@@ -40,11 +40,11 @@ namespace Vanrise.Runtime.Business
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISchedulerTaskTriggerTypeDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskTriggerTypeDataManager>();
-            object _updateHandle;
+            object _lastReceivedDataInfo;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreSchedulerTaskTriggerTypesUpdated(ref _updateHandle);
+                return dataManager.AreSchedulerTaskTriggerTypesUpdated(ref _lastReceivedDataInfo);
             }
         }
     }

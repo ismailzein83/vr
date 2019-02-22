@@ -390,11 +390,11 @@ namespace Vanrise.Runtime.Business
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
-            object _updateHandle;
+            object _lastReceivedDataInfo;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreSchedulerTasksUpdated(ref _updateHandle);
+                return dataManager.AreSchedulerTasksUpdated(ref _lastReceivedDataInfo);
             }
         }
 

@@ -17,10 +17,10 @@ namespace Vanrise.Runtime.Business
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IRuntimeNodeDataManager runtimeNodeDataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeNodeDataManager>();
-            object _updateHandle;
+            object _lastReceivedDataInfo;
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return runtimeNodeDataManager.AreRuntimeNodeUpdated(ref _updateHandle);
+                return runtimeNodeDataManager.AreRuntimeNodeUpdated(ref _lastReceivedDataInfo);
             }
         }
 

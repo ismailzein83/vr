@@ -39,9 +39,9 @@ namespace Vanrise.Runtime.Data.SQL
             return (nbOfRecordsAffected > 0);
         }
 
-        public bool AreRuntimeNodeUpdated(ref object updateHandle)
+        public bool AreRuntimeNodeUpdated(ref object lastReceivedDataInfo)
         {
-            return base.IsDataUpdated("[runtime].[RuntimeNode]", ref updateHandle);
+            return base.IsDataUpdated("[runtime].[RuntimeNode]", ref lastReceivedDataInfo);
         }
 
 

@@ -21,11 +21,6 @@ namespace Vanrise.Runtime.Data.SQL
             ExecuteNonQuerySP("runtime.sp_RuntimeServiceInstance_Insert", serviceInstance.ServiceInstanceId, serviceInstance.ServiceTypeId, serviceInstance.ProcessId, serviceInstance.InstanceInfo != null ? Common.Serializer.Serialize(serviceInstance.InstanceInfo) : null);
         }
 
-        public bool AreServiceInstancesUpdated(ref object updateHandle)
-        {
-            return IsDataUpdated("[runtime].[RuntimeServiceInstance]", ref updateHandle);
-        }
-
         public List<RuntimeServiceInstance> GetServices()
         {
             return GetItemsSP("runtime.sp_RuntimeServiceInstance_GetAll", ServiceInstanceMapper);

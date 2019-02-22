@@ -10,9 +10,7 @@ namespace Vanrise.Runtime.Data
 {
     public interface IRunningProcessDataManager : IDataManager
     {
-        RunningProcessInfo InsertProcessInfo(Guid runtimeNodeId, Guid runtimeNodeInstanceId, int osProcessId, RunningProcessAdditionalInfo additionalInfo);       
-
-        bool AreRunningProcessesUpdated(ref object _updateHandle);
+        RunningProcessInfo InsertProcessInfo(Guid runtimeNodeId, Guid runtimeNodeInstanceId, int osProcessId, RunningProcessAdditionalInfo additionalInfo);
 
         List<RunningProcessInfo> GetRunningProcesses();
 

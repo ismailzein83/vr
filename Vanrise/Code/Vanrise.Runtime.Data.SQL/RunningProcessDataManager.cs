@@ -22,11 +22,6 @@ namespace Vanrise.Runtime.Data.SQL
         {
             return GetItemSP("runtime.sp_RunningProcess_Insert", RunningProcessInfoMapper, runtimeNodeId, runtimeNodeInstanceId, osProcessId, additionalInfo != null ? Common.Serializer.Serialize(additionalInfo) : null);
         }
-        
-        public bool AreRunningProcessesUpdated(ref object _updateHandle)
-        {
-            return base.IsDataUpdated("[runtime].[RunningProcess]", ref _updateHandle);
-        }
 
         public List<RunningProcessInfo> GetRunningProcesses()
         {
@@ -66,7 +61,7 @@ namespace Vanrise.Runtime.Data.SQL
             return runningProcessInfo;
         }
 
-        private RunningProcessDetails RunningProcessDetailsMapper(IDataReader reader) //ADDED BY ME
+        private RunningProcessDetails RunningProcessDetailsMapper(IDataReader reader)
         {
             var runningProcessDetails = new RunningProcessDetails
             {

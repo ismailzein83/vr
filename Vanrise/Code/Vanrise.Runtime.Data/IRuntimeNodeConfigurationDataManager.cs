@@ -12,6 +12,6 @@ namespace Vanrise.Runtime.Data
         List<RuntimeNodeConfiguration> GetAllNodeConfigurations();
         bool Insert(RuntimeNodeConfiguration runtimeNodeConfiguration);
         bool Update(RuntimeNodeConfiguration runtimeNodeConfiguration);
-        bool AreRuntimeNodeConfigurationUpdated(ref object updateHandle);
+        bool AreRuntimeNodeConfigurationUpdated(ref object lastReceivedDataInfo);
     }
 }

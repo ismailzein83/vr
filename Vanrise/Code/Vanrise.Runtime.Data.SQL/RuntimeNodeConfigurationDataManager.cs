@@ -39,9 +39,9 @@ namespace Vanrise.Runtime.Data.SQL
             return (nbOfRecordsAffected > 0);
         }
 
-        public bool AreRuntimeNodeConfigurationUpdated(ref object updateHandle)
+        public bool AreRuntimeNodeConfigurationUpdated(ref object lastReceivedDataInfo)
         {
-            return base.IsDataUpdated("[runtime].[RuntimeNodeConfiguration]", ref updateHandle);
+            return base.IsDataUpdated("[runtime].[RuntimeNodeConfiguration]", ref lastReceivedDataInfo);
         }
 
         #endregion
@@ -55,7 +55,7 @@ namespace Vanrise.Runtime.Data.SQL
                 Name = reader["Name"] as string,
                 RuntimeNodeConfigurationId = (Guid)reader["ID"],
                 Settings = Serializer.Deserialize<RuntimeNodeConfigurationSettings>(reader["Settings"] as string)
- 
+
             };
         }
 

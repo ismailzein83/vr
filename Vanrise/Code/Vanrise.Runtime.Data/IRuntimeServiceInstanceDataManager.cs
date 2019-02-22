@@ -11,8 +11,6 @@ namespace Vanrise.Runtime.Data
     {
         void AddService(RuntimeServiceInstance serviceInstance);
 
-        bool AreServiceInstancesUpdated(ref object updateHandle);
-
         List<RuntimeServiceInstance> GetServices();
 
         void DeleteByProcessId(int runtimeProcessId);

@@ -1,57 +1,210 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using Vanrise.Runtime.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Data.RDB;
+using Vanrise.Entities;
+using Vanrise.Runtime.Entities;
 
-//namespace Vanrise.Runtime.Data.RDB
-//{
-//    class SchedulerTaskStateDataManager : ISchedulerTaskStateDataManager
-//    {
-//        public void DeleteTaskState(Guid taskId)
-//        {
-//            throw new NotImplementedException();
-//        }
+namespace Vanrise.Runtime.Data.RDB
+{
+    public class SchedulerTaskStateDataManager : ISchedulerTaskStateDataManager
+    {
+        static string TABLE_NAME = "runtime_ScheduleTaskState";
+        static string TABLE_ALIAS = "STState";
 
-//        public List<SchedulerTaskState> GetAllScheduleTaskStates()
-//        {
-//            throw new NotImplementedException();
-//        }
+        const string COL_TaskId = "TaskId";
+        const string COL_Status = "Status";
+        const string COL_LastRunTime = "LastRunTime";
+        const string COL_NextRunTime = "NextRunTime";
+        const string COL_LockedByProcessID = "LockedByProcessID";
+        const string COL_ExecutionInfo = "ExecutionInfo";
 
-//        public SchedulerTaskState GetSchedulerTaskStateByTaskId(Guid taskId)
-//        {
-//            throw new NotImplementedException();
-//        }
+        static SchedulerTaskStateDataManager()
+        {
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_TaskId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Status, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastRunTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_NextRunTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LockedByProcessID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_ExecutionInfo, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            {
+                DBSchemaName = "runtime",
+                DBTableName = "ScheduleTaskState",
+                Columns = columns,
+                IdColumnName = COL_TaskId
+            });
+        }
+        BaseRDBDataProvider GetDataProvider()
+        {
+            return RDBDataProviderFactory.CreateProvider("Runtime", "RuntimeConnStringKey", "RuntimeDBConnString");
+        }
 
-//        public List<SchedulerTaskState> GetSchedulerTaskStateByTaskIds(List<Guid> taskIds)
-//        {
-//            throw new NotImplementedException();
-//        }
+        #region Public Methods
+        public void DeleteTaskState(Guid taskId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
 
-//        public void InsertSchedulerTaskState(Guid taskId)
-//        {
-//            throw new NotImplementedException();
-//        }
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_TaskId).Value(taskId);
 
-//        public void RunSchedulerTask(Guid taskId, bool allowRunIfEnabled)
-//        {
-//            throw new NotImplementedException();
-//        }
+            queryContext.ExecuteNonQuery();
+        }
 
-//        public bool TryLockTask(Guid taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public List<SchedulerTaskState> GetAllScheduleTaskStates()
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
 
-//        public void UnlockTask(Guid taskId)
-//        {
-//            throw new NotImplementedException();
-//        }
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_TaskId, COL_Status, COL_LastRunTime, COL_NextRunTime, COL_ExecutionInfo);
 
-//        public bool UpdateTaskState(SchedulerTaskState taskStateObject)
-//        {
-//            throw new NotImplementedException();
-//        }
-//    }
-//}
+            return queryContext.GetItems(TaskStateMapper);
+        }
+
+        public SchedulerTaskState GetSchedulerTaskStateByTaskId(Guid taskId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_TaskId, COL_Status, COL_LastRunTime, COL_NextRunTime, COL_ExecutionInfo);
+
+            selectQuery.Where().EqualsCondition(COL_TaskId).Value(taskId);
+
+            return queryContext.GetItem(TaskStateMapper);
+        }
+
+        public List<SchedulerTaskState> GetSchedulerTaskStateByTaskIds(List<Guid> taskIds)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_TaskId, COL_Status, COL_LastRunTime, COL_NextRunTime, COL_ExecutionInfo);
+
+            selectQuery.Where().ListCondition(COL_TaskId, RDBListConditionOperator.IN, taskIds);
+
+            return queryContext.GetItems(TaskStateMapper);
+        }
+
+        public void InsertSchedulerTaskState(Guid taskId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+            insertQuery.Column(COL_TaskId).Value(taskId);
+            insertQuery.Column(COL_Status).Value(0);
+
+            insertQuery.IfNotExists(TABLE_ALIAS).EqualsCondition(COL_TaskId).Value(taskId);
+
+            queryContext.ExecuteNonQuery();
+        }
+
+        public void RunSchedulerTask(Guid taskId, bool allowRunIfEnabled)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_NextRunTime).DateNow();
+
+            updateQuery.IfNotExists(TABLE_ALIAS).EqualsCondition(COL_TaskId).Value(taskId);
+
+            var whereContext = updateQuery.Where();
+            whereContext.EqualsCondition(COL_TaskId).Value(taskId);
+            whereContext.NullCondition().Column(COL_LockedByProcessID);
+            whereContext.ListCondition(COL_Status, RDBListConditionOperator.IN, new List<int>() { 0, 2, 3 });
+
+            var childCondition = whereContext.ChildConditionGroup();
+            childCondition.NotNullCondition().Column(COL_NextRunTime);
+
+            if (!allowRunIfEnabled)
+                childCondition.FalseCondition();
+            else
+                childCondition.TrueCondition();
+
+            queryContext.ExecuteNonQuery();
+        }
+
+        public bool TryLockTask(Guid taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_LockedByProcessID).Value(currentRuntimeProcessId);
+
+            var whereContext = updateQuery.Where();
+            whereContext.EqualsCondition(COL_TaskId).Value(taskId);
+            if (runningRuntimeProcessesIds != null && runningRuntimeProcessesIds.Count() > 0)
+                whereContext.ListCondition(COL_LockedByProcessID, RDBListConditionOperator.NotIN, runningRuntimeProcessesIds);
+
+            return queryContext.ExecuteNonQuery() > 0;
+        }
+
+        public void UnlockTask(Guid taskId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_LockedByProcessID).Null();
+
+            updateQuery.Where().EqualsCondition(COL_TaskId).Value(taskId);
+
+            queryContext.ExecuteNonQuery();
+        }
+
+        public bool UpdateTaskState(SchedulerTaskState taskStateObject)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_Status).Value((int)taskStateObject.Status);
+
+            if (taskStateObject.NextRunTime.HasValue)
+                updateQuery.Column(COL_NextRunTime).Value(taskStateObject.NextRunTime.Value);
+            else
+                updateQuery.Column(COL_NextRunTime).Null();
+
+            if (taskStateObject.LastRunTime.HasValue)
+                updateQuery.Column(COL_LastRunTime).Value(taskStateObject.LastRunTime.Value);
+            else
+                updateQuery.Column(COL_LastRunTime).Null();
+
+            if (taskStateObject.ExecutionInfo != null)
+                updateQuery.Column(COL_ExecutionInfo).Value(Common.Serializer.Serialize(taskStateObject.ExecutionInfo));
+            else
+                updateQuery.Column(COL_ExecutionInfo).Null();
+
+            updateQuery.Where().EqualsCondition(COL_TaskId).Value(taskStateObject.TaskId);
+
+            return queryContext.ExecuteNonQuery() > 0;
+        }
+        #endregion
+        #region Mappers
+        SchedulerTaskState TaskStateMapper(IRDBDataReader reader)
+        {
+            var schedulerTaskState = new SchedulerTaskState
+            {
+                TaskId = reader.GetGuid(COL_TaskId),
+                Status = (SchedulerTaskStatus)reader.GetInt(COL_Status),
+                LastRunTime = reader.GetNullableDateTime(COL_LastRunTime),
+                NextRunTime = reader.GetNullableDateTime(COL_NextRunTime),
+            };
+            string serializedSettings = reader.GetString(COL_ExecutionInfo);
+            if (serializedSettings != null)
+                schedulerTaskState.ExecutionInfo = Common.Serializer.Deserialize<Object>(serializedSettings);
+            return schedulerTaskState;
+        }
+        #endregion
+    }
+}

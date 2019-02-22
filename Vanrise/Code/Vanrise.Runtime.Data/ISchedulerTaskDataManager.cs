@@ -11,8 +11,8 @@ namespace Vanrise.Runtime.Data
     {
         IEnumerable<SchedulerTask> GetSchedulerTasks();
 
-        bool AreSchedulerTasksUpdated(ref object updateHandle);
-        
+        bool AreSchedulerTasksUpdated(ref object lastReceivedDataInfo);
+
         bool AddTask(Entities.SchedulerTask taskObject);
 
         bool UpdateTaskInfo(Guid taskId, string name, bool isEnabled, Guid triggerTypeId, Guid actionTypeId, SchedulerTaskSettings taskSettings);
