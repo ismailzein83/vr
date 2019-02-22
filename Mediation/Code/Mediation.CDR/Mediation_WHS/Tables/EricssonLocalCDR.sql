@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Mediation_WHS].[EricssonLocalCDR] (
-    [Id]                       BIGINT           NOT NULL,
+    [Id]                       BIGINT           IDENTITY (1, 1) NOT NULL,
     [RecordType]               VARCHAR (5)      NULL,
     [CallStatus]               VARCHAR (20)     NULL,
     [CauseForOutput]           VARCHAR (20)     NULL,
@@ -27,4 +27,6 @@
     [DataSourceId]             UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_EricssonLocalCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
