@@ -33,11 +33,10 @@ namespace Mediation.Runtime.Tasks
     {
         public static void MediationTestingTask_Main()
         {
-            string hex = "00251926118228ffff040002";
+            string hex = "00FF";
             byte[] byteArray = ParserHelper.StringToByteArray(hex);
-
-            string byteArrayAsBCD = ParserHelper.GetBCDNumber(byteArray, true, true);
-            string byteArrayAsString = ParserHelper.ByteArrayToString(byteArray, false);
+            int byteAsInt = byteArray[1] & 0x7F;
+            string byteArrayAsString = ParserHelper.GetHexFromInt(byteAsInt);
         }
     }
 
