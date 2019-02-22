@@ -70,11 +70,18 @@
 
                 api.setData = function (securityProviderObject) {
 
-                    if (securityProviderObject != undefined)
+                    if (securityProviderObject != undefined) {
+
                         securityProviderObject.Settings = {
                             $type: "Vanrise.Security.Entities.SecurityProviderSettings,Vanrise.Security.Entities",
                             ExtendedSettings: securityProviderSelectorAPI.getData()
                         };
+                        if (selectedValues == undefined) {
+                            securityProviderObject.IsEnabled = true;
+                        }
+                    }
+                       
+                  
                 };
 
                 if (ctrl.onReady != null)
