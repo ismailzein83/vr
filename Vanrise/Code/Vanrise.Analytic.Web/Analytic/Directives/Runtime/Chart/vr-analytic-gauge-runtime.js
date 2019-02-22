@@ -113,8 +113,8 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
                     titlePath: "Measure"
                 };
                 seriesDefinitions.push({
-                    title: "ACD",
-                    valuePath: "ACD",
+                    title: (measures != undefined && measures[0] != undefined)?measures[0].MeasureName:"",
+                    valuePath: (measures != undefined && measures[0] != undefined) ? measures[0].MeasureName : "",
                     tooltip: {
                         valueSuffix: ''
                     },
