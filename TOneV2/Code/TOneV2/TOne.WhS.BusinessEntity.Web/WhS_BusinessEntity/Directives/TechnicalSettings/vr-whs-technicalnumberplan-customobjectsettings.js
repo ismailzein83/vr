@@ -15,7 +15,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/RouteSyncTechnicalSettings/Templates/TechnicalNumberPlanCustomObjectSettingsTemplate.html"
+            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/TechnicalSettings/Templates/TechnicalNumberPlanCustomObjectSettingsTemplate.html"
         };
         function TechnicalNumberPlanCustomObjectType($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
@@ -34,7 +34,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "TOne.WhS.RouteSync.Business.TechnicalNumberPlanCustomObjectTypeSettings, TOne.WhS.RouteSync.Business"
+                        $type: "TOne.WhS.BusinessEntity.Business.TechnicalNumberPlanCustomObjectTypeSettings, TOne.WhS.BusinessEntity.Business"
                     };
                     return data;
                 };
@@ -46,6 +46,6 @@
         }
     }
 
-    app.directive('whsRoutesyncTechnicalnumberplanCustomobjectsettings', technicalNumberPlanType);
+    app.directive('vrWhsTechnicalnumberplanCustomobjectsettings', technicalNumberPlanType);
 
 })(app);

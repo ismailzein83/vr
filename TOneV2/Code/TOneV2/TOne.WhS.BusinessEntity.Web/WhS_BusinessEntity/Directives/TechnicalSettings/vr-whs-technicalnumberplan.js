@@ -15,7 +15,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/RouteSyncTechnicalSettings/Templates/RouteSyncTechnicalNumberPlanTemplate.html"
+            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/TechnicalSettings/Templates/RouteSyncTechnicalNumberPlanTemplate.html"
         };
 
         function TechnicalNumberPlanCtor($scope, ctrl, $attrs) {
@@ -68,7 +68,7 @@
 
                 api.setData = function (data) {
                     data.Settings = {
-                        $type: "TOne.WhS.RouteSync.Entities.TechnicalNumberPlan, TOne.WhS.RouteSync.Entities",
+                        $type: "TOne.WhS.BusinessEntity.Business.TechnicalNumberPlan, TOne.WhS.BusinessEntity.Business",
                         Codes: $scope.scopeModel.codeList
                     };
                 };
@@ -79,5 +79,5 @@
             }
         }
     }
-    app.directive('whsRoutesyncTechnicalnumberplan', technicalNumberPlan);
+    app.directive('vrWhsTechnicalnumberplan', technicalNumberPlan);
 })(app);

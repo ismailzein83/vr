@@ -78,8 +78,6 @@
     <Compile Include="SwitchInfoGetterContext.cs" />
     <Compile Include="SwitchManager.cs" />
     <Compile Include="SwitchRouteSynchronizerManager.cs" />
-    <Compile Include="TechnicalNumberPlanCustomObjectTypeSettings.cs" />
-    <Compile Include="TechnicalNumberPlanManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

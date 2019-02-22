@@ -218,6 +218,7 @@
     <Compile Include="Switch\ISwitchFilter.cs" />
     <Compile Include="Switch\SwitchFilter.cs" />
     <Compile Include="Switch\UpdateSwitchOperationOutput.cs" />
+    <Compile Include="TechnicalNumberPlan.cs" />
     <Compile Include="TemporarySalePriceListQuery.cs" />
     <Compile Include="UpdateCarrierAccountOperationOutput.cs" />
     <Compile Include="ZoneRoutingProduct\History\RoutingProductHistoryBySource.cs" />

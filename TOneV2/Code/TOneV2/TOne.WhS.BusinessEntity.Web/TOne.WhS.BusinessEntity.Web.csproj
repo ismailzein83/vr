@@ -517,6 +517,10 @@
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-salepricelistfilenamepattern.js" />
     <Content Include="WhS_BusinessEntity\Directives\SwitchReleaseCause\Templates\SwitchReleaseCauseGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SwitchReleaseCause\whs-be-switchreleasecause-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\TechnicalSettings\Templates\RouteSyncTechnicalNumberPlanTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\TechnicalSettings\Templates\TechnicalNumberPlanCustomObjectSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\TechnicalSettings\vr-whs-technicalnumberplan-customobjectsettings.js" />
+    <Content Include="WhS_BusinessEntity\Directives\TechnicalSettings\vr-whs-technicalnumberplan.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\Templates\SaleEntityZoneRoutingProductHistoryGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\vr-whs-be-saleentityzoneroutingproduct-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />

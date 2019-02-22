@@ -68,7 +68,6 @@
     <Compile Include="RouteSyncDefinition\RouteSyncDefinitionDetail.cs" />
     <Compile Include="RouteSyncDefinition\RouteSyncDefinitionInfo.cs" />
     <Compile Include="RouteSyncDefinition\RouteSyncDefinitionQuery.cs" />
-    <Compile Include="Settings\TechnicalNumberPlan.cs" />
     <Compile Include="Settings\RouteSyncSettings.cs" />
     <Compile Include="Settings\RouteSyncTechnicalSettings.cs" />
     <Compile Include="SwitchCommandLog\SwitchCommandLog.cs" />
