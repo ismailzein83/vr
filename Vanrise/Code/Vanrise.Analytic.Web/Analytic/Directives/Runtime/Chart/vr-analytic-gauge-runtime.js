@@ -73,11 +73,11 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
                                 SortByColumnName: 'MeasureValues.' + measures[0].MeasureName + '.Value',
                                 Query: query
                             };
-                           
+
                             var filteredRecordsPromise = VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
-                                  if(response != undefined && response.Data != undefined && response.Data.length > 0) 
-                                    measureValue = eval("response.Data[0].MeasureValues." + measures[0].MeasureName + ".ModifiedValue");
+                                    if (response != undefined && response.Data != undefined && response.Data.length > 0)
+                                        measureValue = eval("response.Data[0].MeasureValues." + measures[0].MeasureName + ".ModifiedValue");
                                 });
                             promises.push(filteredRecordsPromise);
                             var input = {
@@ -107,14 +107,14 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
                 chartDefinition = {
                     type: "gauge",
                     title: "Measure",
-                    rangesObject : ranges
+                    rangesObject: ranges
                 };
                 xAxisDefinition = {
                     titlePath: "Measure"
                 };
                 seriesDefinitions.push({
-                    title: (measures != undefined && measures[0] != undefined)?measures[0].MeasureName:"",
-                    valuePath: (measures != undefined && measures[0] != undefined) ? measures[0].MeasureName : "",
+                    title: (measures != undefined && measures[0] != undefined) ? measures[0].Title : "",
+                    valuePath: (measures != undefined && measures[0] != undefined) ? measures[0].Title : "",
                     tooltip: {
                         valueSuffix: ''
                     },
