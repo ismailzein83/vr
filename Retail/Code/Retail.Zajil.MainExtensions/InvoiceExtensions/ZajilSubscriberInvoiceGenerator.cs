@@ -63,6 +63,12 @@ namespace Retail.Zajil.MainExtensions
             }
 
             InvoiceDetails retailSubscriberInvoiceDetails = BuildInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate, currencyId);
+            if (retailSubscriberInvoiceDetails.TotalAmount == 0)
+            {
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
+            }
+
             retailSubscriberInvoiceDetails.DuePeriod = context.GetDuePeriod();
             AccountPart accountPart;
             if (accountBEManager.TryGetAccountPart(_acountBEDefinitionId, accountId, _companyExtendedInfoPartdefinitionId, false, out accountPart))
@@ -76,6 +82,7 @@ namespace Retail.Zajil.MainExtensions
                     retailSubscriberInvoiceDetails.CustomerPO = zajilCompanyExtendedInfo.CustomerPO;
                 }
             }
+
             SetInvoiceBillingTransactions(context, retailSubscriberInvoiceDetails);
             context.Invoice = new GeneratedInvoice
             {
@@ -96,10 +103,13 @@ namespace Retail.Zajil.MainExtensions
                     retailSubscriberInvoiceDetails = new InvoiceDetails();
                     foreach (var invoiceBillingRecord in invoiceBillingRecordList)
                     {
-                        retailSubscriberInvoiceDetails.TotalAmount += invoiceBillingRecord.Amount;
-                        retailSubscriberInvoiceDetails.CountCDRs += invoiceBillingRecord.CountCDRs;
-                        retailSubscriberInvoiceDetails.TotalDuration += invoiceBillingRecord.TotalDuration;
-                        retailSubscriberInvoiceDetails.CurrencyId = currencyId;
+                        if (invoiceBillingRecord.Amount != 0)
+                        {
+                            retailSubscriberInvoiceDetails.TotalAmount += invoiceBillingRecord.Amount;
+                            retailSubscriberInvoiceDetails.CountCDRs += invoiceBillingRecord.CountCDRs;
+                            retailSubscriberInvoiceDetails.TotalDuration += invoiceBillingRecord.TotalDuration;
+                            retailSubscriberInvoiceDetails.CurrencyId = currencyId;
+                        }
                     }
                 };
             }
@@ -189,22 +199,25 @@ namespace Retail.Zajil.MainExtensions
                         MeasureValue totalAmount = GetMeasureValue(analyticRecord, "Amount");
                         MeasureValue countCDRs = GetMeasureValue(analyticRecord, "CountCDRs");
                         MeasureValue totalDuration = GetMeasureValue(analyticRecord, "TotalDuration");
-
-                        InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
+                        var amount = Convert.ToDecimal(totalAmount.Value ?? 0.0);
+                        if (amount != 0)
                         {
-                            ServiceTypeId = new Guid(serviceTypeId.Value.ToString()),
-                            Amount = Convert.ToDecimal(totalAmount.Value ?? 0.0),
-                            CountCDRs = Convert.ToInt32(countCDRs.Value),
-                            TotalDuration = Convert.ToDecimal(totalDuration.Value ?? 0.0)
-                        };
+                            InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
+                            {
+                                ServiceTypeId = new Guid(serviceTypeId.Value.ToString()),
+                                Amount = Convert.ToDecimal(totalAmount.Value ?? 0.0),
+                                CountCDRs = Convert.ToInt32(countCDRs.Value),
+                                TotalDuration = Convert.ToDecimal(totalDuration.Value ?? 0.0)
+                            };
 
-                        if (zoneId.Value != null)
-                            invoiceBillingRecord.ZoneId = Convert.ToInt32(zoneId.Value);
+                            if (zoneId.Value != null)
+                                invoiceBillingRecord.ZoneId = Convert.ToInt32(zoneId.Value);
 
-                        if (operatorId.Value != null)
-                            invoiceBillingRecord.InterconnectOperatorId = Convert.ToInt32(operatorId.Value);
+                            if (operatorId.Value != null)
+                                invoiceBillingRecord.InterconnectOperatorId = Convert.ToInt32(operatorId.Value);
 
-                        AddItemToDictionary(itemSetNamesDic, "GroupedByServiceType", invoiceBillingRecord);
+                            AddItemToDictionary(itemSetNamesDic, "GroupedByServiceType", invoiceBillingRecord);
+                        }
                     }
                 }
             }
