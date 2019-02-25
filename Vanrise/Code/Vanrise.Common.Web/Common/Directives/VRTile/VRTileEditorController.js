@@ -14,7 +14,7 @@
 
         var disableColumnWidth;
 
-    
+
         loadParameters();
         defineScope();
         load();
@@ -24,7 +24,7 @@
             if (parameters != undefined && parameters != null) {
                 vrTileEntity = parameters.vrTileEntity;
                 disableColumnWidth = parameters.disableColumnWidth;
-                
+
             }
             isEditMode = (vrTileEntity != undefined);
         }
@@ -72,8 +72,9 @@
                     return;
                 $scope.scopeModel.tileName = vrTileEntity.Name;
                 $scope.scopeModel.showTitle = vrTileEntity.ShowTitle;
-                if(vrTileEntity.Settings != undefined)
-                {
+                $scope.scopeModel.autoRefresh = vrTileEntity.AutoRefresh;
+                $scope.scopeModel.autoRefreshInterval = vrTileEntity.AutoRefreshInterval;
+                if (vrTileEntity.Settings != undefined) {
                     $scope.scopeModel.selectedColumnWidth = UtilsService.getEnum(ColumnWidthEnum, "value", vrTileEntity.Settings.NumberOfColumns);
                 }
             }
@@ -90,15 +91,15 @@
                     });
                 return extendedSettingsLoadPromiseDeferred.promise;
             }
-           
+
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadExtendedSettingsDirective])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.scopeModel.isLoading = false;
-              });
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
         }
 
         function buildVRTileObjFromScope() {
@@ -106,9 +107,11 @@
                 VRTileId: vrTileEntity != undefined ? vrTileEntity.VRTileId : UtilsService.guid(),
                 Name: $scope.scopeModel.tileName,
                 ShowTitle: $scope.scopeModel.showTitle,
+                AutoRefresh: $scope.scopeModel.autoRefresh,
+                AutoRefreshInterval: $scope.scopeModel.autoRefreshInterval,
                 Settings: {
                     ExtendedSettings: extendedSettingsDirectiveApi.getData(),
-                    NumberOfColumns : $scope.scopeModel.selectedColumnWidth.value,
+                    NumberOfColumns: $scope.scopeModel.selectedColumnWidth.value,
                 }
             };
             return obj;

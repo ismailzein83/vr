@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrCommonTabtilesRuntime', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VRTileService','ColumnWidthEnum',
+app.directive('vrCommonTabtilesRuntime', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VRTileService', 'ColumnWidthEnum',
     function (UtilsService, VRUIUtilsService, VRCommon_VRTileService, ColumnWidthEnum) {
 
         return {
@@ -37,6 +37,7 @@ app.directive('vrCommonTabtilesRuntime', ['UtilsService', 'VRUIUtilsService', 'V
                 var api = {};
 
                 api.load = function (payload) {
+                    $scope.scopeModel.tiles = [];
                     var promises = [];
                     if (payload != undefined) {
                         definitionSettings = payload.definitionSettings;
@@ -63,7 +64,7 @@ app.directive('vrCommonTabtilesRuntime', ['UtilsService', 'VRUIUtilsService', 'V
                         tile.onVRTileDirectiveReady = function (api) {
                             tile.tileAPI = api;
                             tile.isDirectiveLoading = true;
-                            
+
                             tile.isDirectiveLoading = true;
                             var payload = { definitionSettings: tileEntity.Settings.ExtendedSettings };
                             VRUIUtilsService.callDirectiveLoad(tile.tileAPI, payload, loadDirectivePromiseDeferred);
@@ -79,7 +80,7 @@ app.directive('vrCommonTabtilesRuntime', ['UtilsService', 'VRUIUtilsService', 'V
                 api.getData = function () {
 
                 };
-                
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

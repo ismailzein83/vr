@@ -36,6 +36,7 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                 var api = {};
 
                 api.load = function (payload) {
+                    $scope.scopeModel.fields = [];
                     var figureStyleInput;
                     var promises = [];
                     var definitionSettings;
@@ -46,7 +47,7 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                     }
                     if (definitionSettings != undefined) {
                         figureStyleInput = {
-                            Queries : definitionSettings.Queries,
+                            Queries: definitionSettings.Queries,
                             ItemsToDisplay: definitionSettings.ItemsToDisplay
                         };
                         promises.push(loadFigures());
@@ -55,20 +56,20 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                         $scope.scopeModel.isLoading = true;
                         return VRCommon_VRTileAPIService.GetFigureItemsValue(figureStyleInput).then(function (response) {
                             if (response != undefined) {
-                                    for (var i = 0, length = response.length; i < length; i++) {
-                                        var figureStyle = response[i];
-                                        $scope.scopeModel.fields.push({
-                                            name: figureStyle.Name,
-                                            value: figureStyle.Value,
-                                            className: figureStyle.StyleFormatingSettings
-                                        });
-                                    }
+                                for (var i = 0, length = response.length; i < length; i++) {
+                                    var figureStyle = response[i];
+                                    $scope.scopeModel.fields.push({
+                                        name: figureStyle.Name,
+                                        value: figureStyle.Value,
+                                        className: figureStyle.StyleFormatingSettings
+                                    });
+                                }
                                 $scope.scopeModel.url = response.ViewURL;
                             }
                         });
                     }
                     return UtilsService.waitMultiplePromises(promises).then(function () {
-                        $scope.scopeModel.isLoading =false;
+                        $scope.scopeModel.isLoading = false;
                     });
                 };
 

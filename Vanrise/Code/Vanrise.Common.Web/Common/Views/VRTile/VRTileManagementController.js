@@ -1,7 +1,7 @@
 ﻿"use strict";
-VRTileManagementController.$inject = ['$scope', 'VRUIUtilsService', 'VRNavigationService','VR_Sec_ViewAPIService','UtilsService','VRNotificationService','ColumnWidthEnum'];
+VRTileManagementController.$inject = ['$scope', 'VRUIUtilsService', 'VRNavigationService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'ColumnWidthEnum', 'VRTimerService'];
 
-function VRTileManagementController($scope, VRUIUtilsService, VRNavigationService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, ColumnWidthEnum) {
+function VRTileManagementController($scope, VRUIUtilsService, VRNavigationService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, ColumnWidthEnum, VRTimerService) {
     var viewId;
 
     var viewEntity;
@@ -26,6 +26,10 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
         $scope.scopeModel.isLoading = true;
         getView().then(function () {
             loadAllControls();
+
+            if ($scope.jobIds)
+                VRTimerService.unregisterJobByIds($scope.jobIds);
+
         }).catch(function () {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
             $scope.scopeModel.isLoading = false;
@@ -36,33 +40,44 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
 
         function loadVRTiles() {
             var promises = [];
-            if (viewEntity != undefined && viewEntity.Settings != undefined && viewEntity.Settings.VRTileViewData != undefined)
-            {
+            if (viewEntity != undefined && viewEntity.Settings != undefined && viewEntity.Settings.VRTileViewData != undefined) {
                 var tiles = viewEntity.Settings.VRTileViewData.VRTiles;
-                if(tiles != undefined)
-                {
+                if (tiles != undefined) {
                     for (var i = 0, tilesLength = tiles.length; i < tilesLength; i++) {
                         var tileEntity = tiles[i];
                         addTile(tileEntity);
                     }
                 }
             }
-            function addTile(tileEntity)
-            {
-                var columnWidthObj =  UtilsService.getEnum(ColumnWidthEnum, "value", tileEntity.Settings.NumberOfColumns);
+            function addTile(tileEntity) {
+                var columnWidthObj = UtilsService.getEnum(ColumnWidthEnum, "value", tileEntity.Settings.NumberOfColumns);
                 var tile = {
                     name: tileEntity.Name,
                     runtimeEditor: tileEntity.Settings.ExtendedSettings.RuntimeEditor,
                     columnWidth: columnWidthObj != undefined ? columnWidthObj.numberOfColumns : undefined,
-                    showTitle : tileEntity.ShowTitle
+                    showTitle: tileEntity.ShowTitle,
+                    autoRefresh: tileEntity.AutoRefresh,
+                    autoRefreshInterval: tileEntity.AutoRefreshInterval
                 };
                 tile.onVRTileDirectiveReady = function (api) {
                     tile.tileAPI = api;
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isDirectiveLoading = value;
-                    };
+                    var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    $scope.scopeModel.isDirectiveLoading = true;
                     var payload = { definitionSettings: tileEntity.Settings.ExtendedSettings };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, tile.tileAPI, payload, setLoader);
+                    VRUIUtilsService.callDirectiveLoad(tile.tileAPI, payload, directiveLoadDeferred);
+
+                    directiveLoadDeferred.promise.then(function () {
+                        $scope.scopeModel.isDirectiveLoading = false;
+                        if (tile.autoRefresh) {
+                            var autoRefreshDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                            tile.onTimerElapsed = function () {
+                                var payload = { definitionSettings: tileEntity.Settings.ExtendedSettings };
+                                VRUIUtilsService.callDirectiveLoad(tile.tileAPI, payload, autoRefreshDirectiveLoadDeferred);
+                                return autoRefreshDirectiveLoadDeferred.promise;
+                            }
+                            registerAutoRefreshJob(tile);
+                        }
+                    });
                 };
                 $scope.scopeModel.vrTiles.push(tile);
             }
@@ -76,6 +91,10 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
 
+    }
+
+    function registerAutoRefreshJob(tile) {
+        VRTimerService.registerJob(tile.onTimerElapsed, $scope, tile.AutoRefreshInterval);
     }
 
     function getView() {

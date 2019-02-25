@@ -18,9 +18,17 @@
                             </span>
                         </vr-columns>
                     </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.autoRefresh" label="Auto Refresh"></vr-switch>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-textbox type="number" minvalue="1" vr-disabled="!scopeModel.autoRefresh" value="scopeModel.autoRefreshInterval" label="Auto Refresh Interval (Sec)" isrequired="scopeModel.autoRefresh"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'" localizedheader="'VRRes.Settings.VREnd'">
-                     <vr-common-tile-extendedsettings on-ready="scopeModel.onExtendedSettingsDirectiveReady" label="Tile Type" normal-col-num="4" isrequired="true"></vr-common-tile-extendedsettings>
+                    <vr-common-tile-extendedsettings on-ready="scopeModel.onExtendedSettingsDirectiveReady" label="Tile Type" normal-col-num="4" isrequired="true"></vr-common-tile-extendedsettings>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

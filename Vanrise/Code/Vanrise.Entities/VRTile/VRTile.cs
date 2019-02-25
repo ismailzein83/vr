@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
@@ -12,6 +8,8 @@ namespace Vanrise.Entities
         public string Name { get; set; }
         public bool ShowTitle { get; set; }
         public VRTileSettings Settings { get; set; }
+        public bool AutoRefresh { get; set; }
+        public int? AutoRefreshInterval { get; set; }
     }
 
 }
