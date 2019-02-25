@@ -14,12 +14,12 @@ namespace TOne.WhS.Invoice.Entities
         public decimal Duration { get; set; }
         public int CountryId { get; set; }
         public int SupplierId { get; set; }
-        public int SupplierZoneId { get; set; }
+        public long SupplierZoneId { get; set; }
 		public long CustomerMobileNetworkId { get; set; }
 		public int CustomerId { get; set; }
         public long SaleZoneId { get; set; }
-        public long OriginalSaleCurrencyId { get; set; }
-        public long SaleCurrencyId { get; set; }
+        public int OriginalSaleCurrencyId { get; set; }
+        public int SaleCurrencyId { get; set; }
         public string SaleCurrency { get; set; }
         public Decimal SaleRate { get; set; }
         public int? SaleRateTypeId { get; set; }
@@ -31,7 +31,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal OriginalAmountAfterCommissionWithTaxes { get; set; }
         public decimal OriginalSaleAmountWithTaxes { get; set; }
         public decimal SaleAmountWithTaxes { get; set; }
-        public int? SaleDealZoneGroupNb { get; set; }
+        public long? SaleDealZoneGroupNb { get; set; }
         public int? SaleDealTierNb { get; set; }
         public int? SaleDeal { get; set; }
         public Decimal? SaleDealRateTierNb { get; set; }

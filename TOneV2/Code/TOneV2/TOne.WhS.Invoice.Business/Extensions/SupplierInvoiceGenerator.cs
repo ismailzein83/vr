@@ -23,55 +23,24 @@ namespace TOne.WhS.Invoice.Business.Extensions
         PartnerManager _partnerManager = new PartnerManager();
         WHSFinancialAccountManager _financialAccountManager = new WHSFinancialAccountManager();
         TOneModuleManager _tOneModuleManager = new TOneModuleManager();
+        InvoiceGenerationManager _invoiceGenerationManager = new InvoiceGenerationManager();
 
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
             var financialAccount = _financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
-            var supplierGenerationCustomSectionPayload = context.CustomSectionPayload as SupplierGenerationCustomSectionPayload;
-            int? timeZoneId = null;
-            decimal? commission = null;
-            CommissionType? commissionType = null;
-            if (supplierGenerationCustomSectionPayload != null)
-            {
-                timeZoneId = supplierGenerationCustomSectionPayload.TimeZoneId;
-                if (supplierGenerationCustomSectionPayload.Commission.HasValue)
-                {
-                    commission = supplierGenerationCustomSectionPayload.Commission.Value;
-                    commissionType = supplierGenerationCustomSectionPayload.CommissionType;
-                }
-            }
-            if (!timeZoneId.HasValue)
-            {
-                timeZoneId = _financialAccountManager.GetSupplierTimeZoneId(financialAccount.FinancialAccountId);
-            }
-            string offset = null;
-            DateTime fromDate = context.FromDate;
-            DateTime toDate = context.ToDate;
-            TimeSpan? offsetValue = null;
-
-            DateTime toDateForBillingTransaction = context.ToDate.Date.AddDays(1);
-            if (timeZoneId.HasValue)
-            {
-                VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(timeZoneId.Value);
-                if (timeZone != null)
-                {
-                    offsetValue = timeZone.Settings.Offset;
-                    offset = timeZone.Settings.Offset.ToString();
-                    fromDate = context.FromDate.Add(-timeZone.Settings.Offset);
-                    toDate = context.ToDate.Add(-timeZone.Settings.Offset);
-                    toDateForBillingTransaction = toDateForBillingTransaction.Add(-timeZone.Settings.Offset);
-                }
-            }
+            int financialAccountId = financialAccount.FinancialAccountId;
+            ResolvedInvoicePayloadObject resolvedPayload = _invoiceGenerationManager.GetDatesWithTimeZone<SupplierGenerationCustomSectionPayload>(context.CustomSectionPayload, financialAccountId, context.FromDate, context.ToDate);
             int currencyId = _financialAccountManager.GetFinancialAccountCurrencyId(financialAccount);
+
             IEnumerable<VRTaxItemDetail> taxItemDetails = _financialAccountManager.GetFinancialAccountTaxItemDetails(financialAccount);
 
-            AnalyticSummaryBigResult<AnalyticRecord> voiceAnalyticResult = new AnalyticSummaryBigResult<AnalyticRecord>();
-            AnalyticSummaryBigResult<AnalyticRecord> smsAnalyticResult = new AnalyticSummaryBigResult<AnalyticRecord>();
+            List<SupplierInvoiceItemDetails> voiceItemSetNames = new List<SupplierInvoiceItemDetails>();
+            List<SupplierSMSInvoiceItemDetails> smsItemSetNames = new List<SupplierSMSInvoiceItemDetails>();
 
-            var voiceAnalyticTableId = new Guid("4C1AAA1B-675B-420F-8E60-26B0747CA79B");
-            var smsAnalytictableId = new Guid("53e9ebc8-c674-4aff-b6c0-9b3b18f95c1f");
+            List<SupplierInvoiceBySaleCurrencyItemDetails> invoiceByCostCurrency = null;
+
+
             string dimensionName = "CostFinancialAccount";
-            int dimensionValue = financialAccount.FinancialAccountId;
             bool isVoiceEnabled = _tOneModuleManager.IsVoiceModuleEnabled();
             bool isSMSEnabled = _tOneModuleManager.IsSMSModuleEnabled();
             bool canGenerateVoiceInvoice = false;
@@ -82,7 +51,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     List<string> voiceListMeasures = new List<string> { "CostNetNotNULL", "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
                     List<string> voiceListDimensions = new List<string> { "SupplierZone", "Supplier", "CostCurrency", "CostRate", "CostRateType", "CostDealZoneGroupNb", "CostDealTierNb", "CostDeal", "CostDealRateTierNb" };
-                    voiceAnalyticResult = GetFilteredRecords(voiceListDimensions, voiceListMeasures, dimensionName, dimensionValue, fromDate, toDate, voiceAnalyticTableId, currencyId, offsetValue);
+                    voiceItemSetNames = _invoiceGenerationManager.GetInvoiceVoiceMappedRecords(voiceListDimensions, voiceListMeasures, dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, currencyId, resolvedPayload.OffsetValue, (analyticRecord) =>
+                    {
+                        return VoiceItemSetNamesMapper(analyticRecord, currencyId, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
+                    });
+                    invoiceByCostCurrency = loadVoiceCurrencyItemSet(dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
                 }
             }
 
@@ -90,15 +63,18 @@ namespace TOne.WhS.Invoice.Business.Extensions
             {
                 List<string> smsListMeasures = new List<string> { "CostNetNotNULL", "NumberOfSMS", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
                 List<string> smsListDimensions = new List<string> { "DestinationMobileNetwork", "Supplier", "CostCurrency", "CostRate" };
-                smsAnalyticResult = GetFilteredRecords(smsListDimensions, smsListMeasures, dimensionName, dimensionValue, fromDate, toDate, smsAnalytictableId, currencyId, offsetValue);
+                smsItemSetNames = _invoiceGenerationManager.GetInvoiceSMSMappedRecords(smsListDimensions, smsListMeasures, dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, currencyId, resolvedPayload.OffsetValue, (analyticRecord) =>
+                {
+                    return SMSItemSetNamesMapper(analyticRecord, currencyId, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
+                });
+                var sMSInvoiceByCostCurrencies = loadSMSCurrencyItemSet(dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
+                if (invoiceByCostCurrency == null)
+                    invoiceByCostCurrency = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
+                TryMergeByCurrencyItemSets(invoiceByCostCurrency, sMSInvoiceByCostCurrencies);
             }
-
-            List<InvoiceBillingRecord> voiceItemSetNames = new List<InvoiceBillingRecord>();
-            List<SMSInvoiceBillingRecord> smsItemSetNames = new List<SMSInvoiceBillingRecord>();
-            ConvertAnalyticDataToList(voiceAnalyticResult.Data, smsAnalyticResult.Data, currencyId, voiceItemSetNames, smsItemSetNames, commission, commissionType, taxItemDetails, offsetValue, canGenerateVoiceInvoice);
-
+           
             SupplierRecurringChargeManager supplierRecurringChargeManager = new SupplierRecurringChargeManager();
-            List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate, context.IssueDate);
+            List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, context.IssueDate);
 
             if ( voiceItemSetNames.Count == 0 && smsItemSetNames.Count == 0 && (evaluatedSupplierRecurringCharges == null || evaluatedSupplierRecurringCharges.Count == 0))
             {
@@ -107,14 +83,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
 
             decimal? minAmount = _partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
-            List<SupplierInvoiceBySaleCurrencyItemDetails> supplierVoiceInvoiceBySaleCurrencyItemDetails = null;
-            List<SupplierSMSInvoiceBySaleCurrencyItemDetails> supplierSMSInvoiceBySaleCurrencyItemDetails = null;
-            LoadCurrencyItemSet(dimensionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails, offsetValue, voiceAnalyticTableId, smsAnalytictableId, isVoiceEnabled, isSMSEnabled, canGenerateVoiceInvoice, out supplierVoiceInvoiceBySaleCurrencyItemDetails, out supplierSMSInvoiceBySaleCurrencyItemDetails);
-
-            if (supplierVoiceInvoiceBySaleCurrencyItemDetails == null)
-                supplierVoiceInvoiceBySaleCurrencyItemDetails = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
-            if (supplierSMSInvoiceBySaleCurrencyItemDetails == null)
-                supplierSMSInvoiceBySaleCurrencyItemDetails = new List<SupplierSMSInvoiceBySaleCurrencyItemDetails>();
+           
             if (taxItemDetails != null)
             {
                 foreach (var tax in taxItemDetails)
@@ -129,24 +98,25 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     }
                 }
             }
+            if (invoiceByCostCurrency == null)
+                invoiceByCostCurrency = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
+            AddRecurringChargeToSupplierCurrency(invoiceByCostCurrency, evaluatedSupplierRecurringCharges, canGenerateVoiceInvoice);
 
-            AddRecurringChargeToSupplierCurrency(supplierVoiceInvoiceBySaleCurrencyItemDetails, supplierSMSInvoiceBySaleCurrencyItemDetails, evaluatedSupplierRecurringCharges, canGenerateVoiceInvoice);
-
-            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(voiceItemSetNames, smsItemSetNames, taxItemDetails, supplierVoiceInvoiceBySaleCurrencyItemDetails, supplierSMSInvoiceBySaleCurrencyItemDetails, evaluatedSupplierRecurringCharges, canGenerateVoiceInvoice);
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(voiceItemSetNames, smsItemSetNames, taxItemDetails, invoiceByCostCurrency, evaluatedSupplierRecurringCharges, canGenerateVoiceInvoice);
             #region BuildSupplierInvoiceDetails
-            SupplierInvoiceDetails supplierInvoiceDetails = BuildSupplierInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, commission, commissionType, canGenerateVoiceInvoice);
+            SupplierInvoiceDetails supplierInvoiceDetails = BuildSupplierInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, canGenerateVoiceInvoice);
             if (supplierInvoiceDetails != null)
             {
-                supplierInvoiceDetails.TimeZoneId = timeZoneId;
+                supplierInvoiceDetails.TimeZoneId = resolvedPayload.TimeZoneId;
                 supplierInvoiceDetails.TotalAmount = supplierInvoiceDetails.CostAmount;
                 supplierInvoiceDetails.TotalAmountAfterCommission = supplierInvoiceDetails.AmountAfterCommission;
                 supplierInvoiceDetails.TotalSMSAmountAfterCommission = supplierInvoiceDetails.SMSAmountAfterCommission;
                 supplierInvoiceDetails.TotalOriginalAmountAfterCommission = supplierInvoiceDetails.OriginalAmountAfterCommission;
                 supplierInvoiceDetails.TotalSMSOriginalAmountAfterCommission = supplierInvoiceDetails.SMSOriginalAmountAfterCommission;
 
-                supplierInvoiceDetails.Commission = commission;
-                supplierInvoiceDetails.CommissionType = commissionType;
-                supplierInvoiceDetails.Offset = offset;
+                supplierInvoiceDetails.Commission = resolvedPayload.Commission;
+                supplierInvoiceDetails.CommissionType = resolvedPayload.CommissionType;
+                supplierInvoiceDetails.Offset = resolvedPayload.Offset;
                 if (taxItemDetails != null)
                 {
                     foreach (var tax in taxItemDetails)
@@ -158,7 +128,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         supplierInvoiceDetails.TotalAmount += ((supplierInvoiceDetails.CostAmount * Convert.ToDecimal(tax.Value)) / 100);
                         supplierInvoiceDetails.TotalSMSAmount += ((supplierInvoiceDetails.TotalSMSAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
-
                     context.ActionAfterGenerateInvoice = (invoice) =>
                     {
 
@@ -206,7 +175,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                     if (!financialAccountInvoiceType.IgnoreFromBalance)
                     {
-                        SetInvoiceBillingTransactions(context, supplierInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                        SetInvoiceBillingTransactions(context, supplierInvoiceDetails, financialAccount, resolvedPayload.FromDate, resolvedPayload.ToDateForBillingTransaction);
                     }
 
                     ConfigManager configManager = new ConfigManager();
@@ -252,19 +221,18 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             #endregion
         }
-
-        private void AddRecurringChargeToSupplierCurrency(List<SupplierInvoiceBySaleCurrencyItemDetails> supplierInvoiceBySaleCurrencyItemDetails, List<SupplierSMSInvoiceBySaleCurrencyItemDetails> supplierSMSInvoiceBySaleCurrencyItemDetails, List<RecurringChargeItem> recurringChargeItems, bool canGenerateVoiceInvoice)
+        private void AddRecurringChargeToSupplierCurrency(List<SupplierInvoiceBySaleCurrencyItemDetails> costCurrencyItemDetails, List<RecurringChargeItem> recurringChargeItems, bool canGenerateVoiceInvoice)
         {
             if (recurringChargeItems != null && recurringChargeItems.Count > 0)
             {
-                if (supplierInvoiceBySaleCurrencyItemDetails == null)
-                    supplierInvoiceBySaleCurrencyItemDetails = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
+                if (costCurrencyItemDetails == null)
+                    costCurrencyItemDetails = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
 
                 foreach (var item in recurringChargeItems)
                 {
                     if (canGenerateVoiceInvoice)
                     {
-                        var supplierInvoiceBySaleCurrencyItemDetail = supplierInvoiceBySaleCurrencyItemDetails.FindRecord(x => x.CurrencyId == item.CurrencyId && x.Month == item.RecurringChargeMonth);
+                        var supplierInvoiceBySaleCurrencyItemDetail = costCurrencyItemDetails.FindRecord(x => x.CurrencyId == item.CurrencyId && x.Month == item.RecurringChargeMonth);
                         if (supplierInvoiceBySaleCurrencyItemDetail != null)
                         {
                             supplierInvoiceBySaleCurrencyItemDetail.Amount += item.Amount;
@@ -274,7 +242,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         }
                         else
                         {
-                            supplierInvoiceBySaleCurrencyItemDetails.Add(new SupplierInvoiceBySaleCurrencyItemDetails
+                            costCurrencyItemDetails.Add(new SupplierInvoiceBySaleCurrencyItemDetails
                             {
                                 FromDate = item.From,
                                 ToDate = item.To,
@@ -291,176 +259,24 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                         }
                     }
-                    if (supplierSMSInvoiceBySaleCurrencyItemDetails == null)
-                        supplierSMSInvoiceBySaleCurrencyItemDetails = new List<SupplierSMSInvoiceBySaleCurrencyItemDetails>();
-                    var supplierSMSInvoiceBySaleCurrencyItemDetail = supplierSMSInvoiceBySaleCurrencyItemDetails.FindRecord(x => x.CurrencyId == item.CurrencyId && x.Month == item.RecurringChargeMonth);
-                    if (supplierSMSInvoiceBySaleCurrencyItemDetail != null)
-                    {
-                        supplierSMSInvoiceBySaleCurrencyItemDetail.Amount += item.Amount;
-                        supplierSMSInvoiceBySaleCurrencyItemDetail.AmountAfterCommission += item.Amount;
-                        supplierSMSInvoiceBySaleCurrencyItemDetail.AmountAfterCommissionWithTaxes += item.AmountAfterTaxes;
-                        supplierSMSInvoiceBySaleCurrencyItemDetail.TotalRecurringChargeAmount += item.AmountAfterTaxes;
-                    }
-                    else
-                    {
-                        supplierSMSInvoiceBySaleCurrencyItemDetails.Add(new SupplierSMSInvoiceBySaleCurrencyItemDetails
-                        {
-                            FromDate = item.From,
-                            ToDate = item.To,
-                            AmountAfterCommission = item.Amount,
-                            AmountAfterCommissionWithTaxes = item.AmountAfterTaxes,
-                            NumberOfSMS = 0,
-                            CurrencyId = item.CurrencyId,
-                            Amount = item.Amount,
-                            TotalRecurringChargeAmount = item.AmountAfterTaxes,
-                            Month = item.RecurringChargeMonth
-                        });
-
-                    }
                 }
             }
         }
-
-
-        private void LoadCurrencyItemSet(string dimensionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue, Guid voiceAnalytictableId, Guid smsAnalyticTableId, bool isVoiceEnabled, bool isSMSEnabled, bool canGenerateVoiceInvoice, out List<SupplierInvoiceBySaleCurrencyItemDetails> supplierVoiceInvoiceBySaleCurrencyItemDetails,  out List<SupplierSMSInvoiceBySaleCurrencyItemDetails> supplierSMSInvoiceBySaleCurrencyItemDetails)
+        private List<SupplierInvoiceBySaleCurrencyItemDetails> loadVoiceCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
         {
-            supplierVoiceInvoiceBySaleCurrencyItemDetails = null;
-            supplierSMSInvoiceBySaleCurrencyItemDetails = null;
-            if (isVoiceEnabled && canGenerateVoiceInvoice)
-            {
-                List<string> voiceListMeasures = new List<string> { "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
-                List<string> voiceListDimensions = new List<string> { "CostCurrency", "MonthQueryTimeShift" };
-                var voiceAnalyticResult = GetFilteredRecords(voiceListDimensions, voiceListMeasures, dimensionName, dimensionValue, fromDate, toDate, voiceAnalytictableId, null, offsetValue);
-                if (voiceAnalyticResult != null && voiceAnalyticResult.Data != null && voiceAnalyticResult.Data.Count() != 0)
-                {
-                    supplierVoiceInvoiceBySaleCurrencyItemDetails =  BuildVoiceCurrencyItemSetNameFromAnalytic(voiceAnalyticResult.Data, commission, commissionType, taxItemDetails);
-                }
-            }
-            if (isSMSEnabled)
-            {
-                List<string> smsListMeasures = new List<string> { "NumberOfSMS", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
-                List<string> smsListDimensions = new List<string> { "CostCurrency", "MonthQueryTimeShift" };
-                var smsAnalyticResult = GetFilteredRecords(smsListDimensions, smsListMeasures, dimensionName, dimensionValue, fromDate, toDate, smsAnalyticTableId, null, offsetValue);
-                if (smsAnalyticResult != null && smsAnalyticResult.Data != null && smsAnalyticResult.Data.Count() != 0)
-                {
-                    supplierSMSInvoiceBySaleCurrencyItemDetails = BuildSMSCurrencyItemSetNameFromAnalytic(smsAnalyticResult.Data, commission, commissionType, taxItemDetails);
-                }
-            }
+            List<string> voiceListMeasures = new List<string> { "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
+            List<string> voiceListDimensions = new List<string> { "CostCurrency", "MonthQueryTimeShift" };
+            return _invoiceGenerationManager.GetInvoiceVoiceMappedRecords(voiceListDimensions, voiceListMeasures, dimentionName, dimensionValue, fromDate, toDate, null, offsetValue, (analyticRecord) => {
+                return CurrencyItemSetNameMapper(analyticRecord, commission, taxItemDetails, true);
+            });
         }
-
-        private List<SupplierInvoiceBySaleCurrencyItemDetails> BuildVoiceCurrencyItemSetNameFromAnalytic(IEnumerable<AnalyticRecord> analyticRecords, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        private List<SupplierInvoiceBySaleCurrencyItemDetails> loadSMSCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
         {
-            List<SupplierInvoiceBySaleCurrencyItemDetails> supplierInvoiceBySaleCurrencies = null;
-            if (analyticRecords != null)
-            {
-                supplierInvoiceBySaleCurrencies = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
-                foreach (var analyticRecord in analyticRecords)
-                {
-                    #region ReadDataFromAnalyticResult
-                    DimensionValue costCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
-                    DimensionValue month = analyticRecord.DimensionValues.ElementAtOrDefault(1);
-
-                    MeasureValue costNet_OrigCurr = GetMeasureValue(analyticRecord, "CostNet_OrigCurr");
-                    MeasureValue costDuration = GetMeasureValue(analyticRecord, "CostDuration");
-                    MeasureValue calls = GetMeasureValue(analyticRecord, "NumberOfCalls");
-                    MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
-                    MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
-                    #endregion
-
-                    var costNet = Convert.ToDecimal(costNet_OrigCurr == null ? 0.0 : costNet_OrigCurr.Value ?? 0.0);
-                    if (costNet != 0)
-                    {
-                        var supplierInvoiceBySaleCurrencyItemDetails = new SupplierInvoiceBySaleCurrencyItemDetails
-                        {
-                            CurrencyId = Convert.ToInt32(costCurrencyId.Value),
-                            FromDate = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
-                            ToDate = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
-                            Duration = Convert.ToDecimal(costDuration.Value ?? 0.0),
-                            NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
-                            Amount = costNet,
-                            Month = month.Value != null ? month.Value.ToString() : null
-                        };
-                        if (commission.HasValue)
-                        {
-                            supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission = supplierInvoiceBySaleCurrencyItemDetails.Amount + ((supplierInvoiceBySaleCurrencyItemDetails.Amount * commission.Value) / 100);
-                        }
-                        else
-                        {
-                            supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission = supplierInvoiceBySaleCurrencyItemDetails.Amount;
-                        }
-
-                        supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes = supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission;
-
-                        if (taxItemDetails != null)
-                        {
-                            foreach (var tax in taxItemDetails)
-                            {
-                                supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes += ((supplierInvoiceBySaleCurrencyItemDetails.Amount * Convert.ToDecimal(tax.Value)) / 100);
-                            }
-                        }
-                        supplierInvoiceBySaleCurrencyItemDetails.TotalTrafficAmount = supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes;
-                        supplierInvoiceBySaleCurrencies.Add(supplierInvoiceBySaleCurrencyItemDetails);
-                    }
-
-                }
-            }
-            return supplierInvoiceBySaleCurrencies;
-        }
-        private List<SupplierSMSInvoiceBySaleCurrencyItemDetails> BuildSMSCurrencyItemSetNameFromAnalytic(IEnumerable<AnalyticRecord> analyticRecords, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
-        {
-            List<SupplierSMSInvoiceBySaleCurrencyItemDetails> supplierInvoiceBySaleCurrencies = null;
-
-            if (analyticRecords != null)
-            {
-                supplierInvoiceBySaleCurrencies = new List<SupplierSMSInvoiceBySaleCurrencyItemDetails>();
-                foreach (var analyticRecord in analyticRecords)
-                {
-                    #region ReadDataFromAnalyticResult
-                    DimensionValue costCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
-                    DimensionValue month = analyticRecord.DimensionValues.ElementAtOrDefault(1);
-
-                    MeasureValue costNet_OrigCurr = GetMeasureValue(analyticRecord, "CostNet_OrigCurr");
-                    MeasureValue sms = GetMeasureValue(analyticRecord, "NumberOfSMS");
-                    MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
-                    MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
-                    #endregion
-
-                    var costNet = Convert.ToDecimal(costNet_OrigCurr == null ? 0.0 : costNet_OrigCurr.Value ?? 0.0);
-                    if (costNet != 0)
-                    {
-                        var supplierInvoiceBySaleCurrencyItemDetails = new SupplierSMSInvoiceBySaleCurrencyItemDetails
-                        {
-                            CurrencyId = Convert.ToInt32(costCurrencyId.Value),
-                            FromDate = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
-                            ToDate = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
-                            NumberOfSMS = Convert.ToInt32(sms.Value ?? 0.0),
-                            Amount = costNet,
-                            Month = month.Value != null ? month.Value.ToString() : null
-                        };
-                        if (commission.HasValue)
-                        {
-                            supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission = supplierInvoiceBySaleCurrencyItemDetails.Amount + ((supplierInvoiceBySaleCurrencyItemDetails.Amount * commission.Value) / 100);
-                        }
-                        else
-                        {
-                            supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission = supplierInvoiceBySaleCurrencyItemDetails.Amount;
-                        }
-
-                        supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes = supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission;
-
-                        if (taxItemDetails != null)
-                        {
-                            foreach (var tax in taxItemDetails)
-                            {
-                                supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes += ((supplierInvoiceBySaleCurrencyItemDetails.Amount * Convert.ToDecimal(tax.Value)) / 100);
-                            }
-                        }
-                        supplierInvoiceBySaleCurrencies.Add(supplierInvoiceBySaleCurrencyItemDetails);
-                    }
-
-                }
-            }
-            return supplierInvoiceBySaleCurrencies;
+            List<string> smsListMeasures = new List<string> { "NumberOfSMS", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
+            List<string> smsListDimensions = new List<string> { "CostCurrency", "MonthQueryTimeShift" };
+            return _invoiceGenerationManager.GetInvoiceSMSMappedRecords(smsListDimensions, smsListMeasures, dimentionName, dimensionValue, fromDate, toDate, null, offsetValue, (analyticRecord) => {
+                return CurrencyItemSetNameMapper(analyticRecord, commission, taxItemDetails, false);
+            });
         }
         private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, SupplierInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount, DateTime fromDate, DateTime toDate)
         {
@@ -498,7 +314,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
 
         }
-        private SupplierInvoiceDetails BuildSupplierInvoiceDetails(List<InvoiceBillingRecord> voiceItemSetNames, List<SMSInvoiceBillingRecord> smsItemSetNames,  string partnerType, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, bool canGenerateVoiceInvoice)
+        private SupplierInvoiceDetails BuildSupplierInvoiceDetails(List<SupplierInvoiceItemDetails> voiceItemSetNames, List<SupplierSMSInvoiceItemDetails> smsItemSetNames,  string partnerType, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, bool canGenerateVoiceInvoice)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             SupplierInvoiceDetails supplierInvoiceDetails = null;
@@ -512,19 +328,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     };
                     foreach (var invoiceBillingRecord in voiceItemSetNames)
                     {
-                        supplierInvoiceDetails.Duration += invoiceBillingRecord.InvoiceMeasures.CostDuration;
-                        supplierInvoiceDetails.CostAmount += invoiceBillingRecord.InvoiceMeasures.CostNet;
-                        supplierInvoiceDetails.OriginalCostAmount += invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr;
-                        supplierInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
+                        supplierInvoiceDetails.Duration += invoiceBillingRecord.Duration;
+                        supplierInvoiceDetails.CostAmount += invoiceBillingRecord.CostAmount;
+                        supplierInvoiceDetails.OriginalCostAmount += invoiceBillingRecord.OriginalCostAmount;
+                        supplierInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.NumberOfCalls;
                         supplierInvoiceDetails.OriginalSupplierCurrencyId = invoiceBillingRecord.OriginalSupplierCurrencyId;
                         supplierInvoiceDetails.SupplierCurrencyId = invoiceBillingRecord.SupplierCurrencyId;
-                        supplierInvoiceDetails.AmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
-                        supplierInvoiceDetails.OriginalAmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
-
+                        supplierInvoiceDetails.AmountAfterCommission += invoiceBillingRecord.AmountAfterCommission;
+                        supplierInvoiceDetails.OriginalAmountAfterCommission += invoiceBillingRecord.OriginalAmountAfterCommission;
                     }
-                 
                 }
-
                 if (smsItemSetNames != null && smsItemSetNames.Count > 0)
                 {
                     if (supplierInvoiceDetails == null)
@@ -536,13 +349,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     }
                     foreach (var invoiceBillingRecord in smsItemSetNames)
                     {
-                        supplierInvoiceDetails.TotalSMSAmount += invoiceBillingRecord.InvoiceMeasures.CostNet;
-                        supplierInvoiceDetails.TotalNumberOfSMS += invoiceBillingRecord.InvoiceMeasures.NumberOfSMS;
+                        supplierInvoiceDetails.TotalSMSAmount += invoiceBillingRecord.CostAmount;
+                        supplierInvoiceDetails.TotalNumberOfSMS += invoiceBillingRecord.NumberOfSMS;
                         supplierInvoiceDetails.OriginalSupplierCurrencyId = invoiceBillingRecord.OriginalSupplierCurrencyId;
                         supplierInvoiceDetails.SupplierCurrencyId = invoiceBillingRecord.SupplierCurrencyId;
-                        supplierInvoiceDetails.SMSAmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
-                        supplierInvoiceDetails.SMSOriginalAmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
-
+                        supplierInvoiceDetails.SMSAmountAfterCommission += invoiceBillingRecord.AmountAfterCommission;
+                        supplierInvoiceDetails.SMSOriginalAmountAfterCommission += invoiceBillingRecord.OriginalAmountAfterCommission;
                     }
                 }
             }
@@ -567,422 +379,225 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return supplierInvoiceDetails;
         }
 
-        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(List<InvoiceBillingRecord> voiceItemSetNames, List<SMSInvoiceBillingRecord> smsItemSetNames, IEnumerable<VRTaxItemDetail> taxItemDetails, List<SupplierInvoiceBySaleCurrencyItemDetails> supplierVoiceInvoicesBySaleCurrency, List<SupplierSMSInvoiceBySaleCurrencyItemDetails> supplierSMSInvoicesBySaleCurrency, List<RecurringChargeItem> supplierRecurringCharges, bool canGenerateVoiceInvoice)
+        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(List<SupplierInvoiceItemDetails> voiceItemSetNames, List<SupplierSMSInvoiceItemDetails> smsItemSetNames, IEnumerable<VRTaxItemDetail> taxItemDetails, List<SupplierInvoiceBySaleCurrencyItemDetails> supplierVoiceInvoicesBySaleCurrency, List<RecurringChargeItem> supplierRecurringCharges, bool canGenerateVoiceInvoice)
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
-
-            if (supplierVoiceInvoicesBySaleCurrency != null && supplierVoiceInvoicesBySaleCurrency.Count > 0 && canGenerateVoiceInvoice)
-            {
-                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
-                {
-                    SetName = "GroupingByCurrency",
-                    Items = new List<GeneratedInvoiceItem>()
-                };
-                foreach (var supplierInvoiceBySaleCurrency in supplierVoiceInvoicesBySaleCurrency)
-                {
-                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                    {
-                        Details = supplierInvoiceBySaleCurrency,
-                        Name = " "
-                    });
-                }
-
-                generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-
-            }
-
-            if(supplierSMSInvoicesBySaleCurrency!=null && supplierSMSInvoicesBySaleCurrency.Count > 0)
-            {
-                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
-                {
-                    SetName = "SMSGroupingByCurrency",
-                    Items = new List<GeneratedInvoiceItem>()
-                };
-                foreach (var supplierSMSInvoiceBySaleCurrency in supplierSMSInvoicesBySaleCurrency)
-                {
-                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                    {
-                        Details = supplierSMSInvoiceBySaleCurrency,
-                        Name = " "
-                    });
-                }
-
-                generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-            }
-
-            if (voiceItemSetNames != null && voiceItemSetNames.Count > 0 && canGenerateVoiceInvoice)
-            {
-                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
-                {
-                    SetName = "GroupedByCostZone",
-                    Items = new List<GeneratedInvoiceItem>()
-                };
-                foreach (var item in voiceItemSetNames)
-                {
-                    SupplierInvoiceItemDetails supplierInvoiceItemDetails = new Entities.SupplierInvoiceItemDetails()
-                    {
-                        Duration = item.InvoiceMeasures.CostDuration,
-                        NumberOfCalls = item.InvoiceMeasures.NumberOfCalls,
-                        OriginalSupplierCurrencyId = item.OriginalSupplierCurrencyId,
-                        OriginalCostAmount = item.InvoiceMeasures.CostNet_OrigCurr,
-                        CostAmount = item.InvoiceMeasures.CostNet,
-                        SupplierZoneId = item.SupplierZoneId,
-                        SupplierId = item.SupplierId,
-                        SupplierCurrencyId = item.SupplierCurrencyId,
-                        SupplierRate = item.SupplierRate,
-                        SupplierRateTypeId = item.SupplierRateTypeId,
-                        FromDate = item.InvoiceMeasures.BillingPeriodFrom,
-                        ToDate = item.InvoiceMeasures.BillingPeriodTo,
-                        AmountAfterCommission = item.InvoiceMeasures.AmountAfterCommission,
-                        OriginalAmountAfterCommission = item.InvoiceMeasures.OriginalAmountAfterCommission,
-                        AmountAfterCommissionWithTaxes = item.InvoiceMeasures.AmountAfterCommissionWithTaxes,
-                        OriginalAmountAfterCommissionWithTaxes = item.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes,
-                        OriginalSupplierAmountWithTaxes = item.InvoiceMeasures.CostNet_OrigCurrWithTaxes,
-                        SupplierAmountWithTaxes = item.InvoiceMeasures.CostNetWithTaxes,
-                        CostDealZoneGroupNb = item.CostDealZoneGroupNb,
-                        CostDealTierNb = item.CostDealTierNb,
-                        CostDeal = item.CostDeal,
-                        CostDealRateTierNb = item.CostDealRateTierNb,
-                    };
-                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                    {
-                        Details = supplierInvoiceItemDetails,
-                        Name = " "
-                    });
-                }
-                if (generatedInvoiceItemSet.Items.Count > 0)
-                {
-                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                }
-            }
-
-            if(smsItemSetNames!=null && smsItemSetNames.Count > 0)
-            {
-                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
-                {
-                    SetName = "GroupedByCostMobileNetwork",
-                    Items = new List<GeneratedInvoiceItem>()
-                };
-                foreach (var item in smsItemSetNames)
-                {
-                    SupplierSMSInvoiceItemDetails supplierInvoiceItemDetails = new Entities.SupplierSMSInvoiceItemDetails()
-                    {
-                        NumberOfSMS = item.InvoiceMeasures.NumberOfSMS,
-                        OriginalSupplierCurrencyId = item.OriginalSupplierCurrencyId,
-                        OriginalCostAmount = item.InvoiceMeasures.CostNet_OrigCurr,
-                        CostAmount = item.InvoiceMeasures.CostNet,
-                        SupplierMobileNetworkId = item.SupplierMobileNetworkId,
-                        SupplierId = item.SupplierId,
-                        SupplierCurrencyId = item.SupplierCurrencyId,
-                        SupplierRate = item.SupplierRate,
-                        FromDate = item.InvoiceMeasures.BillingPeriodFrom,
-                        ToDate = item.InvoiceMeasures.BillingPeriodTo,
-                        AmountAfterCommission = item.InvoiceMeasures.AmountAfterCommission,
-                        OriginalAmountAfterCommission = item.InvoiceMeasures.OriginalAmountAfterCommission,
-                        AmountAfterCommissionWithTaxes = item.InvoiceMeasures.AmountAfterCommissionWithTaxes,
-                        OriginalAmountAfterCommissionWithTaxes = item.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes,
-                        OriginalSupplierAmountWithTaxes = item.InvoiceMeasures.CostNet_OrigCurrWithTaxes,
-                        SupplierAmountWithTaxes = item.InvoiceMeasures.CostNetWithTaxes,
-                    };
-                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                    {
-                        Details = supplierInvoiceItemDetails,
-                        Name = " "
-                    });
-                }
-                if (generatedInvoiceItemSet.Items.Count > 0)
-                {
-                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                }
-            }
-            if (generatedInvoiceItemSets.Count > 0)
-            {
-                if (taxItemDetails != null && taxItemDetails.Count() > 0)
-                {
-                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
-                    {
-                        SetName = "Taxes",
-                        Items = new List<GeneratedInvoiceItem>()
-                    };
-                    foreach (var item in taxItemDetails)
-                    {
-                        generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                        {
-                            Details = item,
-                            Name = " "
-                        });
-                    }
-                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                }
-            }
-            if (supplierRecurringCharges != null && supplierRecurringCharges.Count > 0)
-            {
-                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
-                {
-                    SetName = "RecurringCharge",
-                    Items = new List<GeneratedInvoiceItem>()
-                };
-                foreach (var supplierRecurringCharge in supplierRecurringCharges)
-                {
-                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                    {
-                        Details = supplierRecurringCharge,
-                        Name = " "
-                    });
-                }
-                generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-            }
-
+            _invoiceGenerationManager.AddGeneratedInvoiceItemSet("GroupingByCurrency", generatedInvoiceItemSets, supplierVoiceInvoicesBySaleCurrency);
+            _invoiceGenerationManager.AddGeneratedInvoiceItemSet("GroupedByCostZone", generatedInvoiceItemSets, voiceItemSetNames);
+            _invoiceGenerationManager.AddGeneratedInvoiceItemSet("Taxes", generatedInvoiceItemSets, taxItemDetails);
+            _invoiceGenerationManager.AddGeneratedInvoiceItemSet("GroupedByCostMobileNetwork", generatedInvoiceItemSets, smsItemSetNames);
+            _invoiceGenerationManager.AddGeneratedInvoiceItemSet("RecurringCharge", generatedInvoiceItemSets, supplierRecurringCharges);
             return generatedInvoiceItemSets;
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, Guid analytictableId, int? currencyId,TimeSpan? offset)
+        private SupplierSMSInvoiceItemDetails SMSItemSetNamesMapper(AnalyticRecord analyticRecord, int currencyId, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
         {
-            AnalyticManager analyticManager = new AnalyticManager();
-
-            Dictionary<string, dynamic> queryParameters = null;
-            if(offset.HasValue)
+            var costNetValue = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "CostNetNotNULL");
+            if (costNetValue != 0)
             {
-                queryParameters = new Dictionary<string, dynamic>();
-                queryParameters.Add("BatchStart_TimeShift", offset.Value);
-            }
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
-            {
-                Query = new AnalyticQuery()
+                SupplierSMSInvoiceItemDetails invoiceBillingRecord = new SupplierSMSInvoiceItemDetails
                 {
-                    DimensionFields = listDimensions,
-                    MeasureFields = listMeasures,
-                    TableId = analytictableId,
-                    FromTime = fromDate,
-                    ToTime = toDate,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>(),
-                    CurrencyId = currencyId,
-                    QueryParameters = queryParameters
-                    //  OrderType = AnalyticQueryOrderType.ByAllDimensions
-                },
-                SortByColumnName = "DimensionValues[0].Name"
-            };
-            DimensionFilter dimensionFilter = new DimensionFilter()
-            {
-                Dimension = dimentionFilterName,
-                FilterValues = new List<object> { dimentionFilterValue }
-            };
-            analyticQuery.Query.Filters.Add(dimensionFilter);
-            return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
-        }
-        private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
-        {
-            MeasureValue measureValue;
-            analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
-            return measureValue;
-        }
-        private void ConvertAnalyticDataToList(IEnumerable<AnalyticRecord> voiceAnalyticRecords, IEnumerable<AnalyticRecord> smsAnalyticRecords, int currencyId, List<InvoiceBillingRecord> voiceItemSetNames, List<SMSInvoiceBillingRecord> smsItemSetNames, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue, bool canGenerateVoiceInvoice)
-        {
-            if (voiceAnalyticRecords != null && voiceAnalyticRecords.Count()>0 && canGenerateVoiceInvoice)
-            {
-                foreach (var analyticRecord in voiceAnalyticRecords)
+                    SupplierId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord, 1),
+                    SupplierMobileNetworkId = _invoiceGenerationManager.GetDimensionValue<long>(analyticRecord, 0),
+                    SupplierCurrencyId = currencyId,
+                    OriginalSupplierCurrencyId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord, 2),
+                    SupplierRate = _invoiceGenerationManager.GetDimensionValue<Decimal>(analyticRecord, 3),
+                    CostAmount = costNetValue,
+                    NumberOfSMS = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "NumberOfSMS"),
+                    OriginalCostAmount = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "CostNet_OrigCurr"),
+                };
+
+                var billingPeriodFromDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodFrom");
+                var billingPeriodToDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodTo");
+                if (offsetValue.HasValue)
                 {
-
-                    #region ReadDataFromAnalyticResult
-                    DimensionValue supplierZoneId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
-                    DimensionValue supplierId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
-                    DimensionValue supplierCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
-                    DimensionValue supplierRate = analyticRecord.DimensionValues.ElementAtOrDefault(3);
-                    DimensionValue supplierRateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(4);
-
-                    DimensionValue costDealZoneGroupNb = analyticRecord.DimensionValues.ElementAtOrDefault(5);
-                    DimensionValue costDealTierNb = analyticRecord.DimensionValues.ElementAtOrDefault(6);
-                    DimensionValue costDeal = analyticRecord.DimensionValues.ElementAtOrDefault(7);
-                    DimensionValue costDealRateTierNb = analyticRecord.DimensionValues.ElementAtOrDefault(8);
-
-
-                    MeasureValue costNet_OrigCurr = GetMeasureValue(analyticRecord, "CostNet_OrigCurr");
-                    MeasureValue costDuration = GetMeasureValue(analyticRecord, "CostDuration");
-                    MeasureValue costNet = GetMeasureValue(analyticRecord, "CostNetNotNULL");
-                    MeasureValue calls = GetMeasureValue(analyticRecord, "NumberOfCalls");
-                    MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
-                    MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
-                    #endregion
-
-                    var costNetValue = Convert.ToDecimal(costNet == null ? 0.0 : costNet.Value ?? 0.0);
-                    if (costNetValue != 0)
-                    {
-                        InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
-                        {
-                            SupplierId = Convert.ToInt32(supplierId.Value),
-                            SupplierCurrencyId = currencyId,
-                            OriginalSupplierCurrencyId = Convert.ToInt32(supplierCurrencyId.Value),
-                            SupplierRate = supplierRate != null ? Convert.ToDecimal(supplierRate.Value) : default(Decimal),
-                            SupplierRateTypeId = supplierRateTypeId != null && supplierRateTypeId.Value != null ? Convert.ToInt32(supplierRateTypeId.Value) : default(int?),
-                            SupplierZoneId = Convert.ToInt64(supplierZoneId.Value),
-                            InvoiceMeasures = new InvoiceMeasures
-                            {
-                                CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0),
-                                CostNet = costNetValue,
-                                NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
-                                CostNet_OrigCurr = Convert.ToDecimal(costNet_OrigCurr == null ? 0.0 : costNet_OrigCurr.Value ?? 0.0),
-                            },
-                            CostDeal = costDeal != null ? Convert.ToInt32(costDeal.Value) : default(int?),
-                            CostDealRateTierNb = costDealRateTierNb != null ? Convert.ToDecimal(costDealRateTierNb.Value) : default(Decimal?),
-                            CostDealZoneGroupNb = costDealZoneGroupNb != null ? Convert.ToInt32(costDealZoneGroupNb.Value) : default(int?),
-                            CostDealTierNb = costDealTierNb != null ? Convert.ToInt32(costDealTierNb.Value) : default(int?),
-                        };
-
-
-                        if (billingPeriodFrom != null)
-                        {
-                            var originalBillingPeriodFromDate = Convert.ToDateTime(billingPeriodFrom.Value);
-                            var originalBillingPeriodToDate = Convert.ToDateTime(billingPeriodTo.Value);
-                            var billingPeriodFromDate = originalBillingPeriodFromDate;
-                            var billingPeriodToDate = originalBillingPeriodToDate;
-                            if (offsetValue.HasValue)
-                            {
-                                billingPeriodFromDate = billingPeriodFromDate.Add(offsetValue.Value);
-                                billingPeriodToDate = billingPeriodToDate.Add(offsetValue.Value);
-                            }
-
-                            invoiceBillingRecord.InvoiceMeasures.OriginalBillingPeriodFrom = originalBillingPeriodFromDate;
-                            invoiceBillingRecord.InvoiceMeasures.OriginalBillingPeriodTo = originalBillingPeriodToDate;
-                            invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom = billingPeriodFromDate;
-                            invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo = billingPeriodToDate;
-                        }
-
-
-                        if (commission.HasValue)
-                        {
-                            if (commissionType.HasValue && commissionType.Value == CommissionType.DoNotDisplay)
-                            {
-                                invoiceBillingRecord.SupplierRate = invoiceBillingRecord.SupplierRate + ((invoiceBillingRecord.SupplierRate * commission.Value) / 100);
-                            }
-                            invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * commission.Value) / 100);
-                            invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet + ((invoiceBillingRecord.InvoiceMeasures.CostNet * commission.Value) / 100);
-                        }
-                        else
-                        {
-                            invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr;
-                            invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet;
-                        }
-
-                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
-                        invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
-                        invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurrWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr;
-                        invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet;
-
-                        if (taxItemDetails != null)
-                        {
-                            foreach (var tax in taxItemDetails)
-                            {
-                                invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
-
-                                invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
-
-                                invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurrWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * Convert.ToDecimal(tax.Value)) / 100);
-
-                                invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.CostNet * Convert.ToDecimal(tax.Value)) / 100);
-                            }
-                        }
-
-                        voiceItemSetNames.Add(invoiceBillingRecord);
-
-                    }
-
+                    billingPeriodFromDate = billingPeriodFromDate.Add(offsetValue.Value);
+                    billingPeriodToDate = billingPeriodToDate.Add(offsetValue.Value);
                 }
-            }
+                invoiceBillingRecord.FromDate = billingPeriodFromDate;
+                invoiceBillingRecord.ToDate = billingPeriodToDate;
 
-            if(smsAnalyticRecords != null && smsAnalyticRecords.Count() > 0)
-            {
-                foreach (var analyticRecord in smsAnalyticRecords)
+                if (commission.HasValue)
                 {
-
-                    #region ReadDataFromAnalyticResult
-                    DimensionValue supplierMobileNetworkId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
-                    DimensionValue supplierId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
-                    DimensionValue supplierCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
-                    DimensionValue supplierRate = analyticRecord.DimensionValues.ElementAtOrDefault(3);
-
-
-                    MeasureValue costNet_OrigCurr = GetMeasureValue(analyticRecord, "CostNet_OrigCurr");
-                    MeasureValue costNet = GetMeasureValue(analyticRecord, "CostNetNotNULL");
-                    MeasureValue sms = GetMeasureValue(analyticRecord, "NumberOfSMS");
-                    MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
-                    MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
-                    #endregion
-
-                    var costNetValue = Convert.ToDecimal(costNet == null ? 0.0 : costNet.Value ?? 0.0);
-                    if (costNetValue != 0)
+                    if (commissionType.HasValue && commissionType.Value == CommissionType.DoNotDisplay)
                     {
-                        SMSInvoiceBillingRecord invoiceBillingRecord = new SMSInvoiceBillingRecord
-                        {
-                            SupplierId = Convert.ToInt32(supplierId.Value),
-                            SupplierMobileNetworkId = Convert.ToInt64(supplierMobileNetworkId.Value),
-                            SupplierCurrencyId = currencyId,
-                            OriginalSupplierCurrencyId = Convert.ToInt32(supplierCurrencyId.Value),
-                            SupplierRate = supplierRate != null ? Convert.ToDecimal(supplierRate.Value) : default(Decimal),
-                            InvoiceMeasures = new SMSInvoiceMeasures
-                            {
-                                CostNet = costNetValue,
-                                NumberOfSMS = Convert.ToInt32(sms.Value ?? 0.0),
-                                CostNet_OrigCurr = Convert.ToDecimal(costNet_OrigCurr == null ? 0.0 : costNet_OrigCurr.Value ?? 0.0),
-                            }
-                        };
-
-
-                        if (billingPeriodFrom != null)
-                        {
-                            var originalBillingPeriodFromDate = Convert.ToDateTime(billingPeriodFrom.Value);
-                            var originalBillingPeriodToDate = Convert.ToDateTime(billingPeriodTo.Value);
-                            var billingPeriodFromDate = originalBillingPeriodFromDate;
-                            var billingPeriodToDate = originalBillingPeriodToDate;
-                            if (offsetValue.HasValue)
-                            {
-                                billingPeriodFromDate = billingPeriodFromDate.Add(offsetValue.Value);
-                                billingPeriodToDate = billingPeriodToDate.Add(offsetValue.Value);
-                            }
-
-                            invoiceBillingRecord.InvoiceMeasures.OriginalBillingPeriodFrom = originalBillingPeriodFromDate;
-                            invoiceBillingRecord.InvoiceMeasures.OriginalBillingPeriodTo = originalBillingPeriodToDate;
-                            invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom = billingPeriodFromDate;
-                            invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo = billingPeriodToDate;
-                        }
-
-
-                        if (commission.HasValue)
-                        {
-                            if (commissionType.HasValue && commissionType.Value == CommissionType.DoNotDisplay)
-                            {
-                                invoiceBillingRecord.SupplierRate = invoiceBillingRecord.SupplierRate + ((invoiceBillingRecord.SupplierRate * commission.Value) / 100);
-                            }
-                            invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * commission.Value) / 100);
-                            invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet + ((invoiceBillingRecord.InvoiceMeasures.CostNet * commission.Value) / 100);
-                        }
-                        else
-                        {
-                            invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr;
-                            invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet;
-                        }
-
-                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
-                        invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
-                        invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurrWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr;
-                        invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet;
-
-                        if (taxItemDetails != null)
-                        {
-                            foreach (var tax in taxItemDetails)
-                            {
-                                invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
-
-                                invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
-
-                                invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurrWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * Convert.ToDecimal(tax.Value)) / 100);
-
-                                invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.CostNet * Convert.ToDecimal(tax.Value)) / 100);
-                            }
-                        }
-
-                        smsItemSetNames.Add(invoiceBillingRecord);
-
+                        invoiceBillingRecord.SupplierRate = invoiceBillingRecord.SupplierRate + ((invoiceBillingRecord.SupplierRate * commission.Value) / 100);
                     }
+                    invoiceBillingRecord.OriginalAmountAfterCommission = invoiceBillingRecord.OriginalCostAmount + ((invoiceBillingRecord.OriginalCostAmount * commission.Value) / 100);
+                    invoiceBillingRecord.AmountAfterCommission = invoiceBillingRecord.CostAmount + ((invoiceBillingRecord.CostAmount * commission.Value) / 100);
+                }
+                else
+                {
+                    invoiceBillingRecord.OriginalAmountAfterCommission = invoiceBillingRecord.OriginalCostAmount;
+                    invoiceBillingRecord.AmountAfterCommission = invoiceBillingRecord.CostAmount;
+                }
+
+                invoiceBillingRecord.AmountAfterCommissionWithTaxes = invoiceBillingRecord.AmountAfterCommission;
+                invoiceBillingRecord.OriginalAmountAfterCommissionWithTaxes = invoiceBillingRecord.OriginalAmountAfterCommission;
+                invoiceBillingRecord.OriginalSupplierAmountWithTaxes = invoiceBillingRecord.OriginalCostAmount;
+                invoiceBillingRecord.SupplierAmountWithTaxes = invoiceBillingRecord.CostAmount;
+
+                if (taxItemDetails != null)
+                {
+                    foreach (var tax in taxItemDetails)
+                    {
+                        invoiceBillingRecord.AmountAfterCommissionWithTaxes += ((invoiceBillingRecord.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+
+                        invoiceBillingRecord.OriginalAmountAfterCommissionWithTaxes += ((invoiceBillingRecord.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+
+                        invoiceBillingRecord.OriginalSupplierAmountWithTaxes += ((invoiceBillingRecord.OriginalCostAmount * Convert.ToDecimal(tax.Value)) / 100);
+
+                        invoiceBillingRecord.SupplierAmountWithTaxes += ((invoiceBillingRecord.CostAmount * Convert.ToDecimal(tax.Value)) / 100);
+                    }
+                }
+                return invoiceBillingRecord;
+            }
+            return null;
+        }
+        private SupplierInvoiceItemDetails VoiceItemSetNamesMapper(AnalyticRecord analyticRecord, int currencyId, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
+        {
+            var costNetValue = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "CostNetNotNULL");
+            if (costNetValue != 0)
+            {
+                SupplierInvoiceItemDetails invoiceBillingRecord = new SupplierInvoiceItemDetails
+                {
+                    SupplierId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord,1),
+                    SupplierCurrencyId = currencyId,
+                    OriginalSupplierCurrencyId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord,2),
+                    SupplierRate = _invoiceGenerationManager.GetDimensionValue<Decimal>(analyticRecord, 3),
+                    SupplierRateTypeId = _invoiceGenerationManager.GetDimensionValue<int?>(analyticRecord, 4),
+                    SupplierZoneId = _invoiceGenerationManager.GetDimensionValue<long>(analyticRecord, 0),
+                    Duration = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "CostDuration"),
+                    CostAmount = costNetValue,
+                    NumberOfCalls = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "NumberOfCalls"),
+                    OriginalCostAmount = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "CostNet_OrigCurr"),
+                    CostDeal = _invoiceGenerationManager.GetDimensionValue<int?>(analyticRecord, 7),
+                    CostDealRateTierNb = _invoiceGenerationManager.GetDimensionValue<Decimal?>(analyticRecord, 8),
+                    CostDealZoneGroupNb = _invoiceGenerationManager.GetDimensionValue<long?>(analyticRecord, 5),
+                    CostDealTierNb = _invoiceGenerationManager.GetDimensionValue<int?>(analyticRecord, 6),
+                };
+                var billingPeriodFromDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodFrom");
+                var billingPeriodToDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodTo");
+                if (offsetValue.HasValue)
+                {
+                    billingPeriodFromDate = billingPeriodFromDate.Add(offsetValue.Value);
+                    billingPeriodToDate = billingPeriodToDate.Add(offsetValue.Value);
+                }
+                invoiceBillingRecord.FromDate = billingPeriodFromDate;
+                invoiceBillingRecord.ToDate = billingPeriodToDate;
+
+                if (commission.HasValue)
+                {
+                    if (commissionType.HasValue && commissionType.Value == CommissionType.DoNotDisplay)
+                    {
+                        invoiceBillingRecord.SupplierRate = invoiceBillingRecord.SupplierRate + ((invoiceBillingRecord.SupplierRate * commission.Value) / 100);
+                    }
+                    invoiceBillingRecord.OriginalAmountAfterCommission = invoiceBillingRecord.OriginalCostAmount + ((invoiceBillingRecord.OriginalCostAmount * commission.Value) / 100);
+                    invoiceBillingRecord.AmountAfterCommission = invoiceBillingRecord.CostAmount + ((invoiceBillingRecord.CostAmount * commission.Value) / 100);
+                }
+                else
+                {
+                    invoiceBillingRecord.OriginalAmountAfterCommission = invoiceBillingRecord.OriginalCostAmount;
+                    invoiceBillingRecord.AmountAfterCommission = invoiceBillingRecord.CostAmount;
+                }
+
+                invoiceBillingRecord.AmountAfterCommissionWithTaxes = invoiceBillingRecord.AmountAfterCommission;
+                invoiceBillingRecord.OriginalAmountAfterCommissionWithTaxes = invoiceBillingRecord.OriginalAmountAfterCommission;
+                invoiceBillingRecord.OriginalSupplierAmountWithTaxes = invoiceBillingRecord.OriginalCostAmount;
+                invoiceBillingRecord.SupplierAmountWithTaxes = invoiceBillingRecord.CostAmount;
+
+                if (taxItemDetails != null)
+                {
+                    foreach (var tax in taxItemDetails)
+                    {
+                        invoiceBillingRecord.AmountAfterCommissionWithTaxes += ((invoiceBillingRecord.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+                        invoiceBillingRecord.OriginalAmountAfterCommissionWithTaxes += ((invoiceBillingRecord.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+                        invoiceBillingRecord.OriginalSupplierAmountWithTaxes += ((invoiceBillingRecord.OriginalCostAmount * Convert.ToDecimal(tax.Value)) / 100);
+                        invoiceBillingRecord.SupplierAmountWithTaxes += ((invoiceBillingRecord.CostAmount * Convert.ToDecimal(tax.Value)) / 100);
+                    }
+                }
+                return invoiceBillingRecord;
+            }
+            return null;
+        }
+
+        private SupplierInvoiceBySaleCurrencyItemDetails CurrencyItemSetNameMapper(AnalyticRecord analyticRecord, decimal? commission, IEnumerable<VRTaxItemDetail> taxItemDetails, bool fillVoiceData)
+        {
+            var saleNetValue = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "CostNet_OrigCurr");
+            if (saleNetValue != 0)
+            {
+                var supplierInvoiceBySaleCurrencyItemDetails = new SupplierInvoiceBySaleCurrencyItemDetails
+                {
+                    CurrencyId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord, 0),
+                    FromDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodFrom"),
+                    ToDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodTo"),
+                    Duration = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "SaleDuration"),
+                    NumberOfCalls = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "NumberOfCalls"),
+                    NumberOfSMS = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "NumberOfSMS"),
+                    Amount = saleNetValue,
+                    Month = _invoiceGenerationManager.GetDimensionValue<string>(analyticRecord, 1),
+                };
+
+                if (commission.HasValue)
+                {
+                    supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission = supplierInvoiceBySaleCurrencyItemDetails.Amount + ((supplierInvoiceBySaleCurrencyItemDetails.Amount * commission.Value) / 100);
+                    supplierInvoiceBySaleCurrencyItemDetails.SMSAmountAfterCommission = supplierInvoiceBySaleCurrencyItemDetails.TotalSMSAmount + ((supplierInvoiceBySaleCurrencyItemDetails.TotalSMSAmount * commission.Value) / 100);
+                }
+                else
+                {
+                    supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission = supplierInvoiceBySaleCurrencyItemDetails.Amount;
+                    supplierInvoiceBySaleCurrencyItemDetails.SMSAmountAfterCommission = supplierInvoiceBySaleCurrencyItemDetails.TotalSMSAmount;
+                }
+                supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes = supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission;
+                supplierInvoiceBySaleCurrencyItemDetails.SMSAmountAfterCommissionWithTaxes = supplierInvoiceBySaleCurrencyItemDetails.SMSAmountAfterCommission;
+
+                if (taxItemDetails != null)
+                {
+                    foreach (var tax in taxItemDetails)
+                    {
+                        supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes += ((supplierInvoiceBySaleCurrencyItemDetails.Amount * Convert.ToDecimal(tax.Value)) / 100);
+                        supplierInvoiceBySaleCurrencyItemDetails.SMSAmountAfterCommissionWithTaxes += ((supplierInvoiceBySaleCurrencyItemDetails.TotalSMSAmount * Convert.ToDecimal(tax.Value)) / 100);
+                    }
+                }
+
+                supplierInvoiceBySaleCurrencyItemDetails.TotalTrafficAmount = supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes;
+                supplierInvoiceBySaleCurrencyItemDetails.TotalSMSAmount = supplierInvoiceBySaleCurrencyItemDetails.SMSAmountAfterCommissionWithTaxes;
+                supplierInvoiceBySaleCurrencyItemDetails.TotalFullAmount = supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes;
+
+                return supplierInvoiceBySaleCurrencyItemDetails;
+            }
+            return null;
+
+        }
+        public void TryMergeByCurrencyItemSets(List<SupplierInvoiceBySaleCurrencyItemDetails> mainByCurrencyItemSets, List<SupplierInvoiceBySaleCurrencyItemDetails> sMSInvoiceBySaleCurrency)
+        {
+            if (sMSInvoiceBySaleCurrency != null && sMSInvoiceBySaleCurrency.Count > 0)
+            {
+                foreach (var item in sMSInvoiceBySaleCurrency)
+                {
+                    var invoiceBySaleCurrencyItem = mainByCurrencyItemSets.FindRecord(x => x.CurrencyId == item.CurrencyId && x.Month == item.Month);
+                    if (invoiceBySaleCurrencyItem != null)
+                    {
+                        invoiceBySaleCurrencyItem.TotalSMSAmount += item.TotalSMSAmount;
+                        invoiceBySaleCurrencyItem.SMSAmountAfterCommission += item.SMSAmountAfterCommission;
+                        invoiceBySaleCurrencyItem.SMSAmountAfterCommissionWithTaxes += item.SMSAmountAfterCommissionWithTaxes;
+                        invoiceBySaleCurrencyItem.TotalFullAmount += item.SMSAmountAfterCommissionWithTaxes;
+                    }
+                    else
+                    {
+                        mainByCurrencyItemSets.Add(new SupplierInvoiceBySaleCurrencyItemDetails
+                        {
+                            FromDate = item.FromDate,
+                            ToDate = item.ToDate,
+                            TotalSMSAmount = item.TotalSMSAmount,
+                            NumberOfSMS = item.NumberOfSMS,
+                            CurrencyId = item.CurrencyId,
+                            SMSAmountAfterCommission = item.SMSAmountAfterCommission,
+                            SMSAmountAfterCommissionWithTaxes = item.SMSAmountAfterCommissionWithTaxes,
+                            Month = item.Month,
+                            TotalFullAmount = item.SMSAmountAfterCommissionWithTaxes,
+                        });
+                    }
+
                 }
             }
         }
@@ -1046,68 +661,5 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
         }
         #endregion
-
-
-        public class InvoiceMeasures
-        {
-            public decimal CostNet { get; set; }
-            public decimal CostNetWithTaxes { get; set; }
-            public decimal CostNet_OrigCurr { get; set; }
-            public decimal CostNet_OrigCurrWithTaxes { get; set; }
-            public int NumberOfCalls { get; set; }
-            public Decimal CostDuration { get; set; }
-            public DateTime BillingPeriodTo { get; set; }
-            public DateTime BillingPeriodFrom { get; set; }
-            public DateTime OriginalBillingPeriodTo { get; set; }
-            public DateTime OriginalBillingPeriodFrom { get; set; }
-            public decimal AmountAfterCommission { get; set; }
-            public decimal OriginalAmountAfterCommission { get; set; }
-            public decimal AmountAfterCommissionWithTaxes { get; set; }
-            public decimal OriginalAmountAfterCommissionWithTaxes { get; set; }
-
-        }
-        public class InvoiceBillingRecord
-        {
-            public InvoiceMeasures InvoiceMeasures { get; set; }
-            public long SupplierZoneId { get; set; }
-            public int SupplierId { get; set; }
-            public int OriginalSupplierCurrencyId { get; set; }
-            public Decimal SupplierRate { get; set; }
-            public int? SupplierRateTypeId { get; set; }
-            public int SupplierCurrencyId { get; set; }
-            public int? CostDealZoneGroupNb { get; set; }
-            public int? CostDealTierNb { get; set; }
-            public int? CostDeal { get; set; }
-            public Decimal? CostDealRateTierNb { get; set; }
-
-        }
-
-        public class SMSInvoiceMeasures
-        {
-            public decimal CostNet { get; set; }
-            public decimal CostNetWithTaxes { get; set; }
-            public decimal CostNet_OrigCurr { get; set; }
-            public decimal CostNet_OrigCurrWithTaxes { get; set; }
-            public int NumberOfSMS { get; set; }
-            public DateTime BillingPeriodTo { get; set; }
-            public DateTime BillingPeriodFrom { get; set; }
-            public DateTime OriginalBillingPeriodTo { get; set; }
-            public DateTime OriginalBillingPeriodFrom { get; set; }
-            public decimal AmountAfterCommission { get; set; }
-            public decimal OriginalAmountAfterCommission { get; set; }
-            public decimal AmountAfterCommissionWithTaxes { get; set; }
-            public decimal OriginalAmountAfterCommissionWithTaxes { get; set; }
-
-        }
-        public class SMSInvoiceBillingRecord
-        {
-            public SMSInvoiceMeasures InvoiceMeasures { get; set; }
-            public long SupplierMobileNetworkId { get; set; }
-            public int SupplierId { get; set; }
-            public int OriginalSupplierCurrencyId { get; set; }
-            public Decimal SupplierRate { get; set; }
-            public int? SupplierRateTypeId { get; set; }
-            public int SupplierCurrencyId { get; set; }
-        }
     }
 }

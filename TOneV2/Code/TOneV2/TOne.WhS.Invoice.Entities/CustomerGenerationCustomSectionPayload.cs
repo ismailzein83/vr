@@ -7,10 +7,14 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Invoice.Entities
 {
-    public class CustomerGenerationCustomSectionPayload
+    public class BaseGenerationCustomSectionPayload
     {
         public int? TimeZoneId { get; set; }
         public decimal? Commission { get; set; }
         public CommissionType CommissionType { get; set; }
+    }
+    public class CustomerGenerationCustomSectionPayload: BaseGenerationCustomSectionPayload
+    {
+        
     }
 }

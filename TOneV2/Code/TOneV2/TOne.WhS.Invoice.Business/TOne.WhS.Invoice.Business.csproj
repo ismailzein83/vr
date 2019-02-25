@@ -115,6 +115,7 @@
     <Compile Include="Extensions\VoiceInvoiceSubSectionFilter.cs" />
     <Compile Include="Extensions\VoiceInvoiceUIGridColumnFilter.cs" />
     <Compile Include="InvoiceComparisonTemplateManager.cs" />
+    <Compile Include="InvoiceGenerationManager.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoiceSettings.cs" />
     <Compile Include="InvoiceSettlementManager.cs" />

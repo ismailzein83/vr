@@ -17,7 +17,7 @@ namespace TOne.WhS.Invoice.Entities
         public string OriginalSaleCurrency { get; set; }
         public int CountryId { get; set; }
         public int SupplierId { get; set; }
-        public int SupplierZoneId { get; set; }
+        public long SupplierZoneId { get; set; }
         public string CustomerCurrency { get; set; }
 
         public CustomerInvoiceDetails() { }

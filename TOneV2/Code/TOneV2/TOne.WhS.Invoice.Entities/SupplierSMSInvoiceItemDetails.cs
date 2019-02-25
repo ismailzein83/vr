@@ -17,8 +17,8 @@ namespace TOne.WhS.Invoice.Entities
         public decimal OriginalCostAmount { get; set; }
         public int SupplierId { get; set; }
         public long SupplierMobileNetworkId { get; set; }
-        public long OriginalSupplierCurrencyId { get; set; }
-        public long SupplierCurrencyId { get; set; }
+        public int OriginalSupplierCurrencyId { get; set; }
+        public int SupplierCurrencyId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public decimal AmountAfterCommission { get; set; }

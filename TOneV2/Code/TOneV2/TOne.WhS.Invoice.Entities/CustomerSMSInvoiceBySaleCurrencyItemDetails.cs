@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Invoice.Entities
 {
-	public class CustomerSMSInvoiceBySaleCurrencyItemDetails: SMSInvoiceBySaleCurrencyItemDetails
-	{
-	}
+	//public class CustomerSMSInvoiceBySaleCurrencyItemDetails: SMSInvoiceBySaleCurrencyItemDetails
+	//{
+	//}
 }

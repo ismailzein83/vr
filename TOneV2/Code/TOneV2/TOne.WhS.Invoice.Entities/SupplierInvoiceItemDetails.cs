@@ -18,8 +18,8 @@ namespace TOne.WhS.Invoice.Entities
         public decimal OriginalCostAmount { get; set; }
         public int SupplierId { get; set; }
         public long SupplierZoneId { get; set; }
-        public long OriginalSupplierCurrencyId { get; set; }
-        public long SupplierCurrencyId { get; set; }
+        public int OriginalSupplierCurrencyId { get; set; }
+        public int SupplierCurrencyId { get; set; }
         public int? SupplierRateTypeId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
@@ -29,7 +29,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal OriginalAmountAfterCommissionWithTaxes { get; set; }
         public decimal OriginalSupplierAmountWithTaxes { get; set; }
         public decimal SupplierAmountWithTaxes { get; set; }
-        public int? CostDealZoneGroupNb { get; set; }
+        public long? CostDealZoneGroupNb { get; set; }
         public int? CostDealTierNb { get; set; }
         public int? CostDeal { get; set; }
         public Decimal? CostDealRateTierNb { get; set; }
