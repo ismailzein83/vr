@@ -141,6 +141,11 @@ namespace Vanrise.Data.RDB
                 Expression(new RDBFixedFloatExpression { Value = (float)value });
                 return;
             }
+            if (value is double)
+            {
+                Expression(new RDBFixedFloatExpression { Value = (float)(double)value });
+                return;
+            }
             if (value is Guid)
             {
                 Expression(new RDBFixedGuidExpression { Value = (Guid)value });
