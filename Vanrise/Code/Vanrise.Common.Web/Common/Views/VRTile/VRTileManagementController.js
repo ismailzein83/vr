@@ -94,7 +94,7 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
     }
 
     function registerAutoRefreshJob(tile) {
-        VRTimerService.registerJob(tile.onTimerElapsed, $scope, tile.AutoRefreshInterval);
+        VRTimerService.registerJob(tile.onTimerElapsed, $scope, tile.autoRefreshInterval);
     }
 
     function getView() {
