@@ -9,7 +9,7 @@ using Vanrise.ExcelConversion.Entities;
 namespace TOne.WhS.Invoice.Entities
 {
 	public enum ComparisonCriteria { Calls = 0, Duration = 1, Amount = 2 }
-	public class InvoiceComparisonInput : VRTempPayloadSettings
+	public class InvoiceComparisonInput //: VRTempPayloadSettings
 	{
 		public ListMapping ListMapping { get; set; }
 		public string DateTimeFormat { get; set; }
@@ -21,11 +21,11 @@ namespace TOne.WhS.Invoice.Entities
 		public List<ComparisonResult> ComparisonResults { get; set; }
 		public List<ComparisonCriteria> ComparisonCriterias { get; set; }
 		public int?  DecimalDigits  { get; set; }
-		public bool IsCustomer { get; set; }
-		public int FinancialAccountId { get; set; }
-		public IEnumerable<InvoiceComparisonInput> GetActiveServicesRDLCSchema()
-		{
-			return null;
-		}
+		//public bool IsCustomer { get; set; }
+		//public int FinancialAccountId { get; set; }
+		//public IEnumerable<InvoiceComparisonInput> GetActiveServicesRDLCSchema()
+		//{
+		//	return null;
+		//}
 	}
 }
