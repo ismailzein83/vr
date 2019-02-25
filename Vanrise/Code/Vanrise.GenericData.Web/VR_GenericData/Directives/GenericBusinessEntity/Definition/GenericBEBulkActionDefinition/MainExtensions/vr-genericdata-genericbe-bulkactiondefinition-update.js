@@ -62,7 +62,7 @@ app.directive("vrGenericdataGenericbeBulkactiondefinitionUpdate", ["UtilsService
                 };
 
                 $scope.scopeModel.onFieldDeselected = function (item) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, item.Name, "FieldName");
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, item.Name, "data.FieldName");
                     ctrl.datasource.splice(index, 1);
                 };
 
