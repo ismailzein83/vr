@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
@@ -12,6 +13,9 @@ namespace Vanrise.Analytic.Entities
     {
         public string ReportName { get; set; }
         public Guid TableId { get; set; }
+
+        public VRTimePeriod TimePeriod { get; set; }
+
         public DateTime FromTime { get; set; }
         public DateTime? ToTime { get; set; }
         public int? LastHours { get; set; }

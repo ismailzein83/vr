@@ -251,6 +251,13 @@ namespace Vanrise.Analytic.Business
         {
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
             var query = inputQuery.VRDeepCopy();
+            if(query.TimePeriod != null)
+            {
+                var timePeriodContext = new VRTimePeriodContext { EffectiveDate = DateTime.Now };
+                query.TimePeriod.GetTimePeriod(timePeriodContext);
+                query.FromTime = timePeriodContext.FromTime;
+                query.ToTime = timePeriodContext.ToTime;
+            }
             if (query.AdvancedOrderOptions != null)
             {
                 var additionalMeasures = query.AdvancedOrderOptions.GetAdditionalMeasureNames();
@@ -287,7 +294,7 @@ namespace Vanrise.Analytic.Business
                             Filters = new List<RecordFilter>()
                         };
                         recordFilterGroup.Filters.Add(analyticTableKPISettings.GlobalFilter);
-                        recordFilterGroup.Filters.Add(inputQuery.FilterGroup);
+                        recordFilterGroup.Filters.Add(query.FilterGroup);
                         query.FilterGroup = recordFilterGroup;
 
                     }
