@@ -50,6 +50,7 @@ Retail
 VR_NumberingPlan.PostDeployment.sql
 VR_BEBridge.PostDeployment.sql
 Retail.PostDeployment.sql
+Retail.SwitchReleaseCause.PostDeployment.sql
 
 Retail_Ntegra
 Retail.Ntegra.PostDeployment.sql
