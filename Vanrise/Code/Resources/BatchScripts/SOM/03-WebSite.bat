@@ -15,6 +15,7 @@ xcopy "C:\TFS\SOM\Code\SOM.Web\Images\iconheader.ico" /S /R /y /v /i /z /Q						
 rename																									"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Images\BIL-logoonheader.png" "logoonheader.png"
 rename																									"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Images\BIL-login.png" "login.png"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Bin\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Bin\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Client\Modules\Common\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
