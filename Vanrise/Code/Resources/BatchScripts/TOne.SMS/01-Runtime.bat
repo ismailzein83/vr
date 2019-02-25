@@ -12,7 +12,6 @@ xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release" /y /v /z /i /Q /R					
 xcopy "C:\TFS\Retail\Code\Retail.Runtime\App.config.SMS-WHS.exclude" /y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\TOne.SMS\Runtime\%YYYYMMDD%\"
 rename																										"\\192.168.110.185\Fixes\WebSite\TOne.SMS\Runtime\%YYYYMMDD%\App.config.SMS-WHS.exclude" "TOne.SMS.Runtime.exe.config"
 rename																										"\\192.168.110.185\Fixes\WebSite\TOne.SMS\Runtime\%YYYYMMDD%\Retail.Runtime.exe" "TOne.SMS.Runtime.exe"
-xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll" /y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\TOne.SMS\Runtime\%YYYYMMDD%\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\TOne.SMS\Runtime\%YYYYMMDD%\"
 xcopy "C:\TFS\Retail\Code\Retail.Demo.Web\Retail_Demo\Elements\SMS\Reports\*.rdlc" /S /E /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\TOne.SMS\Runtime\%YYYYMMDD%\Modules\Retail_Demo\Elements\SMS\Reports"
 xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release\Retail.Demo*" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\TOne.SMS\Runtime\%YYYYMMDD%\"
