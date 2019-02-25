@@ -250,6 +250,10 @@ namespace Vanrise.GenericData.BP.Activities
                                 {
                                     return new CallForwardMobileCDRs() { CallForwardMobileCDR = currentCallForwardMobileCDR };
                                 });
+
+                                if (tempCallForwardMobileCDRs.OriginatedMobileCDR != null)
+                                    continue;
+
                                 tempCallForwardMobileCDRs.OriginatedMobileCDR = uncorrelatedMobileCDR;
 
                                 uncorrelatedMobileCDRIndexesToRemove.Add(i);
@@ -274,6 +278,10 @@ namespace Vanrise.GenericData.BP.Activities
                                 {
                                     return new CallForwardMobileCDRs() { CallForwardMobileCDR = currentCallForwardMobileCDR };
                                 });
+
+                                if (tempCallForwardMobileCDRs.TerminatedMobileCDR != null)
+                                    continue;
+
                                 tempCallForwardMobileCDRs.TerminatedMobileCDR = uncorrelatedMobileCDR;
 
                                 uncorrelatedMobileCDRIndexesToRemove.Add(i);
@@ -285,7 +293,7 @@ namespace Vanrise.GenericData.BP.Activities
                 }
             }
 
-            foreach(var indexToRemove in uncorrelatedMobileCDRIndexesToRemove.OrderByDescending(itm => itm))
+            foreach (var indexToRemove in uncorrelatedMobileCDRIndexesToRemove.OrderByDescending(itm => itm))
                 uncorrelatedMobileCDRList.RemoveAt(indexToRemove);
         }
 
