@@ -28,5 +28,15 @@ namespace Vanrise.Integration.Entities
         public DateTime? BatchEnd { get; set; }
     }
 
-    public enum BatchState {[Description("Normal")] Normal = 0, [Description("Missing")] Missing = 1, [Description("Delayed")] Delayed = 2, [Description("Duplicated")] Duplicated = 3 }
+    public enum BatchState
+    {
+        [Description("Normal")]
+        Normal = 0,
+        [Description("Missing")]
+        Missing = 1,
+        [Description("Delayed")]
+        Delayed = 2,
+        [Description("Duplicated")]
+        Duplicated = 3
+    }
 }
