@@ -58,6 +58,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeAnalysis">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
@@ -140,6 +143,10 @@
     <Reference Include="Vanrise.Common.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Excel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.MainExtensions">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.MainExtensions.dll</HintPath>
     </Reference>
@@ -152,6 +159,15 @@
     </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.MainExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.GenericData.BP.Activities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.Activities.dll</HintPath>
