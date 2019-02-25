@@ -9,9 +9,16 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---common.[extensionconfiguration]-------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('83AD690C-CF9F-49CA-BAD0-07B7AA575BEA','VR_Analytic','Analytic','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticReportSettingsEditor.html","EnableAdd":true}'),
+--common.[extensionconfiguration]-------------------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('83AD690C-CF9F-49CA-BAD0-07B7AA575BEA','VR_Analytic','Analytic','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticReportSettingsEditor.html","EnableAdd":true}'),
 ('82FF3B8A-0C39-4376-9602-B84A240FBF82','VR_AnalyticReport','Analytic Report','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticReportViewEditor.html","EnableAdd":true}'),
-('8C5B1E66-20F0-4B26-BC4F-01060B3C3DAA','VR_Analytic_Report_MeasureStyle_Range','Range Condition','Analytic_MeasureStyleRuleTemplates','{"Editor":"vr-analytic-measurestyle-stylerulecondition-range","RuntimeEditor":""}'),
+
+('8C5B1E66-20F0-4B26-BC4F-01060B3C3DAA','VR_Analytic_Report_MeasureStyle_Range','Range Condition','Analytic_MeasureStyleRuleTemplates','{"Editor":"vr-analytic-measurestyle-stylerulecondition-range","RuntimeEditor":""}'),
 ('4E972A40-2887-412B-B192-8E4E9739631C','VR_Analytic_Report_MeasureStyle_Compare','Compare Condition','Analytic_MeasureStyleRuleTemplates','{"Editor":"vr-analytic-measurestyle-stylerulecondition-compare","RuntimeEditor":""}'),
 
 ('DBEFFA6E-E75E-497F-8ACF-8F15469D9B90','VR_Analytic_Report_RealTime_Chart','Real Time Chart','Analytic_RealTimeWidgetSettings','{"Editor":"vr-analytic-realtime-widgets-chart-definition","RuntimeEditor":"vr-analytic-realtime-chart-toprecords"}'),
@@ -30,7 +37,8 @@ Post-Deployment Script Template
 
 ('D050DEB3-700E-437B-86D1-510A81C0C14C','VR_Analytic_WidgetSettings_Chart','Chart','Analytic_AnalyticWidgetsSettings','{"Editor":"vr-analytic-widgets-chart-definition","RuntimeEditor":"vr-analytic-chart-toprecords"}'),
 ('7A2A35E2-543A-42C7-B97F-E05EE8D09A00','VR_Analytic_WidgetSettings_Grid','Grid','Analytic_AnalyticWidgetsSettings','{"Editor":"vr-analytic-widgets-grid-definition","RuntimeEditor":"vr-analytic-datagrid-analyticrecords"}'),
-('CD2AFBD8-5C2F-4E50-8F36-F57C35A0C10F','VR_Analytic_WidgetSettings_PieChart','Pie Chart','Analytic_AnalyticWidgetsSettings','{"Editor":"vr-analytic-widgets-piechart-definition","RuntimeEditor":"vr-analytic-piechart-toprecords"}'),
+('CD2AFBD8-5C2F-4E50-8F36-F57C35A0C10F','VR_Analytic_WidgetSettings_PieChart','Pie Chart','Analytic_AnalyticWidgetsSettings','{"Editor":"vr-analytic-widgets-piechart-definition","RuntimeEditor":"vr-analytic-piechart-toprecords"}'),
+
 ('A1CB1C46-0FFA-41B0-82B0-2CCE407AD86C','VR_Analytic_Report_RealTime_DefaultSearch','Default Real Time Search','Analytic_RealTimeSearchSettings','{"Editor":"vr-analytic-analyticreport-realtime-searchsettings-defaultsearch","RuntimeEditor":""}'),
 
 ('E2A332A2-74FA-4C42-A5D1-33FBDA093946','VR_Analytic_Report_ItemAction_OpenRecordSearch','Open Record Search','Analytic_ItemActionTemplates','{"Editor":"vr-analytic-analyticitemaction-openrecordsearch"}'),
@@ -69,7 +77,19 @@ Post-Deployment Script Template
 ('E9CC9A31-DD48-45F5-A849-5402CCE3B7AF','VR_Analytic_WidgetSettings_Gauge','Gauge','Analytic_AnalyticWidgetsSettings','{"Editor":"vr-analytic-widgets-gauge-definition","RuntimeEditor":"vr-analytic-gauge-runtime"}'),
 ('76285A3E-C385-49C3-8833-DEA21A40471E','WidgetSettings','Analytic Widget','VRCommon_VRTileExtendedSettings','{"Editor":"vr-common-widgetsettings-definition"}')
 
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[ConfigType],[Settings]))
+merge	[common].[extensionconfiguration] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[ConfigType],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+end
 
 --[sec].[Module]------------------------------1501 to 1600------------------------------------------------------
 begin
@@ -96,21 +116,47 @@ end
 --[sec].[View]-----------------------------15001 to 16000---------------------------------------------------------
 begin
 set nocount on;
-;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])as (select * from (values
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('1FAA2B35-B804-4AD7-9D98-0F933CD36150','Tables','Analytic Table','#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticTableManagement'												,'A7E56800-22DC-40C3-B143-454B3291772D','VR_Analytic/AnalyticTable/GetFilteredAnalyticTables',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2),
 ('3DE2E950-F619-4C54-A999-507BF2E0CD39','Reports','Analytic Report','#/view/Analytic/Views/GenericAnalytic/Definition/AnalyticReportManagement'												,'A7E56800-22DC-40C3-B143-454B3291772D','VR_Analytic/AnalyticReport/GetFilteredAnalyticReports',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3),
 ('D69AAFD7-6630-43A1-AA57-548EA0E9C1EE','Data Analysis Definitions','Data Analysis Definitions','#/view/Analytic/Views/DataAnalysis/DataAnalysisDefinition/DataAnalysisDefinitionManagement','A7E56800-22DC-40C3-B143-454B3291772D','VR_Analytic/DataAnalysisDefinition/GetFilteredDataAnalysisDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4),
 ('ADBB44FE-5470-413C-A5F6-8AE8C585FA31','Report Generation','Report Generation','#/view/Analytic/Views/VRReportGeneration/VRReportGenerationManagement'										,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Business.VRReportGenerationViewSettings, Vanrise.Analytic.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',150)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
+merge	[sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+when not matched by target then
+	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 -------------------------------------------------------------------------------------------------------------
 end
 
 
 --[sec].[BusinessEntity]----------------4201 to 4500------------------------------------------------
 begin
-set nocount on;;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('6FDD628E-C876-4DBF-92BF-77225A88C3B9','VR_Analytic_AnalyticReport','Analytic Reports','7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),('85ABD90F-F9BF-4E0C-87ED-08F067EEA5D4','VR_Analytic_ReportGeneration','Report Generation','61451603-E7B9-40C6-AE27-6CBA974E1B3B',0,'["Manage"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+set nocount on;
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('6FDD628E-C876-4DBF-92BF-77225A88C3B9','VR_Analytic_AnalyticReport','Analytic Reports','7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),
+('85ABD90F-F9BF-4E0C-87ED-08F067EEA5D4','VR_Analytic_ReportGeneration','Report Generation','61451603-E7B9-40C6-AE27-6CBA974E1B3B',0,'["Manage"]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
+merge	[sec].[BusinessEntity] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+when not matched by target then
+	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 ----------------------------------------------------------------------------------------------------
 end
 
@@ -131,7 +177,14 @@ as (select * from (values
 ('VR_Analytic/AnalyticReport/UpdateAnalyticReport','VR_Analytic_AnalyticReport: Edit'),
 ('VR_Analytic/AnalyticReport/AddAnalyticReport','VR_Analytic_AnalyticReport: Add'),
 ('VR_Analytic/AnalyticReport/GetFilteredAnalyticReports','VR_Analytic_AnalyticReport: View'),
-('VR_Analytic/AnalyticReport/GetAnalyticReportConfigTypes',null),('VR_Analytic/DataAnalysisDefinition/GetFilteredDataAnalysisDefinitions','VR_SystemConfiguration: View'),('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinition',null),('VR_Analytic/DataAnalysisDefinition/AddDataAnalysisDefinition','VR_SystemConfiguration: Add'),('VR_Analytic/DataAnalysisDefinition/UpdateDataAnalysisDefinition','VR_SystemConfiguration: Edit'),('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinitionSettingsExtensionConfigs',null),('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinitionsInfo',null),
+('VR_Analytic/AnalyticReport/GetAnalyticReportConfigTypes',null),
+
+('VR_Analytic/DataAnalysisDefinition/GetFilteredDataAnalysisDefinitions','VR_SystemConfiguration: View'),
+('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinition',null),
+('VR_Analytic/DataAnalysisDefinition/AddDataAnalysisDefinition','VR_SystemConfiguration: Add'),
+('VR_Analytic/DataAnalysisDefinition/UpdateDataAnalysisDefinition','VR_SystemConfiguration: Edit'),
+('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinitionSettingsExtensionConfigs',null),
+('VR_Analytic/DataAnalysisDefinition/GetDataAnalysisDefinitionsInfo',null),
 ('VR_Analytic/VRReportGeneration/AddPublicVRReportGeneration','VR_Analytic_ReportGeneration: Manage'),
 ('VR_Analytic/VRReportGeneration/UpdatePublicVRReportGeneration','VR_Analytic_ReportGeneration: Manage')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -148,7 +201,37 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 end
 
---[logging].[LoggableEntity]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[UniqueName],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('61D3E1C1-3D2D-46ED-8021-EE5194BB30F6','VR_Analytic_AnalyticItemConfig_1','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticItemConfig_ViewHistoryItem"}'),('55AA5497-D304-418A-8F03-DBFCDF54BA53','VR_Analytic_AnalyticItemConfig_2','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticItemConfig_ViewHistoryItem"}'),('0D3A3D7A-AA41-4D21-BC24-EFEB3CCDFCCC','VR_Analytic_AnalyticItemConfig_3','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticItemConfig_ViewHistoryItem"}'),('4ABAC893-E6BB-4B94-BC2F-D80567247853','VR_Analytic_AnalyticItemConfig_4','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticItemConfig_ViewHistoryItem"}'),('6B9C0B08-E80D-42CB-AF8E-586C4F9507DF','VR_Notification_AlertRule_71aad15b-32a2-435a-a8b1-f7b07ae60de3','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Notification_AlertRule_ViewHistoryItem"}'),('BBEC00FA-0495-438B-A10F-86C8B7E1BC0C','VR_Analytic_DataAnalysisDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_DataAnalysisDefinition_ViewHistoryItem"}'),('8A52BD2F-91A7-4EBD-A68C-720DBC2369D4','VR_Analytic_DataAnalysisItemDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_DataAnalysisItemDefinition_ViewHistoryItem"}'),('AD3C8E78-517D-404C-A72B-F7027EB37B78','VR_Analytic_AnalyticReport','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticReport_ViewHistoryItem"}'),('5360CA20-02EF-451F-8CBE-62E68BC1C05F','VR_Analytic_AnalyticTable','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticTable_ViewHistoryItem"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[UniqueName],[Settings]))merge	[logging].[LoggableEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]when not matched by target then	insert([ID],[UniqueName],[Settings])	values(s.[ID],s.[UniqueName],s.[Settings]);
+--[logging].[LoggableEntity]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[UniqueName],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('61D3E1C1-3D2D-46ED-8021-EE5194BB30F6','VR_Analytic_AnalyticItemConfig_1','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticItemConfig_ViewHistoryItem"}'),
+('55AA5497-D304-418A-8F03-DBFCDF54BA53','VR_Analytic_AnalyticItemConfig_2','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticItemConfig_ViewHistoryItem"}'),
+('0D3A3D7A-AA41-4D21-BC24-EFEB3CCDFCCC','VR_Analytic_AnalyticItemConfig_3','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticItemConfig_ViewHistoryItem"}'),
+('4ABAC893-E6BB-4B94-BC2F-D80567247853','VR_Analytic_AnalyticItemConfig_4','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticItemConfig_ViewHistoryItem"}'),
+
+('6B9C0B08-E80D-42CB-AF8E-586C4F9507DF','VR_Notification_AlertRule_71aad15b-32a2-435a-a8b1-f7b07ae60de3','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Notification_AlertRule_ViewHistoryItem"}'),
+
+('BBEC00FA-0495-438B-A10F-86C8B7E1BC0C','VR_Analytic_DataAnalysisDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_DataAnalysisDefinition_ViewHistoryItem"}'),
+('8A52BD2F-91A7-4EBD-A68C-720DBC2369D4','VR_Analytic_DataAnalysisItemDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_DataAnalysisItemDefinition_ViewHistoryItem"}'),
+('AD3C8E78-517D-404C-A72B-F7027EB37B78','VR_Analytic_AnalyticReport','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticReport_ViewHistoryItem"}'),
+('5360CA20-02EF-451F-8CBE-62E68BC1C05F','VR_Analytic_AnalyticTable','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Analytic_AnalyticTable_ViewHistoryItem"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[UniqueName],[Settings]))
+merge	[logging].[LoggableEntity] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[UniqueName],[Settings])
+	values(s.[ID],s.[UniqueName],s.[Settings]);
+
+
+
 
 --[bp].[BPDefinition]-------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -170,7 +253,28 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
 
 
-	 --[genericdata].[DataStore]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('42C7CA90-D596-42B9-9F37-CDEEDF799B2F','Logging Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"LogDBConnString","IsRemoteDataStore":false}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Settings]))merge	[genericdata].[DataStore] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Settings])	values(s.[ID],s.[Name],s.[Settings]);	 
+	 
+--[genericdata].[DataStore]-------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('42C7CA90-D596-42B9-9F37-CDEEDF799B2F','Logging Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"LogDBConnString","IsRemoteDataStore":false}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[genericdata].[DataStore] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+
+
+	 
 --[genericdata].[DataRecordStorage]-----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -188,7 +292,10 @@ when matched then
 	[Name] = s.[Name],[DataRecordTypeID] = s.[DataRecordTypeID],[DataStoreID] = s.[DataStoreID],[Settings] = s.[Settings],[State] = s.[State]
 when not matched by target then
 	insert([ID],[Name],[DataRecordTypeID],[DataStoreID],[Settings],[State])
-	values(s.[ID],s.[Name],s.[DataRecordTypeID],s.[DataStoreID],s.[Settings],s.[State]);--[genericdata].[DataRecordType]--------------------------------------------------------------------
+	values(s.[ID],s.[Name],s.[DataRecordTypeID],s.[DataStoreID],s.[Settings],s.[State]);
+
+
+--[genericdata].[DataRecordType]--------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[Name],[ParentID],[Fields],[ExtraFieldsEvaluator],[Settings])
@@ -205,7 +312,8 @@ when matched then
 	[Name] = s.[Name],[ParentID] = s.[ParentID],[Fields] = s.[Fields],[ExtraFieldsEvaluator] = s.[ExtraFieldsEvaluator],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[ParentID],[Fields],[ExtraFieldsEvaluator],[Settings])
-	values(s.[ID],s.[Name],s.[ParentID],s.[Fields],s.[ExtraFieldsEvaluator],s.[Settings]);
+	values(s.[ID],s.[Name],s.[ParentID],s.[Fields],s.[ExtraFieldsEvaluator],s.[Settings]);
+
 
 
 --[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
@@ -275,7 +383,29 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 end
 
---[common].[Setting]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('FC50368F-68DF-4EF4-9367-895EFA393D73','KPI Settings','VR_Analytic_KPISettings','General','{"Editor":"vr-analytic-kpi-settings-editor"}',null,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))merge	[common].[Setting] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]--when matched then--	update set--	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]when not matched by target then	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+--update settings by removing wrong default value
+UPDATE	[common].[Setting]
+SET		[Data]= null
+where	[ID]= 'FC50368F-68DF-4EF4-9367-895EFA393D73' and [Data] = '{"$type":"Vanrise.Analytic.Entities.KPISettings, Vanrise.Analytic.Entities","AnalyticTablesKPISettings":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities]], mscorlib","$values":[{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"c0f56f28-e0af-4cbb-937a-0225cdf86e6a","MeasureStyleRules":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.MeasureStyleRule, Vanrise.Analytic.Entities]], mscorlib","$values":[]}},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"ed2f727d-b654-4708-90f4-05cd515dd809"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"45e3d8c6-96b0-4940-b9fa-0b645d8202b9"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"6cd535c0-ac49-46bb-aecf-0eae33823b20","MeasureStyleRules":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.MeasureStyleRule, Vanrise.Analytic.Entities]], mscorlib","$values":[]}},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"a2c2b20a-f74d-41d4-a01c-158899c704d4","MeasureStyleRules":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.MeasureStyleRule, Vanrise.Analytic.Entities]], mscorlib","$values":[]}},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"4f4c1dc0-6024-4ab9-933d-20f456360112","MeasureStyleRules":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.MeasureStyleRule, Vanrise.Analytic.Entities]], mscorlib","$values":[{"$type":"Vanrise.Analytic.Entities.MeasureStyleRule, Vanrise.Analytic.Entities","MeasureName":"CountCDRs","Rules":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.StyleRule, Vanrise.Analytic.Entities]], mscorlib","$values":[{"$type":"Vanrise.Analytic.Entities.StyleRule, Vanrise.Analytic.Entities","RecordFilter":{"$type":"Vanrise.GenericData.Entities.NumberRecordFilter, Vanrise.GenericData.Entities","CompareOperator":2,"Value":1.0,"FieldName":"CountCDRs"},"StyleValue":0,"StyleCode":"Red"},{"$type":"Vanrise.Analytic.Entities.StyleRule, Vanrise.Analytic.Entities","RecordFilter":{"$type":"Vanrise.GenericData.Entities.NumberRecordFilter, Vanrise.GenericData.Entities","CompareOperator":4,"Value":1.0,"FieldName":"CountCDRs"},"StyleValue":1,"StyleCode":"Green"}]}},{"$type":"Vanrise.Analytic.Entities.MeasureStyleRule, Vanrise.Analytic.Entities","MeasureName":"Amount","Rules":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.StyleRule, Vanrise.Analytic.Entities]], mscorlib","$values":[{"$type":"Vanrise.Analytic.Entities.StyleRule, Vanrise.Analytic.Entities","RecordFilter":{"$type":"Vanrise.GenericData.Entities.NumberRecordFilter, Vanrise.GenericData.Entities","CompareOperator":2,"Value":1.0,"FieldName":"Amount"},"StyleValue":2,"StyleCode":"Yellow"},{"$type":"Vanrise.Analytic.Entities.StyleRule, Vanrise.Analytic.Entities","RecordFilter":{"$type":"Vanrise.GenericData.Entities.NumberRecordFilter, Vanrise.GenericData.Entities","CompareOperator":4,"Value":1.0,"FieldName":"Amount"},"StyleValue":3,"StyleCode":"Blue"}]}}]}},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"23d30cd1-069c-4555-9173-288efe450e3b","MeasureStyleRules":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.MeasureStyleRule, Vanrise.Analytic.Entities]], mscorlib","$values":[]}},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"d68c5031-63b7-4ade-8c9b-2b1d67d2314e","MeasureStyleRules":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.MeasureStyleRule, Vanrise.Analytic.Entities]], mscorlib","$values":[]}},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"bfd79fe4-1f5e-423e-b071-4657c47f5c5b","MeasureStyleRules":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.MeasureStyleRule, Vanrise.Analytic.Entities]], mscorlib","$values":[]}},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"f94323ef-86d9-4752-b458-48bb4a1e24cd"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"efe9d65f-0b0e-4466-918f-4d8982a368f6"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"657436e7-9dba-4364-867a-6a49e3bf87b0"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"8105889d-133f-495d-8d1e-7a74d6a51876"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"3af9e02e-0292-4b8e-a307-7b323f32ea13"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"7ab26f93-16e8-4e25-9ea5-8958d32e5b08"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"5fa5eea4-2bcb-4f8d-a4fb-8cb61a13c792"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"f91f0557-fee5-4607-8457-a8e48fa4f5dd"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"d722f557-9cdc-4634-a86e-a941bf51c035"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"8b2de429-b0d6-4ce1-a5f2-c7c1c3bd2f47"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"8e3baf48-a2d3-4b09-8198-cbb4ad6f76f5"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"952c7db8-116f-484e-9f23-cec81b9491f2"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"ecbce87b-fb59-4a7a-bcc2-e0efe4010e37"},{"$type":"Vanrise.Analytic.Entities.AnalyticTableKPISettings, Vanrise.Analytic.Entities","AnalyticTableId":"90f86f51-ff24-4672-b875-e6d21d307ce7"}]}}'
+
+--[common].[Setting]-------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('FC50368F-68DF-4EF4-9367-895EFA393D73','KPI Settings','VR_Analytic_KPISettings','General','{"Editor":"vr-analytic-kpi-settings-editor"}',null,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+merge	[common].[Setting] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+when not matched by target then
+	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 
 
 
