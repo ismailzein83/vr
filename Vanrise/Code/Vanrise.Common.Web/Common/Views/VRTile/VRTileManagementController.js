@@ -25,8 +25,10 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
     function load() {
         $scope.scopeModel.isLoading = true;
         getView().then(function () {
-            if ($scope.jobIds)
+            if ($scope.jobIds) {
                 VRTimerService.unregisterJobByIds($scope.jobIds);
+                $scope.jobIds.length = 0;
+            }
 
             loadAllControls();
         }).catch(function () {
