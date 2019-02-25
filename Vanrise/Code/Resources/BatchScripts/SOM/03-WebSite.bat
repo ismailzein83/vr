@@ -9,9 +9,9 @@ ECHO SOM WebSite
 
 xcopy "C:\Publish\SOM" /S /E /R /y /v /i /z /Q															"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\SOM\list-of-excluded-files.txt
 xcopy "C:\TFS\SOM\Code\SOM.Web\Web.config.exclude" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\BIL-logoonheader.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Images\"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\BIL-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Images\"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\iconheader.ico" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\SOM\Code\SOM.Web\Images\BIL-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\SOM\Code\SOM.Web\Images\BIL-login.png" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\SOM\Code\SOM.Web\Images\iconheader.ico" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Images\"
 rename																									"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Images\BIL-logoonheader.png" "logoonheader.png"
 rename																									"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Images\BIL-login.png" "login.png"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Bin\"
