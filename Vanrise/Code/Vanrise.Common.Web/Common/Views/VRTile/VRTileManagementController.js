@@ -25,11 +25,10 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
     function load() {
         $scope.scopeModel.isLoading = true;
         getView().then(function () {
-            loadAllControls();
-
             if ($scope.jobIds)
                 VRTimerService.unregisterJobByIds($scope.jobIds);
 
+            loadAllControls();
         }).catch(function () {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
             $scope.scopeModel.isLoading = false;
@@ -74,7 +73,7 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
                                 var payload = { definitionSettings: tileEntity.Settings.ExtendedSettings };
                                 VRUIUtilsService.callDirectiveLoad(tile.tileAPI, payload, autoRefreshDirectiveLoadDeferred);
                                 return autoRefreshDirectiveLoadDeferred.promise;
-                            }
+                            };
                             registerAutoRefreshJob(tile);
                         }
                     });
