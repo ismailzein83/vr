@@ -46,6 +46,6 @@
 NImages\
 Version 13-07-2018\
 Old\
-
+Demo\
 \bin\TOne.WhS.Jazz.
 \bin\TOne.WhS.SMSBusinessEntity.
