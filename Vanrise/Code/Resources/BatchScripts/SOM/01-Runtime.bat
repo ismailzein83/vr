@@ -9,6 +9,7 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO.
 ECHO SOM Runtime
 xcopy "C:\TFS\SOM\Code\SOM.Runtime\bin\x64\Release" 				/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\SOM\runtime-list-of-excluded-files.txt
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic"			/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\"
 xcopy "C:\TFS\SOM\Code\SOM.Runtime\app.config.exclude" 				/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\"
 rename																					"\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\App.config.exclude"	"BIL.Runtime.exe.config"
 rename																					"\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\SOM.Runtime.exe"	"BIL.Runtime.exe"
