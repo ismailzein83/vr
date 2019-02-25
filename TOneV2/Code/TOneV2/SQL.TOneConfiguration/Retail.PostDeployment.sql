@@ -236,7 +236,7 @@ as (select * from (values
 
 ('9C3BE71A-81D8-4A02-A1F7-FBBE6536BBBB','Account Types','Account Types','#/view/Retail_BusinessEntity/Views/AccountType/AccountTypeManagement'						,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountType/GetFilteredAccountTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2,0),
 
-('55C42E70-4A75-46A3-9F05-123EDD668122','Account Package','Account Package','#/view/Retail_BusinessEntity/Views/AccountPackage/AccountPackageManagement','AD9EEB65-70A3-4F57-B261-79F40D541E23',null,null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20,0)
+('55C42E70-4A75-46A3-9F05-123EDD668122','Account Package','Account Package','#/view/Retail_BusinessEntity/Views/AccountPackage/AccountPackageManagement','AD9EEB65-70A3-4F57-B261-79F40D541E23','Retail_BE/AccountPackage/GetFilteredAccountPackages',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20,0)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
@@ -326,9 +326,9 @@ as (select * from (values
 ('Retail_BE/Account/AddAccount',null),
 ('Retail_BE/Account/UpdateAccount',null),
 
-('Retail_BE/AccountPackage/GetFilteredAccountPackages',null),
+('Retail_BE/AccountPackage/GetFilteredAccountPackages','Retail_BE_Package: View Assigned Subscribers'),
 ('Retail_BE/AccountPackage/GetAccountPackage',null),
-('Retail_BE/AccountPackage/AddAccountPackage',null),
+('Retail_BE/AccountPackage/AddAccountPackage','Retail_BE_Package: Assign Subscribers'),
 
 ('Retail_BE/ChargingPolicy/GetFilteredChargingPolicies','Retail_BE_ChargingPolicy: View'),
 ('Retail_BE/ChargingPolicy/GetChargingPolicy',null),

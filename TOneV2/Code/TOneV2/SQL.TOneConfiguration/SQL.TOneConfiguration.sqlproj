@@ -957,5 +957,6 @@
     <None Include="Mediation_Mobile.Common.PostDeployment.sql" />
     <None Include="DBsStructure.txt" />
     <None Include="SomST.PostDeployment.sql" />
+    <None Include="Retail.SwitchReleaseCause.PostDeployment.sql" />
   </ItemGroup>
 </Project>
