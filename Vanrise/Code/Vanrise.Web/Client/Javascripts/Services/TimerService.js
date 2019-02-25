@@ -20,17 +20,40 @@
             };
 
             if (scope != undefined) {
+                if (scope.jobIds == undefined) {
+                    scope.jobIds = [];
+                }
+                scope.jobIds.push(job.id);
+
                 scope.job = job;
                 scope.$on("$destroy", function () {
 
-                    if (scope.job) {
-                        unregisterJob(scope.job);
+                    if (scope.jobIds) {
+                        unregisterJobByIds(scope.jobIds);
                     }
                 });
             }
 
             registeredJobs.push(job);
             return job;
+        }
+
+        function unregisterJobByIds(jobIds) {
+            if (jobIds == undefined)
+                return;
+
+            for (var jobIndex = 0; jobIndex < jobIds.length; jobIndex++) {
+                var currentJobId = jobIds[jobIndex];
+                var index = -1;
+                for (var x = 0; x < registeredJobs.length; x++) {
+                    if (currentJobId == registeredJobs[x].id) {
+                        index = x;
+                        break;
+                    }
+                }
+                if (index >= 0)
+                    registeredJobs.splice(index, 1);
+            }
         }
 
         function unregisterJob(job) {
@@ -79,7 +102,8 @@
 
         return ({
             registerJob: registerJob,
-            unregisterJob: unregisterJob
+            unregisterJob: unregisterJob,
+            unregisterJobByIds: unregisterJobByIds
         });
     }
     appControllers.service('VRTimerService', TimerService);
