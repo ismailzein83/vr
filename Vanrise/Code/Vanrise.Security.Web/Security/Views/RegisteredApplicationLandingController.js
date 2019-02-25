@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RegisteredApplicationLanding.$inject = ['$rootScope', '$scope', 'VRNavigationService', 'UISettingsService', 'VR_Sec_RegisteredApplicationAPIService'];
+    RegisteredApplicationLanding.$inject = ['$rootScope', '$scope', 'VRNavigationService', 'UISettingsService', 'VR_Sec_RegisteredApplicationAPIService', 'SecurityService', 'VRNotificationService'];
 
-    function RegisteredApplicationLanding($rootScope, $scope, VRNavigationService, UISettingsService, VR_Sec_RegisteredApplicationAPIService) {
+    function RegisteredApplicationLanding($rootScope, $scope, VRNavigationService, UISettingsService, VR_Sec_RegisteredApplicationAPIService, SecurityService, VRNotificationService) {
 
 
 
@@ -14,7 +14,13 @@
         function defineScope() {
             $scope.registredApplications = [];
             $scope.openApplication = function (item) {
-                window.location.href = item.URL;
+                $scope.isLoading = true;
+                SecurityService.redirectToApplication(item.URL).then(function () {
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.isLoading = false;
+                });
             };
         }
 
