@@ -46,7 +46,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
+                    if (payload != undefined && payload.data != undefined) {
                         measureStyleRules = payload.data.AnalyticTablesKPISettings;
                     }
                     return VR_Analytic_AnalyticTableAPIService.GetAnalyticTablesInfo().then(function (response) {
@@ -97,8 +97,8 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                     TableIds: [itemTab.analytictable.AnalyticTableId],
                     ItemType: VR_Analytic_AnalyticTypeEnum.Measure.value,
                 };
-
-                var measuresByKPI = UtilsService.getItemByVal(measureStyleRules, itemTab.analytictable.AnalyticTableId, "AnalyticTableId");
+                if (measureStyleRules != undefined)
+                    var measuresByKPI = UtilsService.getItemByVal(measureStyleRules, itemTab.analytictable.AnalyticTableId, "AnalyticTableId");
                 dataItem.measureStyleLoadDeferred = UtilsService.createPromiseDeferred();
                 dataItem.measureStyleLoadDeferred.promise.then(function () {
                     dataItem.isMeasureStyleGridLoading = false;
@@ -109,7 +109,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                         var payload = {
                             measureStyles: measuresByKPI != undefined ? measuresByKPI.MeasureStyleRules : undefined,
                             analyticTableId: itemTab.analytictable.AnalyticTableId,
-                            isLoadedFromKpis :true
+                            isLoadedFromKpis: true
                         };
 
                         VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.measureStyleLoadDeferred);
