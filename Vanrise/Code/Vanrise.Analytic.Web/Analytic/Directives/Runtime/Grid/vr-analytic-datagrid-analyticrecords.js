@@ -134,7 +134,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 };
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
-                    ctrl.gridLeftMenuActions = getGridLeftMenuActions();
+                   // ctrl.gridLeftMenuActions = getGridLeftMenuActions();
                     ctrl.showGrid = true;
                     if (!retrieveDataContext.isDataSorted)
                         dataRetrievalInput.Query.OrderType = initialQueryOrderType;
