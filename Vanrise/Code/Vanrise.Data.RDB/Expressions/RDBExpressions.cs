@@ -231,6 +231,16 @@ namespace Vanrise.Data.RDB
         }
     }
 
+    internal class RDBTextLengthExpression : BaseRDBExpression 
+    {
+        public BaseRDBExpression Expression { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return string.Concat("Len(", this.Expression.ToDBQuery(context), ")");
+        }
+    }
+
     public enum RDBDateTimePart { TimeOnly = 1, DateOnly = 2, DateAndHour = 3 }
     internal class RDBDateTimePartExpression : BaseRDBExpression
     {

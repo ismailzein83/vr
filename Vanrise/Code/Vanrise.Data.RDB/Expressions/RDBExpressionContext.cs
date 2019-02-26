@@ -71,9 +71,9 @@ namespace Vanrise.Data.RDB
 
         public void Column(string tableAlias, string columnName)
         {
-            Expression(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName});
+            Expression(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName });
         }
-        
+
         public RDBTextConcatenationExpressionContext TextConcatenation()
         {
             return new RDBTextConcatenationExpressionContext(_queryBuilderContext, _tableAlias, (exp1, exp2) => Expression(new RDBTextConcatenationExpression { Expression1 = exp1, Expression2 = exp2 }));
@@ -82,6 +82,11 @@ namespace Vanrise.Data.RDB
         public RDBExpressionContext TextLeftPart(int numberOfCharacters)
         {
             return new RDBExpressionContext(_queryBuilderContext, (exp) => Expression(new RDBTextLeftPartExpression { Expression = exp, NbOfCharacters = numberOfCharacters }), _tableAlias);
+        }
+
+        public RDBExpressionContext TextLength()
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (exp) => Expression(new RDBTextLengthExpression { Expression = exp }), _tableAlias);
         }
 
         public void DateNow()
@@ -196,10 +201,10 @@ namespace Vanrise.Data.RDB
         {
             return new RDBDateTimeDiffExpressionContext(_queryBuilderContext, _tableAlias, diffInterval, (exp) => Expression(exp));
         }
-        
+
         public RDBExpressionContext ConvertDecimal()
         {
-            return new RDBExpressionContext(_queryBuilderContext, (expression) => Expression(new RDBConvertDecimalExpression{ Expression = expression }), _tableAlias);
+            return new RDBExpressionContext(_queryBuilderContext, (expression) => Expression(new RDBConvertDecimalExpression { Expression = expression }), _tableAlias);
         }
 
         #region Aggregates
@@ -238,7 +243,7 @@ namespace Vanrise.Data.RDB
         {
             Aggregate(aggregateType, _tableAlias, columnName);
         }
-        
+
         public RDBExpressionContext ExpressionAggregate(RDBNonCountAggregateType aggregateType)
         {
             return new RDBExpressionContext(_queryBuilderContext, (exp) => Aggregate(aggregateType, exp), _tableAlias);
@@ -295,7 +300,7 @@ namespace Vanrise.Data.RDB
             _tableAlias = tableAlias;
             _caseExpression = new RDBCaseExpression { Whens = new List<RDBCaseWhenExpression>() };
             setExpression(_caseExpression);
-        } 
+        }
 
         public RDBCaseExpressionWhenContext AddCase()
         {
@@ -319,7 +324,7 @@ namespace Vanrise.Data.RDB
             _tableAlias = tableAlias;
             _when = new RDBCaseWhenExpression();
             whens.Add(_when);
-        } 
+        }
 
 
         public RDBConditionContext When(RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
@@ -358,6 +363,7 @@ namespace Vanrise.Data.RDB
             return new RDBExpressionContext(_queryBuilderContext, (exp) => _dateTimeAddExpression.ValueToAddExpression = exp, _tableAlias);
         }
     }
+
     public class RDBDateTimeDiffExpressionContext
     {
         RDBQueryBuilderContext _queryBuilderContext;

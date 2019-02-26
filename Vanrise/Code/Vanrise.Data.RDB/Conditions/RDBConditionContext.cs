@@ -145,116 +145,116 @@ namespace Vanrise.Data.RDB
 
         public void EqualsCondition(string tableAlias, string columnName, BaseRDBExpression valueExpression)
         {
-             CompareCondition(
-                    new RDBColumnExpression
-                    {
-                        TableAlias = tableAlias,
-                        ColumnName = columnName
-                    },
-                    RDBCompareConditionOperator.Eq,
-                   valueExpression);
-        }
-                
-        public void EqualsCondition(string table1Alias, string column1Name, string table2Alias, string column2Name)
-        {
-             EqualsCondition(
-                    table1Alias,
-                    column1Name,
+            CompareCondition(
                    new RDBColumnExpression
                    {
-                       TableAlias = table2Alias,
-                       ColumnName = column2Name
-                   });
+                       TableAlias = tableAlias,
+                       ColumnName = columnName
+                   },
+                   RDBCompareConditionOperator.Eq,
+                  valueExpression);
+        }
+
+        public void EqualsCondition(string table1Alias, string column1Name, string table2Alias, string column2Name)
+        {
+            EqualsCondition(
+                   table1Alias,
+                   column1Name,
+                  new RDBColumnExpression
+                  {
+                      TableAlias = table2Alias,
+                      ColumnName = column2Name
+                  });
         }
 
         public void ContainsCondition(string tableAlias, string columnName, string value)
         {
-             CompareCondition(
-                tableAlias,
-                columnName,
-                RDBCompareConditionOperator.Contains,
-                new RDBFixedTextExpression { Value = value });
+            CompareCondition(
+               tableAlias,
+               columnName,
+               RDBCompareConditionOperator.Contains,
+               new RDBFixedTextExpression { Value = value });
         }
 
         public void ContainsCondition(string columnName, string value)
         {
-             ContainsCondition(_tableAlias, columnName, value);
+            ContainsCondition(_tableAlias, columnName, value);
         }
 
         public void NotContainsCondition(string tableAlias, string columnName, string value)
         {
-             CompareCondition(
-                tableAlias,
-                columnName,
-                RDBCompareConditionOperator.NotContains,
-                new RDBFixedTextExpression { Value = value });
+            CompareCondition(
+               tableAlias,
+               columnName,
+               RDBCompareConditionOperator.NotContains,
+               new RDBFixedTextExpression { Value = value });
         }
 
         public void NotContainsCondition(string columnName, string value)
         {
-             NotContainsCondition(_tableAlias, columnName, value);
+            NotContainsCondition(_tableAlias, columnName, value);
         }
 
         public void StartsWithCondition(string tableAlias, string columnName, string value)
         {
-             CompareCondition(
-                tableAlias,
-                columnName,
-                RDBCompareConditionOperator.StartWith,
-                new RDBFixedTextExpression { Value = value });
+            CompareCondition(
+               tableAlias,
+               columnName,
+               RDBCompareConditionOperator.StartWith,
+               new RDBFixedTextExpression { Value = value });
         }
 
         public void StartsWithCondition(string columnName, string value)
         {
-             StartsWithCondition(_tableAlias, columnName, value);
+            StartsWithCondition(_tableAlias, columnName, value);
         }
 
         public void NotStartsWithCondition(string tableAlias, string columnName, string value)
         {
-             CompareCondition(
-                tableAlias,
-                columnName,
-                RDBCompareConditionOperator.NotStartWith,
-                new RDBFixedTextExpression { Value = value });
+            CompareCondition(
+               tableAlias,
+               columnName,
+               RDBCompareConditionOperator.NotStartWith,
+               new RDBFixedTextExpression { Value = value });
         }
 
         public void NotStartsWithCondition(string columnName, string value)
         {
-             NotStartsWithCondition(_tableAlias, columnName, value);
+            NotStartsWithCondition(_tableAlias, columnName, value);
         }
 
         public void EndsWithCondition(string tableAlias, string columnName, string value)
         {
-             CompareCondition(
-                tableAlias,
-                columnName,
-                RDBCompareConditionOperator.EndWith,
-                new RDBFixedTextExpression { Value = value });
+            CompareCondition(
+               tableAlias,
+               columnName,
+               RDBCompareConditionOperator.EndWith,
+               new RDBFixedTextExpression { Value = value });
         }
 
         public void EndsWithCondition(string columnName, string value)
         {
-             EndsWithCondition(_tableAlias, columnName, value);
+            EndsWithCondition(_tableAlias, columnName, value);
         }
 
         public void NotEndsWithCondition(string tableAlias, string columnName, string value)
         {
-             CompareCondition(
-                tableAlias,
-                columnName,
-                RDBCompareConditionOperator.NotEndWith,
-                new RDBFixedTextExpression { Value = value });
+            CompareCondition(
+               tableAlias,
+               columnName,
+               RDBCompareConditionOperator.NotEndWith,
+               new RDBFixedTextExpression { Value = value });
         }
 
         public void NotEndsWithCondition(string columnName, string value)
         {
-             NotEndsWithCondition(_tableAlias, columnName, value);
+            NotEndsWithCondition(_tableAlias, columnName, value);
         }
-        
+
         public RDBSelectQuery ExistsCondition()
         {
             var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext(), false);
-            this.Condition(new RDBExistsCondition { SelectQuery = selectQuery});
+            this.Condition(new RDBExistsCondition { SelectQuery = selectQuery });
             return selectQuery;
         }
 
@@ -294,7 +294,7 @@ namespace Vanrise.Data.RDB
         {
             return ListCondition(oper, values == null ? null : values.Select<Guid, BaseRDBExpression>(itm => new RDBFixedGuidExpression { Value = itm }).ToList());
         }
-        
+
         public RDBExpressionContext ListCondition(RDBListConditionOperator oper, IEnumerable<BaseRDBExpression> values)
         {
             return new RDBExpressionContext(_queryBuilderContext, (expression) => ListCondition(expression, oper, values), _tableAlias);
@@ -312,21 +312,21 @@ namespace Vanrise.Data.RDB
 
         public void ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<BaseRDBExpression> values)
         {
-             ListCondition(
-                new RDBColumnExpression
-                {
-                    TableAlias = tableAlias,
-                    ColumnName = columnName
-                },
-                oper,
-                values);
+            ListCondition(
+               new RDBColumnExpression
+               {
+                   TableAlias = tableAlias,
+                   ColumnName = columnName
+               },
+               oper,
+               values);
         }
 
         public void ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<BaseRDBExpression> values)
         {
-             ListCondition(_tableAlias, columnName, oper, values);
+            ListCondition(_tableAlias, columnName, oper, values);
         }
-        
+
         public void ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<string> values)
         {
             ListCondition(
@@ -338,7 +338,7 @@ namespace Vanrise.Data.RDB
 
         public void ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<string> values)
         {
-             ListCondition(_tableAlias, columnName, oper, values);
+            ListCondition(_tableAlias, columnName, oper, values);
         }
 
         public void ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<int> values)
@@ -408,7 +408,7 @@ namespace Vanrise.Data.RDB
 
         public void ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<Guid> values)
         {
-             ListCondition(_tableAlias, columnName, oper, values);
+            ListCondition(_tableAlias, columnName, oper, values);
         }
 
         public RDBConditionContext ConditionIfColumnNotNull(string tableAlias, string columnName, RDBConditionGroupOperator childGroupOperator = RDBConditionGroupOperator.AND)
@@ -433,17 +433,17 @@ namespace Vanrise.Data.RDB
 
         public void NullCondition(BaseRDBExpression expression)
         {
-             Condition(new RDBNullCondition { Expression = expression });
+            Condition(new RDBNullCondition { Expression = expression });
         }
 
         public void NullCondition(string tableAlias, string columnName)
         {
-             NullCondition(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName });
+            NullCondition(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName });
         }
 
         public void NullCondition(string columnName)
         {
-             NullCondition(_tableAlias, columnName);
+            NullCondition(_tableAlias, columnName);
         }
 
         public RDBExpressionContext NotNullCondition()
@@ -453,20 +453,20 @@ namespace Vanrise.Data.RDB
 
         public void NotNullCondition(BaseRDBExpression expression)
         {
-             Condition(new RDBNotNullCondition { Expression = expression });
+            Condition(new RDBNotNullCondition { Expression = expression });
         }
 
         public void NotNullCondition(string tableAlias, string columnName)
         {
-             NotNullCondition(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName });
+            NotNullCondition(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName });
         }
 
         public void NotNullCondition(string columnName)
         {
-             NotNullCondition(_tableAlias, columnName);
+            NotNullCondition(_tableAlias, columnName);
         }
     }
-    
+
     public class RDBTwoExpressionsContext
     {
         RDBExpressionContext _expression1Context;
@@ -520,7 +520,7 @@ namespace Vanrise.Data.RDB
     public class RDBCompareConditionContext : RDBTwoExpressionsContext
     {
         public RDBCompareConditionContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, Action<BaseRDBExpression, BaseRDBExpression> setExpressions)
-            : base(queryBuilderContext, tableAlias,  setExpressions)
+            : base(queryBuilderContext, tableAlias, setExpressions)
         {
         }
 
