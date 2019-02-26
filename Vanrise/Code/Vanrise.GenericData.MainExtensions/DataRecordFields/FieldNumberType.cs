@@ -86,46 +86,36 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return null;
 
             IEnumerable<object> numberValues = FieldTypeHelper.ConvertFieldValueToList<object>(value);
-            string defaultStringDescription = "#,###";
+
             string decimalPrecision = null;
             switch (DataType)
             {
                 case FieldNumberDataType.Decimal:
+                    decimalPrecision = "N";
                     switch (DataPrecision)
                     {
                         case FieldNumberPrecision.Long:
                             var longPrecision = new GeneralSettingsManager().GetLongPrecision();
-                            decimalPrecision = longPrecision;
+                            decimalPrecision += longPrecision;
                             break;
                         case FieldNumberPrecision.Normal:
                             var normalPrecision = new GeneralSettingsManager().GetNormalPrecision();
-                            decimalPrecision = normalPrecision;
+                            decimalPrecision += normalPrecision;
                             break;
-                        default: decimalPrecision = "2"; break;
+                        default: decimalPrecision = "0.00"; break;
                     }
                     break;
 
                 default: break;
             }
-            if(!string.IsNullOrEmpty(decimalPrecision))
-            {
-                var numberPrecision = new String('0', int.Parse(decimalPrecision));
-                defaultStringDescription = string.Join(".", defaultStringDescription, numberPrecision);
-            }
+
 
             if (numberValues == null)
             {
                 if (string.IsNullOrEmpty(decimalPrecision))
-                    switch (DataType)
-                    {
-                        case FieldNumberDataType.Int:
-                            return Convert.ToInt32(value).ToString(defaultStringDescription);
-                        case FieldNumberDataType.BigInt:
-                            return Convert.ToInt64(value).ToString(defaultStringDescription);
-                    }
-
+                    return value.ToString();
                 else
-                    return Convert.ToDecimal(value).ToString(defaultStringDescription);
+                    return Convert.ToDecimal(value).ToString(decimalPrecision);
             }
 
             var descriptions = new List<string>();
@@ -133,21 +123,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (DataType == FieldNumberDataType.Decimal)
             {
                 foreach (var numberValue in numberValues)
-                    descriptions.Add(Convert.ToDecimal(numberValue).ToString(defaultStringDescription));
+                    descriptions.Add(Convert.ToDecimal(numberValue).ToString(decimalPrecision));
             }
             else
             {
                 foreach (var numberValue in numberValues)
-                    switch (DataType)
-                    {
-                        case FieldNumberDataType.Int:
-                            descriptions.Add(Convert.ToInt32(numberValue).ToString(defaultStringDescription));
-                            break;
-                        case FieldNumberDataType.BigInt:
-                            descriptions.Add(Convert.ToInt64(numberValue).ToString(defaultStringDescription));
-                            break;
-                    }
-              
+                    descriptions.Add(numberValue.ToString());
             }
             return String.Join(",", descriptions);
         }
