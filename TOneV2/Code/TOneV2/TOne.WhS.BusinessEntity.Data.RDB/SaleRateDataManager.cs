@@ -25,7 +25,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
 
-
+        const string COL_StateBackupID = "StateBackupID";
         static SaleRateDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>
@@ -599,5 +599,106 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
         #endregion
 
+        #region StateBackup
+
+        //public void BackupBySNPId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int sellingNumberPlanId)
+        //{
+        //    var saleRateBackupDataManager = new SaleRateBackupDataManager();
+        //    var insertQuery = saleRateBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+
+        //    var selectQuery = insertQuery.FromSelect();
+
+        //    selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+        //    var selectColumns = selectQuery.SelectColumns();
+        //    selectColumns.Column(COL_ID, COL_ID);
+        //    selectColumns.Column(COL_PriceListID, COL_PriceListID);
+        //    selectColumns.Column(COL_ZoneID, COL_ZoneID);
+        //    selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
+        //    selectColumns.Column(COL_RateTypeID, COL_RateTypeID);
+        //    selectColumns.Column(COL_Rate, COL_Rate);
+        //    selectColumns.Column(COL_BED, COL_BED);
+        //    selectColumns.Column(COL_EED, COL_EED);
+        //    selectColumns.Column(COL_SourceID, COL_SourceID);
+        //    selectColumns.Column(COL_Change, COL_Change);
+        //    selectColumns.Expression(SaleRateBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+        //    selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+        //    var joinContext = selectQuery.Join();
+        //    var saleZoneDataManager = new SaleZoneDataManager();
+        //    string saleZoneTableAlias = "sz";
+        //    saleZoneDataManager.JoinSaleZone(joinContext, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
+
+        //    var whereContext = selectQuery.Where();
+        //    whereContext.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+
+        //}
+        //public void BackupByOwner(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, IEnumerable<int> ownerIds, int ownerType)
+        //{
+        //    var saleRateBackupDataManager = new SaleRateBackupDataManager();
+        //    var insertQuery = saleRateBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+
+        //    var selectQuery = insertQuery.FromSelect();
+        //    selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+        //    var selectColumns = selectQuery.SelectColumns();
+        //    selectColumns.Column(COL_ID, COL_ID);
+        //    selectColumns.Column(COL_PriceListID, COL_PriceListID);
+        //    selectColumns.Column(COL_ZoneID, COL_ZoneID);
+        //    selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
+        //    selectColumns.Column(COL_RateTypeID, COL_RateTypeID);
+        //    selectColumns.Column(COL_Rate, COL_Rate);
+        //    selectColumns.Column(COL_BED, COL_BED);
+        //    selectColumns.Column(COL_EED, COL_EED);
+        //    selectColumns.Column(COL_SourceID, COL_SourceID);
+        //    selectColumns.Column(COL_Change, COL_Change);
+        //    selectColumns.Expression(SaleRateBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+        //    selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+        //    var joinContext = selectQuery.Join();
+        //    string priceListTableAlias = "spl";
+        //    var salePriceListDataManager = new SalePriceListDataManager();
+        //    salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
+
+        //    var whereContext = selectQuery.Where();
+        //    whereContext.ListCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID, RDBListConditionOperator.IN, ownerIds);
+        //    whereContext.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value(ownerType);
+        //}
+        //public void SetDeleteQueryBySNPId(RDBQueryContext queryContext, long sellingNumberPlanId)
+        //{
+        //    var deleteQuery = queryContext.AddDeleteQuery();
+        //    deleteQuery.FromTable(TABLE_NAME);
+
+        //    string saleZoneTableAlias = "sz";
+        //    var joinContext = deleteQuery.Join(TABLE_ALIAS);
+        //    var saleZoneDataManager = new SaleZoneDataManager();
+        //    saleZoneDataManager.JoinSaleZone(joinContext, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID, false);
+
+        //    deleteQuery.Where().EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+        //}
+
+        //public void SetDeleteQueryByOwner(RDBQueryContext queryContext, IEnumerable<int> ownerIds, int ownerType)
+        //{
+        //    var deleteQuery = queryContext.AddDeleteQuery();
+        //    deleteQuery.FromTable(TABLE_NAME);
+
+        //    var joinContext = deleteQuery.Join(TABLE_ALIAS);
+        //    string salePriceListTableAlias = "spl";
+        //    var salePriceListDataManager = new SalePriceListDataManager();
+        //    salePriceListDataManager.JoinSalePriceList(joinContext, salePriceListTableAlias, TABLE_ALIAS, COL_PriceListID, false);
+
+        //    var whereContext = deleteQuery.Where();
+        //    whereContext.ListCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerID, RDBListConditionOperator.IN, ownerIds);
+        //    whereContext.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value(ownerType);
+        //}
+
+        //public void SetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDataBaseName)
+        //{
+        //    var insertQuery = queryContext.AddInsertQuery();
+        //    insertQuery.IntoTable(TABLE_NAME);
+        //    var saleRateBackupDataManager = new SaleRateBackupDataManager();
+        //    saleRateBackupDataManager.AddSelectQuery(insertQuery, backupDataBaseName, stateBackupId);
+        //}
+        #endregion
     }
 }
