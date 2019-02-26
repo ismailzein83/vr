@@ -1,10 +1,14 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-columns width="1/4row">
+    <retail-be-trafficdirection-selector on-ready="scopeModel.onTrafficDirectionSelectorReady" selectedvalues="scopeModel.trafficDirection" isrequired=" true"></retail-be-trafficdirection-selector>
+</vr-columns>
+<vr-columns width="2/3row" haschildcolumns>
+    <vr-columns width="1/4row">
+        <vr-textbox value="scopeModel.numberOfCalls" label="Number Of Calls" type="number" decimalprecision="0" minvalue="0" isrequired></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-textbox value="scopeModel.duration" label="Duration (Min)" type="number" isrequired></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-textbox value="scopeModel.revenue" label="Revenue" type="number" isrequired></vr-textbox>
+    </vr-columns>
+</vr-columns>

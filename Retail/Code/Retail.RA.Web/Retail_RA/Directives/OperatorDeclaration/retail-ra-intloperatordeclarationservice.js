@@ -19,7 +19,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/Templates/OperationDirectionServicesTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/Templates/IntlOperationDirectionServicesTemplate.html"
 
         };
         function OperatorDirectionServicesCtor($scope, ctrl, $attrs) {
@@ -140,9 +140,9 @@
                 api.setData = function (Object) {
 
                     Object.OperatorDeclarationServices = {
-                        $type: "Retail.RA.Entities.OperatorDeclarationServices,Retail.RA.Entities",
+                        $type: "Retail.RA.Entities.IntlOperatorDeclarationServices,Retail.RA.Entities",
                         Services: {
-                            $type: "Retail.RA.Entities.OperatorDeclarationServicesCollection,Retail.RA.Entities",
+                            $type: "Retail.RA.Entities.IntlOperatorDeclarationServicesCollection,Retail.RA.Entities",
                             $values: getServices()
                         }
                     };
@@ -157,7 +157,7 @@
                 for (var i = 0; i < $scope.scopeModel.operatorDeclarationServices.length; i++) {
                     var operatorDeclarationService = $scope.scopeModel.operatorDeclarationServices[i];
                     services.push({
-                        $type: "Retail.RA.Entities.OperatorDeclarationService,Retail.RA.Entities",
+                        $type: "Retail.RA.Entities.IntlOperatorDeclarationService,Retail.RA.Entities",
                         Revenue: operatorDeclarationService.Revenue,
                         Settings: operatorDeclarationService.directiveAPI.getData()
                     });
@@ -167,6 +167,6 @@
         }
     }
 
-    app.directive('retailRaOperatordeclarationservice', operatorDirectionService);
+    app.directive('retailRaIntloperatordeclarationservice', operatorDirectionService);
 
 })(app);

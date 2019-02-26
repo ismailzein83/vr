@@ -109,13 +109,15 @@
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\Templates\IntlOperatorDeclarationServiceSMSTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\Templates\IntlOperatorDeclarationServiceVoiceTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-icx-operatordeclaration-beforesavehandler.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-icxoperatordeclarationservice.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-icxoperatordeclarationservices-customobjectsettings.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intl-operatordeclaration-beforesavehandler.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intloperatordeclarationservices-customobjectsettings.js" />
-    <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-operatordeclarationservice.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intloperatordeclarationservice.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperationDirectionServicesTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperatorDeclarationOnBeforeSaveHandler.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperatorDirectionServicesCustomObjectSettingsTemplate.html" />
-    <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\OperationDirectionServicesTemplate.html" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperationDirectionServicesTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDeclarationOnBeforeSaveHandler.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDirectionServicesCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnAfterSaveHandlerTemplate.html" />
