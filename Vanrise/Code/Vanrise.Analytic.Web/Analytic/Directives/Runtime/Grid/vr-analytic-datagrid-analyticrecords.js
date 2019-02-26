@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType', 'VR_Analytic_StyleCodeEnum', 'Analytic_AnalyticService', 'VR_Analytic_GridWidthEnum', 'VR_Analytic_AnalyticItemActionService', 'DataRetrievalResultTypeEnum', 'VRCommon_StyleDefinitionAPIService', 'VR_Analytic_KPISettingsAPIService', 'VR_Analytic_AnalyticTableAPIService', 'VR_Analytic_GridSubTablePositionEnum',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum, Analytic_AnalyticService, VR_Analytic_GridWidthEnum, VR_Analytic_AnalyticItemActionService, DataRetrievalResultTypeEnum, VRCommon_StyleDefinitionAPIService, VR_Analytic_KPISettingsAPIService, VR_Analytic_AnalyticTableAPIService, VR_Analytic_GridSubTablePositionEnum) {
+app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType', 'VR_Analytic_StyleCodeEnum', 'Analytic_AnalyticService', 'VR_Analytic_GridWidthEnum', 'VR_Analytic_AnalyticItemActionService', 'DataRetrievalResultTypeEnum', 'VRCommon_StyleDefinitionAPIService', 'VR_Analytic_KPISettingsAPIService', 'VR_Analytic_AnalyticTableAPIService', 'VR_Analytic_GridSubTablePositionEnum','VRTimerService',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum, Analytic_AnalyticService, VR_Analytic_GridWidthEnum, VR_Analytic_AnalyticItemActionService, DataRetrievalResultTypeEnum, VRCommon_StyleDefinitionAPIService, VR_Analytic_KPISettingsAPIService, VR_Analytic_AnalyticTableAPIService, VR_Analytic_GridSubTablePositionEnum, VRTimerService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -41,10 +41,10 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             var reportName;
             var withSummary;
             var styleDefinitions;
-
+            var autoRefresh = false;
             function initializeController() {
                 $scope.gridMenuActions = [];
-
+                var dataRetrievalInput1;
                 ctrl.sortField = "";
                 ctrl.datasource = [];
                 ctrl.dimensions = [];
@@ -80,6 +80,16 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         var directiveAPI = {};
 
                         directiveAPI.load = function (payLoad) {
+                            autoRefresh = payLoad.Settings.AutoRefresh;
+                            if (autoRefresh) {
+                                if ($scope.jobIds) {
+                                    VRTimerService.unregisterJobByIds($scope.jobIds);
+                                    $scope.jobIds.length = 0;
+                                }
+                            }
+                           
+
+
                             var promises = [];
 
                             var promiseReadyDeferred = UtilsService.createPromiseDeferred();
@@ -118,6 +128,9 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             reportName = payLoad.ReportName;
                             UtilsService.waitMultiplePromises(promises).then(function () {
                                 loadGrid(payLoad).finally(function () {
+                                    if (autoRefresh) {
+                                        registerAutoRefreshJob(payLoad.Settings.AutoRefreshInterval);
+                                    }
                                     promiseReadyDeferred.resolve();
                                 }).catch(function (error) {
                                     promiseReadyDeferred.reject(error);
@@ -135,6 +148,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
                    // ctrl.gridLeftMenuActions = getGridLeftMenuActions();
+                    dataRetrievalInput1 = dataRetrievalInput;
                     ctrl.showGrid = true;
                     if (!retrieveDataContext.isDataSorted)
                         dataRetrievalInput.Query.OrderType = initialQueryOrderType;
@@ -159,6 +173,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 for (var m = 0; m < ctrl.measures.length; m++) {
                                     var measure = ctrl.measures[m];
                                     measure.fieldPath = "MeasureValues." + measure.MeasureName + ".Value";
+                                    measure.isFieldDynamic = autoRefresh;
                                     ctrl.columns.push(ctrl.measures[m]);
                                 }
                             }
@@ -442,7 +457,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         TableId: payLoad.TableId,
                         MeasureStyleRules: measureStyleRules,
                         AdvancedOrderOptions: payLoad.Settings != undefined ? payLoad.Settings.AdvancedOrderOptions : payLoad.AdvancedOrderOptions,
-                        CurrencyId: currencyId
+                        CurrencyId: currencyId,
+                        TimePeriod: payLoad.TimePeriod
                     };
                     return queryFinalized;
                 }
@@ -889,6 +905,88 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         }
                     }
                 }
+
+
+                function registerAutoRefreshJob(autoRefreshInterval) {
+                    VRTimerService.registerJob(onTimerElapsed, $scope, autoRefreshInterval);
+                }
+
+                function onTimerElapsed() {
+                    return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput1).then(function (response) {
+                        if (response != undefined && response.Data != undefined) {
+                            InitializeKeepItem();
+                            var itemsToAdd = ModifyItemsAndGetItemsToAdd(response.Data);
+
+                            var deletedIndexes = [];
+                            for (var i = 0; i < ctrl.datasource.length; i++) {
+                                var dimensionObject = ctrl.datasource[i];
+                                if (!dimensionObject.keepItem) {
+                                    deletedIndexes.push(i);
+                                }
+                            }
+
+                            for (var i = 0; i < deletedIndexes.length; i++) {
+                                ctrl.datasource.splice(deletedIndexes[i], 1);
+                            }
+                           
+                            for (var i = 0; i < itemsToAdd.length; i++) {
+                                ctrl.datasource.push(itemsToAdd[i]);
+                            }
+                        }
+                    });
+                }
+
+                function InitializeKeepItem() {
+                    for (var i = 0; i < ctrl.datasource.length; i++) {
+                        ctrl.datasource[i].keepItem = false;
+                    }
+                }
+
+                function ModifyItemsAndGetItemsToAdd(dataItems) {
+                    var itemsToAdd = [];
+                    if (dataItems != undefined) {
+                        for (var i = 0; i < dataItems.length; i++) {
+                            var item = dataItems[i];
+                            var indexItem = GetItemIndexFromDataSource(item.DimensionValues);
+                            if (indexItem != undefined) {
+                                var dataSourceItem = ctrl.datasource[indexItem];
+                                for (var m in item.MeasureValues) {
+                                    if (m != '$type') {
+                                        dataSourceItem.MeasureValues[m].ModifiedValue = item.MeasureValues[m].ModifiedValue;
+                                        dataSourceItem.MeasureValues[m].StyleDefinitionId = item.MeasureValues[m].StyleDefinitionId;
+                                        dataSourceItem.MeasureValues[m].Value = item.MeasureValues[m].Value;
+                                    }
+
+                                }
+                            } else {
+                                itemsToAdd.push(item);
+                            }
+                        }
+                    }
+                    return itemsToAdd;
+                }
+
+                function GetItemIndexFromDataSource(dimensions) {
+                    for (var i = 0; i < ctrl.datasource.length; i++) {
+                        var item = ctrl.datasource[i];
+                        var dimensionMatch = false;
+                        for (var dim = 0; dim < item.DimensionValues.length; dim++) {
+                            var dimensionObject = item.DimensionValues[dim];
+                            var dimension = dimensions[dim];
+                            if (dimension.Name == dimensionObject.Name) {
+                                dimensionMatch = true;
+                            } else {
+                                dimensionMatch = false;
+                            }
+                        }
+                        if (dimensionMatch) {
+                            ctrl.datasource[i].keepItem = true;
+                            return i;
+                        }
+                           
+                    }
+                }
+
             }
         }
 

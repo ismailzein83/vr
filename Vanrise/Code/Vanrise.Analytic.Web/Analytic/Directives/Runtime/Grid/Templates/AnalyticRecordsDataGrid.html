@@ -11,6 +11,7 @@
         <vr-datagridcolumn ng-repeat="column in analyticrecordsctrl.columns" headertext="column.Title" type="column.Type" numberprecision="column.NumberPrecision"
                            field=column.fieldPath tag=column.fieldPath summaryfield=column.fieldPath
                            widthfactor="{{column.Widthfactor}}" listviewwidth="column.ColumnSettings.ListViewWidth" fixedwidth="column.ColumnSettings.FixedWidth"
+                           isfielddynamic ="column.isFieldDynamic"
                            getcolor="analyticrecordsctrl.getMeasureColor" cssclass="column.cssClass" initiallyhidden="column.IsHidden" ishiddeninlistview="column.IsHiddenInListView" columnindex="$index">
         </vr-datagridcolumn>
 
