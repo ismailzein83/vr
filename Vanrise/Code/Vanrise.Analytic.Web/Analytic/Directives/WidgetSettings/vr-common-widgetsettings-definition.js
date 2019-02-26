@@ -135,23 +135,9 @@
 
                             UtilsService.waitMultiplePromises([directiveReadyDeferred.promise, tableSelectedPromiseDeffered.promise]).then(function () {
                                 directiveReadyDeferred = undefined;
-                                var widgetEntity = {
-                                    ChartType: settings.Settings.ChartType,
-                                    Dimensions: settings.Settings.Dimensions,
-                                    Measures: settings.Settings.Measures,
-                                    OrderType: settings.Settings.OrderType,
-                                    RootDimensionsFromSearch: settings.Settings.RootDimensionsFromSearch,
-                                    TopRecords: settings.Settings.TopRecords,
-                                    Measure: settings.Settings.Measure,
-                                    SeriesDimensions: settings.Settings.SeriesDimensions,
-                                    Maximum: settings.Settings.Maximum,
-                                    Minimum: settings.Settings.Minimum,
-                                    RecordFilter: settings.Settings.RecordFilter,
-                                    SubTables: settings.Settings.SubTables
-                                };
                                 directivePayload = {
                                     tableIds: $scope.scopeModel.selectedTable != undefined ? [$scope.scopeModel.selectedTable.AnalyticTableId] : undefined,
-                                    widgetEntity: widgetEntity
+                                    widgetEntity: settings.Settings
                                 };
                                 VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, loadDirectivePromiseDeffered);
                             });

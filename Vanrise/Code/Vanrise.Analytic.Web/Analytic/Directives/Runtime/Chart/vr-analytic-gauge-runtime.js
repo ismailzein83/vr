@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService) {
+app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService','VRTimerService',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, VRTimerService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -39,12 +39,15 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
             var ranges;
             var measureValue;
             var measures;
-
+            var query;
             var definitionSettings;
 
             function initializeController() {
                 $scope.scopeModel = {};
-
+                if ($scope.jobIds) {
+                    VRTimerService.unregisterJobByIds($scope.jobIds);
+                    $scope.jobIds.length = 0;
+                }
                 $scope.scopeModel.onGaugeReady = function (api) {
                     gaugeAPI = api;
                     gaugeReadyPromiseDeferred.resolve();
@@ -65,20 +68,11 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
                             definitionSettings = payload.Settings;
                             measures = definitionSettings.Measures;
                             analyticTableId = payload.TableId;
-                            var query = getQuery(payload);
-                            var dataRetrievalInput = {
-                                DataRetrievalResultType: 0,
-                                IsSortDescending: false,
-                                ResultKey: null,
-                                SortByColumnName: 'MeasureValues.' + measures[0].MeasureName + '.Value',
-                                Query: query
-                            };
-
-                            var filteredRecordsPromise = VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
-                                .then(function (response) {
-                                    if (response != undefined && response.Data != undefined && response.Data.length > 0)
-                                        measureValue = eval("response.Data[0].MeasureValues." + measures[0].MeasureName + ".ModifiedValue");
-                                });
+                             query = getQuery(payload);
+                          
+                            var filteredRecordsPromise = getFilteredRecords(query).then(function (response) {
+                                measureValue = response;
+                            });
                             promises.push(filteredRecordsPromise);
                             var input = {
                                 MeasureName: measures[0].MeasureName,
@@ -95,6 +89,9 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
                             gaugeReadyPromiseDeferred.promise.then(function () {
                                 prepareDataForGaugeDirective();
                                 gaugeAPI.renderChart({ Measure: measureValue }, chartDefinition, seriesDefinitions, xAxisDefinition, yAxisDefinition);
+
+                                if (definitionSettings.AutoRefresh)
+                                    registerAutoRefreshJob(definitionSettings.AutoRefreshInterval);
                             });
                         });
                     };
@@ -128,15 +125,43 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
 
             }
 
+            function registerAutoRefreshJob(autoRefreshInterval) {
+                VRTimerService.registerJob(onTimerElapsed, $scope, autoRefreshInterval);
+            }
             function getQuery(payload) {
                 var queryFinalized = {
                     MeasureFields: UtilsService.getPropValuesFromArray(measures, 'MeasureName'),
-                    FromTime: payload.FromTime,
-                    ToTime: payload.ToTime,
+                    TimePeriod: payload.TimePeriod,
                     TableId: payload.TableId,
                     FilterGroup: payload.FilterGroup,
                 };
                 return queryFinalized;
+            }
+
+            function onTimerElapsed(){
+               return getFilteredRecords(query).then(function (response) {
+                    measureValue = response;
+                    gaugeAPI.updateValue(measureValue);
+                });
+            }
+            function getFilteredRecords(query) {
+                var promiseDeferred = UtilsService.createPromiseDeferred();
+                var dataRetrievalInput = {
+                    DataRetrievalResultType: 0,
+                    IsSortDescending: false,
+                    ResultKey: null,
+                    SortByColumnName: 'MeasureValues.' + measures[0].MeasureName + '.Value',
+                    Query: query
+                };
+                 VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
+                    .then(function (response) {
+                        if (response != undefined && response.Data != undefined && response.Data.length > 0) {
+                            measureValue = eval("response.Data[0].MeasureValues." + measures[0].MeasureName + ".ModifiedValue");
+                            promiseDeferred.resolve(measureValue);
+                        }
+                    });
+
+                return promiseDeferred.promise;
             }
 
         };

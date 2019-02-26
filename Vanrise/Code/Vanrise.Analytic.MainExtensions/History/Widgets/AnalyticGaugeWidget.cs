@@ -13,6 +13,8 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public List<AnalyticChartWidgetMeasure> Measures { get; set; }
         public long Maximum { get; set; }
         public long Minimum { get; set; }
+        public bool AutoRefresh { get; set; }
+        public int? AutoRefreshInterval { get; set; }
         public override List<string> GetMeasureNames()
         {
             return null;
@@ -20,3 +22,4 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         }
     }
 }
+ 

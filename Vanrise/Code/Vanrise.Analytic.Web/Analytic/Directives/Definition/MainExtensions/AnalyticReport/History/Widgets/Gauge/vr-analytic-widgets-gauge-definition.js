@@ -75,6 +75,7 @@
                     var entity;
                     if (payload != undefined) {
                         tableIds = payload.tableIds;
+
                         if (tableIds != undefined && tableIds.length > 0) {
                             var getDimensionsPromise = VR_Analytic_AnalyticItemConfigAPIService.GetDimensions(tableIds[0]).then(function (response) {
                                 if (response != undefined)
@@ -95,6 +96,8 @@
                                     }
                                     $scope.scopeModel.maxValue = payload.widgetEntity.Maximum;
                                     $scope.scopeModel.minValue = payload.widgetEntity.Minimum;
+                                    $scope.scopeModel.autoRefresh = payload.widgetEntity.AutoRefresh;
+                                    $scope.scopeModel.autoRefreshInterval = payload.widgetEntity.AutoRefreshInterval;
                                     configId = payload.configId;
                                 }
 
@@ -118,7 +121,9 @@
                         Measures: [getMeasure($scope.scopeModel.selectedMeasure)],
                         Maximum: $scope.scopeModel.maxValue,
                         Minimum: $scope.scopeModel.minValue,
-                        ConfigId: configId
+                        AutoRefresh: $scope.scopeModel.autoRefresh,
+                        AutoRefreshInterval: $scope.scopeModel.autoRefreshInterval,
+                        ConfigId: configId,
                     };
                 };
 

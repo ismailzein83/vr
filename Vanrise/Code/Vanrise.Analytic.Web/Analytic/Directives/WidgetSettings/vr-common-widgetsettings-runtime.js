@@ -110,6 +110,7 @@
                         FromTime: from,
                         FilterGroup: definitionSettings.RecordFilter,
                         ToTime: to,
+                        TimePeriod: definitionSettings.TimePeriod
                     };
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadPromiseDeferred);
                 });

@@ -1,16 +1,18 @@
-﻿<vr-row>
-    <!--<vr-columns width="1/3row">
-        <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" ondeselectitem="scopeModel.onTableDeselect" selectedvalues="scopeModel.selectedTables" onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
-    </vr-columns>-->
-    <vr-columns width="1/3row">
-        <span vr-loader="isLoadingMeasures">
-            <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorReady" selectedvalues="scopeModel.selectedMeasure" isrequired="true"></vr-analytic-measure-selector>
-        </span>
-    </vr-columns>
-    <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.minValue" label="Minimum" isrequired="true"></vr-textbox>
-    </vr-columns>
-    <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.maxValue" label="Maximum" isrequired="true"></vr-textbox>
-    </vr-columns>
-</vr-row>
+﻿<span vr-loader="isLoadingMeasures">
+    <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorReady" selectedvalues="scopeModel.selectedMeasure" isrequired="true" normal-col-num="4"></vr-analytic-measure-selector>
+</span>
+<vr-columns width="1/3row">
+    <vr-textbox value="scopeModel.minValue" label="Minimum" isrequired="true"></vr-textbox>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-textbox value="scopeModel.maxValue" label="Maximum" isrequired="true"></vr-textbox>
+</vr-columns>
+
+<vr-columns width="1/3row">
+    <vr-switch value="scopeModel.autoRefresh" label="Auto Refresh"></vr-switch>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-textbox type="number" minvalue="1" vr-disabled="!scopeModel.autoRefresh" value="scopeModel.autoRefreshInterval" label="Auto Refresh Interval (Sec)" isrequired="scopeModel.autoRefresh"></vr-textbox>
+</vr-columns>
+
+
