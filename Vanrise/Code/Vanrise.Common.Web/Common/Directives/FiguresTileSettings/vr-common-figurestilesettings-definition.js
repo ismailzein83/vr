@@ -65,7 +65,7 @@
                     figureIconSelectorReadyDeferred.resolve();
                 };
 
-                defineAPI();
+                defineAPI(); 
             }
 
             function defineAPI() {
@@ -79,6 +79,8 @@
                         itemsToDisplay = settings.ItemsToDisplay;
                         var selectedMaxItem = UtilsService.getItemByVal($scope.scopeModel.maximumItemsDataSource, settings.MaximumItemsPerRow, "value");
                         $scope.scopeModel.selectedMaxItem = selectedMaxItem;
+                        $scope.scopeModel.autoRefresh = settings.AutoRefresh;
+                        $scope.scopeModel.autoRefreshInterval = settings.AutoRefreshInterval;
                     }
                     var promises = [];
 
@@ -102,7 +104,9 @@
                         Queries: data.queries,
                         ItemsToDisplay: data.itemsToDisplay,
                         IconPath: figureIconSelectorAPI.getSelectedIds(),
-                        MaximumItemsPerRow: $scope.scopeModel.selectedMaxItem.value
+                        MaximumItemsPerRow: $scope.scopeModel.selectedMaxItem.value,
+                        AutoRefresh: $scope.scopeModel.autoRefresh,
+                        AutoRefreshInterval: $scope.scopeModel.autoRefreshInterval,
                     };
                 };
 

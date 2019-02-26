@@ -1,33 +1,27 @@
-﻿<vr-columns width="fullrow">
-    <vr-button type="Add" data-onclick="ctrl.addQuery" standalone></vr-button>
-
-    
-        <vr-row>
-            <vr-columns width="1/2row">
-                <vr-validator validate="ctrl.isValid()">
-                    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true"  maxheight="300px"
-                                 on-ready="onQueriesGridReady" ondeleterow="ctrl.removeQuery" hidegridmenu>
-                        <vr-datagridcolumn headertext="'Query Name'" field="'Name'" disablesorting="true" isclickable="true" onclicked="ctrl.editFiguresTileQuery"></vr-datagridcolumn>
-                        <!--<vr-datagridcolumn headertext="'Query Name'" field="'Name'" widthfactor="10" disablesorting></vr-datagridcolumn>-->
-                    </vr-datagrid>
-                </vr-validator>
-            </vr-columns>
-            <span vr-loader="ctrl.itemsToDisplayLoading">
-                <vr-columns width="1/2row">
-
-                    <vr-datagrid datasource="ctrl.itemsToDisplayDatasource" norowhighlightonclick="true" maxheight="300px"
-                                 on-ready="onItemsToDisplayGridReady" enabledraggablerow="true" hidegridmenu>
-                        <vr-datagridcolumn headertext="'Figure Item Name'" field="'Name'" widthfactor="10"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Title'" widthfactor="10">
-                            <vr-textbox value="dataItem.Title" isrequired></vr-textbox>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Query'" field="'QueryName'" widthfactor="10"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Hide'"  widthfactor="10">
-                            <vr-switch value="dataItem.HideAtRuntime" ></vr-switch>
-                        </vr-datagridcolumn>
-                    </vr-datagrid>
-                </vr-columns>
-            </span>
-        </vr-row>
-    
+﻿<vr-columns width="fullrow" haschildcolumns>
+    <vr-columns width="fullrow">
+        <vr-button type="Add" data-onclick="ctrl.addQuery" standalone></vr-button>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-validator validate="ctrl.isValid()">
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true"  maxheight="300px"
+                            on-ready="onQueriesGridReady" ondeleterow="ctrl.removeQuery" hidegridmenu>
+                <vr-datagridcolumn headertext="'Query Name'" field="'Name'" disablesorting="true" isclickable="true" onclicked="ctrl.editFiguresTileQuery"></vr-datagridcolumn>
+                <!--<vr-datagridcolumn headertext="'Query Name'" field="'Name'" widthfactor="10" disablesorting></vr-datagridcolumn>-->
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+    <vr-columns width="1/2row" vr-loader="ctrl.itemsToDisplayLoading">
+        <vr-datagrid datasource="ctrl.itemsToDisplayDatasource" norowhighlightonclick="true" maxheight="300px"
+                        on-ready="onItemsToDisplayGridReady" enabledraggablerow="true" hidegridmenu>
+            <vr-datagridcolumn headertext="'Figure Item Name'" field="'Name'" widthfactor="10"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Title'" widthfactor="10">
+                <vr-textbox value="dataItem.Title" isrequired></vr-textbox>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Query'" field="'QueryName'" widthfactor="10"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Hide'"  widthfactor="10">
+                <vr-switch value="dataItem.HideAtRuntime" ></vr-switch>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
 </vr-columns>

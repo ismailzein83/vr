@@ -44,10 +44,7 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
 
             function initializeController() {
                 $scope.scopeModel = {};
-                if ($scope.jobIds) {
-                    VRTimerService.unregisterJobByIds($scope.jobIds);
-                    $scope.jobIds.length = 0;
-                }
+              
                 $scope.scopeModel.onGaugeReady = function (api) {
                     gaugeAPI = api;
                     gaugeReadyPromiseDeferred.resolve();
@@ -69,7 +66,12 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
                             measures = definitionSettings.Measures;
                             analyticTableId = payload.TableId;
                              query = getQuery(payload);
-                          
+                            if (definitionSettings.AutoRefresh) {
+                                if ($scope.jobIds) {
+                                    VRTimerService.unregisterJobByIds($scope.jobIds);
+                                    $scope.jobIds.length = 0;
+                                }
+                            }
                             var filteredRecordsPromise = getFilteredRecords(query).then(function (response) {
                                 measureValue = response;
                             });

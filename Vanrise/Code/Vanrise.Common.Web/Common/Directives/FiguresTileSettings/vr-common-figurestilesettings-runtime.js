@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsService", "VRCommon_VRTileAPIService",
-    function (UtilsService, VRUIUtilsService, VRCommon_VRTileAPIService) {
+app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsService", "VRCommon_VRTileAPIService",'VRTimerService',
+    function (UtilsService, VRUIUtilsService, VRCommon_VRTileAPIService, VRTimerService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -24,7 +24,7 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
         };
         function FigurestilesettingsRuntime($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var figureStyleInput;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.tileTitle = ctrl.header;
@@ -36,25 +36,34 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                 var api = {};
 
                 api.load = function (payload) {
+
                     $scope.scopeModel.fields = [];
-                    var figureStyleInput;
+                   
                     var promises = [];
                     var definitionSettings;
                     if (payload != undefined) {
                         definitionSettings = payload.definitionSettings;
                         $scope.scopeModel.imgPath = definitionSettings.IconPath;
                         $scope.scopeModel.maxItemPerRow = definitionSettings.MaximumItemsPerRow;
+                        if (definitionSettings.AutoRefresh) {
+                            if ($scope.jobIds) {
+                                VRTimerService.unregisterJobByIds($scope.jobIds);
+                                $scope.jobIds.length = 0;
+                            }
+                        }
                     }
+
+
                     if (definitionSettings != undefined) {
                         figureStyleInput = {
                             Queries: definitionSettings.Queries,
                             ItemsToDisplay: definitionSettings.ItemsToDisplay
                         };
-                        promises.push(loadFigures());
+                        promises.push(loadFigures()); 
                     }
                     function loadFigures() {
                         $scope.scopeModel.isLoading = true;
-                        return VRCommon_VRTileAPIService.GetFigureItemsValue(figureStyleInput).then(function (response) {
+                        return getFigureItemsValue().then(function (response) {
                             if (response != undefined) {
                                 for (var i = 0, length = response.length; i < length; i++) {
                                     var figureStyle = response[i];
@@ -66,6 +75,9 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                                 }
                                 $scope.scopeModel.url = response.ViewURL;
                             }
+                            if (definitionSettings.AutoRefresh)
+                                registerAutoRefreshJob(definitionSettings.AutoRefreshInterval);
+
                         });
                     }
                     return UtilsService.waitMultiplePromises(promises).then(function () {
@@ -76,6 +88,36 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                 api.getData = function () {
                 };
 
+                function registerAutoRefreshJob(autoRefreshInterval) {
+                    VRTimerService.registerJob(onTimerElapsed, $scope, autoRefreshInterval);
+                }
+                function onTimerElapsed() {
+                    return getFigureItemsValue().then(function (response) {
+                        if (response != undefined) {
+                            for (var i = 0, length = response.length; i < length; i++) {
+                                var figureStyle = response[i];
+                                for (var j = 0; j < $scope.scopeModel.fields.length; j++) {
+                                    var field = $scope.scopeModel.fields[j];
+                                    if (figureStyle.Name == field.name) {
+                                        $scope.scopeModel.fields[j].value = figureStyle.Value;
+                                        $scope.scopeModel.fields[j].className = figureStyle.StyleFormatingSettings;
+                                    }
+                                }
+                            }
+                            $scope.scopeModel.url = response.ViewURL;
+                        }
+                    });
+                }
+                function getFigureItemsValue() {
+                    var promise = UtilsService.createPromiseDeferred();
+                    VRCommon_VRTileAPIService.GetFigureItemsValue(figureStyleInput).then(function (response) {
+                        promise.resolve(response);
+                    }).catch(function (error) {
+                        promise.reject(error);
+                    });
+
+                    return promise.promise;
+                }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             };

@@ -17,6 +17,8 @@ namespace Vanrise.Common.MainExtensions.VRTile
         public List<FiguresTileDisplayItem> ItemsToDisplay { get; set; }
         public string IconPath { get; set; }
         public int MaximumItemsPerRow { get; set; }
+        public bool AutoRefresh { get; set; }
+        public int? AutoRefreshInterval { get; set; }
     }
     //public class FiguresTileDisplayItem
     //{

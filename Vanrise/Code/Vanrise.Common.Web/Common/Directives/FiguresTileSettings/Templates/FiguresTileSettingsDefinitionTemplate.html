@@ -2,14 +2,18 @@
     <vr-common-tile-figurestile-queries on-ready="scopeModel.onQueriesGridReady"></vr-common-tile-figurestile-queries>
 </vr-row>
 <vr-row>
-    <vr-columns width="1/3row">
-        <vr-sec-view-selector on-ready="scopeModel.onViewsSelectorReady" onselectionchanged="scopeModel.onViewsSelectorSelectionChanged" customlabel="Redirect To View"></vr-sec-view-selector>
-    </vr-columns>
-    <vr-columns width="1/3row">
-        <vr-common-figureicon-selective on-ready="scopeModel.onFigureIconSelectorReady" selectedvalues="scopeModel.selectedIconValue"></vr-common-figureicon-selective>
-    </vr-columns>
+    <vr-sec-view-selector on-ready="scopeModel.onViewsSelectorReady" normal-col-num="4" onselectionchanged="scopeModel.onViewsSelectorSelectionChanged" customlabel="Redirect To View"></vr-sec-view-selector>
+    <vr-common-figureicon-selective on-ready="scopeModel.onFigureIconSelectorReady" normal-col-num="4" selectedvalues="scopeModel.selectedIconValue"></vr-common-figureicon-selective>
     <vr-columns width="1/3row">
         <vr-select label="Maximum Items Per Row" datasource="scopeModel.maximumItemsDataSource" selectedvalues="scopeModel.selectedMaxItem"
-                   datavaluefield="value" datatextfield="description" isrequired="true"  hideremoveicon>
+                   datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/3row">
+        <vr-switch value="scopeModel.autoRefresh" label="Auto Refresh"></vr-switch>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox type="number" minvalue="1" vr-disabled="!scopeModel.autoRefresh" value="scopeModel.autoRefreshInterval" label="Auto Refresh Interval (Sec)" isrequired="scopeModel.autoRefresh"></vr-textbox>
     </vr-columns>
 </vr-row>
