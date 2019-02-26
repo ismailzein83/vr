@@ -80,7 +80,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         var directiveAPI = {};
 
                         directiveAPI.load = function (payLoad) {
-                            autoRefresh = payLoad.Settings.AutoRefresh;
+                            if (payLoad.Settings != undefined)
+                                autoRefresh = payLoad.Settings.AutoRefresh;
                             if (autoRefresh) {
                                 if ($scope.jobIds) {
                                     VRTimerService.unregisterJobByIds($scope.jobIds);
