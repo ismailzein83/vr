@@ -176,7 +176,7 @@
       </Textbox>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>2.83452in</Top>
+        <Top>3.37202in</Top>
         <Left>1.99052in</Left>
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
@@ -909,7 +909,7 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.26042in</Top>
+        <Top>2.79792in</Top>
         <Left>0.05499in</Left>
         <Height>0.46875in</Height>
         <Width>7.71854in</Width>
@@ -1178,7 +1178,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.8866in</Top>
+        <Top>3.4241in</Top>
         <Left>1.99052in</Left>
         <Height>0.19792in</Height>
         <Width>5.78301in</Width>
@@ -1245,7 +1245,7 @@
       </Image>
       <Rectangle Name="Rectangle5">
         <KeepTogether>true</KeepTogether>
-        <Top>4.16524in</Top>
+        <Top>4.89024in</Top>
         <Left>1.99604in</Left>
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
@@ -1978,7 +1978,7 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerSMSInvoiceItemDetails</DataSetName>
-        <Top>3.59115in</Top>
+        <Top>4.31615in</Top>
         <Left>0.06051in</Left>
         <Height>0.46875in</Height>
         <Width>7.71854in</Width>
@@ -2247,7 +2247,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>4.21733in</Top>
+        <Top>4.94233in</Top>
         <Left>1.99604in</Left>
         <Height>0.19792in</Height>
         <Width>5.78301in</Width>
@@ -2258,6 +2258,72 @@
           </Border>
         </Style>
       </Tablix>
+      <Textbox Name="Textbox33">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>VOICE</Value>
+                <Style>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox29</rd:DefaultName>
+        <Top>6.46835cm</Top>
+        <Left>0.13967cm</Left>
+        <Height>0.6cm</Height>
+        <Width>4.51083cm</Width>
+        <ZIndex>13</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox35">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>SMS</Value>
+                <Style>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox32</rd:DefaultName>
+        <Top>10.29247cm</Top>
+        <Left>0.16753cm</Left>
+        <Height>0.6cm</Height>
+        <Width>4.48297cm</Width>
+        <ZIndex>14</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>5.80208in</Height>
     <Style />
