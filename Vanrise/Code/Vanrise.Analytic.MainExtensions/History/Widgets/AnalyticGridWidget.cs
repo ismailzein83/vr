@@ -27,6 +27,10 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
 
         public bool WithSummary { get; set; }
 
+        public bool AutoRefresh { get; set; }
+
+        public int? AutoRefreshInterval { get; set; }
+
         public override List<string> GetMeasureNames()
         {
             return this.Measures.Select(measure => measure.MeasureName).ToList();

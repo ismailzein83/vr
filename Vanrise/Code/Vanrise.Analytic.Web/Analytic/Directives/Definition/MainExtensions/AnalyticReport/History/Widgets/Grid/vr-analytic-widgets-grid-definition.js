@@ -218,6 +218,8 @@
                         if (payload.widgetEntity != undefined) {
                             $scope.scopeModel.rootDimensionsFromSearch = payload.widgetEntity.RootDimensionsFromSearchSection;
                             $scope.scopeModel.withSummary = payload.widgetEntity.WithSummary;
+                            $scope.scopeModel.autoRefresh = payload.widgetEntity.AutoRefresh;
+                            $scope.scopeModel.autoRefreshInterval = payload.widgetEntity.AutoRefreshInterval;
                             selectedDimensionIds = [];
                             if (payload.widgetEntity.Dimensions != undefined && payload.widgetEntity.Dimensions.length > 0) {
                                 for (var i = 0; i < payload.widgetEntity.Dimensions.length; i++) {
@@ -409,6 +411,8 @@
                         OrderType: orderTypeEntity != undefined ? orderTypeEntity.OrderType : undefined,
                         ItemActions: itemActionGridAPI != undefined ? itemActionGridAPI.getData() : undefined,
                         AdvancedOrderOptions: orderTypeEntity != undefined ? orderTypeEntity.AdvancedOrderOptions : undefined,
+                        AutoRefresh: $scope.scopeModel.autoRefresh,
+                        AutoRefreshInterval: $scope.scopeModel.autoRefreshInterval
                     };
                     return data;
                 }

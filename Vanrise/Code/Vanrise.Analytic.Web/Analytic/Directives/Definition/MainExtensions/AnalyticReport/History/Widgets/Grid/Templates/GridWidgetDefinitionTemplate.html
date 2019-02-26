@@ -1,12 +1,17 @@
 ﻿<vr-row>
 
-    <vr-columns width="1/3row">
+    <vr-columns width="1/4row">
         <vr-switch label="Root Dimensions From Search" value="scopeModel.rootDimensionsFromSearch"></vr-switch>
     </vr-columns>
-    <vr-columns width="1/3row">
+    <vr-columns width="1/4row">
         <vr-switch label="With Summary" value="scopeModel.withSummary"></vr-switch>
     </vr-columns>
-
+    <vr-columns width="1/4row">
+        <vr-switch value="scopeModel.autoRefresh" label="Auto Refresh"></vr-switch>
+    </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-textbox type="number" minvalue="1" vr-disabled="!scopeModel.autoRefresh" value="scopeModel.autoRefreshInterval" label="Auto Refresh Interval (Sec)" isrequired="scopeModel.autoRefresh"></vr-textbox>
+    </vr-columns>
 </vr-row>
 
 <vr-tabs>
