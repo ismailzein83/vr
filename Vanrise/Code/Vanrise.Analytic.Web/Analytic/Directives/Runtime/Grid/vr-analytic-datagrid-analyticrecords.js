@@ -915,65 +915,43 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 function onTimerElapsed() {
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput1).then(function (response) {
                         if (response != undefined && response.Data != undefined) {
-                            InitializeKeepItem();
-                            var itemsToAdd = ModifyItemsAndGetItemsToAdd(response.Data);
-
-                            var deletedIndexes = [];
+                            var indexesToDelete = [];
                             for (var i = 0; i < ctrl.datasource.length; i++) {
-                                var dimensionObject = ctrl.datasource[i];
-                                if (!dimensionObject.keepItem) {
-                                    deletedIndexes.push(i);
+                                var dataSourceItem = ctrl.datasource[i];
+                                var matchItem = GetMatchItem(response.Data, dataSourceItem.DimensionValues);
+                                if (matchItem != undefined) {
+                                    for (var m in matchItem.MeasureValues) {
+                                        if (m != '$type') {
+                                            dataSourceItem.MeasureValues[m].ModifiedValue = matchItem.MeasureValues[m].ModifiedValue;
+                                            dataSourceItem.MeasureValues[m].StyleDefinitionId = matchItem.MeasureValues[m].StyleDefinitionId;
+                                            dataSourceItem.MeasureValues[m].Value = matchItem.MeasureValues[m].Value;
+                                        }
+                                    }
+                                } else {
+                                    indexesToDelete.push(i);
                                 }
                             }
-
-                            for (var i = 0; i < deletedIndexes.length; i++) {
-                                ctrl.datasource.splice(deletedIndexes[i], 1);
+                            for (var i = 0; i < indexesToDelete.length; i++) {
+                                ctrl.datasource.splice(indexesToDelete[i], 1);
                             }
-                           
-                            for (var i = 0; i < itemsToAdd.length; i++) {
-                                ctrl.datasource.push(itemsToAdd[i]);
+
+                            for (var i = 0; i < response.Data.length; i++) {
+                                var item = response.Data[i];
+                                if (!item.IsMatchItem) {
+                                    ctrl.datasource.splice(i, 0, item);
+                                }
                             }
                         }
                     });
                 }
 
-                function InitializeKeepItem() {
-                    for (var i = 0; i < ctrl.datasource.length; i++) {
-                        ctrl.datasource[i].keepItem = false;
-                    }
-                }
-
-                function ModifyItemsAndGetItemsToAdd(dataItems) {
-                    var itemsToAdd = [];
-                    if (dataItems != undefined) {
-                        for (var i = 0; i < dataItems.length; i++) {
-                            var item = dataItems[i];
-                            var indexItem = GetItemIndexFromDataSource(item.DimensionValues);
-                            if (indexItem != undefined) {
-                                var dataSourceItem = ctrl.datasource[indexItem];
-                                for (var m in item.MeasureValues) {
-                                    if (m != '$type') {
-                                        dataSourceItem.MeasureValues[m].ModifiedValue = item.MeasureValues[m].ModifiedValue;
-                                        dataSourceItem.MeasureValues[m].StyleDefinitionId = item.MeasureValues[m].StyleDefinitionId;
-                                        dataSourceItem.MeasureValues[m].Value = item.MeasureValues[m].Value;
-                                    }
-
-                                }
-                            } else {
-                                itemsToAdd.push(item);
-                            }
-                        }
-                    }
-                    return itemsToAdd;
-                }
-
-                function GetItemIndexFromDataSource(dimensions) {
-                    for (var i = 0; i < ctrl.datasource.length; i++) {
-                        var item = ctrl.datasource[i];
+                function GetMatchItem(dataItems, dataSourceDimensions) {
+                    for (var i = 0; i < dataItems.length; i++) {
+                        var item = dataItems[i];
                         var dimensionMatch = false;
                         for (var dim = 0; dim < item.DimensionValues.length; dim++) {
                             var dimensionObject = item.DimensionValues[dim];
-                            var dimension = dimensions[dim];
+                            var dimension = dataSourceDimensions[dim];
                             if (dimension.Name == dimensionObject.Name) {
                                 dimensionMatch = true;
                             } else {
@@ -981,11 +959,11 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             }
                         }
                         if (dimensionMatch) {
-                            ctrl.datasource[i].keepItem = true;
-                            return i;
+                            dataItems[i].IsMatchItem = true;
+                            return item;
                         }
-                           
                     }
+                   
                 }
 
             }

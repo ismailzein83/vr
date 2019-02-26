@@ -1261,7 +1261,8 @@ namespace Vanrise.Analytic.Business
             IEnumerable<T> orderedRecords;
             switch (orderType)
             {
-                case AnalyticQueryOrderType.ByAllDimensions: orderedRecords = GetOrderedByAllDimensions(queryContext, dimensions, allRecords, getAnalyticRecord); break;
+                case AnalyticQueryOrderType.ByAllDimensions: orderedRecords = GetOrderedByAllDimensions(queryContext, dimensions, allRecords, getAnalyticRecord,false); break;
+                case AnalyticQueryOrderType.ByAllDimensionsDescending: orderedRecords = GetOrderedByAllDimensions(queryContext, dimensions, allRecords, getAnalyticRecord,true); break;
                 case AnalyticQueryOrderType.ByAllMeasures: orderedRecords = GetOrderedByAllMeasures(measures, allRecords, getAnalyticRecord); break;
                 case AnalyticQueryOrderType.AdvancedMeasureOrder: orderedRecords = GetOrderedByAllAdvancedMeasureOrder(measures, advancedOrderOptions, allRecords, getAnalyticRecord); break;
                 default: orderedRecords = null; break;
@@ -1269,7 +1270,7 @@ namespace Vanrise.Analytic.Business
             return orderedRecords;
         }
 
-        private static IEnumerable<T> GetOrderedByAllDimensions<T>(IAnalyticTableQueryContext queryContext, List<string> dimensions, IEnumerable<T> allRecords, Func<T, AnalyticRecord> getAnalyticRecord)
+        private static IEnumerable<T> GetOrderedByAllDimensions<T>(IAnalyticTableQueryContext queryContext, List<string> dimensions, IEnumerable<T> allRecords, Func<T, AnalyticRecord> getAnalyticRecord, bool descOrder)
         {
             List<string> orderByDimensions = dimensions;
             if (orderByDimensions == null || orderByDimensions.Count == 0)
@@ -1277,24 +1278,44 @@ namespace Vanrise.Analytic.Business
             IOrderedEnumerable<T> orderedRecords;
             var firstDimensionConfig = queryContext.GetDimensionConfig(orderByDimensions[0]);
             if (firstDimensionConfig.Config.FieldType.OrderType == DataRecordFieldOrderType.ByFieldValue)
-                orderedRecords = allRecords.OrderBy(record => getAnalyticRecord(record).DimensionValues[0].Value);
+            {
+                Func<T, Object> orderFunctionByValue = (record) => {
+                    return getAnalyticRecord(record).DimensionValues[0].Value;
+                };
+                orderedRecords = descOrder ? allRecords.OrderByDescending(orderFunctionByValue): allRecords.OrderBy(orderFunctionByValue);
+            }
             else
-                orderedRecords = allRecords.OrderBy(record => getAnalyticRecord(record).DimensionValues[0].Name);
+            {
+                Func<T, Object> orderFunctionByName = (record) => {
+                    return getAnalyticRecord(record).DimensionValues[0].Name;
+                };
+                orderedRecords = descOrder ? allRecords.OrderByDescending(orderFunctionByName) : allRecords.OrderBy(orderFunctionByName);
+            }
             if (orderByDimensions.Count > 1)
             {
+                Func<T, int, Object> orderFunctionByValue = (record, index) => {
+                    return getAnalyticRecord(record).DimensionValues[index].Value;
+                };
+                Func<T, int, Object> orderFunctionByName = (record, index) => {
+                    return getAnalyticRecord(record).DimensionValues[index].Name;
+                };
+
                 for (int i = 1; i < orderByDimensions.Count; i++)
                 {
                     var dimensionIndex = i;
                     var dimensionConfig = queryContext.GetDimensionConfig(orderByDimensions[dimensionIndex]);
                     if (dimensionConfig.Config.FieldType.OrderType == DataRecordFieldOrderType.ByFieldValue)
-                        orderedRecords = orderedRecords.ThenBy(record => getAnalyticRecord(record).DimensionValues[dimensionIndex].Value);
+                    {
+                        orderedRecords = descOrder ? orderedRecords.ThenByDescending(x => orderFunctionByValue(x, dimensionIndex)) : orderedRecords.ThenBy(x => orderFunctionByValue(x, dimensionIndex));
+                    }
                     else
-                        orderedRecords = orderedRecords.ThenBy(record => getAnalyticRecord(record).DimensionValues[dimensionIndex].Name);
+                    {
+                        orderedRecords = descOrder ? orderedRecords.ThenByDescending(x => orderFunctionByName(x, dimensionIndex)) : orderedRecords.ThenBy(x => orderFunctionByName(x, dimensionIndex));
+                    }
                 }
             }
             return orderedRecords;
         }
-
         private static IEnumerable<T> GetOrderedByAllMeasures<T>(List<string> measures, IEnumerable<T> allRecords, Func<T, AnalyticRecord> getAnalyticRecord)
         {
             List<string> orderByMeasures = measures;

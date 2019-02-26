@@ -8,7 +8,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
-    public enum AnalyticQueryOrderType { ByAllDimensions = 1, ByAllMeasures = 2, AdvancedMeasureOrder = 3 }
+    public enum AnalyticQueryOrderType { ByAllDimensions = 1, ByAllMeasures = 2, AdvancedMeasureOrder = 3 , ByAllDimensionsDescending  = 4}
     public class AnalyticQuery
     {
         public string ReportName { get; set; }
