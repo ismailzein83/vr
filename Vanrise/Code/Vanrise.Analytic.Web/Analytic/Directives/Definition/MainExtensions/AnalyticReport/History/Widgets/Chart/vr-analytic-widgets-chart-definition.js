@@ -56,7 +56,18 @@
                     dimensionSelectorAPI = api;
                     dimensionReadyDeferred.resolve();
                 };
+                $scope.scopeModel.validateDimensionSelector = function () {
+                    if (!$scope.scopeModel.rootDimensionsFromSearch && ($scope.scopeModel.selectedAutoRefreshType == undefined || $scope.scopeModel.selectedAutoRefreshType.value != VR_Analytic_AutoRefreshType.SummaryValues.value))
+                        return true;
+                    return false;
+                };
 
+                $scope.scopeModel.onAutoRefreshTypeSelectionChanged = function () {
+                    if ($scope.scopeModel.selectedAutoRefreshType != undefined && $scope.scopeModel.selectedAutoRefreshType.value == VR_Analytic_AutoRefreshType.SummaryValues.value)
+                        $scope.scopeModel.showNumberOfPoints = true;
+                    else 
+                        $scope.scopeModel.showNumberOfPoints = false;
+                };
                 $scope.scopeModel.onSeriesDimensionSelectorDirectiveReady = function (api) {
                     seriesDimensionSelectorAPI = api;
                     seriesDimensionReadyDeferred.resolve();
