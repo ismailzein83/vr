@@ -87,20 +87,20 @@ as (select * from (values
 ('FC96DCD0-F1F4-45A0-88E4-569A6BC0FA13','RA_PerMinute_Tax','Per Minute','RA_Rules_VoiceTaxRuleSettings','{"Editor":"ra-rules-voicetaxrule-perminute"}'),
 ('E9A50C64-A4D2-4704-BCC3-E48752AA69E6','RA_PerSMS_Tax','Per SMS','RA_Rules_SMSTaxRuleSettings','{"Editor":"ra-rules-smstaxrule-persms"}'),
 
-('696FCB6C-EE81-4C34-A390-6793ECC7252D','RA_OperatorDeclaration_Voice','Voice','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-ra-operatordeclarationservice-voice"}'),
+
 ('F3DFF6E3-3061-495F-99C6-7DFDEBD401EC','RA_Overall_Tax','Overall Revenue','RA_Rules_VoiceTaxRuleSettings','{"Editor":"ra-rules-voicetaxrule-overall"}'),
 ('00E25E63-9C8A-46C0-955E-4A7382FB1918','RA_Overall_Tax','Overall Revenue','RA_Rules_SMSTaxRuleSettings','{"Editor":"ra-rules-smstaxrule-overall"}'),
 
 ('DB7EA63C-0407-4712-A95C-7FC253DB8FDF','Retail_RA_PeriodDefinition','Period Definition','VR_GenericData_GenericBEOnAfterSaveHandlerSettings','{"Editor":"retail-ra-perioddefinition-aftersavehandler"}'),
-('0F35BD74-81D4-4CF3-950D-98DE8CDAD7D9','RA_OperatorDeclaration_SMS','SMS','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-ra-operatordeclarationservice-sms"}'),
+
 ('320B61F3-FF99-4E54-B6CE-9EF5DA6128F2','RA_Special_Numbers','Special Numbers','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"retail-ra-specialnumbers-customobjectsettings"}'),
 ('56EE0B5C-DA52-4B8C-B205-FE536F969659','Retail_RA_PeriodDefinition','Period Definition','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"retail-ra-perioddefinition-beforesavehandler"}'),
 ('5DB02AB2-4B23-42CC-92E5-64145E75A57E','TaxRuleStep','Tax Rule Step','VR_GenericData_DataTransformationStepConfig','{"Editor":"ra-datatransformation-voicetaxrulestep","StepPreviewUIControl":"ra-datatransformation-voicetaxrulestep-preview"}'),
 ('A64D3211-45AD-4B1B-8C76-BCE2AF7D03DE','SMSTaxRuleStep','SMS Tax Rule Step','VR_GenericData_DataTransformationStepConfig','{"Editor":"ra-datatransformation-smstaxrulestep","StepPreviewUIControl":"ra-datatransformation-smstaxrulestep-preview"}'),
 
 ('6CF73654-686F-47C4-A93C-3EDDBEDC9676','LastPeriodTimePeriod','Last Period','VRCommon_VRTimePeriod','{"Editor":"ra-timeperiod-lastperiod"}'),
-('B0187271-297F-4544-B323-4469A13962AB','LastYearPeriodTimePeriod','Last Year Period','VRCommon_VRTimePeriod','{"Editor":"ra-timeperiod-lastyearperiod"}'),
-('DEDB89C0-370F-4DF8-BE63-EE60C73436F6','OperatorDeclarationServices','OperatorDeclarationServices','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"retail-ra-operatordeclarationservices-customobjectsettings"}')
+('B0187271-297F-4544-B323-4469A13962AB','LastYearPeriodTimePeriod','Last Year Period','VRCommon_VRTimePeriod','{"Editor":"ra-timeperiod-lastyearperiod"}')
+
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))

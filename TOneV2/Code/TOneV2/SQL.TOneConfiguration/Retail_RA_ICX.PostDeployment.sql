@@ -120,7 +120,10 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('DD7AA977-2836-4BB1-9F22-B885B614D107','Retail_ICX_RA_OperatorDeclaration','Operator Declaration','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"retail-ra-icx-operatordeclaration-beforesavehandler"}')
+('DD7AA977-2836-4BB1-9F22-B885B614D107','Retail_ICX_RA_OperatorDeclaration','Operator Declaration','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"retail-ra-icx-operatordeclaration-beforesavehandler"}'),
+('8794E5D8-AA3C-469D-8C40-2ABEE07A55A4','RA_OperatorDeclaration_IcxVoice','IcxVoice','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-ra-icxoperatordeclarationservice-voice"}'),
+('2A799676-A4E6-429B-B354-4EF5EA8B1DB6','IcxOperatorDeclarationServices','IcxOperatorDeclarationServices','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"retail-ra-icxoperatordeclarationservices-customobjectsettings"}'),
+('AC8D489B-8E67-4F5D-A40F-E50E0B70653C','RA_OperatorDeclaration_IcxSMS','IcxSMS','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-ra-icxoperatordeclarationservice-sms"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
