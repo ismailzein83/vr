@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WidgetsChartDefinition.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_ChartDefinitionTypeEnum'];
+    WidgetsChartDefinition.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_ChartDefinitionTypeEnum','VR_Analytic_AutoRefreshType'];
 
-    function WidgetsChartDefinition(UtilsService, VRUIUtilsService, VR_ChartDefinitionTypeEnum) {
+    function WidgetsChartDefinition(UtilsService, VRUIUtilsService, VR_ChartDefinitionTypeEnum, VR_Analytic_AutoRefreshType) {
         return {
             restrict: "E",
             scope: {
@@ -43,6 +43,8 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.autoRefreshTypes = UtilsService.getArrayEnum(VR_Analytic_AutoRefreshType);
+
                 $scope.scopeModel.dimensions = [];
                 $scope.scopeModel.seriesDimensions = [];
                 $scope.scopeModel.measures = [];
@@ -145,10 +147,14 @@
                                     });
                                 }
                             }
-
+                            if (payload.widgetEntity.AutoRefreshType != undefined) {
+                                $scope.scopeModel.selectedAutoRefreshType = UtilsService.getItemByVal($scope.scopeModel.autoRefreshTypes, payload.widgetEntity.AutoRefreshType, "value");;
+                                $scope.scopeModel.autoRefreshInterval = payload.widgetEntity.AutoRefreshInterval;
+                                $scope.scopeModel.numberOfPoints = payload.widgetEntity.NumberOfPoints;
+                            }
                             setTopMeasure(payload.widgetEntity.TopMeasure);
                             $scope.scopeModel.selectedChartType = UtilsService.getItemByVal($scope.scopeModel.chartTypes, payload.widgetEntity.ChartType, "value");
-
+                          
                             $scope.scopeModel.topRecords = payload.widgetEntity.TopRecords;
                         }
                     };
@@ -221,6 +227,9 @@
                         ChartType: $scope.scopeModel.selectedChartType.value,
                         RootDimensionsFromSearch: $scope.scopeModel.rootDimensionsFromSearch,
                         AdvancedOrderOptions: orderTypeEntity != undefined ? orderTypeEntity.AdvancedOrderOptions : undefined,
+                        AutoRefreshType: $scope.scopeModel.selectedAutoRefreshType != undefined ? $scope.scopeModel.selectedAutoRefreshType.value : undefined,
+                        AutoRefreshInterval: $scope.scopeModel.autoRefreshInterval,
+                        NumberOfPoints: $scope.scopeModel.numberOfPoints
                     };
                     return data;
                 }

@@ -133,6 +133,7 @@
     <Content Include="Analytic\Constants\AnalyticQueryHandlerValidatorResultEnum.js" />
     <Content Include="Analytic\Constants\AutomatedReportQuerySourceEnum.js" />
     <Content Include="Analytic\Constants\AnalyticSameDimensionTypeEnum.js" />
+    <Content Include="Analytic\Constants\AutoRefreshTypeEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcOutputFieldTypeEnum.js" />
     <Content Include="Analytic\Constants\AccessTypeEnum.js" />
     <Content Include="Analytic\Constants\AnalyticAggregateTypeEnum.js" />

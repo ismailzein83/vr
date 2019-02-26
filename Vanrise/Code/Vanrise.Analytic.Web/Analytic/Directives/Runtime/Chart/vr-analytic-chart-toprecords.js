@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService) {
+app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VRTimerService', 'VR_Analytic_AutoRefreshType','VRDateTimeService',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, VRTimerService, VR_Analytic_AutoRefreshType, VRDateTimeService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -33,9 +33,11 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
             var fromTime;
             var toTime;
             var currencyId;
+            var query;
 
+            var useSummaryValues = false;
             function initializeController() {
-
+             
                 ctrl.chartReady = function (api) {
                     directiveAPI = api;
                     chartReadyDeferred.resolve();
@@ -47,22 +49,24 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     function getDirectiveAPI() {
 
                         directiveAPI.load = function (payload) {
-                            var query = getQuery(payload);
+                            query = getQuery(payload);
+                            if (payload.Settings.AutoRefreshType == VR_Analytic_AutoRefreshType.SummaryValues.value) {
+                                useSummaryValues = true;
+                            }
+                            if (useSummaryValues) {
+                                if ($scope.jobIds) {
+                                    VRTimerService.unregisterJobByIds($scope.jobIds);
+                                    $scope.jobIds.length = 0;
+                                }
+
+                            }
                             currencyId = payload.CurrencyId;
-
-                            var dataRetrievalInput = {
-                                DataRetrievalResultType: 0,
-                                IsSortDescending: false,
-                                ResultKey: null,
-                                SortByColumnName: ctrl.sortField,
-                                Query: query
-                            };
-                            return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
-                                .then(function (response) {
-                                    renderCharts(response, payload.Settings.ChartType);
-                                    ctrl.showlaoder = false;
-                                });
-
+                            return getFilteredRecords(query).then(function (response) {
+                                renderCharts(response, payload.Settings.ChartType);
+                                if (useSummaryValues)
+                                    registerAutoRefreshJob(payload.Settings.AutoRefreshInterval);
+                                ctrl.showlaoder = false;
+                            });
                             function renderCharts(response, chartType) {
                                 var chartData = new Array();
 
@@ -85,6 +89,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
 
                                 for (var m = 0; m < ctrl.measures.length; m++) {
                                     for (var i = 0; i < response.Data.length; i++) {
+                                        
                                         var dimensionName = "";
                                         for (var d = 0; d < ctrl.groupingDimensions.length; d++) {
                                             dimensionName += response.Data[i].DimensionValues[d].Name + ", ";
@@ -93,6 +98,10 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                                         var chartRecord = UtilsService.getItemByVal(chartData, dimensionName, "DimensionValue");
                                         if (chartRecord == undefined) {
                                             chartRecord = {};
+
+                                            if (useSummaryValues) {
+                                                chartRecord["Date"] = VRDateTimeService.getNowDateTime();
+                                            }
                                             chartRecord["DimensionValue"] = dimensionName;
                                             chartData.push(chartRecord);
                                         }
@@ -111,25 +120,50 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                                             chartRecord[ctrl.measures[m].MeasureName] = response.Data[i].MeasureValues[ctrl.measures[m].MeasureName].ModifiedValue;
                                         }
                                     }
+
+                                    if (useSummaryValues) {
+                                        if (chartData.length < payload.Settings.NumberOfPoints) {
+                                            for (var i = chartData.length; i <= payload.Settings.NumberOfPoints; i++) {
+                                                var object = {
+                                                    Date: VRDateTimeService.getNowDateTime(),
+                                                };
+                                                for (var m = 0; m < ctrl.measures.length;m++) {
+                                                    var measure = ctrl.measures[m];
+                                                    object[measure.MeasureName] = null;
+                                                }
+                                                chartData.unshift(object);
+                                            }
+                                        }
+                                    }
                                 }
                                 var chartDefinition = {
                                     type: chartType,
-                                    yAxisTitle: dimensionNamesList == undefined ? "Value" : ctrl.measures[0].Title
+                                    yAxisTitle: dimensionNamesList == undefined ? "Value" : ctrl.measures[0].Title,
                                 };
+                                if (useSummaryValues) {
+                                    chartDefinition.numberOfPoints = payload.Settings.NumberOfPoints;
+                                    chartDefinition.enablePoints = false;
+                                    chartDefinition.useAnimation = true;
+                                }
                                 var xAxisDefinition = {
-                                    titlePath: "DimensionValue"
+                                    titlePath: "DimensionValue",
                                 };
-
+                                if (useSummaryValues) {
+                                    xAxisDefinition.titlePath = "Date";
+                                    xAxisDefinition.isTime = true;
+                                    xAxisDefinition.hideAxes = true;
+                                    xAxisDefinition.hideAxesTitle = true;
+                                }
                                 var seriesDefinitions = [];
                                 if (dimensionNamesList != undefined) {
-                                     //in this case we have only one measure because we have subtables; that's why ctrl.measures contains only one item ( so we can use 'ctrl.measures[0].MeasureName' while pushing items in seriesDefinitions)
+                                    //in this case we have only one measure because we have subtables; that's why ctrl.measures contains only one item ( so we can use 'ctrl.measures[0].MeasureName' while pushing items in seriesDefinitions)
                                     for (var i = 0; i < dimensionNamesList.length; i++) {
                                         var dim = dimensionNamesList[i];
                                         seriesDefinitions.push({
                                             title: dim,
                                             valuePath: 'MeasureValues[' + i + ']["' + ctrl.measures[0].MeasureName + '"].Value'
                                         });
-                                    }
+                                    }       
                                 }
                                 else {
                                     for (var i = 0; i < ctrl.measures.length; i++) {
@@ -150,10 +184,49 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                 };
 
             };
+            function registerAutoRefreshJob(autoRefreshInterval) {
+                VRTimerService.registerJob(onTimerElapsed, $scope, autoRefreshInterval);
+            }
 
+            function onTimerElapsed() {
+                return getFilteredRecords(query).then(function (response) {
+                    if (response != undefined && response.Data != undefined) {
+                        for (var i = 0; i < response.Data.length; i++) {
+                            var dataItem = response.Data[i];
+                            if (dataItem.MeasureValues != undefined) {
+                                var item = {};
+                                for (var p in dataItem.MeasureValues) {
+                                    item[p] = dataItem.MeasureValues[p].ModifiedValue;
+                                }
+                                item.Date = VRDateTimeService.getNowDateTime();
+                                directiveAPI.addItem(item);
+                            }
+                        }
+
+                      
+                    }
+                });
+            }
+            function getFilteredRecords(query) {
+                var promiseDeferred = UtilsService.createPromiseDeferred();
+                var dataRetrievalInput = {
+                    DataRetrievalResultType: 0,
+                    IsSortDescending: false,
+                    ResultKey: null,
+                    SortByColumnName: ctrl.sortField,
+                    Query: query
+                };
+                VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
+                    .then(function (response) {
+                        promiseDeferred.resolve(response);
+                    });
+
+                return promiseDeferred.promise;
+            }
             function getQuery(payLoad) {
                 fromTime = payLoad.FromTime;
                 toTime = payLoad.ToTime;
+
                 ctrl.groupingDimensions.length = 0;
                 ctrl.measures.length = 0;
                 var subTables = [];
@@ -173,7 +246,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                         }
                     } else if (payLoad.Settings.RootDimensionsFromSearch) {
                         if (payLoad.SelectedGroupingDimensions != undefined) {
-                            for (var i = 0; i < payLoad.SelectedGroupingDimensions.length; i++) {
+                            for (var i = 0; i < payLoad.SelectedGroupingDimensions.length; i++) { 
                                 var selectedDimension = payLoad.SelectedGroupingDimensions[i];
                                 ctrl.groupingDimensions.push({ DimensionName: selectedDimension.DimensionName });
                             }
@@ -193,7 +266,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                         subTables.push({
                             Dimensions: dimensions,
                             Measures: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName')
-                        })
+                        });
                     }
                 }
                 else {
@@ -220,8 +293,8 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     OrderBy: [payLoad.Settings.TopMeasure],
                     OrderType: payLoad.Settings.OrderType,
                     AdvancedOrderOptions: payLoad.Settings.AdvancedOrderOptions,
-                    CurrencyId: currencyId
-
+                    CurrencyId: currencyId,
+                    TimePeriod: payLoad.TimePeriod
                 };
                 return queryFinalized;
             }

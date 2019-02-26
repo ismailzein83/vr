@@ -5,7 +5,7 @@
                 <vr-switch label="Root Dimensions From Search" value="scopeModel.rootDimensionsFromSearch"></vr-switch>
             </vr-columns>
             <vr-columns width="1/3row" haschildcolumns ng-show="!scopeModel.rootDimensionsFromSearch">
-                <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionSelectorDirectiveReady" isrequired="!scopeModel.rootDimensionsFromSearch" ismultipleselection selectedvalues="scopeModel.selectedDimensions" onselectitem="    scopeModel.onSelectDimensionItem" ondeselectitem="    scopeModel.onDeselectDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
+                <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionSelectorDirectiveReady" isrequired="!scopeModel.rootDimensionsFromSearch && scopeModel.selectedAutoRefreshType ==undefined" ismultipleselection selectedvalues="scopeModel.selectedDimensions" onselectitem="    scopeModel.onSelectDimensionItem" ondeselectitem="    scopeModel.onDeselectDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
             </vr-columns>
         </vr-row>
         <vr-row>
@@ -25,7 +25,18 @@
                 <vr-textbox value="scopeModel.topRecords" type="number" label="Top Records" minvalue="1" maxvalue="100"></vr-textbox>
             </vr-columns>
         </vr-row>
-
+        <vr-row>
+            <vr-columns width="1/3row">
+                <vr-select label="Auto Refresh Type" datasource="scopeModel.autoRefreshTypes" selectedvalues="scopeModel.selectedAutoRefreshType"
+                           datavaluefield="value" datatextfield="description">
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-textbox type="number" minvalue="1" vr-disabled="scopeModel.selectedAutoRefreshType == undefined" value="scopeModel.autoRefreshInterval" label="Auto Refresh Interval (Sec)" isrequired="scopeModel.selectedAutoRefreshType != undefined"></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-textbox type="number" minvalue="1"  value="scopeModel.numberOfPoints" label="Number Of Points" isrequired="scopeModel.selectedAutoRefreshType != undefined"></vr-textbox>
+            </vr-columns>
+        </vr-row>
 
     </vr-tab>
     <vr-tab header="'Order Type'">

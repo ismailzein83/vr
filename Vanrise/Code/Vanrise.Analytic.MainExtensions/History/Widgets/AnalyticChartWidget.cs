@@ -7,6 +7,7 @@ using Vanrise.Analytic.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.History.Widgets
 {
+    public enum AutoRefreshType { SummaryValues = 1 }
     public class AnalyticChartWidget : AnalyticHistoryReportWidget
     {
         public override Guid ConfigId { get { return new Guid("D050DEB3-700E-437B-86D1-510A81C0C14C"); } }
@@ -18,7 +19,9 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public int? TopRecords { get; set; }
         public string ChartType { get; set; }
         public bool RootDimensionsFromSearch { get; set; }
-
+        public int? AutoRefreshInterval { get; set; }
+        public AutoRefreshType? AutoRefreshType { get; set; }
+        public int? NumberOfPoints { get; set; }
         public override List<string> GetMeasureNames()
         {
             return this.Measures.Select(measure => measure.MeasureName).ToList();

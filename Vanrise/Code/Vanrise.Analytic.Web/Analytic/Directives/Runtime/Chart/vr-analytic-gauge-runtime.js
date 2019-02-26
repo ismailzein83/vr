@@ -134,6 +134,8 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
                     TimePeriod: payload.TimePeriod,
                     TableId: payload.TableId,
                     FilterGroup: payload.FilterGroup,
+                    FromTime: payload.FromTime,
+                    ToTime: payload.ToTime,
                 };
                 return queryFinalized;
             }
