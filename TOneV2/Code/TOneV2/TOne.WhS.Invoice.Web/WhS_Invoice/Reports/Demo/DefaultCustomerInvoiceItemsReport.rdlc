@@ -1642,7 +1642,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SaleZoneIdDescription.Value</Value>
+                              <Value>=Fields!CustomerMobileNetworkIdDescription.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2414,12 +2414,12 @@
           <DataField>CustomerId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="SaleZoneId">
-          <DataField>SaleZoneId</DataField>
+        <Field Name="CustomerMobileNetworkId">
+          <DataField>CustomerMobileNetworkId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleZoneIdDescription">
-          <DataField>SaleZoneIdDescription</DataField>
+        <Field Name="CustomerMobileNetworkIdDescription">
+          <DataField>CustomerMobileNetworkIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="OriginalSaleCurrencyId">
