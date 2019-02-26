@@ -241,7 +241,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public enum RDBDateTimePart { TimeOnly = 1, DateOnly = 2, DateAndHour = 3 }
+    public enum RDBDateTimePart { TimeOnly = 1, DateOnly = 2, DateAndHour = 3, Hour = 4, Month = 5 }
     internal class RDBDateTimePartExpression : BaseRDBExpression
     {
         public BaseRDBExpression DateTimeExpression { get; set; }
@@ -256,6 +256,8 @@ namespace Vanrise.Data.RDB
                 case RDBDateTimePart.DateOnly: return string.Format("Cast({0} as date)", datetimeExpression);
                 case RDBDateTimePart.TimeOnly: return string.Format("Cast({0} as time)", datetimeExpression);
                 case RDBDateTimePart.DateAndHour: return string.Format("Convert(Datetime, CONVERT(varchar(13), {0}, 121) + ':00:00')", datetimeExpression);
+                case RDBDateTimePart.Hour: return $"Cast(RIGHT('00' + Convert(varchar, DatePart(Hour, {datetimeExpression})), 2) + ':00:00' as time)";
+                case RDBDateTimePart.Month:return $"DATEADD(month, DATEDIFF(month, 0, {datetimeExpression}), 0)";
                 default: throw new NotSupportedException(string.Format("Part '{0}'", this.Part.ToString()));
             }
         }
