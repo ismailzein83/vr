@@ -210,9 +210,9 @@
     <Compile Include="SupplierRate\QueryHandlers\SupplierRateForZoneQueryHandler.cs" />
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseManager.cs" />
     <Compile Include="Switch\SyncWithinRouteBuildSwitchFilter.cs" />
-    <Compile Include="TechnicalNumberPlanCustomObjectTypeSettings.cs" />
-    <Compile Include="TechnicalNumberPlanManager.cs" />
-    <Compile Include="TechnicalNumberPlanOnBeforeSaveHandler.cs" />
+    <Compile Include="TechnicalZoneManager.cs" />
+    <Compile Include="TechnicalZoneOnBeforeSaveHandler.cs" />
+    <Compile Include="TechnicalCodeManager.cs" />
     <Compile Include="TOneModuleManager.cs" />
     <Compile Include="ZoneCodeGroupManager.cs" />
     <Compile Include="ZoneRoutingProduct\History\CustomerZoneRoutingProductHistoryLocator.cs" />
