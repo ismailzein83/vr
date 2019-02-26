@@ -5,6 +5,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class BusinessEntitySettingsData : SettingData
     {
         public CachingExpirationIntervals CachingExpirationIntervals { get; set; } 
+
+        public TechnicalNumberPlanSettings TechnicalNumberPlanSettings { get; set; }
     }
 
     public class CachingExpirationIntervals

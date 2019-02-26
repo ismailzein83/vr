@@ -123,6 +123,15 @@ namespace TOne.WhS.BusinessEntity.Business
             return businessEntitySettingsData.CachingExpirationIntervals;
         }
 
+        public TechnicalNumberPlanSettings GetTechnicalNumberPlanSettings()
+        {
+            BusinessEntitySettingsData businessEntitySettingsData = GetBusinessEntitySettingsData();
+            if (businessEntitySettingsData.TechnicalNumberPlanSettings == null)
+                throw new NullReferenceException("businessEntitySettingsData.TechnicalNumberPlanSettings");
+
+            return businessEntitySettingsData.TechnicalNumberPlanSettings;
+        }
+
         public decimal GetRoundedDefaultRate()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
