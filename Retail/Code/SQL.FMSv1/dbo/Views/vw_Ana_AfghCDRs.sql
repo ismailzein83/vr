@@ -1,12 +1,14 @@
 ﻿CREATE VIEW dbo.vw_Ana_AfghCDRs
 AS
-SELECT        CLI, b_number, AttemptDateTime, CASE WHEN [OriginationNetwork] IS NULL OR
-                         [OriginationNetwork] = '' THEN 'INTERNATIONAL' ELSE [OriginationNetwork] END AS OriginationNetwork, CASE WHEN [OriginationNetwork] IS NULL OR
-                         [OriginationNetwork] = '' THEN 'SIP' ELSE 'GSM' END AS Type, CASE WHEN (CLI LIKE '+9373%' OR
-                         CLI LIKE '+9378%') AND (LEN(CLI) = 12) THEN 1 WHEN (CLI LIKE '+937%') AND (LEN(CLI) = 12) THEN 2 ELSE 3 END AS CaseAndNetworkType, CASE WHEN (CLI LIKE '+937%') AND (LEN(CLI) = 12) 
+SELECT        r.CLI, r.b_number, r.AttemptDateTime, CASE WHEN r.[OriginationNetwork] IS NULL OR
+                         r.[OriginationNetwork] = '' THEN 'INTERNATIONAL' ELSE r.[OriginationNetwork] END AS OriginationNetwork, CASE WHEN r.[OriginationNetwork] IS NULL OR
+                         r.[OriginationNetwork] = '' THEN 'SIP' ELSE 'GSM' END AS Type, CASE WHEN (r.CLI LIKE '+9373%' OR
+                         r.CLI LIKE '+9378%') AND (LEN(r.CLI) = 12) THEN 1 WHEN (r.CLI LIKE '+937%') AND (LEN(r.CLI) = 12) THEN 2 ELSE 3 END AS CaseAndNetworkType, CASE WHEN (r.CLI LIKE '+937%') AND (LEN(r.CLI) = 12) 
                          THEN 1 ELSE 2 END AS CaseType
-FROM            dbo.RecievedCalls
-WHERE        (b_number LIKE '937%')
+FROM            dbo.RecievedCalls AS r INNER JOIN
+                         dbo.GeneratedCalls AS g ON r.GeneratedCallID = g.ID
+WHERE        (r.b_number LIKE '937%') AND (g.a_number <> 'Unknown') AND (r.AttemptDateTime > '2019-02-14 15:30:00') AND (r.AttemptDateTime < '2019-02-21 00:00:00') AND (r.AttemptDateTime < '2019-02-26') OR
+                         (r.b_number LIKE '937%') AND (r.AttemptDateTime >= '2019-02-21 00:00:00') AND (r.AttemptDateTime < '2019-02-26')
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'vw_Ana_AfghCDRs';
 
@@ -83,12 +85,22 @@ Begin DesignProperties =
          Left = 0
       End
       Begin Tables = 
-         Begin Table = "RecievedCalls"
+         Begin Table = "r"
             Begin Extent = 
                Top = 6
                Left = 38
                Bottom = 136
                Right = 232
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "g"
+            Begin Extent = 
+               Top = 6
+               Left = 270
+               Bottom = 136
+               Right = 525
             End
             DisplayFlags = 280
             TopColumn = 0
@@ -131,4 +143,6 @@ Begin DesignProperties =
    End
 End
 ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'vw_Ana_AfghCDRs';
+
+
 
