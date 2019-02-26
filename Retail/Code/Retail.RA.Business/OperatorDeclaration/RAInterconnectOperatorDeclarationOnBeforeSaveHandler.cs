@@ -14,7 +14,7 @@ namespace Retail.RA.Business
         public override Guid ConfigId { get { return new Guid("DD7AA977-2836-4BB1-9F22-B885B614D107"); } }
         public override void Execute(IGenericBEOnBeforeInsertHandlerContext context)
         {
-            List<OperationDeclarationTrafficItem> traficItems = new List<OperationDeclarationTrafficItem>();
+            List<IcxOperationDeclarationTrafficItem> traficItems = new List<IcxOperationDeclarationTrafficItem>();
             context.ThrowIfNull("context");
             context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
             context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
@@ -26,7 +26,7 @@ namespace Retail.RA.Business
             var periodId = context.GenericBusinessEntity.FieldValues.GetRecord("Period");
             periodId.ThrowIfNull("periodId");
 
-            var operatorDeclarationServices = context.GenericBusinessEntity.FieldValues.GetRecord("OperatorDeclarationServices") as OperatorDeclarationServices;
+            var operatorDeclarationServices = context.GenericBusinessEntity.FieldValues.GetRecord("OperatorDeclarationServices") as IcxOperatorDeclarationServices;
             foreach (var service in operatorDeclarationServices.Services)
             {
                 service.ThrowIfNull("Service");
@@ -39,7 +39,7 @@ namespace Retail.RA.Business
                     break;
                 }
                 else
-                    traficItems.Add(new OperationDeclarationTrafficItem()
+                    traficItems.Add(new IcxOperationDeclarationTrafficItem()
                     {
                         ServiceType = service.Settings.GetServiceType(),
                         TrafficDirection = service.Settings.GetTrafficDirection()

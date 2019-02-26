@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace Retail.RA.Entities
 {
-    public class OperatorDeclarationService
+    public class IntlOperatorDeclarationService
     {
         public Decimal Revenue { get; set; }
 
-        public OperatorDeclarationServiceSettings Settings { get; set; }
+        public IntlOperatorDeclarationServiceSettings Settings { get; set; }
     }
 
-    public abstract class OperatorDeclarationServiceSettings
+    public abstract class IntlOperatorDeclarationServiceSettings
     {
         public abstract Guid ConfigId { get; }
         public abstract TrafficDirection GetTrafficDirection();
@@ -20,14 +20,14 @@ namespace Retail.RA.Entities
 
     }
 
-    public class OperatorDeclarationServices
+    public class IntlOperatorDeclarationServices
     {
-        public OperatorDeclarationServicesCollection Services { get; set; }
+        public IntlOperatorDeclarationServicesCollection Services { get; set; }
     }
-    public class OperatorDeclarationServicesCollection : List<OperatorDeclarationService>
+    public class IntlOperatorDeclarationServicesCollection : List<IntlOperatorDeclarationService>
     {
     }
-    public struct OperationDeclarationTrafficItem
+    public struct IntlOperationDeclarationTrafficItem
     {
         public ServiceType ServiceType { get; set; }
         public TrafficDirection TrafficDirection { get; set; }

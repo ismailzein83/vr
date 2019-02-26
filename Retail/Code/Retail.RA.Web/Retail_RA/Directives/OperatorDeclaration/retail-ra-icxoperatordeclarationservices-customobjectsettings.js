@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/Templates/OperatorDirectionServicesCustomObjectSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/Templates/IcxOperatorDirectionServicesCustomObjectSettingsTemplate.html"
 
         };
         function OperatorDirectionServices($scope, ctrl, $attrs) {
@@ -36,7 +36,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "Retail.RA.Business.OperatorDeclarationServicesCustomObjectTypeSettings, Retail.RA.Business"
+                        $type: "Retail.RA.Business.IcxOperatorDeclarationServicesCustomObjectTypeSettings, Retail.RA.Business"
                     };
                     return data;
                 };
@@ -48,6 +48,6 @@
         }
     }
 
-    app.directive('retailRaOperatordeclarationservicesCustomobjectsettings', operatorDirectionServicesType);
+    app.directive('retailRaIcxoperatordeclarationservicesCustomobjectsettings', operatorDirectionServicesType);
 
 })(app);

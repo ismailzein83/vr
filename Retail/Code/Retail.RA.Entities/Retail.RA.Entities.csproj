@@ -59,8 +59,10 @@
     <Compile Include="OnNetOperationDeclaration\OnNetOperatorDeclarationService.cs" />
     <Compile Include="OnNetOperationDeclaration\OnNetOperatorDirectionServicesMappedCellExtensionConfiguration.cs" />
     <Compile Include="OperatorDeclaration\Enums.cs" />
-    <Compile Include="OperatorDeclaration\OperatorDeclaration.cs" />
-    <Compile Include="OperatorDeclaration\OperatorDeclarationService.cs" />
+    <Compile Include="OperatorDeclaration\IcxOperatorDeclaration.cs" />
+    <Compile Include="OperatorDeclaration\IcxOperatorDeclarationService.cs" />
+    <Compile Include="OperatorDeclaration\IntlOperatorDeclaration.cs" />
+    <Compile Include="OperatorDeclaration\IntlOperatorDeclarationService.cs" />
     <Compile Include="OperatorDeclaration\OperatorDirectionServicesMappedCellExtensionConfiguration.cs" />
     <Compile Include="Period Definition\PeriodDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

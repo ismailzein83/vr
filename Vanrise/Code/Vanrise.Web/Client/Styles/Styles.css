@@ -4062,7 +4062,7 @@ vr-validator[vr-input] > div:nth-child(1) {
     opacity: 0.5;
 }
 
-.highcharts-container svg > text {
+.highcharts-container svg > text.highcharts-credits {
     display: none;
 }
 

@@ -3,7 +3,7 @@ using Retail.RA.Entities;
 
 namespace Retail.RA.Business
 {
-    public class SMS : OperatorDeclarationServiceSettings
+    public class IntlSMS : IntlOperatorDeclarationServiceSettings
     {
         public override Guid ConfigId
         {

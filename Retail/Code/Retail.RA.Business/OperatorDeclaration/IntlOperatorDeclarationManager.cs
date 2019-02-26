@@ -11,7 +11,7 @@ namespace Retail.RA.Business
     {
         static readonly Guid BeDefinitionId = new Guid("6E73A6E0-B3E2-4930-86ED-9EF509D56960");
 
-        public IEnumerable<OperatorDeclaration> GetAllOperatorDecalarations()
+        public IEnumerable<IntlOperatorDeclaration> GetAllOperatorDecalarations()
         {
             var cachedOperatorDeclarations = GetCachedOperatorDeclarations();
             cachedOperatorDeclarations.ThrowIfNull("cachedOperatorDeclarations");
@@ -132,13 +132,13 @@ namespace Retail.RA.Business
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedOutVoiceDeclaration", BeDefinitionId,
                 () =>
                 {
-                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    List<IntlOperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
                     Dictionary<int, List<IntlVoiceDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlVoiceDeclarationService>>();
                     foreach (var operatorDeclaration in cachedOperatorDeclarations)
                     {
                         foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
                         {
-                            if (operatorDeclarationService.Settings is Voice voiceDeclarationServiceSettings && voiceDeclarationServiceSettings.TrafficDirection == TrafficDirection.OUT)
+                            if (operatorDeclarationService.Settings is IntlVoice voiceDeclarationServiceSettings && voiceDeclarationServiceSettings.TrafficDirection == TrafficDirection.OUT)
                             {
                                 List<IntlVoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
                                 operatorDeclarations.Add(new IntlVoiceDeclarationService
@@ -161,13 +161,13 @@ namespace Retail.RA.Business
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedInVoiceDeclaration", BeDefinitionId,
                 () =>
                 {
-                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    List<IntlOperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
                     Dictionary<int, List<IntlVoiceDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlVoiceDeclarationService>>();
                     foreach (var operatorDeclaration in cachedOperatorDeclarations)
                     {
                         foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
                         {
-                            if (operatorDeclarationService.Settings is Voice voiceDeclarationServiceSettings && voiceDeclarationServiceSettings.TrafficDirection == TrafficDirection.IN)
+                            if (operatorDeclarationService.Settings is IntlVoice voiceDeclarationServiceSettings && voiceDeclarationServiceSettings.TrafficDirection == TrafficDirection.IN)
                             {
                                 List<IntlVoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
                                 operatorDeclarations.Add(new IntlVoiceDeclarationService
@@ -190,13 +190,13 @@ namespace Retail.RA.Business
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedInVoiceDeclaration", BeDefinitionId,
                 () =>
                 {
-                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    List<IntlOperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
                     Dictionary<int, List<IntlVoiceDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlVoiceDeclarationService>>();
                     foreach (var operatorDeclaration in cachedOperatorDeclarations)
                     {
                         foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
                         {
-                            if (operatorDeclarationService.Settings is Voice voiceDeclarationServiceSettings)
+                            if (operatorDeclarationService.Settings is IntlVoice voiceDeclarationServiceSettings)
                             {
                                 List<IntlVoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
                                 operatorDeclarations.Add(new IntlVoiceDeclarationService
@@ -220,13 +220,13 @@ namespace Retail.RA.Business
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedOutSMSDeclaration", BeDefinitionId,
                 () =>
                 {
-                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    List<IntlOperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
                     Dictionary<int, List<IntlSMSDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlSMSDeclarationService>>();
                     foreach (var operatorDeclaration in cachedOperatorDeclarations)
                     {
                         foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
                         {
-                            if (operatorDeclarationService.Settings is SMS smsDeclarationServiceSettings && smsDeclarationServiceSettings.TrafficDirection == TrafficDirection.OUT)
+                            if (operatorDeclarationService.Settings is IntlSMS smsDeclarationServiceSettings && smsDeclarationServiceSettings.TrafficDirection == TrafficDirection.OUT)
                             {
                                 List<IntlSMSDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
                                 operatorDeclarations.Add(new IntlSMSDeclarationService
@@ -249,13 +249,13 @@ namespace Retail.RA.Business
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedInSMSDeclaration", BeDefinitionId,
                 () =>
                 {
-                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    List<IntlOperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
                     Dictionary<int, List<IntlSMSDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlSMSDeclarationService>>();
                     foreach (var operatorDeclaration in cachedOperatorDeclarations)
                     {
                         foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
                         {
-                            if (operatorDeclarationService.Settings is SMS smsDeclarationServiceSettings && smsDeclarationServiceSettings.TrafficDirection == TrafficDirection.IN)
+                            if (operatorDeclarationService.Settings is IntlSMS smsDeclarationServiceSettings && smsDeclarationServiceSettings.TrafficDirection == TrafficDirection.IN)
                             {
                                 List<IntlSMSDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
                                 operatorDeclarations.Add(new IntlSMSDeclarationService
@@ -278,13 +278,13 @@ namespace Retail.RA.Business
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedSMSDeclaration", BeDefinitionId,
                 () =>
                 {
-                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    List<IntlOperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
                     Dictionary<int, List<IntlSMSDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlSMSDeclarationService>>();
                     foreach (var operatorDeclaration in cachedOperatorDeclarations)
                     {
                         foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
                         {
-                            if (operatorDeclarationService.Settings is SMS smsDeclarationServiceSettings)
+                            if (operatorDeclarationService.Settings is IntlSMS smsDeclarationServiceSettings)
                             {
                                 List<IntlSMSDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
                                 operatorDeclarations.Add(new IntlSMSDeclarationService
@@ -302,13 +302,13 @@ namespace Retail.RA.Business
                 });
         }
 
-        private List<OperatorDeclaration> GetCachedOperatorDeclarations()
+        private List<IntlOperatorDeclaration> GetCachedOperatorDeclarations()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedOperatorDeclarations", BeDefinitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(BeDefinitionId);
-                List<OperatorDeclaration> operatorDeclarations = new List<OperatorDeclaration>();
+                List<IntlOperatorDeclaration> operatorDeclarations = new List<IntlOperatorDeclaration>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -317,12 +317,12 @@ namespace Retail.RA.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        OperatorDeclaration operatorDeclaration = new OperatorDeclaration
+                        IntlOperatorDeclaration operatorDeclaration = new IntlOperatorDeclaration
                         {
                             ID = (long)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             OperatorId = (long)genericBusinessEntity.FieldValues.GetRecord("Operator"),
                             PeriodId = (int)genericBusinessEntity.FieldValues.GetRecord("Period"),
-                            OperatorDeclarationServices = genericBusinessEntity.FieldValues.GetRecord("OperatorDeclarationServices") as OperatorDeclarationServices
+                            OperatorDeclarationServices = genericBusinessEntity.FieldValues.GetRecord("OperatorDeclarationServices") as IntlOperatorDeclarationServices
                         };
                         operatorDeclarations.Add(operatorDeclaration);
                     }
@@ -338,7 +338,7 @@ namespace Retail.RA.Business
         public long ID { get; set; }
         public PeriodDefinition PeriodDefinition { get; set; }
         public long OperatorId { get; set; }
-        public Voice VoiceSettings { get; set; }
+        public IntlVoice VoiceSettings { get; set; }
     }
 
     public class IntlSMSDeclarationService
@@ -346,6 +346,6 @@ namespace Retail.RA.Business
         public long ID { get; set; }
         public PeriodDefinition PeriodDefinition { get; set; }
         public long OperatorId { get; set; }
-        public SMS SMSSettings { get; set; }
+        public IntlSMS SMSSettings { get; set; }
     }
 }

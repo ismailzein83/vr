@@ -1,24 +1,26 @@
-﻿using System;
-using Vanrise.GenericData.Entities;
-using Retail.RA.Entities;
+﻿using Retail.RA.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.RA.Business
 {
-    public class OperatorDeclarationServicesCustomObjectTypeSettings : FieldCustomObjectTypeSettings
+    public class IcxOperatorDeclarationServicesCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
-        public override Guid ConfigId { get { return new Guid("DEDB89C0-370F-4DF8-BE63-EE60C73436F6"); } }
+        public override Guid ConfigId { get { return new Guid("2A799676-A4E6-429B-B354-4EF5EA8B1DB6"); } }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            var valueObject = context.FieldValue as OperatorDeclarationServices;
+            var valueObject = context.FieldValue as IcxOperatorDeclarationServices;
             if (valueObject != null)
             {
-                var services = valueObject.Services as List<OperatorDeclarationService>;
-                if(services == null)
-                    services = Utilities.ConvertJsonToList<OperatorDeclarationService>(valueObject.Services);
+                var services = valueObject.Services as List<IcxOperatorDeclarationService>;
+                if (services == null)
+                    services = Utilities.ConvertJsonToList<IcxOperatorDeclarationService>(valueObject.Services);
                 if (services != null)
                 {
                     long voiceInNumberOfCalls = 0;
@@ -43,17 +45,17 @@ namespace Retail.RA.Business
                         var serviceType = service.Settings.GetServiceType();
                         if (serviceType == ServiceType.Voice)
                         {
-                            var voice = service.Settings as Voice;
+                            var voice = service.Settings as IcxVoice;
                             if (voice != null)
                             {
                                 var trafficDirection = voice.GetTrafficDirection();
-                                if(trafficDirection == TrafficDirection.IN)
+                                if (trafficDirection == TrafficDirection.IN)
                                 {
                                     voiceInNumberOfCalls += voice.DeclaredNumberOfCalls;
                                     voiceInDuration += voice.DeclaredDuration;
                                     voiceInRevenue += voice.DeclaredRevenue;
                                 }
-                                else if(trafficDirection == TrafficDirection.OUT)
+                                else if (trafficDirection == TrafficDirection.OUT)
                                 {
                                     voiceOutNumberOfCalls += voice.DeclaredNumberOfCalls;
                                     voiceOutDuration += voice.DeclaredDuration;
@@ -63,7 +65,7 @@ namespace Retail.RA.Business
                         }
                         else if (serviceType == ServiceType.SMS)
                         {
-                            var sms = service.Settings as SMS;
+                            var sms = service.Settings as IcxSMS;
                             if (sms != null)
                             {
                                 var trafficDirection = sms.GetTrafficDirection();
@@ -86,27 +88,27 @@ namespace Retail.RA.Business
                     string smsOutDescription = null;
                     List<string> descriptions = new List<string>();
 
-                    if(voiceInNumberOfCalls != 0 || voiceInDuration != 0 || voiceInRevenue != 0)
+                    if (voiceInNumberOfCalls != 0 || voiceInDuration != 0 || voiceInRevenue != 0)
                     {
-                        voiceInDescription = string.Format("Voice(IN)-Number Of Calls: {0},Duration: {1} , Revenue: {2}", voiceInNumberOfCalls, voiceInDuration,voiceInRevenue);
+                        voiceInDescription = string.Format("Voice(IN)-Number Of Calls: {0},Duration: {1} , Revenue: {2}", voiceInNumberOfCalls, voiceInDuration, voiceInRevenue);
                         descriptions.Add(voiceInDescription);
-                    }  
-                    if(voiceOutNumberOfCalls != 0 || voiceOutDuration != 0 || voiceOutRevenue != 0)
+                    }
+                    if (voiceOutNumberOfCalls != 0 || voiceOutDuration != 0 || voiceOutRevenue != 0)
                     {
                         voiceOutDescription = string.Format("Voice(Out)-Number Of Calls: {0},Duration: {1} , Revenue: {2}", voiceOutNumberOfCalls, voiceOutDuration, voiceOutRevenue);
                         descriptions.Add(voiceOutDescription);
                     }
-                    if(numberOfSmsIn != 0 || smsInRevenue!= 0)
+                    if (numberOfSmsIn != 0 || smsInRevenue != 0)
                     {
                         smsInDescription = string.Format("SMS(IN)-Number Of SMS: {0} , Revenue: {1}", numberOfSmsIn, smsInRevenue);
                         descriptions.Add(smsInDescription);
                     }
-                    if(numberOfSmsOut != 0 || smsOutRevenue != 0)
+                    if (numberOfSmsOut != 0 || smsOutRevenue != 0)
                     {
                         smsOutDescription = string.Format("SMS(Out)-Number Of SMS: {0} , Revenue: {1}", numberOfSmsOut, smsOutRevenue);
                         descriptions.Add(smsOutDescription);
                     }
-                    if(descriptions.Count() > 0)
+                    if (descriptions.Count() > 0)
                     {
                         var description = string.Join(" / ", descriptions);
                         return description;
@@ -123,12 +125,12 @@ namespace Retail.RA.Business
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(OperatorDeclarationServices);
+            return typeof(IcxOperatorDeclarationServices);
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            return originalValue as OperatorDeclarationServices;
+            return originalValue as IcxOperatorDeclarationServices;
         }
 
         public override string GetRuntimeTypeDescription()

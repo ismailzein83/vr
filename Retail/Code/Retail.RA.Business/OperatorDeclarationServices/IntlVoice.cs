@@ -3,7 +3,7 @@ using Retail.RA.Entities;
 
 namespace Retail.RA.Business
 {
-    public class Voice : OperatorDeclarationServiceSettings
+    public class IntlVoice : IntlOperatorDeclarationServiceSettings
     {
         public override Guid ConfigId
         {
