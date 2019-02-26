@@ -1,7 +1,9 @@
-﻿<vr-columns colnum="{{sequenceCtrl.normalColNum}}">
+﻿<vr-common-textpatternbuilder on-ready="scopeModel.onTextPatternBuilderDirectiveReady" customlabel="File Name Pattern" normal-col-num="8" isrequired="true"></vr-common-textpatternbuilder>
+
+<vr-columns colnum="{{sequenceCtrl.normalColNum}}">
     <vr-textbox type="number" value="scopeModel.resetSequenceNumber" label="Reset Sequence Number" isrequired="true" minvalue="0"></vr-textbox>
 </vr-columns>
+
 <vr-columns colnum="{{sequenceCtrl.normalColNum}}">
     <vr-timespan value="scopeModel.fileImportTimeInterval" label="File Import Time Interval" isrequired="true" dontacceptzero dontacceptnegative></vr-timespan>
 </vr-columns>
-<vr-common-textpatternbuilder on-ready="scopeModel.onTextPatternBuilderDirectiveReady" customlabel="File Name Pattern" normal-col-num="8" isrequired="true"></vr-common-textpatternbuilder>

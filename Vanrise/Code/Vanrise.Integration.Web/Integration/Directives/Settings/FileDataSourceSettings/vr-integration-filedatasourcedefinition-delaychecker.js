@@ -146,7 +146,7 @@
                 + '	datavaluefield="ExtensionConfigurationId"'
                 + '	datatextfield="Title"'
                 + ' ' + hideremoveicon + ' '
-                + '	label="File Type"'
+                + '	label="File Generation Type"'
                 + '	isrequired="delayCheckerCtrl.isrequired">'
                 + '	</vr-select>'
                 + '</vr-columns>'
