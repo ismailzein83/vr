@@ -92,6 +92,7 @@
     <Compile Include="Extensions\GenericData\InvoiceRecordTypeMainFields.cs" />
     <Compile Include="Extensions\InvoiceFileExtendedSetting.cs" />
     <Compile Include="Extensions\InvoiceItemSubSection.cs" />
+    <Compile Include="Extensions\InvoiceMemoryAnalyticDataProvider.cs" />
     <Compile Include="Extensions\InvoiceSynchronizer.cs" />
     <Compile Include="Extensions\InvoiceTypeExtendedSettingsInfoContext.cs" />
     <Compile Include="InvoiceReportFileFilter.cs" />
@@ -118,6 +119,14 @@
     <ProjectReference Include="..\Vanrise.AccountBalance.Entities\Vanrise.AccountBalance.Entities.csproj">
       <Project>{5111e97a-c9ab-4bef-8f75-32cc46526074}</Project>
       <Name>Vanrise.AccountBalance.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
+      <Project>{374e7ef0-2080-4b79-bcd9-b5563694197c}</Project>
+      <Name>Vanrise.Analytic.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.Entities\Vanrise.Analytic.Entities.csproj">
+      <Project>{bf85d7b4-84c2-441b-bca0-b42fe2619ae9}</Project>
+      <Name>Vanrise.Analytic.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.BEBridge.Entities\Vanrise.BEBridge.Entities.csproj">
       <Project>{9e370ac3-9718-4e10-ab12-b71605880d67}</Project>
