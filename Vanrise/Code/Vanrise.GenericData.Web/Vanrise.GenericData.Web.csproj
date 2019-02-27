@@ -237,8 +237,6 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionGroupTemplate.html" />
-    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\ChangeStatusGenericBEDefinitionActionTemplate.html" />
-    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-changestatusgenericaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\GenericBEBulkActionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\Templates\GenericBEBulkActionSettingsUpdateTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\vr-genericdata-genericbe-bulkactiondefinition-update-fieldstate.js" />
