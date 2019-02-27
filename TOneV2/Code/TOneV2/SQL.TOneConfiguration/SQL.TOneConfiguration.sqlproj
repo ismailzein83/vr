@@ -958,5 +958,6 @@
     <None Include="DBsStructure.txt" />
     <None Include="SomST.PostDeployment.sql" />
     <None Include="Retail.SwitchReleaseCause.PostDeployment.sql" />
+    <None Include="TestCallAnalysis.PotDeployment.sql" />
   </ItemGroup>
 </Project>
