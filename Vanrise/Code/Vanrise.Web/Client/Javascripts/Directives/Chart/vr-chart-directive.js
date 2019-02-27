@@ -14,6 +14,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
+            ctrl.fakeDomeId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
             var chartElement = $element.find('#divChart');
             var menuActionsAttribute = $attrs.menuactions != undefined ? $scope.$parent.$eval($attrs.menuactions) : undefined;
 
@@ -506,6 +507,57 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     });
                 }
             }
+            if (chartDefinition.rangesObject != undefined) {
+                for (var i = 0; i < chartDefinition.rangesObject.length; i++) {
+                    $("#" + ctrl.fakeDomeId).removeClass();
+                    var rangeObject = chartDefinition.rangesObject[i];
+                    var color;
+                    if (typeof rangeObject.Color === 'string' || rangeObject.Color instanceof String) {
+                        color = rangeObject.Color;
+                    }
+                    else if (typeof rangeObject.Color === 'object' || rangeObject.Color instanceof Object) {
+                        $("#" + ctrl.fakeDomeId).addClass(rangeObject.Color.ClassName);
+                        var element = $("#" + ctrl.fakeDomeId);
+                        color = element.css("background-color");
+                    }
+                    //  if (rangeObject.From != null) {
+                    var customLabel = {
+                        text: rangeObject.Name,
+                        y: -2,
+                        style: {
+                            color: color,
+                            fontSize: '10px'
+                        }
+                    };
+                    plotLines.push({
+                        value: rangeObject.From != null ? rangeObject.From : null,
+                        width: 1,
+                        color:'#808080',
+                        zIndex: 5,
+                        label: rangeObject.To == null ? customLabel:undefined,
+                        dashStyle: 'ShortDash',
+                    });
+                  //  if (rangeObject.From == null) {
+                        plotLines.push({
+                            value: rangeObject.To != null ? rangeObject.To : null,
+                            width: 1,
+                            color: '#808080',
+                            zIndex: 5,
+                            label: {
+                                text: rangeObject.Name,
+                                y:9,
+                                style: {
+                                    color: color,
+                                    fontSize: '10px'
+                                }
+                            },
+                            dashStyle: 'ShortDash',
+                        });
+                    //}
+                  //  }
+
+                }
+            }
 
             //yAxisSettings
             var yAxisSettings = {
@@ -545,6 +597,15 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 },
                 shared: true
             };
+            function componentToHex(c) {
+                var hex = c.toString(16);
+                return hex.length == 1 ? "0" + hex : hex;
+            }
+
+            function rgbToHex(r, g, b) {
+                return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+            }
+
 
             function getFormatter(title, y, unit) {
                 if (unit != undefined)

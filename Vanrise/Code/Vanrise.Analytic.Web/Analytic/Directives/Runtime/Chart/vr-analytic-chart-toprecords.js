@@ -33,11 +33,12 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
             var fromTime;
             var toTime;
             var currencyId;
+            var ranges;
             var query;
 
             var useSummaryValues = false;
             function initializeController() {
-             
+
                 ctrl.chartReady = function (api) {
                     directiveAPI = api;
                     chartReadyDeferred.resolve();
@@ -49,6 +50,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     function getDirectiveAPI() {
 
                         directiveAPI.load = function (payload) {
+                            var promises = [];
                             query = getQuery(payload);
                             if (payload.Settings.AutoRefreshType == VR_Analytic_AutoRefreshType.SummaryValues.value) {
                                 useSummaryValues = true;
@@ -61,12 +63,31 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
 
                             }
                             currencyId = payload.CurrencyId;
-                            return getFilteredRecords(query).then(function (response) {
-                                renderCharts(response, payload.Settings.ChartType);
-                                if (useSummaryValues)
-                                    registerAutoRefreshJob(payload.Settings.AutoRefreshInterval);
-                                ctrl.showlaoder = false;
+                            var measures = payload.Settings.Measures;
+                            var input = {
+                                MeasureName: measures[0].MeasureName,
+                                AnalyticTableId: payload.TableId
+                            };
+                            var measureStyleRuleRangesPromise = VR_Analytic_AnalyticAPIService.GetMeasureStyleRulesRanges(input).then(function (response) {
+                                if (response != undefined) {
+                                    ranges = response;
+                                }
                             });
+                            promises.push(measureStyleRuleRangesPromise);
+                            var getFilteredRecordsResponse;
+                            var filteredRecordPromiseDeferred = getFilteredRecords(query).then(function (response) {
+                                getFilteredRecordsResponse = response;
+                            });
+
+                            promises.push(filteredRecordPromiseDeferred);
+
+                            return UtilsService.waitMultiplePromises(promises)
+                                .then(function () {
+                                    renderCharts(getFilteredRecordsResponse, payload.Settings.ChartType);
+                                    if (useSummaryValues)
+                                        registerAutoRefreshJob(payload.Settings.AutoRefreshInterval);
+                                    ctrl.showlaoder = false;
+                                });
                             function renderCharts(response, chartType) {
                                 var chartData = new Array();
 
@@ -89,7 +110,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
 
                                 for (var m = 0; m < ctrl.measures.length; m++) {
                                     for (var i = 0; i < response.Data.length; i++) {
-                                        
+
                                         var dimensionName = "";
                                         for (var d = 0; d < ctrl.groupingDimensions.length; d++) {
                                             dimensionName += response.Data[i].DimensionValues[d].Name + ", ";
@@ -139,6 +160,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                                 var chartDefinition = {
                                     type: chartType,
                                     yAxisTitle: dimensionNamesList == undefined ? "Value" : ctrl.measures[0].Title,
+                                    rangesObject: ranges
                                 };
                                 if (useSummaryValues) {
                                     chartDefinition.numberOfPoints = payload.Settings.NumberOfPoints;
@@ -163,7 +185,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                                             title: dim,
                                             valuePath: 'MeasureValues[' + i + ']["' + ctrl.measures[0].MeasureName + '"].Value'
                                         });
-                                    }       
+                                    }
                                 }
                                 else {
                                     for (var i = 0; i < ctrl.measures.length; i++) {
@@ -203,7 +225,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                             }
                         }
 
-                      
+
                     }
                 });
             }
@@ -246,7 +268,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                         }
                     } else if (payLoad.Settings.RootDimensionsFromSearch) {
                         if (payLoad.SelectedGroupingDimensions != undefined) {
-                            for (var i = 0; i < payLoad.SelectedGroupingDimensions.length; i++) { 
+                            for (var i = 0; i < payLoad.SelectedGroupingDimensions.length; i++) {
                                 var selectedDimension = payLoad.SelectedGroupingDimensions[i];
                                 ctrl.groupingDimensions.push({ DimensionName: selectedDimension.DimensionName });
                             }

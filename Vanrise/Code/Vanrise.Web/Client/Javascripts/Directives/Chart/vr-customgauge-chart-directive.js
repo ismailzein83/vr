@@ -15,6 +15,7 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var chartElement = $element.find('#divChart');
+            ctrl.fakeDomeId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
             var menuActionsAttribute = $attrs.menuactions != undefined ? $scope.$parent.$eval($attrs.menuactions) : undefined;
 
             var chart = new Chart(ctrl, chartElement, $scope, VRModalService);
@@ -141,7 +142,8 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
                 }
             }
             if (chartDefinition.rangesObject != undefined) {
-              for (var i = 0; i < chartDefinition.rangesObject.length; i++) {
+                for (var i = 0; i < chartDefinition.rangesObject.length; i++) {
+                    $("#" + ctrl.fakeDomeId).removeClass();
                   var rangeObject = chartDefinition.rangesObject[i];
                   var obj = {
                       from: rangeObject.From == null ? yAxisDefinition.min : rangeObject.From,
@@ -154,21 +156,10 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
                       obj.color = rangeObject.Color;
                   }
                   else if (typeof rangeObject.Color === 'object' || rangeObject.Color instanceof Object) {
-                      switch (rangeObject.Color.UniqueName) {
-                          case "VR_AccountBalance_StyleFormating_CSSClass":
-                              switch (rangeObject.Color.ClassName) {
-                                  case "label label-success": obj.color = "#5cb85c"; break;
-                                  case "label label-warning": obj.color = "#f0ad4e"; break;
-                                  case "label label-warning-1": obj.color = "#FFD400"; break;
-                                  case "label label-warning-2": obj.color = "#FFAA00"; break;
-                                  case "label label-danger": obj.color = "#d9534f"; break;
-                                  case "label label-info": obj.color = "#5bc0de"; break;
-                                  case "label label-primary": obj.color = "#337ab7"; break;
-                                  case "label label-default": obj.color = "#777777"; break;
-                                  case "danger-font": obj.color = "#ff0000"; break;
-                              }
-                              break;
-                      }
+                      $("#" + ctrl.fakeDomeId).addClass(rangeObject.Color.ClassName);
+                      var element = $("#"+ctrl.fakeDomeId);
+                      var color = element.css("background-color");
+                      obj.color = color;
                   }
                   plotBands.push(obj);
                 }
@@ -191,6 +182,7 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
             //plotOptions
             var plotOptions = {
                 gauge: {
+                  
                     dial: // simpleDialNeedle
                     {
                         // needle extending from pivot
@@ -248,7 +240,7 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
             }];
 
            // setTimeout(function () {
-                chartElement.highcharts({
+            chartElement.highcharts({
                     chart: chartSettings,
                     title: {
                         text: null,
@@ -310,7 +302,7 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
         this.initializeController = initializeController;
         this.defineAPI = defineAPI;
     }
-
+          
     return directiveDefinitionObject;
 
 }]);

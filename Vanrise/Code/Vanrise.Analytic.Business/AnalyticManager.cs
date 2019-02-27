@@ -116,7 +116,7 @@ namespace Vanrise.Analytic.Business
                             rule.ThrowIfNull("rule");
 
                             StyleDefinition styleDefinition = null;
-                            string styleDefinitionName = null;
+                            string statusDefinitionName = null;
 
                             var numberRecordFilter = rule.RecordFilter as NumberRecordFilter;
                             if (numberRecordFilter == null)
@@ -128,7 +128,7 @@ namespace Vanrise.Analytic.Business
                             if (styleDefinitionId != null)
                             {
                                 styleDefinition = styleDefinitionManager.GetStyleDefinition(styleDefinitionId);
-                                styleDefinitionName = styleDefinition.Name;
+                                statusDefinitionName = statusDefinitionManager.GetStatusDefinitionName(rule.StatusDefinitionId);
                                 styleDefinition.StyleDefinitionSettings.ThrowIfNull("styleDefinition.StyleDefinitionSettings");
 
                                 switch (logicalOperator)
@@ -141,7 +141,7 @@ namespace Vanrise.Analytic.Business
                                         {
                                             From = minimum.HasValue ? Math.Max(value, minimum.Value) : value,
                                             To = maximum,
-                                            Name = styleDefinitionName,
+                                            Name = statusDefinitionName,
                                             Color = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings
                                         });
                                         maximum = value;
@@ -156,7 +156,7 @@ namespace Vanrise.Analytic.Business
                                         {
                                             From = minimum.HasValue ? Math.Max(value, minimum.Value) : value,
                                             To = maximum,
-                                            Name = styleDefinitionName,
+                                            Name = statusDefinitionName,
                                             Color = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings
                                         });
                                         maximum = value;
@@ -172,7 +172,7 @@ namespace Vanrise.Analytic.Business
                                         {
                                             From = minimum,
                                             To = maximum.HasValue ? Math.Min(value, maximum.Value) : value,
-                                            Name = styleDefinitionName,
+                                            Name = statusDefinitionName,
                                             Color = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings
                                         });
                                         minimum = value;
@@ -187,7 +187,7 @@ namespace Vanrise.Analytic.Business
                                         {
                                             From = minimum,
                                             To = maximum.HasValue ? Math.Min(value, maximum.Value) : value,
-                                            Name = styleDefinitionName,
+                                            Name = statusDefinitionName,
                                             Color = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings
                                         });
                                         minimum = value;
@@ -206,7 +206,7 @@ namespace Vanrise.Analytic.Business
                                             {
                                                 From = value,
                                                 To = value,
-                                                Name = styleDefinitionName,
+                                                Name = statusDefinitionName,
                                                 Color = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings
                                             });
                                             takenValues.Add(value);
