@@ -201,7 +201,6 @@ namespace TOne.WhS.RouteSync.IVSwitch
             ivSwitch.Routes.AddRange(routes);
             return ivSwitch;
         }
-
         private List<IVSwitchRoute> BuildIVSwitchRoutes(Entities.Route route, ref int priority, PreparedConfiguration preparedData)
         {
             var routes = new List<IVSwitchRoute>();
@@ -221,15 +220,17 @@ namespace TOne.WhS.RouteSync.IVSwitch
             int serial = 1;
             foreach (var option in nonBlockedOptions)
             {
-                SupplierDefinition supplier;
-                if (preparedData.SupplierDefinitions.TryGetValue(option.SupplierId, out supplier) && supplier.Gateways != null)
+                if (!preparedData.SupplierDefinitions.TryGetValue(option.SupplierId, out var supplier) && supplier.Gateways == null)
+                    continue;
+
+                if (option.Percentage != null && option.Percentage != 0)
                 {
+                    var supplierRoutes = new List<IVSwitchRoute>();
                     foreach (var supplierGateWay in supplier.Gateways)
                     {
                         if (priority == 0)
                             break;
 
-                        totalBkt++;
                         var ivOption = new IVSwitchRoute
                         {
                             Destination = route.Code,
@@ -238,35 +239,47 @@ namespace TOne.WhS.RouteSync.IVSwitch
                             StateId = 1,
                             HuntStop = 0,
                             WakeUpTime = preparedData._switchTime,
-                            Description = new CarrierAccountManager().GetCarrierAccountName(int.Parse(option.SupplierId))
+                            Description = new CarrierAccountManager().GetCarrierAccountName(int.Parse(option.SupplierId)),
+                            RoutingMode = 8,
+                            Flag1 = BuildPercentage(supplierGateWay.Percentage, option.Percentage, optionsPercenatgeSum, supplier.Gateways.Count),
+                            BktSerial = serial++
                         };
-                        if (option.Percentage != null && option.Percentage != 0)
-                        {
-                            ivOption.RoutingMode = 8;
-                            ivOption.Flag1 = BuildPercentage(supplierGateWay.Percentage, option.Percentage, optionsPercenatgeSum,
-                                    supplier.Gateways.Count);
-                            ivOption.BktSerial = serial++;
+                        int bktCapacity = (int)Math.Round(ivOption.Flag1.Value / 10);
+                        ivOption.BktCapacity = bktCapacity <= 0 ? 1 : bktCapacity;
+                        ivOption.BktToken = ivOption.BktCapacity;
+                        supplierRoutes.Add(ivOption);
+                    }
+                    if (option.Backups != null && option.Backups.Count > 0)
+                    {
+                        supplierRoutes.AddRange(GetBackupRoutes(route.Code, preparedData._switchTime,
+                            preparedData.BlockRouteId, option.Backups, preparedData.SupplierDefinitions, ref priority, ref serial));
+                    }
+                    if (supplierRoutes.Any())
+                        supplierRoutes.Last().HuntStop = 1;
 
-                            int bktCapacity = (int)Math.Round(ivOption.Flag1.Value / 10);
-                            ivOption.BktCapacity = bktCapacity <= 0 ? 1 : bktCapacity;
-                            ivOption.BktToken = ivOption.BktCapacity;
-                        }
-                        routes.Add(ivOption);
-                        if (option.Backups != null && option.Backups.Count > 0)
+                    routes.AddRange(supplierRoutes);
+                }
+                else
+                {
+                    foreach (var supplierGateWay in supplier.Gateways)
+                    {
+                        if (priority == 0)
+                            break;
+
+                        routes.Add(new IVSwitchRoute
                         {
-                            routes.AddRange(GetBackupRoutes(route.Code, preparedData._switchTime,
-                                preparedData.BlockRouteId, option.Backups, preparedData.SupplierDefinitions, ref priority, ref serial));
-                        }
+                            Destination = route.Code,
+                            RouteId = supplierGateWay.RouteId,
+                            Preference = priority--,
+                            StateId = 1,
+                            HuntStop = 0,
+                            WakeUpTime = preparedData._switchTime,
+                            Description = new CarrierAccountManager().GetCarrierAccountName(int.Parse(option.SupplierId))
+                        });
                     }
                 }
-                int totalCount = routes.Count;
-                routes.ForEach(r => r.TotalBkts = totalCount);
-
-                if (routes.Any() && (option.Backups == null || option.Backups.Count == 0))
-                {
-                    routes.Last().HuntStop = 1;
-                }
-
+                if (routes.Any())
+                    routes.ForEach(r => r.TotalBkts = routes.Count);
             }
             return routes;
         }
@@ -290,6 +303,9 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     {
                         foreach (var supplierGateWay in supplier.Gateways)
                         {
+                            if (priority == 0)
+                                break;
+
                             backupRoutes.Add(new IVSwitchRoute
                             {
                                 RoutingMode = 1,
@@ -307,8 +323,6 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     }
                 }
             }
-            if (backupRoutes.Any())
-                backupRoutes.Last().HuntStop = 1;
             return backupRoutes;
         }
 
