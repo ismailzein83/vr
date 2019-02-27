@@ -99,10 +99,10 @@ app.directive('vrCommonTabtilesDefinition', ['UtilsService', 'VRUIUtilsService',
             }
 
             function editTabTile(tabTileObj) {
-                 var onTabTileUpdated = function (tabTile) {
+                var onTabTileUpdated = function (tabTile) {
                     var index = ctrl.datasource.indexOf(tabTileObj);
                     var tabtile = {
-                        Name: tabTileObj.Name,
+                        Name: tabTile.Name,
                         Tiles: [tabTile]
                     };
                      ctrl.datasource[index] = tabtile; 
