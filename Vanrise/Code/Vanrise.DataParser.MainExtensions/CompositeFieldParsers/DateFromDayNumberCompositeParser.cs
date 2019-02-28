@@ -16,6 +16,8 @@ namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
             int dayNumber = Convert.ToInt32(context.Record.GetFieldValue(DayNumberFieldName));
 
             DateTime date = new DateTime(year, 1, 1).AddDays(dayNumber - 1);
+            if (DateTime.Compare(date,DateTime.Now.AddDays(1)) > 0)
+                date = date.AddYears(-1);
 
             context.Record.SetFieldValue(FieldName, date);
         }
