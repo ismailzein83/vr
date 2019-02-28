@@ -34,20 +34,23 @@ namespace Mediation.Runtime.DataParser
         {
             try
             {
-                CreateMediationSettingsFile(GetHuaweiNamibiaParserSettings(), "Huawei_Namibia");
-                CreateMediationSettingsFile(GetHuaweiIraqParserSettings(), "Huawei_Iraq");
-                CreateMediationSettingsFile(GetHuaweiIraqParserSettings_GPRS(), "Huawei_Iraq_GPRS");
-                CreateMediationSettingsFile(GetEricssonIraqParserSettings(), "Ericsson_Iraq");
-                CreateMediationSettingsFile(GetNokiaParserSettings(), "Nokia_Iraq");
-                CreateMediationSettingsFile(GetEricssonParserSettings_GPRS(), "Ericsson_GPRS");
-                CreateMediationSettingsFile(GetWHSEricssonOgero_ParserSettings(), "WHS_Ericsson");
-                CreateMediationSettingsFile(GetICXNokiaSiemens_ParserSettings(), "ICX_NokiaSiemens");
-                CreateMediationSettingsFile(GetICXAlcatel_ParserSettings(), "ICX_Alcatel");
-                CreateMediationSettingsFile(GetHuaweiIMSOgero_ParserSettings(), "HuaweiIMS_Ogero");
-                CreateMediationSettingsFile(GetHuaweiMGCFOgero_ParserSettings(), "HuaweiMGCF_Ogero");
-                CreateMediationSettingsFile(GetHuaweiEPCOgero_ParserSettings(), "HuaweiEPC_Ogero");
-                CreateMediationSettingsFile(GetHuaweiMobilis_ParserSettings(), "Huawei_Mobilis");
-                CreateMediationSettingsFile(GetEricssonMobilisParserSettings(), "Ericsson_Mobilis");
+                CreateMediationSettingsFile(GetOgeroAlcatelICX_ParserSettings(), "Ogero_Alcatel_ICX");
+                CreateMediationSettingsFile(GetOgeroEricssonWHS_ParserSettings(), "Ogero_Ericsson_WHS");
+                CreateMediationSettingsFile(GetOgeroHuaweiIMS_ParserSettings(), "Ogero_Huawei_IMS");
+                CreateMediationSettingsFile(GetOgeroHuaweiMGCF_ParserSettings(), "Ogero_Huawei_MGCF");
+                CreateMediationSettingsFile(GetOgeroHuaweiEPC_ParserSettings(), "Ogero_Huawei_EPC");
+                CreateMediationSettingsFile(GetOgeroNokiaSiemensICX_ParserSettings(), "Ogero_NokiaSiemens_ICX");
+
+                CreateMediationSettingsFile(GetIraqEricsson_ParserSettings(), "Iraq_Ericsson");
+                CreateMediationSettingsFile(GetIraqEricssonGPRS_ParserSettings(), "Iraq_Ericsson_GPRS");
+                CreateMediationSettingsFile(GetIraqHuawei_ParserSettings(), "Iraq_Huawei");
+                CreateMediationSettingsFile(GetIraqHuaweiGPRS_ParserSettings(), "Iraq_Huawei_GPRS");
+                CreateMediationSettingsFile(GetIraqNokia_ParserSettings(), "Iraq_Nokia");
+
+                CreateMediationSettingsFile(GetMobilisEricsson_ParserSettings(), "Mobilis_Ericsson");
+                CreateMediationSettingsFile(GetMobilisHuawei_ParserSettings(), "Mobilis_Huawei");
+
+                CreateMediationSettingsFile(GetNamibiaHuawei_ParserSettings(), "Namibia_Huawei");
             }
             catch (Exception ex)
             {
@@ -93,7 +96,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Alcatel
 
-        public string GetICXAlcatel_ParserSettings()
+        public string GetOgeroAlcatelICX_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -238,7 +241,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Ericsson 
 
-        public string GetWHSEricssonOgero_ParserSettings()
+        public string GetOgeroEricssonWHS_ParserSettings()
         {
             //HexTLVParserType hexParser = new HexTLVParserType
             //{
@@ -3234,7 +3237,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Huawei IMS 
 
-        public string GetHuaweiIMSOgero_ParserSettings()
+        public string GetOgeroHuaweiIMS_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -4932,7 +4935,7 @@ namespace Mediation.Runtime.DataParser
 
         #region  Huawei MGCF 
 
-        public string GetHuaweiMGCFOgero_ParserSettings()
+        public string GetOgeroHuaweiMGCF_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -6469,7 +6472,7 @@ namespace Mediation.Runtime.DataParser
 
         #region  Huawei EPC 
 
-        public string GetHuaweiEPCOgero_ParserSettings()
+        public string GetOgeroHuaweiEPC_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -7042,7 +7045,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Nokia Siemens 
 
-        public string GetICXNokiaSiemens_ParserSettings()
+        public string GetOgeroNokiaSiemensICX_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -7235,7 +7238,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Ericsson 
 
-        public string GetEricssonIraqParserSettings()
+        public string GetIraqEricsson_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -8500,7 +8503,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Ericsson GPRS
 
-        public string GetEricssonParserSettings_GPRS()
+        public string GetIraqEricssonGPRS_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -8860,7 +8863,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Huawei 
 
-        public string GetHuaweiIraqParserSettings()
+        public string GetIraqHuawei_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -10865,7 +10868,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Huawei GPRS
 
-        public string GetHuaweiIraqParserSettings_GPRS()
+        public string GetIraqHuaweiGPRS_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -11450,7 +11453,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Nokia 
 
-        public string GetNokiaParserSettings()
+        public string GetIraqNokia_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -13795,7 +13798,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Ericsson
 
-        public string GetEricssonMobilisParserSettings()
+        public string GetMobilisEricsson_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -14519,7 +14522,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Huawei 
 
-        public string GetHuaweiMobilis_ParserSettings()
+        public string GetMobilisHuawei_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -15615,7 +15618,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Huawei 
 
-        public string GetHuaweiNamibiaParserSettings()
+        public string GetNamibiaHuawei_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -17483,8 +17486,6 @@ namespace Mediation.Runtime.DataParser
         }
 
         #endregion
-
-
 
         #endregion
 
