@@ -9,6 +9,25 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+--[common].[Setting]--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('C5F609C7-C3B5-489C-82FB-31B1B2FE5956','Interconnect Settings','Retail_BE_InterconnectSettings','Business Entities','{"Editor":"retail-be-interconnectsettings-editor"}','{"$type":"Retail.BusinessEntity.Entities.InterconnectSettings, Retail.BusinessEntity.Entities","LocalOperatorName":"Local Operator Name","LocalOperatorID":-999999}',0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+merge	[common].[Setting] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+when not matched by target then
+	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+
 --delete useless views
 delete from [sec].[View] where [Id] in ('E68EFF9C-879E-4A6C-B412-8E225A966571',--'Charging Policies'
 										'3C53D6DC-BBE7-49CA-A222-8211AF25DD31'--'Business Rules'
