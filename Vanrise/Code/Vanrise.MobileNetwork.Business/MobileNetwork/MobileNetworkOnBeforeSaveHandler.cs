@@ -10,7 +10,7 @@ namespace Vanrise.MobileNetwork.Business
     public class MobileNetworkOnBeforeSaveHandler : GenericBEOnBeforeInsertHandler
     {
         public override Guid ConfigId { get { return new Guid("BC08F237-652F-4C5B-A1B5-CE39D33AE419"); } }
-        public override void Execute(IGenericBEOnBeforeInsertHandlerContext context)
+        public override void Execute(IGenericBEOnBeforeInsertHandlerContext context) 
         {
             MobileNetworkManager mobileNetworkManager = new MobileNetworkManager();
             context.ThrowIfNull("context");
@@ -18,7 +18,8 @@ namespace Vanrise.MobileNetwork.Business
             context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
             var networkName = (string)context.GenericBusinessEntity.FieldValues.GetRecord("NetworkName");
             networkName.ThrowIfNull("networkName");
-
+            var id = context.GenericBusinessEntity.FieldValues.GetRecord("ID");
+            int? networkId = (int?)id;
             var settings = (MobileNetworkSettings)context.GenericBusinessEntity.FieldValues.GetRecord("Settings");
             settings.ThrowIfNull("settings");
 
@@ -27,8 +28,9 @@ namespace Vanrise.MobileNetwork.Business
                 throw new NullReferenceException("mobileCountryId");
 
             var allMobileNetworks = mobileNetworkManager.GetAllMobileNetworks();
+            var mobileNetwork = allMobileNetworks.FindRecord(itm => string.Compare(itm.NetworkName, networkName, true) == 0);
 
-            if (allMobileNetworks.Any(itm => string.Compare(itm.NetworkName, networkName, true) == 0) && context.OperationType == HandlerOperationType.Add)
+            if (  mobileNetwork != null && (!networkId.HasValue ||  networkId.Value != mobileNetwork.Id))
             {
                 context.OutputResult.Result = false;
                 context.OutputResult.Messages.Add(string.Format("Network '{0}' already exist.", networkName));
@@ -43,7 +45,7 @@ namespace Vanrise.MobileNetwork.Business
                 foreach (var mobileCountryNetwork in mobileCountryNetworks)
                 {
                     var commonCodes = mobileCountryNetwork.MobileNetworkSettings.Codes.Select(item => item.Code).Intersect(settings.Codes.Select(item => item.Code));
-                    if (commonCodes != null && commonCodes.Any() && context.OperationType == HandlerOperationType.Add)
+                    if (commonCodes != null && commonCodes.Any()&& (!networkId.HasValue || networkId.Value != mobileCountryNetwork.Id))
                     {
                         context.OutputResult.Result = false;
                         context.OutputResult.Messages.Add(string.Format("Network codes '{0}' already exist under mobile country code '{1}'.", string.Join(", ", commonCodes), mobileCountryNetwork.NetworkName));
