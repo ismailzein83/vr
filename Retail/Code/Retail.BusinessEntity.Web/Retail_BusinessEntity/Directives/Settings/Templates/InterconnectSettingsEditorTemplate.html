@@ -1,6 +1,9 @@
 ﻿<vr-row>
-    <vr-columns width="1/2row">
+    <vr-columns colnum="5">
         <vr-textbox label="Local Operator ID" value="scopeModel.localOperatorID" type="number"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="1" withemptyline haschildcolumns>
+        <vr-hint value="This value must not be changed more than once to avoid data integrity problems."></vr-hint>
     </vr-columns>
     <vr-columns width="1/2row">
         <vr-textbox label="Local Operator Name" value="scopeModel.localOperatorName" type="text"></vr-textbox>
