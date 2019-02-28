@@ -7,6 +7,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Retail.BusinessEntity.Entities;
+using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -31,9 +32,10 @@ namespace Retail.BusinessEntity.Business
         {
             long accountId = Convert.ToInt64(context.EntityId);
 
-            //TODO: get them from technical settings of interconnect
-            if (accountId == -999999)
-                return "Ogero";
+            var interconnectSettings = new SettingManager().GetSetting<InterconnectSettings>(InterconnectSettings.SETTING_TYPE);
+            interconnectSettings.ThrowIfNull("interconnectSettings");
+            if (accountId == interconnectSettings.LocalOperatorID)
+                return interconnectSettings.LocalOperatorName;
 
             var operatorWithLocalDefinition = context.EntityDefinition.Settings.CastWithValidate<OperatorsWithLocalDefinitionSettings>("context.EntityDefinition.Settings");
 
@@ -75,10 +77,11 @@ namespace Retail.BusinessEntity.Business
 
             IEnumerable<AccountInfo> icxOperators = s_accountBEManager.GetAccountsInfo(operatorWithLocalDefinition.AccountBEDefintionId, null, null);
 
-            //TODO: get them from technical settings of interconnect
+            var interconnectSettings = new SettingManager().GetSetting<InterconnectSettings>(InterconnectSettings.SETTING_TYPE);
+            interconnectSettings.ThrowIfNull("interconnectSettings");
             AccountInfo localAccount = new AccountInfo();
-            localAccount.AccountId = -999999;
-            localAccount.Name = "Ogero";
+            localAccount.AccountId = interconnectSettings.LocalOperatorID;
+            localAccount.Name = interconnectSettings.LocalOperatorName;
 
             List<AccountInfo> accountsWithLocal = new List<AccountInfo>();
             accountsWithLocal.Add(localAccount);
@@ -86,12 +89,7 @@ namespace Retail.BusinessEntity.Business
 
             return accountsWithLocal;
         }
-
-        public long GetLocalOperatorId()
-        {
-            //TODO: get it from technical settings of interconnect
-            return -999999;
-        }
+   
 
         #endregion
 
