@@ -787,6 +787,7 @@
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\figure-icons\sms.png" />
     <Content Include="Images\figure-icons\inbound-traffic.png" />
     <Content Include="Images\figure-icons\income.png" />
     <Content Include="Images\figure-icons\kpi.png" />
