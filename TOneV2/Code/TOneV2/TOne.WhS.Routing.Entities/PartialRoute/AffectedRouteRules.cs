@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Entities
@@ -25,7 +24,6 @@ namespace TOne.WhS.Routing.Entities
         public IEnumerable<int> CustomerIds { get; set; }
         public IEnumerable<long> ZoneIds { get; set; }
         public IEnumerable<CodeCriteria> Codes { get; set; }
-        
         public RoutingExcludedDestinationData RoutingExcludedDestinationData { get; set; }  
     }
 }

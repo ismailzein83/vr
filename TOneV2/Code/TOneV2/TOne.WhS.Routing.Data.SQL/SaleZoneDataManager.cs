@@ -6,9 +6,16 @@ namespace TOne.WhS.Routing.Data.SQL
     public class SaleZoneDataManager : RoutingDataManager
     {
         readonly string[] columns = { "ID", "Name" };
-        public void ApplySaleZonesToTable(object saleZones)
+
+        public object InitialiazeStreamForDBApply()
         {
-            InsertBulkToTable(saleZones as BaseBulkInsertInfo);
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(SaleZone record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}", record.SaleZoneId, record.Name);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -26,15 +33,9 @@ namespace TOne.WhS.Routing.Data.SQL
             };
         }
 
-        public object InitialiazeStreamForDBApply()
+        public void ApplySaleZonesToTable(object saleZones)
         {
-            return base.InitializeStreamForBulkInsert();
-        }
-
-        public void WriteRecordToStream(SaleZone record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}", record.SaleZoneId, record.Name);
+            InsertBulkToTable(saleZones as BaseBulkInsertInfo);
         }
     }
 }

@@ -16,24 +16,10 @@ namespace TOne.WhS.Routing.Data.SQL
         readonly string[] productRouteColumns = { "RoutingProductId", "SaleZoneId", "SellingNumberPlanId", "SaleZoneServices", "ExecutedRuleId", "OptionsDetailsBySupplier", "OptionsByPolicy", "IsBlocked" };
         readonly string[] productRouteByCustomerColumns = { "RoutingProductId", "SaleZoneId", "SellingNumberPlanId", "SaleZoneServices", "ExecutedRuleId", "OptionsByPolicy", "IsBlocked" };
 
-
-        const char RouteOptionSuppliersSeparator = '|';
-        const char RouteOptionSupplierPropertiesSeparator = '~';
-        const char SupplierZonesSeparator = '#';
-        const string SupplierZonesSeparatorAsString = "#";
-        const char SupplierZonePropertiesSeparator = '$';
-        const char SupplierServicesSeparator = '@';
-        const string SupplierServicesSeparatorAsString = "@";
-
-        const char PolicyRouteOptionsSeparator = '|';
-        const char PolicyRouteOptionPropertiesSeparator = '~';
-        const char RouteOptionsSeparator = '#';
-        const string RouteOptionsSeparatorAsString = "#";
-        const char RouteOptionPropertiesSeparator = '$';
-
         public IEnumerable<RoutingCustomerInfo> RoutingCustomerInfo { get; set; }
 
         #region Public Methods
+
         public object InitialiazeStreamForDBApply()
         {
             ProductRouteBulkInsert productRouteBulkInsert = new ProductRouteBulkInsert();
@@ -58,8 +44,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 foreach (var rproute in record.RPRoutes)
                 {
                     string saleZoneServices = (rproute.SaleZoneServiceIds != null && rproute.SaleZoneServiceIds.Count > 0) ? string.Join(",", rproute.SaleZoneServiceIds) : null;
-                    string optionsDetailsBySupplier = this.SerializeOptionsDetailsBySupplier(rproute.OptionsDetailsBySupplier);
-                    string rpOptionsByPolicy = this.SerializeOptionsByPolicy(rproute.RPOptionsByPolicy);
+                    string optionsDetailsBySupplier = Helper.SerializeOptionsDetailsBySupplier(rproute.OptionsDetailsBySupplier);
+                    string rpOptionsByPolicy = Helper.SerializeOptionsByPolicy(rproute.RPOptionsByPolicy);
 
                     streamForBulkInsert.RPRoutesStream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", rproute.RoutingProductId, rproute.SaleZoneId, rproute.SellingNumberPlanID, saleZoneServices, rproute.ExecutedRuleId,
                                                                                    optionsDetailsBySupplier, rpOptionsByPolicy, rproute.IsBlocked ? 1 : 0);
@@ -72,20 +58,11 @@ namespace TOne.WhS.Routing.Data.SQL
                 foreach (var rproute in record.RPRoutes)
                 {
                     string saleZoneServices = (rproute.SaleZoneServiceIds != null && rproute.SaleZoneServiceIds.Count > 0) ? string.Join(",", rproute.SaleZoneServiceIds) : null;
-                    string rpOptionsByPolicy = this.SerializeOptionsByPolicy(rproute.RPOptionsByPolicy);
+                    string rpOptionsByPolicy = Helper.SerializeOptionsByPolicy(rproute.RPOptionsByPolicy);
 
                     customerStream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", rproute.RoutingProductId, rproute.SaleZoneId, rproute.SellingNumberPlanID, saleZoneServices, rproute.ExecutedRuleId,
                                                                                     rpOptionsByPolicy, rproute.IsBlocked ? 1 : 0);
                 }
-            }
-        }
-
-        public void ApplyProductRouteForDB(object preparedProductRoute)
-        {
-            var streamBulkInsertInfoList = preparedProductRoute as List<StreamBulkInsertInfo>;
-            foreach (var streamBulkInsertInfo in streamBulkInsertInfoList)
-            {
-                InsertBulkToTable(streamBulkInsertInfo);
             }
         }
 
@@ -125,6 +102,15 @@ namespace TOne.WhS.Routing.Data.SQL
 
         }
 
+        public void ApplyProductRouteForDB(object preparedProductRoute)
+        {
+            var streamBulkInsertInfoList = preparedProductRoute as List<StreamBulkInsertInfo>;
+            foreach (var streamBulkInsertInfo in streamBulkInsertInfoList)
+            {
+                InsertBulkToTable(streamBulkInsertInfo);
+            }
+        }
+
         public IEnumerable<RPRouteByCode> GetFilteredRPRoutesByCode(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByCode> input)
         {
             Dictionary<string, List<RPRouteByCode>> result = new Dictionary<string, List<RPRouteByCode>>();
@@ -134,12 +120,7 @@ namespace TOne.WhS.Routing.Data.SQL
             string tableName;
             bool explicitCustomerTableExists = ExplicitCustomerTableExists(input.Query.CustomerId, out tableName);
 
-            string query = query_GetFilteredRPRoutesByCode.ToString();
-
             string codeFilter = string.Empty;
-            if (!string.IsNullOrEmpty(input.Query.CodePrefix))
-                codeFilter = string.Format(" AND cszm.Code like '{0}%' ", input.Query.CodePrefix);
-
             string routingProductIdsFilter = string.Empty;
             string saleZoneIdsFilter = string.Empty;
             string sellingNumberPlanIdFilter = string.Empty;
@@ -147,9 +128,15 @@ namespace TOne.WhS.Routing.Data.SQL
 
             string joinCustomerZoneDetail = string.Empty;
             string effectiveRateValue = string.Empty;
-
-            string leftJoin = explicitCustomerTableExists ? " LEFT " : string.Empty;
             string simulatedRoutingProductIdFilter = string.Empty;
+            string leftJoin = explicitCustomerTableExists ? " LEFT " : string.Empty;
+
+            bool? isBlocked = null;
+            if (input.Query.RouteStatus.HasValue)
+                isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
+
+            if (!string.IsNullOrEmpty(input.Query.CodePrefix))
+                codeFilter = string.Format(" AND cszm.Code like '{0}%' ", input.Query.CodePrefix);
 
             if (input.Query.RoutingProductIds != null && input.Query.RoutingProductIds.Count > 0)
                 routingProductIdsFilter = string.Format(" AND pr.RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
@@ -180,22 +167,19 @@ namespace TOne.WhS.Routing.Data.SQL
                 effectiveRateValue = "null as EffectiveRateValue ";
             }
 
+            string query = query_GetFilteredRPRoutesByCode.ToString();
             query = query.Replace("#TABLENAME#", tableName);
             query = query.Replace("#LimitResult#", input.Query.LimitResult.ToString());
             query = query.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
             query = query.Replace("#SIMULATE_ROUTING_PRODUCT_ID#", simulatedRoutingProductIdFilter);
             query = query.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
             query = query.Replace("#SELLING_NUMBER_PLAN_ID#", sellingNumberPlanIdFilter);
+            query = query.Replace("#CodeFilter#", codeFilter);
+
             query = query.Replace("#CUSTOMER_IDS#", customerIdFilter);
             query = query.Replace("#CUSTOMERZONEDETAILS#", joinCustomerZoneDetail);
             query = query.Replace("#EFFECTIVERATE#", effectiveRateValue);
-            query = query.Replace("#CodeFilter#", codeFilter);
             query = query.Replace("#LEFT#", leftJoin);
-
-            bool? isBlocked = null;
-            if (input.Query.RouteStatus.HasValue)
-                isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
-
 
             ExecuteReaderText(query, (reader) =>
             {
@@ -265,8 +249,6 @@ namespace TOne.WhS.Routing.Data.SQL
             string tableName;
             bool explicitCustomerTableExists = ExplicitCustomerTableExists(input.Query.CustomerId, out tableName);
 
-            string query = query_GetFilteredRPRoutesByZone.ToString();
-
             string routingProductIdsFilter = string.Empty;
             string saleZoneIdsFilter = string.Empty;
             string sellingNumberPlanIdFilter = string.Empty;
@@ -274,8 +256,12 @@ namespace TOne.WhS.Routing.Data.SQL
 
             string joinCustomerZoneDetail = string.Empty;
             string effectiveRateValue = string.Empty;
-            string leftJoin = explicitCustomerTableExists ? " LEFT " : string.Empty;
             string simulatedRoutingProductIdFilter = string.Empty;
+            string leftJoin = explicitCustomerTableExists ? " LEFT " : string.Empty;
+
+            bool? isBlocked = null;
+            if (input.Query.RouteStatus.HasValue)
+                isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
 
             if (input.Query.RoutingProductIds != null && input.Query.RoutingProductIds.Count > 0)
                 routingProductIdsFilter = string.Format(" AND pr.RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
@@ -306,6 +292,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 effectiveRateValue = " ,null as EffectiveRateValue ";
             }
 
+            string query = query_GetFilteredRPRoutesByZone.ToString();
             query = query.Replace("#TABLENAME#", tableName);
             query = query.Replace("#LimitResult#", input.Query.LimitResult.ToString());
             query = query.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
@@ -317,10 +304,6 @@ namespace TOne.WhS.Routing.Data.SQL
             query = query.Replace("#CUSTOMERZONEDETAILS#", joinCustomerZoneDetail);
             query = query.Replace("#EFFECTIVERATE#", effectiveRateValue);
             query = query.Replace("#LEFT#", leftJoin);
-
-            bool? isBlocked = null;
-            if (input.Query.RouteStatus.HasValue)
-                isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
 
             return GetItemsText(query, RPRouteMapper, (cmd) =>
             {
@@ -362,7 +345,7 @@ namespace TOne.WhS.Routing.Data.SQL
             if (string.IsNullOrEmpty(serializedRouteOptionsAsString))
                 return null;
 
-            return this.DeserializeOptionsByPolicy(serializedRouteOptionsAsString);
+            return Helper.DeserializeOptionsByPolicy(serializedRouteOptionsAsString);
         }
 
         public Dictionary<int, RPRouteOptionSupplier> GetRouteOptionSuppliers(int routingProductId, long saleZoneId)
@@ -377,7 +360,7 @@ namespace TOne.WhS.Routing.Data.SQL
             if (string.IsNullOrEmpty(serializedRouteOptionSuppliersAsString))
                 return null;
 
-            return this.DeserializeOptionsDetailsBySupplier(serializedRouteOptionSuppliersAsString);
+            return Helper.DeserializeOptionsDetailsBySupplier(serializedRouteOptionSuppliersAsString);
         }
 
         public void FinalizeProductRoute(Action<string> trackStep, int commandTimeoutInSeconds, int? maxDOP)
@@ -406,17 +389,17 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 foreach (var customer in RoutingCustomerInfo)
                 {
-                    string customerRouteTableName = string.Format("ProductRouteByCustomer_{0}", customer.CustomerId);
+                    string productRouteByCustomerTableName = string.Format("ProductRouteByCustomer_{0}", customer.CustomerId);
 
                     trackStep(string.Format("Starting create Clustered Index on ProductRouteByCustomer_{0} table (RoutingProductId and SaleZoneId).", customer.CustomerId));
-                    query = string.Format(query_CreateIX_ProductRoute_RoutingProductId.Replace("#TABLENAME#", customerRouteTableName), maxDOPSyntax);
+                    query = string.Format(query_CreateIX_ProductRoute_RoutingProductId.Replace("#TABLENAME#", productRouteByCustomerTableName), maxDOPSyntax);
                     ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
                     trackStep(string.Format("Finished create Clustered Index on ProductRouteByCustomer_{0} table (RoutingProductId and SaleZoneId).", customer.CustomerId));
                     totalNumberOfIndexesDone++;
                     trackStep(string.Format("Remaining Indexes to build: {0}", totalNumberOfIndexesToBuild - totalNumberOfIndexesDone));
 
                     trackStep(string.Format("Starting create Index on ProductRouteByCustomer_{0} table (SaleZoneId).", customer.CustomerId));
-                    query = string.Format(query_CreateIX_ProductRoute_SaleZoneId.Replace("#TABLENAME#", customerRouteTableName), maxDOPSyntax);
+                    query = string.Format(query_CreateIX_ProductRoute_SaleZoneId.Replace("#TABLENAME#", productRouteByCustomerTableName), maxDOPSyntax);
                     ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
                     trackStep(string.Format("Finished create Index on ProductRouteByCustomer_{0} table (SaleZoneId).", customer.CustomerId));
                     totalNumberOfIndexesDone++;
@@ -425,24 +408,10 @@ namespace TOne.WhS.Routing.Data.SQL
             }
         }
 
-        private bool ExplicitCustomerTableExists(int? customerId, out string tableName)
-        {
-            tableName = "ProductRoute";
-            if (!customerId.HasValue)
-                return false;
-
-            string customerRouteTableName = string.Format("ProductRouteByCustomer_{0}", customerId.HasValue ? customerId.Value.ToString() : string.Empty);
-
-            string query = query_CheckProductRouteByCustomerTable.Replace("#CUSOMTERTABLENAME#", customerRouteTableName);
-            bool result = ExecuteScalarText(query, null) != null;
-            if (result)
-                tableName = customerRouteTableName;
-
-            return result;
-        }
         #endregion
 
         #region Private Methods
+
         private RPRouteByCode RPRouteByCodeMapper(IDataReader reader)
         {
             string saleZoneServices = reader["SaleZoneServices"] as string;
@@ -476,7 +445,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
                 EffectiveRateValue = GetReaderValue<decimal?>(reader, "EffectiveRateValue"),
-                RPOptionsByPolicy = this.DeserializeOptionsByPolicy(optionsByPolicy)
+                RPOptionsByPolicy = Helper.DeserializeOptionsByPolicy(optionsByPolicy)
             };
         }
 
@@ -497,227 +466,26 @@ namespace TOne.WhS.Routing.Data.SQL
             return dtRPZonesInfo;
         }
 
-        /// <summary>
-        /// SupplierID~SZ1#SZ2#...#SZn~SupplierStatus~...~SupplierServiceWeight|SupplierID~SZ1#SZ2#...#SZn~SupplierStatus~...~SupplierServiceWeight
-        /// SZ1 --> SupplierZoneId$SupplierRate$SupplierServiceID1@SupplierServiceID2@...@SupplierServiceID1SupplierServiceID1n$IsBlocked$SupplierRateId
-        /// </summary>
-        /// <param name="optionsDetailsBySupplier"></param>
-        /// <returns></returns>
-        private string SerializeOptionsDetailsBySupplier(Dictionary<int, RPRouteOptionSupplier> optionsDetailsBySupplier)
+        private bool ExplicitCustomerTableExists(int? customerId, out string tableName)
         {
-            if (optionsDetailsBySupplier == null)
-                return string.Empty;
+            tableName = "ProductRoute";
+            if (!customerId.HasValue)
+                return false;
 
-            StringBuilder str = new StringBuilder();
+            string customerRouteTableName = string.Format("ProductRouteByCustomer_{0}", customerId.Value.ToString());
 
-            foreach (var routeOptionSupplier in optionsDetailsBySupplier.Values)
-            {
-                if (str.Length > 0)
-                    str.Append(RouteOptionSuppliersSeparator);
+            string query = query_CheckProductRouteByCustomerTable.Replace("#CUSOMTERTABLENAME#", customerRouteTableName);
+            bool result = ExecuteScalarText(query, null) != null;
+            if (result)
+                tableName = customerRouteTableName;
 
-                List<string> serializedSupplierZones = new List<string>();
-
-                foreach (var supplierZone in routeOptionSupplier.SupplierZones)
-                {
-                    string exactSupplierServiceIdsAsString = supplierZone.ExactSupplierServiceIds != null ? string.Join(SupplierServicesSeparatorAsString, supplierZone.ExactSupplierServiceIds) : string.Empty;
-                    string isBlocked = !supplierZone.IsBlocked ? string.Empty : "1";
-                    string isForced = !supplierZone.IsForced ? string.Empty : "1";
-                    serializedSupplierZones.Add(string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}", SupplierZonePropertiesSeparator, supplierZone.SupplierZoneId, supplierZone.SupplierRate,
-                                                    exactSupplierServiceIdsAsString, supplierZone.ExecutedRuleId, supplierZone.SupplierRateId, isBlocked, isForced));
-                }
-
-                string serializedSupplierZonesAsString = string.Join(SupplierZonesSeparatorAsString, serializedSupplierZones);
-
-                str.AppendFormat("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}", RouteOptionSupplierPropertiesSeparator, routeOptionSupplier.SupplierId, serializedSupplierZonesAsString,
-                                    routeOptionSupplier.NumberOfBlockedZones, routeOptionSupplier.NumberOfUnblockedZones, routeOptionSupplier.Percentage, routeOptionSupplier.SupplierServiceWeight);
-            }
-            return str.ToString();
-        }
-
-        public Dictionary<int, RPRouteOptionSupplier> DeserializeOptionsDetailsBySupplier(string serializedOptionsDetailsBySupplier)
-        {
-            if (string.IsNullOrEmpty(serializedOptionsDetailsBySupplier))
-                return null;
-
-            Dictionary<int, RPRouteOptionSupplier> optionsDetailsBySupplier = new Dictionary<int, RPRouteOptionSupplier>();
-
-            string[] lines = serializedOptionsDetailsBySupplier.Split(RouteOptionSuppliersSeparator);
-
-            foreach (var line in lines)
-            {
-                string[] parts = line.Split(RouteOptionSupplierPropertiesSeparator);
-
-                var routeOptionSupplier = new RPRouteOptionSupplier();
-                routeOptionSupplier.SupplierId = int.Parse(parts[0]);
-                routeOptionSupplier.NumberOfBlockedZones = int.Parse(parts[2]);
-                routeOptionSupplier.NumberOfUnblockedZones = int.Parse(parts[3]);
-                routeOptionSupplier.Percentage = !string.IsNullOrEmpty(parts[4]) ? int.Parse(parts[4]) : default(int?);
-                routeOptionSupplier.SupplierServiceWeight = int.Parse(parts[5]);
-
-                string supplierZonesAsString = parts[1];
-                if (!string.IsNullOrEmpty(supplierZonesAsString))
-                {
-                    string[] supplierZones = supplierZonesAsString.Split(SupplierZonesSeparator);
-                    routeOptionSupplier.SupplierZones = new List<RPRouteOptionSupplierZone>();
-
-                    foreach (var supplierZone in supplierZones)
-                    {
-                        string[] supplierZoneParts = supplierZone.Split(SupplierZonePropertiesSeparator);
-
-                        var routeOptionSupplierZone = new RPRouteOptionSupplierZone();
-                        //routeOptionSupplierZone.SupplierCode = supplierZoneParts[0];
-                        routeOptionSupplierZone.SupplierZoneId = long.Parse(supplierZoneParts[0]);
-                        routeOptionSupplierZone.SupplierRate = decimal.Parse(supplierZoneParts[1]);
-                        routeOptionSupplierZone.ExecutedRuleId = !string.IsNullOrEmpty(supplierZoneParts[3]) ? int.Parse(supplierZoneParts[3]) : default(int?);
-                        routeOptionSupplierZone.SupplierRateId = !string.IsNullOrEmpty(supplierZoneParts[4]) ? long.Parse(supplierZoneParts[4]) : default(long?);
-
-                        if (!string.IsNullOrEmpty(supplierZoneParts[2]))
-                            routeOptionSupplierZone.ExactSupplierServiceIds = new HashSet<int>(supplierZoneParts[2].Split(SupplierServicesSeparator).Select(itm => int.Parse(itm)));
-
-                        string isBlockedAsString = supplierZoneParts[5];
-                        if (!string.IsNullOrEmpty(isBlockedAsString))
-                        {
-                            int isBlocked;
-                            if (int.TryParse(isBlockedAsString, out isBlocked))
-                                routeOptionSupplierZone.IsBlocked = isBlocked > 0;
-                        }
-
-                        string isFrocedAsString = supplierZoneParts[6];
-                        if (!string.IsNullOrEmpty(isFrocedAsString))
-                        {
-                            int isForced;
-                            if (int.TryParse(isFrocedAsString, out isForced))
-                                routeOptionSupplierZone.IsForced = isForced > 0;
-                        }
-
-                        routeOptionSupplier.SupplierZones.Add(routeOptionSupplierZone);
-                    }
-                }
-
-                optionsDetailsBySupplier.Add(routeOptionSupplier.SupplierId, routeOptionSupplier);
-            }
-
-            return optionsDetailsBySupplier;
-        }
-
-        /// <summary>
-        /// PolicyID~S1#S2#...#Sn|PolicyID~S1#S2#...#Sn
-        /// S1 --> SupplierId$SupplierRate$...$SupplierZoneMatchHasClosedRate
-        /// </summary>
-        /// <param name="optionsByPolicy"></param>
-        /// <returns></returns>
-        private string SerializeOptionsByPolicy(Dictionary<Guid, IEnumerable<RPRouteOption>> optionsByPolicy)
-        {
-            if (optionsByPolicy == null)
-                return string.Empty;
-
-            StringBuilder str = new StringBuilder();
-            foreach (var kvp in optionsByPolicy)
-            {
-                Guid policyId = kvp.Key;
-                IEnumerable<RPRouteOption> routeOptions = kvp.Value;
-
-                if (str.Length > 0)
-                    str.Append(PolicyRouteOptionsSeparator);
-
-                List<string> serializedRouteOptions = new List<string>();
-
-                foreach (var routeOption in routeOptions)
-                {
-                    string supplierZoneMatchHasClosedRate = !routeOption.SupplierZoneMatchHasClosedRate ? string.Empty : "1";
-                    string isForced = !routeOption.IsForced ? string.Empty : "1";
-                    string supplierZoneId = routeOption.SupplierZoneId.HasValue ? routeOption.SupplierZoneId.ToString() : string.Empty;
-                    string supplierServicesIds = routeOption.SupplierServicesIds != null ? string.Join(",", routeOption.SupplierServicesIds) : string.Empty;
-
-                    serializedRouteOptions.Add(string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}{11}", RouteOptionPropertiesSeparator, routeOption.SupplierId, routeOption.SupplierRate, routeOption.Percentage,
-                                        routeOption.OptionWeight, routeOption.SaleZoneId, routeOption.SupplierServiceWeight, supplierZoneMatchHasClosedRate, Convert.ToInt32(routeOption.SupplierStatus), isForced, supplierZoneId, supplierServicesIds));
-                }
-
-                string serializadedRouteOptionsAsString = string.Join(RouteOptionsSeparatorAsString, serializedRouteOptions);
-
-                str.AppendFormat("{1}{0}{2}", PolicyRouteOptionPropertiesSeparator, policyId, serializadedRouteOptionsAsString);
-            }
-            return str.ToString();
-        }
-
-        private Dictionary<Guid, IEnumerable<RPRouteOption>> DeserializeOptionsByPolicy(string serializedOptionsDetailsBySupplier)
-        {
-            if (string.IsNullOrEmpty(serializedOptionsDetailsBySupplier))
-                return null;
-
-            Dictionary<Guid, IEnumerable<RPRouteOption>> optionsByPolicy = new Dictionary<Guid, IEnumerable<RPRouteOption>>();
-
-            string[] lines = serializedOptionsDetailsBySupplier.Split(PolicyRouteOptionsSeparator);
-
-            foreach (var line in lines)
-            {
-                string[] parts = line.Split(PolicyRouteOptionPropertiesSeparator);
-
-                Guid policyId = Guid.Parse(parts[0]);
-                string routeOptionsAsString = parts[1];
-
-                if (!string.IsNullOrEmpty(routeOptionsAsString))
-                {
-                    List<RPRouteOption> routeOptionsList = new List<RPRouteOption>();
-                    string[] routeOptions = routeOptionsAsString.Split(RouteOptionsSeparator);
-
-                    foreach (var routeOption in routeOptions)
-                    {
-                        string[] routeOptionParts = routeOption.Split(RouteOptionPropertiesSeparator);
-
-                        var rpRouteOption = new RPRouteOption();
-                        rpRouteOption.SupplierId = int.Parse(routeOptionParts[0]);
-                        rpRouteOption.SupplierRate = decimal.Parse(routeOptionParts[1]);
-                        rpRouteOption.Percentage = !string.IsNullOrEmpty(routeOptionParts[2]) ? int.Parse(routeOptionParts[2]) : default(int?);
-                        rpRouteOption.OptionWeight = decimal.Parse(routeOptionParts[3]);
-                        rpRouteOption.SaleZoneId = long.Parse(routeOptionParts[4]);
-                        rpRouteOption.SupplierServiceWeight = int.Parse(routeOptionParts[5]);
-                        rpRouteOption.SupplierStatus = (SupplierStatus)int.Parse(routeOptionParts[7]);
-
-                        string supplierZoneMatchHasClosedRateAsString = routeOptionParts[6];
-                        if (!string.IsNullOrEmpty(supplierZoneMatchHasClosedRateAsString))
-                        {
-                            int supplierZoneMatchHasClosedRate;
-                            if (int.TryParse(supplierZoneMatchHasClosedRateAsString, out supplierZoneMatchHasClosedRate))
-                                rpRouteOption.SupplierZoneMatchHasClosedRate = supplierZoneMatchHasClosedRate > 0;
-                        }
-
-                        string isFrocedAsString = routeOptionParts[8];
-                        if (!string.IsNullOrEmpty(isFrocedAsString))
-                        {
-                            int isForced;
-                            if (int.TryParse(isFrocedAsString, out isForced))
-                                rpRouteOption.IsForced = isForced > 0;
-                        }
-
-                        string supplierZoneIdAsString = routeOptionParts[9];
-                        if (!string.IsNullOrEmpty(supplierZoneIdAsString))
-                            rpRouteOption.SupplierZoneId = long.Parse(supplierZoneIdAsString);
-
-                        string supplierServicesAsString = routeOptionParts[10];
-                        if (!string.IsNullOrEmpty(supplierServicesAsString))
-                        {
-                            var supplierServicesIds = supplierServicesAsString.Split(',');
-                            rpRouteOption.SupplierServicesIds = new HashSet<int>();
-                            foreach (var supplierServiceId in supplierServicesIds)
-                            {
-                                rpRouteOption.SupplierServicesIds.Add(int.Parse(supplierServiceId));
-                            }
-                        }
-
-                        routeOptionsList.Add(rpRouteOption);
-                    }
-
-                    optionsByPolicy.Add(policyId, routeOptionsList);
-                }
-            }
-
-            return optionsByPolicy;
+            return result;
         }
 
         #endregion
 
         #region private classes
+
         private class ProductRouteBulkInsert
         {
             public StreamForBulkInsert RPRoutesStream { get; set; }
@@ -734,35 +502,39 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private StringBuilder query_GetFilteredRPRoutesByZone = new StringBuilder(@"SELECT TOP #LimitResult# pr.[RoutingProductId]
                                                                                     ,pr.[SaleZoneId]
-                                                                                    ,pr.[SellingNumberPlanID]
                                                                                     ,sz.[Name] 
+                                                                                    ,pr.[SellingNumberPlanID]
                                                                                     ,pr.[SaleZoneServices]
-                                                                                    #EFFECTIVERATE#
                                                                                     ,pr.[ExecutedRuleId]
                                                                                     ,pr.[OptionsByPolicy]
                                                                                     ,pr.[IsBlocked]
+                                                                                    #EFFECTIVERATE#
                                                                                     FROM [dbo].#TABLENAME# as pr with(nolock)
                                                                                     JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
                                                                                     #LEFT# #CUSTOMERZONEDETAILS# #CUSTOMER_IDS#
-                                                                                    Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #SIMULATE_ROUTING_PRODUCT_ID# #SALE_ZONE_IDS# #SELLING_NUMBER_PLAN_ID#");
+                                                                                    Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #SIMULATE_ROUTING_PRODUCT_ID# 
+                                                                                           #SALE_ZONE_IDS# #SELLING_NUMBER_PLAN_ID#");
 
         private StringBuilder query_GetFilteredRPRoutesByCode = new StringBuilder(@"SELECT TOP #LimitResult# pr.[RoutingProductId], 
                                                                                     pr.[SaleZoneId], 
                                                                                     sz.Name as SaleZoneName, 
-                                                                                    pr.SellingNumberPlanID,
-                                                                                    [SaleZoneServices],
-                                                                                    [ExecutedRuleId], 
-                                                                                    cszm.Code, 
-                                                                                    pr.IsBlocked,
+                                                                                    pr.[SellingNumberPlanID],
+                                                                                    pr.[SaleZoneServices],
+                                                                                    pr.[ExecutedRuleId], 
+                                                                                    pr.[IsBlocked],
+                                                                                    cszm.[Code], 
                                                                                     #EFFECTIVERATE#
                                                                                     into #routes
                                                                                     FROM [dbo].#TABLENAME# pr with(nolock)
                                                                                     JOIN [dbo].[CodeSaleZoneMatch] cszm on pr.SaleZoneId = cszm.SaleZoneID
                                                                                     JOIN [dbo].[SaleZone] as sz ON cszm.SaleZoneID = sz.ID
                                                                                     #LEFT# #CUSTOMERZONEDETAILS# #CUSTOMER_IDS#
-                                                                                    Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #SIMULATE_ROUTING_PRODUCT_ID# #SALE_ZONE_IDS# #SELLING_NUMBER_PLAN_ID# #CodeFilter#
+                                                                                    Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #SIMULATE_ROUTING_PRODUCT_ID# 
+                                                                                           #SALE_ZONE_IDS# #SELLING_NUMBER_PLAN_ID# #CodeFilter#
 
-                                                                                    select distinct code into #distinctCodes from #routes
+                                                                                    select distinct code 
+                                                                                    into #distinctCodes 
+                                                                                    from #routes
 
                                                                                     select cszm.SupplierZoneID, cszm.Code, cszm.CodeMatch
                                                                                     into #CodeSupplierZoneMatch
@@ -807,9 +579,9 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 pr.[OptionsByPolicy],
                                                                 pr.[IsBlocked],
                                                                 null as EffectiveRateValue
-                                                            FROM [dbo].#TABLENAME# pr with(nolock) JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
-                                                            JOIN @RPZoneList z
-                                                            ON z.RoutingProductId = pr.RoutingProductId AND z.SaleZoneId = pr.SaleZoneId";
+                                                            FROM [dbo].#TABLENAME# pr with(nolock) 
+                                                            JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId = sz.ID
+                                                            JOIN @RPZoneList as z ON z.RoutingProductId = pr.RoutingProductId AND z.SaleZoneId = pr.SaleZoneId";
 
         private const string query_CreateIX_ProductRoute_RoutingProductId = @"CREATE CLUSTERED INDEX [IX_#TABLENAME#_RoutingProductId_SaleZoneId] ON dbo.#TABLENAME#
                                                                               (

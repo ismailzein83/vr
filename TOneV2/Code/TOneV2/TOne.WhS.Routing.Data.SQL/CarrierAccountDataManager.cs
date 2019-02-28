@@ -6,9 +6,16 @@ namespace TOne.WhS.Routing.Data.SQL
     public class CarrierAccountDataManager : RoutingDataManager
     {
         readonly string[] columns = { "ID", "Name" };
-        public void ApplyCarrierAccountsToTable(object carrierAccounts)
+
+        public object InitialiazeStreamForDBApply()
         {
-            InsertBulkToTable(carrierAccounts as BaseBulkInsertInfo);
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(CarrierAccountInfo record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}", record.CarrierAccountId, record.Name);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -26,15 +33,9 @@ namespace TOne.WhS.Routing.Data.SQL
             };
         }
 
-        public object InitialiazeStreamForDBApply()
+        public void ApplyCarrierAccountsToTable(object carrierAccounts)
         {
-            return base.InitializeStreamForBulkInsert();
-        }
-
-        public void WriteRecordToStream(CarrierAccountInfo record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}", record.CarrierAccountId, record.Name);
+            InsertBulkToTable(carrierAccounts as BaseBulkInsertInfo);
         }
     }
 }

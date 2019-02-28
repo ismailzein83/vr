@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Data
 {
-	public interface ICodeZoneMatchDataManager : IDataManager
+    public interface ICodeZoneMatchDataManager : IDataManager
 	{
 		RoutingDatabase RPRouteDatabase { get; set; }
 
@@ -20,6 +16,7 @@ namespace TOne.WhS.Routing.Data
         IEnumerable<CodeSupplierZoneMatch> GetSupplierZoneMatchBysupplierIds(IEnumerable<long> supplierIds, string codeStartWith);
 
         IEnumerable<CodeSaleZoneMatch> GetSaleZoneMatchBySellingNumberPlanId(int sellingNumberPlanId, string codeStartWith);
-        IEnumerable<CodeSupplierZoneMatch> GetSupplierZoneMatchBysupplierIdsAndSellingNumberPanId(int sellingNumberPlanId, IEnumerable<long> supplierIds, string codeStartWith);
+
+        IEnumerable<CodeSupplierZoneMatch> GetSupplierZoneMatchBySupplierIdsAndSellingNumberPanId(int sellingNumberPlanId, IEnumerable<long> supplierIds, string codeStartWith);
 	}
 }

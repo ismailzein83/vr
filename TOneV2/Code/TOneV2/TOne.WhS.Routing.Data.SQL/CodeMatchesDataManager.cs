@@ -27,9 +27,9 @@ namespace TOne.WhS.Routing.Data.SQL
 
         //const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
 
-        #region Public Methods
-
         public bool ShouldApplyCodeZoneMatch { get; set; }
+
+        #region Public Methods
 
         public object InitialiazeStreamForDBApply()
         {
@@ -72,25 +72,6 @@ namespace TOne.WhS.Routing.Data.SQL
                     codeMatchBulkInsert.CodeSupplierZoneMatchStream.WriteRecord("{0}^{1}^{2}^{3}", record.Code, supplierCodeMatch.CodeMatch.SupplierId, supplierCodeMatch.CodeMatch.SupplierZoneId, supplierCodeMatch.CodeMatch.SupplierCode);
             }
             //}
-        }
-
-        public void ApplyCodeMatchesForDB(object preparedData)
-        {
-            var codeMatchBulkInsertInfo = preparedData as CodeMatchBulkInsertInfo;
-            int count = 2;
-
-            Parallel.For(0, count, (i) =>
-            {
-                switch (i)
-                {
-                    //case 0: base.InsertBulkToTable(codeMatchBulkInsertInfo.CodeMatchesBulkInsertInfo); break;
-                    //case 1: base.InsertBulkToTable(codeMatchBulkInsertInfo.CodeSaleZoneMatchBulkInsertInfo); break;
-                    //case 2: base.InsertBulkToTable(codeMatchBulkInsertInfo.CodeSupplierZoneMatchBulkInsertInfo); break;
-
-                    case 0: base.InsertBulkToTable(codeMatchBulkInsertInfo.CodeSaleZoneMatchBulkInsertInfo); break;
-                    case 1: base.InsertBulkToTable(codeMatchBulkInsertInfo.CodeSupplierZoneMatchBulkInsertInfo); break;
-                }
-            });
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -137,6 +118,25 @@ namespace TOne.WhS.Routing.Data.SQL
             return codeMatchBulkInsertInfo;
         }
 
+        public void ApplyCodeMatchesForDB(object preparedData)
+        {
+            var codeMatchBulkInsertInfo = preparedData as CodeMatchBulkInsertInfo;
+            int count = 2;
+
+            Parallel.For(0, count, (i) =>
+            {
+                switch (i)
+                {
+                    //case 0: base.InsertBulkToTable(codeMatchBulkInsertInfo.CodeMatchesBulkInsertInfo); break;
+                    //case 1: base.InsertBulkToTable(codeMatchBulkInsertInfo.CodeSaleZoneMatchBulkInsertInfo); break;
+                    //case 2: base.InsertBulkToTable(codeMatchBulkInsertInfo.CodeSupplierZoneMatchBulkInsertInfo); break;
+
+                    case 0: base.InsertBulkToTable(codeMatchBulkInsertInfo.CodeSaleZoneMatchBulkInsertInfo); break;
+                    case 1: base.InsertBulkToTable(codeMatchBulkInsertInfo.CodeSupplierZoneMatchBulkInsertInfo); break;
+                }
+            });
+        }
+
         public Dictionary<long, RPCodeMatches> GetRPCodeMatchesBySaleZone(long fromZoneId, long toZoneId, Func<bool> shouldStop)
         {
             Dictionary<long, RPCodeMatches> result = new Dictionary<long, RPCodeMatches>();
@@ -149,6 +149,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
                     string code = reader["Code"] as string;
                     long saleZoneId = (long)reader["SaleZoneID"];
+
                     RPCodeMatches rpCodeMatches = result.GetOrCreateItem(saleZoneId, () =>
                     {
                         return new RPCodeMatches() { SaleZoneId = saleZoneId, Code = code, SupplierCodeMatches = new List<SupplierCodeMatchWithRate>() }; ;
@@ -176,6 +177,7 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             DataTable dtCodes = BuildCodesTable(routeCodes);
             Dictionary<string, PartialCodeMatches> result = new Dictionary<string, PartialCodeMatches>();
+
             ExecuteReaderText(query_GetCodeMatchesByCode.ToString(), (reader) =>
             {
                 while (reader.Read())
@@ -183,7 +185,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     string code = reader["Code"] as string;
                     PartialCodeMatches partialCodeMatches = result.GetOrCreateItem(code, () =>
                     {
-                        return new PartialCodeMatches() { Code = code, SupplierCodeMatches = new List<SupplierCodeMatchWithRate>(), SupplierCodeMatchesBySupplier = new SupplierCodeMatchWithRateBySupplier() }; ;
+                        return new PartialCodeMatches() { Code = code, SupplierCodeMatches = new List<SupplierCodeMatchWithRate>(), SupplierCodeMatchesBySupplier = new SupplierCodeMatchWithRateBySupplier() };
                     });
 
                     SupplierCodeMatchWithRate supplierCodeMatchWithRate = SupplierCodeMatchWithRateMapper(reader);
@@ -197,6 +199,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 dtPrm.Value = dtCodes;
                 cmd.Parameters.Add(dtPrm);
             });
+
             return result.Values.ToList();
         }
 
@@ -208,6 +211,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
             string supplierServiceIds = reader["SupplierServiceIds"] as string;
             string exactSupplierServiceIds = reader["ExactSupplierServiceIds"] as string;
+
             return new SupplierCodeMatchWithRate()
             {
                 CodeMatch = new SupplierCodeMatch()

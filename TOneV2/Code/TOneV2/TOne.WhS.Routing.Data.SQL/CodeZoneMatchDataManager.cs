@@ -9,9 +9,9 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CodeZoneMatchDataManager : BaseTOneDataManager, ICodeZoneMatchDataManager
     {
+        #region Fields/Constructors
 
-
-        #region Constructors
+        public RoutingDatabase RPRouteDatabase { get; set; }
 
         public CodeZoneMatchDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -21,11 +21,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #endregion
 
-        #region Fields
-
-        public RoutingDatabase RPRouteDatabase { get; set; }
-
-        #endregion
+        #region Public Methods
 
         public IEnumerable<SaleZoneDefintion> GetSaleZonesMatchedToSupplierZones(IEnumerable<long> supplierZoneIds, int? sellingNumberPlanId)
         {
@@ -73,7 +69,7 @@ namespace TOne.WhS.Routing.Data.SQL
             });
         }
 
-        public IEnumerable<CodeSupplierZoneMatch> GetSupplierZoneMatchBysupplierIdsAndSellingNumberPanId(int sellingNumberPlanId, IEnumerable<long> supplierIds, string codeStartWith)
+        public IEnumerable<CodeSupplierZoneMatch> GetSupplierZoneMatchBySupplierIdsAndSellingNumberPanId(int sellingNumberPlanId, IEnumerable<long> supplierIds, string codeStartWith)
         {
             return base.GetItemsText<CodeSupplierZoneMatch>(query_GetCodeSupplierZoneMatchBySupplierIdsAndSellingNumberPlanId, CodeSupplierZoneMatchMapper, (cmd) =>
             {
@@ -94,8 +90,8 @@ namespace TOne.WhS.Routing.Data.SQL
                     SqlDbType = System.Data.SqlDbType.Int,
                     Value = sellingNumberPlanId
                 };
-
                 cmd.Parameters.Add(sNPId);
+
                 var supplierIdsParameter = new SqlParameter()
                 {
                     ParameterName = "@SupplierIds",
@@ -107,6 +103,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 cmd.Parameters.Add(supplierIdsParameter);
             });
         }
+
         public IEnumerable<CodeSaleZoneMatch> GetSaleZoneMatchBySellingNumberPlanId(int sellingNumberPlanId, string codeStartWith)
         {
             return base.GetItemsText<CodeSaleZoneMatch>(query_GetSaleZoneMatchBySellingNumberPlanId, CodeSaleZoneMatchMapper, (cmd) =>
@@ -130,6 +127,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 cmd.Parameters.Add(codeStartWithParameter);
             });
         }
+
         public IEnumerable<CodeSupplierZoneMatch> GetSupplierZonesMatchedToSaleZones(IEnumerable<long> saleZoneIds, IEnumerable<int> supplierIds)
         {
             return base.GetItemsText<CodeSupplierZoneMatch>(query_GetSupplierZonesMatchedToSaleZones, CodeSupplierZoneMatchMapper, (cmd) =>
@@ -163,12 +161,14 @@ namespace TOne.WhS.Routing.Data.SQL
                     SqlDbType = SqlDbType.Int,
                     Value = supplierId
                 });
+
                 cmd.Parameters.Add(new SqlParameter()
                 {
                     ParameterName = "@SupplierZoneIds",
                     SqlDbType = SqlDbType.NVarChar,
                     Value = string.Join(",", supplierZoneIds)
                 });
+
                 var otherSupplierIdsParameter = new SqlParameter()
                 {
                     ParameterName = "@OtherSupplierIds",
@@ -181,6 +181,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 cmd.Parameters.Add(otherSupplierIdsParameter);
             });
         }
+
+        #endregion
 
         #region Protected Methods
 
@@ -199,96 +201,8 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #endregion
 
-        #region Queries
-        private const string query_GetSaleZonesMatchedToSupplierZones =
-        @"
-			declare @SupplierZoneIdTable table (SupplierZoneId bigint not null)
-			insert into @SupplierZoneIdTable (SupplierZoneId)
-			select ParsedString from dbo.ParseStringList(@SupplierZoneIds);
-			
-			with CodeCTE as (select Code from dbo.CodeSupplierZoneMatch where SupplierZoneId in (select SupplierZoneId from @SupplierZoneIdTable))
-			
-			select SellingNumberPlanId, SaleZoneId
-			from dbo.CodeSaleZoneMatch with(nolock)
-			where Code in (select Code from CodeCTE) #SELLINGNUMBERPLAN#
-            group by SellingNumberPlanId, SaleZoneId
-		";
-
-
-        private const string query_GetSaleZoneMatchBySellingNumberPlanId =
-        @"
-			select Code,SellingNumberPlanID,SaleZoneID,CodeMatch
-			from dbo.CodeSaleZoneMatch with(nolock)
-			where SellingNumberPlanID = @SellingNumberPlanId 
-                And( @CodeStartWith is null OR Code like @CodeStartWith+'%')
-		";
-
-        private const string query_GetCodeSupplierZoneMatchBySupplierIds =
-        @"
-			declare @SupplierIdsTable table (SupplierId bigint not null)
-			insert into @SupplierIdsTable (SupplierId)
-			select ParsedString from dbo.ParseStringList(@SupplierIds);
-		
-			select Code,SupplierID,SupplierZoneID,CodeMatch
-			from dbo.CodeSupplierZoneMatch with(nolock)
-			where SupplierID in (select SupplierId from @SupplierIdsTable)
-                And( @CodeStartWith is null OR Code like @CodeStartWith+'%')
-		";
-
-        private const string query_GetCodeSupplierZoneMatchBySupplierIdsAndSellingNumberPlanId =
-       @"
-			declare @SupplierIdsTable table (SupplierId bigint not null)
-			insert into @SupplierIdsTable (SupplierId)
-			select ParsedString from dbo.ParseStringList(@SupplierIds);
-		    
-           
-
-                         select cs.Code,cs.SupplierID,cs.SupplierZoneID,cs.CodeMatch from [dbo].[CodeSupplierZoneMatch] as cs JOIN @SupplierIdsTable sIds ON cs.SupplierID = sIds.SupplierId
-                            WHERE( @CodeStartWith is null OR cs.Code like @CodeStartWith+'%')";
-
-        private const string query_GetSupplierZonesMatchedToSaleZones =
-        @"
-			declare @SaleZoneIdTable table (SaleZoneId bigint not null)
-			insert into @SaleZoneIdTable (SaleZoneId)
-			select ParsedString from dbo.ParseStringList(@SaleZoneIds)
-			
-			declare @SupplierIdTable table (SupplierId int not null)
-			if (@SupplierIds is not null)
-			begin
-				insert into @SupplierIdTable (SupplierId)
-				select ParsedString from dbo.ParseStringList(@SupplierIds)
-			end;
-			
-			with CodeCTE as (select Code from dbo.CodeSaleZoneMatch where SaleZoneID in (select SaleZoneId from @SaleZoneIdTable))
-			
-			select Code, SupplierId, SupplierZoneId, CodeMatch
-			from dbo.CodeSupplierZoneMatch with(nolock)
-			where Code in (select Code from CodeCTE) and (@SupplierIds is null or SupplierID in (select SupplierId from @SupplierIdTable))
-		";
-
-        private const string query_GetOtherSupplierZonesMatchedToSupplierZones =
-        @"
-			declare @SupplierZoneIdTable table (SupplierZoneId bigint not null)
-			insert into @SupplierZoneIdTable (SupplierZoneId)
-			select ParsedString from dbo.ParseStringList(@SupplierZoneIds)
-			
-			declare @OtherSupplierIdTable table (OtherSupplierId int not null)
-			if (@OtherSupplierIds is not null)
-			begin
-				insert into @OtherSupplierIdTable (OtherSupplierId)
-				select ParsedString from dbo.ParseStringList(@OtherSupplierIds)
-			end;
-			
-			with CodeCTE as (select Code from dbo.CodeSupplierZoneMatch where SupplierZoneID in (select SupplierZoneId from @SupplierZoneIdTable))
-			
-			select Code, SupplierId, SupplierZoneId
-			from dbo.CodeSupplierZoneMatch with(nolock)
-			where SupplierID != @SupplierId and Code in (select Code from CodeCTE) and (@OtherSupplierIds is null or SupplierID in (select OtherSupplierId from @OtherSupplierIdTable))
-		";
-
-        #endregion
-
         #region Mappers
+
         private SaleZoneDefintion SaleZoneDefintionMapper(IDataReader reader)
         {
             return new SaleZoneDefintion()
@@ -322,41 +236,94 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #endregion
 
-        //RoutingDatabase ICodeZoneMatchDataManager.RPRouteDatabase
-        //{
-        //    get
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //    set
-        //    {
-        //       throw new NotImplementedException();
-        //    }
-        //}
+        #region Queries
 
-        //IEnumerable<CodeSaleZoneMatch> ICodeZoneMatchDataManager.GetSaleZonesMatchedToSupplierZones(IEnumerable<long> supplierZoneIds)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        private const string query_GetSaleZonesMatchedToSupplierZones =
+        @"
+			declare @SupplierZoneIdTable table (SupplierZoneId bigint not null)
+			insert into @SupplierZoneIdTable (SupplierZoneId)
+			select ParsedString from dbo.ParseStringList(@SupplierZoneIds);
+			
+			with CodeCTE as (select Code from dbo.CodeSupplierZoneMatch where SupplierZoneId in (select SupplierZoneId from @SupplierZoneIdTable))
+			
+			select SellingNumberPlanId, SaleZoneId
+			from dbo.CodeSaleZoneMatch with(nolock)
+			where Code in (select Code from CodeCTE) #SELLINGNUMBERPLAN#
+            group by SellingNumberPlanId, SaleZoneId
+         ";
 
-        //IEnumerable<CodeSupplierZoneMatch> ICodeZoneMatchDataManager.GetSupplierZonesMatchedToSaleZones(IEnumerable<long> saleZoneIds, IEnumerable<int> supplierIds)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
-        //IEnumerable<CodeSupplierZoneMatch> ICodeZoneMatchDataManager.GetOtherSupplierZonesMatchedToSupplierZones(int supplierId, IEnumerable<long> supplierZoneIds, IEnumerable<int> otherSupplierIds)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        private const string query_GetSaleZoneMatchBySellingNumberPlanId =
+        @"
+			select Code,SellingNumberPlanID,SaleZoneID,CodeMatch
+			from dbo.CodeSaleZoneMatch with(nolock)
+			where SellingNumberPlanID = @SellingNumberPlanId 
+                And( @CodeStartWith is null OR Code like @CodeStartWith+'%')
+		 ";
 
-        //IEnumerable<CodeSupplierZoneMatch> ICodeZoneMatchDataManager.GetSupplierZoneMatchBysupplierIds(IEnumerable<long> supplierIds, string codeStartWith)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        private const string query_GetCodeSupplierZoneMatchBySupplierIds =
+        @"
+			declare @SupplierIdsTable table (SupplierId bigint not null)
+			insert into @SupplierIdsTable (SupplierId)
+			select ParsedString from dbo.ParseStringList(@SupplierIds);
+		
+			select Code,SupplierID,SupplierZoneID,CodeMatch
+			from dbo.CodeSupplierZoneMatch with(nolock)
+			where SupplierID in (select SupplierId from @SupplierIdsTable)
+                And( @CodeStartWith is null OR Code like @CodeStartWith+'%')
+		 ";
 
-        //IEnumerable<CodeSaleZoneMatch> ICodeZoneMatchDataManager.GetSaleZoneMatchBySellingNumberPlanId(int sellingNumberPlanId, string codeStartWith)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        private const string query_GetCodeSupplierZoneMatchBySupplierIdsAndSellingNumberPlanId =
+        @"
+			declare @SupplierIdsTable table (SupplierId bigint not null)
+			insert into @SupplierIdsTable (SupplierId)
+			select ParsedString from dbo.ParseStringList(@SupplierIds);
+		    
+            select cs.Code,cs.SupplierID,cs.SupplierZoneID,cs.CodeMatch 
+            from [dbo].[CodeSupplierZoneMatch] as cs JOIN @SupplierIdsTable sIds ON cs.SupplierID = sIds.SupplierId
+            WHERE( @CodeStartWith is null OR cs.Code like @CodeStartWith+'%')
+         ";
+
+        private const string query_GetSupplierZonesMatchedToSaleZones =
+        @"
+			declare @SaleZoneIdTable table (SaleZoneId bigint not null)
+			insert into @SaleZoneIdTable (SaleZoneId)
+			select ParsedString from dbo.ParseStringList(@SaleZoneIds)
+			
+			declare @SupplierIdTable table (SupplierId int not null)
+			if (@SupplierIds is not null)
+			begin
+				insert into @SupplierIdTable (SupplierId)
+				select ParsedString from dbo.ParseStringList(@SupplierIds)
+			end;
+			
+			with CodeCTE as (select Code from dbo.CodeSaleZoneMatch where SaleZoneID in (select SaleZoneId from @SaleZoneIdTable))
+			
+			select Code, SupplierId, SupplierZoneId, CodeMatch
+			from dbo.CodeSupplierZoneMatch with(nolock)
+			where Code in (select Code from CodeCTE) and (@SupplierIds is null or SupplierID in (select SupplierId from @SupplierIdTable))
+		 ";
+
+        private const string query_GetOtherSupplierZonesMatchedToSupplierZones =
+        @"
+			declare @SupplierZoneIdTable table (SupplierZoneId bigint not null)
+			insert into @SupplierZoneIdTable (SupplierZoneId)
+			select ParsedString from dbo.ParseStringList(@SupplierZoneIds)
+			
+			declare @OtherSupplierIdTable table (OtherSupplierId int not null)
+			if (@OtherSupplierIds is not null)
+			begin
+				insert into @OtherSupplierIdTable (OtherSupplierId)
+				select ParsedString from dbo.ParseStringList(@OtherSupplierIds)
+			end;
+			
+			with CodeCTE as (select Code from dbo.CodeSupplierZoneMatch where SupplierZoneID in (select SupplierZoneId from @SupplierZoneIdTable))
+			
+			select Code, SupplierId, SupplierZoneId
+			from dbo.CodeSupplierZoneMatch with(nolock)
+			where SupplierID != @SupplierId and Code in (select Code from CodeCTE) and (@OtherSupplierIds is null or SupplierID in (select OtherSupplierId from @OtherSupplierIdTable))
+		 ";
+
+        #endregion
     }
 }

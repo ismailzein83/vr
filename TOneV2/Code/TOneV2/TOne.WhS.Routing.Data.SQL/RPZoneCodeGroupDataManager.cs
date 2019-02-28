@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.Routing.Entities;
-using Vanrise.Data.SQL;
-using Vanrise.Common;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
+using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
@@ -18,6 +10,32 @@ namespace TOne.WhS.Routing.Data.SQL
         private readonly string[] columns = { "ZoneId", "IsSale", "CodeGroups" };
 
         #region Public Methods
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(ZoneCodeGroup record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.ZoneId, record.IsSale ? 1 : 0, string.Join<string>(",", record.CodeGroups));
+        }
+
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
+            {
+                TableName = "[dbo].[ZoneCodeGroup]",
+                Stream = streamForBulkInsert,
+                TabLock = true,
+                KeepIdentity = false,
+                FieldSeparator = '^',
+                ColumnNames = columns
+            };
+        }
 
         public void ApplyZoneCodeGroupsForDB(object preparedZoneCodeGroups)
         {
@@ -46,41 +64,12 @@ namespace TOne.WhS.Routing.Data.SQL
             return result;
         }
 
-        public object InitialiazeStreamForDBApply()
-        {
-            return base.InitializeStreamForBulkInsert();
-        }
-
-        public void WriteRecordToStream(ZoneCodeGroup record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.ZoneId, record.IsSale ? 1 : 0, string.Join<string>(",", record.CodeGroups));
-        }
-
-        public object FinishDBApplyStream(object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.Close();
-            return new StreamBulkInsertInfo
-            {
-                TableName = "[dbo].[ZoneCodeGroup]",
-                Stream = streamForBulkInsert,
-                TabLock = true,
-                KeepIdentity = false,
-                FieldSeparator = '^',
-                ColumnNames = columns
-            };
-        }
-
         #endregion
-
-
 
         #region Queries
 
         const string query_GetZoneCodeGroups = @"SELECT ZoneId, IsSale, CodeGroups
-                                                    FROM    [dbo].[ZoneCodeGroup] with(nolock)";
-
+                                                 FROM   [dbo].[ZoneCodeGroup] with(nolock)";
 
         #endregion
     }

@@ -51,6 +51,12 @@ namespace TOne.WhS.Routing.Data.SQL
             return GetItemsText(query, CustomerRouteQualityConfigurationDataMapper, null);
         }
 
+        public List<CustomerRouteQualityConfigurationData> GetCustomerRouteQualityConfigurationsDataAfterVersionNumber(int versionNumber)
+        {
+            string query = query_GetCustomerRouteQualityConfigurationData.Replace("#FILTER#", string.Format("WHERE VersionNumber > {0}", versionNumber));
+            return GetItemsText(query, CustomerRouteQualityConfigurationDataMapper, null);
+        }
+
         public void UpdateCustomerRouteQualityConfigurationsData(List<CustomerRouteQualityConfigurationData> customerRouteQualityConfigurationData)
         {
             DataTable dtCustomerQualityConfigurationData = BuildCustomerRouteQualityConfigurationsDataTable(customerRouteQualityConfigurationData);
@@ -63,11 +69,6 @@ namespace TOne.WhS.Routing.Data.SQL
             });
         }
 
-        public List<CustomerRouteQualityConfigurationData> GetCustomerRouteQualityConfigurationsDataAfterVersionNumber(int versionNumber)
-        {
-            string query = query_GetCustomerRouteQualityConfigurationData.Replace("#FILTER#", string.Format("WHERE VersionNumber > {0}", versionNumber));
-            return GetItemsText(query, CustomerRouteQualityConfigurationDataMapper, null);
-        }
         private DataTable BuildCustomerRouteQualityConfigurationsDataTable(List<CustomerRouteQualityConfigurationData> customerRouteQualityConfigurationData)
         {
             DataTable dtCustomerRouteQualityConfigurationsDataInfo = new DataTable();
@@ -90,6 +91,7 @@ namespace TOne.WhS.Routing.Data.SQL
             dtCustomerRouteQualityConfigurationsDataInfo.EndLoadData();
             return dtCustomerRouteQualityConfigurationsDataInfo;
         }
+
         #endregion
 
         #region Mappers

@@ -59,8 +59,9 @@ namespace TOne.WhS.Routing.Business
                 throw new NullReferenceException("supplierIds");
             if (sellingNumberPlanId == null)
                 throw new NullReferenceException("sellingNumberPlanId");
+
             ICodeZoneMatchDataManager dataManager = GetDataManager();
-            return dataManager.GetSupplierZoneMatchBysupplierIdsAndSellingNumberPanId(sellingNumberPlanId, supplierIds, codeStartWith);
+            return dataManager.GetSupplierZoneMatchBySupplierIdsAndSellingNumberPanId(sellingNumberPlanId, supplierIds, codeStartWith);
         }
 
 		#endregion

@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.Routing.Entities;
-using Vanrise.Data.SQL;
+﻿using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
     public class CodeSaleZoneDataManager : RoutingDataManager, ICodeSaleZoneDataManager
     {
         readonly string[] columns = { "Code", "SaleZoneId" };
-        public void ApplyCodeToCodeSaleZoneTable(object preparedCodeMatches)
+
+        public object InitialiazeStreamForDBApply()
         {
-            InsertBulkToTable(preparedCodeMatches as BaseBulkInsertInfo);
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(Entities.CodeSaleZone record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}", record.Code, record.SaleZoneId);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -31,15 +32,9 @@ namespace TOne.WhS.Routing.Data.SQL
             };
         }
 
-        public object InitialiazeStreamForDBApply()
+        public void ApplyCodeToCodeSaleZoneTable(object preparedCodeMatches)
         {
-            return base.InitializeStreamForBulkInsert();
-        }
-
-        public void WriteRecordToStream(Entities.CodeSaleZone record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}", record.Code, record.SaleZoneId);
+            InsertBulkToTable(preparedCodeMatches as BaseBulkInsertInfo);
         }
     }
 }

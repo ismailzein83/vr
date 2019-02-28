@@ -68,30 +68,6 @@ namespace TOne.WhS.Routing.Data.SQL
             return GetItemsText(query, CustomerZoneDetailMapper, null);
         }
 
-        public IEnumerable<CustomerZoneDetail> GetFilteredCustomerZoneDetailsByZone(IEnumerable<long> saleZoneIds)
-        {
-            DataTable dtZoneIds = BuildZoneIdsTable(new HashSet<long>(saleZoneIds));
-            return GetItemsText(query_GetFilteredCustomerZoneDetailsByZone, CustomerZoneDetailMapper, (cmd) =>
-            {
-                var dtPrm = new SqlParameter("@ZoneList", SqlDbType.Structured);
-                dtPrm.TypeName = "LongIDType";
-                dtPrm.Value = dtZoneIds;
-                cmd.Parameters.Add(dtPrm);
-            });
-        }
-
-        public List<CustomerZoneDetail> GetCustomerZoneDetails(HashSet<CustomerSaleZone> customerSaleZones)
-        {
-            DataTable dtCustomerZones = BuildCustomerZonesTable(customerSaleZones);
-            return GetItemsText(query_GetFilteredCustomerZoneDetailsByCustomerZone, CustomerZoneDetailMapper, (cmd) =>
-            {
-                var dtPrm = new SqlParameter("@CustomerZoneList", SqlDbType.Structured);
-                dtPrm.TypeName = "CustomerZoneType";
-                dtPrm.Value = dtCustomerZones;
-                cmd.Parameters.Add(dtPrm);
-            });
-        }
-
         public List<CustomerZoneDetail> GetCustomerZoneDetailsAfterVersionNumber(int versionNumber)
         {
             string query = query_GetCustomerZoneDetails.Replace("#FILTER#", string.Format("WHERE VersionNumber > {0}", versionNumber));
@@ -115,8 +91,29 @@ namespace TOne.WhS.Routing.Data.SQL
             return GetItemsText(query, CustomerZoneDetailMapper, null);
         }
 
+        public IEnumerable<CustomerZoneDetail> GetFilteredCustomerZoneDetailsByZone(IEnumerable<long> saleZoneIds)
+        {
+            DataTable dtZoneIds = BuildZoneIdsTable(new HashSet<long>(saleZoneIds));
+            return GetItemsText(query_GetFilteredCustomerZoneDetailsByZone, CustomerZoneDetailMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@ZoneList", SqlDbType.Structured);
+                dtPrm.TypeName = "LongIDType";
+                dtPrm.Value = dtZoneIds;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
 
-
+        public List<CustomerZoneDetail> GetCustomerZoneDetails(HashSet<CustomerSaleZone> customerSaleZones)
+        {
+            DataTable dtCustomerZones = BuildCustomerZonesTable(customerSaleZones);
+            return GetItemsText(query_GetFilteredCustomerZoneDetailsByCustomerZone, CustomerZoneDetailMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@CustomerZoneList", SqlDbType.Structured);
+                dtPrm.TypeName = "CustomerZoneType";
+                dtPrm.Value = dtCustomerZones;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
 
         public void UpdateCustomerZoneDetails(List<CustomerZoneDetail> customerZoneDetails)
         {

@@ -63,16 +63,6 @@ namespace TOne.WhS.Routing.Data.SQL
             ApplySupplierZoneDetailsForDB(preparedSupplierZoneDetails);
         }
 
-        private struct GetCachedSupplierZoneDetailsCacheName
-        {
-            public int RoutingDatabaseId { get; set; }
-
-            public override int GetHashCode()
-            {
-                return this.RoutingDatabaseId.GetHashCode();
-            }
-        }
-
         public Dictionary<long, SupplierZoneDetail> GetCachedSupplierZoneDetails()
         {
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneDetailsCacheManager>();
@@ -88,11 +78,10 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public IEnumerable<SupplierZoneDetail> GetSupplierZoneDetailsByCode(string code)
         {
-            string query = string.Format(query_GetSupplierZoneDetails.Replace("#FILTER#", @"Join [dbo].CodeSupplierZoneMatch cszm on zd.SupplierZoneId = cszm.SupplierZoneID
-  where cszm.code = '{0}'"), code);
+            string query = string.Format(query_GetSupplierZoneDetails.Replace("#FILTER#", $@"Join [dbo].CodeSupplierZoneMatch cszm on zd.SupplierZoneId = cszm.SupplierZoneID 
+                                                                                             Where cszm.code = '{code}'"));
             return GetItemsText(query, SupplierZoneDetailMapper, null);
         }
-
 
         public IEnumerable<SupplierZoneDetail> GetSupplierZoneDetails()
         {
@@ -227,19 +216,23 @@ namespace TOne.WhS.Routing.Data.SQL
         private class SupplierZoneDetailsCacheExpirationChecker : CacheExpirationChecker
         {
             static SupplierZoneDetailsCacheExpirationChecker s_instance = new SupplierZoneDetailsCacheExpirationChecker();
-            public static SupplierZoneDetailsCacheExpirationChecker Instance
-            {
-                get
-                {
-                    return s_instance;
-                }
-            }
+            public static SupplierZoneDetailsCacheExpirationChecker Instance { get { return s_instance; } }
 
             public override bool IsCacheExpired(Vanrise.Caching.ICacheExpirationCheckerContext context)
             {
                 TimeSpan entitiesTimeSpan = TimeSpan.FromMinutes(5);
                 SlidingWindowCacheExpirationChecker slidingWindowCacheExpirationChecker = new SlidingWindowCacheExpirationChecker(entitiesTimeSpan);
                 return slidingWindowCacheExpirationChecker.IsCacheExpired(context);
+            }
+        }
+
+        private struct GetCachedSupplierZoneDetailsCacheName
+        {
+            public int RoutingDatabaseId { get; set; }
+
+            public override int GetHashCode()
+            {
+                return this.RoutingDatabaseId.GetHashCode();
             }
         }
 

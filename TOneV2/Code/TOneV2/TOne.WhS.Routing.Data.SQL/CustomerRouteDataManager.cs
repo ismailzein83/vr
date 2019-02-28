@@ -43,17 +43,6 @@ namespace TOne.WhS.Routing.Data.SQL
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.Code, record.SaleZoneId, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, supplierIds, serializedOptions);
         }
 
-        public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
-        {
-            var streamInfo = preparedCustomerRoute as StreamBulkInsertInfo;
-            DateTime start = DateTime.Now;
-            InsertBulkToTable(streamInfo);
-            if (this.BPContext != null)
-            {
-                this.BPContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Routes saved to database in {1}", streamInfo.Stream.RecordCount, (DateTime.Now - start));
-            }
-        }
-
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -67,6 +56,17 @@ namespace TOne.WhS.Routing.Data.SQL
                 FieldSeparator = '^',
                 ColumnNames = columns,
             };
+        }
+
+        public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
+        {
+            var streamInfo = preparedCustomerRoute as StreamBulkInsertInfo;
+            DateTime start = DateTime.Now;
+            InsertBulkToTable(streamInfo);
+            if (this.BPContext != null)
+            {
+                this.BPContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Routes saved to database in {1}", streamInfo.Stream.RecordCount, (DateTime.Now - start));
+            }
         }
 
         public IEnumerable<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input)
@@ -172,6 +172,17 @@ namespace TOne.WhS.Routing.Data.SQL
                 });
         }
 
+        public List<CustomerRoute> GetCustomerRoutesAfterVersionNb(int versionNb)
+        {
+            StringBuilder queryBuilder = new StringBuilder(query_GetCustomerRoutes);
+            queryBuilder.Replace("#LimitResult#", string.Empty);
+            queryBuilder.Replace("#FILTER#", string.Format("Where mcr.VersionNumber > {0}", versionNb));
+
+            List<CustomerRoute> customerRoutes = GetItemsText(queryBuilder.ToString(), CustomerRouteMapper, (cmd) => { });
+            CompleteSupplierData(customerRoutes);
+            return customerRoutes;
+        }
+
         public List<CustomerRouteData> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, long partialRoutesNumberLimit, out bool maximumExceeded)
         {
             HashSet<string> addedCustomerRouteDefinitions = new HashSet<string>();
@@ -263,17 +274,6 @@ namespace TOne.WhS.Routing.Data.SQL
             query = string.Format(query_CreateIX_CustomerRoute_CustomerId_Code, maxDOPSyntax);
             ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             trackStep("Finished create CLUSTERED on CustomerRoute table (CustomerId and Code).");
-        }
-
-        public List<CustomerRoute> GetCustomerRoutesAfterVersionNb(int versionNb)
-        {
-            StringBuilder queryBuilder = new StringBuilder(query_GetCustomerRoutes);
-            queryBuilder.Replace("#LimitResult#", string.Empty);
-            queryBuilder.Replace("#FILTER#", string.Format("Where mcr.VersionNumber > {0}", versionNb));
-
-            List<CustomerRoute> customerRoutes = GetItemsText(queryBuilder.ToString(), CustomerRouteMapper, (cmd) => { });
-            CompleteSupplierData(customerRoutes);
-            return customerRoutes;
         }
 
         #endregion
@@ -606,10 +606,10 @@ namespace TOne.WhS.Routing.Data.SQL
                                                             Where #AFFECTEDROUTES#";
 
         const string query_GetCustomerRoutes = @"SELECT #LimitResult# cr.CustomerID
+                                                        ,ca.Name as CustomerName
                                                         ,cr.Code
-                                                        ,sz.Name as SaleZoneName
-                                                        ,ca.Name as  CustomerName
                                                         ,cr.SaleZoneID
+                                                        ,sz.Name as SaleZoneName
                                                         ,czd.EffectiveRateValue as Rate
                                                         ,czd.SaleZoneServiceIds
                                                         ,cr.IsBlocked
