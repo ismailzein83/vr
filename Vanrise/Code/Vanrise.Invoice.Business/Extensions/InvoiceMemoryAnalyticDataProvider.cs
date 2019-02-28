@@ -85,6 +85,7 @@ namespace Vanrise.Invoice.Business.Extensions
                 {
                     FromTime = fromTime,
                     ToTime = toTime,
+                    InvoiceTypeId = InvoiceTypeId
                 }
             });
 
