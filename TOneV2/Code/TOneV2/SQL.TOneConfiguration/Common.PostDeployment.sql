@@ -540,6 +540,7 @@ as (select * from (values
 ('F3FEE864-02EF-4C0B-A68D-D9AEB5BAC07E','gray','{"$type":"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities","StyleFormatingSettings":{"$type":"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions","ClassName":"label label-default","ConfigId":"c1c2f3b8-9707-4fd1-b871-c4018fd77b04"}}'),
 ('A6F96839-2922-4CEE-B0F6-F026F8BD8C11','Yellow','{"$type":"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities","StyleFormatingSettings":{"$type":"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions","ClassName":"label label-warning","ConfigId":"c1c2f3b8-9707-4fd1-b871-c4018fd77b04"}}'),
 ('ED3AED64-DEB0-4F28-847C-0A08F43E1C97','Orange','{"$type":"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities","StyleFormatingSettings":{"$type":"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions","ClassName":"label label-warning-1","UniqueName":"VR_AccountBalance_StyleFormating_CSSClass","ConfigId":"c1c2f3b8-9707-4fd1-b871-c4018fd77b04"}}'),
+('A5616F24-E508-4AB1-90EB-BA72074872A0','Blue Aqua','{"$type":"Vanrise.Entities.StyleDefinitionSettings, Vanrise.Entities","StyleFormatingSettings":{"$type":"Vanrise.Common.MainExtensions.StyleFormatingSettings.CSSClass, Vanrise.Common.MainExtensions","ClassName":"label label-info","UniqueName":"VR_AccountBalance_StyleFormating_CSSClass","ConfigId":"c1c2f3b8-9707-4fd1-b871-c4018fd77b04"}}'),
 
 
 
