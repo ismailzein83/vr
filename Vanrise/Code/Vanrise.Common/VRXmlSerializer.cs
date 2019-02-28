@@ -69,6 +69,11 @@ namespace Vanrise.Common
             return new DotNetXmlSerializer().Serialize(o);
         }
 
+        public string Serialize(Object o, Dictionary<string, string> namespaces)
+        {
+            return new DotNetXmlSerializer().Serialize(o, namespaces);
+        }
+
         private static void RemoveNamespace(XDocument xdoc)
         {
             if (xdoc.Root == null) return;
@@ -415,14 +420,14 @@ namespace Vanrise.Common
         }
     }
 
-    internal class DotNetXmlSerializer 
+    internal class DotNetXmlSerializer
     {
         /// <summary>
         ///     Default constructor, does not specify namespace
         /// </summary>
         public DotNetXmlSerializer()
         {
-             Encoding = Encoding.UTF8;
+            Encoding = Encoding.UTF8;
         }
 
         /// <inheritdoc />
@@ -460,6 +465,26 @@ namespace Vanrise.Common
             return writer.ToString();
         }
 
+        public string Serialize(object obj, Dictionary<string, string> namespaces)
+        {
+            var ns = new System.Xml.Serialization.XmlSerializerNamespaces();
+
+            if (namespaces != null && namespaces.Count > 0)
+            {
+                foreach (var item in namespaces)
+                {
+                    ns.Add(item.Key, item.Value);
+                }
+            }
+
+            var serializer = new System.Xml.Serialization.XmlSerializer(obj.GetType());
+            var writer = new EncodingStringWriter(Encoding);
+
+            serializer.Serialize(writer, obj, ns);
+
+            return writer.ToString();
+        }
+
         /// <summary>
         ///     Name of the root element to use when serializing
         /// </summary>
@@ -474,7 +499,7 @@ namespace Vanrise.Common
         ///     Format string to use when serializing dates
         /// </summary>
         public string DateFormat { get; set; }
-        
+
 
         private class EncodingStringWriter : System.IO.StringWriter
         {
