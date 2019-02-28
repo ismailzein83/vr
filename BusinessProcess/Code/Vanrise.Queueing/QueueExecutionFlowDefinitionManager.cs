@@ -97,9 +97,8 @@ namespace Vanrise.Queueing
             var queueExecutionFlowDefinitions = GetCachedExecutionFlowDefinitions();
 
             Func<QueueExecutionFlowDefinition, bool> filterExpression = (executionFlowDefinition) =>
-
                       (input.Query.Title == null || executionFlowDefinition.Title.Contains(input.Query.Title)) &&
-                      (input.Query.Name == null || executionFlowDefinition.Name.Contains(input.Query.Name));
+                      (input.Query.Name == null || executionFlowDefinition.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
             VRActionLogger.Current.LogGetFilteredAction(QueueExecutionFlowDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, queueExecutionFlowDefinitions.ToBigResult(input, filterExpression, QueueExecutionFlowDefinitionDetailMapper));
