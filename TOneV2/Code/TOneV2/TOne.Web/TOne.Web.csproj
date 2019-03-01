@@ -798,6 +798,14 @@
     <Content Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="images\figure-icons\inbound-traffic.png" />
+    <Content Include="images\figure-icons\income.png" />
+    <Content Include="images\figure-icons\kpi.png" />
+    <Content Include="images\figure-icons\outbound-traffic.png" />
+    <Content Include="images\figure-icons\revenus.png" />
+    <Content Include="images\figure-icons\sms.png" />
+    <Content Include="images\figure-icons\top-operator.png" />
+    <Content Include="images\figure-icons\volume.png" />
     <Content Include="images\cabill-iconheader.ico" />
     <Content Include="images\cabill-logoonheader.png" />
     <Content Include="images\cabill-login.png" />
