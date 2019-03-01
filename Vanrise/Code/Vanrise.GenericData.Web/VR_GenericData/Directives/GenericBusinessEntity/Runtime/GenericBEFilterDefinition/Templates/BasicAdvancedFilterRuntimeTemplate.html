@@ -1,4 +1,4 @@
-﻿<vr-row removeline>
+﻿<vr-row ng-show="scopeModel.showBasicAdvancedTabs" removeline>
     <vr-columns width="fullrow">
         <vr-choices-filter selectedindex="selectedFilternIndex">
             <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
@@ -6,8 +6,7 @@
         </vr-choices-filter>
     </vr-columns>
 </vr-row>
-<vr-row removeline>
-    <span ng-repeat="filter in scopeModel.filters">
-        <vr-directivewrapper directive="filter.editor" on-ready="filter.onFilterReady" normal-col-num="2" ng-show="filter.showInBasic || advancedSelected"></vr-directivewrapper>
-    </span>
-</vr-row>
+
+<span ng-repeat="filter in scopeModel.filters">
+    <vr-directivewrapper directive="filter.editor" on-ready="filter.onFilterReady" normal-col-num="2" ng-show=" !scopeModel.showBasicAdvancedTabs || filter.showInBasic || advancedSelected"></vr-directivewrapper>
+</span>

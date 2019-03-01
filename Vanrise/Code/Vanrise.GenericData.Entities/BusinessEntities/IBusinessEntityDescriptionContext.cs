@@ -85,14 +85,16 @@ namespace Vanrise.GenericData.Entities
     }
     public interface IBusinessEntityGetIdByDescriptionContext
     {
-         Object FieldDescription { get; }
+        Object FieldDescription { get; }
 
-         string ErrorMessage { set; }
+        Guid BusinessEntityDefinitionId { get; }
 
-         Object FieldValue { set; }
+        string ErrorMessage { set; }
 
-         DataRecordFieldType FieldType { get; }
+        Object FieldValue { set; }
 
-         BERuntimeSelectorFilter BERuntimeSelectorFilter { get; }
+        DataRecordFieldType FieldType { get; }
+
+        BERuntimeSelectorFilter BERuntimeSelectorFilter { get; }
     }
 }

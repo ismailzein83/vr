@@ -38,6 +38,7 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.showAddButton = true;
+                $scope.scopeModel.hasFilter = true;
 
                 $scope.scopeModel.onFilterDirectiveReady = function (api) {
                     filterDirectiveAPI = api;
@@ -48,7 +49,7 @@
                     gridDirectiveAPI = api;
                     gridDirectiveReadyDeferred.resolve();
                 };
-                
+
                 function checkDoesUserHaveAddAccess(businessDefinitionId) {
                     VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(businessDefinitionId).then(function (response) {
                         $scope.scopeModel.showAddButton = response;
@@ -79,8 +80,10 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    //$scope.scopeModel.hasFilter = false;
+
                     var promises = [];
-                  
+
                     if (payload != undefined) {
                         businessDefinitionId = payload.businessEntityDefinitionId;
                         fieldValues = payload.fieldValues;
@@ -100,7 +103,7 @@
                                     $scope.scopeModel.filterDirective = genericBEDefinitionSettings.FilterDefinition.Settings.RuntimeEditor;
                                 }
                                 $scope.scopeModel.showAddButton = !genericBEDefinitionSettings.HideAddButton;
-                                $scope.scopeModel.showUploadButton = genericBEDefinitionSettings.ShowUpload; 
+                                $scope.scopeModel.showUploadButton = genericBEDefinitionSettings.ShowUpload;
                             }
                         });
                     }
@@ -110,9 +113,18 @@
                         UtilsService.waitMultiplePromises([loadBusinessEntityDefinitionSettings()]).then(function () {
                             if ($scope.scopeModel.filterDirective != undefined) {
                                 filterDirectiveReadyDeferred.promise.then(function () {
+                                    
+                                    //var context = {
+                                    //    showSearchButton: function (value) {
+                                    //        $scope.scopeModel.hasFilter = $scope.scopeModel.hasFilter || value;
+                                    //    }
+                                    //};
+
                                     var filterDirectivePayload = {
                                         settings: genericBEDefinitionSettings.FilterDefinition.Settings,
-                                        dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId
+                                        dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
+                                        filterValues: filterValues
+                                        //,context: context
                                     };
                                     VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, filterDirectivePayload, filterDirectiveLoadDeferred);
                                 });
@@ -167,7 +179,7 @@
                             filters.push(filterData.Filters[i]);
                         }
 
-            }
+                    }
                 }
 
                 if (filterValues != undefined) {

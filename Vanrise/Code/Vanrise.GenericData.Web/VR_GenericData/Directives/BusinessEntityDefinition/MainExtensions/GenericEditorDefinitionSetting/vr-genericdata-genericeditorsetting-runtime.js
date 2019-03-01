@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VR_GenericData_DataRecordFieldAPIService","VR_GenericData_GenericUIRuntimeAPIService",
+app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_GenericData_DataRecordFieldAPIService", "VR_GenericData_GenericUIRuntimeAPIService",
     function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_GenericUIRuntimeAPIService) {
 
         var directiveDefinitionObject = {
@@ -31,6 +31,8 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNo
             var definitionSettings;
             var dataRecordTypeId;
             var historyId;
+            var parentFieldValues;
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -46,12 +48,12 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNo
 
                 api.load = function (payload) {
                     var promises = [];
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         selectedValues = payload.selectedValues;
                         definitionSettings = payload.definitionSettings;
                         dataRecordTypeId = payload.dataRecordTypeId;
                         historyId = payload.historyId;
+                        parentFieldValues = payload.parentFieldValues;
                     }
                     var editorpromise = UtilsService.createPromiseDeferred();
                     UtilsService.waitMultipleAsyncOperations([getGenericEditorRuntimeRows, loadRunTimeFieldTypeTemplates]).then(function () {
@@ -95,10 +97,12 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNo
                             return dataRecordFieldTypeConfig.RuntimeEditor;
                     }
                 }
+
                 function getFieldPathValue(fieldPath) {
                     if (selectedValues != undefined && fieldPath != undefined)
                         return selectedValues[fieldPath];
                 }
+
                 function loadRunTimeFieldTypeTemplates() {
                     return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                         if (response) {
@@ -106,23 +110,40 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNo
                         }
                     });
                 }
-                function getGenericEditorRuntimeRows()
-                {
+
+                function extendGenericEditorRuntimeRowFields(fields) {
+                    var extendedFields = [];
+                    for (var j = 0; j < fields.length; j++) {
+                        var currentField = fields[j];
+                        if (parentFieldValues[currentField.FieldPath] == undefined)
+                            extendedFields.push(currentField);
+                    }
+
+                    return extendedFields;
+                }
+
+                function getGenericEditorRuntimeRows() {
                     var input = {
-                        Rows: definitionSettings != undefined? definitionSettings.Rows:definitionSettings,
+                        Rows: definitionSettings != undefined ? definitionSettings.Rows : definitionSettings,
                         DataRecordTypeId: dataRecordTypeId
                     };
                     return VR_GenericData_GenericUIRuntimeAPIService.GetGenericEditorRuntimeRows(input).then(function (response) {
+                        if (parentFieldValues != undefined && response != undefined && response.length > 0) {
+                            for (var i = 0; i < response.length; i++) {
+                                var currentRow = response[i];
+                                if (currentRow.Fields != undefined && currentRow.Fields.length > 0)
+                                    currentRow.Fields = extendGenericEditorRuntimeRowFields(currentRow.Fields);
+                            }
+                        }
                         runtimeRows = response;
                     });
                 }
 
                 api.setData = function (dicData) {
+
                     var sectionData = sectionDirectiveApi.getData();
-                    if (sectionData != undefined)
-                    {
-                        for(var prop in sectionData)
-                        {
+                    if (sectionData != undefined) {
+                        for (var prop in sectionData) {
                             dicData[prop] = sectionData[prop];
                         }
                     }

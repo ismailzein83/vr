@@ -223,6 +223,8 @@ namespace Vanrise.GenericData.Business
     {
         public Object FieldDescription { get; set; }
 
+        public Guid BusinessEntityDefinitionId { get; set; }
+
         public string ErrorMessage { get; set; }
 
         public Object FieldValue { get; set; }
@@ -230,6 +232,5 @@ namespace Vanrise.GenericData.Business
         public DataRecordFieldType FieldType { get; set; }
 
         public BERuntimeSelectorFilter BERuntimeSelectorFilter { get; set; }
-    
     }
 }

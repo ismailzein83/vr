@@ -2,7 +2,7 @@
 
     'use strict';
 
-    BasicAdvancedFilterRuntimeSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService','VR_GenericData_RecordQueryLogicalOperatorEnum'];
+    BasicAdvancedFilterRuntimeSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_RecordQueryLogicalOperatorEnum'];
 
     function BasicAdvancedFilterRuntimeSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_RecordQueryLogicalOperatorEnum) {
         return {
@@ -28,54 +28,67 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.showBasicAdvancedTabs = false;
+
                 defineAPI();
             }
             function defineAPI() {
                 var api = {};
-                
+
                 api.load = function (payload) {
                     var promises = [];
                     $scope.scopeModel.filters = [];
                     if (payload != undefined) {
-                         dataRecordTypeId = payload.dataRecordTypeId;
+                        dataRecordTypeId = payload.dataRecordTypeId;
+
                         var settings = payload.settings;
-                        if(settings != undefined)
-                        {
-                            if(settings.Filters != undefined)
-                            {
-                                for (var i = 0; i < settings.Filters.length; i++) {
-                                    var filter = settings.Filters[i];
+                        var filterValues = payload.filterValues;
+
+                        if (settings != undefined && settings.Filters != undefined && settings.Filters.length > 0) {
+                            var firstFilterShowInBasic = settings.Filters[0].ShowInBasic;
+
+                            for (var i = 0; i < settings.Filters.length; i++) {
+                                var filter = settings.Filters[i];
+
+                                if (!$scope.scopeModel.showBasicAdvancedTabs && firstFilterShowInBasic != filter.ShowInBasic) {
+                                    $scope.scopeModel.showBasicAdvancedTabs = true;
+                                }
+
+                                if (filterValues == undefined || filterValues[filter.FilterSettings.FieldName] == undefined) {
                                     var filterItem = {
-                                        payload:filter,
+                                        payload: filter,
                                         readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                         loadPromisedeferred: UtilsService.createPromiseDeferred(),
                                     };
+
                                     promises.push(filterItem.loadPromisedeferred.promise);
                                     addFilterAPI(filterItem);
                                 }
                             }
-
                         }
-                        function addFilterAPI(filterItem) {
-                            var filter = {
-                                editor: filterItem.payload.FilterSettings.RuntimeEditor,
-                                showInBasic: filterItem.payload.ShowInBasic,
-                            };
-                            filter.onFilterReady = function (api) {
-                                filter.filterAPI = api;
-                                filterItem.readyPromiseDeferred.resolve();
-                            };
 
-                            filterItem.readyPromiseDeferred.promise.then(function () {
-                                var filterDirectivePayload = {
-                                    settings: filterItem.payload.FilterSettings,
-                                    dataRecordTypeId: dataRecordTypeId
-                                };
-                                VRUIUtilsService.callDirectiveLoad(filter.filterAPI, filterDirectivePayload, filterItem.loadPromisedeferred);
-                            });
-                            $scope.scopeModel.filters.push(filter);
-                        }
                     }
+
+                    function addFilterAPI(filterItem) {
+                        var filter = {
+                            editor: filterItem.payload.FilterSettings.RuntimeEditor,
+                            showInBasic: filterItem.payload.ShowInBasic
+                        };
+                        filter.onFilterReady = function (api) {
+                            filter.filterAPI = api;
+                            filterItem.readyPromiseDeferred.resolve();
+                        };
+
+                        filterItem.readyPromiseDeferred.promise.then(function () {
+                            var filterDirectivePayload = {
+                                settings: filterItem.payload.FilterSettings,
+                                dataRecordTypeId: dataRecordTypeId
+                            };
+                            VRUIUtilsService.callDirectiveLoad(filter.filterAPI, filterDirectivePayload, filterItem.loadPromisedeferred);
+                        });
+                        $scope.scopeModel.filters.push(filter);
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -84,8 +97,7 @@
                     var recordFilters = [];
                     var filters = [];
 
-                    for(var i=0; i<$scope.scopeModel.filters.length; i++)
-                    {
+                    for (var i = 0; i < $scope.scopeModel.filters.length; i++) {
                         var filter = $scope.scopeModel.filters[i];
                         var data = filter.filterAPI.getData();
                         if (data != undefined) {
@@ -97,9 +109,8 @@
                                 filterData.ToTime = data.ToTime;
                             if (data.LimitResult != undefined)
                                 filterData.LimitResult = data.LimitResult;
-                            
-                            if (data.Filters != undefined)
-                            {
+
+                            if (data.Filters != undefined) {
                                 for (var j = 0; j < data.Filters.length; j++) {
                                     filters.push(data.Filters[j]);
                                 }

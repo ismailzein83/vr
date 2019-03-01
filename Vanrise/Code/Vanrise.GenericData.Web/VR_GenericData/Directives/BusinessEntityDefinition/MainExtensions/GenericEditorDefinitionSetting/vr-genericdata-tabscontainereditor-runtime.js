@@ -28,6 +28,8 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNot
             var definitionSettings;
             var dataRecordTypeId;
             var historyId;
+            var parentFieldValues;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.tabContainers = [];
@@ -45,6 +47,7 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNot
                         definitionSettings = payload.definitionSettings;
                         dataRecordTypeId = payload.dataRecordTypeId;
                         historyId = payload.historyId;
+                        parentFieldValues = payload.parentFieldValues;
                     }
                     if (definitionSettings != undefined)
                     {
@@ -79,7 +82,8 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNot
                                 dataRecordTypeId: dataRecordTypeId,
                                 definitionSettings: tabContainerDef.payload.TabSettings,
                                 selectedValues: selectedValues,
-                                historyId: historyId
+                                historyId: historyId, 
+                                parentFieldValues: parentFieldValues
                             };
                             VRUIUtilsService.callDirectiveLoad(tabContainer.editorRuntimeAPI, directivePayload, tabContainerDef.directiveLoadPromiseDeferred);
                         });

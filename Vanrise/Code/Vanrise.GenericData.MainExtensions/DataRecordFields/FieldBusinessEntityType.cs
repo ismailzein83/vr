@@ -250,7 +250,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             var businessEntityContext = new BusinessEntityGetIdByDescriptionContext
             {
                 FieldDescription = context.FieldDescription,
-                FieldType = context.FieldType
+                FieldType = context.FieldType,
+                BusinessEntityDefinitionId= BusinessEntityDefinitionId
             };
 
             var beManager = GetBusinessEntityManager();

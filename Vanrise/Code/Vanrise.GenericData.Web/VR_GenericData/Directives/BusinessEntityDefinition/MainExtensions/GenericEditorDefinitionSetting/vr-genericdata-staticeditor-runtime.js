@@ -31,9 +31,11 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRNotificati
             var definitionSettings;
             var dataRecordTypeId;
             var historyId;
+            var parentFieldValues;
+
             function initializeController() {
                 $scope.scopeModel = {};
-
+               
                 $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
                     editorRuntimeDirectiveApi = api;
                     editorRuntimeDirectivePromiseDeferred.resolve();
@@ -52,22 +54,24 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRNotificati
                         definitionSettings = payload.definitionSettings;
                         dataRecordTypeId = payload.dataRecordTypeId;
                         historyId = payload.historyId;
+                        parentFieldValues = payload.parentFieldValues;
 
                         if(definitionSettings != undefined)
                         {
                             $scope.scopeModel.runtimeEditor = definitionSettings.DirectiveName;
                         }
                     }
-                    promises.push(loadBusinessEntityDefinitionSelector());
+                    promises.push(loadStaticEditorDirective());
                       
-                    function loadBusinessEntityDefinitionSelector() {
+                    function loadStaticEditorDirective() {
                         var editorRuntimeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
                         editorRuntimeDirectivePromiseDeferred.promise.then(function () {
                             var directivePayload = {
                                 definitionSettings : definitionSettings,
                                 selectedValues : selectedValues,
                                 dataRecordTypeId: dataRecordTypeId,
-                                historyId: historyId
+                                historyId: historyId,
+                                parentFieldValues: parentFieldValues
                             };
                             VRUIUtilsService.callDirectiveLoad(editorRuntimeDirectiveApi, directivePayload, editorRuntimeDirectiveLoadDeferred);
                         });
