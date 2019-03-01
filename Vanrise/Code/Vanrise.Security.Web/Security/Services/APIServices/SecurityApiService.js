@@ -16,7 +16,9 @@
             GetPasswordValidationInfo: GetPasswordValidationInfo,
             GetRemotePasswordValidationInfo: GetRemotePasswordValidationInfo,
             ChangeExpiredPassword: ChangeExpiredPassword,
-            RedirectToApplication: RedirectToApplication
+            RedirectToApplication: RedirectToApplication,
+            RedirectToRegisteredApplication: RedirectToRegisteredApplication,
+            RedirectToCentralApplication: RedirectToCentralApplication
         });
 
         function Authenticate(authenticateObject) {
@@ -59,6 +61,16 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'RedirectToApplication'), {
                 applicationURL: applicationURL
             });
+        }
+
+        function RedirectToRegisteredApplication(applicationId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'RedirectToRegisteredApplication'), {
+                applicationId: applicationId
+            });
+        }
+
+        function RedirectToCentralApplication() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'RedirectToCentralApplication'));
         }
     }
 

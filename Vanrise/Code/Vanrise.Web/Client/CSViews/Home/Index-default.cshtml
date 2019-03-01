@@ -14,7 +14,7 @@
             i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
                 (i[r].q = i[r].q || []).push(arguments)
             }, i[r].l = 1 * new Date(); a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
     </script>
     @VRWebStyles.Render("~/Content/bootstrap")
@@ -26,7 +26,7 @@
     @VRWebStyles.Render("~/Content/Styles")
     @VRWebStyles.Render("~/Content/Themes")
 </head>
-<body @ViewBag.RTLClass ng-class="isMobile?'vr-mobile-view':''" ng-init="isLocalizationEnabled = @ViewBag.IsLocalizationEnabled ; hasRemoteApplications = @ViewBag.HasRemoteApplications;">
+<body @ViewBag.RTLClass ng-class="isMobile?'vr-mobile-view':''" ng-init="isLocalizationEnabled = @ViewBag.IsLocalizationEnabled ; hasRemoteApplications = @ViewBag.HasRemoteApplications; hasCentralApplication = @ViewBag.HasCentralApplication;">
     <div ng-show="spinner" class="loading-container"><img src="Client/Images/loader-mask.gif" /></div>
     <div ng-show="!spinner" ng-cloak id="mainBodyContainer" style="display:none">
 
@@ -72,7 +72,9 @@
                                     <li role="presentation" ng-if="@ViewBag.HasRemoteApplications">
                                         <a href="" ng-click="openRemoteApplicationsModal()">Switch Application</a>
                                     </li>
-
+                                    <li role="presentation" ng-if="@ViewBag.HasCentralApplication">
+                                        <a href="" ng-click="redirectToCentralApplication()">Back To Products</a>
+                                    </li>
                                     <li role="presentation">
                                         <a href="" ng-click="logout()">Logout</a>
                                     </li>
@@ -207,7 +209,7 @@
                 <!-- /#sidebar-wrapper -->
                 <!-- Page Content -->
                 <div id="page-content-wrapper">
-                    <div class="container-fluid vr-container">                        
+                    <div class="container-fluid vr-container">
                         <div class="col-lg-12" ng-view id="mainNgView" ng-if="$root.mainViewReady"></div>
                         <div class="col-lg-12" ng-if="$root.mainViewError">
                             <div class="alert alert-danger" style="position:absolute;margin-top: 50px;left: 50%;transform: translate(-50%,0%);">

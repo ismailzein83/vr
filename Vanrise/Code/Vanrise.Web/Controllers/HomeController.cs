@@ -33,14 +33,21 @@ namespace Vanrise.Web.Controllers
             ViewBag.RTLClass = isRTL ? " class= rtl " : "";
 
 
-            Vanrise.Security.Business.SecurityManager securityManager = new SecurityManager();
+            SecurityManager securityManager = new SecurityManager();
+            RegisteredApplicationManager registeredApplicationManager = new RegisteredApplicationManager();
+
             var loginUrl = securityManager.GetLoginURL();
             if (loginUrl != null)
                 ViewBag.LoginURL = loginUrl;
             int? loggedInUserId;
-            ViewBag.HasRemoteApplications = false;
+            ViewBag.HasRemoteApplications = "false";
+            ViewBag.HasCentralApplication = "false";
+
             if (SecurityContext.Current.TryGetLoggedInUserId(out loggedInUserId))
-                ViewBag.HasRemoteApplications = new Vanrise.Security.Business.RegisteredApplicationManager().HasRemoteApplications(loggedInUserId.Value).ToString().ToLower();
+            {
+                ViewBag.HasRemoteApplications = registeredApplicationManager.HasRemoteApplications(loggedInUserId.Value).ToString().ToLower();
+                ViewBag.HasCentralApplication = (!string.IsNullOrEmpty(registeredApplicationManager.GetRegisteredApplicationURL(loggedInUserId.Value))).ToString().ToLower();
+            }
 
             return View("~/Client/CSViews/Home/Index.cshtml");
         }

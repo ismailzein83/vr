@@ -214,5 +214,20 @@ namespace Vanrise.Security.MainExtensions.SecurityProvider
 
             return result.FindAllRecords(itm => itm.ApplicationId != this.ApplicationId);
         }
+
+        public override bool ValidateApplication(IValidateApplicationContext context)
+        {
+            if (context.ApplicationId != this.ApplicationId)
+                return false;
+
+            return true;
+        }
+
+        public override string GetApplicationURL(GetApplicationURLContext context)
+        {
+            var vrConnection = new VRConnectionManager().GetVRConnection<VRInterAppRestConnection>(VRConnectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+            return connectionSettings.BaseURL;
+        }
     }
 }

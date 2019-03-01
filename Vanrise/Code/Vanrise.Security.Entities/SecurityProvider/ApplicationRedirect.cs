@@ -22,6 +22,13 @@ namespace Vanrise.Security.Entities
         public AuthenticationToken AuthenticationToken { get; set; }
     }
 
+    public class CentralApplicationRedirectOutput
+    {
+        public ApplicationRedirectOutput ApplicationRedirectOutput { get; set; }
+
+        public string CentralApplicationURL { get; set; }
+    }
+
     public class ValidateSecurityTokenInput
     {
         public Guid? ApplicationId { get; set; }

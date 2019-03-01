@@ -13,7 +13,7 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Business
 {
-    public class SecurityManager: ISecurityManager
+    public class SecurityManager : ISecurityManager
     {
         static UserManager s_userManager = new UserManager();
         static ConfigManager s_configManager = new ConfigManager();
@@ -137,6 +137,130 @@ namespace Vanrise.Security.Business
 
             SecurityProviderValidateSecurityTokenContext context = new SecurityProviderValidateSecurityTokenContext() { Token = input.Token, ApplicationId = input.ApplicationId };
             bool isValid = securityProvider.Settings.ExtendedSettings.ValidateSecurityToken(context);
+            if (!isValid)
+                return null;
+
+            ApplicationRedirectOutput output = new ApplicationRedirectOutput()
+            {
+                CookieName = GetCookieName(),
+                AuthenticationToken = CreateAuthenticationToken(user)
+            };
+
+            return output;
+        }
+
+        public ApplicationRedirectOutput RedirectToRegisteredApplication(Guid applicationId)
+        {
+            RegisteredApplication application = new RegisteredApplicationManager().GetRegisteredApplicationbyId(applicationId);
+            application.ThrowIfNull("application", applicationId);
+
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            User user = new UserManager().GetUserbyId(userId);
+
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", user.SecurityProviderId);
+
+            SecurityToken currentUserToken;
+            if (!SecurityContext.TryGetSecurityToken(out currentUserToken))
+                return null;
+
+            string encryptedToken = Common.Cryptography.Encrypt(Common.Serializer.Serialize(currentUserToken), GetLocalTokenDecryptionKey());
+
+            ApplicationRedirectInput applicationRedirectInput = new ApplicationRedirectInput() { Email = user.Email, Token = encryptedToken, ApplicationId = applicationId };
+            return Vanrise.Common.VRWebAPIClient.Post<ApplicationRedirectInput, ApplicationRedirectOutput>(application.URL, "/api/VR_Sec/Security/TryGenerateTokenForRemote", applicationRedirectInput);
+        }
+
+        public ApplicationRedirectOutput TryGenerateTokenForRemote(ApplicationRedirectInput input)
+        {
+            User user = new UserManager().GetUserbyEmail(input.Email);
+            if (user == null)
+                return null;
+
+            if (user.IsSystemUser)
+                return null;
+
+            if (!new UserManager().IsUserEnable(user))
+            {
+                VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with inactive user");
+                return null;
+            }
+
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", user.SecurityProviderId);
+
+            ValidateApplicationContext validateApplicationContext = new ValidateApplicationContext() { ApplicationId = input.ApplicationId };
+            bool isApplicationValid = securityProvider.Settings.ExtendedSettings.ValidateApplication(validateApplicationContext);
+            if (!isApplicationValid)
+                return null;
+
+            SecurityProviderValidateSecurityTokenContext context = new SecurityProviderValidateSecurityTokenContext() { Token = input.Token };
+            bool isValid = securityProvider.Settings.ExtendedSettings.ValidateSecurityToken(context);
+            if (!isValid)
+                return null;
+
+            ApplicationRedirectOutput output = new ApplicationRedirectOutput()
+            {
+                CookieName = GetCookieName(),
+                AuthenticationToken = CreateAuthenticationToken(user)
+            };
+
+            return output;
+        }
+
+        public CentralApplicationRedirectOutput RedirectToCentralApplication()
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            User user = new UserManager().GetUserbyId(userId);
+
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", user.SecurityProviderId);
+
+            SecurityToken currentUserToken;
+            if (!SecurityContext.TryGetSecurityToken(out currentUserToken))
+                return null;
+
+            string encryptedToken = Common.Cryptography.Encrypt(Common.Serializer.Serialize(currentUserToken), GetLocalTokenDecryptionKey());
+
+            SecurityProviderGetApplicationRedirectInputContext context = new SecurityProviderGetApplicationRedirectInputContext() { Token = encryptedToken, Email = user.Email };
+            ApplicationRedirectInput applicationRedirectInput = securityProvider.Settings.ExtendedSettings.GetApplicationRedirectInput(context);
+
+            string centralApplicationURL = securityProvider.Settings.ExtendedSettings.GetApplicationURL(new GetApplicationURLContext());
+
+            ApplicationRedirectOutput output = Vanrise.Common.VRWebAPIClient.Post<ApplicationRedirectInput, ApplicationRedirectOutput>(centralApplicationURL, "/api/VR_Sec/Security/TryGenerateTokenForCentral", applicationRedirectInput);
+
+            return new CentralApplicationRedirectOutput() { ApplicationRedirectOutput = output, CentralApplicationURL = centralApplicationURL };
+        }
+
+
+        public ApplicationRedirectOutput TryGenerateTokenForCentral(ApplicationRedirectInput input)
+        {
+            User user = new UserManager().GetUserbyEmail(input.Email);
+            if (user == null)
+                return null;
+
+            if (user.IsSystemUser)
+                return null;
+
+            if (!new UserManager().IsUserEnable(user))
+            {
+                VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with inactive user");
+                return null;
+            }
+
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", user.SecurityProviderId);
+
+            RegisteredApplication registeredApplication = new RegisteredApplicationManager().GetRegisteredApplicationbyId(input.ApplicationId);
+            if (registeredApplication == null)
+                return null;
+
+            string applicationURL = registeredApplication.URL;
+            if (string.IsNullOrEmpty(applicationURL))
+                return null;
+
+            ValidateSecurityTokenInput validateSecurityTokenInput = new ValidateSecurityTokenInput() { Token = input.Token };
+
+            bool isValid = Vanrise.Common.VRWebAPIClient.Post<ValidateSecurityTokenInput, bool>(applicationURL, "/api/VR_Sec/Security/ValidateSecurityToken", validateSecurityTokenInput);
             if (!isValid)
                 return null;
 

@@ -100,6 +100,13 @@ namespace Vanrise.Security.Business
             return result != null && result.Count() > 0;
         }
 
+        public string GetRegisteredApplicationURL(int userId)
+        {
+            User user = new UserManager().GetUserbyId(userId);
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            return securityProvider.Settings.ExtendedSettings.GetApplicationURL(new GetApplicationURLContext());
+        }
+
         private RegisteredApplicationInfo RegisteredApplicationInfoMapper(RegisteredApplication registeredApplication)
         {
             return new RegisteredApplicationInfo()

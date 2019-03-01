@@ -53,6 +53,10 @@ namespace Vanrise.Security.Entities
         public virtual void OnBeforeSave(ISecurityProviderOnBeforeSaveContext context) { }
 
         public virtual IEnumerable<RegisteredApplicationInfo> GetRemoteRegisteredApplicationsInfo(ISecurityProviderGetRemoteRegisteredApplicationsInfoContext context) { return null; }
+
+        public virtual bool ValidateApplication(IValidateApplicationContext context) { return false; }
+
+        public virtual string GetApplicationURL(GetApplicationURLContext context) { return null; }
     }
 
     public abstract class SecurityProviderAuthenticationPayload
@@ -188,14 +192,14 @@ namespace Vanrise.Security.Entities
     {
         string Token { get; }
 
-        Guid ApplicationId { get; }
+        Guid? ApplicationId { get; }
     }
 
     public class SecurityProviderValidateSecurityTokenContext : ISecurityProviderValidateSecurityTokenContext
     {
         public string Token { get; set; }
 
-        public Guid ApplicationId { get; set; }
+        public Guid? ApplicationId { get; set; }
     }
 
     public interface ISecurityProviderOnBeforeSaveContext
@@ -220,5 +224,25 @@ namespace Vanrise.Security.Entities
     public class SecurityProviderGetRemoteRegisteredApplicationsInfoContext : ISecurityProviderGetRemoteRegisteredApplicationsInfoContext
     {
         public string SerializedFilter { get; set; }
+    }
+
+    public interface IValidateApplicationContext
+    {
+        Guid ApplicationId { get; }
+    }
+
+    public class ValidateApplicationContext : IValidateApplicationContext
+    {
+        public Guid ApplicationId { get; set; }
+    }
+
+    public interface IGetApplicationURLContext
+    {
+
+    }
+
+    public class GetApplicationURLContext : IGetApplicationURLContext
+    {
+
     }
 }

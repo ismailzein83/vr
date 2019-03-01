@@ -109,12 +109,44 @@ namespace Vanrise.Security.Web.Controllers
             return manager.RedirectToApplication(applicationURL);
         }
 
+        [HttpGet]
+        [Route("RedirectToRegisteredApplication")]
+        public ApplicationRedirectOutput RedirectToRegisteredApplication(Guid applicationId)
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.RedirectToRegisteredApplication(applicationId);
+        }
+
+        [HttpGet]
+        [Route("RedirectToCentralApplication")]
+        public CentralApplicationRedirectOutput RedirectToCentralApplication()
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.RedirectToCentralApplication();
+        }
+
         [IsAnonymous]
         [HttpPost]
         [Route("TryGenerateToken")]
         public ApplicationRedirectOutput TryGenerateToken(ApplicationRedirectInput input)
         {
             return _manager.TryGenerateToken(input);
+        }
+
+        [IsAnonymous]
+        [HttpPost]
+        [Route("TryGenerateTokenForRemote")]
+        public ApplicationRedirectOutput TryGenerateTokenForRemote(ApplicationRedirectInput input)
+        {
+            return _manager.TryGenerateTokenForRemote(input);
+        }
+
+        [IsAnonymous]
+        [HttpPost]
+        [Route("TryGenerateTokenForCentral")]
+        public ApplicationRedirectOutput TryGenerateTokenForCentral(ApplicationRedirectInput input)
+        {
+            return _manager.TryGenerateTokenForCentral(input);
         }
 
         [IsAnonymous]

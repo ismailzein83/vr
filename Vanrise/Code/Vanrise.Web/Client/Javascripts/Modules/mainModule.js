@@ -233,6 +233,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 };
                 VRModalService.showModal('/Client/Modules/Security/Views/Security/RemoteApplications.html', parameters, modalSettings);
             };
+
+            $scope.redirectToCentralApplication = function () {
+                SecurityService.redirectToCentralApplication($scope.securityProviderId);
+            };
+
             $scope.openMobileUserActionPopup = function () {
                 var modalSettings = {
                     autoclose: true
