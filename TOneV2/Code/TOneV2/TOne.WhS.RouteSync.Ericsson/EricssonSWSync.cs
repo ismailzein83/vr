@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Ericsson.Business;
 using TOne.WhS.RouteSync.Ericsson.Data;
@@ -986,6 +987,8 @@ namespace TOne.WhS.RouteSync.Ericsson
         private EricssonRoutesWithCommands GetEricssonRoutesWithCommands(string switchId, Dictionary<string, CustomerMappingWithActionType> customersToDeleteByBO,
         Dictionary<string, List<EricssonRouteWithCommands>> ericssonRoutesToDeleteWithCommands, Dictionary<string, List<EricssonRouteWithCommands>> ericssonARoutesToDeleteWithCommands)
         {
+            TechnicalCodeManager technicalCodeManager = new TechnicalCodeManager();
+
             Dictionary<string, List<EricssonRouteWithCommands>> result = ericssonRoutesToDeleteWithCommands != null ? new Dictionary<string, List<EricssonRouteWithCommands>>(ericssonRoutesToDeleteWithCommands) : new Dictionary<string, List<EricssonRouteWithCommands>>();
             Dictionary<string, List<EricssonRouteWithCommands>> aRouteResult = ericssonARoutesToDeleteWithCommands != null ? new Dictionary<string, List<EricssonRouteWithCommands>>(ericssonARoutesToDeleteWithCommands) : new Dictionary<string, List<EricssonRouteWithCommands>>();
 
@@ -1008,7 +1011,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                     {
                         foreach (var routeCompareResult in routeDifferences.RoutesToAdd)
                         {
-                            var commands = GetRouteCommand(routeCompareResult);
+                            var commands = GetRouteCommand(routeCompareResult, technicalCodeManager);
 
                             if (Utilities.GetEnumAttribute<EricssonRouteType, EricssonRouteTypeAttribute>(routeCompareResult.Route.RouteType).IsARoute)
                                 aRouteCustomerEricssonRoutesWithCommands.Add(new EricssonRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Add });
@@ -1021,7 +1024,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                     {
                         foreach (var routeCompareResult in routeDifferences.RoutesToUpdate)
                         {
-                            var commands = GetRouteCommand(routeCompareResult);
+                            var commands = GetRouteCommand(routeCompareResult, technicalCodeManager);
 
                             if (Utilities.GetEnumAttribute<EricssonRouteType, EricssonRouteTypeAttribute>(routeCompareResult.Route.RouteType).IsARoute)
                                 aRouteCustomerEricssonRoutesWithCommands.Add(new EricssonRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Update });
@@ -1076,14 +1079,14 @@ namespace TOne.WhS.RouteSync.Ericsson
             return deletedRouteCommands;
         }
 
-        private List<string> GetRouteCommand(EricssonConvertedRouteCompareResult routeCompareResult)
+        private List<string> GetRouteCommand(EricssonConvertedRouteCompareResult routeCompareResult, TechnicalCodeManager technicalCodeManager)
         {
             List<string> routeCommands = new List<string>();
 
             var route = routeCompareResult.Route;
             EricssonRouteProperties ericssonRouteParameters = GetRouteTypeAndParameters(route.Code, route.RouteType);
 
-            routeCommands.Add(GetRouteCommandString(route, ericssonRouteParameters));
+            routeCommands.Add(GetRouteCommandString(route, ericssonRouteParameters, technicalCodeManager));
 
             return routeCommands;
         }
@@ -1109,7 +1112,7 @@ namespace TOne.WhS.RouteSync.Ericsson
             return codeGroupObject.Code;
         }
 
-        private string GetRouteCommandString(EricssonConvertedRoute route, EricssonRouteProperties routeParamerters)
+        private string GetRouteCommandString(EricssonConvertedRoute route, EricssonRouteProperties routeParamerters, TechnicalCodeManager technicalCodeManager)
         {
             StringBuilder strCommand = new StringBuilder();
             string L = null;
@@ -1128,7 +1131,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
                     string mValue = string.IsNullOrEmpty(routeParamerters.M) ? null : string.Format("0-{0}", routeParamerters.M);
 
-                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, L, mValue, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null, route.RouteType));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, L, mValue, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null, route.RouteType, technicalCodeManager));
                     break;
 
                 default:
@@ -1138,7 +1141,7 @@ namespace TOne.WhS.RouteSync.Ericsson
             return strCommand.ToString();
         }
 
-        private StringBuilder GetRouteCommandStringText(string code, string B, int RC, string L, string M, string D, string cc, string CCL, string F, string BNT, EricssonRouteType routeType)
+        private StringBuilder GetRouteCommandStringText(string code, string B, int RC, string L, string M, string D, string cc, string CCL, string F, string BNT, EricssonRouteType routeType, TechnicalCodeManager technicalCodeManager)
         {
             string insertCommand = "";
             string bCommand = "";
@@ -1165,7 +1168,11 @@ namespace TOne.WhS.RouteSync.Ericsson
             }
             else
             {
-                script.AppendFormat(",RC={0},TRD={1}", RC, code);
+                TechnicalCodePrefix technicalCodePrefix = technicalCodeManager.GetTechnicalCodeByNumberPrefix(code);
+                if (technicalCodePrefix == null)
+                    throw new NullReferenceException($"No Technical Code Match is found for the following Code: '{code}'");
+
+                script.AppendFormat(",RC={0},TRD={1}", RC, technicalCodePrefix.ZoneID);
 
                 if (!string.IsNullOrEmpty(L))
                     script.AppendFormat(",L={0}", L);

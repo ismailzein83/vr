@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
-using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -19,11 +15,12 @@ namespace TOne.WhS.BusinessEntity.Business
             context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
 
             TechnicalZoneManager technicalZoneManager = new TechnicalZoneManager();
-            if (!technicalZoneManager.CanAddMoreZones())
+            string outputMessage;
+            if (!technicalZoneManager.CanAddMoreZones(out outputMessage))
             {
                 var zoneName = (string)context.GenericBusinessEntity.FieldValues.GetRecord("ZoneName");
                 context.OutputResult.Result = false;
-                context.OutputResult.Messages.Add($"Cannot Add More Zones! Failed to add Zone '{zoneName}'");
+                context.OutputResult.Messages.Add($"Failed to add Zone '{zoneName}': {outputMessage}");
             }
         }
     }

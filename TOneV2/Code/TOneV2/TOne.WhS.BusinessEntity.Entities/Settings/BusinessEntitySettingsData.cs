@@ -4,9 +4,24 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class BusinessEntitySettingsData : SettingData
     {
-        public CachingExpirationIntervals CachingExpirationIntervals { get; set; } 
+        public CachingExpirationIntervals CachingExpirationIntervals { get; set; }
 
-        public TechnicalNumberPlanSettings TechnicalNumberPlanSettings { get; set; }
+        private TechnicalNumberPlanSettings _technicalNumberPlanSettings;
+
+        public TechnicalNumberPlanSettings TechnicalNumberPlanSettings
+        {
+            get
+            {
+                if (_technicalNumberPlanSettings == null)
+                    _technicalNumberPlanSettings = new TechnicalNumberPlanSettings() { MaxTechnicalZoneCount = 4000 };
+
+                return _technicalNumberPlanSettings;
+            }
+            set
+            {
+                _technicalNumberPlanSettings = value;
+            }
+        }
     }
 
     public class CachingExpirationIntervals

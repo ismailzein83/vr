@@ -13,17 +13,20 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
 
-        public bool CanAddMoreZones()
+        public bool CanAddMoreZones(out string outputMessage)
         {
+            outputMessage = null;
+
             int maxTechnicalZoneCount = new ConfigManager().GetTechnicalNumberPlanSettings().MaxTechnicalZoneCount;
             var allTechnicalZones = GetTechnicalZones();
-            if (allTechnicalZones == null || allTechnicalZones.Count() == 0)
-                return true;
 
-            if (allTechnicalZones.Count() < maxTechnicalZoneCount)
-                return true;
+            if (allTechnicalZones != null && allTechnicalZones.Count() >= maxTechnicalZoneCount)
+            {
+                outputMessage = $"Maximum number of Technical Zones ({maxTechnicalZoneCount}) has been reached";
+                return false;
+            }
 
-            return false;
+            return true;
         }
 
         public IEnumerable<TechnicalZone> GetTechnicalZones()
