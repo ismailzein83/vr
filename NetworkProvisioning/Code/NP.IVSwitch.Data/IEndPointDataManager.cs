@@ -16,5 +16,9 @@ namespace NP.IVSwitch.Data
         List<AccessList> GetAccessList();
         bool EndPointAclUpdate(IEnumerable<int> endPointIds, int value, RouteTableViewType routeTableViewType,UserType userType  );
         bool RouteTableEndPointUpdate(RouteTableInput routeTableInput, int routeTableId);
-    }
+		bool DeleteEndPoint(EndPoint endPoint);
+		bool DeleteAccount(EndPoint endPoint);
+		bool SetRouteTableAsDeleted(int endPointId);
+
+	}
 }

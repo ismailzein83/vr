@@ -56,5 +56,13 @@ namespace NP.IVSwitch.Web.Controllers
         {
             return _manager.GetEndPointHistoryDetailbyHistoryId(endPointHistoryId);
         }
-    }
+
+		[HttpGet]
+		[Route("DeleteEndPoint")]
+		public Vanrise.Entities.DeleteOperationOutput<object> DeleteEndPoint(int endPointId)
+		{
+			return _manager.DeleteEndPoint(endPointId);
+		}
+
+	}
 }

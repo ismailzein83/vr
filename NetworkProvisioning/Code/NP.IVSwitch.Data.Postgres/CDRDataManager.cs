@@ -104,5 +104,11 @@ namespace NP.IVSwitch.Data.Postgres
 
             return liveCdrItem;
         }
+
+		public void DeleteHelperAccount(int accountId)
+		{
+			String cmdDeleteHelperAccount = string.Format("delete from ui_helper_accounts where account_id={0}", accountId);
+			ExecuteNonQueryText(cmdDeleteHelperAccount, cmd => { });
+		}
     }
 }

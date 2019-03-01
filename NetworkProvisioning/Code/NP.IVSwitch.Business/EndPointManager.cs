@@ -253,8 +253,8 @@ namespace NP.IVSwitch.Business
 				string message;
 				if (!ValidateAllAccountsHosts(endPointItem.Entity, out message))
 				{
-						updateOperationOutput.ShowExactMessage = true;
-						updateOperationOutput.Message = message;
+					updateOperationOutput.ShowExactMessage = true;
+					updateOperationOutput.Message = message;
 					return updateOperationOutput;
 				}
 				if (helper.ValidateSameAccountHost(hosts, endPointItem.Entity, out message))
@@ -364,6 +364,125 @@ namespace NP.IVSwitch.Business
 			return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
 				.IsCacheExpired(ref lastCheckTime);
 		}
+		public DeleteOperationOutput<object> DeleteEndPoint(int endPointId)
+		{
+			IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
+			Helper.SetSwitchConfig(dataManager);
+			DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>
+			{
+				Result = DeleteOperationResult.Failed
+			};
+			EndPoint endPointToDelete = GetEndPoint(endPointId);
+			var carrierProfileManager = new CarrierProfileManager();
+			var carrierAccountManager = new CarrierAccountManager();
+			bool doesCarrAccHaveACLExtendedSettings = false;
+			bool doesCarrAccHaveSIPExtendedSettings = false;
+			bool doesProfileHasExtendedSettings = false;
+			int? carrierAccountId = this.GetEndPointCarrierAccountId(endPointId);
+			int? profileId = carrierAccountManager.GetCarrierProfileId(carrierAccountId.Value);
+
+			if (!profileId.HasValue)
+			{
+				return deleteOperationOutput;
+			}
+
+			EndPointCarrierAccountExtension endPointsExtendedSettings = null;
+			AccountCarrierProfileExtension accountCarrierProfileExtension = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profileId.Value) ?? new AccountCarrierProfileExtension();
+
+			if (carrierAccountId.HasValue)
+				endPointsExtendedSettings = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(carrierAccountId.Value);
+
+			if (endPointsExtendedSettings != null && endPointsExtendedSettings.AclEndPointInfo != null && endPointsExtendedSettings.AclEndPointInfo.Count > 0)
+				doesCarrAccHaveACLExtendedSettings = true;
+
+			if (endPointsExtendedSettings != null && endPointsExtendedSettings.UserEndPointInfo != null && endPointsExtendedSettings.UserEndPointInfo.Count > 0)
+				doesCarrAccHaveSIPExtendedSettings = true;
+
+
+
+			switch (endPointToDelete.EndPointType)
+			{
+				case UserType.ACL:
+					if (doesCarrAccHaveACLExtendedSettings)
+					{
+						endPointsExtendedSettings.AclEndPointInfo.RemoveAll(x => x.EndPointId == endPointId);
+						if (endPointsExtendedSettings.AclEndPointInfo.Count == 0)
+							endPointsExtendedSettings.AclEndPointInfo = null;
+
+						if (endPointsExtendedSettings.AclEndPointInfo == null && !doesCarrAccHaveSIPExtendedSettings)
+						{
+							carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId.Value, null);
+							if (endPointToDelete.RouteTableId.HasValue)
+								dataManager.SetRouteTableAsDeleted(endPointToDelete.RouteTableId.Value);
+						}
+						else
+							carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId.Value, endPointsExtendedSettings);
+
+					}
+
+					break;
+
+				case UserType.SIP:
+
+					if (doesCarrAccHaveSIPExtendedSettings)
+					{
+						endPointsExtendedSettings.UserEndPointInfo.RemoveAll(x => x.EndPointId == endPointId);
+						if (endPointsExtendedSettings.UserEndPointInfo.Count == 0)
+							endPointsExtendedSettings.UserEndPointInfo = null;
+
+						if (endPointsExtendedSettings.UserEndPointInfo == null && !doesCarrAccHaveACLExtendedSettings)
+						{
+							carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId.Value, null);
+							if (endPointToDelete.RouteTableId.HasValue)
+								dataManager.SetRouteTableAsDeleted(endPointToDelete.RouteTableId.Value);
+						}
+						else
+							carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId.Value, endPointsExtendedSettings);
+					}
+
+					break;
+				default:
+					deleteOperationOutput.Message = "Carrier Account Have null extended settings";
+					deleteOperationOutput.ShowExactMessage = true;
+					return deleteOperationOutput;
+			}
+
+
+
+			var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(profileId.Value, true, false);
+			if (profileCarrierAccounts != null)
+			{
+				foreach (var account in profileCarrierAccounts)
+				{
+					EndPointCarrierAccountExtension endPointCarrierAccountExtension = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(account.CarrierAccountId);
+					if (endPointCarrierAccountExtension != null)
+					{
+						if (endPointCarrierAccountExtension.AclEndPointInfo != null && endPointCarrierAccountExtension.AclEndPointInfo.Count > 0 || endPointCarrierAccountExtension.UserEndPointInfo != null && endPointCarrierAccountExtension.UserEndPointInfo.Count > 0)
+						{
+							doesProfileHasExtendedSettings = true;
+							break;
+						}
+					}
+				}
+			}
+
+			if (!doesProfileHasExtendedSettings && accountCarrierProfileExtension != null && !accountCarrierProfileExtension.VendorAccountId.HasValue)
+			{
+				carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountCarrierProfileExtension>(profileId.Value, null);
+				dataManager.DeleteAccount(endPointToDelete);
+			}
+			else
+				if (!doesProfileHasExtendedSettings && accountCarrierProfileExtension != null)
+			{
+				accountCarrierProfileExtension.CustomerAccountId = default(int?);
+				carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountCarrierProfileExtension>(profileId.Value, accountCarrierProfileExtension);
+			}
+			dataManager.DeleteEndPoint(endPointToDelete);
+			Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+			deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+			return deleteOperationOutput;
+		}
+
 
 		#endregion
 

@@ -48,6 +48,11 @@
             });
         }
 
+		function DeleteEndPoint(endPointId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'DeleteEndPoint'), {
+				endPointId: endPointId,
+			});
+		}
         return ({
             GetFilteredEndPoints: GetFilteredEndPoints,
             GetEndPoint: GetEndPoint,
@@ -56,7 +61,8 @@
             HasAddEndPointPermission: HasAddEndPointPermission,
             HasEditEndPointPermission: HasEditEndPointPermission,
             GetEndPointsInfo: GetEndPointsInfo,
-            GetEndPointHistoryDetailbyHistoryId: GetEndPointHistoryDetailbyHistoryId
+			GetEndPointHistoryDetailbyHistoryId: GetEndPointHistoryDetailbyHistoryId,
+			DeleteEndPoint: DeleteEndPoint
         });
     }
 

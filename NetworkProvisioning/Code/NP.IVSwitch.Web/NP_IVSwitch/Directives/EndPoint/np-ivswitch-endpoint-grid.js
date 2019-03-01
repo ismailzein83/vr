@@ -103,6 +103,11 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 					clicked: cloneEndPoint,
 					haspermission: hasCloneEndPointPermisssion
 				});
+				$scope.scopeModel.menuActions.push({
+					name: 'Delete',
+					clicked: deleteEndPoint,
+					//haspermission: hasCloneEndPointPermisssion
+				});
             }
             function editEndPoint(EndPointItem) {
                 var onEndPointUpdated = function (updatedEndPoint) {
@@ -118,6 +123,17 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 					gridAPI.itemUpdated(addedEndPoint);
 				};
 				NP_IVSwitch_EndPointService.cloneEndPoint(carrierAccountId,EndPointItem.Entity.EndPointId, onEndPointAdded);
+			}
+			function deleteEndPoint(EndPointItem) {
+				VRNotificationService.showDeleteConfirmation().then(function (response) {
+					if (response) {
+						NP_IVSwitch_EndPointAPIService.DeleteEndPoint(EndPointItem.Entity.EndPointId).then(function (response) {
+							if (VRNotificationService.notifyOnItemDeleted("End Point", response, "Entity.Description")) {
+								gridAPI.itemDeleted(EndPointItem);
+							}
+						});
+					}
+				});
 			}
 
 
