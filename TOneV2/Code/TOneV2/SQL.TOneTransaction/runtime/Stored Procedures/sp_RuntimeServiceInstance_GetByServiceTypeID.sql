@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [runtime].[sp_RuntimeServiceInstance_GetAll] 
+﻿
+
+CREATE PROCEDURE [runtime].[sp_RuntimeServiceInstance_GetByServiceTypeID] 
+	@ServiceTypeID int
 AS
 BEGIN
 	SELECT s.[ID]
@@ -7,5 +10,5 @@ BEGIN
       ,s.[ServiceInstanceInfo]
   FROM [runtime].[RuntimeServiceInstance] s WITH (NOLOCK)
   JOIN [runtime].[RunningProcess] p WITH (NOLOCK) ON s.ProcessID = p.ID
-  WHERE ISNULL(IsDraft, 0) = 0
+  WHERE s.ServiceTypeID = @ServiceTypeID AND ISNULL(IsDraft, 0) = 0
 END

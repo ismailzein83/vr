@@ -14,12 +14,14 @@ BEGIN
            (RuntimeNodeID
 		   ,RuntimeNodeInstanceID
 		   ,OSProcessID
+		   ,IsDraft
            ,[StartedTime]
            ,AdditionalInfo)
      VALUES
            (@RuntimeNodeID
 		   ,@RuntimeNodeInstanceID
 		   ,@OSProcessID
+		   ,1
            ,GETDATE()
            ,@AdditionalInfo)
            

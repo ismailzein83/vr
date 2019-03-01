@@ -172,7 +172,6 @@
     <Build Include="runtime\Tables\RuntimeManager.sql" />
     <Build Include="VRNotification\Tables\VRAlertRuleExecution.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeManager_GetServiceURL.sql" />
-    <Build Include="runtime\Stored Procedures\sp_RunningProcess_IsExists.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_Delete.sql" />
     <Build Include="Security\VRNotification.sql" />
@@ -244,6 +243,11 @@
     <Build Include="bp\Stored Procedures\sp_BPTimeSubscription_Delete.sql" />
     <Build Include="VRNotification\User Defined Types\EventKeysTable.sql" />
     <Build Include="queue\Stored Procedures\sp_HoldRequest_DeleteByBPInstanceId.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RunningProcess_SetReady.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetMaxIdAndCount.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_GetByServiceTypeID.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeManager_GetNonTimedOutRuntimeManagerInstanceID.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetByID.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessProcess.PostDeployment.sql" />

@@ -1,5 +1,7 @@
 ﻿
-CREATE PROCEDURE [runtime].[sp_RunningProcess_GetAll]
+
+CREATE PROCEDURE [runtime].[sp_RunningProcess_GetByID]
+	@ProcessID INT
 AS
 BEGIN
            
@@ -10,5 +12,5 @@ BEGIN
       ,[StartedTime]
       ,AdditionalInfo
 	 FROM [runtime].[RunningProcess] WITH(NOLOCK) 
-	 WHERE ISNULL(IsDraft, 0) = 0
+	 WHERE ID = @ProcessID
 END
