@@ -38,6 +38,8 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.showAddButton = true;
+                $scope.scopeModel.showUploadButton = true;
+
                 $scope.scopeModel.hasFilter = true;
 
                 $scope.scopeModel.onFilterDirectiveReady = function (api) {
@@ -49,12 +51,6 @@
                     gridDirectiveAPI = api;
                     gridDirectiveReadyDeferred.resolve();
                 };
-
-                function checkDoesUserHaveAddAccess(businessDefinitionId) {
-                    VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(businessDefinitionId).then(function (response) {
-                        $scope.scopeModel.showAddButton = response;
-                    });
-                }
 
                 $scope.search = function () {
                     return gridDirectiveAPI.load(getGridFilter());
@@ -93,6 +89,15 @@
                     promises.push(loadBusinessEntityDefinitionSettings());
                     promises.push(loadFilterDirective());
                     promises.push(loadGridDirective());
+                    promises.push(loadCheckDoesUserHaveAddAccess());
+
+                    function loadCheckDoesUserHaveAddAccess() {
+                        return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(businessDefinitionId).then(function (response) {
+                            $scope.scopeModel.showAddButton = $scope.scopeModel.showAddButton && response;
+                            $scope.scopeModel.showUploadButton = $scope.scopeModel.showAddButton && $scope.scopeModel.showUploadButton;
+                        });
+                    }
+
 
                     function loadBusinessEntityDefinitionSettings() {
 
@@ -102,8 +107,9 @@
                                 if (genericBEDefinitionSettings.FilterDefinition != undefined && genericBEDefinitionSettings.FilterDefinition.Settings != undefined) {
                                     $scope.scopeModel.filterDirective = genericBEDefinitionSettings.FilterDefinition.Settings.RuntimeEditor;
                                 }
-                                $scope.scopeModel.showAddButton = !genericBEDefinitionSettings.HideAddButton;
-                                $scope.scopeModel.showUploadButton = genericBEDefinitionSettings.ShowUpload;
+
+                                $scope.scopeModel.showAddButton = $scope.scopeModel.showAddButton && !genericBEDefinitionSettings.HideAddButton;
+                                $scope.scopeModel.showUploadButton = genericBEDefinitionSettings.ShowUpload && $scope.scopeModel.showAddButton;
                             }
                         });
                     }
@@ -113,7 +119,7 @@
                         UtilsService.waitMultiplePromises([loadBusinessEntityDefinitionSettings()]).then(function () {
                             if ($scope.scopeModel.filterDirective != undefined) {
                                 filterDirectiveReadyDeferred.promise.then(function () {
-                                    
+
                                     //var context = {
                                     //    showSearchButton: function (value) {
                                     //        $scope.scopeModel.hasFilter = $scope.scopeModel.hasFilter || value;

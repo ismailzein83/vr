@@ -54,7 +54,9 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.showAddButton = false;
+                $scope.scopeModel.showAddButton = true;
+                $scope.scopeModel.showUploadButton = true;
+
                 $scope.scopeModel.showActionButtons = false;
                 $scope.scopeModel.showMenuActions = false;
                 $scope.scopeModel.deselectAllClicked = function () {
@@ -106,7 +108,8 @@
 
                 function checkDoesUserHaveAddAccess(definitionId) {
                     VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(definitionId).then(function (response) {
-                        $scope.scopeModel.showAddButton = response;
+                        $scope.scopeModel.showAddButton = $scope.scopeModel.showAddButton && response;
+                        $scope.scopeModel.showUploadButton = $scope.scopeModel.showAddButton && $scope.scopeModel.showUploadButton;
                     });
 
                 }
@@ -204,8 +207,8 @@
                         if (genericBEDefinitionSettings.FilterDefinition != undefined && genericBEDefinitionSettings.FilterDefinition.Settings != undefined) {
                             $scope.scopeModel.filterDirective = genericBEDefinitionSettings.FilterDefinition.Settings.RuntimeEditor;
                         }
-                        $scope.scopeModel.showAddButton = !genericBEDefinitionSettings.HideAddButton;
-                        $scope.scopeModel.showUploadButton = genericBEDefinitionSettings.ShowUpload;
+                        $scope.scopeModel.showAddButton = $scope.scopeModel.showAddButton && !genericBEDefinitionSettings.HideAddButton;
+                        $scope.scopeModel.showUploadButton = genericBEDefinitionSettings.ShowUpload && $scope.scopeModel.showAddButton;
                     }
                 });
             }
