@@ -257,8 +257,9 @@ namespace TestRuntime
                                 ddrExtraFields.Add("Skip_R_0_6", skip_0_6.Trim());
 
                             string trdCode = currentRecord.Substring(7, 7);
-                            if (!string.IsNullOrEmpty(trdCode))
-                                ddr.TRDCode = trdCode.Trim();
+                            int trdInt;
+                            if (!string.IsNullOrEmpty(trdCode) && int.TryParse(trdCode.Trim(), out trdInt) && trdInt > 0)
+                                ddr.TRDCode = trdInt;
 
                             ddr.N1 = Convert.ToInt64(currentRecord.Substring(14, 10));
                             ddr.N2 = Convert.ToInt64(currentRecord.Substring(24, 10));
