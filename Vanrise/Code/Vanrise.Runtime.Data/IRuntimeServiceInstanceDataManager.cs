@@ -14,5 +14,6 @@ namespace Vanrise.Runtime.Data
         List<RuntimeServiceInstance> GetServices();
 
         void DeleteByProcessId(int runtimeProcessId);
+        List<RuntimeServiceInstance> GetServicesByTypeId(int serviceTypeId);
     }
 }

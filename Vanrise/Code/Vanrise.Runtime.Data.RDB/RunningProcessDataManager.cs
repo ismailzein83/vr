@@ -19,6 +19,7 @@ namespace Vanrise.Runtime.Data.RDB
         const string COL_RuntimeNodeID = "RuntimeNodeID";
         const string COL_RuntimeNodeInstanceID = "RuntimeNodeInstanceID";
         const string COL_OSProcessID = "OSProcessID";
+        const string COL_IsDraft = "IsDraft";
         const string COL_StartedTime = "StartedTime";
         const string COL_AdditionalInfo = "AdditionalInfo";
 
@@ -29,6 +30,7 @@ namespace Vanrise.Runtime.Data.RDB
             columns.Add(COL_RuntimeNodeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_RuntimeNodeInstanceID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_OSProcessID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_IsDraft, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
             columns.Add(COL_StartedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_AdditionalInfo, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
 
@@ -40,6 +42,10 @@ namespace Vanrise.Runtime.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_StartedTime
             });
+        }
+
+        public RunningProcessDataManager()
+        {
         }
 
         BaseRDBDataProvider GetDataProvider()
@@ -61,6 +67,7 @@ namespace Vanrise.Runtime.Data.RDB
             insertQuery.Column(COL_RuntimeNodeID).Value(runtimeNodeId);
             insertQuery.Column(COL_RuntimeNodeInstanceID).Value(runtimeNodeInstanceId);
             insertQuery.Column(COL_OSProcessID).Value(osProcessId);
+            insertQuery.Column(COL_IsDraft).Value(true);
 
             if (additionalInfo != null)
                 insertQuery.Column(COL_AdditionalInfo).Value(Common.Serializer.Serialize(additionalInfo));
@@ -86,7 +93,23 @@ namespace Vanrise.Runtime.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
+            var where = selectQuery.Where();
+            AddNotDraftCondition(where, TABLE_ALIAS);
+
             return queryContext.GetItems(RunningProcessInfoMapper);
+        }
+
+        public RunningProcessInfo GetRunningProcess(int processId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            selectQuery.Where().EqualsCondition(COL_ID).Value(processId);            
+
+            return queryContext.GetItem(RunningProcessInfoMapper);
         }
 
         public List<Runtime.Entities.RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<Runtime.Entities.RunningProcessQuery> input)
@@ -96,7 +119,11 @@ namespace Vanrise.Runtime.Data.RDB
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            selectQuery.Where().EqualsCondition(COL_RuntimeNodeInstanceID).Value(input.Query.RuntimeNodeInstanceId);
+
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_RuntimeNodeInstanceID).Value(input.Query.RuntimeNodeInstanceId);
+
+            AddNotDraftCondition(where, TABLE_ALIAS);
 
             return queryContext.GetItems(RunningProcessDetailsMapper);
         }
@@ -112,18 +139,49 @@ namespace Vanrise.Runtime.Data.RDB
             queryContext.ExecuteNonQuery();
         }
 
-        public bool IsExists(int runningProcessId)
+        public void GetRunningProcessSummary(out int? maxProcessId, out int processCount)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Column(COL_ID);
-            selectQuery.Where().EqualsCondition(COL_ID).Value(runningProcessId);
 
-            return queryContext.ExecuteScalar().NullableIntValue.HasValue;
+            var selectAggregates = selectQuery.SelectAggregates();
+            selectAggregates.Aggregate(RDBNonCountAggregateType.MAX, COL_ID, "MaxID");
+            selectAggregates.Count("NbOfProcesses");
+
+            var where = selectQuery.Where();
+            AddNotDraftCondition(where, TABLE_ALIAS);
+
+            int? maxProcessId_local = null;
+            int processCount_local = 0;
+            queryContext.ExecuteReader(
+                (reader) =>
+                {
+                    if (reader.Read())
+                    {
+                        maxProcessId_local = reader.GetNullableInt("MaxID");
+                        processCount_local = reader.GetIntWithNullHandling("NbOfProcesses");
+                    }
+                });
+            maxProcessId = maxProcessId_local;
+            processCount = processCount_local;
         }
 
+        public void SetRunningProcessReady(int processId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+
+            updateQuery.Column(COL_IsDraft).Value(false);
+
+            updateQuery.Where().EqualsCondition(COL_ID).Value(processId);
+
+            queryContext.ExecuteNonQuery();
+        }
+        
         #endregion
 
         #region Private Methods
@@ -160,6 +218,21 @@ namespace Vanrise.Runtime.Data.RDB
                 runningProcessDetails.AdditionalInfo = Common.Serializer.Deserialize(serializedAdditionInfo) as RunningProcessAdditionalInfo;
             return runningProcessDetails;
         }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal static void JoinRunningProcess(RDBJoinContext joinContext, RDBJoinType joinType, string runningProcessTableAlias, string otherTableAlias, string otherTableProcessIdColumnName)
+        {
+            joinContext.JoinOnEqualOtherTableColumn(joinType, TABLE_NAME, runningProcessTableAlias, COL_ID, otherTableAlias, otherTableProcessIdColumnName, true);
+        }
+
+        internal static void AddNotDraftCondition(RDBConditionContext conditionContext, string runningProcessTableAlias)
+        {
+            conditionContext.ConditionIfColumnNotNull(runningProcessTableAlias, COL_IsDraft).EqualsCondition(runningProcessTableAlias, COL_IsDraft).Value(false);
+        }
+
         #endregion
     }
 }

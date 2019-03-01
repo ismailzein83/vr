@@ -15,14 +15,9 @@ namespace Vanrise.Runtime
 {
     public class RunningProcessManager : IRunningProcessManager
     {
-
+        static IRunningProcessDataManager s_dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
         static RunningProcessInfo s_currentProcess;
-        static List<RunningProcessInfo> s_allRunningProcesses;
-        static Dictionary<int, RunningProcessInfo> s_allRunningProcessesDict;
-        static Object s_lockObj = new object();
-        static bool s_areProcessesChanged = true;
         
-
         public static RunningProcessInfo CurrentProcess
         {
             get
@@ -44,71 +39,34 @@ namespace Vanrise.Runtime
                 return s_currentProcess != null;
             }
         }
-
-        internal static void SetRunningProcessChanged()
-        {
-            lock(s_lockObj)
-            {
-                s_areProcessesChanged = true;
-            }
-        }
-
-        private void RefreshRunningProcessesIfNeeded()
-        {
-            if(s_areProcessesChanged)
-            {
-                lock(s_lockObj)
-                {
-                    if(s_areProcessesChanged)
-                    {
-                        IRunningProcessDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
-                        var allRunningProcesses = dataManager.GetRunningProcesses();
-                        Dictionary<int, RunningProcessInfo> allRunningProcessesDict = allRunningProcesses.ToDictionary(itm => itm.ProcessId, itm => itm);
-                        s_allRunningProcesses = allRunningProcesses;
-                        s_allRunningProcessesDict = allRunningProcessesDict;
-                        s_areProcessesChanged = false;
-                    }
-                }
-            }
-        }
-
+        
         public Dictionary<int, RunningProcessInfo> GetAllRunningProcesses()
         {
-            RefreshRunningProcessesIfNeeded();
-             return s_allRunningProcessesDict;
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("RunningProcessManager_GetAllRunningProcesses",
+               () =>
+               {
+                   return GetRunningProcesses().ToDictionary(p => p.ProcessId, p => p);
+               });
         }
 
 
         public IDataRetrievalResult<RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<RunningProcessQuery> input)
         {
-            IRunningProcessDataManager runningProcessDataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
-            IEnumerable<RunningProcessDetails> runningProcesses = runningProcessDataManager.GetFilteredRunningProcesses(input);
+            IEnumerable<RunningProcessDetails> runningProcesses = s_dataManager.GetFilteredRunningProcesses(input);
             runningProcesses.ToDictionary(runningProcess => runningProcess.ProcessId, runningProcess => runningProcess);
             return DataRetrievalManager.Instance.ProcessResult(input, runningProcesses.ToBigResult(input, null, RunningProcessDetailMapper));
         }
 
-
-        internal List<RunningProcessInfo> GetRunningProcessesFromDB()
-        {
-            RefreshRunningProcessesIfNeeded();
-            return s_allRunningProcesses;
-        }
-
+        
         public List<RunningProcessInfo> GetRunningProcesses()
         {
-            return GetRunningProcessesFromDB();
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("RunningProcessManager_GetRunningProcesses",
+                () =>
+                {
+                    return s_dataManager.GetRunningProcesses();
+                });
         }
-
-        public List<RunningProcessInfo> GetCachedRunningProcesses()
-        {
-            return GetRunningProcessesFromDB();
-        }
-
-        public List<RunningProcessInfo> GetCachedRunningProcesses(TimeSpan maxCacheTime)
-        {
-            return GetRunningProcessesFromDB();
-        }
-
+        
         static Dictionary<int, string> s_processIdServiceUrls = new Dictionary<int, string>();
         
         internal string GetProcessTCPServiceURL(int processId)
@@ -119,8 +77,8 @@ namespace Vanrise.Runtime
                 lock(s_processIdServiceUrls)
                 {
                     if (!s_processIdServiceUrls.TryGetValue(processId, out serviceURL))
-                    {                        
-                        RunningProcessInfo runningProcessInfo = GetAllRunningProcesses().GetRecord(processId);
+                    {
+                        RunningProcessInfo runningProcessInfo = s_dataManager.GetRunningProcess(processId);
                         if (runningProcessInfo == null)
                             throw new NullReferenceException(String.Format("runningProcessInfo '{0}'", processId));
                         if (runningProcessInfo.AdditionalInfo == null)
@@ -189,6 +147,33 @@ namespace Vanrise.Runtime
                 AdditionalInfo = process.AdditionalInfo
             };
         }
+        #endregion
+
+        #region Private Classes
+
+        internal class CacheManager: Vanrise.Caching.BaseCacheManager
+        {
+            int? _maxProcessId;
+            int _processCount;
+
+            protected override bool ShouldSetCacheExpired()
+            {
+                int? maxProcessIdFromDB;
+                int processCountFromDB;
+                s_dataManager.GetRunningProcessSummary(out maxProcessIdFromDB, out processCountFromDB);
+                if(maxProcessIdFromDB != _maxProcessId || processCountFromDB != _processCount)
+                {
+                    _maxProcessId = maxProcessIdFromDB;
+                    _processCount = processCountFromDB;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
         #endregion
     }
 }

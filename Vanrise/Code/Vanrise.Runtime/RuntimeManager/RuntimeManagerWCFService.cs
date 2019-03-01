@@ -10,11 +10,6 @@ namespace Vanrise.Runtime
 {
     internal class RuntimeManagerWCFService : IRuntimeManagerWCFService
     {
-        public PingPrimaryNodeResponse PingPrimaryNode(PingPrimaryNodeRequest request)
-        {
-            return RuntimeManager.Current.PingPrimaryNodeRequestReceived(request);
-        }
-
         public void UnlockFreezedTransactions(List<TransactionLockItem> freezedTransactionLocks)
         {
             if (freezedTransactionLocks != null)
@@ -103,12 +98,6 @@ namespace Vanrise.Runtime
         public bool IsThisRuntimeNodeInstance(Guid runtimeNodeId, Guid instanceId)
         {
             return RuntimeManager.Current.IsThisRuntimeNodeInstanceRequestReceived(runtimeNodeId, instanceId);
-        }
-
-
-        public void SetRuntimeProcessesAndServicesChanged()
-        {
-            RuntimeManager.Current.SetRuntimeProcessesAndServicesChanged();
         }
     }
 }

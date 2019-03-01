@@ -12,47 +12,7 @@ namespace Vanrise.Runtime
 {
     public class RuntimeServiceInstanceManager
     {
-        static List<RuntimeServiceInstance> s_runtimeServices;
-        static Dictionary<int, List<RuntimeServiceInstance>> s_runtimeServicesByTypeId;
-        static Dictionary<int, Dictionary<Guid, RuntimeServiceInstance>> s_runtimeServicesDictByTypeId;
-        static Object s_lockObj = new object();
-
-        static bool s_areServicesChanged = true;
-        public static void SetServicesChanged()
-        {
-            lock (s_lockObj)
-            {
-                s_areServicesChanged = true;
-            }
-        }
-
-        private void RefreshServicesIfNeeded()
-        {
-            if (s_areServicesChanged)
-            {
-                lock (s_lockObj)
-                {
-                    if (s_areServicesChanged)
-                    {
-                        IRuntimeServiceInstanceDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeServiceInstanceDataManager>();
-                        var runtimeServices = dataManager.GetServices();
-                        Dictionary<int, List<RuntimeServiceInstance>> runtimeServicesByTypeId = new Dictionary<int, List<RuntimeServiceInstance>>();
-                        Dictionary<int, Dictionary<Guid, RuntimeServiceInstance>> runtimeServicesDictByTypeId = new Dictionary<int, Dictionary<Guid, RuntimeServiceInstance>>();
-                        foreach (var s in runtimeServices)
-                        {
-                            runtimeServicesByTypeId.GetOrCreateItem(s.ServiceTypeId).Add(s);
-                            runtimeServicesDictByTypeId.GetOrCreateItem(s.ServiceTypeId).Add(s.ServiceInstanceId, s);
-                        }
-
-                        s_runtimeServices = runtimeServices;
-                        s_runtimeServicesByTypeId = runtimeServicesByTypeId;
-                        s_runtimeServicesDictByTypeId = runtimeServicesDictByTypeId;
-                        s_areServicesChanged = false;
-                    }
-                }
-            }
-        }
-
+        static IRuntimeServiceInstanceDataManager s_dataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeServiceInstanceDataManager>();
         internal RuntimeServiceInstance RegisterServiceInstance(Guid serviceInstanceId, int processId, string serviceTypeUniqueName, ServiceInstanceInfo info)
         {
             int serviceTypeId = GetServiceTypeId(serviceTypeUniqueName);
@@ -69,12 +29,6 @@ namespace Vanrise.Runtime
             return serviceInstance;
         }
 
-        private int GetServiceTypeId(string serviceTypeUniqueName)
-        {
-            int serviceTypeId = Common.BusinessManagerFactory.GetManager<Common.ITypeManager>().GetTypeId(serviceTypeUniqueName);
-            return serviceTypeId;
-        }
-
         public RuntimeServiceInstance GetServiceInstance(string serviceTypeUniqueName, Guid serviceInstanceId)
         {            
             return GetServicesDictionary(serviceTypeUniqueName).GetRecord(serviceInstanceId);
@@ -86,24 +40,59 @@ namespace Vanrise.Runtime
             return GetServicesByType().GetRecord(serviceTypeId);
         }
 
+        public List<RuntimeServiceInstance> GetServicesFromDB(string serviceTypeUniqueName)
+        {
+            int serviceTypeId = GetServiceTypeId(serviceTypeUniqueName);
+            return s_dataManager.GetServicesByTypeId(serviceTypeId);
+        }
+
         public Dictionary<Guid, RuntimeServiceInstance> GetServicesDictionary(string serviceTypeUniqueName)
         {
-            RefreshServicesIfNeeded();
             int serviceTypeId = GetServiceTypeId(serviceTypeUniqueName);
-            return s_runtimeServicesDictByTypeId.GetRecord(serviceTypeId);
+            var runtimeServicesDictByTypeId = Vanrise.Caching.CacheManagerFactory.GetCacheManager<RunningProcessManager.CacheManager>().GetOrCreateObject(
+                $"RuntimeServiceInstanceManager_GetServicesDictionary_{serviceTypeId}",
+                  () =>
+                  {
+                      Dictionary<int, Dictionary<Guid, RuntimeServiceInstance>> runtimeServicesDictByTypeId_local = new Dictionary<int, Dictionary<Guid, RuntimeServiceInstance>>();
+                      var allServices = GetAllServices();
+                      foreach (var s in allServices)
+                      {
+                          runtimeServicesDictByTypeId_local.GetOrCreateItem(s.ServiceTypeId).Add(s.ServiceInstanceId, s);
+                      }
+                      return runtimeServicesDictByTypeId_local;
+                  });
+            return runtimeServicesDictByTypeId.GetRecord(serviceTypeId);
         }
 
 
         Dictionary<int, List<RuntimeServiceInstance>> GetServicesByType()
         {
-            RefreshServicesIfNeeded();
-            return s_runtimeServicesByTypeId;
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<RunningProcessManager.CacheManager>().GetOrCreateObject("RuntimeServiceInstanceManager_GetServicesByType",
+                  () =>
+                  {
+                      Dictionary<int, List<RuntimeServiceInstance>> servicesByType = new Dictionary<int, List<RuntimeServiceInstance>>();
+                      var allServices = GetAllServices();
+                      foreach (var s in allServices)
+                      {
+                          servicesByType.GetOrCreateItem(s.ServiceTypeId).Add(s);
+                      }
+                      return servicesByType;
+                  });
         }
 
         List<RuntimeServiceInstance> GetAllServices()
         {
-            RefreshServicesIfNeeded();
-            return s_runtimeServices;
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<RunningProcessManager.CacheManager>().GetOrCreateObject("RuntimeServiceInstanceManager_GetAllServices",
+                () =>
+                {                    
+                    return s_dataManager.GetServices();
+                });
+        }
+
+        private int GetServiceTypeId(string serviceTypeUniqueName)
+        {
+            int serviceTypeId = Common.BusinessManagerFactory.GetManager<Common.ITypeManager>().GetTypeId(serviceTypeUniqueName);
+            return serviceTypeId;
         }
     }
 }

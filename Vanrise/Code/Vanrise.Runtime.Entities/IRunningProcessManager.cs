@@ -9,7 +9,5 @@ namespace Vanrise.Runtime.Entities
     public interface IRunningProcessManager
     {
         RunningProcessInfo CurrentProcess { get; }
-
-        List<RunningProcessInfo> GetCachedRunningProcesses();
     }
 }

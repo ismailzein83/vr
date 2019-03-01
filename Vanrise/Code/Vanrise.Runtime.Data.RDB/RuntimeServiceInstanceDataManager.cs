@@ -79,6 +79,30 @@ namespace Vanrise.Runtime.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().Columns(COL_ID, COL_ServiceTypeID, COL_ProcessID, COL_ServiceInstanceInfo);
 
+            string runningProcessTableAlias = "runningProcess";
+            RunningProcessDataManager.JoinRunningProcess(selectQuery.Join(), RDBJoinType.Inner, runningProcessTableAlias, TABLE_ALIAS, COL_ProcessID);
+
+            var where = selectQuery.Where();
+            RunningProcessDataManager.AddNotDraftCondition(where, runningProcessTableAlias);
+
+            return queryContext.GetItems(ServiceInstanceMapper);
+        }
+
+        public List<RuntimeServiceInstance> GetServicesByTypeId(int serviceTypeId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            string runningProcessTableAlias = "runningProcess";
+            RunningProcessDataManager.JoinRunningProcess(selectQuery.Join(), RDBJoinType.Inner, runningProcessTableAlias, TABLE_ALIAS, COL_ProcessID);
+
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_ServiceTypeID).Value(serviceTypeId);
+            RunningProcessDataManager.AddNotDraftCondition(where, runningProcessTableAlias);
+
             return queryContext.GetItems(ServiceInstanceMapper);
         }
 

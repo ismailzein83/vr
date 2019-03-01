@@ -13,7 +13,7 @@ namespace Vanrise.Runtime.Data
 
         void Delete(Guid lockItemId);
 
-        List<TransactionLockItem> GetLocksForNotRunningProcesses(List<int> runningProcessesIds);
+        List<TransactionLockItem> GetLocksForNotRunningProcesses();
 
         List<TransactionLockItem> GetAll();
     }

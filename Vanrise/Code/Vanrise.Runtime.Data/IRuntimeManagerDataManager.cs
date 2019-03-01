@@ -11,5 +11,7 @@ namespace Vanrise.Runtime.Data
         string GetRuntimeManagerServiceURL(out Guid runtimeNodeInstanceId);
 
         bool TryTakePrimaryNode(Guid serviceInstanceId, TimeSpan heartbeatTimeOut);
+
+        Guid? GetNonTimedOutRuntimeManagerId(TimeSpan heartbeatTimeOut);
     }
 }

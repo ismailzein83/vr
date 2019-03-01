@@ -14,9 +14,14 @@ namespace Vanrise.Runtime.Data
 
         List<RunningProcessInfo> GetRunningProcesses();
 
-        void DeleteRunningProcess(int runningProcessId);
-        List<Entities.RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<RunningProcessQuery> input);
+        RunningProcessInfo GetRunningProcess(int processId);
 
-        bool IsExists(int runningProcessId);
+        void DeleteRunningProcess(int runningProcessId);
+
+        List<Entities.RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<RunningProcessQuery> input);
+        
+        void GetRunningProcessSummary(out int? maxProcessId, out int processCount);
+
+        void SetRunningProcessReady(int processId);
     }
 }

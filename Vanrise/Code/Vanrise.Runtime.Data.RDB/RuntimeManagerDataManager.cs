@@ -134,6 +134,32 @@ namespace Vanrise.Runtime.Data.RDB
 
             return updateQueryContext.ExecuteNonQuery() > 0;
         }
+
+        public Guid? GetNonTimedOutRuntimeManagerId(TimeSpan heartbeatTimeOut)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1, true);
+
+            selectQuery.SelectColumns().Column(COL_InstanceID);
+
+            var nodeStateDataManager = new RuntimeNodeStateDataManager();
+
+            string runtimeNodeStateTableAlias = "NodeState";
+            nodeStateDataManager.JoinRuntimeNodeState(selectQuery.Join(), runtimeNodeStateTableAlias, TABLE_ALIAS, COL_InstanceID, true);
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_ID).Value(1);
+
+            var compareConditionCtx = where.CompareCondition(RDBCompareConditionOperator.L);
+
+            var dateDiffCtx = compareConditionCtx.Expression1().DateTimeDiff(RDBDateTimeDiffInterval.Seconds);
+            dateDiffCtx.DateTimeExpression1().Column(runtimeNodeStateTableAlias, RuntimeNodeStateDataManager.COL_LastHeartBeatTime);
+            dateDiffCtx.DateTimeExpression2().DateNow();
+
+            compareConditionCtx.Expression2().Value((int)heartbeatTimeOut.TotalSeconds);
+
+            return queryContext.ExecuteScalar().NullableGuidValue;
+        }
         #endregion
     }
 }

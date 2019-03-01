@@ -26,9 +26,9 @@ namespace Vanrise.Runtime.Data.SQL
             ExecuteNonQuerySP("[runtime].[sp_TransactionLock_Delete]", lockItemId);
         }
 
-        public List<TransactionLockItem> GetLocksForNotRunningProcesses(List<int> runningProcessesIds)
+        public List<TransactionLockItem> GetLocksForNotRunningProcesses()
         {
-            return GetItemsSP("[runtime].[sp_TransactionLock_GetForNotRunningProcesses]", TransactionLockItemMapper, String.Join(",", runningProcessesIds));
+            return GetItemsSP("[runtime].[sp_TransactionLock_GetForNotRunningProcesses]", TransactionLockItemMapper);
         }
 
         public List<TransactionLockItem> GetAll()

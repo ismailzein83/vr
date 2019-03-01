@@ -284,7 +284,7 @@ namespace Vanrise.Runtime
                         if (!childRuntimeProcessProxy.OSProcessId.HasValue)
                         {
                             StartChildProcess(childRuntimeProcessProxy);
-                            System.Threading.Thread.Sleep(250);
+                            System.Threading.Thread.Sleep(100);
                         }
                     }
                 }
@@ -421,6 +421,7 @@ namespace Vanrise.Runtime
                         _runningProcessIds.Remove(childRuntimeProcessProxy.ProcessId.Value);
                     }
                     childRuntimeProcessProxy.ProcessId = null;
+                    childRuntimeProcessProxy.ProcessIdAssignedTime = null;
                     childRuntimeProcessProxy.OSProcessId = null;
                 }
             };
@@ -447,6 +448,7 @@ namespace Vanrise.Runtime
                         if (childProcessProxy.OSProcessId == osProcessId)//another runtime process might have been started with a new OSProcessId
                         {
                             childProcessProxy.ProcessId = processId;
+                            childProcessProxy.ProcessIdAssignedTime = DateTime.Now;
                             _runningProcessIds.Add(processId);
                             return true;
                         }
@@ -456,21 +458,37 @@ namespace Vanrise.Runtime
             return false;
         }
 
-        internal List<int> GetAllRunningProcessIds()
+        internal List<int> GetAllRunningProcessIdsForMoreThan30Secs()
         {
-            List<int> runningProcessIds;
+            List<int> runningProcessIds = new List<int>();
             if (_childRuntimeProcessProxies != null)
             {
                 lock (_childRuntimeProcessProxies)
                 {
-                    runningProcessIds = new List<int>(_runningProcessIds);
+                    foreach(var childRuntimeProcess in _childRuntimeProcessProxies)
+                    {
+                        if(childRuntimeProcess.ProcessId.HasValue && childRuntimeProcess.ProcessIdAssignedTime.HasValue
+                            && (DateTime.Now - childRuntimeProcess.ProcessIdAssignedTime.Value).TotalSeconds >= 30)
+                        {
+                            runningProcessIds.Add(childRuntimeProcess.ProcessId.Value);
+                        }
+                    }
                 }
             }
-            else
-            {
-                runningProcessIds = new List<int>();
-            }
             return runningProcessIds;
+        }
+
+        internal int GetRunningProcessesCount()
+        {
+            int processCount = 0;
+            if (_childRuntimeProcessProxies != null)
+            {
+                lock (_childRuntimeProcessProxies)
+                {
+                    processCount = _runningProcessIds.Count;
+                }
+            }
+            return processCount;
         }
 
         internal void KillAllChildProcesses()
@@ -526,6 +544,8 @@ namespace Vanrise.Runtime
             public int? OSProcessId { get; set; }
 
             public int? ProcessId { get; set; }
+
+            public DateTime? ProcessIdAssignedTime { get; set; }
         }
 
         #endregion

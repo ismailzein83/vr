@@ -80,7 +80,7 @@ namespace Vanrise.Runtime.Data.RDB
             return queryContext.GetItems(TransactionLockItemMapper);
         }
 
-        public List<TransactionLockItem> GetLocksForNotRunningProcesses(List<int> runningProcessesIds)
+        public List<TransactionLockItem> GetLocksForNotRunningProcesses()
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
@@ -88,7 +88,10 @@ namespace Vanrise.Runtime.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, false);
             selectQuery.SelectColumns().Columns(COL_ID, COL_TransactionUniqueName, COL_ProcessID);
 
-            selectQuery.Where().ListCondition(COL_ProcessID, RDBListConditionOperator.NotIN, runningProcessesIds);
+            string runningProcessTableAlias = "runningProcess";
+            RunningProcessDataManager.JoinRunningProcess(selectQuery.Join(), RDBJoinType.Left, runningProcessTableAlias, TABLE_ALIAS, COL_ProcessID);
+
+            selectQuery.Where().NullCondition(runningProcessTableAlias, COL_ID);
 
             return queryContext.GetItems(TransactionLockItemMapper);
         }

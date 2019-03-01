@@ -35,5 +35,10 @@ namespace Vanrise.Runtime.Data.SQL
         {
             return Convert.ToBoolean(ExecuteScalarSP("[runtime].[sp_RuntimeManager_TryTakePrimaryNode]", serviceInstanceId, heartbeatTimeOut.TotalSeconds));
         }
+
+        public Guid? GetNonTimedOutRuntimeManagerId(TimeSpan heartbeatTimeOut)
+        {
+            return (Guid?)ExecuteScalarSP("runtime.[sp_RuntimeManager_GetNonTimedOutRuntimeManagerInstanceID]", heartbeatTimeOut.TotalSeconds);
+        }
     }
 }

@@ -78,9 +78,9 @@ namespace Vanrise.Runtime
             }
         }
 
-        public void RemoveLocksForNotRunningProcesses(List<int> runningProcessesIds)
+        public void RemoveLocksForNotRunningProcesses()
         {
-            List<TransactionLockItem> locksToDelete = GetLocksForNotRunningProcesses(runningProcessesIds);
+            List<TransactionLockItem> locksToDelete = GetLocksForNotRunningProcesses();
             if(locksToDelete != null)
             {
                 foreach(var lockItem in locksToDelete)
@@ -117,9 +117,9 @@ namespace Vanrise.Runtime
             _dataManager.Delete(lockItemId);
         }
 
-        private List<TransactionLockItem> GetLocksForNotRunningProcesses(List<int> runningProcessesIds)
+        private List<TransactionLockItem> GetLocksForNotRunningProcesses()
         {
-            return _dataManager.GetLocksForNotRunningProcesses(runningProcessesIds);
+            return _dataManager.GetLocksForNotRunningProcesses();
         }
 
         #endregion

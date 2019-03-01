@@ -9,8 +9,6 @@ namespace Vanrise.Runtime
 {
     public interface IRuntimeManagerWCFService
     {
-        PingPrimaryNodeResponse PingPrimaryNode(PingPrimaryNodeRequest request);
-
         void UnlockFreezedTransactions(List<TransactionLockItem> freezedTransactionLocks);
 
         bool TryLockRuntimeService(string serviceTypeUniqueName, int runtimeProcessId);
@@ -24,15 +22,11 @@ namespace Vanrise.Runtime
         string RegisterRunningProcess(string serializedInput);
 
         bool IsThisRuntimeNodeInstance(Guid runtimeNodeId, Guid instanceId);
-
-        void SetRuntimeProcessesAndServicesChanged();
     }
 
     public class PingPrimaryNodeRequest
     {
         public Guid RuntimeNodeInstanceId { get; set; }
-
-        public bool RunningProcessesChangedInCurrentNode { get; set; }
     }
 
     public class PingPrimaryNodeResponse

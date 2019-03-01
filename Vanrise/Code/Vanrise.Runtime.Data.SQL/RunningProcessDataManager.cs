@@ -38,9 +38,31 @@ namespace Vanrise.Runtime.Data.SQL
             ExecuteNonQuerySP("[runtime].[sp_RunningProcess_Delete]", runningProcessId);
         }
 
-        public bool IsExists(int runningProcessId)
+        public void GetRunningProcessSummary(out int? maxProcessId, out int processCount)
         {
-            return ExecuteScalarSP("[runtime].[sp_RunningProcess_IsExists]", runningProcessId) != null;
+            int? maxProcessId_local = null;
+            int processCount_local = 0;
+            ExecuteReaderSP("runtime.sp_RunningProcess_GetMaxIdAndCount",
+                (reader) =>
+                {
+                    if(reader.Read())
+                    {
+                        maxProcessId_local = GetReaderValue<int?>(reader, "MaxID");
+                        processCount_local = GetReaderValue<int>(reader, "NbOfProcesses");
+                    }
+                });
+            maxProcessId = maxProcessId_local;
+            processCount = processCount_local;
+        }
+
+        public void SetRunningProcessReady(int processId)
+        {
+            ExecuteNonQuerySP("runtime.sp_RunningProcess_SetReady", processId);
+        }
+
+        public RunningProcessInfo GetRunningProcess(int processId)
+        {
+            return GetItemSP("[runtime].[sp_RunningProcess_GetByID]", RunningProcessInfoMapper, processId);
         }
 
         #region Private Methods
