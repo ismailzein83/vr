@@ -59,7 +59,7 @@ namespace Vanrise.Common.Business
             if ((DateTime.Now - _deleteTimedOutServicesLastTime) > _deleteTimedOutServicesInterval)
             {
                 Vanrise.Runtime.RunningProcessManager runningProcessManager = new Runtime.RunningProcessManager();
-                IEnumerable<int> runningProcessIds = runningProcessManager.GetCachedRunningProcesses().MapRecords(itm => itm.ProcessId);
+                IEnumerable<int> runningProcessIds = runningProcessManager.GetRunningProcesses().MapRecords(itm => itm.ProcessId);
                 _dataManager.DeleteTimedOutServices(runningProcessIds);
                 _deleteTimedOutServicesLastTime = DateTime.Now;
             }
