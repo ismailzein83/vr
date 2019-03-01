@@ -92,6 +92,7 @@
     <Compile Include="VRTile\FiguresTileSettings.cs" />
     <Compile Include="VRTile\TabsTiles.cs" />
     <Compile Include="VRTimePeriod\AllTimePeriod.cs" />
+    <Compile Include="VRTimePeriod\CurrentWeekTimePeriod.cs" />
     <Compile Include="VRTimePeriod\LastMonthTimePeriod.cs" />
     <Compile Include="VRTimePeriod\LastTimePeriod.cs" />
     <Compile Include="VRTimePeriod\CurrentMonthTimePeriod.cs" />
