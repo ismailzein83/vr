@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericruleManagement", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'VR_GenericData_DataRecordFieldAPIService',
-    function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, VR_GenericData_DataRecordFieldAPIService) {
+app.directive("vrGenericdataGenericruleManagement", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'VR_GenericData_DataRecordFieldAPIService','VRDateTimeService',
+    function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, VR_GenericData_DataRecordFieldAPIService, VRDateTimeService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -113,7 +113,7 @@ app.directive("vrGenericdataGenericruleManagement", ['VRNotificationService', 'U
                 api.loadDirective = function (payload) {
 
                     var promises = [];
-
+                    $scope.scopeModel.effectiveDate = VRDateTimeService.getNowDateTime();
                     if (payload != undefined) {
                         ruleDefinitionId = payload.RuleDefinitionId;
                         criteriaFieldsToHide = payload.criteriaFieldsToHide;

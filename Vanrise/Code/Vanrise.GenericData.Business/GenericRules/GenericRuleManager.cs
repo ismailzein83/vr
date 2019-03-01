@@ -70,7 +70,7 @@ namespace Vanrise.GenericData.Business
 
                 foreach (T targetRule in rules)
                 {
-                    if (rule == targetRule || overridenRules.Contains(targetRule))
+                    if (rule == targetRule || overridenRules.Contains(targetRule) || !rule.IsOverlappedWith(targetRule))
                         continue;
 
                     for (var index = 0; index < genericRuleDefinitionCriteria.Fields.Count; index++)
