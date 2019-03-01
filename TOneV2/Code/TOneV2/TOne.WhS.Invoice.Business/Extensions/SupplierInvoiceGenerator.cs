@@ -76,7 +76,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             SupplierRecurringChargeManager supplierRecurringChargeManager = new SupplierRecurringChargeManager();
             List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, context.IssueDate);
 
-            if ( voiceItemSetNames.Count == 0 && smsItemSetNames.Count == 0 && (evaluatedSupplierRecurringCharges == null || evaluatedSupplierRecurringCharges.Count == 0))
+            if ((voiceItemSetNames == null || voiceItemSetNames.Count == 0) && (smsItemSetNames == null || smsItemSetNames.Count == 0) && (evaluatedSupplierRecurringCharges == null || evaluatedSupplierRecurringCharges.Count == 0))
             {
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                 return;

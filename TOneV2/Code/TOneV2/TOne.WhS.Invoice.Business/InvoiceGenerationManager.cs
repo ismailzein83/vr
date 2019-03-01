@@ -140,7 +140,7 @@ namespace TOne.WhS.Invoice.Business
             {
                 return PrepareItemSetNames<T>(analyticRecords.Data, mapper);
             }
-            return null;
+            return default(List<T>);
         }
         private AnalyticSummaryBigResult<AnalyticRecord> GetInvoiceAnalyticRecords(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue)
         {
