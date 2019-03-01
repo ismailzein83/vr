@@ -220,7 +220,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             int serial = 1;
             foreach (var option in nonBlockedOptions)
             {
-                if (!preparedData.SupplierDefinitions.TryGetValue(option.SupplierId, out var supplier) && supplier.Gateways == null)
+                if (!preparedData.SupplierDefinitions.TryGetValue(option.SupplierId, out var supplier) || supplier.Gateways == null)
                     continue;
 
                 if (option.Percentage != null && option.Percentage != 0)
