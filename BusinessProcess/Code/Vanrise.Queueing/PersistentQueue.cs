@@ -128,7 +128,7 @@ namespace Vanrise.Queueing
             else
             {
                 int currentProcessId = RunningProcessManager.CurrentProcess.ProcessId;
-                IEnumerable<int> runningProcessesIds = _runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
+                IEnumerable<int> runningProcessesIds = _runningProcessManager.GetRunningProcesses().Select(itm => itm.ProcessId);
                 queueItem = _dataManagerQueueItem.DequeueItem(_queueId, currentProcessId, runningProcessesIds, _queueSettings.MaximumConcurrentReaders);
             }
             if (queueItem != null)

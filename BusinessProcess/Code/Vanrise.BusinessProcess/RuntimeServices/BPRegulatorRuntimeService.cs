@@ -54,7 +54,6 @@ namespace Vanrise.BusinessProcess
         {
             TransactionLocker.Instance.TryLock("BPRegulatorRuntimeService_Execute", () =>
             {
-                RuntimeServiceInstanceManager.SetServicesChanged();
                 var bpServiceInstances = GetRunningServiceInstances();
                 if (bpServiceInstances == null || bpServiceInstances.Count == 0)
                     return;
@@ -83,7 +82,7 @@ namespace Vanrise.BusinessProcess
 
         private List<Runtime.Entities.RuntimeServiceInstance> GetRunningServiceInstances()
         {
-            return _serviceInstanceManager.GetServices(BusinessProcessService.SERVICE_TYPE_UNIQUE_NAME);
+            return _serviceInstanceManager.GetServicesFromDB(BusinessProcessService.SERVICE_TYPE_UNIQUE_NAME);
         }
 
         static List<BPInstanceStatus> s_pendingStatuses = BPInstanceStatusAttribute.GetNonClosedStatuses();
