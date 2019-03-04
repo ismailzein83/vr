@@ -46,6 +46,13 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
+        public bool UpdateInvoiceComplaintFlag(string invoiceId, bool status)
+        {
+            return true;
+        }
+
+
+
         //old one
         public PaymentInfo SubmitToPOS(string customerId, string requestId, string ratePlanId, Guid contactId, BPMExtended.Main.Entities.OperationType operationType)
         {
