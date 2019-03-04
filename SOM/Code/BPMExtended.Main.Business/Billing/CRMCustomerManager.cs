@@ -307,7 +307,17 @@ namespace BPMExtended.Main.Business
             update.Execute();
 
         }
-        
+
+        public void PostLineMovingNewSwitchToOM(Guid requestId)
+        {
+            //TODO: update status in 'request header' table
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
+                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
+            update.Execute();
+
+        }
+
 
         public void PostLineTerminationRequestToOM(Guid requestId)
         {

@@ -224,6 +224,17 @@ namespace BPMExtended.Main.Business
             return item;
         }
 
+        public bool IsManualSwitchByPhoneNumber(string phoneNumber)
+        {
+
+            bool item = false;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<bool>(String.Format("api/SOM/Inventory/IsManualSwitch?phoneNumber={0}", phoneNumber));
+            }
+            return item;
+        }
+
         public bool IsManualDSLAM(string contractId)
         {
 
@@ -803,6 +814,50 @@ namespace BPMExtended.Main.Business
             update.Execute();
 
             return true;
+        }
+
+        public bool changeLineMovingNewSwitchMDFPort(string newPort, string switchId)
+        {
+            //TODO: change MDF port for telephony line subscription
+            return true;
+        }
+
+        public bool changeLineMovingNewSwitchCabinetPort(string newPort, string switchId, string requestId)
+        {
+            //TODO: change cabinet port for telephony line subscription
+
+            //Update new cabinet port on request level
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StLineMovingNewSwitch").Set("StNewCabinetPort", Column.Parameter(newPort))
+                .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+            update.Execute();
+
+
+            return true;
+        }
+
+        public bool changeLineMovingNewSwitchDPPort(string newPort, string switchId, string requestId)
+        {
+            //TODO: change DP port for telephony line subscription
+
+            //Update new dp port on request level
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StLineMovingNewSwitch").Set("StNewDPPort", Column.Parameter(newPort))
+                .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+            update.Execute();
+
+            return true;
+        }
+
+        public string GetNumberCategory(string phonenumber)
+        {
+            string item;
+
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<string>(String.Format("api/SOM/Inventory/GetNumberCategory?phoneNumber={0}", phonenumber));
+            }
+            return item;
         }
 
 

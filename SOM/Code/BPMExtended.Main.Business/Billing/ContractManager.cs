@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Terrasoft.Core;
+using Terrasoft.Core.DB;
 using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
@@ -526,6 +527,29 @@ namespace BPMExtended.Main.Business
         }
 
 
+        public bool DeactivateLineMovingContract(string contractId , string requestId)
+        {
+            //TODO: Deactivate line moving contract on the network
+            //TODO: if line deactivated => change step id to technical step
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StLineMovingNewSwitch").Set("StStepId", Column.Parameter("404A2E98-D3B8-4A7A-813F-CE4594CF580C"))
+                .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+            update.Execute();
+
+            return true;
+        }
+
+        public bool DeactivateLineTerminationRequest(string contractId, string requestId)
+        {
+            //TODO: Deactivate line  contract on the network
+            //TODO: if line deactivated => change step id to technical step
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StLineTerminationRequest").Set("StStepId", Column.Parameter("45363147-CC59-4632-B09E-EB850D2FD25F"))
+                .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+            update.Execute();
+
+            return true;
+        }
 
 
         #region mappers

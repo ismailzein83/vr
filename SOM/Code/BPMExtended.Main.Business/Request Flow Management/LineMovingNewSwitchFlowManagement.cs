@@ -20,12 +20,13 @@ namespace BPMExtended.Main.Business
         const string lineDescription = "440D0312-56EF-43FB-8D69-7A24ADF1621A";
         const string freeReservation = "BC91A824-24B2-48F5-992B-9B7DCB161F93";
 
-        const string paymentValidation = "404A2E98-D3B8-4A7A-813F-CE4594CF580C";
+        const string paymentValidation = "F6DD7B58-2F3B-4405-B399-E43AF8ABA619";
         const string waitingList = "754175DA-D7F8-4E16-B138-2035C656BADF";
 
         const string address = "91F109E6-486E-4024-AF3C-1A8498E3EA2F";
         const string payment = "00A0E8E2-565F-44FD-9056-B77244A2E956";
         const string print2 = "4ECB28B2-9E20-4B42-BD9B-99AFC0349452";
+        const string attachments = "C81F6793-4F81-424F-BFFA-82CF11E333B8";
         const string technicalStep = "404A2E98-D3B8-4A7A-813F-CE4594CF580C";
         //const string oldSwitch = "1082C816-1665-443B-BD0C-F5AEB095FA10";
         //const string oldMDF = "471A0856-236D-4E18-80A5-765107978E35";
@@ -40,28 +41,29 @@ namespace BPMExtended.Main.Business
         //const string validation = "5A1B3225-0CE5-483E-B580-FE498AE2C2B9";
         //const string completed = "9D780792-3EB0-4AF7-A455-70CE2A64FCCE";
 
-        public string GetNextStep(string id, string currentStepId , bool isWaitingList)
+        public string GetNextStep(string id, string currentStepId , bool isWaitingList , bool isAdvantageous)
         {
 
             string nextStepId = "";
             switch (currentStepId.ToUpper())
             {
-                case startingProcess: nextStepId = print; break;
-                case print: nextStepId = lineDescription; break;
-                case lineDescription: nextStepId = freeReservation; break;
+                case startingProcess: nextStepId = lineDescription; break;
+                case lineDescription: nextStepId = print; break;
+                case print: nextStepId = freeReservation; break;
                 case freeReservation: nextStepId = isWaitingList? paymentValidation : address; break;
                 case paymentValidation: nextStepId = waitingList; break;
                 case waitingList: nextStepId = freeReservation; break;
-                case address: nextStepId = payment; break;
+                case address: nextStepId = isAdvantageous? print2 : payment; break;
                 case payment: nextStepId = print2; break;
-                case print2: nextStepId = technicalStep;break;
+                case print2: nextStepId = attachments; break;
+                    //case print2: nextStepId = technicalStep;break;
 
 
 
                     // case print2: nextStepId = ManualSwitch(id)? oldSwitch : oldMDF ; break;
                     //case oldSwitch: nextStepId = oldMDF; break;
                     //case oldMDF: nextStepId = oldCabinet; break;
-                    //case oldCabinet: nextStepId = oldDP; break;
+                    //case oldCabinet: nextStepId = old DP; break;
                     //case oldDP: nextStepId = IsAutomaticSwitchType(id)?newMDF:newSwitch; break;
                     //case newSwitch: nextStepId = newMDF; break;
                     //case newMDF: nextStepId = newCabinet; break;
