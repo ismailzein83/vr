@@ -49,3 +49,4 @@ Old\
 Demo\
 \bin\TOne.WhS.Jazz.
 \bin\TOne.WhS.SMSBusinessEntity.
+\bin\Vanrise.MobileNetwork.
