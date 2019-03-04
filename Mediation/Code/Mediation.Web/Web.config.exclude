@@ -66,15 +66,16 @@
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="DataParserDBConnStringKey"                        value="ConfigurationDBConnString"/>
     
-	<add key="Mediation_GenericConfig_DBConnStringKey"          value="ConfigurationDBConnString"/>
+	<add key="Mediation_GenericConfig_DBConnStringKey"            value="ConfigurationDBConnString"/>
     <add key="Mediation_GenericRecord_DBConnStringKey"          value="Mediation_CDR_DBConnString"/>
 
     <!-- Begin, keep only one key depending on the client-->
     <add key="Mediation_CDR_Mobilis_DBConnStringKey"            value="Mediation_CDR_DBConnString"/>
-    <add key="Mediation_CDR_Ogero_DBConnStringKey"				value="Mediation_CDR_DBConnString"/>
+    <add key="Mediation_CDR_Ogero_DBConnStringKey"			    value="Mediation_CDR_DBConnString"/>
     <add key="Mediation_CDR_Jazz_DBConnStringKey"				value="Mediation_CDR_DBConnString"/>
-    <add key="Mediation_CDR_Iraq_DBConnStringKey"				value="Mediation_CDR_DBConnString"/>
-	<!-- End, keep only one key depending on the client-->
+    <add key="Mediation_CDR_MobileAnalysis_DBConnStringKey"		value="Mediation_CDR_DBConnString"/>
+    <add key="Mediation_CDR_Namibia_DBConnStringKey"		    value="Mediation_CDR_DBConnString"/>
+    <!-- End, keep only one key depending on the client-->
 
     <add key="BCPDonotDeleteFiles" value="false"/>
     <add key="BusinessProcess_ActivityEventsTracking" value="false"/>

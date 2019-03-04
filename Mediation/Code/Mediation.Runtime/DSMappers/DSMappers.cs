@@ -13,8 +13,8 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Ogero_Alcatel_ICX(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = false };
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("30553F01-CE03-4D29-9BF5-80D0D06DFA34"), options, (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("30553F01-CE03-4D29-9BF5-80D0D06DFA34"), options, (parsedBatch) =>
             {
                 MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Alcatel Parsed CDRs", parsedBatch.RecordType);
                 switch (parsedBatch.RecordType)
@@ -35,8 +35,8 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Ogero_Ericsson_WHS_Binary(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = true };
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("6f27b54c-90f3-4332-8437-1adffdb8ed2d"), options, (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("6f27b54c-90f3-4332-8437-1adffdb8ed2d"), options, (parsedBatch) =>
             {
                 MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                 switch (parsedBatch.RecordType)
@@ -1047,8 +1047,8 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Ogero_HuaweiIMS_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = false };
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("504a12e9-61d2-4e31-b193-1d43749dc055"), options, (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("504a12e9-61d2-4e31-b193-1d43749dc055"), options, (parsedBatch) =>
             {
                 MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Huawei IMS Parsed CDRs", parsedBatch.RecordType);
                 switch (parsedBatch.RecordType)
@@ -1069,8 +1069,8 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Ogero_HuaweiMGCF_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = false };
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("D6896CC8-22EF-4FAA-BEF4-4644EE5323F9"), options, (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("D6896CC8-22EF-4FAA-BEF4-4644EE5323F9"), options, (parsedBatch) =>
             {
                 MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Huawei MGCF Parsed CDRs", parsedBatch.RecordType);
                 switch (parsedBatch.RecordType)
@@ -1091,8 +1091,8 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Ogero_HuaweiEPC_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = false };
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("95037A1B-EF0C-4F2B-8B22-F51EE65ACD45"), options, (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("95037A1B-EF0C-4F2B-8B22-F51EE65ACD45"), options, (parsedBatch) =>
             {
                 MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Huawei EPC Parsed CDRs", parsedBatch.RecordType);
                 switch (parsedBatch.RecordType)
@@ -1113,8 +1113,8 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Ogero_NokiaSiemens_ICX(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = false };
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("202c8508-a24c-4664-b769-be71c86fcd75"), options, (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("202c8508-a24c-4664-b769-be71c86fcd75"), options, (parsedBatch) =>
             {
                 MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Nokia Siemens Parsed CDRs", parsedBatch.RecordType);
                 switch (parsedBatch.RecordType)
@@ -1135,7 +1135,7 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Ogero_Radius(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             var cdrs = new List<dynamic>();
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Ogero_Radius_CDR");
 
@@ -1143,12 +1143,12 @@ namespace Mediation.Runtime
 
             int batchSize = 0;
             int lineNumber = 0;
-            string fileName = ImportedData.Name;
+            string fileName = importedData.Name;
 
             int? intValue = default(int?);
             long? longValue = default(long?);
 
-            System.IO.StreamReader sr = ImportedData.StreamReader;
+            System.IO.StreamReader sr = importedData.StreamReader;
             while (!sr.EndOfStream)
             {
                 string cdrLine = sr.ReadLine();
@@ -1270,16 +1270,16 @@ namespace Mediation.Runtime
 
         #endregion
 
-        #region Iraq 
+        #region MobileAnalysis 
 
-        public static MappingOutput MapCDR_File_Iraq_Ericsson(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        public static MappingOutput MapCDR_File_MobileAnalysis_Ericsson(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("BA810002-0B4D-4563-9A0D-EE228D69A1A6"), (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("BA810002-0B4D-4563-9A0D-EE228D69A1A6"), (parsedBatch) =>
             {
                 switch (parsedBatch.RecordType)
                 {
-                    case "Iraq_Mobile_CDR":
+                    case "MobileAnalysis_CDR":
                         List<dynamic> multiLegRecords = new List<dynamic>();
                         List<dynamic> normalRecords = new List<dynamic>();
 
@@ -1304,7 +1304,7 @@ namespace Mediation.Runtime
                         }
                         break;
 
-                    case "Iraq_SMS":
+                    case "MobileAnalysis_SMS":
                         MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                         mappedBatches.Add("SMSTransformationStage", batch);
                         break;
@@ -1317,10 +1317,10 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static MappingOutput MapCDR_File_Iraq_Ericsson_GPRS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        public static MappingOutput MapCDR_File_MobileAnalysis_Ericsson_GPRS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("B9648105-8914-4C70-8550-F63D946F5B0C"), (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("B9648105-8914-4C70-8550-F63D946F5B0C"), (parsedBatch) =>
             {
                 MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                 mappedBatches.Add("GPRSStoreStage", batch);
@@ -1332,14 +1332,14 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static MappingOutput MapCDR_File_Iraq_Huawei(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        public static MappingOutput MapCDR_File_MobileAnalysis_Huawei(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("3B0C2ED7-CC17-46C0-8F96-697BD185B273"), (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("3B0C2ED7-CC17-46C0-8F96-697BD185B273"), (parsedBatch) =>
             {
                 switch (parsedBatch.RecordType)
                 {
-                    case "Iraq_Mobile_CDR":
+                    case "MobileAnalysis_CDR":
                         List<dynamic> multiLegRecords = new List<dynamic>();
                         List<dynamic> normalRecords = new List<dynamic>();
                         foreach (dynamic record in parsedBatch.Records)
@@ -1362,7 +1362,7 @@ namespace Mediation.Runtime
                         }
                         break;
 
-                    case "Iraq_SMS":
+                    case "MobileAnalysis_SMS":
                         MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                         mappedBatches.Add("SMSTransformationStage", batch);
                         break;
@@ -1375,10 +1375,10 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static MappingOutput MapCDR_File_Iraq_Huawei_GPRS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        public static MappingOutput MapCDR_File_MobileAnalysis_Huawei_GPRS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("16b6af8d-6a15-46a1-9c19-ccfac1ebbdde"), (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("16b6af8d-6a15-46a1-9c19-ccfac1ebbdde"), (parsedBatch) =>
             {
                 MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                 mappedBatches.Add("GPRSStoreStage", batch);
@@ -1390,11 +1390,11 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static MappingOutput MapCDR_File_Iraq_Nokia(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        public static MappingOutput MapCDR_File_MobileAnalysis_Nokia(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
 
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("230bedb5-a3ee-4cbe-802c-dfdaa2a2d438"), (parsedBatch) =>
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("230bedb5-a3ee-4cbe-802c-dfdaa2a2d438"), (parsedBatch) =>
             {
                 var utilityManager = new Vanrise.Common.Business.UtilityManager();
                 var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
@@ -1413,7 +1413,7 @@ namespace Mediation.Runtime
 
                 switch (parsedBatch.RecordType)
                 {
-                    case "Iraq_Mobile_CDR":
+                    case "MobileAnalysis_CDR":
                         List<dynamic> multiLegRecords = new List<dynamic>();
                         List<dynamic> normalRecords = new List<dynamic>();
 
@@ -1441,7 +1441,7 @@ namespace Mediation.Runtime
 
                         break;
 
-                    case "Iraq_SMS":
+                    case "MobileAnalysis_SMS":
                         MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                         mappedBatches.Add("SMSTransformationStage", batch);
                         break;
@@ -1755,8 +1755,8 @@ namespace Mediation.Runtime
 
         public static MappingOutput MapCDR_File_Mobilis_Ericsson(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("57E3E68E-9403-440D-A67D-CC5896D6BAD5"), (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("57E3E68E-9403-440D-A67D-CC5896D6BAD5"), (parsedBatch) =>
             {
                 switch (parsedBatch.RecordType)
                 {
@@ -1781,8 +1781,8 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Mobilis_Huawei(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions();
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("9B613038-9F64-47C7-B9FA-2F41ABE85286"), options, (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("9B613038-9F64-47C7-B9FA-2F41ABE85286"), options, (parsedBatch) =>
             {
                 MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of CDRs", parsedBatch.RecordType);
                 switch (parsedBatch.RecordType)
@@ -1803,13 +1803,13 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Mobilis_SMS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             var smsList = new List<dynamic>();
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type smsRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Mobilis_SMS");
 
             int batchSize = 0;
 
-            System.IO.StreamReader sr = ImportedData.StreamReader;
+            System.IO.StreamReader sr = importedData.StreamReader;
             while (!sr.EndOfStream)
             {
                 string smsLine = sr.ReadLine();
@@ -1824,7 +1824,7 @@ namespace Mediation.Runtime
                     string[] fields = smsLine.Split(',');
 
                     sms.DataSourceId = dataSourceId;
-                    sms.FileName = ImportedData.Name;
+                    sms.FileName = importedData.Name;
 
                     sms.SMID = fields[0];
                     sms.OriginalAddress = fields[1];
@@ -2103,7 +2103,7 @@ namespace Mediation.Runtime
 
         public static MappingOutput MapCDR_File_Teles(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type mediationCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("ParsedCDR");
 
@@ -2111,7 +2111,7 @@ namespace Mediation.Runtime
 
             try
             {
-                System.IO.StreamReader sr = ImportedData.StreamReader;
+                System.IO.StreamReader sr = importedData.StreamReader;
                 while (!sr.EndOfStream)
                 {
                     string currentLine = sr.ReadLine();
@@ -2140,7 +2140,7 @@ namespace Mediation.Runtime
                     cdr.TC_ORIGINATORIP = rowData[32].Trim('"');
                     cdr.TC_REPLACECALLID = rowData[18].Trim('"');
                     cdr.TC_CALLINDICATOR = rowData[14].Trim('"');
-                    cdr.FileName = ImportedData.Name;
+                    cdr.FileName = importedData.Name;
                     DateTime? attemptDateTime = default(DateTime?);
                     if (!string.IsNullOrEmpty(rowData[36].Trim('"')))
                         attemptDateTime = (DateTime?)(DateTime.ParseExact(rowData[36].Trim('"'), "yyyyMMddHHmmss:fff", System.Globalization.CultureInfo.InvariantCulture));
@@ -2168,16 +2168,16 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Jazz_Huawei_WithTransitRule(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             var cdrs = new List<dynamic>();
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Jazz_Huawei_CDR");
 
             int batchSize = 0;
 
-            string fileName = ImportedData.Name;
+            string fileName = importedData.Name;
             var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Jazz_Huawei_CDR");
 
-            System.IO.StreamReader sr = ImportedData.StreamReader;
+            System.IO.StreamReader sr = importedData.StreamReader;
             while (!sr.EndOfStream)
             {
                 string cdrLine = sr.ReadLine();
@@ -2262,16 +2262,16 @@ namespace Mediation.Runtime
         public static MappingOutput MapCDR_File_Jazz_Huawei_WithoutTransitRule(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             var cdrs = new List<dynamic>();
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Jazz_Huawei_CDR");
 
             int batchSize = 0;
 
-            string fileName = ImportedData.Name;
+            string fileName = importedData.Name;
             var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Jazz_Huawei_CDR");
 
-            System.IO.StreamReader sr = ImportedData.StreamReader;
+            System.IO.StreamReader sr = importedData.StreamReader;
             while (!sr.EndOfStream)
             {
                 string cdrLine = sr.ReadLine();
@@ -2359,8 +2359,8 @@ namespace Mediation.Runtime
 
         public static MappingOutput MapCDR_File_Namibia_Huawei(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
-            StreamReaderImportedData ImportedData = ((StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("e2a77834-86da-42ba-9501-c3eb81f5f60b"), (parsedBatch) =>
+            StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("e2a77834-86da-42ba-9501-c3eb81f5f60b"), (parsedBatch) =>
             {
                 switch (parsedBatch.RecordType)
                 {
@@ -2383,7 +2383,7 @@ namespace Mediation.Runtime
                         mappedBatches.Add("CDR_TransformationStep", cdrBatch);
                         break;
 
-                    case "Namibia_SMS":
+                    case "Namibia_WHS_SMS":
                         MappedBatchItem smsBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                         mappedBatches.Add("SMS_TransformationStep", smsBatch);
                         break;
@@ -2392,7 +2392,7 @@ namespace Mediation.Runtime
 
             MappingOutput result = new MappingOutput();
             result.Result = MappingResult.Valid;
-            result.Message = string.Format("Finished importing File {0}", ImportedData.Name);
+            result.Message = string.Format("Finished importing File {0}", importedData.Name);
             LogVerbose("Finished");
             return result;
         }
