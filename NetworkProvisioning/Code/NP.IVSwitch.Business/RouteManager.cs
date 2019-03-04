@@ -383,6 +383,98 @@ namespace NP.IVSwitch.Business
 			return updateOperationOutput;
 		}
 
+		public DeleteOperationOutput<object> DeleteRoute(int routeId)
+		{
+			IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+			Helper.SetSwitchConfig(dataManager);
+			DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>
+			{
+				Result = DeleteOperationResult.Failed
+			};
+			Route routeToDelete = GetRoute(routeId);
+			var carrierProfileManager = new CarrierProfileManager();
+			var carrierAccountManager = new CarrierAccountManager();
+			bool doesCarrAccHaveRouteExtendedSettings = false;
+			bool doesProfileHasExtendedSettings = false;
+			int? carrierAccountId = this.GetRouteCarrierAccountId(routeId);
+			int? profileId = carrierAccountManager.GetCarrierProfileId(carrierAccountId.Value);
+
+			if (!profileId.HasValue)
+			{
+				return deleteOperationOutput;
+			}
+
+			RouteCarrierAccountExtension routesExtendedSettings = null;
+			AccountCarrierProfileExtension accountCarrierProfileExtension = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profileId.Value) ?? new AccountCarrierProfileExtension();
+
+			if (carrierAccountId.HasValue)
+				routesExtendedSettings = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(carrierAccountId.Value);
+
+			if (routesExtendedSettings != null && routesExtendedSettings.RouteInfo != null && routesExtendedSettings.RouteInfo.Count > 0)
+				doesCarrAccHaveRouteExtendedSettings = true;
+
+
+			if (doesCarrAccHaveRouteExtendedSettings)
+			{
+				routesExtendedSettings.RouteInfo.RemoveAll(x => x.RouteId == routeId);
+				if (routesExtendedSettings.RouteInfo.Count == 0)
+					routesExtendedSettings.RouteInfo = null;
+
+				if (routesExtendedSettings.RouteInfo == null)
+				{
+					carrierAccountManager.UpdateCarrierAccountExtendedSetting<RouteCarrierAccountExtension>(carrierAccountId.Value, null);
+				}
+				else
+					carrierAccountManager.UpdateCarrierAccountExtendedSetting<RouteCarrierAccountExtension>(carrierAccountId.Value, routesExtendedSettings);
+			}
+			else
+			{
+				deleteOperationOutput.Message = "Carrier Account Have null extended settings";
+				deleteOperationOutput.ShowExactMessage = true;
+				return deleteOperationOutput;
+			}
+
+
+			var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(profileId.Value, false, true);
+			if (profileCarrierAccounts != null)
+			{
+				foreach (var account in profileCarrierAccounts)
+				{
+					RouteCarrierAccountExtension routeCarrierAccountExtension = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(account.CarrierAccountId);
+					if (routeCarrierAccountExtension != null)
+					{
+						if (routeCarrierAccountExtension.RouteInfo != null && routeCarrierAccountExtension.RouteInfo.Count > 0)
+						{
+							doesProfileHasExtendedSettings = true;
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				deleteOperationOutput.Message = "Carrier Profile Have null extended settings";
+				deleteOperationOutput.ShowExactMessage = true;
+				return deleteOperationOutput;
+			}
+
+			if (!doesProfileHasExtendedSettings && accountCarrierProfileExtension != null && !accountCarrierProfileExtension.CustomerAccountId.HasValue)
+			{
+				carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountCarrierProfileExtension>(profileId.Value, null);
+			}
+			else
+				if (!doesProfileHasExtendedSettings && accountCarrierProfileExtension != null)
+			{
+				accountCarrierProfileExtension.VendorAccountId = default(int?);
+				carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountCarrierProfileExtension>(profileId.Value, accountCarrierProfileExtension);
+			}
+			dataManager.DeleteRoute(routeToDelete);
+			Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+			deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+			return deleteOperationOutput;
+		}
+
+
 		public DateTime GetSwitchDateTime()
 		{
 			IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();

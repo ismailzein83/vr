@@ -102,10 +102,21 @@ namespace NP.IVSwitch.Data.Postgres
             return recordsEffected > 0;
         }
 
-        #endregion
+		public bool DeleteRoute(Route route)
+		{
+			String cmdDeleteRoute = string.Format("delete from routes where route_id={0}", route.RouteId);
+			int effectedRows = ExecuteNonQueryText(cmdDeleteRoute, cmd => { });
+			RouteTableRouteDataManager routeTableRouteDataManager = new RouteTableRouteDataManager();
+			routeTableRouteDataManager.IvSwitchSync = this.IvSwitchSync;
+			routeTableRouteDataManager.DeleteHelperRoute(route.RouteId);
+			return true;
+		}
 
-        #region private Methods
-        private int? InsertRoutes(Route route, int groupId, int tariffId)
+
+		#endregion
+
+		#region private Methods
+		private int? InsertRoutes(Route route, int groupId, int tariffId)
         {
             String cmdText = @"INSERT INTO routes(account_id,user_id,description,group_id,tariff_id,
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, wakeup_time, host,port,transport_mode_id,

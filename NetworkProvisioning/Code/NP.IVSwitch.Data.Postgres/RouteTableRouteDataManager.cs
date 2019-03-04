@@ -74,6 +74,12 @@ namespace NP.IVSwitch.Data.Postgres
 			});
 			return recordsEffected > 0;
 		}
+		public bool DeleteHelperRoute(int routeId)
+		{
+			String cmdDeleteHelperRoute = string.Format("delete from ui_helper_routes where route_id={0}", routeId);
+			int effectedRows = ExecuteNonQueryText(cmdDeleteHelperRoute, cmd => { });
+			return effectedRows > 0;
+		}
 		public void CreateRouteTableRoute(int routeTableId)
 		{
 			string table = string.Format("rt{0}", routeTableId);

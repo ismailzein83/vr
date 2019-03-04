@@ -15,5 +15,6 @@ namespace NP.IVSwitch.Data
         bool UpdateVendorUSer(Route route);
         DateTime GetSwitchDateTime();
         int GetGlobalTariffTableId();
-    }
+		bool DeleteRoute(Route route);
+	}
 }

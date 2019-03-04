@@ -92,6 +92,12 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 					clicked: cloneRoute,
 					haspermission: hasCloneRoutePermission
 				});
+
+				$scope.scopeModel.menuActions.push({
+					name: 'Delete',
+					clicked: deleteRoute,
+					//haspermission: hasCloneRoutePermission
+				});
             }
             function editRoute(RouteItem) {
                 var onRouteUpdated = function (updatedRoute) {
@@ -109,6 +115,18 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 
 
 				NP_IVSwitch_RouteService.cloneRoute(RouteItem.Entity.RouteId,carrierAccountId,onRouteAdded);
+			}
+
+			function deleteRoute(routeItem) {
+				VRNotificationService.showDeleteConfirmation().then(function (response) {
+					if (response) {
+						NP_IVSwitch_RouteAPIService.DeleteRoute(routeItem.Entity.RouteId).then(function (response) {
+							if (VRNotificationService.notifyOnItemDeleted("Route", response, "Entity.Description")) {
+								gridAPI.itemDeleted(routeItem);
+							}
+						});
+					}
+				});
 			}
 
             function hasEditRoutePermission() {

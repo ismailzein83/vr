@@ -64,5 +64,12 @@ namespace NP.IVSwitch.Web.Controllers
             return _manager.GetRouteHistoryDetailbyHistoryId(routeHistoryId);
         }
 
-    }
+		[HttpGet]
+		[Route("DeleteRoute")]
+		public Vanrise.Entities.DeleteOperationOutput<object> DeleteRoute(int routeId)
+		{
+			return _manager.DeleteRoute(routeId);
+		}
+
+	}
 }
