@@ -446,8 +446,6 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AssignAccountManagerAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\ICX\retail-be-icx-operatorwithlocal-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\Invoice\retail-be-account-invoice-selector.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Extensions\RecurringChargeTypeSettings\retail-be-recurringchargetype-settings.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Extensions\RecurringChargeTypeSettings\Templates\RecurringChargeTypeSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faulttickets-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faultticket-customobjectsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faultticket-staticeditor.js" />
@@ -706,6 +704,12 @@
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\retail-be-productdefinition-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionExtendedSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\retail-be-recurringchargeperiodsettings-monthly.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\retail-be-recurringchargeperiodsettings-onceayear.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\retail-be-recurringchargeperiodsettings-quarterly.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\Templates\MonthlyRecurringChargePeriodTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\Templates\OnceAYearRecurringChargePeriodTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\Templates\QuarterlyRecurringChargePeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountChargeEvaluators\MainExtensions\retail-be-accountchargeevaluator-fixedcharge.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountChargeEvaluators\MainExtensions\Templates\FixedChargeAccountChargeEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\retail-be-productextendedsettings-prepaid.js" />
@@ -738,6 +742,9 @@
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\retail-be-recurringchargedefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ProcessInput\retail-be-recurringcharge-process.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ProcessInput\Templates\RecurringChargProcessTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\retail-be-recurringchargeperiod-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\retail-be-recurringchargeperiod.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\Templates\RecurringChargePeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ScheduleTask\retail-be-recurringcharge-task.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ScheduleTask\Templates\RecurringChargeTaskTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
