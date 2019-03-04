@@ -34,13 +34,11 @@
   <connectionStrings>
     <add name="TOneCDRDBConnString" connectionString="Server=localhost;Database=TOneV2_CDR;User ID=sa;Password= "/>
     <add name="TOneAnalyticsDBConnString" connectionString="Server=localhost;Database=TOneV2_Analytics;User ID=sa;Password= "/>
-
-    <add name="TOneSMSDBConnString" connectionString="Server=localhost;Database=TOneV2_SMS;User ID=sa;Password= "/>
-    <add name="TOneSMSAnalyticsDBConnString" connectionString="Server=localhost;Database=TOneV2_SMSAnalytics;User ID=sa;Password= "/>
     
     <add name="QueueItemDBConnString" connectionString="Server=localhost;Database=TOneV2_Queueing;User ID=sa;Password= "/>
     <add name="TransactionDBConnString" connectionString="Server=localhost;Database=TOneV2_Transaction;User ID=sa;Password= "/>
     <add name="LogDBConnString" connectionString="Server=localhost;Database=TOneV2_Logging;User ID=sa;Password= "/>
+    
     <add name="RoutingDBConnStringTemplateKey" connectionString="Data Source=localhost;Initial Catalog=TOneV2_#WorkflowType#_#DatabaseId#;User ID=sa;Password= "/>
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=TOne_Configuration;User ID=sa;Password= "/>
     <add name="MainDBConnString" connectionString=""/>
