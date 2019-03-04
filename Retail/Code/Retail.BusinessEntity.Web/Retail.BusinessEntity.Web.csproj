@@ -240,6 +240,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountCreditLimitFieldEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\FaultTicketSourceEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ModuleTypeEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\RecurringChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\RootSelectorTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\DIDNumberTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\FinancialAccountEffectiveEnum.js" />
@@ -445,6 +446,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AssignAccountManagerAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\ICX\retail-be-icx-operatorwithlocal-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\Invoice\retail-be-account-invoice-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\RecurringChargeTypeSettings\retail-be-recurringchargetype-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\RecurringChargeTypeSettings\Templates\RecurringChargeTypeSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faulttickets-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faultticket-customobjectsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faultticket-staticeditor.js" />
