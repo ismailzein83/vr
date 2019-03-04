@@ -51,16 +51,65 @@ namespace Vanrise.Invoice.Business
             return invoiceItems;
         }
 
-        public string GetSubsectionTitle(Guid invoiceTypeId, Guid subsectionId)
+        public string GetSubsectionTitle(Guid invoiceTypeId, Guid uniqueSectionID)
         {
-            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
+            string sectionTitle = null;
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
             invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceTypeId);
             invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", invoiceTypeId);
-            var subsection = invoiceType.Settings.SubSections.FindRecord(x => x.InvoiceSubSectionId == subsectionId);
-            subsection.ThrowIfNull("subsection", subsectionId);
-            return subsection.SectionTitle;
+            foreach (var section in invoiceType.Settings.SubSections)
+            {
+                var subsection = section.Settings as InvoiceItemSubSection;
+                if (subsection != null)
+                {
+                    if (section.InvoiceSubSectionId == uniqueSectionID)
+                    {
+                        sectionTitle = section.SectionTitle;
+                        break;
+                    }
+                    foreach (var item in subsection.SubSections)
+                    {
+                        if (item.UniqueSectionID == uniqueSectionID)
+                        {
+                            sectionTitle = item.SectionTitle;
+                            break;
+                        }
+                        else
+                        {
+                            sectionTitle = GetSectionTitle(item.Settings.SubSections, uniqueSectionID);
+                            if (sectionTitle != null)
+                                break;
+                        }
+                    }
+                    if (sectionTitle != null)
+                        break;
+                }
+            }
+            return sectionTitle;
+        }
+
+        private string GetSectionTitle(List<InvoiceItemSubSectionOfSubSuction> subSections, Guid uniqueSectionID)
+        {
+            if (subSections == null || subSections.Count == 0)
+                return null;
+            string sectionTitle = null;
+
+            foreach (var subsection in subSections)
+            {
+                if (subsection.UniqueSectionID == uniqueSectionID)
+                {
+                    sectionTitle = subsection.SectionTitle;
+                    break;
+                }
+                else
+                {
+                    sectionTitle = GetSectionTitle(subsection.Settings.SubSections, uniqueSectionID);
+                    if (sectionTitle != null)
+                        break;
+                }
+            }
+            return sectionTitle;
         }
 
         public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(Guid invoiceTypeId, List<long> invoiceIds, List<string> itemSetNames, CompareOperator compareOperator)
@@ -139,7 +188,16 @@ namespace Vanrise.Invoice.Business
 
                 InvoiceTypeManager manager = new InvoiceTypeManager();
                 var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
-                var gridColumns = GetInvoiceSubSectionGridColumn(invoiceType, input.Query.UniqueSectionID);
+                invoiceType.ThrowIfNull("invoiceType", input.Query.InvoiceTypeId);
+                invoiceType.Settings.ThrowIfNull("invoiceType.Settings", input.Query.InvoiceTypeId);
+                invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", input.Query.InvoiceTypeId);
+                List<InvoiceSubSectionGridColumn> gridColumns = null;
+                foreach (var subsection in invoiceType.Settings.SubSections)
+                {
+                    gridColumns = subsection.Settings.GetSubsectionGridColumns(invoiceType, input.Query.UniqueSectionID);
+                    if (gridColumns != null)
+                        break;
+                }
                 var itemSetNameStorageConnectionString = manager.GetItemSetNameStorageInfo(input.Query.InvoiceTypeId, input.Query.ItemSetName);
                 IInvoiceItemDataManager _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
                 _dataManager.StorageConnectionStringKey = itemSetNameStorageConnectionString;
@@ -186,53 +244,6 @@ namespace Vanrise.Invoice.Business
                     ExportExcelHandler = new InvoiceItemExcelExportHandler(input.Query)
                 };
             }
-            public List<InvoiceSubSectionGridColumn> GetInvoiceSubSectionGridColumn(InvoiceType invoiceType, Guid uniqueSectionID)
-            {
-                List<InvoiceSubSectionGridColumn> gridColumns = null;
-                foreach (var subsection in invoiceType.Settings.SubSections)
-                {
-                    var invoiceItemSubSection = subsection.Settings as InvoiceItemSubSection;
-                    if (invoiceItemSubSection != null)
-                    {
-                        if (subsection.InvoiceSubSectionId == uniqueSectionID)
-                        {
-                            gridColumns = invoiceItemSubSection.GridColumns;
-                            break;
-                        }
-                        else
-                        {
-                            gridColumns = GetInvoiceSubSectionGridColumn(invoiceItemSubSection.SubSections, uniqueSectionID);
-                            if (gridColumns != null)
-                                break;
-                        }
-                    }
-
-
-                }
-                return gridColumns;
-            }
-            public List<InvoiceSubSectionGridColumn> GetInvoiceSubSectionGridColumn(List<InvoiceItemSubSectionOfSubSuction> subSections, Guid uniqueSectionID)
-            {
-                if (subSections == null || subSections.Count == 0)
-                    return null;
-                List<InvoiceSubSectionGridColumn> gridColumns = null;
-
-                foreach (var subsection in subSections)
-                {
-                    if (subsection.UniqueSectionID == uniqueSectionID)
-                    {
-                        gridColumns = subsection.Settings.GridColumns;
-                        break;
-                    }
-                    else
-                    {
-                        gridColumns = GetInvoiceSubSectionGridColumn(subsection.Settings.SubSections, uniqueSectionID);
-                        if (gridColumns != null)
-                            break;
-                    }
-                }
-                return gridColumns;
-            }
         }
 
         private class GroupingInvoiceItemRequestHandler : BigDataRequestHandler<GroupingInvoiceItemQuery, Entities.GroupingInvoiceItemDetail, Entities.GroupingInvoiceItemDetail>
@@ -271,7 +282,15 @@ namespace Vanrise.Invoice.Business
                 InvoiceItemRequestHandler invoiceItemRequestHandler = new InvoiceItemRequestHandler();
                 var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
                 invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
-                var gridColumns = invoiceItemRequestHandler.GetInvoiceSubSectionGridColumn(invoiceType, _query.UniqueSectionID);
+                invoiceType.Settings.ThrowIfNull("invoiceType.Settings", _query.InvoiceTypeId);
+                invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", _query.InvoiceTypeId);
+                List<InvoiceSubSectionGridColumn> gridColumns = null;
+                foreach(var subsection in invoiceType.Settings.SubSections)
+                {
+                    gridColumns = subsection.Settings.GetSubsectionGridColumns(invoiceType, _query.UniqueSectionID);
+                    if (gridColumns != null)
+                        break;
+                }
                 if (gridColumns != null && gridColumns.Count > 0)
                 {
                     foreach (var column in gridColumns)
@@ -330,18 +349,23 @@ namespace Vanrise.Invoice.Business
                 groupingItem.ThrowIfNull("groupingItem", _query.ItemGroupingId);
                 groupingItem.DimensionItemFields.ThrowIfNull("groupingItem.DimensionItemFields", _query.ItemGroupingId);
                 groupingItem.AggregateItemFields.ThrowIfNull("groupingItem.AggregateItemFields", _query.ItemGroupingId);
-                var subsection = invoiceType.Settings.SubSections.FindRecord(x => x.InvoiceSubSectionId == _query.UniqueSectionID);
-                subsection.ThrowIfNull("subsection", _query.UniqueSectionID);
-                subsection.Settings.ThrowIfNull("subsection.Settings", _query.UniqueSectionID);
-                var headers = subsection.Settings.GetSubsectionHeaders();
-                if (headers != null && headers.Count > 0)
+                List<InvoiceSubSectionGridColumn> gridColumns = null;
+                foreach (var subsection in invoiceType.Settings.SubSections)
                 {
+                    gridColumns = subsection.Settings.GetSubsectionGridColumns(invoiceType, _query.UniqueSectionID);
+                    if (gridColumns != null)
+                        break;
+                }
+                if (gridColumns != null && gridColumns.Count > 0)
+                {
+                    int columnIndex = 0;
                     if (_query.DimensionIds != null && _query.DimensionIds.Count > 0)
                     {
-                        foreach (var dimensionId in _query.DimensionIds)
+                        for (int i = 0; i < _query.DimensionIds.Count; i++)
                         {
-                            var header = headers.GetRecord(dimensionId);
-                            var headerCell = new ExportExcelHeaderCell() { Title = header };
+                            var dimensionId = _query.DimensionIds[i];
+                            var gridColumn = gridColumns[columnIndex];
+                            var headerCell = new ExportExcelHeaderCell() { Title = gridColumn.Header };
                             var dimensionItem = groupingItem.DimensionItemFields.FindRecord(x => x.DimensionItemFieldId == dimensionId);
                             dimensionItem.ThrowIfNull("dimenionItem", dimensionId);
                             dimensionItem.FieldType.ThrowIfNull("dimenionItem.FieldType", dimensionId);
@@ -350,14 +374,16 @@ namespace Vanrise.Invoice.Business
                                 HeaderCell = headerCell
                             });
                             sheet.Header.Cells.Add(headerCell);
+                            columnIndex++;
                         }
                     }
                     if (_query.MeasureIds != null && _query.MeasureIds.Count > 0)
                     {
-                        foreach (var measureId in _query.MeasureIds)
+                        for (int i = 0; i < _query.MeasureIds.Count; i++)
                         {
-                            var header = headers.GetRecord(measureId);
-                            var headerCell = new ExportExcelHeaderCell() { Title = header };
+                            var measureId = _query.MeasureIds[i];
+                            var gridColumn = gridColumns[columnIndex];
+                            var headerCell = new ExportExcelHeaderCell() { Title = gridColumn.Header };
                             var measureItem = groupingItem.AggregateItemFields.FindRecord(x => x.AggregateItemFieldId == measureId);
                             measureItem.ThrowIfNull("measureItem", measureId);
                             measureItem.FieldType.ThrowIfNull("measureItem.FieldType", measureId);
@@ -366,6 +392,7 @@ namespace Vanrise.Invoice.Business
                                 HeaderCell = headerCell
                             });
                             sheet.Header.Cells.Add(headerCell);
+                            columnIndex++;
                         }
                     }
                 }

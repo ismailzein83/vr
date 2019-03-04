@@ -48,7 +48,8 @@ app.service('VR_Invoice_InvoiceItemService', ['VRModalService', 'SecurityService
                             ItemGroupingId: itemGroupingId,
                             Filters: filters,
                             ParentGroupingInvoiceItemDetails: invoiceItem,
-                            SectionId: subSection.InvoiceSubSectionId
+                            SectionId: subSection.InvoiceSubSectionId,
+                            UniqueSectionID: subSection.InvoiceSubSectionId
                         },
                         settings: subSection,
                         invoiceId: invoiceId,

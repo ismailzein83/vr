@@ -31,7 +31,7 @@ namespace Vanrise.Invoice.Entities
     public abstract class InvoiceSubSectionSettings
     {
         public abstract Guid ConfigId { get; }
-        public virtual Dictionary<Guid, string> GetSubsectionHeaders()
+        public virtual List<InvoiceSubSectionGridColumn> GetSubsectionGridColumns(InvoiceType invoiceType, Guid uniqueSectionID)
         {
             return null;
         }

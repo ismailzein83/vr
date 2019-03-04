@@ -10,6 +10,7 @@ using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Common;
 
 namespace Vanrise.Invoice.MainExtensions
 {
@@ -127,10 +128,69 @@ namespace Vanrise.Invoice.MainExtensions
             else
             {
                 var excelResult = manager.GetFilteredGroupingInvoiceItems(itemGroupingInput) as Vanrise.Entities.ExcelResult<GroupingInvoiceItemDetail>;
-                return GetWebResponse(input, excelResult, manager.GetSubsectionTitle(input.Query.InvoiceTypeId, input.Query.UniqueSectionID));
+                return GetWebResponse(input, excelResult, GetSectionTitle(input.Query.InvoiceTypeId, input.Query.UniqueSectionID));
             }
         }
+        private string GetSectionTitle(Guid invoiceTypeId, Guid uniqueSectionID)
+        {
+            string sectionTitle = null;
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
+            invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceTypeId);
+            invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", invoiceTypeId);
+            foreach (var section in invoiceType.Settings.SubSections)
+            {
+                var subsection = section.Settings as ItemGroupingSection;
+                if (subsection != null)
+                {
+                    if (section.InvoiceSubSectionId == uniqueSectionID)
+                    {
+                        sectionTitle = section.SectionTitle;
+                        break;
+                    }
+                    foreach (var item in subsection.Settings.SubSections)
+                    {
+                        if (item.InvoiceSubSectionId == uniqueSectionID)
+                        {
+                            sectionTitle = item.SectionTitle;
+                            break;
+                        }
+                        else
+                        {
+                            sectionTitle = GetSectionTitle(item.Settings.SubSections, uniqueSectionID);
+                            if (sectionTitle != null)
+                                break;
+                        }
+                    }
+                    if (sectionTitle != null)
+                        break;
+                }
+            }
+            return sectionTitle;
+        }
 
+        private string GetSectionTitle(List<ItemGroupingSubSection> subSections, Guid uniqueSectionID)
+        {
+            if (subSections == null || subSections.Count == 0)
+                return null;
+            string sectionTitle = null;
+
+            foreach (var subsection in subSections)
+            {
+                if (subsection.InvoiceSubSectionId == uniqueSectionID)
+                {
+                    sectionTitle = subsection.SectionTitle;
+                    break;
+                }
+                else
+                {
+                    sectionTitle = GetSectionTitle(subsection.Settings.SubSections, uniqueSectionID);
+                    if (sectionTitle != null)
+                        break;
+                }
+            }
+            return sectionTitle;
+        }
         private ItemGroupingSectionSettings GetSection(InvoiceType invoiceType, Guid sectionId)
         {
             ItemGroupingSectionSettings subsectionItem = null;
