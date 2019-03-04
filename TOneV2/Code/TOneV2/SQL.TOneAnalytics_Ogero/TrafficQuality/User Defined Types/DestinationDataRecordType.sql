@@ -7,7 +7,7 @@
     [A2]               INT            NULL,
     [A3]               INT            NULL,
     [A4]               BIT            NULL,
-    [TRDCode]          VARCHAR (7)    NULL,
+    [TRDCode]          INT            NULL,
     [N1]               BIGINT         NULL,
     [N2]               BIGINT         NULL,
     [N3]               BIGINT         NULL,
@@ -17,4 +17,6 @@
     [T3]               INT            NULL,
     [ExtraFields]      NVARCHAR (MAX) NULL,
     [FileName]         VARCHAR (255)  NULL);
+
+
 
