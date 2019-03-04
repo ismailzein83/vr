@@ -154,7 +154,8 @@ namespace Vanrise.Security.Business
                 foreach (Module item in subModules)
                 {
                     List<View> viewsOfSubModules = views.FindAll(x => x.ModuleId == item.ModuleId);
-                    if ((viewsOfSubModules != null && viewsOfSubModules.Count > 0) || withEmptyChilds)
+                    List<Module> modulesOfSubModules = modules.FindAll(x => x.ParentId == item.ModuleId);
+                    if ((viewsOfSubModules != null && viewsOfSubModules.Count > 0) || (modulesOfSubModules != null && modulesOfSubModules.Count > 0) || withEmptyChilds)
                         menu.Childs.Add(GetModuleMenu(item, modules, views, withEmptyChilds));
                 }
             }
@@ -189,7 +190,7 @@ namespace Vanrise.Security.Business
         private MenuItem GetModuleMenu(Module module, List<Module> modules)
         {
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
-            MenuItem menu = new MenuItem() { Id = module.ModuleId, Location = module.Url, Icon = module.Icon, AllowDynamic = module.AllowDynamic ,RenderedAsView = module.RenderedAsView };
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Location = module.Url, Icon = module.Icon, AllowDynamic = module.AllowDynamic, RenderedAsView = module.RenderedAsView };
             if (module.Settings != null && module.Settings.LocalizedName != null)
                 menu.Name = vrLocalizationManager.GetTranslatedTextResourceValue(module.Settings.LocalizedName, module.Name);
             if (menu.Name == null)

@@ -159,7 +159,8 @@
                                                 <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
                                                 <ul class="nav slideanimation inner-sub-menu" ng-if="menusubItemsCurrent.Id == c.Id">
                                                     <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
-                                                        <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                                        <a ng-if="!a.RenderedAsView" class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                                        <span ng-if="a.RenderedAsView" class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-click="$root.goToFirstPageFromSubModule(a)">{{::a.Name}}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -224,6 +225,10 @@
 
                                 <span>
                                     <a href="" ng-click="$root.goToHomePage()">@ViewBag.ProductName</a>
+                                </span>
+                                <span ng-if="$root.selectedMenu.parent.parent">
+                                    <span class="glyphicon glyphicon-menu-right"></span>
+                                    <a href="" ng-click="$root.goToModulePage($root.selectedMenu.parent.parent)">{{$root.selectedMenu.parent.parent.Name}}</a>
                                 </span>
                                 <span ng-if="$root.selectedMenu.parent">
                                     <span class="glyphicon glyphicon-menu-right"></span>

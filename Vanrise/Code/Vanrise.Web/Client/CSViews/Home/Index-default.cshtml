@@ -239,7 +239,7 @@
                     </div>
                     <div id="navbar" class="navbar-collapse collapse vr-collapse">
                         <ul class="nav navbar-nav">
-                            <li class="panel-default menu-item-list" ng-repeat="item in menuItems">
+                            <li class="panel-default menu-item-list" ng-repeat="item in $root.menuItems">
                                 <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" ng-click="setIndex(item)">
 
                                     <span ng-if="item.Childs.length > 0">

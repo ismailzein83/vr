@@ -392,7 +392,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
             $rootScope.evalModuleViewToggle = function () {
                 if (window.location.hash == "#/view/default")
-                    return;            
+                    return;
                 $rootScope.showModuleViewToggle = (
                     ($rootScope.showModuleTiles == true && $rootScope.selectedtile && $rootScope.selectedtile.DefaultURL != undefined && window.location.hash.indexOf("ModuleDefault") > -1)
                     ||
@@ -404,7 +404,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 if ($rootScope.toTilesView != state) {
                     $rootScope.toTilesView = state;
                     if (UISettingsService.getDefaultPageURl() && (!$rootScope.toTilesView || !$rootScope.showApplicationTiles)) {
-                        window.location.href = UISettingsService.getDefaultPageURl();                       
+                        window.location.href = UISettingsService.getDefaultPageURl();
                     }
                     else
                         VRNavigationService.goto("/default");
@@ -417,7 +417,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $scope.getApplicationSelectedViewClass = function () {
                 return window.location.href.indexOf("default") > -1;
             };
-            $scope.showCurrentPageTitle= function () {
+            $scope.showCurrentPageTitle = function () {
                 if ($scope.currentPage.parent.RenderedAsView == true)
                     return false;
                 if ($rootScope.showModuleViewToggle == true)
@@ -641,8 +641,13 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                         $scope.menuItemsCurrent = selectedModule;
                     if (selectedModule.parent != null) {
                         $scope.menuItemsCurrent = selectedModule.parent;
-                        $scope.menusubItemsCurrent = selectedModule
+                        $scope.menusubItemsCurrent = selectedModule;
                     }
+                    if (selectedModule.parent != null && selectedModule.parent.parent != null) {
+                        $scope.menuItemsCurrent = selectedModule.parent.parent;
+                        $scope.menusubItemsCurrent = selectedModule.parent;
+                    }
+
                 }
                 $rootScope.evalModuleViewToggle();
             };
