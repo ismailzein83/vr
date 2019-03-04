@@ -288,6 +288,8 @@
     <Compile Include="ProductManager.cs" />
     <Compile Include="RecurringChargeDefinitionManager.cs" />
     <Compile Include="RecurringChargeManager.cs" />
+    <Compile Include="RecurringCharges\RecurringChargeTypeManager.cs" />
+    <Compile Include="RecurringCharges\RecurringChargeTypeSettings.cs" />
     <Compile Include="ReleaseCauseManager.cs" />
     <Compile Include="RequestManager.cs" />
     <Compile Include="RetailModuleManager.cs" />
