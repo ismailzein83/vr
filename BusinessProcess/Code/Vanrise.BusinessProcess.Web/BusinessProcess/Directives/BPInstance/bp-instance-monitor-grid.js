@@ -84,8 +84,9 @@ app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstan
                 };
 
                 api.clearTimer = function () {
-                    if ($scope.job) {
-                        VRTimerService.unregisterJob($scope.job);
+                    if ($scope.jobIds) {
+                        VRTimerService.unregisterJobByIds($scope.jobIds);
+                        $scope.jobIds.length = 0;
                     }
                 };
 
@@ -110,8 +111,9 @@ app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstan
             }
 
             function createTimer() {
-                if ($scope.job) {
-                    VRTimerService.unregisterJob($scope.job);
+                if ($scope.jobIds) {
+                    VRTimerService.unregisterJobByIds($scope.jobIds);
+                    $scope.jobIds.length = 0;
                 }
 
                 var pageInfo = gridAPI.getPageInfo();

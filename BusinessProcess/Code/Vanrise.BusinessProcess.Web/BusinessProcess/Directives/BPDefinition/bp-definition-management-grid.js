@@ -105,8 +105,9 @@ app.directive("businessprocessBpDefinitionManagementGrid", ["UtilsService", "VRN
             }
 
             function createTimer() {
-                if ($scope.job) {
-                    VRTimerService.unregisterJob($scope.job);
+                if ($scope.jobIds) {
+                    VRTimerService.unregisterJobByIds($scope.jobIds);
+                    $scope.jobIds.length = 0;
                 }
                 VRTimerService.registerJob(onTimerElapsed, $scope);
             }
@@ -116,9 +117,9 @@ app.directive("businessprocessBpDefinitionManagementGrid", ["UtilsService", "VRN
                     manipulateDataUpdated(response);
                     $scope.isLoading = false;
                 },
-                function (excpetion) {
-                    $scope.isLoading = false;
-                });
+                    function (excpetion) {
+                        $scope.isLoading = false;
+                    });
             }
 
             function manipulateDataUpdated(response) {

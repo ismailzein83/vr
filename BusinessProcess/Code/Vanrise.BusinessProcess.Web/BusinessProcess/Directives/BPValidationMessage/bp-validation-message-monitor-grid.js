@@ -58,8 +58,9 @@ function (BusinessProcess_BPValidationMessageAPIService, UtilsService, BusinessP
                     };
 
                     directiveAPI.clearTimer = function () {
-                        if ($scope.job) {
-                            VRTimerService.unregisterJob($scope.job);
+                        if ($scope.jobIds) {
+                            VRTimerService.unregisterJobByIds($scope.jobIds);
+                            $scope.jobIds.length = 0;
                         }
                     };
                     return directiveAPI;
@@ -102,8 +103,9 @@ function (BusinessProcess_BPValidationMessageAPIService, UtilsService, BusinessP
                 }
 
                 function createTimer() {
-                    if ($scope.job) {
-                        VRTimerService.unregisterJob($scope.job);
+                    if ($scope.jobIds) {
+                        VRTimerService.unregisterJobByIds($scope.jobIds);
+                        $scope.jobIds.length = 0;
                     }
                     var pageInfo = gridAPI.getPageInfo();
                     input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;

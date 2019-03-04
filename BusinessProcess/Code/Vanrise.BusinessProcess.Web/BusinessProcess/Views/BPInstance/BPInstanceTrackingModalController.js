@@ -117,8 +117,9 @@
                 if ($scope.scopeModel.process.HasBusinessRules)
                     validationMessageMonitorGridAPI.clearTimer();
 
-                if ($scope.job) {
-                    VRTimerService.unregisterJob($scope.job);
+                if ($scope.jobIds) {
+                    VRTimerService.unregisterJobByIds($scope.jobIds);
+                    $scope.jobIds.length = 0;
                 }
 
                 if (context != undefined && context.onClose != undefined) {
@@ -282,8 +283,9 @@
         }
 
         function createTimer() {
-            if ($scope.job) {
-                VRTimerService.unregisterJob($scope.job);
+            if ($scope.jobIds) {
+                VRTimerService.unregisterJobByIds($scope.jobIds);
+                $scope.jobIds.length = 0;
             }
             VRTimerService.registerJob(onTimerElapsed, $scope);
         }
