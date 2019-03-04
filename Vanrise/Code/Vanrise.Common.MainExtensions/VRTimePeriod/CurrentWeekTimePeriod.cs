@@ -14,7 +14,7 @@ namespace Vanrise.Common.MainExtensions
         }
         public DateTime GetStartOfWeek(DateTime currentDate, DayOfWeek startOfWeek)
         {
-            return currentDate.AddDays(-(DateTime.Today.DayOfWeek - startOfWeek));
+            return currentDate.AddDays(-(DateTime.Today.DayOfWeek - startOfWeek)).Date;
         }
     }
 }
