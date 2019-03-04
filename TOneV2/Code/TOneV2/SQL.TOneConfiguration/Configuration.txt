@@ -15,6 +15,7 @@ VR_AccountBalance.PostDeployment.sql
 VR_Notification.PostDeployment.sql
 User_Guides.PostDeployment.sql
 DataAnalysis.PostDeployment.sql
+VR_MobileNetwork.PostDeployment.sql
 Enumerations.sql
 
 TOne
@@ -119,7 +120,6 @@ SomST.PostDeployment.sql
 
 RA
 Retail_RA.PostDeployment.sql
-VR_MobileNetwork.PostDeployment.sql
 
 Interconnect
 InterConnect.PostDeployment.sql
