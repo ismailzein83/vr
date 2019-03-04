@@ -23,8 +23,7 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-            if (parameters != undefined && parameters != null)
-            {
+            if (parameters != undefined && parameters != null) {
                 parentId = parameters.parentId;
                 moduleId = parameters.moduleId;
             }
@@ -39,6 +38,11 @@
                 else
                     return insertModule();
             };
+
+            if (parentId == null) {
+                $scope.scopeModel.rootModule = true;
+                $scope.scopeModel.renderedAsView = false;
+            }
 
             $scope.hasSaveModulePermission = function () {
                 if (isEditMode)
@@ -60,14 +64,14 @@
             };
 
         }
-        
+
         function load() {
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
                 getModule().then(function () {
                     loadAllControls().finally(function () {
-                      //  moduleEntity = undefined;
+                        //  moduleEntity = undefined;
                     });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -101,12 +105,12 @@
                 var payload = {};
                 if (moduleEntity != undefined && moduleEntity.Settings != undefined) {
                     payload.selectedResourceKey = moduleEntity.Settings.LocalizedName;
-              }
+                }
                 VRUIUtilsService.callDirectiveLoad(nameResourceKeySelectorAPI, payload, resourceKeySelectorLoadDeferred);
             });
             return resourceKeySelectorLoadDeferred.promise;
         }
-       
+
         function setTitle() {
             if (isEditMode && moduleEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(moduleEntity.Name, 'Module');
@@ -120,12 +124,22 @@
                 return;
 
             $scope.scopeModel.name = moduleEntity.Name;
+            if (moduleEntity.ParentId == null) {
+                $scope.scopeModel.rootModule = true;
+                $scope.scopeModel.renderedAsView = false;
+            }
+            else {
+                $scope.scopeModel.rootModule = false;
+                $scope.scopeModel.renderedAsView = moduleEntity.RenderedAsView;              
+            }
+
+
         }
         function loadViewSelector() {
             var loadViewSelectorPromise = UtilsService.createPromiseDeferred();
             viewSelectorReadyDeferred.promise.then(function () {
                 var payload = {
-                    selectedIds: moduleEntity!=undefined ? moduleEntity.DefaultViewId : undefined
+                    selectedIds: moduleEntity != undefined ? moduleEntity.DefaultViewId : undefined
                 };
                 VRUIUtilsService.callDirectiveLoad(viewSelectorAPI, payload, loadViewSelectorPromise);
             });
@@ -133,15 +147,17 @@
 
         }
         function buildModuleObjFromScope() {
+            var parentId = moduleEntity != undefined ? moduleEntity.ParentId : parentId ;
             var moduleObject = {
                 ModuleId: moduleId,
                 Name: $scope.scopeModel.name,
-                AllowDynamic:moduleEntity && moduleEntity.isDynamic || false,
-                DefaultViewId : viewSelectorAPI.getSelectedIds(),
-                ParentId: moduleEntity != undefined ? moduleEntity.ParentId : parentId,
+                AllowDynamic: moduleEntity && moduleEntity.isDynamic || false,
+                DefaultViewId: viewSelectorAPI.getSelectedIds(),
+                ParentId: parentId,
                 Settings: {
                     LocalizedName: nameResourceKeySelectorAPI.getResourceKey()
-                }
+                },
+                RenderedAsView: parentId != null ? $scope.scopeModel.renderedAsView : false
             };
             return moduleObject;
         }

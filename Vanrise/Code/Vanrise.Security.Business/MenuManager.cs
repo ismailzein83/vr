@@ -153,10 +153,10 @@ namespace Vanrise.Security.Business
                     menu.Childs = new List<MenuItem>();
                 foreach (Module item in subModules)
                 {
-                    List<View> viewsOfSubModules = views.FindAll(x => x.ModuleId == item.ModuleId);
-                    List<Module> modulesOfSubModules = modules.FindAll(x => x.ParentId == item.ModuleId);
-                    if ((viewsOfSubModules != null && viewsOfSubModules.Count > 0) || (modulesOfSubModules != null && modulesOfSubModules.Count > 0) || withEmptyChilds)
-                        menu.Childs.Add(GetModuleMenu(item, modules, views, withEmptyChilds));
+                    var menuItem = GetModuleMenu(item, modules, views, withEmptyChilds);
+
+                    if ((menuItem.Childs != null && menuItem.Childs.Count > 0) || withEmptyChilds)
+                        menu.Childs.Add(menuItem);
                 }
             }
 

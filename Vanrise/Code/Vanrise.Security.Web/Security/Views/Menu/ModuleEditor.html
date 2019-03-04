@@ -8,6 +8,9 @@
                             <vr-textbox value="scopeModel.name" label="Name" localizedlabel="VRRes.Name.VREnd" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-sec-view-selector normal-col-num="4" on-ready="scopeModel.onViewSelectorReady" customlabel="Default View"></vr-sec-view-selector>
+                        <vr-columns colnum="4">
+                            <vr-switch value="scopeModel.renderedAsView" label="Rendered As View" vr-disabled="scopeModel.rootModule" localizedlabel="VRRes.Name.VREnd" isrequired></vr-switch>
+                        </vr-columns>
                         <vr-common-localizationressourcekey-selector on-ready="scopeModel.onNameResourceKeySelectorReady" normal-col-num="4" isrequired="true" customlabel="View Name Resource Key"></vr-common-localizationressourcekey-selector>
                     </vr-row>
                 </vr-tab>
