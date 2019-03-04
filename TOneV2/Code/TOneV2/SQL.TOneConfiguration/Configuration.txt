@@ -30,6 +30,7 @@ TOne_Jazz_ERPIntegration.PostDeployment.sql
 
 TOneV2.SMS
 TOne_SMS.PostDeployment.sql
+TOne_VoiceSMSPostFix.PostDeployment.sql
 
 BI
 BI.PostDeployemnt.sql
