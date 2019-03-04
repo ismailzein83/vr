@@ -32,7 +32,7 @@ app.directive('whsJazzTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onanalyticTableDirectiveReady = function (api) {
+                $scope.scopeModel.onAnalyticTableDirectiveReady = function (api) {
                     analyticTableDirectiveAPI = api;
                     analyticTableDirectiveReadyDeferred.resolve();
                 };
@@ -48,7 +48,7 @@ app.directive('whsJazzTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                 api.load = function (payload) {
 
                     var selectedIds;
-
+                    var promises = [];
                     if (payload != undefined && payload.data != undefined) {
                         selectedIds = payload.data.AnalyticTableId;
                     }
@@ -72,8 +72,8 @@ app.directive('whsJazzTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Jazz.Business.JazzERPIntegrationData, TOne.WhS.Jazz.Business",
-                        AnalyticTableId: analyticTableDirectiveAPI.getSelectedIds
+                        $type: "TOne.WhS.Jazz.Business.JazzTechnicalSettingData, TOne.WhS.Jazz.Business",
+                        AnalyticTableId: analyticTableDirectiveAPI.getSelectedIds()
                     };
                 };
 
@@ -85,4 +85,4 @@ app.directive('whsJazzTechnicalSettingsEditor', ['UtilsService', 'VRUIUtilsServi
         }
 
         return directiveDefinitionObject;
-    }]);
+    }]); 

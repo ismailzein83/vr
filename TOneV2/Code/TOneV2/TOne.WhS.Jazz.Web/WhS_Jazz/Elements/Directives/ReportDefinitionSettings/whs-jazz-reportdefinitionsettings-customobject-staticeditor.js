@@ -263,9 +263,9 @@
                                 }
                             }
                         }
-                        $scope.scopeModel.splitRateValue = selectedValues.SplitRateValue;
-                        promises.push(loadAmountTypeSelector({ selectedIds: selectedValues.AmountType }));
-                        promises.push(loadCurrencySelector({ selectedIds: selectedValues.CurrencyId }));
+                        $scope.scopeModel.splitRateValue = selectedValues != undefined ? selectedValues.SplitRateValue : undefined;
+                        promises.push(loadAmountTypeSelector({ selectedIds: selectedValues != undefined ? selectedValues.AmountType : undefined }));
+                        promises.push(loadCurrencySelector({ selectedIds: selectedValues != undefined ? selectedValues.CurrencyId : undefined }));
                         promises.push(loadReportDefinitionFilterDirective());
                         UtilsService.waitMultiplePromises(promises).then(function () {
                             loadPromiseDeferred.resolve();

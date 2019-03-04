@@ -82,8 +82,8 @@ namespace TOne.WhS.Jazz.Business
                                     var row = excelTable.CreateDataRow();
                                     CreateCell(transactionReportData.TransactionCode, row, cellStyle2);
                                     CreateCell(transactionReportData.TransationDescription, row, cellStyle2);
-                                    CreateCell((transactionReportData.Credit.HasValue?Decimal.Round(transactionReportData.Credit.Value,3): transactionReportData.Credit).ToString(), row, cellStyle2);
-                                    CreateCell((transactionReportData.Debit.HasValue ? Decimal.Round(transactionReportData.Debit.Value, 3) : transactionReportData.Debit).ToString(), row, cellStyle2);
+                                    CreateCell((transactionReportData.Credit.HasValue?Decimal.Round(transactionReportData.Credit.Value,3): transactionReportData.Credit), row, cellStyle2);
+                                    CreateCell((transactionReportData.Debit.HasValue ? Decimal.Round(transactionReportData.Debit.Value, 3) : transactionReportData.Debit), row, cellStyle2);
                                 }
                             }
                         }
@@ -102,7 +102,7 @@ namespace TOne.WhS.Jazz.Business
 
             return excelFile.GenerateExcelFile();
         }
-        private void CreateCell(string cellValue, VRExcelTableRow row, VRExcelTableRowCellStyle cellStyle)
+        private void CreateCell(object cellValue, VRExcelTableRow row, VRExcelTableRowCellStyle cellStyle)
         {
             var cell = row.CreateCell();
             cell.SetValue(cellValue);

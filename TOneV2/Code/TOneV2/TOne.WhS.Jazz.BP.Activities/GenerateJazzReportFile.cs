@@ -23,7 +23,6 @@ namespace TOne.WhS.Jazz.BP.Activities
             var excelFile = new VRExcelFile();
             if (jazzReports != null && jazzReports.Count > 0)
             {
-                jazzReports=jazzReports.OrderBy(x => x.ReportName).ToList();
                 foreach(var report in jazzReports)
                 {
                     var excelSheet = excelFile.CreateSheet();
@@ -67,16 +66,9 @@ namespace TOne.WhS.Jazz.BP.Activities
                     }
 
                     CreateCell("Duration", headerRow, cellStyle1);
-                    //if (!report.HasValue)
-                    //{
+                    
                         CreateCell("Amount", headerRow, cellStyle1);
-                    //}
-                    //else
-                    //{
-
-                    //    CreateCell(string.Format("Amount Rate-{0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
-                    //    CreateCell(string.Format("Amount {0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
-                    //}
+                    
 
                     if (report.TaxOption.HasValue)
                     {
@@ -86,16 +78,9 @@ namespace TOne.WhS.Jazz.BP.Activities
                     CreateCell("Market", headerRow, cellStyle1);
                     CreateCell("Region", headerRow, cellStyle1);
 
-                    //if (!report.SplitRateValue.HasValue)
-                    //{
+                   
                         CreateCell("Region Value", headerRow, cellStyle1);
-                    //}
-
-                    //else
-                    //{
-                    //    CreateCell(string.Format("Region Value Rate-{0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
-                    //    CreateCell(string.Format("Region Value {0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
-                    //}
+                   
               
                     if (report.ReportData!=null && report.ReportData.Count > 0)
                     {
@@ -111,16 +96,16 @@ namespace TOne.WhS.Jazz.BP.Activities
                                         {
                                             var row = excelTable.CreateDataRow();
                                             CreateCell(string.Format("{0}", reportData.CarrierAccountName), row, cellStyle1);
-                                            CreateCell(reportData.Duration.ToString(), row, cellStyle1);
-                                            CreateCell(reportData.Amount.ToString(), row, cellStyle1);
+                                            CreateCell(reportData.Duration, row, cellStyle1);
+                                            CreateCell(reportData.Amount, row, cellStyle1);
                                            
 
                                             if (report.TaxOption.HasValue)
-                                                CreateCell(reportData.Tax.ToString(), row, cellStyle1);
+                                                CreateCell(reportData.Tax, row, cellStyle1);
 
                                             CreateCell(string.Format("{0} {1}%",market.MarketName, market.Percentage), row, cellStyle1);
                                             CreateCell(string.Format("{0} {1}%", region.RegionName, region.Percentage), row, cellStyle1);
-                                            CreateCell(region.RegionValue.ToString(), row, cellStyle2);
+                                            CreateCell(region.RegionValue, row, cellStyle2);
                                         }
                                     }
                                 }
@@ -145,7 +130,7 @@ namespace TOne.WhS.Jazz.BP.Activities
             FileId.Set(context, fileId);
 
         }
-        private void CreateCell(string cellValue, VRExcelTableRow row, VRExcelTableRowCellStyle cellStyle)
+        private void CreateCell(object cellValue, VRExcelTableRow row, VRExcelTableRowCellStyle cellStyle)
         {
             var cell = row.CreateCell();
             cell.SetValue(cellValue);

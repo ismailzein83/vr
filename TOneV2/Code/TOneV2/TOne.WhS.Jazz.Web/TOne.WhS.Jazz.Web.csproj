@@ -153,14 +153,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="WhS_Jazz\Constant\RateCalculationTypeEnum.js" />
+    <Content Include="WhS_Jazz\Constant\AmountTypeEnum.js" />
     <Content Include="WhS_Jazz\Constant\ModuleConfig.js" />
     <Content Include="WhS_Jazz\Elements\Directives\MainExtensions\Templates\ReportDefinitionOnBeforeSaveHandler.html" />
     <Content Include="WhS_Jazz\Elements\Directives\MainExtensions\Templates\AccountCodeOnBeforeSaveHandler.html" />
     <Content Include="WhS_Jazz\Elements\Directives\MainExtensions\whs-jazz-reportdefinition-onbeforesavehandler.js" />
     <Content Include="WhS_Jazz\Elements\Directives\MainExtensions\whs-jazz-accountcode-onbeforesavehandler.js" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\Templates\AmountCalculationSelector.html" />
-    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-amount-type-selector.js" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportsProcess\Templates\ReportsProcess.html" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportsProcess\whs-jazz-reports-process.js" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\Templates\ReportDefinitionSettingsCustomObjectStaticEditor.html" />
@@ -175,6 +174,7 @@
     <Content Include="WhS_Jazz\Elements\Directives\AccountCode\Templates\AccountCodeCustomObjectDefintion.html" />
     <Content Include="WhS_Jazz\Elements\Directives\AccountCode\whs-jazz-accountcode-customobject-staticeditor.js" />
     <Content Include="WhS_Jazz\Elements\Directives\AccountCode\whs-jazz-accountcode-customobjectsettings.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\Settings\Templates\TechnicalSettings.html" />
     <Content Include="WhS_Jazz\Elements\Directives\Settings\whs-jazz-technical-settings-editor.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\CustomerTypeAPIService.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\TransactionsReportAPIService.js" />

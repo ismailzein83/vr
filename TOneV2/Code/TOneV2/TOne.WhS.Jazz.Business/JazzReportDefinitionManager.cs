@@ -57,17 +57,21 @@ namespace TOne.WhS.Jazz.Business
                             IsEnabled = (bool)genericBusinessEntity.FieldValues.GetRecord("IsEnabled")
                         };
 
-                        if (genericBusinessEntity.FieldValues.GetRecord("TaxOption") != null)
-                            reportDefintion.TaxOption = (TaxOptionEnum)genericBusinessEntity.FieldValues.GetRecord("TaxOption");
-
-                        if (genericBusinessEntity.FieldValues.GetRecord("AmountType") != null)
-                            reportDefintion.AmountType = (AmountTypeEnum)genericBusinessEntity.FieldValues.GetRecord("AmountType");
-
-                        if (genericBusinessEntity.FieldValues.GetRecord("SplitRateValue") != null)
-                            reportDefintion.SplitRateValue = (decimal)genericBusinessEntity.FieldValues.GetRecord("SplitRateValue");
-
-                        if (genericBusinessEntity.FieldValues.GetRecord("CurrencyId") != null)
-                            reportDefintion.CurrencyId = (int)genericBusinessEntity.FieldValues.GetRecord("CurrencyId");
+                        var taxOption = genericBusinessEntity.FieldValues.GetRecord("TaxOption");
+                        if (taxOption != null)
+                            reportDefintion.TaxOption = (TaxOptionEnum)taxOption;
+                        var amountMeasureType = genericBusinessEntity.FieldValues.GetRecord("AmountMeasureType");
+                        if (amountMeasureType != null)
+                            reportDefintion.AmountMeasureType = (AmountMeasureTypeEnum)amountMeasureType;
+                        var amountType = genericBusinessEntity.FieldValues.GetRecord("AmountType");
+                        if (amountType != null)
+                            reportDefintion.AmountType = (AmountTypeEnum)amountType;
+                        var splitRateValue = genericBusinessEntity.FieldValues.GetRecord("SplitRateValue");
+                        if (splitRateValue != null)
+                            reportDefintion.SplitRateValue = (decimal)splitRateValue;
+                        var currencyId = genericBusinessEntity.FieldValues.GetRecord("CurrencyId");
+                        if (currencyId != null)
+                            reportDefintion.CurrencyId = (int)currencyId;
 
                         reportDefintion.Settings = new JazzReportDefinitionSettings();
                         reportDefintion.Settings = (JazzReportDefinitionSettings)genericBusinessEntity.FieldValues.GetRecord("Settings");
@@ -79,7 +83,7 @@ namespace TOne.WhS.Jazz.Business
             });
         }
 
-        public bool ValidateJazzReportDefinition(GenericBusinessEntity genericBusinessEntity, HandlerOperationType operationType)
+        public void ValidateJazzReportDefinition(GenericBusinessEntity genericBusinessEntity, HandlerOperationType operationType, OutputResult outputResult)
         {
             JazzReportDefinition jazzReportDefinition = new JazzReportDefinition
             {
@@ -88,9 +92,18 @@ namespace TOne.WhS.Jazz.Business
             if (genericBusinessEntity.FieldValues.GetRecord("AmountMeasureType") != null)
                 jazzReportDefinition.AmountMeasureType = (AmountMeasureTypeEnum)genericBusinessEntity.FieldValues.GetRecord("AmountMeasureType");
 
-            if (jazzReportDefinition.Direction == ReportDefinitionDirectionEnum.Out && jazzReportDefinition.AmountMeasureType.HasValue && jazzReportDefinition.AmountMeasureType.Value == AmountMeasureTypeEnum.AMT)
-                return false;
-            return true;
+            if (jazzReportDefinition.Direction == ReportDefinitionDirectionEnum.Out)
+            {
+                if (jazzReportDefinition.AmountMeasureType.HasValue && jazzReportDefinition.AmountMeasureType.Value == AmountMeasureTypeEnum.AMT)
+                {
+                    outputResult.Result = false;
+                    outputResult.Messages.Add("Cannot Choose AMT Amount Measure Type With Direction Out");
+                }
+
+                if (jazzReportDefinition.TaxOption.HasValue && jazzReportDefinition.TaxOption.Value == TaxOptionEnum.TaxMeasure)
+                    outputResult.Result = false;
+                outputResult.Messages.Add("Suppliers Cannot Be Assigned Taxes!");
+            }
         }
 
     }

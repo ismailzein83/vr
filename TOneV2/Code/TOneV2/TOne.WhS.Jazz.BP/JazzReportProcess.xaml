@@ -101,17 +101,17 @@
               <ActivityAction.Argument>
                 <DelegateInArgument x:TypeArguments="twje:JazzReportDefinition" Name="reportDefinition" />
               </ActivityAction.Argument>
-              <Sequence>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
                 <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
                   <Sequence.Variables>
                     <Variable x:TypeArguments="scg:List(twje:JazzTransactionsReport)" Name="TransactionsReports" />
                     <Variable x:TypeArguments="twjba1:JazzReport" Name="JazzReport" />
                     <Variable x:TypeArguments="scg:List(twje:JazzTransactionsReport)" Name="TransactionsReport" />
                   </Sequence.Variables>
-                  <vbw:WriteTrackingMessage>
+                  <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_7">
                     <vbw:WriteTrackingMessage.Message>
                       <InArgument x:TypeArguments="x:String">
-                        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Start Processing Report:{0}",reportDefinition.Name)</mca:CSharpValue>
+                        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Start Processing Report: '{0}'",reportDefinition.Name)</mca:CSharpValue>
                       </InArgument>
                     </vbw:WriteTrackingMessage.Message>
                     <vbw:WriteTrackingMessage.Severity>
@@ -119,7 +119,6 @@
                         <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
                       </InArgument>
                     </vbw:WriteTrackingMessage.Severity>
-                    <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_7</sap2010:WorkflowViewState.IdRef>
                   </vbw:WriteTrackingMessage>
                   <twjba1:ProcessJazzReport sap2010:WorkflowViewState.IdRef="ProcessJazzReport_1">
                     <twjba1:ProcessJazzReport.FromDate>
@@ -148,10 +147,10 @@
                       </InArgument>
                     </twjba1:ProcessJazzReport.ToDate>
                   </twjba1:ProcessJazzReport>
-                  <vbw:WriteTrackingMessage>
+                  <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_8">
                     <vbw:WriteTrackingMessage.Message>
                       <InArgument x:TypeArguments="x:String">
-                        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Processing Report:{0}", reportDefinition.Name)</mca:CSharpValue>
+                        <mca:CSharpValue x:TypeArguments="x:String">string.Format("End Processing Report: '{0}'", reportDefinition.Name)</mca:CSharpValue>
                       </InArgument>
                     </vbw:WriteTrackingMessage.Message>
                     <vbw:WriteTrackingMessage.Severity>
@@ -159,7 +158,6 @@
                         <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
                       </InArgument>
                     </vbw:WriteTrackingMessage.Severity>
-                    <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_8</sap2010:WorkflowViewState.IdRef>
                   </vbw:WriteTrackingMessage>
                   <twjba1:SaveJazzReportDraft sap2010:WorkflowViewState.IdRef="SaveJazzReportDraft_1">
                     <twjba1:SaveJazzReportDraft.TransactionsReport>
@@ -188,7 +186,6 @@
                     </If.Then>
                   </If>
                 </Sequence>
-                <sap2010:WorkflowViewState.IdRef>Sequence_6</sap2010:WorkflowViewState.IdRef>
               </Sequence>
             </ActivityAction>
           </ForEach>
@@ -299,7 +296,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkphenouQlBcSmF6elJlcG9ydFByb2Nlc3MueGFtbD87A68CDgIBAUELQXgCAQJFBUsgAwGIAkwFUigDAYICUwWtAgoCAQdIC0iGAQMBigJFYEV2AwGJAk8LT30DAYMCVgtWYwIBCFoJogIUAgEUpQIJqwIkAgENXgvCARUCAXHDAQvOASsCAWTPAQvVASYCAV3WAQvqARwCAUnrAQuTAhACASOUAguaAikCARybAguhAiYCARWoAg+oAokBAgEPpQJkpQJ8AgEOYRFhggEDAfwBaA/AARoCAXLLARHLAW0CAWvGARHGAVwCAWXSARHSAXICAV7nARHnAYUBAgFX3gER4gEhAgFR1gGmAdYBtgECAVDZARHZAZ0BAgFK7gER7gFyAgEk8gEPhgIaAgEziQIPkQIaAgEqlwIRlwJUAgEdngIRngKdAQIBFmkRvgEcAgFz8wER/gE2AgE8/wERhQIsAgE0igIRkAIsAgErbxN7LgMB5wF8E5YBLgMBtAGXAROjAS4DAZ8BpAETqgEwAwGUAasBE70BGAIBdPYBF/YBZQIBQ/sBF/sBYwIBPYICF4ICkgECATb/AWz/AYMBAgE1jQIXjQKSAQIBLYoCbIoCggECASx3GXeTAQMB8gFyGXKZAQMB6AGJARmJAY4BAwHdAX8Zf2cDAdMBkwEZkwFlAwHJAYQBGYQBcgMBvwGOARmOAXgDAbUBnwEZnwGTAQMBqgGaARmaAZQBAwGgAacBGacBhgEDAZUBrgEZrgFqAgF1sgEXuwEpAgF/uQEbuQF+AwGKAbUBHbUBbgMBgAE=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkphenouQlBcSmF6elJlcG9ydFByb2Nlc3MueGFtbD87A6wCDgIBAUELQXgCAQJFBUsgAwGIAkwFUigDAYICUwWqAgoCAQdIC0iGAQMBigJFYEV2AwGJAk8LT30DAYMCVgtWYwIBCFoJnwIUAgEUogIJqAIkAgENXgu/ARUCAXHAAQvLASsCAWTMAQvSASYCAV3TAQvnARwCAUnoAQuQAhACASORAguXAikCARyYAgueAiYCARWlAg+lAokBAgEPogJkogJ8AgEOYRFhggEDAfwBaA+9ARoCAXLIARHIAW0CAWvDARHDAVwCAWXPARHPAXICAV7kARHkAYUBAgFX2wER3wEhAgFR0wGmAdMBtgECAVDWARHWAZ0BAgFK6wER6wFyAgEk7wEPgwIaAgEzhgIPjgIaAgEqlAIRlAJUAgEdmwIRmwKdAQIBFmkRvAEcAgFz8AER+wE2AgE8/AERggIsAgE0hwIRjQIsAgErbxN6LgMB5wF7E5UBLgMBtAGWAROhAS4DAZ8BogETqAEwAwGUAakBE7sBGAIBdPMBF/MBZQIBQ/gBF/gBYwIBPf8BF/8BkgECATb8AWz8AYMBAgE1igIXigKSAQIBLYcCbIcCggECASx3GXeTAQMB8gFyGXKcAQMB6AGIARmIAY4BAwHdAX4ZfmcDAdMBkgEZkgFlAwHJAYMBGYMBcgMBvwGNARmNAXgDAbUBngEZngGTAQMBqgGZARmZAZsBAwGgAaUBGaUBhgEDAZUBrAEZrAFqAgF1sAEXuQEpAgF/twEbtwF+AwGKAbMBHbMBbgMBgAE=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

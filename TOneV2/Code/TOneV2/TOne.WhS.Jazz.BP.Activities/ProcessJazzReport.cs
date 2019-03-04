@@ -12,8 +12,6 @@ using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Entities;
 using TOne.BusinessEntity.Business;
 using Vanrise.Common.Business;
-using RegionManager = TOne.WhS.Jazz.Business.RegionManager;
-using ConfigManager = TOne.WhS.Jazz.Business.ConfigManager;
 
 namespace TOne.WhS.Jazz.BP.Activities
 {
@@ -92,7 +90,7 @@ namespace TOne.WhS.Jazz.BP.Activities
             AnalyticManager analyticManager = new AnalyticManager();
             var regulatedToDate = toDate.AddDays(1).AddMilliseconds(-3);
 
-            ConfigManager configManager = new ConfigManager();
+            TOne.WhS.Jazz.Business.ConfigManager configManager = new TOne.WhS.Jazz.Business.ConfigManager();
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
@@ -158,13 +156,22 @@ namespace TOne.WhS.Jazz.BP.Activities
                     var duration= Convert.ToDecimal(durationValue.Value ?? 0.0);
                     var amountType = reportDefinition.AmountType;
                     CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
-                    var exchangeRate = amountType.HasValue ? currencyExchangeRateManager.ConvertValueToSystemCurrency(reportDefinition.SplitRateValue.Value, reportDefinition.CurrencyId.Value, DateTime.Now):1;
+                    var exchangeRate = (amountType.HasValue && reportDefinition.CurrencyId.HasValue) ? currencyExchangeRateManager.ConvertValueToSystemCurrency(reportDefinition.SplitRateValue.Value, reportDefinition.CurrencyId.Value, DateTime.Now):1;
+                    decimal splitRateValue = 0;
+                    if (amountType.HasValue)
+                    {
+                        if (reportDefinition.SplitRateValue.HasValue)
+                            splitRateValue = reportDefinition.SplitRateValue.Value;
+                        else
+                            throw new NullReferenceException($"splitRateValue '{splitRateValue}'");
+                    }
+
                     var jazzReportData = new JazzReportData
                     {
                         CarrierAccountId = Convert.ToInt32(carrierAccount.Value),
                         CarrierAccountName = carrierAccount.Name,
                         Duration = Decimal.Round(Convert.ToDecimal(durationValue.Value ?? 0.0),2),
-                        Amount = Decimal.Round(!amountType.HasValue ? amount : amountType.Value==AmountTypeEnum.FixedAmount? duration* reportDefinition.SplitRateValue.Value:amount-duration * reportDefinition.SplitRateValue.Value,3)*exchangeRate,
+                        Amount = Decimal.Round(!amountType.HasValue ? amount : amountType.Value==AmountTypeEnum.FixedRate? duration* splitRateValue : amount-duration * splitRateValue, 3)*exchangeRate,
                         Tax = taxValue != null ? Decimal.Round(Convert.ToDecimal(taxValue.Value ?? 0.0),3) : 0
                     };
 
@@ -181,13 +188,13 @@ namespace TOne.WhS.Jazz.BP.Activities
                                 MarketName = _marketManager.GetMarketName(market.MarketId),
                                 CustomerTypeId = market.CustomerTypeId,
                                 CustomerTypeName = _customerTypeManager.GetCustomerTypeName(market.CustomerTypeId),
-                                MarketValue = market.Percentage * jazzReportData.Amount / 100,
+                                MarketValue = Decimal.Round(market.Percentage * jazzReportData.Amount / 100,3),
                                 Percentage = market.Percentage,
                             };
                             if (reportDefinition.Settings.RegionSettings != null && reportDefinition.Settings.RegionSettings.RegionOptions != null && reportDefinition.Settings.RegionSettings.RegionOptions.Count > 0)
                             {
                                 reportMarket.Regions = new List<JazzReportRegion>();
-                                RegionManager _regionManager = new RegionManager();
+                                TOne.WhS.Jazz.Business.RegionManager _regionManager = new TOne.WhS.Jazz.Business.RegionManager();
                                 foreach (var region in reportDefinition.Settings.RegionSettings.RegionOptions)
                                 {
                                     reportMarket.Regions.Add(new JazzReportRegion
@@ -333,7 +340,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                 var transactionsReportsDataDictionary = new Dictionary<string, JazzTransactionsReportData>();
                                 MarketManager marketManager = new MarketManager();
                                 CustomerTypeManager customerTypeManager = new CustomerTypeManager();
-                                RegionManager regionManager = new RegionManager();
+                                TOne.WhS.Jazz.Business.RegionManager regionManager = new TOne.WhS.Jazz.Business.RegionManager();
                                 ProductServiceManager productServiceManager = new ProductServiceManager();
                                 foreach (var carrier in accountCode.Carriers.Carriers)
                                 {

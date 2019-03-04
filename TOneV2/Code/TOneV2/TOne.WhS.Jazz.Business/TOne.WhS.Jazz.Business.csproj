@@ -107,6 +107,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598E-8526-4BB4-9D1B-87A6B3B1CE72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754D-484C-48F7-9284-BE9B6B9D5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Jazz.BP.Arguments\TOne.WhS.Jazz.BP.Arguments.csproj">
       <Project>{97FCD3FB-7C13-4C40-B150-BDCF81E4AB19}</Project>
       <Name>TOne.WhS.Jazz.BP.Arguments</Name>

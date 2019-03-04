@@ -25,12 +25,8 @@ namespace TOne.WhS.Jazz.Business
 
             JazzReportDefinitionManager jazzReportDefinitionManager = new JazzReportDefinitionManager();
           
-            var result = jazzReportDefinitionManager.ValidateJazzReportDefinition(context.GenericBusinessEntity,context.OperationType);
-
-            context.OutputResult.Result = result;
-
-            if(!result)
-                context.OutputResult.Messages.Add("Cannot Choose AMT Amount Measure Type With Direction Out");
+            jazzReportDefinitionManager.ValidateJazzReportDefinition(context.GenericBusinessEntity,context.OperationType, context.OutputResult);
+          
         }
 
     }

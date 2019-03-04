@@ -7,7 +7,7 @@ using Vanrise.GenericData.Entities;
 namespace TOne.WhS.Jazz.Entities
 {
     public enum ReportDefinitionDirectionEnum  { In = 0,Out = 1 }
-    public enum AmountTypeEnum { FixedAmount = 1, PartialAmount = 2 }
+    public enum AmountTypeEnum { FixedRate = 1, PartialAmount = 2 }
     public enum AmountMeasureTypeEnum { AMT=0}
     public enum TaxOptionEnum { TaxMeasure=1,ZeroTax=2}
     public class JazzReportDefinition

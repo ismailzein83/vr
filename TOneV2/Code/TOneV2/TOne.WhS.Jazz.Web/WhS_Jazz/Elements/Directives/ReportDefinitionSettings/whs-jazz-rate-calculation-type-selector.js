@@ -1,6 +1,6 @@
 ﻿
-appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Jazz_RateCalculationTypeEnum',
-    function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Jazz_RateCalculationTypeEnum) {
+appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Jazz_AmountTypeEnum',
+    function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Jazz_AmountTypeEnum) {
         'use strict';
 
         var directiveDefinitionObject = {
@@ -69,13 +69,7 @@ appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationS
                 $scope.scopeModel.onRateTypeChanged = function (value) {
                   
                 };
-                $scope.scopeModel.showFixedRateValue = function () {
-                    if (ctrl.selectedvalues != undefined) {
-                        if (ctrl.selectedvalues.value == WhS_Jazz_RateCalculationTypeEnum.PartialRate.value || ctrl.selectedvalues.value == WhS_Jazz_RateCalculationTypeEnum.FixedRate.value)
-                            return true;
-                    }
-                    return false;
-                };
+           
             }
 
             function defineAPI() {
@@ -88,7 +82,7 @@ appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationS
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
-                    ctrl.datasource = UtilsService.getArrayEnum(WhS_Jazz_RateCalculationTypeEnum);
+                    ctrl.datasource = UtilsService.getArrayEnum(WhS_Jazz_AmountTypeEnum);
                     if (selectedIds != undefined) {
                         rateTypeSelectedPromise = UtilsService.createPromiseDeferred();
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
