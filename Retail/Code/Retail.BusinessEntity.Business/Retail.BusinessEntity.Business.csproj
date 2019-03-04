@@ -168,6 +168,7 @@
     <Compile Include="AccountPartTaxesRuntimeManager.cs" />
     <Compile Include="BEConfigurationManager.cs" />
     <Compile Include="Context\AccountBulkActionSettingsContext.cs" />
+    <Compile Include="Extensions\AccountBulkActionsBPDefinitionSettings.cs" />
     <Compile Include="Extensions\AccountDIDMemoryAnalyticDataManager.cs" />
     <Compile Include="Extensions\AccountManager\AssignedAccountToAccountManagerFilter.cs" />
     <Compile Include="Extensions\AccountManager\RetailAccountManagerAssignmentManager.cs" />
