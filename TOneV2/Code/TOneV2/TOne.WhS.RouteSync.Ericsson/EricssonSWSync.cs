@@ -278,144 +278,160 @@ namespace TOne.WhS.RouteSync.Ericsson
             {
                 ericssonSSHCommunication = SwitchCommunicationList.FirstOrDefault(itm => itm.IsActive);
             }
+
             SSHCommunicator sshCommunicator = null;
-            if (ericssonSSHCommunication != null)
-                sshCommunicator = new SSHCommunicator(ericssonSSHCommunication.SSHCommunicatorSettings);
-
-            DateTime finalizeTime = DateTime.Now;
-
-            List<CommandResult> commandResults = new List<CommandResult>();
-
-            List<string> faultCodes = null;
-            int maxNumberOfRetries = 0;
-            if (sshCommunicator != null)
+            try
             {
-                var configManager = new TOne.WhS.RouteSync.Business.ConfigManager();
-                EricssonSwitchRouteSynchronizerSettings switchSettings = configManager.GetRouteSynchronizerSwitchSettings(ConfigId) as EricssonSwitchRouteSynchronizerSettings;
-                if (switchSettings == null || switchSettings.FaultCodes == null)
-                    throw new NullReferenceException("Ericsson switch settings is not defined. Please go to Route Sync under Component Settings and add related settings.");
-                faultCodes = switchSettings.FaultCodes;
-                maxNumberOfRetries = switchSettings.NumberOfRetries;
-            }
+                if (ericssonSSHCommunication != null)
+                    sshCommunicator = new SSHCommunicator(ericssonSSHCommunication.SSHCommunicatorSettings);
 
-            #region execute and log Customer Mapping
-            List<CustomerMappingWithCommands> succeedCustomerMappingsWithCommands;
-            List<CustomerMappingWithCommands> failedCustomerMappingsWithCommands;
-            List<CustomerMappingWithCommands> succeedCustomerMappingsWithFailedTrunk;
+                DateTime finalizeTime = DateTime.Now;
 
-            var executeStatus = ExecuteCustomerMappingsCommands(customerMappingsWithCommands, ericssonSSHCommunication, sshCommunicator, commandResults, out succeedCustomerMappingsWithCommands, out failedCustomerMappingsWithCommands, out succeedCustomerMappingsWithFailedTrunk, faultCodes, maxNumberOfRetries);
-            LogCustomerMappingCommands(succeedCustomerMappingsWithCommands, failedCustomerMappingsWithCommands, ftpLogger, finalizeTime);
+                List<CommandResult> commandResults = new List<CommandResult>();
 
-            if (succeedCustomerMappingsWithCommands != null && succeedCustomerMappingsWithCommands.Count > 0)
-                customerMappingSucceededDataManager.SaveCustomerMappingsSucceededToDB(succeedCustomerMappingsWithCommands.Select(item => item.CustomerMappingWithActionType));
-
-            List<CustomerMappingWithCommands> failedCustomerMappingToUpdate = new List<CustomerMappingWithCommands>();
-            if (failedCustomerMappingsWithCommands != null && failedCustomerMappingsWithCommands.Count > 0)
-            {
-                var failedAdded = failedCustomerMappingsWithCommands.FindAllRecords(item => item.CustomerMappingWithActionType.ActionType == CustomerMappingActionType.Add);
-                var failedUpdated = failedCustomerMappingsWithCommands.FindAllRecords(item => item.CustomerMappingWithActionType.ActionType == CustomerMappingActionType.Update);
-
-                if (failedAdded != null && failedAdded.Any())
-                    customerMappingDataManager.RemoveCutomerMappingsFromTempTable(failedAdded.Select(item => item.CustomerMappingWithActionType.CustomerMapping.BO));
-
-                if (failedUpdated != null && failedUpdated.Any())
-                    failedCustomerMappingToUpdate.AddRange(failedUpdated);
-            }
-
-            if (succeedCustomerMappingsWithFailedTrunk != null && succeedCustomerMappingsWithFailedTrunk.Count > 0)
-                failedCustomerMappingToUpdate.AddRange(succeedCustomerMappingsWithFailedTrunk);
-
-            if (failedCustomerMappingToUpdate.Count > 0)
-                customerMappingDataManager.UpdateCustomerMappingsInTempTable(failedCustomerMappingToUpdate.Select(item => item.CustomerMappingWithActionType.CustomerMapping));
-            #endregion
-
-            #region execute and log Route Cases
-            List<RouteCaseWithCommands> succeedRouteCasesWithCommands;
-            List<RouteCaseWithCommands> failedRouteCasesWithCommands;
-
-            ExecuteRouteCasesCommands(routeCasesToBeAddedWithCommands, ericssonSSHCommunication, sshCommunicator, commandResults, out succeedRouteCasesWithCommands, out failedRouteCasesWithCommands, routeCaseDataManager, maxNumberOfRetries);
-            LogRouteCaseCommands(succeedRouteCasesWithCommands, failedRouteCasesWithCommands, ftpLogger, finalizeTime);
-            #endregion
-
-            #region execute and log Routes
-
-            IEnumerable<int> failedRouteCaseNumbers = (failedRouteCasesWithCommands == null) ? null : failedRouteCasesWithCommands.Select(item => item.RouteCase.RCNumber);
-            IEnumerable<string> failedCustomerMappingBOs = (failedCustomerMappingsWithCommands == null) ? null : failedCustomerMappingsWithCommands.Select(item => item.CustomerMappingWithActionType.CustomerMapping.BO);
-
-            Dictionary<string, List<EricssonRouteWithCommands>> allFailedEricssonRoutesWithCommandsByBo = new Dictionary<string, List<EricssonRouteWithCommands>>();
-            List<CustomerMappingWithActionType> customerMappingsToDeleteSucceed = new List<CustomerMappingWithActionType>();
-            List<CustomerMappingWithActionType> customerMappingsToDeleteFailed = new List<CustomerMappingWithActionType>();
-
-            Dictionary<string, List<EricssonRouteWithCommands>> succeedEricssonRoutesWithCommandsByBo = null;
-            Dictionary<string, List<EricssonRouteWithCommands>> failedEricssonRoutesWithCommandsByBo = null;
-
-            Dictionary<string, List<EricssonRouteWithCommands>> succeedEricssonARoutesWithCommandsByBo = null;
-            Dictionary<string, List<EricssonRouteWithCommands>> failedEricssonARoutesWithCommandsByBo = null;
-
-            if (ericssonRoutesWithCommandsByBo != null)
-            {
-                ExecuteRoutesCommands(ericssonRoutesWithCommandsByBo.BNumberEricssonRouteWithCommands, ericssonSSHCommunication, sshCommunicator, customersToDeleteByBO, commandResults,
-                  out succeedEricssonRoutesWithCommandsByBo, out failedEricssonRoutesWithCommandsByBo, allFailedEricssonRoutesWithCommandsByBo, customerMappingsToDeleteSucceed, customerMappingsToDeleteFailed
-                  , failedCustomerMappingBOs, failedRouteCaseNumbers, faultCodes, maxNumberOfRetries, false);
-
-                ExecuteRoutesCommands(ericssonRoutesWithCommandsByBo.ANumberEricssonRouteWithCommands, ericssonSSHCommunication, sshCommunicator, customersToDeleteByBO, commandResults,
-                  out succeedEricssonARoutesWithCommandsByBo, out failedEricssonARoutesWithCommandsByBo, allFailedEricssonRoutesWithCommandsByBo, customerMappingsToDeleteSucceed, customerMappingsToDeleteFailed
-                  , failedCustomerMappingBOs, failedRouteCaseNumbers, faultCodes, maxNumberOfRetries, true);
-            }
-
-            LogEricssonRouteCommands(succeedEricssonRoutesWithCommandsByBo, failedEricssonRoutesWithCommandsByBo, ftpLogger, finalizeTime, false);
-            LogEricssonRouteCommands(succeedEricssonARoutesWithCommandsByBo, failedEricssonARoutesWithCommandsByBo, ftpLogger, finalizeTime, true);
-
-            #region Update the deleted customer
-            if (customerMappingsToDeleteSucceed != null && customerMappingsToDeleteSucceed.Count > 0)
-                customerMappingSucceededDataManager.SaveCustomerMappingsSucceededToDB(customerMappingsToDeleteSucceed);
-
-            if (customerMappingsToDeleteFailed != null && customerMappingsToDeleteFailed.Count > 0)
-            {
-                customerMappingDataManager.InsertCutomerMappingsToTempTable(customerMappingsToDeleteFailed.Select(item => item.CustomerMapping));
-                routeDataManager.CopyCustomerRoutesToTempTable(customerMappingsToDeleteFailed.Select(item => item.CustomerMapping.BO));
-            }
-            customerMappingDataManager.Finalize(new CustomerMappingFinalizeContext());
-            #endregion
-
-            if (succeedEricssonRoutesWithCommandsByBo != null && succeedEricssonRoutesWithCommandsByBo.Count > 0)// save succeeded routes to succeeded table
-                routeSucceededDataManager.SaveRoutesSucceededToDB(succeedEricssonRoutesWithCommandsByBo);
-
-            if (succeedEricssonARoutesWithCommandsByBo != null && succeedEricssonARoutesWithCommandsByBo.Count > 0)// save succeeded routes to succeeded table
-                routeSucceededDataManager.SaveRoutesSucceededToDB(succeedEricssonARoutesWithCommandsByBo);
-
-            if (allFailedEricssonRoutesWithCommandsByBo != null && allFailedEricssonRoutesWithCommandsByBo.Count > 0)
-            {
-                var failedAdded = new List<EricssonConvertedRoute>();
-                var failedUpdated = new List<EricssonConvertedRoute>();
-                var failedDeleted = new List<EricssonConvertedRoute>();
-
-                foreach (var failedEricssonRoutesWithCommands in allFailedEricssonRoutesWithCommandsByBo)
+                List<string> faultCodes = null;
+                int maxNumberOfRetries = 0;
+                if (sshCommunicator != null)
                 {
-                    foreach (var route in failedEricssonRoutesWithCommands.Value)
-                    {
-                        if (route.ActionType == RouteActionType.Add)
-                            failedAdded.Add(route.RouteCompareResult.Route);
-                        if (route.ActionType == RouteActionType.Update)
-                            failedUpdated.Add(route.RouteCompareResult.OriginalValue);
-                        if (route.ActionType == RouteActionType.Delete)
-                            failedDeleted.Add(route.RouteCompareResult.Route);
-                    }
+                    var configManager = new TOne.WhS.RouteSync.Business.ConfigManager();
+                    EricssonSwitchRouteSynchronizerSettings switchSettings = configManager.GetRouteSynchronizerSwitchSettings(ConfigId) as EricssonSwitchRouteSynchronizerSettings;
+                    if (switchSettings == null || switchSettings.FaultCodes == null)
+                        throw new NullReferenceException("Ericsson switch settings is not defined. Please go to Route Sync under Component Settings and add related settings.");
+                    faultCodes = switchSettings.FaultCodes;
+                    maxNumberOfRetries = switchSettings.NumberOfRetries;
                 }
-                if (failedDeleted != null && failedDeleted.Count > 0)
-                    routeDataManager.InsertRoutesToTempTable(failedDeleted);
 
-                if (failedAdded != null && failedAdded.Count > 0)
-                    routeDataManager.RemoveRoutesFromTempTable(failedAdded);
+                #region execute and log Customer Mapping
+                List<CustomerMappingWithCommands> succeedCustomerMappingsWithCommands;
+                List<CustomerMappingWithCommands> failedCustomerMappingsWithCommands;
+                List<CustomerMappingWithCommands> succeedCustomerMappingsWithFailedTrunk;
 
-                if (failedUpdated != null && failedUpdated.Count > 0)
-                    routeDataManager.UpdateRoutesInTempTable(failedUpdated);
+                var executeStatus = ExecuteCustomerMappingsCommands(customerMappingsWithCommands, ericssonSSHCommunication, sshCommunicator, commandResults, out succeedCustomerMappingsWithCommands, out failedCustomerMappingsWithCommands, out succeedCustomerMappingsWithFailedTrunk, faultCodes, maxNumberOfRetries);
+                LogCustomerMappingCommands(succeedCustomerMappingsWithCommands, failedCustomerMappingsWithCommands, ftpLogger, finalizeTime);
+
+                if (succeedCustomerMappingsWithCommands != null && succeedCustomerMappingsWithCommands.Count > 0)
+                    customerMappingSucceededDataManager.SaveCustomerMappingsSucceededToDB(succeedCustomerMappingsWithCommands.Select(item => item.CustomerMappingWithActionType));
+
+                List<CustomerMappingWithCommands> failedCustomerMappingToUpdate = new List<CustomerMappingWithCommands>();
+                if (failedCustomerMappingsWithCommands != null && failedCustomerMappingsWithCommands.Count > 0)
+                {
+                    var failedAdded = failedCustomerMappingsWithCommands.FindAllRecords(item => item.CustomerMappingWithActionType.ActionType == CustomerMappingActionType.Add);
+                    var failedUpdated = failedCustomerMappingsWithCommands.FindAllRecords(item => item.CustomerMappingWithActionType.ActionType == CustomerMappingActionType.Update);
+
+                    if (failedAdded != null && failedAdded.Any())
+                        customerMappingDataManager.RemoveCutomerMappingsFromTempTable(failedAdded.Select(item => item.CustomerMappingWithActionType.CustomerMapping.BO));
+
+                    if (failedUpdated != null && failedUpdated.Any())
+                        failedCustomerMappingToUpdate.AddRange(failedUpdated);
+                }
+
+                if (succeedCustomerMappingsWithFailedTrunk != null && succeedCustomerMappingsWithFailedTrunk.Count > 0)
+                    failedCustomerMappingToUpdate.AddRange(succeedCustomerMappingsWithFailedTrunk);
+
+                if (failedCustomerMappingToUpdate.Count > 0)
+                    customerMappingDataManager.UpdateCustomerMappingsInTempTable(failedCustomerMappingToUpdate.Select(item => item.CustomerMappingWithActionType.CustomerMapping));
+                #endregion
+
+                #region execute and log Route Cases
+                List<RouteCaseWithCommands> succeedRouteCasesWithCommands;
+                List<RouteCaseWithCommands> failedRouteCasesWithCommands;
+
+                ExecuteRouteCasesCommands(routeCasesToBeAddedWithCommands, ericssonSSHCommunication, sshCommunicator, commandResults, out succeedRouteCasesWithCommands, out failedRouteCasesWithCommands, routeCaseDataManager, maxNumberOfRetries);
+                LogRouteCaseCommands(succeedRouteCasesWithCommands, failedRouteCasesWithCommands, ftpLogger, finalizeTime);
+                #endregion
+
+                #region execute and log Routes
+
+                IEnumerable<int> failedRouteCaseNumbers = (failedRouteCasesWithCommands == null) ? null : failedRouteCasesWithCommands.Select(item => item.RouteCase.RCNumber);
+                IEnumerable<string> failedCustomerMappingBOs = (failedCustomerMappingsWithCommands == null) ? null : failedCustomerMappingsWithCommands.Select(item => item.CustomerMappingWithActionType.CustomerMapping.BO);
+
+                Dictionary<string, List<EricssonRouteWithCommands>> allFailedEricssonRoutesWithCommandsByBo = new Dictionary<string, List<EricssonRouteWithCommands>>();
+                List<CustomerMappingWithActionType> customerMappingsToDeleteSucceed = new List<CustomerMappingWithActionType>();
+                List<CustomerMappingWithActionType> customerMappingsToDeleteFailed = new List<CustomerMappingWithActionType>();
+
+                Dictionary<string, List<EricssonRouteWithCommands>> succeedEricssonRoutesWithCommandsByBo = null;
+                Dictionary<string, List<EricssonRouteWithCommands>> failedEricssonRoutesWithCommandsByBo = null;
+
+                Dictionary<string, List<EricssonRouteWithCommands>> succeedEricssonARoutesWithCommandsByBo = null;
+                Dictionary<string, List<EricssonRouteWithCommands>> failedEricssonARoutesWithCommandsByBo = null;
+
+                if (ericssonRoutesWithCommandsByBo != null)
+                {
+                    ExecuteRoutesCommands(ericssonRoutesWithCommandsByBo.BNumberEricssonRouteWithCommands, ericssonSSHCommunication, sshCommunicator, customersToDeleteByBO, commandResults,
+                      out succeedEricssonRoutesWithCommandsByBo, out failedEricssonRoutesWithCommandsByBo, allFailedEricssonRoutesWithCommandsByBo, customerMappingsToDeleteSucceed, customerMappingsToDeleteFailed
+                      , failedCustomerMappingBOs, failedRouteCaseNumbers, faultCodes, maxNumberOfRetries, false);
+
+                    ExecuteRoutesCommands(ericssonRoutesWithCommandsByBo.ANumberEricssonRouteWithCommands, ericssonSSHCommunication, sshCommunicator, customersToDeleteByBO, commandResults,
+                      out succeedEricssonARoutesWithCommandsByBo, out failedEricssonARoutesWithCommandsByBo, allFailedEricssonRoutesWithCommandsByBo, customerMappingsToDeleteSucceed, customerMappingsToDeleteFailed
+                      , failedCustomerMappingBOs, failedRouteCaseNumbers, faultCodes, maxNumberOfRetries, true);
+                }
+
+                LogEricssonRouteCommands(succeedEricssonRoutesWithCommandsByBo, failedEricssonRoutesWithCommandsByBo, ftpLogger, finalizeTime, false);
+                LogEricssonRouteCommands(succeedEricssonARoutesWithCommandsByBo, failedEricssonARoutesWithCommandsByBo, ftpLogger, finalizeTime, true);
+
+                #region Update the deleted customer
+                if (customerMappingsToDeleteSucceed != null && customerMappingsToDeleteSucceed.Count > 0)
+                    customerMappingSucceededDataManager.SaveCustomerMappingsSucceededToDB(customerMappingsToDeleteSucceed);
+
+                if (customerMappingsToDeleteFailed != null && customerMappingsToDeleteFailed.Count > 0)
+                {
+                    customerMappingDataManager.InsertCutomerMappingsToTempTable(customerMappingsToDeleteFailed.Select(item => item.CustomerMapping));
+                    routeDataManager.CopyCustomerRoutesToTempTable(customerMappingsToDeleteFailed.Select(item => item.CustomerMapping.BO));
+                }
+                customerMappingDataManager.Finalize(new CustomerMappingFinalizeContext());
+                #endregion
+
+                if (succeedEricssonRoutesWithCommandsByBo != null && succeedEricssonRoutesWithCommandsByBo.Count > 0)// save succeeded routes to succeeded table
+                    routeSucceededDataManager.SaveRoutesSucceededToDB(succeedEricssonRoutesWithCommandsByBo);
+
+                if (succeedEricssonARoutesWithCommandsByBo != null && succeedEricssonARoutesWithCommandsByBo.Count > 0)// save succeeded routes to succeeded table
+                    routeSucceededDataManager.SaveRoutesSucceededToDB(succeedEricssonARoutesWithCommandsByBo);
+
+                if (allFailedEricssonRoutesWithCommandsByBo != null && allFailedEricssonRoutesWithCommandsByBo.Count > 0)
+                {
+                    var failedAdded = new List<EricssonConvertedRoute>();
+                    var failedUpdated = new List<EricssonConvertedRoute>();
+                    var failedDeleted = new List<EricssonConvertedRoute>();
+
+                    foreach (var failedEricssonRoutesWithCommands in allFailedEricssonRoutesWithCommandsByBo)
+                    {
+                        foreach (var route in failedEricssonRoutesWithCommands.Value)
+                        {
+                            if (route.ActionType == RouteActionType.Add)
+                                failedAdded.Add(route.RouteCompareResult.Route);
+                            if (route.ActionType == RouteActionType.Update)
+                                failedUpdated.Add(route.RouteCompareResult.OriginalValue);
+                            if (route.ActionType == RouteActionType.Delete)
+                                failedDeleted.Add(route.RouteCompareResult.Route);
+                        }
+                    }
+                    if (failedDeleted != null && failedDeleted.Count > 0)
+                        routeDataManager.InsertRoutesToTempTable(failedDeleted);
+
+                    if (failedAdded != null && failedAdded.Count > 0)
+                        routeDataManager.RemoveRoutesFromTempTable(failedAdded);
+
+                    if (failedUpdated != null && failedUpdated.Count > 0)
+                        routeDataManager.UpdateRoutesInTempTable(failedUpdated);
+                }
+
+                routeDataManager.Finalize(new RouteFinalizeContext());
+                #endregion
+
+                LogAllCommands(commandResults, ftpLogger, finalizeTime);
             }
-
-            routeDataManager.Finalize(new RouteFinalizeContext());
-            #endregion
-
-            LogAllCommands(commandResults, ftpLogger, finalizeTime);
+            finally
+            {
+                try
+                {
+                    if (sshCommunicator != null)
+                        sshCommunicator.Dispose();
+                }
+                catch(Exception ex)
+                {
+                    context.WriteBusinessHandledException(ex, true);
+                }
+            }
         }
 
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
@@ -1726,21 +1742,6 @@ namespace TOne.WhS.RouteSync.Ericsson
                             }
                             else
                             {
-
-                                var allFailedEricssonRoutesWithCommands = allFailedRoutesWithCommandsByBo.GetOrCreateItem(customerBo);
-                                var failedEricssonRoutesWithCommands = failedRoutesWithCommandsByBo.GetOrCreateItem(customerBo);
-                                failedEricssonRoutesWithCommands.Add(ericssonRouteWithCommands);
-                                allFailedEricssonRoutesWithCommands.Add(ericssonRouteWithCommands);
-                                if (ericssonRouteWithCommands.ActionType == RouteActionType.DeleteCustomer)
-                                {
-                                    CustomerMappingWithActionType customersToDelete;
-                                    if (customersToDeleteByBO.TryGetValue(customerBo, out customersToDelete))
-                                        customerMappingsToDeleteFailed.Add(customersToDelete);
-
-                                    var customerMappingIndex = customerMappingsToDeleteSucceed.FindIndex(item => item.CustomerMapping.BO == customerBo);
-                                    if (customerMappingIndex >= 0)
-                                        customerMappingsToDeleteSucceed.RemoveAt(customerMappingIndex);
-                                }
                                 break;
                             }
                         }
