@@ -101,65 +101,94 @@
               <ActivityAction.Argument>
                 <DelegateInArgument x:TypeArguments="twje:JazzReportDefinition" Name="reportDefinition" />
               </ActivityAction.Argument>
-              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-                <Sequence.Variables>
-                  <Variable x:TypeArguments="scg:List(twje:JazzTransactionsReport)" Name="TransactionsReports" />
-                  <Variable x:TypeArguments="twjba1:JazzReport" Name="JazzReport" />
-                  <Variable x:TypeArguments="scg:List(twje:JazzTransactionsReport)" Name="TransactionsReport" />
-                </Sequence.Variables>
-                <twjba1:ProcessJazzReport sap2010:WorkflowViewState.IdRef="ProcessJazzReport_1">
-                  <twjba1:ProcessJazzReport.FromDate>
-                    <InArgument x:TypeArguments="s:DateTime">
-                      <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
-                    </InArgument>
-                  </twjba1:ProcessJazzReport.FromDate>
-                  <twjba1:ProcessJazzReport.JazzReport>
-                    <OutArgument x:TypeArguments="twjba1:JazzReport">
-                      <mca:CSharpReference x:TypeArguments="twjba1:JazzReport">JazzReport</mca:CSharpReference>
-                    </OutArgument>
-                  </twjba1:ProcessJazzReport.JazzReport>
-                  <twjba1:ProcessJazzReport.JazzTransactionsReport>
-                    <OutArgument x:TypeArguments="scg:List(twje:JazzTransactionsReport)">
-                      <mca:CSharpReference x:TypeArguments="scg:List(twje:JazzTransactionsReport)">TransactionsReport</mca:CSharpReference>
-                    </OutArgument>
-                  </twjba1:ProcessJazzReport.JazzTransactionsReport>
-                  <twjba1:ProcessJazzReport.ReportDefinition>
-                    <InArgument x:TypeArguments="twje:JazzReportDefinition">
-                      <mca:CSharpValue x:TypeArguments="twje:JazzReportDefinition">reportDefinition</mca:CSharpValue>
-                    </InArgument>
-                  </twjba1:ProcessJazzReport.ReportDefinition>
-                  <twjba1:ProcessJazzReport.ToDate>
-                    <InArgument x:TypeArguments="s:DateTime">
-                      <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
-                    </InArgument>
-                  </twjba1:ProcessJazzReport.ToDate>
-                </twjba1:ProcessJazzReport>
-                <twjba1:SaveJazzReportDraft sap2010:WorkflowViewState.IdRef="SaveJazzReportDraft_1">
-                  <twjba1:SaveJazzReportDraft.TransactionsReport>
-                    <InArgument x:TypeArguments="scg:List(twje:JazzTransactionsReport)">
-                      <mca:CSharpValue x:TypeArguments="scg:List(twje:JazzTransactionsReport)">TransactionsReport</mca:CSharpValue>
-                    </InArgument>
-                  </twjba1:SaveJazzReportDraft.TransactionsReport>
-                </twjba1:SaveJazzReportDraft>
-                <If sap2010:WorkflowViewState.IdRef="If_2">
-                  <If.Condition>
-                    <InArgument x:TypeArguments="x:Boolean">
-                      <mca:CSharpValue x:TypeArguments="x:Boolean">JazzReport != null</mca:CSharpValue>
-                    </InArgument>
-                  </If.Condition>
-                  <If.Then>
-                    <AddToCollection x:TypeArguments="twjba1:JazzReport" DisplayName="AddToCollection&lt;JazzReport&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1">
-                      <AddToCollection.Item>
-                        <InArgument x:TypeArguments="twjba1:JazzReport">
-                          <mca:CSharpValue x:TypeArguments="twjba1:JazzReport">JazzReport</mca:CSharpValue>
-                        </InArgument>
-                      </AddToCollection.Item>
-                      <InArgument x:TypeArguments="scg:ICollection(twjba1:JazzReport)">
-                        <mca:CSharpValue x:TypeArguments="scg:ICollection(twjba1:JazzReport)">JazzReports</mca:CSharpValue>
+              <Sequence>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+                  <Sequence.Variables>
+                    <Variable x:TypeArguments="scg:List(twje:JazzTransactionsReport)" Name="TransactionsReports" />
+                    <Variable x:TypeArguments="twjba1:JazzReport" Name="JazzReport" />
+                    <Variable x:TypeArguments="scg:List(twje:JazzTransactionsReport)" Name="TransactionsReport" />
+                  </Sequence.Variables>
+                  <vbw:WriteTrackingMessage>
+                    <vbw:WriteTrackingMessage.Message>
+                      <InArgument x:TypeArguments="x:String">
+                        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Start Processing Report:{0}",reportDefinition.Name)</mca:CSharpValue>
                       </InArgument>
-                    </AddToCollection>
-                  </If.Then>
-                </If>
+                    </vbw:WriteTrackingMessage.Message>
+                    <vbw:WriteTrackingMessage.Severity>
+                      <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                        <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                      </InArgument>
+                    </vbw:WriteTrackingMessage.Severity>
+                    <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_7</sap2010:WorkflowViewState.IdRef>
+                  </vbw:WriteTrackingMessage>
+                  <twjba1:ProcessJazzReport sap2010:WorkflowViewState.IdRef="ProcessJazzReport_1">
+                    <twjba1:ProcessJazzReport.FromDate>
+                      <InArgument x:TypeArguments="s:DateTime">
+                        <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+                      </InArgument>
+                    </twjba1:ProcessJazzReport.FromDate>
+                    <twjba1:ProcessJazzReport.JazzReport>
+                      <OutArgument x:TypeArguments="twjba1:JazzReport">
+                        <mca:CSharpReference x:TypeArguments="twjba1:JazzReport">JazzReport</mca:CSharpReference>
+                      </OutArgument>
+                    </twjba1:ProcessJazzReport.JazzReport>
+                    <twjba1:ProcessJazzReport.JazzTransactionsReport>
+                      <OutArgument x:TypeArguments="scg:List(twje:JazzTransactionsReport)">
+                        <mca:CSharpReference x:TypeArguments="scg:List(twje:JazzTransactionsReport)">TransactionsReport</mca:CSharpReference>
+                      </OutArgument>
+                    </twjba1:ProcessJazzReport.JazzTransactionsReport>
+                    <twjba1:ProcessJazzReport.ReportDefinition>
+                      <InArgument x:TypeArguments="twje:JazzReportDefinition">
+                        <mca:CSharpValue x:TypeArguments="twje:JazzReportDefinition">reportDefinition</mca:CSharpValue>
+                      </InArgument>
+                    </twjba1:ProcessJazzReport.ReportDefinition>
+                    <twjba1:ProcessJazzReport.ToDate>
+                      <InArgument x:TypeArguments="s:DateTime">
+                        <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+                      </InArgument>
+                    </twjba1:ProcessJazzReport.ToDate>
+                  </twjba1:ProcessJazzReport>
+                  <vbw:WriteTrackingMessage>
+                    <vbw:WriteTrackingMessage.Message>
+                      <InArgument x:TypeArguments="x:String">
+                        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Processing Report:{0}", reportDefinition.Name)</mca:CSharpValue>
+                      </InArgument>
+                    </vbw:WriteTrackingMessage.Message>
+                    <vbw:WriteTrackingMessage.Severity>
+                      <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                        <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                      </InArgument>
+                    </vbw:WriteTrackingMessage.Severity>
+                    <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_8</sap2010:WorkflowViewState.IdRef>
+                  </vbw:WriteTrackingMessage>
+                  <twjba1:SaveJazzReportDraft sap2010:WorkflowViewState.IdRef="SaveJazzReportDraft_1">
+                    <twjba1:SaveJazzReportDraft.TransactionsReport>
+                      <InArgument x:TypeArguments="scg:List(twje:JazzTransactionsReport)">
+                        <mca:CSharpValue x:TypeArguments="scg:List(twje:JazzTransactionsReport)">TransactionsReport</mca:CSharpValue>
+                      </InArgument>
+                    </twjba1:SaveJazzReportDraft.TransactionsReport>
+                  </twjba1:SaveJazzReportDraft>
+                  <If sap2010:WorkflowViewState.IdRef="If_2">
+                    <If.Condition>
+                      <InArgument x:TypeArguments="x:Boolean">
+                        <mca:CSharpValue x:TypeArguments="x:Boolean">JazzReport != null</mca:CSharpValue>
+                      </InArgument>
+                    </If.Condition>
+                    <If.Then>
+                      <AddToCollection x:TypeArguments="twjba1:JazzReport" DisplayName="AddToCollection&lt;JazzReport&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1">
+                        <AddToCollection.Item>
+                          <InArgument x:TypeArguments="twjba1:JazzReport">
+                            <mca:CSharpValue x:TypeArguments="twjba1:JazzReport">JazzReport</mca:CSharpValue>
+                          </InArgument>
+                        </AddToCollection.Item>
+                        <InArgument x:TypeArguments="scg:ICollection(twjba1:JazzReport)">
+                          <mca:CSharpValue x:TypeArguments="scg:ICollection(twjba1:JazzReport)">JazzReports</mca:CSharpValue>
+                        </InArgument>
+                      </AddToCollection>
+                    </If.Then>
+                  </If>
+                </Sequence>
+                <sap2010:WorkflowViewState.IdRef>Sequence_6</sap2010:WorkflowViewState.IdRef>
               </Sequence>
             </ActivityAction>
           </ForEach>
@@ -270,13 +299,15 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkphenouQlBcSmF6elJlcG9ydFByb2Nlc3MueGFtbDg7A5ICDgIBAUELQXgCAQJFBUsgAwHdAUwFUigDAdcBUwWQAgoCAQdIC0iGAQMB3wFFYEV2AwHeAU8LT30DAdgBVgtWYwIBCFoJhQIUAgEUiAIJjgIkAgENXgulARUCAXGmAQuxASsCAWSyAQu4ASYCAV25AQvNARwCAUnOAQv2ARACASP3AQv9ASkCARz+AQuEAiYCARWLAg+LAokBAgEPiAJkiAJ8AgEOYRFhggEDAdEBaA+jARoCAXKuARGuAW0CAWupARGpAVwCAWW1ARG1AXICAV7KARHKAYUBAgFXwQERxQEhAgFRuQGmAbkBtgECAVC8ARG8AZ0BAgFK0QER0QFyAgEk1QEP6QEaAgEz7AEP9AEaAgEq+gER+gFUAgEdgQIRgQKdAQIBFm4RiAEsAwGeAYkBEY8BLgMBkwGQARGiARYCAXPWARHhATYCATziARHoASwCATTtARHzASwCASt7F3uMAQMBxwFxF3FlAwG9AYUBF4UBYwMBswF2F3ZwAwGpAYABF4ABdgMBnwGMAReMAYQBAwGUAZMBF5MBaAIBdJcBFaABJwIBftkBF9kBZQIBQ94BF94BYwIBPeUBF+UBkgECATbiAWziAYMBAgE18AEX8AGSAQIBLe0BbO0BggECASyeARmeAXwDAYkBmgEbmgFsAgF/</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkphenouQlBcSmF6elJlcG9ydFByb2Nlc3MueGFtbD87A68CDgIBAUELQXgCAQJFBUsgAwGIAkwFUigDAYICUwWtAgoCAQdIC0iGAQMBigJFYEV2AwGJAk8LT30DAYMCVgtWYwIBCFoJogIUAgEUpQIJqwIkAgENXgvCARUCAXHDAQvOASsCAWTPAQvVASYCAV3WAQvqARwCAUnrAQuTAhACASOUAguaAikCARybAguhAiYCARWoAg+oAokBAgEPpQJkpQJ8AgEOYRFhggEDAfwBaA/AARoCAXLLARHLAW0CAWvGARHGAVwCAWXSARHSAXICAV7nARHnAYUBAgFX3gER4gEhAgFR1gGmAdYBtgECAVDZARHZAZ0BAgFK7gER7gFyAgEk8gEPhgIaAgEziQIPkQIaAgEqlwIRlwJUAgEdngIRngKdAQIBFmkRvgEcAgFz8wER/gE2AgE8/wERhQIsAgE0igIRkAIsAgErbxN7LgMB5wF8E5YBLgMBtAGXAROjAS4DAZ8BpAETqgEwAwGUAasBE70BGAIBdPYBF/YBZQIBQ/sBF/sBYwIBPYICF4ICkgECATb/AWz/AYMBAgE1jQIXjQKSAQIBLYoCbIoCggECASx3GXeTAQMB8gFyGXKZAQMB6AGJARmJAY4BAwHdAX8Zf2cDAdMBkwEZkwFlAwHJAYQBGYQBcgMBvwGOARmOAXgDAbUBnwEZnwGTAQMBqgGaARmaAZQBAwGgAacBGacBhgEDAZUBrgEZrgFqAgF1sgEXuwEpAgF/uQEbuQF+AwGKAbUBHbUBbgMBgAE=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="763,22" />
-      <sap2010:ViewStateData Id="LoadJazzReportDefinitions_1" sap:VirtualizedContainerService.HintSize="763,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="785,22" />
+      <sap2010:ViewStateData Id="LoadJazzReportDefinitions_1" sap:VirtualizedContainerService.HintSize="785,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_7" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="ProcessJazzReport_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_8" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="SaveJazzReportDraft_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,210">
@@ -287,17 +318,24 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,458">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,582">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="516,608" />
-      <sap2010:ViewStateData Id="GenerateJazzReportFile_1" sap:VirtualizedContainerService.HintSize="516,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="516,22" />
-      <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="516,22" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="508,706">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="538,856" />
+      <sap2010:ViewStateData Id="GenerateJazzReportFile_1" sap:VirtualizedContainerService.HintSize="538,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="538,22" />
+      <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="538,22" />
       <sap2010:ViewStateData Id="ApplyJazzReportTransactions_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,208">
@@ -315,10 +353,10 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="516,358" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="538,358" />
       <sap2010:ViewStateData Id="DeleteJazzReportFile_1" sap:VirtualizedContainerService.HintSize="516,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="516,22" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="538,1440">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="560,1688">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -326,15 +364,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="763,1590" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="785,1838">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="785,1838" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="807,2086">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Jazz.BP.JazzReportProcess_1" sap:VirtualizedContainerService.HintSize="825,1918" />
+      <sap2010:ViewStateData Id="TOne.WhS.Jazz.BP.JazzReportProcess_1" sap:VirtualizedContainerService.HintSize="847,2166" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

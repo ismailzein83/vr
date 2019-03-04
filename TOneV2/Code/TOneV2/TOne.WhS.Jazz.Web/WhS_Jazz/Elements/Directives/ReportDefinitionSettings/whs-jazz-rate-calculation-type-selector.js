@@ -38,16 +38,16 @@ appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationS
 
 
             var multipleselection = "";
-            var label = "Rate Calculation Type";
+            var label = "Amount Type";
             if (attrs.ismultipleselection != undefined) {
-                label = "Rate Calculation Type";
+                label = "Amount Type";
                 multipleselection = "ismultipleselection";
             }
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum/2}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="description" datavaluefield="value" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="scopeModel.onRateTypeChanged" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>' +
-                '<vr-columns colnum="{{ctrl.normalColNum/2}}"><vr-textbox ng-if="scopeModel.showFixedRateValue()" value="scopeModel.fixedRateValue" label="Fixed Rate Value" isrequired type="number" ></vr-textbox></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="description" datavaluefield="value" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged=ctrl.onselectionchanged onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
+              
 
         }
 
@@ -67,14 +67,7 @@ appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationS
                     defineAPI();
                 };
                 $scope.scopeModel.onRateTypeChanged = function (value) {
-                    if (selectorAPI) {
-                        if (value) {
-                            if (rateTypeSelectedPromise != undefined)
-                                rateTypeSelectedPromise = undefined;
-                            else
-                                $scope.scopeModel.fixedRateValue = undefined;
-                        }
-                    }
+                  
                 };
                 $scope.scopeModel.showFixedRateValue = function () {
                     if (ctrl.selectedvalues != undefined) {
@@ -92,9 +85,8 @@ appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationS
                     selectorAPI.clearDataSource();
                     var selectedIds;
 
-                    if (payload != undefined && payload.AmountCalculation!=undefined) {
-                        selectedIds = payload.AmountCalculation.RateCalculationType;
-                        $scope.scopeModel.fixedRateValue = payload.AmountCalculation.FixedRateValue;
+                    if (payload != undefined) {
+                        selectedIds = payload.selectedIds;
                     }
                     ctrl.datasource = UtilsService.getArrayEnum(WhS_Jazz_RateCalculationTypeEnum);
                     if (selectedIds != undefined) {
@@ -104,12 +96,8 @@ appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationS
                     }
                 };
 
-                api.getSelectedIds = function () {
-                    return {
-                        $type:"TOne.WhS.Jazz.Entities.AmountCalculation,TOne.WhS.Jazz.Entities",
-                        RateCalculationType: VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl),
-                        FixedRateValue: $scope.scopeModel.fixedRateValue
-                    }
+                api.getData = function () {
+                    return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                 };
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);

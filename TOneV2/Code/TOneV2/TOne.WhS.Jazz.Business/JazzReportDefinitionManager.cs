@@ -59,10 +59,17 @@ namespace TOne.WhS.Jazz.Business
 
                         if (genericBusinessEntity.FieldValues.GetRecord("TaxOption") != null)
                             reportDefintion.TaxOption = (TaxOptionEnum)genericBusinessEntity.FieldValues.GetRecord("TaxOption");
+
+                        if (genericBusinessEntity.FieldValues.GetRecord("AmountType") != null)
+                            reportDefintion.AmountType = (AmountTypeEnum)genericBusinessEntity.FieldValues.GetRecord("AmountType");
+
                         if (genericBusinessEntity.FieldValues.GetRecord("SplitRateValue") != null)
                             reportDefintion.SplitRateValue = (decimal)genericBusinessEntity.FieldValues.GetRecord("SplitRateValue");
 
-                            reportDefintion.Settings = new JazzReportDefinitionSettings();
+                        if (genericBusinessEntity.FieldValues.GetRecord("CurrencyId") != null)
+                            reportDefintion.CurrencyId = (int)genericBusinessEntity.FieldValues.GetRecord("CurrencyId");
+
+                        reportDefintion.Settings = new JazzReportDefinitionSettings();
                         reportDefintion.Settings = (JazzReportDefinitionSettings)genericBusinessEntity.FieldValues.GetRecord("Settings");
                         result.Add(reportDefintion.JazzReportDefinitionId, reportDefintion);
                     }
@@ -71,8 +78,20 @@ namespace TOne.WhS.Jazz.Business
                 return result;
             });
         }
-      
 
+        public bool ValidateJazzReportDefinition(GenericBusinessEntity genericBusinessEntity, HandlerOperationType operationType)
+        {
+            JazzReportDefinition jazzReportDefinition = new JazzReportDefinition
+            {
+                Direction = (ReportDefinitionDirectionEnum)genericBusinessEntity.FieldValues.GetRecord("Direction"),
+            };
+            if (genericBusinessEntity.FieldValues.GetRecord("AmountMeasureType") != null)
+                jazzReportDefinition.AmountMeasureType = (AmountMeasureTypeEnum)genericBusinessEntity.FieldValues.GetRecord("AmountMeasureType");
+
+            if (jazzReportDefinition.Direction == ReportDefinitionDirectionEnum.Out && jazzReportDefinition.AmountMeasureType.HasValue && jazzReportDefinition.AmountMeasureType.Value == AmountMeasureTypeEnum.AMT)
+                return false;
+            return true;
+        }
 
     }
 

@@ -28,7 +28,13 @@
             var reportDefintionFilterGroup;
             var reportDefintionFilterDirectiveAPI;
             var reportDefintionFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var amountTypeSelectorAPI;
+            var amountTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var currencySelectorAPI;
+            var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var context;
+            var amountTypeSelectedPromise;
             var analyticTableId = "795440c9-69e4-442e-a067-896bc969c73f";
             function initializeController() {
 
@@ -96,6 +102,34 @@
                     if (validatePercentages($scope.scopeModel.markets))
                         return 'Percentages Sum Must Be Equal To 100';
                     return null;
+                };
+                $scope.scopeModel.showSplitRateValue = function () {
+                    if (amountTypeSelectorAPI != undefined && amountTypeSelectorAPI.getData() != undefined)
+                        return true;
+                    return false;
+                };
+                $scope.scopeModel.onRateCalculationTypeSelectorReady = function (api) {
+                    amountTypeSelectorAPI = api;
+                    amountTypeSelectorReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onCurrencySelectorReady = function (api) {
+                    currencySelectorAPI = api;
+                    currencySelectorReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onAmountTypeSelectionChanged = function (value) {
+                    if (amountTypeSelectorAPI) {
+                        if (value) {
+                            if (amountTypeSelectedPromise != undefined) {
+                                amountTypeSelectedPromise = undefined;
+                            }
+                            else {
+
+                                currencySelectorAPI.load();
+                                $scope.scopeModel.splitRateValue = undefined;
+                            }
+                        }
+                    }
                 };
                 defineAPI();
             }
@@ -171,16 +205,32 @@
 
                 return reportDefintionFilterDirectiveLoadDeferred.promise;
             }
-
+            function loadAmountTypeSelector(payload) {
+                var amountTypeSelectorLoadromiseDeferred = UtilsService.createPromiseDeferred();
+                amountTypeSelectorReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(amountTypeSelectorAPI, payload, amountTypeSelectorLoadromiseDeferred);
+                    amountTypeSelectedPromise = UtilsService.createPromiseDeferred();
+                });
+                return amountTypeSelectorLoadromiseDeferred.promise;
+            }
+            function loadCurrencySelector(payload) {
+                var currencySelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                currencySelectorReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, payload, currencySelectorLoadPromiseDeferred);
+                });
+                return currencySelectorLoadPromiseDeferred.promise;
+            }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     var promises = [];
+                    var selectedValues;
                     var loadPromiseDeferred = UtilsService.createPromiseDeferred();
                     loadDimensions().then(function () {
                         if (payload != undefined && payload.selectedValues != undefined && payload.selectedValues.Settings != undefined) {
-                            var settings = payload.selectedValues.Settings;
+                            selectedValues = payload.selectedValues;
+                            var settings = selectedValues.Settings;
                           
                             reportDefintionFilterGroup = settings.ReportFilter;
                             if (settings.MarketSettings != undefined) {
@@ -213,7 +263,9 @@
                                 }
                             }
                         }
-                      
+                        $scope.scopeModel.splitRateValue = selectedValues.SplitRateValue;
+                        promises.push(loadAmountTypeSelector({ selectedIds: selectedValues.AmountType }));
+                        promises.push(loadCurrencySelector({ selectedIds: selectedValues.CurrencyId }));
                         promises.push(loadReportDefinitionFilterDirective());
                         UtilsService.waitMultiplePromises(promises).then(function () {
                             loadPromiseDeferred.resolve();
@@ -246,6 +298,9 @@
                             });
                         }
                     }
+                    payload.AmountType = amountTypeSelectorAPI.getData();
+                    payload.SplitRateValue = $scope.scopeModel.splitRateValue;
+                    payload.CurrencyId = currencySelectorAPI.getSelectedIds();
                     payload.Settings = {
                         $type: "TOne.WhS.Jazz.Entities.JazzReportDefinitionSettings,TOne.WhS.Jazz.Entities",
                         MarketSettings: {

@@ -28,6 +28,8 @@ namespace TOne.WhS.Jazz.Business
             var transactionsReports = draftReportDataManager.GetTransactionsReports(processInstanceId);
             if (transactionsReports != null && transactionsReports.Count > 0)
             {
+               transactionsReports= transactionsReports.OrderBy(x => x.SheetName).ToList();
+
                 var reportsIds = transactionsReports.MapRecords(x=>x.ReportId).ToList();
                 var transactionsReportsDictionary = transactionsReports.ToDictionary(x => x.ReportId, x => x);
                 IDraftReportTransactionDataManager draftReportTransactionDataManager = JazzDataManagerFactory.GetDataManager<IDraftReportTransactionDataManager>();

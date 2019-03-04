@@ -7,16 +7,20 @@ using Vanrise.GenericData.Entities;
 namespace TOne.WhS.Jazz.Entities
 {
     public enum ReportDefinitionDirectionEnum  { In = 0,Out = 1 }
-    public enum RateCalculationTypeEnum { FullRate = 0,FixedRate = 1,PartialRate = 2 }
+    public enum AmountTypeEnum { FixedAmount = 1, PartialAmount = 2 }
+    public enum AmountMeasureTypeEnum { AMT=0}
     public enum TaxOptionEnum { TaxMeasure=1,ZeroTax=2}
     public class JazzReportDefinition
     {
         public Guid JazzReportDefinitionId { get; set; }
-        public string Name  { get; set; }
+        public string Name { get; set; }
         public ReportDefinitionDirectionEnum Direction { get; set; }
         public int SwitchId { get; set; }
-        public decimal? SplitRateValue { get; set; }
         public TaxOptionEnum? TaxOption { get; set; }
+        public AmountTypeEnum? AmountType { get; set; }
+        public int? CurrencyId { get; set; }
+        public AmountMeasureTypeEnum? AmountMeasureType { get; set; }
+        public decimal? SplitRateValue { get; set; }
         public JazzReportDefinitionSettings Settings { get; set; }
         public bool IsEnabled { get; set; }
 
@@ -28,6 +32,8 @@ namespace TOne.WhS.Jazz.Entities
         public RecordFilter ReportFilter { get; set; }
 
     }
+
+
     public class MarketSettings
     {
         public List<MarketOption> MarketOptions { get; set; }

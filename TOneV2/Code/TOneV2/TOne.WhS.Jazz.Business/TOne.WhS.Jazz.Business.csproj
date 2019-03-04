@@ -87,10 +87,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="JazzTechnicalSettings.cs" />
+    <Compile Include="JazzReportDefinitionOnBeforeInsertHandler.cs" />
     <Compile Include="AccountCodeOnBeforeInsertHandler.cs" />
     <Compile Include="JazzReportBPDefinitionSettings.cs" />
     <Compile Include="TransactionsReportManager.cs" />
-    <Compile Include="ReportDefinitionManager.cs" />
+    <Compile Include="JazzReportDefinitionManager.cs" />
     <Compile Include="MarketManager.cs" />
     <Compile Include="RegionManager.cs" />
     <Compile Include="ReportDefinitionSettingsCustomObject.cs" />

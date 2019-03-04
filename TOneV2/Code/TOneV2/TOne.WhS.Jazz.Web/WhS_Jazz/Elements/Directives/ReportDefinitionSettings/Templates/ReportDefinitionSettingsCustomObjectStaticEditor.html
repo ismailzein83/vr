@@ -1,4 +1,15 @@
-﻿
+﻿<vr-tab header="'Amount'">
+    <vr-row>
+        <whs-jazz-rate-calculation-type-selector on-ready="scopeModel.onRateCalculationTypeSelectorReady" onselectionchanged="scopeModel.onAmountTypeSelectionChanged" isrequired normal-col-num="4"></whs-jazz-rate-calculation-type-selector>
+        <div ng-show="scopeModel.showSplitRateValue()">
+            <vr-columns colnum="4">
+                <vr-textbox value="scopeModel.splitRateValue" label="Split Rate Value" isrequired="scopeModel.showSplitRateValue()" type="number"></vr-textbox>
+            </vr-columns>
+
+                <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" normal-col-num="4"></vr-common-currency-selector>
+        </div>
+    </vr-row>
+</vr-tab>
     <vr-tab header="'Markets'">
         <vr-row>
             <vr-columns width="fullrow">
@@ -30,6 +41,7 @@
             </vr-columns>
         </vr-row>
     </vr-tab>
+
     <vr-tab header="'Regions'">
         <vr-row>
             <vr-columns width="fullrow">

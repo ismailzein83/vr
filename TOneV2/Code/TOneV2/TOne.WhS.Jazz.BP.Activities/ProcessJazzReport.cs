@@ -11,6 +11,10 @@ using Vanrise.Common;
 using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Entities;
 using TOne.BusinessEntity.Business;
+using Vanrise.Common.Business;
+using RegionManager = TOne.WhS.Jazz.Business.RegionManager;
+using ConfigManager = TOne.WhS.Jazz.Business.ConfigManager;
+
 namespace TOne.WhS.Jazz.BP.Activities
 {
 
@@ -44,7 +48,7 @@ namespace TOne.WhS.Jazz.BP.Activities
             List<string> dimensions = null;
             List<string> measures = null;
 
-            var amountMeasure = (reportDefinition.TaxOption == TaxOptionEnum.TaxMeasure && !reportDefinition.SplitRateValue.HasValue) ? "AMT" : "SaleNet";
+            var amountMeasure = reportDefinition.AmountMeasureType.HasValue ? "AMT" : "SaleNet";
 
             if (reportDefinition.Direction.Equals(ReportDefinitionDirectionEnum.In))
             {
@@ -70,7 +74,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                 {
                     ReportName = reportDefinition.Name,
                     Direction = reportDefinition.Direction,
-                    SplitRateValue=reportDefinition.SplitRateValue,
+                    AmountMeasureType = reportDefinition.AmountMeasureType,
                     TaxOption= reportDefinition.TaxOption,
                     ReportData = reportData
                 };
@@ -86,16 +90,19 @@ namespace TOne.WhS.Jazz.BP.Activities
         {
             
             AnalyticManager analyticManager = new AnalyticManager();
-            var regulatedToDate = toDate.AddDays(1);
-            regulatedToDate=regulatedToDate.AddMilliseconds(-3);
+            var regulatedToDate = toDate.AddDays(1).AddMilliseconds(-3);
+
+            ConfigManager configManager = new ConfigManager();
+
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
-                
+
+
                 Query = new AnalyticQuery()
                 {
                     DimensionFields = listDimensions,
                     MeasureFields = listMeasures,
-                    TableId = Guid.Parse("795440c9-69e4-442e-a067-896bc969c73f "),
+                    TableId = configManager.GetJazzTechnicalSettings(),
                     FromTime = fromDate,
                     ToTime = regulatedToDate,
 
@@ -149,13 +156,15 @@ namespace TOne.WhS.Jazz.BP.Activities
 
                     var amount = Convert.ToDecimal(netValue.Value ?? 0.0);
                     var duration= Convert.ToDecimal(durationValue.Value ?? 0.0);
+                    var amountType = reportDefinition.AmountType;
+                    CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+                    var exchangeRate = amountType.HasValue ? currencyExchangeRateManager.ConvertValueToSystemCurrency(reportDefinition.SplitRateValue.Value, reportDefinition.CurrencyId.Value, DateTime.Now):1;
                     var jazzReportData = new JazzReportData
                     {
                         CarrierAccountId = Convert.ToInt32(carrierAccount.Value),
                         CarrierAccountName = carrierAccount.Name,
                         Duration = Decimal.Round(Convert.ToDecimal(durationValue.Value ?? 0.0),2),
-                        Amount1 = Decimal.Round(!reportDefinition.SplitRateValue.HasValue ? amount : (amount - duration * reportDefinition.SplitRateValue.Value),3),
-                        Amount2 = Decimal.Round(reportDefinition.SplitRateValue.HasValue ? duration * reportDefinition.SplitRateValue.Value : 0,3),
+                        Amount = Decimal.Round(!amountType.HasValue ? amount : amountType.Value==AmountTypeEnum.FixedAmount? duration* reportDefinition.SplitRateValue.Value:amount-duration * reportDefinition.SplitRateValue.Value,3)*exchangeRate,
                         Tax = taxValue != null ? Decimal.Round(Convert.ToDecimal(taxValue.Value ?? 0.0),3) : 0
                     };
 
@@ -172,8 +181,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                 MarketName = _marketManager.GetMarketName(market.MarketId),
                                 CustomerTypeId = market.CustomerTypeId,
                                 CustomerTypeName = _customerTypeManager.GetCustomerTypeName(market.CustomerTypeId),
-                                MarketValue1 = market.Percentage * jazzReportData.Amount1 / 100,
-                                MarketValue2 = market.Percentage * jazzReportData.Amount2 / 100,
+                                MarketValue = market.Percentage * jazzReportData.Amount / 100,
                                 Percentage = market.Percentage,
                             };
                             if (reportDefinition.Settings.RegionSettings != null && reportDefinition.Settings.RegionSettings.RegionOptions != null && reportDefinition.Settings.RegionSettings.RegionOptions.Count > 0)
@@ -186,8 +194,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                     {
                                         RegionId = region.RegionId,
                                         RegionName = _regionManager.GetRegionById(region.RegionId).Name,
-                                        RegionValue1 =Decimal.Round(region.Percentage * reportMarket.MarketValue1 / 100,3),
-                                        RegionValue2 = Decimal.Round(region.Percentage * reportMarket.MarketValue2 / 100,3),
+                                        RegionValue =Decimal.Round(region.Percentage * reportMarket.MarketValue / 100,3),
                                         Percentage = region.Percentage,
                                     });
                                 }
@@ -210,20 +217,17 @@ namespace TOne.WhS.Jazz.BP.Activities
             {
                 var reportsDataDictionary = reportsData.ToDictionary(x => x.CarrierAccountId, x => x);
 
-                transactionsReports = GetTransactionsReports(reportDefinition, reportsDataDictionary, transactionTypes, false, false);
+                transactionsReports = GetTransactionsReports(reportDefinition, reportsDataDictionary, transactionTypes, false);
 
                 if (reportDefinition.TaxOption.HasValue)
                 {
                     if(reportDefinition.TaxOption.Value==TaxOptionEnum.TaxMeasure)
-                        transactionsReports = transactionsReports.Concat(GetTransactionsReports(reportDefinition, reportsDataDictionary, transactionTypes, false, true)).ToList();
+                        transactionsReports = transactionsReports.Concat(GetTransactionsReports(reportDefinition, reportsDataDictionary, transactionTypes, true)).ToList();
 
                     else
                         transactionsReports.Add(GetZeroTaxTransactionReport(reportDefinition));
                 }
-
-                if (reportDefinition.SplitRateValue.HasValue)
-                    transactionsReports = transactionsReports.Concat(GetTransactionsReports(reportDefinition, reportsDataDictionary, transactionTypes, true, false)).ToList();
-            }
+              }
             return transactionsReports;
         }
 
@@ -254,7 +258,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                 }
             };
         }
-        private List<JazzTransactionsReport> GetTransactionsReports(JazzReportDefinition reportDefinition, Dictionary<int,JazzReportData> reportsDataDictionary, List<TransactionType> transactionTypes,bool splitRate,bool applyTax)
+        private List<JazzTransactionsReport> GetTransactionsReports(JazzReportDefinition reportDefinition, Dictionary<int,JazzReportData> reportsDataDictionary, List<TransactionType> transactionTypes,bool applyTax)
         {
             var transactionsReports = new List<JazzTransactionsReport>();
 
@@ -290,7 +294,7 @@ namespace TOne.WhS.Jazz.BP.Activities
 
                                         if (reportsDataDictionary.TryGetValue(carrier.CarrierAccountId, out reportData))
                                         {
-                                            amount += splitRate ? reportData.Amount2 : reportData.Amount1;
+                                            amount += reportData.Amount;
                                             tax += reportData.Tax;
                                         }
                                     }
@@ -299,7 +303,6 @@ namespace TOne.WhS.Jazz.BP.Activities
 
                                 if (!applyTax)
                                 {
-
                                     transactionsReportsData.Add(new JazzTransactionsReportData
                                     {
                                         TransationDescription = string.Format("{0} {1}", switchCode.Name, accountCode.Name),
@@ -364,8 +367,8 @@ namespace TOne.WhS.Jazz.BP.Activities
                                                             {
                                                                 TransationDescription = string.Format("{0} {1} {2} {3} {4} {5}", switchCode.Name, transactionRegion.Name, transactionMarket.Name, transactionCustomerType.Name, transactionProductService.Name, accountCode.Name),
                                                                 TransactionCode = string.Format("{0}-{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}-{9}-{10}-{11}", switchCode.Code, transactionRegion.Code, departement, lobs, transactionMarket.Code, transactionCustomerType.Code, transactionProductService.Code, productsPricing, accountCode.Code, relatedParties, future1, future2),
-                                                                Credit = transactionType.IsCredit ? (splitRate ? region.RegionValue2 : region.RegionValue1) : 0,
-                                                                Debit = transactionType.IsCredit ? 0 : (splitRate ? region.RegionValue2 : region.RegionValue1)
+                                                                Credit = transactionType.IsCredit ? region.RegionValue : 0,
+                                                                Debit = transactionType.IsCredit ? 0 : region.RegionValue
                                                             };
                                                             transactionsReportsData.Add(newTransactionReportData);
                                                             transactionsReportsDataDictionary.Add(regionUniqueKey, newTransactionReportData);
@@ -373,9 +376,9 @@ namespace TOne.WhS.Jazz.BP.Activities
                                                         else
                                                         {
                                                             if (transactionType.IsCredit)
-                                                                transactionData.Credit += splitRate ? region.RegionValue2 : region.RegionValue1;
+                                                                transactionData.Credit += region.RegionValue;
                                                             else
-                                                                transactionData.Debit += splitRate ? region.RegionValue2 : region.RegionValue1;
+                                                                transactionData.Debit += region.RegionValue;
                                                         }
                                                     }
                                                 }
@@ -387,11 +390,11 @@ namespace TOne.WhS.Jazz.BP.Activities
                         }
                     }
                 }
-                var rateTitlePart = reportDefinition.SplitRateValue.HasValue ? string.Concat( splitRate ? Decimal.Round(reportDefinition.SplitRateValue.Value, 4).ToString() : "R-" + Decimal.Round(reportDefinition.SplitRateValue.Value,4)) : null;
+                var amountType = reportDefinition.AmountType;
                 var jazzTransactionsReport = new JazzTransactionsReport
                 {
                     ReportDefinitionId = reportDefinition.JazzReportDefinitionId,
-                    SheetName = string.Concat(reportDefinition.Name.Length>15? reportDefinition.Name.Substring(0,15):reportDefinition.Name, " ", applyTax ? "Tax" : transactionType.Name.Substring(0,3)," ", rateTitlePart),
+                    SheetName = string.Concat(reportDefinition.Name.Length>15? reportDefinition.Name.Substring(0,15):reportDefinition.Name, " ", applyTax ? "Tax" : transactionType.Name.Substring(0,3)),
                     TransactionTypeId = transactionType.ID,
                     IsTaxTransaction = false
                 };
