@@ -48,12 +48,10 @@
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-
             <div transclude-to="buttons">
                 <vr-button type="Apply" formname="formCustomerSMSRateEditor" ng-if="scopeModel.nbPendingChanges > 0" haspermission="scopeModel.hasApplyChangesPermission" data-onclick="scopeModel.applyChanges"></vr-button>
                 <vr-button type="CancelChanges" ng-if="scopeModel.isCustomerSMSRateDraftExist" haspermission="scopeModel.hasCancelDraftPermission" data-onclick="scopeModel.cancelCustomerDraft"></vr-button>
-                <vr-button type="Save" formname="formCustomerSMSRateEditor" haspermission="scopeModel.hasSaveChangesPermission" data-onclick="scopeModel.saveChanges"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+                <vr-button type="Close" formname="formCustomerSMSRateEditor" haspermission="scopeModel.hasSaveChangesPermission" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>

@@ -154,8 +154,28 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal();
+                saveDraftChanges();
             };
+
+            $scope.modalContext.onModalHide = function () {
+                if ($scope.formSupplierSMSRateEditor.validate() != null)
+                    return;
+
+                for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                    var currentDataItem = $scope.scopeModel.datasource[i];
+                    currentDataItem.onRateValueChanged(currentDataItem);
+                }
+
+                saveDraftChanges();
+            };
+
+            function saveDraftChanges() {
+                $scope.scopeModel.isLoading = true;
+                onSaveOrApplyClicked().finally(function () {
+                    $scope.modalContext.closeModal();
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
 
             $scope.scopeModel.hasApplyChangesPermission = function () {
                 return WhS_SMSBusinessEntity_SupplierSMSRateChangesAPIService.HasApplyChangesPermission();
@@ -324,10 +344,8 @@
 
                 if (!tryUpdateSupplierSMSRateChange(dataItem)) {
                     var rate = dataItem.NewRate;
-                    if (rate != undefined) {
-                        var obj = { MobileNetworkID: dataItem.MobileNetworkID, NewRate: rate };
-                        modifiedSmsRates.push(obj);
-                    }
+                    var obj = { MobileNetworkID: dataItem.MobileNetworkID, NewRate: rate };
+                    modifiedSmsRates.push(obj);
                 }
 
                 function isNullOrEmpty(item) {
