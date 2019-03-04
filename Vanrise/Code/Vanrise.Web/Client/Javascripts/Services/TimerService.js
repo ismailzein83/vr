@@ -56,18 +56,6 @@
             }
         }
 
-        function unregisterJob(job) {
-            var index = -1;
-            for (var x = 0; x < registeredJobs.length; x++) {
-                if (job.id == registeredJobs[x].id) {
-                    index = x;
-                    break;
-                }
-            }
-            if (index >= 0)
-                registeredJobs.splice(index, 1);
-        }
-
         var timer = setInterval(function () {
 
             if (!isGettingData && registeredJobs.length > 0) {
@@ -102,7 +90,6 @@
 
         return ({
             registerJob: registerJob,
-            unregisterJob: unregisterJob,
             unregisterJobByIds: unregisterJobByIds
         });
     }
