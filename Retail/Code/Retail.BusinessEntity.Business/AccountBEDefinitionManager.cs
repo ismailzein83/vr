@@ -345,6 +345,10 @@ namespace Retail.BusinessEntity.Business
             });
         }
 
+        private Dictionary<Guid,BusinessEntityDefinition> GetCachedAccountBEDefinitions()
+        {
+            return s_businessEntityDefinitionManager.GetBusinessEntityDefinitionsByConfigId(AccountBEDefinitionSettings.s_configId);
+        }
         private bool IsViewVisible(Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionView> visibleViews, AccountViewDefinition accountViewDefinition)
         {
             if (!visibleViews.ContainsKey(accountViewDefinition.AccountViewDefinitionId))
@@ -510,6 +514,75 @@ namespace Retail.BusinessEntity.Business
             {
                 if (v != null && v.Settings != null && v.Settings.DoesUserHaveAccess(viewcontext) == true)
                     return true;
+            }
+            return false;
+        }
+
+        public bool DoesUserHaveActionsAccess(int userId)
+        {
+            var accountBEDefinitions = GetCachedAccountBEDefinitions();
+            if (accountBEDefinitions != null)
+            {
+                foreach (var accountBEDefinition in accountBEDefinitions)
+                {
+                    if (DoesUserHaveActionsAccess(userId, accountBEDefinition.Key))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+
+       
+
+        public bool DoesUserHaveStartActionAccess(List<AccountBulkActionRuntime> accountBulkActions, Guid accountBEDefinitionId, int userId )
+        {
+            if(accountBulkActions != null && accountBulkActions.Count > 0)
+            {
+                var settings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
+                if(settings != null && settings.AccountBulkActions != null && settings.AccountBulkActions.Count > 0)
+                {
+                    foreach (var accountBulkAction in accountBulkActions)
+                    {
+                        var bulkActionItem = settings.AccountBulkActions.FindRecord(x => x.AccountBulkActionId == accountBulkAction.AccountBulkActionId);
+                        if (bulkActionItem != null && bulkActionItem.Settings != null && bulkActionItem.Settings.DoesUserHaveStartInstanceAccess(new AccountBulkActionSettingsCheckAccessContext { AccountBulkAction = bulkActionItem, UserId = userId }))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        public bool DoesUserHaveRunActionAccess(List<AccountBulkActionRuntime> accountBulkActions, Guid accountBEDefinitionId, int userId)
+        {
+            if (accountBulkActions != null && accountBulkActions.Count > 0)
+            {
+                var settings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
+                if (settings != null && settings.AccountBulkActions != null && settings.AccountBulkActions.Count > 0)
+                {
+                    foreach (var accountBulkAction in accountBulkActions)
+                    {
+                        var bulkActionItem = settings.AccountBulkActions.FindRecord(x => x.AccountBulkActionId == accountBulkAction.AccountBulkActionId);
+                        if (bulkActionItem != null && bulkActionItem.Settings != null && bulkActionItem.Settings.DoesUserHaveRunInstanceAccess(new AccountBulkActionSettingsCheckAccessContext { AccountBulkAction = bulkActionItem, UserId = userId }))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        public bool DoesUserHaveActionsAccess(int userId, Guid accountBEDefinitionId)
+        {
+            var settings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            if (settings != null && settings.AccountBulkActions != null)
+            {
+                foreach (var accountBulkAction in settings.AccountBulkActions)
+                {
+                    if (accountBulkAction.Settings.DoesUserHaveActionsAccess(new AccountBulkActionSettingsCheckAccessContext { AccountBulkAction = accountBulkAction, UserId = userId }))
+                        return true;
+                }
             }
             return false;
         }

@@ -63,12 +63,37 @@ namespace Retail.BusinessEntity.Entities
         public string Title { get; set; }
         public AccountBulkActionSettings Settings { get; set; }
         public AccountCondition AccountCondition { get; set; }
+        public RequiredPermissionSettings RequiredPermission { get; set; }
     }
 
     public abstract class AccountBulkActionSettings
     {
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeEditor { get; }
+        public virtual bool DoesUserHaveActionsAccess(IAccountBulkActionSettingsCheckAccessContext context)
+        {
+            return ContextFactory.GetContext().IsAllowed(context.AccountBulkAction.RequiredPermission, context.UserId);
+        }
+        public virtual bool DoesUserHaveStartInstanceAccess(IAccountBulkActionSettingsCheckAccessContext context)
+        {
+            return ContextFactory.GetContext().IsAllowed(context.AccountBulkAction.RequiredPermission, context.UserId);
+        }
+        public virtual bool DoesUserHaveRunInstanceAccess(IAccountBulkActionSettingsCheckAccessContext context)
+        {
+            return ContextFactory.GetContext().IsAllowed(context.AccountBulkAction.RequiredPermission, context.UserId);
+        }
+    }
+    public interface IAccountBulkActionSettingsCheckAccessContext
+    {
+        int UserId { get; }
+        AccountBulkAction AccountBulkAction { get; set; }
+
+    }
+    public class AccountBulkActionSettingsCheckAccessContext : IAccountBulkActionSettingsCheckAccessContext
+    {
+        public int UserId { get; set; }
+        public AccountBulkAction AccountBulkAction { get; set; }
+
     }
     public interface IAccountBulkActionSettingsContext
     {
@@ -82,6 +107,7 @@ namespace Retail.BusinessEntity.Entities
     public abstract class AccountBulkActionRuntimeSettings
     {
         public abstract void Execute(IAccountBulkActionSettingsContext context);
+      
     }
     public class AccountExtraFieldDefinition
     {
