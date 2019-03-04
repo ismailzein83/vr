@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 using Vanrise.Integration.Business;
 using Vanrise.Integration.Entities;
 
@@ -28,6 +29,7 @@ namespace Vanrise.Integration.MainExtensions.BusinessObjectDataStore
             HashSet<DSAnalysisInterval> dsAnalysisIntervalHashSet = new HashSet<DSAnalysisInterval>();
             var manager = new DataSourceImportedBatchManager();
 
+            Dictionary<string, DataRecordField> fields = new DataRecordTypeManager().GetDataRecordTypeFields(new Guid("3BD1FED8-44C7-4F33-93FD-D8276FBE07AD"));
             foreach (var field in context.Fields)
             {
                 if (field.StartsWith(LastHourPrefix))
@@ -65,11 +67,12 @@ namespace Vanrise.Integration.MainExtensions.BusinessObjectDataStore
                     Guid dataSourceId = dataSourceSummaryByIntervalKvp.Key;
                     Dictionary<DSAnalysisInterval, DataSourceSummary> dataSourceSummaryByInterval = dataSourceSummaryByIntervalKvp.Value;
 
-                    context.OnRecordLoaded(DataRecordObjectMapper(dataSourceId, dataSourceSummaryByInterval, now), DateTime.Now);
+                    context.OnRecordLoaded(DataRecordObjectMapper(dataSourceId, dataSourceSummaryByInterval, now, fields), DateTime.Now);
                 }
         }
 
-        private DataRecordObject DataRecordObjectMapper(Guid datasourceId, Dictionary<DSAnalysisInterval, DataSourceSummary> dataSourceSummaryByInterval, DateTime now)
+        private DataRecordObject DataRecordObjectMapper(Guid datasourceId, Dictionary<DSAnalysisInterval, DataSourceSummary> dataSourceSummaryByInterval, DateTime now,
+            Dictionary<string, DataRecordField> fields)
         {
             var dataSourceSummaryObject = new Dictionary<string, object>();
             dataSourceSummaryObject.Add("DataSource", datasourceId);
@@ -88,20 +91,29 @@ namespace Vanrise.Integration.MainExtensions.BusinessObjectDataStore
                 dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "MinBatchSize"), dataSourceSummary.MinBatchSize);
                 dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbInvalidBatches"), dataSourceSummary.NbInvalidBatch);
                 dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbEmptyBatches"), dataSourceSummary.NbEmptyBatch);
-                dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbOfMinutesSinceLastBatch"), now.Subtract(dataSourceSummary.LastImportedBatchTime).TotalMinutes);
+
+                AddRoundedValue(dataSourceSummaryObject, string.Concat(interval.Prefix, "NbOfMinutesSinceLastBatch"), fields, now.Subtract(dataSourceSummary.LastImportedBatchTime).TotalMinutes);
+
                 if (dataSourceSummary.MinBatchStart.HasValue)
                 {
-                    dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbOfMinutesSinceFirstBatchStarted"), now.Subtract(dataSourceSummary.MinBatchStart.Value).TotalMinutes);
-                    dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbOfHoursSinceFirstBatchStarted"), now.Subtract(dataSourceSummary.MinBatchStart.Value).TotalHours);
+                    AddRoundedValue(dataSourceSummaryObject, string.Concat(interval.Prefix, "NbOfMinutesSinceFirstBatchStarted"), fields, now.Subtract(dataSourceSummary.MinBatchStart.Value).TotalMinutes);
+                    AddRoundedValue(dataSourceSummaryObject, string.Concat(interval.Prefix, "NbOfHoursSinceFirstBatchStarted"), fields, now.Subtract(dataSourceSummary.MinBatchStart.Value).TotalHours);
                 }
+
                 if (dataSourceSummary.MaxBatchEnd.HasValue)
                 {
-                    dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbOfMinutesSinceLastBatchEnded"), now.Subtract(dataSourceSummary.MaxBatchEnd.Value).TotalMinutes);
-                    dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbOfHoursSinceLastBatchEnded"), now.Subtract(dataSourceSummary.MaxBatchEnd.Value).TotalHours);
+                    AddRoundedValue(dataSourceSummaryObject, string.Concat(interval.Prefix, "NbOfMinutesSinceLastBatchEnded"), fields, now.Subtract(dataSourceSummary.MaxBatchEnd.Value).TotalMinutes);
+                    AddRoundedValue(dataSourceSummaryObject, string.Concat(interval.Prefix, "NbOfHoursSinceLastBatchEnded"), fields, now.Subtract(dataSourceSummary.MaxBatchEnd.Value).TotalHours);
                 }
             }
 
             return new DataRecordObject(new Guid("3BD1FED8-44C7-4F33-93FD-D8276FBE07AD"), dataSourceSummaryObject);
+        }
+
+        private void AddRoundedValue(Dictionary<string, object> dataSourceSummaryObject, string fieldName, Dictionary<string, DataRecordField> fields, double fieldValue)
+        {
+            decimal roundedFieldValue = fields.GetRecord(fieldName).Type.GetRoundedValue(fieldValue);
+            dataSourceSummaryObject.Add(fieldName, roundedFieldValue);
         }
 
         private struct DSAnalysisInterval
