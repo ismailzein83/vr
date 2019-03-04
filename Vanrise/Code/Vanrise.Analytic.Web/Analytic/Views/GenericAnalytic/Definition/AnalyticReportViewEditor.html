@@ -16,10 +16,10 @@
                                 </vr-columns>
                             </vr-row>
                             <vr-row>
-                                <vr-analytic-analyticreport-config-selector on-ready="scopeModel.onReportTypeSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReportType" onselectionchanged="scopeModel.onReportTypeSelectionChanged" normal-col-num="12"></vr-analytic-analyticreport-config-selector>
+                                <vr-analytic-analyticreport-config-selector on-ready="scopeModel.onReportTypeSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReportType" onselectionchanged="scopeModel.onReportTypeSelectionChanged" normal-col-num="12" hideremoveicon></vr-analytic-analyticreport-config-selector>
                             </vr-row>
                             <vr-row ng-show="scopeModel.selectedReportType !=undefined">
-                                <vr-analytic-analyticreport-selector on-ready="scopeModel.onReportSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReport" normal-col-num="12"></vr-analytic-analyticreport-selector>
+                                <vr-analytic-analyticreport-selector on-ready="scopeModel.onReportSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReport" normal-col-num="12" hideremoveicon></vr-analytic-analyticreport-selector>
                             </vr-row>
                             <vr-row>
                                 <vr-sec-viewcommonproperties-editor on-ready="scopeModel.onViewCommonPropertiesReady" normal-col-num="12"></vr-sec-viewcommonproperties-editor>

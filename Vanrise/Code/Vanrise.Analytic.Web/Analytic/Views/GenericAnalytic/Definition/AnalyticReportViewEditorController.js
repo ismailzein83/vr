@@ -116,9 +116,16 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadReportTypeSelector, loadReportSelector, loadViewCommonProperties]).then(function () {
+                var rootPromiseNode = {
+                    promises: [UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadReportTypeSelector, loadViewCommonProperties])],
+                    getChildNode: function () {
+                        return {
+                            promises: [UtilsService.waitMultipleAsyncOperations([loadReportSelector])]
+                        };
+                    }
+                };
 
-                }).finally(function () {
+                return UtilsService.waitPromiseNode(rootPromiseNode).finally(function () {
                     $scope.scopeModel.isLoading = false;
                     reportTypeSelectorSelectionChangePromise = undefined;
                 }).catch(function (error) {
