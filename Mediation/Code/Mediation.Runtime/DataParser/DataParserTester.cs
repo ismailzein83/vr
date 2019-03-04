@@ -76,7 +76,7 @@ namespace Mediation.Runtime.DataParser
             DateTimeParser dateTimeParser = new DateTimeParser()
             {
                 FieldName = fieldName,
-                TimeShiftFieldName = timeShiftFieldName,
+                //TimeShiftFieldName = timeShiftFieldName,
                 DateTimeParsingType = DateTimeParsingType.DateTime,
                 IsBCD = true,
                 YearIndex = 0,
@@ -3420,7 +3420,7 @@ namespace Mediation.Runtime.DataParser
                 {
                     IsBCD = true,
                     FieldName = "ServiceRequestTime",
-                    TimeShiftFieldName = "TimeShift",
+                    //TimeShiftFieldName = "TimeShift",
                     DateTimeParsingType = DateTimeParsingType.DateTime,
                     YearIndex = 0,
                     MonthIndex = 1,
@@ -4087,7 +4087,7 @@ namespace Mediation.Runtime.DataParser
                 {
                     IsBCD = true,
                     FieldName = "ServiceRequestTime",
-                    TimeShiftFieldName = "TimeShift",
+                    //TimeShiftFieldName = "TimeShift",
                     DateTimeParsingType = DateTimeParsingType.DateTime,
                     YearIndex = 0,
                     MonthIndex = 1,
