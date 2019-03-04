@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             TechnicalZoneManager technicalZoneManager = new TechnicalZoneManager();
             string outputMessage;
-            if (!technicalZoneManager.CanAddMoreZones(out outputMessage))
+            if (context.OperationType == HandlerOperationType.Add && !technicalZoneManager.CanAddMoreZones(out outputMessage))
             {
                 var zoneName = (string)context.GenericBusinessEntity.FieldValues.GetRecord("ZoneName");
                 context.OutputResult.Result = false;
