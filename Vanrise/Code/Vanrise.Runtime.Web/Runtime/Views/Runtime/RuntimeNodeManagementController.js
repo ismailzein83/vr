@@ -1,13 +1,12 @@
 ﻿(function (appControllers) {
     "use strict";
-    RuntimeNodeManagementController.$inject = ['$scope','VRTimerService', 'VRRuntime_RuntimeNodeService', 'VRRuntime_RuntimeNodeAPIService', 'VRRuntime_RuntimeNodeStateAPIService', 'UtilsService', 'VRUIUtilsService'];
+    RuntimeNodeManagementController.$inject = ['$scope', 'VRTimerService', 'VRRuntime_RuntimeNodeService', 'VRRuntime_RuntimeNodeAPIService', 'VRRuntime_RuntimeNodeStateAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function RuntimeNodeManagementController($scope,VRTimerService, VRRuntime_RuntimeNodeService, VRRuntime_RuntimeNodeAPIService, VRRuntime_RuntimeNodeStateAPIService, UtilsService, VRUIUtilsService) {
+    function RuntimeNodeManagementController($scope, VRTimerService, VRRuntime_RuntimeNodeService, VRRuntime_RuntimeNodeAPIService, VRRuntime_RuntimeNodeStateAPIService, UtilsService, VRUIUtilsService) {
         var gridAPI;
         var filter = {};
         var nodeId;
         var runtimeNodeId;
-        var job;
         var timeInterval = 0.1;
 
 
@@ -19,22 +18,21 @@
             filter = {};
 
             $scope.onGridReady = function (api) {
-                    gridAPI = api;
-                    api.loadGrid(filter);
-                };
+                gridAPI = api;
+                api.loadGrid(filter);
+            };
 
 
-            if (job != undefined) {
-                VRTimerService.unregisterJob(job);
+            if ($scope.jobIds != undefined) {
+                VRTimerService.unregisterJobByIds($scope.jobIds);
+                $scope.jobIds.length = 0;
             }
-            job = VRTimerService.registerJob(getNodesStates, $scope, timeInterval);
-
-
+            VRTimerService.registerJob(getNodesStates, $scope, timeInterval);
 
             VRRuntime_RuntimeNodeAPIService.GetAllNodes().then(function (response) {
                 if (response != null) {
                     for (var i = 0; i < response.length; i++) {
-                        addToDatasource(response[i]);            
+                        addToDatasource(response[i]);
                     }
                     function addToDatasource(nodeObj) {
 
@@ -56,8 +54,7 @@
                             }
 
                             else {
-                                for (var i = 0; i < $scope.datasource.length; i++)
-                                {
+                                for (var i = 0; i < $scope.datasource.length; i++) {
                                     $scope.datasource[i].preview = false;
                                 }
                                 nodeObj.preview = true;
@@ -72,7 +69,7 @@
 
 
             function getNodesStates() {
-                var promises = [];    
+                var promises = [];
                 var getStates = UtilsService.createPromiseDeferred();
                 promises.push(getStates.promise);
 
@@ -82,9 +79,9 @@
                             if ($scope.datasource[j].RuntimeNodeId == response[i].RuntimeNodeId) {
                                 $scope.datasource[j].State = response[i];
 
-                                if($scope.datasource[i].preview==true){
-                                   //gridAPI.getNewData(filter);
-                                   gridAPI.loadGrid(filter);
+                                if ($scope.datasource[i].preview == true) {
+                                    //gridAPI.getNewData(filter);
+                                    gridAPI.loadGrid(filter);
                                 }
                             }
                         }

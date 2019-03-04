@@ -12,8 +12,9 @@
 
         function tryTakeSession(scope, sessionTryTakeInput) {
             var promiseDeffered = UtilsService.createPromiseDeferred();
-            if (scope.job) {
-                VRTimerService.unregisterJob(scope.job);
+            if (scope.jobIds) {
+                VRTimerService.unregisterJobByIds(scope.jobIds);
+                scope.jobIds.length = 0;
             }
             var responseObject = {};
             VRCommon_VRExclusiveSessionTypeAPIService.TryTakeSession(sessionTryTakeInput).then(function (response) {
@@ -33,16 +34,19 @@
             return promiseDeffered.promise;
 
             function releaseSession() {
-                if (scope.job) {
-                    VRTimerService.unregisterJob(scope.job);
+                if (scope.jobIds) {
+                    VRTimerService.unregisterJobByIds(scope.jobIds);
+                    scope.jobIds.length = 0;
                 }
                 return VRCommon_VRExclusiveSessionTypeAPIService.ReleaseSession(sessionTryTakeInput);
             }
 
             function onTimerElapsed() {
-                 return VRCommon_VRExclusiveSessionTypeAPIService.TryKeepSession(sessionTryTakeInput).then(function (response) {
+                return VRCommon_VRExclusiveSessionTypeAPIService.TryKeepSession(sessionTryTakeInput).then(function (response) {
                     if (!response.IsSucceeded) {
-                        VRTimerService.unregisterJob(scope.job);
+                        VRTimerService.unregisterJobByIds(scope.jobIds);
+                        scope.jobIds.length = 0;
+
                         responseObject.onTryTakeFailure(response);
                     }
                     promiseDeffered.resolve(response);

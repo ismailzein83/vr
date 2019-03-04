@@ -32,8 +32,9 @@
             };
 
             function createTimer() {
-                if (scope.job) {
-                    VRTimerService.unregisterJob(scope.job);
+                if (scope.jobIds) {
+                    VRTimerService.unregisterJobByIds(scope.jobIds);
+                    scope.jobIds.length = 0;
                 }
 
                 return getFirstPage().then(function () {
@@ -44,7 +45,7 @@
             function onTimerElapsed(jobId) {
                 if (lastUpdateHandle != undefined)
                     return VR_Notification_VRNotificationsAPIService.GetUpdatedVRNotifications(buildVRNotificationUpdateInput()).then(function (response) {
-                        if (scope.job.id == jobId)
+                        if (scope.jobIds != undefined && UtilsService.contains(scope.jobIds, jobId))
                             manipulateDataUpdated(response);
                     });
                 else {

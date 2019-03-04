@@ -24,7 +24,6 @@
             this.initializeController = initializeController;
 
             var filterObj;
-            var job;
             var fieldTypes = [];
             var dimensions = [];
             var measures = [];
@@ -39,7 +38,7 @@
                 $scope.scopeModel.sinceTimes = UtilsService.getArrayEnum(VR_Analytic_SinceTimeEnum);
 
                 $scope.scopeModel.timeUnits = UtilsService.getArrayEnum(VR_Analytic_TimeUnitEnum);
-                
+
                 $scope.scopeModel.selectedSinceTime = VR_Analytic_SinceTimeEnum.Time;
                 $scope.scopeModel.showSinceTime = true;
                 $scope.scopeModel.selectedTimeGroupingUnit = VR_Analytic_TimeGroupingUnitEnum.Hour;
@@ -111,11 +110,15 @@
                         }
                     }
 
-                    if (job != undefined)
-                        VRTimerService.unregisterJob(job);
-                    job = VRTimerService.registerJob(search, $scope, $scope.scopeModel.timeInterval * 60);
+                    if ($scope.jobIds != undefined) {
+                        VRTimerService.unregisterJobByIds($scope.jobIds);
+                        $scope.jobIds.length = 0;
+                    }
+
+                    VRTimerService.registerJob(search, $scope, $scope.scopeModel.timeInterval * 60);
+
                 };
-               
+
                 defineColumnWidth();
 
                 defineAPI();
@@ -124,9 +127,9 @@
             function search() {
                 var promises = [];
                 if ($scope.scopeModel.widgets.length > 0) {
-                  
-                
-                    for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
+
+
+                    for (var i = 0; i < $scope.scopeModel.widgets.length; i++) {
                         var widget = $scope.scopeModel.widgets[i];
                         widget.promiseDeffer = UtilsService.createPromiseDeferred();
                         promises.push(widget.promiseDeffer.promise);
@@ -136,8 +139,7 @@
                 return UtilsService.waitMultiplePromises(promises);
             }
 
-            function loadWidgetDirective(widget)
-            {
+            function loadWidgetDirective(widget) {
                 var setLoader = function (value) { $scope.scopeModel.isLoadingDimensionDirective = value, !value ? widget.promiseDeffer.resolve() : undefined; };
                 var payload = getQuery(widget.settings);
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, widget.directiveAPI, payload, setLoader);

@@ -207,8 +207,9 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
             }
 
             function createTimer() {
-                if ($scope.job) {
-                    VRTimerService.unregisterJob($scope.job);
+                if ($scope.jobIds) {
+                    VRTimerService.unregisterJobByIds($scope.jobIds);
+                    $scope.jobIds.length = 0;
                 }
                 var pageInfo = gridAPI.getPageInfo();
 
