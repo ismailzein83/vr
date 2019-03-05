@@ -2099,9 +2099,9 @@ namespace Mediation.Runtime
         
         #endregion
 
-        #region Teles
+        #region Multinet
 
-        public static MappingOutput MapCDR_File_Teles(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        public static MappingOutput MapCDR_File_Multinet_Teles(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
@@ -2159,7 +2159,7 @@ namespace Mediation.Runtime
             MappingOutput result = new MappingOutput();
             result.Result = MappingResult.Valid;
             return result;
-        }
+        } 
 
         #endregion
 
