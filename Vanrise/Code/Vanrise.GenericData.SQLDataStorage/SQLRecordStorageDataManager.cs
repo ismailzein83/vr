@@ -711,6 +711,48 @@ namespace Vanrise.GenericData.SQLDataStorage
             return minDateFromReader;
         }
 
+        public DateTime? GetMinDateTimeWithMaxIdByFilter(RecordFilterGroup filterGroup, out long? maxId)
+        {
+            string tableName = GetTableNameWithSchema();
+            string idFieldName = GetColumnNameFromFieldName(DataRecordType.Settings.IdField);
+            string datetimeFieldName = GetColumnNameFromFieldName(_dataRecordStorage.Settings.DateTimeField);
+
+            List<string> queryFilters = new List<string>();
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+            int parameterIndex = 0;
+           
+            if (filterGroup != null)
+            {
+                Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
+                string recordFilter = recordFilterSQLBuilder.BuildRecordFilter(filterGroup, ref parameterIndex, parameterValues);
+
+                if (!string.IsNullOrEmpty(recordFilter))
+                    queryFilters.Add(recordFilter);
+   
+            }
+            string query = $"SELECT MAX ({idFieldName}) AS MaxId, MIN({datetimeFieldName}) AS MinDate,  from {tableName} WITH (NOLOCK)";
+            if (queryFilters.Count > 0)
+                query += string.Format(" Where {0} ", string.Join(" And ", queryFilters));
+
+            DateTime? minDateFromReader = null;
+            long? maxIdFromReader = null;
+
+            ExecuteReaderText(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    minDateFromReader = GetReaderValue<DateTime?>(reader, "MinDate");
+                    maxIdFromReader = GetReaderValue<long?>(reader, "MaxId");
+                }
+            }, (cmd) =>
+            {
+                cmd.CommandTimeout = 0;
+            });
+
+            maxId = maxIdFromReader;
+            return minDateFromReader;
+        }
+
         public long? GetMaxId(out DateTime? maxDate, out DateTime? minDate)
         {
             string tableName = GetTableNameWithSchema();
@@ -1294,6 +1336,8 @@ namespace Vanrise.GenericData.SQLDataStorage
             datatable.EndLoadData();
             return datatable;
         }
+
+      
 
         #endregion
     }

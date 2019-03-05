@@ -182,6 +182,11 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
+        public DateTime? GetMinDateTimeWithMaxIdByFilter(RecordFilterGroup filterGroup, out long? maxId)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Classes
 
         private class BusinessObjectDataProviderLoadRecordsContext : IBusinessObjectDataProviderLoadRecordsContext

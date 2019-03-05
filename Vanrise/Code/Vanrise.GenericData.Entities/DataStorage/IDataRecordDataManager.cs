@@ -35,6 +35,8 @@ namespace Vanrise.GenericData.Entities
 
         DateTime? GetMinDateTimeWithMaxIdAfterId(long id, out long? maxId);
 
+        DateTime? GetMinDateTimeWithMaxIdByFilter(RecordFilterGroup filterGroup, out long? maxId);
+
         long? GetMaxId(out DateTime? maxDate, out DateTime? minDate);
     }
 

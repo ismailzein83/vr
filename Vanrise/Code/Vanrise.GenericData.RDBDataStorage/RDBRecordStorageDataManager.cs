@@ -240,6 +240,40 @@ namespace Vanrise.GenericData.RDBDataStorage
             return minDateFromReader;
         }
 
+        public DateTime? GetMinDateTimeWithMaxIdByFilter(RecordFilterGroup filterGroup, out long? maxId)
+        {
+            var rdbRegistrationInfo = GetRDBRegistrationInfo();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(rdbRegistrationInfo.RDBTableQuerySource, "rec", null, true);
+
+            var selectAggregates = selectQuery.SelectAggregates();
+            string dateTimeFieldName = GetDateTimeFieldNameWithValidate();
+            selectAggregates.Aggregate(RDBNonCountAggregateType.MIN, dateTimeFieldName, "MinDate");
+            string idFieldName = GetIdFieldNameWithValidate();
+            selectAggregates.Aggregate(RDBNonCountAggregateType.MAX, idFieldName, "MaxId");
+
+            var where = selectQuery.Where();
+
+            if (filterGroup != null)
+                AddFilterGroupCondition(filterGroup, where);
+
+            DateTime? minDateFromReader = null;
+            long? maxIdFromReader = null;
+
+            queryContext.ExecuteReader((reader) =>
+            {
+                if (reader.Read())
+                {
+                    minDateFromReader = reader.GetNullableDateTime("MinDate");
+                    maxIdFromReader = reader.GetNullableLong("MaxId");
+                }
+            });
+
+            maxId = maxIdFromReader;
+            return minDateFromReader;
+        }
+
         public object InitialiazeStreamForDBApply()
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -929,6 +963,8 @@ namespace Vanrise.GenericData.RDBDataStorage
                 }
             }
         }
+
+ 
 
         #endregion
 

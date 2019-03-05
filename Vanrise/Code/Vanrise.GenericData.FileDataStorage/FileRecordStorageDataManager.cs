@@ -1046,6 +1046,11 @@ namespace Vanrise.GenericData.FileDataStorage
             }
         }
 
+        public DateTime? GetMinDateTimeWithMaxIdByFilter(RecordFilterGroup filterGroup, out long? maxId)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 

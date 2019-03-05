@@ -327,6 +327,13 @@ namespace Vanrise.GenericData.Business
             return storageDataManager.GetMinDateTimeWithMaxIdAfterId(id, out maxId);
         }
 
+        public DateTime? GetMinDateTimeWithMaxIdByFilter (Guid dataRecordStorageId, RecordFilterGroup filterGroup, out long? maxId)
+        {
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
+            return storageDataManager.GetMinDateTimeWithMaxIdByFilter(filterGroup, out maxId);
+        }
+
         public long? GetMaxId(Guid dataRecordStorageId, out DateTime? maxDate, out DateTime? minDate)
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId);
