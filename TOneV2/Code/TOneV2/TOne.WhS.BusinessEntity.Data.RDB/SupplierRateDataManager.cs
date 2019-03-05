@@ -248,12 +248,42 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public DateTime? GetNextOpenOrCloseTime(DateTime effectiveDate)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.SelectAggregates().Aggregate(RDBNonCountAggregateType.MIN, "NextOpenOrCloseTime");
+
+            var unionSelect = selectQuery.FromSelectUnion("v");
+
+            var firstSelect = unionSelect.AddSelect();
+            firstSelect.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            firstSelect.SelectColumns().Expression("NextOpenOrCloseTime").Aggregate(RDBNonCountAggregateType.MIN, COL_BED);
+
+            var firstSelectWhereContext = firstSelect.Where();
+            firstSelectWhereContext.GreaterThanCondition(COL_BED).Value(effectiveDate);
+            firstSelectWhereContext.NotEqualsCondition(COL_BED).Column(COL_EED);
+
+
+            var secondSelect = unionSelect.AddSelect();
+            secondSelect.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            secondSelect.SelectColumns().Expression("NextOpenOrCloseTime").Aggregate(RDBNonCountAggregateType.MIN, COL_EED);
+
+            var secondSelectWhereContext = secondSelect.Where();
+            secondSelectWhereContext.GreaterThanCondition(COL_EED).Value(effectiveDate);
+            secondSelectWhereContext.NotEqualsCondition(COL_BED).Column(COL_EED);
+
+            object nextOpenOrCloseTimeAsObj = queryContext.ExecuteScalar().DateTimeValue;
+
+            DateTime? nextOpenOrCloseTime = null;
+            if (nextOpenOrCloseTimeAsObj != DBNull.Value)
+                nextOpenOrCloseTime = (DateTime)nextOpenOrCloseTimeAsObj;
+
+            return nextOpenOrCloseTime;
         }
 
         public object GetMaximumTimeStamp()
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.GetMaxReceivedDataInfo(TABLE_NAME);
         }
         #endregion
 
