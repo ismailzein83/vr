@@ -53,6 +53,13 @@
 				endPointId: endPointId,
 			});
 		}
+
+		function HasDeletePermisssion() {
+			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['DeleteEndPoint']));
+		}
+		function HasViewEndPointPermission() {
+			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['GetFilteredEndPoints']));
+		}
         return ({
             GetFilteredEndPoints: GetFilteredEndPoints,
             GetEndPoint: GetEndPoint,
@@ -62,7 +69,9 @@
             HasEditEndPointPermission: HasEditEndPointPermission,
             GetEndPointsInfo: GetEndPointsInfo,
 			GetEndPointHistoryDetailbyHistoryId: GetEndPointHistoryDetailbyHistoryId,
-			DeleteEndPoint: DeleteEndPoint
+			DeleteEndPoint: DeleteEndPoint,
+			HasDeletePermisssion: HasDeletePermisssion,
+			HasViewEndPointPermission: HasViewEndPointPermission
         });
     }
 

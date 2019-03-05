@@ -35,8 +35,8 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
                      };
                      NP_IVSwitch_RouteService.addRoute(carrierAccountId, onRouteAdded);
                  };
-                 $scope.scopeModel.hadAddRoutePermission = function () {
-                     return NP_IVSwitch_RouteAPIService.HasEditRoutePermission();
+				 $scope.scopeModel.hadAddRoutePermission = function () {
+                     return NP_IVSwitch_RouteAPIService.HasAddRoutePermission();
                  };
 
                  $scope.scopeModel.onGridReady = function (api) {
@@ -96,7 +96,7 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 				$scope.scopeModel.menuActions.push({
 					name: 'Delete',
 					clicked: deleteRoute,
-					//haspermission: hasCloneRoutePermission
+					haspermission: hasDeleteRoutePermission
 				});
             }
             function editRoute(RouteItem) {
@@ -134,7 +134,11 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 			}
 
 			function hasCloneRoutePermission() {
-				return NP_IVSwitch_RouteAPIService.HasEditRoutePermission();
+				return NP_IVSwitch_RouteAPIService.HasAddRoutePermission();
+			}
+
+			function hasDeleteRoutePermission() {
+				return NP_IVSwitch_RouteAPIService.HasDeleteRoutePermission();
 			}
         }
     }]);

@@ -37,7 +37,7 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
                     };
                     NP_IVSwitch_EndPointService.addEndPoint(carrierAccountId, onEndPointAdded);
                 };
-                $scope.scopeModel.hadAddEndPointPermission = function () {
+				$scope.scopeModel.hadAddEndPointPermission = function () {
                     return NP_IVSwitch_EndPointAPIService.HasAddEndPointPermission();
                 };
 
@@ -106,7 +106,7 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 				$scope.scopeModel.menuActions.push({
 					name: 'Delete',
 					clicked: deleteEndPoint,
-					//haspermission: hasCloneEndPointPermisssion
+					haspermission: hasDeletePermisssion
 				});
             }
             function editEndPoint(EndPointItem) {
@@ -145,6 +145,9 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 				return NP_IVSwitch_EndPointAPIService.HasAddEndPointPermission();
 			}
 
+			function hasDeletePermisssion() {
+				return NP_IVSwitch_EndPointAPIService.HasDeletePermisssion();
+			}
         }
     }]);
 

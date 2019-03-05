@@ -3,9 +3,9 @@
 
     "use strict";
 
-    EndPointService.$inject = ['VRModalService', 'WhS_BE_CarrierAccountService', 'NP_IVSwitch_CarrierAccountTypeEnum', 'UtilsService', 'VRCommon_ObjectTrackingService'];
+	EndPointService.$inject = ['VRModalService', 'WhS_BE_CarrierAccountService', 'NP_IVSwitch_CarrierAccountTypeEnum', 'UtilsService', 'VRCommon_ObjectTrackingService','NP_IVSwitch_EndPointAPIService'];
 
-    function EndPointService(NPModalService, WhS_BE_CarrierAccountService, NP_IVSwitch_CarrierAccountTypeEnum, UtilsService, VRCommon_ObjectTrackingService) {
+	function EndPointService(NPModalService, WhS_BE_CarrierAccountService, NP_IVSwitch_CarrierAccountTypeEnum, UtilsService, VRCommon_ObjectTrackingService, NP_IVSwitch_EndPointAPIService) {
         var drillDownDefinitions = [];
         function addEndPoint(CarrierAccountId, onEndPointAdded) {
             var settings = {};
@@ -54,7 +54,8 @@
 
  
             drillDownDefinition.title = "EndPoints";
-            drillDownDefinition.directive = "np-ivswitch-endpoint-grid";
+			drillDownDefinition.directive = "np-ivswitch-endpoint-grid";
+			drillDownDefinition.haspermission = NP_IVSwitch_EndPointAPIService.HasViewEndPointPermission;
             drillDownDefinition.hideDrillDownFunction = function (carrierAccountItem) {
                  return (carrierAccountItem.Entity.AccountType == NP_IVSwitch_CarrierAccountTypeEnum.Supplier.value);
 

@@ -49,11 +49,17 @@
             return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetRouteHistoryDetailbyHistoryId'), {
                 routeHistoryId: routeHistoryId
             });
-		}
+		} 
 		function DeleteRoute(routeId) {
 			return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'DeleteRoute'), {
 				routeId: routeId,
 			});
+		}
+		function HasDeleteRoutePermission() {
+			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['DeleteRoute']));
+		}
+		function HasViewRoutePermission() {
+			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['GetFilteredRoutes']));
 		}
 
         return ({
@@ -66,7 +72,9 @@
             GetSwitchDateTime: GetSwitchDateTime,
             GetRoutesInfo: GetRoutesInfo,
 			GetRouteHistoryDetailbyHistoryId: GetRouteHistoryDetailbyHistoryId,
-			DeleteRoute: DeleteRoute
+			DeleteRoute: DeleteRoute,
+			HasDeleteRoutePermission: HasDeleteRoutePermission,
+			HasViewRoutePermission: HasViewRoutePermission
         });
     }
 

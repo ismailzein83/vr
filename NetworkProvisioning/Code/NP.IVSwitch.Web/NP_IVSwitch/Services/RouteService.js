@@ -3,9 +3,9 @@
 
     "use strict";
 
-    RouteService.$inject = ['VRModalService', 'WhS_BE_CarrierAccountService', 'NP_IVSwitch_CarrierAccountTypeEnum', 'UtilsService', 'VRCommon_ObjectTrackingService'];
+	RouteService.$inject = ['VRModalService', 'WhS_BE_CarrierAccountService', 'NP_IVSwitch_CarrierAccountTypeEnum', 'UtilsService', 'VRCommon_ObjectTrackingService','NP_IVSwitch_RouteAPIService'];
 
-    function RouteService(NPModalService, WhS_BE_CarrierAccountService, NP_IVSwitch_CarrierAccountTypeEnum, UtilsService, VRCommon_ObjectTrackingService) {
+	function RouteService(NPModalService, WhS_BE_CarrierAccountService, NP_IVSwitch_CarrierAccountTypeEnum, UtilsService, VRCommon_ObjectTrackingService, NP_IVSwitch_RouteAPIService) {
         var drillDownDefinitions = [];
         function addRoute(CarrierAccountId, onRouteAdded) {
             var settings = {};
@@ -59,7 +59,8 @@
 
 
             drillDownDefinition.title = "Routes";
-            drillDownDefinition.directive = "np-ivswitch-route-grid";
+			drillDownDefinition.directive = "np-ivswitch-route-grid";
+			drillDownDefinition.haspermission = NP_IVSwitch_RouteAPIService.HasViewRoutePermission;
             drillDownDefinition.hideDrillDownFunction = function (carrierAccountItem) {
                   return ( carrierAccountItem.Entity.AccountType == NP_IVSwitch_CarrierAccountTypeEnum.Customer.value);
 
