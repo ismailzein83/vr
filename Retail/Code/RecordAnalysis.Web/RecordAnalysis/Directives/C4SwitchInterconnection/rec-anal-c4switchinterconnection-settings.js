@@ -301,7 +301,7 @@
 
                 api.setData = function (switchInterconnectionItem) {
 
-                    switchInterconnectionItem.Settings = getSwitchInterconnectionEntity();;
+                    switchInterconnectionItem.Settings = getSwitchInterconnectionEntity();
                 };
 
                 api.getData = function () {

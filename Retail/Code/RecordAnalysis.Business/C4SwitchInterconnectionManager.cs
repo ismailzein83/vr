@@ -20,38 +20,81 @@ namespace RecordAnalysis.Business
             if (interconnectionByTrunk == null)
                 return null;
 
-            return interconnectionByTrunk.GetRecord(trunk);
+            C4SwitchInterconnectionEntity result = interconnectionByTrunk.GetRecord(trunk);
+            if (result == null)
+                return null;
+
+            return result.InterconnectionId;
         }
 
+        public Dictionary<int, C4SwitchInterconnectionByTrunk> GetAllTrunkInterconnectionBySwitch()
+        {
+            var cachedTrunkInterconnectionBySwitch = GetCachedTrunkInterconnectionBySwitch();
+            cachedTrunkInterconnectionBySwitch.ThrowIfNull("cachedTrunkInterconnectionBySwitch");
+            return cachedTrunkInterconnectionBySwitch;
+        }
+
+        public Dictionary<int, List<C4SwitchInterconnectionEntity>> GetC4SwitchInterconnectionEntitiesByInterconnection()
+        {
+            var cachedSwitchIdByInterconnection = GetCachedC4SwitchInterconnectionEntitiesByInterconnection();
+            cachedSwitchIdByInterconnection.ThrowIfNull("cachedSwitchIdByInterconnection");
+            return cachedSwitchIdByInterconnection;
+        }
+
+        public C4SwitchInterconnectionEntity C4SwitchInterconnectionEntityMapper(Dictionary<string, object> fieldValues)
+        {
+            if (fieldValues == null)
+                return null;
+
+            var entity = new C4SwitchInterconnectionEntity()
+            {
+                SwitchInterconnectionId = (int)fieldValues.GetRecord("Id"),
+                SwitchId = (int)fieldValues.GetRecord("Switch"),
+                InterconnectionId = (int)fieldValues.GetRecord("Interconnection"),
+            };
+            entity.Settings = fieldValues.GetRecord("Settings").CastWithValidate<C4SwitchInterconnection>("Settings", entity.SwitchInterconnectionId);
+            entity.Settings.Trunks.ThrowIfNull("settings.Trunks", entity.SwitchInterconnectionId);
+
+            return entity;
+        }
+
+        public C4SwitchInterconnectionEntityToSave C4SwitchInterconnectionEntityToSaveMapper(Dictionary<string, object> fieldValues)
+        {
+            if (fieldValues == null)
+                return null;
+
+            var entity = new C4SwitchInterconnectionEntityToSave()
+            {
+                SwitchInterconnectionId = (int?)fieldValues.GetRecord("Id"),
+                SwitchId = (int)fieldValues.GetRecord("Switch"),
+                InterconnectionId = (int)fieldValues.GetRecord("Interconnection"),
+            };
+            entity.Settings = fieldValues.GetRecord("Settings").CastWithValidate<C4SwitchInterconnection>("Settings", entity.SwitchInterconnectionId);
+            entity.Settings.Trunks.ThrowIfNull("settings.Trunks", entity.SwitchInterconnectionId);
+
+            return entity;
+        }
 
         #region Private Methods
 
-        private Dictionary<int, InterconnectionByTrunk> GetCachedTrunkInterconnectionBySwitch()
+        private Dictionary<int, C4SwitchInterconnectionByTrunk> GetCachedTrunkInterconnectionBySwitch()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedC4SwitchInterconnections", BeDefinitionId, () =>
             {
-                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(BeDefinitionId);
+                var c4SwitchInterconnectionEntities = GetCachedC4SwitchInterconnectionEntity();
 
-                var trunkInterconnectionBySwitch = new Dictionary<int, InterconnectionByTrunk>();
+                var trunkInterconnectionBySwitch = new Dictionary<int, C4SwitchInterconnectionByTrunk>();
 
-                if (genericBusinessEntities != null)
+                if (c4SwitchInterconnectionEntities != null)
                 {
-                    foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
+                    foreach (var item in c4SwitchInterconnectionEntities)
                     {
-                        if (genericBusinessEntity.FieldValues == null)
-                            continue;
+                        var interconnectionByTrunk = trunkInterconnectionBySwitch.GetOrCreateItem(item.SwitchId);
 
-                        var switchId = (int)genericBusinessEntity.FieldValues.GetRecord("Switch");
-                        var interconnectionId = (int)genericBusinessEntity.FieldValues.GetRecord("Interconnection");
-
-                        var interconnectionByTrunk = trunkInterconnectionBySwitch.GetOrCreateItem(switchId);
-                        var settings = genericBusinessEntity.FieldValues.GetRecord("Settings").CastWithValidate<C4SwitchInterconnection>("Settings", switchId);
-                        settings.Trunks.ThrowIfNull("settings.Trunks", switchId);
-
-                        foreach (var trunk in settings.Trunks)
+                        foreach (var trunk in item.Settings.Trunks)
                         {
-                            interconnectionByTrunk.Add(trunk.TrunkName, interconnectionId);
+                            interconnectionByTrunk.Add(trunk.TrunkName, item);
                         }
                     }
                 }
@@ -59,7 +102,50 @@ namespace RecordAnalysis.Business
             });
         }
 
-        private class InterconnectionByTrunk : Dictionary<string, int> { }
+        private Dictionary<int, List<C4SwitchInterconnectionEntity>> GetCachedC4SwitchInterconnectionEntitiesByInterconnection()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedC4SwitchInterconnectionEntitiesByInterconnection", BeDefinitionId, () =>
+            {
+                var c4SwitchInterconnectionEntities = GetCachedC4SwitchInterconnectionEntity();
+
+                var switchIdByInterconnection = new Dictionary<int, List<C4SwitchInterconnectionEntity>>();
+
+                if (c4SwitchInterconnectionEntities != null)
+                {
+                    foreach (var item in c4SwitchInterconnectionEntities)
+                    {
+                        var idBySwitch = switchIdByInterconnection.GetOrCreateItem(item.InterconnectionId);
+                        idBySwitch.Add(item);
+                    }
+                }
+                return switchIdByInterconnection;
+            });
+        }
+
+        private IEnumerable<C4SwitchInterconnectionEntity> GetCachedC4SwitchInterconnectionEntity()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedC4SwitchInterconnectionEntity", BeDefinitionId, () =>
+            {
+                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(BeDefinitionId);
+
+                var c4SwitchInterconnectionEntity = new List<C4SwitchInterconnectionEntity>();
+
+                if (genericBusinessEntities != null)
+                {
+                    foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
+                    {
+                        C4SwitchInterconnectionEntity item = C4SwitchInterconnectionEntityMapper(genericBusinessEntity.FieldValues);
+                        if (item == null)
+                            continue;
+
+                        c4SwitchInterconnectionEntity.Add(item);
+                    }
+                }
+                return c4SwitchInterconnectionEntity;
+            });
+        }
         #endregion
     }
 }

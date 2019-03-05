@@ -58,6 +58,38 @@
                         $scope.scopeModel.probeTrunkMappings.splice(trunkIndex, 1);
                 };
 
+                $scope.scopeModel.isProbeTrunkMappingsValid = function () {
+                    var probeTrunkMappings = $scope.scopeModel.probeTrunkMappings;
+                    var probeTrunkMappingsLength = probeTrunkMappings.length;
+
+                    if (probeTrunkMappingsLength == 0) {
+                        return 'At least 1 item should be added';
+                    }
+
+                    else {
+                        for (var i = 0; i < probeTrunkMappingsLength - 1; i++) {
+                            var currentprobeTrunkMapping = probeTrunkMappings[i];
+                            var currentSwitchId = currentprobeTrunkMapping.switchAPI != undefined ? currentprobeTrunkMapping.switchAPI.getSelectedIds() : undefined;
+                            var currentPointCode = currentprobeTrunkMapping.PointCode;
+                            var currentTrunk = currentprobeTrunkMapping.Trunk;
+
+
+                            for (var j = i + 1; j < probeTrunkMappingsLength; j++) {
+                                var probeTrunkMappingToCompare = probeTrunkMappings[j];
+
+                                var switchIdToCompare = probeTrunkMappingToCompare.switchAPI != undefined ? probeTrunkMappingToCompare.switchAPI.getSelectedIds() : undefined;
+                                var pointCodeToCompare = probeTrunkMappingToCompare.PointCode;
+                                var trunkToCompare = probeTrunkMappingToCompare.Trunk;
+
+                                if (currentSwitchId == switchIdToCompare && currentPointCode == pointCodeToCompare && currentTrunk == trunkToCompare)
+                                    return 'Combination of Point code, Switch and Trunk should be unique.';
+                            }
+                        }
+                    }
+                    return null;
+                };
+
+
                 defineAPI();
             }
 

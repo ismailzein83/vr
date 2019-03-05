@@ -83,6 +83,8 @@
     <Content Include="RecordAnalysis\Directives\C4Probe\rec-anal-c4probe-settings.js" />
     <Content Include="RecordAnalysis\Directives\C4Probe\Templates\C4ProbeCustomObjectSettings.html" />
     <Content Include="RecordAnalysis\Directives\C4Probe\Templates\C4ProbeSettingsTemplate.html" />
+    <Content Include="RecordAnalysis\Directives\C4SwitchInterconnection\rec-anal-c4switchinterconnection-beforesavehandler.js" />
+    <Content Include="RecordAnalysis\Directives\C4SwitchInterconnection\Templates\C4SwitchInterconnectionOnBeforeSaveHandler.html" />
     <Content Include="RecordAnalysis\Directives\C4Switch\rec-anal-c4switch-settings.js" />
     <Content Include="RecordAnalysis\Directives\C4Switch\Templates\C4SwitchCustomObjectSettings.html" />
     <Content Include="RecordAnalysis\Directives\C4Switch\Templates\C4SwitchSettingsTemplate.html" />
