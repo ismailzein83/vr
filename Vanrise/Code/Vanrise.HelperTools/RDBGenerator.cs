@@ -83,12 +83,12 @@ namespace Vanrise.HelperTools
         string BuildTableStaticFields(Table table)
         {
             StringBuilder staticFields = new StringBuilder();
-            staticFields.Append(string.Format("static string TABLE_NAME =\"{0}_{1}\";", table.Schema, table.Name));
+            staticFields.Append(string.Format("public static string TABLE_NAME =\"{0}_{1}\";", table.Schema, table.Name));
             staticFields.AppendLine();
             foreach (Column col in table.Columns)
             {
                 if (col.DataType.SqlDataType == SqlDataType.Timestamp) continue;
-                staticFields.Append(string.Format("const string COL_{0} = \"{0}\";", col.Name));
+                staticFields.Append(string.Format("public const string COL_{0} = \"{0}\";", col.Name));
                 staticFields.AppendLine();
             }
 
