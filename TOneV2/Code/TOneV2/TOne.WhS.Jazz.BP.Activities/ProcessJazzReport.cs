@@ -40,9 +40,9 @@ namespace TOne.WhS.Jazz.BP.Activities
             var reportDefinition = ReportDefinition.Get(context);
             var fromDate = FromDate.Get(context);
             var toDate = ToDate.Get(context);
-            RecordFilter recordFilter = null;
+            RecordFilterGroup recordFilterGroup = null;
             if (reportDefinition.Settings != null && reportDefinition.Settings.ReportFilter != null)
-                recordFilter = reportDefinition.Settings.ReportFilter;
+                recordFilterGroup = reportDefinition.Settings.ReportFilter;
             List<string> dimensions = null;
             List<string> measures = null;
 
@@ -63,10 +63,10 @@ namespace TOne.WhS.Jazz.BP.Activities
                 dimensions = new List<string> { "Supplier" };
                 measures = new List<string> { "CostNet", "CostDuration" };
             }
-            var analyticResult = GetFilteredRecords(dimensions, measures, fromDate, toDate, recordFilter);
-            if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() != 0)
+            var analyticResult = GetFilteredRecords(dimensions, measures, fromDate, toDate, recordFilterGroup);
+            if (analyticResult != null  && analyticResult.Count() != 0)
             {
-                var reportData = BuildReportItemSetNameFromAnalytic(analyticResult.Data, reportDefinition, amountMeasure);
+                var reportData = BuildReportItemSetNameFromAnalytic(analyticResult, reportDefinition, amountMeasure);
 
                 report = new JazzReport
                 {
@@ -84,7 +84,7 @@ namespace TOne.WhS.Jazz.BP.Activities
             JazzTransactionsReport.Set(context, transactionsReports);
         }
 
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, DateTime fromDate, DateTime toDate, RecordFilter recordFilter)
+        private List<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, DateTime fromDate, DateTime toDate, RecordFilterGroup recordFilter)
         {
             
             AnalyticManager analyticManager = new AnalyticManager();
@@ -92,29 +92,17 @@ namespace TOne.WhS.Jazz.BP.Activities
 
             TOne.WhS.Jazz.Business.ConfigManager configManager = new TOne.WhS.Jazz.Business.ConfigManager();
 
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+            AnalyticQuery analyticQuery = new AnalyticQuery
             {
 
-
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = listDimensions,
-                    MeasureFields = listMeasures,
-                    TableId = configManager.GetJazzTechnicalSettings(),
-                    FromTime = fromDate,
-                    ToTime = regulatedToDate,
-
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = listDimensions,
+                MeasureFields = listMeasures,
+                TableId = configManager.GetJazzTechnicalSettings(),
+                FromTime = fromDate,
+                ToTime = regulatedToDate,
+                FilterGroup = recordFilter
             };
-            if (recordFilter != null)
-            {
-                RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
-                recordFilterGroup.Filters = new List<RecordFilter>();
-                recordFilterGroup.Filters.Add(recordFilter);
-                analyticQuery.Query.FilterGroup = recordFilterGroup;
-            }
-            return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+            return analyticManager.GetAllFilteredRecords(analyticQuery);
         }
         private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
         {
@@ -155,23 +143,36 @@ namespace TOne.WhS.Jazz.BP.Activities
                     var amount = Convert.ToDecimal(netValue.Value ?? 0.0);
                     var duration= Convert.ToDecimal(durationValue.Value ?? 0.0);
                     var amountType = reportDefinition.AmountType;
+                    var regulatedAmount=amount;
+                    decimal exchangeRate=1;
                     CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
-                    var exchangeRate = (amountType.HasValue && reportDefinition.CurrencyId.HasValue) ? currencyExchangeRateManager.ConvertValueToSystemCurrency(reportDefinition.SplitRateValue.Value, reportDefinition.CurrencyId.Value, DateTime.Now):1;
+
                     decimal splitRateValue = 0;
+
                     if (amountType.HasValue)
                     {
                         if (reportDefinition.SplitRateValue.HasValue)
+                        {
                             splitRateValue = reportDefinition.SplitRateValue.Value;
+                            if (reportDefinition.CurrencyId.HasValue)
+                                exchangeRate = currencyExchangeRateManager.ConvertValueToSystemCurrency(splitRateValue, reportDefinition.CurrencyId.Value, DateTime.Now);
+                        }
                         else
                             throw new NullReferenceException($"splitRateValue '{splitRateValue}'");
+
+                        if (amountType.Value == AmountTypeEnum.FixedRate)
+                            regulatedAmount = duration * splitRateValue * exchangeRate;
+                        else
+                            regulatedAmount = (amount - duration * splitRateValue) * exchangeRate;
                     }
 
+                     
                     var jazzReportData = new JazzReportData
                     {
                         CarrierAccountId = Convert.ToInt32(carrierAccount.Value),
                         CarrierAccountName = carrierAccount.Name,
                         Duration = Decimal.Round(Convert.ToDecimal(durationValue.Value ?? 0.0),2),
-                        Amount = Decimal.Round(!amountType.HasValue ? amount : amountType.Value==AmountTypeEnum.FixedRate? duration* splitRateValue : amount-duration * splitRateValue, 3)*exchangeRate,
+                        Amount = Decimal.Round(regulatedAmount, 3),
                         Tax = taxValue != null ? Decimal.Round(Convert.ToDecimal(taxValue.Value ?? 0.0),3) : 0
                     };
 
@@ -188,7 +189,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                 MarketName = _marketManager.GetMarketName(market.MarketId),
                                 CustomerTypeId = market.CustomerTypeId,
                                 CustomerTypeName = _customerTypeManager.GetCustomerTypeName(market.CustomerTypeId),
-                                MarketValue = Decimal.Round(market.Percentage * jazzReportData.Amount / 100,3),
+                                MarketValue =market.Percentage * jazzReportData.Amount / 100,
                                 Percentage = market.Percentage,
                             };
                             if (reportDefinition.Settings.RegionSettings != null && reportDefinition.Settings.RegionSettings.RegionOptions != null && reportDefinition.Settings.RegionSettings.RegionOptions.Count > 0)
@@ -201,7 +202,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                     {
                                         RegionId = region.RegionId,
                                         RegionName = _regionManager.GetRegionById(region.RegionId).Name,
-                                        RegionValue =Decimal.Round(region.Percentage * reportMarket.MarketValue / 100,3),
+                                        RegionValue =region.Percentage * reportMarket.MarketValue / 100,
                                         Percentage = region.Percentage,
                                     });
                                 }

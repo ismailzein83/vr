@@ -29,7 +29,7 @@ namespace TOne.WhS.Jazz.Entities
     {
         public MarketSettings MarketSettings { get; set; }
         public RegionSettings RegionSettings { get; set; }
-        public RecordFilter ReportFilter { get; set; }
+        public RecordFilterGroup ReportFilter { get; set; }
 
     }
 
