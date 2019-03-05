@@ -12,6 +12,9 @@ namespace RecordAnalysis.Business
 
         public int? GetInterconnectionIdBySwitchIdandTrunk(int switchId, string trunk)
         {
+            if (string.IsNullOrEmpty(trunk))
+                return null;
+
             var cachedTrunkInterconnectionBySwitch = GetCachedTrunkInterconnectionBySwitch();
             if (cachedTrunkInterconnectionBySwitch == null)
                 return null;
@@ -20,7 +23,7 @@ namespace RecordAnalysis.Business
             if (interconnectionByTrunk == null)
                 return null;
 
-            C4SwitchInterconnectionEntity result = interconnectionByTrunk.GetRecord(trunk);
+            C4SwitchInterconnectionEntity result = interconnectionByTrunk.GetRecord(trunk.ToLower());
             if (result == null)
                 return null;
 
@@ -41,23 +44,6 @@ namespace RecordAnalysis.Business
             return cachedSwitchIdByInterconnection;
         }
 
-        public C4SwitchInterconnectionEntity C4SwitchInterconnectionEntityMapper(Dictionary<string, object> fieldValues)
-        {
-            if (fieldValues == null)
-                return null;
-
-            var entity = new C4SwitchInterconnectionEntity()
-            {
-                SwitchInterconnectionId = (int)fieldValues.GetRecord("Id"),
-                SwitchId = (int)fieldValues.GetRecord("Switch"),
-                InterconnectionId = (int)fieldValues.GetRecord("Interconnection"),
-            };
-            entity.Settings = fieldValues.GetRecord("Settings").CastWithValidate<C4SwitchInterconnection>("Settings", entity.SwitchInterconnectionId);
-            entity.Settings.Trunks.ThrowIfNull("settings.Trunks", entity.SwitchInterconnectionId);
-
-            return entity;
-        }
-
         public C4SwitchInterconnectionEntityToSave C4SwitchInterconnectionEntityToSaveMapper(Dictionary<string, object> fieldValues)
         {
             if (fieldValues == null)
@@ -71,6 +57,11 @@ namespace RecordAnalysis.Business
             };
             entity.Settings = fieldValues.GetRecord("Settings").CastWithValidate<C4SwitchInterconnection>("Settings", entity.SwitchInterconnectionId);
             entity.Settings.Trunks.ThrowIfNull("settings.Trunks", entity.SwitchInterconnectionId);
+
+            foreach (var trunk in entity.Settings.Trunks)
+            {
+                trunk.TrunkName = trunk.TrunkName.ToLower();
+            }
 
             return entity;
         }
@@ -146,6 +137,29 @@ namespace RecordAnalysis.Business
                 return c4SwitchInterconnectionEntity;
             });
         }
+
+        private C4SwitchInterconnectionEntity C4SwitchInterconnectionEntityMapper(Dictionary<string, object> fieldValues)
+        {
+            if (fieldValues == null)
+                return null;
+
+            var entity = new C4SwitchInterconnectionEntity()
+            {
+                SwitchInterconnectionId = (int)fieldValues.GetRecord("Id"),
+                SwitchId = (int)fieldValues.GetRecord("Switch"),
+                InterconnectionId = (int)fieldValues.GetRecord("Interconnection"),
+            };
+            entity.Settings = fieldValues.GetRecord("Settings").CastWithValidate<C4SwitchInterconnection>("Settings", entity.SwitchInterconnectionId);
+            entity.Settings.Trunks.ThrowIfNull("settings.Trunks", entity.SwitchInterconnectionId);
+
+            foreach (var trunk in entity.Settings.Trunks)
+            {
+                trunk.TrunkName = trunk.TrunkName.ToLower();
+            }
+
+            return entity;
+        }
+
         #endregion
     }
 }

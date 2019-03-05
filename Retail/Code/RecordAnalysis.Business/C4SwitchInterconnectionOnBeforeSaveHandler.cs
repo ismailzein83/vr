@@ -27,24 +27,24 @@ namespace RecordAnalysis.Business
             var switchInterconnectionEntitiesByInterconnection = c4SwitchInterconnectionManager.GetC4SwitchInterconnectionEntitiesByInterconnection();
 
             List<C4SwitchInterconnectionEntity> c4SwitchInterconnectionEntities = switchInterconnectionEntitiesByInterconnection.GetRecord(entityToSave.InterconnectionId);
-            if (c4SwitchInterconnectionEntities == null || c4SwitchInterconnectionEntities.Count == 0)
-                return;
-
-            C4SwitchInterconnectionEntity existingEntity = c4SwitchInterconnectionEntities.FindRecord(itm => itm.SwitchId == entityToSave.SwitchId);
-            if (existingEntity != null)
+            if (c4SwitchInterconnectionEntities != null && c4SwitchInterconnectionEntities.Count > 0)
             {
-                switch (context.OperationType)
+                C4SwitchInterconnectionEntity existingEntity = c4SwitchInterconnectionEntities.FindRecord(itm => itm.SwitchId == entityToSave.SwitchId);
+                if (existingEntity != null)
                 {
-                    case HandlerOperationType.Add:
-                        AddSwitchAlreadyMappedErrorMessage(context, genericBusinessEntityManager, entityToSave.SwitchId, entityToSave.InterconnectionId);
-                        break;
-
-                    case HandlerOperationType.Update:
-                        if (existingEntity.SwitchInterconnectionId != entityToSave.SwitchInterconnectionId)
+                    switch (context.OperationType)
+                    {
+                        case HandlerOperationType.Add:
                             AddSwitchAlreadyMappedErrorMessage(context, genericBusinessEntityManager, entityToSave.SwitchId, entityToSave.InterconnectionId);
-                        break;
+                            break;
 
-                    default: throw new NotSupportedException(string.Format("HandlerOperationType {0} not supported.", context.OperationType));
+                        case HandlerOperationType.Update:
+                            if (existingEntity.SwitchInterconnectionId != entityToSave.SwitchInterconnectionId)
+                                AddSwitchAlreadyMappedErrorMessage(context, genericBusinessEntityManager, entityToSave.SwitchId, entityToSave.InterconnectionId);
+                            break;
+
+                        default: throw new NotSupportedException(string.Format("HandlerOperationType {0} not supported.", context.OperationType));
+                    }
                 }
             }
 
@@ -53,33 +53,30 @@ namespace RecordAnalysis.Business
 
             HashSet<string> trunkNames = new HashSet<string>();
             HashSet<string> duplicatedTrunks = new HashSet<string>();
-            if (interconnectionByTrunkDict != null)
+
+            foreach (var trunk in trunks)
             {
-                foreach (var trunk in trunks)
+                if (trunkNames.Contains(trunk.TrunkName))
                 {
-                    string modifiedTrunkName = !string.IsNullOrEmpty(trunk.TrunkName) ? trunk.TrunkName.ToLower() : null;
-                    if (trunkNames.Contains(modifiedTrunkName))
-                    {
-                        duplicatedTrunks.Add(trunk.TrunkName);
+                    duplicatedTrunks.Add(trunk.TrunkName);
+                    continue;
+                }
 
-                    }
+                trunkNames.Add(trunk.TrunkName);
+                C4SwitchInterconnectionEntity relatedEntity = interconnectionByTrunkDict.GetRecord(trunk.TrunkName);
+                if (relatedEntity == null)
+                    continue;
 
-                    trunkNames.Add(modifiedTrunkName);
-                    C4SwitchInterconnectionEntity relatedEntity = interconnectionByTrunkDict.GetRecord(trunk.TrunkName);
-                    if (relatedEntity == null)
-                        continue;
+                switch (context.OperationType)
+                {
+                    case HandlerOperationType.Add:
+                        AddTrunkAlreadyMappedErrorMessage(context, genericBusinessEntityManager, relatedEntity, trunk.TrunkName);
+                        break;
 
-                    switch (context.OperationType)
-                    {
-                        case HandlerOperationType.Add:
+                    case HandlerOperationType.Update:
+                        if (relatedEntity.InterconnectionId != entityToSave.InterconnectionId)
                             AddTrunkAlreadyMappedErrorMessage(context, genericBusinessEntityManager, relatedEntity, trunk.TrunkName);
-                            break;
-
-                        case HandlerOperationType.Update:
-                            if (relatedEntity.InterconnectionId != entityToSave.InterconnectionId)
-                                AddTrunkAlreadyMappedErrorMessage(context, genericBusinessEntityManager, relatedEntity, trunk.TrunkName);
-                            break;
-                    }
+                        break;
                 }
             }
 
