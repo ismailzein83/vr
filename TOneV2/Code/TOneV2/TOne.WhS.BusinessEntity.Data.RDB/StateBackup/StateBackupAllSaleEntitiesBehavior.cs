@@ -48,14 +48,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 var saleEntityServiceDataManager = new SaleEntityServiceDataManager();
                 var saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
 
-                saleRateDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
+                // saleRateDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
                 saleCodeDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
                 saleEntityServiceDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
                 saleEntityRoutingProductDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
                 saleZoneDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
                 salePriceListDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
                 customerCountryDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
-                //set salerate delete
+
 
 
                 salePriceListDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
