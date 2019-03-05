@@ -411,13 +411,8 @@ namespace NP.IVSwitch.Business
 
 						if (endPointsExtendedSettings.AclEndPointInfo == null && !doesCarrAccHaveSIPExtendedSettings)
 						{
-							carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId.Value, null);
-							if (endPointToDelete.RouteTableId.HasValue)
-								dataManager.SetRouteTableAsDeleted(endPointToDelete.RouteTableId.Value);
+							endPointsExtendedSettings = null;
 						}
-						else
-							carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId.Value, endPointsExtendedSettings);
-
 					}
 
 					break;
@@ -432,12 +427,8 @@ namespace NP.IVSwitch.Business
 
 						if (endPointsExtendedSettings.UserEndPointInfo == null && !doesCarrAccHaveACLExtendedSettings)
 						{
-							carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId.Value, null);
-							if (endPointToDelete.RouteTableId.HasValue)
-								dataManager.SetRouteTableAsDeleted(endPointToDelete.RouteTableId.Value);
+							endPointsExtendedSettings = null;
 						}
-						else
-							carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId.Value, endPointsExtendedSettings);
 					}
 
 					break;
@@ -447,7 +438,9 @@ namespace NP.IVSwitch.Business
 					return deleteOperationOutput;
 			}
 
-
+			carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(carrierAccountId.Value, endPointsExtendedSettings);
+			if (endPointsExtendedSettings == null && endPointToDelete.RouteTableId.HasValue)
+				dataManager.SetRouteTableAsDeleted(endPointToDelete.RouteTableId.Value);
 
 			var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(profileId.Value, true, false);
 			if (profileCarrierAccounts != null)
@@ -748,7 +741,7 @@ namespace NP.IVSwitch.Business
 				foreach (var item in allEndPoints)
 				{
 					string[] hostparts = item.Host.Split('/');
-					if (hostparts[0].Equals(originalPoint.Host) && item.EndPointId!=originalPoint.EndPointId)
+					if (hostparts[0].Equals(originalPoint.Host) && item.EndPointId != originalPoint.EndPointId)
 					{
 						if (item.TechPrefix.Equals(originalPoint.TechPrefix))
 						{

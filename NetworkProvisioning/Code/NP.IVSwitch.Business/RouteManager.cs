@@ -394,7 +394,6 @@ namespace NP.IVSwitch.Business
 			Route routeToDelete = GetRoute(routeId);
 			var carrierProfileManager = new CarrierProfileManager();
 			var carrierAccountManager = new CarrierAccountManager();
-			bool doesCarrAccHaveRouteExtendedSettings = false;
 			bool doesProfileHasExtendedSettings = false;
 			int? carrierAccountId = this.GetRouteCarrierAccountId(routeId);
 			int? profileId = carrierAccountManager.GetCarrierProfileId(carrierAccountId.Value);
@@ -411,21 +410,12 @@ namespace NP.IVSwitch.Business
 				routesExtendedSettings = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(carrierAccountId.Value);
 
 			if (routesExtendedSettings != null && routesExtendedSettings.RouteInfo != null && routesExtendedSettings.RouteInfo.Count > 0)
-				doesCarrAccHaveRouteExtendedSettings = true;
-
-
-			if (doesCarrAccHaveRouteExtendedSettings)
 			{
 				routesExtendedSettings.RouteInfo.RemoveAll(x => x.RouteId == routeId);
 				if (routesExtendedSettings.RouteInfo.Count == 0)
-					routesExtendedSettings.RouteInfo = null;
+					routesExtendedSettings = null;
 
-				if (routesExtendedSettings.RouteInfo == null)
-				{
-					carrierAccountManager.UpdateCarrierAccountExtendedSetting<RouteCarrierAccountExtension>(carrierAccountId.Value, null);
-				}
-				else
-					carrierAccountManager.UpdateCarrierAccountExtendedSetting<RouteCarrierAccountExtension>(carrierAccountId.Value, routesExtendedSettings);
+				carrierAccountManager.UpdateCarrierAccountExtendedSetting<RouteCarrierAccountExtension>(carrierAccountId.Value, routesExtendedSettings);
 			}
 			else
 			{
