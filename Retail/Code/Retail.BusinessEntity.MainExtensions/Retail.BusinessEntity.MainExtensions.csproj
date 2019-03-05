@@ -171,6 +171,9 @@
     <Compile Include="DataRecordFieldFormulas\ZoneEvaluatorFieldFormula.cs" />
     <Compile Include="FinancialAccount\PostpaidFinancialAccount.cs" />
     <Compile Include="FinancialAccount\PostpaidFinancialAccountDefinition.cs" />
+    <Compile Include="FinancialRecurringChargePeriod\MonthlyRecurringCharge.cs" />
+    <Compile Include="FinancialRecurringChargePeriod\QuarterlyRecurringCharge.cs" />
+    <Compile Include="FinancialRecurringChargePeriod\YearlyRecurringCharge.cs" />
     <Compile Include="PackageTypes\PricingPackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageSettings.cs" />

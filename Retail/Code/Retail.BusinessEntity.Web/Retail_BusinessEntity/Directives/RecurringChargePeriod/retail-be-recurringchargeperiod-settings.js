@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RecurringChargePeriodSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'WhS_BE_RecurringChargeAPIService'];
+    RecurringChargePeriodSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'Retail_BE_FinacialRecurringChargeAPIService'];
 
-    function RecurringChargePeriodSelectorDirective(UtilsService, VRUIUtilsService, WhS_BE_RecurringChargeAPIService) {
+    function RecurringChargePeriodSelectorDirective(UtilsService, VRUIUtilsService, Retail_BE_FinacialRecurringChargeAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -75,7 +75,7 @@
                     promises.push(getRecurringChargePeriodsTemplateConfigs());
 
                     function getRecurringChargePeriodsTemplateConfigs() {
-                        return WhS_BE_RecurringChargeAPIService.GetRecurringChargePeriodsConfigs().then(function (response) {
+                        return Retail_BE_FinacialRecurringChargeAPIService.GetRecurringChargePeriodsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

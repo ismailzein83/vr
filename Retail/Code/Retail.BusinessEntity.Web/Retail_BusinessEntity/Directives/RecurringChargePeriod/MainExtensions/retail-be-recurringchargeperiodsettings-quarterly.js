@@ -50,7 +50,7 @@ app.directive("retailBeRecurringchargeperiodsettingsQuarterly", ["UtilsService",
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges.QuarterlyRecurringCharge,TOne.WhS.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.MainExtensions.FinancialRecurringChargePeriod.QuarterlyRecurringCharge,Retail.BusinessEntity.MainExtensions",
                         InAdvance: $scope.scopeModel.inAdvance
                     };
                 };

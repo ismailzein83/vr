@@ -15,5 +15,6 @@ namespace Retail.BusinessEntity.Entities
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+        public List<string> Classifications { get; set; }
     }
 }

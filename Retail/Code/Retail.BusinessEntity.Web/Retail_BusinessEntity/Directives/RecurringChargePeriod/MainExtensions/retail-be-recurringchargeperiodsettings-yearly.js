@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailBeRecurringchargeperiodsettingsOnceayear", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("retailBeRecurringchargeperiodsettingsYearly", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -70,7 +70,7 @@ app.directive("retailBeRecurringchargeperiodsettingsOnceayear", ["UtilsService",
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges.OnceAYearRecuringCharge ,TOne.WhS.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.MainExtensions.FinancialRecurringChargePeriod.YearlyRecurringCharge ,Retail.BusinessEntity.MainExtensions",
                         Date: dayMonthDirectiveAPI.getData()
                     };
                 };

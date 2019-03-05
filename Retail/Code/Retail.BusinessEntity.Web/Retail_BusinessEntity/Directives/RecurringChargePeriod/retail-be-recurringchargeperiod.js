@@ -73,7 +73,7 @@ app.directive('retailBeRecurringchargeperiod', ['UtilsService', 'VRUIUtilsServic
                 api.setData = function (entity) {
                     if (entity != undefined) {
                         entity.RecurringChargePeriod = {
-                            $type: "Retail.BusinessEntity.Entities.RecurringChargePeriod, Retail.BusinessEntity.Entities",
+                            $type: "Retail.BusinessEntity.Entities.FinancialRecurringChargePeriod, Retail.BusinessEntity.Entities",
                             Settings: recurringChargePeriodSelectorAPI.getData()
                         };
                     }

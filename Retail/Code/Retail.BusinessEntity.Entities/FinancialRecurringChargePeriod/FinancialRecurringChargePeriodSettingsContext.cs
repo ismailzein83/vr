@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class RecurringChargePeriodSettingsContext : IRecurringChargePeriodSettingsContext
+    public class FinancialRecurringChargePeriodSettingsContext : IFinancialRecurringChargePeriodSettingsContext
     {
         public DateTime FromDate { set; get; }
         public DateTime ToDate { set; get; }

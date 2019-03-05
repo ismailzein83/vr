@@ -181,6 +181,7 @@
     <Compile Include="Controllers\BEConfigurationController.cs" />
     <Compile Include="Controllers\FinancialAccountController.cs" />
     <Compile Include="Controllers\FinancialAccountDefinitionController.cs" />
+    <Compile Include="Controllers\FinancialRecurringChargeController.cs" />
     <Compile Include="Controllers\OperatorWithLocalController.cs" />
     <Compile Include="Controllers\PackageDefinitionController.cs" />
     <Compile Include="Controllers\OperatorDeclaredInfoController.cs" />
@@ -705,7 +706,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionExtendedSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductDefinition\Templates\ProductDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\retail-be-recurringchargeperiodsettings-monthly.js" />
-    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\retail-be-recurringchargeperiodsettings-onceayear.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\retail-be-recurringchargeperiodsettings-yearly.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\retail-be-recurringchargeperiodsettings-quarterly.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\Templates\MonthlyRecurringChargePeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\Templates\OnceAYearRecurringChargePeriodTemplate.html" />
@@ -826,6 +827,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPartTaxesRuntimeAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialRecurringChargeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\OperatorDirectionServicesAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\OperatorsWithLocalAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageDefinitionAPIService.js" />
