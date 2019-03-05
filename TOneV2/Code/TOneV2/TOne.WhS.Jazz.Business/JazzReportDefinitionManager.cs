@@ -89,8 +89,13 @@ namespace TOne.WhS.Jazz.Business
             {
                 Direction = (ReportDefinitionDirectionEnum)genericBusinessEntity.FieldValues.GetRecord("Direction"),
             };
-            if (genericBusinessEntity.FieldValues.GetRecord("AmountMeasureType") != null)
-                jazzReportDefinition.AmountMeasureType = (AmountMeasureTypeEnum)genericBusinessEntity.FieldValues.GetRecord("AmountMeasureType");
+            var taxOption = genericBusinessEntity.FieldValues.GetRecord("TaxOption");
+            if (taxOption != null)
+                jazzReportDefinition.TaxOption = (TaxOptionEnum)taxOption;
+
+            var amountMeasureType = genericBusinessEntity.FieldValues.GetRecord("AmountMeasureType");
+            if (amountMeasureType != null)
+                jazzReportDefinition.AmountMeasureType = (AmountMeasureTypeEnum)amountMeasureType;
 
             if (jazzReportDefinition.Direction == ReportDefinitionDirectionEnum.Out)
             {
