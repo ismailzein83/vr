@@ -89,14 +89,17 @@ namespace Vanrise.Data.RDB
 
         protected virtual T GetFieldValue<T>()
         {
-            if (_value == null)
-                throw new NullReferenceException("_value");
-            if (_value == DBNull.Value)
-                throw new Exception("_value is DBNull");
-            if (_value is T)
-                return (T)_value;
+            if (_value == null || _value == DBNull.Value)
+            {
+                return default(T);
+            }
             else
-                return (T)Convert.ChangeType(_value, GetInlineType(typeof(T)));
+            {
+                if (_value is T)
+                    return (T)_value;
+                else
+                    return (T)Convert.ChangeType(_value, GetInlineType(typeof(T)));
+            }
         }
 
         protected virtual T GetFieldValueWithNullHandling<T>()

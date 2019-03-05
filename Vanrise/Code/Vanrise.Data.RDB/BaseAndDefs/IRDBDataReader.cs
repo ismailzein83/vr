@@ -104,17 +104,20 @@ namespace Vanrise.Data.RDB
         }
 
         protected virtual T GetFieldValue<T>(string fieldName)
+        {
+            var value = _originalReader[fieldName];
+            if (value == null || value == DBNull.Value)
             {
-                var value = _originalReader[fieldName];
-                if (value == null)
-                    throw new NullReferenceException(String.Format("value of field '{0}'", fieldName));
-                if (value == DBNull.Value)
-                    throw new Exception(string.Format("value is DBNull. Field '{0}'", fieldName));
+                return default(T);
+            }
+            else
+            {
                 if (value is T)
                     return (T)value;
                 else
                     return (T)Convert.ChangeType(value, CommonRDBFieldValue.GetInlineType(typeof(T)));
             }
+        }
 
         protected virtual T GetFieldValueWithNullHandling<T>(string fieldName)
         {
