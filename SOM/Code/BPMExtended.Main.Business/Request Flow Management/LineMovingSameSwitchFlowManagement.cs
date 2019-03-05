@@ -29,8 +29,7 @@ namespace BPMExtended.Main.Business
                 case startingProcess: nextStepId = nearbyNumbers; break;
                 case nearbyNumbers: nextStepId = print; break;
                 case print: nextStepId = temporaryReservation; break;
-                case temporaryReservation: nextStepId = isWaitingList? paymentValidation : address; break;
-                case paymentValidation: nextStepId = waitingList; break;
+                case temporaryReservation: nextStepId = isWaitingList? waitingList : address; break;
                 case waitingList: nextStepId = temporaryReservation; break;
                 case address: nextStepId = payment; break;
                 case payment: nextStepId = attachment; break;
