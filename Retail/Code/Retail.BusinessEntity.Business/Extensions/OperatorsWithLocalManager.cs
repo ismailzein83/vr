@@ -89,7 +89,13 @@ namespace Retail.BusinessEntity.Business
 
             return accountsWithLocal;
         }
-   
+
+        public long GetLocalOperatorId()
+        {
+            var interconnectSettings = new SettingManager().GetSetting<InterconnectSettings>(InterconnectSettings.SETTING_TYPE);
+            interconnectSettings.ThrowIfNull("interconnectSettings");
+            return interconnectSettings.LocalOperatorID;
+        }
 
         #endregion
 
