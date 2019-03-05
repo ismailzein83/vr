@@ -70,5 +70,7 @@
     <Build Include="ICX_BE\Tables\Switch.sql" />
     <Build Include="ICX_BE\User Defined Types\SwitchType.sql" />
     <Build Include="Security\ICX_BE.sql" />
+    <Build Include="ICX_BE\Tables\Gateway.sql" />
+    <Build Include="ICX_BE\User Defined Types\GatewayType.sql" />
   </ItemGroup>
 </Project>
