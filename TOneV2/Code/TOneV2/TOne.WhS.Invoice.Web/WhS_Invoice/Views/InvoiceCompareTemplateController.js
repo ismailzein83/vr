@@ -2,9 +2,9 @@
 
     'use strict';
 
-    invoiceCompareTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_Invoice_InvoiceAPIService', 'VR_ExcelConversion_FieldTypeEnum', 'VR_Invoice_InvoiceTypeAPIService', 'WhS_Invoice_InvoiceAPIService', 'WhS_Invoice_ComparisonResultEnum', 'LabelColorsEnum', 'WhS_Invoice_ComparisonCriteriaEnum', 'UISettingsService', 'WhS_Invoice_InvoiceCompareTemplateAPIService'];
+	invoiceCompareTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_Invoice_InvoiceAPIService', 'VR_ExcelConversion_FieldTypeEnum', 'VR_Invoice_InvoiceTypeAPIService', 'WhS_Invoice_InvoiceAPIService', 'WhS_Invoice_ComparisonResultEnum', 'LabelColorsEnum', 'WhS_Invoice_ComparisonCriteriaEnum', 'UISettingsService', 'WhS_Invoice_InvoiceCompareTemplateAPIService', 'VRCommon_VRTempPayloadAPIService','InsertOperationResultEnum'];
 
-    function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum, WhS_Invoice_ComparisonCriteriaEnum, UISettingsService, WhS_Invoice_InvoiceCompareTemplateAPIService) {
+	function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum, WhS_Invoice_ComparisonCriteriaEnum, UISettingsService, WhS_Invoice_InvoiceCompareTemplateAPIService, VRCommon_VRTempPayloadAPIService, InsertOperationResultEnum) {
 
         var invoiceAccountEntity;
         var invoiceCarrierType;
@@ -19,7 +19,8 @@
         var gridAPI;
         var gridPromiseDeferred = UtilsService.createPromiseDeferred();
         var inputWorkBookApi;
-        var invoiceCompareTemplateEntity;
+		var invoiceCompareTemplateEntity;
+		//var financialAccountId;
 
         loadParameters();
         defineScope();
@@ -32,12 +33,32 @@
                 invoiceId = parameters.invoiceId;
                 invoiceTypeId = parameters.invoiceTypeId;
                 invoiceActionId = parameters.invoiceActionId;
-                invoiceCarrierType = parameters.invoiceCarrierType;
+				invoiceCarrierType = parameters.invoiceCarrierType;
+				//financialAccountId = parameters.partnerId;
             }
         }
 
         function defineScope() {
-            $scope.scopeModel = {};
+			$scope.scopeModel = {};
+
+			//$scope.scopeModel.export = function () {
+			//	var objToCompare = {
+			//		Settings: buildInvoiceCompareObjFromScope()
+			//	};
+			//	objToCompare.Settings.IsCustomer = (invoiceCarrierType == 0);
+			//	objToCompare.Settings.FinancialAccountId = financialAccountId;
+			//	return VRCommon_VRTempPayloadAPIService.AddVRTempPayload(objToCompare).then(function (response) {
+			//		if (response.Result == InsertOperationResultEnum.Succeeded.value) {
+			//			var tempPayloadId = response.InsertedObject;
+			//			var paramsurl = "";
+			//			paramsurl += "tempPayloadId=" + tempPayloadId;
+			//			var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+			//			var left = ((screenWidth / 2) - (1000 / 2));
+			//			window.open("Client/Modules/WhS_Invoice/Reports/CompareInvoiceReport.aspx?" + paramsurl, "_blank", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no,width=1000, height=600,scrollbars=1 , top = 40, left = " + left + "");
+			//		}
+			//	}).catch(function (error) {
+			//	});
+			//};
             $scope.scopeModel.threshold = 5;
             $scope.scopeModel.decimalDigits = 2;
             $scope.scopeModel.comparisonResults = [];
@@ -94,11 +115,11 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-            $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+			$scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Invoice_InvoiceAPIService.CompareInvoices(dataRetrievalInput).then(function (response) {
 
                     if (response != undefined && response.Result != undefined) {
-                        VRNotificationService.notifyOnItemAdded("Compare Invoice", response);
+						VRNotificationService.notifyOnItemAdded("Compare Invoice", response);
                     } else {
                         $scope.scopeModel.recievedComparisonTab.isSelected = true;
                         onResponseReady(response);
@@ -226,7 +247,8 @@
         }
 
         function buildInvoiceCompareObjFromScope() {
-            var obj = {
+			var obj = {
+				//$type: "TOne.WhS.Invoice.Entities.InvoiceComparisonInput,TOne.WhS.Invoice.Entities",
                 Threshold: $scope.scopeModel.threshold,
                 ListMapping: mainListAPI.getData(),
                 DateTimeFormat: $scope.scopeModel.dateTimeFormat,
@@ -293,7 +315,8 @@
 
 
         function startCompare() {
-            $scope.scopeModel.showGrid = false;
+			$scope.scopeModel.showGrid = false;
+			//$scope.scopeModel.isCompare = false;
             var loadPromiseDeferred = UtilsService.createPromiseDeferred();
             setTimeout(function () {
                 $scope.scopeModel.showGrid = true;
@@ -301,7 +324,10 @@
                 gridPromiseDeferred.promise.then(function () {
                     gridPromiseDeferred = undefined;
                     var comparisonInput = buildInvoiceCompareObjFromScope();
-                    gridAPI.retrieveData(comparisonInput).then(function () {
+					gridAPI.retrieveData(comparisonInput).then(function () {
+						//WhS_Invoice_InvoiceAPIService.DoesInvoiceReportExist(invoiceCarrierType==0).then(function (response) {
+						//	$scope.scopeModel.isCompare = response;
+						//});
                         loadPromiseDeferred.resolve();
                     });
                 });

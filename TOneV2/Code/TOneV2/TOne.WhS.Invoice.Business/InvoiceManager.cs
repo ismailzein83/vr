@@ -314,11 +314,19 @@ namespace TOne.WhS.Invoice.Business
 
         }
 
-        private void ValidateCompareInvoices(InvoiceComparisonInput input)
+		//public bool DoesInvoiceReportExist(bool isCustomer) {
+		//	string physicalPath = "";
+		//  if(isCustomer)
+		//		physicalPath = VRWebContext.MapVirtualToPhysicalPath("~/Client/Modules/WhS_Invoice/Reports/CustomerCompareInvoiceReport.rdlc");
+		//  else
+		//		physicalPath = VRWebContext.MapVirtualToPhysicalPath("~/Client/Modules/WhS_Invoice/Reports/SupplierCompareInvoiceReport.rdlc");
+		//	return Utilities.PhysicalPathExists(physicalPath);
+		//}
+		private void ValidateCompareInvoices(InvoiceComparisonInput input)
         {
             CompareInvoices(input);
         }
-        private List<InvoiceComparisonResult> CompareInvoices(InvoiceComparisonInput input)
+        public List<InvoiceComparisonResult> CompareInvoices(InvoiceComparisonInput input)
         {
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(input.InvoiceTypeId);
