@@ -553,6 +553,14 @@ namespace Vanrise.GenericData.Business
 
                 }
 
+                foreach (var field in genericBusinessEntityToUpdate.FieldValues)
+                {
+                    if (!newGenericBE.FieldValues.Keys.Contains(field.Key))
+                    {
+                        newGenericBE.FieldValues.Add(field.Key, field.Value);
+                    }
+                }
+
                 var idFieldType = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
                 genericBusinessEntityToUpdate.GenericBusinessEntityId = idFieldType.Type.ParseValueToFieldType(new DataRecordFieldTypeParseValueToFieldTypeContext(genericBusinessEntityToUpdate.GenericBusinessEntityId));
 
