@@ -708,6 +708,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CodeGroupService.js" />
     <Content Include="WhS_BusinessEntity\Services\SellingNumberPlanService.js" />
+    <Content Include="WhS_BusinessEntity\Services\TOneModuleService.js" />
     <Content Include="WhS_BusinessEntity\Services\ZoneServiceConfigService.js" />
     <Content Include="WhS_BusinessEntity\Style\WhsBusinessEntity.css" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountEditor.html" />
