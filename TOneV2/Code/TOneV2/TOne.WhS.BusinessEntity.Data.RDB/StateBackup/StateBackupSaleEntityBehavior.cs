@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 salePriceListDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, ownerIds, ownerType);
 
                 var saleRateDataManager = new SaleRateDataManager();
-                saleRateDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, ownerIds, ownerType);
+                // saleRateDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, ownerIds, ownerType);
 
                 var saleEntityServiceDataManager = new SaleEntityServiceDataManager();
                 saleEntityServiceDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, ownerId, ownerType);
@@ -37,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                     var customerIds = backupSaleEntityData.SellingProductCustomerIds;
                     customerCountryDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, customerIds);
                     salePriceListDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, customerIds, (int)SalePriceListOwnerType.Customer);
-                    saleRateDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, customerIds, (int)SalePriceListOwnerType.Customer);
+                    //  saleRateDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, customerIds, (int)SalePriceListOwnerType.Customer);
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 saleEntityServiceDataManager.SetDeleteQueryByOwner(queryContext, ownerId, ownerType);
                 saleEntityRoutingProductDataManager.SetDeleteQueryByOwner(queryContext, ownerId, ownerType);
                 salePriceListDataManager.SetDeleteQueryByOwner(queryContext, ownerIds, ownerType);
-            
+
                 if (backupSaleEntityData.OwnerType == SalePriceListOwnerType.SellingProduct)
                 {
                     var customerIds = backupSaleEntityData.SellingProductCustomerIds;

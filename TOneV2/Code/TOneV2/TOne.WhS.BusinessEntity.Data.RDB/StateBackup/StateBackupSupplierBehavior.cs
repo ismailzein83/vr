@@ -21,7 +21,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 supplierCodeDataManager.BackupBySupplierId(queryContext, stateBackupId, this.BackupDatabaseName, supplierId);
 
                 var supplierRateDataManager = new SupplierRateDataManager();
-                supplierRateDataManager.BackupBySupplierId(queryContext, stateBackupId, this.BackupDatabaseName, supplierId);
+                //  supplierRateDataManager.BackupBySupplierId(queryContext, stateBackupId, this.BackupDatabaseName, supplierId);
 
                 var supplierZoneServiceDataManager = new SupplierZoneServiceDataManager();
                 supplierZoneServiceDataManager.BackupBySupplierId(queryContext, stateBackupId, this.BackupDatabaseName, supplierId);
@@ -40,7 +40,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 var supplierRateDataManager = new SupplierRateDataManager();
                 var supplierZoneServiceDataManager = new SupplierZoneServiceDataManager();
 
-                supplierRateDataManager.SetDeleteQueryBySupplierId(queryContext, supplierId);
+                //  supplierRateDataManager.SetDeleteQueryBySupplierId(queryContext, supplierId);
                 supplierCodeDataManager.SetDeleteQueryBySupplierId(queryContext, supplierId);
                 supplierZoneServiceDataManager.SetDeleteQueryBySupplierId(queryContext, supplierId);
                 supplierZoneDataManager.SetDeleteQueryBySupplierId(queryContext, supplierId);
@@ -49,7 +49,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 supplierPriceListDataManager.GetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 supplierZoneDataManager.GetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 supplierCodeDataManager.GetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
-                supplierRateDataManager.GetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
+                //  supplierRateDataManager.GetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 supplierZoneServiceDataManager.GetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
             }
         }
