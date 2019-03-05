@@ -167,6 +167,8 @@
     <Content Include="TestCallAnalysis\Elements\AccountParts\MainExtensions\CountryCodes\tcanal-accounttype-part-runtime-countrycodes.js" />
     <Content Include="TestCallAnalysis\Elements\AccountParts\MainExtensions\CountryCodes\Templates\CountryCodesPartDefinitionTemplate.html" />
     <Content Include="TestCallAnalysis\Elements\AccountParts\MainExtensions\CountryCodes\Templates\CountryCodesPartRuntimeTemplate.html" />
+    <Content Include="TestCallAnalysis\Elements\CaseCDRChangeStatus\Directives\Templates\ChangeStatusGenericBEDefinitionActionTemplate.html" />
+    <Content Include="TestCallAnalysis\Elements\CaseCDRChangeStatus\Directives\vr-testcallanalysis-changestatusgenericaction-definition.js" />
     <Content Include="TestCallAnalysis\Elements\CaseCDRChangeStatus\Views\CaseCDRChangeStatus.html" />
     <Content Include="TestCallAnalysis\Elements\CaseCDRChangeStatus\Views\CaseCDRChangeStatusController.js" />
     <Content Include="TestCallAnalysis\Elements\CDRCorrelation\Directives\tcanal-cdrcorrelation-process.js" />

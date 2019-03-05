@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
@@ -37,6 +34,22 @@ namespace TestCallAnalysis.BP.Activities
         [RequiredArgument]
         public InOutArgument<MemoryQueue<RecordBatch>> OutputQueue { get; set; }
 
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<RecordBatch>());
+            base.OnBeforeExecute(context, handle);
+        }
+
+        protected override LoadCDRsToCorrelateInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new LoadCDRsToCorrelateInput()
+            {
+                OutputQueue = this.OutputQueue.Get(context),
+                CDRCorrelationFilterGroups = this.CDRCorrelationFilterGroups.Get(context),
+            };
+        }
+
         protected override LoadCDRsToCorrelateOutput DoWorkWithResult(LoadCDRsToCorrelateInput inputArgument, AsyncActivityHandle handle)
         {
             int maximumOutputQueueSize = 20;
@@ -60,7 +73,7 @@ namespace TestCallAnalysis.BP.Activities
 
                     long recordsCount = 0;
                     DateTime startTime = DateTime.Now;
-                    new DataRecordStorageManager().GetDataRecords(new Guid("F8C165AD-21C3-4E29-9E3A-7D3E332FDC42"), filterGroup.From, filterGroup.To, filterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
+                    new DataRecordStorageManager().GetDataRecords(new Guid("58FCA073-8F5C-4A56-A4AF-025EB3B8BB60"), filterGroup.From, filterGroup.To, filterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
                     {
                         totalRecordsCount++;
                         recordsCount++;
@@ -79,21 +92,6 @@ namespace TestCallAnalysis.BP.Activities
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", totalRecordsCount);
             return new LoadCDRsToCorrelateOutput();
-        }
-
-        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
-        {
-            if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<RecordBatch>());
-            base.OnBeforeExecute(context, handle);
-        }
-        protected override LoadCDRsToCorrelateInput GetInputArgument(AsyncCodeActivityContext context)
-        {
-            return new LoadCDRsToCorrelateInput()
-            {
-                OutputQueue = this.OutputQueue.Get(context),
-                CDRCorrelationFilterGroups = this.CDRCorrelationFilterGroups.Get(context),
-            };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadCDRsToCorrelateOutput result)

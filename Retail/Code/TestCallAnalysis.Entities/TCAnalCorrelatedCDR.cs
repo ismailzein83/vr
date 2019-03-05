@@ -19,8 +19,9 @@ namespace TestCallAnalysis.Entities
         public long OperatorID { get; set; }
         public string OrigCallingNumber { get; set; }
         public string OrigCalledNumber { get; set; }
-        public ReceivedCallingNumberType ReceivedCallingNumberType { get; set; }
+        public ReceivedCallingNumberType? ReceivedCallingNumberType { get; set; }
         public long? ReceivedCallingNumberOperatorID { get; set; }
-        public long CaseId { get; set; }
+        public long? CaseId { get; set; }
+      
     }
 }

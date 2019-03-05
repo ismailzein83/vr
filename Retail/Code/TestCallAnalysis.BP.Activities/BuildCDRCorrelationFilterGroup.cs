@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestCallAnalysis.Entities;
-using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -33,6 +28,7 @@ namespace TestCallAnalysis.BP.Activities
         {
             TimeSpan dateTimeMargin = this.DateTimeMargin.Get(context);
             TestCallAnalysis.Entities.CDRCorrelationProcessState cdrCorrelationProcessState = this.CDRCorrelationProcessState.Get(context);
+
             DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
             long? lastImportedId = null;
             bool newDataImported = false;
@@ -41,7 +37,7 @@ namespace TestCallAnalysis.BP.Activities
             DateTime? overallMinDate;
             DateTime? overallMaxDate;
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            var inputDataRecordStorageId = new Guid("f8c165ad-21c3-4e29-9e3a-7d3e332fdc42");
+            var inputDataRecordStorageId = new Guid("58FCA073-8F5C-4A56-A4AF-025EB3B8BB60");
             var dataRecordStorage = dataRecordStorageManager.GetDataRecordStorage(inputDataRecordStorageId);
             
             var dataRecordType = dataRecordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
@@ -49,11 +45,14 @@ namespace TestCallAnalysis.BP.Activities
             var datetimeFieldName = dataRecordType.Settings.DateTimeField;
 
             long? overallMaxId = dataRecordStorageManager.GetMaxId(inputDataRecordStorageId, out overallMaxDate, out overallMinDate);
+            cdrCorrelationProcessState.LastImportedId = 1;
 
             if (cdrCorrelationProcessState != null && cdrCorrelationProcessState.LastImportedId.HasValue)
             {
+                RecordFilterGroup recordFilter = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And, Filters = new List<RecordFilter>() };
+                recordFilter.Filters.Add(new BooleanRecordFilter { FieldName = "IsCorrelated", IsTrue = false});
                 long? maxId;
-                DateTime? minDate = dataRecordStorageManager.GetMinDateTimeWithMaxIdAfterId(inputDataRecordStorageId, cdrCorrelationProcessState.LastImportedId.Value, out maxId);
+                DateTime? minDate = dataRecordStorageManager.GetMinDateTimeWithMaxIdByFilter(inputDataRecordStorageId, recordFilter, out maxId);
 
                 if (minDate.HasValue)
                 {
@@ -86,6 +85,7 @@ namespace TestCallAnalysis.BP.Activities
             recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = datetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.Less, Value = maxDate });
             recordFilter.Filters.Add(new NumberRecordFilter { FieldName = idFieldName, CompareOperator = NumberRecordFilterOperator.LessOrEquals, Value = maxId });
             recordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "CDRType", CompareOperator = ListRecordFilterOperator.In, Values = new List<decimal>() { 1, 2 } });
+            recordFilter.Filters.Add(new BooleanRecordFilter { FieldName = "IsCorrelated", IsTrue = false });
             cdrCorrelationFilterGroups.Add(new TestCallAnalysis.Entities.CDRCorrelationFilterGroup() { RecordFilterGroup = recordFilter, From = minDate, To = maxDate });
             return cdrCorrelationFilterGroups;
         }

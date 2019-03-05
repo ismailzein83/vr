@@ -22,6 +22,9 @@ namespace TestCallAnalysis.Entities
         public long OperatorID { get; set; }
         public string OrigCallingNumber { get; set; }
         public string OrigCalledNumber { get; set; }
-
+        public DateTime CreatedDate { get; set; }
+        public bool IsCorrelated { get; set; }
+        public int? CallingNumberType { get; set; }
+        public int CalledNumberType { get; set; }
     }
 }

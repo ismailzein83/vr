@@ -31,7 +31,7 @@ namespace TestCallAnalysis.BP.Activities
 
         protected override InsertCorrelatedCDRsOutput DoWorkWithResult(InsertCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            Guid dataRecordStorage = new Guid("230581C3-644E-495A-A958-22EA1CFFBA98");
+            Guid dataRecordStorage = new Guid("F5E8B48B-70E0-46B8-BA69-9A4C37E6A520");
             var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorage);
             int maxDBNumberQuery = recordStorageDataManager.GetDBQueryMaxParameterNumber();
 

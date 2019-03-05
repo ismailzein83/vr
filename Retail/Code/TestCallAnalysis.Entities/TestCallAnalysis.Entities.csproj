@@ -58,14 +58,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalledNumberMapping.cs" />
     <Compile Include="CDRCaseBatch.cs" />
     <Compile Include="CDRCorrelationBatch.cs" />
     <Compile Include="CDRCorrelationFilterGroup.cs" />
     <Compile Include="CDRCorrelationProcessState.cs" />
     <Compile Include="CountryCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TCAnalCaseCDR.cs" />
     <Compile Include="TCAnalCorrelatedCDR.cs" />
     <Compile Include="TCAnalMappedCDR.cs" />
+    <Compile Include="WhiteList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
