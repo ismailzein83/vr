@@ -11,6 +11,7 @@ namespace TOne.WhS.Sales.Business
         public void ApplyNewCustomerCountriesToDB(IEnumerable<NewCustomerCountry> newCustomerCountries)
         {
             INewCustomerCountryDataManager dataManager = SalesDataManagerFactory.GetDataManager<INewCustomerCountryDataManager>();
+            dataManager.ProcessInstanceId = ProcessInstanceId;
             dataManager.ApplyNewCustomerCountriesToDB(newCustomerCountries);
         }
 

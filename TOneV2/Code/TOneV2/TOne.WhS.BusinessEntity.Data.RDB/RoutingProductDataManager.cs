@@ -127,8 +127,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public bool CheckIfRoutingProductHasRelatedSaleEntities(int routingProductId)
         {
-            var routingProduct = GetRoutingProduct(routingProductId);
-            return routingProduct != null;
+            var saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
+            return saleEntityRoutingProductDataManager.HasSaleEntityByRoutingProductId(routingProductId);
         }
         #endregion
 

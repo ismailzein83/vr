@@ -96,8 +96,45 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #region StateBackup
 
-        //TODO Not yet implemented
+        public void BackupBySupplierId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int supplierId)
+        {
+            var supplierPriceListBackupDataManager = new SupplierPriceListBackupDataManager();
+            var insertQuery = supplierPriceListBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
 
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_SupplierID, COL_SupplierID);
+            selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
+            selectColumns.Column(COL_FileID, COL_FileID);
+            selectColumns.Column(COL_EffectiveOn, COL_EffectiveOn);
+            selectColumns.Column(COL_PricelistType, COL_PricelistType);
+            selectColumns.Column(COL_CreatedTime, COL_CreatedTime);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
+            selectColumns.Column(COL_SPLStateBackupID, COL_SPLStateBackupID);
+            selectColumns.Column(COL_UserID, COL_UserID);
+            selectColumns.Expression(SupplierPriceListBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_SupplierID).Value(supplierId);
+        }
+        public void SetDeleteQueryBySupplierId(RDBQueryContext queryContext, int supplierId)
+        {
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_SupplierID).Value(supplierId);
+        }
+        public void GetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
+        {
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_ALIAS);
+            var supplierPriceListBackupDataManager = new SupplierPriceListBackupDataManager();
+            supplierPriceListBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+        }
         #endregion
 
         #region Mappers

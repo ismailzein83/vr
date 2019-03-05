@@ -13,6 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static string TABLE_ALIAS = "ca";
         static string TABLE_NAME = "TOneWhS_BE_CarrierAccount";
+
         const string COL_ID = "ID";
         const string COL_NameSuffix = "NameSuffix";
         const string COL_CarrierProfileID = "CarrierProfileID";
@@ -21,7 +22,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_CustomerSettings = "CustomerSettings";
         const string COL_CarrierAccountSettings = "CarrierAccountSettings";
         const string COL_ExtendedSettings = "ExtendedSettings";
-        const string COL_SellingNumberPlanID = "SellingNumberPlanID";
         const string COL_SellingProductID = "SellingProductID";
         const string COL_SourceID = "SourceID";
         const string COL_IsDeleted = "IsDeleted";
@@ -29,7 +29,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_CreatedBy = "CreatedBy";
         const string COL_LastModifiedBy = "LastModifiedBy";
         const string COL_LastModifiedTime = "LastModifiedTime";
-        
+
+        internal const string COL_SellingNumberPlanID = "SellingNumberPlanID";
+
         static CarrierAccountDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -212,6 +214,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 CarrierAccountSettings = Serializer.Deserialize<CarrierAccountSettings>(reader.GetString(COL_CarrierAccountSettings)),
                 ExtendedSettings = Serializer.Deserialize<Dictionary<string, Object>>(reader.GetString(COL_ExtendedSettings))
             };
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void JoinCarrierAccount(RDBJoinContext joinContext, string carrierAccountTableAlias, string originalTableAlias, string originalOwnerIdCol, bool withNoLockJoin)
+        {
+            var joinStatement = joinContext.Join(TABLE_NAME, carrierAccountTableAlias);
+            if (withNoLockJoin)
+                joinStatement.WithNoLock();
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(originalTableAlias, originalOwnerIdCol, carrierAccountTableAlias, COL_ID);
         }
 
         #endregion

@@ -107,6 +107,18 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
         #endregion
 
+        #region Public Methods
+
+        public void JoinSellingNumberPlan(RDBJoinContext joinContext, string sellingNumberTableAlias, string originalTableAlias, string originalIdCol, bool withNoLockJoin)
+        {
+            var joinStatement = joinContext.Join(TABLE_NAME, sellingNumberTableAlias);
+            if (withNoLockJoin)
+                joinStatement.WithNoLock();
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(originalTableAlias, originalIdCol, sellingNumberTableAlias, COL_ID);
+        }
+
+        #endregion
         #region Mappers
         SellingNumberPlan SellingNumberPlanMapper(IRDBDataReader reader)
         {

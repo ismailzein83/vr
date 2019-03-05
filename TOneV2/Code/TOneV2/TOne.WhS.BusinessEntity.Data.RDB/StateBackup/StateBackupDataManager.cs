@@ -9,14 +9,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class StateBackupDataManager : IStateBackupDataManager
     {
-
         #region Private Memebers
 
         private StateBackupTypeBehavior _stateBackupBehavior = null;
 
         #endregion
+
         #region RDB
 
+        static string TABLE_ALIAS = "sb";
         static string TABLE_NAME = "TOneWhS_BE_StateBackup";
         const string COL_ID = "ID";
         const string COL_ConfigID = "ConfigID";
@@ -25,8 +26,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_RestoreDate = "RestoreDate";
         const string COL_BackupByUserID = "BackupByUserID";
         const string COL_RestoredByUserID = "RestoredByUserID";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static StateBackupDataManager()
         {
@@ -38,17 +37,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             columns.Add(COL_RestoreDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_BackupByUserID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_RestoredByUserID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
                 DBTableName = "StateBackup",
                 Columns = columns,
-                IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime,
-                ModifiedTimeColumnName = COL_LastModifiedTime
+                IdColumnName = COL_ID
 
             });
         }
@@ -65,39 +60,83 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             this.PrepareData(backupType);
 
-            long stateBackupId;
-            bool inserted = Insert(backupType, out stateBackupId);
+            bool inserted = Insert(backupType, out var stateBackupId);
             if (inserted)
             {
-
+                var queryContext = new RDBQueryContext(GetDataProvider());
+                _stateBackupBehavior.GetBackupQueryContext(queryContext, stateBackupId);
+                queryContext.ExecuteNonQuery(true);
             }
             return stateBackupId;
         }
 
         public bool RestoreData(long stateBackupId, StateBackupType stateBackupType, int userId)
         {
-            throw new NotImplementedException();
+            this.PrepareData(stateBackupType);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            _stateBackupBehavior.GetRestoreCommands(queryContext, stateBackupId);
+            SetUpdateQuery(queryContext, stateBackupId, stateBackupType.UserId);
+            return queryContext.ExecuteNonQuery(true) > 0;
         }
 
         public IEnumerable<Entities.StateBackup> GetFilteredStateBackups(StateBackupQuery input)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereContext = selectQuery.Where();
+            if (input.BackupTypeFilterConfigId.HasValue)
+                whereContext.EqualsCondition(COL_ConfigID).Value(input.BackupTypeFilterConfigId.Value);
+            if (input.From.HasValue)
+                whereContext.GreaterOrEqualCondition(COL_BackupDate).Value(input.From.Value);
+            if (input.To.HasValue)
+                whereContext.LessOrEqualCondition(COL_BackupDate).Value(input.To.Value);
+
+            return queryContext.GetItems(StateBackupMapper);
         }
 
         public Entities.StateBackup GetStateBackup(long stateBackupId)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_ID).Value(stateBackupId);
+
+            return queryContext.GetItem(StateBackupMapper);
         }
 
         public IEnumerable<Entities.StateBackup> GetStateBackupsAfterId(long stateBackupId)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereContext = selectQuery.Where();
+            whereContext.GreaterThanCondition(COL_ID).Value(stateBackupId);
+
+            return queryContext.GetItems(StateBackupMapper);
         }
 
         #endregion
 
         #region Private Methods
 
+        private void SetUpdateQuery(RDBQueryContext queryContext, long stateBackupId, int userId)
+        {
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+
+            updateQuery.Column(COL_RestoreDate).DateNow();
+            updateQuery.Column(COL_RestoredByUserID).Value(userId);
+
+            updateQuery.Where().EqualsCondition(COL_ID).Value(stateBackupId);
+        }
         private bool Insert(StateBackupType backupType, out long stateBackupId)
         {
             stateBackupId = 0;
@@ -144,5 +183,22 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
+        #region Private Mappers
+
+        private Entities.StateBackup StateBackupMapper(IRDBDataReader reader)
+        {
+            return new Entities.StateBackup
+            {
+                StateBackupId = reader.GetLong(COL_ID),
+                BackupTypeConfigId = reader.GetGuidWithNullHandling(COL_ConfigID),
+                Info = Serializer.Deserialize<StateBackupType>(reader.GetString(COL_Info)),
+                BackupDate = reader.GetDateTime(COL_BackupDate),
+                RestoreDate = reader.GetNullableDateTime(COL_RestoreDate),
+                BackupByUserId = reader.GetInt(COL_BackupByUserID),
+                RestoredByByUserId = reader.GetNullableInt(COL_BackupByUserID)
+            };
+        }
+
+        #endregion
     }
 }

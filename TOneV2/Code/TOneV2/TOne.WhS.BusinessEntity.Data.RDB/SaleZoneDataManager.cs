@@ -197,5 +197,49 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
 
         #endregion
+
+        #region StateBackup
+
+        public void BackupBySNPId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int sellingNumberPlanId)
+        {
+            var saleZoneBackupDataManager = new SaleZoneBackupDataManager();
+            var insertQuery = saleZoneBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+
+            var selectQuery = insertQuery.FromSelect();
+
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_SellingNumberPlanID, COL_SellingNumberPlanID);
+            selectColumns.Column(COL_CountryID, COL_CountryID);
+            selectColumns.Column(COL_Name, COL_Name);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Expression(SaleZoneBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+
+        }
+        public void SetDeleteQueryBySNPId(RDBQueryContext queryContext, long sellingNumberPlanId)
+        {
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+        }
+
+        public void SetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
+        {
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+            var saleZoneBackupDataManager = new SaleZoneBackupDataManager();
+            saleZoneBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+        }
+
+        #endregion
     }
 }

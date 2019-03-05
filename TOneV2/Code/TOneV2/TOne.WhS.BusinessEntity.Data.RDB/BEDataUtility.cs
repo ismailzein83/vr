@@ -28,17 +28,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             //(sc.EED is null or (sc.EED<>sc.BED and sc.EED > @when))
             var effectiveAfterDateCondition = context.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            effectiveAfterDateCondition.NullCondition(ColEED);
+            effectiveAfterDateCondition.NullCondition(tableAlias, ColEED);
 
             var dateAndCondition = effectiveAfterDateCondition.ChildConditionGroup();
-            dateAndCondition.NotEqualsCondition(ColEED).Column(colBED);
-            dateAndCondition.GreaterThanCondition(ColEED).Value(effectiveOn);
+            dateAndCondition.NotEqualsCondition(tableAlias, ColEED).Column(tableAlias, colBED);
+            dateAndCondition.GreaterThanCondition(tableAlias, ColEED).Value(effectiveOn);
         }
 
         public static void SetParentCodeCondition(RDBConditionContext conditionContext, string code, string tableAlias, string codeColumnName)
         {
-            var andConditionContext = conditionContext.ChildConditionGroup();
-            var compareCondition = andConditionContext.CompareCondition(RDBCompareConditionOperator.StartWith);
+            var compareCondition = conditionContext.CompareCondition(RDBCompareConditionOperator.StartWith);
             compareCondition.Expression1().Value(code);
             compareCondition.Expression2().Column(tableAlias, codeColumnName);
         }

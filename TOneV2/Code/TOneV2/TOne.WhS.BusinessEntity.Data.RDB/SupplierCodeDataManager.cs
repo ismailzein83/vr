@@ -4,6 +4,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Data.RDB.StateBackup;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.RDB
@@ -277,7 +278,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, 2, true);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1, true);
             selectQuery.SelectColumns().Column(COL_ID);
 
             var whereContext = selectQuery.Where();
@@ -286,6 +287,56 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
 
+        #endregion
+
+        #region StateBackup
+        public void BackupBySupplierId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int supplierId)
+        {
+            var supplierCodeBackupDataManager = new SupplierCodeBackupDataManager();
+            var insertQuery = supplierCodeBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_Code, COL_Code);
+            selectColumns.Column(COL_ZoneID, COL_ZoneID);
+            selectColumns.Column(COL_CodeGroupID, COL_CodeGroupID);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Expression(SupplierCodeBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var joinContext = selectQuery.Join();
+            string supplierZoneTableAlias = "spz";
+            var supplierZoneDataManager = new SupplierZoneDataManager();
+            supplierZoneDataManager.JoinSupplierZone(joinContext, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
+        }
+        public void SetDeleteQueryBySupplierId(RDBQueryContext queryContext, int supplierId)
+        {
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+
+            var joinContext = deleteQuery.Join(TABLE_ALIAS);
+            string supplierZoneTableAlias = "spz";
+            var supplierZoneDataManager = new SupplierZoneDataManager();
+            supplierZoneDataManager.JoinSupplierZone(joinContext, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
+
+            deleteQuery.Where().EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
+        }
+
+        public void GetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
+        {
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_ALIAS);
+            var supplierCodeBackupDataManager = new SupplierCodeBackupDataManager();
+            supplierCodeBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+        }
         #endregion
 
     }

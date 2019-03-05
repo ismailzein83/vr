@@ -27,6 +27,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
 
+        const string COL_StateBackupID = "StateBackupID";
 
         static SupplierZoneServiceDataManager()
         {
@@ -302,6 +303,55 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.GetItems(SupplierDefaultServiceMapper);
         }
 
+        #endregion
+
+        #region StateBackup
+
+        public void BackupBySupplierId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int supplierId)
+        {
+            var supplierZoneServiceBackupDataManager = new SupplierZoneServiceBackupDataManager();
+            var insertQuery = supplierZoneServiceBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_ZoneID, COL_ZoneID);
+            selectColumns.Column(COL_PriceListID, COL_PriceListID);
+            selectColumns.Column(COL_SupplierID, COL_SupplierID);
+            selectColumns.Column(COL_ReceivedServicesFlag, COL_ReceivedServicesFlag);
+            selectColumns.Column(COL_EffectiveServiceFlag, COL_EffectiveServiceFlag);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Expression(SupplierZoneServiceBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_SupplierID).Value(supplierId);
+            whereContext.NotNullCondition(COL_ZoneID);
+        }
+
+        public void SetDeleteQueryBySupplierId(RDBQueryContext queryContext, int supplierId)
+        {
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+
+            var joinContext = deleteQuery.Join(TABLE_ALIAS);
+            string supplierZoneTableAlias = "spz";
+            var supplierZoneDataManager = new SupplierZoneDataManager();
+            supplierZoneDataManager.JoinSupplierZone(joinContext, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
+
+            deleteQuery.Where().EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
+        }
+        public void GetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
+        {
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_ALIAS);
+            var supplierZoneServiceBackupDataManager = new SupplierZoneServiceBackupDataManager();
+            supplierZoneServiceBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+        }
         #endregion
 
         #region Mappers

@@ -19,6 +19,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
 
+        const string COL_StateBackupID = "StateBackupID";
 
         static CustomerCountryDataManager()
         {
@@ -68,10 +69,85 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
-        #region StateBackup Methods
+        #region StateBackup 
 
-        //Not Yet implemented
+        public void BackupBySNPId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int sellingNumberPlanId)
+        {
+            var customerCountryBackupDataManager = new CustomerCountryBackupDataManager();
+            var insertQuery = customerCountryBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
 
+            var selectQuery = insertQuery.FromSelect();
+
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_CustomerID, COL_CustomerID);
+            selectColumns.Column(COL_CountryID, COL_CountryID);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Expression(CustomerCountryBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var joinContext = selectQuery.Join();
+            var carrierAccountDataManager = new CarrierAccountDataManager();
+            string carrierAccountTableAlias = "ca";
+            carrierAccountDataManager.JoinCarrierAccount(joinContext, carrierAccountTableAlias, TABLE_ALIAS, COL_CustomerID, true);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(carrierAccountTableAlias, CarrierAccountDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+        }
+
+        public void BackupByOwner(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, IEnumerable<int> customerIds)
+        {
+            var customerCountryBackupDataManager = new CustomerCountryBackupDataManager();
+            var insertQuery = customerCountryBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_CustomerID, COL_CustomerID);
+            selectColumns.Column(COL_CountryID, COL_CountryID);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
+            selectColumns.Expression(CustomerCountryBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereContext = selectQuery.Where();
+            whereContext.ListCondition(COL_CustomerID, RDBListConditionOperator.IN, customerIds);
+        }
+        public void SetDeleteQueryBySNPId(RDBQueryContext queryContext, long sellingNumberPlanId)
+        {
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+
+            var joinContext = deleteQuery.Join(TABLE_ALIAS);
+            string carrierAccountTableAlias = "ca";
+            var carrierAccountDataManager = new CarrierAccountDataManager();
+            carrierAccountDataManager.JoinCarrierAccount(joinContext, carrierAccountTableAlias, TABLE_ALIAS, COL_CustomerID, false);
+
+            var whereContext = deleteQuery.Where();
+            whereContext.EqualsCondition(carrierAccountTableAlias, CarrierAccountDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+        }
+        public void SetDeleteQueryByOwner(RDBQueryContext queryContext, IEnumerable<int> customerIds)
+        {
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+
+            var whereContext = deleteQuery.Where();
+            whereContext.ListCondition(COL_CustomerID, RDBListConditionOperator.IN, customerIds);
+        }
+        public void SetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
+        {
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+
+            var customerCountryBackupDataManager = new CustomerCountryBackupDataManager();
+            customerCountryBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+        }
         #endregion
 
         #region Mappers

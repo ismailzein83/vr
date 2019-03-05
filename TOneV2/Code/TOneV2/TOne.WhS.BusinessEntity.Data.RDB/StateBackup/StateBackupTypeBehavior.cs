@@ -1,4 +1,5 @@
-﻿using TOne.WhS.BusinessEntity.Entities;
+﻿using Vanrise.Data.RDB;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
@@ -8,8 +9,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public StateBackupType Data { get; set; }
 
-        public abstract string GetBackupCommands(long stateBackupId);
+        public abstract void GetBackupQueryContext(RDBQueryContext queryContext, long stateBackupId);
 
-        public abstract string GetRestoreCommands(long stateBackupId);
+        public abstract void GetRestoreCommands(RDBQueryContext queryContext, long stateBackupId);
     }
 }

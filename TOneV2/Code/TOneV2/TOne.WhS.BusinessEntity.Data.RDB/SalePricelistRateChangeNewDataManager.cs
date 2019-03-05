@@ -132,7 +132,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Column(TABLE_ALIAS);
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.AllTableColumns(TABLE_ALIAS);
+            selectColumns.Column(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID, SalePriceListNewDataManager.COL_OwnerID);
 
             var join = selectQuery.Join();
             salePriceListNewDataManager.JoinSalePriceListNew(join, salePriceListNewTableAlias, TABLE_ALIAS, COL_PricelistId);

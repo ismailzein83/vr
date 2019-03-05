@@ -167,7 +167,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 CodeGroupId = reader.GetInt(COL_ID),
                 CountryId = reader.GetInt(COL_CountryID),
                 Name = reader.GetString(COL_Name),
-                Code = reader.GetString(COL_Code)
+                Code = reader.GetString(COL_Code).Trim()        
             };
         }
         #endregion

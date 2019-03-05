@@ -23,6 +23,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_SourceID = "SourceID";
         const string COL_ProcessInstanceID = "ProcessInstanceID";
         const string COL_LastModifiedTime = "LastModifiedTime";
+        const string COL_CreatedTime = "CreatedTime";
+
 
         static SaleCodeDataManager()
         {
@@ -35,15 +37,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
                 DBTableName = "SaleCode",
                 Columns = columns,
+                CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
+
 
         BaseRDBDataProvider GetDataProvider()
         {
@@ -367,7 +373,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var where = selectQuery.Where();
             where.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_CountryID).Value(countryId);
 
-            BEDataUtility.SetEffectiveAfterDateCondition(where, TABLE_ALIAS, COL_BED, COL_EED, effectiveDate);
+            BEDataUtility.SetEffectiveDateCondition(where, TABLE_ALIAS, COL_BED, COL_EED, effectiveDate);
 
             return queryContext.GetItems(SaleCodeMapper);
         }
@@ -414,7 +420,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return new CodePrefixInfo
             {
                 CodePrefix = reader.GetString("CodePrefix"),
-                Count = reader.GetInt("codeCount")
+                Count = reader.GetInt("CodeCount")
             };
         }
         #endregion
@@ -483,6 +489,61 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             updateQuery.Column(COL_EED).Column(joinTableAlias, COL_EED);
             updateQuery.Where().EqualsCondition(joinTableAlias, columnName).Value(processInstanceID);
         }
+        #endregion
+
+        #region StateBackup
+
+        public void BackupBySNPId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int sellingNumberPlanId)
+        {
+            var saleCodeBackupDataManager = new SaleCodeBackupDataManager();
+            var insertQuery = saleCodeBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_Code, COL_Code);
+            selectColumns.Column(COL_ZoneID, COL_ZoneID);
+            selectColumns.Column(COL_CodeGroupID, COL_CodeGroupID);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Expression(SaleCodeBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
+
+            var saleZoneDataManager = new SaleZoneDataManager();
+            string saleZoneTableAlias = "sz";
+            var joinContext = selectQuery.Join();
+
+            saleZoneDataManager.JoinSaleZone(joinContext, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+        }
+
+        public void SetDeleteQueryBySNPId(RDBQueryContext queryContext, long sellingNumberPlanId)
+        {
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+
+            string saleZoneTableAlias = "sz";
+            var joinContext = deleteQuery.Join(TABLE_ALIAS);
+            var saleZoneDataManager = new SaleZoneDataManager();
+            saleZoneDataManager.JoinSaleZone(joinContext, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID, false);
+
+            deleteQuery.Where().EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+        }
+
+
+        public void SetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
+        {
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+            var saleCodeBackupDataManager = new SaleCodeBackupDataManager();
+            saleCodeBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+        }
+
         #endregion
     }
 }
