@@ -219,7 +219,15 @@ as (select * from (values
 ('NP_IVSwitch/RouteTableRoute/DeleteRouteTableRoute','NP_IVSwitch_RouteTable: Delete'),
 ('NP_IVSwitch/RouteTableRoute/GetFilteredRouteTableRoutes','NP_IVSwitch_RouteTable: View'),
 ('NP_IVSwitch/RouteTable/GetFilteredRouteTables','NP_IVSwitch_RouteTable: View'),
-('NP_IVSwitch/TranslationRule/DeleteTranslationRule','NP_IVSwitch_TranslationRule: Delete')
+('NP_IVSwitch/TranslationRule/DeleteTranslationRule','NP_IVSwitch_TranslationRule: Delete'),
+(1203,'NP_IVSwitch/EndPoint/GetFilteredEndPoints','NP_IVSwitch_EndPoint: View'),
+(1206,'NP_IVSwitch/EndPoint/AddEndPoint','NP_IVSwitch_EndPoint: Add'),
+(1207,'NP_IVSwitch/EndPoint/UpdateEndPoint','NP_IVSwitch_EndPoint: Edit'),
+(1208,'NP_IVSwitch/EndPoint/DeleteEndPoint','NP_IVSwitch_EndPoint: Delete'),
+(1209,'NP_IVSwitch/Route/GetFilteredRoutes','NP_IVSwitch_Route: View'),
+(1210,'NP_IVSwitch/Route/AddRoute','NP_IVSwitch_Route: Add'),
+(1211,'NP_IVSwitch/Route/UpdateRoute','NP_IVSwitch_Route: Edit'),
+(1212,'NP_IVSwitch/Route/DeleteRoute','NP_IVSwitch_Route: Delete')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -243,7 +251,9 @@ as (select * from (values
 ('BA7E48EB-E7CB-4C32-AE2D-47C9FCCBC7B6','NP_IVSwitch_CodecProfile','Codec Profile'			,'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',0,'["View", "Add", "Edit"]'),
 ('D2D07DBA-66EA-4B68-9F00-EBD66B00A740','NP_IVSwitch_TranslationRule','Translation Rule'	,'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',0,'["View", "Add", "Edit","Delete"]'),
 ('5437DC96-9CB1-44B2-B680-B1A51D6CA876','NP_IVSwitch_Firewall','Firewall'					,'61451603-E7B9-40C6-AE27-6CBA974E1B3B',0,'["View", "Add", "Edit"]'),
-('4145E135-96B2-412D-9F4E-D3CEE79741F5','NP_IVSwitch_RouteTable','Route Table'				,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]')
+('4145E135-96B2-412D-9F4E-D3CEE79741F5','NP_IVSwitch_RouteTable','Route Table'				,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]'),
+('F88A6489-C43B-4E7E-B910-46B62E040EC5','NP_IVSwitch_Route','Route','475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]'),
+('19FC9866-775E-4114-8D00-6FF123E67E78','NP_IVSwitch_EndPoint','End Point','475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
