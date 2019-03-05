@@ -101,8 +101,10 @@ namespace TOne.WhS.Jazz.Business
                 }
 
                 if (jazzReportDefinition.TaxOption.HasValue && jazzReportDefinition.TaxOption.Value == TaxOptionEnum.TaxMeasure)
+                {
                     outputResult.Result = false;
-                outputResult.Messages.Add("Suppliers Cannot Be Assigned Taxes!");
+                    outputResult.Messages.Add("Suppliers Cannot Be Assigned Taxes!");
+                }
             }
         }
 
