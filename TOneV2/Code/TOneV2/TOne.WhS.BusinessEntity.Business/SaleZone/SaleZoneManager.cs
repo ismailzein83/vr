@@ -135,7 +135,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return (filteredSaleZones != null && filteredSaleZones.Count() > 0) ? filteredSaleZones : null;
         }
 
-
         public int? GetSaleZoneCountryId(long saleZoneId)
         {
             SaleZone saleZone = GetSaleZone(saleZoneId);
@@ -143,6 +142,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
             return saleZone.CountryId;
         }
+
         public string GetCountryNameByZoneId(long zoneId)
         {
             var countryManager = new CountryManager();
@@ -151,6 +151,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new DataIntegrityValidationException("CountryId is null");
             return countryManager.GetCountryName(countryId.Value);
         }
+
         public string GetZoneNameWithoutCountryName(long? zoneId, string zone)
         {
             if (!zoneId.HasValue)
@@ -162,12 +163,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 zone = zone.Remove(index, countryName.Length).TrimStart(new char[] { '-', '_', ' ' });
             return zone;
         }
+
         public string GetAreaCodeFromCode(string code)
         {
             var codeGroup = new CodeGroupManager().GetMatchCodeGroup(code).Code;
             code = code.Remove(0, codeGroup.Length);
             return code;
         }
+
         public IOrderedEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
@@ -413,6 +416,7 @@ namespace TOne.WhS.BusinessEntity.Business
             };
             return allSaleZones.MapRecords(SaleZoneInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
+
         public IEnumerable<ClientSaleZoneInfo> GetClientSaleZonesInfo(SaleZoneInfoFilter filter)
         {
             var saleZonesInfo = GetAllSaleZonesInfo(filter);
@@ -562,16 +566,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            ISaleZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired()
-            {
-                return _dataManager.AreZonesUpdated(ref _updateHandle);
-            }
-        }
         private ClientSaleZoneInfo ClientSaleZoneInfoMapper(SaleZoneInfo saleZoneInfo)
         {
             return new ClientSaleZoneInfo()
@@ -580,6 +575,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 SaleZoneId = saleZoneInfo.SaleZoneId
             };
         }
+
         private SaleZoneDetail SaleZoneDetailMapper(SaleZone saleZone)
         {
             SaleZoneDetail saleZoneDetail = new SaleZoneDetail();
@@ -609,6 +605,17 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISaleZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired()
+            {
+                return _dataManager.AreZonesUpdated(ref _updateHandle);
+            }
+        }
 
         private class SaleZoneDetailExportExcelHandler : ExcelExportHandler<SaleZoneDetail>
         {
