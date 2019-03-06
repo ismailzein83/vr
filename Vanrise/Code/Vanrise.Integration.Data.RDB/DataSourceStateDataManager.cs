@@ -36,7 +36,7 @@ namespace Vanrise.Integration.Data.RDB
         #region Private Methods
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("Integration", "IntegrationConfigDBConnStringKey", "IntegrationConfigDBConnStringKey");
+            return RDBDataProviderFactory.CreateProvider("Integration", "IntegrationConfigDBConnStringKey", "IntegrationConfigDBConnString");
         }
 
         #endregion

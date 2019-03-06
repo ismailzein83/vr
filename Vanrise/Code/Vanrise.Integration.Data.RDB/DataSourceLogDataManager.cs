@@ -41,7 +41,7 @@ namespace Vanrise.Integration.Data.RDB
         #region Private Methods
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("Integration", "BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnStringKey");
+            return RDBDataProviderFactory.CreateProvider("IntegrationLogging", "BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString");
         }
 
         #endregion
@@ -96,6 +96,7 @@ namespace Vanrise.Integration.Data.RDB
                 where.GreaterOrEqualCondition(COL_LogEntryTime).Value(query.From.Value);
             if (query.To.HasValue)
                 where.LessOrEqualCondition(COL_LogEntryTime).Value(query.To.Value);
+            selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.DESC);
             return queryContext.GetItems(DataSourceLogMapper);
         }
 

@@ -73,7 +73,7 @@ namespace Vanrise.Integration.Data.RDB
         #region Private Methods
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("Integration", "BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnStringKey");
+            return RDBDataProviderFactory.CreateProvider("IntegrationLogging", "BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString");
         }
 
         #endregion
@@ -110,11 +110,12 @@ namespace Vanrise.Integration.Data.RDB
                 TotalRecordCount = reader.GetInt("TotalRecordCount"),
                 MaxRecordCount = reader.GetInt("MaxRecordCount"),
                 MinRecordCount = reader.GetInt("MinRecordCount"),
-                MaxBatchSize = reader.GetInt("MaxBatchSize"),
+                MaxBatchSize = reader.GetNullableDecimal("MaxBatchSize"),
+                MinBatchSize = reader.GetNullableDecimal("MinBatchSize"),
                 NbInvalidBatch = reader.GetInt("NbInvalidBatch"),
                 NbEmptyBatch = reader.GetInt("NbEmptyBatch"),
-                MinBatchStart = reader.GetDateTime("MinBatchStart"),
-                MaxBatchEnd = reader.GetDateTime("MaxBatchEnd")
+                MinBatchStart = reader.GetNullableDateTime("MinBatchStart"),
+                MaxBatchEnd = reader.GetNullableDateTime("MaxBatchEnd")
             };
         }
 
@@ -157,7 +158,7 @@ namespace Vanrise.Integration.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(COL_ID, RDBDataType.BigInt);
+            tempTableQuery.AddColumn(COL_ID, RDBDataType.BigInt, true);
             tempTableQuery.AddColumn(COL_ExecutionStatus, RDBDataType.Int);
 
             if (executionStatusToUpdateById != null)
@@ -186,7 +187,7 @@ namespace Vanrise.Integration.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, query.Top, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_BatchDescription, COL_BatchSize, COL_BatchState, COL_RecordsCount, COL_MappingResult, COL_MapperMessage, COL_QueueItemIds, COL_LogEntryTime, COL_BatchStart, COL_BatchEnd, COL_ExecutionStatus);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             var where = selectQuery.Where();
             if (query.DataSourceId.HasValue)
                 where.EqualsCondition(COL_DataSourceId).Value(query.DataSourceId.Value);
@@ -200,7 +201,7 @@ namespace Vanrise.Integration.Data.RDB
                 where.LessOrEqualCondition(COL_LogEntryTime).Value(query.To.Value);
             if (query.ExecutionFlowsStatus != null)
                 where.ListCondition(COL_ExecutionStatus, RDBListConditionOperator.IN, query.ExecutionFlowsStatus.MapRecords(x => (int)x));
-
+            selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.DESC);
             return queryContext.GetItems(DataSourceImportedBatchMapper);
         }
 
@@ -225,14 +226,14 @@ namespace Vanrise.Integration.Data.RDB
             var expToSet = selectAggregates.ExpressionAggregate(RDBNonCountAggregateType.SUM, NbInvalidBatchColumnName);
             var nbInvalidBatchExp = expToSet.CaseExpression();
             var case1 = nbInvalidBatchExp.AddCase();
-            case1.When().EqualsCondition(COL_MappingResult).Value(2);
+            case1.When().EqualsCondition(COL_MappingResult).Value((int)MappingResult.Invalid);
             case1.Then().Value(1);
             nbInvalidBatchExp.Else().Value(0);
 
             var expToSet2 = selectAggregates.ExpressionAggregate(RDBNonCountAggregateType.SUM, NbEmptyBatchColumnName);
             var nbEmptyBatchExp = expToSet.CaseExpression();
             var case2 = nbEmptyBatchExp.AddCase();
-            case2.When().EqualsCondition(COL_MappingResult).Value(3);
+            case2.When().EqualsCondition(COL_MappingResult).Value((int)MappingResult.Empty);
             case2.Then().Value(1);
             nbEmptyBatchExp.Else().Value(0);
 
@@ -254,12 +255,11 @@ namespace Vanrise.Integration.Data.RDB
             selectQuery.SelectColumns().Columns(COL_ID, COL_BatchDescription, COL_BatchSize, COL_BatchState, COL_RecordsCount, COL_MappingResult, COL_MapperMessage, COL_QueueItemIds, COL_LogEntryTime, COL_BatchStart, COL_BatchEnd, COL_ExecutionStatus);
             var where = selectQuery.Where();
             if (afterId.HasValue)
-                where.LessThanCondition(COL_ID).Value(afterId.Value);
+                where.GreaterThanCondition(COL_ID).Value(afterId.Value);
             if (executionFlowsStatus != null)
             {
-               where.ConditionIfColumnNotNull(COL_ExecutionStatus).ListCondition(COL_ExecutionStatus, RDBListConditionOperator.IN, executionFlowsStatus.MapRecords(x => (int)x));
+                where.ConditionIfColumnNotNull(COL_ExecutionStatus).ListCondition(COL_ExecutionStatus, RDBListConditionOperator.IN, executionFlowsStatus.MapRecords(x => (int)x));
             }
-
             selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.ASC);
 
             return queryContext.GetItems(DataSourceImportedBatchMapper);
