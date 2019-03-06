@@ -136,10 +136,12 @@
                             businessEntityDefinitionId: "fa6c91c0-adc9-4bb2-aedb-77a6ee1c9131",
                             fieldValues: {
                                 FinancialAccountId: financialAccountId,
-                                CurrencyId: currencyId
                             },
                             filterValues: {
                                 FinancialAccountId: financialAccountId,
+                            },
+                            defaultValues: {
+                                CurrencyId: currencyId
                             }
                         };
                         genericBusinessEntityAPI.load(genericBusinessEntityPayload).then(function () {
@@ -174,10 +176,12 @@
                             businessEntityDefinitionId: "e9c11a90-864c-45a1-b90c-d7fdd80e9cf3",
                             fieldValues: {
                                 FinancialAccountId: financialAccountId,
-                                CurrencyId: currencyId
                             },
                             filterValues: {
                                 FinancialAccountId: financialAccountId,
+                            },
+                            defaultValues: {
+                                CurrencyId: currencyId
                             }
                         };
                         genericBusinessEntityAPI.load(genericBusinessEntityPayload).then(function () {
