@@ -79,8 +79,8 @@
             $scope.scopeModel.onDealBillingTypeSelectionChanged = function () {
                 volumeCommitmenetItemsReadyDeferred.promise.then(function () {
                     var payload = {
-                        context:getContext()
-                    }
+                        context: getContext()
+                    };
                     volumeCommitmenetItemsAPI.load(payload);
                 });
             };
