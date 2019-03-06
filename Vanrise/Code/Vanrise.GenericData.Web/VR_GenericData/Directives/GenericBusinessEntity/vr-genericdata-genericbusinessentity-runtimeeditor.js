@@ -119,6 +119,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                         definitionTitle = response.DefinitionTitle;
                         if (context != undefined) {
                             context.setTitleFieldName(response.TitleFieldName);
+                            context.setTitleOperation(definitionTitle);
                             titleFieldName = response.TitleFieldName;
                         }
                         genericBusinessEntity = response.GenericBusinessEntity;

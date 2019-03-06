@@ -9,6 +9,7 @@
         var isEditMode;
         var definitionTitle;
         var titleFieldName;
+        var titleOperation;
 
         var genericBusinessEntityId;
         var businessEntityDefinitionId;
@@ -96,6 +97,9 @@
             context.setTitleFieldName = function (fieldName) {
                 titleFieldName = fieldName;
             };
+            context.setTitleOperation = function (fieldName) {
+                titleOperation = fieldName;
+            };
             return context;
         }
 
@@ -108,7 +112,7 @@
             $scope.scopeModel.isLoading = true;
 
             return VR_GenericData_GenericBusinessEntityAPIService.AddGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded(titleFieldName, response, 'Title', additionalErrorsDirectiveAPI)) {
+                if (VRNotificationService.notifyOnItemAdded(titleOperation, response, 'Title', additionalErrorsDirectiveAPI)) {
                     if ($scope.onGenericBEAdded != undefined)
                         $scope.onGenericBEAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -124,7 +128,7 @@
             $scope.scopeModel.isLoading = true;
 
             return VR_GenericData_GenericBusinessEntityAPIService.UpdateGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated(titleFieldName, response, 'Title', additionalErrorsDirectiveAPI)) {
+                if (VRNotificationService.notifyOnItemUpdated(titleOperation, response, 'Title', additionalErrorsDirectiveAPI)) {
                     if ($scope.onGenericBEUpdated != undefined)
                         $scope.onGenericBEUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
