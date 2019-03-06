@@ -21,7 +21,8 @@
 			DownloadGenericBusinessEntityTemplate: DownloadGenericBusinessEntityTemplate,
             DownloadBusinessEntityLog: DownloadBusinessEntityLog,
             ExecuteGenericBEBulkActions: ExecuteGenericBEBulkActions,
-            GetGenericBETitleFieldValue: GetGenericBETitleFieldValue
+            GetGenericBETitleFieldValue: GetGenericBETitleFieldValue,
+            DoesUserHaveViewAccess: DoesUserHaveViewAccess
         };
 
 
@@ -67,6 +68,12 @@
         }
         function DoesUserHaveAddAccess(businessEntityDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'), {
+                businessEntityDefinitionId: businessEntityDefinitionId
+            });
+        }
+
+        function DoesUserHaveViewAccess(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveViewAccess'), {
                 businessEntityDefinitionId: businessEntityDefinitionId
             });
         }

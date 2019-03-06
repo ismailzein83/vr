@@ -91,6 +91,14 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
+        [Route("DoesUserHaveViewAccess")]
+        public bool DoesUserHaveViewAccess(Guid businessEntityDefinitionId)
+        {
+            GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+            return manager.DoesUserHaveViewAccess(businessEntityDefinitionId);
+        }
+
+        [HttpGet]
         [Route("DoesUserHaveDeleteAccess")]
         public bool DoesUserHaveDeleteAccess(Guid businessEntityDefinitionId)
         {
