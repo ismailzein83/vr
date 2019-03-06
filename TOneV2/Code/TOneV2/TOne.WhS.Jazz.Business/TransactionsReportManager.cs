@@ -29,8 +29,8 @@ namespace TOne.WhS.Jazz.Business
             if (transactionsReports != null && transactionsReports.Count > 0)
             {
                 JazzReportDefinitionManager jazzReportDefinitionManager = new JazzReportDefinitionManager();
-                var orderedReports = transactionsReports.OrderBy(x => jazzReportDefinitionManager.GetJazzReportDefinitionName(x.ReportDefinitionId));
-                transactionsReports = orderedReports.OrderBy(x => x.SheetName).ToList();
+
+                transactionsReports = transactionsReports.OrderBy(x => jazzReportDefinitionManager.GetJazzReportDefinitionName(x.ReportDefinitionId)).ThenBy(x => x.SheetName).ToList();
 
                 var reportsIds = transactionsReports.MapRecords(x=>x.ReportId).ToList();
                 var transactionsReportsDictionary = transactionsReports.ToDictionary(x => x.ReportId, x => x);

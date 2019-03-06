@@ -46,10 +46,11 @@ namespace TOne.WhS.Jazz.BP.Activities
             List<string> dimensions = null;
             List<string> measures = null;
 
-            var amountMeasure = reportDefinition.AmountMeasureType.HasValue ? "AMT" : "SaleNet";
+            string amountMeasure; 
 
             if (reportDefinition.Direction==ReportDefinitionDirection.In)
             {
+                amountMeasure = reportDefinition.AmountMeasureType.HasValue ? "AMT" : "SaleNet";
                 dimensions = new List<string> { "Customer" };
                 measures = new List<string> { amountMeasure, "SaleDuration" };
                 if (reportDefinition.TaxOption == TaxOption.TaxMeasure)
@@ -136,7 +137,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                     }
                     else
                     {
-                        netValue = GetMeasureValue(analyticRecord, "CostNet");
+                        netValue = GetMeasureValue(analyticRecord, amountMeasure);
                         durationValue = GetMeasureValue(analyticRecord, "CostDuration");
                     }
                     #endregion
@@ -145,17 +146,13 @@ namespace TOne.WhS.Jazz.BP.Activities
                     var duration= Convert.ToDecimal(durationValue.Value ?? 0.0);
                     var amountType = reportDefinition.AmountType;
 
-                    decimal splitRateValue = 0;
 
                     if (amountType.HasValue)
                     {
                         if (!reportDefinition.SplitRateValue.HasValue)
-                        {
-                            throw new NullReferenceException($"splitRateValue '{splitRateValue}'");
-                        }
-                        else
-                        {
-                            splitRateValue = reportDefinition.SplitRateValue.Value;
+                            throw new NullReferenceException($"splitRateValue '{reportDefinition.SplitRateValue}'");
+                       
+                            var splitRateValue = reportDefinition.SplitRateValue.Value;
                             CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
 
                             if (reportDefinition.CurrencyId.HasValue)
@@ -165,7 +162,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                 amount = duration * splitRateValue;
                             else
                                 amount = (amount - duration * splitRateValue);
-                        }
+                        
                     }
 
                      
@@ -323,7 +320,6 @@ namespace TOne.WhS.Jazz.BP.Activities
                                 }
                                 else
                                 {
-                                    {
                                         var taxCode = taxCodeManger.GetTaxCode(reportDefinition.SwitchId, reportDefinition.Direction);
                                         taxCode.ThrowIfNull("taxCode", reportDefinition.JazzReportDefinitionId);
 
@@ -334,7 +330,6 @@ namespace TOne.WhS.Jazz.BP.Activities
                                             Credit = transactionType.IsCredit ? 0 : tax,
                                             Debit = transactionType.IsCredit ? tax : 0,
                                         });
-                                    }
                                 }
                             }
                             else if (transactionType.TransactionScope == TransactionScope.Region && !applyTax)
