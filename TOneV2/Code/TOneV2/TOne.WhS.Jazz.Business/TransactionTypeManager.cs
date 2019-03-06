@@ -17,18 +17,7 @@ namespace TOne.WhS.Jazz.Business
 
         public List<TransactionType> GetAllTransactionTypes()
         {
-            var records = GetCachedTransactionTypes();
-            List<TransactionType> transactionTypes = null;
-
-            if (records != null && records.Count > 0)
-            {
-                transactionTypes = new List<TransactionType>();
-                foreach (var record in records)
-                {
-                    transactionTypes.Add(record.Value);
-                }
-            }
-            return transactionTypes;
+            return GetCachedTransactionTypes().Values.ToList();
         }
        
         public TransactionType GetTransactionByName(string transactionName)
@@ -37,7 +26,7 @@ namespace TOne.WhS.Jazz.Business
             return transactionTypes.FindRecord(x => x.Name == transactionName);
         }
 
-        public List<TransactionType> GetMatchedTransactionTypes( ReportDefinitionDirectionEnum reportDefinitionDirection)
+        public List<TransactionType> GetMatchedTransactionTypes( ReportDefinitionDirection reportDefinitionDirection)
         {
             var allTransactionTypes = GetCachedTransactionTypes();
             List<TransactionType> transactionTypes = null;
@@ -46,7 +35,7 @@ namespace TOne.WhS.Jazz.Business
                 transactionTypes = new List<TransactionType>();
                 foreach (var transactionType in allTransactionTypes)
                 {
-                    if ((transactionType.Value.CarrierType == CarrierTypeEnum.ApplicableForCustomers && reportDefinitionDirection == ReportDefinitionDirectionEnum.In) || (transactionType.Value.CarrierType == CarrierTypeEnum.ApplicableForSuppliers && reportDefinitionDirection == ReportDefinitionDirectionEnum.Out))
+                    if ((transactionType.Value.CarrierType == CarrierType.ApplicableForCustomers && reportDefinitionDirection == ReportDefinitionDirection.In) || (transactionType.Value.CarrierType == CarrierType.ApplicableForSuppliers && reportDefinitionDirection == ReportDefinitionDirection.Out))
                         transactionTypes.Add(transactionType.Value);
                 }
             }
@@ -99,8 +88,8 @@ namespace TOne.WhS.Jazz.Business
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
-                            CarrierType = (CarrierTypeEnum)genericBusinessEntity.FieldValues.GetRecord("CarrierType"),
-                            TransactionScope =(TransactionScopeEnum)genericBusinessEntity.FieldValues.GetRecord("TransactionScope"),
+                            CarrierType = (CarrierType)genericBusinessEntity.FieldValues.GetRecord("CarrierType"),
+                            TransactionScope =(TransactionScope)genericBusinessEntity.FieldValues.GetRecord("TransactionScope"),
                             IsCredit=(bool)genericBusinessEntity.FieldValues.GetRecord("IsCredit"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),

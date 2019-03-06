@@ -16,18 +16,7 @@ namespace TOne.WhS.Jazz.Business
 
         public List<Market> GetAllMarkets()
         {
-            var records = GetCachedMarkets();
-            List<Market> markets = null;
-
-            if (records != null && records.Count > 0)
-            {
-                markets = new List<Market>();
-                foreach (var record in records)
-                {
-                    markets.Add(record.Value);
-                }
-            }
-            return markets;
+            return GetCachedMarkets().Values.ToList();
         }
 
         public IEnumerable<MarketDetail> GetMarketsInfo(MarketInfoFilter filter)

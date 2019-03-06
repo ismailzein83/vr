@@ -19,20 +19,20 @@ namespace TOne.WhS.Jazz.Business
 
         public List<JazzReportDefinition> GetAllReportDefinitions()
         {
-            var records = GetCachedReportDefinitions();
-            List<JazzReportDefinition> jazzReportDefinitions = null;
-
-            if (records != null && records.Count > 0)
-            {
-                jazzReportDefinitions = new List<JazzReportDefinition>();
-                foreach (var record in records)
-                {
-                    jazzReportDefinitions.Add(record.Value);
-                }
-            }
-            return jazzReportDefinitions;
+            return GetCachedReportDefinitions().Values.ToList();
         }
 
+        public string GetJazzReportDefinitionName(Guid reportId)
+        {
+            return GetJazzReportDefinitionById(reportId).Name;
+
+        }
+
+        public JazzReportDefinition GetJazzReportDefinitionById(Guid reportId)
+        {
+            var reports = GetCachedReportDefinitions();
+            return reports.GetRecord(reportId);
+        }
         private Dictionary<Guid, JazzReportDefinition> GetCachedReportDefinitions()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
@@ -52,20 +52,20 @@ namespace TOne.WhS.Jazz.Business
                         {
                             JazzReportDefinitionId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
-                            Direction = (ReportDefinitionDirectionEnum)genericBusinessEntity.FieldValues.GetRecord("Direction"),
+                            Direction = (ReportDefinitionDirection)genericBusinessEntity.FieldValues.GetRecord("Direction"),
                             SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
                             IsEnabled = (bool)genericBusinessEntity.FieldValues.GetRecord("IsEnabled")
                         };
 
                         var taxOption = genericBusinessEntity.FieldValues.GetRecord("TaxOption");
                         if (taxOption != null)
-                            reportDefintion.TaxOption = (TaxOptionEnum)taxOption;
+                            reportDefintion.TaxOption = (TaxOption)taxOption;
                         var amountMeasureType = genericBusinessEntity.FieldValues.GetRecord("AmountMeasureType");
                         if (amountMeasureType != null)
-                            reportDefintion.AmountMeasureType = (AmountMeasureTypeEnum)amountMeasureType;
+                            reportDefintion.AmountMeasureType = (AmountMeasureType)amountMeasureType;
                         var amountType = genericBusinessEntity.FieldValues.GetRecord("AmountType");
                         if (amountType != null)
-                            reportDefintion.AmountType = (AmountTypeEnum)amountType;
+                            reportDefintion.AmountType = (AmountType)amountType;
                         var splitRateValue = genericBusinessEntity.FieldValues.GetRecord("SplitRateValue");
                         if (splitRateValue != null)
                             reportDefintion.SplitRateValue = (decimal)splitRateValue;
@@ -73,7 +73,6 @@ namespace TOne.WhS.Jazz.Business
                         if (currencyId != null)
                             reportDefintion.CurrencyId = (int)currencyId;
 
-                        reportDefintion.Settings = new JazzReportDefinitionSettings();
                         reportDefintion.Settings = (JazzReportDefinitionSettings)genericBusinessEntity.FieldValues.GetRecord("Settings");
                         result.Add(reportDefintion.JazzReportDefinitionId, reportDefintion);
                     }
@@ -87,25 +86,25 @@ namespace TOne.WhS.Jazz.Business
         {
             JazzReportDefinition jazzReportDefinition = new JazzReportDefinition
             {
-                Direction = (ReportDefinitionDirectionEnum)genericBusinessEntity.FieldValues.GetRecord("Direction"),
+                Direction = (ReportDefinitionDirection)genericBusinessEntity.FieldValues.GetRecord("Direction"),
             };
             var taxOption = genericBusinessEntity.FieldValues.GetRecord("TaxOption");
             if (taxOption != null)
-                jazzReportDefinition.TaxOption = (TaxOptionEnum)taxOption;
+                jazzReportDefinition.TaxOption = (TaxOption)taxOption;
 
             var amountMeasureType = genericBusinessEntity.FieldValues.GetRecord("AmountMeasureType");
             if (amountMeasureType != null)
-                jazzReportDefinition.AmountMeasureType = (AmountMeasureTypeEnum)amountMeasureType;
+                jazzReportDefinition.AmountMeasureType = (AmountMeasureType)amountMeasureType;
 
-            if (jazzReportDefinition.Direction == ReportDefinitionDirectionEnum.Out)
+            if (jazzReportDefinition.Direction == ReportDefinitionDirection.Out)
             {
-                if (jazzReportDefinition.AmountMeasureType.HasValue && jazzReportDefinition.AmountMeasureType.Value == AmountMeasureTypeEnum.AMT)
+                if (jazzReportDefinition.AmountMeasureType.HasValue && jazzReportDefinition.AmountMeasureType.Value == AmountMeasureType.AMT)
                 {
                     outputResult.Result = false;
                     outputResult.Messages.Add("Cannot Choose AMT Amount Measure Type With Direction Out");
                 }
 
-                if (jazzReportDefinition.TaxOption.HasValue && jazzReportDefinition.TaxOption.Value == TaxOptionEnum.TaxMeasure)
+                if (jazzReportDefinition.TaxOption.HasValue && jazzReportDefinition.TaxOption.Value == TaxOption.TaxMeasure)
                 {
                     outputResult.Result = false;
                     outputResult.Messages.Add("Suppliers Cannot Be Assigned Taxes!");

@@ -13,7 +13,7 @@ namespace TOne.WhS.Jazz.Business
 {
     public class ConfigManager
     {
-        public Guid GetJazzTechnicalSettings()
+        public Guid GetERPIntegrationAnalyticTableId()
         {
             SettingManager settingManager = new SettingManager();
             JazzTechnicalSettingData jazzTechnicalSettings = settingManager.GetSetting<JazzTechnicalSettingData>(JazzTechnicalSettingData.SETTING_TYPE);

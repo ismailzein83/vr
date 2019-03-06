@@ -48,20 +48,21 @@ namespace TOne.WhS.Jazz.BP.Activities
 
             var amountMeasure = reportDefinition.AmountMeasureType.HasValue ? "AMT" : "SaleNet";
 
-            if (reportDefinition.Direction.Equals(ReportDefinitionDirectionEnum.In))
+            if (reportDefinition.Direction==ReportDefinitionDirection.In)
             {
                 dimensions = new List<string> { "Customer" };
                 measures = new List<string> { amountMeasure, "SaleDuration" };
-                if (reportDefinition.TaxOption == TaxOptionEnum.TaxMeasure)
+                if (reportDefinition.TaxOption == TaxOption.TaxMeasure)
                     measures.Add("STAX");
             }
             else
             {
-                if (reportDefinition.TaxOption == TaxOptionEnum.TaxMeasure)
+                amountMeasure = "CostNet";
+                if (reportDefinition.TaxOption == TaxOption.TaxMeasure)
                     throw new Exception("Suppliers Cannot Be Assigned Taxes!");
 
                 dimensions = new List<string> { "Supplier" };
-                measures = new List<string> { "CostNet", "CostDuration" };
+                measures = new List<string> { amountMeasure, "CostDuration" };
             }
             var analyticResult = GetFilteredRecords(dimensions, measures, fromDate, toDate, recordFilterGroup);
             if (analyticResult != null  && analyticResult.Count() != 0)
@@ -97,7 +98,7 @@ namespace TOne.WhS.Jazz.BP.Activities
 
                 DimensionFields = listDimensions,
                 MeasureFields = listMeasures,
-                TableId = configManager.GetJazzTechnicalSettings(),
+                TableId = configManager.GetERPIntegrationAnalyticTableId(),
                 FromTime = fromDate,
                 ToTime = regulatedToDate,
                 FilterGroup = recordFilter
@@ -126,11 +127,11 @@ namespace TOne.WhS.Jazz.BP.Activities
                     MeasureValue durationValue = null;
                     MeasureValue taxValue = null;
 
-                    if (reportDefinition.Direction == ReportDefinitionDirectionEnum.In)
+                    if (reportDefinition.Direction == ReportDefinitionDirection.In)
                     {
                         netValue = GetMeasureValue(analyticRecord,amountMeasure) ;
                         durationValue = GetMeasureValue(analyticRecord, "SaleDuration");
-                        if (reportDefinition.TaxOption == TaxOptionEnum.TaxMeasure)
+                        if (reportDefinition.TaxOption == TaxOption.TaxMeasure)
                             taxValue = GetMeasureValue(analyticRecord, "STAX");
                     }
                     else
@@ -143,27 +144,28 @@ namespace TOne.WhS.Jazz.BP.Activities
                     var amount = Convert.ToDecimal(netValue.Value ?? 0.0);
                     var duration= Convert.ToDecimal(durationValue.Value ?? 0.0);
                     var amountType = reportDefinition.AmountType;
-                    var regulatedAmount=amount;
-                    decimal exchangeRate=1;
-                    CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
 
                     decimal splitRateValue = 0;
 
                     if (amountType.HasValue)
                     {
-                        if (reportDefinition.SplitRateValue.HasValue)
+                        if (!reportDefinition.SplitRateValue.HasValue)
                         {
-                            splitRateValue = reportDefinition.SplitRateValue.Value;
-                            if (reportDefinition.CurrencyId.HasValue)
-                                exchangeRate = currencyExchangeRateManager.ConvertValueToSystemCurrency(splitRateValue, reportDefinition.CurrencyId.Value, DateTime.Now);
+                            throw new NullReferenceException($"splitRateValue '{splitRateValue}'");
                         }
                         else
-                            throw new NullReferenceException($"splitRateValue '{splitRateValue}'");
+                        {
+                            splitRateValue = reportDefinition.SplitRateValue.Value;
+                            CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
 
-                        if (amountType.Value == AmountTypeEnum.FixedRate)
-                            regulatedAmount = duration * splitRateValue * exchangeRate;
-                        else
-                            regulatedAmount = (amount - duration * splitRateValue) * exchangeRate;
+                            if (reportDefinition.CurrencyId.HasValue)
+                                splitRateValue = currencyExchangeRateManager.ConvertValueToSystemCurrency(splitRateValue, reportDefinition.CurrencyId.Value, DateTime.Now);
+
+                            if (amountType.Value == AmountType.FixedRate)
+                                amount = duration * splitRateValue;
+                            else
+                                amount = (amount - duration * splitRateValue);
+                        }
                     }
 
                      
@@ -172,7 +174,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                         CarrierAccountId = Convert.ToInt32(carrierAccount.Value),
                         CarrierAccountName = carrierAccount.Name,
                         Duration = Decimal.Round(Convert.ToDecimal(durationValue.Value ?? 0.0),2),
-                        Amount = Decimal.Round(regulatedAmount, 3),
+                        Amount = Decimal.Round(amount, 3),
                         Tax = taxValue != null ? Decimal.Round(Convert.ToDecimal(taxValue.Value ?? 0.0),3) : 0
                     };
 
@@ -195,7 +197,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                             if (reportDefinition.Settings.RegionSettings != null && reportDefinition.Settings.RegionSettings.RegionOptions != null && reportDefinition.Settings.RegionSettings.RegionOptions.Count > 0)
                             {
                                 reportMarket.Regions = new List<JazzReportRegion>();
-                                TOne.WhS.Jazz.Business.RegionManager _regionManager = new TOne.WhS.Jazz.Business.RegionManager();
+                                TOne.WhS.Jazz.Business.RegionManager _regionManager = new Business.RegionManager();
                                 foreach (var region in reportDefinition.Settings.RegionSettings.RegionOptions)
                                 {
                                     reportMarket.Regions.Add(new JazzReportRegion
@@ -229,7 +231,7 @@ namespace TOne.WhS.Jazz.BP.Activities
 
                 if (reportDefinition.TaxOption.HasValue)
                 {
-                    if(reportDefinition.TaxOption.Value==TaxOptionEnum.TaxMeasure)
+                    if(reportDefinition.TaxOption.Value==TaxOption.TaxMeasure)
                         transactionsReports = transactionsReports.Concat(GetTransactionsReports(reportDefinition, reportsDataDictionary, transactionTypes, true)).ToList();
 
                     else
@@ -290,7 +292,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                     {
                         if (accountCode.Carriers != null && accountCode.Carriers.Carriers != null && accountCode.Carriers.Carriers.Count > 0)
                         {
-                            if (transactionType.TransactionScope == TransactionScopeEnum.Account)
+                            if (transactionType.TransactionScope == TransactionScope.Account)
                             {
                                 decimal amount = 0;
                                 decimal tax = 0;
@@ -321,7 +323,6 @@ namespace TOne.WhS.Jazz.BP.Activities
                                 }
                                 else
                                 {
-                                    if (!(reportDefinition.TaxOption == TaxOptionEnum.ZeroTax && transactionsReportsData.Count > 0))
                                     {
                                         var taxCode = taxCodeManger.GetTaxCode(reportDefinition.SwitchId, reportDefinition.Direction);
                                         taxCode.ThrowIfNull("taxCode", reportDefinition.JazzReportDefinitionId);
@@ -336,12 +337,12 @@ namespace TOne.WhS.Jazz.BP.Activities
                                     }
                                 }
                             }
-                            else if (transactionType.TransactionScope == TransactionScopeEnum.Region && !applyTax)
+                            else if (transactionType.TransactionScope == TransactionScope.Region && !applyTax)
                             {
-                                var transactionsReportsDataDictionary = new Dictionary<string, JazzTransactionsReportData>();
+                                var transactionReportsByRegionKey = new Dictionary<string, JazzTransactionsReportData>();
                                 MarketManager marketManager = new MarketManager();
                                 CustomerTypeManager customerTypeManager = new CustomerTypeManager();
-                                TOne.WhS.Jazz.Business.RegionManager regionManager = new TOne.WhS.Jazz.Business.RegionManager();
+                                TOne.WhS.Jazz.Business.RegionManager regionManager = new Business.RegionManager();
                                 ProductServiceManager productServiceManager = new ProductServiceManager();
                                 foreach (var carrier in accountCode.Carriers.Carriers)
                                 {
@@ -359,7 +360,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                                         JazzTransactionsReportData transactionData = null;
                                                         var regionUniqueKey = string.Concat(market.MarketId, "_", region.RegionId);
 
-                                                        if (!transactionsReportsDataDictionary.TryGetValue(regionUniqueKey, out transactionData))
+                                                        if (!transactionReportsByRegionKey.TryGetValue(regionUniqueKey, out transactionData))
                                                         {
                                                             var transactionMarket = marketManager.GetMarketById(market.MarketId);
                                                             var transactionCustomerType = customerTypeManager.GetCustomerTypeById(market.CustomerTypeId);
@@ -379,7 +380,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                                                 Debit = transactionType.IsCredit ? 0 : region.RegionValue
                                                             };
                                                             transactionsReportsData.Add(newTransactionReportData);
-                                                            transactionsReportsDataDictionary.Add(regionUniqueKey, newTransactionReportData);
+                                                            transactionReportsByRegionKey.Add(regionUniqueKey, newTransactionReportData);
                                                         }
                                                         else
                                                         {
@@ -402,7 +403,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                 var jazzTransactionsReport = new JazzTransactionsReport
                 {
                     ReportDefinitionId = reportDefinition.JazzReportDefinitionId,
-                    SheetName = string.Concat(reportDefinition.Name.Length>15? reportDefinition.Name.Substring(0,15):reportDefinition.Name, " ", applyTax ? "Tax" : transactionType.Name.Substring(0,3)),
+                    SheetName = string.Concat(reportDefinition.Name.Length>27? reportDefinition.Name.Substring(0,27):reportDefinition.Name, " ", applyTax ? "Tax" : transactionType.Name.Substring(0,3)),
                     TransactionTypeId = transactionType.ID,
                     IsTaxTransaction = false
                 };

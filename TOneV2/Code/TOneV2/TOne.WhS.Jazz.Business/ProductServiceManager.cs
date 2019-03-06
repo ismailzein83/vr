@@ -16,18 +16,7 @@ namespace TOne.WhS.Jazz.Business
 
         public List<ProductService> GetAllProductServices()
         {
-            var records = GetCachedProductServices();
-            List<ProductService> productServices = null;
-
-            if (records != null && records.Count > 0)
-            {
-                productServices = new List<ProductService>();
-                foreach (var record in records)
-                {
-                    productServices.Add(record.Value);
-                }
-            }
-            return productServices;
+            return GetCachedProductServices().Values.ToList();
         }
 
 

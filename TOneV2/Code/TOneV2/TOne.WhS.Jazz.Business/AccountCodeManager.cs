@@ -22,18 +22,7 @@ namespace TOne.WhS.Jazz.Business
 
         public List<AccountCode> GetAllAccountCodes()
         {
-            var records = GetCachedAccountCodes();
-            List<AccountCode> accountCodes = null;
-
-            if (records != null && records.Count > 0)
-            {
-                accountCodes = new List<AccountCode>();
-                foreach (var record in records)
-                {
-                    accountCodes.Add(record.Value);
-                }
-            }
-            return accountCodes;
+            return GetCachedAccountCodes().Values.ToList();
         }
 
         private Dictionary<Guid, AccountCode> GetCachedAccountCodes()

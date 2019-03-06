@@ -16,18 +16,7 @@ namespace TOne.WhS.Jazz.Business
 
         public List<CustomerType> GetAllCustomerTypes()
         {
-            var records = GetCachedCustomerTypes();
-            List<CustomerType> customerTypes = null;
-
-            if (records != null && records.Count > 0)
-            {
-                customerTypes = new List<CustomerType>();
-                foreach (var record in records)
-                {
-                    customerTypes.Add(record.Value);
-                }
-            }
-            return customerTypes;
+            return GetCachedCustomerTypes().Values.ToList();
         }
         public CustomerType GetCustomerTypeById(Guid customerTypeId)
         {

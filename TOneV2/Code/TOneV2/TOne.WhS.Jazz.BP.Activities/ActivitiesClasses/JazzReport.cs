@@ -10,9 +10,9 @@ namespace TOne.WhS.Jazz.BP.Activities
     public class JazzReport
     {
         public string ReportName { get; set; }
-        public ReportDefinitionDirectionEnum Direction { get; set; }
-        public AmountMeasureTypeEnum? AmountMeasureType { get; set; }
-        public TaxOptionEnum? TaxOption { get; set; }
+        public ReportDefinitionDirection Direction { get; set; }
+        public AmountMeasureType? AmountMeasureType { get; set; }
+        public TaxOption? TaxOption { get; set; }
         public List<JazzReportData> ReportData { get; set; }
     }
     public class JazzReportData

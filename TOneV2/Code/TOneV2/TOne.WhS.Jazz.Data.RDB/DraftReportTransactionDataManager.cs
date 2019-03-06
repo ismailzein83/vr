@@ -96,8 +96,8 @@ namespace TOne.WhS.Jazz.Data.RDB
                     row.Column(COL_ERPDraftReportID).Value(reportId);
                     row.Column(COL_TransactionCode).Value(data.TransactionCode);
                     row.Column(COL_TransactionDescription).Value(data.TransationDescription);
-                    row.Column(COL_Credit).Value(data.Credit.Value);
-                    row.Column(COL_Debit).Value(data.Debit.Value);
+                    row.Column(COL_Credit).Value(data.Credit);
+                    row.Column(COL_Debit).Value(data.Debit);
                 }
             }
              queryContext.ExecuteNonQuery();
@@ -120,14 +120,15 @@ namespace TOne.WhS.Jazz.Data.RDB
         {
             DraftReportDataManager draftReportDataManager = new DraftReportDataManager();
 
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
-            selectQuery.SelectColumns().Column(COL_TransactionCode, transactionCodeAlias);
-            selectQuery.SelectColumns().Column(COL_TransactionDescription, transactionDescriptionAlias);
-            selectQuery.SelectColumns().Column(COL_Credit, creditAlias);
-            selectQuery.SelectColumns().Column(COL_Debit, debitAlias);
+            selectQuery.From(TABLE_NAME, tableAlias);
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_TransactionCode, transactionCodeAlias);
+            selectColumns.Column(COL_TransactionDescription, transactionDescriptionAlias);
+            selectColumns.Column(COL_Credit, creditAlias);
+            selectColumns.Column(COL_Debit, debitAlias);
 
             var joinContext = selectQuery.Join();
-            draftReportDataManager.AddJoinToDraftReport(joinContext, TABLE_ALIAS, "draftReport", COL_ERPDraftReportID);
+            draftReportDataManager.AddJoinToDraftReport(joinContext, tableAlias, "draftReport", COL_ERPDraftReportID);
 
             var whereCondition = selectQuery.Where();
             draftReportDataManager.AddProcessInstanceIdCondition(whereCondition, "draftReport", processInstanceId);

@@ -11,7 +11,7 @@ namespace TOne.WhS.Jazz.Entities
         public int SwitchId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
-        public ReportDefinitionDirectionEnum Direction { get; set; }
+        public ReportDefinitionDirection Direction { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime LastModifiedTime { get; set; }
         public int LastModifiedBy { get; set; }

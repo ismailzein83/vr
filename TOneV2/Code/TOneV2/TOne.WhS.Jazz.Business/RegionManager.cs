@@ -16,19 +16,8 @@ namespace TOne.WhS.Jazz.Business
 
         public List<Region> GetAllRegions()
         {
-            var records = GetCachedRegions();
-            List<Region> regions = null;
-
-            if (records != null && records.Count > 0)
-            {
-                regions = new List<Region>();
-                foreach (var record in records)
-                {
-                    regions.Add(record.Value);
-                }
-            }
-            return regions;
-        } 
+            return GetCachedRegions().Values.ToList();
+        }
 
 
         private Dictionary<Guid, Region> GetCachedRegions()

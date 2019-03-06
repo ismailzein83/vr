@@ -28,7 +28,6 @@ namespace TOne.WhS.Jazz.BP.Activities
                         outReportDefintions.Add(reportDefintion);
                 }
             }
-            outReportDefintions = outReportDefintions.OrderBy(x => x.Name).ToList();
             RepportDefinitions.Set(context, outReportDefintions);
         }
     }

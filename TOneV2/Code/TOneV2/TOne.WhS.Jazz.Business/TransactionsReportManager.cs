@@ -28,7 +28,10 @@ namespace TOne.WhS.Jazz.Business
             var transactionsReports = draftReportDataManager.GetTransactionsReports(processInstanceId);
             if (transactionsReports != null && transactionsReports.Count > 0)
             {
-               transactionsReports= transactionsReports.OrderBy(x => x.SheetName).ToList();
+                JazzReportDefinitionManager jazzReportDefinitionManager = new JazzReportDefinitionManager();
+                var orderedReports = transactionsReports.OrderBy(x => jazzReportDefinitionManager.GetJazzReportDefinitionName(x.ReportDefinitionId));
+                transactionsReports = orderedReports.OrderBy(x => x.SheetName).ToList();
+
 
                 var reportsIds = transactionsReports.MapRecords(x=>x.ReportId).ToList();
                 var transactionsReportsDictionary = transactionsReports.ToDictionary(x => x.ReportId, x => x);
@@ -50,12 +53,12 @@ namespace TOne.WhS.Jazz.Business
                             {
                                 var excelTable = excelSheet.CreateTable(1, 0);
 
-                                VRExcelTableRowCellStyle cellStyle1 = new VRExcelTableRowCellStyle
+                                VRExcelTableRowCellStyle numberCellStyle = new VRExcelTableRowCellStyle
                                 {
                                     VerticalAlignment = VRExcelContainerVerticalAlignment.Center,
-                                    HorizontalAlignment = VRExcelContainerHorizontalAlignment.Center
+                                    HorizontalAlignment = VRExcelContainerHorizontalAlignment.Right
                                 };
-                                VRExcelTableRowCellStyle cellStyle2 = new VRExcelTableRowCellStyle
+                                VRExcelTableRowCellStyle textCellStyle = new VRExcelTableRowCellStyle
                                 {
                                     VerticalAlignment = VRExcelContainerVerticalAlignment.Center
                                 };
@@ -73,17 +76,17 @@ namespace TOne.WhS.Jazz.Business
                                 excelSheet.AddCell(titleCell);
 
                                 var headerRow = excelTable.CreateHeaderRow();
-                                CreateCell("Transaction Code", headerRow, cellStyle2);
-                                CreateCell("Transaction Description", headerRow, cellStyle2);
-                                CreateCell("Credit", headerRow, cellStyle2);
-                                CreateCell("Debit", headerRow, cellStyle2);
+                                CreateCell("Transaction Code", headerRow, textCellStyle);
+                                CreateCell("Transaction Description", headerRow, textCellStyle);
+                                CreateCell("Credit", headerRow, textCellStyle);
+                                CreateCell("Debit", headerRow, textCellStyle);
                                 foreach (var transactionReportData in transactionsReportData.Value)
                                 {
                                     var row = excelTable.CreateDataRow();
-                                    CreateCell(transactionReportData.TransactionCode, row, cellStyle2);
-                                    CreateCell(transactionReportData.TransationDescription, row, cellStyle2);
-                                    CreateCell((transactionReportData.Credit.HasValue?Decimal.Round(transactionReportData.Credit.Value,3): transactionReportData.Credit), row, cellStyle2);
-                                    CreateCell((transactionReportData.Debit.HasValue ? Decimal.Round(transactionReportData.Debit.Value, 3) : transactionReportData.Debit), row, cellStyle2);
+                                    CreateCell(transactionReportData.TransactionCode, row, textCellStyle);
+                                    CreateCell(transactionReportData.TransationDescription, row, textCellStyle);
+                                    CreateCell(transactionReportData.Credit, row, numberCellStyle);
+                                    CreateCell(transactionReportData.Debit, row, numberCellStyle);
                                 }
                             }
                         }

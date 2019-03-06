@@ -50,7 +50,7 @@ namespace TOne.WhS.Jazz.Data.RDB
 
         #region Public Methods
 
-        public bool Insert(JazzTransactionsReport transactionsReport,long processInstanceId, out long insertedId)
+        public void Insert(JazzTransactionsReport transactionsReport,long processInstanceId, out long insertedId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
@@ -64,13 +64,11 @@ namespace TOne.WhS.Jazz.Data.RDB
             insertQuery.Column(COL_IsTaxTransaction).Value(transactionsReport.IsTaxTransaction);
 
             var insertedID = queryContext.ExecuteScalar().NullableLongValue;
+
             if (insertedID.HasValue)
-            {
                 insertedId = insertedID.Value;
-                return true;
-            }
-            insertedId = -1;
-            return false;
+            else
+                insertedId = -1;
         }
 
         public List<ERPDraftReport> GetTransactionsReports(long processInstanceId)

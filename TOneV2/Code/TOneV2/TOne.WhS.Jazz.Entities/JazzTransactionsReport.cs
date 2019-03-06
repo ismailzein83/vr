@@ -18,8 +18,8 @@ namespace TOne.WhS.Jazz.Entities
     {
         public string TransationDescription { get; set; }
         public string TransactionCode { get; set; }
-        public decimal? Credit { get; set; }
-        public decimal? Debit { get; set; }
+        public decimal Credit { get; set; }
+        public decimal Debit { get; set; }
     }
 
 

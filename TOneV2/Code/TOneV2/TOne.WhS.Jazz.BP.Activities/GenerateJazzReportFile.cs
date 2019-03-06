@@ -23,6 +23,7 @@ namespace TOne.WhS.Jazz.BP.Activities
             var excelFile = new VRExcelFile();
             if (jazzReports != null && jazzReports.Count > 0)
             {
+                jazzReports= jazzReports.OrderBy(x => x.ReportName).ToList();
                 foreach(var report in jazzReports)
                 {
                     var excelSheet = excelFile.CreateSheet();
@@ -30,18 +31,17 @@ namespace TOne.WhS.Jazz.BP.Activities
                     var excelTable = excelSheet.CreateTable(1,0);
 
                     excelTable.EnableRowVerticalMerge();
-                    excelTable.EnableMergeHeaders();
 
-                    VRExcelTableRowCellStyle cellStyle1 = new VRExcelTableRowCellStyle
+                    VRExcelTableRowCellStyle numberCellStyle = new VRExcelTableRowCellStyle
                     {
                         VerticalAlignment=VRExcelContainerVerticalAlignment.Center,
-                        HorizontalAlignment=VRExcelContainerHorizontalAlignment.Center
+                        HorizontalAlignment=VRExcelContainerHorizontalAlignment.Right
                     };
-                    VRExcelTableRowCellStyle cellStyle2 = new VRExcelTableRowCellStyle
+                    VRExcelTableRowCellStyle textCellStyle = new VRExcelTableRowCellStyle
                     {
                         VerticalAlignment = VRExcelContainerVerticalAlignment.Center
-                    };
-                    VRExcelCell titleCell = new VRExcelCell
+                    }; 
+                     VRExcelCell titleCell = new VRExcelCell
                     {
                         Value = report.ReportName,
                         RowIndex = 0,
@@ -56,30 +56,30 @@ namespace TOne.WhS.Jazz.BP.Activities
 
                     var headerRow = excelTable.CreateHeaderRow();
                     headerRow.CreateStyle();
-                    if (report.Direction.Equals(ReportDefinitionDirectionEnum.In))
+                    if (report.Direction==ReportDefinitionDirection.In)
                     {
-                        CreateCell("Customer", headerRow, cellStyle1);
+                        CreateCell("Customer", headerRow, textCellStyle);
                     }
                     else
                     {
-                        CreateCell("Supplier", headerRow, cellStyle1);
+                        CreateCell("Supplier", headerRow, textCellStyle);
                     }
 
-                    CreateCell("Duration", headerRow, cellStyle1);
+                    CreateCell("Duration", headerRow, textCellStyle);
                     
-                        CreateCell("Amount", headerRow, cellStyle1);
+                        CreateCell("Amount", headerRow, textCellStyle);
                     
 
                     if (report.TaxOption.HasValue)
                     {
-                        CreateCell("STAX", headerRow, cellStyle1);
+                        CreateCell("STAX", headerRow, textCellStyle);
                     }
 
-                    CreateCell("Market", headerRow, cellStyle1);
-                    CreateCell("Region", headerRow, cellStyle1);
+                    CreateCell("Market", headerRow, textCellStyle);
+                    CreateCell("Region", headerRow, textCellStyle);
 
                    
-                        CreateCell("Region Value", headerRow, cellStyle1);
+                        CreateCell("Region Value", headerRow, textCellStyle);
                    
               
                     if (report.ReportData!=null && report.ReportData.Count > 0)
@@ -95,17 +95,17 @@ namespace TOne.WhS.Jazz.BP.Activities
                                         foreach(var region in market.Regions)
                                         {
                                             var row = excelTable.CreateDataRow();
-                                            CreateCell(string.Format("{0}", reportData.CarrierAccountName), row, cellStyle1);
-                                            CreateCell(reportData.Duration, row, cellStyle1);
-                                            CreateCell(reportData.Amount, row, cellStyle1);
+                                            CreateCell(string.Format("{0}", reportData.CarrierAccountName), row, textCellStyle);
+                                            CreateCell(reportData.Duration, row, numberCellStyle);
+                                            CreateCell(reportData.Amount, row, numberCellStyle);
                                            
 
                                             if (report.TaxOption.HasValue)
-                                                CreateCell(reportData.Tax, row, cellStyle1);
+                                                CreateCell(reportData.Tax, row, numberCellStyle);
 
-                                            CreateCell(string.Format("{0} {1}%",market.MarketName, market.Percentage), row, cellStyle1);
-                                            CreateCell(string.Format("{0} {1}%", region.RegionName, region.Percentage), row, cellStyle1);
-                                            CreateCell(region.RegionValue, row, cellStyle2);
+                                            CreateCell(string.Format("{0} {1}%",market.MarketName, market.Percentage), row, textCellStyle);
+                                            CreateCell(string.Format("{0} {1}%", region.RegionName, region.Percentage), row, textCellStyle);
+                                            CreateCell(region.RegionValue, row, numberCellStyle);
                                         }
                                     }
                                 }
