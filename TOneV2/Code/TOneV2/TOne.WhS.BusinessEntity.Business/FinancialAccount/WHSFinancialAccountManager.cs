@@ -1503,6 +1503,33 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
+		//public CompanySetting GetCompanySettings(int financialAccountId) {
+		//	var financialAccount = GetFinancialAccount(financialAccountId);
+		//	financialAccount.ThrowIfNull("financialAccount", financialAccountId);
+		//	if (financialAccount.CarrierAccountId.HasValue)
+		//	{
+		//		return s_carrierAccountManager.GetCompanySetting(financialAccount.CarrierAccountId.Value);
+		//	}
+		//	else
+		//	{
+		//		return s_carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
+		//	}
+		//}
+
+		//public CarrierProfile GetCarrierProfile(int financialAccountId)
+		//{
+		//	var financialAccount = GetFinancialAccount(financialAccountId);
+		//	financialAccount.ThrowIfNull("financialAccount", financialAccountId);
+		//	if (financialAccount.CarrierAccountId.HasValue)
+		//	{
+		//		return s_carrierProfileManager.GetCarrierProfile(financialAccount.CarrierAccountId.Value);
+		//	}
+		//	else
+		//	{
+		//		return s_carrierProfileManager.GetCarrierProfile(financialAccount.CarrierProfileId.Value);
+		//	}
+		//}
+
         #endregion
     }
 }
