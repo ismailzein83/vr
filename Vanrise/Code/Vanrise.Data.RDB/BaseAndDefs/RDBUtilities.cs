@@ -44,6 +44,8 @@ namespace Vanrise.Data.RDB
                     {
                         foreach (var methodInfo in typeof(IRDBDataReader).GetMethods())
                         {
+                            if (!methodInfo.Name.StartsWith("Get"))
+                                continue;
                             string existingMethodName;
                             if (!s_methodNamesByType.TryGetValue(methodInfo.ReturnType, out existingMethodName))
                             {
