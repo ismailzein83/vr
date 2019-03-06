@@ -220,14 +220,14 @@ as (select * from (values
 ('NP_IVSwitch/RouteTableRoute/GetFilteredRouteTableRoutes','NP_IVSwitch_RouteTable: View'),
 ('NP_IVSwitch/RouteTable/GetFilteredRouteTables','NP_IVSwitch_RouteTable: View'),
 ('NP_IVSwitch/TranslationRule/DeleteTranslationRule','NP_IVSwitch_TranslationRule: Delete'),
-(1203,'NP_IVSwitch/EndPoint/GetFilteredEndPoints','NP_IVSwitch_EndPoint: View'),
-(1206,'NP_IVSwitch/EndPoint/AddEndPoint','NP_IVSwitch_EndPoint: Add'),
-(1207,'NP_IVSwitch/EndPoint/UpdateEndPoint','NP_IVSwitch_EndPoint: Edit'),
-(1208,'NP_IVSwitch/EndPoint/DeleteEndPoint','NP_IVSwitch_EndPoint: Delete'),
-(1209,'NP_IVSwitch/Route/GetFilteredRoutes','NP_IVSwitch_Route: View'),
-(1210,'NP_IVSwitch/Route/AddRoute','NP_IVSwitch_Route: Add'),
-(1211,'NP_IVSwitch/Route/UpdateRoute','NP_IVSwitch_Route: Edit'),
-(1212,'NP_IVSwitch/Route/DeleteRoute','NP_IVSwitch_Route: Delete')
+('NP_IVSwitch/EndPoint/GetFilteredEndPoints','NP_IVSwitch_EndPoint: View'),
+('NP_IVSwitch/EndPoint/AddEndPoint','NP_IVSwitch_EndPoint: Add'),
+('NP_IVSwitch/EndPoint/UpdateEndPoint','NP_IVSwitch_EndPoint: Edit'),
+('NP_IVSwitch/EndPoint/DeleteEndPoint','NP_IVSwitch_EndPoint: Delete'),
+('NP_IVSwitch/Route/GetFilteredRoutes','NP_IVSwitch_Route: View'),
+('NP_IVSwitch/Route/AddRoute','NP_IVSwitch_Route: Add'),
+('NP_IVSwitch/Route/UpdateRoute','NP_IVSwitch_Route: Edit'),
+('NP_IVSwitch/Route/DeleteRoute','NP_IVSwitch_Route: Delete')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
