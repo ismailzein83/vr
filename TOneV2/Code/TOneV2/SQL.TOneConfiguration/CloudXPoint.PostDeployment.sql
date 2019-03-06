@@ -162,13 +162,14 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('9B4C0061-8610-42B0-B522-BCCFD8314B75','Switch Mapping','Switch Mapping','#/view/NP_IVSwitch/Views/SwitchMapping/SwitchMappingManagement'													,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','NP_IVSwitch/SwitchMapping/GetFilteredSwitchMappings',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',55),
-('37714ED2-FCA7-4C9C-A75B-720424B947AF','CLI Groups','CLI Groups',null																														,'148EC616-4E67-4343-A3D4-5FA535238249',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"94820cf8-c9a3-40a9-b90e-ba25a2a96d73"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',10),
-('9F98A163-C563-4836-B53D-212DFF6D6AF5','Translation Rules','Translation Rules','#/view/NP_IVSwitch/Views/TranslationRule/TranslationRuleManagement'										,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/TranslationRule/GetFilteredTranslationRules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
-('979EA3A2-EF3C-4227-802E-4C501280BEDA','Codec Profiles','Codec Profiles','#/view/NP_IVSwitch/Views/CodecProfile/CodecProfileManagement'													,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/CodecProfile/GetFilteredCodecProfiles',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
-('C028E089-4353-4408-BE19-5BB751FFDD73','Firewalls','Firewalls','#/view/NP_IVSwitch/Views/Firewall/FirewallManagement'																		,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/Firewall/GetFilteredFirewalls',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',25),
-('C8B12E9A-2B11-4B60-BBE2-2023330B02E2','Route Table','Route Table','#/viewwithparams/NP_IVSwitch/Views/RouteTable/RouteTableManagement/{"viewId":"c8b12e9a-2b11-4b60-bbe2-2023330b02e2"}'	,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/RouteTable/GetFilteredRouteTables',null,null,'{"$type":"NP.IVSwitch.Entities.RouteTableViewSettings, NP.IVSwitch.Entities","Types":[0,1,2]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',30),
-('AA625479-74DE-4092-931F-D640E4BC2921','Switch Configuration','Switch Configuration','#/viewwithparams/WhS_BusinessEntity/Views/Switch/SingleSwitchManagement/{"switchId":"1"}'			,'148EC616-4E67-4343-A3D4-5FA535238249','WhS_BE/Switch/GetFilteredSwitches & WhS_BE/Switch/UpdateSwitch',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',33),
-('8098e7bb-55ed-4c3b-be5e-72ad74cb62c4','Switch Dashboard','Switch Dashboard','#/view/NP_IVSwitch/Views/SwitchDashboard/SwitchDashboard'													,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/SwitchDashboard/GetSwitchDashboardManagerResult',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',35)
+
+('8098e7bb-55ed-4c3b-be5e-72ad74cb62c4','Switch Dashboard','Switch Dashboard','#/view/NP_IVSwitch/Views/SwitchDashboard/SwitchDashboard'													,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/SwitchDashboard/GetSwitchDashboardManagerResult',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3),
+('AA625479-74DE-4092-931F-D640E4BC2921','Switch Configuration','Switch Configuration','#/viewwithparams/WhS_BusinessEntity/Views/Switch/SingleSwitchManagement/{"switchId":"1"}'			,'148EC616-4E67-4343-A3D4-5FA535238249','WhS_BE/Switch/GetFilteredSwitches & WhS_BE/Switch/UpdateSwitch',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
+('C8B12E9A-2B11-4B60-BBE2-2023330B02E2','Route Table','Route Table','#/viewwithparams/NP_IVSwitch/Views/RouteTable/RouteTableManagement/{"viewId":"c8b12e9a-2b11-4b60-bbe2-2023330b02e2"}'	,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/RouteTable/GetFilteredRouteTables',null,null,'{"$type":"NP.IVSwitch.Entities.RouteTableViewSettings, NP.IVSwitch.Entities","Types":[0,1,2]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',7),
+('37714ED2-FCA7-4C9C-A75B-720424B947AF','CLI Groups','CLI Groups',null																														,'148EC616-4E67-4343-A3D4-5FA535238249',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"94820cf8-c9a3-40a9-b90e-ba25a2a96d73"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',9),
+('9F98A163-C563-4836-B53D-212DFF6D6AF5','Translation Rules','Translation Rules','#/view/NP_IVSwitch/Views/TranslationRule/TranslationRuleManagement'										,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/TranslationRule/GetFilteredTranslationRules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
+('979EA3A2-EF3C-4227-802E-4C501280BEDA','Codec Profiles','Codec Profiles','#/view/NP_IVSwitch/Views/CodecProfile/CodecProfileManagement'													,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/CodecProfile/GetFilteredCodecProfiles',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',12),
+('C028E089-4353-4408-BE19-5BB751FFDD73','Firewalls','Firewalls','#/view/NP_IVSwitch/Views/Firewall/FirewallManagement'																		,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/Firewall/GetFilteredFirewalls',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',14)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -182,6 +183,20 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 --------------------------------------------------------------------------------------------------------------
 end
+
+---------------move views related to switch manager from administration/switches to switch manager module
+UPDATE	[sec].[View] 
+SET		[Module] = '148EC616-4E67-4343-A3D4-5FA535238249'
+WHERE	[ID] IN (	'11603625-2CF3-436D-9FAA-B5D04CB42F09',--'Switch Connectivity'
+				   '3F7327B6-0742-4C6D-8B2C-BE9B5D4DECD4',--'Switch Release Cause'
+				   'a01100f6-e5ca-43f2-8944-d78bd95cb4ee')--,'Point Of Interconnects'
+
+UPDATE	[sec].[BusinessEntity]
+SET		[ModuleId] = '475F9CED-6D87-4B16-B9D8-ED06F60F3465'
+WHERE	[ID] IN (	'18DAE80F-E3FE-4E4B-A92E-1ED8FDC28AB6',--'WhS_BE_Switch'
+					'E3CF3CB5-0F44-49B7-87E6-D05B3DE54B8D',--'WhS_BE_SwitchReleaseCode'
+					'DBCC03FB-EEEE-4C96-962B-5E68CF019771',--'WhS_BE_SwitchConnectivity'
+					'20688FC8-12A8-49E7-B68F-7ABA0BF21CD6')--,'WHS_BE_POI','Point Of Interconnects'	
 
 --[sec].[SystemAction]------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -248,14 +263,14 @@ set nocount on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('BA7E48EB-E7CB-4C32-AE2D-47C9FCCBC7B6','NP_IVSwitch_CodecProfile','Codec Profile'			,'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',0,'["View", "Add", "Edit"]'),
-('D2D07DBA-66EA-4B68-9F00-EBD66B00A740','NP_IVSwitch_TranslationRule','Translation Rule'	,'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',0,'["View", "Add", "Edit","Delete"]'),
-('5437DC96-9CB1-44B2-B680-B1A51D6CA876','NP_IVSwitch_Firewall','Firewall'					,'61451603-E7B9-40C6-AE27-6CBA974E1B3B',0,'["View", "Add", "Edit"]'),
+('BA7E48EB-E7CB-4C32-AE2D-47C9FCCBC7B6','NP_IVSwitch_CodecProfile','Codec Profile'			,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View", "Add", "Edit"]'),
+('D2D07DBA-66EA-4B68-9F00-EBD66B00A740','NP_IVSwitch_TranslationRule','Translation Rule'	,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View", "Add", "Edit","Delete"]'),
+('5437DC96-9CB1-44B2-B680-B1A51D6CA876','NP_IVSwitch_Firewall','Firewall'					,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View", "Add", "Edit"]'),
 ('4145E135-96B2-412D-9F4E-D3CEE79741F5','NP_IVSwitch_RouteTable','Route Table'				,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]'),
-('F88A6489-C43B-4E7E-B910-46B62E040EC5','NP_IVSwitch_Route','Route','475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]'),
-('19FC9866-775E-4114-8D00-6FF123E67E78','NP_IVSwitch_EndPoint','End Point','475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]'),
-('d84c7f2a-39c5-41b9-aff6-bade7a56e8e7','NP_IVSwitch_CLIGroup','CLIGroup','475f9ced-6d87-4b16-b9d8-ed06f60f3465',0,'["View","Add","Edit","Delete"]'),
-('8858303c-e9ed-4709-a050-6b82c04780a0','NP_IVSwitch_SwitchDashboard','Switch Dashboard','475f9ced-6d87-4b16-b9d8-ed06f60f3465',0,'["View"]')
+('F88A6489-C43B-4E7E-B910-46B62E040EC5','NP_IVSwitch_Route','Route'							,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]'),
+('19FC9866-775E-4114-8D00-6FF123E67E78','NP_IVSwitch_EndPoint','End Point'					,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]'),
+('d84c7f2a-39c5-41b9-aff6-bade7a56e8e7','NP_IVSwitch_CLIGroup','CLIGroup'					,'475f9ced-6d87-4b16-b9d8-ed06f60f3465',0,'["View","Add","Edit","Delete"]'),
+('8858303c-e9ed-4709-a050-6b82c04780a0','NP_IVSwitch_SwitchDashboard','Switch Dashboard'	,'475f9ced-6d87-4b16-b9d8-ed06f60f3465',0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
