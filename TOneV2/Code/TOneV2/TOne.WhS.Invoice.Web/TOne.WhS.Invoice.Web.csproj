@@ -127,8 +127,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
     </Reference>
@@ -284,6 +290,9 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultCustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceReport.rdlc" />
+    <!--<EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>-->
     <EmbeddedResource Include="WhS_Invoice\Reports\SupplierCompareInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
