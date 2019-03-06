@@ -83,6 +83,7 @@
     <Compile Include="AccountParts\AccountPartInterconnectSettingDefinition.cs" />
     <Compile Include="AccountParts\AccountPartInterconnectSetting.cs" />
     <Compile Include="AssignedFinancialAccountToInvoiceSettingFilter.cs" />
+    <Compile Include="InterconnectInvoiceComparisonManager.cs" />
     <Compile Include="InterconnectInvoiceGenerator.cs" />
     <Compile Include="InterconnectInvoiceSettings.cs" />
     <Compile Include="InterconnectPartnerSettings.cs" />

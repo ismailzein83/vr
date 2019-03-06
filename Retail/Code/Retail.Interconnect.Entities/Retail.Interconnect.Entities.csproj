@@ -43,11 +43,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.ExcelConversion.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InterconnectInvoiceDetails.cs" />
     <Compile Include="InterconnectInvoiceItemDetails.cs" />
     <Compile Include="InterconnectSMSInvoiceItemDetails.cs" />
+    <Compile Include="InvoiceComparison\InvoiceComparisonSMSInput.cs" />
+    <Compile Include="InvoiceComparison\InvoiceComparisonSMSResult.cs" />
+    <Compile Include="InvoiceComparison\InvoiceComparisonTemplate.cs" />
+    <Compile Include="InvoiceComparison\InvoiceComparisonVoiceInput.cs" />
+    <Compile Include="InvoiceComparison\InvoiceComparisonVoiceResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
