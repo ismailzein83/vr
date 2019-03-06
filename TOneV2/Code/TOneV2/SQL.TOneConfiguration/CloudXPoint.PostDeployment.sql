@@ -169,7 +169,7 @@ as (select * from (values
 ('979EA3A2-EF3C-4227-802E-4C501280BEDA','Codec Profiles','Codec Profiles','#/view/NP_IVSwitch/Views/CodecProfile/CodecProfileManagement'													,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/CodecProfile/GetFilteredCodecProfiles',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
 ('C028E089-4353-4408-BE19-5BB751FFDD73','Firewalls','Firewalls','#/view/NP_IVSwitch/Views/Firewall/FirewallManagement'																		,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/Firewall/GetFilteredFirewalls',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',25),
 ('C8B12E9A-2B11-4B60-BBE2-2023330B02E2','Route Table','Route Table','#/viewwithparams/NP_IVSwitch/Views/RouteTable/RouteTableManagement/{"viewId":"c8b12e9a-2b11-4b60-bbe2-2023330b02e2"}'	,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/RouteTable/GetFilteredRouteTables',null,null,'{"$type":"NP.IVSwitch.Entities.RouteTableViewSettings, NP.IVSwitch.Entities","Types":[0,1,2]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',30),
-('8098e7bb-55ed-4c3b-be5e-72ad74cb62c4','Switch Dashboard','Switch Dashboard','#/view/NP_IVSwitch/Views/SwitchDashboard/SwitchDashboard'													,'148EC616-4E67-4343-A3D4-5FA535238249',null,null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',35)
+('8098e7bb-55ed-4c3b-be5e-72ad74cb62c4','Switch Dashboard','Switch Dashboard','#/view/NP_IVSwitch/Views/SwitchDashboard/SwitchDashboard'													,'148EC616-4E67-4343-A3D4-5FA535238249','NP_IVSwitch/SwitchDashboard/GetSwitchDashboardManagerResult',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',35)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -227,7 +227,8 @@ as (select * from (values
 ('NP_IVSwitch/Route/GetFilteredRoutes','NP_IVSwitch_Route: View'),
 ('NP_IVSwitch/Route/AddRoute','NP_IVSwitch_Route: Add'),
 ('NP_IVSwitch/Route/UpdateRoute','NP_IVSwitch_Route: Edit'),
-('NP_IVSwitch/Route/DeleteRoute','NP_IVSwitch_Route: Delete')
+('NP_IVSwitch/Route/DeleteRoute','NP_IVSwitch_Route: Delete'),
+('NP_IVSwitch/SwitchDashboard/GetSwitchDashboardManagerResult','NP_IVSwitch_SwitchDashboard:View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -254,7 +255,8 @@ as (select * from (values
 ('4145E135-96B2-412D-9F4E-D3CEE79741F5','NP_IVSwitch_RouteTable','Route Table'				,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]'),
 ('F88A6489-C43B-4E7E-B910-46B62E040EC5','NP_IVSwitch_Route','Route','475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]'),
 ('19FC9866-775E-4114-8D00-6FF123E67E78','NP_IVSwitch_EndPoint','End Point','475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]'),
-('d84c7f2a-39c5-41b9-aff6-bade7a56e8e7','NP_IVSwitch_CLIGroup','CLIGroup','475f9ced-6d87-4b16-b9d8-ed06f60f3465',0,'["View","Add","Edit","Delete"]')
+('d84c7f2a-39c5-41b9-aff6-bade7a56e8e7','NP_IVSwitch_CLIGroup','CLIGroup','475f9ced-6d87-4b16-b9d8-ed06f60f3465',0,'["View","Add","Edit","Delete"]'),
+('8858303c-e9ed-4709-a050-6b82c04780a0','NP_IVSwitch_SwitchDashboard','Switch Dashboard','475f9ced-6d87-4b16-b9d8-ed06f60f3465',0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
