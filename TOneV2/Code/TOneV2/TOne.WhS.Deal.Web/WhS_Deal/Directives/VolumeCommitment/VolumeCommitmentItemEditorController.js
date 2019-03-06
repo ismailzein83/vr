@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentItemEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum'];
+    VolumeCommitmentItemEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum','WhS_Deal_DealBillingTypeEnum'];
 
-    function VolumeCommitmentItemEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum) {
+    function VolumeCommitmentItemEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, WhS_Deal_DealBillingTypeEnum) {
         $scope.scopeModel = {};
         var volumeCommitmentItemEntity;
         var context;
@@ -19,9 +19,11 @@
         var carrierAccountId;
         var zoneDirectiveAPI;
 
-        var volumeCommitmentType;
+        var volumeCommitmentType; 
         var dealBED;
 
+        var billingType;
+         
         loadParameters();
         defineScope();
         load();
@@ -32,11 +34,12 @@
                 volumeCommitmentItemEntity = parametersObj.volumeCommitmentItemEntity;
                 context = parametersObj.context;
                 carrierAccountId = parametersObj.carrierAccountId;
+                billingType = parametersObj.billingType;
                 if (context != undefined)
                     $scope.scopeModel.zoneSelector = context.getZoneSelector();
             }
             isEditMode = (volumeCommitmentItemEntity != undefined);
-        }
+        } 
 
         function defineScope() {
 
@@ -46,9 +49,9 @@
                     var obj = bulidTierObject(volumeCommitmentItemTier, $scope.scopeModel.tiers.length);
                     $scope.scopeModel.tiers.push(obj);
                 };
-                WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItemTier(onVolumeCommitmentItemTierAdded, $scope.scopeModel.tiers, getContext());
+                WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItemTier(onVolumeCommitmentItemTierAdded, $scope.scopeModel.tiers, getContext(), billingType);
             };
-
+            $scope.scopeModel.isEstimatedVolume = billingType != undefined ? billingType.value == WhS_Deal_DealBillingTypeEnum.EstimatedVolume.value:false;
             $scope.scopeModel.isValid = function () {
                 if ($scope.scopeModel.tiers.length == 0)
                     return "You should add at least one tier.";
@@ -181,7 +184,6 @@
             promises.push(loadCountryPromiseDeferred.promise);
 
             var payload = {};
-
             if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryIds != undefined) {
                 payload.selectedIds = volumeCommitmentItemEntity != undefined ? volumeCommitmentItemEntity.CountryIds : undefined;
                 countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -243,6 +245,7 @@
         function loadStaticData() {
             if (volumeCommitmentItemEntity != undefined) {
                 $scope.scopeModel.name = volumeCommitmentItemEntity.Name;
+               
             }
         }
 
@@ -274,7 +277,8 @@
                 Name: $scope.scopeModel.name,
                 SaleZones: saleZones,
                 CountryIds: countryDirectiveApi.getSelectedIds(),
-                Tiers: tiers
+                Tiers: tiers,
+              
             };
         }
 
@@ -332,7 +336,7 @@
                     $scope.scopeModel.tiers[nextindex] = bulidTierObject(nextItem, nextindex);
                 }
             };
-            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTier(tierEntity, onVolumeCommitmentItemTierUpdated, $scope.scopeModel.tiers, getContext());
+            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTier(tierEntity, onVolumeCommitmentItemTierUpdated, $scope.scopeModel.tiers, getContext(), billingType);
         };
 
         function findExceptionZoneIds(exrates) {

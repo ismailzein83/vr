@@ -18,7 +18,7 @@
                 <vr-tab header="'Tiers'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-button type="Add" data-onclick="scopeModel.addTier" standalone vr-disabled="scopeModel.disabelTierAdd() || scopeModel.selectedZones.length == 0"></vr-button>
+                            <vr-button type="Add" data-onclick="scopeModel.addTier" standalone vr-disabled="scopeModel.disabelTierAdd() || scopeModel.selectedZones.length == 0 || (scopeModel.isEstimatedVolume==true && scopeModel.tiers.length >= 2)"></vr-button>
                             <vr-validator validate="scopeModel.isValid()">
                                 <vr-datagrid datasource="scopeModel.tiers" norowhighlightonclick="true" menuactions="scopeModel.tierGridMenuActions" maxheight="300px"
                                              on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeTier" hidegridmenu>

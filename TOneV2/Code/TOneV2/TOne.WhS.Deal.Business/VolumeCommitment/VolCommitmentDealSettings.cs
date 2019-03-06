@@ -16,6 +16,11 @@ namespace TOne.WhS.Deal.Business
         Supplier = 1,
         Customer = 2
     }
+    public enum DealBillingType
+    {
+        byTraffic = 0,
+        EstimatedVolume = 1,
+    }
     public class VolCommitmentDealSettings : DealSettings
     {
         public static Guid VolCommitmentDealSettingsConfigId = new Guid("B606E88C-4AE5-4BF0-BCE5-10D456A092F5");
@@ -30,6 +35,7 @@ namespace TOne.WhS.Deal.Business
         public int LastGroupNumber { get; set; }
         public int CurrencyId { get; set; }
         public VolCommitmentTimeZone VolCommitmentTimeZone { get; set; }
+        public DealBillingType BillingType { get; set; }
         public override DateTime? RealEED
         {
             get
@@ -135,6 +141,35 @@ namespace TOne.WhS.Deal.Business
                     validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following countries {0} are not sold at {1}", string.Join(",", invalidCountryNames), RealBED));
                 }
             }
+            if(Items != null && Items.Count() > 0)
+            {
+                foreach (var item in Items)
+                {
+                    if (item != null && BillingType == DealBillingType.EstimatedVolume)
+                    {
+                        if (item.Tiers.Count() > 2)
+                        {
+                            validationResult = false;
+                            validateBeforeSaveContext.ValidateMessages.Add(string.Format("Deal billing type is 'Estimated Volume' and contains more than 2 tiers in group '{0}'", item.Name));
+                        }
+                        bool tierWithDiscountEvaluaterExists = false;
+                        foreach (var tier in item.Tiers)
+                        {
+                            if(tier.EvaluatedRate.ConfigId == new Guid("434BB6E0-A725-422E-A66A-BE839192AE5C") || tier.EvaluatedRate.ConfigId == new Guid("49AF4D76-C067-47DA-A600-A1EA0E1AAD99"))
+                            {
+                                tierWithDiscountEvaluaterExists = true;
+                                break;
+                            }
+                        }
+                        if(tierWithDiscountEvaluaterExists)
+                        {
+                            validationResult = false;
+                            validateBeforeSaveContext.ValidateMessages.Add("Cannot add tier(s) with discount rate evaluater when billing type is 'Estimated Volume'");
+                        }
+                    }
+                }
+            }
+
 
             return validationResult;
         }

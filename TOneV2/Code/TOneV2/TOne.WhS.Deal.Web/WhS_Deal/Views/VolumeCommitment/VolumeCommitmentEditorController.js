@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'VRCommon_EntityFilterEffectiveModeEnum'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'VRCommon_EntityFilterEffectiveModeEnum','WhS_Deal_DealBillingTypeEnum'];
 
-    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, VRCommon_EntityFilterEffectiveModeEnum) {
+    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_DealBillingTypeEnum) {
 
         var isEditMode;
 
@@ -55,6 +55,8 @@
             $scope.scopeModel = {};
             $scope.scopeModel.disabelType = isEditMode;
             $scope.scopeModel.volumeCommitmentTypes = UtilsService.getArrayEnum(WhS_Deal_VolumeCommitmentTypeEnum);
+            $scope.scopeModel.billingTypes = UtilsService.getArrayEnum(WhS_Deal_DealBillingTypeEnum);
+            //$scope.scopeModel.selectedBillingType = WhS_Deal_DealBillingTypeEnum.ByTraffic;
             $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
 
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
@@ -65,11 +67,22 @@
                 };
                 VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorReadyDeferred);
                 setTimeout(function () {
-                    var payload = { context: getContext() };
+                    var payload = {
+                        context: getContext(),
+                      
+                    };
                     volumeCommitmenetItemsAPI.load(payload);
                 });
                 if (!carrierAccountSelectedPromise)
                     $scope.scopeModel.description = undefined;
+            };
+            $scope.scopeModel.onDealBillingTypeSelectionChanged = function () {
+                volumeCommitmenetItemsReadyDeferred.promise.then(function () {
+                    var payload = {
+                        context:getContext()
+                    }
+                    volumeCommitmenetItemsAPI.load(payload);
+                });
             };
 
             $scope.scopeModel.onVolumeCommitmentTypeChanged = function () {
@@ -136,7 +149,7 @@
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
             $scope.scopeModel.showVolumeItemSection = function () {
-                return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined);
+                return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined && $scope.scopeModel.selectedBillingType != undefined);
             };
             $scope.scopeModel.validateDealStatusDate = function () {
                 var date = UtilsService.createDateFromString($scope.scopeModel.deActivationDate);
@@ -197,6 +210,7 @@
                 else {
                     var payload = {
                         context: getContext(),
+                      
                     };
                     volumeCommitmenetItemsAPI.load(payload);
                     updateDescription();
@@ -230,7 +244,6 @@
             if (volumeCommitmentEntity == undefined || volumeCommitmentEntity.Settings == undefined)
                 return;
             offset = volumeCommitmentEntity.Settings.OffSet;
-            console.log(offset);
         }
 
         function loadStaticData() {
@@ -243,6 +256,7 @@
             $scope.scopeModel.selectedDealStatus = UtilsService.getItemByVal($scope.scopeModel.dealStatus, volumeCommitmentEntity.Settings.Status, 'value');
             $scope.scopeModel.deActivationDate = volumeCommitmentEntity.Settings.DeActivationDate;
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
+            $scope.scopeModel.selectedBillingType = UtilsService.getItemByVal($scope.scopeModel.billingTypes, volumeCommitmentEntity.Settings.BillingType, "value");
 
             var datasource = [];
             datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.System);
@@ -283,6 +297,7 @@
 
                     var payload = {
                         context: getContext(),
+                       
                     };
                     if (volumeCommitmentEntity != undefined) {
                         payload.volumeCommitmentItems = volumeCommitmentEntity.Settings.Items;
@@ -296,8 +311,9 @@
         }
         function updateDescription() {
             setTimeout(function () {
-                if ($scope.scopeModel.carrierAccount != undefined)
+                if ($scope.scopeModel.carrierAccount != undefined) {
                     $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate($scope.scopeModel.beginDate);
+                }
             });
         }
         function loadCurrencySelector() {
@@ -371,7 +387,8 @@
                     Status: $scope.scopeModel.selectedDealStatus.value,
                     DeActivationDate: $scope.scopeModel.deActivationDate,
                     IsRecurrable: volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined ? volumeCommitmentEntity.Settings.IsRecurrable : true,
-                    VolCommitmentTimeZone: $scope.scopeModel.selectedTimeZone.value
+                    VolCommitmentTimeZone: $scope.scopeModel.selectedTimeZone.value,
+                    BillingType : $scope.scopeModel.selectedBillingType.value
                 }
             };
             return obj;
@@ -388,6 +405,10 @@
                 getZoneSelector: function () {
                     if ($scope.scopeModel.selectedVolumeCommitmentType != undefined)
                         return $scope.scopeModel.selectedVolumeCommitmentType.zoneSelector;
+                },
+                getBillingType: function () {
+                    if ($scope.scopeModel.selectedBillingType != undefined)
+                        return $scope.scopeModel.selectedBillingType;
                 },
                 getZoneSelectorPayload: function (item) {
                     if ($scope.scopeModel.selectedVolumeCommitmentType != undefined) {
