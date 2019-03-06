@@ -56,6 +56,7 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.showAddButton = true;
                 $scope.scopeModel.showUploadButton = true;
+                $scope.scopeModel.hasFilter = false;
 
                 $scope.scopeModel.showActionButtons = false;
                 $scope.scopeModel.showMenuActions = false;
@@ -79,11 +80,11 @@
                 };
 
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
-                    businessEntityDefinitionAPI = api; 
+                    businessEntityDefinitionAPI = api;
                     businessEntityDefinitionReadyDeferred.resolve();
                 };
                 $scope.scopeModel.onBusinessEntityDefinitionSelectionChange = function () {
-                    if (businessEntityDefinitionAPI!=undefined) {
+                    if (businessEntityDefinitionAPI != undefined) {
                         if (businessEntityDefinitionAPI.getSelectedIds() != undefined) {
                             checkDoesUserHaveAddAccess(businessEntityDefinitionAPI.getSelectedIds());
 
@@ -141,6 +142,7 @@
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
+                    $scope.scopeModel.hasFilter = false;
                     $scope.scopeModel.isGridLoading = true;
                     if (payload != undefined) {
                         viewId = payload.viewId;
@@ -215,6 +217,7 @@
 
             function loadSearchCriteria() {
                 return UtilsService.waitMultipleAsyncOperations([loadFilterDirective]).then(function () {
+                    $scope.scopeModel.hasFilter = filterDirectiveAPI != undefined ? filterDirectiveAPI.hasFilters() : false;
                     loadGridDirective();
                 });
             }
@@ -278,7 +281,7 @@
                     businessEntityDefinitionId: businessEntityDefinitionAPI.getSelectedIds(),
                     context: getGridContext(),
                     bulkActionId: bulkActionId
-                }; 
+                };
                 return gridPayload;
             }
 
@@ -298,7 +301,7 @@
             function loadBulkActions() {
                 $scope.scopeModel.addBulkActions.length = 0;
                 return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEDefinitionSettings(businessEntityDefinitionId).then(function (response) {
-                    genericBEDefinitionSettings = response; 
+                    genericBEDefinitionSettings = response;
                     if (genericBEDefinitionSettings && genericBEDefinitionSettings.GenericBEBulkActions && genericBEDefinitionSettings.GenericBEBulkActions.length != 0) {
                         if (bulkActionId == undefined) {
                             $scope.scopeModel.showMenuActions = true;
@@ -342,11 +345,9 @@
                 currentContext.setActionsEnablity = function (value) {
 
                     $scope.scopeModel.enableBulkActions = value;
-                }; 
+                };
                 return currentContext;
             }
-
-
         }
     }
 

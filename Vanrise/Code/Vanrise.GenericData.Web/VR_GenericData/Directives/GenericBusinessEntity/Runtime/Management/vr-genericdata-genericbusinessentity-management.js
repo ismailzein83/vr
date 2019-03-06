@@ -35,12 +35,14 @@
             var businessEntityDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
             var fieldValues;
             var filterValues;
+            var defaultValues;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.showAddButton = true;
                 $scope.scopeModel.showUploadButton = true;
 
-                $scope.scopeModel.hasFilter = true;
+                $scope.scopeModel.hasFilter = false;
 
                 $scope.scopeModel.onFilterDirectiveReady = function (api) {
                     filterDirectiveAPI = api;
@@ -61,7 +63,7 @@
                         gridDirectiveAPI.onGenericBEAdded(addedGenericBusinessEntity);
                     };
                     var editorSize = undefined;//genericBEDefinitionSettings != undefined ? genericBEDefinitionSettings.editorSize : undefined;
-                    VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessDefinitionId, editorSize, fieldValues);
+                    VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessDefinitionId, editorSize, fieldValues, defaultValues);
                 };
 
                 $scope.scopeModel.uploadBusinessEntity = function () {
@@ -76,7 +78,7 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    //$scope.scopeModel.hasFilter = false;
+                    $scope.scopeModel.hasFilter = false;
 
                     var promises = [];
 
@@ -84,10 +86,11 @@
                         businessDefinitionId = payload.businessEntityDefinitionId;
                         fieldValues = payload.fieldValues;
                         filterValues = payload.filterValues;
+                        defaultValues = payload.defaultValues;
                     }
 
                     promises.push(loadBusinessEntityDefinitionSettings());
-                    promises.push(loadFilterDirective());
+                    promises.push(loadExistingFilter());
                     promises.push(loadGridDirective());
                     promises.push(loadCheckDoesUserHaveAddAccess());
 
@@ -114,23 +117,22 @@
                         });
                     }
 
+                    function loadExistingFilter() {
+                        return loadFilterDirective().then(function () {
+                            $scope.scopeModel.hasFilter = filterDirectiveAPI != undefined ? filterDirectiveAPI.hasFilters() : false;
+                        });
+                    }
+
                     function loadFilterDirective() {
                         var filterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
                         UtilsService.waitMultiplePromises([loadBusinessEntityDefinitionSettings()]).then(function () {
                             if ($scope.scopeModel.filterDirective != undefined) {
                                 filterDirectiveReadyDeferred.promise.then(function () {
 
-                                    //var context = {
-                                    //    showSearchButton: function (value) {
-                                    //        $scope.scopeModel.hasFilter = $scope.scopeModel.hasFilter || value;
-                                    //    }
-                                    //};
-
                                     var filterDirectivePayload = {
                                         settings: genericBEDefinitionSettings.FilterDefinition.Settings,
                                         dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
                                         filterValues: filterValues
-                                        //,context: context
                                     };
                                     VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, filterDirectivePayload, filterDirectiveLoadDeferred);
                                 });
@@ -140,6 +142,7 @@
                         });
                         return filterDirectiveLoadDeferred.promise;
                     }
+
 
                     function loadGridDirective() {
                         var promiseDeferred = UtilsService.createPromiseDeferred();
@@ -160,6 +163,8 @@
                     ctrl.onReady(api);
                 }
             }
+
+
 
             function getGridFilter() {
                 var filterData = filterDirectiveAPI != undefined ? filterDirectiveAPI.getData() : undefined;

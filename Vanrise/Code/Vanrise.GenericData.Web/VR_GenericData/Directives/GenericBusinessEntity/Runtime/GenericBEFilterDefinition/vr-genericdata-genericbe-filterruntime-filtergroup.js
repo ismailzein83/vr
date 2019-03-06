@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FilterGroupFilterRuntimeSettingsDirective.$inject = ['UtilsService','VRUIUtilsService','VR_GenericData_DataRecordTypeAPIService'];
+    FilterGroupFilterRuntimeSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService'];
 
-    function FilterGroupFilterRuntimeSettingsDirective(UtilsService,VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService) {
+    function FilterGroupFilterRuntimeSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -32,6 +32,10 @@
 
             var definitionSettings;
 
+            var filterValues;
+
+            var fields = [];
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -43,7 +47,7 @@
                 defineAPI();
             }
 
-          
+
 
             function defineAPI() {
                 var api = {};
@@ -53,6 +57,7 @@
                     if (payload != undefined) {
                         dataRecordTypeId = payload.dataRecordTypeId;
                         definitionSettings = payload.settings;
+                        filterValues = payload.filterValues;
                     }
                     var loadDirectivePromise = UtilsService.createPromiseDeferred();
                     promises.push(loadDirectivePromise.promise);
@@ -66,31 +71,43 @@
                     }).catch(function (error) {
                         loadDirectivePromise.reject(error);
                     });
-      
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 function loadDataRecordTypeFields() {
-                  return  VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
+                    return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
                         dataRecordType = response;
                     });
                 }
+
                 function loadRecordFilterDirective() {
                     var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                    recordFilterDirectiveReadyDeferred.promise.then(function () {
-                        var recordFilterDirectivePayload = {
-                            context: buildContext()
-                        };
-                        VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
-                    });
+                    if (tryGetRecordFields()) {
+
+                        recordFilterDirectiveReadyDeferred.promise.then(function () {
+                            var recordFilterDirectivePayload = {
+                                context: buildContext()
+                            };
+                            VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
+                        });
+                    }
+                    else {
+                        recordFilterDirectiveLoadDeferred.resolve();
+                    }
 
                     return recordFilterDirectiveLoadDeferred.promise;
                 }
+
                 api.getData = function () {
                     var data = recordFilterDirectiveAPI.getData();
                     return {
-                        RecordFilter: data != undefined? data.filterObj:undefined
+                        RecordFilter: data != undefined ? data.filterObj : undefined
                     };
+                };
+
+                api.hasFilters = function () {
+                    return $scope.scopeModel.hasRecordFields;
                 };
 
                 if (ctrl.onReady != null) {
@@ -101,28 +118,39 @@
             function buildContext() {
                 var context = {
                     getFields: function () {
-
-                        var fields = [];
-                        if (dataRecordType != undefined && dataRecordType.Fields && definitionSettings.AvailableFieldNames != undefined) {
-                            for (var i = 0; i < definitionSettings.AvailableFieldNames.length; i++)
-                            {
-                                var field = definitionSettings.AvailableFieldNames[i];
-                                var fieldType = UtilsService.getItemByVal(dataRecordType.Fields, field, "Name");
-                                if(fieldType != undefined)
-                                {
-                                    fields.push({
-                                        FieldName: fieldType.Name,
-                                        FieldTitle: fieldType.Title,
-                                        Type: fieldType.Type
-                                    });
-                                }
-                            }
-                        }
                         return fields;
                     }
                 };
                 return context;
             };
+
+            function getFields() {
+                var fields = [];
+                if (dataRecordType != undefined && dataRecordType.Fields && definitionSettings.AvailableFieldNames != undefined) {
+                    for (var i = 0; i < definitionSettings.AvailableFieldNames.length; i++) {
+                        var field = definitionSettings.AvailableFieldNames[i];
+
+                        if (filterValues != undefined && filterValues[field] != undefined)
+                            continue;
+
+                        var fieldType = UtilsService.getItemByVal(dataRecordType.Fields, field, "Name");
+                        if (fieldType != undefined) {
+                            fields.push({
+                                FieldName: fieldType.Name,
+                                FieldTitle: fieldType.Title,
+                                Type: fieldType.Type
+                            });
+                        }
+                    }
+                }
+                return fields;
+            }
+
+            function tryGetRecordFields() {
+                fields = getFields();
+                $scope.scopeModel.hasRecordFields = fields.length > 0;
+                return $scope.scopeModel.hasRecordFields;
+            }
         }
     }
 

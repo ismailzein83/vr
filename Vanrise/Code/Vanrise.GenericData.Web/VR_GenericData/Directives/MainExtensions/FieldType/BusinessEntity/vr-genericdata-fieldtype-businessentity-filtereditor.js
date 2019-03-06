@@ -41,12 +41,15 @@
 
             function getDirectiveAPI() {
                 var api = {};
+
                 api.load = function (payload) {
                     return directiveAPI.load(payload);
                 };
+
                 api.getValuesAsArray = function () {
                     return directiveAPI.getData();
                 };
+
                 api.getData = function () {
                     var returnValue;
                     var directiveData = directiveAPI.getData();
@@ -60,6 +63,7 @@
 
                     return returnValue;
                 };
+
                 return api;
             }
         }

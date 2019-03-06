@@ -35,6 +35,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
             var genericBusinessEntity;
 
             var fieldValues;
+            var defaultValues;
 
             var titleFieldName;
 
@@ -64,6 +65,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         genericBusinessEntityId = payload.genericBusinessEntityId;
                         fieldValues = payload.fieldValues;
+                        defaultValues = payload.defaultValues;
                         historyId = payload.historyId;
                         context = payload.context;
                     }
@@ -148,7 +150,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                     var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
                     runtimeEditorReadyDeferred.promise.then(function () {
                         var runtimeEditorPayload = {
-                            selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : fieldValues,
+                            selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : defaultValues,
                             dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,
                             definitionSettings: businessEntityDefinitionSettings.EditorDefinition.Settings,
                             historyId: historyId,

@@ -18,6 +18,7 @@
         var additionalErrorsReadyDeferred = UtilsService.createPromiseDeferred();
 
         var fieldValues;
+        var defaultValues;
 
         var runtimeEditorAPI;
         var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -33,6 +34,7 @@
                 businessEntityDefinitionId = parameters.businessEntityDefinitionId;
                 genericBusinessEntityId = parameters.genericBusinessEntityId;
                 fieldValues = parameters.fieldValues;
+                defaultValues = parameters.defaultValues;
             }
 
             isEditMode = (genericBusinessEntityId != undefined);
@@ -73,6 +75,7 @@
                         businessEntityDefinitionId: businessEntityDefinitionId,
                         genericBusinessEntityId: genericBusinessEntityId,
                         fieldValues: fieldValues,
+                        defaultValues: defaultValues,
                         context: getContext()
                     };
                     VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);

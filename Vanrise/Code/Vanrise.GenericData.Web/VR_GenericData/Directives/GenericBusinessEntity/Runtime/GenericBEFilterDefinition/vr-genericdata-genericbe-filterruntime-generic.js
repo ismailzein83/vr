@@ -2,7 +2,7 @@
 
     'use strict';
 
-    GenericFilterRuntimeSettingsDirective.$inject = ['UtilsService','VR_GenericData_DataRecordTypeAPIService','VR_GenericData_DataRecordFieldAPIService','VRUIUtilsService'];
+    GenericFilterRuntimeSettingsDirective.$inject = ['UtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VRUIUtilsService'];
 
     function GenericFilterRuntimeSettingsDirective(UtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataRecordFieldAPIService, VRUIUtilsService) {
         return {
@@ -123,9 +123,13 @@
                     };
                 };
 
+                api.hasFilters = function () {
+                    return $scope.scopeModel.filter.directiveAPI != undefined;
+                };
+
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
-            }
+                }
             }
         }
     }

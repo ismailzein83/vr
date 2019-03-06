@@ -47,6 +47,10 @@
                     };
                 };
 
+                api.hasFilters = function () {
+                    return true;
+                };
+
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }

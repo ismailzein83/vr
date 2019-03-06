@@ -91,6 +91,10 @@
                     return data;
                 };
 
+                api.hasFilters = function () {
+                    return (filterObj != undefined || ctrl.expression != undefined);
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

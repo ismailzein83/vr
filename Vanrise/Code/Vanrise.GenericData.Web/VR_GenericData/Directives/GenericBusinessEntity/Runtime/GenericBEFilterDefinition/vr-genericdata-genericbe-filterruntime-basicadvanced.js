@@ -54,7 +54,7 @@
                                     $scope.scopeModel.showBasicAdvancedTabs = true;
                                 }
 
-                                if (filterValues == undefined || filterValues[filter.FilterSettings.FieldName] == undefined) {
+                                if (filterValues == undefined || (filter.FilterSettings != undefined && filterValues[filter.FilterSettings.FieldName] == undefined)) {
                                     var filterItem = {
                                         payload: filter,
                                         readyPromiseDeferred: UtilsService.createPromiseDeferred(),
@@ -125,6 +125,22 @@
                     filterData.Filters = filters;
 
                     return filterData;
+                };
+
+                api.hasFilters = function () {
+                    var filterCount = $scope.scopeModel.filters.length;
+
+                    if (filterCount == 0)
+                        return false;
+
+                    for (var i = 0; i < filterCount; i++) {
+                        var filter = $scope.scopeModel.filters[i];
+                        var hasFilters = filter.filterAPI.hasFilters();
+                        if (hasFilters)
+                            return true;
+                    }
+
+                    return false;
                 };
 
                 if (ctrl.onReady != null) {

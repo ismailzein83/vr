@@ -10,13 +10,13 @@
         </vr-row>
     </div>
     <vr-row removeline>
-        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+        <vr-actionbar showcollapsebutton="scopeModel.filterDirective != undefined" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
                 <vr-button type="DeselectAll" formname="formFilter" data-onclick="scopeModel.deselectAllClicked" vr-disabled="!scopeModel.enableDeselectAll" ng-show="scopeModel.showActionButtons"></vr-button>
                 <vr-button type="SelectAll" formname="formFilter" data-onclick="scopeModel.selectAllClicked" vr-disabled="!scopeModel.enableSelectAll" ng-show="scopeModel.showActionButtons"></vr-button>
                 <vr-button type="BulkActions" formname="formFilter" ng-show="scopeModel.showMenuActions" menuactions="scopeModel.addBulkActions"></vr-button>
                 <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton"></vr-button>
-                <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                <vr-button type="Search" ng-if="scopeModel.filterDirective != undefined && scopeModel.hasFilter" formname="formFilter" data-onclick="search" ></vr-button>
                 <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton"></vr-button>
             </div>
         </vr-actionbar>
