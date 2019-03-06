@@ -711,6 +711,8 @@
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\Templates\MonthlyRecurringChargePeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\Templates\OnceAYearRecurringChargePeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\MainExtensions\Templates\QuarterlyRecurringChargePeriodTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\retail-be-recurringchargeperiod-customobjectsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\Templates\RecurringChargePeriodCustomObjectSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountChargeEvaluators\MainExtensions\retail-be-accountchargeevaluator-fixedcharge.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountChargeEvaluators\MainExtensions\Templates\FixedChargeAccountChargeEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Product\ProductRuntime\MainExtensions\ProductTypes\retail-be-productextendedsettings-prepaid.js" />

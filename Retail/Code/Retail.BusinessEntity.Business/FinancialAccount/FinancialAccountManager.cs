@@ -900,13 +900,15 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
     
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)
         {
+            var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
             return new FinancialAccountDetail
             {
                 SequenceNumber = financialAccount.SequenceNumber,
                 BED = financialAccount.BED,
                 EED = financialAccount.EED,
                 FinancialAccountDefinitionName = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionName(financialAccount.FinancialAccountDefinitionId),
-                BalanceAccountTypeId = s_financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId)
+                BalanceAccountTypeId = s_financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId),
+                Classifications = financialAccountDefinitionSettings!=null ? financialAccountDefinitionSettings.ApplicableClassifications : null
             };
         }
       

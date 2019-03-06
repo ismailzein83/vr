@@ -41,6 +41,11 @@ namespace Retail.BusinessEntity.Business
             return businessEntityDefinition.Settings as AccountBEDefinitionSettings;
         }
 
+        public bool CheckUseRecurringChargeModule(Guid accountBEDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettingsWithHidden(accountBEDefinitionId);
+            return accountBEDefinitionSettings.UseRecurringChargeModule;
+        }
         public AccountBEDefinitionSettings GetAccountBEDefinitionSettings(Guid accountBEDefinitionId)
         {
             var businessEntityDefinition = s_businessEntityDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);

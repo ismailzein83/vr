@@ -170,6 +170,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             $scope.scopeModel.useFinancialAccountModule = payload.businessEntityDefinitionSettings.UseFinancialAccountModule;
 
                             $scope.scopeModel.useRemoteSelector = payload.businessEntityDefinitionSettings.UseRemoteSelector;
+                            $scope.scopeModel.useRecurringChargeModule = payload.businessEntityDefinitionSettings.UseRecurringChargeModule;
                         }
                     }
 
@@ -343,7 +344,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         PackageAssignmentCondition: accountConditionSelectiveDirectiveAPI.getData(),
                         UseFinancialAccountModule:$scope.scopeModel.useFinancialAccountModule,
                         Security: securityDefinitionsDirectiveAPI.getData(),
-                        AccountBulkActions: accountBulkActionsDirectiveAPI.getData()
+                        AccountBulkActions: accountBulkActionsDirectiveAPI.getData(),
+                        UseRecurringChargeModule: $scope.scopeModel.useFinancialAccountModule ? $scope.scopeModel.useRecurringChargeModule : false
                     };
                     return obj;
                 };

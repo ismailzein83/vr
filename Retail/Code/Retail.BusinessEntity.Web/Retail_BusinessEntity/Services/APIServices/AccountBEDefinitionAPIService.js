@@ -85,6 +85,12 @@
             });
         }
 
+        function CheckUseRecurringChargeModule(accountBEDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "CheckUseRecurringChargeModule"), {
+                accountBEDefinitionId: accountBEDefinitionId
+            });
+        }
+
         return {
             GetAccountBEDefinitionSettingsWithHidden: GetAccountBEDefinitionSettingsWithHidden,
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
@@ -101,6 +107,7 @@
             GetAccountBEStatusDefinitionId: GetAccountBEStatusDefinitionId,
             GetAccountBulkActionSettingsConfigs: GetAccountBulkActionSettingsConfigs,
             GetAccountBEDefinitionClassificationsInfo: GetAccountBEDefinitionClassificationsInfo,
+            CheckUseRecurringChargeModule: CheckUseRecurringChargeModule
         };
     }
 

@@ -42,7 +42,7 @@ namespace Retail.BusinessEntity.Entities
         public AccountCondition PackageAssignmentCondition { get; set; }
 
         public bool UseFinancialAccountModule { get; set; }
-
+        public bool UseRecurringChargeModule { get; set; }
         public AccountBEDefinitionSecurity Security { get; set; }
 
         public List<AccountBEClassification> Classifications { get; set; }

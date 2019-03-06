@@ -11,8 +11,11 @@
     </vr-row>
     <vr-row>
         <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" normal-col-num="6" customlabel="Local Service Account Type"></retail-be-accounttype-selector>
-        <vr-columns width="1/2row">
+        <vr-columns width="1/4row">
             <vr-switch value="scopeModel.useFinancialAccountModule" label="Use Financial Account Module"></vr-switch>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-switch value="scopeModel.useRecurringChargeModule" label="Use Recurring Charges Module" ng-if="scopeModel.useFinancialAccountModule"></vr-switch>
         </vr-columns>
     </vr-row>     
             <retail-be-accountbedefinition-financialaccountlocator on-ready="scopeModel.onFinancialAccountLocatorReady"

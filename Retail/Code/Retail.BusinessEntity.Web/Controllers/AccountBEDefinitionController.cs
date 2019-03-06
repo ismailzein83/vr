@@ -126,5 +126,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountBEDefinitionClassificationsInfo(accountBEDefinitionId);
         }
+
+        [HttpGet]
+        [Route("CheckUseRecurringChargeModule")]
+        public bool CheckUseRecurringChargeModule(Guid accountBEDefinitionId)
+        {
+            return _manager.CheckUseRecurringChargeModule(accountBEDefinitionId);
+        }
     }
 }

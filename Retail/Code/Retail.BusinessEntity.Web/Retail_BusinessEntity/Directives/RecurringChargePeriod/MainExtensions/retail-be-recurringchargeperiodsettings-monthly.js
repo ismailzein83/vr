@@ -49,7 +49,7 @@ app.directive("retailBeRecurringchargeperiodsettingsMonthly", ["UtilsService", "
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.BusinessEntity.MainExtensions.FinancialRecurringChargePeriod.MonthlyRecuringCharge ,Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.MainExtensions.FinancialRecurringChargePeriod.MonthlyRecurringCharge, Retail.BusinessEntity.MainExtensions",
                         InAdvance: $scope.scopeModel.inAdvance
                     };
                 };
