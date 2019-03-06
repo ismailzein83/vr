@@ -162,7 +162,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 CarrierAccountId = reader.GetInt(COL_CarrierAccountID),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime),
                 CreatedBy = reader.GetNullableInt(COL_CreatedBy),
                 LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
                 LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime),

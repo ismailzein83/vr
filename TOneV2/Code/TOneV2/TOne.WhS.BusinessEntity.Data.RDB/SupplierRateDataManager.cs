@@ -419,7 +419,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 CurrencyId = reader.GetNullableInt(COL_CurrencyID),
                 Rate = reader.GetDecimal(COL_Rate),
                 RateTypeId = reader.GetNullableInt(COL_RateTypeID),
-                RateChange = (RateChangeType)reader.GetIntWithNullHandling(COL_Change),
+                RateChange = (RateChangeType)reader.GetInt(COL_Change),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED)
             };
@@ -434,7 +434,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 CurrencyId = reader.GetNullableInt(COL_CurrencyID),
                 Rate = reader.GetDecimal(COL_Rate),
                 RateTypeId = reader.GetNullableInt(COL_RateTypeID),
-                RateChange = (RateChangeType)reader.GetIntWithNullHandling(COL_Change),
+                RateChange = (RateChangeType)reader.GetInt(COL_Change),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED)
             };

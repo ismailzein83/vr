@@ -147,7 +147,7 @@ namespace TOne.WhS.Sales.Data.RDB
             return new ChangedCustomerCountryPreview
             {
                 CountryId = reader.GetInt(COL_ID),
-                CustomerId = reader.GetIntWithNullHandling(COL_CustomerID),
+                CustomerId = reader.GetInt(COL_CustomerID),
                 EED = reader.GetDateTime(COL_EED)
             };
         }

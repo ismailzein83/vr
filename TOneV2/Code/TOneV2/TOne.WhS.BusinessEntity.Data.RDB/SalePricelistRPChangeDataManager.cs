@@ -90,12 +90,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 ZoneName = reader.GetString(COL_ZoneName),
                 ZoneId = reader.GetNullableLong(COL_ZoneID),
-                RoutingProductId = reader.GetIntWithNullHandling(COL_RoutingProductId),
-                RecentRoutingProductId = reader.GetIntWithNullHandling(COL_RecentRoutingProductId),
+                RoutingProductId = reader.GetInt(COL_RoutingProductId),
+                RecentRoutingProductId = reader.GetInt(COL_RecentRoutingProductId),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                CountryId = reader.GetIntWithNullHandling(COL_CountryId),
-                CustomerId = reader.GetIntWithNullHandling(COL_CustomerId)
+                CountryId = reader.GetInt(COL_CountryId),
+                CustomerId = reader.GetInt(COL_CustomerId)
             };
         }
 

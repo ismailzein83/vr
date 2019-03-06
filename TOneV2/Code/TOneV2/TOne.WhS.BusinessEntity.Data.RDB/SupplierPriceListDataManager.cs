@@ -146,12 +146,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 SupplierId = reader.GetInt(COL_SupplierID),
                 CurrencyId = reader.GetInt(COL_CurrencyID),
                 FileId = reader.GetNullableLong(COL_FileID),
-                EffectiveOn = reader.GetDateTimeWithNullHandling(COL_EffectiveOn),
+                EffectiveOn = reader.GetDateTime(COL_EffectiveOn),
                 PricelistType = (SupplierPricelistType?)reader.GetNullableInt(COL_PricelistType),
-                CreateTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                CreateTime = reader.GetDateTime(COL_CreatedTime),
                 ProcessInstanceId = reader.GetNullableLong(COL_ProcessInstanceID),
                 SPLStateBackupId = reader.GetNullableLong(COL_SPLStateBackupID),
-                UserId = reader.GetIntWithNullHandling(COL_UserID),
+                UserId = reader.GetInt(COL_UserID),
             };
         }
 

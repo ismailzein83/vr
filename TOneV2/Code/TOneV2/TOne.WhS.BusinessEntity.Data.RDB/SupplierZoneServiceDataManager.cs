@@ -361,8 +361,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return new SupplierZoneService
             {
                 SupplierZoneServiceId = reader.GetLong(COL_ID),
-                ZoneId = reader.GetLongWithNullHandling(COL_ZoneID),
-                PriceListId = reader.GetIntWithNullHandling(COL_PriceListID),
+                ZoneId = reader.GetLong(COL_ZoneID),
+                PriceListId = reader.GetInt(COL_PriceListID),
                 SupplierId = reader.GetInt(COL_SupplierID),
                 ReceivedServices = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_ReceivedServicesFlag)),
                 EffectiveServices = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_EffectiveServiceFlag)),
@@ -378,7 +378,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 SupplierZoneServiceId = reader.GetLong(COL_ID),
                 SupplierId = reader.GetInt(COL_SupplierID),
-                PriceListId = reader.GetIntWithNullHandling(COL_PriceListID),
+                PriceListId = reader.GetInt(COL_PriceListID),
                 ReceivedServices = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_ReceivedServicesFlag)),
                 EffectiveServices = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_EffectiveServiceFlag)),
                 BED = reader.GetDateTime(COL_BED),

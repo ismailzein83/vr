@@ -118,7 +118,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 ChangeType = (RateChangeType)reader.GetInt(COL_Change),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                RoutingProductId = reader.GetIntWithNullHandling(COL_RoutingProductID),
+                RoutingProductId = reader.GetInt(COL_RoutingProductID),
                 CurrencyId = reader.GetNullableInt(COL_CurrencyID)
             };
         }

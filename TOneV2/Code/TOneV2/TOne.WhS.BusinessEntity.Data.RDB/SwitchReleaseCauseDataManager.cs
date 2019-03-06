@@ -141,13 +141,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 ReleaseCode = reader.GetString(COL_ReleaseCode),
                 SwitchReleaseCauseId = reader.GetInt(COL_ID),
-                SwitchId = reader.GetIntWithNullHandling(COL_SwitchID),
+                SwitchId = reader.GetInt(COL_SwitchID),
                 Settings = Serializer.Deserialize<SwitchReleaseCauseSetting>(reader.GetString(COL_Settings)),
                 SourceId = reader.GetString(COL_SourceID),
-                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime),
                 CreatedBy = reader.GetNullableInt(COL_CreatedBy),
                 LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
-                LastModifiedTime = reader.GetDateTimeWithNullHandling(COL_LastModifiedTime)
+                LastModifiedTime = reader.GetDateTime(COL_LastModifiedTime)
             };
         }
         #endregion

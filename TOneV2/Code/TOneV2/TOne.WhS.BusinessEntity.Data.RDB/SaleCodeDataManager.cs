@@ -411,7 +411,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 ZoneId = reader.GetLong(COL_ZoneID),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                CodeGroupId = reader.GetIntWithNullHandling(COL_CodeGroupID),
+                CodeGroupId = reader.GetInt(COL_CodeGroupID),
                 SourceId = reader.GetString(COL_SourceID)
             };
         }

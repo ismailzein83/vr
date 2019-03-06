@@ -176,13 +176,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 OwnerId = reader.GetInt(COL_OwnerID),
                 OwnerType = (SalePriceListOwnerType)reader.GetInt(COL_OwnerType),
                 CurrencyId = reader.GetInt(COL_CurrencyID),
-                EffectiveOn = reader.GetDateTimeWithNullHandling(COL_EffectiveOn),
+                EffectiveOn = reader.GetDateTime(COL_EffectiveOn),
                 PriceListType = (SalePriceListType?)reader.GetNullableInt(COL_PriceListType),
                 SourceId = reader.GetString(COL_SourceID),
-                ProcessInstanceId = reader.GetLongWithNullHandling(COL_ProcessInstanceID),
-                FileId = reader.GetLongWithNullHandling(COL_FileID),
-                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
-                UserId = reader.GetIntWithNullHandling(COL_UserID),
+                ProcessInstanceId = reader.GetLong(COL_ProcessInstanceID),
+                FileId = reader.GetLong(COL_FileID),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime),
+                UserId = reader.GetInt(COL_UserID),
                 Description = reader.GetString(COL_Description),
                 PricelistStateBackupId = reader.GetNullableLong(COL_PricelistStateBackupID)
             };

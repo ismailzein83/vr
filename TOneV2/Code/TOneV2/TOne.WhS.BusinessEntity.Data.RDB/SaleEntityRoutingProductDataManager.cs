@@ -367,7 +367,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 OwnerId = reader.GetInt(COL_OwnerID),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                SaleZoneId = reader.GetLongWithNullHandling(COL_ZoneID)
+                SaleZoneId = reader.GetLong(COL_ZoneID)
             };
         }
 

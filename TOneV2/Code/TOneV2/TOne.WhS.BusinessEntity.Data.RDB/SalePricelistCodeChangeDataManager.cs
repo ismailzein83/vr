@@ -95,10 +95,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 PricelistId = reader.GetInt(SalePricelistCustomerChangeDataManager.COL_PricelistID),
                 Code = reader.GetString(COL_Code),
-                CountryId = reader.GetIntWithNullHandling(COL_CountryID),
+                CountryId = reader.GetInt(COL_CountryID),
                 RecentZoneName = reader.GetString(COL_RecentZoneName),
                 ZoneName = reader.GetString(COL_ZoneName),
-                ChangeType = (CodeChange)reader.GetIntWithNullHandling(COL_Change),
+                ChangeType = (CodeChange)reader.GetInt(COL_Change),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
                 ZoneId = reader.GetNullableLong(COL_ZoneID)

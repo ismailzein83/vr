@@ -145,7 +145,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 Name = reader.GetString(COL_Name),
                 SourceId = reader.GetString(COL_SourceID),
                 Settings = Serializer.Deserialize<SwitchSettings>(reader.GetString(COL_Settings)),
-                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime),
                 CreatedBy = reader.GetNullableInt(COL_CreatedBy),
                 LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
                 LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime)

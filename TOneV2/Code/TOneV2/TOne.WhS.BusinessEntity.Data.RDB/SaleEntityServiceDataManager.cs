@@ -262,7 +262,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 SaleEntityServiceId = reader.GetLong(COL_ID),
                 PriceListId = reader.GetInt(COL_PriceListID),
-                ZoneId = reader.GetLongWithNullHandling(COL_ZoneID),
+                ZoneId = reader.GetLong(COL_ZoneID),
                 Services = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_Services)),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED)

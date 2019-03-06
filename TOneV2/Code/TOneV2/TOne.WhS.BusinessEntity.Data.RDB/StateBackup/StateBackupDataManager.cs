@@ -190,7 +190,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return new Entities.StateBackup
             {
                 StateBackupId = reader.GetLong(COL_ID),
-                BackupTypeConfigId = reader.GetGuidWithNullHandling(COL_ConfigID),
+                BackupTypeConfigId = reader.GetGuid(COL_ConfigID),
                 Info = Serializer.Deserialize<StateBackupType>(reader.GetString(COL_Info)),
                 BackupDate = reader.GetDateTime(COL_BackupDate),
                 RestoreDate = reader.GetNullableDateTime(COL_RestoreDate),
