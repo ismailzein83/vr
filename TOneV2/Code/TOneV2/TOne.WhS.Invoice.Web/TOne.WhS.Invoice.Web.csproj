@@ -290,6 +290,9 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultCustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultSupplierInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
