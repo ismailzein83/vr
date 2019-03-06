@@ -685,7 +685,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 DefinitionID = reader.GetGuid(COL_DefinitionID),
                 WorkflowInstanceID = reader.GetNullableGuid(COL_WorkflowInstanceID),
                 Status = (BPInstanceStatus)reader.GetInt(COL_ExecutionStatus),
-                AssignmentStatus = (BPInstanceAssignmentStatus)reader.GetIntWithNullHandling(COL_AssignmentStatus),
+                AssignmentStatus = (BPInstanceAssignmentStatus)reader.GetInt(COL_AssignmentStatus),
                 LastMessage = reader.GetString(COL_LastMessage),
                 CreatedTime = reader.GetDateTime(COL_CreatedTime),
                 StatusUpdatedTime = reader.GetNullableDateTime(COL_StatusUpdatedTime),
