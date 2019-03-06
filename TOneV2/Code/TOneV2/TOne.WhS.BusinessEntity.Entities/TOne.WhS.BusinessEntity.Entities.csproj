@@ -70,6 +70,9 @@
     <Compile Include="ANumber\ANumberSaleCode.cs" />
     <Compile Include="ANumber\ANumberSupplierCode.cs" />
     <Compile Include="Carriers\CarrierAccounts\PassThroughCustomerRateEvaluatorExtensionConfig.cs" />
+    <Compile Include="Carriers\CarrierAccounts\SMSServiceType.cs" />
+    <Compile Include="Carriers\CarrierAccounts\SMSServiceTypeFilter.cs" />
+    <Compile Include="Carriers\CarrierAccounts\SMSServiceTypeInfo.cs" />
     <Compile Include="Carriers\CarrierProfile\CarrierProfilePortalAccount.cs" />
     <Compile Include="CodeList\CodeListResolver.cs" />
     <Compile Include="InsertCarrierAccountOperationOutput.cs" />

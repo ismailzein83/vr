@@ -148,6 +148,7 @@
     <Compile Include="CarrierAccounts\BaseCarrierAccountEventPayload.cs" />
     <Compile Include="CarrierAccounts\CarrierAccountBE360DegreeNodeType.cs" />
     <Compile Include="CarrierAccounts\ReevaluateRuleStatusChangedHandler.cs" />
+    <Compile Include="CarrierAccounts\SMSServiceTypeManager.cs" />
     <Compile Include="CarrierProfiles\BaseCarrierProfileEventPayload.cs" />
     <Compile Include="CarrierProfiles\CarrierProfileAccountsBE360DegreeNodeType.cs" />
     <Compile Include="CarrierProfiles\CarrierProfileBE360DegreeNodeType.cs" />

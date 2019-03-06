@@ -159,6 +159,7 @@
     <Compile Include="Controllers\OtherRatesPreviewController.cs" />
     <Compile Include="Controllers\PortalAccountController.cs" />
     <Compile Include="Controllers\RecurringChargeController.cs" />
+    <Compile Include="Controllers\SMSServiceTypeController.cs" />
     <Compile Include="Controllers\SwitchReleaseCauseController.cs" />
     <Compile Include="Controllers\WHSFinancialAccountController.cs" />
     <Compile Include="Controllers\WHSFinancialAccountDefinitionController.cs" />
@@ -278,6 +279,7 @@
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccountall-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-customer-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-activationstatus-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-smsservicestype-selector.js.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-supplier-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerFaultTicketCustomObjectSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerFaultTicketSettingsTemplate.html" />
@@ -655,6 +657,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListChangeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePriceListTemplateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleRateHistoryAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SMSServiceTypeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\StateBackupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierOtherRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerSoldZonesAPIService.js" />
