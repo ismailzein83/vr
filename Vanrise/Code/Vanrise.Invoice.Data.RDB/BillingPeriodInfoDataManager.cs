@@ -43,8 +43,8 @@ namespace Vanrise.Invoice.Data.RDB
         {
             Entities.BillingPeriodInfo invoice = new Entities.BillingPeriodInfo
             {
-                NextPeriodStart = reader.GetDateTimeWithNullHandling(COL_NextPeriodStart),
-                InvoiceTypeId = reader.GetGuidWithNullHandling(COL_InvoiceTypeId),
+                NextPeriodStart = reader.GetDateTime(COL_NextPeriodStart),
+                InvoiceTypeId = reader.GetGuid(COL_InvoiceTypeId),
                 PartnerId = reader.GetString(COL_PartnerId)
             };
             return invoice;

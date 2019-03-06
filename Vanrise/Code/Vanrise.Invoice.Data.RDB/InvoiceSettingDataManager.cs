@@ -59,7 +59,7 @@ namespace Vanrise.Invoice.Data.RDB
                 Name = reader.GetString(COL_Name),
                 InvoiceTypeId = reader.GetGuid(COL_InvoiceTypeId),
                 Details = Vanrise.Common.Serializer.Deserialize<InvoiceSettingDetails>(reader.GetString(COL_Details)),
-                IsDefault = reader.GetBooleanWithNullHandling(COL_IsDefault)
+                IsDefault = reader.GetBoolean(COL_IsDefault)
             };
             return invoiceSetting;
         }

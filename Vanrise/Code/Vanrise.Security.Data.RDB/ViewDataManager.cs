@@ -79,7 +79,7 @@ namespace Vanrise.Security.Data.RDB
                 ViewContent = Common.Serializer.Deserialize<ViewContent>(reader.GetString(COL_Content)),
                 Type = reader.GetGuid(COL_Type), 
                 ModuleId = reader.GetNullableGuid(COL_Module),
-                Rank = reader.GetIntWithNullHandling(COL_Rank)
+                Rank = reader.GetInt(COL_Rank)
             };
             var settings = reader.GetString(COL_Settings);
             if (!string.IsNullOrEmpty(settings))

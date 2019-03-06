@@ -85,16 +85,16 @@ namespace Vanrise.Integration.Data.RDB
             {
                 ID = reader.GetLong(COL_ID),
                 BatchDescription = reader.GetString(COL_BatchDescription),
-                BatchSize = reader.GetDecimalWithNullHandling(COL_BatchSize),
-                BatchState = (BatchState)reader.GetIntWithNullHandling(COL_BatchState),
+                BatchSize = reader.GetDecimal(COL_BatchSize),
+                BatchState = (BatchState)reader.GetInt(COL_BatchState),
                 RecordsCount = reader.GetInt(COL_RecordsCount),
-                MappingResult = (MappingResult)reader.GetIntWithNullHandling(COL_MappingResult),
+                MappingResult = (MappingResult)reader.GetInt(COL_MappingResult),
                 MapperMessage = reader.GetString(COL_MapperMessage),
                 QueueItemIds = reader.GetString(COL_QueueItemIds),
                 LogEntryTime = reader.GetDateTime(COL_LogEntryTime),
                 BatchStart = reader.GetNullableDateTime(COL_BatchStart),
                 BatchEnd = reader.GetNullableDateTime(COL_BatchEnd),
-                ExecutionStatus = (ItemExecutionFlowStatus)reader.GetIntWithNullHandling(COL_ExecutionStatus)
+                ExecutionStatus = (ItemExecutionFlowStatus)reader.GetInt(COL_ExecutionStatus)
             };
 
             return dataSourceImportedBatch;

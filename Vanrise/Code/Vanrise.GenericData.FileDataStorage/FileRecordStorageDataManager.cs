@@ -1021,7 +1021,7 @@ namespace Vanrise.GenericData.FileDataStorage
             {
                 FileRecordStorageFileMetadataId = reader.GetLong(COL_ID),
                 ParentFolderRelativePath = reader.GetString(COL_ParentFolderRelativePath),
-                NbOfRecords = reader.GetLongWithNullHandling(COL_NbOfRecords),
+                NbOfRecords = reader.GetLong(COL_NbOfRecords),
                 FromTime = reader.GetDateTime(COL_FromTime),
                 ToTime = reader.GetDateTime(COL_ToTime),
                 MinTime = reader.GetDateTime(COL_MinTime),

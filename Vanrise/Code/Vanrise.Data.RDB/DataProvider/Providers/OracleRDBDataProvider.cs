@@ -1065,23 +1065,13 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
             public override Guid? GetNullableGuid(string fieldName)
             {
-                byte[] bytes = base.GetFieldValueWithNullHandling<byte[]>(fieldName);
+                byte[] bytes = base.GetFieldValue<byte[]>(fieldName);
                 if (bytes != null)
                     return new Guid(bytes);
                 else
                     return default(Guid?);
             }
-
-            public override Guid GetGuidWithNullHandling(string fieldName)
-            {
-                byte[] bytes = base.GetFieldValueWithNullHandling<byte[]>(fieldName);
-                if (bytes != null)
-                    return new Guid(bytes);
-                else
-                    return default(Guid);
-            }
-
-
+            
             public override bool GetBoolean(string fieldName)
             {
                 short intValue = base.GetFieldValue<short>(fieldName);
@@ -1090,20 +1080,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
             public override bool? GetNullableBoolean(string fieldName)
             {
-                short? intValue = base.GetFieldValueWithNullHandling<short?>(fieldName);
+                short? intValue = base.GetFieldValue<short?>(fieldName);
                 if (intValue.HasValue)
                     return intValue.Value > 0;
                 else
                     return default(bool?);
-            }
-
-            public override bool GetBooleanWithNullHandling(string fieldName)
-            {
-                short? intValue = base.GetFieldValueWithNullHandling<short?>(fieldName);
-                if (intValue.HasValue)
-                    return intValue.Value > 0;
-                else
-                    return default(bool);
             }
         }
 
@@ -1141,26 +1122,14 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             {
                 get
                 {
-                    byte[] bytes = base.GetFieldValueWithNullHandling<byte[]>();
+                    byte[] bytes = base.GetFieldValue<byte[]>();
                     if (bytes != null)
                         return new Guid(bytes);
                     else
                         return default(Guid?);
                 }
             }
-
-            public override Guid GuidWithNullHandlingValue
-            {
-                get
-                {
-                    byte[] bytes = base.GetFieldValueWithNullHandling<byte[]>();
-                    if (bytes != null)
-                        return new Guid(bytes);
-                    else
-                        return default(Guid);
-                }
-            }
-
+            
 
             public override bool BooleanValue
             {
@@ -1175,23 +1144,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             {
                 get
                 {
-                    short? intValue = base.GetFieldValueWithNullHandling<short?>();
+                    short? intValue = base.GetFieldValue<short?>();
                     if (intValue.HasValue)
                         return intValue.Value > 0;
                     else
                         return default(bool?);
-                }
-            }
-
-            public override bool BooleanWithNullHandlingValue
-            {
-                get
-                {
-                    short? intValue = base.GetFieldValueWithNullHandling<short?>();
-                    if (intValue.HasValue)
-                        return intValue.Value > 0;
-                    else
-                        return default(bool);
                 }
             }
         }

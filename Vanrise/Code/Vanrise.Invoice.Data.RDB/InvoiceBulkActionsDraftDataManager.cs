@@ -47,7 +47,7 @@ namespace Vanrise.Invoice.Data.RDB
         {
             return new InvoiceBulkActionsDraftSummary()
             {
-                TotalCount = reader.GetIntWithNullHandling("TotalCount"),
+                TotalCount = reader.GetInt("TotalCount"),
                 MinimumFrom = reader.GetNullableDateTime("MinimumFrom"),
                 MaximumTo = reader.GetNullableDateTime("MaximumTo")
             };

@@ -53,7 +53,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             {
                 BillingTransactionTypeId = reader.GetGuid(COL_ID),
                 Name = reader.GetString(COL_Name),
-                IsCredit = reader.GetBooleanWithNullHandling(COL_IsCredit),
+                IsCredit = reader.GetBoolean(COL_IsCredit),
                 Settings = Common.Serializer.Deserialize<BillingTransactionTypeSettings>(reader.GetString(COL_Settings))
             };
         }

@@ -136,7 +136,7 @@ namespace Vanrise.Common.Data.RDB
 			{
 				BigDataServiceId = reader.GetLong(COL_ID),
 				URL = reader.GetString(COL_ServiceURL),
-				TotalCachedRecordsCount = reader.GetLongWithNullHandling(COL_TotalCachedRecordsCount),
+				TotalCachedRecordsCount = reader.GetLong(COL_TotalCachedRecordsCount),
 				CachedObjectIds = new HashSet<Guid>()
 			};
 			string serializedCachedObjectIds = reader.GetString(COL_CachedObjectIds);

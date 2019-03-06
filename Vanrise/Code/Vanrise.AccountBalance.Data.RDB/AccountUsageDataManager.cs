@@ -69,7 +69,7 @@ namespace Vanrise.AccountBalance.Data.RDB
                 PeriodEnd = reader.GetDateTime(COL_PeriodEnd),
                 UsageBalance = reader.GetDecimal(COL_UsageBalance),
                 CurrencyId = reader.GetInt(COL_CurrencyId),
-                IsOverriden = reader.GetBooleanWithNullHandling(COL_IsOverridden),
+                IsOverriden = reader.GetBoolean(COL_IsOverridden),
                 OverridenAmount = reader.GetNullableDecimal(COL_OverriddenAmount),
                 CorrectionProcessId = reader.GetNullableGuid(COL_CorrectionProcessID)
             };
@@ -81,7 +81,7 @@ namespace Vanrise.AccountBalance.Data.RDB
                 AccountUsageId = reader.GetLong(COL_ID),
                 AccountId = reader.GetString(COL_AccountID),
                 TransactionTypeId = reader.GetGuid(COL_TransactionTypeID),
-                IsOverridden = reader.GetBooleanWithNullHandling(COL_IsOverridden),
+                IsOverridden = reader.GetBoolean(COL_IsOverridden),
             };
         }
 
@@ -130,7 +130,7 @@ namespace Vanrise.AccountBalance.Data.RDB
                 {
                     accountUsageFound = true;
                     accountUsageInfo.AccountUsageId = reader.GetLong(COL_ID);
-                    //accountUsageInfo.IsOverridden = reader.GetBooleanWithNullHandling(COL_IsOverridden);
+                    //accountUsageInfo.IsOverridden = reader.GetBoolean(COL_IsOverridden);
                 }
             });
 

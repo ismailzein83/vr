@@ -150,8 +150,8 @@ namespace Vanrise.Common.Data.RDB
 				Time = reader.GetDateTime(COL_LogTime),
 				UserId = reader.GetInt(COL_UserID),
 				ActionId = reader.GetInt(COL_ActionID),
-				HasDetail = reader.GetBooleanWithNullHandling(COL_ObjectDetails),
-				HasChangeInfo = reader.GetBooleanWithNullHandling(COL_ChangeInfo),
+				HasDetail = reader.GetBoolean(COL_ObjectDetails),
+				HasChangeInfo = reader.GetBoolean(COL_ChangeInfo),
 				ActionDescription = reader.GetString(COL_ActionDescription)
 			};
 

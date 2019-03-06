@@ -110,7 +110,7 @@ namespace Vanrise.Common.Data.RDB
 				Category = reader.GetString(COL_Category)  ,
 				Settings = !string.IsNullOrEmpty(settings) ? Vanrise.Common.Serializer.Deserialize<SettingConfiguration>(settings) : null,
 				Data = !string.IsNullOrEmpty(data) ? Vanrise.Common.Serializer.Deserialize<SettingData>(data) : null,
-				IsTechnical =reader.GetBooleanWithNullHandling(COL_IsTechnical)
+				IsTechnical =reader.GetBoolean(COL_IsTechnical)
 			};
 		}
 		#endregion

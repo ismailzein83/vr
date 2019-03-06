@@ -104,23 +104,23 @@ namespace Vanrise.Invoice.Data.RDB
             Entities.Invoice invoice = new Entities.Invoice
             {
                 Details = Vanrise.Common.Serializer.Deserialize(reader.GetString(COL_Details)),
-                FromDate = reader.GetDateTimeWithNullHandling(COL_FromDate),
+                FromDate = reader.GetDateTime(COL_FromDate),
                 InvoiceId = reader.GetLong(COL_ID),
                 InvoiceTypeId = reader.GetGuid(COL_InvoiceTypeID),
-                IssueDate = reader.GetDateTimeWithNullHandling(COL_IssueDate),
+                IssueDate = reader.GetDateTime(COL_IssueDate),
                 PartnerId = reader.GetString(COL_PartnerID),
                 SerialNumber = reader.GetString(COL_SerialNumber),
-                ToDate = reader.GetDateTimeWithNullHandling(COL_ToDate),
+                ToDate = reader.GetDateTime(COL_ToDate),
                 PaidDate = reader.GetNullableDateTime(COL_PaidDate),
-                DueDate = reader.GetDateTimeWithNullHandling(COL_DueDate),
-                UserId = reader.GetIntWithNullHandling(COL_UserId),
-                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                DueDate = reader.GetDateTime(COL_DueDate),
+                UserId = reader.GetInt(COL_UserId),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime),
                 LockDate = reader.GetNullableDateTime(COL_LockDate),
                 Note = reader.GetString(COL_Notes),
                 SourceId = reader.GetString(COL_SourceId),
-                IsAutomatic = reader.GetBooleanWithNullHandling(COL_IsAutomatic),
+                IsAutomatic = reader.GetBoolean(COL_IsAutomatic),
                 Settings = Vanrise.Common.Serializer.Deserialize<InvoiceSettings>(reader.GetString(COL_Settings)),
-                InvoiceSettingId = reader.GetGuidWithNullHandling(COL_InvoiceSettingID),
+                InvoiceSettingId = reader.GetGuid(COL_InvoiceSettingID),
                 SentDate = reader.GetNullableDateTime(COL_SentDate),
                 SettlementInvoiceId = reader.GetNullableLong(COL_SettlementInvoiceId),
                 SplitInvoiceGroupId = reader.GetNullableGuid(COL_SplitInvoiceGroupId),
@@ -135,11 +135,11 @@ namespace Vanrise.Invoice.Data.RDB
         {
             return new InvoiceByPartnerInfo
             {
-                InvoiceTypeId = reader.GetGuidWithNullHandling(COL_InvoiceTypeID),
-                IssueDate = reader.GetDateTimeWithNullHandling(COL_IssueDate),
+                InvoiceTypeId = reader.GetGuid(COL_InvoiceTypeID),
+                IssueDate = reader.GetDateTime(COL_IssueDate),
                 PartnerId = reader.GetString(COL_PartnerID),
-                ToDate = reader.GetDateTimeWithNullHandling(COL_ToDate),
-                DueDate = reader.GetDateTimeWithNullHandling(COL_DueDate),
+                ToDate = reader.GetDateTime(COL_ToDate),
+                DueDate = reader.GetDateTime(COL_DueDate),
             };
         }
         public VRPopulatedPeriod VRPopulatedPeriodMapper(IRDBDataReader reader)

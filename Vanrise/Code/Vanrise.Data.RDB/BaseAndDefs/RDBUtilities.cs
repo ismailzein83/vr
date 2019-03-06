@@ -26,7 +26,7 @@ namespace Vanrise.Data.RDB
             {
                 if(!functionName.StartsWith("GetNullable"))
                 {
-                    string newFunctionName = string.Concat("GetNullable", functionName.Substring(3).Replace("WithNullHandling", ""));
+                    string newFunctionName = string.Concat("GetNullable", functionName.Substring(3));
                     if (s_methodNamesByType.Values.Contains(newFunctionName))
                         functionName = newFunctionName;
                 }
@@ -48,11 +48,6 @@ namespace Vanrise.Data.RDB
                             if (!s_methodNamesByType.TryGetValue(methodInfo.ReturnType, out existingMethodName))
                             {
                                 s_methodNamesByType.Add(methodInfo.ReturnType, methodInfo.Name);
-                            }
-                            else
-                            {
-                                if (methodInfo.Name.Contains("WithNullHandling"))
-                                    s_methodNamesByType[methodInfo.ReturnType] = methodInfo.Name;
                             }
                         }
                     }

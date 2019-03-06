@@ -161,7 +161,7 @@ namespace Vanrise.Runtime.Data.RDB
                     if (reader.Read())
                     {
                         maxProcessId_local = reader.GetNullableInt("MaxID");
-                        processCount_local = reader.GetIntWithNullHandling("NbOfProcesses");
+                        processCount_local = reader.GetInt("NbOfProcesses");
                     }
                 });
             maxProcessId = maxProcessId_local;

@@ -75,13 +75,13 @@ namespace Vanrise.AccountBalance.Data.RDB
                 AccountTypeId = reader.GetGuid(COL_AccountTypeID),
                 CurrencyId = reader.GetInt(COL_CurrencyID),
                 AlertRuleID = reader.GetNullableInt(COL_AlertRuleID),
-                InitialBalance = reader.GetDecimalWithNullHandling(COL_InitialBalance),
+                InitialBalance = reader.GetDecimal(COL_InitialBalance),
                 NextThreshold = reader.GetNullableDecimal(COL_NextAlertThreshold),
                 LastExecutedThreshold = reader.GetNullableDecimal(COL_LastExecutedActionThreshold),
                 LiveBalanceActiveAlertsInfo = Serializer.Deserialize(reader.GetString(COL_ActiveAlertsInfo), typeof(VRBalanceActiveAlertInfo)) as VRBalanceActiveAlertInfo,
                 BED = reader.GetNullableDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                Status = (VRAccountStatus) reader.GetIntWithNullHandling(COL_Status),
+                Status = (VRAccountStatus) reader.GetInt(COL_Status),
             };
         }
 
@@ -94,11 +94,11 @@ namespace Vanrise.AccountBalance.Data.RDB
                 AccountTypeId = reader.GetGuid(COL_AccountTypeID),
                 CurrentBalance = reader.GetDecimal(COL_CurrentBalance),
                 CurrencyId = reader.GetInt(COL_CurrencyID),
-                InitialBalance = reader.GetDecimalWithNullHandling(COL_InitialBalance),
-                AlertRuleID = reader.GetIntWithNullHandling(COL_AlertRuleID),
+                InitialBalance = reader.GetDecimal(COL_InitialBalance),
+                AlertRuleID = reader.GetInt(COL_AlertRuleID),
                 BED = reader.GetNullableDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                Status = (VRAccountStatus)reader.GetIntWithNullHandling(COL_Status)
+                Status = (VRAccountStatus)reader.GetInt(COL_Status)
             };
         }
 
@@ -111,7 +111,7 @@ namespace Vanrise.AccountBalance.Data.RDB
                 CurrencyId = reader.GetInt(COL_CurrencyID),
                 BED = reader.GetNullableDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                Status = (VRAccountStatus)reader.GetIntWithNullHandling(COL_Status)
+                Status = (VRAccountStatus)reader.GetInt(COL_Status)
             };
         }
 

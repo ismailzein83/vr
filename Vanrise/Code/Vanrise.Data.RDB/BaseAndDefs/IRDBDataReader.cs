@@ -19,51 +19,35 @@ namespace Vanrise.Data.RDB
         string GetStringWithEmptyHandling(string fieldName);
 
         int GetInt(string fieldName);
-
-        int GetIntWithNullHandling(string fieldName);
-
+        
         int? GetNullableInt(string fieldName);
 
         long GetLong(string fieldName);
-
-        long GetLongWithNullHandling(string fieldName);
-
+        
         long? GetNullableLong(string fieldName);
 
         decimal GetDecimal(string fieldName);
-
-        decimal GetDecimalWithNullHandling(string fieldName);
-
+        
         decimal? GetNullableDecimal(string fieldName);
 
         Double GetDouble(string fieldName);
-
-        Double GetDoubleWithNullHandling(string fieldName);
-
+        
         Double? GetNullableDouble(string fieldName);
 
         DateTime GetDateTime(string fieldName);
-
-        DateTime GetDateTimeWithNullHandling(string fieldName);
-
+        
         DateTime? GetNullableDateTime(string fieldName);
 
         Guid GetGuid(string fieldName);
-
-        Guid GetGuidWithNullHandling(string fieldName);
-
+        
         Guid? GetNullableGuid(string fieldName);
 
         Boolean GetBoolean(string fieldName);
-
-        Boolean GetBooleanWithNullHandling(string fieldName);
-
+        
         Boolean? GetNullableBoolean(string fieldName);
 
         byte[] GetBytes(string fieldName);
-
-        byte[] GetNullableBytes(string fieldName);
-
+        
         Vanrise.Entities.Time GetTime(string fieldName);
     }
 
@@ -118,19 +102,7 @@ namespace Vanrise.Data.RDB
                     return (T)Convert.ChangeType(value, CommonRDBFieldValue.GetInlineType(typeof(T)));
             }
         }
-
-        protected virtual T GetFieldValueWithNullHandling<T>(string fieldName)
-        {
-            var value = _originalReader[fieldName];
-            if (value == null || value == DBNull.Value)
-                return default(T);
-            else
-                if (value is T)
-                    return (T)value;
-                else
-                    return (T)Convert.ChangeType(value, CommonRDBFieldValue.GetInlineType(typeof(T)));
-        }
-
+        
         public virtual int GetInt(string fieldName)
         {
             return GetFieldValue<int>(fieldName);
@@ -138,7 +110,7 @@ namespace Vanrise.Data.RDB
 
         public virtual int? GetNullableInt(string fieldName)
         {
-            return GetFieldValueWithNullHandling<int?>(fieldName);
+            return GetFieldValue<int?>(fieldName);
         }
 
         public virtual long GetLong(string fieldName)
@@ -148,7 +120,7 @@ namespace Vanrise.Data.RDB
 
         public virtual long? GetNullableLong(string fieldName)
         {
-            return GetFieldValueWithNullHandling<long?>(fieldName);
+            return GetFieldValue<long?>(fieldName);
         }
 
         public virtual DateTime GetDateTime(string fieldName)
@@ -158,38 +130,18 @@ namespace Vanrise.Data.RDB
 
         public virtual DateTime? GetNullableDateTime(string fieldName)
         {
-            return GetFieldValueWithNullHandling<DateTime?>(fieldName);
+            return GetFieldValue<DateTime?>(fieldName);
         }
 
-
-        public virtual int GetIntWithNullHandling(string fieldName)
-        {
-            return GetFieldValueWithNullHandling<int>(fieldName);
-        }
-
-        public virtual long GetLongWithNullHandling(string fieldName)
-        {
-            return GetFieldValueWithNullHandling<long>(fieldName);
-        }
-
-        public virtual DateTime GetDateTimeWithNullHandling(string fieldName)
-        {
-            return GetFieldValueWithNullHandling<DateTime>(fieldName);
-        }
-
+        
         public virtual Guid GetGuid(string fieldName)
         {
             return GetFieldValue<Guid>(fieldName);
         }
 
-        public virtual Guid GetGuidWithNullHandling(string fieldName)
-        {
-            return GetFieldValueWithNullHandling<Guid>(fieldName);
-        }
-
         public virtual Guid? GetNullableGuid(string fieldName)
         {
-            return GetFieldValueWithNullHandling<Guid?>(fieldName);
+            return GetFieldValue<Guid?>(fieldName);
         }
 
         public virtual bool GetBoolean(string fieldName)
@@ -197,14 +149,9 @@ namespace Vanrise.Data.RDB
             return GetFieldValue<bool>(fieldName);
         }
 
-        public virtual bool GetBooleanWithNullHandling(string fieldName)
-        {
-            return GetFieldValueWithNullHandling<bool>(fieldName);
-        }
-
         public virtual bool? GetNullableBoolean(string fieldName)
         {
-            return GetFieldValueWithNullHandling<bool?>(fieldName);
+            return GetFieldValue<bool?>(fieldName);
         }
 
 
@@ -212,29 +159,20 @@ namespace Vanrise.Data.RDB
         {
             return GetFieldValue<decimal>(fieldName);
         }
-
-        public virtual decimal GetDecimalWithNullHandling(string fieldName)
-        {
-            return GetFieldValueWithNullHandling<decimal>(fieldName);
-        }
-
+        
         public virtual decimal? GetNullableDecimal(string fieldName)
         {
-            return GetFieldValueWithNullHandling<decimal?>(fieldName);
+            return GetFieldValue<decimal?>(fieldName);
         }
 
         public double GetDouble(string fieldName)
         {
             return GetFieldValue<double>(fieldName);
         }
-        public double GetDoubleWithNullHandling(string fieldName)
-        {
-            return GetFieldValueWithNullHandling<double>(fieldName);
-        }
 
         public double? GetNullableDouble(string fieldName)
         {
-            return GetFieldValueWithNullHandling<double?>(fieldName);
+            return GetFieldValue<double?>(fieldName);
         }
 
 
@@ -242,12 +180,7 @@ namespace Vanrise.Data.RDB
         {
             return GetFieldValue<byte[]>(fieldName);
         }
-
-        public virtual byte[] GetNullableBytes(string fieldName)
-        {
-            return GetFieldValueWithNullHandling<byte[]>(fieldName);
-        }
-
+        
         public Vanrise.Entities.Time GetTime(string fieldName)
         {
             var value = _originalReader[fieldName];

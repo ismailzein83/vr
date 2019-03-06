@@ -54,12 +54,12 @@ namespace Vanrise.Invoice.Data.RDB
         {
             return new VRInvoiceAccount
             {
-                Status = (VRAccountStatus)reader.GetIntWithNullHandling(COL_Status),
+                Status = (VRAccountStatus)reader.GetInt(COL_Status),
                 BED = reader.GetNullableDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
                 InvoiceAccountId = reader.GetLong(COL_ID),
                 InvoiceTypeId = reader.GetGuid(COL_InvoiceTypeID),
-                IsDeleted = reader.GetBooleanWithNullHandling(COL_IsDeleted),
+                IsDeleted = reader.GetBoolean(COL_IsDeleted),
                 PartnerId = reader.GetString(COL_PartnerID)
             };
         }

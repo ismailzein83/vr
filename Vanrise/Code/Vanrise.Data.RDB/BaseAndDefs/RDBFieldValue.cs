@@ -13,50 +13,34 @@ namespace Vanrise.Data.RDB
         public abstract string StringValueWithEmptyHandling { get; }
 
         public abstract int IntValue { get; }
-
-        public abstract int IntWithNullHandlingValue { get; }
-
+        
         public abstract int? NullableIntValue { get; }
 
         public abstract long LongValue { get; }
-
-        public abstract long LongWithNullHandlingValue { get; }
-
+        
         public abstract long? NullableLongValue { get; }
 
         public abstract decimal DecimalValue { get; }
-
-        public abstract decimal DecimalWithNullHandlingValue { get; }
-
+        
         public abstract decimal? NullableDecimalValue { get; }
 
         public abstract double DoubleValue { get; }
-
-        public abstract double DoubleWithNullHandlingValue { get; }
-
+        
         public abstract double? NullableDoubleValue { get; }
 
         public abstract DateTime DateTimeValue { get; }
-
-        public abstract DateTime DateTimeWithNullHandlingValue { get; }
-
+        
         public abstract DateTime? NullableDateTimeValue { get; }
 
         public abstract Guid GuidValue { get; }
-
-        public abstract Guid GuidWithNullHandlingValue { get; }
-
+        
         public abstract Guid? NullableGuidValue { get; }
 
         public abstract Boolean BooleanValue { get; }
-
-        public abstract Boolean BooleanWithNullHandlingValue { get; }
-
+        
         public abstract Boolean? NullableBooleanValue { get; }
 
         public abstract byte[] BytesValue { get; }
-
-        public abstract byte[] NullableBytes { get; }
     }
 
     public class CommonRDBFieldValue : RDBFieldValue
@@ -101,18 +85,7 @@ namespace Vanrise.Data.RDB
                     return (T)Convert.ChangeType(_value, GetInlineType(typeof(T)));
             }
         }
-
-        protected virtual T GetFieldValueWithNullHandling<T>()
-        {
-            if (_value == null || _value == DBNull.Value)
-                return default(T);
-            else
-                if (_value is T)
-                    return (T)_value;
-                else
-                    return (T)Convert.ChangeType(_value, GetInlineType(typeof(T)));
-        }
-
+        
         public override string StringValue
         {
             get { return _value as string; }
@@ -127,115 +100,75 @@ namespace Vanrise.Data.RDB
         {
             get { return GetFieldValue<int>(); }
         }
-
-        public override int IntWithNullHandlingValue
-        {
-            get { return GetFieldValueWithNullHandling<int>(); }
-        }
-
+        
         public override int? NullableIntValue
         {
-            get { return GetFieldValueWithNullHandling<int?>(); }
+            get { return GetFieldValue<int?>(); }
         }
 
         public override long LongValue
         {
             get { return GetFieldValue<long>(); }
         }
-
-        public override long LongWithNullHandlingValue
-        {
-            get { return GetFieldValueWithNullHandling<long>(); }
-        }
-
+        
         public override long? NullableLongValue
         {
-            get { return GetFieldValueWithNullHandling<long?>(); }
+            get { return GetFieldValue<long?>(); }
         }
 
         public override decimal DecimalValue
         {
             get { return GetFieldValue<decimal>(); }
         }
-
-        public override decimal DecimalWithNullHandlingValue
-        {
-            get { return GetFieldValueWithNullHandling<decimal>(); }
-        }
-
+        
         public override decimal? NullableDecimalValue
         {
-            get { return GetFieldValueWithNullHandling<decimal?>(); }
+            get { return GetFieldValue<decimal?>(); }
         }
 
         public override double DoubleValue
         {
             get { return GetFieldValue<double>(); }
         }
-
-        public override double DoubleWithNullHandlingValue
-        {
-            get { return GetFieldValueWithNullHandling<double>(); }
-        }
-
+        
         public override double? NullableDoubleValue
         {
-            get { return GetFieldValueWithNullHandling<double?>(); }
+            get { return GetFieldValue<double?>(); }
         }
 
         public override DateTime DateTimeValue
         {
             get { return GetFieldValue<DateTime>(); }
         }
-
-        public override DateTime DateTimeWithNullHandlingValue
-        {
-            get { return GetFieldValueWithNullHandling<DateTime>(); }
-        }
-
+        
         public override DateTime? NullableDateTimeValue
         {
-            get { return GetFieldValueWithNullHandling<DateTime?>(); }
+            get { return GetFieldValue<DateTime?>(); }
         }
 
         public override Guid GuidValue
         {
             get { return GetFieldValue<Guid>(); }
         }
-
-        public override Guid GuidWithNullHandlingValue
-        {
-            get { return GetFieldValueWithNullHandling<Guid>(); }
-        }
-
+        
         public override Guid? NullableGuidValue
         {
-            get { return GetFieldValueWithNullHandling<Guid?>(); }
+            get { return GetFieldValue<Guid?>(); }
         }
 
         public override bool BooleanValue
         {
             get { return GetFieldValue<bool>(); }
         }
-
-        public override bool BooleanWithNullHandlingValue
-        {
-            get { return GetFieldValueWithNullHandling<bool>(); }
-        }
-
+        
         public override bool? NullableBooleanValue
         {
-            get { return GetFieldValueWithNullHandling<bool?>(); }
+            get { return GetFieldValue<bool?>(); }
         }
 
         public override byte[] BytesValue
         {
             get { return GetFieldValue<byte[]>(); }
-        }
-
-        public override byte[] NullableBytes
-        {
-            get { return GetFieldValueWithNullHandling<byte[]>(); }
         }
     }
 

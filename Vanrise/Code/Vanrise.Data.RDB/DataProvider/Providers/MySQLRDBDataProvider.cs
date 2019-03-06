@@ -467,22 +467,13 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
             public override Guid? GetNullableGuid(string fieldName)
             {
-                string stringValue = base.GetFieldValueWithNullHandling<string>(fieldName);
+                string stringValue = base.GetFieldValue<string>(fieldName);
                 if (stringValue != null)
                     return ParseGuidWithValidate(fieldName, stringValue);
                 else
                     return default(Guid?);
             }
-
-            public override Guid GetGuidWithNullHandling(string fieldName)
-            {
-                string stringValue = base.GetFieldValueWithNullHandling<string>(fieldName);
-                if (stringValue != null)
-                    return ParseGuidWithValidate(fieldName, stringValue);
-                else
-                    return default(Guid);
-            }
-
+            
             private Guid ParseGuidWithValidate(string fieldName, string stringValue)
             {
                 Guid guidValue;
@@ -499,20 +490,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
             public override bool? GetNullableBoolean(string fieldName)
             {
-                ulong? intValue = base.GetFieldValueWithNullHandling<ulong?>(fieldName);
+                ulong? intValue = base.GetFieldValue<ulong?>(fieldName);
                 if (intValue.HasValue)
                     return intValue.Value > 0;
                 else
                     return default(bool?);
-            }
-
-            public override bool GetBooleanWithNullHandling(string fieldName)
-            {
-                ulong? intValue = base.GetFieldValueWithNullHandling<ulong?>(fieldName);
-                if (intValue.HasValue)
-                    return intValue.Value > 0;
-                else
-                    return default(bool);
             }
         }
 
@@ -537,26 +519,14 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             {
                 get
                 {
-                    string stringValue = base.GetFieldValueWithNullHandling<string>();
+                    string stringValue = base.GetFieldValue<string>();
                     if (stringValue != null)
                         return ParseGuidWithValidate(stringValue);
                     else
                         return default(Guid?);
                 }
             }
-
-            public override Guid GuidWithNullHandlingValue
-            {
-                get
-                {
-                    string stringValue = base.GetFieldValueWithNullHandling<string>();
-                    if (stringValue != null)
-                        return ParseGuidWithValidate(stringValue);
-                    else
-                        return default(Guid);
-                }
-            }
-
+            
             private Guid ParseGuidWithValidate(string stringValue)
             {
                 Guid guidValue;
@@ -578,23 +548,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             {
                 get
                 {
-                    ulong? intValue = base.GetFieldValueWithNullHandling<ulong?>();
+                    ulong? intValue = base.GetFieldValue<ulong?>();
                     if (intValue.HasValue)
                         return intValue.Value > 0;
                     else
                         return default(bool?);
-                }
-            }
-
-            public override bool BooleanWithNullHandlingValue
-            {
-                get
-                {
-                    ulong? intValue = base.GetFieldValueWithNullHandling<ulong?>();
-                    if (intValue.HasValue)
-                        return intValue.Value > 0;
-                    else
-                        return default(bool);
                 }
             }
         }

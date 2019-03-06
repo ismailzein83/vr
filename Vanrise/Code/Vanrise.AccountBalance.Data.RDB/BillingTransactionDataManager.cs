@@ -83,11 +83,11 @@ namespace Vanrise.AccountBalance.Data.RDB
                 TransactionTime = reader.GetDateTime(COL_TransactionTime),
                 TransactionTypeId = reader.GetGuid(COL_TransactionTypeID),
                 Reference = reader.GetString(COL_Reference),
-                IsBalanceUpdated = reader.GetBooleanWithNullHandling(COL_IsBalanceUpdated),
+                IsBalanceUpdated = reader.GetBoolean(COL_IsBalanceUpdated),
                 SourceId = reader.GetString(COL_SourceID),
                 Settings = (settingsAsString != null) ? Vanrise.Common.Serializer.Deserialize<BillingTransactionSettings>(settingsAsString) : null,
-                IsDeleted = reader.GetBooleanWithNullHandling(COL_IsDeleted),
-                IsSubtractedFromBalance = reader.GetBooleanWithNullHandling(COL_IsSubtractedFromBalance)
+                IsDeleted = reader.GetBoolean(COL_IsDeleted),
+                IsSubtractedFromBalance = reader.GetBoolean(COL_IsSubtractedFromBalance)
             };
         }
 
