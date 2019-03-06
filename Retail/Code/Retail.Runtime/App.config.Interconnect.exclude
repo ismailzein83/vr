@@ -71,6 +71,7 @@
 
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString" />    
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="ICXDBConnStringKey"                               value="ConfigurationDBConnString"/>
     
     <add key="RetailCDRDBConnStringKey"                         value="RetailCDRDBConnString"/>
     <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>
