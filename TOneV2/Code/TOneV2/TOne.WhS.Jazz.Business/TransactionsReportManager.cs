@@ -32,7 +32,6 @@ namespace TOne.WhS.Jazz.Business
                 var orderedReports = transactionsReports.OrderBy(x => jazzReportDefinitionManager.GetJazzReportDefinitionName(x.ReportDefinitionId));
                 transactionsReports = orderedReports.OrderBy(x => x.SheetName).ToList();
 
-
                 var reportsIds = transactionsReports.MapRecords(x=>x.ReportId).ToList();
                 var transactionsReportsDictionary = transactionsReports.ToDictionary(x => x.ReportId, x => x);
                 IDraftReportTransactionDataManager draftReportTransactionDataManager = JazzDataManagerFactory.GetDataManager<IDraftReportTransactionDataManager>();
@@ -40,16 +39,17 @@ namespace TOne.WhS.Jazz.Business
 
                 if (transactionsReportsData != null && transactionsReportsData.Count > 0)
                 {
-                    foreach (var transactionsReportData in transactionsReportsData)
+
+                    foreach (var transactionsReport in transactionsReports)
                     {
-                        ERPDraftReport report = null;
-                        if (transactionsReportsDictionary.TryGetValue(transactionsReportData.Key, out report))
+                        List<ERPDraftReportTranaction> reportDatas = null;
+                        if (transactionsReportsData.TryGetValue(transactionsReport.ReportId, out reportDatas))
                         {
                             var excelSheet = excelFile.CreateSheet();
 
-                            excelSheet.SheetName = (report.SheetName.Length > 31) ? string.Format("{0}...", report.SheetName.Substring(0, 28)) : report.SheetName;
+                            excelSheet.SheetName = (transactionsReport.SheetName.Length > 31) ? string.Format("{0}...", transactionsReport.SheetName.Substring(0, 28)) : transactionsReport.SheetName;
 
-                            if (transactionsReportData.Value != null && transactionsReportData.Value.Count > 0)
+                            if (reportDatas != null && reportDatas.Count > 0)
                             {
                                 var excelTable = excelSheet.CreateTable(1, 0);
 
@@ -64,7 +64,7 @@ namespace TOne.WhS.Jazz.Business
                                 };
                                 VRExcelCell titleCell = new VRExcelCell
                                 {
-                                    Value = report.SheetName,
+                                    Value = transactionsReport.SheetName,
                                     RowIndex = 0,
                                     ColumnIndex = 0,
                                     Style = new VRExcelCellStyle
@@ -80,13 +80,13 @@ namespace TOne.WhS.Jazz.Business
                                 CreateCell("Transaction Description", headerRow, textCellStyle);
                                 CreateCell("Credit", headerRow, textCellStyle);
                                 CreateCell("Debit", headerRow, textCellStyle);
-                                foreach (var transactionReportData in transactionsReportData.Value)
+                                foreach (var reportData in reportDatas)
                                 {
                                     var row = excelTable.CreateDataRow();
-                                    CreateCell(transactionReportData.TransactionCode, row, textCellStyle);
-                                    CreateCell(transactionReportData.TransationDescription, row, textCellStyle);
-                                    CreateCell(transactionReportData.Credit, row, numberCellStyle);
-                                    CreateCell(transactionReportData.Debit, row, numberCellStyle);
+                                    CreateCell(reportData.TransactionCode, row, textCellStyle);
+                                    CreateCell(reportData.TransationDescription, row, textCellStyle);
+                                    CreateCell(reportData.Credit, row, numberCellStyle);
+                                    CreateCell(reportData.Debit, row, numberCellStyle);
                                 }
                             }
                         }
