@@ -90,7 +90,7 @@ app.directive("vrWhsDealSupplierrateevaluatorSelective", ["WhS_Deal_VolCommitmen
                                     selectiveCtrl.selectedTemplateConfig = UtilsService.getItemByVal(selectiveCtrl.templateConfigs, evaluatedRate.ConfigId, 'ExtensionConfigurationId');
                                 }
                                 else {
-                                    selectiveCtrl.selectedTemplateConfig = selectiveCtrl.templateConfigs[1];
+                                    selectiveCtrl.selectedTemplateConfig = UtilsService.getItemByVal(selectiveCtrl.templateConfigs, 'F89330E6-F3C2-4B85-B303-3C1FACAE6AC6'.toLowerCase(), 'ExtensionConfigurationId');
                                 }
                             });
                     }

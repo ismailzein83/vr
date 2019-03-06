@@ -94,7 +94,7 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
                                 selectiveCtrl.selectedTemplateConfig = UtilsService.getItemByVal(selectiveCtrl.templateConfigs, evaluatedRate.ConfigId, 'ExtensionConfigurationId');
                             }
                             else {
-                                selectiveCtrl.selectedTemplateConfig = selectiveCtrl.templateConfigs[1];
+                                selectiveCtrl.selectedTemplateConfig = UtilsService.getItemByVal(selectiveCtrl.templateConfigs, '2349B728-30EF-46B0-B54A-F9350F66FF2F'.toLowerCase(), 'ExtensionConfigurationId');
                             }
                         });
                 }
