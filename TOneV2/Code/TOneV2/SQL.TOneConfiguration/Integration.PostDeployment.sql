@@ -349,23 +349,23 @@ when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
 
-----[common].[Setting]--------------------1 to 100----------------------------------------------------
---begin
---set nocount on;
---;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
---as (select * from (values
-----//////////////////////////////////////////////////////////////////////////////////////////////////
---('0D693835-9A45-4D35-826B-A6DA59011B4B','Data Source','VR_Integration_DataSourceSettings','General','{"Editor":"vr-integration-datasourcesetting-editor"}',null,0)
-----\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
---)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
---merge	[common].[Setting] as t
---using	cte_data as s
---on		1=1 and t.[ID] = s.[ID]
-----when matched then
-----	update set
-----	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
---when not matched by target then
---	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
---	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
-------------------------------------------------------------------------------------------------------
---end
+--[common].[Setting]--------------------1 to 100----------------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('0D693835-9A45-4D35-826B-A6DA59011B4B','Data Source','VR_Integration_DataSourceSettings','General','{"Editor":"vr-integration-datasourcesetting-editor"}','{"$type":"Vanrise.Integration.Entities.DataSourceSettingData, Vanrise.Integration.Entities","FileDataSourceSettings":{"$type":"Vanrise.Integration.Entities.FileDataSourceSettings, Vanrise.Integration.Entities","PeakTimeRanges":{"$type":"System.Collections.Generic.List`1[[Vanrise.Integration.Entities.PeakTimeRange, Vanrise.Integration.Entities]], mscorlib","$values":[]},"FileDataSourceDefinitions":{"$type":"System.Collections.Generic.List`1[[Vanrise.Integration.Entities.FileDataSourceDefinition, Vanrise.Integration.Entities]], mscorlib","$values":[{"$type":"Vanrise.Integration.Entities.FileDataSourceDefinition, Vanrise.Integration.Entities","FileDataSourceDefinitionId":"ca001263-f0f2-1f5f-3c3f-2821848e7193","Name":"Default"}]}}}',0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+merge	[common].[Setting] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+when not matched by target then
+	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+----------------------------------------------------------------------------------------------------
+end
