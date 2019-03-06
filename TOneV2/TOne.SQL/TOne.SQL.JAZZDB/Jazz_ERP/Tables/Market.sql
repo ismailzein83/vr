@@ -4,10 +4,12 @@
     [Code]             VARCHAR (40)     NULL,
     [ProductServiceId] UNIQUEIDENTIFIER NULL,
     [CreatedBy]        INT              NULL,
-    [CreatedTime]      DATETIME         CONSTRAINT [DF_Market_CreatedTime] DEFAULT (getdate()) NULL,
     [LastModifiedBy]   INT              NULL,
+    [CreatedTime]      DATETIME         CONSTRAINT [DF_Market_CreatedTime] DEFAULT (getdate()) NULL,
     [LastModifiedTime] DATETIME         NULL,
     [timestamp]        ROWVERSION       NULL,
-    CONSTRAINT [PK_Market] PRIMARY KEY CLUSTERED ([ID] ASC)
+    PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
