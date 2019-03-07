@@ -42,7 +42,7 @@ namespace TOne.WhS.Jazz.Business
 
                     foreach (var transactionsReport in transactionsReports)
                     {
-                        List<ERPDraftReportTranaction> reportDatas = null;
+                        List<ERPDraftReportTransaction> reportDatas = null;
                         if (transactionsReportsData.TryGetValue(transactionsReport.ReportId, out reportDatas))
                         {
                             var excelSheet = excelFile.CreateSheet();

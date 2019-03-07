@@ -109,7 +109,7 @@
                         });
 
                     }
-                    else loadTransactionTypeSelector({});
+                    else return loadTransactionTypeSelector({});
                 };
 
                 api.setData = function (payload) {

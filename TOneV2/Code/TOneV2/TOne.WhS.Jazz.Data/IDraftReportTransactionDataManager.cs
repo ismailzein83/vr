@@ -9,7 +9,7 @@ namespace TOne.WhS.Jazz.Data
 {
    public interface IDraftReportTransactionDataManager : IDataManager
     {
-        Dictionary<long, List<ERPDraftReportTranaction>> GetTransactionsReportsData(List<long> reportsIds);
+        Dictionary<long, List<ERPDraftReportTransaction>> GetTransactionsReportsData(List<long> reportsIds);
         void Insert(List<JazzTransactionsReportData> transactionReportData,long reportId);
         void Delete(long processInstanceId);
 

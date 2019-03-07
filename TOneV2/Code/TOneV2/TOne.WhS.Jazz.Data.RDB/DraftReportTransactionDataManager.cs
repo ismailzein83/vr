@@ -51,7 +51,7 @@ namespace TOne.WhS.Jazz.Data.RDB
 
         #region Public Methods
 
-        public Dictionary<long, List<ERPDraftReportTranaction>> GetTransactionsReportsData(List<long> reportsIds)
+        public Dictionary<long, List<ERPDraftReportTransaction>> GetTransactionsReportsData(List<long> reportsIds)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
@@ -59,24 +59,24 @@ namespace TOne.WhS.Jazz.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Where().ListCondition(COL_ERPDraftReportID, RDBListConditionOperator.IN, reportsIds);
 
-            Dictionary<long, List<ERPDraftReportTranaction>> data = null;
+            Dictionary<long, List<ERPDraftReportTransaction>> data = null;
             queryContext.ExecuteReader(
               (reader) =>
               {
                   while (reader.Read())
                   {
                       if (data == null)
-                          data = new Dictionary<long, List<ERPDraftReportTranaction>>();
+                          data = new Dictionary<long, List<ERPDraftReportTransaction>>();
 
                       long draftReportId = reader.GetLong(COL_ERPDraftReportID);
-                      ERPDraftReportTranaction transactionsReportData = new ERPDraftReportTranaction
+                      ERPDraftReportTransaction transactionsReportData = new ERPDraftReportTransaction
                       {
                           TransactionCode = reader.GetString(COL_TransactionCode),
                           TransationDescription = reader.GetString(COL_TransactionDescription),
                           Credit = reader.GetDecimal(COL_Credit),
                           Debit = reader.GetDecimal(COL_Debit)
                       };
-                      List<ERPDraftReportTranaction> transactionsReportsData = data.GetOrCreateItem(draftReportId);
+                      List<ERPDraftReportTransaction> transactionsReportsData = data.GetOrCreateItem(draftReportId);
                       transactionsReportsData.Add(transactionsReportData);
                   }
               });

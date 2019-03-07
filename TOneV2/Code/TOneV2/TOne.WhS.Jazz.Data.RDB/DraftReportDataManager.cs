@@ -63,12 +63,7 @@ namespace TOne.WhS.Jazz.Data.RDB
                 insertQuery.Column(COL_TransactionTypeID).Value(transactionsReport.TransactionTypeId.Value);
             insertQuery.Column(COL_IsTaxTransaction).Value(transactionsReport.IsTaxTransaction);
 
-            var insertedID = queryContext.ExecuteScalar().NullableLongValue;
-
-            if (insertedID.HasValue)
-                insertedId = insertedID.Value;
-            else
-                insertedId = -1;
+            insertedId = queryContext.ExecuteScalar().LongValue;
         }
 
         public List<ERPDraftReport> GetTransactionsReports(long processInstanceId)

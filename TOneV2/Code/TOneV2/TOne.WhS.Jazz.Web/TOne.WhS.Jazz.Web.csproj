@@ -155,16 +155,17 @@
   <ItemGroup>
     <Content Include="WhS_Jazz\Constant\AmountTypeEnum.js" />
     <Content Include="WhS_Jazz\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\AccountCode\Templates\AccountCodeCustomObjectRuntimeFilter.html" />
+    <Content Include="WhS_Jazz\Elements\Directives\AccountCode\whs-jazz-accountcode-customobject-filter-directive.js" />
     <Content Include="WhS_Jazz\Elements\Directives\MainExtensions\Templates\ReportDefinitionOnBeforeSaveHandler.html" />
     <Content Include="WhS_Jazz\Elements\Directives\MainExtensions\Templates\AccountCodeOnBeforeSaveHandler.html" />
     <Content Include="WhS_Jazz\Elements\Directives\MainExtensions\whs-jazz-reportdefinition-onbeforesavehandler.js" />
     <Content Include="WhS_Jazz\Elements\Directives\MainExtensions\whs-jazz-accountcode-onbeforesavehandler.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\Templates\AmountCalculationSelector.html" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportsProcess\Templates\ReportsProcess.html" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportsProcess\whs-jazz-reports-process.js" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\Templates\ReportDefinitionSettingsCustomObjectStaticEditor.html" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-reportdefinitionsettings-customobject-staticeditor.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-rate-calculation-type-selector.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-amount-type-selector.js" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-region-selector.js" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-market-selector.js" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-customer-type-selector.js" />

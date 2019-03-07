@@ -13,7 +13,7 @@ namespace TOne.WhS.Jazz.Entities
         public string SheetName { get; set; }
         public Guid? TransactionTypeId { get; set; }
     }
-    public class ERPDraftReportTranaction
+    public class ERPDraftReportTransaction
     {
         public string TransationDescription { get; set; }
         public string TransactionCode { get; set; }

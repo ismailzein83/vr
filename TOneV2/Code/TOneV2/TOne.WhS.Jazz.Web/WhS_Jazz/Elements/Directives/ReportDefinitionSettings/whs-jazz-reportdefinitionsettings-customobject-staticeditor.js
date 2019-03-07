@@ -91,6 +91,8 @@
                 $scope.scopeModel.validateRegions = function () {
                     if ($scope.scopeModel.regions.length == 0 )
                         return 'You Should At Least Add One Region ';
+                    if (validateRegionDuplicates($scope.scopeModel.regions))
+                        return 'Duplicate Regions  Exists';
                     if (validatePercentages($scope.scopeModel.regions))
                         return 'Percentages Sum Must Be Equal To 100';
                     return null;
@@ -99,6 +101,8 @@
                 $scope.scopeModel.validateMarkets = function () {
                     if ($scope.scopeModel.markets.length == 0)
                         return 'You Should At Least Add One Market ';
+                    if (validateMarketDuplicates($scope.scopeModel.markets))
+                        return 'Duplicate Markets With Customer Types Exists';
                     if (validatePercentages($scope.scopeModel.markets))
                         return 'Percentages Sum Must Be Equal To 100';
                     return null;
@@ -108,7 +112,7 @@
                         return true;
                     return false;
                 };
-                $scope.scopeModel.onRateCalculationTypeSelectorReady = function (api) {
+                $scope.scopeModel.onAmountTypeSelectorReady = function (api) {
                     amountTypeSelectorAPI = api;
                     amountTypeSelectorReadyPromiseDeferred.resolve();
                 };
@@ -120,12 +124,13 @@
                 $scope.scopeModel.onAmountTypeSelectionChanged = function (value) {
                     if (amountTypeSelectorAPI) {
                         if (value) {
+                            $scope.scopeModel.isCurrencyRequired = true;
                             if (amountTypeSelectedPromise != undefined) {
                                 amountTypeSelectedPromise = undefined;
                             }
                             else {
 
-                                currencySelectorAPI.load();
+                                currencySelectorAPI.load({ selectSystemCurrency: true });
                                 $scope.scopeModel.splitRateValue = undefined;
                             }
                         }
@@ -143,7 +148,48 @@
                     return false;
                 return true;
             }
+            function validateMarketDuplicates(items) {
 
+                var marketOptions;
+                if (items!= undefined) {
+                    marketOptions = [];
+                    for (var i = 0; i < items.length; i++) {
+                        var item = items[i];
+                        marketOptions.push({
+                            MarketId: item.marketDirectiveAPI != undefined ? item.marketDirectiveAPI.getSelectedIds() : undefined,
+                            CustomerTypeId: item.customerTypeDirectiveAPI != undefined ? item.customerTypeDirectiveAPI.getSelectedIds() : undefined,
+                        });
+                    }
+                }
+
+                for (var i = 0; i < marketOptions.length; i++) {
+                    for (var j = i; j < marketOptions.length; j++) {
+                        if (i != j && marketOptions[i].MarketId != undefined && marketOptions[i].CustomerTypeId != undefined && marketOptions[j].MarketId != undefined && marketOptions[j].CustomerTypeId != undefined && marketOptions[i].MarketId == marketOptions[j].MarketId && marketOptions[i].CustomerTypeId == marketOptions[j].CustomerTypeId)
+                            return true;
+                    }
+                }
+                return false;
+            }
+            function validateRegionDuplicates(items) {
+
+                var regionOptions;
+                if (items != undefined) {
+                    regionOptions = [];
+                    for (var i = 0; i < items.length; i++) {
+                        var item = items[i];
+                        regionOptions.push({
+                            RegionId: item.regionDirectiveAPI != undefined ? item.regionDirectiveAPI.getSelectedIds() : undefined,
+                        });
+                    }
+                } 
+                for (var i = 0; i < regionOptions.length; i++) {
+                    for (var j = i; j < regionOptions.length; j++) {
+                        if (i != j && regionOptions[i].RegionId != undefined && regionOptions[j].RegionId != undefined && regionOptions[i].RegionId == regionOptions[j].RegionId)
+                            return true;
+                    }
+                }
+                return false;
+            }
             function prepareRegionObject(regionObject) {
 
                 var entity = {
@@ -265,7 +311,7 @@
                         }
                         $scope.scopeModel.splitRateValue = selectedValues != undefined ? selectedValues.SplitRateValue : undefined;
                         promises.push(loadAmountTypeSelector({ selectedIds: selectedValues != undefined ? selectedValues.AmountType : undefined }));
-                        promises.push(loadCurrencySelector({ selectedIds: selectedValues != undefined ? selectedValues.CurrencyId : undefined }));
+                        promises.push(loadCurrencySelector({ selectedIds: selectedValues != undefined ? selectedValues.CurrencyId : undefined, selectSystemCurrency: selectedValues == undefined ? true : false }));
                         promises.push(loadReportDefinitionFilterDirective());
                         UtilsService.waitMultiplePromises(promises).then(function () {
                             loadPromiseDeferred.resolve();

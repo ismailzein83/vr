@@ -101,6 +101,10 @@
       <Project>{70CE755D-00AE-4E12-8F07-E4DF91346293}</Project>
       <Name>TOne.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Jazz.Business\TOne.WhS.Jazz.Business.csproj">
       <Project>{13b1e299-0735-4740-85f3-5ef085d4d206}</Project>
       <Name>TOne.WhS.Jazz.Business</Name>

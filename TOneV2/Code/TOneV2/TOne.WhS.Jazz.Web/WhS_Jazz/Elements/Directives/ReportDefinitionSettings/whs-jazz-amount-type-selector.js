@@ -1,5 +1,5 @@
 ﻿
-appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Jazz_AmountTypeEnum',
+appControllers.directive('whsJazzAmountTypeSelector', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Jazz_AmountTypeEnum',
     function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Jazz_AmountTypeEnum) {
         'use strict';
 
