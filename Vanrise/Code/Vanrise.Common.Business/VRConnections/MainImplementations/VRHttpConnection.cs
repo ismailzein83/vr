@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -22,6 +21,8 @@ namespace Vanrise.Common.Business
 
         public List<VRWorkflowRetrySettings> WorkflowRetrySettings { get; set; }
 
+        public VRHttpConnectionCallInterceptor Interceptor { get; set; }
+
         public virtual bool TrySendRequest(string actionPath, VRHttpMethod httpMethod, VRHttpMessageFormat messageFormat, Dictionary<string, string> urlParameters,
             Dictionary<string, string> headers, string body, Action<VRHttpResponse> onResponseReceived, bool throwIfError, Action<VRHttpFault> onError)
         {
@@ -30,7 +31,7 @@ namespace Vanrise.Common.Business
             VRHttpFault fault = null;
             try
             {
-                using (var client = new System.Net.Http.HttpClient())
+                using (var client = new System.Net.Http.HttpClient(new HttpClientHandler { UseCookies = false }))
                 {
                     client.BaseAddress = new Uri(this.BaseURL);
                     string messageFormatValue = Utilities.GetEnumAttribute<VRHttpMessageFormat, VRHttpMessageFormatAttribute>(messageFormat).Value;
@@ -39,6 +40,13 @@ namespace Vanrise.Common.Business
                     using (System.Net.Http.HttpRequestMessage request = new System.Net.Http.HttpRequestMessage(MapVRHttpMethod(httpMethod), actionWithParameters))
                     {
                         AddHeaders(request, headers);
+
+                        if (this.Interceptor != null)
+                        {
+                            var context = new VRHttpConnectionInterceptRequestContext() { Client = client, Connection = this, Body = body, HttpRequestMessage = request };
+                            this.Interceptor.InterceptRequest(context);
+                            body = context.Body;
+                        }
 
                         if (!String.IsNullOrEmpty(body))
                             request.Content = new System.Net.Http.StringContent(body, System.Text.Encoding.UTF8, messageFormatValue);
@@ -143,7 +151,7 @@ namespace Vanrise.Common.Business
 
     public class VRWorkflowRetrySettings
     {
-        public int MaxRetryCount { get;set;}
+        public int MaxRetryCount { get; set; }
 
         public TimeSpan RetryInterval { get; set; }
     }

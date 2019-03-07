@@ -1,6 +1,7 @@
 ﻿<vr-columns width="1/2row">
     <vr-textbox value="scopeModel.baseURL" label="Base URL" localizedlabel="VRRes.BaseURL.VREnd" isrequired="true"></vr-textbox>
 </vr-columns>
+<vr-common-httpconnectioncallinterceptor-selective on-ready="scopeModel.onHttpconnectioncallinterceptorSelectiveReady"></vr-common-httpconnectioncallinterceptor-selective>
 <vr-columns width="fullrow">
     <vr-section header="Headers">
         <vr-button type="Add" data-onclick="scopeModel.addHttpHeader" standalone></vr-button>

@@ -36,7 +36,7 @@
 
                 $scope.onDirectiveReady = function (api) {
                     directiveAPI = api;
-                    var setLoader = function (value) { $scope.isLoadingDirective = value };
+                    var setLoader = function (value) { $scope.isLoadingDirective = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
                 };
                 defineAPI();
@@ -46,17 +46,14 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log("Selective load");
-
                     $scope.interceptorTemplates.length = 0;
 
                     var promises = [];
-                    var settings;
+                    var interceptor;
 
                     if (payload != undefined) {
-                        settings = payload.settings;
+                        interceptor = payload.Interceptor;
                     }
-                    console.log("RA");
                     var loadTemplatesPromise = loadTemplates();
                     promises.push(loadTemplatesPromise);
 
@@ -64,8 +61,8 @@
                     promises.push(loadDirectivePromise);
 
                     loadTemplatesPromise.then(function () {
-                        if (settings != undefined) {
-                            $scope.selectedInterceptorTemplate = UtilsService.getItemByVal($scope.interceptorTemplates, settings.ConfigId, 'ExtensionConfigurationId');
+                        if (interceptor != undefined) {
+                            $scope.selectedInterceptorTemplate = UtilsService.getItemByVal($scope.interceptorTemplates, interceptor.ConfigId, 'ExtensionConfigurationId');
                         }
                         else if ($scope.interceptorTemplates.length > 0)
                             $scope.selectedInterceptorTemplate = $scope.interceptorTemplates[0];
@@ -73,7 +70,6 @@
 
                     function loadTemplates() {
                         return VRCommon_HttpConnectionCallInterceptorAPIService.GetHttpConnectionCallInterceptorTemplateConfigs().then(function (response) {
-                            console.log(response);
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.interceptorTemplates.push(response[i]);
@@ -86,7 +82,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { settings: settings };
+                            var directivePayload = { Interceptor: interceptor };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 

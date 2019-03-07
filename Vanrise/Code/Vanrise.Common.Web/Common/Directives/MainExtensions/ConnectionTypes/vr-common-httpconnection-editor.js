@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonHttpconnectionEditor', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrCommonHttpconnectionEditor', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -26,6 +26,9 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService',
             var settingsGridAPI;
             var settingsGridAPIReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var httpconnectioncallinterceptorSelectiveAPI;
+            var httpconnectioncallinterceptorSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.headers = [];
@@ -40,6 +43,11 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService',
                 $scope.scopeModel.onSettingGridReady = function (api) {
                     settingsGridAPI = api;
                     settingsGridAPIReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onHttpconnectioncallinterceptorSelectiveReady = function (api) {
+                    httpconnectioncallinterceptorSelectiveAPI = api;
+                    httpconnectioncallinterceptorSelectiveReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.addHttpHeader = function () {
@@ -96,6 +104,16 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService',
                         if (payload.data.WorkflowRetrySettings != undefined)
                             $scope.scopeModel.settings = payload.data.WorkflowRetrySettings;
                     }
+
+                    var httpconnectioncallinterceptorSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    httpconnectioncallinterceptorSelectiveReadyDeferred.promise.then(function () {
+                        var interceptorPayload = {
+                            Interceptor: (payload != undefined && payload.data != undefined) ? payload.data.Interceptor : null
+                        };
+                        VRUIUtilsService.callDirectiveLoad(httpconnectioncallinterceptorSelectiveAPI, interceptorPayload, httpconnectioncallinterceptorSelectiveLoadDeferred);
+                    });
+
                 };
 
                 api.getData = function () {
@@ -127,7 +145,8 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService',
                         $type: "Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business",
                         BaseURL: $scope.scopeModel.baseURL,
                         Headers: headers,
-                        WorkflowRetrySettings: settings
+                        WorkflowRetrySettings: settings,
+                        Interceptor: (httpconnectioncallinterceptorSelectiveAPI != null) ? httpconnectioncallinterceptorSelectiveAPI.getData() : null
                     };
                 };
 
