@@ -14,6 +14,7 @@
         var vrWorkflowArgumentEditorRuntimeDict;
 
         var activitiesErrorsDictionary;
+        var classMembersErrors;
 
         var argumentsGridAPI;
         var argumentsGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -48,7 +49,7 @@
             $scope.scopeModel.isCompileValidContext =
                 {
                     validate: function () {
-                        if(workflowDesignerAPI == undefined || !workflowDesignerAPI.isActivityValid())
+                        if (workflowDesignerAPI == undefined || !workflowDesignerAPI.isActivityValid())
                             return 'Compile action is not allowed';
 
                         return null;
@@ -62,6 +63,10 @@
 
             $scope.scopeModel.tryCompileWorkflow = function () {
                 return tryCompileWorkflow();
+            };
+
+            $scope.scopeModel.tryCompileWorkflowClassMembers = function () {
+                return tryCompileWorkflowClassMembers();
             };
 
             $scope.scopeModel.saveVRWorkflow = function () {
@@ -91,6 +96,16 @@
 
                 return promiseDeferred.promise;
             };
+
+            $scope.scopeModel.classMembersHasErrorsValidator = function () {
+                if (classMembersErrors != undefined && classMembersErrors.length > 0) {
+                    var errorMessage = '';
+                    for (var i = 0; i < classMembersErrors.length; i++) {
+                        errorMessage += (i + 1) + ') ' + classMembersErrors[i] + '\n';
+                    }
+                    return errorMessage;
+                }
+            }
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
@@ -134,6 +149,7 @@
                 if (vrWorkflowEntity != undefined) {
                     $scope.scopeModel.name = vrWorkflowEntity.Name;
                     $scope.scopeModel.title = vrWorkflowEntity.Title;
+                    $scope.scopeModel.classMembersCode = (vrWorkflowEntity.Settings != undefined && vrWorkflowEntity.Settings.ClassMembers != undefined) ? vrWorkflowEntity.Settings.ClassMembers.ClassMembersCode : null;
                 }
             }
 
@@ -259,6 +275,7 @@
 
         function tryCompileWorkflow() {
             activitiesErrorsDictionary = undefined;
+            classMembersErrors = undefined;
 
             if (activitiesList != undefined) {
                 var resetErrorsFunction;
@@ -277,8 +294,32 @@
                     promiseDeferred.resolve(true);
                 }
                 else {
+                    classMembersErrors = response.ClassMembersErrors;
                     activitiesErrorsDictionary = response.ActivitiesErrors;
                     //BusinessProcess_VRWorkflowService.tryCompilationResult(response.ErrorMessages, workflowObj);
+                    promiseDeferred.resolve(false);
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+                promiseDeferred.reject(error);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+            return promiseDeferred.promise;
+        }
+
+        function tryCompileWorkflowClassMembers() {
+            classMembersErrors = undefined;
+            var promiseDeferred = UtilsService.createPromiseDeferred();
+            $scope.scopeModel.isLoading = true;
+            var workflowObj = buildVRWorkflowObjFromScope();
+            BusinessProcess_VRWorkflowAPIService.TryCompileWorkflowClassMembers(workflowObj).then(function (response) {
+                if (response.Result) {
+                    VRNotificationService.showSuccess("Workflow class members compiled successfully.");
+                    promiseDeferred.resolve(true);
+                }
+                else {
+                    classMembersErrors = response.ClassMembersErrors;
                     promiseDeferred.resolve(false);
                 }
             }).catch(function (error) {
@@ -296,6 +337,7 @@
                 Title: $scope.scopeModel.title,
                 Settings: {
                     Arguments: argumentsGridAPI.getData(),
+                    ClassMembers: { ClassMembersCode: $scope.scopeModel.classMembersCode },
                     RootActivity: workflowDesignerAPI.getData()
                 }
             };

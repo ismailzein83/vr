@@ -29,6 +29,8 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public VRWorkflowArgumentCollection Arguments { get; set; }
 
+        public VRWorkflowClassMembers ClassMembers { get; set; }
+
         public VRWorkflowActivity RootActivity { get; set; }
     }
 
@@ -52,6 +54,11 @@ namespace Vanrise.BusinessProcess.Entities
     public class VRWorkflowArgumentEditorRuntime
     {
         public string VRWorkflowVariableTypeDescription { get; set; }
+    }
+
+    public class VRWorkflowClassMembers
+    {
+        public string ClassMembersCode { get; set; }
     }
 
     //public enum VRWorkflowTimeUnit

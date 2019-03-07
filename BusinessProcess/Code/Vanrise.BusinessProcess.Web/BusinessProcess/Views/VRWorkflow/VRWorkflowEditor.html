@@ -19,8 +19,22 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
+                <vr-tab header="'Class Members'">
+                    <vr-row>
+                        <vr-columns colnum="12">
+                            <vr-validator validate="scopeModel.classMembersHasErrorsValidator()">
+                                <vr-textarea value="scopeModel.classMembersCode" label="Class Members Implementation" rows="20"></vr-textarea>
+                            </vr-validator>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns colnum="1">
+                            <a style="cursor:pointer;font-size:11px" ng-click="scopeModel.tryCompileWorkflowClassMembers()">Compile</a>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
                 <vr-tab header="'Workflow'">
-                        <businessprocess-vr-workflow-designer-directive on-ready="scopeModel.onWorkflowDesignerReady"></businessprocess-vr-workflow-designer-directive>
+                    <businessprocess-vr-workflow-designer-directive on-ready="scopeModel.onWorkflowDesignerReady"></businessprocess-vr-workflow-designer-directive>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

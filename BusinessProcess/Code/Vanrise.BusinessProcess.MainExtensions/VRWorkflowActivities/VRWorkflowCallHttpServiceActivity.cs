@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.Common;
 using Vanrise.Common.Business;
 
 namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
@@ -44,6 +40,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public VRWorkflowCallHttpRetrySettings RetrySettings { get; set; }
 
+        public string ClassMembersCode { get; set; }
+
         protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             var httpClient = new System.Net.Http.HttpClient();
@@ -52,6 +50,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                 namespace #NAMESPACE#
                 {
+                    #ClassMembersCode#
+
                     public class #CLASSNAME# : NativeActivity
                     {
                         protected override void Execute(NativeActivityContext context)
@@ -168,6 +168,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             nmSpaceCodeBuilder.Replace("#ACTIONPATH#", this.ActionPath);
             nmSpaceCodeBuilder.Replace("#HTTPMETHOD#", this.Method.ToString());
             nmSpaceCodeBuilder.Replace("#RetrySettings#", this.RetrySettings.ToString());
+            nmSpaceCodeBuilder.Replace("#ClassMembersCode#", this.ClassMembersCode);
 
             if (this.URLParameters != null && this.URLParameters.Count > 0)
             {
