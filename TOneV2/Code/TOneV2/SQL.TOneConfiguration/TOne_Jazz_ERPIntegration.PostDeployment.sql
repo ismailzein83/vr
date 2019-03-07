@@ -244,9 +244,9 @@ as (select * from (values
 merge	[Jazz_ERP].[TransactionType] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[CreatedBy] = s.[CreatedBy],[LastModifiedBy] = s.[LastModifiedBy],[LastModifiedTime] = s.[LastModifiedTime],[CarrierType] = s.[CarrierType],[IsCredit] = s.[IsCredit],[TransactionScope] = s.[TransactionScope]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[CreatedBy] = s.[CreatedBy],[LastModifiedBy] = s.[LastModifiedBy],[LastModifiedTime] = s.[LastModifiedTime],[CarrierType] = s.[CarrierType],[IsCredit] = s.[IsCredit],[TransactionScope] = s.[TransactionScope]
 when not matched by target then
 	insert([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[CarrierType],[IsCredit],[TransactionScope])
 	values(s.[ID],s.[Name],s.[CreatedBy],s.[LastModifiedBy],s.[LastModifiedTime],s.[CarrierType],s.[IsCredit],s.[TransactionScope]);
