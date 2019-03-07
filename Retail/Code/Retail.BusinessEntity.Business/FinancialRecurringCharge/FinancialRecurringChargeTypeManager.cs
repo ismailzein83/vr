@@ -15,10 +15,10 @@ namespace Retail.BusinessEntity.Business
         public static Guid recurringChargesTypeBEDefinitionId = new Guid("76688fc9-322b-45aa-8d5d-53cc87ade48e");
 
         #region Public Mehods
-        public string GetRecurringChargeTypeName(long recurringChargeTypeId, string classification)
+        public string GetRecurringChargeTypeName(long recurringChargeTypeId)
         {
-            var recurringChargesTypes = GetCachedRecurringChargesTypes(classification);
-            if (recurringChargesTypes == null)
+            var recurringChargesTypes = GetCachedRecurringChargesTypes();
+            if (recurringChargesTypes == null || recurringChargesTypes.Count==0)
             {
                 return null;
             }
@@ -29,9 +29,9 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        private Dictionary<long, FinancialRecurringChargeType> GetCachedRecurringChargesTypes(string classification)
+        private Dictionary<long, FinancialRecurringChargeType> GetCachedRecurringChargesTypes()
         {
-            return _genericBusinessEntityManager.GetCachedOrCreate(string.Format("GetCachedRecurringChargesTypes_{0}", classification), recurringChargesTypeBEDefinitionId,() =>
+            return _genericBusinessEntityManager.GetCachedOrCreate("GetCachedRecurringChargesTypes", recurringChargesTypeBEDefinitionId,() =>
             {
                 Dictionary<long, FinancialRecurringChargeType> recurringChargesTypesDic = new Dictionary<long, FinancialRecurringChargeType>();
                 var recurringChargesTypesBEDefinitions = _genericBusinessEntityManager.GetAllGenericBusinessEntities(recurringChargesTypeBEDefinitionId);
@@ -42,16 +42,12 @@ namespace Retail.BusinessEntity.Business
                         var fieldValues = recurringChargesBEDefinition.FieldValues;
                         if (fieldValues != null)
                         {
-                            string itemClassification = Convert.ToString(fieldValues.GetRecord("Classification"));
-                            if (itemClassification == classification)
+                            var financialRecurringChargeType = new FinancialRecurringChargeType
                             {
-                                var financialRecurringChargeType = new FinancialRecurringChargeType
-                                {
-                                    FinancialRecurringChargeTypeId = Convert.ToInt64(fieldValues.GetRecord("ID")),
-                                    Name = Convert.ToString(fieldValues.GetRecord("Name"))
-                                };
-                                recurringChargesTypesDic.Add(financialRecurringChargeType.FinancialRecurringChargeTypeId, financialRecurringChargeType);
-                            }
+                                FinancialRecurringChargeTypeId = Convert.ToInt64(fieldValues.GetRecord("ID")),
+                                Name = Convert.ToString(fieldValues.GetRecord("Name"))
+                            };
+                            recurringChargesTypesDic.Add(financialRecurringChargeType.FinancialRecurringChargeTypeId, financialRecurringChargeType);
                         }
                     }
                 }

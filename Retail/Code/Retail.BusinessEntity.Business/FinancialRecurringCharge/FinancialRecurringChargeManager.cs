@@ -25,54 +25,54 @@ namespace Retail.BusinessEntity.Business
             return recurringCharges.Values.FindAllRecords(x => x.FinancialAccountId == financialAccountId);
         }
 
-        public List<FinancialRecurringCharge> GetEffectiveCustomerRecurringCharges(string financialAccountId, DateTime fromDate, DateTime toDate, string classification)
+        public List<FinancialRecurringCharge> GetEffectiveRecurringCharges(string financialAccountId, DateTime fromDate, DateTime toDate, string classification)
         {
-            var customerRecurringCharges = GetRecurringChargesByFinancialAccountId(financialAccountId, classification);
-            if (customerRecurringCharges == null)
+            var recurringCharges = GetRecurringChargesByFinancialAccountId(financialAccountId, classification);
+            if (recurringCharges == null)
                 return null;
 
-            var effectiveCustomerRecurringCharges = new List<FinancialRecurringCharge>();
-            foreach (var customerRecurringCharge in customerRecurringCharges)
+            var effectiveRecurringCharges = new List<FinancialRecurringCharge>();
+            foreach (var recurringCharge in recurringCharges)
             {
-                if (Utilities.AreTimePeriodsOverlapped(customerRecurringCharge.BED, customerRecurringCharge.EED, fromDate, toDate))
-                    effectiveCustomerRecurringCharges.Add(customerRecurringCharge);
+                if (Utilities.AreTimePeriodsOverlapped(recurringCharge.BED, recurringCharge.EED, fromDate, toDate))
+                    effectiveRecurringCharges.Add(recurringCharge);
             }
-            return effectiveCustomerRecurringCharges;
+            return effectiveRecurringCharges;
         }
         public List<FinancialRecurringChargeItem> GetEvaluatedRecurringCharges(string financialAccountId, DateTime fromDate, DateTime toDate, DateTime issueDate, string classification)
         {
-            var effectiveCustomerRecurringCharges = GetEffectiveCustomerRecurringCharges(financialAccountId, fromDate, toDate, classification);
-            if (effectiveCustomerRecurringCharges == null)
+            var effectiveRecurringCharges = GetEffectiveRecurringCharges(financialAccountId, fromDate, toDate, classification);
+            if (effectiveRecurringCharges == null)
                 return null;
 
             var evaluatedRecurringCharges = new List<FinancialRecurringChargeItem>();
-            var customerRecurringChargeTypeManager = new FinancialRecurringChargeTypeManager();
+            var recurringChargeTypeManager = new FinancialRecurringChargeTypeManager();
 
-            foreach (var effectiveCustomerRecurringCharge in effectiveCustomerRecurringCharges)
+            foreach (var effectiveRecurringCharge in effectiveRecurringCharges)
             {
 
-                effectiveCustomerRecurringCharge.RecurringChargePeriod.ThrowIfNull("effectiveCustomerRecurringCharge.RecurringChargePeriod");
-                effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings.ThrowIfNull("effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings");
+                effectiveRecurringCharge.RecurringChargePeriod.ThrowIfNull("effectiveRecurringCharge.RecurringChargePeriod");
+                effectiveRecurringCharge.RecurringChargePeriod.Settings.ThrowIfNull("effectiveRecurringCharge.RecurringChargePeriod.Settings");
                 var context = new FinancialRecurringChargePeriodSettingsContext()
                 {
-                    FromDate = fromDate > effectiveCustomerRecurringCharge.BED ? fromDate : effectiveCustomerRecurringCharge.BED,
-                    ToDate = effectiveCustomerRecurringCharge.EED.HasValue && toDate > effectiveCustomerRecurringCharge.EED.Value ? effectiveCustomerRecurringCharge.EED.Value : toDate
+                    FromDate = fromDate > effectiveRecurringCharge.BED ? fromDate : effectiveRecurringCharge.BED,
+                    ToDate = effectiveRecurringCharge.EED.HasValue && toDate > effectiveRecurringCharge.EED.Value ? effectiveRecurringCharge.EED.Value : toDate
                 };
-                effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings.Execute(context);
+                effectiveRecurringCharge.RecurringChargePeriod.Settings.Execute(context);
                 if (context.Periods != null)
                 {
                     foreach (var period in context.Periods)
                     {
                         evaluatedRecurringCharges.Add(new FinancialRecurringChargeItem
                         {
-                            Name = customerRecurringChargeTypeManager.GetRecurringChargeTypeName(effectiveCustomerRecurringCharge.RecurringChargeTypeId, classification),
-                            Amount = effectiveCustomerRecurringCharge.Amount,
+                            Name = recurringChargeTypeManager.GetRecurringChargeTypeName(effectiveRecurringCharge.RecurringChargeTypeId),
+                            Amount = effectiveRecurringCharge.Amount,
                             From = period.From,
                             To = period.To,
-                            CurrencyId = effectiveCustomerRecurringCharge.CurrencyId,
-                            RecurringChargeId = effectiveCustomerRecurringCharge.ID,
-                            AmountAfterTaxes = effectiveCustomerRecurringCharge.Amount,
-                            DueDate = effectiveCustomerRecurringCharge.DuePeriod.HasValue ? issueDate.AddDays(effectiveCustomerRecurringCharge.DuePeriod.Value) : issueDate,
+                            CurrencyId = effectiveRecurringCharge.CurrencyId,
+                            RecurringChargeId = effectiveRecurringCharge.ID,
+                            AmountAfterTaxes = effectiveRecurringCharge.Amount,
+                            DueDate = effectiveRecurringCharge.DuePeriod.HasValue ? issueDate.AddDays(effectiveRecurringCharge.DuePeriod.Value) : issueDate,
                             RecurringChargeMonth = period.RecurringChargeDate.ToString("MMMM - yyyy"),
                             RecurringChargeDate = period.RecurringChargeDate
                         });
@@ -104,7 +104,7 @@ namespace Retail.BusinessEntity.Business
                             var itemClassification = (string)fieldValues.GetRecord("Classification");
                             if (itemClassification == classification)
                             {
-                                var customerRecurringCharge = new FinancialRecurringCharge
+                                var recurringCharge = new FinancialRecurringCharge
                                 {
                                     ID = Convert.ToInt64(fieldValues.GetRecord("ID")),
                                     RecurringChargeTypeId = Convert.ToInt64(fieldValues.GetRecord("RecurringChargeTypeId")),
@@ -116,7 +116,7 @@ namespace Retail.BusinessEntity.Business
                                     RecurringChargePeriod = (FinancialRecurringChargePeriod)fieldValues.GetRecord("RecurringChargePeriod"),
                                     DuePeriod = (int?)fieldValues.GetRecord("DuePeriod")
                                 };
-                                recurringChargesDictionary.Add(customerRecurringCharge.ID, customerRecurringCharge);
+                                recurringChargesDictionary.Add(recurringCharge.ID, recurringCharge);
                             }
                         }
                     }
