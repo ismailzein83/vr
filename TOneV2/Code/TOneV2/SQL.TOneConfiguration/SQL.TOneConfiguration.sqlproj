@@ -949,6 +949,11 @@
     <None Include="ProbesAnalytics.PostDeployment.sql" />
     <None Include="Retail_RecordAnalysis.PostDeployment.sql" />
     <None Include="TOne_VoiceSMSPostFix.PostDeployment.sql" />
+    <None Include="Mediation_Namibia.PostDeployment.sql" />
+    <None Include="Mediation_MobileAnalysis.PostDeployment.sql" />
+    <None Include="Mediation_Jazz.PostDeployment.sql" />
+    <None Include="Mediation_Ogero.PostDeployment.sql" />
+    <None Include="Mediation_Multinet.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
