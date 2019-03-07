@@ -10,6 +10,8 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Transformation;
+using Vanrise.Rules;
 using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -21,6 +23,12 @@ namespace TOne.WhS.BusinessEntity.Business
         CarrierProfileManager _carrierProfileManager;
         SellingNumberPlanManager _sellingNumberPlanManager;
         SellingProductManager _sellingProductManager;
+
+        static CarrierAccountManager()
+        {
+            MappingRuleManager instance = new MappingRuleManager();
+            instance.AddRuleCachingExpirationChecker(new CarrierAccountCachingExpirationChecker());
+        }
 
         public CarrierAccountManager()
         {
@@ -1572,6 +1580,16 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+        public class CarrierAccountCachingExpirationChecker : RuleCachingExpirationChecker
+        {
+            DateTime? _cacheLastCheck;
+
+            public override bool IsRuleDependenciesCacheExpired()
+            {
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref _cacheLastCheck);
+            }
+        }
+
         private class CarrierAccountDetailExportExcelHandler : ExcelExportHandler<CarrierAccountDetail>
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CarrierAccountDetail> context)
@@ -1823,6 +1841,12 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
+        public override bool IsStillAvailable(IBusinessEntityIsStillAvailableContext context)
+        {
+            context.ThrowIfNull("context");
+            return !IsCarrierAccountDeleted(Convert.ToInt32(context.EntityId));
+        }
+       
         #endregion
     }
 
