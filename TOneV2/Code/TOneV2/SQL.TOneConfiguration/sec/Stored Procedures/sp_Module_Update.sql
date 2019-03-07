@@ -4,7 +4,8 @@
 	@ParentId uniqueidentifier,	
 	@DefaultViewId uniqueidentifier,
 	@AllowDynamic bit,
-	@Settings nvarchar(max)
+	@Settings nvarchar(max),
+	@RenderedAsView bit
 AS
 BEGIN
 	IF NOT EXISTS(SELECT 1 FROM sec.[Module] WHERE ID != @ID AND Name = @Name and ParentId = @ParentId)
@@ -15,7 +16,8 @@ BEGIN
 			[DefaultViewId] = @DefaultViewId,
 			[AllowDynamic] = @AllowDynamic,
 			[Settings] = @Settings,
-			LastModifiedTime = GETDATE()
+			LastModifiedTime = GETDATE(),
+			RenderedAsView = @RenderedAsView
 		WHERE ID = @ID
 	end
 END
