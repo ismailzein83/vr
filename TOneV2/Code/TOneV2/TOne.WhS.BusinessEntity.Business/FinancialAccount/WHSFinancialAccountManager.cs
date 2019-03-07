@@ -1365,12 +1365,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
+            DateTime? _carrierProfileLastCheck;
+            DateTime? _carrierAccountLastCheck;
+
             IWHSFinancialAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreFinancialAccountsUpdated(ref _updateHandle);
+                return _dataManager.AreFinancialAccountsUpdated(ref _updateHandle)
+                   | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CarrierProfileManager.CacheManager>().IsCacheExpired(ref _carrierProfileLastCheck)
+                   | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CarrierAccountManager.CacheManager>().IsCacheExpired(ref _carrierAccountLastCheck);
             }
         }
 
