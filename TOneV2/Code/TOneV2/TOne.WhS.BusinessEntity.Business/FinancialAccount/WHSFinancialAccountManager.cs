@@ -265,7 +265,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public string GetFinancialInvoiceSettingName(Guid financialAccountDefinitionId, string financialAccountId, Guid invoiceTypeId)
         {
             var invoiceSettingId = GetFinancialInvoiceSettingId(financialAccountDefinitionId, financialAccountId, invoiceTypeId);
-            if(invoiceSettingId.HasValue)
+            if (invoiceSettingId.HasValue)
             {
                 return new InvoiceSettingManager().GetInvoiceSettingName(invoiceSettingId.Value);
             }
@@ -669,7 +669,27 @@ namespace TOne.WhS.BusinessEntity.Business
                {
                    IWHSFinancialAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
                    IEnumerable<WHSFinancialAccount> financialAccounts = dataManager.GetFinancialAccounts();
-                   return financialAccounts.ToDictionary(fa => fa.FinancialAccountId, fa => fa);
+
+                   if (financialAccounts == null || financialAccounts.Count() == 0)
+                       return null;
+
+                   Dictionary<int, WHSFinancialAccount> financialAccountsDict = new Dictionary<int, WHSFinancialAccount>();
+                   foreach (var financialAccount in financialAccounts)
+                   {
+                       if (financialAccount.CarrierAccountId.HasValue && !s_carrierAccountManager.IsCarrierAccountDeleted(financialAccount.CarrierAccountId.Value))
+                       {
+                           financialAccountsDict.Add(financialAccount.FinancialAccountId, financialAccount);
+                           continue;
+                       }
+
+                       if (financialAccount.CarrierProfileId.HasValue && !s_carrierProfileManager.IsCarrierProfileDeleted(financialAccount.CarrierProfileId.Value))
+                       {
+                           financialAccountsDict.Add(financialAccount.FinancialAccountId, financialAccount);
+                           continue;
+                       }
+                   }
+
+                   return financialAccountsDict;
                });
         }
 
@@ -1503,32 +1523,32 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new NotImplementedException();
         }
 
-		//public CompanySetting GetCompanySettings(int financialAccountId) {
-		//	var financialAccount = GetFinancialAccount(financialAccountId);
-		//	financialAccount.ThrowIfNull("financialAccount", financialAccountId);
-		//	if (financialAccount.CarrierAccountId.HasValue)
-		//	{
-		//		return s_carrierAccountManager.GetCompanySetting(financialAccount.CarrierAccountId.Value);
-		//	}
-		//	else
-		//	{
-		//		return s_carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
-		//	}
-		//}
+        //public CompanySetting GetCompanySettings(int financialAccountId) {
+        //	var financialAccount = GetFinancialAccount(financialAccountId);
+        //	financialAccount.ThrowIfNull("financialAccount", financialAccountId);
+        //	if (financialAccount.CarrierAccountId.HasValue)
+        //	{
+        //		return s_carrierAccountManager.GetCompanySetting(financialAccount.CarrierAccountId.Value);
+        //	}
+        //	else
+        //	{
+        //		return s_carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
+        //	}
+        //}
 
-		//public CarrierProfile GetCarrierProfile(int financialAccountId)
-		//{
-		//	var financialAccount = GetFinancialAccount(financialAccountId);
-		//	financialAccount.ThrowIfNull("financialAccount", financialAccountId);
-		//	if (financialAccount.CarrierAccountId.HasValue)
-		//	{
-		//		return s_carrierProfileManager.GetCarrierProfile(financialAccount.CarrierAccountId.Value);
-		//	}
-		//	else
-		//	{
-		//		return s_carrierProfileManager.GetCarrierProfile(financialAccount.CarrierProfileId.Value);
-		//	}
-		//}
+        //public CarrierProfile GetCarrierProfile(int financialAccountId)
+        //{
+        //	var financialAccount = GetFinancialAccount(financialAccountId);
+        //	financialAccount.ThrowIfNull("financialAccount", financialAccountId);
+        //	if (financialAccount.CarrierAccountId.HasValue)
+        //	{
+        //		return s_carrierProfileManager.GetCarrierProfile(financialAccount.CarrierAccountId.Value);
+        //	}
+        //	else
+        //	{
+        //		return s_carrierProfileManager.GetCarrierProfile(financialAccount.CarrierProfileId.Value);
+        //	}
+        //}
 
         #endregion
     }
