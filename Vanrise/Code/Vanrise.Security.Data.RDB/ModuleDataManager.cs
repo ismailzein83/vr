@@ -22,6 +22,7 @@ namespace Vanrise.Security.Data.RDB
         const string COL_Rank = "Rank";
         const string COL_AllowDynamic = "AllowDynamic";
         const string COL_Settings = "Settings";
+        const string COL_RenderedAsView = "RenderedAsView";
         const string COL_LastModifiedTime = "LastModifiedTime";
 
         static ModuleDataManager()
@@ -37,6 +38,8 @@ namespace Vanrise.Security.Data.RDB
             columns.Add(COL_AllowDynamic, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_RenderedAsView, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "sec",
@@ -62,7 +65,8 @@ namespace Vanrise.Security.Data.RDB
                 ParentId = reader.GetNullableGuid(COL_ParentId),
                 Icon = reader.GetString(COL_Icon),
                 AllowDynamic = true,
-                Settings = Common.Serializer.Deserialize<ModuleSettings>(reader.GetString(COL_Settings))
+                Settings = Common.Serializer.Deserialize<ModuleSettings>(reader.GetString(COL_Settings)),
+                RenderedAsView = reader.GetBoolean(COL_RenderedAsView)
             };
             var rank = reader.GetNullableInt(COL_Rank);
             if (rank.HasValue)
@@ -94,6 +98,7 @@ namespace Vanrise.Security.Data.RDB
             if (moduleObject.DefaultViewId.HasValue)
                 insertQuery.Column(COL_DefaultViewId).Value(moduleObject.DefaultViewId.Value);
             insertQuery.Column(COL_AllowDynamic).Value(moduleObject.AllowDynamic);
+            insertQuery.Column(COL_RenderedAsView).Value(moduleObject.RenderedAsView);
             if (moduleObject.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Common.Serializer.Serialize(moduleObject.Settings));
             return queryContext.ExecuteNonQuery() > 0;
@@ -136,6 +141,7 @@ namespace Vanrise.Security.Data.RDB
             else
                 updateQuery.Column(COL_DefaultViewId).Null();
             updateQuery.Column(COL_AllowDynamic).Value(moduleObject.AllowDynamic);
+            updateQuery.Column(COL_RenderedAsView).Value(moduleObject.RenderedAsView);
             if (moduleObject.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Common.Serializer.Serialize(moduleObject.Settings));
             else

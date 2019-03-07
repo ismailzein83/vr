@@ -37,14 +37,14 @@ namespace Vanrise.Security.Data.SQL
         public bool AddModule(Entities.Module moduleObject)
         {
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.DefaultViewId, moduleObject.AllowDynamic, Vanrise.Common.Serializer.Serialize(moduleObject.Settings));
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.DefaultViewId, moduleObject.AllowDynamic, Vanrise.Common.Serializer.Serialize(moduleObject.Settings), moduleObject.RenderedAsView);
 
             return (recordesEffected > 0);
         }
 
         public bool UpdateModule(Entities.Module moduleObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Update", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.DefaultViewId, moduleObject.AllowDynamic, Vanrise.Common.Serializer.Serialize(moduleObject.Settings));
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Update", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.DefaultViewId, moduleObject.AllowDynamic, Vanrise.Common.Serializer.Serialize(moduleObject.Settings),moduleObject.RenderedAsView);
             return (recordesEffected > 0);
         }
         #endregion
