@@ -135,10 +135,23 @@
                         var genericBusinessEntityPayload = {
                             businessEntityDefinitionId: "fa6c91c0-adc9-4bb2-aedb-77a6ee1c9131",
                             fieldValues: {
-                                FinancialAccountId: financialAccountId,
+                                FinancialAccountId: {
+                                    value: financialAccountId,
+                                    visibility: false,
+                                    default: false
+                                },
+                                CurrencyId: {
+                                    value: currencyId,
+                                    visibility: true,
+                                    default: true
+                                }
                             },
                             filterValues: {
-                                FinancialAccountId: financialAccountId,
+                                FinancialAccountId: {
+                                    value: financialAccountId,
+                                    visibility: false,
+                                    default: false
+                                }
                             },
                             defaultValues: {
                                 CurrencyId: currencyId
@@ -175,10 +188,23 @@
                         var genericBusinessEntityPayload = {
                             businessEntityDefinitionId: "e9c11a90-864c-45a1-b90c-d7fdd80e9cf3",
                             fieldValues: {
-                                FinancialAccountId: financialAccountId,
+                                FinancialAccountId: {
+                                    value: financialAccountId,
+                                    visibility: false,
+                                    default: undefined
+                                },
+                                CurrencyId: {
+                                    value: currencyId,
+                                    visibility: true,
+                                    default: currencyId
+                                }
                             },
                             filterValues: {
-                                FinancialAccountId: financialAccountId,
+                                FinancialAccountId: {
+                                    value: financialAccountId,
+                                    visibility: false,
+                                    default: undefined
+                                }
                             },
                             defaultValues: {
                                 CurrencyId: currencyId
