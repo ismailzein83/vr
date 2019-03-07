@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Mediation_WHS].[MobilisZTEWLLBadCDR] (
-    [Id]                      BIGINT           NOT NULL,
+    [Id]                      BIGINT           IDENTITY (1, 1) NOT NULL,
     [LACOfSubscriber]         VARCHAR (10)     NULL,
     [CIOfSubscriber]          VARCHAR (10)     NULL,
     [TicketType]              VARCHAR (5)      NULL,
@@ -17,4 +17,6 @@
     [DataSourceId]            UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_MobilisZTEWLLBadCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 

@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Mediation_WHS].[MobilisSMS] (
-    [Id]                       BIGINT           NOT NULL,
+    [Id]                       BIGINT           IDENTITY (1, 1) NOT NULL,
     [SMID]                     VARCHAR (50)     NULL,
     [OriginalAddress]          VARCHAR (50)     NULL,
     [DestAddr]                 VARCHAR (50)     NULL,
@@ -85,6 +85,8 @@
     [DataSourceId]             UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_MobilisSMS] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

@@ -1,5 +1,5 @@
-﻿CREATE TABLE [Mediation_WHS].[MobilisEricssonBadCDR] (
-    [Id]                          BIGINT           NOT NULL,
+﻿CREATE TYPE [Mediation_WHS].[MobilisEricssonR13BadCDRType] AS TABLE (
+    [Id]                          BIGINT           NULL,
     [RecordType]                  INT              NULL,
     [RecordTypeName]              VARCHAR (50)     NULL,
     [CallIdentificationNumber]    INT              NULL,
@@ -24,11 +24,5 @@
     [RecordSequenceNumber]        INT              NULL,
     [MobileStationRoamingNumber]  VARCHAR (50)     NULL,
     [FileName]                    VARCHAR (255)    NULL,
-    [DataSourceId]                UNIQUEIDENTIFIER NULL,
-    CONSTRAINT [PK_MobilisEricssonBadCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
-);
-
-
-
-
+    [DataSourceId]                UNIQUEIDENTIFIER NULL);
 

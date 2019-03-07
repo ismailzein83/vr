@@ -88,13 +88,14 @@
     <Build Include="Mediation_WHS\Tables\MobilisHuaweiBadCDR.sql" />
     <Build Include="Mediation_WHS\User Defined Types\MobilisHuaweiCDRType.sql" />
     <Build Include="Mediation_WHS\User Defined Types\MobilisHuaweiBadCDRType.sql" />
-    <Build Include="Mediation_WHS\Tables\MobilisEricssonSMS.sql" />
-    <Build Include="Mediation_WHS\Tables\MobilisEricssonCDR.sql" />
-    <Build Include="Mediation_WHS\Tables\MobilisEricssonBadSMS.sql" />
-    <Build Include="Mediation_WHS\Tables\MobilisEricssonBadCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonSMSType.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonCDRType.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonBadSMSType.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonBadCDRType.sql" />
+    <Build Include="Mediation_WHS\Tables\MobilisEricssonR13SMS.sql" />
+    <Build Include="Mediation_WHS\Tables\MobilisEricssonR13CDR.sql" />
+    <Build Include="Mediation_WHS\Tables\MobilisEricssonR13BadSMS.sql" />
+    <Build Include="Mediation_WHS\Tables\MobilisEricssonR13BadCDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonR13SMSType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonR13CDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonR13BadSMSType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonR13BadCDRType.sql" />
+    <Build Include="Security\Mobile_EDR.sql" />
   </ItemGroup>
 </Project>

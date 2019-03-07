@@ -1,5 +1,5 @@
-﻿CREATE TYPE [Mediation_WHS].[MobilisEricssonSMSType] AS TABLE (
-    [Id]                       BIGINT           NULL,
+﻿CREATE TABLE [Mediation_WHS].[MobilisEricssonR13BadSMS] (
+    [Id]                       BIGINT           IDENTITY (1, 1) NOT NULL,
     [RecordType]               INT              NULL,
     [RecordTypeName]           VARCHAR (50)     NULL,
     [CallIdentificationNumber] INT              NULL,
@@ -18,7 +18,7 @@
     [OriginatingAddress]       VARCHAR (50)     NULL,
     [DestinationAddress]       VARCHAR (50)     NULL,
     [FileName]                 VARCHAR (255)    NULL,
-    [DataSourceId]             UNIQUEIDENTIFIER NULL);
-
-
+    [DataSourceId]             UNIQUEIDENTIFIER NULL,
+    CONSTRAINT [PK_MobilisEricssonBadSMS] PRIMARY KEY CLUSTERED ([Id] ASC)
+);
 

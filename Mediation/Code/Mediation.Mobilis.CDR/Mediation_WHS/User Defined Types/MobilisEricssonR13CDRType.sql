@@ -1,4 +1,4 @@
-﻿CREATE TYPE [Mediation_WHS].[MobilisEricssonCDRType] AS TABLE (
+﻿CREATE TYPE [Mediation_WHS].[MobilisEricssonR13CDRType] AS TABLE (
     [Id]                          BIGINT           NULL,
     [RecordType]                  INT              NULL,
     [RecordTypeName]              VARCHAR (50)     NULL,
@@ -25,8 +25,4 @@
     [MobileStationRoamingNumber]  VARCHAR (50)     NULL,
     [FileName]                    VARCHAR (255)    NULL,
     [DataSourceId]                UNIQUEIDENTIFIER NULL);
-
-
-
-
 

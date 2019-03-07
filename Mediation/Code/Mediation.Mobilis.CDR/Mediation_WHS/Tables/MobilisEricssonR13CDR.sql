@@ -1,5 +1,5 @@
-﻿CREATE TABLE [Mediation_WHS].[MobilisEricssonCDR] (
-    [Id]                          BIGINT           NOT NULL,
+﻿CREATE TABLE [Mediation_WHS].[MobilisEricssonR13CDR] (
+    [Id]                          BIGINT           IDENTITY (1, 1) NOT NULL,
     [RecordType]                  INT              NULL,
     [RecordTypeName]              VARCHAR (50)     NULL,
     [CallIdentificationNumber]    INT              NULL,
@@ -27,8 +27,4 @@
     [DataSourceId]                UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_MobilisEricssonCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
-
-
-
 

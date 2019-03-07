@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Mediation.Ogero.CDR</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{640ccf6c-5b1d-4c6a-8be5-0f24c6b02840}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Mediation.Ogero.CDR</RootNamespace>
+    <AssemblyName>Mediation.Ogero.CDR</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Mediation_WHS\" />
+    <Folder Include="Mediation_WHS\Tables\" />
+    <Folder Include="Mediation_ICX\" />
+    <Folder Include="Mediation_ICX\Tables\" />
+    <Folder Include="Mediation_WHS\User Defined Types\" />
+    <Folder Include="Mediation_ICX\User Defined Types\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiIMSCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiIMSBadCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiMGCFCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiMGCFBadCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroRadiusCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiEPCCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiEPCBadCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\EricssonLocalCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\EricssonLocalBadCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\EricssonInternationalCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\EricssonInternationalBadCDR.sql" />
+    <Build Include="Mediation_ICX\Tables\NokiaSiemensCDR.sql" />
+    <Build Include="Mediation_ICX\Tables\NokiaSiemensBadCDR.sql" />
+    <Build Include="Mediation_ICX\Tables\AlcatelBadCDR.sql" />
+    <Build Include="Mediation_ICX\Tables\AlcatelCDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroRadiusCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiMGCFCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiMGCFBadCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiIMSCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiIMSBadCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiEPCCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiEPCBadCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\EricssonLocalCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\EricssonLocalBadCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\EricssonInternationalCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\EricssonInternationalBadCDRType.sql" />
+    <Build Include="Mediation_ICX\User Defined Types\NokiaSiemensCDRType.sql" />
+    <Build Include="Mediation_ICX\User Defined Types\NokiaSiemensBadCDRType.sql" />
+    <Build Include="Mediation_ICX\User Defined Types\AlcatelBadCDRType.sql" />
+    <Build Include="Mediation_ICX\User Defined Types\AlcatelCDRType.sql" />
+    <Build Include="Security\Mediation_WHS.sql" />
+    <Build Include="Security\Mediation_ICX.sql" />
+  </ItemGroup>
+</Project>

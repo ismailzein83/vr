@@ -63,6 +63,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Huawei.Web", "Med
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Mediation.Mobilis.CDR", "Mediation.Mobilis.CDR\Mediation.Mobilis.CDR.sqlproj", "{CC259D29-F9A1-4ED4-AD1C-67439E1B50EF}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Mediation.Namibia.CDR", "Mediation.Namibia.CDR\Mediation.Namibia.CDR.sqlproj", "{E3C6B5B2-176A-4E2D-AE62-4105A641C506}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Mediation.MobileAnalysis.CDR", "Mediation.MobileAnalysis.CDR\Mediation.MobileAnalysis.CDR.sqlproj", "{5CC47754-D23B-4769-9A1D-074FF0698EB5}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Mediation.Jazz.CDR", "Mediation.Jazz.CDR\Mediation.Jazz.CDR.sqlproj", "{ADE522B4-1554-4910-B9CE-286C55E9BEA8}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Mediation.Ogero.CDR", "Mediation.Ogero.CDR\Mediation.Ogero.CDR.sqlproj", "{640CCF6C-5B1D-4C6A-8BE5-0F24C6B02840}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Mediation.Multinet.CDR", "Mediation.Multinet.CDR\Mediation.Multinet.CDR.sqlproj", "{3D82B367-A54E-42C0-94A8-868144BBF2B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,6 +173,36 @@ Global
 		{CC259D29-F9A1-4ED4-AD1C-67439E1B50EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC259D29-F9A1-4ED4-AD1C-67439E1B50EF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC259D29-F9A1-4ED4-AD1C-67439E1B50EF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E3C6B5B2-176A-4E2D-AE62-4105A641C506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3C6B5B2-176A-4E2D-AE62-4105A641C506}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3C6B5B2-176A-4E2D-AE62-4105A641C506}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E3C6B5B2-176A-4E2D-AE62-4105A641C506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3C6B5B2-176A-4E2D-AE62-4105A641C506}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3C6B5B2-176A-4E2D-AE62-4105A641C506}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5CC47754-D23B-4769-9A1D-074FF0698EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CC47754-D23B-4769-9A1D-074FF0698EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CC47754-D23B-4769-9A1D-074FF0698EB5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5CC47754-D23B-4769-9A1D-074FF0698EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CC47754-D23B-4769-9A1D-074FF0698EB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CC47754-D23B-4769-9A1D-074FF0698EB5}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{ADE522B4-1554-4910-B9CE-286C55E9BEA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADE522B4-1554-4910-B9CE-286C55E9BEA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADE522B4-1554-4910-B9CE-286C55E9BEA8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{ADE522B4-1554-4910-B9CE-286C55E9BEA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADE522B4-1554-4910-B9CE-286C55E9BEA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADE522B4-1554-4910-B9CE-286C55E9BEA8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{640CCF6C-5B1D-4C6A-8BE5-0F24C6B02840}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{640CCF6C-5B1D-4C6A-8BE5-0F24C6B02840}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{640CCF6C-5B1D-4C6A-8BE5-0F24C6B02840}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{640CCF6C-5B1D-4C6A-8BE5-0F24C6B02840}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{640CCF6C-5B1D-4C6A-8BE5-0F24C6B02840}.Release|Any CPU.Build.0 = Release|Any CPU
+		{640CCF6C-5B1D-4C6A-8BE5-0F24C6B02840}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{3D82B367-A54E-42C0-94A8-868144BBF2B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D82B367-A54E-42C0-94A8-868144BBF2B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D82B367-A54E-42C0-94A8-868144BBF2B3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3D82B367-A54E-42C0-94A8-868144BBF2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D82B367-A54E-42C0-94A8-868144BBF2B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D82B367-A54E-42C0-94A8-868144BBF2B3}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,12 +233,17 @@ Global
 		{C7B1F600-C09A-4BA4-99F3-A45FD8EBFDA8} = {C08783AE-51E1-4309-9AF3-6307F2A8A03B}
 		{0D919E35-B040-48BC-9D99-636AB9639261} = {C08783AE-51E1-4309-9AF3-6307F2A8A03B}
 		{CC259D29-F9A1-4ED4-AD1C-67439E1B50EF} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
+		{E3C6B5B2-176A-4E2D-AE62-4105A641C506} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
+		{5CC47754-D23B-4769-9A1D-074FF0698EB5} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
+		{ADE522B4-1554-4910-B9CE-286C55E9BEA8} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
+		{640CCF6C-5B1D-4C6A-8BE5-0F24C6B02840} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
+		{3D82B367-A54E-42C0-94A8-868144BBF2B3} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3381E55-55EE-41E5-BE13-0133A3628F42}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 23
+		SccNumberOfProjects = 28
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -290,5 +335,25 @@ Global
 		SccProjectTopLevelParentUniqueName22 = Mediation.sln
 		SccProjectName22 = Mediation.Mobilis.CDR
 		SccLocalPath22 = Mediation.Mobilis.CDR
+		SccProjectUniqueName23 = Mediation.Namibia.CDR\\Mediation.Namibia.CDR.sqlproj
+		SccProjectTopLevelParentUniqueName23 = Mediation.sln
+		SccProjectName23 = Mediation.Namibia.CDR
+		SccLocalPath23 = Mediation.Namibia.CDR
+		SccProjectUniqueName24 = Mediation.MobileAnalysis.CDR\\Mediation.MobileAnalysis.CDR.sqlproj
+		SccProjectTopLevelParentUniqueName24 = Mediation.sln
+		SccProjectName24 = Mediation.MobileAnalysis.CDR
+		SccLocalPath24 = Mediation.MobileAnalysis.CDR
+		SccProjectUniqueName25 = Mediation.Jazz.CDR\\Mediation.Jazz.CDR.sqlproj
+		SccProjectTopLevelParentUniqueName25 = Mediation.sln
+		SccProjectName25 = Mediation.Jazz.CDR
+		SccLocalPath25 = Mediation.Jazz.CDR
+		SccProjectUniqueName26 = Mediation.Ogero.CDR\\Mediation.Ogero.CDR.sqlproj
+		SccProjectTopLevelParentUniqueName26 = Mediation.sln
+		SccProjectName26 = Mediation.Ogero.CDR
+		SccLocalPath26 = Mediation.Ogero.CDR
+		SccProjectUniqueName27 = Mediation.Multinet.CDR\\Mediation.Multinet.CDR.sqlproj
+		SccProjectTopLevelParentUniqueName27 = Mediation.sln
+		SccProjectName27 = Mediation.Multinet.CDR
+		SccLocalPath27 = Mediation.Multinet.CDR
 	EndGlobalSection
 EndGlobal

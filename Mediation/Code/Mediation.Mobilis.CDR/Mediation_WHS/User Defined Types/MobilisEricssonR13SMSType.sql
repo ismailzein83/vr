@@ -1,4 +1,4 @@
-﻿CREATE TYPE [Mediation_WHS].[MobilisEricssonBadSMSType] AS TABLE (
+﻿CREATE TYPE [Mediation_WHS].[MobilisEricssonR13SMSType] AS TABLE (
     [Id]                       BIGINT           NULL,
     [RecordType]               INT              NULL,
     [RecordTypeName]           VARCHAR (50)     NULL,
@@ -19,6 +19,4 @@
     [DestinationAddress]       VARCHAR (50)     NULL,
     [FileName]                 VARCHAR (255)    NULL,
     [DataSourceId]             UNIQUEIDENTIFIER NULL);
-
-
 
