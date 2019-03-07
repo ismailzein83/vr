@@ -77,7 +77,7 @@ app.directive('vrWhsBeSmsservicestypeSelector', ['UtilsService', 'VRUIUtilsServi
 
             return '<vr-select '
                 + ' datatextfield = "Name"'
-                + ' datavaluefield = "ID"'
+                + ' datavaluefield = "SMSServiceTypeInfoId"'
                 + ' label = "' + label
                 + ' "datasource="ctrl.datasource"'
                 + ' on-ready="ctrl.onSMSServiceTypeReady"'
@@ -136,14 +136,14 @@ app.directive('vrWhsBeSmsservicestypeSelector', ['UtilsService', 'VRUIUtilsServi
                             }
 
                             if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'ID', attrs, ctrl);
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'SMSServiceTypeInfoId', attrs, ctrl);
                             }
                         }
                     });
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('ID', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('SMSServiceTypeInfoId', attrs, ctrl);
                 };
 
                 if (ctrl.onReady != null)

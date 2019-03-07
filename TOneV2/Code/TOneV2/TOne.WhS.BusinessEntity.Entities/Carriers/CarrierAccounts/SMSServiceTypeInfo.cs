@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SMSServiceTypeInfo
     {
-        public int ID { get; set; }
+        public int SMSServiceTypeInfoId { get; set; }
 
         public string Name { get; set; }
     }

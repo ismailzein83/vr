@@ -35,7 +35,7 @@
                         <vr-columns width="1/2row">
                             <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/2row" ng-show="scopeModel.showSMSServiceType">
+                        <vr-columns width="1/2row" ng-if="scopeModel.showSMSServiceType">
                             <vr-whs-be-smsservicestype-selector on-ready="scopeModel.onSMSServiceTypeSelectorReady" ismultipleselection="true"></vr-whs-be-smsservicestype-selector>
                         </vr-columns>
                         <vr-columns width="1/2row">

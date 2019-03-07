@@ -109,13 +109,7 @@
             };
             $scope.scopeModel.onSMSServiceTypeSelectorReady = function (api) {
                 smsServiceTypeSelectorAPI = api;
-                if (WhS_BE_ToneModuleService.isSMSModuleEnabled()) {
-                    smsServiceTypeSelectorReadyDeferred.resolve();
-                    $scope.scopeModel.showSMSServiceType = true;
-                }
-                else {
-                    smsServiceTypeSelectorReadyDeferred.reject();
-                }
+                smsServiceTypeSelectorReadyDeferred.resolve();   
             };
             $scope.scopeModel.onCarrierAccountTypeChanged = function () {
 
@@ -500,16 +494,17 @@
             return loadActivationStatusSelectorPromiseDeferred.promise;
         }
         function loadSMSServiceTypeSelector() {
-            var loadSMSServiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-            smsServiceTypeSelectorReadyDeferred.promise.then(function () {
-                var payload = {
-                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.SMSServiceTypes : undefined)
-                };
-                VRUIUtilsService.callDirectiveLoad(smsServiceTypeSelectorAPI, payload, loadSMSServiceTypeSelectorPromiseDeferred);
-            }).catch(function () {
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, smsServiceTypeSelectorAPI, undefined, undefined, loadSMSServiceTypeSelectorPromiseDeferred);
-            });
-            return loadSMSServiceTypeSelectorPromiseDeferred.promise;
+            if (WhS_BE_ToneModuleService.isSMSModuleEnabled()) {
+                $scope.scopeModel.showSMSServiceType = true;
+                var loadSMSServiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                smsServiceTypeSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.SMSServiceTypes : undefined)
+                    };
+                    VRUIUtilsService.callDirectiveLoad(smsServiceTypeSelectorAPI, payload, loadSMSServiceTypeSelectorPromiseDeferred);
+                });
+                return loadSMSServiceTypeSelectorPromiseDeferred.promise;
+            }
         }
         function loadCarrierAccountTypeSelector() {
             return carrierAccountTypeSelectorReadyDeferred.promise;
@@ -821,7 +816,7 @@
                     CompanySettingId: companySettingsSelectorAPI.getSelectedIds(),
                     NominalCapacity: $scope.scopeModel.nominalCapacity,
                     IsInterconnectSwitch: $scope.scopeModel.isInterconnectSwitch,
-                    SMSServiceTypes: smsServiceTypeSelectorAPI.getSelectedIds(),
+                    SMSServiceTypes: $scope.scopeModel.showSMSServiceType ? smsServiceTypeSelectorAPI.getSelectedIds() : undefined,
                 },
                 SupplierSettings: {
                     DefaultServices: zoneServiceConfigSelectorAPI != undefined ? getSelectedDefaultServices() : null,

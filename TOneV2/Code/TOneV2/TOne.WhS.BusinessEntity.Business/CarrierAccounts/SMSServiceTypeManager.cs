@@ -39,14 +39,14 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         SMSServiceType smsServiceType = new SMSServiceType()
                         {
-                            ID = (int)genericBusinessEntity.FieldValues.GetRecord("ID"),
+                            SMSServiceTypeId = (int)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = genericBusinessEntity.FieldValues.GetRecord("Name") as string,
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy"),
                         };
-                        result.Add(smsServiceType.ID, smsServiceType);
+                        result.Add(smsServiceType.SMSServiceTypeId, smsServiceType);
                     }
                 }
                 return result;
@@ -60,7 +60,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return new SMSServiceTypeInfo()
             {
-                ID = smsServiceType.ID,
+                SMSServiceTypeInfoId = smsServiceType.SMSServiceTypeId,
                 Name = smsServiceType.Name,
             };
         }
