@@ -284,7 +284,7 @@ namespace Vanrise.Runtime
                         if (!childRuntimeProcessProxy.OSProcessId.HasValue)
                         {
                             StartChildProcess(childRuntimeProcessProxy);
-                            System.Threading.Thread.Sleep(100);
+                            System.Threading.Thread.Sleep(250);
                         }
                     }
                 }
