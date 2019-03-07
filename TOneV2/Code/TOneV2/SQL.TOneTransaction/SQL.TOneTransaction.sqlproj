@@ -140,8 +140,6 @@
     <Build Include="runtime\Tables\ScheduleTaskState_1.sql" />
     <Build Include="runtime\Functions\ParseStringList_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_Update_1.sql" />
-    <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_UnlockTask_1.sql" />
-    <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_TryLockAndUpdateScheduleTask_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_Insert_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_GetByTaskIds_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_GetByTaskId_1.sql" />
