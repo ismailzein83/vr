@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 
@@ -12,8 +8,8 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments
     {
         public string ConnectionString { get; set; }
         public string ConnectionStringName { get; set; }
+        public string ConnectionStringAppSettingName { get; set; }
         public string Query { get; set; }
-
         private string Title { get; set; }
 
         public override string GetTitle()

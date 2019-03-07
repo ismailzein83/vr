@@ -17,6 +17,9 @@ namespace Vanrise.BusinessProcess.WFActivities
         public InArgument<string> ConnectionStringName { get; set; }
 
         [RequiredArgument]
+        public InArgument<string> ConnectionStringAppSettingName { get; set; }
+
+        [RequiredArgument]
         public InArgument<string> Query { get; set; }
 
         protected override void VRExecute(IBaseCodeActivityContext context)
@@ -28,31 +31,34 @@ namespace Vanrise.BusinessProcess.WFActivities
 
             var databaseJobProcessInput = GetDatabaseJobProcessInput(taskId.Value);
 
-            var connectionStringName = databaseJobProcessInput.ConnectionStringName;
-
             string connectionString;
-            if (!String.IsNullOrWhiteSpace(connectionStringName)) 
-                 connectionString = Vanrise.Common.Utilities.GetConnectionStringByName(connectionStringName);
-            else
+            if (!String.IsNullOrWhiteSpace(databaseJobProcessInput.ConnectionString))
+            {
                 connectionString = databaseJobProcessInput.ConnectionString;
+            }
+            else if (!String.IsNullOrWhiteSpace(databaseJobProcessInput.ConnectionStringName))
+            {
+                connectionString = Utilities.GetConnectionStringByName(databaseJobProcessInput.ConnectionStringName);
+            }
+            else
+            {
+                connectionString = Utilities.GetConnectionStringByAppSettingName(databaseJobProcessInput.ConnectionStringAppSettingName);
+            }
 
             if (String.IsNullOrWhiteSpace(connectionString))
                 throw new NullReferenceException("connectionString");
 
             var query = databaseJobProcessInput.Query;
-
             if (!String.IsNullOrWhiteSpace(query))
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.CommandTimeout = 0;
                         command.ExecuteNonQuery();
                     }
-
                     connection.Close();
                 }
             }
@@ -63,9 +69,7 @@ namespace Vanrise.BusinessProcess.WFActivities
         {
             SchedulerTask task = new SchedulerTaskManager().GetTask(taskId);
             WFTaskActionArgument wfTaskActionArgument = task.TaskSettings.TaskActionArgument.CastWithValidate<WFTaskActionArgument>("wfTaskActionArgument", taskId);
-            DatabaseJobProcessInput databaseJobProcessInput = wfTaskActionArgument.ProcessInputArguments.CastWithValidate<DatabaseJobProcessInput>("databaseJobProcessInput", taskId);
-
-            return databaseJobProcessInput;
+            return wfTaskActionArgument.ProcessInputArguments.CastWithValidate<DatabaseJobProcessInput>("databaseJobProcessInput", taskId);
         }
     }
 }
