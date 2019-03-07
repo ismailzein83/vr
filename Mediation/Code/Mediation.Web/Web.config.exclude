@@ -75,6 +75,7 @@
     <add key="Mediation_CDR_Jazz_DBConnStringKey"				value="Mediation_CDR_DBConnString"/>
     <add key="Mediation_CDR_MobileAnalysis_DBConnStringKey"		value="Mediation_CDR_DBConnString"/>
     <add key="Mediation_CDR_Namibia_DBConnStringKey"		    value="Mediation_CDR_DBConnString"/>
+    <add key="Mediation_CDR_Multinet_DBConnStringKey"		    value="Mediation_CDR_DBConnString"/>
     <!-- End, keep only one key depending on the client-->
 
     <add key="BCPDonotDeleteFiles" value="false"/>
