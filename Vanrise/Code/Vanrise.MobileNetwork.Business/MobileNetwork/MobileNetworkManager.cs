@@ -20,7 +20,7 @@ namespace Vanrise.MobileNetwork.Business
             if (!startingCountryChar.HasValue)
                 return allMobileNetworksByMobileCountryNames;
 
-            string countryCharToString = startingCountryChar.Value.ToString();
+            string countryCharToString = startingCountryChar.Value.ToString().ToUpper();
 
             Dictionary<string, List<Entities.MobileNetwork>> filteredMobileNetworks = new Dictionary<string, List<Entities.MobileNetwork>>();
 
@@ -29,7 +29,7 @@ namespace Vanrise.MobileNetwork.Business
                 string mobileCountryName = mobileNetworkKvp.Key;
                 List<Entities.MobileNetwork> mobileNetworks = mobileNetworkKvp.Value;
 
-                if (mobileCountryName.StartsWith(countryCharToString, false, System.Globalization.CultureInfo.InvariantCulture))
+                if (mobileCountryName.ToUpper().StartsWith(countryCharToString, false, System.Globalization.CultureInfo.InvariantCulture))
                     filteredMobileNetworks.Add(mobileCountryName, mobileNetworks);
             }
 
