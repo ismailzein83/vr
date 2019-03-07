@@ -352,7 +352,8 @@ namespace Vanrise.Notification.Business
             VRAlertRuleDetail vrAlertRuleDetail = new VRAlertRuleDetail()
             {
                 Entity = vrAlertRule,
-                RuleTypeName = new VRAlertRuleTypeManager().GetVRAlertRuleTypeName(vrAlertRule.RuleTypeId)
+                RuleTypeName = new VRAlertRuleTypeManager().GetVRAlertRuleTypeName(vrAlertRule.RuleTypeId),
+                CreatedBy = vrAlertRule.CreatedBy.HasValue ? new UserManager().GetUserName(vrAlertRule.CreatedBy.Value) : null
             };
             vrAlertRuleDetail.AllowEdit = _alertTypeManager.DoesUserHaveEditAccess(vrAlertRule.RuleTypeId);
             return vrAlertRuleDetail;

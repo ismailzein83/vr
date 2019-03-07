@@ -1,17 +1,17 @@
-﻿
-
-<vr-datagrid on-ready="scopeModel.onGridReady"
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
              datasource="scopeModel.vrAlertRule"
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="scopeModel.menuActions"
              idfield="Entity.VRAlertRuleId" enableautoexport="true">
-    <vr-datagridcolumn headertext="'Id'" field="'Entity.VRAlertRuleId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Rule Type'" field="'RuleTypeName'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Status'" fixedwidth="'75'" >
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.VRAlertRuleId'" fixedwidth="'80'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Rule Type'" field="'RuleTypeName'" widthfactor="2"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" fixedwidth="'100'">
         <vr-icon icontype="dataItem.Entity.IsDisabled == false ? 'true' : 'false'" tooltip="dataItem.Entity.IsDisabled == false ? 'Enabled' : 'Disabled' "></vr-icon>
     </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created By'" field="'CreatedBy'" widthfactor="1"> </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created Time'" type="'Datetime'" field="'Entity.CreatedTime'" fixedwidth="'100'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
