@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -478,9 +479,10 @@ namespace Vanrise.Common
             }
 
             var serializer = new System.Xml.Serialization.XmlSerializer(obj.GetType());
-            var writer = new EncodingStringWriter(Encoding);
+            var writer = new StringWriter();
+            XmlWriter xmlWriter = XmlWriter.Create(writer, new XmlWriterSettings() { OmitXmlDeclaration = true });
 
-            serializer.Serialize(writer, obj, ns);
+            serializer.Serialize(xmlWriter, obj, ns);
 
             return writer.ToString();
         }
