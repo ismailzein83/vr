@@ -14,6 +14,7 @@
     <x:Property Name="Input" Type="InArgument(vbewa:DatabaseJobProcessInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.BusinessProcess.Extensions.WFTaskAction.DatabaseJobProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -26,8 +27,11 @@
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Runtime.DurableInstancing</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
@@ -45,28 +49,30 @@
       <AssemblyReference>Vanrise.Runtime.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Security.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Business</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
-      <AssemblyReference>PresentationFramework</AssemblyReference>
-      <AssemblyReference>PresentationCore</AssemblyReference>
-      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
-      <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Extensions.WFTaskAction</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="variable1" />
     </Sequence.Variables>
-    <local:DatabaseJobTaskActivity>
+    <local:DatabaseJobTaskActivity sap2010:WorkflowViewState.IdRef="DatabaseJobTaskActivity_1">
       <local:DatabaseJobTaskActivity.ConnectionString>
         <InArgument x:TypeArguments="x:String">
           <mca:CSharpValue x:TypeArguments="x:String">Input.ConnectionString</mca:CSharpValue>
         </InArgument>
       </local:DatabaseJobTaskActivity.ConnectionString>
+      <local:DatabaseJobTaskActivity.ConnectionStringAppSettingName>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">Input.ConnectionStringAppSettingName</mca:CSharpValue>
+        </InArgument>
+      </local:DatabaseJobTaskActivity.ConnectionStringAppSettingName>
       <local:DatabaseJobTaskActivity.ConnectionStringName>
         <InArgument x:TypeArguments="x:String">
           <mca:CSharpValue x:TypeArguments="x:String">Input.ConnectionStringName</mca:CSharpValue>
@@ -77,12 +83,9 @@
           <mca:CSharpValue x:TypeArguments="x:String">Input.Query</mca:CSharpValue>
         </InArgument>
       </local:DatabaseJobTaskActivity.Query>
-      <sap2010:WorkflowViewState.IdRef>DatabaseJobTaskActivity_1</sap2010:WorkflowViewState.IdRef>
     </local:DatabaseJobTaskActivity>
-    <sap2010:WorkflowViewState.IdRef>Sequence_1</sap2010:WorkflowViewState.IdRef>
-    <sads:DebugSymbol.Symbol>d2NDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5CdXNpbmVzc1Byb2Nlc3MuRXh0ZW5zaW9ucy5XRlRhc2tBY3Rpb25cRGF0YWJhc2VKb2JQcm9jZXNzLnhhbWwFPANUDgIBAUAFUSUCAQJDC0NfAgEJTQtNVAIBBkgLSGMCAQM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2NDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5CdXNpbmVzc1Byb2Nlc3MuRXh0ZW5zaW9ucy5XRlRhc2tBY3Rpb25cRGF0YWJhc2VKb2JQcm9jZXNzLnhhbWwGPQNYDgIBAUEFViUCAQJEC0RfAgEMUwtTVAIBCUkLSW0CAQZOC05jAgED</sads:DebugSymbol.Symbol>
   </Sequence>
-  <sap2010:WorkflowViewState.IdRef>Vanrise.BusinessProcess.Extensions.WFTaskAction.DatabaseJobProcess_1</sap2010:WorkflowViewState.IdRef>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="DatabaseJobTaskActivity_1" sap:VirtualizedContainerService.HintSize="200,22.4" />
