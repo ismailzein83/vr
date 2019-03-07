@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InterconnectInvoiceByCurrencyItemDetails.cs" />
     <Compile Include="InterconnectInvoiceDetails.cs" />
     <Compile Include="InterconnectInvoiceItemDetails.cs" />
     <Compile Include="InterconnectSMSInvoiceItemDetails.cs" />
