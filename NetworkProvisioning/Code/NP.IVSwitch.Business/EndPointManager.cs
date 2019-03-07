@@ -469,6 +469,7 @@ namespace NP.IVSwitch.Business
 			{
 				accountCarrierProfileExtension.CustomerAccountId = default(int?);
 				carrierProfileManager.UpdateCarrierProfileExtendedSetting<AccountCarrierProfileExtension>(profileId.Value, accountCarrierProfileExtension);
+				dataManager.DeleteAccount(endPointToDelete);
 			}
 			dataManager.DeleteEndPoint(endPointToDelete);
 			Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
