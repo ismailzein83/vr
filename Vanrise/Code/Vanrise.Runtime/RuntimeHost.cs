@@ -406,6 +406,7 @@ namespace Vanrise.Runtime
                 Arguments = String.Format("ProcessId {0} {1} {2} {3}", currentProcessId, _runtimeNodeId.ToString(), _runtimeNodeInstanceId.ToString(), childRuntimeProcessProxy.ProcessConfigId)
             };
             var childProcess = Process.Start(startInfo);
+            childProcess.ThrowIfNull("childProcess");
             lock (_childRuntimeProcessProxies)
             {
                 childRuntimeProcessProxy.OSProcessId = childProcess.Id;
