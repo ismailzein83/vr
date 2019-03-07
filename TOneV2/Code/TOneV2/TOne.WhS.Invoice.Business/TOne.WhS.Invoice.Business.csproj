@@ -114,6 +114,7 @@
     <Compile Include="Extensions\InvoiceGeneratorActionPartnerCondition.cs" />
     <Compile Include="Extensions\VoiceInvoiceSubSectionFilter.cs" />
     <Compile Include="Extensions\VoiceInvoiceUIGridColumnFilter.cs" />
+    <Compile Include="InvoiceCompareManager.cs" />
     <Compile Include="InvoiceComparisonTemplateManager.cs" />
     <Compile Include="InvoiceGenerationManager.cs" />
     <Compile Include="InvoiceManager.cs" />
