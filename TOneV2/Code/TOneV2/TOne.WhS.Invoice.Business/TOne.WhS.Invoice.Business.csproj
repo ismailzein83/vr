@@ -135,6 +135,10 @@
       <Project>{fcc59d3d-6e58-4558-bc27-8c6a01223cb7}</Project>
       <Name>TOne.WhS.Deal.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">
+      <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>
+      <Name>TOne.WhS.Deal.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Invoice.Data\TOne.WhS.Invoice.Data.csproj">
       <Project>{23e57496-f040-4b3f-9544-dd158b4c17f1}</Project>
       <Name>TOne.WhS.Invoice.Data</Name>
