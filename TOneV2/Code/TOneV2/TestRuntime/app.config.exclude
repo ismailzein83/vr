@@ -93,7 +93,8 @@
     
     <add key="StateBackupDatabase"                              value="TOneV2_StateBackup"/>
     <!--<add key="BCPCommandName"                                   value="bcp"/>-->
-
+    <!--<add key="Runtime_DontDisableUseShellExecute"               value="true" />-->
+    
     <add key="AddBusinessProcessConsoleTracking" value="true"/>
     <add key="DropOldRoutingDatabasesInterval" value="00:01:00"/>
     <add key="BusinessProcessDisabledNamedPipeService" value="true"/>
