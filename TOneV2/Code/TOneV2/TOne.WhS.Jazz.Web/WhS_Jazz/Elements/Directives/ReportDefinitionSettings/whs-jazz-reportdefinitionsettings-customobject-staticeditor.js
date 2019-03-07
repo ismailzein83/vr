@@ -164,7 +164,7 @@
 
                 for (var i = 0; i < marketOptions.length; i++) {
                     for (var j = i; j < marketOptions.length; j++) {
-                        if (i != j && marketOptions[i].MarketId != undefined && marketOptions[i].CustomerTypeId != undefined && marketOptions[j].MarketId != undefined && marketOptions[j].CustomerTypeId != undefined && marketOptions[i].MarketId == marketOptions[j].MarketId && marketOptions[i].CustomerTypeId == marketOptions[j].CustomerTypeId)
+                        if (i != j && marketOptions[i].MarketId != undefined && marketOptions[i].CustomerTypeId != undefined  && marketOptions[i].MarketId == marketOptions[j].MarketId && marketOptions[i].CustomerTypeId == marketOptions[j].CustomerTypeId)
                             return true;
                     }
                 }
@@ -184,7 +184,7 @@
                 } 
                 for (var i = 0; i < regionOptions.length; i++) {
                     for (var j = i; j < regionOptions.length; j++) {
-                        if (i != j && regionOptions[i].RegionId != undefined && regionOptions[j].RegionId != undefined && regionOptions[i].RegionId == regionOptions[j].RegionId)
+                        if (i != j && regionOptions[i].RegionId != undefined  && regionOptions[i].RegionId == regionOptions[j].RegionId)
                             return true;
                     }
                 }
