@@ -317,13 +317,18 @@ namespace Vanrise.Rules
                 return null;
         }
 
+        protected virtual bool IsRuleStillValid(T rule)
+        {
+            return true;
+        }
+
         public Dictionary<int, T> GetAllRules()
         {
-            return GetCachedOrCreate("GetCachedRules", 
+            return GetCachedOrCreate("GetCachedRules",
                 () =>
                 {
                     Dictionary<int, T> rulesWithDeleted = this.GetAllRulesWithDeleted();
-                    return rulesWithDeleted != null ? rulesWithDeleted.FindAllRecords(itm => !itm.IsDeleted).ToDictionary(itm => itm.RuleId, itm => itm) : null;
+                    return rulesWithDeleted != null ? rulesWithDeleted.FindAllRecords(itm => !itm.IsDeleted && IsRuleStillValid(itm)).ToDictionary(itm => itm.RuleId, itm => itm) : null;
                 });
         }
 
@@ -506,7 +511,8 @@ namespace Vanrise.Rules
         {
             lock (GetCacheManager().ruleCachingExpirationCheckerDict)
             {
-                GetCacheManager().ruleCachingExpirationCheckerDict.Add(GetRuleTypeId(), ruleCachingExpirationChecker);
+                var ruleCachingExpirationCheckers = GetCacheManager().ruleCachingExpirationCheckerDict.GetOrCreateItem(GetRuleTypeId());
+                ruleCachingExpirationCheckers.Add(ruleCachingExpirationChecker);
             }
         }
 
@@ -539,7 +545,7 @@ namespace Vanrise.Rules
 
         IRuleDataManager _dataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
         ConcurrentDictionary<int, Object> _updateHandlesByRuleType = new ConcurrentDictionary<int, Object>();
-        public VRDictionary<int, RuleCachingExpirationChecker> ruleCachingExpirationCheckerDict = new VRDictionary<int, RuleCachingExpirationChecker>(true);
+        public VRDictionary<int, List<RuleCachingExpirationChecker>> ruleCachingExpirationCheckerDict = new VRDictionary<int, List<RuleCachingExpirationChecker>>(true);
 
 
         protected override bool ShouldSetCacheExpired(int parameter)
@@ -550,11 +556,14 @@ namespace Vanrise.Rules
             bool isCacheExpired = _dataManager.AreRulesUpdated(parameter, ref updateHandle);
             _updateHandlesByRuleType.AddOrUpdate(parameter, updateHandle, (key, existingHandle) => updateHandle);
 
-            RuleCachingExpirationChecker ruleCachingExpirationChecker;
+            List<RuleCachingExpirationChecker> ruleCachingExpirationCheckers;
             bool isRuleDependenciesCacheExpired = false;
-            if (ruleCachingExpirationCheckerDict.TryGetValue(parameter, out ruleCachingExpirationChecker))
+            if (ruleCachingExpirationCheckerDict.TryGetValue(parameter, out ruleCachingExpirationCheckers))
             {
-                isRuleDependenciesCacheExpired = ruleCachingExpirationChecker.IsRuleDependenciesCacheExpired();
+                foreach (var ruleCachingExpirationChecker in ruleCachingExpirationCheckers)
+                {
+                    isRuleDependenciesCacheExpired = isRuleDependenciesCacheExpired | ruleCachingExpirationChecker.IsRuleDependenciesCacheExpired();
+                }
             }
 
             return isCacheExpired || isRuleDependenciesCacheExpired;

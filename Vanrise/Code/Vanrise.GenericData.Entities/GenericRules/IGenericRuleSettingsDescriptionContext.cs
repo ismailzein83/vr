@@ -10,4 +10,9 @@ namespace Vanrise.GenericData.Entities
     {
         GenericRuleDefinitionSettings RuleDefinitionSettings { get; set; }
     }
+
+    public interface IGenericRuleIsRuleStillValidContext
+    {
+        GenericRuleDefinitionSettings RuleDefinitionSettings { get; }
+    }
 }

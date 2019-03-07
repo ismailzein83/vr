@@ -135,6 +135,11 @@ namespace Vanrise.GenericData.Entities
         {
             return Convert.ChangeType(originalValue, GetNonNullableRuntimeType());
         }
+
+        public virtual bool IsStillAvailable(IDataRecordFieldTypeIsStillAvailableContext context)
+        {
+            return true;
+        }
     }
     public interface IDataRecordFieldTypeDefaultRDBFieldAttributeContext
     {
@@ -229,5 +234,15 @@ namespace Vanrise.GenericData.Entities
         Object FieldValue { set; }
 
         DataRecordFieldType FieldType { get; set; }
+    }
+
+    public class DataRecordFieldTypeIsStillAvailableContext : IDataRecordFieldTypeIsStillAvailableContext
+    {
+        public dynamic EntityId { get; set; }
+    }
+
+    public interface IDataRecordFieldTypeIsStillAvailableContext
+    {
+        dynamic EntityId { get; }
     }
 }

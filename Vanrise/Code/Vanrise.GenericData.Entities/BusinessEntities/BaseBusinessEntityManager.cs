@@ -28,5 +28,10 @@ namespace Vanrise.GenericData.Entities
         {
 
         }
+
+        public virtual bool IsStillAvailable(IBusinessEntityIsStillAvailableContext context)
+        {
+            return true;
+        }
     }
 }

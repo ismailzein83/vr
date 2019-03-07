@@ -97,4 +97,14 @@ namespace Vanrise.GenericData.Entities
 
         BERuntimeSelectorFilter BERuntimeSelectorFilter { get; }
     }
+
+    public interface IBusinessEntityIsStillAvailableContext 
+    {
+        dynamic EntityId { get; }
+    }
+
+    public class BusinessEntityIsStillAvailableContext : IBusinessEntityIsStillAvailableContext
+    {
+        public dynamic EntityId { get; set; }
+    }
 }

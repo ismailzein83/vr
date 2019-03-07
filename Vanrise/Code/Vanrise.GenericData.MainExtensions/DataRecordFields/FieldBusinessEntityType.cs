@@ -251,7 +251,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             {
                 FieldDescription = context.FieldDescription,
                 FieldType = context.FieldType,
-                BusinessEntityDefinitionId= BusinessEntityDefinitionId
+                BusinessEntityDefinitionId = BusinessEntityDefinitionId
             };
 
             var beManager = GetBusinessEntityManager();
@@ -272,6 +272,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             BusinessEntityDefinitionManager _manager = new BusinessEntityDefinitionManager();
             return _manager.GetBusinessEntityDefinitionName(BusinessEntityDefinitionId);
+        }
+
+        public override bool IsStillAvailable(IDataRecordFieldTypeIsStillAvailableContext context)
+        {
+            BaseBusinessEntityManager baseBusinessEntityManager = GetBusinessEntityManager();
+            return baseBusinessEntityManager.IsStillAvailable(new BusinessEntityIsStillAvailableContext() { EntityId = context.EntityId });
         }
 
         #endregion

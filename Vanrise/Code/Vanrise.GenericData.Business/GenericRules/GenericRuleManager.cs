@@ -15,10 +15,16 @@ namespace Vanrise.GenericData.Business
 {
     public class GenericRuleManager<T> : Vanrise.Rules.RuleManager<T, GenericRuleDetail>, IGenericRuleManager where T : GenericRule
     {
+        GenericRuleDefinitionManager _genericRuleDefinitionManager;
         static GenericRuleManager()
         {
             GenericRuleManager<T> instance = new GenericRuleManager<T>();
             instance.AddRuleCachingExpirationChecker(new GenericRuleCachingExpirationChecker());
+        }
+
+        public GenericRuleManager()
+        {
+            _genericRuleDefinitionManager = new GenericRuleDefinitionManager();
         }
 
         #region Public Methods
@@ -165,6 +171,12 @@ namespace Vanrise.GenericData.Business
                 return false;
 
             return firstRuleCriteriaValue.All(secondRuleCriteriaValue.Contains) && firstRuleCriteriaValue.Count() == secondRuleCriteriaValue.Count();
+        }
+
+        protected override bool IsRuleStillValid(T rule)
+        {
+            GenericRuleDefinition ruleDefinition = _genericRuleDefinitionManager.GetGenericRuleDefinition(rule.DefinitionId);
+            return rule.IsRuleStillValid(new GenericRuleIsRuleStillValidContext() { RuleDefinitionSettings = ruleDefinition.SettingsDefinition });
         }
 
         public GenericRule GetGenericRule(int ruleId, bool isViewedFromUI)

@@ -29,5 +29,17 @@ namespace Vanrise.GenericData.Transformation.Entities
             var mappingRuleDefinitionSettings = ruleDefinitionSettings as MappingRuleDefinitionSettings;
             return mappingRuleDefinitionSettings.FieldType.IsMatched(Settings.Value, settingsFilterValue);
         }
+
+        public override bool IsRuleStillValid(IGenericRuleIsRuleStillValidContext context)
+        {
+            if (Settings != null && Settings.Value != null)
+            {
+                var mappingRuleDefinitionSettings = context.RuleDefinitionSettings as MappingRuleDefinitionSettings;
+                if (mappingRuleDefinitionSettings != null && mappingRuleDefinitionSettings.FieldType != null)
+                    return mappingRuleDefinitionSettings.FieldType.IsStillAvailable(new DataRecordFieldTypeIsStillAvailableContext { EntityId = Settings.Value });
+            }
+
+            return false;
+        }
     }
 }

@@ -20,6 +20,11 @@ namespace Vanrise.GenericData.Entities
         {
             return null;
         }
+
+        public virtual bool IsRuleStillValid(IGenericRuleIsRuleStillValidContext context)
+        {
+            return true;
+        }
     }
 
     public interface IGenericRule
