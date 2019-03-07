@@ -1,21 +1,21 @@
 ﻿'use strict';
 
-app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountService', 'Retail_BE_FinancialAccountAPIService', 'VRNotificationService', 'VRUIUtilsService', 'Retail_BE_AccountBalanceTypeAPIService', 'UtilsService', 'Retail_BE_FinacialRecurringChargeAPIService', 'Retail_BE_AccountBEDefinitionAPIService','VR_GenericData_GenericBusinessEntityAPIService',
+app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountService', 'Retail_BE_FinancialAccountAPIService', 'VRNotificationService', 'VRUIUtilsService', 'Retail_BE_AccountBalanceTypeAPIService', 'UtilsService', 'Retail_BE_FinacialRecurringChargeAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService',
     function (Retail_BE_FinancialAccountService, Retail_BE_FinancialAccountAPIService, VRNotificationService, VRUIUtilsService, Retail_BE_AccountBalanceTypeAPIService, UtilsService, Retail_BE_FinacialRecurringChargeAPIService, Retail_BE_AccountBEDefinitionAPIService, VR_GenericData_GenericBusinessEntityAPIService) {
-    return {
-        restrict: 'E',
-        scope: {
-            onReady: '=',
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            var financialAccountGrid = new FinancialAccountGrid($scope, ctrl, $attrs);
-            financialAccountGrid.initializeController();
-        },
-        controllerAs: 'ctrl',
-        bindToController: true,
-        templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/FinancialAccount/Templates/FinancialAccountGridTemplate.html'
-    };
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var financialAccountGrid = new FinancialAccountGrid($scope, ctrl, $attrs);
+                financialAccountGrid.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/FinancialAccount/Templates/FinancialAccountGridTemplate.html'
+        };
 
         function FinancialAccountGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
@@ -73,7 +73,7 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
 
 
                     function getRecurringChargeModulePromise() {
-                       return Retail_BE_AccountBEDefinitionAPIService.CheckUseRecurringChargeModule(accountBEDefinitionId).then(function (response) {
+                        return Retail_BE_AccountBEDefinitionAPIService.CheckUseRecurringChargeModule(accountBEDefinitionId).then(function (response) {
                             useRecurringChargeModule = response;
                         });
                     }
@@ -113,7 +113,7 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
                     gridDrillDownTabManager.setDrillDownExtensionObject(updatedFinancialAccount);
                     gridAPI.itemUpdated(updatedFinancialAccount);
                 };
-                Retail_BE_FinancialAccountService.editFinancialAccount(onFinancialAccountUpdated,accountBEDefinitionId,accountId, financialAccount.SequenceNumber);
+                Retail_BE_FinancialAccountService.editFinancialAccount(onFinancialAccountUpdated, accountBEDefinitionId, accountId, financialAccount.SequenceNumber);
             }
 
             function getGridDrillDownTabDefinitions(financialAccount) {
@@ -155,19 +155,35 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
                         var genericBusinessEntityPayload = {
                             businessEntityDefinitionId: "DD2CBB22-0FC8-4AD2-BDCD-CB63A3E5DEA8",
                             fieldValues: {
-                                FinancialAccountId: financialAccountId,
-                                Classification: classification
+                                FinancialAccountId: {
+                                    value: financialAccountId,
+                                    visibility: false,
+                                    default: false
+                                },
+                                Classification: {
+                                    value: classification,
+                                    visibility: false,
+                                    default: false
+                                }
                             },
                             filterValues: {
-                                FinancialAccountId: financialAccountId,
-                                Classification: classification
+                                FinancialAccountId: {
+                                    value: financialAccountId,
+                                    visibility: false,
+                                    default: false
+                                },
+                                Classification: {
+                                    value: classification,
+                                    visibility: false,
+                                    default: false
+                                }
                             }
                         };
-                        return genericBusinessEntityAPI.load(genericBusinessEntityPayload);
-                    };
-                    drillDownTabDefinitions.push(recurringChargeDrillDownTab);
-                }
-                return drillDownTabDefinitions;
+                    return genericBusinessEntityAPI.load(genericBusinessEntityPayload);
+                };
+                drillDownTabDefinitions.push(recurringChargeDrillDownTab);
             }
+            return drillDownTabDefinitions;
+        }
     }
 }]);
