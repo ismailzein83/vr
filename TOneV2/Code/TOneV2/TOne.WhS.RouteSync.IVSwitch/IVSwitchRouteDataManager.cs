@@ -104,7 +104,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             {
                 string.Format("ALTER TABLE {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {0}; ", tableName, tableName + "_OLD", tableName + "_temp")
             };
-            ExecuteNonQuery(swapQuery);
+            ExecuteNonQueryWithTransaction(swapQuery);
         }
         public void CreatePrimaryKey(string routeTableName)
         {
