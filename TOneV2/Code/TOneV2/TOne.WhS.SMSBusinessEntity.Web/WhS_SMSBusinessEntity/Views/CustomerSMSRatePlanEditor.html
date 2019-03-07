@@ -39,7 +39,7 @@
                             <vr-span ng-if="(dataItem.FutureRate != undefined)" style="cursor: pointer; text-decoration: underline" ng-click="viewScope.scopeModel.onFutureRateClicked(dataItem)">*</vr-span>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'New Rate'" widthfactor="4" disablesorting>
-                            <vr-textbox type="number" value="dataItem.TempRate" minvalue="0" onblurtextbox="dataItem.onRateValueChanged(dataItem)"></vr-textbox>
+                            <vr-textbox type="number" tonextinput value="dataItem.TempRate" minvalue="0" onblurtextbox="dataItem.onRateValueChanged(dataItem)"></vr-textbox>
                         </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-columns>
