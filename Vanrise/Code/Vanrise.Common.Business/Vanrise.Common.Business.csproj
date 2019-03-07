@@ -125,7 +125,7 @@
     <Compile Include="VRConnections\MainImplementations\VRHttpConnectionCallInterceptorManager.cs" />
     <Compile Include="VRConnections\MainImplementations\VRFTPConnection.cs" />
     <Compile Include="VRConnections\MainImplementations\SQLConnection.cs" />
-    <Compile Include="VRConnections\MainImplementations\VRHttpConnectionInterceptRequestContext.cs" />
+    <Compile Include="VRConnections\MainImplementations\VRHttpConnectionCallInterceptor.cs" />
     <Compile Include="VRConnections\VRConnectionManager.cs" />
     <Compile Include="DataGrouping\DataGroupingAnalysisInfoManager.cs" />
     <Compile Include="DataGrouping\Distribution\DataGroupingDistributor.cs" />
