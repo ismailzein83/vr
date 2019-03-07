@@ -17,11 +17,10 @@
 
         });
 
-        function addGenericBusinessEntity(onGenericBEAdded, businessEntityDefinitionId,editorSize,fieldValues, defaultValues) {
+        function addGenericBusinessEntity(onGenericBEAdded, businessEntityDefinitionId,editorSize,fieldValues) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
-                fieldValues: fieldValues,
-                defaultValues: defaultValues
+                fieldValues: fieldValues
             };
 
             var settings = {

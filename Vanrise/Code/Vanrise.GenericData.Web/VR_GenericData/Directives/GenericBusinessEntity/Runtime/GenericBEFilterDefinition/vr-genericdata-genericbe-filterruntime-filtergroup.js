@@ -126,12 +126,16 @@
 
             function getFields() {
                 var fields = [];
-                if (dataRecordType != undefined && dataRecordType.Fields && definitionSettings.AvailableFieldNames != undefined) {
-                    for (var i = 0; i < definitionSettings.AvailableFieldNames.length; i++) {
-                        var field = definitionSettings.AvailableFieldNames[i];
+                var availableNames = definitionSettings.AvailableFieldNames;
+                if (dataRecordType != undefined && dataRecordType.Fields && availableNames != undefined) {
+                    for (var i = 0; i < availableNames.length; i++) {
+                        var field = availableNames[i];
 
-                        if (filterValues != undefined && filterValues[field] != undefined)
-                            continue;
+                        if (filterValues != undefined) {
+                            var filterValue = filterValues[field];
+                            if (filterValue != undefined && !filterValue.visibility)
+                                continue;
+                        }
 
                         var fieldType = UtilsService.getItemByVal(dataRecordType.Fields, field, "Name");
                         if (fieldType != undefined) {

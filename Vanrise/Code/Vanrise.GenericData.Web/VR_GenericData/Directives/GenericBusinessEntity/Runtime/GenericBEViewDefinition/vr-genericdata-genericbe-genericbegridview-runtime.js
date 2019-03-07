@@ -85,8 +85,12 @@
                     var childName = currentMapping.SubviewColumnName;
 
                     var parentFieldValue = fieldValues[currentMapping.ParentColumnName];
-                    if (parentFieldValue != undefined && parentFieldValue.Value != undefined && childName!=undefined) {
-                        fields[childName] = parentFieldValue.Value;
+                    if (parentFieldValue != undefined && parentFieldValue.Value != undefined && childName != undefined) {
+                        fields[childName] = {
+                            value: parentFieldValue.Value,
+                            visibility: false,
+                            default: false
+                        };
                     }
                 }
 

@@ -35,7 +35,6 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
             var genericBusinessEntity;
 
             var fieldValues;
-            var defaultValues;
 
             var titleFieldName;
 
@@ -43,7 +42,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
             var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
             var context;
             var historyId;
-            
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -65,7 +64,6 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         genericBusinessEntityId = payload.genericBusinessEntityId;
                         fieldValues = payload.fieldValues;
-                        defaultValues = payload.defaultValues;
                         historyId = payload.historyId;
                         context = payload.context;
                     }
@@ -99,7 +97,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                     var fieldValuesObj = {};
                     if (fieldValues != undefined) {
                         for (var prop in fieldValues) {
-                            fieldValuesObj[prop] = fieldValues[prop];
+                            fieldValuesObj[prop] = fieldValues[prop].value;
                         }
                     }
 
@@ -149,6 +147,13 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                 function loadEditorRuntimeDirective() {
                     var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
                     runtimeEditorReadyDeferred.promise.then(function () {
+                        var defaultValues = {};
+                        for (var prop in fieldValues) {
+                            var propValue = fieldValues[prop];
+                            if (propValue.default)
+                                defaultValues[prop] = propValue.value;
+                        }
+
                         var runtimeEditorPayload = {
                             selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : defaultValues,
                             dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,

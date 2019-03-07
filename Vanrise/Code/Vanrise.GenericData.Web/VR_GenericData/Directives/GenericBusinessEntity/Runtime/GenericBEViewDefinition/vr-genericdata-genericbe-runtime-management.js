@@ -52,10 +52,16 @@
             var runtimeManagement;
             var context;
 
+            var showAddFromAccess = true;
+            var showUploadFromAccess = true;
+
+            var showAddFromDefinitionSettings = true;
+            var showUploadFromDefinitionSettings = true;
+
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.showAddButton = true;
-                $scope.scopeModel.showUploadButton = true;
+                $scope.scopeModel.showAddButton = false;
+                $scope.scopeModel.showUploadButton = false;
                 $scope.scopeModel.hasFilter = false;
 
                 $scope.scopeModel.showActionButtons = false;
@@ -86,7 +92,10 @@
                 $scope.scopeModel.onBusinessEntityDefinitionSelectionChange = function () {
                     if (businessEntityDefinitionAPI != undefined) {
                         if (businessEntityDefinitionAPI.getSelectedIds() != undefined) {
-                            checkDoesUserHaveAddAccess(businessEntityDefinitionAPI.getSelectedIds());
+                            checkDoesUserHaveAddAccess(businessEntityDefinitionAPI.getSelectedIds()).then(function () {
+                                $scope.scopeModel.showAddButton = showAddFromDefinitionSettings && showAddFromAccess;
+                                $scope.scopeModel.showUploadButton = showUploadFromDefinitionSettings && showUploadFromAccess;
+                            });
 
                             if (businessEntityDefinitionSelectedDeferred != undefined)
                                 businessEntityDefinitionSelectedDeferred.resolve();
@@ -108,9 +117,9 @@
                 };
 
                 function checkDoesUserHaveAddAccess(definitionId) {
-                    VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(definitionId).then(function (response) {
-                        $scope.scopeModel.showAddButton = $scope.scopeModel.showAddButton && response;
-                        $scope.scopeModel.showUploadButton = $scope.scopeModel.showAddButton && $scope.scopeModel.showUploadButton;
+                    return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(definitionId).then(function (response) {
+                        showAddFromAccess = response;
+                        showUploadFromAccess = response;
                     });
 
                 }
@@ -182,6 +191,10 @@
                     $scope.scopeModel.hideBusinessEntityDefinitionSelector = businessEntityDefinitionAPI.hasSingleItem();
 
                     loadBusinessEntityDefinitionSettings().then(function () {
+
+                        $scope.scopeModel.showAddButton = showAddFromDefinitionSettings && showAddFromAccess;
+                        $scope.scopeModel.showUploadButton = showUploadFromDefinitionSettings && showUploadFromAccess;
+
                         loadSearchCriteria().then(function () {
                             loadBEDefinitionsSelectorAndSubsectionsPromiseDeferred.resolve();
                         }).catch(function (error) {
@@ -209,8 +222,8 @@
                         if (genericBEDefinitionSettings.FilterDefinition != undefined && genericBEDefinitionSettings.FilterDefinition.Settings != undefined) {
                             $scope.scopeModel.filterDirective = genericBEDefinitionSettings.FilterDefinition.Settings.RuntimeEditor;
                         }
-                        $scope.scopeModel.showAddButton = $scope.scopeModel.showAddButton && !genericBEDefinitionSettings.HideAddButton;
-                        $scope.scopeModel.showUploadButton = genericBEDefinitionSettings.ShowUpload && $scope.scopeModel.showAddButton;
+                        showAddFromDefinitionSettings = !genericBEDefinitionSettings.HideAddButton;
+                        showUploadFromDefinitionSettings = genericBEDefinitionSettings.ShowUpload;
                     }
                 });
             }

@@ -179,9 +179,17 @@
                             if (businessEntityGridColumnAttributes != undefined) {
                                 for (var index = 0; index < businessEntityGridColumnAttributes.length; index++) {
                                     var businessEntityGridColumnAttribute = businessEntityGridColumnAttributes[index];
-                                    if (fieldValues == undefined || fieldValues[businessEntityGridColumnAttribute.Name] == undefined) {
+                                    if (fieldValues == undefined) {
                                         $scope.scopeModel.columns.push(businessEntityGridColumnAttribute.Attribute);
+                                        continue;
                                     }
+
+                                    var fieldValue = fieldValues[businessEntityGridColumnAttribute.Name];
+                                    if (fieldValue == undefined || fieldValue.visibility) {
+                                        $scope.scopeModel.columns.push(businessEntityGridColumnAttribute.Attribute);
+                                        continue;
+                                    }
+
                                 }
                             }
                         });

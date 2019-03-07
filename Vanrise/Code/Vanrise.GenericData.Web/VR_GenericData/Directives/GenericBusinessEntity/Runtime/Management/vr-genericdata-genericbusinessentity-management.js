@@ -35,12 +35,17 @@
             var businessEntityDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
             var fieldValues;
             var filterValues;
-            var defaultValues;
+
+            var showAddFromAccess;
+            var showUploadFromAccess;
+
+            var showAddFromDefinitionSettings;
+            var showUploadFromDefinitionSettings;
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.showAddButton = true;
-                $scope.scopeModel.showUploadButton = true;
+                $scope.scopeModel.showAddButton = false;
+                $scope.scopeModel.showUploadButton = false;
 
                 $scope.scopeModel.hasFilter = false;
 
@@ -63,7 +68,7 @@
                         gridDirectiveAPI.onGenericBEAdded(addedGenericBusinessEntity);
                     };
                     var editorSize = undefined;//genericBEDefinitionSettings != undefined ? genericBEDefinitionSettings.editorSize : undefined;
-                    VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessDefinitionId, editorSize, fieldValues, defaultValues);
+                    VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessDefinitionId, editorSize, fieldValues);
                 };
 
                 $scope.scopeModel.uploadBusinessEntity = function () {
@@ -86,7 +91,6 @@
                         businessDefinitionId = payload.businessEntityDefinitionId;
                         fieldValues = payload.fieldValues;
                         filterValues = payload.filterValues;
-                        defaultValues = payload.defaultValues;
                     }
 
                     promises.push(loadBusinessEntityDefinitionSettings());
@@ -96,8 +100,8 @@
 
                     function loadCheckDoesUserHaveAddAccess() {
                         return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(businessDefinitionId).then(function (response) {
-                            $scope.scopeModel.showAddButton = $scope.scopeModel.showAddButton && response;
-                            $scope.scopeModel.showUploadButton = $scope.scopeModel.showAddButton && $scope.scopeModel.showUploadButton;
+                            showAddFromAccess = response;
+                            showUploadFromAccess = response;
                         });
                     }
 
@@ -111,8 +115,8 @@
                                     $scope.scopeModel.filterDirective = genericBEDefinitionSettings.FilterDefinition.Settings.RuntimeEditor;
                                 }
 
-                                $scope.scopeModel.showAddButton = $scope.scopeModel.showAddButton && !genericBEDefinitionSettings.HideAddButton;
-                                $scope.scopeModel.showUploadButton = genericBEDefinitionSettings.ShowUpload && $scope.scopeModel.showAddButton;
+                                showAddFromDefinitionSettings = !genericBEDefinitionSettings.HideAddButton;
+                                showUploadFromDefinitionSettings = genericBEDefinitionSettings.ShowUpload;
                             }
                         });
                     }
@@ -155,7 +159,10 @@
                         return promiseDeferred.promise;
                     }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        $scope.scopeModel.showAddButton = showAddFromDefinitionSettings && showAddFromAccess;
+                        $scope.scopeModel.showUploadButton = showUploadFromDefinitionSettings && showUploadFromAccess;
+                    });
 
                 };
 
@@ -197,11 +204,17 @@
                     if (filters == undefined)
                         filters = [];
                     for (var key in filterValues) {
+                        var filterValue = filterValues[key].value;
                         filters.push({
                             FieldName: key,
-                            FilterValues: [filterValues[key]]
+                            FilterValues: [filterValue]
                         });
                     }
+                }
+
+                var fieldsWithoutObj = {};
+                for (var prop in fieldValues) {
+                    fieldsWithoutObj[prop] = fieldValues[prop].value;
                 }
 
                 var gridPayload = {

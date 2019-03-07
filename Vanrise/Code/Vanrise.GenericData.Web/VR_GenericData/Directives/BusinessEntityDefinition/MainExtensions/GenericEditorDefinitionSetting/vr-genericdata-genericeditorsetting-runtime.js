@@ -115,7 +115,13 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNo
                     var extendedFields = [];
                     for (var j = 0; j < fields.length; j++) {
                         var currentField = fields[j];
-                        if (parentFieldValues[currentField.FieldPath] == undefined)
+                        if (parentFieldValues == undefined) {
+                            extendedFields.push(currentField);
+                            continue;
+                        }
+
+                        var parentFieldValue = parentFieldValues[currentField.FieldPath];
+                        if (parentFieldValue == undefined || parentFieldValue.visibility)
                             extendedFields.push(currentField);
                     }
 
