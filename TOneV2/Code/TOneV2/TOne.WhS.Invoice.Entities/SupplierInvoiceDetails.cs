@@ -35,6 +35,7 @@ namespace TOne.WhS.Invoice.Entities
         public Decimal TotalReccurringChargesAfterTax { get; set; }
         public Decimal TotalReccurringCharges { get; set; }
         public Decimal TotalInvoiceAmount { get; set; }
+        public decimal TotalAmountBeforeTax { get; set; }
 
     }
     public class SupplierInvoiceDetails: BaseInvoiceDetails

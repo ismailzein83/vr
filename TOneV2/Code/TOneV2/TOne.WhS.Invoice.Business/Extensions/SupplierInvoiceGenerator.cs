@@ -83,26 +83,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
 
             decimal? minAmount = _partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
+          
            
-            if (taxItemDetails != null)
-            {
-                foreach (var tax in taxItemDetails)
-                {
-                    if (evaluatedSupplierRecurringCharges != null)
-                    {
-                        foreach (var item in evaluatedSupplierRecurringCharges)
-                        {
-                            item.AmountAfterTaxes += ((item.Amount * Convert.ToDecimal(tax.Value)) / 100);
-                            item.VAT = tax.IsVAT ? tax.Value : 0;
-                        }
-                    }
-                }
-            }
-            if (invoiceByCostCurrency == null)
-                invoiceByCostCurrency = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
-            AddRecurringChargeToSupplierCurrency(invoiceByCostCurrency, evaluatedSupplierRecurringCharges, canGenerateVoiceInvoice);
 
-            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(voiceItemSetNames, smsItemSetNames, taxItemDetails, invoiceByCostCurrency, evaluatedSupplierRecurringCharges, canGenerateVoiceInvoice);
             #region BuildSupplierInvoiceDetails
             SupplierInvoiceDetails supplierInvoiceDetails = BuildSupplierInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, canGenerateVoiceInvoice);
             if (supplierInvoiceDetails != null)
@@ -117,6 +100,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 supplierInvoiceDetails.Commission = resolvedPayload.Commission;
                 supplierInvoiceDetails.CommissionType = resolvedPayload.CommissionType;
                 supplierInvoiceDetails.Offset = resolvedPayload.Offset;
+                supplierInvoiceDetails.TotalAmountBeforeTax = supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalAmountAfterCommission;
+
                 if (taxItemDetails != null)
                 {
                     foreach (var tax in taxItemDetails)
@@ -127,6 +112,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         supplierInvoiceDetails.TotalSMSOriginalAmountAfterCommission += ((supplierInvoiceDetails.SMSOriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
                         supplierInvoiceDetails.TotalAmount += ((supplierInvoiceDetails.CostAmount * Convert.ToDecimal(tax.Value)) / 100);
                         supplierInvoiceDetails.TotalSMSAmount += ((supplierInvoiceDetails.TotalSMSAmount * Convert.ToDecimal(tax.Value)) / 100);
+                        if (evaluatedSupplierRecurringCharges != null)
+                        {
+                            foreach (var item in evaluatedSupplierRecurringCharges)
+                            {
+                                item.AmountAfterTaxes += ((item.Amount * Convert.ToDecimal(tax.Value)) / 100);
+                                item.VAT = tax.IsVAT ? tax.Value : 0;
+                            }
+                        }
                     }
                     context.ActionAfterGenerateInvoice = (invoice) =>
                     {
@@ -152,6 +145,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     };
 
                 }
+                if (invoiceByCostCurrency == null)
+                    invoiceByCostCurrency = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
+                AddRecurringChargeToSupplierCurrency(invoiceByCostCurrency, evaluatedSupplierRecurringCharges, canGenerateVoiceInvoice);
                 CurrencyManager currencyManager = new CurrencyManager();
                 var systemCurrency = currencyManager.GetSystemCurrency();
                 systemCurrency.ThrowIfNull("systemCurrency");
@@ -195,10 +191,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         totalReccurringChargesInAccountCurrency += currencyExchangeRateManager.ConvertValueToCurrency(item.Amount, item.CurrencyId, currencyId, context.IssueDate);
 
                     }
+
                     supplierInvoiceDetails.TotalReccurringChargesAfterTax = totalReccurringChargesAfterTaxInAccountCurrency;
                     supplierInvoiceDetails.TotalReccurringCharges = totalReccurringChargesInAccountCurrency;
                     supplierInvoiceDetails.TotalInvoiceAmount = supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalReccurringChargesAfterTax + supplierInvoiceDetails.TotalSMSAmountAfterCommission;
+                    supplierInvoiceDetails.TotalAmountBeforeTax += supplierInvoiceDetails.TotalReccurringCharges;
 
+                    foreach (var tax in taxItemDetails)
+                    {
+                        tax.TaxAmount = ((supplierInvoiceDetails.TotalAmountBeforeTax * Convert.ToDecimal(tax.Value)) / 100);
+                    }
+                    List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(voiceItemSetNames, smsItemSetNames, taxItemDetails, invoiceByCostCurrency, evaluatedSupplierRecurringCharges, canGenerateVoiceInvoice);
                     context.Invoice = new GeneratedInvoice
                     {
                         InvoiceDetails = supplierInvoiceDetails,
@@ -522,8 +525,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
         private SupplierInvoiceBySaleCurrencyItemDetails CurrencyItemSetNameMapper(AnalyticRecord analyticRecord, decimal? commission, IEnumerable<VRTaxItemDetail> taxItemDetails, bool fillVoiceData)
         {
-            var saleNetValue = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "CostNet_OrigCurr");
-            if (saleNetValue != 0)
+            var costNetValue = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "CostNet_OrigCurr");
+            if (costNetValue != 0)
             {
                 var supplierInvoiceBySaleCurrencyItemDetails = new SupplierInvoiceBySaleCurrencyItemDetails
                 {
@@ -533,8 +536,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     Duration = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "SaleDuration"),
                     NumberOfCalls = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "NumberOfCalls"),
                     NumberOfSMS = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "NumberOfSMS"),
-                    Amount = saleNetValue,
+                    Amount = costNetValue,
                     Month = _invoiceGenerationManager.GetDimensionValue<string>(analyticRecord, 1),
+                    TotalSMSAmount = costNetValue
                 };
 
                 if (commission.HasValue)
@@ -561,7 +565,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                 supplierInvoiceBySaleCurrencyItemDetails.TotalTrafficAmount = supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes;
                 supplierInvoiceBySaleCurrencyItemDetails.TotalSMSAmount = supplierInvoiceBySaleCurrencyItemDetails.SMSAmountAfterCommissionWithTaxes;
-                supplierInvoiceBySaleCurrencyItemDetails.TotalFullAmount = supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes;
+                supplierInvoiceBySaleCurrencyItemDetails.TotalFullAmount = fillVoiceData? supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes : supplierInvoiceBySaleCurrencyItemDetails.SMSAmountAfterCommissionWithTaxes;
 
                 return supplierInvoiceBySaleCurrencyItemDetails;
             }
