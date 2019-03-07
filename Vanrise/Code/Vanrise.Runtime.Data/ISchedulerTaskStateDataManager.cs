@@ -10,10 +10,6 @@ namespace Vanrise.Runtime.Data
 
         SchedulerTaskState GetSchedulerTaskStateByTaskId(Guid taskId);
         
-        void UnlockTask(Guid taskId);
-
-        bool TryLockTask(Guid taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds);
-
         bool UpdateTaskState(SchedulerTaskState taskStateObject);
 
         List<SchedulerTaskState> GetAllScheduleTaskStates();

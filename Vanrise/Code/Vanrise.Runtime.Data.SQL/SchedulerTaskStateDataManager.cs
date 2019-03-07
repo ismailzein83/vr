@@ -35,26 +35,7 @@ namespace Vanrise.Runtime.Data.SQL
         {
             return GetItemSP("runtime.sp_SchedulerTaskState_GetByTaskId", TaskStateMapper, taskId);
         }
-
-        public void UnlockTask(Guid taskId)
-        {
-            ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_UnlockTask", taskId);
-        }
-
-        public bool TryLockTask(Guid taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
-        {
-            int rslt = ExecuteNonQuerySPCmd("runtime.sp_SchedulerTaskState_TryLockAndUpdateScheduleTask",
-                (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@TaskId", taskId));
-                    cmd.Parameters.Add(new SqlParameter("@CurrentRuntimeProcessID", currentRuntimeProcessId));
-                    var dtPrm = new SqlParameter("@RunningProcessIDs", SqlDbType.Structured);
-                    dtPrm.Value = BuildIDDataTable(runningRuntimeProcessesIds);
-                    cmd.Parameters.Add(dtPrm);
-                });
-            return rslt > 0;
-        }
-
+        
         public bool UpdateTaskState(SchedulerTaskState taskStateObject)
         {
             int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_Update", taskStateObject.TaskId, (int)taskStateObject.Status, taskStateObject.NextRunTime,

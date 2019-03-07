@@ -89,7 +89,33 @@ namespace Vanrise.GenericData.Data.RDB
 
         public void GenerateScript(List<BusinessEntityDefinition> beDefinitions, Action<string, string> addEntityScript)
         {
-            throw new NotImplementedException();
+            StringBuilder scriptBuilder = new StringBuilder();
+            foreach (var beDefinition in beDefinitions)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}')", beDefinition.BusinessEntityDefinitionId, beDefinition.Name, beDefinition.Title, Serializer.Serialize(beDefinition.Settings));
+            }
+            string script = String.Format(@"set nocount on;
+;with cte_data([ID],[Name],[Title],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+{0}
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Settings]))
+merge	[genericdata].[BusinessEntityDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[Settings]);", scriptBuilder);
+            addEntityScript("[genericdata].[BusinessEntityDefinition]", script);
         }
 
         public IEnumerable<BusinessEntityDefinition> GetBusinessEntityDefinitions()

@@ -132,36 +132,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             queryContext.ExecuteNonQuery();
         }
-
-        public bool TryLockTask(Guid taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-
-            var updateQuery = queryContext.AddUpdateQuery();
-            updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column(COL_LockedByProcessID).Value(currentRuntimeProcessId);
-
-            var whereContext = updateQuery.Where();
-            whereContext.EqualsCondition(COL_TaskId).Value(taskId);
-            if (runningRuntimeProcessesIds != null && runningRuntimeProcessesIds.Count() > 0)
-                whereContext.ListCondition(COL_LockedByProcessID, RDBListConditionOperator.NotIN, runningRuntimeProcessesIds);
-
-            return queryContext.ExecuteNonQuery() > 0;
-        }
-
-        public void UnlockTask(Guid taskId)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-
-            var updateQuery = queryContext.AddUpdateQuery();
-            updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column(COL_LockedByProcessID).Null();
-
-            updateQuery.Where().EqualsCondition(COL_TaskId).Value(taskId);
-
-            queryContext.ExecuteNonQuery();
-        }
-
+        
         public bool UpdateTaskState(SchedulerTaskState taskStateObject)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());

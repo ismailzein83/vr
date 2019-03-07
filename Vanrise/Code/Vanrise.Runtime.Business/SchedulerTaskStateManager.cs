@@ -28,19 +28,7 @@ namespace Vanrise.Runtime.Business
             }
             return updateOperationOutput;
         }
-
-        public bool TryLockTask(Guid taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
-        {
-            ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
-            return dataManager.TryLockTask(taskId, currentRuntimeProcessId, runningRuntimeProcessesIds);
-        }
-
-        public void UnlockTask(Guid taskId)
-        {
-            ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
-            dataManager.UnlockTask(taskId);
-        }
-
+        
         public SchedulerTaskStateUpdateOutput GetUpdated(List<Guid> taskIds)
         {
             SchedulerTaskManager schedulerTaskManager = new SchedulerTaskManager();

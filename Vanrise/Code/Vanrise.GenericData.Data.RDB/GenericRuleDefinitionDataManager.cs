@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Vanrise.Data.RDB;
 using Vanrise.GenericData.Entities;
 using Vanrise.Entities;
+using Vanrise.Common;
+
 namespace Vanrise.GenericData.Data.RDB
 {
     public class GenericRuleDefinitionDataManager : IGenericRuleDefinitionDataManager
@@ -115,7 +117,34 @@ namespace Vanrise.GenericData.Data.RDB
 
         public void GenerateScript(List<GenericRuleDefinition> ruleDefinitions, Action<string, string> addEntityScript)
         {
-            throw new NotImplementedException();
+            StringBuilder scriptBuilder = new StringBuilder();
+            foreach (var ruleDefinition in ruleDefinitions)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", ruleDefinition.GenericRuleDefinitionId, ruleDefinition.Name, Serializer.Serialize(ruleDefinition));
+            }
+
+            string script = String.Format(@"set nocount on;
+;with cte_data([ID],[Name],[Details])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+{0}
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Details]))
+merge	[genericdata].[GenericRuleDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Details] = s.[Details]
+when not matched by target then
+	insert([ID],[Name],[Details])
+	values(s.[ID],s.[Name],s.[Details]);", scriptBuilder);
+            addEntityScript("[genericdata].[GenericRuleDefinition]", script);
         }
         #endregion
     }

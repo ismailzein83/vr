@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,8 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
-    <Compile Include="IFreezedTransactionLockDataManager.cs" />
-    <Compile Include="ILockServiceDataManager.cs" />
     <Compile Include="IRunningProcessDataManager.cs" />
     <Compile Include="IRuntimeManagerDataManager.cs" />
     <Compile Include="IRuntimeNodeConfigurationDataManager.cs" />
