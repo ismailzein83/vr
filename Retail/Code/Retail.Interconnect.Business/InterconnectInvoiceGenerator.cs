@@ -64,14 +64,14 @@ namespace Retail.Interconnect.Business
             int currencyId = _accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
             string classification = _type == InterconnectInvoiceType.Customer ? "Customer" : "Supplier";
 
-            RetailModuleManager retailModuleManager = new RetailModuleManager();
+            InterconnectModuleManager interconnectModuleManager = new InterconnectModuleManager();
 
             List<InterconnectInvoiceByCurrencyItemDetails> invoiceByCurrency = null;
             IEnumerable<VRTaxItemDetail> taxItemDetails = _financialAccountManager.GetFinancialAccountTaxItemDetails(context.InvoiceTypeId, _acountBEDefinitionId, context.PartnerId);
             List<InvoiceBillingRecord> voiceItemSetNames = new List<InvoiceBillingRecord>();
             List<InvoiceSMSBillingRecord> smsItemSetNames = new List<InvoiceSMSBillingRecord>();
 
-            if (retailModuleManager.IsVoiceModuleEnabled(voiceAnalyticTableId))
+            if (interconnectModuleManager.IsVoiceModuleEnabled())
             {
                 List<string> voiceListMeasures = new List<string> { "TotalBillingDuration", "Amount", "CountCDRs", "BillingPeriodTo", "BillingPeriodFrom", "Amount_OrigCurr" };
                 List<string> voiceListDimensions = new List<string> { "DestinationZone", "OriginationZone", "Operator", "Rate", "RateType", "BillingType", "Currency" };
@@ -81,7 +81,7 @@ namespace Retail.Interconnect.Business
                  });
                 invoiceByCurrency = LoadVoiceCurrencyItemSetName(dimensionName, financialAccountData.FinancialAccountId, fromDate, toDate, taxItemDetails);
             }
-            if (retailModuleManager.IsSMSModuleEnabled(smsAnalyticTableId))
+            if (interconnectModuleManager.IsSMSModuleEnabled())
             {
                 List<string> smsListMeasures = new List<string> { "Amount", "DeliveredSMS", "BillingPeriodTo", "BillingPeriodFrom", "Amount_OriginalCurrency" };
                 List<string> smsListDimensions = new List<string> { "DestinationMobileNetwork", "OriginationMobileNetwork", "Operator", "Rate", "RateType", "BillingType", "Currency" };
