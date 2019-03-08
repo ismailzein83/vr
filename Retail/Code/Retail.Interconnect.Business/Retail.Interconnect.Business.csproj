@@ -51,6 +51,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -61,6 +65,12 @@
     </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
@@ -78,17 +88,29 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountParts\AccountPartInterconnectSettingDefinition.cs" />
     <Compile Include="AccountParts\AccountPartInterconnectSetting.cs" />
     <Compile Include="AssignedFinancialAccountToInvoiceSettingFilter.cs" />
+    <Compile Include="Extensions\CompareInvoiceAction.cs" />
     <Compile Include="InterconnectInvoiceComparisonManager.cs" />
     <Compile Include="InterconnectInvoiceGenerationManager.cs" />
     <Compile Include="InterconnectInvoiceGenerator.cs" />
+    <Compile Include="InterconnectInvoiceManager.cs" />
     <Compile Include="InterconnectInvoiceSettings.cs" />
+    <Compile Include="InterconnectModuleManager.cs" />
     <Compile Include="InterconnectPartnerSettings.cs" />
     <Compile Include="InterConnectOperatorManager.cs" />
+    <Compile Include="InvoiceComparison\InvoiceComparisonTemplateManager.cs" />
+    <Compile Include="InvoiceComparison\InvoiceCompareManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +125,10 @@
     <ProjectReference Include="..\Retail.BusinessEntity.MainExtensions\Retail.BusinessEntity.MainExtensions.csproj">
       <Project>{e4c4ef32-adfb-48c3-a3d3-489a4fc53b89}</Project>
       <Name>Retail.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Interconnect.Data\Retail.Interconnect.Data.csproj">
+      <Project>{19D00A8A-5F7B-4BEB-BB0A-E408E68C4765}</Project>
+      <Name>Retail.Interconnect.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.Interconnect.Entities\Retail.Interconnect.Entities.csproj">
       <Project>{ed0cd3d2-1e3f-4399-ba99-0ebf76746a34}</Project>
