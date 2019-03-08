@@ -854,6 +854,14 @@
       <Project>{2ae6da00-8341-4dbe-b7e7-53e27d06b2c9}</Project>
       <Name>Retail.Interconnect.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Interconnect.Data.RDB\Retail.Interconnect.Data.RDB.csproj">
+      <Project>{441bcb61-49a2-40c0-8a07-30f60423e1a0}</Project>
+      <Name>Retail.Interconnect.Data.RDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Interconnect.Data\Retail.Interconnect.Data.csproj">
+      <Project>{19d00a8a-5f7b-4beb-bb0a-e408e68c4765}</Project>
+      <Name>Retail.Interconnect.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Interconnect.Entities\Retail.Interconnect.Entities.csproj">
       <Project>{ed0cd3d2-1e3f-4399-ba99-0ebf76746a34}</Project>
       <Name>Retail.Interconnect.Entities</Name>
