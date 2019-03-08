@@ -2105,7 +2105,7 @@ namespace Mediation.Runtime
         {
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-            Type mediationCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("ParsedCDR");
+            Type mediationCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Multinet_Teles_Parsed_CDR");
 
             var cdrs = new List<dynamic>();
 
@@ -2154,7 +2154,7 @@ namespace Mediation.Runtime
                 throw ex;
             }
 
-            MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "ParsedCDR");
+            MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "Multinet_Teles_Parsed_CDR");
             mappedBatches.Add("Teles Mediation Stage", batch);
             MappingOutput result = new MappingOutput();
             result.Result = MappingResult.Valid;

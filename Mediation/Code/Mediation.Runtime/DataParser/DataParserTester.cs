@@ -47,7 +47,7 @@ namespace Mediation.Runtime.DataParser
                 CreateMediationSettingsFile(GetMobileAnalysisHuaweiGPRS_ParserSettings(), "MobileAnalysis_Huawei_GPRS");
                 CreateMediationSettingsFile(GetMobileAnalysisNokia_ParserSettings(), "MobileAnalysis_Nokia");
 
-                CreateMediationSettingsFile(GetMobilisEricsson_ParserSettings(), "Mobilis_Ericsson");
+                CreateMediationSettingsFile(GetMobilisEricssonR13_ParserSettings(), "Mobilis_Ericsson_R13");
                 CreateMediationSettingsFile(GetMobilisHuawei_ParserSettings(), "Mobilis_Huawei");
 
                 CreateMediationSettingsFile(GetNamibiaHuawei_ParserSettings(), "Namibia_Huawei");
@@ -76,7 +76,7 @@ namespace Mediation.Runtime.DataParser
             DateTimeParser dateTimeParser = new DateTimeParser()
             {
                 FieldName = fieldName,
-                //TimeShiftFieldName = timeShiftFieldName,
+                TimeShiftFieldName = timeShiftFieldName,
                 DateTimeParsingType = DateTimeParsingType.DateTime,
                 IsBCD = true,
                 YearIndex = 0,
@@ -323,7 +323,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "WHS_Ericsson_CDR"
+                    RecordType = "Ogero_WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -343,7 +343,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "WHS_Ericsson_CDR"
+                    RecordType = "Ogero_WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -364,7 +364,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "WHS_Ericsson_CDR"
+                    RecordType = "Ogero_WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -384,7 +384,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "WHS_Ericsson_CDR"
+                    RecordType = "Ogero_WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -405,7 +405,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "WHS_Ericsson_CDR"
+                    RecordType = "Ogero_WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -426,7 +426,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "WHS_Ericsson_CDR"
+                    RecordType = "Ogero_WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -447,7 +447,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "WHS_Ericsson_CDR"
+                    RecordType = "Ogero_WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -468,7 +468,7 @@ namespace Mediation.Runtime.DataParser
             //                Value = 3
             //            }
             //        },
-            //        RecordType = "WHS_Ericsson_CDR"
+            //        RecordType = "Ogero_WHS_Ericsson_CDR"
             //        //CompositeFieldsParsers = GetOgeroCompositeFields()
             //    }
             //});
@@ -489,7 +489,7 @@ namespace Mediation.Runtime.DataParser
             //                Value = 3
             //            }
             //        },
-            //        RecordType = "WHS_Ericsson_CDR"
+            //        RecordType = "Ogero_WHS_Ericsson_CDR"
             //        //CompositeFieldsParsers = GetOgeroCompositeFields()
             //    }
             //});
@@ -510,7 +510,7 @@ namespace Mediation.Runtime.DataParser
             //                Value = 3
             //            }
             //        },
-            //        RecordType = "WHS_Ericsson_CDR"
+            //        RecordType = "Ogero_WHS_Ericsson_CDR"
             //        //CompositeFieldsParsers = GetOgeroCompositeFields()
             //    }
             //});
@@ -3420,7 +3420,7 @@ namespace Mediation.Runtime.DataParser
                 {
                     IsBCD = true,
                     FieldName = "ServiceRequestTime",
-                    //TimeShiftFieldName = "TimeShift",
+                    TimeShiftFieldName = "TimeShift",
                     DateTimeParsingType = DateTimeParsingType.DateTime,
                     YearIndex = 0,
                     MonthIndex = 1,
@@ -4087,7 +4087,7 @@ namespace Mediation.Runtime.DataParser
                 {
                     IsBCD = true,
                     FieldName = "ServiceRequestTime",
-                    //TimeShiftFieldName = "TimeShift",
+                    TimeShiftFieldName = "TimeShift",
                     DateTimeParsingType = DateTimeParsingType.DateTime,
                     YearIndex = 0,
                     MonthIndex = 1,
@@ -13800,7 +13800,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Ericsson
 
-        public string GetMobilisEricsson_ParserSettings()
+        public string GetMobilisEricssonR13_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -13898,7 +13898,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSOriginating"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_CDR",
+                    RecordType = "Mobilis_Ericsson_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_EricssonMobilis(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_EricssonMobilis()
                 }
@@ -13925,7 +13925,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSTerminating"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_CDR",
+                    RecordType = "Mobilis_Ericsson_R13_CDR",
                     TempFieldsNames = GetTempFieldsName_EricssonMobilis(),
                     CompositeFieldsParsers = GetCompositeFieldParsers_EricssonMobilis()
                 }
@@ -13952,7 +13952,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSOriginatingSMSinMSC"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_SMS",
+                    RecordType = "Mobilis_Ericsson_R13_SMS",
                     CompositeFieldsParsers = GetCompositeFieldParsers_SMS_EricssonMobilis()
                 }
             });
@@ -13978,7 +13978,7 @@ namespace Mediation.Runtime.DataParser
                             Value = "MSTerminatingSMSinMSC"
                         }
                     },
-                    RecordType = "Mobilis_Ericsson_SMS",
+                    RecordType = "Mobilis_Ericsson_R13_SMS",
                     CompositeFieldsParsers = GetCompositeFieldParsers_SMS_EricssonMobilis()
                 }
             });
