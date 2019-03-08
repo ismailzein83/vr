@@ -61,6 +61,7 @@
     <Compile Include="ComparisonInvoiceDetail.cs" />
     <Compile Include="ComparisonResult.cs" />
     <Compile Include="CustomerInvoiceBySaleCurrencyItemDetails.cs" />
+    <Compile Include="CustomerInvoiceDealItemDetails.cs" />
     <Compile Include="CustomerSMSInvoiceBySaleCurrencyItemDetails.cs" />
     <Compile Include="InvoiceComparisonSMSResultDetail.cs" />
     <Compile Include="InvoiceComparisonSMSResult.cs" />
