@@ -15,11 +15,15 @@ namespace Retail.Interconnect.Entities
         public decimal AmountWithTaxes { get; set; }
         public decimal SMSAmountWithTaxes { get; set; }
         public decimal TotalAmountWithTaxes { get; set; }
+        public decimal TotalAmountBeforeTaxes { get; set; }
         public decimal Duration { get; set; }
         public int InterconnectCurrencyId { get; set; }
         public string InterconnectCurrency { get; set; }
         public int TotalNumberOfCalls { get; set; }
         public int TotalNumberOfSMS { get; set; }
+        public decimal TotalRecurringChargesAfterTaxes { get; set; }
+        public decimal TotalRecurringCharges { get; set; }
+        public decimal TotalInvoiceAmount { get; set; }
         public InterconnectInvoiceDetails() { }
         public IEnumerable<InterconnectInvoiceDetails> GetInterconnectInvoiceDetailsRDLCSchema()
         {
