@@ -7,7 +7,7 @@ using Vanrise.ExcelConversion.Entities;
 
 namespace TOne.WhS.Invoice.Entities
 {
-   public class InvoiceComparisonTemplate
+    public class InvoiceComparisonTemplate
     {
         public long InvoiceComparisonTemplateId { get; set; }
         public Guid InvoiceTypeId { get; set; }
@@ -15,6 +15,12 @@ namespace TOne.WhS.Invoice.Entities
         public InvoiceComparisonTemplateDetails Details { get; set; }
     }
     public class InvoiceComparisonTemplateDetails
+    {
+        public ListMapping ListMapping { get; set; }
+        public string DateTimeFormat { get; set; }
+        public SMSInvoiceComparisonTemplateDetails SMS { get; set; }
+    }
+    public class SMSInvoiceComparisonTemplateDetails
     {
         public ListMapping ListMapping { get; set; }
         public string DateTimeFormat { get; set; }

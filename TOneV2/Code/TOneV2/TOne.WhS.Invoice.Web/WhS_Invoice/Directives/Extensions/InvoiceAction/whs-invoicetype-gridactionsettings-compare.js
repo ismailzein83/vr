@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_Invoice_InvoiceTypeEnum",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_Invoice_InvoiceTypeEnum) {
+app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_Invoice_InvoiceTypeEnum", "WhS_BE_ToneModuleService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_Invoice_InvoiceTypeEnum, WhS_BE_ToneModuleService) {
 
         var directiveDefinitionObject = {
 
@@ -29,28 +29,78 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
             this.initializeController = initializeController;
             var invoiceCarrierTypeDirectiveAPI;
             var invoiceCarrierSelectorReadyPromiseDeffered = UtilsService.createPromiseDeferred();
-            var itemGroupingSelectedReadyPromiseDeferred;
+
+            var itemGroupingVoiceSelectedReadyPromiseDeferred;
+            var itemGroupingSMSSelectedReadyPromiseDeferred;
+
             var context;
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.itemGroupings = [];
 
-                $scope.scopeModel.dimensionsItemGroupings = [];
-                $scope.scopeModel.measuresItemGroupings = [];
+                $scope.scopeModel.isVoiceModuleEnabled = WhS_BE_ToneModuleService.isVoiceModuleEnabled();
+                $scope.scopeModel.isSMSModuleEnabled = WhS_BE_ToneModuleService.isSMSModuleEnabled();
+
+                $scope.scopeModel.voiceItemGroupings = [];
+                $scope.scopeModel.smsItemGroupings = [];
+
+                $scope.scopeModel.voiceDimensionsItemGroupings = [];
+                $scope.scopeModel.smsDimensionsItemGroupings = [];
+
+                $scope.scopeModel.voiceMeasuresItemGroupings = [];
+                $scope.scopeModel.smsMeasuresItemGroupings = [];
+
                 $scope.scopeModel.invoiceCarrierType = UtilsService.getArrayEnum(WhS_Invoice_InvoiceTypeEnum);
+
                 $scope.scopeModel.onInvoiceCarrierTypeDirectiveReady = function (api) {
                     invoiceCarrierTypeDirectiveAPI = api;
                     invoiceCarrierSelectorReadyPromiseDeffered.resolve();
                 };
 
-
-                $scope.scopeModel.onItemGroupingSelectionChanged = function (selectedGroupItem) {
+                $scope.scopeModel.onVoiceItemGroupingSelectionChanged = function (selectedGroupItem) {
                     if (context != undefined && selectedGroupItem != undefined) {
-                        if (itemGroupingSelectedReadyPromiseDeferred != undefined)
-                            itemGroupingSelectedReadyPromiseDeferred.resolve();
+                        if (itemGroupingVoiceSelectedReadyPromiseDeferred != undefined)
+                            itemGroupingVoiceSelectedReadyPromiseDeferred.resolve();
                         else {
-                            $scope.scopeModel.dimensionsItemGroupings = context.getGroupingDimensions(selectedGroupItem.ItemGroupingId);
-                            $scope.scopeModel.measuresItemGroupings = context.getGroupingMeasures(selectedGroupItem.ItemGroupingId);
+                            $scope.scopeModel.voiceDimensionsItemGroupings = context.getGroupingDimensions(selectedGroupItem.ItemGroupingId);
+                            $scope.scopeModel.voiceMeasuresItemGroupings = context.getGroupingMeasures(selectedGroupItem.ItemGroupingId);
+
+                            $scope.scopeModel.selectedZoneDimension = undefined;
+                            $scope.scopeModel.selectedVoiceFromDateMeasure = undefined;
+                            $scope.scopeModel.selectedVoiceToDateMeasure = undefined;
+
+                            $scope.scopeModel.selectedVoiceRateTypeDimension = undefined;
+                            $scope.scopeModel.selectedVoiceCurrencyDimension = undefined;
+                            $scope.scopeModel.selectedVoiceRateDimension = undefined;
+
+                            $scope.scopeModel.selectedNumberOfCallsMeasure = undefined;
+                            $scope.scopeModel.selectedVoiceAmountMeasure = undefined;
+                            $scope.scopeModel.selectedDurationMeasure = undefined;
+                            $scope.scopeModel.selectedVoiceRateMeasure = undefined;
+
+                        }
+                    }
+                };
+
+                $scope.scopeModel.onSMSItemGroupingSelectionChanged = function (selectedGroupItem) {
+                    if (context != undefined && selectedGroupItem != undefined) {
+                        if (itemGroupingSMSSelectedReadyPromiseDeferred != undefined)
+                            itemGroupingSMSSelectedReadyPromiseDeferred.resolve();
+                        else {
+                            $scope.scopeModel.smsDimensionsItemGroupings = context.getGroupingDimensions(selectedGroupItem.ItemGroupingId);
+                            $scope.scopeModel.smsMeasuresItemGroupings = context.getGroupingMeasures(selectedGroupItem.ItemGroupingId);
+
+                            $scope.scopeModel.selectedMobileNetworkDimension = undefined;
+                            $scope.scopeModel.selectedSMSFromDateMeasure = undefined;
+                            $scope.scopeModel.selectedSMSToDateMeasure = undefined;
+                            ;
+                            $scope.scopeModel.selectedSMSCurrencyDimension = undefined;
+                            $scope.scopeModel.selectedSMSRateDimension = undefined;
+
+                            $scope.scopeModel.selectedNumberOfSMSsMeasure = undefined;
+                            $scope.scopeModel.selectedSMSAmountMeasure = undefined;
+                            $scope.scopeModel.selectedSMSRateMeasure = undefined;
+
+
                         }
                     }
                 };
@@ -66,9 +116,9 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                     if (payload != undefined) {
                         invoiceActionEntity = payload.invoiceActionEntity;
                         context = payload.context;
-                        if(context != undefined)
-                        {
-                            $scope.scopeModel.itemGroupings = context.getItemGroupingsInfo();
+                        if (context != undefined) {
+                            $scope.scopeModel.voiceItemGroupings = context.getItemGroupingsInfo();
+                            $scope.scopeModel.smsItemGroupings = context.getItemGroupingsInfo();
                         }
                         if (payload.invoiceActionEntity != undefined && payload.invoiceActionEntity.InvoiceCarrierType != undefined)
                             $scope.scopeModel.selectedValue = UtilsService.getItemByVal($scope.scopeModel.invoiceCarrierType, payload.invoiceActionEntity.InvoiceCarrierType, "value");
@@ -78,59 +128,129 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                     if (invoiceActionEntity != undefined) {
                         $scope.scopeModel.partnerLabel = invoiceActionEntity.PartnerLabel;
                         $scope.scopeModel.partnerAbbreviationLabel = invoiceActionEntity.PartnerAbbreviationLabel;
-                        $scope.scopeModel.selectedItemGrouping = UtilsService.getItemByVal($scope.scopeModel.itemGroupings, invoiceActionEntity.ItemGroupingId, "ItemGroupingId");
-                        if (invoiceActionEntity.ItemGroupingId != undefined) {
-                            itemGroupingSelectedReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                            promises.push(itemGroupingSelectedReadyPromiseDeferred.promise);
 
-                            itemGroupingSelectedReadyPromiseDeferred.promise.then(function () {
-                                itemGroupingSelectedReadyPromiseDeferred = undefined;
-                                $scope.scopeModel.dimensionsItemGroupings = context.getGroupingDimensions(invoiceActionEntity.ItemGroupingId);
-                                $scope.scopeModel.measuresItemGroupings = context.getGroupingMeasures(invoiceActionEntity.ItemGroupingId);
-                                
-                                $scope.scopeModel.selectedZoneDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsItemGroupings, invoiceActionEntity.ZoneDimensionId, "DimensionItemFieldId");
-                                $scope.scopeModel.selectedFromDateMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.FromDateMeasureId, "MeasureItemFieldId");
-                                $scope.scopeModel.selectedToDateMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.ToDateMeasureId, "MeasureItemFieldId");
+                        if ($scope.scopeModel.isVoiceModuleEnabled && invoiceActionEntity.VoiceSettings != undefined) {
+                            var voiceSettings = invoiceActionEntity.VoiceSettings;
 
-                                $scope.scopeModel.selectedRateTypeDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsItemGroupings, invoiceActionEntity.RateTypeDimensionId, "DimensionItemFieldId");
-                                $scope.scopeModel.selectedCurrencyDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsItemGroupings, invoiceActionEntity.CurrencyDimensionId, "DimensionItemFieldId");
-                                $scope.scopeModel.selectedRateDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsItemGroupings, invoiceActionEntity.RateDimensionId, "DimensionItemFieldId");
+                            $scope.scopeModel.selectedVoiceItemGrouping = UtilsService.getItemByVal($scope.scopeModel.voiceItemGroupings, voiceSettings.ItemGroupingId, "ItemGroupingId");
 
-                                $scope.scopeModel.selectedNumberOfCallsMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.NumberOfCallsMeasureId, "MeasureItemFieldId");
-                                $scope.scopeModel.selectedAmountMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.AmountMeasureId, "MeasureItemFieldId");
-                                $scope.scopeModel.selectedDurationMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.DurationMeasureId, "MeasureItemFieldId");
-                                $scope.scopeModel.selectedRateMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.RateMeasureId, "MeasureItemFieldId");
+                            if (voiceSettings.ItemGroupingId != undefined) {
+                                itemGroupingVoiceSelectedReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                promises.push(itemGroupingVoiceSelectedReadyPromiseDeferred.promise);
+                                itemGroupingVoiceSelectedReadyPromiseDeferred.promise.then(function () {
+                                    itemGroupingVoiceSelectedReadyPromiseDeferred = undefined;
+                                    $scope.scopeModel.voiceDimensionsItemGroupings = context.getGroupingDimensions(voiceSettings.ItemGroupingId);
+                                    $scope.scopeModel.voiceMeasuresItemGroupings = context.getGroupingMeasures(voiceSettings.ItemGroupingId);
 
-                            });
-                        }
+                                    $scope.scopeModel.selectedZoneDimension = UtilsService.getItemByVal($scope.scopeModel.voiceDimensionsItemGroupings, voiceSettings.ZoneDimensionId, "DimensionItemFieldId");
+                                    $scope.scopeModel.selectedVoiceFromDateMeasure = UtilsService.getItemByVal($scope.scopeModel.voiceMeasuresItemGroupings, voiceSettings.FromDateMeasureId, "MeasureItemFieldId");
+                                    $scope.scopeModel.selectedVoiceToDateMeasure = UtilsService.getItemByVal($scope.scopeModel.voiceMeasuresItemGroupings, voiceSettings.ToDateMeasureId, "MeasureItemFieldId");
+
+                                    $scope.scopeModel.selectedVoiceRateTypeDimension = UtilsService.getItemByVal($scope.scopeModel.voiceDimensionsItemGroupings, voiceSettings.RateTypeDimensionId, "DimensionItemFieldId");
+                                    $scope.scopeModel.selectedVoiceCurrencyDimension = UtilsService.getItemByVal($scope.scopeModel.voiceDimensionsItemGroupings, voiceSettings.CurrencyDimensionId, "DimensionItemFieldId");
+                                    $scope.scopeModel.selectedVoiceRateDimension = UtilsService.getItemByVal($scope.scopeModel.voiceDimensionsItemGroupings, voiceSettings.RateDimensionId, "DimensionItemFieldId");
+
+                                    $scope.scopeModel.selectedNumberOfCallsMeasure = UtilsService.getItemByVal($scope.scopeModel.voiceMeasuresItemGroupings, voiceSettings.NumberOfCallsMeasureId, "MeasureItemFieldId");
+                                    $scope.scopeModel.selectedVoiceAmountMeasure = UtilsService.getItemByVal($scope.scopeModel.voiceMeasuresItemGroupings, voiceSettings.AmountMeasureId, "MeasureItemFieldId");
+                                    $scope.scopeModel.selectedDurationMeasure = UtilsService.getItemByVal($scope.scopeModel.voiceMeasuresItemGroupings, voiceSettings.DurationMeasureId, "MeasureItemFieldId");
+                                    $scope.scopeModel.selectedVoiceRateMeasure = UtilsService.getItemByVal($scope.scopeModel.voiceMeasuresItemGroupings, voiceSettings.RateMeasureId, "MeasureItemFieldId");
+
+                                });
+                            }
+
+                        };
+
+                        if ($scope.scopeModel.isSMSModuleEnabled && invoiceActionEntity.SMSSettings != undefined) {
+                            $scope.scopeModel.selectedSMSItemGrouping = UtilsService.getItemByVal($scope.scopeModel.smsItemGroupings, invoiceActionEntity.SMSSettings.ItemGroupingId, "ItemGroupingId");
+
+                            if (invoiceActionEntity.SMSSettings != undefined) {
+                                var smsSettings = invoiceActionEntity.SMSSettings;
+
+                                $scope.scopeModel.selectedSMSItemGrouping = UtilsService.getItemByVal($scope.scopeModel.smsItemGroupings, smsSettings.ItemGroupingId, "ItemGroupingId");
+
+                                if (smsSettings.ItemGroupingId != undefined) {
+                                    itemGroupingSMSSelectedReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    promises.push(itemGroupingSMSSelectedReadyPromiseDeferred.promise);
+                                    itemGroupingSMSSelectedReadyPromiseDeferred.promise.then(function () {
+                                        itemGroupingSMSSelectedReadyPromiseDeferred = undefined;
+                                        $scope.scopeModel.smsDimensionsItemGroupings = context.getGroupingDimensions(smsSettings.ItemGroupingId);
+                                        $scope.scopeModel.smsMeasuresItemGroupings = context.getGroupingMeasures(smsSettings.ItemGroupingId);
+
+                                        $scope.scopeModel.selectedMobileNetworkDimension = UtilsService.getItemByVal($scope.scopeModel.smsDimensionsItemGroupings, smsSettings.MobileNetworkDimensionId, "DimensionItemFieldId");
+                                        $scope.scopeModel.selectedSMSFromDateMeasure = UtilsService.getItemByVal($scope.scopeModel.smsMeasuresItemGroupings, smsSettings.FromDateMeasureId, "MeasureItemFieldId");
+                                        $scope.scopeModel.selectedSMSToDateMeasure = UtilsService.getItemByVal($scope.scopeModel.smsMeasuresItemGroupings, smsSettings.ToDateMeasureId, "MeasureItemFieldId");
+
+                                        $scope.scopeModel.selectedSMSCurrencyDimension = UtilsService.getItemByVal($scope.scopeModel.smsDimensionsItemGroupings, smsSettings.CurrencyDimensionId, "DimensionItemFieldId");
+                                        $scope.scopeModel.selectedSMSRateDimension = UtilsService.getItemByVal($scope.scopeModel.smsDimensionsItemGroupings, smsSettings.RateDimensionId, "DimensionItemFieldId");
+
+                                        $scope.scopeModel.selectedNumberOfSMSsMeasure = UtilsService.getItemByVal($scope.scopeModel.smsMeasuresItemGroupings, smsSettings.NumberOfSMSsMeasureId, "MeasureItemFieldId");
+                                        $scope.scopeModel.selectedSMSAmountMeasure = UtilsService.getItemByVal($scope.scopeModel.smsMeasuresItemGroupings, smsSettings.AmountMeasureId, "MeasureItemFieldId");
+                                        $scope.scopeModel.selectedSMSRateMeasure = UtilsService.getItemByVal($scope.scopeModel.smsMeasuresItemGroupings, smsSettings.RateMeasureId, "MeasureItemFieldId");
+
+                                    });
+                                }
+
+                            };
+
+                        };
                     }
-
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    return {
+                    var obj =
+                    {
                         $type: "TOne.WhS.Invoice.Business.Extensions.CompareInvoiceAction ,TOne.WhS.Invoice.Business",
                         PartnerLabel: $scope.scopeModel.partnerLabel,
                         PartnerAbbreviationLabel: $scope.scopeModel.partnerAbbreviationLabel,
-                        ZoneDimensionId: $scope.scopeModel.selectedZoneDimension.DimensionItemFieldId,
-                        RateTypeDimensionId: $scope.scopeModel.selectedRateTypeDimension.DimensionItemFieldId,
-                        CurrencyDimensionId: $scope.scopeModel.selectedCurrencyDimension.DimensionItemFieldId,
-                        RateDimensionId: $scope.scopeModel.selectedRateDimension.DimensionItemFieldId,
-                        NumberOfCallsMeasureId: $scope.scopeModel.selectedNumberOfCallsMeasure.MeasureItemFieldId,
-                        AmountMeasureId: $scope.scopeModel.selectedAmountMeasure.MeasureItemFieldId,
-                        DurationMeasureId: $scope.scopeModel.selectedDurationMeasure.MeasureItemFieldId,
-                        RateMeasureId: $scope.scopeModel.selectedRateMeasure.MeasureItemFieldId,
-                        ItemGroupingId: $scope.scopeModel.selectedItemGrouping.ItemGroupingId,
                         InvoiceCarrierType: $scope.scopeModel.selectedValue != undefined ? $scope.scopeModel.selectedValue.value : undefined,
-                        FromDateMeasureId: $scope.scopeModel.selectedFromDateMeasure.MeasureItemFieldId,
-                        ToDateMeasureId: $scope.scopeModel.selectedToDateMeasure.MeasureItemFieldId,
                     };
+
+                    if (WhS_BE_ToneModuleService.isVoiceModuleEnabled())
+                        obj.VoiceSettings = buildVoiceSettings();
+
+                    if (WhS_BE_ToneModuleService.isSMSModuleEnabled())
+                        obj.SMSSettings = buildSMSSettings();
+
+                    console.log(obj);
+                    return obj;
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function buildVoiceSettings() {
+                var obj = {
+                    ZoneDimensionId: $scope.scopeModel.selectedZoneDimension.DimensionItemFieldId,
+                    RateTypeDimensionId: $scope.scopeModel.selectedVoiceRateTypeDimension.DimensionItemFieldId,
+                    CurrencyDimensionId: $scope.scopeModel.selectedVoiceCurrencyDimension.DimensionItemFieldId,
+                    RateDimensionId: $scope.scopeModel.selectedVoiceRateDimension.DimensionItemFieldId,
+                    NumberOfCallsMeasureId: $scope.scopeModel.selectedNumberOfCallsMeasure.MeasureItemFieldId,
+                    AmountMeasureId: $scope.scopeModel.selectedVoiceAmountMeasure.MeasureItemFieldId,
+                    DurationMeasureId: $scope.scopeModel.selectedDurationMeasure.MeasureItemFieldId,
+                    RateMeasureId: $scope.scopeModel.selectedVoiceRateMeasure.MeasureItemFieldId,
+                    ItemGroupingId: $scope.scopeModel.selectedVoiceItemGrouping.ItemGroupingId,
+                    FromDateMeasureId: $scope.scopeModel.selectedVoiceFromDateMeasure.MeasureItemFieldId,
+                    ToDateMeasureId: $scope.scopeModel.selectedVoiceToDateMeasure.MeasureItemFieldId,
+                };
+                return obj;
+            }
+
+            function buildSMSSettings() {
+                var obj = {
+                    MobileNetworkDimensionId: $scope.scopeModel.selectedMobileNetworkDimension.DimensionItemFieldId,
+                    CurrencyDimensionId: $scope.scopeModel.selectedSMSCurrencyDimension.DimensionItemFieldId,
+                    RateDimensionId: $scope.scopeModel.selectedSMSRateDimension.DimensionItemFieldId,
+                    NumberOfSMSsMeasureId: $scope.scopeModel.selectedNumberOfSMSsMeasure.MeasureItemFieldId,
+                    AmountMeasureId: $scope.scopeModel.selectedSMSAmountMeasure.MeasureItemFieldId,
+                    RateMeasureId: $scope.scopeModel.selectedSMSRateMeasure.MeasureItemFieldId,
+                    ItemGroupingId: $scope.scopeModel.selectedSMSItemGrouping.ItemGroupingId,
+                    FromDateMeasureId: $scope.scopeModel.selectedSMSFromDateMeasure.MeasureItemFieldId,
+                    ToDateMeasureId: $scope.scopeModel.selectedSMSToDateMeasure.MeasureItemFieldId,
+                };
+                return obj;
             }
             function getContext() {
                 var currentContext = context;

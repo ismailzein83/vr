@@ -1,163 +1,257 @@
 ﻿<div vr-modalcontent ng-controller="WhS_Invoice_InvoiceCompareTemplateController" size="xlarge" vr-loader="scopeModel.isLoading">
-	<vr-modalbody>
-		<vr-form name="formInvoiceCompareEditor">
-			<vr-tabs>
-				<vr-tab header="'{{scopeModel.to}} Invoice Summary'">
+    <vr-modalbody>
+        <vr-form name="formInvoiceCompareEditor">
+            <vr-tabs>
+                <vr-tab header="'{{scopeModel.to}} Invoice Summary'">
 
-					<vr-row removeline>
-						<vr-columns colnum="1"><vr-label>Issued By: </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue>{{scopeModel.issuedBy}}</vr-label></vr-columns>
+                    <vr-row removeline>
+                        <vr-columns colnum="12" haschildcolumns>
+                            <vr-columns colnum="1"><vr-label>Issued By: </vr-label></vr-columns>
+                            <vr-columns colnum="2"><vr-label isvalue>{{scopeModel.issuedBy}}</vr-label></vr-columns>
 
-						<vr-columns colnum="1"><vr-label>To: </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue breakline>{{scopeModel.to}}</vr-label></vr-columns>
+                            <vr-columns colnum="1"><vr-label>To: </vr-label></vr-columns>
+                            <vr-columns colnum="2"><vr-label isvalue breakline>{{scopeModel.to}}</vr-label></vr-columns>
 
-						<vr-columns colnum="1"><vr-label>From Date : </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue>{{scopeModel.fromDate}}</vr-label></vr-columns>
+                            <vr-columns colnum="1"><vr-label>From Date : </vr-label></vr-columns>
+                            <vr-columns colnum="2"><vr-label isvalue>{{scopeModel.fromDate}}</vr-label></vr-columns>
 
-						<vr-columns colnum="1"><vr-label>To Date: </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue breakline>{{scopeModel.toDate}}</vr-label></vr-columns>
+                            <vr-columns colnum="1"><vr-label>To Date: </vr-label></vr-columns>
+                            <vr-columns colnum="2"><vr-label isvalue breakline>{{scopeModel.toDate}}</vr-label></vr-columns>
+                        </vr-columns>
 
+                        <vr-columns colnum="12" haschildcolumns>
+                            <vr-columns colnum="1"><vr-label>Issue Date : </vr-label></vr-columns>
+                            <vr-columns colnum="2"><vr-label isvalue>{{scopeModel.issuedDate}}</vr-label></vr-columns>
 
-						<vr-columns colnum="1"><vr-label>Issue Date : </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue>{{scopeModel.issuedDate}}</vr-label></vr-columns>
+                            <vr-columns colnum="1"><vr-label>Due Date : </vr-label></vr-columns>
+                            <vr-columns colnum="2"><vr-label isvalue breakline>{{scopeModel.dueDate}}</vr-label></vr-columns>
 
-						<vr-columns colnum="1"><vr-label>Due Date : </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue breakline>{{scopeModel.dueDate}}</vr-label></vr-columns>
+                            <vr-columns colnum="1"><vr-label>Serial Number : </vr-label></vr-columns>
+                            <vr-columns colnum="2"><vr-label isvalue>{{scopeModel.serialNumber}}</vr-label></vr-columns>
 
+                            <vr-columns colnum="1"><vr-label>Time Zone : </vr-label></vr-columns>
+                            <vr-columns colnum="2"><vr-label isvalue breakline>{{scopeModel.timeZone}}</vr-label></vr-columns>
+                        </vr-columns>
 
+                        <vr-columns colnum="12" haschildcolumns>
+                            <vr-columns colnum="1" ng-if="scopeModel.isVoiceModuleEnabled"><vr-label>Calls  : </vr-label></vr-columns>
+                            <vr-columns colnum="2" ng-if="scopeModel.isVoiceModuleEnabled"><vr-label isvalue>{{scopeModel.calls}}</vr-label></vr-columns>
 
-						<vr-columns colnum="1"><vr-label>Serial Number : </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue>{{scopeModel.serialNumber}}</vr-label></vr-columns>
+                            <vr-columns colnum="1" ng-if="scopeModel.isVoiceModuleEnabled"><vr-label>Duration (m) 	 : </vr-label></vr-columns>
+                            <vr-columns colnum="2" ng-if="scopeModel.isVoiceModuleEnabled"><vr-label isvalue breakline>{{scopeModel.duration}}</vr-label></vr-columns>
 
-						<vr-columns colnum="1"><vr-label>Time Zone : </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue breakline>{{scopeModel.timeZone}}</vr-label></vr-columns>
+                            <vr-columns colnum="1" ng-if="scopeModel.isSMSModuleEnabled"><vr-label>Number of SMSs 	 : </vr-label></vr-columns>
+                            <vr-columns colnum="2" ng-if="scopeModel.isSMSModuleEnabled"><vr-label isvalue>{{scopeModel.smss}}</vr-label></vr-columns>
 
-						<vr-columns colnum="1"><vr-label>Calls  : </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue>{{scopeModel.calls}}</vr-label></vr-columns>
+                            <vr-columns colnum="1"><vr-label>Total Amount : </vr-label></vr-columns>
+                            <vr-columns colnum="2"><vr-label isvalue>{{scopeModel.totalAmount}}  {{scopeModel.currency}}</vr-label></vr-columns>
+                        </vr-columns>
 
-						<vr-columns colnum="1"><vr-label>Duration (m) 	 : </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue breakline>{{scopeModel.duration}}</vr-label></vr-columns>
+                        <vr-columns colnum="12" haschildcolumns>
+                            <vr-columns colnum="2" haschildcolumns>
+                                <vr-columns colnum="3"><vr-label>Locked : </vr-label></vr-columns>
+                                <vr-columns colnum="3"><vr-switch value="scopeModel.isLocked" vr-disabled="true"></vr-switch></vr-columns>
 
-						<vr-columns colnum="1"><vr-label>Total Amount : </vr-label></vr-columns>
-						<vr-columns colnum="2"><vr-label isvalue>{{scopeModel.totalAmount}}  {{scopeModel.currency}}</vr-label></vr-columns>
-						<vr-columns colnum="2" haschildcolumns>
-							<vr-columns colnum="3"><vr-label>Locked : </vr-label></vr-columns>
-							<vr-columns colnum="3"><vr-switch value="scopeModel.isLocked" vr-disabled="true"></vr-switch></vr-columns>
+                                <vr-columns colnum="3"><vr-label>Paid : </vr-label></vr-columns>
+                                <vr-columns colnum="3"><vr-switch value="scopeModel.isPaid" vr-disabled="true"></vr-switch></vr-columns>
+                            </vr-columns>
+                        </vr-columns>
 
-							<vr-columns colnum="3"><vr-label>Paid : </vr-label></vr-columns>
-							<vr-columns colnum="3"><vr-switch value="scopeModel.isPaid" vr-disabled="true"></vr-switch></vr-columns>
-						</vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Received Invoice'" tabobject="scopeModel.recievedInvoiceTab">
+                    <vr-row removeline>
+                        <vr-columns colnum="2">
+                            <vr-fileupload extension="xls,xlsx,csv,xlsb" value="scopeModel.inPutFile" label="File Excel" isrequired="true" tempfile="true"> </vr-fileupload>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-section title="Excel Viewer">
+                                <vr-excel-wb fileid="scopeModel.inPutFile.fileId" on-ready="scopeModel.onReadyWoorkBook"></vr-excel-wb>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-section title="Mapping">
 
-					</vr-row>
-				</vr-tab>
-				<vr-tab header="'Received Invoice'" tabobject="scopeModel.recievedInvoiceTab">
-					<vr-row removeline>
-						<vr-columns colnum="2">
-							<vr-fileupload extension="xls,xlsx,csv,xlsb" value="scopeModel.inPutFile" label="File Excel" isrequired="true" tempfile="true"> </vr-fileupload>
-						</vr-columns>
-					</vr-row>
-					<vr-row removeline>
-						<vr-columns width="1/2row">
-							<vr-section title="Excel Viewer">
-								<vr-excel-wb fileid="scopeModel.inPutFile.fileId" on-ready="scopeModel.onReadyWoorkBook"></vr-excel-wb>
-							</vr-section>
-						</vr-columns>
-						<vr-columns width="1/2row">
-							<vr-validation-group validationcontext="scopeModel.configurationValidation">
-								<vr-section title="Mapping" vr-loader="scopeModel.isLoadingDirective">
-									<vr-excelconversion-listmapping on-ready="scopeModel.onMainListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
-									<vr-row>
-										<vr-timeformat label="Date Time Format" value="scopeModel.dateTimeFormat" normal-col-num="6" isrequired="scopeModel.checkUsesOfEffectiveDate()"></vr-timeformat>
-									</vr-row>
-								</vr-section>
-							</vr-validation-group>
-						</vr-columns>
-					</vr-row>
-				</vr-tab>
-				<vr-tab header="'Comparison'" tabobject="scopeModel.recievedComparisonTab">
-					<vr-row removeline>
-						<vr-columns width="1/4row">
-							<vr-columns width="fullrow" haschildcolumns>
-								<vr-columns colnum="11" haschildcolumns>
-									<vr-textbox value="scopeModel.threshold" label="Threshold (%)" type="number" minvalue="0"></vr-textbox>
-								</vr-columns>
-								<vr-columns colnum="1" withemptyline left-medium-spacing>
-									<vr-hint value="{{scopeModel.thresholdHint}}"></vr-hint>
-								</vr-columns>
-							</vr-columns>
-						</vr-columns>
-						<vr-columns width="1/4row">
-							<vr-select datasource="scopeModel.comparisonResult"
-									   datatextfield="description"
-									   datavaluefield="value"
-									   selectedvalues="scopeModel.selectedComparisonResults"
-									   entityname="Result"
-									   label="Result"
-									   ismultipleselection>
-							</vr-select>
-						</vr-columns>
-						<vr-columns width="1/4row">
-							<vr-select datasource="scopeModel.comparisonCriterias"
-									   datatextfield="description"
-									   datavaluefield="value"
-									   selectedvalues="scopeModel.selectedComparisonCriterias"
-									   entityname="Criterias"
-									   label="Criterias"
-									   ismultipleselection>
-							</vr-select>
-						</vr-columns>
-						<vr-columns width="1/4row">
-							<vr-textbox label="Decimal Digits" value="scopeModel.decimalDigits">
-							</vr-textbox>
-						</vr-columns>
-					</vr-row>
+                                <vr-tabs>
+                                    <vr-tab header="'Voice'" ng-if="scopeModel.isVoiceModuleEnabled" vr-loader="scopeModel.isVoiceLoadingDirective">
+                                        <vr-validation-group validationcontext="scopeModel.configurationValidation">
+                                            <vr-excelconversion-listmapping on-ready="scopeModel.onVoiceMainListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+                                            <vr-row>
+                                                <vr-timeformat label="Date Time Format" value="scopeModel.voiceDateTimeFormat" normal-col-num="6" isrequired="scopeModel.isVoiceMappingRequired()"></vr-timeformat>
+                                            </vr-row>
+                                        </vr-validation-group>
+                                    </vr-tab>
 
-					<vr-row removeline>
-						<vr-columns width="fullrow" ng-if="scopeModel.showGrid">
-							<vr-datagrid on-ready="scopeModel.onGridReady"
-										 datasource="scopeModel.comparisonResults"
-										 dataretrievalfunction="scopeModel.dataRetrievalFunction"
-										 pagingtype="'PagingOnScroll'"
-										 idfield="Entity.Destination" enableautoexport="true">
-								<vr-datagridcolumn headertext="'Destination'" type="'Text'" field="'Entity.Destination'" widthfactor="20"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Currency'" field="'Entity.Currency'" type="'Text'" widthfactor="8"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Sys. Rate'" field="'Entity.SystemRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="6"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Rate'" field="'Entity.ProviderRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="6"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'From'" field="'Entity.From'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Till'" field="'Entity.To'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Sys. Calls'" field="'Entity.SystemCalls'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" cssclass="'bg-success'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Calls'" type="'Number'" field="'Entity.ProviderCalls'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" cssclass="'bg-success'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Diff. Calls'" headerdescription="scopeModel.diffCall" field="'Entity.DiffCalls'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffCallsColor" cssclass="'bg-success'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Diff. Calls %'" headerdescription="scopeModel.diffCallPercentage" field="'Entity.DiffCallsPercentage'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffCallsColor" cssclass="'bg-success'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Sys. Duration'" field="'Entity.SystemDuration'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" cssclass="'bg-warning'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Duration'" type="'Number'" field="'Entity.ProviderDuration'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" cssclass="'bg-warning'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Diff. Duration'" headerdescription="scopeModel.diffDuration" field="'Entity.DiffDuration'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffDurationColor" cssclass="'bg-warning'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Diff. Duration %'" headerdescription="scopeModel.diffDurationPercentage" field="'Entity.DiffDurationPercentage'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffDurationColor" cssclass="'bg-warning'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Sys. Amount'" field="'Entity.SystemAmount'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" cssclass="'bg-info'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Amount'" field="'Entity.ProviderAmount'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" cssclass="'bg-info'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Diff. Amount'" headerdescription="scopeModel.diffAmount" field="'Entity.DiffAmount'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffAmountColor" cssclass="'bg-info'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Diff. Amount %'" headerdescription="scopeModel.diffAmountPercentage" field="'Entity.DiffAmountPercentage'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffAmountColor" cssclass="'bg-info'"></vr-datagridcolumn>
-								<vr-datagridcolumn headertext="'Result'" field="'ResultDescription'" getcolor="scopeModel.getResultColor" widthfactor="10" tooltipfield="'ResultTooltipDescription'"></vr-datagridcolumn>
-							</vr-datagrid>
-						</vr-columns>
-					</vr-row>
-					<!--<vr-row>
-						<vr-columns>
-							<vr-button type="Export" data-onclick="scopeModel.export" standalone ng-if="scopeModel.isCompare"></vr-button>
-						</vr-columns>
-					</vr-row>-->
-				</vr-tab>
-			</vr-tabs>
-		</vr-form>
-	</vr-modalbody>
-	<div>
-		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-			<div transclude-to="buttons">
-				<vr-button type="Save" data-onclick="scopeModel.save" formname="formInvoiceCompareEditor"></vr-button>
-				<vr-button type="Compare" data-onclick="scopeModel.compare" formname="formInvoiceCompareEditor"></vr-button>
-				<vr-button type="Reset" data-onclick="scopeModel.reset"></vr-button>
-				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-			</div>
-		</vr-actionbar>
-	</div>
+                                    <vr-tab header="'SMS'" ng-if="scopeModel.isSMSModuleEnabled">
+                                        <vr-validation-group validationcontext="scopeModel.configurationValidation" vr-loader="scopeModel.isSMSLoadingDirective">
+                                            <vr-excelconversion-listmapping on-ready="scopeModel.onSMSMainListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+                                            <vr-row>
+                                                <vr-timeformat label="Date Time Format" value="scopeModel.smsDateTimeFormat" normal-col-num="6" isrequired="scopeModel.isSMSMappingRequired()"></vr-timeformat>
+                                            </vr-row>
+                                        </vr-validation-group>
+                                    </vr-tab>
+                                </vr-tabs>
+
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Voice Comparison'" tabobject="scopeModel.recievedVoiceComparisonTab" ng-if="scopeModel.isVoiceModuleEnabled">
+                    <vr-row removeline>
+                        <vr-columns width="1/4row">
+                            <vr-columns width="fullrow" haschildcolumns>
+                                <vr-columns colnum="11" haschildcolumns>
+                                    <vr-textbox value="scopeModel.voiceThreshold" label="Threshold (%)" type="number" minvalue="0"></vr-textbox>
+                                </vr-columns>
+                                <vr-columns colnum="1" withemptyline left-medium-spacing>
+                                    <vr-hint value="{{scopeModel.thresholdHint}}"></vr-hint>
+                                </vr-columns>
+                            </vr-columns>
+                        </vr-columns>
+                        <vr-columns width="1/4row">
+                            <vr-select datasource="scopeModel.voiceComparisonResult"
+                                       datatextfield="description"
+                                       datavaluefield="value"
+                                       selectedvalues="scopeModel.selectedVoiceComparisonResults"
+                                       entityname="Result"
+                                       label="Result"
+                                       ismultipleselection>
+                            </vr-select>
+                        </vr-columns>
+                        <vr-columns width="1/4row">
+                            <vr-select datasource="scopeModel.voiceComparisonCriterias"
+                                       datatextfield="description"
+                                       datavaluefield="value"
+                                       selectedvalues="scopeModel.selectedVoiceComparisonCriterias"
+                                       entityname="Criterias"
+                                       label="Criterias"
+                                       ismultipleselection>
+                            </vr-select>
+                        </vr-columns>
+                        <vr-columns width="1/4row">
+                            <vr-textbox label="Decimal Digits" value="scopeModel.voiceDecimalDigits">
+                            </vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+
+                    <vr-row removeline>
+                        <vr-columns width="fullrow" ng-if="scopeModel.showVoiceGrid">
+                            <vr-datagrid on-ready="scopeModel.onVoiceGridReady"
+                                         datasource="scopeModel.voiceComparisonResults"
+                                         dataretrievalfunction="scopeModel.voiceDataRetrievalFunction"
+                                         pagingtype="'PagingOnScroll'"
+                                         idfield="Entity.Destination" enableautoexport="true">
+                                <vr-datagridcolumn headertext="'Destination'" type="'Text'" field="'Entity.Destination'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Currency'" field="'Entity.Currency'" type="'Text'" widthfactor="8"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Sys. Rate'" field="'Entity.SystemRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="6"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Rate'" field="'Entity.ProviderRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="6"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'From'" field="'Entity.From'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Till'" field="'Entity.To'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Sys. Calls'" field="'Entity.SystemCalls'" type="'Number'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" cssclass="'bg-success'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Calls'" type="'Number'" field="'Entity.ProviderCalls'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" cssclass="'bg-success'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Diff. Calls'" headerdescription="scopeModel.diffCall" field="'Entity.DiffCalls'" type="'Number'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffCallsColor" cssclass="'bg-success'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Diff. Calls %'" headerdescription="scopeModel.diffCallPercentage" field="'Entity.DiffCallsPercentage'" type="'Number'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffCallsColor" cssclass="'bg-success'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Sys. Duration'" field="'Entity.SystemDuration'" type="'Number'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" cssclass="'bg-warning'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Duration'" type="'Number'" field="'Entity.ProviderDuration'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" cssclass="'bg-warning'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Diff. Duration'" headerdescription="scopeModel.diffDuration" field="'Entity.DiffDuration'" type="'Number'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffDurationColor" cssclass="'bg-warning'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Diff. Duration %'" headerdescription="scopeModel.diffDurationPercentage" field="'Entity.DiffDurationPercentage'" type="'Number'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffDurationColor" cssclass="'bg-warning'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Sys. Amount'" field="'Entity.SystemAmount'" type="'Number'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" cssclass="'bg-info'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Amount'" field="'Entity.ProviderAmount'" type="'Number'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" cssclass="'bg-info'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Diff. Amount'" headerdescription="scopeModel.diffAmount" field="'Entity.DiffAmount'" type="'Number'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffAmountColor" cssclass="'bg-info'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Diff. Amount %'" headerdescription="scopeModel.diffAmountPercentage" field="'Entity.DiffAmountPercentage'" type="'Number'" numberprecision="{{scopeModel.voiceDecimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffAmountColor" cssclass="'bg-info'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Result'" field="'ResultDescription'" getcolor="scopeModel.getResultColor" widthfactor="10" tooltipfield="'ResultTooltipDescription'"></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+                    <!--<vr-row>
+                        <vr-columns>
+                            <vr-button type="Export" data-onclick="scopeModel.export" standalone ng-if="scopeModel.isCompare"></vr-button>
+                        </vr-columns>
+                    </vr-row>-->
+                </vr-tab>
+                <vr-tab header="'SMS Comparison'" tabobject="scopeModel.recievedSMSComparisonTab" ng-if="scopeModel.isSMSModuleEnabled">
+                    <vr-row removeline>
+                        <vr-columns width="1/4row">
+                            <vr-columns width="fullrow" haschildcolumns>
+                                <vr-columns colnum="11" haschildcolumns>
+                                    <vr-textbox value="scopeModel.smsThreshold" label="Threshold (%)" type="number" minvalue="0"></vr-textbox>
+                                </vr-columns>
+                                <vr-columns colnum="1" withemptyline left-medium-spacing>
+                                    <vr-hint value="{{scopeModel.thresholdHint}}"></vr-hint>
+                                </vr-columns>
+                            </vr-columns>
+                        </vr-columns>
+                        <vr-columns width="1/4row">
+                            <vr-select datasource="scopeModel.smsComparisonResult"
+                                       datatextfield="description"
+                                       datavaluefield="value"
+                                       selectedvalues="scopeModel.selectedSMSComparisonResults"
+                                       entityname="Result"
+                                       label="Result"
+                                       ismultipleselection>
+                            </vr-select>
+                        </vr-columns>
+                        <vr-columns width="1/4row">
+                            <vr-select datasource="scopeModel.smsComparisonCriterias"
+                                       datatextfield="description"
+                                       datavaluefield="value"
+                                       selectedvalues="scopeModel.selectedSMSComparisonCriterias"
+                                       entityname="Criterias"
+                                       label="Criterias"
+                                       ismultipleselection>
+                            </vr-select>
+                        </vr-columns>
+                        <vr-columns width="1/4row">
+                            <vr-textbox label="Decimal Digits" value="scopeModel.smsDecimalDigits">
+                            </vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+
+                    <vr-row removeline>
+                        <vr-columns width="fullrow" ng-if="scopeModel.showSMSGrid">
+                            <vr-datagrid on-ready="scopeModel.onSMSGridReady"
+                                         datasource="scopeModel.smsComparisonResults"
+                                         dataretrievalfunction="scopeModel.smsDataRetrievalFunction"
+                                         pagingtype="'PagingOnScroll'"
+                                         idfield="Entity.MobileNetwork" enableautoexport="true">
+                                <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'Entity.MobileNetwork'" widthfactor="20"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Currency'" field="'Entity.Currency'" type="'Text'" widthfactor="8"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Sys. Rate'" field="'Entity.SystemRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="6"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Rate'" field="'Entity.ProviderRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="6"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'From'" field="'Entity.From'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Till'" field="'Entity.To'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Sys. SMSs'" field="'Entity.SystemSMSs'" type="'Number'" numberprecision="{{scopeModel.smsDecimalDigits}}" widthfactor="10" cssclass="'bg-success'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} SMSs'" type="'Number'" field="'Entity.ProviderSMSs'" numberprecision="{{scopeModel.smsDecimalDigits}}" widthfactor="10" cssclass="'bg-success'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Diff. SMSs'" headerdescription="scopeModel.diffCall" field="'Entity.DiffCalls'" type="'Number'" numberprecision="{{scopeModel.smsDecimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffCallsColor" cssclass="'bg-success'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Diff. SMSs %'" headerdescription="scopeModel.diffCallPercentage" field="'Entity.DiffSMSsPercentage'" type="'Number'" numberprecision="{{scopeModel.smsDecimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffCallsColor" cssclass="'bg-success'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Sys. Amount'" field="'Entity.SystemAmount'" type="'Number'" numberprecision="{{scopeModel.smsDecimalDigits}}" widthfactor="10" cssclass="'bg-info'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Amount'" field="'Entity.ProviderAmount'" type="'Number'" numberprecision="{{scopeModel.smsDecimalDigits}}" widthfactor="10" cssclass="'bg-info'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Diff. Amount'" headerdescription="scopeModel.diffAmount" field="'Entity.DiffAmount'" type="'Number'" numberprecision="{{scopeModel.smsDecimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffAmountColor" cssclass="'bg-info'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Diff. Amount %'" headerdescription="scopeModel.diffAmountPercentage" field="'Entity.DiffAmountPercentage'" type="'Number'" numberprecision="{{scopeModel.smsDecimalDigits}}" widthfactor="10" getcolor="scopeModel.getDiffAmountColor" cssclass="'bg-info'"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Result'" field="'ResultDescription'" getcolor="scopeModel.getResultColor" widthfactor="10" tooltipfield="'ResultTooltipDescription'"></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+                    <!--<vr-row>
+                        <vr-columns>
+                            <vr-button type="Export" data-onclick="scopeModel.export" standalone ng-if="scopeModel.isCompare"></vr-button>
+                        </vr-columns>
+                    </vr-row>-->
+                </vr-tab>
+
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formInvoiceCompareEditor"></vr-button>
+                <vr-button type="Compare" data-onclick="scopeModel.compare" formname="formInvoiceCompareEditor"></vr-button>
+                <vr-button type="Reset" data-onclick="scopeModel.reset"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
 </div>

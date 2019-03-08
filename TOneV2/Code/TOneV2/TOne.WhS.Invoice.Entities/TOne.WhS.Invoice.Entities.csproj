@@ -59,8 +59,12 @@
   <ItemGroup>
     <Compile Include="CompareInvoiceOperationOutput.cs" />
     <Compile Include="ComparisonInvoiceDetail.cs" />
+    <Compile Include="ComparisonResult.cs" />
     <Compile Include="CustomerInvoiceBySaleCurrencyItemDetails.cs" />
     <Compile Include="CustomerSMSInvoiceBySaleCurrencyItemDetails.cs" />
+    <Compile Include="InvoiceComparisonSMSResultDetail.cs" />
+    <Compile Include="InvoiceComparisonSMSResult.cs" />
+    <Compile Include="InvoiceComparisonSMSInput.cs" />
     <Compile Include="RDLCCustomerSMSInvoiceItemDetails.cs" />
     <Compile Include="CustomerSMSInvoiceItemDetails.cs" />
     <Compile Include="InvoiceBySaleCurrencyItemDetails.cs" />
@@ -85,9 +89,9 @@
     <Compile Include="CustomerGenerationCustomSectionPayload.cs" />
     <Compile Include="CustomerInvoiceDetails.cs" />
     <Compile Include="CustomerInvoiceItemDetails.cs" />
-    <Compile Include="InvoiceComparisonInput.cs" />
-    <Compile Include="InvoiceComparisonResult.cs" />
-    <Compile Include="InvoiceComparisonResultDetail.cs" />
+    <Compile Include="InvoiceComparisonVoiceInput.cs" />
+    <Compile Include="InvoiceComparisonVoiceResult.cs" />
+    <Compile Include="InvoiceComparisonVoiceResultDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDLCSupplierInvoiceItemDetails.cs" />
     <Compile Include="RDLCCustomerInvoiceItemDetails.cs" />

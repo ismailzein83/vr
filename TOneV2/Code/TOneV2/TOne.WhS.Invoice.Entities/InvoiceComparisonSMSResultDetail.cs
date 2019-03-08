@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Invoice.Entities
 {
-    public class InvoiceComparisonResultDetail
+    public class InvoiceComparisonSMSResultDetail
     {
-        public InvoiceComparisonResult Entity { get; set; }
+        public InvoiceComparisonSMSResult Entity { get; set; }
         public string ResultDescription { get; set; }
         public string ResultTooltipDescription { get; set; }
     }
