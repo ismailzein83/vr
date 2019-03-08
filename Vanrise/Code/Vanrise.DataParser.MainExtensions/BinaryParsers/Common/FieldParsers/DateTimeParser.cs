@@ -8,6 +8,7 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
     {
         public override Guid ConfigId { get { return new Guid("F95D8834-4A38-4197-A6C7-D3D4BCD1B0FD"); } }
         public string FieldName { get; set; }
+        public string TimeShiftFieldName { get; set; }
         public DateTimeParsingType DateTimeParsingType { get; set; }
         public bool WithOffset { get; set; }
         public int DayIndex { get; set; }
@@ -74,6 +75,7 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
 
                     TimeSpan timeSpan = new TimeSpan(hoursValue, minutesValue, secondsValue);
                     value = new DateTime(value.Year, value.Month, value.Day, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
+
                     break;
 
                 case DateTimeParsingType.DateTime:
@@ -111,6 +113,18 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
             }
 
             context.Record.SetFieldValue(this.FieldName, value);
+
+            if (!string.IsNullOrEmpty(this.TimeShiftFieldName))
+            {
+                string timeShiftSignAsHex = ParserHelper.GetHexFromByte(context.FieldValue[TimeShiftIndicatorIndex]).ToUpper();
+                string timeShiftSign = string.Compare(timeShiftSignAsHex, "2B") == 0 ? "+" : "-";
+
+                string hoursShiftAsString = ParserHelper.GetHexFromByte(context.FieldValue[HoursTimeShiftIndex]);
+                string minutesShiftAsString = ParserHelper.GetHexFromByte(context.FieldValue[MinutesTimeShiftIndex]);
+
+                string timeShiftValue = $"{timeShiftSign} {hoursShiftAsString}:{minutesShiftAsString}";
+                context.Record.SetFieldValue(this.TimeShiftFieldName, timeShiftValue);
+            }
         }
     }
 }
