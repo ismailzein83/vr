@@ -1,7 +1,8 @@
 ﻿
 <vr-row>
     <vr-columns colnum="{{listMappingCtrl.normalColNum}}">
-        <vr-cellviewer on-select="listMappingCtrl.selectFirstRowIndex" on-update="listMappingCtrl.updateFirstRowIndexRange" isrequired="true" value="listMappingCtrl.firstRowIndex" label="First Row" type="'row'"> </vr-cellviewer>
+        <vr-cellviewer on-select="listMappingCtrl.selectFirstRowIndex" on-update="listMappingCtrl.updateFirstRowIndexRange" isrequired="scopeModel.firstRowRequired" ng-if="scopeModel.firstRowRequired" value="listMappingCtrl.firstRowIndex" label="First Row" type="'row'"> </vr-cellviewer>
+        <vr-cellviewer on-select="listMappingCtrl.selectFirstRowIndex" on-update="listMappingCtrl.updateFirstRowIndexRange" isrequired="scopeModel.firstRowRequired" ng-if="!scopeModel.firstRowRequired" value="listMappingCtrl.firstRowIndex" label="First Row" type="'row'"> </vr-cellviewer>
     </vr-columns>
     <vr-columns colnum="{{listMappingCtrl.normalColNum}}">
         <vr-cellviewer on-select="listMappingCtrl.selectLastRowIndex" on-update="listMappingCtrl.updateLastRowIndexRange" value="listMappingCtrl.lastRowIndex" label="Last Row" type="'row'"> </vr-cellviewer>

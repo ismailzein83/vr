@@ -45,6 +45,8 @@
                 //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterFieldMappingAPI, directivePayload, setLoader, filterFieldMappingReadyPromiseDeferred);
 
                 //};
+
+                $scope.scopeModel.firstRowRequired = true;
                 ctrl.fieldMappings = [];
                 ctrl.updateLastRowIndexRange = function () {
                     if (context != undefined) {
@@ -105,18 +107,18 @@
                 ctrl.filterFieldsMappings = [];
                 ctrl.addField = function () {
                     var dataItem =
-                        {
-                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                            loadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                            selectedDataTypes: VR_GenericData_MappingFieldTypeEnum.Text
-                        };
+                    {
+                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                        loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                        selectedDataTypes: VR_GenericData_MappingFieldTypeEnum.Text
+                    };
                     addFilterAPIExtension(dataItem);
                 };
                 ctrl.dataTypes = UtilsService.getArrayEnum(VR_GenericData_MappingFieldTypeEnum);
                 ctrl.addFilterValidate = function () {
                     if (ctrl.filterFieldsMappings.length == 0)
                         return true;
-                    for (var i = 0 ; i < ctrl.filterFieldsMappings.length ; i++) {
+                    for (var i = 0; i < ctrl.filterFieldsMappings.length; i++) {
                         var filterFieldsMapping = ctrl.filterFieldsMappings[i];
                         if (filterFieldsMapping.FieldName == undefined || filterFieldsMapping.selectedDataTypes == undefined)
                             return true;
@@ -139,7 +141,7 @@
                     if (recordFilterData != undefined && recordFilterData.filterObj != undefined) {
                         var fieldNames = VR_GenericData_RecordFilterService.getFilterGroupFieldNames(recordFilterData.filterObj);
                         if (fieldNames != undefined) {
-                            for (var i = 0; i < fieldNames.length ; i++) {
+                            for (var i = 0; i < fieldNames.length; i++) {
                                 var fieldName = fieldNames[i];
                                 if (UtilsService.getItemByVal(ctrl.filterFieldsMappings, fieldName, "FieldName") == undefined)
                                     return true;
@@ -161,7 +163,7 @@
                 //};
                 defineAPI();
             }
-      
+
             function addFilterAPIExtension(dataItem, payloadEntity) {
                 var payload = {
                     context: getContext()
@@ -178,10 +180,10 @@
                     dataItem.readyPromiseDeferred.resolve();
                 };
                 dataItem.readyPromiseDeferred.promise
-              .then(function () {
+                    .then(function () {
 
-                  VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
-              });
+                        VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
+                    });
                 ctrl.filterFieldsMappings.push(dataItem);
             }
             //function addConditionalCellFieldMapping(dataItem, payloadEntity) {
@@ -210,7 +212,7 @@
             //                    dataItem.showOperators = true;
             //                }
             //            });
-                       
+
             //            dataItem.value = payloadEntity.RecordFilter.Value;
             //        }
             //    }
@@ -248,7 +250,7 @@
             //                }
             //                dataItem.selectedOperation = undefined;
             //            }
-                        
+
             //        }
 
             //    };
@@ -295,9 +297,9 @@
                         ctrl.filterFieldsMappings.length = 0;
                         ctrl.lastRowIndex = undefined;
                         ctrl.firstRowIndex = undefined;
-                        $scope.scopeModel.labelName = (payload.listTitle!=undefined)?payload.listTitle + " Date Time Format":undefined;
+                        $scope.scopeModel.labelName = (payload.listTitle != undefined) ? payload.listTitle + " Date Time Format" : undefined;
                         $scope.showDateFormat = payload.showDateFormat;
-                        $scope.scopeModel.dateTimeFormat = (payload.listMappingData != undefined && payload.showDateFormat==true) ? payload.listMappingData.DateTimeFormat : undefined;
+                        $scope.scopeModel.dateTimeFormat = (payload.listMappingData != undefined && payload.showDateFormat == true) ? payload.listMappingData.DateTimeFormat : undefined;
                         //$scope.scopeModel.filterFieldMappings.length = 0;
                         if (listMappingData != undefined) {
 
@@ -318,7 +320,7 @@
                             if (listMappingData.Filter != undefined)
                             {
                                 $scope.scopeModel.selectedFilterType = $scope.scopeModel.filterTypes[1];
-                                
+
                                 if (listMappingData.Filter.Fields != undefined) {
                                     for (var j = 0; j < listMappingData.Filter.Fields.length; j++) {
                                         var filterItem = {
@@ -357,13 +359,13 @@
                         }
 
 
-                        
+
                     }
                     if ($scope.scopeModel.selectedFilterType == undefined) {
                         $scope.scopeModel.selectedFilterType = $scope.scopeModel.filterTypes[1];
                     }
                     promises.push(loadRecordFilterDirective());
-               //     promises.push(loadDataRecordFieldTypeConfig());
+                    //     promises.push(loadDataRecordFieldTypeConfig());
                     function loadRecordFilterDirective() {
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
                         recordFilterReadyPromiseDeferred.promise.then(function () {
@@ -389,17 +391,17 @@
                             dataItem.readyPromiseDeferred.resolve();
                         };
                         dataItem.readyPromiseDeferred.promise
-                      .then(function () {
-                          if (listMappingData != undefined && listMappingData.FieldMappings != undefined && listMappingData.FieldMappings.length > 0) {
-                              var fieldMapping = UtilsService.getItemByVal(listMappingData.FieldMappings, dataItem.FieldName, "FieldName");
-                              if (fieldMapping != undefined) {
-                                  payload.fieldMapping = fieldMapping;
+                            .then(function () {
+                                if (listMappingData != undefined && listMappingData.FieldMappings != undefined && listMappingData.FieldMappings.length > 0) {
+                                    var fieldMapping = UtilsService.getItemByVal(listMappingData.FieldMappings, dataItem.FieldName, "FieldName");
+                                    if (fieldMapping != undefined) {
+                                        payload.fieldMapping = fieldMapping;
 
-                              }
+                                    }
 
-                          }
-                          VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
-                      });
+                                }
+                                VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
+                            });
                     }
                     //function loadFieldMappings()
                     //{
@@ -418,6 +420,33 @@
                 };
 
                 api.getData = getData;
+
+                api.hasValue = function () {
+
+                    if (ctrl.firstRowIndex != undefined)
+                        return true;
+
+                    if (ctrl.lastRowIndex != undefined)
+                        return true;
+
+                    for (var i = 0; i < ctrl.fieldMappings.length; i++) {
+                        var fieldMapping = ctrl.fieldMappings[i];
+                        if (fieldMapping.fieldMappingAPI != undefined) {
+                            var fieldMappingData = fieldMapping.fieldMappingAPI.getData();
+                            if (fieldMappingData != undefined && fieldMappingData.RowIndex != undefined && fieldMappingData.CellIndex != undefined) {
+                                return true;
+                            }
+                        }
+                    };
+                    return false;
+                };
+
+                api.setFirstRowRequired = function (payload) {
+                    if (payload != undefined) {
+                        $scope.scopeModel.firstRowRequired = payload.firstRowRequired;
+
+                    }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
@@ -484,8 +513,8 @@
                         LastRowIndex: ctrl.lastRowIndex != undefined ? ctrl.lastRowIndex.row : undefined,
                         FieldMappings: fieldMappings,
                         Filter: filter,
-                       // RowFilters:rowFilters,
-                        DateTimeFormat: ($scope.scopeModel.dateTimeFormat != undefined && $scope.scopeModel.showDateFormat==true) ? $scope.scopeModel.dateTimeFormat : undefined
+                        // RowFilters:rowFilters,
+                        DateTimeFormat: ($scope.scopeModel.dateTimeFormat != undefined && $scope.scopeModel.showDateFormat == true) ? $scope.scopeModel.dateTimeFormat : undefined
                     };
                     return data;
                 }
@@ -537,8 +566,8 @@
                 //                break;
                 //        }
                 //    }
-                   
-                  
+
+
                 //    return recordFilter;
                 //}
 
@@ -553,15 +582,14 @@
                         return ctrl.firstRowIndex;
                     };
                     currentContext.getLastRowIndex = function () {
-                        return  ctrl.lastRowIndex;
+                        return ctrl.lastRowIndex;
                     };
                     currentContext.getFilterFieldsMappings = function () {
                         return ctrl.filterFieldsMappings;
                     };
 
                     currentContext.getFilterCellFieldMapping = function (fieldName) {
-                        if (fieldName != undefined)
-                        {
+                        if (fieldName != undefined) {
                             var fieldMapping = UtilsService.getItemByVal(ctrl.filterFieldsMappings, fieldName, "FieldName");
                             if (fieldMapping != undefined && fieldMapping.fieldMappingAPI != undefined)
                                 return fieldMapping.fieldMappingAPI.getData();
@@ -573,21 +601,21 @@
 
             function getRecordFilterContext() {
                 var context =
-                    {
-                        getFields: function () {
-                            var fields = [];
-                            for (var i = 0; i < ctrl.filterFieldsMappings.length; i++) {
-                                var filterFieldsMapping = ctrl.filterFieldsMappings[i];
+                {
+                    getFields: function () {
+                        var fields = [];
+                        for (var i = 0; i < ctrl.filterFieldsMappings.length; i++) {
+                            var filterFieldsMapping = ctrl.filterFieldsMappings[i];
 
-                                fields.push({
-                                    FieldName: filterFieldsMapping.FieldName,
-                                    FieldTitle: filterFieldsMapping.FieldName,
-                                    Type: filterFieldsMapping.selectedDataTypes.value,
-                                });
-                            }
-                            return fields;
+                            fields.push({
+                                FieldName: filterFieldsMapping.FieldName,
+                                FieldTitle: filterFieldsMapping.FieldName,
+                                Type: filterFieldsMapping.selectedDataTypes.value,
+                            });
                         }
-                    };
+                        return fields;
+                    }
+                };
                 return context;
             }
             //function getRuleFilterEditorByFieldType(configId) {
