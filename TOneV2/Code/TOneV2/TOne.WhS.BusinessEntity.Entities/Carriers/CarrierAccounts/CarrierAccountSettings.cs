@@ -33,7 +33,5 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public Guid? CompanySettingId { get; set; }
 
 		public bool IsInterconnectSwitch { get; set; }
-
-        public List<int> SMSServiceTypes { get; set; }
 	}
 }

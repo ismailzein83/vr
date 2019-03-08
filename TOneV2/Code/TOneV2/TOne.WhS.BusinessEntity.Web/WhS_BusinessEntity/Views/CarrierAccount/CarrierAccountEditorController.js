@@ -21,8 +21,7 @@
         var companySettingsSelectorAPI;
         var companySettingSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var smsServiceTypeSelectorAPI;
-        var smsServiceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         // Pricing Settings
         var bpBusinessRuleSetDirectiveAPI;
@@ -48,6 +47,9 @@
         var pricingSettingsEditorAPI;
         var pricingSettingsEditorReadyDeferred;
 
+        var customerSmsServiceTypeSelectorAPI;
+        var customerSmsServiceTypeSelectorReadyDeferred;
+
         var passThroughCustomerRateEvaluatorDirectiveAPI;
         var passThroughCustomerRateEvaluatorDirectiveReadyDeferred;
 
@@ -60,6 +62,9 @@
 
         var supplierRoutingStatusSelectorAPI;
         var supplierRoutingStatusSelectorReadyDeferred;
+
+        var supplierSmsServiceTypeSelectorAPI;
+        var supplierSmsServiceTypeSelectorReadyDeferred;
 
         var isEditMode;
         var context;
@@ -107,10 +112,7 @@
                 carrierAccountTypeSelectorAPI = api;
                 carrierAccountTypeSelectorReadyDeferred.resolve();
             };
-            $scope.scopeModel.onSMSServiceTypeSelectorReady = function (api) {
-                smsServiceTypeSelectorAPI = api;
-                smsServiceTypeSelectorReadyDeferred.resolve();   
-            };
+
             $scope.scopeModel.onCarrierAccountTypeChanged = function () {
 
                 if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
@@ -133,6 +135,11 @@
                                 };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerTimeZoneSelectorAPI, payload, setLoader);
                         }
+
+                        if (WhS_BE_ToneModuleService.isSMSModuleEnabled()) {
+                            $scope.scopeModel.showSMSServiceType = true;
+                        }
+
                         $scope.scopeModel.showSellingNumberPlan = true;
 
                     }
@@ -160,6 +167,11 @@
                                 };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierTimeZoneSelectorAPI, payload, setLoader);
                         }
+
+                        if (WhS_BE_ToneModuleService.isSMSModuleEnabled()) {
+                            $scope.scopeModel.showSMSServiceType = true;
+                        }
+
                         $scope.scopeModel.showZoneServiceConfig = true;
                     }
                     else {
@@ -235,6 +247,12 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceListSettingsEditorAPI, priceListSettingsPayload, setLoader, priceListSettingsEditorReadyDeferred);
             };
 
+            $scope.scopeModel.onCustomerSMSServiceTypeSelectorReady = function (api) {
+                customerSmsServiceTypeSelectorAPI = api;
+                var setLoader = function (value) { $scope.scopeModel.isLoadingCustomerSMSServiceTypeSelector = value; };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerSmsServiceTypeSelectorAPI, undefined, setLoader, customerSmsServiceTypeSelectorReadyDeferred);
+            };
+
             $scope.scopeModel.onPassThroughCustomerRateEvaluatorSelectorReady = function (api) {
                 passThroughCustomerRateEvaluatorDirectiveAPI = api;
                 var setLoader = function (value) {
@@ -267,6 +285,15 @@
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSupplierRoutingStatusSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierRoutingStatusSelectorAPI, { selectedIds: WhS_BE_RoutingStatusEnum.Enabled.value }, setLoader, supplierRoutingStatusSelectorReadyDeferred);
             };
+
+            $scope.scopeModel.onSupplierSMSServiceTypeSelectorReady = function (api) {
+                supplierSmsServiceTypeSelectorAPI = api;
+                var setLoader = function (value) {
+                    $scope.scopeModel.isLoadingSupplierSMSServiceTypeSelector = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierSmsServiceTypeSelectorAPI, undefined, setLoader, supplierSmsServiceTypeSelectorReadyDeferred);
+            };
+
 
             $scope.hasSaveCarrierAccountPermission = function () {
                 if (isEditMode)
@@ -404,12 +431,14 @@
                     customerRoutingStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     priceListSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
                     pricingSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
+                    customerSmsServiceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                 }
                 function setSupplierGlobalVars() {
                     supplierTimeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     bpBusinessRuleSetSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     zoneServiceConfigSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     supplierRoutingStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+                    supplierSmsServiceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                 }
             }
 
@@ -432,7 +461,7 @@
         }
 
         function loadDefinitionTab() {
-            return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCarrierProfileSelector, loadCarrierActivationStatusSelector, loadCarrierAccountTypeSelector, loadCurrencySelector, loadCompanySettingSelector, loadSMSServiceTypeSelector]);
+            return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCarrierProfileSelector, loadCarrierActivationStatusSelector, loadCarrierAccountTypeSelector, loadCurrencySelector, loadCompanySettingSelector]);
         }
         function loadStaticData() {
             if (!isEditMode && !isViewHistoryMode) {
@@ -493,15 +522,15 @@
             });
             return loadActivationStatusSelectorPromiseDeferred.promise;
         }
-        function loadSMSServiceTypeSelector() {
+        function loadCustomerSMSServiceTypeSelector() {
             if (WhS_BE_ToneModuleService.isSMSModuleEnabled()) {
                 $scope.scopeModel.showSMSServiceType = true;
                 var loadSMSServiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                smsServiceTypeSelectorReadyDeferred.promise.then(function () {
+                customerSmsServiceTypeSelectorReadyDeferred.promise.then(function () {
                     var payload = {
-                        selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.SMSServiceTypes : undefined)
+                        selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CustomerSettings.SMSServiceTypes : undefined)
                     };
-                    VRUIUtilsService.callDirectiveLoad(smsServiceTypeSelectorAPI, payload, loadSMSServiceTypeSelectorPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(customerSmsServiceTypeSelectorAPI, payload, loadSMSServiceTypeSelectorPromiseDeferred);
                 });
                 return loadSMSServiceTypeSelectorPromiseDeferred.promise;
             }
@@ -562,6 +591,9 @@
 
             var loadCustomerRoutingStatusSelectorPromise = loadCustomerRoutingStatusSelector();
             promises.push(loadCustomerRoutingStatusSelectorPromise);
+
+            var loadCustomerSMSServiceTypeSelectorPromise = loadCustomerSMSServiceTypeSelector();
+            promises.push(loadCustomerSMSServiceTypeSelectorPromise);
 
             var loadPriceListSettingsPromise = loadPriceListSettings();
             promises.push(loadPriceListSettingsPromise);
@@ -689,7 +721,7 @@
         }
 
         function loadSupplierSettingsTab() {
-            return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector, loadBPBusinessRuleSetSelector]);
+            return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector, loadBPBusinessRuleSetSelector, loadSupplierSMSServiceType]);
         }
         function loadSupplierTimeZoneSelector() {
             var supplierTimeZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -716,6 +748,20 @@
                 VRUIUtilsService.callDirectiveLoad(bpBusinessRuleSetDirectiveAPI, payload, loadBPBusinessRuleSetSelectorPromiseDeferred);
             });
             return loadBPBusinessRuleSetSelectorPromiseDeferred.promise;
+        }
+
+        function loadSupplierSMSServiceType() {
+            if (WhS_BE_ToneModuleService.isSMSModuleEnabled()) {
+                $scope.scopeModel.showSMSServiceType = true;
+                var loadSMSServiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                supplierSmsServiceTypeSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.SMSServiceTypes : undefined)
+                    };
+                    VRUIUtilsService.callDirectiveLoad(supplierSmsServiceTypeSelectorAPI, payload, loadSMSServiceTypeSelectorPromiseDeferred);
+                });
+                return loadSMSServiceTypeSelectorPromiseDeferred.promise;
+            }
         }
 
         function loadZoneServiceConfigSelector() {
@@ -816,7 +862,6 @@
                     CompanySettingId: companySettingsSelectorAPI.getSelectedIds(),
                     NominalCapacity: $scope.scopeModel.nominalCapacity,
                     IsInterconnectSwitch: $scope.scopeModel.isInterconnectSwitch,
-                    SMSServiceTypes: $scope.scopeModel.showSMSServiceType ? smsServiceTypeSelectorAPI.getSelectedIds() : undefined,
                 },
                 SupplierSettings: {
                     DefaultServices: zoneServiceConfigSelectorAPI != undefined ? getSelectedDefaultServices() : null,
@@ -829,7 +874,8 @@
                         Email: $scope.scopeModel.automaticPriceListEmail,
                         SubjectCode: $scope.scopeModel.automaticPriceListSubjectCode,
                         AttachmentCode: $scope.scopeModel.automaticPriceListAttachmentCode,
-                    }
+                    },
+                    SMSServiceTypes: $scope.scopeModel.showSMSServiceType && supplierSmsServiceTypeSelectorAPI != undefined ? supplierSmsServiceTypeSelectorAPI.getSelectedIds() : undefined,
                 },
 
                 CustomerSettings: {
@@ -839,6 +885,7 @@
                     PassThroughCustomerRateEvaluator: ($scope.scopeModel.isPassThrough && passThroughCustomerRateEvaluatorDirectiveAPI) ? passThroughCustomerRateEvaluatorDirectiveAPI.getData() : undefined,
                     PricelistSettings: priceListSettingsEditorAPI != undefined ? priceListSettingsEditorAPI.getData() : undefined,
                     PricingSettings: pricingSettingsEditorAPI != undefined ? pricingSettingsEditorAPI.getData() : undefined,
+                    SMSServiceTypes: $scope.scopeModel.showSMSServiceType && customerSmsServiceTypeSelectorAPI != undefined ? customerSmsServiceTypeSelectorAPI.getSelectedIds() : undefined,
                 }
             };
 

@@ -17,7 +17,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public int? BPBusinessRuleSetId { get; set; }
 
 		public SupplierAutoImportSettings AutoImportSettings { get; set; }
-	}
+
+        public List<int> SMSServiceTypes { get; set; }
+    }
 
 	public class SupplierAutoImportSettings
 	{

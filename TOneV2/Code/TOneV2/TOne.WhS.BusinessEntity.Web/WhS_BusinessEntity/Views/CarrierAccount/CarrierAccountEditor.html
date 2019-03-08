@@ -35,9 +35,7 @@
                         <vr-columns width="1/2row">
                             <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/2row" ng-if="scopeModel.showSMSServiceType">
-                            <vr-whs-be-smsservicestype-selector on-ready="scopeModel.onSMSServiceTypeSelectorReady" ismultipleselection="true"></vr-whs-be-smsservicestype-selector>
-                        </vr-columns>
+
                         <vr-columns width="1/2row">
                             <vr-switch value="scopeModel.isInterconnectSwitch" label="Interconnect Switch"></vr-switch>
                         </vr-columns>
@@ -45,7 +43,7 @@
                 </vr-tab>
                 <vr-tab header="'Customer Settings'" ng-if="scopeModel.showSellingNumberPlan">
                     <vr-row>
-                        <vr-columns width="fullrow">
+                        <span width="fullrow">
                             <vr-section header="General Settings">
                                 <vr-row>
                                     <span vr-loader="scopeModel.isLoadingCustomerTimeZoneSelector">
@@ -77,6 +75,12 @@
                                                                           hideremoveicon>
                                         </vr-whs-be-routingstatus-selector>
                                     </span>
+                                    <span ng-if="scopeModel.showSMSServiceType" vr-loader="scopeModel.isLoadingCustomerSMSServiceTypeSelector">
+                                        <vr-whs-be-smsservicestype-selector on-ready="scopeModel.onCustomerSMSServiceTypeSelectorReady"
+                                                                            ismultipleselection="true"
+                                                                            normal-col-num="6">
+                                        </vr-whs-be-smsservicestype-selector>
+                                    </span>
                                 </vr-row>
                                 <vr-row removeline>
                                     <vr-columns width="fullrow" haschildcolumns>
@@ -89,7 +93,7 @@
                                     </vr-columns>
                                 </vr-row>
                             </vr-section>
-                        </vr-columns>
+                        </span>
                     </vr-row>
                     <vr-tabs>
                         <vr-tab header="'Pricelist Settings'" ng-if="scopeModel.showSellingNumberPlan" vr-loader="scopeModel.isLoadingPriceListSettingsEditor">
@@ -103,7 +107,7 @@
 
                 <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
                     <vr-row>
-                        <vr-columns width="fullrow">
+                        <span width="fullrow">
                             <vr-section header="General Settings">
                                 <vr-row>
                                     <span vr-loader="scopeModel.isLoadingSupplierTimeZoneSelector">
@@ -128,9 +132,15 @@
                                             <businessprocess-bp-business-rule-set-selector on-ready="scopeModel.onBPBusinessRuleSetSelectorReady" label="Rule Set"></businessprocess-bp-business-rule-set-selector>
                                         </span>
                                     </vr-columns>
+                                    <span ng-if="scopeModel.showSMSServiceType" vr-loader="scopeModel.isLoadingSupplierSMSServiceTypeSelector">
+                                        <vr-whs-be-smsservicestype-selector on-ready="scopeModel.onSupplierSMSServiceTypeSelectorReady"
+                                                                            ismultipleselection="true"
+                                                                            normal-col-num="6">
+                                        </vr-whs-be-smsservicestype-selector>
+                                    </span>
                                 </vr-row>
                             </vr-section>
-                        </vr-columns>
+                        </span>
                     </vr-row>
                     <vr-tabs>
                         <vr-tab header="'Automatic Import'">

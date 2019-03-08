@@ -21,6 +21,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public PricingSettings PricingSettings { get; set; }
 
         public PricelistSettings PricelistSettings { get; set; }
+
+        public List<int> SMSServiceTypes { get; set; }
     }
 
     public abstract class PassThroughCustomerRateEvaluator

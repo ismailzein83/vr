@@ -75,7 +75,8 @@ app.directive('vrWhsBeSmsservicestypeSelector', ['UtilsService', 'VRUIUtilsServi
             if (attrs.usefullcolumn != undefined)
                 usefullcolumn = "usefullcolumn";
 
-            return '<vr-select '
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                +  '<vr-select '
                 + ' datatextfield = "Name"'
                 + ' datavaluefield = "SMSServiceTypeInfoId"'
                 + ' label = "' + label
@@ -86,7 +87,6 @@ app.directive('vrWhsBeSmsservicestypeSelector', ['UtilsService', 'VRUIUtilsServi
                 + ' onselectitem="ctrl.onselectitem" '
                 + ' ondeselectitem = "ctrl.ondeselectitem" '
                 + ' customvalidate = "ctrl.customvalidate" '
-                + ' normal-col-num="{{ctrl.normalColNum}}"'
                 +' isrequired = "ctrl.isrequired"' +
                 + ' ' + hideselectedvaluessection
                 + ' ' + hidelabel
@@ -96,7 +96,8 @@ app.directive('vrWhsBeSmsservicestypeSelector', ['UtilsService', 'VRUIUtilsServi
                 + ' ' + hideremoveicon
                 + ' ' + multipleselection
                 + '>'
-                + '</vr-select>';
+                + '</vr-select>'
+                + '</vr-columns>';
            
         }
 
