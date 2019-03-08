@@ -213,7 +213,6 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                     if (WhS_BE_ToneModuleService.isSMSModuleEnabled())
                         obj.SMSSettings = buildSMSSettings();
 
-                    console.log(obj);
                     return obj;
                 };
 
