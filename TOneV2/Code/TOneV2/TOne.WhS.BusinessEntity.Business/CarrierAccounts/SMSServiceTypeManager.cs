@@ -41,6 +41,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             SMSServiceTypeId = (int)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = genericBusinessEntity.FieldValues.GetRecord("Name") as string,
+                            Symbol = genericBusinessEntity.FieldValues.GetRecord("Symbol") as string,
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),

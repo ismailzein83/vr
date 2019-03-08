@@ -12,6 +12,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string Name { get; set; }
 
+        public string Symbol { get; set; }
+
         public DateTime CreatedTime { get; set; }
 
         public DateTime LastModifiedTime { get; set; }
