@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Mediation.Generic.Entities;
+using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using Mediation.Generic.Entities;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.GenericData.Business;
@@ -12,7 +10,7 @@ namespace Mediation.Generic.Data.SQL
     public class BadMediationRecordsDataManager : BaseSQLDataManager, IBadMediationRecordsDataManager
     {
         public BadMediationRecordsDataManager()
-            : base(GetConnectionStringName("Mediation_GenericRecord_DBConnStringKey", "Mediation_GenericRecord_DBConnString"))
+            : base(GetConnectionStringName("Mediation_CDR_DBConnStringKey", "Mediation_CDR_DBConnString"))
         { 
         
         }
@@ -73,6 +71,5 @@ namespace Mediation.Generic.Data.SQL
         }
 
         #endregion
-               
     }
 }

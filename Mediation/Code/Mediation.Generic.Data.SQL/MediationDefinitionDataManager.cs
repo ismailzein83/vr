@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Mediation.Generic.Entities;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mediation.Generic.Entities;
 using Vanrise.Data.SQL;
 
 namespace Mediation.Generic.Data.SQL
@@ -12,7 +9,7 @@ namespace Mediation.Generic.Data.SQL
     public class MediationDefinitionDataManager : BaseSQLDataManager, IMediationDefinitionDataManager
     {
         public MediationDefinitionDataManager()
-            : base(GetConnectionStringName("Mediation_GenericConfig_DBConnStringKey", "Mediation_GenericConfig_DBConnString"))
+            : base(GetConnectionStringName("MediationDBConnStringKey", "MediationDBConnString"))
         {
 
         }

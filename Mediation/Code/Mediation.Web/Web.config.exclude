@@ -11,8 +11,8 @@
     <loggers>
       <logger name="SQLLogger" type="Vanrise.Logging.SQL.SQLLogger, Vanrise.Logging.SQL">
         <parameters>
-          <parameter name="LoggingConnectionStringKey" value="LogDBConnString" />
-          <parameter name="ConfigurationConnectionStringKey" value="ConfigurationDBConnString" />
+          <parameter name="LoggingConnectionStringKey"        value="LogDBConnString" />
+          <parameter name="ConfigurationConnectionStringKey"  value="ConfigurationDBConnString" />
         </parameters>
       </logger>
       <logger name="ConsoleLogger"  type="Vanrise.Common.ConsoleLogger, Vanrise.Common"></logger>
@@ -25,24 +25,24 @@
   <connectionStrings>
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Mediation_Configuration;User ID=sa;Password= "/>
     <add name="Mediation_CDR_DBConnString" connectionString="Data Source=localhost;Initial Catalog=Mediation_CDR;User ID=sa; Password= " />
-    
+
     <add name="QueueItemDBConnString" connectionString="Server=localhost;Database=Mediation_Queueing;User ID=sa;Password= "/>
     <add name="TransactionDBConnString" connectionString="Server=localhost;Database=Mediation_Transaction;User ID=sa;Password= "/>
-    <add name="LogDBConnString" connectionString="Server=localhost;Database=Mediation_Logging;User ID=sa;Password= "/>    
+    <add name="LogDBConnString" connectionString="Server=localhost;Database=Mediation_Logging;User ID=sa;Password= "/>
 
-    <add name="MainDBConnString" connectionString=""/>    
+    <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
   <appSettings>
-    <add key="Web_ExtendedModulesNames" value=""/>
-    <add key="Vanrise License" value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT" />
-    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3tMeD!@t!0n" />
-    <add key="TempPasswordValidity" value="24:00:00"/>
-    
-    <add key="webpages:Version" value="2.0.0.0" />
-    <add key="webpages:Enabled" value="false" />
-    <add key="PreserveLoginUrl" value="true" />
-    <add key="ClientValidationEnabled" value="true" />
-    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+    <add key="Web_ExtendedModulesNames"                         value=""/>
+    <add key="Vanrise License"                                  value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT" />
+    <add key="EncryptionSecretKey"                              value="V@nR!se-Se6r3tMeD!@t!0n" />
+    <add key="TempPasswordValidity"                             value="24:00:00"/>
+
+    <add key="webpages:Version"                                 value="2.0.0.0" />
+    <add key="webpages:Enabled"                                 value="false" />
+    <add key="PreserveLoginUrl"                                 value="true" />
+    <add key="ClientValidationEnabled"                          value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled"                     value="true" />
 
     <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
     <add key="BusinessProcessDBConnStringKey"                   value="TransactionDBConnString" />
@@ -50,7 +50,7 @@
     <add key="IntegrationConnStringKey"                         value="TransactionDBConnString"/>
     <add key="QueueDBConnStringKey"                             value="TransactionDBConnString"/>
     <add key="VRNotificationTransactionDBConnStringKey"         value="TransactionDBConnString"/>
-    
+
     <add key="QueueItemDBConnStringKey"                         value="QueueItemDBConnString"/>
 
     <add key="BusinessProcessTrackingDBConnStringKey"           value="LogDBConnString"/>
@@ -65,23 +65,23 @@
     <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="DataParserDBConnStringKey"                        value="ConfigurationDBConnString"/>
-    
-	<add key="Mediation_GenericConfig_DBConnStringKey"            value="ConfigurationDBConnString"/>
-    <add key="Mediation_GenericRecord_DBConnStringKey"          value="Mediation_CDR_DBConnString"/>
+
+    <add key="MediationDBConnStringKey"                         value="MediationDBConnString"/>
 
     <!-- Begin, keep only one key depending on the client-->
+    <add key="Mediation_CDR_DBConnStringKey"                    value="Mediation_CDR_DBConnString"/>    
     <add key="Mediation_CDR_Mobilis_DBConnStringKey"            value="Mediation_CDR_DBConnString"/>
-    <add key="Mediation_CDR_Ogero_DBConnStringKey"			    value="Mediation_CDR_DBConnString"/>
-    <add key="Mediation_CDR_Jazz_DBConnStringKey"				value="Mediation_CDR_DBConnString"/>
-    <add key="Mediation_CDR_MobileAnalysis_DBConnStringKey"		value="Mediation_CDR_DBConnString"/>
-    <add key="Mediation_CDR_Namibia_DBConnStringKey"		    value="Mediation_CDR_DBConnString"/>
-    <add key="Mediation_CDR_Multinet_DBConnStringKey"		    value="Mediation_CDR_DBConnString"/>
+    <add key="Mediation_CDR_Ogero_DBConnStringKey"			        value="Mediation_CDR_DBConnString"/>
+    <add key="Mediation_CDR_Jazz_DBConnStringKey"				        value="Mediation_CDR_DBConnString"/>
+    <add key="Mediation_CDR_MobileAnalysis_DBConnStringKey"		  value="Mediation_CDR_DBConnString"/>
+    <add key="Mediation_CDR_Namibia_DBConnStringKey"		        value="Mediation_CDR_DBConnString"/>
+    <add key="Mediation_CDR_Multinet_DBConnStringKey"		        value="Mediation_CDR_DBConnString"/>
     <!-- End, keep only one key depending on the client-->
 
-    <add key="BCPDonotDeleteFiles" value="false"/>
-    <add key="BusinessProcess_ActivityEventsTracking" value="false"/>
+    <add key="BCPDonotDeleteFiles"                              value="false"/>
+    <add key="BusinessProcess_ActivityEventsTracking"           value="false"/>
 
-    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,Mediation_CDR_DBConnString,LogDBConnString"/>
+    <add key="ExposedConnectionStringNames"                     value="ConfigurationDBConnString,Mediation_CDR_DBConnString,LogDBConnString"/>
   </appSettings>
   <system.web>
     <compilation debug="true" targetFramework="4.7.2" />

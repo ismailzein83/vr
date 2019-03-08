@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 
 namespace Mediation.Generic.Data.SQL
@@ -10,7 +6,7 @@ namespace Mediation.Generic.Data.SQL
     public class MediationCommittedIdDataManager : BaseSQLDataManager, IMediationCommittedIdDataManager
     {
         public MediationCommittedIdDataManager()
-            : base(GetConnectionStringName("Mediation_GenericRecord_DBConnStringKey", "Mediation_GenericRecord_DBConnString"))
+            : base(GetConnectionStringName("Mediation_CDR_DBConnStringKey", "Mediation_CDR_DBConnString"))
         {
 
         }

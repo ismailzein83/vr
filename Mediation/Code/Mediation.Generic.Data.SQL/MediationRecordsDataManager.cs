@@ -12,8 +12,10 @@ namespace Mediation.Generic.Data.SQL
     public class MediationRecordsDataManager : BaseSQLDataManager, IMediationRecordsDataManager
     {
         public MediationRecordsDataManager()
-            : base(GetConnectionStringName("Mediation_GenericRecord_DBConnStringKey", "Mediation_GenericRecord_DBConnString"))
-        { }
+            : base(GetConnectionStringName("Mediation_CDR_DBConnStringKey", "Mediation_CDR_DBConnString"))
+        {
+
+        }
 
         readonly string[] columns = { "EventId", "SessionId", "EventTime", "EventStatus", "MediationDefinitionId", "EventDetails" };
         DataRecordTypeManager _dataRecordTypeManager = new DataRecordTypeManager();
