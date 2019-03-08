@@ -97,7 +97,9 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                     var fieldValuesObj = {};
                     if (fieldValues != undefined) {
                         for (var prop in fieldValues) {
-                            fieldValuesObj[prop] = fieldValues[prop].value;
+                            var fieldValue = fieldValues[prop];
+                            if (!fieldValue.visibility)
+                                fieldValuesObj[prop] = fieldValue.value;
                         }
                     }
 

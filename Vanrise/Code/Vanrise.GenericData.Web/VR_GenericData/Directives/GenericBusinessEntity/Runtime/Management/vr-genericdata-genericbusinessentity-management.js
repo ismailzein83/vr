@@ -212,11 +212,6 @@
                     }
                 }
 
-                var fieldsWithoutObj = {};
-                for (var prop in fieldValues) {
-                    fieldsWithoutObj[prop] = fieldValues[prop].value;
-                }
-
                 var gridPayload = {
                     query: {
                         FilterGroup: filterGroup,
