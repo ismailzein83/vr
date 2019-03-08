@@ -341,9 +341,19 @@ namespace Vanrise.Analytic.Business
                 else
                 {
                     if (records == null)
+                    {
                         return null;
+                    }
                     else
-                        return GetOrderedAnalyticRecords(queryContext, query.OrderType.Value, query.DimensionFields, query.MeasureFields, query.AdvancedOrderOptions, records, record => record).ToList();
+                    {
+                        var orderedData = GetOrderedAnalyticRecords(queryContext, query.OrderType.Value, query.DimensionFields, query.MeasureFields, query.AdvancedOrderOptions, records, record => record).ToList();
+                        if(query.TopRecords.HasValue)
+                        {
+                            if (orderedData != null)
+                                orderedData = orderedData.Take(query.TopRecords.Value).ToList();
+                        }
+                        return orderedData;
+                    }
                 }
             }
             else
