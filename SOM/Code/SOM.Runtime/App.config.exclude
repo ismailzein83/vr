@@ -49,7 +49,11 @@
     <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
-
+    
+    <!--<add key="BCPCommandName"                                   value="bcp"/>-->
+    <!--<add key="Runtime_DontDisableUseShellExecute"               value="true" />-->
+    <!--<add key="DBCommandDefaultTimeOutInterval"                  value="01:00:00" />-->
+    
     <add key="SOM_DBConnStringKey"                              value="ConfigurationDBConnString"/>
     <add key="SOMTransaction_DBConnStringKey"                   value="TransactionDBConnString"/>
     <add key="ExposedConnectionStringNames"                     value="ConfigurationDBConnString,LogDBConnString"/>
