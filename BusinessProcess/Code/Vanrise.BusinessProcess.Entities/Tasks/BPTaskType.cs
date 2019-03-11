@@ -6,6 +6,6 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public Guid BPTaskTypeId { get; set; }
         public string Name { get; set; }
-        public BPTaskTypeSettings Settings { get; set; }
+        public BaseBPTaskTypeSettings Settings { get; set; }
     }
 }

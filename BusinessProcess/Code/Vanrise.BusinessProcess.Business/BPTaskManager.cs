@@ -6,6 +6,11 @@ using System.Linq;
 
 namespace Vanrise.BusinessProcess.Business
 {
+    public class BPTaskAssigneeContext : IBPTaskAssigneeContext
+    {
+        public int ProcessInitiaterUserId { get; set; }
+    }
+
     public class BPTaskManager
     {
         #region public methods

@@ -6,10 +6,17 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public class BPTaskTypeSettings
+    public abstract class BaseBPTaskTypeSettings
     {
-        public string Editor { get; set; }
+        public abstract Guid ConfigId { get; }
 
-        public bool AutoOpenTask { get; set; }
+        public virtual string Editor { get; set; }
+
+        public virtual bool AutoOpenTask { get; set; }
+    }
+
+    public class BPTaskTypeSettings : BaseBPTaskTypeSettings
+    {
+        public override Guid ConfigId => new Guid("7E158311-F841-4569-BF44-3F7F8B10CF90");
     }
 }
