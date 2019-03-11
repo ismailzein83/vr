@@ -528,7 +528,7 @@
                 var loadSMSServiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 customerSmsServiceTypeSelectorReadyDeferred.promise.then(function () {
                     var payload = {
-                        selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CustomerSettings.SMSServiceTypes : undefined)
+                        selectedIds: getCustomerSMSServiceTypes(),
                     };
                     VRUIUtilsService.callDirectiveLoad(customerSmsServiceTypeSelectorAPI, payload, loadSMSServiceTypeSelectorPromiseDeferred);
                 });
@@ -756,7 +756,7 @@
                 var loadSMSServiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 supplierSmsServiceTypeSelectorReadyDeferred.promise.then(function () {
                     var payload = {
-                        selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.SMSServiceTypes : undefined)
+                        selectedIds: getSupplierSMSServiceTypes(),
                     };
                     VRUIUtilsService.callDirectiveLoad(supplierSmsServiceTypeSelectorAPI, payload, loadSMSServiceTypeSelectorPromiseDeferred);
                 });
@@ -810,6 +810,38 @@
                     defaultServices.push({ ServiceId: selectedServices[i] });
                 }
                 return defaultServices;
+            }
+        }
+
+        function getSupplierSMSServiceTypes() {
+            if (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != null && carrierAccountEntity.SupplierSettings.SMSServiceTypes != null) {
+                var supplierSMSServiceTypes = [];
+
+                for (var i = 0; i < carrierAccountEntity.SupplierSettings.SMSServiceTypes.length; i++)
+                    supplierSMSServiceTypes.push(carrierAccountEntity.SupplierSettings.SMSServiceTypes[i].SMSServiceTypeId);
+
+                return supplierSMSServiceTypes;
+            }
+        }
+
+        function getCustomerSMSServiceTypes() {
+            if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != null && carrierAccountEntity.CustomerSettings.SMSServiceTypes != null) {
+                var customerSMSServiceTypes = [];
+
+                for (var i = 0; i < carrierAccountEntity.CustomerSettings.SMSServiceTypes.length; i++)
+                    customerSMSServiceTypes.push(carrierAccountEntity.CustomerSettings.SMSServiceTypes[i].SMSServiceTypeId);
+
+                return customerSMSServiceTypes;
+            }
+        }
+
+        function getSelectedSMSServiceTypes(selectedIds) {
+            var selectedSMSServiceTypes = [];
+            if (selectedIds != undefined) {
+                for (var i = 0; i < selectedIds.length; i++) {
+                    selectedSMSServiceTypes.push({ SMSServiceTypeId: selectedIds[i] });
+                }
+                return selectedSMSServiceTypes;
             }
         }
 
@@ -875,7 +907,7 @@
                         SubjectCode: $scope.scopeModel.automaticPriceListSubjectCode,
                         AttachmentCode: $scope.scopeModel.automaticPriceListAttachmentCode,
                     },
-                    SMSServiceTypes: $scope.scopeModel.showSMSServiceType && supplierSmsServiceTypeSelectorAPI != undefined ? supplierSmsServiceTypeSelectorAPI.getSelectedIds() : undefined,
+                    SMSServiceTypes: $scope.scopeModel.showSMSServiceType && supplierSmsServiceTypeSelectorAPI != undefined ? getSelectedSMSServiceTypes(supplierSmsServiceTypeSelectorAPI.getSelectedIds()) : undefined,
                 },
 
                 CustomerSettings: {
@@ -885,7 +917,7 @@
                     PassThroughCustomerRateEvaluator: ($scope.scopeModel.isPassThrough && passThroughCustomerRateEvaluatorDirectiveAPI) ? passThroughCustomerRateEvaluatorDirectiveAPI.getData() : undefined,
                     PricelistSettings: priceListSettingsEditorAPI != undefined ? priceListSettingsEditorAPI.getData() : undefined,
                     PricingSettings: pricingSettingsEditorAPI != undefined ? pricingSettingsEditorAPI.getData() : undefined,
-                    SMSServiceTypes: $scope.scopeModel.showSMSServiceType && customerSmsServiceTypeSelectorAPI != undefined ? customerSmsServiceTypeSelectorAPI.getSelectedIds() : undefined,
+                    SMSServiceTypes: $scope.scopeModel.showSMSServiceType && customerSmsServiceTypeSelectorAPI != undefined ? getSelectedSMSServiceTypes(customerSmsServiceTypeSelectorAPI.getSelectedIds()) : undefined,
                 }
             };
 
