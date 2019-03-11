@@ -33,7 +33,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public override InvoicePartnerManager GetPartnerManager()
         {
-            return new CarrierPartnerSettings();
+            return new CarrierPartnerSettings(CarrierInvoiceType.Customer);
         }
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {

@@ -31,7 +31,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public override InvoicePartnerManager GetPartnerManager()
         {
-            return new CarrierPartnerSettings();
+            return new CarrierPartnerSettings(CarrierInvoiceType.Settlement);
         }
         public Guid CustomerInvoiceTypeId { get; set; }
         public Guid SupplierInvoiceTypeId { get; set; }

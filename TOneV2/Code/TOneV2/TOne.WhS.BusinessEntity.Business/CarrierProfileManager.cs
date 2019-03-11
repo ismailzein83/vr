@@ -520,7 +520,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (var crAccount in carrierAccounts)
             {
-                List<SMSServiceType> crAccountSMSServiceTypes = carrierAccountManager.GetCustomerSMSServiceTypes(crAccount.CarrierAccountId);
+                List<SMSServiceType> crAccountSMSServiceTypes = carrierAccountManager.GetCustomerSMSServiceTypes(crAccount);
                 if(crAccountSMSServiceTypes != null && crAccountSMSServiceTypes.Count> 0)
                 {
                     foreach (var crAccountSMSServiceType in crAccountSMSServiceTypes)
@@ -543,7 +543,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (var crAccount in carrierAccounts)
             {
-                List<SMSServiceType> crAccountSMSServiceTypes = carrierAccountManager.GetSupplierSMSServiceTypes(crAccount.CarrierAccountId);
+                List<SMSServiceType> crAccountSMSServiceTypes = carrierAccountManager.GetSupplierSMSServiceTypes(crAccount);
                 if (crAccountSMSServiceTypes != null && crAccountSMSServiceTypes.Count > 0)
                 {
                     foreach (var crAccountSMSServiceType in crAccountSMSServiceTypes)

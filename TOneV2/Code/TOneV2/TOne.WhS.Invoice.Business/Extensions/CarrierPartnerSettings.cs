@@ -30,8 +30,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
         CarrierCompanyName = 13,
         Email = 14,
         Attention = 15,
-		BillingCompanyEmail=16
+		BillingCompanyEmail=16,
+        SMSServiceTypes = 17,
 	}
+    public enum CarrierInvoiceType { Customer = 1, Supplier = 2, Settlement = 3 }
     public class CarrierPartnerSettings : InvoicePartnerManager
     {
         public override string PartnerFilterSelector
@@ -56,6 +58,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
         }
         public bool UseMaskInfo { get; set; }
+        CarrierInvoiceType _accountType { get; set; }
+        public CarrierPartnerSettings(CarrierInvoiceType accountType)
+        {
+            _accountType = accountType;
+        }
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
@@ -112,6 +119,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                 pricingEmail = pricingEmailObject.Description;
                             currencySymbol = currencyManager.GetCurrencySymbol(carrierAccount.CarrierAccountSettings.CurrencyId);
                         }
+                        List<SMSServiceType> sMSServiceTypes = new List<SMSServiceType>();
+                        switch (_accountType)
+                        {
+                            case CarrierInvoiceType.Customer:
+                                sMSServiceTypes = financialAccountManager.GetFinancialAccountCustomerSMSServiceTypes(financialAccount.FinancialAccountId);
+                                break;
+                            case CarrierInvoiceType.Supplier:
+                                sMSServiceTypes = financialAccountManager.GetFinancialAccountSupplierSMSServiceTypes(financialAccount.FinancialAccountId);
+                                break;
+                        }
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.SMSServiceTypes, string.Join(",", sMSServiceTypes.Select(x => x.Symbol)), true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, pricingEmail, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Attention, pricingContact, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.CarrierCompanyName,carrierCompanyName , true);
