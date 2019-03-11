@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
 
-namespace Vanrise.BusinessProcess.MainExtensions.BPTaskType
+namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
 {
     public class BPGenericTaskTypeSettings : BaseBPTaskTypeSettings
     {

@@ -75,7 +75,7 @@
     <Compile Include="BPInstance\TestingBPInstanceBeforeInsertHandler.cs" />
     <Compile Include="BPTaskAssigne\InitiatorBPTaskAssignee.cs" />
     <Compile Include="BPTaskAssigne\FixedUsersBPTaskAssignee.cs" />
-    <Compile Include="BPTaskType\BPGenericTaskTypeSettings.cs" />
+    <Compile Include="BPTaskTypes\BPGenericTaskTypeSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRWorkflowActivities\CodeGenerationHelper.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowDelayActivity.cs" />
