@@ -822,29 +822,85 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
-        public bool changeLineMovingNewSwitchCabinetPort(string newPort, string switchId, string requestId)
-        {
-            //TODO: change cabinet port for telephony line subscription
+        //public bool changeLineMovingNewSwitchCabinetPort(string newPort, string switchId, string requestId)
+        //{
+        //    //TODO: change cabinet port for telephony line subscription
 
-            //Update new cabinet port on request level
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StLineMovingNewSwitch").Set("StNewCabinetPort", Column.Parameter(newPort))
-                .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
-            update.Execute();
+        //    //Update new cabinet port on request level
+        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+        //    var update = new Update(connection, "StLineMovingNewSwitch").Set("StNewCabinetPort", Column.Parameter(newPort))
+        //        .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+        //    update.Execute();
 
 
-            return true;
-        }
+        //    return true;
+        //}
 
-        public bool changeLineMovingNewSwitchDPPort(string newPort, string switchId, string requestId)
+        //public bool changeLineMovingNewSwitchDPPort(string newPort, string switchId, string requestId)
+        //{
+        //    //TODO: change DP port for telephony line subscription
+
+        //    //Update new dp port on request level
+        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+        //    var update = new Update(connection, "StLineMovingNewSwitch").Set("StNewDPPort", Column.Parameter(newPort))
+        //        .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+        //    update.Execute();
+
+        //    return true;
+        //}
+
+        //public bool changeLineMovingSameSwitchCabinetPort(string newPort, string switchId, string requestId)
+        //{
+        //    //TODO: change cabinet port for telephony line subscription
+
+        //    //Update new cabinet port on request level
+        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+        //    var update = new Update(connection, "StLineMovingSameSwitchRequest").Set("StNewCabinetPort", Column.Parameter(newPort))
+        //        .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+        //    update.Execute();
+
+
+        //    return true;
+        //}
+
+        //public bool changeLineMovingSameSwitchDPPort(string newPort, string switchId, string requestId)
+        //{
+        //    //TODO: change DP port for telephony line subscription
+
+        //    //Update new dp port on request level
+        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+        //    var update = new Update(connection, "StLineMovingSameSwitchRequest").Set("StNewDPPort", Column.Parameter(newPort))
+        //        .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+        //    update.Execute();
+
+        //    return true;
+        //}
+
+        ////////
+
+        public bool changeNewDPPort(string newPort, string switchId, string requestId , string entityName)
         {
             //TODO: change DP port for telephony line subscription
 
             //Update new dp port on request level
             UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StLineMovingNewSwitch").Set("StNewDPPort", Column.Parameter(newPort))
+            var update = new Update(connection, entityName).Set("StNewDPPort", Column.Parameter(newPort == null ? "" : newPort))
                 .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
             update.Execute();
+
+            return true;
+        }
+
+        public bool changeNewCabinetPort(string newPort, string switchId, string requestId , string entityName)
+        {
+            //TODO: change cabinet port for telephony line subscription
+
+            //Update new cabinet port on request level
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, entityName).Set("StNewCabinetPort", Column.Parameter(newPort==null?"":newPort))
+                .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+            update.Execute();
+
 
             return true;
         }

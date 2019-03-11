@@ -31,7 +31,7 @@ namespace BPMExtended.Main.Business
                 case print: nextStepId = temporaryReservation; break;
                 case temporaryReservation: nextStepId = isWaitingList? waitingList : address; break;
                 case waitingList: nextStepId = temporaryReservation; break;
-                case address: nextStepId = payment; break;
+                case address: nextStepId = isAdvantageous ? attachment : payment; break;
                 case payment: nextStepId = attachment; break;
                 case attachment: nextStepId = technical; break;
             }

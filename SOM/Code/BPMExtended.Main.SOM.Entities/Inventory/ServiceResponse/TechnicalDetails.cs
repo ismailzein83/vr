@@ -13,8 +13,10 @@ namespace BPMExtended.Main.SOMAPI
         public PhoneType PhoneType { get; set; }
         public PhoneStatus PhoneStatus { get; set; }
         public string VerticalMDF { get; set; }
+        public string PhoneID { get; set; }
         public string MDFPort { get; set; }
         public string Cabinet { get; set; }
+        public string CabinetId { get; set; }
         public string CabinetPrimaryPort { get; set; }
         public string CabinetSecondaryPort { get; set; }
         public string DP { get; set; }
@@ -24,7 +26,7 @@ namespace BPMExtended.Main.SOMAPI
         public string SwitchId { get; set; }
         public string SwitchOMC { get; set; }
         public string SWITCH_TYPE { get; set; }
-
+        public string PathId { get; set; }
 
         public string DSlam { get; set; }
         public string DSlamPort { get; set; }

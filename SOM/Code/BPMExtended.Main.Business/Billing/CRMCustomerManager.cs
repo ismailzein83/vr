@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -196,6 +197,17 @@ namespace BPMExtended.Main.Business
         }
 
         public void PostADSLLineTerminationToOM(Guid requestId)
+        {
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
+                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
+            update.Execute();
+
+            //TODO : Get taxes
+            //TODO: If the contract has active VPN service, CRM should add another OCC/fees
+        }
+
+        public void PostDeportedNumberToOM(Guid requestId)
         {
             UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
             var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
@@ -506,5 +518,34 @@ namespace BPMExtended.Main.Business
 
                 return isCommercial;
         }
+
+
+        //public void convertFileToBinaryCode()
+        //{
+        //    byte[] file;
+        //    using (var stream = new FileStream(@"C:\Users\mohamad.abdallah\Desktop\Test.txt", FileMode.Open, FileAccess.Read))
+        //    {
+        //        using (var reader = new BinaryReader(stream))
+        //        {
+        //            file = reader.ReadBytes((int)stream.Length);
+        //        }
+        //    }
+
+        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+
+        //    var ins = new Insert(connection)
+        //       .Into("ContactFile")
+        //       .Set("ContactId", Column.Parameter("E7D397DD-75E4-4E07-850E-23DE2ABEDD0A"))
+        //       .Set("Name",Column.Parameter("Test.txt"))
+        //       .Set("Data", Column.Parameter(file))
+        //       .Set("TypeId", Column.Parameter("529BC2F8-0EE0-DF11-971B-001D60E938C6"))
+        //       .Set("Size", Column.Parameter("10"))
+        //       .Set("Version", Column.Parameter("1"));
+
+        //    var affectedRows = ins.Execute();
+
+
+        //}
+
     }
 }
