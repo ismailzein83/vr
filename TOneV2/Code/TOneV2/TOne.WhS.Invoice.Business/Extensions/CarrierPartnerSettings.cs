@@ -29,8 +29,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
         CustomerVatID = 12,
         CarrierCompanyName = 13,
         Email = 14,
-        Attention = 15
-    }
+        Attention = 15,
+		BillingCompanyEmail=16
+	}
     public class CarrierPartnerSettings : InvoicePartnerManager
     {
         public override string PartnerFilterSelector
@@ -151,9 +152,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegAddress, companySetting.RegistrationAddress, true);
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.Name, companySetting.CompanyName, true);
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
+							AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyEmail, companySetting.BillingEmails, true);
 
-                        }
-                        return rdlcReportParameters;
+
+						}
+						return rdlcReportParameters;
                         #endregion
                     }
 
