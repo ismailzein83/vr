@@ -817,8 +817,11 @@
             if (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != null && carrierAccountEntity.SupplierSettings.SMSServiceTypes != null) {
                 var supplierSMSServiceTypes = [];
 
-                for (var i = 0; i < carrierAccountEntity.SupplierSettings.SMSServiceTypes.length; i++)
-                    supplierSMSServiceTypes.push(carrierAccountEntity.SupplierSettings.SMSServiceTypes[i].SMSServiceTypeId);
+                var smsServiceTypesLength = carrierAccountEntity.SupplierSettings.SMSServiceTypes.length;
+                var smsServiceTypes = carrierAccountEntity.SupplierSettings.SMSServiceTypes;
+
+                for (var i = 0; i < smsServiceTypesLength; i++)
+                    supplierSMSServiceTypes.push(smsServiceTypes[i].SMSServiceTypeId);
 
                 return supplierSMSServiceTypes;
             }
@@ -828,8 +831,11 @@
             if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != null && carrierAccountEntity.CustomerSettings.SMSServiceTypes != null) {
                 var customerSMSServiceTypes = [];
 
-                for (var i = 0; i < carrierAccountEntity.CustomerSettings.SMSServiceTypes.length; i++)
-                    customerSMSServiceTypes.push(carrierAccountEntity.CustomerSettings.SMSServiceTypes[i].SMSServiceTypeId);
+                var smsServiceTypesLength = carrierAccountEntity.CustomerSettings.SMSServiceTypes.length;
+                var smsServiceTypes = carrierAccountEntity.CustomerSettings.SMSServiceTypes;
+
+                for (var i = 0; i < smsServiceTypesLength; i++)
+                    customerSMSServiceTypes.push(smsServiceTypes[i].SMSServiceTypeId);
 
                 return customerSMSServiceTypes;
             }
