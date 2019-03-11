@@ -16,6 +16,6 @@ namespace Vanrise.BusinessProcess.Entities
             }
         }
 
-
+        public virtual Guid? TaskTypeId { get; set; }
     }
 }

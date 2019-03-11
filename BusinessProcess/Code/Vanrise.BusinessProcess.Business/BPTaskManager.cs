@@ -22,7 +22,12 @@ namespace Vanrise.BusinessProcess.Business
                 throw new ArgumentNullException("createBPTaskInput.TaskData");
 
             BPTaskTypeManager bpTaskTypeManager = new BPTaskTypeManager();
-            var bpTaskType = bpTaskTypeManager.GetBPTaskType(createBPTaskInput.TaskName);
+            BPTaskType bpTaskType;
+            if (createBPTaskInput.TaskData.TaskTypeId.HasValue)
+                bpTaskType = bpTaskTypeManager.GetBPTaskType(createBPTaskInput.TaskData.TaskTypeId.Value);
+            else
+                bpTaskType = bpTaskTypeManager.GetBPTaskType(createBPTaskInput.TaskName);
+
             if (bpTaskType == null)
                 throw new Exception(String.Format("Could not resolve BPTaskType '{0}'", createBPTaskInput.TaskName));
 
