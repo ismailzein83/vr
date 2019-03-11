@@ -27,15 +27,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                 DateTime fromDate = new DateTime(currentDateTime.Year, currentDateTime.Month, 1);
                 DateTime toDate = fromDate.GetLastDayOfMonth();
 
-                if (!InAdvance)
-                    currentDateTime = fromDate.AddMonths(1).GetLastDayOfMonth();
-
                 periodsList.Add(new RecurringChargePeriodOutput
                 {
                     From = fromDate,
                     To = toDate,
                     RecurringChargeDate = currentDateTime
                 });
+                if (!InAdvance)
+                    currentDateTime = fromDate.AddMonths(1).GetLastDayOfMonth();
             }
             context.Periods = periodsList;
         }
