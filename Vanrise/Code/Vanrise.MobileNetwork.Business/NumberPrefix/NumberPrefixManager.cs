@@ -50,7 +50,7 @@ namespace Vanrise.MobileNetwork.Business
                             Id = (long)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
                             BED = (DateTime)genericBusinessEntity.FieldValues.GetRecord("BED"),
-                            EED = (DateTime)genericBusinessEntity.FieldValues.GetRecord("EED"),
+                            EED = (DateTime?)genericBusinessEntity.FieldValues.GetRecord("EED"),
                             MobileNetworkId = (int)genericBusinessEntity.FieldValues.GetRecord("MobileNetworkId")
                         };
                         NumberPrefixList.Add(numberPrefix);

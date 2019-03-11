@@ -26,7 +26,6 @@ namespace Vanrise.MobileNetwork.Business
             var bed = context.GenericBusinessEntity.FieldValues.GetRecord("BED");
             bed.ThrowIfNull("BED");
             var eed = context.GenericBusinessEntity.FieldValues.GetRecord("EED");
-            eed.ThrowIfNull("EED");
             var mobileNetworkId = context.GenericBusinessEntity.FieldValues.GetRecord("MobileNetworkId");
             mobileNetworkId.ThrowIfNull("mobileNetworkId");
 
@@ -35,7 +34,7 @@ namespace Vanrise.MobileNetwork.Business
             {
                 foreach (var numberPrefix in numberPrefixesWithSameCode)
                 {
-                    if (Utilities.AreTimePeriodsOverlapped((DateTime)bed, (DateTime)eed, numberPrefix.BED, numberPrefix.EED) && (numberPrefixId == null || numberPrefix.Id != (long)numberPrefixId))
+                    if (Utilities.AreTimePeriodsOverlapped((DateTime)bed, (DateTime?)eed, numberPrefix.BED, numberPrefix.EED) && (numberPrefixId == null || numberPrefix.Id != (long)numberPrefixId))
                     {
                         var mobileNetwork = mobileNetworkManager.GetMobileNetworkById(numberPrefix.MobileNetworkId);
                         overlappingNetworkNames.Add(mobileNetwork.NetworkName);
