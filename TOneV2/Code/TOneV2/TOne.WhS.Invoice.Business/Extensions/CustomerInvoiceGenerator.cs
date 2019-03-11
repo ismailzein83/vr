@@ -187,7 +187,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					financialAccountInvoiceType.ThrowIfNull("financialAccountInvoiceType");
 					if (!financialAccountInvoiceType.IgnoreFromBalance)
 					{
-						SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, resolvedPayload.FromDate, resolvedPayload.ToDateForBillingTransaction);
+						SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, resolvedPayload.FromDate, resolvedPayload.ToDateForBillingTransaction, currencyId);
 					}
 
 					ConfigManager configManager = new ConfigManager();
@@ -297,7 +297,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 return CurrencyItemSetNameMapper(analyticRecord, commission, taxItemDetails,false);
             });
 		}
-		private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, CustomerInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount, DateTime fromDate, DateTime toDate)
+		private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, CustomerInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount, DateTime fromDate, DateTime toDate, int currencyId)
 		{
 			var financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
 			var balanceAccountTypeId = financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId);
@@ -313,8 +313,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					AccountTypeId = balanceAccountTypeId.Value,
 					AccountId = context.PartnerId,
 					TransactionTypeId = invoiceSettings.InvoiceTransactionTypeId,
-					Amount = invoiceDetails.TotalAmountAfterCommission,
-					CurrencyId = invoiceDetails.SaleCurrencyId,
+					Amount = invoiceDetails.TotalInvoiceAmount,
+					CurrencyId = currencyId,
 					FromDate = fromDate,
 					ToDate = toDate
 				};
