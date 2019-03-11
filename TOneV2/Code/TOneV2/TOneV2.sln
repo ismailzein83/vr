@@ -482,6 +482,10 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.TOneSMS", "SQL.TOneSMS\
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.TOneSMSAnalytics", "SQL.TOneSMSAnalytics\SQL.TOneSMSAnalytics.sqlproj", "{D0FC6B18-9A08-4FAF-A9D2-4B2A48239FE4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cataleya", "Cataleya", "{A561F7D5-763D-44D9-BBB0-18ACA131E19F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.RouteSync.Cataleya", "TOne.WhS.RouteSync.Cataleya\TOne.WhS.RouteSync.Cataleya.csproj", "{9454AA0D-2A5D-4902-B6C5-0F705881222A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -8332,6 +8336,54 @@ Global
 		{D0FC6B18-9A08-4FAF-A9D2-4B2A48239FE4}.SingleImage|x86.ActiveCfg = Debug|Any CPU
 		{D0FC6B18-9A08-4FAF-A9D2-4B2A48239FE4}.SingleImage|x86.Build.0 = Debug|Any CPU
 		{D0FC6B18-9A08-4FAF-A9D2-4B2A48239FE4}.SingleImage|x86.Deploy.0 = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.CD_ROM|x64.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.CD_ROM|x64.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.CD_ROM|x86.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.CD_ROM|x86.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Debug|x64.Build.0 = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Debug|x86.Build.0 = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.DVD-5|x64.ActiveCfg = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.DVD-5|x64.Build.0 = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.DVD-5|x86.ActiveCfg = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.DVD-5|x86.Build.0 = Debug|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Optimized|Any CPU.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Optimized|x64.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Optimized|x64.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Optimized|x86.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Optimized|x86.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Release|x64.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Release|x64.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Release|x86.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.Release|x86.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.SingleImage|x64.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.SingleImage|x64.Build.0 = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.SingleImage|x86.ActiveCfg = Release|Any CPU
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A}.SingleImage|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -8569,14 +8621,16 @@ Global
 		{3EFE224F-8A50-4C2A-BB1B-B0E1EAD61070} = {C521B0BD-F4EA-465F-948C-E5E273ED1DEA}
 		{BA04C83E-3AC6-46A7-8F5D-233199A3562E} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
 		{D0FC6B18-9A08-4FAF-A9D2-4B2A48239FE4} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
+		{A561F7D5-763D-44D9-BBB0-18ACA131E19F} = {AFCE007F-63FD-4982-A774-461D14440BEC}
+		{9454AA0D-2A5D-4902-B6C5-0F705881222A} = {A561F7D5-763D-44D9-BBB0-18ACA131E19F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9AA4648-5D8B-487B-A34E-74D631BBC0B1}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 202
+		SccNumberOfProjects = 203
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = TestRuntime\\TestRuntime.csproj
 		SccProjectTopLevelParentUniqueName1 = TOneV2.sln
@@ -9382,5 +9436,9 @@ Global
 		SccProjectTopLevelParentUniqueName201 = TOneV2.sln
 		SccProjectName201 = SQL.TOneSMSAnalytics
 		SccLocalPath201 = SQL.TOneSMSAnalytics
+		SccProjectUniqueName202 = TOne.WhS.RouteSync.Cataleya\\TOne.WhS.RouteSync.Cataleya.csproj
+		SccProjectTopLevelParentUniqueName202 = TOneV2.sln
+		SccProjectName202 = TOne.WhS.RouteSync.Cataleya
+		SccLocalPath202 = TOne.WhS.RouteSync.Cataleya
 	EndGlobalSection
 EndGlobal
