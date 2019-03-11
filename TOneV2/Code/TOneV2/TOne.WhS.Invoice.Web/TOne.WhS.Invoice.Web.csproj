@@ -160,8 +160,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\InvoiceCompareTemplateController.cs" />
     <Compile Include="Controllers\InvoiceCompareController.cs" />
+    <Compile Include="Controllers\InvoiceCompareTemplateController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\InvoiceSettlementController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -204,12 +204,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Invoice\Constants\CarrierTypeEnum.js" />
-    <Content Include="WhS_Invoice\Constants\SMSComparisonCriteriaEnum.js" />
     <Content Include="WhS_Invoice\Constants\ComparisonCriteriaEnum.js" />
     <Content Include="WhS_Invoice\Constants\ComparisonResultEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
     <Content Include="WhS_Invoice\Constants\ModuleTypeEnum.js" />
+    <Content Include="WhS_Invoice\Constants\SMSComparisonCriteriaEnum.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\IncludedInvoicesInSettlementEditorCotroller.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\IncludedInvoicesInSettlementEditor.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\SettlementGenerationCustomSectionTemplate.html" />
@@ -257,8 +257,8 @@
     <Content Include="WhS_Invoice\Reports\CompareInvoiceReport.aspx" />
     <Content Include="WhS_Invoice\Reports\Reporting.aspx" />
     <Content Include="WhS_Invoice\Services\APIServices\IncludedInvoicesInSettlementAPIService.js" />
-    <Content Include="WhS_Invoice\Services\APIServices\InvoiceCompareService.js" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAPIService.js" />
+    <Content Include="WhS_Invoice\Services\APIServices\InvoiceCompareService.js" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceCompareTemplateAPIService.js" />
     <Content Include="WhS_Invoice\Services\IncludedInvoicesInSettlementService.js" />
     <Content Include="WhS_Invoice\Services\InvoiceService.js" />
@@ -293,10 +293,12 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultCustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultSupplierInvoiceReport.rdlc">
+    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultSupplierInvoiceReport.rdlc" />
+    <!--<EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc">
+    </EmbeddedResource>-->
+    <EmbeddedResource Include="WhS_Invoice\Reports\SupplierPaymentDemand.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\SupplierCompareInvoiceReport.rdlc">
