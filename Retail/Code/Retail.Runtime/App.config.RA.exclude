@@ -41,7 +41,9 @@
     <add key="RuntimeNodeId" value="ca664c3b-2e31-4542-beeb-89e7367e090c"/>
     <add key="BCPTempFilesDirectory" value="C:\BCPFiles" />
 
-    <!--<add key="BCPCommandName"                               value="bcp"/>-->
+    <!--<add key="BCPCommandName"                                   value="bcp"/>-->
+    <!--<add key="Runtime_DontDisableUseShellExecute"               value="true" />-->
+    <!--<add key="DBCommandDefaultTimeOutInterval"                  value="01:00:00" />-->
     <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
     <add key="BusinessProcessDBConnStringKey"                   value="TransactionDBConnString" />
     <add key="BigDataServiceDBConnStringKey"                    value="TransactionDBConnString"/>
