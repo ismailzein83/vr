@@ -84,6 +84,10 @@
     <add key="BCPDonotDeleteFiles" value="false"/>
     <add key="BusinessProcess_ActivityEventsTracking" value="false"/>
 
+    <!--<add key="BCPCommandName"                                   value="bcp"/>-->
+    <!--<add key="Runtime_DontDisableUseShellExecute"               value="true" />-->
+    <!--<add key="DBCommandDefaultTimeOutInterval"                  value="01:00:00" />-->
+    
     <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,Mediation_CDR_DBConnString,LogDBConnString"/>
   </appSettings>
   <system.codedom>
