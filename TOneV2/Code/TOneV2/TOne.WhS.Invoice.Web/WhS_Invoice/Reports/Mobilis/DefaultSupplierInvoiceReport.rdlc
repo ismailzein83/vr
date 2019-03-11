@@ -649,9 +649,7 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                         <Paragraph>
                           <TextRuns>
@@ -663,9 +661,7 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox41</rd:DefaultName>
@@ -758,7 +754,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!TotalDuration.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalDuration.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                               </Style>
@@ -803,15 +799,13 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!AmountAfterCommission.Value</Value>
+                              <Value>=FormatNumber(Parameters!AmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox49</rd:DefaultName>
@@ -947,13 +941,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!SMSAmountAfterCommission.Value</Value>
+                              <Value>=FormatNumber(Parameters!SMSAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox42</rd:DefaultName>
@@ -1072,7 +1064,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Currency.Value &amp;":"&amp; Code.ConvertirEnText(Parameters!TotalInvoiceAmount.Value.ToString().Replace(",", string.Empty))&amp;"Seulement"</Value>
+                              <Value>=Parameters!Currency.Value &amp;":"&amp; Code.convertNumberToFrenchLetters(Parameters!TotalInvoiceAmount.Value.ToString().Replace(",", string.Empty))&amp;"Seulement"</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1307,7 +1299,8 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Left>1.4293in</Left>
+                          <Top>0.01042in</Top>
+                          <Left>1.2668in</Left>
                           <Height>0.2in</Height>
                           <Width>5.28155in</Width>
                           <Style>
@@ -1341,8 +1334,8 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Top>0.2in</Top>
-                          <Left>1.4293in</Left>
+                          <Top>0.21042in</Top>
+                          <Left>1.2668in</Left>
                           <Height>0.2in</Height>
                           <Width>5.28155in</Width>
                           <ZIndex>1</ZIndex>
@@ -1377,8 +1370,8 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Top>0.4in</Top>
-                          <Left>1.4293in</Left>
+                          <Top>0.41042in</Top>
+                          <Left>1.27722in</Left>
                           <Height>0.2in</Height>
                           <Width>5.28155in</Width>
                           <ZIndex>2</ZIndex>
@@ -1413,8 +1406,8 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Top>0.62778in</Top>
-                          <Left>1.4293in</Left>
+                          <Top>0.6382in</Top>
+                          <Left>1.27722in</Left>
                           <Height>0.2in</Height>
                           <Width>5.28155in</Width>
                           <ZIndex>3</ZIndex>
@@ -1447,7 +1440,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Left>0.15402in</Left>
+                          <Top>0.01042in</Top>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
                           <ZIndex>4</ZIndex>
@@ -1480,8 +1473,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>0.2in</Top>
-                          <Left>0.15402in</Left>
+                          <Top>0.21042in</Top>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
                           <ZIndex>5</ZIndex>
@@ -1514,8 +1506,8 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>0.4in</Top>
-                          <Left>0.15402in</Left>
+                          <Top>0.41042in</Top>
+                          <Left>0.00194in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
                           <ZIndex>6</ZIndex>
@@ -1548,8 +1540,8 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>0.62778in</Top>
-                          <Left>0.15402in</Left>
+                          <Top>0.6382in</Top>
+                          <Left>0.00194in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
                           <ZIndex>7</ZIndex>
@@ -2259,15 +2251,13 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!TotalInvoiceAmount.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalInvoiceAmount.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <FontStyle>Italic</FontStyle>
+                                <FontFamily>Verdana</FontFamily>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox11</rd:DefaultName>
@@ -2381,13 +2371,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!TotalReccurringCharges.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalReccurringCharges.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox22</rd:DefaultName>
@@ -2517,13 +2505,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!TotalAmountBeforeTax.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalAmountBeforeTax.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox33</rd:DefaultName>
@@ -2650,13 +2636,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!TaxAmount.Value</Value>
+                              <Value>=FormatNumber(Fields!TaxAmount.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox38</rd:DefaultName>
@@ -3501,6 +3485,15 @@
     </ReportParameter>
   </ReportParameters>
   <Code>	Public Function ConvertirEnText(ValNum As Double) As String
+		If ValNum = 1 Then
+			ConvertirEnText = "un"
+			Exit Function
+		End If
+
+		If ValNum = 0 Then
+			ConvertirEnText = "zéro"
+			Exit Function
+		End If
 
 		Static Unites(0 To 9) As String
 		Static Dixaines(0 To 9) As String
@@ -3650,14 +3643,42 @@ EndNbVersTexte:
 			End If
 
 			ConvertirEnText = strResultat + virgule + xx
-			Else
-				ConvertirEnText = strResultat
+		Else
+			ConvertirEnText = strResultat
 		End If
 		Exit Function
 
 NbVersTexteError:
 		strResultat = "Une Erreur !"
 		Resume EndNbVersTexte
+	End Function
+
+
+
+	Public Function convertNumberToFrenchLetters(valNum As Double) As String
+		Dim splitedNumber() As String
+		Dim nombreAvantVirgule As String
+		Dim nombreApresvirgule As String
+		Dim virgule As String
+
+		splitedNumber = valNum.ToString().Split(".")
+		Convert.ToDouble(CDbl(Val(splitedNumber(0))))
+		nombreAvantVirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(splitedNumber(0)))))
+		If splitedNumber.Length &gt; 1 Then
+			Dim secondValue As String
+			virgule = "virgule "
+			secondValue = splitedNumber(1)
+			While secondValue.StartsWith("0")
+				virgule += "zéro "
+				secondValue = secondValue.Remove(0, 1)
+			End While
+
+
+			nombreApresvirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(secondValue))))
+
+		End If
+		convertNumberToFrenchLetters = nombreAvantVirgule + " " + virgule + nombreApresvirgule
+
 	End Function
 </Code>
   <EmbeddedImages>

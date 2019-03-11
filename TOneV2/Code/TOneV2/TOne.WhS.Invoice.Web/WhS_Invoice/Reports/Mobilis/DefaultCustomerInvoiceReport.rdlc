@@ -649,9 +649,7 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                         <Paragraph>
                           <TextRuns>
@@ -663,9 +661,7 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox41</rd:DefaultName>
@@ -758,7 +754,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!TotalDuration.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalDuration.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                               </Style>
@@ -803,15 +799,13 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!AmountAfterCommission.Value</Value>
+                              <Value>=FormatNumber(Parameters!AmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox49</rd:DefaultName>
@@ -947,13 +941,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!SMSAmountAfterCommission.Value</Value>
+                              <Value>=FormatNumber(Parameters!SMSAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox42</rd:DefaultName>
@@ -1072,7 +1064,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Currency.Value &amp;":"&amp; Code.ConvertirEnText(Parameters!TotalInvoiceAmount.Value.ToString().Replace(",", string.Empty))&amp;"Seulement"</Value>
+                              <Value>=Parameters!Currency.Value &amp;":"&amp; Code.convertNumberToFrenchLetters(Parameters!TotalInvoiceAmount.Value.ToString().Replace(",", string.Empty))&amp;"Seulement"</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1307,7 +1299,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Left>1.4293in</Left>
+                          <Left>1.2793in</Left>
                           <Height>0.2in</Height>
                           <Width>5.28155in</Width>
                           <Style>
@@ -1342,7 +1334,7 @@
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
                           <Top>0.2in</Top>
-                          <Left>1.4293in</Left>
+                          <Left>1.2793in</Left>
                           <Height>0.2in</Height>
                           <Width>5.28155in</Width>
                           <ZIndex>1</ZIndex>
@@ -1378,7 +1370,7 @@
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
                           <Top>0.4in</Top>
-                          <Left>1.4293in</Left>
+                          <Left>1.2793in</Left>
                           <Height>0.2in</Height>
                           <Width>5.28155in</Width>
                           <ZIndex>2</ZIndex>
@@ -1414,7 +1406,7 @@
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
                           <Top>0.62778in</Top>
-                          <Left>1.4293in</Left>
+                          <Left>1.2793in</Left>
                           <Height>0.2in</Height>
                           <Width>5.28155in</Width>
                           <ZIndex>3</ZIndex>
@@ -1447,7 +1439,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Left>0.15402in</Left>
+                          <Left>0.00402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
                           <ZIndex>4</ZIndex>
@@ -1481,7 +1473,7 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
                           <Top>0.2in</Top>
-                          <Left>0.15402in</Left>
+                          <Left>0.00402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
                           <ZIndex>5</ZIndex>
@@ -1515,7 +1507,7 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
                           <Top>0.4in</Top>
-                          <Left>0.15402in</Left>
+                          <Left>0.00402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
                           <ZIndex>6</ZIndex>
@@ -1549,7 +1541,7 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
                           <Top>0.62778in</Top>
-                          <Left>0.15402in</Left>
+                          <Left>0.00402in</Left>
                           <Height>0.2in</Height>
                           <Width>1.15in</Width>
                           <ZIndex>7</ZIndex>
@@ -2259,15 +2251,13 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!TotalInvoiceAmount.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalInvoiceAmount.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <FontStyle>Italic</FontStyle>
+                                <FontFamily>Verdana</FontFamily>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox11</rd:DefaultName>
@@ -2391,13 +2381,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!TotalReccurringCharges.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalReccurringCharges.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox22</rd:DefaultName>
@@ -2527,13 +2515,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!TotalAmountBeforeTax.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalAmountBeforeTax.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox33</rd:DefaultName>
@@ -2660,13 +2646,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!TaxAmount.Value</Value>
+                              <Value>=FormatNumber(Fields!TaxAmount.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox38</rd:DefaultName>
@@ -3508,136 +3492,204 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
-  <Code>Public Function ConvertirEnText(ValNum As Double) As String
+  <Code>	Public Function ConvertirEnText(ValNum As Double) As String
+		If ValNum = 1 Then
+			ConvertirEnText = "un"
+			Exit Function
+		End If
 
-Static Unites(0 To 9) As String
-Static Dixaines(0 To 9) As String
-Static LesDixaines(0 To 9) As String
-Static Milliers(0 To 4) As String
+		If ValNum = 0 Then
+			ConvertirEnText = "zéro"
+			Exit Function
+		End If
 
-Dim i As Integer
-Dim nPosition As Integer
-Dim ValNb As Integer
-Dim LesZeros As Integer
-Dim strResultat As String
-Dim strTemp As String
-Dim tmpBuff As String
+		Static Unites(0 To 9) As String
+		Static Dixaines(0 To 9) As String
+		Static LesDixaines(0 To 9) As String
+		Static Milliers(0 To 4) As String
 
-Unites(0) = "zero"
-Unites(1) = "un"
-Unites(2) = "deux"
-Unites(3) = "trois"
-Unites(4) = "quatre"
-Unites(5) = "cinq"
-Unites(6) = "six"
-Unites(7) = "sept"
-Unites(8) = "huit"
-Unites(9) = "neuf"
+		Dim splitedNombre() As String
+		Dim nombreApresVirgule As Double
+		Dim xx As String
+		Dim i As Integer
+		Dim nPosition As Integer
+		Dim ValNb As Integer
+		Dim LesZeros As Integer
+		Dim strResultat As String
+		Dim strTemp As String
+		Dim tmpBuff As String
 
-Dixaines(0) = "dix"
-Dixaines(1) = "onze"
-Dixaines(2) = "douze"
-Dixaines(3) = "treize"
-Dixaines(4) = "quatorze"
-Dixaines(5) = "quinze"
-Dixaines(6) = "seize"
-Dixaines(7) = "dix-sept"
-Dixaines(8) = "dix-huit"
-Dixaines(9) = "dix-neuf"
 
-LesDixaines(0) = ""
-LesDixaines(1) = "dix"
-LesDixaines(2) = "vingt"
-LesDixaines(3) = "trente"
-LesDixaines(4) = "quarante"
-LesDixaines(5) = "cinquante"
-LesDixaines(6) = "soixante"
-LesDixaines(7) = "soixante-dix"
-LesDixaines(8) = "quatre-vingt"
-LesDixaines(9) = "quatre-vingt-dix"
 
-Milliers(0) = ""
-Milliers(1) = "mille"
-Milliers(2) = "million"
-Milliers(3) = "millard"
-Milliers(4) = "mille"
 
-On Error GoTo NbVersTexteError
+		Unites(0) = "zero"
+		Unites(1) = "un"
+		Unites(2) = "deux"
+		Unites(3) = "trois"
+		Unites(4) = "quatre"
+		Unites(5) = "cinq"
+		Unites(6) = "six"
+		Unites(7) = "sept"
+		Unites(8) = "huit"
+		Unites(9) = "neuf"
 
-strTemp = CStr(Int(ValNum))
+		Dixaines(0) = "dix"
+		Dixaines(1) = "onze"
+		Dixaines(2) = "douze"
+		Dixaines(3) = "treize"
+		Dixaines(4) = "quatorze"
+		Dixaines(5) = "quinze"
+		Dixaines(6) = "seize"
+		Dixaines(7) = "dix-sept"
+		Dixaines(8) = "dix-huit"
+		Dixaines(9) = "dix-neuf"
 
-For i = Len(strTemp) To 1 Step -1
-   ValNb = Val(Mid$(strTemp, i, 1))
-   nPosition = (Len(strTemp) - i) + 1
-   Select Case (nPosition Mod 3)
-      Case 1
-         LesZeros = False
-         If i = 1 Then
-            If ValNb &gt; 1 Then
-               tmpBuff = Unites(ValNb) &amp; " "
-            Else
-               tmpBuff = ""
-            End If
-         ElseIf Mid$(strTemp, i - 1, 1) = "1" Then
-            tmpBuff = Dixaines(ValNb) &amp; " "
-            i = i - 1
-         ElseIf Mid$(strTemp, i - 1, 1) = "9" Then
-            tmpBuff = LesDixaines(8) &amp; " " &amp; _
-                Dixaines(ValNb) &amp; " "
-            i = i - 1
-         ElseIf Mid$(strTemp, i - 1, 1) = "7" Then
-            tmpBuff = LesDixaines(6) &amp; " " &amp; _
-                 Dixaines(ValNb) &amp; " "
-            i = i - 1
-         ElseIf ValNb &gt; 0 Then
-            tmpBuff = Unites(ValNb) &amp; " "
-         Else
-            LesZeros = True
-            If i &gt; 1 Then
-               If Mid$(strTemp, i - 1, 1) &lt;&gt; "0" Then
-                  LesZeros = False
-               End If
-            End If
-            If i &gt; 2 Then
-               If Mid$(strTemp, i - 2, 1) &lt;&gt; "0" Then
-                  LesZeros = False
-               End If
-            End If
-            tmpBuff = ""
-         End If
-         If LesZeros = False And nPosition &gt; 1 Then
-            tmpBuff = tmpBuff &amp; Milliers(nPosition / 3) &amp; " "
-         End If
-         strResultat = tmpBuff &amp; strResultat
-      Case 2
-         If ValNb &gt; 0 Then
-            strResultat = LesDixaines(ValNb) &amp; " " &amp; _
-               strResultat
-         End If
-      Case 0
-         If ValNb &gt; 0 Then
-            If ValNb &gt; 1 Then
-               strResultat = Unites(ValNb) &amp; " cent " &amp; _
-                  strResultat
-            Else
-               strResultat = "cent " &amp; strResultat
-            End If
-         End If
-   End Select
-Next i
-If Len(strResultat) &gt; 0 Then
-   strResultat = UCase$(Left$(strResultat, 1)) &amp; _
-      Mid$(strResultat, 2)
-End If
+		LesDixaines(0) = ""
+		LesDixaines(1) = "dix"
+		LesDixaines(2) = "vingt"
+		LesDixaines(3) = "trente"
+		LesDixaines(4) = "quarante"
+		LesDixaines(5) = "cinquante"
+		LesDixaines(6) = "soixante"
+		LesDixaines(7) = "soixante-dix"
+		LesDixaines(8) = "quatre-vingt"
+		LesDixaines(9) = "quatre-vingt-dix"
+
+		Milliers(0) = ""
+		Milliers(1) = "mille"
+		Milliers(2) = "million"
+		Milliers(3) = "millard"
+		Milliers(4) = "mille"
+
+		On Error GoTo NbVersTexteError
+
+		strTemp = CStr(Int(ValNum))
+
+		For i = Len(strTemp) To 1 Step -1
+			ValNb = Val(Mid$(strTemp, i, 1))
+			nPosition = (Len(strTemp) - i) + 1
+			Select Case (nPosition Mod 3)
+				Case 1
+					LesZeros = False
+					If i = 1 Then
+						If ValNb &gt; 1 Then
+							tmpBuff = Unites(ValNb) &amp; " "
+						Else
+							tmpBuff = ""
+						End If
+					ElseIf Mid$(strTemp, i - 1, 1) = "1" Then
+						tmpBuff = Dixaines(ValNb) &amp; " "
+						i = i - 1
+					ElseIf Mid$(strTemp, i - 1, 1) = "9" Then
+						tmpBuff = LesDixaines(8) &amp; " " &amp;
+							Dixaines(ValNb) &amp; " "
+						i = i - 1
+					ElseIf Mid$(strTemp, i - 1, 1) = "7" Then
+						tmpBuff = LesDixaines(6) &amp; " " &amp;
+							 Dixaines(ValNb) &amp; " "
+						i = i - 1
+					ElseIf ValNb &gt; 0 Then
+						tmpBuff = Unites(ValNb) &amp; " "
+					Else
+						LesZeros = True
+						If i &gt; 1 Then
+							If Mid$(strTemp, i - 1, 1) &lt;&gt; "0" Then
+								LesZeros = False
+							End If
+						End If
+						If i &gt; 2 Then
+							If Mid$(strTemp, i - 2, 1) &lt;&gt; "0" Then
+								LesZeros = False
+							End If
+						End If
+						tmpBuff = ""
+					End If
+					If LesZeros = False And nPosition &gt; 1 Then
+						tmpBuff = tmpBuff &amp; Milliers(nPosition / 3) &amp; " "
+					End If
+					strResultat = tmpBuff &amp; strResultat
+				Case 2
+					If ValNb &gt; 0 Then
+						strResultat = LesDixaines(ValNb) &amp; " " &amp;
+						   strResultat
+					End If
+				Case 0
+					If ValNb &gt; 0 Then
+						If ValNb &gt; 1 Then
+							strResultat = Unites(ValNb) &amp; " cent " &amp;
+							   strResultat
+						Else
+							strResultat = "cent " &amp; strResultat
+						End If
+					End If
+			End Select
+		Next i
+		If Len(strResultat) &gt; 0 Then
+			strResultat = UCase$(Left$(strResultat, 1)) &amp;
+			   Mid$(strResultat, 2)
+		End If
 
 EndNbVersTexte:
-ConvertirEnText = strResultat
-Exit Function
+		splitedNombre = ValNum.ToString().Split(".")
+		If splitedNombre.Length &gt; 1 Then
+			Dim secondValue As String
+			Dim virgule As String
+			virgule = "virgule "
+			secondValue = splitedNombre(1)
+			While secondValue.StartsWith("0")
+				virgule += "zéro "
+				secondValue = secondValue.Remove(0, 1)
+			End While
+
+
+			nombreApresVirgule = Convert.ToDouble(CDbl(Val(secondValue)))
+			If nombreApresVirgule = 1 Then
+				xx = "un"
+			Else
+
+				xx = ConvertirEnText(nombreApresVirgule)
+			End If
+
+			ConvertirEnText = strResultat + virgule + xx
+		Else
+			ConvertirEnText = strResultat
+		End If
+		Exit Function
 
 NbVersTexteError:
-strResultat = "Une Erreur !"
-Resume EndNbVersTexte
-End Function</Code>
+		strResultat = "Une Erreur !"
+		Resume EndNbVersTexte
+	End Function
+
+
+
+	Public Function convertNumberToFrenchLetters(valNum As Double) As String
+		Dim splitedNumber() As String
+		Dim nombreAvantVirgule As String
+		Dim nombreApresvirgule As String
+		Dim virgule As String
+
+		splitedNumber = valNum.ToString().Split(".")
+		Convert.ToDouble(CDbl(Val(splitedNumber(0))))
+		nombreAvantVirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(splitedNumber(0)))))
+		If splitedNumber.Length &gt; 1 Then
+			Dim secondValue As String
+			virgule = "virgule "
+			secondValue = splitedNumber(1)
+			While secondValue.StartsWith("0")
+				virgule += "zéro "
+				secondValue = secondValue.Remove(0, 1)
+			End While
+
+
+			nombreApresvirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(secondValue))))
+
+		End If
+		convertNumberToFrenchLetters = nombreAvantVirgule + " " + virgule + nombreApresvirgule
+
+	End Function
+
+</Code>
   <EmbeddedImages>
     <EmbeddedImage Name="ID1111201655117PM">
       <MIMEType>image/png</MIMEType>
