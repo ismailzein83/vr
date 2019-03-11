@@ -98,6 +98,7 @@
     <Compile Include="RDLCCustomerInvoiceItemDetails.cs" />
     <Compile Include="SattlementInvoiceDetails.cs" />
     <Compile Include="SupplierInvoiceBySaleCurrencyItemDetails.cs" />
+    <Compile Include="SupplierInvoiceDealItemDetails.cs" />
     <Compile Include="SupplierInvoiceDetails.cs" />
     <Compile Include="SupplierInvoiceItemDetails.cs" />
     <Compile Include="SupplierSMSInvoiceBySaleCurrencyItemDetails.cs" />
