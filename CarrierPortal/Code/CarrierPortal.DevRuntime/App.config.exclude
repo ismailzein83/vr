@@ -34,6 +34,10 @@
   <appSettings>
     <add key="IsRuntimeService" value="true"/>
     <add key="RuntimeNodeId" value="481ffcd0-e0eb-48a1-badb-31658f700397"/>
+
+    <!--<add key="BCPCommandName"                                   value="bcp"/>-->
+    <!--<add key="Runtime_DontDisableUseShellExecute"               value="true" />-->
+    <!--<add key="DBCommandDefaultTimeOutInterval"                  value="01:00:00" />-->
     
     <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
     <add key="BigDataServiceDBConnStringKey"                    value="TransactionDBConnString"/>
