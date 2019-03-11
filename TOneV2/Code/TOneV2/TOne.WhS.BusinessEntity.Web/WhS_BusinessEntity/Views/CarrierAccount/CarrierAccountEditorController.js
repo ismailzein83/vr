@@ -817,11 +817,11 @@
             if (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != null && carrierAccountEntity.SupplierSettings.SMSServiceTypes != null) {
                 var supplierSMSServiceTypes = [];
 
-                var smsServiceTypesLength = carrierAccountEntity.SupplierSettings.SMSServiceTypes.length;
-                var smsServiceTypes = carrierAccountEntity.SupplierSettings.SMSServiceTypes;
+                var supplierSmsServiceTypesLength = carrierAccountEntity.SupplierSettings.SMSServiceTypes.length;
+                var supplierSmsServiceTypes = carrierAccountEntity.SupplierSettings.SMSServiceTypes;
 
-                for (var i = 0; i < smsServiceTypesLength; i++)
-                    supplierSMSServiceTypes.push(smsServiceTypes[i].SMSServiceTypeId);
+                for (var i = 0; i < supplierSmsServiceTypesLength; i++)
+                    supplierSMSServiceTypes.push(supplierSmsServiceTypes[i].SMSServiceTypeId);
 
                 return supplierSMSServiceTypes;
             }
@@ -831,11 +831,11 @@
             if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != null && carrierAccountEntity.CustomerSettings.SMSServiceTypes != null) {
                 var customerSMSServiceTypes = [];
 
-                var smsServiceTypesLength = carrierAccountEntity.CustomerSettings.SMSServiceTypes.length;
-                var smsServiceTypes = carrierAccountEntity.CustomerSettings.SMSServiceTypes;
+                var customerSmsServiceTypesLength = carrierAccountEntity.CustomerSettings.SMSServiceTypes.length;
+                var customerSmsServiceTypes = carrierAccountEntity.CustomerSettings.SMSServiceTypes;
 
-                for (var i = 0; i < smsServiceTypesLength; i++)
-                    customerSMSServiceTypes.push(smsServiceTypes[i].SMSServiceTypeId);
+                for (var i = 0; i < customerSmsServiceTypesLength; i++)
+                    customerSMSServiceTypes.push(customerSmsServiceTypes[i].SMSServiceTypeId);
 
                 return customerSMSServiceTypes;
             }
