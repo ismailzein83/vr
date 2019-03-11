@@ -78,6 +78,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseBPTaskTypeSettingsCustomObject.cs" />
     <Compile Include="BPAPIDiscovery.cs" />
     <Compile Include="BPBusinessRuleSetEffectiveActionManager.cs" />
     <Compile Include="BPBusinessRuleSetManager.cs" />
