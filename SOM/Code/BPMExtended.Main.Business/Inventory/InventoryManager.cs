@@ -22,7 +22,7 @@ namespace BPMExtended.Main.Business
             TechnicalDetails item = null;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<TechnicalDetails>(String.Format("api/SOM/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
+                item = client.Get<TechnicalDetails>(String.Format("api/SOM.ST/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
             }
             return item;
             /*
@@ -65,7 +65,7 @@ namespace BPMExtended.Main.Business
             TechnicalDetails item = null;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<TechnicalDetails>(String.Format("api/SOM/Inventory/GetTechnicalDetailsByPath?pathID={0}", pathID));
+                item = client.Get<TechnicalDetails>(String.Format("api/SOM.ST/Inventory/GetTechnicalDetailsByPath?pathID={0}", pathID));
             }
             return item;
             /*
@@ -108,7 +108,7 @@ namespace BPMExtended.Main.Business
             TechnicalReservation item = null;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<TechnicalReservation>(String.Format("api/SOM/Inventory/GetTemporaryTechnicalReservation?phoneNumber={0}", phoneNumber));
+                item = client.Get<TechnicalReservation>(String.Format("api/SOM.ST/Inventory/GetTemporaryTechnicalReservation?phoneNumber={0}", phoneNumber));
             }
             return item;
             //return new TechnicalReservation
@@ -168,7 +168,7 @@ namespace BPMExtended.Main.Business
             List<PhoneNumberInfo> phoneNumbers;
             using (SOMClient client = new SOMClient())
             {
-                phoneNumbers = client.Get<List<PhoneNumberInfo>>(String.Format("api/SOM/Inventory/GetAvailableNumbers?switchId={0}&category={1}&type={2}&top={3}", switchId, category, type, top));
+                phoneNumbers = client.Get<List<PhoneNumberInfo>>(String.Format("api/SOM.ST/Inventory/GetAvailableNumbers?switchId={0}&category={1}&type={2}&top={3}", switchId, category, type, top));
             }
 
             if (phoneNumbers != null)
@@ -193,7 +193,7 @@ namespace BPMExtended.Main.Business
             List<DeviceInfo> deviceItems;
             using (SOMClient client = new SOMClient())
             {
-                deviceItems = client.Get<List<DeviceInfo>>(String.Format("api/SOM/Inventory/GetFreeDevices?switchId={0}&lineType={1}&top={2}", switchId, lineType, top));
+                deviceItems = client.Get<List<DeviceInfo>>(String.Format("api/SOM.ST/Inventory/GetFreeDevices?switchId={0}&lineType={1}&top={2}", switchId, lineType, top));
             }
 
             if (deviceItems != null)
@@ -219,7 +219,7 @@ namespace BPMExtended.Main.Business
             bool item = false;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<bool>(String.Format("api/SOM/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
+                item = client.Get<bool>(String.Format("api/SOM.ST/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
             }
             return item;
         }
@@ -230,7 +230,7 @@ namespace BPMExtended.Main.Business
             bool item = false;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<bool>(String.Format("api/SOM/Inventory/IsManualSwitch?phoneNumber={0}", phoneNumber));
+                item = client.Get<bool>(String.Format("api/SOM.ST/Inventory/IsManualSwitch?phoneNumber={0}", phoneNumber));
             }
             return item;
         }
@@ -244,7 +244,7 @@ namespace BPMExtended.Main.Business
             bool item = false;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<bool>(String.Format("api/SOM/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
+                item = client.Get<bool>(String.Format("api/SOM.ST/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
             }
             return item;
         }
@@ -254,7 +254,7 @@ namespace BPMExtended.Main.Business
             List<PortInfo> apiResult;
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM/Inventory/GetCabinetPrimaryPorts?cabinetId={0}", cabinetId));
+                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM.ST/Inventory/GetCabinetPrimaryPorts?cabinetId={0}", cabinetId));
             }
 
             return apiResult == null ? null : apiResult.MapRecords(r => new PortInfo
@@ -269,7 +269,7 @@ namespace BPMExtended.Main.Business
             List<PortInfo> apiResult;
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM/Inventory/GetCabinetSecondaryPorts?cabinetId={0}", cabinetId));
+                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM.ST/Inventory/GetCabinetSecondaryPorts?cabinetId={0}", cabinetId));
             }
 
             return apiResult == null ? null : apiResult.MapRecords(r => new PortInfo
@@ -284,7 +284,7 @@ namespace BPMExtended.Main.Business
             List<DPPortInfo> apiResult;
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<List<DPPortInfo>>(String.Format("api/SOM/Inventory/GetDPPorts?dpId={0}", dpId));
+                apiResult = client.Get<List<DPPortInfo>>(String.Format("api/SOM.ST/Inventory/GetDPPorts?dpId={0}", dpId));
             }
 
             return apiResult == null ? null : apiResult.MapRecords(r => new DPPortInfo
@@ -300,7 +300,7 @@ namespace BPMExtended.Main.Business
             List<ISPInfo> phoneNumbers;
             using (SOMClient client = new SOMClient())
             {
-                phoneNumbers = client.Get<List<ISPInfo>>(String.Format("api/SOM/Inventory/GetISPs"));
+                phoneNumbers = client.Get<List<ISPInfo>>(String.Format("api/SOM.ST/Inventory/GetISPs"));
             }
 
             if (phoneNumbers != null)
@@ -324,7 +324,7 @@ namespace BPMExtended.Main.Business
 
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<List<DeviceDetailItem>>(String.Format("api/SOM/Inventory/GetDeviceIDs?phoneNumbers={0}",phoneNumbers));
+                apiResult = client.Get<List<DeviceDetailItem>>(String.Format("api/SOM.ST/Inventory/GetDeviceIDs?phoneNumbers={0}",phoneNumbers));
             }
 
             return apiResult == null ? null : apiResult.MapRecords(r => new Device
@@ -342,7 +342,7 @@ namespace BPMExtended.Main.Business
 
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<string>(String.Format("api/SOM/Inventory/GetDeviceID?phoneNumbers={0}", phoneNumberID));
+                apiResult = client.Get<string>(String.Format("api/SOM.ST/Inventory/GetDeviceID?phoneNumbers={0}", phoneNumberID));
             }
 
             return apiResult;
@@ -355,7 +355,7 @@ namespace BPMExtended.Main.Business
 
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<string>(String.Format("api/SOM/Inventory/CreateFullPath?phoneNumber={0}&pathID={1}", phoneNumber, pathID));
+                apiResult = client.Get<string>(String.Format("api/SOM.ST/Inventory/CreateFullPath?phoneNumber={0}&pathID={1}", phoneNumber, pathID));
             }
 
             return apiResult;
@@ -778,7 +778,7 @@ namespace BPMExtended.Main.Business
             string  item = "";
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<string>(String.Format("api/SOM/Inventory/ReserveNumber?phoneNumber=" + phoneNumber + "&pathType=" + pathType + "&phoneNumberID=" + phoneNumberID + "&deviceID=" + deviceID + "&mDFPortID=" + mDFPortID + "&dPPortID=" + dPPortID + "&primaryPort=" + primaryPort + "&secondaryPort=" + secondaryPort));
+                item = client.Get<string>(String.Format("api/SOM.ST/Inventory/ReserveNumber?phoneNumber=" + phoneNumber + "&pathType=" + pathType + "&phoneNumberID=" + phoneNumberID + "&deviceID=" + deviceID + "&mDFPortID=" + mDFPortID + "&dPPortID=" + dPPortID + "&primaryPort=" + primaryPort + "&secondaryPort=" + secondaryPort));
             }
             return item;
         }
@@ -911,7 +911,7 @@ namespace BPMExtended.Main.Business
 
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<string>(String.Format("api/SOM/Inventory/GetNumberCategory?phoneNumber={0}", phonenumber));
+                item = client.Get<string>(String.Format("api/SOM.ST/Inventory/GetNumberCategory?phoneNumber={0}", phonenumber));
             }
             return item;
         }

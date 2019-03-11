@@ -18,14 +18,14 @@ namespace BPMExtended.Main.Business
             TechnicalDetails item = null;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<TechnicalDetails>(String.Format("api/SOM/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
+                item = client.Get<TechnicalDetails>(String.Format("api/SOM.ST/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
             }
 
             string switchId = item.SwitchId;
             List<PortInfo> apiResult;
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM/Inventory/GetDSLAMPorts?switchId={0}", switchId));
+                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM.ST/Inventory/GetDSLAMPorts?switchId={0}", switchId));
             }
 
             return apiResult == null ? null : apiResult.MapRecords(r => new DSLAMPortInfo
@@ -41,14 +41,14 @@ namespace BPMExtended.Main.Business
             TechnicalDetails item = null;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<TechnicalDetails>(String.Format("api/SOM/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
+                item = client.Get<TechnicalDetails>(String.Format("api/SOM.ST/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
             }
 
             string switchId = item.SwitchId;
             List<PortInfo> apiResult;
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM/Inventory/GetISPDSLAMPorts?switchId={0}&ISP={1}", switchId, ISP));
+                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM.ST/Inventory/GetISPDSLAMPorts?switchId={0}&ISP={1}", switchId, ISP));
             }
 
             return apiResult == null ? null : apiResult.MapRecords(r => new DSLAMPortInfo
