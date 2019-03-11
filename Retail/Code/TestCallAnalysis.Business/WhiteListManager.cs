@@ -42,11 +42,15 @@ namespace TestCallAnalysis.Business
                     {
                         WhiteList whiteList = new WhiteList()
                         {
-                            ID = (long)genericBusinessEntity.FieldValues.GetRecord("ID"),
+                            WhiteListId = (long)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             OperatorID = (long)genericBusinessEntity.FieldValues.GetRecord("OperatorId"),
                             Number = genericBusinessEntity.FieldValues.GetRecord("Number") as string,
+                            CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
+                            LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
+                            CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
+                            LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy"),
                         };
-                        result.Add(whiteList.ID, whiteList);
+                        result.Add(whiteList.WhiteListId, whiteList);
                     }
                 }
                 return result;

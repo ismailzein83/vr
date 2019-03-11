@@ -12,7 +12,7 @@ namespace TestCallAnalysis.Entities
     }
     public class TCAnalMappedCDR
     {
-        public long ID { get; set; }
+        public long MappedCDRId { get; set; }
         public Guid DataSourceId { get; set; }
         public DateTime AttemptDateTime { get; set; }
         public decimal DurationInSeconds { get; set; }
@@ -22,9 +22,12 @@ namespace TestCallAnalysis.Entities
         public long OperatorID { get; set; }
         public string OrigCallingNumber { get; set; }
         public string OrigCalledNumber { get; set; }
-        public DateTime CreatedDate { get; set; }
         public bool IsCorrelated { get; set; }
         public int? CallingNumberType { get; set; }
         public int CalledNumberType { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public DateTime LastModifiedTime { get; set; }
+        public int CreatedBy { get; set; }
+        public int LastModifiedBy { get; set; }
     }
 }

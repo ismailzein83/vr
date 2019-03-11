@@ -45,12 +45,16 @@ namespace TestCallAnalysis.Business
                     {
                         CalledNumberMapping calledNumberMapping = new CalledNumberMapping()
                         {
-                            ID = (long)genericBusinessEntity.FieldValues.GetRecord("ID"),
+                            CalledNumberMappingId = (long)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             OperatorID = (long)genericBusinessEntity.FieldValues.GetRecord("OperatorID"),
                             Number = genericBusinessEntity.FieldValues.GetRecord("Number") as string,
                             MappedNumber = genericBusinessEntity.FieldValues.GetRecord("MappedNumber") as string,
+                            CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
+                            LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
+                            CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
+                            LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy"),
                         };
-                        result.Add(calledNumberMapping.ID, calledNumberMapping);
+                        result.Add(calledNumberMapping.CalledNumberMappingId, calledNumberMapping);
                     }
                 }
                 return result;

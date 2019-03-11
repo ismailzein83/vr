@@ -36,8 +36,8 @@
 
             $scope.scopeModel.saveStatus = function () {
                 $scope.scopeModel.isLoading = true;
-
-                return VR_TestCallAnalysis_CaseCDRAPIService.UpdateCaseCDRStatus(buildCaseCDRStatusObjFromScope()).then(function (response) {
+              
+                return VR_TestCallAnalysis_CaseCDRAPIService.UpdateCaseCDRStatus(buildCaseCDRToUpdate()).then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated('Case CDR Table', response, 'Name')) {
                         if ($scope.onGenericBEUpdated != undefined)
                             $scope.onGenericBEUpdated(response.UpdatedObject);
@@ -79,7 +79,7 @@
 
             function setTitle() {
                 if (caseCDREntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(caseCDREntity.FieldValues.CallingNumber, 'Change Status Editor');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(caseCDREntity.CallingNumber, 'Change Status Editor');
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor('Change Status Editor');
             }
@@ -96,7 +96,7 @@
 
         function loadCaseCDRStatusSelector() {
             var promises = [];
-            if (caseCDREntity != undefined && caseCDREntity.FieldValues != undefined) {
+            if (caseCDREntity != undefined) {
                 var loadStatusDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 promises.push(loadStatusDefinitionPromiseDeferred.promise);
@@ -106,7 +106,7 @@
                             BusinessEntityDefinitionId: '36D87065-A854-4A56-AD28-CCADB74B31EF',  
                             Filters: [{
                                 $type: "TestCallAnalysis.Business.CaseCDRChangeStatusFilter ,TestCallAnalysis.Business",
-                                StatusDefinitionId: caseCDREntity.FieldValues.StatusId
+                                StatusDefinitionId: caseCDREntity.StatusId
                             }]
                         }
                     };
@@ -117,22 +117,11 @@
             return UtilsService.waitMultiplePromises(promises);
         }
 
-        function buildCaseCDRStatusObjFromScope() {
-            var fieldValues = caseCDREntity.FieldValues;
+
+        function buildCaseCDRToUpdate() {
             return {
-                FieldValues: {
-                    $type: fieldValues.$type,
-                    StatusId: statusDefinitionAPI.getSelectedIds(),
-                    CalledNumber: fieldValues.CalledNumber,
-                    CallingNumber: fieldValues.CallingNumber,
-                    FirstAttempt: fieldValues.FirstAttempt,
-                    LastAttempt: fieldValues.LastAttempt,
-                    NumberOfCDRs: fieldValues.NumberOfCDRs,
-                    OperatorID: fieldValues.OperatorID
-                },
-                GenericBusinessEntityId: genericBusinessEntityId,
-                BusinessEntityDefinitionId: businessEntityDefinitionId,
-                FilterGroup: null
+                CaseCDRId: genericBusinessEntityId,
+                StatusId: statusDefinitionAPI.getSelectedIds(),
             };
         }
     }

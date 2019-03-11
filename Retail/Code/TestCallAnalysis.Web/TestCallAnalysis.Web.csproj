@@ -158,6 +158,10 @@
       <Project>{F6FD0703-9ED3-46A8-9204-91647185A3E5}</Project>
       <Name>TestCallAnalysis.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestCallAnalysis.Entities\TestCallAnalysis.Entities.csproj">
+      <Project>{7247A3C2-23B2-42F9-ACED-2E2884953BE3}</Project>
+      <Name>TestCallAnalysis.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestCallAnalysis\Constant\ModuleConfig.js" />

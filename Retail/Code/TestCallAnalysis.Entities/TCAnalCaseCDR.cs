@@ -8,7 +8,7 @@ namespace TestCallAnalysis.Entities
 {
     public class TCAnalCaseCDR
     {
-        public long ID { get; set; }
+        public long CaseId { get; set; }
         public string CallingNumber {get; set;}
         public string CalledNumber {get; set;}
         public DateTime FirstAttempt {get; set;}
@@ -16,5 +16,9 @@ namespace TestCallAnalysis.Entities
         public int NumberOfCDRs {get; set;}
         public Guid StatusId {get; set;}
         public long OperatorID {get; set;}
+        public DateTime CreatedTime { get; set; }
+        public DateTime LastModifiedTime { get; set; }
+        public int CreatedBy { get; set; }
+        public int LastModifiedBy { get; set; }
     }
 }

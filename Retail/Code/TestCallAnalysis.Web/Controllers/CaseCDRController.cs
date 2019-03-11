@@ -8,6 +8,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
 using TestCallAnalysis.Business;
 using Vanrise.GenericData.Business;
+using TestCallAnalysis.Entities;
 
 namespace TestCallAnalysis.Web.Controllers
 {
@@ -15,11 +16,12 @@ namespace TestCallAnalysis.Web.Controllers
     [RoutePrefix(TestCallAnalysis.Web.Constants.ROUTE_PREFIX + "CaseCDR")]
     public class CaseCDRController: BaseAPIController
     {
-        CaseCDREntityManager _manager = new CaseCDREntityManager();
+        static Guid statusBusinessEntityDefinitionId = new Guid("1264c992-479e-45fb-8e8a-7edd54a9bc18");
+        CaseCDRManager _manager = new CaseCDRManager();
 
         [HttpGet]
         [Route("GetCaseCDREntity")]
-        public GenericBusinessEntity GetCaseCDREntity(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId)
+        public TCAnalCaseCDR GetCaseCDREntity(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId)
         {
             genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
             return _manager.GetCaseCDREntity(businessEntityDefinitionId,genericBusinessEntityId);
@@ -27,11 +29,11 @@ namespace TestCallAnalysis.Web.Controllers
 
         [HttpPost]
         [Route("UpdateCaseCDRStatus")]
-        public object UpdateCaseCDRStatus(GenericBusinessEntityToUpdate caseCDREntity)
+        public object UpdateCaseCDRStatus(CaseCDRToUpdate caseCDRToUpdate)
         {
-            if (!DoesUserHaveEditAccess(caseCDREntity.BusinessEntityDefinitionId))
+            if (!DoesUserHaveEditAccess(statusBusinessEntityDefinitionId))
                 return GetUnauthorizedResponse();
-            return _manager.UpdateCaseCDRStatus(caseCDREntity);
+            return _manager.UpdateCaseCDRStatus(caseCDRToUpdate);
         }
 
         [HttpGet]

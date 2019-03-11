@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalledNumberMapping.cs" />
+    <Compile Include="CaseCDRToUpdate.cs" />
     <Compile Include="CDRCaseBatch.cs" />
     <Compile Include="CDRCorrelationBatch.cs" />
     <Compile Include="CDRCorrelationFilterGroup.cs" />
@@ -68,6 +69,8 @@
     <Compile Include="TCAnalCaseCDR.cs" />
     <Compile Include="TCAnalCorrelatedCDR.cs" />
     <Compile Include="TCAnalMappedCDR.cs" />
+    <Compile Include="UpdateCorrelatedCDRsBatch.cs" />
+    <Compile Include="UpdatedMappedCDRs.cs" />
     <Compile Include="WhiteList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

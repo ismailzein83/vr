@@ -10,7 +10,7 @@ namespace TestCallAnalysis.Entities
     public enum GeneratedCallingNumberType { International = 1, Local = 2 }
     public class TCAnalCorrelatedCDR
     {
-        public long ID { get; set; }
+        public long CorrelatedCDRId { get; set; }
         public DateTime AttemptDateTime { get; set; }
         public decimal DurationInSeconds { get; set; }
         public string CalledNumber { get; set; }
@@ -22,6 +22,9 @@ namespace TestCallAnalysis.Entities
         public ReceivedCallingNumberType? ReceivedCallingNumberType { get; set; }
         public long? ReceivedCallingNumberOperatorID { get; set; }
         public long? CaseId { get; set; }
-      
+        public DateTime CreatedTime { get; set; }
+        public DateTime LastModifiedTime { get; set; }
+        public int CreatedBy { get; set; }
+        public int LastModifiedBy { get; set; }
     }
 }

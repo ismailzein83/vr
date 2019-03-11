@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestCallAnalysis.Business;
 using TestCallAnalysis.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
@@ -29,12 +30,17 @@ namespace TestCallAnalysis.BP.Activities
         [RequiredArgument]
         public InOutArgument<MemoryQueue<CDRCorrelationBatch>> InputQueueToInsert { get; set; }
 
+        protected override InsertCorrelatedCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new InsertCorrelatedCDRsInput()
+            {
+                InputQueueToInsert = this.InputQueueToInsert.Get(context),
+            };
+        }
+   
         protected override InsertCorrelatedCDRsOutput DoWorkWithResult(InsertCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            Guid dataRecordStorage = new Guid("F5E8B48B-70E0-46B8-BA69-9A4C37E6A520");
-            var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorage);
-            int maxDBNumberQuery = recordStorageDataManager.GetDBQueryMaxParameterNumber();
-
+            CorrelatedCDRManager correlatedCDRManager = new CorrelatedCDRManager();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -45,7 +51,7 @@ namespace TestCallAnalysis.BP.Activities
                         hasItem = inputArgument.InputQueueToInsert.TryDequeue((recordBatch) =>
                         {
                             DateTime batchStartTime = DateTime.Now;
-                            recordStorageDataManager.InsertRecords(recordBatch.OutputRecordsToInsert);
+                            correlatedCDRManager.InsertCorrelatedCDRs(recordBatch);
                             double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
                             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs Batch is done. Events Count: {0}.  ElapsedTime: {1} (s)",
                                 recordBatch.OutputRecordsToInsert.Count, elapsedTime.ToString());
@@ -56,14 +62,6 @@ namespace TestCallAnalysis.BP.Activities
             });
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs is done.");
             return new InsertCorrelatedCDRsOutput();
-        }
-
-        protected override InsertCorrelatedCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
-        {
-            return new InsertCorrelatedCDRsInput()
-            {
-                InputQueueToInsert = this.InputQueueToInsert.Get(context),
-            };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, InsertCorrelatedCDRsOutput result)

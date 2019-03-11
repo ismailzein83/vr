@@ -19,8 +19,8 @@
             });
         }
 
-        function UpdateCaseCDRStatus(caseCDREntity) {
-            return BaseAPIService.post(UtilsService.getServiceURL(TestCallAnalysis_ModuleConfig.moduleName, controllerName, 'UpdateCaseCDRStatus'), caseCDREntity);
+        function UpdateCaseCDRStatus(caseCDRToUpdate) {
+            return BaseAPIService.post(UtilsService.getServiceURL(TestCallAnalysis_ModuleConfig.moduleName, controllerName, 'UpdateCaseCDRStatus'), caseCDRToUpdate);
         }
 
     }

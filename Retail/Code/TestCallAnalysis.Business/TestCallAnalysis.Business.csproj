@@ -50,6 +50,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -67,10 +68,12 @@
     <Compile Include="CalledNumberMappingManager.cs" />
     <Compile Include="CaseCDRChangeStatusAction.cs" />
     <Compile Include="CaseCDRChangeStatusFilter.cs" />
-    <Compile Include="CaseCDREntityManager.cs" />
+    <Compile Include="CorrelatedCDRManager.cs" />
     <Compile Include="CountryCodesPartDefinition.cs" />
     <Compile Include="CountryCodesPartSettings.cs" />
+    <Compile Include="MappedCDRManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CaseCDRManager.cs" />
     <Compile Include="WhiteListManager.cs" />
   </ItemGroup>
   <ItemGroup>

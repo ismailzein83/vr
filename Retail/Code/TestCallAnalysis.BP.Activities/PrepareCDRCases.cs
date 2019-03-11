@@ -32,7 +32,6 @@ namespace TestCallAnalysis.BP.Activities
     {
         [RequiredArgument]
         public InOutArgument<MemoryQueue<CDRCaseBatch>> InputQueue { get; set; }
-
         [RequiredArgument]
         public InOutArgument<MemoryQueue<PrepareCDRCasesToInsert>> PrepareCDRCasesToInsert { get; set; }
 
@@ -40,7 +39,7 @@ namespace TestCallAnalysis.BP.Activities
         {
             if (this.PrepareCDRCasesToInsert.Get(context) == null)
                 this.PrepareCDRCasesToInsert.Set(context, new MemoryQueue<PrepareCDRCasesToInsert>());
-         
+
             base.OnBeforeExecute(context, handle);
         }
 
@@ -55,6 +54,9 @@ namespace TestCallAnalysis.BP.Activities
 
         protected override void DoWork(PrepareCDRCasesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            WhiteListManager whiteListManager = new WhiteListManager();
+            CaseCDRManager caseCDRManager = new CaseCDRManager();
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -67,25 +69,17 @@ namespace TestCallAnalysis.BP.Activities
                             if (recordBatch.OutputRecordsToInsert != null && recordBatch.OutputRecordsToInsert.Count > 0)
                             {
                                 List<TCAnalCaseCDR> tCAnalCaseCDRs = new List<TCAnalCaseCDR>();
-                                WhiteListManager whiteListManager = new WhiteListManager();
-                             
+
                                 foreach (var record in recordBatch.OutputRecordsToInsert)
                                 {
                                     List<string> whiteList = whiteListManager.GetWhiteListByOperatorId(record.OperatorID);
-
-                                    if (whiteList != null && whiteList.Count>0 && whiteList.Contains(record.ReceivedCallingNumber))
+                                    if (whiteList != null && whiteList.Count > 0 && whiteList.Contains(record.ReceivedCallingNumber))
                                         continue;
 
                                     TCAnalCaseCDR tcanalCaseCDR = new TCAnalCaseCDR();
-                                    tcanalCaseCDR.ID = record.ID;
-                                    tcanalCaseCDR.CallingNumber = record.ReceivedCallingNumber;
-                                    tcanalCaseCDR.CalledNumber = record.CalledNumber;
-                                    tcanalCaseCDR.FirstAttempt = record.AttemptDateTime;
-                                    tcanalCaseCDR.LastAttempt = record.AttemptDateTime; 
-                                    tcanalCaseCDR.NumberOfCDRs = 1;
-                                    tcanalCaseCDR.OperatorID = record.OperatorID;
+                                    tcanalCaseCDR = caseCDRManager.CaseCDRMapper(record);
 
-                                    if (record.ReceivedCallingNumber != null && record.GeneratedCallingNumber !=null)
+                                    if (record.ReceivedCallingNumber != null && record.GeneratedCallingNumber != null)
                                         tcanalCaseCDR.StatusId = new Guid("4ea323c2-56ba-46db-a84d-5792009924a3"); // Fraud
 
                                     else
@@ -97,23 +91,8 @@ namespace TestCallAnalysis.BP.Activities
                                 PrepareCDRCasesToInsert caseCDRsList = new PrepareCDRCasesToInsert();
                                 if (tCAnalCaseCDRs.Count > 0)
                                 {
-                                    var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-                                    Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("TCAnal_CaseCDR");
-
-                                    foreach (var caseCDR in tCAnalCaseCDRs)
-                                    {
-                                        dynamic runtimeCDR = Activator.CreateInstance(cdrRuntimeType) as dynamic;
-                                        runtimeCDR.ID = caseCDR.ID;
-                                        runtimeCDR.CallingNumber = caseCDR.CallingNumber;
-                                        runtimeCDR.CalledNumber = caseCDR.CalledNumber;
-                                        runtimeCDR.FirstAttempt = caseCDR.FirstAttempt;
-                                        runtimeCDR.LastAttempt = caseCDR.LastAttempt;
-                                        runtimeCDR.NumberOfCDRs = caseCDR.NumberOfCDRs;
-                                        runtimeCDR.StatusId = caseCDR.StatusId;
-                                        runtimeCDR.OperatorID = caseCDR.OperatorID;
-                                        caseCDRsList.TCAnalListToInsert.Add(runtimeCDR);
-                                    }
-
+                                    CaseCDRManager tCAnalCaseCDRManager = new CaseCDRManager();
+                                    caseCDRsList.TCAnalListToInsert = tCAnalCaseCDRManager.CaseCDRsToRuntime(tCAnalCaseCDRs);
                                     inputArgument.OutputQueue.Enqueue(caseCDRsList);
                                 }
                             }
