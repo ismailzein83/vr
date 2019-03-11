@@ -32,8 +32,9 @@ namespace Retail.Interconnect.Business
         AccountType = 13,
         AccountNumber = 14,
         Attn = 15,
-        AssignedNumber = 16
-    }
+        AssignedNumber = 16,
+		BillingCompanyEmail=17
+	}
 
     public class InterconnectPartnerSettings : InvoicePartnerManager
     {
@@ -87,7 +88,7 @@ namespace Retail.Interconnect.Business
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
             FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
+			var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
             switch (context.InfoType)
             {
                 case "Account":
@@ -105,7 +106,7 @@ namespace Retail.Interconnect.Business
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
                     CityManager cityManager = new CityManager();
 
-                    IAccountProfile accountProfile;
+					IAccountProfile accountProfile;
                     string address = null;
                     if (accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountProfile))
                     {
@@ -170,8 +171,9 @@ namespace Retail.Interconnect.Business
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegAddress, companySetting.RegistrationAddress, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.CompanyName, companySetting.CompanyName, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
+						AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyEmail, companySetting.BillingEmails, true);
 
-                    }
+					}
                     return rdlcReportParameters;
             }
             return null;

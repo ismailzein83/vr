@@ -151,6 +151,8 @@
     <EmbeddedResource Include="Retail_Interconnect\Reports\Demo\SupplierInterconnectInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\SupplierInterconnectInvoiceReport.rdlc" />
+    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\CustomerInterconnectInvoiceReport.rdlc" />
     <EmbeddedResource Include="Retail_Interconnect\Reports\SupplierInterconnectInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
