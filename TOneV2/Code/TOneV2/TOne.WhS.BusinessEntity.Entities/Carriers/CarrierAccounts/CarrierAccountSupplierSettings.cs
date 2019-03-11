@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
 		public SupplierAutoImportSettings AutoImportSettings { get; set; }
 
-        public List<int> SMSServiceTypes { get; set; }
+        public List<CarrierAccountSMSServiceType> SMSServiceTypes { get; set; }
     }
 
 	public class SupplierAutoImportSettings
@@ -28,4 +28,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public string SubjectCode { get; set; }
 		public string AttachmentCode { get; set; }
 	}
+
+    public class CarrierAccountSMSServiceType
+    {
+        public int SMSServiceTypeId { get; set; }
+    }
 }

@@ -630,6 +630,38 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+        public List<SMSServiceType> GetFinancialAccountCustomerSMSServiceTypes(int financialAccountId)
+        {
+            var wHSFinancialAccount = GetFinancialAccount(financialAccountId);
+            wHSFinancialAccount.ThrowIfNull("financialAccount", financialAccountId);
+
+            if (wHSFinancialAccount.CarrierAccountId.HasValue)
+            {
+                return s_carrierAccountManager.GetCustomerSMSServiceTypes(wHSFinancialAccount.CarrierAccountId.Value);
+            }
+            else
+            {
+                return s_carrierProfileManager.GetCarrierProfileCustomerSMSServiceTypes(wHSFinancialAccount.CarrierProfileId.Value);
+            }
+            
+        }
+
+        public List<SMSServiceType> GetFinancialAccountSupplierSMSServiceTypes(int financialAccountId)
+        {
+            var wHSFinancialAccount = GetFinancialAccount(financialAccountId);
+            wHSFinancialAccount.ThrowIfNull("financialAccount", financialAccountId);
+
+            if (wHSFinancialAccount.CarrierAccountId.HasValue)
+            {
+               return s_carrierAccountManager.GetSupplierSMSServiceTypes(wHSFinancialAccount.CarrierAccountId.Value);
+            }
+            else
+            {
+                return s_carrierProfileManager.GetCarrierProfileSupplierSMSServiceTypes(wHSFinancialAccount.CarrierProfileId.Value);
+            }
+        }
+
+
         /// <summary>
         /// Used In DataTransformation
         /// </summary>

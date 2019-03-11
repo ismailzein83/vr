@@ -11,6 +11,12 @@ namespace TOne.WhS.BusinessEntity.Business
         static Guid businessEntityDefinitionId = new Guid("E32B1008-F956-4055-8B94-48583E34AE83");
 
         #region Public Methods
+        public SMSServiceType GetSMSServiceTypeById(int smsServiceTypeId)
+        {
+            return GetCachedSMSServicesType().GetRecord(smsServiceTypeId);
+        }
+
+
         public IEnumerable<SMSServiceTypeInfo> GetSMSServicesTypeInfo(SMSServiceTypeFilter filter)
         {
             var smsServicesType = GetCachedSMSServicesType();

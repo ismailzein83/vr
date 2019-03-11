@@ -510,6 +510,53 @@ namespace TOne.WhS.BusinessEntity.Business
             
             return ticketContactInfos;
         }
+
+        public List<SMSServiceType> GetCarrierProfileCustomerSMSServiceTypes(int carrierProfileId)
+        {
+            List<SMSServiceType> smsServiceTypes = new List<SMSServiceType>();
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            IEnumerable<CarrierAccount> carrierAccounts = carrierAccountManager.GetCarriersByProfileId(carrierProfileId, true, false);
+
+            foreach (var crAccount in carrierAccounts)
+            {
+                List<SMSServiceType> crAccountSMSServiceTypes = carrierAccountManager.GetCustomerSMSServiceTypes(crAccount.CarrierAccountId);
+                if(crAccountSMSServiceTypes != null && crAccountSMSServiceTypes.Count> 0)
+                {
+                    foreach (var crAccountSMSServiceType in crAccountSMSServiceTypes)
+                    {
+                        if (!smsServiceTypes.Any(x => x.SMSServiceTypeId == crAccountSMSServiceType.SMSServiceTypeId))
+                            smsServiceTypes.Add(crAccountSMSServiceType);
+                    }
+                }
+                  
+            }
+            return smsServiceTypes;
+        }
+
+        public List<SMSServiceType> GetCarrierProfileSupplierSMSServiceTypes(int carrierProfileId)
+        {
+            List<SMSServiceType> smsServiceTypes = new List<SMSServiceType>();
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            IEnumerable<CarrierAccount> carrierAccounts = carrierAccountManager.GetCarriersByProfileId(carrierProfileId, false, true);
+
+            foreach (var crAccount in carrierAccounts)
+            {
+                List<SMSServiceType> crAccountSMSServiceTypes = carrierAccountManager.GetSupplierSMSServiceTypes(crAccount.CarrierAccountId);
+                if (crAccountSMSServiceTypes != null && crAccountSMSServiceTypes.Count > 0)
+                {
+                    foreach (var crAccountSMSServiceType in crAccountSMSServiceTypes)
+                    {
+                        if(!smsServiceTypes.Any(x=>x.SMSServiceTypeId == crAccountSMSServiceType.SMSServiceTypeId))
+                            smsServiceTypes.Add(crAccountSMSServiceType);
+                    }
+                }
+
+            }
+            return smsServiceTypes;
+        }
+
         #endregion
 
         #endregion

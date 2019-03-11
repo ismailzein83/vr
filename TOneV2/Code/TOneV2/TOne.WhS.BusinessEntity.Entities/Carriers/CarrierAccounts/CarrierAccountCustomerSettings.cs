@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public PricelistSettings PricelistSettings { get; set; }
 
-        public List<int> SMSServiceTypes { get; set; }
+        public List<CarrierAccountSMSServiceType> SMSServiceTypes { get; set; }
     }
 
     public abstract class PassThroughCustomerRateEvaluator

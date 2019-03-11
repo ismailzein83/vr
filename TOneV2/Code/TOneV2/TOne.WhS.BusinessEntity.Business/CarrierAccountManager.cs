@@ -967,6 +967,35 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetAllCustomers().MapRecords(x => x.CarrierAccountId, x => x.SellingProductId.Value == sellingProductId);
         }
 
+        public List<SMSServiceType> GetCustomerSMSServiceTypes(int carrierAccountId)
+        {
+            CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+            carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
+            carrierAccount.CustomerSettings.ThrowIfNull("carrierAccount.CustomerSettings", carrierAccountId);
+
+            List<SMSServiceType> smsServicetypes = new List<SMSServiceType>();
+
+            if (carrierAccount.CustomerSettings.SMSServiceTypes != null && carrierAccount.CustomerSettings.SMSServiceTypes.Count > 0)
+                smsServicetypes = GetSMSServiceTypesEntities(carrierAccount.CustomerSettings.SMSServiceTypes);
+
+            return smsServicetypes;
+        }
+
+        public List<SMSServiceType> GetSupplierSMSServiceTypes(int carrierAccountId)
+        {
+            CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+            carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
+            carrierAccount.SupplierSettings.ThrowIfNull("carrierAccount.SupplierSettings", carrierAccountId);
+
+            SMSServiceTypeManager smsServiceTypeManager = new SMSServiceTypeManager();
+            List<SMSServiceType> smsServicetypes = new List<SMSServiceType>();
+
+            if (carrierAccount.SupplierSettings.SMSServiceTypes != null && carrierAccount.SupplierSettings.SMSServiceTypes.Count > 0)
+                smsServicetypes = GetSMSServiceTypesEntities(carrierAccount.SupplierSettings.SMSServiceTypes);
+
+            return smsServicetypes;
+        }
+
         /// <summary>
         /// Used In DataTransformation
         /// </summary>
@@ -1562,6 +1591,19 @@ namespace TOne.WhS.BusinessEntity.Business
                 return CarrierAccountInvoiceType.Profile;
         }
 
+        private List<SMSServiceType> GetSMSServiceTypesEntities(List<CarrierAccountSMSServiceType> carrierAccountSMSServiceTypes)
+        {
+            List<SMSServiceType> smsServiceTypes = new List<SMSServiceType>();
+            SMSServiceTypeManager smsServiceTypeManager = new SMSServiceTypeManager();
+
+            foreach (var crAccountSMSServiceType in carrierAccountSMSServiceTypes)
+            {
+                SMSServiceType smsServiceType = smsServiceTypeManager.GetSMSServiceTypeById(crAccountSMSServiceType.SMSServiceTypeId);
+                if (smsServiceType != null)
+                    smsServiceTypes.Add(smsServiceType);
+            }
+            return smsServiceTypes;
+        }
         #endregion
 
         #region Classes
@@ -1846,7 +1888,7 @@ namespace TOne.WhS.BusinessEntity.Business
             context.ThrowIfNull("context");
             return !IsCarrierAccountDeleted(Convert.ToInt32(context.EntityId));
         }
-       
+
         #endregion
     }
 
