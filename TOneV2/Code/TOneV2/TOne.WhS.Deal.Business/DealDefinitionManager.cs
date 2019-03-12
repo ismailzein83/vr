@@ -30,7 +30,7 @@ namespace TOne.WhS.Deal.Business
                     return false;
 
                 if (filter.CarrierAccountIds != null && !filter.CarrierAccountIds.Contains(dealDefinition.Settings.GetCarrierAccountId()))
-                        return false;
+                    return false;
 
                 if (filter.Filters != null)
                 {
@@ -139,7 +139,7 @@ namespace TOne.WhS.Deal.Business
                 return null;
 
             var zoneInfo = dealZoneInfo.First().Value;
-            if (effectiveAfter > zoneInfo.EED)
+            if (zoneInfo.EED.VRLessThan(effectiveAfter))
                 return null;
 
             return zoneInfo.DealId;
@@ -151,7 +151,7 @@ namespace TOne.WhS.Deal.Business
                 return null;
 
             var cachedAccountSaleZoneGroups = GetCachedAccountSaleZoneGroups();
-            IOrderedEnumerable<DealSaleZoneGroupWithoutRate> dealSaleZoneGroups = cachedAccountSaleZoneGroups.GetRecord(new AccountZoneGroup() { AccountId = customerId.Value, ZoneId = saleZoneId.Value });
+            IOrderedEnumerable<DealSaleZoneGroupWithoutRate> dealSaleZoneGroups = cachedAccountSaleZoneGroups.GetRecord(new AccountZoneGroup { AccountId = customerId.Value, ZoneId = saleZoneId.Value });
             if (dealSaleZoneGroups != null && dealSaleZoneGroups.Count() > 0)
             {
                 foreach (DealSaleZoneGroupWithoutRate dealSaleZoneGroup in dealSaleZoneGroups)
@@ -193,7 +193,7 @@ namespace TOne.WhS.Deal.Business
                 return null;
 
             var cachedAccountSupplierZoneGroups = GetCachedAccountSupplierZoneGroups();
-            IOrderedEnumerable<DealSupplierZoneGroupWithoutRate> dealSupplierZoneGroups = cachedAccountSupplierZoneGroups.GetRecord(new AccountZoneGroup() { AccountId = supplierId.Value, ZoneId = supplierZoneId.Value });
+            IOrderedEnumerable<DealSupplierZoneGroupWithoutRate> dealSupplierZoneGroups = cachedAccountSupplierZoneGroups.GetRecord(new AccountZoneGroup { AccountId = supplierId.Value, ZoneId = supplierZoneId.Value });
             if (dealSupplierZoneGroups != null && dealSupplierZoneGroups.Count() > 0)
             {
                 foreach (DealSupplierZoneGroupWithoutRate dealSupplierZoneGroup in dealSupplierZoneGroups)
@@ -210,10 +210,9 @@ namespace TOne.WhS.Deal.Business
 
         public DealZoneGroupTierDetailsWithoutRate GetDealZoneGroupTierDetailsWithoutRate(bool isSale, int dealId, int zoneGroupNb, int tierNb)
         {
-            if (isSale)
-                return GetSaleDealZoneGroupTierDetailsWithoutRate(dealId, zoneGroupNb, tierNb);
-            else
-                return GetSupplierDealZoneGroupTierDetailsWithoutRate(dealId, zoneGroupNb, tierNb);
+            return isSale
+                ? GetSaleDealZoneGroupTierDetailsWithoutRate(dealId, zoneGroupNb, tierNb)
+                : GetSupplierDealZoneGroupTierDetailsWithoutRate(dealId, zoneGroupNb, tierNb);
         }
 
         public DealZoneGroupTierDetailsWithoutRate GetSaleDealZoneGroupTierDetailsWithoutRate(int dealId, int zoneGroupNb, int tierNb)
@@ -222,7 +221,7 @@ namespace TOne.WhS.Deal.Business
             if (dealSaleZoneGroup == null || dealSaleZoneGroup.Tiers == null)
                 return null;
 
-            DealSaleZoneGroupTierWithoutRate dealZoneGroupTier = dealSaleZoneGroup.Tiers.Where(itm => itm.TierNumber == tierNb).FirstOrDefault();
+            DealSaleZoneGroupTierWithoutRate dealZoneGroupTier = dealSaleZoneGroup.Tiers.FirstOrDefault(itm => itm.TierNumber == tierNb);
             if (dealZoneGroupTier == null)
                 return null;
 
@@ -253,13 +252,13 @@ namespace TOne.WhS.Deal.Business
             }
             else
             {
-
                 if (isSale)
                 {
                     var saleZone = new SaleZoneManager().GetSaleZone(zoneId);
                     if (saleZone == null)
                         throw new NullReferenceException("saleZone");
-                    if ((dealBED < saleZone.BED && (dealEED < saleZone.EED || saleZone.EED == null)) || (saleZone.EED != null && dealBED > saleZone.BED && dealEED > saleZone.EED))
+                    
+                    if (dealBED < saleZone.BED && saleZone.EED.VRGreaterThan(dealEED) || saleZone.EED.HasValue && dealBED > saleZone.BED && saleZone.EED.VRLessThan(dealEED))
                         return true;
                 }
                 else
@@ -267,18 +266,16 @@ namespace TOne.WhS.Deal.Business
                     var supplierZone = new SupplierZoneManager().GetSupplierZone(zoneId);
                     if (supplierZone == null)
                         throw new NullReferenceException("supplierZone");
-                    if (supplierZone.BED > dealBED || (supplierZone.EED.HasValue && supplierZone.EED.Value < dealEED.Value))
+                    if (supplierZone.BED > dealBED || supplierZone.EED.VRLessThan(dealEED))
                         return true;
-
                 }
             }
-
             return false;
         }
 
         public List<long> AreZonesExcluded(OverlappedZonesContext context, bool isSale)
         {
-            List<long> excludedSaleZones = new List<long>();
+            var excludedSaleZones = new List<long>();
             if (context.ZoneIds != null)
                 foreach (var saleZoneId in context.ZoneIds)
                 {
@@ -404,7 +401,7 @@ namespace TOne.WhS.Deal.Business
                     {
                         var dealSaleZoneGroup = baseDealSaleZoneGroup as DealSaleZoneGroup;
                         if (dealSaleZoneGroup == null)
-                            throw new Exception(String.Format("baseDealSaleZoneGroup should be of type 'Deal.Entities.DealSaleZoneGroup' and not of type '{0}'", baseDealSaleZoneGroup.GetType()));
+                            throw new Exception($"baseDealSaleZoneGroup should be of type 'Deal.Entities.DealSaleZoneGroup' and not of type '{baseDealSaleZoneGroup.GetType()}'");
 
                         result.Add(dealSaleZoneGroup);
                     }
@@ -433,7 +430,7 @@ namespace TOne.WhS.Deal.Business
                     {
                         var dealSupplierZoneGroup = baseDealSupplierZoneGroups as DealSupplierZoneGroup;
                         if (dealSupplierZoneGroup == null)
-                            throw new Exception(String.Format("baseDealSupplierZoneGroups should be of type 'Deal.Entities.DealSupplierZoneGroup' and not of type '{0}'", baseDealSupplierZoneGroups.GetType()));
+                            throw new Exception($"baseDealSupplierZoneGroups should be of type 'Deal.Entities.DealSupplierZoneGroup' and not of type '{baseDealSupplierZoneGroups.GetType()}'");
 
                         result.Add(dealSupplierZoneGroup);
                     }
@@ -467,6 +464,12 @@ namespace TOne.WhS.Deal.Business
         public List<DealDefinition> GetRecurredDeals(DealDefinition deal, int recurringNumber, RecurringType recurringType)
         {
             var recurredDeals = new List<DealDefinition>();
+            if (!deal.Settings.EEDToStore.HasValue)
+            {
+                return recurredDeals;
+                //we cannot reccur a deal without EED
+            }
+
             DateTime endDealDate = deal.Settings.EEDToStore.Value;
             DateTime beginDealDate = deal.Settings.BeginDate;
 
@@ -489,11 +492,13 @@ namespace TOne.WhS.Deal.Business
                         recurredDeal.Settings.EEDToStore = deal.Settings.EEDToStore.Value.AddMonths((monthsDifference + 1) * (i + 1));
                         break;
                 }
-                recurredDeal.Name = string.Format("{0}-({1}-{2})", deal.Name, recurredDeal.Settings.BeginDate.ToString(Vanrise.Common.Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)), recurredDeal.Settings.EEDToStore.Value.ToString(Vanrise.Common.Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)));
+
+                string dateFormat = Utilities.GetDateTimeFormat(DateTimeType.Date);
+                recurredDeal.Name = $"{deal.Name}-({recurredDeal.Settings.BeginDate.ToString(dateFormat)}-{recurredDeal.Settings.EEDToStore.Value.ToString(dateFormat)})";
                 recurredDeal.Settings.IsRecurrable = false;
                 recurredDeals.Add(recurredDeal);
             }
-            recurredDeals[recurringNumber - 1].Settings.IsRecurrable = true;
+            recurredDeals.Last().Settings.IsRecurrable = true;
             return recurredDeals;
         }
 
@@ -512,12 +517,11 @@ namespace TOne.WhS.Deal.Business
                     CustomerId = recurredDeal.Settings.GetCarrierAccountId(),
                 };
 
-
                 if (!recurredDeal.Settings.ValidateDataBeforeSave(contextDeal))
                 {
                     foreach (var message in contextDeal.ValidateMessages)
                     {
-                        errorMessages.Add(string.Format("{0}. Corresponding Deal: {1}", message, recurredDeal.Name));
+                        errorMessages.Add($"{message}. Corresponding Deal: {recurredDeal.Name}");
                     }
                 }
             }
@@ -526,7 +530,7 @@ namespace TOne.WhS.Deal.Business
 
         public bool IsOverlapped(DealZoneInfo dealZoneInfo, DateTime beginEffectiveDate, DateTime? endEffectiveDate)
         {
-            return (endEffectiveDate.VRGreaterThan(dealZoneInfo.BED) && dealZoneInfo.EED > beginEffectiveDate);
+            return endEffectiveDate.VRGreaterThan(dealZoneInfo.BED) && dealZoneInfo.EED > beginEffectiveDate;
         }
 
         public DealSettingsDetail GetDealSettingsDetail(int dealId)
@@ -538,14 +542,13 @@ namespace TOne.WhS.Deal.Business
             settings.ThrowIfNull("Deal Settings", dealId);
             var carrierAccountId = settings.GetCarrierAccountId();
 
-            CarrierAccount carrierAccount = new CarrierAccountManager().GetCarrierAccount(carrierAccountId);
-            carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
+            var sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(carrierAccountId);
 
-            return new DealSettingsDetail()
+            return new DealSettingsDetail
             {
                 DealId = dealId,
                 CarrierAccountId = carrierAccountId,
-                SellingNumberPlanId = carrierAccount.SellingNumberPlanId,
+                SellingNumberPlanId = sellingNumberPlanId,
                 SaleZoneIds = settings.GetDealSaleZoneIds(),
                 SupplierZoneIds = settings.GetDealSupplierZoneIds(),
                 BED = settings.BEDToDisplay,
@@ -639,7 +642,9 @@ namespace TOne.WhS.Deal.Business
 
         private bool IsOverlapped(DateTime firstBeginEffectiveDate, DateTime? firstEndEffectiveDate, DateTime secondBeginEffectiveDate, DateTime? secondEndEffectiveDate)
         {
-            return (secondEndEffectiveDate.VRGreaterThan(firstBeginEffectiveDate) && firstEndEffectiveDate > secondBeginEffectiveDate && secondBeginEffectiveDate != secondEndEffectiveDate.Value);
+            return secondEndEffectiveDate.VRGreaterThan(firstBeginEffectiveDate)
+                    && firstEndEffectiveDate.VRGreaterThan(secondBeginEffectiveDate)
+                    && (!secondEndEffectiveDate.HasValue || secondBeginEffectiveDate != secondEndEffectiveDate.Value);
         }
 
         private bool CheckDealStatus(DealStatus dealStatus, DateTime? deActivationDate, DateTime effectiveDate)
@@ -667,9 +672,10 @@ namespace TOne.WhS.Deal.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustomerDealZoneInfoByZoneId", () =>
             {
-                Dictionary<int, DealZoneInfoByZoneId> customerDealZoneInfo = new Dictionary<int, DealZoneInfoByZoneId>();
+                var customerDealZoneInfo = new Dictionary<int, DealZoneInfoByZoneId>();
                 var cachedDeals = GetCachedDeals();
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                var carrierAccountManager = new CarrierAccountManager();
+
                 foreach (var dealDef in cachedDeals.Values)
                 {
                     var zoneIds = dealDef.Settings.GetDealSaleZoneIds();
@@ -708,10 +714,11 @@ namespace TOne.WhS.Deal.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSupplierDealZoneInfoByZoneId", () =>
             {
-                Dictionary<int, DealZoneInfoByZoneId> supplierDealZoneInfo = new Dictionary<int, DealZoneInfoByZoneId>();
+                var supplierDealZoneInfo = new Dictionary<int, DealZoneInfoByZoneId>();
                 var cachedDeals = GetCachedDealsByConfigId();
+                var carrierAccountManager = new CarrierAccountManager();
                 IEnumerable<DealDefinition> dealDefinitions = cachedDeals.Values.SelectMany(item => item);
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
                 foreach (var deal in dealDefinitions)
                 {
                     var zoneIds = deal.Settings.GetDealSupplierZoneIds();
@@ -722,16 +729,11 @@ namespace TOne.WhS.Deal.Business
 
                         if (carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange)
                         {
-                            DealZoneInfoByZoneId dealZoneInfoByZoneId;
-                            if (!supplierDealZoneInfo.TryGetValue(carrierAccountId, out dealZoneInfoByZoneId))
-                            {
-                                dealZoneInfoByZoneId = new DealZoneInfoByZoneId();
-                                supplierDealZoneInfo.Add(carrierAccountId, dealZoneInfoByZoneId);
-                            }
+                            var dealZoneInfoByZoneId = supplierDealZoneInfo.GetOrCreateItem(carrierAccountId);
+
                             foreach (var zoneId in zoneIds)
                             {
                                 SortedList<DateTime, DealZoneInfo> dealZoneInfos = dealZoneInfoByZoneId.GetOrCreateItem(zoneId, () => { return new SortedList<DateTime, DealZoneInfo>(new DecsendingDateTimeComparer()); });
-                                //List<DealZoneInfo> dealZoneInfos = dealZoneInfoByZoneId.GetOrCreateItem(zoneId);
                                 var overlappedItem = dealZoneInfos.FindRecord(x => IsOverlapped(x, deal.Settings.RealBED, deal.Settings.RealEED));
                                 if (overlappedItem == null)
                                 {
@@ -1032,7 +1034,7 @@ namespace TOne.WhS.Deal.Business
             };
         }
 
-        public override DealDefinitionDetail DealDeinitionDetailMapper(DealDefinition deal)
+        public override DealDefinitionDetail DealDefinitionDetailMapper(DealDefinition deal)
         {
             throw new NotImplementedException();
         }

@@ -31,7 +31,6 @@
         var originalEED;
 
         var offset;
-        var SwapDealTimeZone;
 
         var shiftedBED;
         var shiftedEED;
@@ -58,7 +57,6 @@
         function defineScope() {
 
             $scope.scopeModel = {};
-            //UtilsService.setContextReadOnly($scope.scopeModel);
             $scope.scopeModel.disabelType = (isEditMode);
             $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum);
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_Deal_DealAgreementTypeEnum);
@@ -185,8 +183,8 @@
                 if (carrierAccountSelectorAPI == undefined)
                     return null;
 
-                var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues();
-                if (selectedcarrier == undefined)
+                var selectedCarrier = carrierAccountSelectorAPI.getSelectedValues();
+                if (selectedCarrier == undefined)
                     return 'Please select a Carrier Account.';
                 if ($scope.scopeModel.beginDate == undefined || $scope.scopeModel.endDate == undefined)
                     return 'Please select Deal BED and Deal EED';
@@ -200,8 +198,8 @@
                 if (carrierAccountSelectorAPI == undefined)
                     return null;
 
-                var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues();
-                if (selectedcarrier == undefined)
+                var selectedCarrier = carrierAccountSelectorAPI.getSelectedValues();
+                if (selectedCarrier == undefined)
                     return 'Please select a Carrier Account.';
                 if ($scope.scopeModel.beginDate == undefined || $scope.scopeModel.endDate == undefined)
                     return 'Please select Deal BED and Deal EED';
@@ -219,8 +217,6 @@
             $scope.scopeModel.dataForBoundsReady = function () {
                 return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined && $scope.scopeModel.selectedTimeZone.value != undefined);
             };
-
-            //UtilsService.setContextReadOnly($scope);
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -468,8 +464,8 @@
         function getContext() {
             return {
                 getSupplierZoneSelectorPayload: function (item) {
-                    var payload;
-                    payload = {
+
+                    var payload = {
                         supplierId: carrierAccountSelectorAPI.getSelectedIds()
                     };
                     if (item != undefined) {
@@ -494,21 +490,23 @@
                             EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
                             ExcludePendingClosedZones: true
                         };
-                    payload.filter.Filters = [{
-                        $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
-                        CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                        DealId: dealId,
-                        BED: shiftedBED != undefined ? shiftedBED : $scope.scopeModel.beginDate,
-                        EED: shiftedEED != undefined ? shiftedBED : $scope.scopeModel.endDate,
-                    }];
+                    payload.filter.Filters = [
+                        {
+                            $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
+                            CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                            DealId: dealId,
+                            BED: shiftedBED != undefined ? shiftedBED : $scope.scopeModel.beginDate,
+                            EED: shiftedEED != undefined ? shiftedBED : $scope.scopeModel.endDate
+                        }
+                    ];
 
                     return payload;
                 },
 
                 getSaleZoneSelectorPayload: function (item) {
                     var carrierAccount = carrierAccountSelectorAPI.getSelectedValues();
-                    var payload;
-                    payload = {
+
+                    var payload = {
                         sellingNumberPlanId: carrierAccount != undefined ? carrierAccount.SellingNumberPlanId : undefined
                     };
                     if (item != undefined) {
@@ -534,17 +532,17 @@
                             EffectiveDate: $scope.scopeModel.beginDate,
                             ExcludePendingClosedZones: true
                         };
-
                     }
-                    payload.filter.Filters = [{
-                        $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
-                        CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                        DealId: dealId,
-                        BED: shiftedBED != undefined ? shiftedBED : $scope.scopeModel.beginDate,
-                        EED: shiftedEED != undefined ? shiftedEED : $scope.scopeModel.endDate,
-                    }];
+                    payload.filter.Filters = [
+                        {
+                            $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
+                            CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                            DealId: dealId,
+                            BED: shiftedBED != undefined ? shiftedBED : $scope.scopeModel.beginDate,
+                            EED: shiftedEED != undefined ? shiftedEED : $scope.scopeModel.endDate
+                        }
+                    ];
                     return payload;
-
                 },
                 getEffectiveOnDate: function () {
                     return GetShiftedDate($scope.scopeModel.beginDate);
@@ -579,8 +577,6 @@
                         newShiftedEED = undefined;
                         shiftedDatesPromiseDeferred.resolve();
                     }
-                    //console.log(newShiftedBED);
-                    //console.log(newShiftedEED);
                     return shiftedDatesPromiseDeferred.promise.then(function () {
                         shiftedBED = newShiftedBED;
                         shiftedEED = newShiftedEED;

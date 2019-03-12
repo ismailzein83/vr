@@ -73,7 +73,7 @@ namespace TOne.WhS.Deal.Business
                 ExportExcelHandler = new VolCommitmentDealExcelExportHandler()
             };
             VRActionLogger.Current.LogGetFilteredAction(VolCommitmentDealLoggableEntity.Instance, input);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDeinitionDetailMapper), handler);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDefinitionDetailMapper), handler);
         }
 
         public InsertDealOperationOutput<RecurredDealItem> RecurDeal(int dealId, int recurringNumber, RecurringType recurringType)
@@ -114,7 +114,7 @@ namespace TOne.WhS.Deal.Business
             {
                 RecurredDealItem recurredDealItem = new RecurredDealItem()
                 {
-                    UpdatedItem = DealDeinitionDetailMapper(deal)
+                    UpdatedItem = DealDefinitionDetailMapper(deal)
                 };
                 recurredDealItem.InsertedItems = new List<DealDefinitionDetail>();
                 errorMessages = new List<string>();
@@ -125,7 +125,7 @@ namespace TOne.WhS.Deal.Business
                     {
                         CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                         insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                        recurredDealItem.InsertedItems.Add(DealDeinitionDetailMapper(recurredDeal));
+                        recurredDealItem.InsertedItems.Add(DealDefinitionDetailMapper(recurredDeal));
                         // insertOperationOutput.InsertedObject.Add(DealDeinitionDetailMapper(recurredDeal));
                         recurredDeal.DealId = insertedId;
                     }
@@ -145,7 +145,7 @@ namespace TOne.WhS.Deal.Business
             return insertOperationOutput;
         }
 
-        public override DealDefinitionDetail DealDeinitionDetailMapper(DealDefinition deal)
+        public override DealDefinitionDetail DealDefinitionDetailMapper(DealDefinition deal)
         {
             VolCommitmentDetail detail = new VolCommitmentDetail()
             {

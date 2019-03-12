@@ -68,7 +68,7 @@ namespace TOne.WhS.Deal.Business
                 ExportExcelHandler = new SwapDealExcelExportHandler()
             };
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDeinitionDetailMapper), handler);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDefinitionDetailMapper), handler);
         }
 
         public DealDefinition GetSwapDealHistoryDetailbyHistoryId(int swapDealHistoryId)
@@ -131,7 +131,7 @@ namespace TOne.WhS.Deal.Business
             {
                 RecurredDealItem recurredDealItem = new RecurredDealItem()
                 {
-                    UpdatedItem = DealDeinitionDetailMapper(deal)
+                    UpdatedItem = DealDefinitionDetailMapper(deal)
                 };
                 errorMessages = new List<string>();
                 recurredDealItem.InsertedItems = new List<DealDefinitionDetail>();
@@ -142,8 +142,7 @@ namespace TOne.WhS.Deal.Business
                     {
                         CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                         insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                        recurredDealItem.InsertedItems.Add(DealDeinitionDetailMapper(recurredDeal));
-                        //insertOperationOutput.InsertedObject.Add(DealDeinitionDetailMapper(recurredDeal));
+                        recurredDealItem.InsertedItems.Add(DealDefinitionDetailMapper(recurredDeal));
                         recurredDeal.DealId = insertedId;
                     }
                     else
@@ -162,7 +161,7 @@ namespace TOne.WhS.Deal.Business
             return insertOperationOutput;
         }
 
-        public override DealDefinitionDetail DealDeinitionDetailMapper(DealDefinition deal)
+        public override DealDefinitionDetail DealDefinitionDetailMapper(DealDefinition deal)
         {
             SwapDealDetail detail = new SwapDealDetail()
             {

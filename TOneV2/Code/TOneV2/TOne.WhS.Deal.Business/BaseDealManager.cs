@@ -7,7 +7,6 @@ using TOne.WhS.Deal.Data;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common.Business;
 using System.Collections.Generic;
-using System.Reflection;
 using Vanrise.GenericData.Entities;
 using TOne.WhS.BusinessEntity.Entities;
 
@@ -24,7 +23,7 @@ namespace TOne.WhS.Deal.Business
 
         public string GetDealName(DealDefinition dealDefinition)
         {
-            return dealDefinition != null ? dealDefinition.Name : null;
+            return GetDealName(dealDefinition.DealId);
         }
 
         public string GetDealName(int dealId)
@@ -62,7 +61,7 @@ namespace TOne.WhS.Deal.Business
                     deal.DealId = insertedId;
                     VRActionLogger.Current.TrackAndLogObjectAdded(GetLoggableEntity(), deal);
 
-                    insertOperationOutput.InsertedObject = DealDeinitionDetailMapper(deal);
+                    insertOperationOutput.InsertedObject = DealDefinitionDetailMapper(deal);
                 }
                 else
                 {
@@ -78,7 +77,6 @@ namespace TOne.WhS.Deal.Business
 
         public bool DeleteDeal(int dealId)
         {
-
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
             if (dataManager.Delete(dealId))
             {
@@ -114,17 +112,14 @@ namespace TOne.WhS.Deal.Business
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                     var dealEntity = this.GetDeal(deal.DealId);
                     VRActionLogger.Current.TrackAndLogObjectUpdated(GetLoggableEntity(), dealEntity);
-                    updateOperationOutput.UpdatedObject = DealDeinitionDetailMapper(dealEntity);
+                    updateOperationOutput.UpdatedObject = DealDefinitionDetailMapper(dealEntity);
                 }
                 else
-                {
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-                }
             }
             else
-            {
                 updateOperationOutput.ValidationMessages = context.ValidateMessages;
-            }
+
             return updateOperationOutput;
         }
 
@@ -137,7 +132,7 @@ namespace TOne.WhS.Deal.Business
             return dealSettings;
         }
 
-        public abstract DealDefinitionDetail DealDeinitionDetailMapper(DealDefinition deal);
+        public abstract DealDefinitionDetail DealDefinitionDetailMapper(DealDefinition deal);
 
         public abstract BaseDealLoggableEntity GetLoggableEntity();
 

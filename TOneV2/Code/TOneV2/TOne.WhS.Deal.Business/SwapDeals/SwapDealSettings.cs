@@ -127,9 +127,10 @@ namespace TOne.WhS.Deal.Business
 
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
-            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            var dealDefinitionManager = new DealDefinitionManager();
+            var saleZoneManager = new SaleZoneManager();
+            var supplierZoneManager = new SupplierZoneManager();
+
             validateBeforeSaveContext.ValidateMessages = new List<string>();
             bool validationResult = true;
             if (validateBeforeSaveContext.IsEditMode)
@@ -162,35 +163,34 @@ namespace TOne.WhS.Deal.Business
             {
                 validationResult = false;
                 var excludedSaleZoneNames = saleZoneManager.GetSaleZoneNames(excludedSaleZones);
-                validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following sale zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSaleZoneNames)));
+                validateBeforeSaveContext.ValidateMessages.Add($"The following sale zone(s) {string.Join(",", excludedSaleZoneNames)} are overlapping with zones in other deals");
             }
 
             if (excludedSupplierZones.Count > 0)
             {
                 validationResult = false;
                 var excludedSupplierZoneNames = supplierZoneManager.GetSupplierZoneNames(excludedSupplierZones);
-                validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following supplier zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSupplierZoneNames)));
+                validateBeforeSaveContext.ValidateMessages.Add($"The following supplier zone(s) {string.Join(",", excludedSupplierZoneNames)} are overlapping with zones in other deals");
             }
 
-            if (GracePeriod > (EndDate.Value - RealBED).Days)
+            if (EndDate.HasValue && GracePeriod > (EndDate.Value - RealBED).Days)
             {
                 validationResult = false;
                 validateBeforeSaveContext.ValidateMessages.Add("Grace Period should be less than the difference between BED and EED");
             }
 
-            if ((Inbounds != null && Inbounds.Count > 0) && (Outbounds != null && Outbounds.Count > 0))
+            if (Inbounds != null && Inbounds.Count > 0 && Outbounds != null && Outbounds.Count > 0)
             {
                 ValidateSaleAndCost(validateBeforeSaveContext, ref validationResult);
             }
             var invalidCountryIds = ValidateSwapDealCountries(CarrierAccountId, RealBED, false);
             if (invalidCountryIds.Count > 0)
             {
-                CountryManager countryManager = new CountryManager();
+                var countryManager = new CountryManager();
                 var invalidCountryNames = countryManager.GetCountryNames(invalidCountryIds.Distinct());
                 validationResult = false;
-                validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following countries {0} are not sold at {1}", string.Join(",", invalidCountryNames), RealBED));
+                validateBeforeSaveContext.ValidateMessages.Add($"The following countries {string.Join(",", invalidCountryNames)} are not sold at {RealBED}");
             }
-
             return validationResult;
         }
 
@@ -244,7 +244,7 @@ namespace TOne.WhS.Deal.Business
 
         public override List<long> GetDealSaleZoneIds()
         {
-            List<long> zoneIds = new List<long>();
+            var zoneIds = new List<long>();
             foreach (var inbound in Inbounds)
             {
                 var saleZones = inbound.SaleZones;
@@ -257,7 +257,7 @@ namespace TOne.WhS.Deal.Business
         }
         public override List<long> GetDealSupplierZoneIds()
         {
-            List<long> zoneIds = new List<long>();
+            var zoneIds = new List<long>();
             foreach (var outbound in Outbounds)
             {
                 var supplierZones = outbound.SupplierZones;
@@ -396,14 +396,14 @@ namespace TOne.WhS.Deal.Business
                         validateBeforeSaveContext.ValidateMessages.Add("Durations should be balanced");
                     }
                 }
-
             }
         }
         private List<int> ValidateSwapDealCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            List<int> invalidCountries = new List<int>();
-            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+            var invalidCountries = new List<int>();
+            var customerCountryManager = new CustomerCountryManager();
             var customerCountries = customerCountryManager.GetCustomerCountryIds(customerId, effectiveOn, isEffectiveInFuture);
+
             foreach (var inbound in Inbounds)
             {
                 if (inbound.CountryIds != null)
@@ -492,10 +492,10 @@ namespace TOne.WhS.Deal.Business
         }
         private Dictionary<long, List<DealRate>> GetDealSaleRatesByZoneId(decimal rate, List<DealSaleZoneGroupZoneItem> zones)
         {
-            var dealeRateByZoneId = new Dictionary<long, List<DealRate>>();
+            var dealRateByZoneId = new Dictionary<long, List<DealRate>>();
             foreach (var zone in zones)
             {
-                List<DealRate> dealRates = dealeRateByZoneId.GetOrCreateItem(zone.ZoneId);
+                List<DealRate> dealRates = dealRateByZoneId.GetOrCreateItem(zone.ZoneId);
                 DealRate dealRate = new DealRate
                 {
                     ZoneId = zone.ZoneId,
@@ -506,7 +506,7 @@ namespace TOne.WhS.Deal.Business
                 };
                 dealRates.Add(dealRate);
             }
-            return dealeRateByZoneId;
+            return dealRateByZoneId;
         }
         private List<BaseDealSupplierZoneGroup> BuildSupplierZoneGroups(int dealId, bool evaluateRates)
         {
@@ -663,10 +663,10 @@ namespace TOne.WhS.Deal.Business
 
         private Dictionary<long, List<DealRate>> GetDealSupplierRatesByZoneId(decimal rate, List<DealSupplierZoneGroupZoneItem> zones)
         {
-            var dealeRateByZoneId = new Dictionary<long, List<DealRate>>();
+            var dealRateByZoneId = new Dictionary<long, List<DealRate>>();
             foreach (var zone in zones)
             {
-                List<DealRate> dealRates = dealeRateByZoneId.GetOrCreateItem(zone.ZoneId);
+                List<DealRate> dealRates = dealRateByZoneId.GetOrCreateItem(zone.ZoneId);
                 DealRate dealRate = new DealRate
                 {
                     ZoneId = zone.ZoneId,
@@ -677,7 +677,7 @@ namespace TOne.WhS.Deal.Business
                 };
                 dealRates.Add(dealRate);
             }
-            return dealeRateByZoneId;
+            return dealRateByZoneId;
         }
         #endregion
     }
