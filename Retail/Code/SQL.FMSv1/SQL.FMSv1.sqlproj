@@ -72,5 +72,9 @@
     <Build Include="dbo\Views\vw_Ana_AfghOffNetCDRs.sql" />
     <Build Include="dbo\Views\vw_Ana_AfghInternationalCDRs.sql" />
     <Build Include="dbo\Views\vw_Ana_AfghCDRs.sql" />
+    <Build Include="dbo\Views\vw_Ana_SudanOnNetCDRs.sql" />
+    <Build Include="dbo\Views\vw_Ana_SudanOffNetCDRs.sql" />
+    <Build Include="dbo\Views\vw_Ana_SudanInternationalCDRs.sql" />
+    <Build Include="dbo\Views\vw_Ana_SudanCDRs.sql" />
   </ItemGroup>
 </Project>
