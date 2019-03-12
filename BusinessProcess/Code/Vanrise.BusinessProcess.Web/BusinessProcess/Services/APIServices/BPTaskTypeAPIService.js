@@ -8,10 +8,15 @@
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTaskType", "GetBPTaskTypeByTaskId"), {
                 taskId: taskId
             });
+
+            function GetBaseBPTaskTypeSettingsConfigs() {
+                return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTaskType", "GetBaseBPTaskTypeSettingsConfigs"));
+            }
         }
 
         return ({
-            GetBPTaskTypeByTaskId: GetBPTaskTypeByTaskId
+            GetBPTaskTypeByTaskId: GetBPTaskTypeByTaskId,
+            GetBaseBPTaskTypeSettingsConfigs: GetBaseBPTaskTypeSettingsConfigs
         });
     }
 

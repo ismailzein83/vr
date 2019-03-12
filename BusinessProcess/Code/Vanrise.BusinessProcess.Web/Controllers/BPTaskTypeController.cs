@@ -15,5 +15,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             BPTaskTypeManager manager = new BPTaskTypeManager();
             return manager.GetBPTaskTypeByTaskId(taskId);
         }
+        [HttpGet]
+        [Route("GetBaseBPTaskTypeSettingsConfigs")]
+        public object GetBaseBPTaskTypeSettingsConfigs()
+        {
+            BPTaskTypeManager manager = new BPTaskTypeManager();
+            return manager.GetBaseBPTaskTypeSettingsConfigs();
+        }
     }
 }
