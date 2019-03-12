@@ -16,7 +16,42 @@ namespace TOne.WhS.Deal.Business
     public class VolCommitmentDealManager : BaseDealManager
     {
         #region Public Methods
+        public Dictionary<int, VolCommitmentDealSettings> GetEffectiveVolCommitmentDeals(List<int> carrierAccountIds, DateTime fromDate, DateTime toDate, out DateTime? minBED, out DateTime? maxEED)
+        {
+            var cachedVolCommitmentDeals = GetCachedVolCommitmentDeals();
+            minBED = null;
+            maxEED = null;
+            if (cachedVolCommitmentDeals == null || cachedVolCommitmentDeals.Count() == 0 || carrierAccountIds == null || carrierAccountIds.Count == 0)
+                return null;
+            Dictionary<int, VolCommitmentDealSettings> effectiveVolCommitmentDeals = new Dictionary<int, VolCommitmentDealSettings>();
 
+            foreach (var deal in cachedVolCommitmentDeals)
+            {
+                if (deal.Settings == null)
+                    continue;
+
+                var volCommitmentDealSettings = deal.Settings.CastWithValidate<VolCommitmentDealSettings>("VolCommitmentDealSettings");
+
+                if (volCommitmentDealSettings.Status != DealStatus.Active)
+                    continue;
+                if (!volCommitmentDealSettings.RealEED.HasValue)
+                    continue;
+                if (!carrierAccountIds.Contains(volCommitmentDealSettings.CarrierAccountId))
+                    continue;
+                if (volCommitmentDealSettings.BillingType != DealBillingType.EstimatedVolume)
+                    continue;
+
+                if (volCommitmentDealSettings.RealEED.Value <= toDate && volCommitmentDealSettings.RealEED.Value > fromDate)
+                {
+                    effectiveVolCommitmentDeals.Add(deal.DealId, volCommitmentDealSettings);
+                    if (!minBED.HasValue || volCommitmentDealSettings.RealBED < minBED)
+                        minBED = volCommitmentDealSettings.RealBED;
+                    if (!maxEED.HasValue || volCommitmentDealSettings.RealEED.Value > maxEED)
+                        maxEED = volCommitmentDealSettings.RealEED.Value;
+                }
+            }
+            return effectiveVolCommitmentDeals;
+        } 
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredVolCommitmentDeals(Vanrise.Entities.DataRetrievalInput<VolCommitmentDealQuery> input)
         {
             var cachedEntities = this.GetCachedVolCommitmentDeals();
