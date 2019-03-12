@@ -26,10 +26,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox9</rd:DefaultName>
-        <Top>0.04167in</Top>
-        <Left>0.40611in</Left>
+        <Top>0.09721in</Top>
+        <Left>0.39308in</Left>
         <Height>0.48466in</Height>
-        <Width>7.82037in</Width>
+        <Width>7.70637in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -564,7 +564,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>= Parameters!ExistedServices</Value>
+                              <Value>= Parameters!SMSServiceTypes.Value</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -891,7 +891,7 @@
               <Width>6.62476in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.19561in</Width>
+              <Width>1.1956in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1048,7 +1048,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Parameters!ServicesType.Value</Value>
+                              <Value>=Parameters!SMSServiceTypes.Value</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -1341,10 +1341,10 @@
             <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
-        <Top>3.85856in</Top>
-        <Left>0.40611in</Left>
+        <Top>3.84468in</Top>
+        <Left>0.22036in</Left>
         <Height>1.22714in</Height>
-        <Width>7.82037in</Width>
+        <Width>7.82036in</Width>
         <ZIndex>11</ZIndex>
         <Style>
           <Border>
@@ -1541,8 +1541,8 @@
             <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
-        <Top>5.17008in</Top>
-        <Left>0.40611in</Left>
+        <Top>5.1562in</Top>
+        <Left>0.22036in</Left>
         <Height>0.89475in</Height>
         <Width>7.82038in</Width>
         <ZIndex>12</ZIndex>
@@ -1723,8 +1723,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>6.13427in</Top>
-        <Left>0.40611in</Left>
+        <Top>6.12039in</Top>
+        <Left>0.22036in</Left>
         <Height>0.87391in</Height>
         <Width>7.82036in</Width>
         <ZIndex>13</ZIndex>
@@ -2121,7 +2121,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>Remis à :              Le :                   </Value>
+                              <Value>Remis à :                              Le :                   </Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontSize>9pt</FontSize>
@@ -2205,8 +2205,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>7.07763in</Top>
-        <Left>0.40611in</Left>
+        <Top>7.06375in</Top>
+        <Left>0.22036in</Left>
         <Height>1.03827in</Height>
         <Width>7.82037in</Width>
         <ZIndex>14</ZIndex>
@@ -2220,25 +2220,25 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>8.13673in</Height>
+    <Height>20.66729cm</Height>
     <Style>
       <Border>
-        <Style>Solid</Style>
+        <Style>None</Style>
       </Border>
     </Style>
   </Body>
-  <Width>8.55083in</Width>
+  <Width>20.9482cm</Width>
   <Page>
     <PageHeader>
-      <Height>1.27209in</Height>
+      <Height>3.35454cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
         <Rectangle Name="Rectangle1">
           <ReportItems>
             <Line Name="Line1">
-              <Left>2.24308in</Left>
-              <Height>1.27209in</Height>
+              <Left>2.0272in</Left>
+              <Height>1.26861in</Height>
               <Width>0in</Width>
               <Style>
                 <Border>
@@ -2265,9 +2265,9 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>0.4107in</Top>
-              <Left>2.80043in</Left>
-              <Height>0.21874in</Height>
+              <Top>0.22318in</Top>
+              <Left>2.69626in</Left>
+              <Height>0.24305in</Height>
               <Width>3.30803in</Width>
               <ZIndex>1</ZIndex>
               <Style>
@@ -2323,9 +2323,9 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.69889in</Top>
-              <Left>2.46425in</Left>
-              <Height>0.46209in</Height>
+              <Top>0.53569in</Top>
+              <Left>2.36008in</Left>
+              <Height>0.55209in</Height>
               <Width>4.03018in</Width>
               <ZIndex>2</ZIndex>
               <Style>
@@ -2342,8 +2342,8 @@
               <Source>Embedded</Source>
               <Value>ATM_Mobilis</Value>
               <Sizing>FitProportional</Sizing>
-              <Top>0.4107in</Top>
-              <Left>0.13545in</Left>
+              <Top>0.40722in</Top>
+              <Left>0.03128in</Left>
               <Height>0.68056in</Height>
               <Width>1.95425in</Width>
               <ZIndex>3</ZIndex>
@@ -2370,9 +2370,9 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox5</rd:DefaultName>
-              <Top>0.24055in</Top>
-              <Left>7.08643in</Left>
-              <Height>0.17361in</Height>
+              <Top>0.22318in</Top>
+              <Left>6.6009in</Left>
+              <Height>0.1875in</Height>
               <Width>1.40741in</Width>
               <ZIndex>4</ZIndex>
               <Style>
@@ -2386,8 +2386,8 @@
               </Style>
             </Textbox>
             <Line Name="Line4">
-              <Top>0.46972in</Top>
-              <Left>7.02256in</Left>
+              <Top>0.46624in</Top>
+              <Left>6.53703in</Left>
               <Height>0in</Height>
               <Width>1.51996in</Width>
               <ZIndex>5</ZIndex>
@@ -2398,8 +2398,8 @@
               </Style>
             </Line>
             <Line Name="Line3">
-              <Left>7.03087in</Left>
-              <Height>1.27209in</Height>
+              <Left>6.54534in</Left>
+              <Height>1.26861in</Height>
               <Width>0in</Width>
               <ZIndex>6</ZIndex>
               <Style>
@@ -2409,8 +2409,8 @@
               </Style>
             </Line>
             <Line Name="Line5">
-              <Top>0.66764in</Top>
-              <Left>7.03087in</Left>
+              <Top>0.66416in</Top>
+              <Left>6.54534in</Left>
               <Height>0in</Height>
               <Width>1.51165in</Width>
               <ZIndex>7</ZIndex>
@@ -2421,8 +2421,8 @@
               </Style>
             </Line>
             <Line Name="Line6">
-              <Top>0.96972in</Top>
-              <Left>7.03087in</Left>
+              <Top>0.96624in</Top>
+              <Left>6.54534in</Left>
               <Height>0in</Height>
               <Width>1.51165in</Width>
               <ZIndex>8</ZIndex>
@@ -2433,8 +2433,8 @@
               </Style>
             </Line>
             <Line Name="Line7">
-              <Top>0.66764in</Top>
-              <Left>7.77334in</Left>
+              <Top>0.66416in</Top>
+              <Left>7.28781in</Left>
               <Height>0.30208in</Height>
               <Width>0in</Width>
               <ZIndex>9</ZIndex>
@@ -2472,10 +2472,10 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>0.69542in</Top>
-              <Left>7.05865in</Left>
+              <Top>0.68151in</Top>
+              <Left>6.55923in</Left>
               <Height>0.24653in</Height>
-              <Width>0.65914in</Width>
+              <Width>0.71469in</Width>
               <ZIndex>10</ZIndex>
               <Style>
                 <Border>
@@ -2515,10 +2515,10 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>0.66764in</Top>
-              <Left>7.85109in</Left>
-              <Height>0.28819in</Height>
-              <Width>0.66494in</Width>
+              <Top>0.66416in</Top>
+              <Left>7.28781in</Left>
+              <Height>0.24652in</Height>
+              <Width>0.7205in</Width>
               <ZIndex>11</ZIndex>
               <Style>
                 <Border>
@@ -2547,8 +2547,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox6</rd:DefaultName>
-              <Top>0.46972in</Top>
-              <Left>7.05865in</Left>
+              <Top>0.46624in</Top>
+              <Left>6.57312in</Left>
               <Height>0.15972in</Height>
               <Width>0.33333in</Width>
               <ZIndex>12</ZIndex>
@@ -2579,8 +2579,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox26</rd:DefaultName>
-              <Top>0.98361in</Top>
-              <Left>7.22648in</Left>
+              <Top>0.98013in</Top>
+              <Left>6.74095in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
               <ZIndex>13</ZIndex>
@@ -2596,8 +2596,9 @@
             </Textbox>
           </ReportItems>
           <KeepTogether>true</KeepTogether>
-          <Height>1.27209in</Height>
-          <Width>8.55083in</Width>
+          <Left>0.10417in</Left>
+          <Height>1.26861in</Height>
+          <Width>8.05699in</Width>
           <Style>
             <Border>
               <Style>Solid</Style>
@@ -2611,10 +2612,13 @@
         </Border>
       </Style>
     </PageHeader>
-    <LeftMargin>1in</LeftMargin>
-    <RightMargin>1in</RightMargin>
-    <TopMargin>1in</TopMargin>
-    <BottomMargin>1in</BottomMargin>
+    <PageHeight>29.7cm</PageHeight>
+    <PageWidth>21cm</PageWidth>
+    <LeftMargin>0cm</LeftMargin>
+    <RightMargin>0cm</RightMargin>
+    <TopMargin>0.5cm</TopMargin>
+    <BottomMargin>0.5cm</BottomMargin>
+    <ColumnSpacing>1.27cm</ColumnSpacing>
     <Style />
   </Page>
   <AutoRefresh>0</AutoRefresh>
@@ -2712,16 +2716,6 @@
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="ExistedServices">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ServicesType">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
     <ReportParameter Name="FromDate">
       <DataType>DateTime</DataType>
       <Prompt>ReportParameter1</Prompt>
@@ -2732,6 +2726,12 @@
     </ReportParameter>
     <ReportParameter Name="InvoiceSerialNumber">
       <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="SMSServiceTypes">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
@@ -2956,6 +2956,6 @@ GtHNKn1+xxWtanzu/ku5pSPezy2sW+Vz+m3o7I0OXyh9z/lHZoQ0Mq5R+sBE0NqXu2u55VZJRTUGquk1
 AABEHAAAAAAAEUfEAQAAAAAQcQAAAAAARPxPET8OAAAAAAChkjbgfwiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCIBI+/j/5WTO4/4+okQAAAABJRU5ErkJggg==</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
-  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>95679e7a-92a4-4807-a0fc-b70e6be96099</rd:ReportID>
 </Report>
