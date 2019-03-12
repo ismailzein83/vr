@@ -147,6 +147,7 @@
     <Compile Include="VRDynamicAPI\VRDynamicAPIQuery.cs" />
     <Compile Include="VRDynamicAPI\VRDynamicAPI.cs" />
     <Compile Include="VRDynamicAPI\VRDynamicAPIDetails.cs" />
+    <Compile Include="VRIPAddress\VRIPAddress.cs" />
     <Compile Include="VRNamespace\VRCustomClassType.cs" />
     <Compile Include="VRNamespace\VRNamespace.cs" />
     <Compile Include="VRNamespace\VRNamespaceClassInfo.cs" />
