@@ -4,11 +4,14 @@ using Vanrise.BusinessProcess.Entities;
 using System.Linq;
 using Vanrise.Common;
 using System;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.BusinessProcess.Business
 {
     public class BPTaskTypeManager
     {
+        static Guid businessEntityDefinitionId = new Guid("d33fd65a-721f-4ae1-9d41-628be9425796");
+
         #region public methods
 
         public BPTaskType GetBPTaskType(Guid taskTypeId)
@@ -38,6 +41,30 @@ namespace Vanrise.BusinessProcess.Business
                    return GetBPTaskTypes().ToDictionary(cn => cn.BPTaskTypeId, cn => cn);
                });
         }
+
+        //private Dictionary<Guid, BPTaskType> GetCachedBPTaskTypes()
+        //{
+        //    IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+        //    return genericBusinessEntityManager.GetCachedOrCreate("GetCachedBPTaskTypes", businessEntityDefinitionId, () =>
+        //    {
+        //        Dictionary<Guid, BPTaskType> result = new Dictionary<Guid, BPTaskType>();
+        //        IEnumerable<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(businessEntityDefinitionId);
+        //        if (genericBusinessEntities != null)
+        //        {
+        //            foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
+        //            {
+        //                BPTaskType bpTaskType = new BPTaskType()
+        //                {
+        //                    BPTaskTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
+        //                    Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
+        //                    Settings = Vanrise.Common.Serializer.Deserialize<BaseBPTaskTypeSettings>(genericBusinessEntity.FieldValues.GetRecord("Setting") as string)
+        //                };
+        //                result.Add(bpTaskType.BPTaskTypeId, bpTaskType);
+        //            }
+        //        }
+        //        return result;
+        //    });
+        //}
 
         private Dictionary<string, BPTaskType> GetCachedBPTaskTypesByName()
         {
