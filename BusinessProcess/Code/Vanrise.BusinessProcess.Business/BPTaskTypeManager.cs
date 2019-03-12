@@ -17,14 +17,34 @@ namespace Vanrise.BusinessProcess.Business
 
         public BPTaskType GetBPTaskType(Guid taskTypeId)
         {
-            return GetCachedBPTaskTypesById().GetRecord(taskTypeId);
+            return GetCachedBPTaskTypes().GetRecord(taskTypeId);
         }
-
         public BPTaskType GetBPTaskType(string taskTypeName)
         {
-            return GetCachedBPTaskTypesByName().GetRecord(taskTypeName);
+            return GetCachedBPTaskTypes().FindRecord(x => x.Name == taskTypeName);
         }
 
+        //public BPTaskType GetBPTaskType(Guid taskTypeId)
+        //{
+        //    return GetCachedBPTaskTypesById().GetRecord(taskTypeId);
+        //}
+        //public BPTaskType GetBPTaskType(string taskTypeName)
+        //{
+        //    return GetCachedBPTaskTypesByName().GetRecord(taskTypeName);
+        //}
+
+        public IEnumerable<BPTaskTypeInfo> GetBPTaskTypesInfo(BPTaskTypeFilter filter)
+        {
+            var bpTaskTypes = GetCachedBPTaskTypes();
+            Func<BPTaskType, bool> filterExpression = (itm) =>
+            {
+                if (filter != null)
+                    return false;
+
+                return true;
+            };
+            return bpTaskTypes.MapRecords(BPTaskTypeInfoMapper, filterExpression);
+        }
         public BPTaskType GetBPTaskTypeByTaskId(long taskId)
         {
             BPTaskManager bpTaskManager = new BPTaskManager();
@@ -48,29 +68,31 @@ namespace Vanrise.BusinessProcess.Business
                });
         }
 
-        //private Dictionary<Guid, BPTaskType> GetCachedBPTaskTypes()
-        //{
-        //    IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-        //    return genericBusinessEntityManager.GetCachedOrCreate("GetCachedBPTaskTypes", businessEntityDefinitionId, () =>
-        //    {
-        //        Dictionary<Guid, BPTaskType> result = new Dictionary<Guid, BPTaskType>();
-        //        IEnumerable<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(businessEntityDefinitionId);
-        //        if (genericBusinessEntities != null)
-        //        {
-        //            foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
-        //            {
-        //                BPTaskType bpTaskType = new BPTaskType()
-        //                {
-        //                    BPTaskTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
-        //                    Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
-        //                    Settings = Vanrise.Common.Serializer.Deserialize<BaseBPTaskTypeSettings>(genericBusinessEntity.FieldValues.GetRecord("Setting") as string)
-        //                };
-        //                result.Add(bpTaskType.BPTaskTypeId, bpTaskType);
-        //            }
-        //        }
-        //        return result;
-        //    });
-        //}
+        private Dictionary<Guid, BPTaskType> GetCachedBPTaskTypes()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedBPTaskTypes", businessEntityDefinitionId, () =>
+            {
+                Dictionary<Guid, BPTaskType> result = new Dictionary<Guid, BPTaskType>();
+                IEnumerable<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(businessEntityDefinitionId);
+                if (genericBusinessEntities != null)
+                {
+                    foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
+                    {
+                        BPTaskType bpTaskType = new BPTaskType()
+                        {
+                            BPTaskTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("BPTaskTypeId"),
+                            Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
+                            Settings = genericBusinessEntity.FieldValues.GetRecord("Settings") as BaseBPTaskTypeSettings,
+                        };
+                        result.Add(bpTaskType.BPTaskTypeId, bpTaskType);
+                    }
+                }
+                return result;
+            });
+        }
+
+
 
         private Dictionary<string, BPTaskType> GetCachedBPTaskTypesByName()
         {
@@ -96,6 +118,17 @@ namespace Vanrise.BusinessProcess.Business
             {
                 return dataManager.AreBPTaskTypesUpdated(ref _lastReceivedDataInfo);
             }
+        }
+        #endregion
+
+        #region Mappers
+        private BPTaskTypeInfo BPTaskTypeInfoMapper(BPTaskType bPTaskType)
+        {
+            return new BPTaskTypeInfo()
+            {
+                BPTaskTypeId = bPTaskType.BPTaskTypeId,
+                Name = bPTaskType.Name,
+            };
         }
         #endregion
     }
