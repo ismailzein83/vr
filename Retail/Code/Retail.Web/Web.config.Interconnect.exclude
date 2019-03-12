@@ -81,6 +81,9 @@
     <add key="RetailCDRDBConnStringKey"                         value="RetailCDRDBConnString"/>
     <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>
     
+    <add key="ICXSMSDBConnStringKey"                            value="ICXSMSDBConnString"/>
+    <add key="ICXSMSAnalyticsDBConnStringKey"                   value="ICXSMSAnalyticsDBConnString"/>
+    
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
