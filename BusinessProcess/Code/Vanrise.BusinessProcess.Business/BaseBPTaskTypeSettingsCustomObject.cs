@@ -16,7 +16,8 @@ namespace Vanrise.BusinessProcess.Business
 
         public override bool AreEqual(object newValue, object oldValue)
         {
-            throw new NotImplementedException();
+            return true;
+            //throw new NotImplementedException();
         }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
@@ -31,7 +32,8 @@ namespace Vanrise.BusinessProcess.Business
 
         public override string GetRuntimeTypeDescription()
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
+            return null;
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
