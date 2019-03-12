@@ -46,6 +46,6 @@
         } 
     }
 
-    app.directive('bpTasktypesettingsCustomobject', bpTaskTypeCustomObjectSettings);
+    app.directive('bpBasebptasktypesettingsCustomobject', bpTaskTypeCustomObjectSettings);
 
 })(app);

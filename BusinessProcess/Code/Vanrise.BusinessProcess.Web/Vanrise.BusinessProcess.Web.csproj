@@ -218,9 +218,13 @@
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-log-search.js" />
-    <Content Include="BusinessProcess\Directives\BPTaskType\bp-tasktypesettings-customobject.js" />
-    <Content Include="BusinessProcess\Directives\BPTaskType\Templates\BPTaskTypeSettingsTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BaseBPTaskType\bp-basebptasktypesettings-customobject.js" />
+    <Content Include="BusinessProcess\Directives\BaseBPTaskType\Templates\BaseBPTaskTypeSettingsTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-selector.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\BaseBPTaskTypeSettings\bp-generictasktype-settings.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\BaseBPTaskTypeSettings\bp-tasktype-settings.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\BaseBPTaskTypeSettings\Templates\BPGenericTaskTypeSettingsTemplate.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\BaseBPTaskTypeSettings\Templates\BPTaskTypeSettingsTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\Templates\BPRegulatorRuntimeServiceTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\bp-regulator-runtimeservice.js" />
     <Content Include="BusinessProcess\Directives\BPValidationMessage\bp-validation-message-history-grid.js" />
