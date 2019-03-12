@@ -95,6 +95,8 @@
     <Compile Include="VRWorkflowActivities\VRWorkflowSequenceActivity.cs" />
     <Compile Include="VRWorkflowVariableTypes\VRWorkflowCustomClassType.cs" />
     <Compile Include="VRWorkflowVariableTypes\VRWorkflowGenericVariableType.cs" />
+    <Compile Include="VRWorkflow_TaskAssignees\VRWorkflowProcessInitiatorTaskAssignees.cs" />
+    <Compile Include="VRWorkflow_TaskAssignees\VRWorkflowSpecificUsersTaskAssignees.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.BusinessProcess.Business\Vanrise.BusinessProcess.Business.csproj">

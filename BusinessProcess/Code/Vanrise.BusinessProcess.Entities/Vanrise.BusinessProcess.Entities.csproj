@@ -169,6 +169,7 @@
     <Compile Include="VRWorkflow\VRWorkflowFilter.cs" />
     <Compile Include="VRWorkflow\VRWorkflowInfo.cs" />
     <Compile Include="VRWorkflow\VRWorkflowQuery.cs" />
+    <Compile Include="VRWorkflow\VRWorkflowTaskAssignees.cs" />
     <Compile Include="VRWorkflow\VRWorkflowVariable.cs" />
     <Compile Include="VRWorkflow\VRWorkflowVariableType.cs" />
     <Compile Include="VRWorkflow\VRWorkflowVariableTypeConfig.cs" />

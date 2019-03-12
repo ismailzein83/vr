@@ -22,6 +22,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public string TaskTitle { get; set; }
 
+        public VRWorkflowTaskAssignees TaskAssignees { get; set; }
+
         public List<VRWorkflowAssignTaskActivityInputItem> InputItems { get; set; }
 
         public List<VRWorkflowAssignTaskActivityOutputItem> OutputItems { get; set; }
@@ -224,17 +226,5 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         public string To { get; set; }
 
         public string FieldName { get; set; }
-    }
-
-    public class VRWorkflowTaskAssignees
-    {
-        public VRWorkflowTaskAssigneesSetting Settings { get; set; }
-    }
-
-    public abstract class VRWorkflowTaskAssigneesSetting
-    {
-        public abstract Guid ConfigId { get; }
-
-        public abstract string GetAssigneeCode();
     }
 }
