@@ -298,6 +298,10 @@
     <!--<EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>-->
+    <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultCustomerInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultCustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultSupplierInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultSupplierInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\SupplierPaymentDemand.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
