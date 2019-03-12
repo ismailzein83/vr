@@ -2,7 +2,9 @@
 
     'use strict';
 
-    function bpTaskTypeCustomObjectSettings() {
+    BPTaskTypeCustomObjectSettings.$inject = ['UtilsService', 'VRUIUtilsService'];
+
+    function BPTaskTypeCustomObjectSettings( UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -15,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/BusinessProcess/Directives/BPTaskType/Templates/BPTaskTypeSettingsTemplate.html"
+            templateUrl: "/Client/Modules/BusinessProcess/Directives/BPTask/BaseBPTaskType/Templates/BaseBPTaskTypeSettingsTemplate.html"
 
         };
         function SettingsCtor($scope, ctrl, $attrs) {
@@ -46,6 +48,6 @@
         } 
     }
 
-    app.directive('bpBasebptasktypesettingsCustomobject', bpTaskTypeCustomObjectSettings);
+    app.directive('bpBasebptasktypesettingsCustomobject', BPTaskTypeCustomObjectSettings);
 
 })(app);

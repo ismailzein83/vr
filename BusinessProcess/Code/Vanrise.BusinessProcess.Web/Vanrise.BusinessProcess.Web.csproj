@@ -189,6 +189,7 @@
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpServiceMethodEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowTrackingMessageSeverityEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowArgumentDirectionEnum.js" />
+    <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\bp-basebptasktypesettings-selective.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-actions-selective.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-information-action.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-warning-item-action.js" />
@@ -218,9 +219,12 @@
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-log-search.js" />
-    <Content Include="BusinessProcess\Directives\BaseBPTaskType\bp-basebptasktypesettings-customobject.js" />
-    <Content Include="BusinessProcess\Directives\BaseBPTaskType\Templates\BaseBPTaskTypeSettingsTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\bp-basebptasktypesettings-customobject.js" />
+    <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\Templates\BaseBPTaskTypeSettingsTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-selector.js" />
+    <Content Include="BusinessProcess\Directives\BPTask\bp-tasktype-staticeditor.js" />
+    <Content Include="BusinessProcess\Views\BPTask\BPGenericTaskTypeSettingsEditor.html" />
+    <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskTypeStaticEditorTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\BaseBPTaskTypeSettings\bp-generictasktype-settings.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\BaseBPTaskTypeSettings\bp-tasktype-settings.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\BaseBPTaskTypeSettings\Templates\BPGenericTaskTypeSettingsTemplate.html" />
@@ -340,6 +344,7 @@
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceRunningProcessesController.js" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceTrackingModal.html" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceTrackingModalController.js" />
+    <Content Include="BusinessProcess\Views\BPTask\BPGenericTaskTypeSettingsEditorController.js" />
     <Content Include="BusinessProcess\Views\BPTask\BPTaskMonitor.html" />
     <Content Include="BusinessProcess\Views\BPTask\BPTaskMonitorController.js" />
     <Content Include="BusinessProcess\Views\BPTask\BPTaskTestEditor.html" />

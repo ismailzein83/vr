@@ -1,0 +1,15 @@
+﻿<div vr-modalcontent ng-controller="BusinessProcess_BP_BPGenericTaskTypeSettingsEditorController" width="'85%'">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formBPGenericTaskTypeSettings" vr-loader="scopeModal.isLoading">
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Continue" data-onclick="scopeModal.continueTask" formname="formBPGenericTaskTypeSettings"></vr-button>
+                <vr-button type="Stop" data-onclick="scopeModal.stopTask"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
