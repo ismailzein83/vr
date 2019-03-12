@@ -5,6 +5,7 @@ using System.Linq;
 using Vanrise.Common;
 using System;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -29,6 +30,11 @@ namespace Vanrise.BusinessProcess.Business
             BPTaskManager bpTaskManager = new BPTaskManager();
             var bpTask = bpTaskManager.GetTask(taskId);
             return GetBPTaskType(bpTask.TypeId);
+        }
+        public IEnumerable<BaseBPTaskTypeSettingsConfig> GetBaseBPTaskTypeSettingsConfigs()
+        {
+            ExtensionConfigurationManager extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<BaseBPTaskTypeSettingsConfig>(BaseBPTaskTypeSettingsConfig.EXTENSION_TYPE);
         }
         #endregion
 
