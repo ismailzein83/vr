@@ -157,25 +157,25 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
                             fieldValues: {
                                 FinancialAccountId: {
                                     value: financialAccountId,
-                                    visibility: false,
-                                    default: false
+                                    isHidden: true,
+                                    isDisabled: false
                                 },
                                 Classification: {
                                     value: classification,
-                                    visibility: false,
-                                    default: false
+                                    isHidden: true,
+                                    isDisabled: false
                                 }
                             },
                             filterValues: {
                                 FinancialAccountId: {
                                     value: financialAccountId,
-                                    visibility: false,
-                                    default: false
+                                    isHidden: true,
+                                    isDisabled: false
                                 },
                                 Classification: {
                                     value: classification,
-                                    visibility: false,
-                                    default: false
+                                    isHidden: true,
+                                    isDisabled: false
                                 }
                             }
                         };
