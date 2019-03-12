@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Vanrise.Common;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Transformation.Entities
@@ -17,8 +14,11 @@ namespace Vanrise.GenericData.Transformation.Entities
         public string IsEffectiveInFuture { get; set; }
 
         public string RuleId { get; set; }
+
         public List<GenericRuleCriteriaFieldMapping> RuleFieldsMappings { get; set; }
+
         public List<GenericRuleObjectMapping> RuleObjectsMappings { get; set; }
+
         protected void GenerateRuleTargetExecutionCode<T>(IDataTransformationCodeGenerationContext context, out string ruleTargetVariableName)
             where T : GenericRuleTarget
         {
@@ -42,6 +42,7 @@ namespace Vanrise.GenericData.Transformation.Entities
                         ruleFieldMapping.Value, ruleTargetVariableName, ruleFieldMapping.RuleCriteriaFieldName, "\"");
                 }
             }
+
             if (this.RuleObjectsMappings != null)
             {
                 context.AddCodeToCurrentInstanceExecutionBlock("{0}.Objects = new Dictionary<string, dynamic>();", ruleTargetVariableName);
