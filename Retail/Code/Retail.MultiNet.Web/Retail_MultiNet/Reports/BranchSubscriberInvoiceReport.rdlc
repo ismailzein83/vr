@@ -3023,7 +3023,9 @@
               </Parameter>
             </Parameters>
             <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
-            <Height>0.4375in</Height>
+            <Top>0.04118in</Top>
+            <Left>0.00005in</Left>
+            <Height>0.44792in</Height>
             <Width>7.24185in</Width>
             <Style>
               <Border>
@@ -3032,14 +3034,11 @@
             </Style>
           </Subreport>
         </ReportItems>
-        <PageBreak>
-          <BreakLocation>Start</BreakLocation>
-        </PageBreak>
         <KeepTogether>true</KeepTogether>
         <Top>22.71224cm</Top>
         <Left>1.12071cm</Left>
-        <Height>1.13771cm</Height>
-        <Width>18.39435cm</Width>
+        <Height>1.31285cm</Height>
+        <Width>18.39441cm</Width>
         <ZIndex>12</ZIndex>
         <Visibility>
           <Hidden>=IIf(Parameters!OnlyFirstPage.Value = "1",true,false)</Hidden>
@@ -3051,7 +3050,7 @@
         </Style>
       </Rectangle>
     </ReportItems>
-    <Height>27.05016cm</Height>
+    <Height>24.06037cm</Height>
     <Style />
   </Body>
   <Width>20.31208cm</Width>

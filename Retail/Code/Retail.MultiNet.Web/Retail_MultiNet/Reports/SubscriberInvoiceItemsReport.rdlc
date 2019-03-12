@@ -846,39 +846,24 @@
           </Border>
         </Style>
       </Tablix>
-      <Textbox Name="Textbox1">
-        <CanGrow>true</CanGrow>
+      <Rectangle Name="Rectangle2">
+        <PageBreak>
+          <BreakLocation>End</BreakLocation>
+        </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value />
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>0.27878cm</Top>
-        <Left>0cm</Left>
-        <Height>0.6cm</Height>
-        <Width>18.2cm</Width>
+        <Top>0.23495cm</Top>
+        <Left>0.26141cm</Left>
+        <Height>0.48508cm</Height>
+        <Width>17.91292cm</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
-            <Width>0.25pt</Width>
           </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
         </Style>
-      </Textbox>
+      </Rectangle>
     </ReportItems>
-    <Height>8.18439cm</Height>
+    <Height>7.86689cm</Height>
     <Style />
   </Body>
   <Width>18.28172cm</Width>
