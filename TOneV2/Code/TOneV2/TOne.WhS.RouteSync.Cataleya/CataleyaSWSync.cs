@@ -9,11 +9,11 @@ namespace TOne.WhS.RouteSync.Cataleya
     {
         public override Guid ConfigId { get { return new Guid("D770F53B-057F-4BB8-BF20-883A2DBC510B"); } }
 
-        public string MappingSeparator { get; set; }
+        //public string MappingSeparator { get; set; }
 
-        public int? NumberOfMappings { get; set; }
+        //public int? NumberOfMappings { get; set; }
 
-        public int NumberOfOptions { get; set; }
+        //public int NumberOfOptions { get; set; }
 
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
