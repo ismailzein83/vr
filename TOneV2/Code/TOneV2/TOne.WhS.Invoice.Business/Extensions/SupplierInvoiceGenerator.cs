@@ -108,7 +108,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 
             #region BuildSupplierInvoiceDetails
-            SupplierInvoiceDetails supplierInvoiceDetails = BuildSupplierInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, canGenerateVoiceInvoice, dealItemSetNames);
+            SupplierInvoiceDetails supplierInvoiceDetails = BuildSupplierInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, canGenerateVoiceInvoice, dealItemSetNames,currencyId);
             if (supplierInvoiceDetails != null)
             {
                 decimal totalDealAmount = 0;
@@ -365,18 +365,21 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
 
         }
-        private SupplierInvoiceDetails BuildSupplierInvoiceDetails(List<SupplierInvoiceItemDetails> voiceItemSetNames, List<SupplierSMSInvoiceItemDetails> smsItemSetNames, string partnerType, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, bool canGenerateVoiceInvoice, List<SupplierInvoiceDealItemDetails> dealItemSetNames)
+        private SupplierInvoiceDetails BuildSupplierInvoiceDetails(List<SupplierInvoiceItemDetails> voiceItemSetNames, List<SupplierSMSInvoiceItemDetails> smsItemSetNames, string partnerType, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, bool canGenerateVoiceInvoice, List<SupplierInvoiceDealItemDetails> dealItemSetNames, int currencyId)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             SupplierInvoiceDetails supplierInvoiceDetails = null;
             if (partnerType != null)
             {
+                supplierInvoiceDetails = new SupplierInvoiceDetails()
+                {
+                    PartnerType = partnerType,
+                    SupplierCurrencyId = currencyId,
+                    SupplierCurrency = currencyManager.GetCurrencySymbol(currencyId)
+                };
+
                 if (voiceItemSetNames != null && voiceItemSetNames.Count > 0 && canGenerateVoiceInvoice)
                 {
-                    supplierInvoiceDetails = new SupplierInvoiceDetails()
-                    {
-                        PartnerType = partnerType
-                    };
                     foreach (var invoiceBillingRecord in voiceItemSetNames)
                     {
                         supplierInvoiceDetails.Duration += invoiceBillingRecord.Duration;
@@ -384,34 +387,31 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         supplierInvoiceDetails.OriginalCostAmount += invoiceBillingRecord.OriginalCostAmount;
                         supplierInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.NumberOfCalls;
                         supplierInvoiceDetails.OriginalSupplierCurrencyId = invoiceBillingRecord.OriginalSupplierCurrencyId;
-                        supplierInvoiceDetails.SupplierCurrencyId = invoiceBillingRecord.SupplierCurrencyId;
                         supplierInvoiceDetails.AmountAfterCommission += invoiceBillingRecord.AmountAfterCommission;
                         supplierInvoiceDetails.OriginalAmountAfterCommission += invoiceBillingRecord.OriginalAmountAfterCommission;
+                    }
+                    if (voiceItemSetNames.Count > 0)
+                    {
+                        supplierInvoiceDetails.OriginalSupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.OriginalSupplierCurrencyId);
                     }
                 }
                 if (smsItemSetNames != null && smsItemSetNames.Count > 0)
                 {
-                    if (supplierInvoiceDetails == null)
-                    {
-                        supplierInvoiceDetails = new SupplierInvoiceDetails()
-                        {
-                            PartnerType = partnerType
-                        };
-                    }
                     foreach (var invoiceBillingRecord in smsItemSetNames)
                     {
                         supplierInvoiceDetails.TotalSMSAmount += invoiceBillingRecord.CostAmount;
                         supplierInvoiceDetails.TotalNumberOfSMS += invoiceBillingRecord.NumberOfSMS;
                         supplierInvoiceDetails.OriginalSupplierCurrencyId = invoiceBillingRecord.OriginalSupplierCurrencyId;
-                        supplierInvoiceDetails.SupplierCurrencyId = invoiceBillingRecord.SupplierCurrencyId;
                         supplierInvoiceDetails.SMSAmountAfterCommission += invoiceBillingRecord.AmountAfterCommission;
                         supplierInvoiceDetails.SMSOriginalAmountAfterCommission += invoiceBillingRecord.OriginalAmountAfterCommission;
+                    }
+                    if(smsItemSetNames.Count > 0)
+                    {
+                        supplierInvoiceDetails.OriginalSupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.OriginalSupplierCurrencyId);
                     }
                 }
                 if (dealItemSetNames != null)
                 {
-                    if (supplierInvoiceDetails == null)
-                        supplierInvoiceDetails = new SupplierInvoiceDetails() { PartnerType = partnerType };
                     foreach (var dealBillingRecord in dealItemSetNames)
                     {
                         supplierInvoiceDetails.TotalDealAmount += dealBillingRecord.Amount;
@@ -420,8 +420,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             if (supplierInvoiceDetails != null)
             {
-                supplierInvoiceDetails.OriginalSupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.OriginalSupplierCurrencyId);
-                supplierInvoiceDetails.SupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.SupplierCurrencyId);
                 if (commissionType.HasValue)
                 {
                     switch (commissionType.Value)

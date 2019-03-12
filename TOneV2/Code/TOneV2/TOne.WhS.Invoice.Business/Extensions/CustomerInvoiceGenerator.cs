@@ -112,7 +112,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 
             #region BuildCustomerInvoiceDetails
-            CustomerInvoiceDetails customerInvoiceDetails = BuildCustomerInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, canGenerateVoiceInvoice, dealItemSetNames);
+            CustomerInvoiceDetails customerInvoiceDetails = BuildCustomerInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, canGenerateVoiceInvoice, dealItemSetNames, currencyId);
             if (customerInvoiceDetails != null)
             {
                 decimal totalDealAmount = 0;
@@ -375,16 +375,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
 
         }
-        private CustomerInvoiceDetails BuildCustomerInvoiceDetails(List<CustomerInvoiceItemDetails> voiceItemSetNames, List<CustomerSMSInvoiceItemDetails> smsItemSetNames, string partnerType, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, bool canGenerateVoiceInvoice, List<CustomerInvoiceDealItemDetails> dealItemSetNames)
+        private CustomerInvoiceDetails BuildCustomerInvoiceDetails(List<CustomerInvoiceItemDetails> voiceItemSetNames, List<CustomerSMSInvoiceItemDetails> smsItemSetNames, string partnerType, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, bool canGenerateVoiceInvoice, List<CustomerInvoiceDealItemDetails> dealItemSetNames, int currencyId)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             CustomerInvoiceDetails customerInvoiceDetails = null;
             if (partnerType != null)
             {
+                customerInvoiceDetails = new CustomerInvoiceDetails() {
+                    PartnerType = partnerType,
+                    SaleCurrencyId = currencyId,
+                    SaleCurrency = currencyManager.GetCurrencySymbol(currencyId)
+                };
                 if (voiceItemSetNames != null && canGenerateVoiceInvoice)
                 {
-                    customerInvoiceDetails = new CustomerInvoiceDetails() { PartnerType = partnerType };
-
                     foreach (var invoiceBillingRecord in voiceItemSetNames)
                     {
                         customerInvoiceDetails.Duration += invoiceBillingRecord.Duration;
@@ -392,63 +395,52 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         customerInvoiceDetails.OriginalSaleAmount += invoiceBillingRecord.OriginalSaleAmount;
                         customerInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.NumberOfCalls;
                         customerInvoiceDetails.OriginalSaleCurrencyId = invoiceBillingRecord.OriginalSaleCurrencyId;
-                        customerInvoiceDetails.SaleCurrencyId = invoiceBillingRecord.SaleCurrencyId;
                         customerInvoiceDetails.CountryId = invoiceBillingRecord.CountryId;
                         customerInvoiceDetails.SupplierId = invoiceBillingRecord.SupplierId;
                         customerInvoiceDetails.SupplierZoneId = invoiceBillingRecord.SupplierZoneId;
                         customerInvoiceDetails.AmountAfterCommission += invoiceBillingRecord.AmountAfterCommission;
                         customerInvoiceDetails.OriginalAmountAfterCommission += invoiceBillingRecord.OriginalAmountAfterCommission;
                     }
+                    if(voiceItemSetNames.Count > 0)
+                       customerInvoiceDetails.OriginalSaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.OriginalSaleCurrencyId);
                 }
 
                 if (smsItemSetNames != null)
                 {
-                    if (customerInvoiceDetails == null)
-                        customerInvoiceDetails = new CustomerInvoiceDetails() { PartnerType = partnerType };
-
                     foreach (var smsInvoiceBillingRecord in smsItemSetNames)
                     {
                         customerInvoiceDetails.TotalNumberOfSMS += smsInvoiceBillingRecord.NumberOfSMS;
                         customerInvoiceDetails.OriginalSaleCurrencyId = smsInvoiceBillingRecord.OriginalSaleCurrencyId;
-                        customerInvoiceDetails.SaleCurrencyId = smsInvoiceBillingRecord.SaleCurrencyId;
                         customerInvoiceDetails.CountryId = smsInvoiceBillingRecord.CountryId;
                         customerInvoiceDetails.SupplierId = smsInvoiceBillingRecord.SupplierId;
                         customerInvoiceDetails.SMSAmountAfterCommission += smsInvoiceBillingRecord.AmountAfterCommission;
                         customerInvoiceDetails.SMSOriginalAmountAfterCommission += smsInvoiceBillingRecord.OriginalAmountAfterCommission;
                     }
+                    if (smsItemSetNames.Count > 0)
+                        customerInvoiceDetails.OriginalSaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.OriginalSaleCurrencyId);
                 }
 
                 if (dealItemSetNames != null && dealItemSetNames.Count > 0)
                 {
-                    if (customerInvoiceDetails == null)
-                        customerInvoiceDetails = new CustomerInvoiceDetails() { PartnerType = partnerType };
                     foreach (var dealBillingRecord in dealItemSetNames)
                     {
                         customerInvoiceDetails.TotalDealAmount += dealBillingRecord.Amount;
                     }
                 }
 
-                if (customerInvoiceDetails != null)
+                if (commissionType.HasValue)
                 {
-                    if (commissionType.HasValue)
+                    switch (commissionType.Value)
                     {
-                        switch (commissionType.Value)
-                        {
-                            case CommissionType.Display:
-                                customerInvoiceDetails.DisplayComission = true;
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        customerInvoiceDetails.DisplayComission = false;
+                        case CommissionType.Display:
+                            customerInvoiceDetails.DisplayComission = true;
+                            break;
                     }
                 }
-            }
-            if (customerInvoiceDetails != null)
-            {
-                customerInvoiceDetails.OriginalSaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.OriginalSaleCurrencyId);
-                customerInvoiceDetails.SaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.SaleCurrencyId);
+                else
+                {
+                    customerInvoiceDetails.DisplayComission = false;
+                }
             }
             return customerInvoiceDetails;
         }
@@ -465,7 +457,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         private CustomerSMSInvoiceItemDetails SMSItemSetNamesMapper(AnalyticRecord analyticRecord, int currencyId, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
         {
-            #endregion
+        
             var saleNetValue = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "SaleNetNotNULL");
             if (saleNetValue != 0)
             {
@@ -591,7 +583,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return null;
         }
-
         private CustomerInvoiceDealItemDetails DealItemSetNameMapper(AnalyticRecord analyticRecord)
         {
             var saleNetValue = _invoiceGenerationManager.GetMeasureValue<decimal>(analyticRecord, "SaleNet_OrigCurr");
@@ -661,7 +652,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return null;
 
         }
-        public void TryMergeByCurrencyItemSets(List<CustomerInvoiceBySaleCurrencyItemDetails> mainByCurrencyItemSets, List<CustomerInvoiceBySaleCurrencyItemDetails> sMSInvoiceBySaleCurrency)
+        private void TryMergeByCurrencyItemSets(List<CustomerInvoiceBySaleCurrencyItemDetails> mainByCurrencyItemSets, List<CustomerInvoiceBySaleCurrencyItemDetails> sMSInvoiceBySaleCurrency)
         {
             if (sMSInvoiceBySaleCurrency != null && sMSInvoiceBySaleCurrency.Count > 0)
             {
@@ -769,6 +760,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return null;
         }
+        #endregion
         #region CheckUnpricedCDRs
         private bool CheckUnpricedCDRs(IInvoiceGenerationContext context, WHSFinancialAccount financialAccount)
         {
