@@ -88,8 +88,8 @@
                     if (parentFieldValue != undefined && parentFieldValue.Value != undefined && childName != undefined) {
                         fields[childName] = {
                             value: parentFieldValue.Value,
-                            visibility: false,
-                            default: false
+                            isHidden: true,
+                            isDisabled: false
                         };
                     }
                 }

@@ -121,7 +121,7 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNo
                         }
 
                         var parentFieldValue = parentFieldValues[currentField.FieldPath];
-                        if (parentFieldValue == undefined || parentFieldValue.visibility)
+                        if (parentFieldValue == undefined || !parentFieldValue.isHidden)
                             extendedFields.push(currentField);
                     }
 

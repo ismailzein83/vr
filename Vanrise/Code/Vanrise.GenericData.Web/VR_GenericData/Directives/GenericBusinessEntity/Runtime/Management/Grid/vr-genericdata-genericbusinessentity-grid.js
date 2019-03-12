@@ -185,7 +185,7 @@
                                     }
 
                                     var fieldValue = fieldValues[businessEntityGridColumnAttribute.Name];
-                                    if (fieldValue == undefined || fieldValue.visibility) {
+                                    if (fieldValue == undefined || !fieldValue.isHidden) {
                                         $scope.scopeModel.columns.push(businessEntityGridColumnAttribute.Attribute);
                                         continue;
                                     }

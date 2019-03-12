@@ -98,7 +98,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                     if (fieldValues != undefined) {
                         for (var prop in fieldValues) {
                             var fieldValue = fieldValues[prop];
-                            if (!fieldValue.visibility)
+                            if (fieldValue.isHidden)
                                 fieldValuesObj[prop] = fieldValue.value;
                         }
                     }
@@ -152,7 +152,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                         var defaultValues = {};
                         for (var prop in fieldValues) {
                             var propValue = fieldValues[prop];
-                            if (propValue.default)
+                            if (!propValue.isHidden)
                                 defaultValues[prop] = propValue.value;
                         }
 

@@ -54,7 +54,7 @@
                                     $scope.scopeModel.showBasicAdvancedTabs = true;
                                 }
 
-                                if (filterValues == undefined || (filter.FilterSettings != undefined && (filterValues[filter.FilterSettings.FieldName] == undefined || filterValues[filter.FilterSettings.FieldName].visibility))) {
+                                if (filterValues == undefined || (filter.FilterSettings != undefined && (filterValues[filter.FilterSettings.FieldName] == undefined || !filterValues[filter.FilterSettings.FieldName].isHidden))) {
                                     var filterItem = {
                                         payload: filter,
                                         readyPromiseDeferred: UtilsService.createPromiseDeferred(),

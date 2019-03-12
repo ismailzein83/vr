@@ -133,7 +133,7 @@
 
                         if (filterValues != undefined) {
                             var filterValue = filterValues[field];
-                            if (filterValue != undefined && !filterValue.visibility)
+                            if (filterValue != undefined && filterValue.isHidden)
                                 continue;
                         }
 
