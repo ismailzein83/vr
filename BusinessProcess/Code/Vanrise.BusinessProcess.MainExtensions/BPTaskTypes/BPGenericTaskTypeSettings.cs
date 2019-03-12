@@ -15,7 +15,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
         {
             get
             {
-                throw new NotImplementedException();
+                return "";
             }
             set
             {
