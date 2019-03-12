@@ -283,6 +283,16 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 };
                 VRModalService.showModal('/Client/Modules/Security/Views/User/EditMyLanguage.html', null, modalSettings);
             };
+
+            $scope.openRenderedAsViewModal = function () {
+                var modalSettings = {
+                };
+                modalSettings.onScopeReady = function (modalScope) {
+                    modalScope.currentPage = $scope.currentPage;
+                };
+                VRModalService.showModal('/Client/Modules/Security/Views/MobileRenderedAsViewPopup.html', null, modalSettings);
+            };
+
             $scope.menuItemsCurrent = null;
             $scope.setIndex = function (item) {
                 // $('.vr-menu-item').slideUp();
@@ -354,6 +364,13 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 $rootScope.toTilesView = obj.TilesMode;
                 $rootScope.toModuleTilesView = obj.ModuleTilesMode;
                 $rootScope.evalApplicationViewToggle();
+                if ($scope.isMobile) {
+                    obj.MenuOption = MasterLayoutMenuOptionEnum.FullMenu.value;
+                    $rootScope.showApplicationTiles = false;
+                    $rootScope.showModuleTiles = false;
+                    $rootScope.toTilesView = false;
+                    $rootScope.toModuleTilesView = false;
+                }
                 switch (obj.MenuOption) {
                     case MasterLayoutMenuOptionEnum.FullMenu.value:
                         $rootScope.fullMenu = true;
@@ -448,13 +465,12 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                     value.tileIcon = buildTileIconPath(value.Icon);
                     allMenuItems.push(value);
                     matchParentNode(value);
-
-                    $rootScope.mainMenuReady = true;
                 });
                 $rootScope.menuItems = response;
                 if (currentURL != undefined)
                     setSelectedMenuFromURL();
                 $scope.spinner = false;
+                $rootScope.mainMenuReady = true;
             });
 
             function matchParentNode(obj) {
@@ -591,12 +607,38 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
             $rootScope.moduleRenderedAsView;
             $rootScope.startView = 0;
+            var viewPageSize = $scope.isMobile ? 1: 5;
+            $rootScope.limitRenderAsViewTo = viewPageSize;
             $rootScope.goToFirstPageFromSubModule = function (c) {
+                if ($rootScope.moduleRenderedAsView && c.Id == $rootScope.moduleRenderedAsView.Id) return;
                 $rootScope.moduleRenderedAsView = c;
-                var firstPage = c.Childs[0];
-                window.location.href = firstPage.Location;
+                if (c.Childs != null) {
+                    var firstPage = c.Childs[0];
+                    $rootScope.viewsCountStart = 0;
+                    $rootScope.viewsCountLimit = $rootScope.viewsCountStart + $rootScope.viewsPageSize;
+                    window.location.href = firstPage.Location;
+                }
             };
 
+            $rootScope.changeView;
+            $rootScope.viewsPageSize = viewPageSize;
+            $rootScope.viewsCountStart = $rootScope.startView;
+            $rootScope.viewsCountLimit = $rootScope.viewsCountStart + $rootScope.viewsPageSize;
+
+
+            $rootScope.setViewSelectedIndex = function (index) {
+                $rootScope.changeView = true;
+                $rootScope.viewsCountStart = index;
+                $rootScope.viewsCountLimit = $rootScope.viewsCountStart + $rootScope.viewsPageSize;
+                window.location.href = $rootScope.moduleRenderedAsView.Childs[index].Location;
+            };
+
+            $rootScope.setLastViewSelectedIndex = function (index) {
+                $rootScope.changeView = true;
+                $rootScope.viewsCountLimit = index + 1;
+                $rootScope.viewsCountStart = $rootScope.viewsCountLimit - $rootScope.viewsPageSize;
+                window.location.href = $rootScope.moduleRenderedAsView.Childs[index].Location;
+            };
 
             $rootScope.menuFilter = function (item) {
                 if ($rootScope.showAllMenuItems) return true;
@@ -647,12 +689,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                         $scope.menuItemsCurrent = selectedModule.parent.parent;
                         $scope.menusubItemsCurrent = selectedModule.parent;
                     }
-
+                                        
                 }
                 $rootScope.evalModuleViewToggle();
             };
             $scope.currentPage = null;
-
             function setMenuItemSelectedFlag(menuItem, isSelected) {
                 $scope.menusubItemsCurrent = null;
                 menuItem.isSelected = isSelected;
@@ -664,6 +705,21 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                     $scope.currentPage = menuItem;
                     if ($scope.currentPage.parent.RenderedAsView == true) {
                         $rootScope.moduleRenderedAsView = $scope.currentPage.parent;
+                        var index = $rootScope.moduleRenderedAsView.Childs.indexOf($scope.currentPage);
+                        if (!$rootScope.changeView && $rootScope.moduleRenderedAsView.Childs.length > $rootScope.viewsPageSize) {
+                            if (index < $rootScope.viewsPageSize) {
+                                $rootScope.viewsCountStart = 0;
+                                $rootScope.viewsCountLimit = $rootScope.viewsCountStart + $rootScope.viewsPageSize;
+                            }
+                            else if (index > $rootScope.viewsPageSize) {
+                                $rootScope.viewsCountLimit = index + 1;
+                                $rootScope.viewsCountStart = $rootScope.viewsCountLimit - $rootScope.viewsPageSize;
+                            }
+                            else {
+                                $rootScope.viewsCountLimit = index + 1;
+                                $rootScope.viewsCountStart = $rootScope.viewsCountLimit - $rootScope.viewsPageSize;
+                            }
+                        }
                     }
                 }
 

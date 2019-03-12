@@ -1,0 +1,14 @@
+﻿<div vr-modalcontent  ismenu ng-controller="MobileRenderedAsViewPopupController" >
+    <vr-modalbody>
+        <ul class="gid-cell-menu am-fade-and-slide-top tabs-popup" style="list-style-type:none;">
+            <li role="presentation">
+                <div ng-repeat="a in $root.moduleRenderedAsView.Childs" class="mark-select action-item">
+                    <div class="hand-cursor tab-item" ng-click="selectViewAndCloseModal(a)"  ng-class="a.Id == currentPage.Id? 'selected-tab' : ''">
+                        <span style="font-size:20px">{{a.Name}}</span>
+
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </vr-modalbody>
+</div>

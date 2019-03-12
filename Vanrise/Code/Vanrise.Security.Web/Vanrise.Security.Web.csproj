@@ -231,6 +231,7 @@
     <Content Include="Security\Services\ViewService.js" />
     <Content Include="Security\Services\UserService.js" />
     <Content Include="Security\Services\WidgetService.js" />
+    <Content Include="Security\Views\MobileRenderedAsViewPopupController.js" />
     <Content Include="Security\Views\RegisteredApplicationLanding.html" />
     <Content Include="Security\Views\RegisteredApplicationLandingController.js" />
     <Content Include="Security\Views\BusinessEntity\BusinessEntityDefinitionEditor.html" />
@@ -361,6 +362,7 @@
     <Content Include="Security\Views\View\GenericViewEditorController.js" />
     <Content Include="Security\Views\View\ViewManagement.html" />
     <Content Include="Security\Views\View\ViewManagementController.js" />
+    <Content Include="Security\Views\MobileRenderedAsViewPopup.html" />
     <Content Include="Security\Views\WidgetsPages\WidgetPreview.html" />
     <Content Include="Security\Views\WidgetsPages\WidgetPreviewController.js" />
     <Content Include="Security\Views\WidgetsPages\WidgetEditor.html" />

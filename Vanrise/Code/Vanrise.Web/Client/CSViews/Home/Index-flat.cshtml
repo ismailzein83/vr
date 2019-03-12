@@ -58,7 +58,7 @@
                                     <div class="dropdown vr-user-menu" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
                                         <div class="dropdown-toggle flex-user-menu" id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
                                             <div class="vr-user-icon">
-                                                <vr-preview-image  height="26px" width="26px" value="userPhotoFileId" usericon="userPhotoFileId!=null"> </vr-preview-image>
+                                                <vr-preview-image height="26px" width="26px" value="userPhotoFileId" usericon="userPhotoFileId!=null"> </vr-preview-image>
                                             </div>
                                             <label class="vr-user-label">{{userDisplayName}}</label>
                                         </div>
@@ -126,7 +126,7 @@
                                 </div>
                             </div>
                             <div class="panel panel-default menu-item-list" ng-repeat="item in $root.menuItems | filter: $root.menuFilter">
-                                <div ng-class="item.isSelected? 'selected-menu':''" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" ng-click="setIndex(item)">
+                                <div ng-class="item.isSelected? 'selected-menu':''" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme bgcolor-{{item.keyclass}}" ng-click="setIndex(item)">
 
                                     <span ng-if="item.Childs.length > 0">
                                         <span class="glyphicon module-icon"><img class="icon" ng-src="{{::item.Icon}}" /></span>
@@ -152,7 +152,7 @@
                                             </ul>
                                             <ul class="nav" ng-if="c.RenderedAsView">
                                                 <li class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''">
-                                                    <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href="" ng-click="$root.goToFirstPageFromSubModule(c)">{{::c.Name}} </a>
+                                                    <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href="{{::c.Childs[0].Location}}" ng-click="$root.goToFirstPageFromSubModule(c)">{{::c.Name}} </a>
                                                 </li>
                                             </ul>
                                             <div ng-if="c.Childs.length > 0  && !c.RenderedAsView" class="dll-parent-menu menu-item-list-ligth">
@@ -160,7 +160,7 @@
                                                 <ul class="nav slideanimation inner-sub-menu" ng-if="menusubItemsCurrent.Id == c.Id">
                                                     <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
                                                         <a ng-if="!a.RenderedAsView" class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
-                                                        <span ng-if="a.RenderedAsView" class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-click="$root.goToFirstPageFromSubModule(a)">{{::a.Name}}</span>
+                                                        <a ng-if="a.RenderedAsView" ng-href="{{::a.Childs[0].Location}}" class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-click="$root.goToFirstPageFromSubModule(a)">{{::a.Name}}</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -180,18 +180,35 @@
                     <div class="container-fluid vr-container">
                         <div class="vr-top-nav-container">
                             <div class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-if="$root.moduleRenderedAsView && currentPage.parent.RenderedAsView ==  true && !$root.masterLayoutSettings.IsBreadcrumbVisible">
-                                <a ng-repeat="c in $root.moduleRenderedAsView.Childs | limitTo: 5 :  $root.startView " ng-href="{{::c.Location}}">
-                                    <label class="hand-cursor" ng-class="c.Id == currentPage.Id ? 'choiced-view' : ''"> {{c.Name}}</label>
-                                    <span style="cursor:default" ng-show="!$last">|</span>
-                                </a>
-                                <span style="position:relative" ng-if="$root.moduleRenderedAsView.Childs.length > 5 ">
-                                    <a id="dropdownTabs" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
-                                        <span class="glyphicon glyphicon-option-horizontal hand-cursor list-view-icon" ng-class=" $root.moduleRenderedAsView.Childs.indexOf(currentPage) > 5 ? 'other-selected':''"></span>
+                                <span id="dropdownTabsPrev" style="position:relative" ng-show="($root.viewsCountLimit >  $root.viewsPageSize && $root.moduleRenderedAsView.Childs.length > $root.viewsPageSize) ||  ( $root.moduleRenderedAsView.Childs.length  <  $root.limitRenderAsViewTo &&  $root.viewsCountStart > 0 )">
+                                    <a style="color:#333" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                                        <span class="glyphicon glyphicon-backward hand-cursor list-view-icon"></span>
                                     </a>
-                                    <ul class="dropdown-menu " aria-labelledby="dropdownTabs">
-                                        <li ng-repeat="a in $root.moduleRenderedAsView.Childs | limitTo: $root.moduleRenderedAsView.Childs.length - 5 :  5 ">
-                                            <a ng-href="{{::a.Location}}" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
-                                                {{a.Name}}
+                                    <ul class="dropdown-menu " aria-labelledby="dropdownTabsPrev">
+                                        <li ng-repeat="a in $root.moduleRenderedAsView.Childs " ng-hide="$index >= $root.viewsCountStart ">
+                                            <a href="{{::a.Location}}" ng-click="$root.setViewSelectedIndex($index)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
+                                                <label class="hand-cursor">
+                                                    {{a.Name}}
+                                                </label>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </span>
+
+                                <a ng-repeat="c in $root.moduleRenderedAsView.Childs" ng-show="$index < $root.viewsCountLimit  && $index >= $root.viewsCountStart " ng-href="{{c.Location}}" ng-click="$root.changeView =  true">
+                                    <label class="hand-cursor" ng-class="c.Id == currentPage.Id ? 'choiced-view' : ''"> {{c.Name}}</label>
+                                    <span style="cursor:default" ng-hide="$index == $root.viewsCountLimit - 1 || $last ">|</span>
+                                </a>
+                                <span id="dropdownTabsFor" style="position:relative" ng-show="$root.moduleRenderedAsView.Childs.length > $root.viewsPageSize && $root.viewsCountLimit < $root.moduleRenderedAsView.Childs.length ">
+                                    <a style="color:#333" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                                        <span class="glyphicon glyphicon-forward hand-cursor list-view-icon"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownTabsFor">
+                                        <li ng-repeat="a in $root.moduleRenderedAsView.Childs" ng-hide=" $index < $root.viewsCountLimit">
+                                            <a href="{{::a.Location}}" ng-click="$root.setLastViewSelectedIndex($index)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
+                                                <label class="hand-cursor">
+                                                    {{a.Name}}
+                                                </label>
                                             </a>
                                         </li>
                                     </ul>
@@ -263,20 +280,33 @@
                                 <span ng-if="currentPage">
                                     <span class="glyphicon glyphicon-menu-right" ng-show="!$root.showModuleViewToggle && !showApplicationViewToggle"></span>
                                     <label ng-if="showCurrentPageTitle()">{{currentPage.Title}}</label>
-
                                     <span class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-if="$root.moduleRenderedAsView && currentPage.parent.RenderedAsView ==  true">
-                                        <a ng-repeat="c in $root.moduleRenderedAsView.Childs | limitTo: 5 :  $root.startView " ng-href="{{::c.Location}}">
-                                            <label class="hand-cursor" ng-class="c.Id == currentPage.Id ? 'choiced-view' : ''"> {{c.Name}}</label>
-                                            <span style="cursor:default" ng-show="!$last">|</span>
-                                        </a>
-                                        <span style="position:relative" ng-if="$root.moduleRenderedAsView.Childs.length > 5 ">
-                                            <a id="dropdownTabs" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
-                                                <label class="glyphicon glyphicon-option-horizontal hand-cursor list-view-icon" ng-class=" $root.moduleRenderedAsView.Childs.indexOf(currentPage) > 5 ? 'other-selected':''"></label>
+                                        <span id="dropdownTabsPrev" style="position:relative" ng-show="($root.viewsCountLimit >  $root.viewsPageSize && $root.moduleRenderedAsView.Childs.length > $root.viewsPageSize) ||  ( $root.moduleRenderedAsView.Childs.length  <  $root.limitRenderAsViewTo &&  $root.viewsCountStart > 0 )">
+                                            <a style="color:#333" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                                                <span class="glyphicon glyphicon-backward hand-cursor list-view-icon"></span>
                                             </a>
-                                            <ul class="dropdown-menu " aria-labelledby="dropdownTabs">
-                                                <li ng-repeat="a in $root.moduleRenderedAsView.Childs | limitTo: $root.moduleRenderedAsView.Childs.length - 5 :  5 ">
-                                                    <a ng-href="{{::a.Location}}" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
-                                                        <label>
+                                            <ul class="dropdown-menu " aria-labelledby="dropdownTabsPrev">
+                                                <li ng-repeat="a in $root.moduleRenderedAsView.Childs " ng-hide="$index >= $root.viewsCountStart ">
+                                                    <a href="{{::a.Location}}" ng-click="$root.setViewSelectedIndex($index)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
+                                                        <label class="hand-cursor">
+                                                            {{a.Name}}
+                                                        </label>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                        <a ng-repeat="c in $root.moduleRenderedAsView.Childs" dataindex="{{$index}}" viewscountlimit="{{$root.viewsCountLimit}}" viewscountstart="{{$root.viewsCountStart}}" ng-show="$index < $root.viewsCountLimit  && $index >= $root.viewsCountStart " ng-href="{{c.Location}}" ng-click="$root.changeView =  true">
+                                            <label class="hand-cursor" ng-class="c.Id == currentPage.Id ? 'choiced-view' : ''"> {{c.Name}}</label>
+                                            <span style="cursor:default" ng-hide="$index == $root.viewsCountLimit - 1 || $last ">|</span>
+                                        </a>
+                                        <span id="dropdownTabsFor" style="position:relative" ng-show="$root.moduleRenderedAsView.Childs.length > $root.viewsPageSize && $root.viewsCountLimit < $root.moduleRenderedAsView.Childs.length ">
+                                            <a style="color:#333" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                                                <span class="glyphicon glyphicon-forward hand-cursor list-view-icon"></span>
+                                            </a>
+                                            <ul class="dropdown-menu " aria-labelledby="dropdownTabsFor">
+                                                <li ng-repeat="a in $root.moduleRenderedAsView.Childs" ng-hide=" $index < $root.viewsCountLimit">
+                                                    <a href="{{::a.Location}}" ng-click="$root.setLastViewSelectedIndex($index)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
+                                                        <label class="hand-cursor">
                                                             {{a.Name}}
                                                         </label>
                                                     </a>
@@ -324,7 +354,7 @@
                     <div id="navbar" class="navbar-collapse collapse vr-collapse">
                         <ul class="nav navbar-nav">
                             <li class="panel-default menu-item-list" ng-repeat="item in $root.menuItems">
-                                <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" ng-click="setIndex(item)">
+                                <div class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme bgcolor-{{::item.keyclass}}" ng-click="setIndex(item)">
 
                                     <span ng-if="item.Childs.length > 0">
                                         <span class="glyphicon module-icon" style="top: -4px; "><img class="icon" ng-src="{{::item.Icon}}" /></span>
@@ -333,9 +363,8 @@
                                             <span ng-if="item.Childs.length>0" class="glyphicon " ng-class="menuItemsCurrent.Id == item.Id ?'glyphicon-chevron-down':'glyphicon-chevron-right'" style="font-size: 10px; top: 7px;"></span>
                                         </span>
                                     </span>
-
                                     <ul class="nav" ng-if="item.Childs.length == 0" data-toggle="collapse" data-parent="#accordion">
-                                        <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.Childs">
+                                        <li class="dll-menu menu-item-list-ligth">
                                             <a class="menulink  " ng-href="{{::item.Location}}" ng-click="logfunc()">{{::item.Name}}</a>
                                         </li>
                                     </ul>
@@ -368,17 +397,26 @@
                 <h4 class="vr-page-title" ng-bind="currentPage.Title"></h4>
             </div>
             <div id="page-content-wrapper" class="vr-mobile-content-wrapper">
+                <span class="btn-group btn-group-custom vr-tabs vr-choices-filter ng-scope" ng-if="$root.moduleRenderedAsView && currentPage.parent.RenderedAsView ==  true">
 
+                    <span ng-repeat="c in $root.moduleRenderedAsView.Childs ">
+                        <label class="hand-cursor ng-binding ng-hide" ng-show="c.Id  == currentPage.Id ">{{c.Name}}</label>
+                    </span>
+                    <span style="position:relative" ng-if="$root.moduleRenderedAsView.Childs.length > $root.limitRenderAsViewTo ">
+                        <a id="dropdownTabs" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" ng-click="openRenderedAsViewModal()">
+                            <label class="hand-cursor">
+                                <span class="glyphicon  glyphicon-chevron-right hand-cursor"></span>
+                            </label>
+                        </a>
+                    </span>
+                </span>
                 <div class="container-fluid vr-container">
                     <div class="col-lg-12" ng-view id="mainNgView"></div>
                 </div>
-                <!-- /#page-content-wrapper -->
             </div>
+            <!-- /#page-content-wrapper -->
         </div>
-
-
     </div>
-
 </body>
 @VRWebScripts.Render("~/bundles/helpers")
 @VRWebScripts.Render("~/bundles/JQuery")

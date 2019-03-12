@@ -502,6 +502,18 @@
         cursor: pointer !important;
         text-decoration: none;
     }
+
+
+.flat.vr-mobile-view .vr-page-title,
+.flat.vr-mobile-view .vr-user-label,
+.flat.vr-mobile-view .vr-nav-custom label,
+.flat.vr-mobile-view .vr-nav-custom a,
+.flat.vr-mobile-view .vr-nav-custom a:active,
+.flat.vr-mobile-view .vr-nav-custom a:visited,
+.flat.vr-mobile-view .vr-nav-custom a:focus,
+.flat.vr-mobile-view .vr-nav-custom .glyphicon {
+    color: #635F5F !important;
+}
 /*** Styles added to fix the issue with zoom in on iphone ***/
 /* iPhone < 5: */
 @media screen and (device-aspect-ratio: 2/3) {
