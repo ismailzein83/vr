@@ -33,9 +33,8 @@ namespace Vanrise.Invoice.MainExtensions
                     string currentDir = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(OpenRDLCReportActionManager)).Location);
                     ReportUrl = Path.Combine(currentDir, reportRuntimeURL);
                 }
-                if (!File.Exists(ReportUrl))
-                    this._ReportFileExists = false;
-                this._ReportFileExists = true;
+
+                this._ReportFileExists = File.Exists(ReportUrl);
             }
             return this._ReportFileExists.Value;
         }
