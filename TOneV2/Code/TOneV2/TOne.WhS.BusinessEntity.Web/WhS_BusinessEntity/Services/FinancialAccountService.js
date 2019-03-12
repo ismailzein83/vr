@@ -137,24 +137,21 @@
                             fieldValues: {
                                 FinancialAccountId: {
                                     value: financialAccountId,
-                                    visibility: false,
-                                    default: false
+                                    isHidden: true,
+                                    isDisabled: false
                                 },
                                 CurrencyId: {
                                     value: currencyId,
-                                    visibility: true,
-                                    default: true
+                                    isHidden: false,
+                                    isDisabled: false
                                 }
                             },
                             filterValues: {
                                 FinancialAccountId: {
                                     value: financialAccountId,
-                                    visibility: false,
-                                    default: false
+                                    isHidden: true,
+                                    isDisabled: false
                                 }
-                            },
-                            defaultValues: {
-                                CurrencyId: currencyId
                             }
                         };
                         genericBusinessEntityAPI.load(genericBusinessEntityPayload).then(function () {
@@ -190,24 +187,21 @@
                             fieldValues: {
                                 FinancialAccountId: {
                                     value: financialAccountId,
-                                    visibility: false,
-                                    default: undefined
+                                    isHidden: true,
+                                    isDisabled: false
                                 },
                                 CurrencyId: {
                                     value: currencyId,
-                                    visibility: true,
-                                    default: currencyId
+                                    isHidden: false,
+                                    isDisabled: false
                                 }
                             },
                             filterValues: {
                                 FinancialAccountId: {
                                     value: financialAccountId,
-                                    visibility: false,
-                                    default: undefined
+                                    isHidden: true,
+                                    isDisabled: false
                                 }
-                            },
-                            defaultValues: {
-                                CurrencyId: currencyId
                             }
                         };
                         genericBusinessEntityAPI.load(genericBusinessEntityPayload).then(function () {
