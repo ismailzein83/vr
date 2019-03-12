@@ -37,7 +37,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             };
             string settings = reader["Settings"] as string;
             if (!String.IsNullOrWhiteSpace(settings))
-                bpTaskType.Settings = Serializer.Deserialize<BPTaskTypeSettings>(settings);
+                bpTaskType.Settings = Serializer.Deserialize<BaseBPTaskTypeSettings>(settings);
 
             return bpTaskType;
         }

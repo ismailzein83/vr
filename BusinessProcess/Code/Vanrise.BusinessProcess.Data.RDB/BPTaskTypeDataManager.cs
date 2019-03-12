@@ -69,7 +69,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             };
             string settings = reader.GetString(COL_Settings);
             if (!String.IsNullOrWhiteSpace(settings))
-                bpTaskType.Settings = Serializer.Deserialize<BPTaskTypeSettings>(settings);
+                bpTaskType.Settings = Serializer.Deserialize<BaseBPTaskTypeSettings>(settings);
 
             return bpTaskType;
         }
