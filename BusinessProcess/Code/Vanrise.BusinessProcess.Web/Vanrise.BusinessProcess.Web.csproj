@@ -234,6 +234,7 @@
     <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskCompilationResult.html" />
     <Content Include="BusinessProcess\Directives\CustomCode\CustomCodeTaskCompilationResultController.js" />
     <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskTemplate.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-assigntask.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-callhttpservice.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-subprocess.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-delay.js" />
@@ -246,6 +247,7 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivityForEachEditor.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivitySequenceEditor.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivitySubprocessEditor.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowAssignTaskTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowCallHttpServiceTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowDelayTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowIfElseTemplate.html" />
