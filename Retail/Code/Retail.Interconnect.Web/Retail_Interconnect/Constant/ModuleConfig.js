@@ -1,3 +1,3 @@
-﻿//app.constant('Retail_Interconnect_ModuleConfig', {
-//    moduleName: "Retail_Interconnect"
-//});
+﻿app.constant('Retail_Interconnect_ModuleConfig', {
+    moduleName: "Retail_Interconnect"
+});

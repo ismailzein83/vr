@@ -1,23 +1,23 @@
-﻿//(function (appControllers) {
+﻿(function (appControllers) {
 
-//    'use strict';
+    'use strict';
 
-//    retailModuleService.$inject = ['UISettingsService'];
+    retailModuleService.$inject = ['UISettingsService'];
 
-//    function retailModuleService(UISettingsService) {
+    function retailModuleService(UISettingsService) {
 
-//        function isVoiceModuleEnabled() {
-//            return UISettingsService.getUIParameterValue("IsVoiceModuleEnabled");
-//        }
-//        function isSMSModuleEnabled() {
-//            return UISettingsService.getUIParameterValue("IsSMSModuleEnabled");
-//        }
-//        return ({
-//            isSMSModuleEnabled: isSMSModuleEnabled,
-//            isVoiceModuleEnabled: isVoiceModuleEnabled
-//        });
-//    }
+        function isVoiceModuleEnabled() {
+            return UISettingsService.getUIParameterValue("IsVoiceModuleEnabled");
+        }
+        function isSMSModuleEnabled() {
+            return UISettingsService.getUIParameterValue("IsSMSModuleEnabled");
+        }
+        return ({
+            isSMSModuleEnabled: isSMSModuleEnabled,
+            isVoiceModuleEnabled: isVoiceModuleEnabled
+        });
+    }
 
-//    appControllers.service('Retail_Interconnect_RetailModuleService', retailModuleService);
+    appControllers.service('Retail_Interconnect_RetailModuleService', retailModuleService);
 
-//})(appControllers);
+})(appControllers);

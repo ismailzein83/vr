@@ -8,6 +8,28 @@ namespace Retail.Interconnect.Entities
 {
     public class InvoiceComparisonSMSResult
     {
+        public string MobileNetwork { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
+        public string Currency { get; set; }
+        public Decimal? SystemRate { get; set; }
+        public Decimal? ProviderRate { get; set; }
+        public Decimal? SystemAmount { get; set; }
+        public Decimal? ProviderAmount { get; set; }
+        public Decimal? SystemSMSs { get; set; }
+        public Decimal? ProviderSMSs { get; set; }
+        public decimal? DiffSMSsPercentage { get; set; }
+
+        public decimal? DiffSMSs { get; set; }
+        public Vanrise.Entities.LabelColor? DiffSMSsColor { get; set; }
+
+        public decimal? DiffAmount { get; set; }
+        public decimal? DiffAmountPercentage { get; set; }
+
+        public Vanrise.Entities.LabelColor? DiffAmountColor { get; set; }
+
+        public ComparisonResult Result { get; set; }
+        public Vanrise.Entities.LabelColor ResultColor { get; set; }
     }
 
 

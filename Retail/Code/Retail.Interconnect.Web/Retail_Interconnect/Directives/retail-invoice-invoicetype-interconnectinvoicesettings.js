@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "retail_Interconnect_InvoiceType",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, retail_Interconnect_InvoiceType) {
+app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_Interconnect_InvoiceType",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_Interconnect_InvoiceType) {
 
         var directiveDefinitionObject = {
 
@@ -39,7 +39,7 @@ app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsServ
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.invoiceType = UtilsService.getArrayEnum(retail_Interconnect_InvoiceType);
+                $scope.scopeModel.invoiceType = UtilsService.getArrayEnum(Retail_Interconnect_InvoiceType);
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     beDefinitionSelectorAPI = api;
                     beDefinitionSelectorPromiseDeferred.resolve();

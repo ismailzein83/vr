@@ -7,7 +7,7 @@ using Vanrise.ExcelConversion.Entities;
 
 namespace Retail.Interconnect.Entities
 {
-    public enum ComparisonSMSCriteria { NbOfSMSs = 0, Amount = 2 }
+    public enum ComparisonSMSCriteria { NbOfSMSs = 1, Amount = 2 }
     public class InvoiceComparisonSMSInput
     {
         public ListMapping ListMapping { get; set; }

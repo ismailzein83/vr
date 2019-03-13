@@ -19,39 +19,39 @@ namespace Retail.Interconnect.Business.Extensions
         {
             return SecurityContext.Current.IsAllowed(context.InvoiceAction.RequiredPermission, context.UserId);
         }
-        //public InvoiceCarrierType InvoiceCarrierType { get; set; }
-        //public string PartnerLabel { get; set; }
-        //public string PartnerAbbreviationLabel { get; set; }
-        //public CompareInvoiceSMSActionSettings SMSSettings { get; set; }
-        //public CompareInvoiceVoiceActionSettings VoiceSettings { get; set; }
+        public InvoiceCarrierType InvoiceCarrierType { get; set; }
+        public string PartnerLabel { get; set; }
+        public string PartnerAbbreviationLabel { get; set; }
+        public CompareInvoiceSMSActionSettings SMSSettings { get; set; }
+        public CompareInvoiceVoiceActionSettings VoiceSettings { get; set; }
     }
 
-    //public class CompareInvoiceActionSettings
-    //{
-    //    public Guid ItemGroupingId { get; set; }
-    //}
-    //public class CompareInvoiceSMSActionSettings : CompareInvoiceActionSettings
-    //{
-    //    public Guid MobileNetworkDimensionId { get; set; }
-    //    public Guid CurrencyDimensionId { get; set; }
-    //    public Guid RateDimensionId { get; set; }
-    //    public Guid RateMeasureId { get; set; }
-    //    public Guid NumberOfSMSsMeasureId { get; set; }
-    //    public Guid AmountMeasureId { get; set; }
-    //    public Guid FromDateMeasureId { get; set; }
-    //    public Guid ToDateMeasureId { get; set; }
-    //}
-    //public class CompareInvoiceVoiceActionSettings : CompareInvoiceActionSettings
-    //{
-    //    public Guid ZoneDimensionId { get; set; }
-    //    public Guid CurrencyDimensionId { get; set; }
-    //    public Guid RateDimensionId { get; set; }
-    //    public Guid RateTypeDimensionId { get; set; }
-    //    public Guid RateMeasureId { get; set; }
-    //    public Guid NumberOfCallsMeasureId { get; set; }
-    //    public Guid AmountMeasureId { get; set; }
-    //    public Guid DurationMeasureId { get; set; }
-    //    public Guid FromDateMeasureId { get; set; }
-    //    public Guid ToDateMeasureId { get; set; }
-    //}
+    public class CompareInvoiceActionSettings
+    {
+        public Guid ItemGroupingId { get; set; }
+    }
+    public class CompareInvoiceSMSActionSettings : CompareInvoiceActionSettings
+    {
+        public Guid MobileNetworkDimensionId { get; set; }
+        public Guid CurrencyDimensionId { get; set; }
+        public Guid RateDimensionId { get; set; }
+        public Guid RateMeasureId { get; set; }
+        public Guid NumberOfSMSsMeasureId { get; set; }
+        public Guid AmountMeasureId { get; set; }
+        public Guid FromDateMeasureId { get; set; }
+        public Guid ToDateMeasureId { get; set; }
+    }
+    public class CompareInvoiceVoiceActionSettings : CompareInvoiceActionSettings
+    {
+        public Guid ZoneDimensionId { get; set; }
+        public Guid CurrencyDimensionId { get; set; }
+        public Guid RateDimensionId { get; set; }
+        public Guid RateTypeDimensionId { get; set; }
+        public Guid RateMeasureId { get; set; }
+        public Guid NumberOfCallsMeasureId { get; set; }
+        public Guid AmountMeasureId { get; set; }
+        public Guid DurationMeasureId { get; set; }
+        public Guid FromDateMeasureId { get; set; }
+        public Guid ToDateMeasureId { get; set; }
+    }
 }

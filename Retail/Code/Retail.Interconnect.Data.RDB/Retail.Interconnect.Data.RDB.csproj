@@ -43,9 +43,29 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InterconnectInvoiceComparisonTemplateDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.Interconnect.Data\Retail.Interconnect.Data.csproj">
+      <Project>{19d00a8a-5f7b-4beb-bb0a-e408e68c4765}</Project>
+      <Name>Retail.Interconnect.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Interconnect.Entities\Retail.Interconnect.Entities.csproj">
+      <Project>{ED0CD3D2-1E3F-4399-BA99-0EBF76746A34}</Project>
+      <Name>Retail.Interconnect.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
