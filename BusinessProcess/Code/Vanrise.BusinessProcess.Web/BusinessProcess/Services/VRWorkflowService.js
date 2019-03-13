@@ -228,7 +228,22 @@
 			};
 
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/VRWorkflowCompilationResult.html', modalParameters, modalSettings);
-		}
+        }
+
+        function openAssignTaskEditor(obj, context, onActivityUpdated, remove, isNew) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onActivityUpdated = onActivityUpdated;
+                modalScope.remove = remove;
+            };
+            var parameter = {
+                obj: obj,
+                context: context,
+                isNew: isNew
+            };
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityAssignTaskEditor.html', parameter, modalSettings);
+        }
 
 		return ({
 			addVRWorkflow: addVRWorkflow,
@@ -245,7 +260,8 @@
 			openForeachEditor: openForeachEditor,
 			openSequenceEditor: openSequenceEditor,
 			openCallHttpServiceEditor: openCallHttpServiceEditor,
-			openSubProcessEditor: openSubProcessEditor
+            openSubProcessEditor: openSubProcessEditor,
+            openAssignTaskEditor: openAssignTaskEditor,
 		});
 	}
 

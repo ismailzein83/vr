@@ -223,6 +223,8 @@
     <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\Templates\BaseBPTaskTypeSettingsTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-selector.js" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-tasktype-staticeditor.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivityAssignTaskEditor.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityAssignTaskController.js" />
     <Content Include="BusinessProcess\Views\BPTask\BPGenericTaskTypeSettingsEditor.html" />
     <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskTypeStaticEditorTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\BaseBPTaskTypeSettings\bp-generictasktype-settings.js" />

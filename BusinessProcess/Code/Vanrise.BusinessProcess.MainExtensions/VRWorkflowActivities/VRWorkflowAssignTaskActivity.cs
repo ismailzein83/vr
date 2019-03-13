@@ -12,15 +12,17 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
     public class VRWorkflowAssignTaskActivity : VRWorkflowActivitySettings
     {
-        public override Guid ConfigId => new Guid("A9445F70-1188-4F39-8135-419954E88A8B");
+        public override Guid ConfigId { get { return new Guid("A9445F70-1188-4F39-8135-419954E88A8B"); } }
 
-        public override string Editor => throw new NotImplementedException();
+        public override string Editor { get { return "businessprocess-vr-workflowactivity-assigntask"; } }
 
-        public override string Title => "Human Activity";
+        public override string Title { get { return "Human Activity"; } }
 
         public Guid TaskTypeId { get; set; }
 
         public string TaskTitle { get; set; }
+
+        public string DisplayName { get; set; }
 
         public VRWorkflowTaskAssignees TaskAssignees { get; set; }
 
