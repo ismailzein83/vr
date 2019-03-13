@@ -45,8 +45,6 @@
                 //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterFieldMappingAPI, directivePayload, setLoader, filterFieldMappingReadyPromiseDeferred);
 
                 //};
-
-                $scope.scopeModel.firstRowRequired = true;
                 ctrl.fieldMappings = [];
                 ctrl.updateLastRowIndexRange = function () {
                     if (context != undefined) {
@@ -420,33 +418,6 @@
                 };
 
                 api.getData = getData;
-
-                api.hasValue = function () {
-
-                    if (ctrl.firstRowIndex != undefined)
-                        return true;
-
-                    if (ctrl.lastRowIndex != undefined)
-                        return true;
-
-                    for (var i = 0; i < ctrl.fieldMappings.length; i++) {
-                        var fieldMapping = ctrl.fieldMappings[i];
-                        if (fieldMapping.fieldMappingAPI != undefined) {
-                            var fieldMappingData = fieldMapping.fieldMappingAPI.getData();
-                            if (fieldMappingData != undefined && fieldMappingData.RowIndex != undefined && fieldMappingData.CellIndex != undefined) {
-                                return true;
-                            }
-                        }
-                    };
-                    return false;
-                };
-
-                api.setFirstRowRequired = function (payload) {
-                    if (payload != undefined) {
-                        $scope.scopeModel.firstRowRequired = payload.firstRowRequired;
-
-                    }
-                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
