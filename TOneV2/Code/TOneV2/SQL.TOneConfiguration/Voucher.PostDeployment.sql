@@ -40,8 +40,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('A0677B2C-4D1D-493B-A1BB-50940034E25E','ActivateVouchers_Generic','ActivateVouchers Generic','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-activatevouchergenericaction-definition"}'),
 ('F8F17A71-DDF2-4D7E-873F-861A79D67793','Sequence Serial Number Part','Sequence ','VR_Vouchers_ExtendedSettings_SerialNumberParts','{"Editor":"vr-voucher-vouchercards-extendedsettings-sequenceserialnumberpart"}'),
-('6B038908-4F30-4F0F-8E05-E13FE5577A0D','Vouchar_Cards','Vouchar Cards','VR_GenericData_GenericBEExtendedSettings','{"Editor":"vr-voucher-vouchercards-extendedsettings"}'),
-('A0677B2C-4D1D-493B-A1BB-50940034E25E','ActivateVouchers_Generic','ActivateVouchers Generic','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-activatevouchergenericaction-definition"}')
+('6B038908-4F30-4F0F-8E05-E13FE5577A0D','Vouchar_Cards','Vouchar Cards','VR_GenericData_GenericBEExtendedSettings','{"Editor":"vr-voucher-vouchercards-extendedsettings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
