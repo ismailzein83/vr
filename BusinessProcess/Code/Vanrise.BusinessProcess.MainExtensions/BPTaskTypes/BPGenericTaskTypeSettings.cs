@@ -15,7 +15,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
         {
             get
             {
-                return "";
+                return "/Client/Modules/BusinessProcess/Views/BPTask/BPGenericTaskTypeSettingsEditor.html";
             }
             set
             {

@@ -317,6 +317,19 @@ namespace Vanrise.BusinessProcess.Data.RDB
             return bpTask;
         }
 
+        public bool UpdateTask(long taskId, BPTaskData taskData)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            if (taskData != null)
+                updateQuery.Column(COL_TaskData).Value(Serializer.Serialize(taskData));
+            else
+                updateQuery.Column(COL_TaskData).Null();
+            updateQuery.Where().EqualsCondition(COL_ID).Value(taskId);
+            return queryContext.ExecuteNonQuery() > 0;
+        }
+
         #endregion
     }
 }

@@ -47,6 +47,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
             ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTaskExecution]", input.TaskId, input.ExecutedBy, (int)bpTaskStatus, input.ExecutionInformation != null ? Serializer.Serialize(input.ExecutionInformation) : null, input.Notes, input.Decision);
         }
 
+        public bool UpdateTask(long taskId, BPTaskData taskData)
+        {
+            int recordsAffected = ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTask]", taskId, taskData!=null ? Serializer.Serialize(taskData) : null);
+            return recordsAffected > 0;
+        }
+
         public List<BPTask> GetUpdated(ref object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId)
         {
             List<BPTask> bpTasks = new List<BPTask>();

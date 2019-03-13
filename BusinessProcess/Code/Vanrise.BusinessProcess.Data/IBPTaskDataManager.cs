@@ -14,6 +14,7 @@ namespace Vanrise.BusinessProcess.Data
         BPTask GetTask(long taskId);
 
         void UpdateTaskExecution(ExecuteBPTaskInput input, BPTaskStatus bpTaskStatus);
+        bool UpdateTask(long taskId, BPTaskData TaskData);
 
         List<BPTask> GetUpdated(ref object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId);
 

@@ -84,10 +84,18 @@ namespace Vanrise.BusinessProcess.Business
 
         public void ExecuteTask(ExecuteBPTaskInput input)
         {
-            input.ExecutedBy = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
-            BPTask task = GetTask(input.TaskId);
-            IBPEventDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
-            dataManager.InsertEvent(task.ProcessInstanceId, BPTask.GetTaskWFBookmark(task.BPTaskId), input);
+            if (input.TaskData == null)
+            {
+                input.ExecutedBy = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
+                BPTask task = GetTask(input.TaskId);
+                IBPEventDataManager eventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
+                eventDataManager.InsertEvent(task.ProcessInstanceId, BPTask.GetTaskWFBookmark(task.BPTaskId), input);
+            }
+            else
+            {
+                IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
+                taskDataManager.UpdateTask(input.TaskId, input.TaskData);
+            }
         }
 
         public BPTask GetTask(long taskId)
