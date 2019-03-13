@@ -8,7 +8,11 @@ namespace TOne.WhS.Invoice.Entities
 {
 	public class ReportComparisonInvoiceDetail
 	{
-		public DateTime IssuedDate { get; set; }
+		public DateTime IssueDate { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public bool IsVoiceCompare { get; set; }
+        public bool IsSMSCompare { get; set; }
 
-	}
+    }
 }

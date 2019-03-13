@@ -10,7 +10,7 @@ namespace TOne.WhS.Invoice.Entities
 {
     public enum SMSComparisonCriteria { NoOfSMS = 1, Amount = 2 }
 
-    public class InvoiceComparisonSMSInput //: VRTempPayloadSettings
+    public class InvoiceComparisonSMSInput
     {
         public ListMapping ListMapping { get; set; }
         public string DateTimeFormat { get; set; }

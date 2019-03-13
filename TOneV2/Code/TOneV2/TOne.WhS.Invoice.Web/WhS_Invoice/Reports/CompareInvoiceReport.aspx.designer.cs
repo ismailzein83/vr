@@ -7,8 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TOne.WhS.Invoice.Web.WhS_Invoice.Reports {
-    
+namespace TOne.WhS.Invoice.Web.WhS_Invoice.Reports {    
     
     public partial class CompareInvoiceReport {
         

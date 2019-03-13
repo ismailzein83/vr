@@ -21,9 +21,14 @@
         var voiceMainListAPI;
         var smsMainListAPI;
 
+        var mappingTabsAPI;
+        var mappingTabsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var voiceMainListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        var smsMainListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var voiceMainListMappingReadyPromiseDeferred;
+        var smsMainListMappingReadyPromiseDeferred;
+
+        var voiceEnableSelectionChangePromise;
+        var smsEnableSelectionChangePromise;
 
         var voiceGridAPI;
         var voiceGridPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -31,7 +36,7 @@
         var smsGridPromiseDeferred = UtilsService.createPromiseDeferred();
         var inputWorkBookApi;
         var invoiceCompareTemplateEntity;
-        //var financialAccountId;
+        var financialAccountId;
 
         loadParameters();
         defineScope();
@@ -45,7 +50,7 @@
                 invoiceTypeId = parameters.invoiceTypeId;
                 invoiceActionId = parameters.invoiceActionId;
                 invoiceCarrierType = parameters.invoiceCarrierType;
-                //financialAccountId = parameters.partnerId;
+                financialAccountId = parameters.partnerId;
             }
         }
 
@@ -54,25 +59,51 @@
 
             $scope.scopeModel.isVoiceModuleEnabled = WhS_BE_ToneModuleService.isVoiceModuleEnabled();
             $scope.scopeModel.isSMSModuleEnabled = WhS_BE_ToneModuleService.isSMSModuleEnabled();
+            $scope.scopeModel.voiceEnabled = false;
+            $scope.scopeModel.smsEnabled = false;
+            $scope.scopeModel.voiceTab = {};
+            $scope.scopeModel.smsTab = {};
 
-            //$scope.scopeModel.export = function () {
-            //	var objToCompare = {
-            //		Settings: buildInvoiceCompareObjFromScope()
-            //	};
-            //	objToCompare.Settings.IsCustomer = (invoiceCarrierType == 0);
-            //	objToCompare.Settings.FinancialAccountId = financialAccountId;
-            //	return VRCommon_VRTempPayloadAPIService.AddVRTempPayload(objToCompare).then(function (response) {
-            //		if (response.Result == InsertOperationResultEnum.Succeeded.value) {
-            //			var tempPayloadId = response.InsertedObject;
-            //			var paramsurl = "";
-            //			paramsurl += "tempPayloadId=" + tempPayloadId;
-            //			var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-            //			var left = ((screenWidth / 2) - (1000 / 2));
-            //			window.open("Client/Modules/WhS_Invoice/Reports/CompareInvoiceReport.aspx?" + paramsurl, "_blank", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no,width=1000, height=600,scrollbars=1 , top = 40, left = " + left + "");
-            //		}
-            //	}).catch(function (error) {
-            //	});
-            //};
+            $scope.scopeModel.voiceTab.showTab = false;
+            $scope.scopeModel.smsTab.showTab = false;
+
+            $scope.scopeModel.recievedVoiceComparisonTab = {};
+            $scope.scopeModel.recievedSMSComparisonTab = {};
+
+            $scope.scopeModel.recievedVoiceComparisonTab.showTab = false;
+            $scope.scopeModel.recievedSMSComparisonTab.showTab = false;
+
+            $scope.scopeModel.isCompare = false;
+
+            $scope.scopeModel.export = function () {
+                var objToCompare = {
+                    Settings: {
+                        $type: "TOne.WhS.Invoice.Entities.InvoiceComparisonVRTempPayload,TOne.WhS.Invoice.Entities"
+                    }
+                };
+
+                if ($scope.scopeModel.voiceEnabled)
+                    objToCompare.Settings.VoiceInput = buildInvoiceCompareVoiceObjFromScope();
+
+                if ($scope.scopeModel.smsEnabled)
+                    objToCompare.Settings.SMSInput = buildInvoiceCompareSMSObjFromScope();
+
+                objToCompare.Settings.IsCustomer = (invoiceCarrierType == 0);
+                objToCompare.Settings.FinancialAccountId = financialAccountId;
+                objToCompare.Settings.InvoiceId = invoiceId;
+
+                return VRCommon_VRTempPayloadAPIService.AddVRTempPayload(objToCompare).then(function (response) {
+                    if (response.Result == InsertOperationResultEnum.Succeeded.value) {
+                        var tempPayloadId = response.InsertedObject;
+                        var paramsurl = "";
+                        paramsurl += "tempPayloadId=" + tempPayloadId;
+                        var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+                        var left = ((screenWidth / 2) - (1000 / 2));
+                        window.open("Client/Modules/WhS_Invoice/Reports/CompareInvoiceReport.aspx?" + paramsurl, "_blank", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no,width=1000, height=600,scrollbars=1 , top = 40, left = " + left + "");
+                    }
+                }).catch(function (error) {
+                });
+            };
 
             $scope.scopeModel.voiceThreshold = 5;
             $scope.scopeModel.smsThreshold = 5;
@@ -93,7 +124,7 @@
                 VRNotificationService.showConfirmation('Configurations will be lost, are you sure you want to continue?').then(function (response) {
                     if (response) {
 
-                        if ($scope.scopeModel.isVoiceModuleEnabled) {
+                        if ($scope.scopeModel.voiceEnabled) {
                             voiceListPayload = {
                                 context: getContext(),
                                 fieldMappings: [
@@ -116,7 +147,7 @@
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, voiceMainListAPI, voiceListPayload, setVoiceLoader);
                         };
 
-                        if ($scope.scopeModel.isSMSModuleEnabled) {
+                        if ($scope.scopeModel.smsEnabled) {
                             var smsListPayload = {
                                 context: getContext(),
                                 fieldMappings: [
@@ -136,7 +167,6 @@
                             var setSMSLoader = function (value) {
                                 $scope.scopeModel.isSMSLoadingDirective = value;
                             };
-
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, smsMainListAPI, smsListPayload, setSMSLoader);
                         }
                     }
@@ -153,6 +183,11 @@
             $scope.scopeModel.onSMSMainListMappingReady = function (api) {
                 smsMainListAPI = api;
                 smsMainListMappingReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onMappingTabsReady = function (api) {
+                mappingTabsAPI = api;
+                mappingTabsReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.save = function () {
@@ -185,7 +220,8 @@
                     if (response != undefined && response.Result != undefined) {
                         VRNotificationService.notifyOnItemAdded("Compare Invoice", response);
                     } else {
-                        $scope.scopeModel.recievedVoiceComparisonTab.isSelected = true;
+                        if (!($scope.scopeModel.smsEnabled && $scope.scopeModel.recievedSMSComparisonTab != undefined && $scope.scopeModel.recievedSMSComparisonTab.isSelected))
+                            $scope.scopeModel.recievedVoiceComparisonTab.isSelected = true;
                         onResponseReady(response);
                     }
 
@@ -200,7 +236,7 @@
                     if (response != undefined && response.Result != undefined) {
                         VRNotificationService.notifyOnItemAdded("Compare Invoice", response);
                     } else {
-                        if (!($scope.scopeModel.isVoiceModuleEnabled && $scope.scopeModel.isVoiceMappingRequired()))
+                        if (!$scope.scopeModel.voiceEnabled && $scope.scopeModel.recievedSMSComparisonTab != undefined && !$scope.scopeModel.recievedSMSComparisonTab.isSelected)
                             $scope.scopeModel.recievedSMSComparisonTab.isSelected = true;
 
                         onResponseReady(response);
@@ -240,40 +276,47 @@
                 }
             };
 
-            $scope.scopeModel.isVoiceMappingRequired = function () {
-                if (voiceMainListAPI != undefined && smsMainListAPI != undefined) {
-                    if (isVoiceRequired()) {
-                        if (voiceListPayload != undefined && voiceListPayload.fieldMappings != undefined) {
-                            setListMappingRequried(voiceListPayload.fieldMappings, voiceMainListAPI, true);
-                        }
-                        return true;
+            $scope.scopeModel.enableVoiceSelectionChange = function () {
+                if ($scope.scopeModel.voiceEnabled != undefined) {
+
+                    if (voiceEnableSelectionChangePromise != undefined) {
+                        voiceEnableSelectionChangePromise.resolve();
                     }
                     else {
-                        if (voiceListPayload != undefined && voiceListPayload.fieldMappings != undefined) {
-                            setListMappingRequried(voiceListPayload.fieldMappings, voiceMainListAPI, false);
-                        }
-                        return false;
+                        $scope.scopeModel.recievedVoiceComparisonTab.showTab = $scope.scopeModel.voiceEnabled;
+                        if (mappingTabsAPI != undefined) {
+
+                            $scope.scopeModel.voiceTab.showTab = $scope.scopeModel.voiceEnabled;
+                            if ($scope.scopeModel.voiceEnabled) {
+
+                                mappingTabsAPI.setTabSelected(0);
+                                voiceMainListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                loadVoiceMainListListMapping();
+                            }
+                        };
                     }
                 }
-            };
+            }
+            $scope.scopeModel.enableSMSSelectionChange = function () {
 
-            $scope.scopeModel.isSMSMappingRequired = function () {
-                if (smsMainListAPI != undefined && voiceMainListAPI != undefined) {
-                    if (isSMSRequired()) {
-                        if (smsListPayload != undefined && smsListPayload.fieldMappings != undefined) {
-                            setListMappingRequried(smsListPayload.fieldMappings, smsMainListAPI, true);
-                        }
-                        return true;
+                if ($scope.scopeModel.smsEnabled != undefined) {
+
+                    if (smsEnableSelectionChangePromise != undefined) {
+                        smsEnableSelectionChangePromise.resolve();
                     }
                     else {
-                        if (smsListPayload != undefined && smsListPayload.fieldMappings != undefined) {
-                            setListMappingRequried(smsListPayload.fieldMappings, smsMainListAPI, false);
+                        $scope.scopeModel.recievedSMSComparisonTab.showTab = $scope.scopeModel.smsEnabled;
+                        if (mappingTabsAPI != undefined) {
+                            $scope.scopeModel.smsTab.showTab = $scope.scopeModel.smsEnabled;
+                            if ($scope.scopeModel.smsEnabled) {
+                                mappingTabsAPI.setTabSelected(1);
+                                smsMainListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                loadSMSMainListListMapping();
+                            }
                         }
-                        return false;
                     }
-                }
-            };
-
+                };
+            }
         }
 
         function load() {
@@ -355,37 +398,74 @@
                 }
                 if (invoiceCompareTemplateEntity != undefined && invoiceCompareTemplateEntity.Details != undefined) {
 
-                    $scope.scopeModel.voiceDateTimeFormat = invoiceCompareTemplateEntity.Details.DateTimeFormat;
-                    if (invoiceCompareTemplateEntity.Details.SMS != undefined) {
-                        $scope.scopeModel.smsDateTimeFormat = invoiceCompareTemplateEntity.Details.SMS.DateTimeFormat;
+                    if (invoiceCompareTemplateEntity.Details.DateTimeFormat != undefined && invoiceCompareTemplateEntity.Details.ListMapping != undefined) {
+
+                        voiceEnableSelectionChangePromise = UtilsService.createPromiseDeferred();
+                        voiceMainListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        $scope.scopeModel.voiceEnabled = true;
+
+                        mappingTabsReadyPromiseDeferred.promise.then(function () {
+                            $scope.scopeModel.voiceEnabled = true;
+                            $scope.scopeModel.voiceTab.showTab = true;
+                            $scope.scopeModel.recievedVoiceComparisonTab.showTab = true;
+
+                            mappingTabsAPI.setTabSelected(0);
+                            loadVoiceMainListListMapping();
+                        });
+                        $scope.scopeModel.voiceDateTimeFormat = invoiceCompareTemplateEntity.Details.DateTimeFormat;
+
+                        if (invoiceCompareTemplateEntity.Details.SMS != undefined) {
+
+                            smsEnableSelectionChangePromise = UtilsService.createPromiseDeferred();
+                            smsMainListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+                            mappingTabsReadyPromiseDeferred.promise.then(function () {
+                                $scope.scopeModel.smsEnabled = true;
+                                $scope.scopeModel.smsTab.showTab = true;
+                                $scope.scopeModel.recievedSMSComparisonTab.showTab = true;
+
+
+                                if (!$scope.scopeModel.voiceEnabled)
+                                    mappingTabsAPI.setTabSelected(1);
+                                loadSMSMainListListMapping();
+                            });
+                            $scope.scopeModel.smsDateTimeFormat = invoiceCompareTemplateEntity.Details.SMS.DateTimeFormat;
+                        };
                     };
 
-                }
-
-                $scope.scopeModel.voiceComparisonCriterias = UtilsService.getArrayEnum(WhS_Invoice_ComparisonCriteriaEnum);
-                $scope.scopeModel.smsComparisonCriterias = UtilsService.getArrayEnum(WhS_Invoice_SMSComparisonCriteriaEnum);
+                    $scope.scopeModel.voiceComparisonCriterias = UtilsService.getArrayEnum(WhS_Invoice_ComparisonCriteriaEnum);
+                    $scope.scopeModel.smsComparisonCriterias = UtilsService.getArrayEnum(WhS_Invoice_SMSComparisonCriteriaEnum);
+                };
             }
 
+            function loadExportButton() {
+                var promise = UtilsService.createPromiseDeferred();
+                WhS_Invoice_InvoiceAPIService.DoesInvoiceReportExist(invoiceCarrierType == 0).then(function (response) {
+                    $scope.scopeModel.isCompare = response;
+                    promise.resolve();
+                });
+                return promise.promise;
+            }
+            promises.push(loadExportButton);
             promises.push(setTitle);
             promises.push(loadStaticData);
 
-            if ($scope.scopeModel.isVoiceModuleEnabled)
-                promises.push(loadVoiceMainListListMapping);
-
-            if ($scope.scopeModel.isSMSModuleEnabled)
-                promises.push(loadSMSMainListListMapping);
 
 
             return UtilsService.waitMultipleAsyncOperations(promises).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
+                voiceEnableSelectionChangePromise = undefined;
+                smsEnableSelectionChangePromise = undefined;
                 $scope.scopeModel.isLoading = false;
             });
         }
 
         function buildInvoiceCompareVoiceObjFromScope() {
             var obj = {
-                //$type: "TOne.WhS.Invoice.Entities.InvoiceComparisonInput,TOne.WhS.Invoice.Entities",
+                $type: "TOne.WhS.Invoice.Entities.InvoiceComparisonVoiceInput,TOne.WhS.Invoice.Entities",
                 Threshold: $scope.scopeModel.voiceThreshold,
                 ListMapping: voiceMainListAPI.getData(),
                 DateTimeFormat: $scope.scopeModel.voiceDateTimeFormat,
@@ -402,7 +482,7 @@
 
         function buildInvoiceCompareSMSObjFromScope() {
             var obj = {
-                //$type: "TOne.WhS.Invoice.Entities.InvoiceComparisonInput,TOne.WhS.Invoice.Entities",
+                $type: "TOne.WhS.Invoice.Entities.InvoiceComparisonSMSInput,TOne.WhS.Invoice.Entities",
                 Threshold: $scope.scopeModel.smsThreshold,
                 ListMapping: smsMainListAPI.getData(),
                 DateTimeFormat: $scope.scopeModel.smsDateTimeFormat,
@@ -418,7 +498,6 @@
         }
 
         function loadVoiceMainListListMapping() {
-            var loadMainListMappingPromiseDeferred = UtilsService.createPromiseDeferred();
             voiceMainListMappingReadyPromiseDeferred.promise.then(function () {
                 voiceListPayload = {
                     context: getContext(),
@@ -438,10 +517,12 @@
                 };
                 if (invoiceCompareTemplateEntity != undefined && invoiceCompareTemplateEntity.Details != undefined)
                     voiceListPayload.listMappingData = invoiceCompareTemplateEntity.Details.ListMapping;
-                VRUIUtilsService.callDirectiveLoad(voiceMainListAPI, voiceListPayload, loadMainListMappingPromiseDeferred);
-            });
 
-            return loadMainListMappingPromiseDeferred.promise;
+                var setVoiceLoader = function (value) {
+                    $scope.scopeModel.isVoiceLoadingDirective = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, voiceMainListAPI, voiceListPayload, setVoiceLoader);
+            });
         }
 
         function loadSMSMainListListMapping() {
@@ -464,7 +545,11 @@
                 };
                 if (invoiceCompareTemplateEntity != undefined && invoiceCompareTemplateEntity.Details != undefined && invoiceCompareTemplateEntity.Details.SMS != undefined)
                     smsListPayload.listMappingData = invoiceCompareTemplateEntity.Details.SMS.ListMapping;
-                VRUIUtilsService.callDirectiveLoad(smsMainListAPI, smsListPayload, loadMainListMappingPromiseDeferred);
+
+                var setSMSLoader = function (value) {
+                    $scope.scopeModel.isSMSLoadingDirective = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, smsMainListAPI, smsListPayload, setSMSLoader);
             });
 
             return loadMainListMappingPromiseDeferred.promise;
@@ -498,7 +583,7 @@
             $scope.scopeModel.showVoiceGrid = false;
             $scope.scopeModel.showSMSGrid = false;
             var loadPromiseDeferred = UtilsService.createPromiseDeferred();
-            //$scope.scopeModel.isCompare = false;
+
             setTimeout(function () {
                 var promises = [];
 
@@ -506,7 +591,7 @@
                 $scope.scopeModel.showSMSGrid = true;
 
 
-                if ($scope.scopeModel.isVoiceModuleEnabled && $scope.scopeModel.isVoiceMappingRequired()) {
+                if ($scope.scopeModel.voiceEnabled) {
                     var loadVoicePromiseDeferred = UtilsService.createPromiseDeferred();
                     voiceGridPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(voiceGridPromiseDeferred.promise);
@@ -516,15 +601,13 @@
                         voiceGridPromiseDeferred = undefined;
                         var comparisonInput = buildInvoiceCompareVoiceObjFromScope();
                         voiceGridAPI.retrieveData(comparisonInput).then(function () {
-                            //WhS_Invoice_InvoiceAPIService.DoesInvoiceReportExist(invoiceCarrierType==0).then(function (response) {
-                            //	$scope.scopeModel.isCompare = response;
-                            //});
+
                             loadVoicePromiseDeferred.resolve();
                         });
                     });
                 };
 
-                if ($scope.scopeModel.isSMSModuleEnabled && $scope.scopeModel.isSMSMappingRequired()) {
+                if ($scope.scopeModel.smsEnabled) {
 
                     var loadSMSPromiseDeferred = UtilsService.createPromiseDeferred();
                     smsGridPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -538,9 +621,7 @@
                             buildInvoiceCompareSMSObjFromScope();
 
                         smsGridAPI.retrieveData(comparisonInput).then(function () {
-                            //WhS_Invoice_InvoiceAPIService.DoesInvoiceReportExist(invoiceCarrierType==0).then(function (response) {
-                            //	$scope.scopeModel.isCompare = response;
-                            //});
+
                             loadSMSPromiseDeferred.resolve();
                         });
                     });
@@ -556,7 +637,7 @@
         function buildVoiceObjectFromScope() {
 
             var details = {};
-            if ($scope.scopeModel.isSMSModuleEnabled)
+            if ($scope.scopeModel.smsEnabled)
                 var details = {
                     SMS: {
                         ListMapping: smsMainListAPI.getData(),
@@ -564,7 +645,7 @@
                     }
                 };
 
-            if ($scope.scopeModel.isVoiceModuleEnabled) {
+            if ($scope.scopeModel.voiceEnabled) {
 
                 details.ListMapping = voiceMainListAPI.getData();
                 details.DateTimeFormat = $scope.scopeModel.voiceDateTimeFormat;
@@ -576,25 +657,6 @@
                 Details: details
             };
             return obj;
-        }
-
-        function setListMappingRequried(list, api, flag) {
-            api.setFirstRowRequired({
-                firstRowRequired: flag
-            });
-            var fieldMappings = list;
-            var fieldMappingsLength = fieldMappings.length;
-            for (var i = 0; i < fieldMappingsLength; i++) {
-                fieldMappings[i].isRequired = flag;
-            };
-        }
-
-        function isVoiceRequired() {
-            return voiceMainListAPI.hasValue() || !smsMainListAPI.hasValue();
-        }
-
-        function isSMSRequired() {
-            return smsMainListAPI.hasValue() || !voiceMainListAPI.hasValue();
         }
 
         function saveInvoiceCompareTemplate() {

@@ -7,9 +7,7 @@ app.service('WhS_Invoice_InvoiceService', ['VRModalService', 'UtilsService', 'VR
             var actionType = {
                 ActionTypeName: "CompareInvoiceAction",
                 actionMethod: function (payload) {
-                    //console.log(payload)
-                    openCompareAction(payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceTypeId, payload.invoiceAction.Settings.InvoiceCarrierType);
-                    //	openCompareAction(payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceTypeId, payload.invoiceAction.Settings.InvoiceCarrierType, payload.invoice.Entity.PartnerId);
+                    openCompareAction(payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceTypeId, payload.invoiceAction.Settings.InvoiceCarrierType, payload.invoice.Entity.PartnerId);
 
                 }
             };
@@ -26,8 +24,8 @@ app.service('WhS_Invoice_InvoiceService', ['VRModalService', 'UtilsService', 'VR
                 invoiceId: invoiceId,
                 invoiceActionId: invoiceActionId,
                 invoiceTypeId: invoiceTypeId,
-                invoiceCarrierType: invoiceCarrierType
-                //,partnerId: partnerId
+                invoiceCarrierType: invoiceCarrierType,
+                partnerId: partnerId
 
             };
             VRModalService.showModal('/Client/Modules/WhS_Invoice/Views/InvoiceCompareTemplate.html', parameters, settings);

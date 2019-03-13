@@ -643,7 +643,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return s_carrierProfileManager.GetCarrierProfileCustomerSMSServiceTypes(wHSFinancialAccount.CarrierProfileId.Value);
             }
-            
+
         }
 
         public List<SMSServiceType> GetFinancialAccountSupplierSMSServiceTypes(int financialAccountId)
@@ -653,7 +653,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (wHSFinancialAccount.CarrierAccountId.HasValue)
             {
-               return s_carrierAccountManager.GetSupplierSMSServiceTypes(wHSFinancialAccount.CarrierAccountId.Value);
+                return s_carrierAccountManager.GetSupplierSMSServiceTypes(wHSFinancialAccount.CarrierAccountId.Value);
             }
             else
             {
@@ -779,6 +779,37 @@ namespace TOne.WhS.BusinessEntity.Business
             }
 
             return name;
+        }
+
+        public CompanySetting GetCompanySettings(int financialAccountId)
+        {
+            var financialAccount = GetFinancialAccount(financialAccountId);
+            financialAccount.ThrowIfNull("financialAccount", financialAccountId);
+            if (financialAccount.CarrierAccountId.HasValue)
+            {
+                return s_carrierAccountManager.GetCompanySetting(financialAccount.CarrierAccountId.Value);
+            }
+            else
+            {
+                return s_carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
+            }
+        }
+
+        public CarrierProfile GetCarrierProfile(int financialAccountId)
+        {
+            var financialAccount = GetFinancialAccount(financialAccountId);
+            financialAccount.ThrowIfNull("financialAccount", financialAccountId);
+            if (financialAccount.CarrierAccountId.HasValue)
+            {
+                var carrierProfileId = s_carrierAccountManager.GetCarrierProfileId(financialAccount.CarrierAccountId.Value);
+                if (carrierProfileId.HasValue)
+                    return s_carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
+                return null;
+            }
+            else
+            {
+                return s_carrierProfileManager.GetCarrierProfile(financialAccount.CarrierProfileId.Value);
+            }
         }
 
         #endregion
@@ -1559,33 +1590,6 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
-
-        //public CompanySetting GetCompanySettings(int financialAccountId) {
-        //	var financialAccount = GetFinancialAccount(financialAccountId);
-        //	financialAccount.ThrowIfNull("financialAccount", financialAccountId);
-        //	if (financialAccount.CarrierAccountId.HasValue)
-        //	{
-        //		return s_carrierAccountManager.GetCompanySetting(financialAccount.CarrierAccountId.Value);
-        //	}
-        //	else
-        //	{
-        //		return s_carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
-        //	}
-        //}
-
-        //public CarrierProfile GetCarrierProfile(int financialAccountId)
-        //{
-        //	var financialAccount = GetFinancialAccount(financialAccountId);
-        //	financialAccount.ThrowIfNull("financialAccount", financialAccountId);
-        //	if (financialAccount.CarrierAccountId.HasValue)
-        //	{
-        //		return s_carrierProfileManager.GetCarrierProfile(financialAccount.CarrierAccountId.Value);
-        //	}
-        //	else
-        //	{
-        //		return s_carrierProfileManager.GetCarrierProfile(financialAccount.CarrierProfileId.Value);
-        //	}
-        //}
 
         #endregion
     }

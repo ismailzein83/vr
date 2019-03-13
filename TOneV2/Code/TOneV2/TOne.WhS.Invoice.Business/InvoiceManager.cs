@@ -266,14 +266,15 @@ namespace TOne.WhS.Invoice.Business
 
         }
 
-        //public bool DoesInvoiceReportExist(bool isCustomer) {
-        //	string physicalPath = "";
-        //  if(isCustomer)
-        //		physicalPath = VRWebContext.MapVirtualToPhysicalPath("~/Client/Modules/WhS_Invoice/Reports/CustomerCompareInvoiceReport.rdlc");
-        //  else
-        //		physicalPath = VRWebContext.MapVirtualToPhysicalPath("~/Client/Modules/WhS_Invoice/Reports/SupplierCompareInvoiceReport.rdlc");
-        //	return Utilities.PhysicalPathExists(physicalPath);
-        //}
+        public bool DoesInvoiceReportExist(bool isCustomer)
+        {
+            string physicalPath = "";
+            if (isCustomer)
+                physicalPath = VRWebContext.MapVirtualToPhysicalPath("~/Client/Modules/WhS_Invoice/Reports/CustomerCompareInvoiceReport.rdlc");
+            else
+                physicalPath = VRWebContext.MapVirtualToPhysicalPath("~/Client/Modules/WhS_Invoice/Reports/SupplierCompareInvoiceReport.rdlc");
+            return Utilities.PhysicalPathExists(physicalPath);
+        }
 
 
     }
