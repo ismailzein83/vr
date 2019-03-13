@@ -128,7 +128,7 @@
                 label = "";
                 withemptyline = '';
             }
-            var template ='<vr-columns colnum="{{ctrl.normalColNum}}">'
+            var template ='<vr-row><vr-columns colnum="{{ctrl.normalColNum}}">'
                 +' <vr-select on-ready="scopeModel.onSelectorReady"'
                 + ' datasource="scopeModel.templateConfigs"'
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
@@ -138,7 +138,7 @@
                 + ' isrequired="true"'
                 + 'hideremoveicon>'
                 + '</vr-select>'
-                + '</vr-columns>'
+                + '</vr-columns></vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
             return template;
 
