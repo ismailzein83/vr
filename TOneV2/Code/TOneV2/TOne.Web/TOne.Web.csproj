@@ -1264,6 +1264,10 @@
       <Project>{31466bbd-3579-4033-b991-12d044564a32}</Project>
       <Name>TOne.WhS.RouteSync.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Cataleya\TOne.WhS.RouteSync.Cataleya.csproj">
+      <Project>{9454aa0d-2a5d-4902-b6c5-0f705881222a}</Project>
+      <Name>TOne.WhS.RouteSync.Cataleya</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Data.RDB\TOne.WhS.RouteSync.Data.RDB.csproj">
       <Project>{563ae598-a89f-4d68-bf93-48e06a1916f4}</Project>
       <Name>TOne.WhS.RouteSync.Data.RDB</Name>
