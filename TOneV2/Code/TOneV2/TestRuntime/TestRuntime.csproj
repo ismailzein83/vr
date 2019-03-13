@@ -1405,6 +1405,10 @@
       <Project>{ecd63186-7d8e-4cbb-8e90-c1fff4a806a0}</Project>
       <Name>TOne.WhS.SupplierPriceList.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Data.RDB\TOne.WhS.SupplierPriceList.Data.RDB.csproj">
+      <Project>{76d2567a-a428-41b5-985c-94cd6b1ef0e9}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Data.RDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Data.SQL\TOne.WhS.SupplierPriceList.Data.SQL.csproj">
       <Project>{7b2361d9-b37e-482e-8eba-9d88ac7d6829}</Project>
       <Name>TOne.WhS.SupplierPriceList.Data.SQL</Name>
