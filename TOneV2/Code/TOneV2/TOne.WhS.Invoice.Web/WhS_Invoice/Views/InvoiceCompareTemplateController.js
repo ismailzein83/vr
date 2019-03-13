@@ -276,6 +276,14 @@
                 }
             };
 
+            $scope.scopeModel.getDiffSMSsColor = function (dataItem, coldef) {
+                if (dataItem.Entity.DiffSMSsColor != undefined) {
+                    var color = UtilsService.getEnum(LabelColorsEnum, 'value', dataItem.Entity.DiffSMSsColor);
+                    if (color != undefined)
+                        return color.color;
+                }
+            };
+
             $scope.scopeModel.enableVoiceSelectionChange = function () {
                 if ($scope.scopeModel.voiceEnabled != undefined) {
 
