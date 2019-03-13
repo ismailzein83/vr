@@ -305,7 +305,7 @@
                         };
                     }
                 }
-            }
+            };
             $scope.scopeModel.enableSMSSelectionChange = function () {
 
                 if ($scope.scopeModel.smsEnabled != undefined) {
@@ -325,7 +325,7 @@
                         }
                     }
                 };
-            }
+            };
 
         }
 
@@ -655,7 +655,7 @@
                 details.VoiceTemplate = {
                     ListMapping: voiceMainListAPI.getData(),
                     DateTimeFormat: $scope.scopeModel.voiceDateTimeFormat
-                }
+                };
 
             };
 
