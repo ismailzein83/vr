@@ -304,7 +304,7 @@
                         };
                     }
                 }
-            }
+            };
             $scope.scopeModel.enableSMSSelectionChange = function () {
 
                 if ($scope.scopeModel.smsEnabled != undefined) {
@@ -324,7 +324,7 @@
                         }
                     }
                 };
-            }
+            };
         }
 
         function load() {
