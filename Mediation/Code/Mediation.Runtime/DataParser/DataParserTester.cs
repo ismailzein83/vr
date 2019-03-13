@@ -49,6 +49,7 @@ namespace Mediation.Runtime.DataParser
 
                 CreateMediationSettingsFile(GetMobilisEricssonR13_ParserSettings(), "Mobilis_Ericsson_R13");
                 CreateMediationSettingsFile(GetMobilisHuawei_ParserSettings(), "Mobilis_Huawei");
+                CreateMediationSettingsFile(GetMobilisHuaweiR13_ParserSettings(), "Mobilis_Huawei_R13");
 
                 CreateMediationSettingsFile(GetNamibiaHuawei_ParserSettings(), "Namibia_Huawei");
             }
@@ -13798,7 +13799,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Mobilis
 
-        #region Ericsson
+        #region Ericsson R13
 
         public string GetMobilisEricssonR13_ParserSettings()
         {
@@ -13896,6 +13897,60 @@ namespace Mediation.Runtime.DataParser
                         {
                             FieldName = "RecordTypeName",
                             Value = "MSOriginating"
+                        }
+                    },
+                    RecordType = "Mobilis_Ericsson_R13_CDR",
+                    TempFieldsNames = GetTempFieldsName_EricssonMobilis(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers_EricssonMobilis()
+                }
+            });
+
+            subParser.Add("A2", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A2_RoamingCallForwarding_FieldParsers_EricssonMobilis()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordType",
+                            Value = 101
+                        },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordTypeName",
+                            Value = "RoamingCallForwarding"
+                        }
+                    },
+                    RecordType = "Mobilis_Ericsson_R13_CDR",
+                    TempFieldsNames = GetTempFieldsName_EricssonMobilis(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers_EricssonMobilis()
+                }
+            });
+
+            subParser.Add("A3", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A3_CallForwarding_FieldParsers_EricssonMobilis()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordType",
+                            Value = 100
+                        },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordTypeName",
+                            Value = "CallForwarding"
                         }
                     },
                     RecordType = "Mobilis_Ericsson_R13_CDR",
@@ -14152,6 +14207,311 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "CallingSubscriberIMEISV",
                     RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+        private Dictionary<string, BinaryFieldParser> Get_A2_RoamingCallForwarding_FieldParsers_EricssonMobilis()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallIdentificationNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("82", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledSubscriberIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "MobileStationRoamingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("88", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "DisconnectingParty",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("89", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "DateForStartOfCharge",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false,
+                    YearIndex = 0,
+                    MonthIndex = 1,
+                    DayIndex = 2
+                }
+            });
+
+            parsers.Add("8A", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStartOfCharge"
+                }
+            });
+
+            parsers.Add("8B", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStopOfCharge"
+                }
+            });
+
+            parsers.Add("8C", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "ChargeableDurationInSeconds"
+                }
+            });
+
+            parsers.Add("8E", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
+                }
+            });
+
+            parsers.Add("95", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("96", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
+            parsers.Add("9E", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RedirectionCounter",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F2D", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "FaultCode",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            return parsers;
+        }
+        private Dictionary<string, BinaryFieldParser> Get_A3_CallForwarding_FieldParsers_EricssonMobilis()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallIdentificationNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("82", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "OriginalCalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "RedirectingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("88", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RedirectionCounter",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("8B", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "MobileStationRoamingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("8C", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "DisconnectingParty",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("8D", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "DateForStartOfCharge",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false,
+                    YearIndex = 0,
+                    MonthIndex = 1,
+                    DayIndex = 2
+                }
+            });
+
+            parsers.Add("8E", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStartOfCharge"
+                }
+            });
+
+            parsers.Add("8F", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStopOfCharge"
+                }
+            });
+
+            parsers.Add("90", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "ChargeableDurationInSeconds"
+                }
+            });
+
+            parsers.Add("92", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
+                }
+            });
+
+            parsers.Add("99", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("9A", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
+            parsers.Add("9F33", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "FaultCode",
+                    NumberType = NumberType.Int
                 }
             });
 
@@ -14417,6 +14777,1089 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
         private Dictionary<string, BinaryFieldParser> Get_A7_MSTerminatingSMS_FieldParsers_EricssonMobilis()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallIdentificationNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("82", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("83", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("84", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledSubscriberIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledSubscriberIMEI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "MessageTime",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false,
+                    YearIndex = 0,
+                    MonthIndex = 1,
+                    DayIndex = 2
+                }
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "MessageTime",
+                    DateTimeParsingType = DateTimeParsingType.Time,
+                    WithOffset = false,
+                    HoursIndex = 0,
+                    MinutesIndex = 1,
+                    SecondsIndex = 2
+                }
+            });
+
+            parsers.Add("8C", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("9F21", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "OriginatingAddress",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F2B", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledSubscriberIMEISV",
+                    RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+
+        #endregion
+
+        #region Huawei R13
+
+        public string GetMobilisHuaweiR13_ParserSettings()
+        {
+            BinaryParserType hexParser = new BinaryParserType
+            {
+                RecordParser = new SplitByTagRecordParser
+                {
+                    SubRecordsParsersByTag = Get_A0_SubRecordsParsersByTag_Mobilis_HuaweiR13()
+                },
+                RecordParserTemplates = GetTemplates_Mobilis_HuaweiR13()
+            };
+
+            ParserType parserType = new ParserType
+            {
+                ParserTypeId = new Guid("09DB62EC-084C-46CB-9D08-26D88C82D04F"),
+                Settings = new ParserTypeSettings
+                {
+                    ExtendedSettings = hexParser
+                }
+            };
+
+            return Serializer.Serialize(parserType.Settings);
+        }
+
+        private Dictionary<Guid, BinaryRecordParser> GetTemplates_Mobilis_HuaweiR13()
+        {
+            Dictionary<Guid, BinaryRecordParser> templates = new Dictionary<Guid, BinaryRecordParser>();
+
+            templates.Add(new Guid("7BCA4684-805C-4313-AD66-02CEDEE52A73"), new BinaryRecordParser
+            {
+                Settings = new SplitByTagRecordParser
+                {
+                    SubRecordsParsersByTag = GetTemplateParsers_Mobilis_HuaweiR13()
+                }
+            });
+
+            return templates;
+        }
+        private Dictionary<string, BinaryRecordParser> GetTemplateParsers_Mobilis_HuaweiR13()
+        {
+            Dictionary<string, BinaryRecordParser> parsers = new Dictionary<string, BinaryRecordParser>();
+
+            parsers.Add("A0", new BinaryRecordParser
+            {
+                Settings = new SplitByTagRecordParser
+                {
+                    SubRecordsParsersByTag = Get_Template_CreateRecordsParsersByTag_Mobilis_HuaweiR13()
+                }
+            });
+
+            return parsers;
+        }
+        private Dictionary<string, BinaryRecordParser> Get_A0_SubRecordsParsersByTag_Mobilis_HuaweiR13()
+        {
+            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
+
+            subParser.Add("A0", new BinaryRecordParser
+            {
+                Settings = new SplitByTagRecordParser
+                {
+                    SubRecordsParsersByTag = Get_Template_CreateRecordsParsersByTag_Mobilis_HuaweiR13()
+                }
+            });
+
+            subParser.Add("A1", new BinaryRecordParser
+            {
+                Settings = new ExecuteTemplateRecordParser
+                {
+                    RecordParserTemplateId = new Guid("7BCA4684-805C-4313-AD66-02CEDEE52A73")
+                }
+            });
+
+            return subParser;
+        }
+        private Dictionary<string, BinaryRecordParser> Get_Template_CreateRecordsParsersByTag_Mobilis_HuaweiR13()
+        {
+            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
+
+            subParser.Add("A1", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A1_MSOriginating_FieldParsers_Mobilis_HuaweiR13()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordType",
+                            Value = 0
+                        },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordTypeName",
+                            Value = "MSOriginating"
+                        }
+                    },
+                    RecordType = "Mobilis_Huawei_R13_CDR",
+                    TempFieldsNames = GetTempFieldsName_Mobilis_HuaweiR13(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers_Mobilis_HuaweiR13()
+                }
+            });
+
+            subParser.Add("A2", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A2_RoamingCallForwarding_FieldParsers_Mobilis_HuaweiR13()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordType",
+                            Value = 101
+                        },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordTypeName",
+                            Value = "RoamingCallForwarding"
+                        }
+                    },
+                    RecordType = "Mobilis_Huawei_R13_CDR",
+                    TempFieldsNames = GetTempFieldsName_Mobilis_HuaweiR13(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers_Mobilis_HuaweiR13()
+                }
+            });
+
+            subParser.Add("A3", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A3_CallForwarding_FieldParsers_Mobilis_HuaweiR13()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordType",
+                            Value = 100
+                        },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordTypeName",
+                            Value = "CallForwarding"
+                        }
+                    },
+                    RecordType = "Mobilis_Huawei_R13_CDR",
+                    TempFieldsNames = GetTempFieldsName_Mobilis_HuaweiR13(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers_Mobilis_HuaweiR13()
+                }
+            });
+
+            subParser.Add("A4", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A4_MSTerminating_FieldParsers_Mobilis_HuaweiR13()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordType",
+                            Value = 1
+                        },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordTypeName",
+                            Value = "MSTerminating"
+                        }
+                    },
+                    RecordType = "Mobilis_Huawei_R13_CDR",
+                    TempFieldsNames = GetTempFieldsName_Mobilis_HuaweiR13(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers_Mobilis_HuaweiR13()
+                }
+            });
+
+            subParser.Add("A5", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A5_MSOriginatingSMS_FieldParsers_Mobilis_HuaweiR13()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordType",
+                            Value = 6
+                        },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordTypeName",
+                            Value = "MSOriginatingSMSinMSC"
+                        }
+                    },
+                    RecordType = "Mobilis_Huawei_R13_SMS",
+                    CompositeFieldsParsers = GetCompositeFieldParsers_SMS_Mobilis_HuaweiR13()
+                }
+            });
+
+            subParser.Add("A7", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A7_MSTerminatingSMS_FieldParsers_Mobilis_HuaweiR13()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordType",
+                            Value = 7
+                        },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "RecordTypeName",
+                            Value = "MSTerminatingSMSinMSC"
+                        }
+                    },
+                    RecordType = "Mobilis_Huawei_R13_SMS",
+                    CompositeFieldsParsers = GetCompositeFieldParsers_SMS_Mobilis_HuaweiR13()
+                }
+            });
+
+            return subParser;
+        }
+
+        private HashSet<string> GetTempFieldsName_Mobilis_HuaweiR13()
+        {
+            return new HashSet<string> { "DateForStartOfCharge", "TimeForStartOfCharge", "TimeForStopOfCharge", "TimeFromRegisterSeizureToStartOfCharging" };
+        }
+        private List<CompositeFieldsParser> GetCompositeFieldParsers_Mobilis_HuaweiR13()
+        {
+            return new List<CompositeFieldsParser>
+            {
+                new FileNameCompositeParser { FieldName = "FileName" },
+                new DataSourceCompositeParser { DataSourceFieldName = "DataSourceId" },
+                new DateTimeCompositeParser { FieldName = "ConnectDateTime", DateFieldName = "DateForStartOfCharge", TimeFieldName = "TimeForStartOfCharge" },
+                new DateTimeCompositeParser { FieldName = "DisconnectDateTime", DateFieldName = "DateForStartOfCharge", TimeFieldName = "TimeForStopOfCharge"},
+                new DateTimeCompositeParser { FieldName = "SetupTime", DateFieldName = "ConnectDateTime", TimeFieldName = "TimeFromRegisterSeizureToStartOfCharging", SubtractTime = true },
+            };
+        }
+        private List<CompositeFieldsParser> GetCompositeFieldParsers_SMS_Mobilis_HuaweiR13()
+        {
+            return new List<CompositeFieldsParser>
+            {
+                 new FileNameCompositeParser { FieldName = "FileName" },
+                 new DataSourceCompositeParser { DataSourceFieldName = "DataSourceId" }
+            };
+        }
+
+        private Dictionary<string, BinaryFieldParser> Get_A1_MSOriginating_FieldParsers_Mobilis_HuaweiR13()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallIdentificationNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingSubscriberIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingSubscriberIMEI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("88", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "DisconnectingParty",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("89", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "DateForStartOfCharge",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false,
+                    YearIndex = 0,
+                    MonthIndex = 1,
+                    DayIndex = 2
+                }
+            });
+
+            parsers.Add("8A", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStartOfCharge"
+                }
+            });
+
+            parsers.Add("8B", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStopOfCharge"
+                }
+            });
+
+            parsers.Add("8C", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "ChargeableDurationInSeconds"
+                }
+            });
+
+            parsers.Add("8E", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
+                }
+            });
+
+            parsers.Add("96", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("97", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
+            parsers.Add("9A", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForTCSeizureCalling"
+                }
+            });
+
+            parsers.Add("9F44", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "NetworkCallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
+            parsers.Add("9F810F", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingSubscriberIMEISV",
+                    RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+        private Dictionary<string, BinaryFieldParser> Get_A2_RoamingCallForwarding_FieldParsers_Mobilis_HuaweiR13()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallIdentificationNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("82", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledSubscriberIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "MobileStationRoamingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("88", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "DisconnectingParty",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("89", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "DateForStartOfCharge",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false,
+                    YearIndex = 0,
+                    MonthIndex = 1,
+                    DayIndex = 2
+                }
+            });
+
+            parsers.Add("8A", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStartOfCharge"
+                }
+            });
+
+            parsers.Add("8B", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStopOfCharge"
+                }
+            });
+
+            parsers.Add("8C", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "ChargeableDurationInSeconds"
+                }
+            });
+
+            parsers.Add("8E", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
+                }
+            });
+
+            parsers.Add("95", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("96", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
+            parsers.Add("9E", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RedirectionCounter",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F2D", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "FaultCode",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            return parsers;
+        }
+        private Dictionary<string, BinaryFieldParser> Get_A3_CallForwarding_FieldParsers_Mobilis_HuaweiR13()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallIdentificationNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("82", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "OriginalCalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "RedirectingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("88", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RedirectionCounter",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("8B", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "MobileStationRoamingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("8C", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "DisconnectingParty",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("8D", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "DateForStartOfCharge",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false,
+                    YearIndex = 0,
+                    MonthIndex = 1,
+                    DayIndex = 2
+                }
+            });
+
+            parsers.Add("8E", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStartOfCharge"
+                }
+            });
+
+            parsers.Add("8F", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStopOfCharge"
+                }
+            });
+
+            parsers.Add("90", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "ChargeableDurationInSeconds"
+                }
+            });
+
+            parsers.Add("92", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
+                }
+            });
+
+            parsers.Add("99", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("9A", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
+            parsers.Add("9F33", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "FaultCode",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            return parsers;
+        }
+        private Dictionary<string, BinaryFieldParser> Get_A4_MSTerminating_FieldParsers_Mobilis_HuaweiR13()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallIdentificationNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("82", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledSubscriberIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledSubscriberIMEI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("88", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "MobileStationRoamingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("89", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "DisconnectingParty",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("8A", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "DateForStartOfCharge",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false,
+                    YearIndex = 0,
+                    MonthIndex = 1,
+                    DayIndex = 2
+                }
+            });
+
+            parsers.Add("8B", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStartOfCharge"
+                }
+            });
+
+            parsers.Add("8C", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForStopOfCharge"
+                }
+            });
+
+            parsers.Add("8D", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "ChargeableDurationInSeconds"
+                }
+            });
+
+            parsers.Add("8F", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
+                }
+            });
+
+            parsers.Add("96", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("97", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
+            parsers.Add("9A", new BinaryFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeForTCSeizureCalled"
+                }
+            });
+
+            parsers.Add("9F74", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledSubscriberIMEISV",
+                    RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+        private Dictionary<string, BinaryFieldParser> Get_A5_MSOriginatingSMS_FieldParsers_Mobilis_HuaweiR13()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallIdentificationNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("82", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingPartyNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingSubscriberIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingSubscriberIMEI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "MessageTime",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false,
+                    YearIndex = 0,
+                    MonthIndex = 1,
+                    DayIndex = 2
+                }
+            });
+
+            parsers.Add("88", new BinaryFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "MessageTime",
+                    DateTimeParsingType = DateTimeParsingType.Time,
+                    WithOffset = false,
+                    HoursIndex = 0,
+                    MinutesIndex = 1,
+                    SecondsIndex = 2
+                }
+            });
+
+            parsers.Add("8D", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
+            parsers.Add("91", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingSubscriberIMEISV",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F20", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "DestinationAddress",
+                    RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+        private Dictionary<string, BinaryFieldParser> Get_A7_MSTerminatingSMS_FieldParsers_Mobilis_HuaweiR13()
         {
             Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
