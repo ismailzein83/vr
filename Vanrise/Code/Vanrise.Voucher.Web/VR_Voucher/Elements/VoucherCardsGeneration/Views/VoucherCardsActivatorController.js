@@ -88,10 +88,8 @@
                     if ($scope.onGenericBEUpdated != undefined) {
                         $scope.onGenericBEUpdated(response.UpdatedObject);
                     }
-                }
-                else VRNotificationService.notifyException(error, $scope);
                     $scope.modalContext.closeModal();
-            
+                }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
