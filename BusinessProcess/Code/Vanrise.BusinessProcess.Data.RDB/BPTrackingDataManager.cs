@@ -40,7 +40,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("BusinessProcess", "BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString");
+            return RDBDataProviderFactory.CreateProvider("BusinessProcessTracking", "BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString");
 
         }
 
@@ -149,7 +149,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             if (lstTrackingMsgs != null)
             {
-                var queryContext = new RDBQueryContext(GetDataProvider());
+                var queryContext = new RDBQueryContext(GetDataProvider(), true);
 
                 var multipleInsertQuery = queryContext.AddInsertMultipleRowsQuery();
                 multipleInsertQuery.IntoTable(TABLE_NAME);

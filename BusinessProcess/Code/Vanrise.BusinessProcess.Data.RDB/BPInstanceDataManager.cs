@@ -320,7 +320,16 @@ namespace Vanrise.BusinessProcess.Data.RDB
             whereContext.EqualsCondition(COL_DefinitionID).Value(definitionId);
             whereContext.EqualsCondition(COL_ServiceInstanceID).Value(serviceInstanceId);
 
-            whereContext.ConditionIfColumnNotNull(COL_AssignmentStatus).EqualsCondition(COL_AssignmentStatus).Value((int)assignmentStatus);
+            if (assignmentStatus == BPInstanceAssignmentStatus.Free)
+            {
+                whereContext.ConditionIfColumnNotNull(COL_AssignmentStatus).EqualsCondition(COL_AssignmentStatus).Value((int)assignmentStatus);
+            }
+            else
+            {
+                whereContext.NotNullCondition(COL_AssignmentStatus);
+                whereContext.EqualsCondition(COL_AssignmentStatus).Value((int)assignmentStatus);
+            }
+
             BuildExecutionStatusFilter(acceptableBPStatuses, whereContext);
 
             selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.ASC);

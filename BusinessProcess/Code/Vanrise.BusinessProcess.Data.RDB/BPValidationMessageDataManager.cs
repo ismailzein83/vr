@@ -107,7 +107,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
         }
         public void Insert(IEnumerable<Entities.BPValidationMessage> messages)
         {
-            var queryContext = new RDBQueryContext(GetDataProvider());
+            var queryContext = new RDBQueryContext(GetDataProvider(), true);
             var multipleInsertQuery = queryContext.AddInsertMultipleRowsQuery();
             multipleInsertQuery.IntoTable(TABLE_NAME);
             foreach (BPValidationMessage msg in messages)

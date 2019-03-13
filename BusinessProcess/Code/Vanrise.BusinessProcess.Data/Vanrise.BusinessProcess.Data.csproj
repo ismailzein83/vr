@@ -59,7 +59,6 @@
     <Compile Include="BPDataManagerFactory.cs" />
     <Compile Include="IBPBusinessRuleSetDataManager.cs" />
     <Compile Include="IBPBusinessRuleActionDataManager.cs" />
-    <Compile Include="IBPBusinessRuleActionTypeDataManager.cs" />
     <Compile Include="IBPDefinitionStateDataManager.cs" />
     <Compile Include="IBPDefinitionArgumentStateDataManager.cs" />
     <Compile Include="IProcessSynchronisationDataManager.cs" />
