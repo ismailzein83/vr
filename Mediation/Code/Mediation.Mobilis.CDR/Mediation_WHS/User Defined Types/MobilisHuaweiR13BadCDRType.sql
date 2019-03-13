@@ -1,4 +1,4 @@
-﻿CREATE TYPE [Mediation_WHS].[MobilisEricssonR13CDRType] AS TABLE (
+﻿CREATE TYPE [Mediation_WHS].[MobilisHuaweiR13BadCDRType] AS TABLE (
     [Id]                          BIGINT           NULL,
     [RecordType]                  INT              NULL,
     [RecordTypeName]              VARCHAR (50)     NULL,
@@ -29,6 +29,4 @@
     [FaultCode]                   INT              NULL,
     [FileName]                    VARCHAR (255)    NULL,
     [DataSourceId]                UNIQUEIDENTIFIER NULL);
-
-
 

@@ -73,7 +73,6 @@
     <Build Include="Mediation_WHS\Tables\SMS.sql" />
     <Build Include="Mediation_WHS\User Defined Types\SMSType.sql" />
     <Build Include="Mediation_WHS\User Defined Types\CDRType.sql" />
-    <Build Include="Security\Mobile_EDR.sql" />
     <Build Include="Security\Mediation_WHS.sql" />
   </ItemGroup>
 </Project>

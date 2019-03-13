@@ -16,6 +16,9 @@
     [CallingSubscriberIMEISV]     VARCHAR (50)     NULL,
     [CalledSubscriberIMEISV]      VARCHAR (50)     NULL,
     [DisconnectingParty]          INT              NULL,
+    [OriginalCalledNumber]        VARCHAR (50)     NULL,
+    [RedirectingNumber]           VARCHAR (50)     NULL,
+    [RedirectionCounter]          INT              NULL,
     [IncomingRoute]               VARCHAR (20)     NULL,
     [OutgoingRoute]               VARCHAR (20)     NULL,
     [TimeForTCSeizureCalling]     INT              NULL,
@@ -23,8 +26,11 @@
     [NetworkCallReference]        BIGINT           NULL,
     [RecordSequenceNumber]        INT              NULL,
     [MobileStationRoamingNumber]  VARCHAR (50)     NULL,
+    [FaultCode]                   INT              NULL,
     [FileName]                    VARCHAR (255)    NULL,
     [DataSourceId]                UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_MobilisEricssonCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
