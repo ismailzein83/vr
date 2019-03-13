@@ -86,15 +86,7 @@
     <Folder Include="Mediation_ICX\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Mobile_EDR\Tables\GPRS.sql" />
-    <Build Include="Mobile_EDR\Tables\SMS.sql" />
     <Build Include="Mobile_EDR\Tables\MobileCDR.sql" />
-    <Build Include="Mobile_EDR\User Defined Types\MobileCDRType.sql" />
-    <Build Include="Mobile_EDR\User Defined Types\SMSType.sql" />
-    <Build Include="Mobile_EDR\User Defined Types\GPRSType.sql" />
-    <Build Include="Security\Mobile_EDR.sql" />
-    <Build Include="Mediation_WHS\Tables\CDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\CDRType.sql" />
     <Build Include="Security\Mediation_WHS.sql" />
     <Build Include="Mediation_Generic\Tables\MultiLegSessionID.sql" />
     <Build Include="Mediation_Generic\Tables\MediationRecord.sql" />
@@ -106,11 +98,6 @@
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_DeleteBySessionIds.sql" />
     <Build Include="dbo\User Defined Types\StringIDType.sql" />
     <Build Include="Security\Mediation_Generic.sql" />
-    <Build Include="Mediation_Centrex\Tables\CookedCDR.sql" />
-    <Build Include="Mediation_Centrex\User Defined Types\CookedCDRType.sql" />
-    <Build Include="Security\Mediation_Centrex.sql" />
-    <Build Include="Mobile_EDR\Tables\MobileCDR_Full.sql" />
-    <Build Include="Mobile_EDR\User Defined Types\MobileCDR_FullType.sql" />
     <Build Include="Mediation_WHS\Views\vw_CDRs.sql" />
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetSessionIdByStatus.sql" />
     <Build Include="Mediation_Generic\Tables\MediationLastCommittedId.sql" />
@@ -119,48 +106,6 @@
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationLastCommittedId_Get.sql" />
     <Build Include="dbo\User Defined Types\IDType.sql" />
     <Build Include="Mediation_Generic\Tables\BadMediationRecord.sql" />
-    <Build Include="Mediation_ICX\Tables\NokiaSiemensBadCDR.sql" />
-    <Build Include="Mediation_ICX\Tables\NokiaSiemensCDR.sql" />
-    <Build Include="Mediation_ICX\User Defined Types\NokiaSiemensBadCDRType.sql" />
-    <Build Include="Mediation_ICX\User Defined Types\NokiaSiemensCDRType.sql" />
-    <Build Include="Security\Mediation_ICX.sql" />
-    <Build Include="Mediation_ICX\Tables\AlcatelCDR.sql" />
-    <Build Include="Mediation_ICX\Tables\AlcatelBadCDR.sql" />
-    <Build Include="Mediation_ICX\User Defined Types\AlcatelCDRType.sql" />
-    <Build Include="Mediation_ICX\User Defined Types\AlcatelBadCDRType.sql" />
-    <Build Include="Mediation_WHS\Tables\JazzHuaweiCDR.sql" />
-    <Build Include="Mediation_WHS\Tables\JazzHuaweiBadCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\JazzHuaweiCDRType.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\JazzHuaweiBadCDRType.sql" />
     <Build Include="Mediation_WHS\Tables\OgeroHuaweiCDR.sql" />
-    <Build Include="Mediation_WHS\Tables\OgeroRadiusCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\OgeroRadiusCDRType.sql" />
-    <Build Include="Mediation_WHS\Tables\JazzHuaweiDiscardedCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\JazzHuaweiDiscardedCDRType.sql" />
-    <Build Include="Mediation_WHS\Tables\EricssonLocalCDR.sql" />
-    <Build Include="Mediation_WHS\Tables\EricssonLocalBadCDR.sql" />
-    <Build Include="Mediation_WHS\Tables\EricssonInternationalCDR.sql" />
-    <Build Include="Mediation_WHS\Tables\EricssonInternationalBadCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\EricssonLocalCDRType.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\EricssonLocalBadCDRType.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\EricssonInternationalCDRType.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\EricssonInternationalBadCDRType.sql" />
-    <Build Include="Mediation_WHS\Tables\OgeroHuaweiMGCFCDR.sql" />
-    <Build Include="Mediation_WHS\Tables\OgeroHuaweiIMSCDR.sql" />
-    <Build Include="Mediation_WHS\Tables\OgeroHuaweiIMSBadCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiMGCFCDRType.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiIMSCDRType.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiIMSBadCDRType.sql" />
-    <Build Include="Mobile_EDR\Tables\BadCDR_2.sql" />
-    <Build Include="Mobile_EDR\User Defined Types\BadCDRType_2.sql" />
-    <Build Include="Mediation_WHS\Tables\OgeroHuaweiMGCFBadCDR_2.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiMGCFBadCDRType_2.sql" />
-    <Build Include="Mediation_WHS\Tables\OgeroHuaweiEPCCDR.sql" />
-    <Build Include="Mediation_WHS\Tables\OgeroHuaweiEPCBadCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiEPCCDRType.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiEPCBadCDRType.sql" />
-    <Build Include="Mobile_EDR\Tables\CorrelatedMobileCDR.sql" />
-    <Build Include="Mobile_EDR\User Defined Types\CorrelatedMobileCDRType.sql" />
-    <Build Include="Mobile_EDR\Tables\MobileCDRFileMetadata.sql" />
   </ItemGroup>
 </Project>
