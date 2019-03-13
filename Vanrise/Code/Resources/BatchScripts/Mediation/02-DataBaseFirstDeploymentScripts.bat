@@ -18,30 +18,37 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VR_Notification.PostDeplo
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\ExcelConversion.PostDeployment.sql" 		/y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation.PostDeployment.sql" /y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_WHS.Common.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation.Teles.2.6.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_WHS.Huawei.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation.Ericsson_WHS.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation.NokiaSiemens_ICX.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation.Alcatel_ICX.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Mobile.Common.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Mobile.Huawei.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Mobile.Ericsson.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Mobile.Nokia.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Datasource_Iraq.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Datasource_Multinet.PostDeployment.sql" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Datasource_Namibia.PostDeployment.sql" /y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Jazz.Huawei.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Ogero.HuaweiMGCF.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Ogero.HuaweiIMS.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Ogero.HuaweiEPC.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Ogero.Radius.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Jazz.PostDeployment.sql" /y /v /z /i /Q /R					"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_MobileAnalysis.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Ogero.PostDeployment.sql" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Namibia.PostDeployment.sql" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Multinet.PostDeployment.sql" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Mobilis.PostDeployment.sql" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_WHS.Common.PostDeployment.sql" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation.Teles.2.6.PostDeployment.sql" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_WHS.Huawei.PostDeployment.sql" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation.Ericsson_WHS.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation.NokiaSiemens_ICX.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation.Alcatel_ICX.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Mobile.Common.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Mobile.Huawei.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Mobile.Ericsson.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Mobile.Nokia.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Datasource_Iraq.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Datasource_Multinet.PostDeployment.sql" /y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Datasource_Namibia.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Jazz.Huawei.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Ogero.HuaweiMGCF.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Ogero.HuaweiIMS.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Ogero.HuaweiEPC.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Ogero.Radius.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Mobilis.PostDeployment.sql" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
