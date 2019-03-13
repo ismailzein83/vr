@@ -32,6 +32,8 @@
                     validationOptions.labledEmailValidation = true;
                 if ($attrs.type === TextboxTypeEnum.Ip.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Ip.name)
                     validationOptions.ipValidation = true;
+                if ($attrs.type === TextboxTypeEnum.IpV6.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.IpV6.name)
+                    validationOptions.ipV6Validation = true;
                 if ($attrs.refusepecialcharacter != undefined)
                     validationOptions.specialCharacterValidation = true;
                 if ($attrs.type === TextboxTypeEnum.FileName.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.FileName.name)
@@ -321,6 +323,9 @@
         },
         Ip: {
             name: "ip"
+        },
+        IpV6: {
+            name: "ipv6"
         },
         FileName: {
             name: "filename"

@@ -138,6 +138,8 @@
                             validationOptionsInput.labledEmailValidation = true;
                         if (iAttrs.datatype === TextboxTypeEnum.Ip.name || $scope.$parent.$eval(ctrl.datatype) === TextboxTypeEnum.Ip.name)
                             validationOptionsInput.ipValidation = true;
+                        if (iAttrs.datatype === TextboxTypeEnum.IpV6.name || $scope.$parent.$eval(ctrl.datatype) === TextboxTypeEnum.IpV6.name)
+                            validationOptionsInput.ipV6Validation = true;
                         else if (iAttrs.datatype === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.datatype) === TextboxTypeEnum.Number.name) {
                             validationOptionsInput.numberValidation = true;
                             validationOptionsInput.maxNumber = ctrl.maxvalue;
@@ -387,6 +389,7 @@
         Email: { name: "email" },
         LabeledEmail: { name: "labeledemail" },
         Ip: { name: "ip" },
+        IpV6: { name: "ipv6" },
         Number: { name: "number" },
         Password: { name: "password" }
     });
