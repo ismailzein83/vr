@@ -1,7 +1,7 @@
 ﻿(function (app) {
     "use strict";
-    ModuleTypeConditionDirective.inject = ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_ModuleTypeEnum"];
-    function ModuleTypeConditionDirective(UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_ModuleTypeEnum) {
+    ModuleTypeConditionDirective.inject = ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_Interconnect_Invoice_ModuleTypeEnum"];
+    function ModuleTypeConditionDirective(UtilsService, VRNotificationService, VRUIUtilsService, Retail_Interconnect_Invoice_ModuleTypeEnum) {
 
         return {
 
@@ -21,7 +21,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/InvoiceType/InvoiceGridActionFilterCondition/Templates/ModuleTypeConditionTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Interconnect/Directives/Extensions/InvoiceGridActionFilterCondition/Templates/ModuleTypeConditionTemplate.html"
 
         };
 
@@ -32,7 +32,7 @@
             function initializeController() {
 
                 $scope.scopeModel = {};
-                $scope.scopeModel.moduleTypes = UtilsService.getArrayEnum(Retail_BE_ModuleTypeEnum);
+                $scope.scopeModel.moduleTypes = UtilsService.getArrayEnum(Retail_Interconnect_Invoice_ModuleTypeEnum);
 
                 defineAPI();
             }
@@ -42,7 +42,7 @@
 
                 api.load = function (payload) {
                     var invoiceFilterConditionEntity;
-                    if (payload != undefined && payload.invoiceFilterConditionEntity!=undefined) {
+                    if (payload != undefined && payload.invoiceFilterConditionEntity != undefined) {
                         invoiceFilterConditionEntity = payload.invoiceFilterConditionEntity;
                         $scope.scopeModel.selectedModuleType = UtilsService.getItemByVal($scope.scopeModel.moduleTypes, invoiceFilterConditionEntity.ModuleType, 'value');
                     }
@@ -53,7 +53,7 @@
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.BusinessEntity.Business.ModuleTypeCondition, Retail.BusinessEntity.Business",
+                        $type: "Retail.Interconnect.Business.ModuleTypeCondition, Retail.Interconnect.Business",
                         ModuleType: $scope.scopeModel.selectedModuleType.value
                     };
                 };

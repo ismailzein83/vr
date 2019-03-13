@@ -21,7 +21,7 @@ app.directive("retailInvoicetypeInvoiceuigridcolumnfilterSms", ["UtilsService", 
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/InvoiceType/InvoiceUIGridColumnFilter/Templates/SMSInvoiceUIGridColumnFilterTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Interconnect/Directives/Extensions/InvoiceUIGridColumnFilter/Templates/SMSInvoiceUIGridColumnFilterTemplate.html"
 
         };
 
@@ -45,7 +45,7 @@ app.directive("retailInvoicetypeInvoiceuigridcolumnfilterSms", ["UtilsService", 
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.BusinessEntity.Business.SMSInvoiceUIGridColumnFilter, Retail.BusinessEntity.Business"
+                        $type: "Retail.Interconnect.Business.SMSInvoiceUIGridColumnFilter, Retail.Interconnect.Business"
                     };
                 };
 

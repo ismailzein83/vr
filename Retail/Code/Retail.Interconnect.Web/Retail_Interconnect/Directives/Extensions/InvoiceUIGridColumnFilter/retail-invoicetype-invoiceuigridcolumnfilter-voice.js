@@ -21,7 +21,7 @@ app.directive("retailInvoicetypeInvoiceuigridcolumnfilterVoice", ["UtilsService"
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/InvoiceType/InvoiceUIGridColumnFilter/Templates/VoiceInvoiceUIGridColumnFilterTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Interconnect/Directives/Extensions/InvoiceUIGridColumnFilter/Templates/VoiceInvoiceUIGridColumnFilterTemplate.html"
 
         };
 
@@ -45,7 +45,7 @@ app.directive("retailInvoicetypeInvoiceuigridcolumnfilterVoice", ["UtilsService"
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.BusinessEntity.Business.VoiceInvoiceUIGridColumnFilter, Retail.BusinessEntity.Business"
+                        $type: "Retail.Interconnect.Business.VoiceInvoiceUIGridColumnFilter, Retail.Interconnect.Business"
                     };
                 };
 

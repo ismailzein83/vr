@@ -187,11 +187,6 @@
     <Compile Include="FinancialAccount\FinancialAccountDefinitionFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountDefinitionFilterContext.cs" />
     <Compile Include="FinancialRecurringCharge\FinancialRecurringChargePeriodObjectTypeSettings.cs" />
-    <Compile Include="InvoiceSubSectionFilter\SMSInvoiceSubSectionFilter.cs" />
-    <Compile Include="InvoiceSubSectionFilter\VoiceInvoiceSubSectionFilter.cs" />
-    <Compile Include="InvoiceUIGridColumnFilter\SMSInvoiceUIGridColumnFilter.cs" />
-    <Compile Include="InvoiceUIGridColumnFilter\VoiceInvoiceUIGridColumnFilter.cs" />
-    <Compile Include="InvoiceGridActionFilterCondition\ModuleTypeCondition.cs" />
     <Compile Include="PackageUsageVolume\AccountPackageUsageVolumeManager.cs" />
     <Compile Include="PackageUsageVolume\PackageUsageVolumeCombinationManager.cs" />
     <Compile Include="PackageUsageVolume\PackageUsageVolumeGetPackageItemsInfoContext.cs" />

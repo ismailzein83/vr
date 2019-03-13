@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailInvoicetypeInvoicesubsectionfilterSms", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("retailInvoicetypeInvoicesubsectionfilterVoice", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("retailInvoicetypeInvoicesubsectionfilterSms", ["UtilsService", "V
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new SMSInvoiceSubsectionFilter($scope, ctrl, $attrs);
+                var ctor = new VoiceInvoiceSubsectionFilter($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("retailInvoicetypeInvoicesubsectionfilterSms", ["UtilsService", "V
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/InvoiceType/InvoiceSubSectionFilter/Templates/SMSInvoiceSubSectionFilterTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Interconnect/Directives/Extensions/InvoiceSubSectionFilter/Templates/VoiceInvoiceSubSectionFilterTemplate.html"
 
         };
 
-        function SMSInvoiceSubsectionFilter($scope, ctrl, $attrs) {
+        function VoiceInvoiceSubsectionFilter($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -45,7 +45,7 @@ app.directive("retailInvoicetypeInvoicesubsectionfilterSms", ["UtilsService", "V
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.BusinessEntity.Business.SMSInvoiceSubSectionFilter, Retail.BusinessEntity.Business"
+                        $type: "Retail.Interconnect.Business.VoiceInvoiceSubSectionFilter, Retail.Interconnect.Business"
                     };
                 };
 

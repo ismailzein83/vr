@@ -165,6 +165,16 @@
     <Content Include="Retail_Interconnect\Constant\ModuleTypeEnum.js" />
     <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceAction\Templates\CompareInvoiceActionTemplate.html" />
     <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceAction\retail-interconnect-invoicetype-gridactionsettings-compare.js" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceGridActionFilterCondition\retail-invoicetype-invoicefiltercondition-moduletype.js" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceGridActionFilterCondition\Templates\ModuleTypeConditionTemplate.html" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceSubSectionFilter\retail-invoicetype-invoicesubsectionfilter-sms.js" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceSubSectionFilter\retail-invoicetype-invoicesubsectionfilter-voice.js" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceSubSectionFilter\Templates\SMSInvoiceSubSectionFilterTemplate.html" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceSubSectionFilter\Templates\VoiceInvoiceSubSectionFilterTemplate.html" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceUIGridColumnFilter\retail-invoicetype-invoiceuigridcolumnfilter-sms.js" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceUIGridColumnFilter\retail-invoicetype-invoiceuigridcolumnfilter-voice.js" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceUIGridColumnFilter\Templates\SMSInvoiceUIGridColumnFilterTemplate.html" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceUIGridColumnFilter\Templates\VoiceInvoiceUIGridColumnFilterTemplate.html" />
     <Content Include="Retail_Interconnect\Directives\MainExtensions\AccountPart\Definition\retail-interconnect-account-part-definition-setting.js" />
     <Content Include="Retail_Interconnect\Directives\MainExtensions\AccountPart\Definition\Templates\AccountTypeSettingPartDefinitionTemplate.html" />
     <Content Include="Retail_Interconnect\Directives\MainExtensions\AccountPart\Runtime\retail-interconnect-account-part-runtime-setting.js" />

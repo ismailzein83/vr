@@ -240,7 +240,6 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountCreditLimitFieldEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\FaultTicketSourceEnum.js" />
-    <Content Include="Retail_BusinessEntity\Constant\ModuleTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\RecurringChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\RootSelectorTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\DIDNumberTypeEnum.js" />
@@ -502,16 +501,6 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DID\Templates\DIDNumber.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceSerialNumberSettings\retail-invoicetype-serialnumber-accountcity.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceSerialNumberSettings\Templates\AccountCitySerialNumberPartTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceType\InvoiceGridActionFilterCondition\retail-invoicetype-invoicefiltercondition-moduletype.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceType\InvoiceGridActionFilterCondition\Templates\ModuleTypeConditionTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceType\InvoiceSubSectionFilter\retail-invoicetype-invoicesubsectionfilter-sms.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceType\InvoiceSubSectionFilter\retail-invoicetype-invoicesubsectionfilter-voice.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceType\InvoiceSubSectionFilter\Templates\SMSInvoiceSubSectionFilterTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceType\InvoiceSubSectionFilter\Templates\VoiceInvoiceSubSectionFilterTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceType\InvoiceUIGridColumnFilter\retail-invoicetype-invoiceuigridcolumnfilter-sms.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceType\InvoiceUIGridColumnFilter\retail-invoicetype-invoiceuigridcolumnfilter-voice.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceType\InvoiceUIGridColumnFilter\Templates\SMSInvoiceUIGridColumnFilterTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceType\InvoiceUIGridColumnFilter\Templates\VoiceInvoiceUIGridColumnFilterTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\retail-be-retrievefinancialinfostep-preview.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\retail-be-retrievefinancialinfostep.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\Templates\RetrieveFinancialInfoStepPreviewTemplate.html" />

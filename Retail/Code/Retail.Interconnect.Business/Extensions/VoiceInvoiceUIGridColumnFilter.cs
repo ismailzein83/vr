@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Entities;
 
-namespace Retail.BusinessEntity.Business
+namespace Retail.Interconnect.Business
 {
     public class VoiceInvoiceUIGridColumnFilter : InvoiceUIGridColumnFilter
     {
@@ -16,9 +16,8 @@ namespace Retail.BusinessEntity.Business
 
         public override bool IsFilterMatch(IInvoiceUIGridColumnFilterContext context)
         {
-            RetailModuleManager retailModuleManager = new RetailModuleManager();
-            Guid voiceAnalyticTableId = new Guid("6cd535c0-ac49-46bb-aecf-0eae33823b20");
-            return retailModuleManager.IsVoiceModuleEnabled(voiceAnalyticTableId);
+            InterconnectModuleManager interconnectModuleManager = new InterconnectModuleManager();
+            return interconnectModuleManager.IsVoiceModuleEnabled();
         }
     }
 }
