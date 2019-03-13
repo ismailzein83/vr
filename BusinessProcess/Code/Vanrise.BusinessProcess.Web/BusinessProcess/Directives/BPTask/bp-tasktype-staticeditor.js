@@ -17,7 +17,7 @@ app.directive('bpTasktypeStaticeditor', ['UtilsService', 'VRUIUtilsService',
             bindToController: true,
             compile: function (element, attrs) {
             },
-            templateUrl: "/Client/Modules/BusinessProcess/Directives/BPTask/Templates/BPTaskTypeStaticEditor.html"
+            templateUrl: "/Client/Modules/BusinessProcess/Directives/BPTask/Templates/BPTaskTypeStaticEditorTemplate.html"
         };
 
         function BPTaskTypeStaticEditor(ctrl, $scope, $attrs) {
