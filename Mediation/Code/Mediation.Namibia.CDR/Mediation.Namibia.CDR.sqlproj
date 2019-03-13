@@ -67,6 +67,7 @@
     <Folder Include="Mobile_EDR\User Defined Types\" />
     <Folder Include="Mediation_WHS\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="Mediation_WHS\Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Mediation_WHS\Tables\CDR.sql" />
@@ -74,5 +75,6 @@
     <Build Include="Mediation_WHS\User Defined Types\SMSType.sql" />
     <Build Include="Mediation_WHS\User Defined Types\CDRType.sql" />
     <Build Include="Security\Mediation_WHS.sql" />
+    <Build Include="Mediation_WHS\Views\vw_CDRs.sql" />
   </ItemGroup>
 </Project>

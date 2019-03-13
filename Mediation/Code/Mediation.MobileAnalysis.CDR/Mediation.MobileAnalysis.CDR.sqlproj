@@ -78,5 +78,7 @@
     <Build Include="Mobile_EDR\User Defined Types\GPRSType.sql" />
     <Build Include="Mobile_EDR\User Defined Types\BadCDRType.sql" />
     <Build Include="Security\Mobile_EDR.sql" />
+    <Build Include="Mobile_EDR\Tables\MobileCDR_Full.sql" />
+    <Build Include="Mobile_EDR\User Defined Types\MobileCDR_FullType.sql" />
   </ItemGroup>
 </Project>
