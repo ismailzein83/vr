@@ -144,6 +144,8 @@
     <Compile Include="BusinessRules\IBusinessRuleActionExecutionContext.cs" />
     <Compile Include="BusinessRules\IRuleTarget.cs" />
     <Compile Include="BusinessRules\BPValidationMessage.cs" />
+    <Compile Include="Tasks\BPTaskTypeFilter.cs" />
+    <Compile Include="Tasks\BPTaskTypeInfo.cs" />
     <Compile Include="Tasks\BPTaskTypeSettings.cs" />
     <Compile Include="Tasks\BPTaskUpdateInput.cs" />
     <Compile Include="Tasks\BPTaskUpdateOutput.cs" />
