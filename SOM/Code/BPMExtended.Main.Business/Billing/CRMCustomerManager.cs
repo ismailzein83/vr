@@ -351,6 +351,16 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public void PostContractTakeOverToOM(Guid requestId)
+        {
+            //TODO: update status in 'request header' table
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
+                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
+            update.Execute();
+
+        }
+
         public bool WaitingListPaymentValidation(string customerId, string contractId)
         {
             return true;
@@ -523,7 +533,7 @@ namespace BPMExtended.Main.Business
         //public void convertFileToBinaryCode()
         //{
         //    byte[] file;
-        //    using (var stream = new FileStream(@"C:\Users\mohamad.abdallah\Desktop\Test.txt", FileMode.Open, FileAccess.Read))
+        //    using (var stream = new FileStream(@"C:\Users\mohamad.abdallah\Desktop\adsl.docx", FileMode.Open, FileAccess.Read))
         //    {
         //        using (var reader = new BinaryReader(stream))
         //        {
@@ -536,7 +546,88 @@ namespace BPMExtended.Main.Business
         //    var ins = new Insert(connection)
         //       .Into("ContactFile")
         //       .Set("ContactId", Column.Parameter("E7D397DD-75E4-4E07-850E-23DE2ABEDD0A"))
-        //       .Set("Name",Column.Parameter("Test.txt"))
+        //       .Set("Name", Column.Parameter("adsl.docx"))
+        //       .Set("Data", Column.Parameter(file))
+        //       .Set("TypeId", Column.Parameter("529BC2F8-0EE0-DF11-971B-001D60E938C6"))
+        //       .Set("Size", Column.Parameter("10"))
+        //       .Set("Version", Column.Parameter("1"));
+
+        //    var affectedRows = ins.Execute();
+
+
+        //}
+
+        //public void convertExcelToBinaryCode()
+        //{
+        //    byte[] file;
+        //    using (var stream = new FileStream(@"C:\Users\mohamad.abdallah\Desktop\excel.csv", FileMode.Open, FileAccess.Read))
+        //    {
+        //        using (var reader = new BinaryReader(stream))
+        //        {
+        //            file = reader.ReadBytes((int)stream.Length);
+        //        }
+        //    }
+
+        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+
+        //    var ins = new Insert(connection)
+        //       .Into("ContactFile")
+        //       .Set("ContactId", Column.Parameter("E7D397DD-75E4-4E07-850E-23DE2ABEDD0A"))
+        //       .Set("Name", Column.Parameter("excel.csv"))
+        //       .Set("Data", Column.Parameter(file))
+        //       .Set("TypeId", Column.Parameter("529BC2F8-0EE0-DF11-971B-001D60E938C6"))
+        //       .Set("Size", Column.Parameter("10"))
+        //       .Set("Version", Column.Parameter("1"));
+
+        //    var affectedRows = ins.Execute();
+
+
+        //}
+
+        //public void convertImageToBinaryCode()
+        //{
+        //    byte[] file;
+        //    using (var stream = new FileStream(@"C:\Users\mohamad.abdallah\Desktop\p.png", FileMode.Open, FileAccess.Read))
+        //    {
+        //        using (var reader = new BinaryReader(stream))
+        //        {
+        //            file = reader.ReadBytes((int)stream.Length);
+        //        }
+        //    }
+
+        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+
+        //    var ins = new Insert(connection)
+        //       .Into("ContactFile")
+        //       .Set("ContactId", Column.Parameter("E7D397DD-75E4-4E07-850E-23DE2ABEDD0A"))
+        //       .Set("Name", Column.Parameter("p.png"))
+        //       .Set("Data", Column.Parameter(file))
+        //       .Set("TypeId", Column.Parameter("529BC2F8-0EE0-DF11-971B-001D60E938C6"))
+        //       .Set("Size", Column.Parameter("10"))
+        //       .Set("Version", Column.Parameter("1"));
+
+        //    var affectedRows = ins.Execute();
+
+
+        //}
+
+        //public void convertPdfToBinaryCode()
+        //{
+        //    byte[] file;
+        //    using (var stream = new FileStream(@"C:\Users\mohamad.abdallah\Desktop\q.pdf", FileMode.Open, FileAccess.Read))
+        //    {
+        //        using (var reader = new BinaryReader(stream))
+        //        {
+        //            file = reader.ReadBytes((int)stream.Length);
+        //        }
+        //    }
+
+        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+
+        //    var ins = new Insert(connection)
+        //       .Into("ContactFile")
+        //       .Set("ContactId", Column.Parameter("E7D397DD-75E4-4E07-850E-23DE2ABEDD0A"))
+        //       .Set("Name", Column.Parameter("q.pdf"))
         //       .Set("Data", Column.Parameter(file))
         //       .Set("TypeId", Column.Parameter("529BC2F8-0EE0-DF11-971B-001D60E938C6"))
         //       .Set("Size", Column.Parameter("10"))

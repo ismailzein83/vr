@@ -19,6 +19,7 @@ namespace BPMExtended.Main.Business
 
         public List<CustomerCategoryInfo> GetCustomerCategoryInfo(BPMCustomerType customerType)
         {
+           
             var customerCategories = RatePlanMockDataGenerator.GetCustomerCategories(customerType);
             return customerCategories.MapRecords(CustomerCategroryInfoMapper).ToList();
         }
