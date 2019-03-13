@@ -5,7 +5,7 @@
 
     function invoiceAPIService(BaseAPIService, UtilsService, Retail_Interconnect_ModuleConfig) {
 
-        var controllerName = "InterconnectInvoiceCompareController";
+        var controllerName = "InvoiceCompareController";
 
         function CompareVoiceInvoices(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_Interconnect_ModuleConfig.moduleName, controllerName, "CompareVoiceInvoices"), input);

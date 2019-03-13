@@ -109,9 +109,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\InvoiceComparison\InterconnectInvoiceController.cs" />
-    <Compile Include="Controllers\InvoiceComparison\InterconnectInvoiceCompareTemplateController.cs" />
-    <Compile Include="Controllers\InvoiceComparison\InterconnectInvoiceCompareController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\InvoiceCompareTemplateController.cs" />
+    <Compile Include="Controllers\InvoiceCompareController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Retail_Interconnect\Reports\CompareInvoiceReport.aspx.cs">
       <DependentUpon>CompareInvoiceReport.aspx</DependentUpon>
@@ -128,7 +128,9 @@
       <DependentUpon>Reporting.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controllers\InvoiceComparison\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{C527C7B2-A481-4D1D-B25A-4A540E812153}</Project>

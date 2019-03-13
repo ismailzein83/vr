@@ -10,7 +10,7 @@ using Vanrise.Entities;
 
 namespace Retail.Interconnect.Data.RDB
 {
-    public class InterconnectInvoiceComparisonTemplateDataManager : IInterconnectInvoiceComparisonTemplateDataManager
+    public class InvoiceComparisonTemplateDataManager : IInvoiceComparisonTemplateDataManager
     {
         #region RDB
         static string TABLE_NAME = "TOneWhS_Invoice_InvoiceComparisonTemplate";
@@ -23,7 +23,7 @@ namespace Retail.Interconnect.Data.RDB
         const string COL_LastModifiedTime = "LastModifiedTime";
 
 
-        static InterconnectInvoiceComparisonTemplateDataManager()
+        static InvoiceComparisonTemplateDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
@@ -48,7 +48,7 @@ namespace Retail.Interconnect.Data.RDB
         #region Private Methods
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("Retail_Interconnect", "Retail_BE_DBConnStringKey", "RetailDBConnString");
+            return RDBDataProviderFactory.CreateProvider("Retail_Interconnect", "Retail_Interconnect_DBConnStringKey", "RetailDBConnString");
         }
         #endregion
 

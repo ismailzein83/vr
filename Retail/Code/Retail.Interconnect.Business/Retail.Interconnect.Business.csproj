@@ -101,7 +101,6 @@
     <Compile Include="AccountParts\AccountPartInterconnectSetting.cs" />
     <Compile Include="AssignedFinancialAccountToInvoiceSettingFilter.cs" />
     <Compile Include="Extensions\CompareInvoiceAction.cs" />
-    <Compile Include="InterconnectInvoiceComparisonManager.cs" />
     <Compile Include="InterconnectInvoiceGenerationManager.cs" />
     <Compile Include="InterconnectInvoiceGenerator.cs" />
     <Compile Include="InterconnectInvoiceManager.cs" />

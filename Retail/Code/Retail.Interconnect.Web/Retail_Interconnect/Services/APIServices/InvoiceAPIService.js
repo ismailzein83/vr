@@ -5,7 +5,7 @@
 
     function invoiceAPIService(BaseAPIService, UtilsService, Retail_Interconnect_ModuleConfig) {
 
-        var controllerName = "InterconnectInvoiceController";
+        var controllerName = "InvoiceController";
 
         function GetInvoiceDetails(invoiceId, invoiceCarrierType) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_Interconnect_ModuleConfig.moduleName, controllerName, 'GetInvoiceDetails'), {

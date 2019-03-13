@@ -5,7 +5,7 @@
 
     function InvoiceCompareTemplateAPIService(BaseAPIService, UtilsService, Retail_Interconnect_ModuleConfig) {
 
-        var controllerName = "InterconnectInvoiceCompareTemplateController";
+        var controllerName = "InvoiceCompareTemplateController";
 
         function SaveInvoiceCompareTemplate(invoiceComparisonTemplate) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_Interconnect_ModuleConfig.moduleName, controllerName, "SaveInvoiceCompareTemplate"), invoiceComparisonTemplate);

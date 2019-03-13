@@ -12,8 +12,8 @@ using Vanrise.Web.Base;
 namespace Retail.Voice.Web.Controllers
 {
     [JSONWithTypeAttribute]
-    [RoutePrefix(Constants.ROUTE_PREFIX + "InterconnectInvoiceCompareController")]
-    public class WhSInvoiceCompareController : BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "InvoiceCompareController")]
+    public class InvoiceCompareController : BaseAPIController
     {
 
         [HttpPost]

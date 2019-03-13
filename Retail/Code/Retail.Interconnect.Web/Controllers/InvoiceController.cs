@@ -12,8 +12,8 @@ using Vanrise.Web.Base;
 namespace Retail.Voice.Web.Controllers
 {
     [JSONWithTypeAttribute]
-    [RoutePrefix(Constants.ROUTE_PREFIX + "InterconnectInvoiceController")]
-    public class InterconnnectInvoiceController : BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "InvoiceController")]
+    public class InvoiceController : BaseAPIController
     {
 
         [HttpGet]

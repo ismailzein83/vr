@@ -57,7 +57,7 @@
     <Compile Include="InterconnectInvoiceItemDetails.cs" />
     <Compile Include="InterconnectSMSInvoiceItemDetails.cs" />
     <Compile Include="InvoiceCarrierType.cs" />
-    <Compile Include="InvoiceComparisonVRTempPayload.cs" />
+    <Compile Include="InvoiceComparison\InvoiceComparisonVRTempPayload.cs" />
     <Compile Include="InvoiceComparison\CompareInvoiceOperationOutput.cs" />
     <Compile Include="InvoiceComparison\ComparisonInvoiceDetail.cs" />
     <Compile Include="InvoiceComparison\ComparisonResult.cs" />
@@ -67,9 +67,9 @@
     <Compile Include="InvoiceComparison\InvoiceComparisonVoiceInput.cs" />
     <Compile Include="InvoiceComparison\InvoiceComparisonVoiceResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportComparisonInvoiceDetail.cs" />
-    <Compile Include="ReportInvoiceSMSComparisonResult.cs" />
-    <Compile Include="ReportInvoiceVoiceComparisonResult.cs" />
+    <Compile Include="InvoiceComparison\ReportComparisonInvoiceDetail.cs" />
+    <Compile Include="InvoiceComparison\ReportInvoiceSMSComparisonResult.cs" />
+    <Compile Include="InvoiceComparison\ReportInvoiceVoiceComparisonResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">

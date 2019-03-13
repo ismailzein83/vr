@@ -13,7 +13,7 @@ namespace Retail.Interconnect.Business
         #region Public Methods
         public bool TryAddOrUpdateInvoiceCompareTemplate(InvoiceComparisonTemplate invoiceCompareTemplate)
         {
-            IInterconnectInvoiceComparisonTemplateDataManager dataManager = InterconnectInvoiceManagerFactory.GetDataManager<IInterconnectInvoiceComparisonTemplateDataManager>();
+            IInvoiceComparisonTemplateDataManager dataManager = InterconnectInvoiceManagerFactory.GetDataManager<IInvoiceComparisonTemplateDataManager>();
             return dataManager.TryAddOrUpdateInvoiceCompareTemplate(invoiceCompareTemplate);
         }
         public InvoiceComparisonTemplate GetInvoiceCompareTemplate(Guid invoiceTypeId, string partnerId)
@@ -27,7 +27,7 @@ namespace Retail.Interconnect.Business
         #region Private Classes
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IInterconnectInvoiceComparisonTemplateDataManager dataManager = InterconnectInvoiceManagerFactory.GetDataManager<IInterconnectInvoiceComparisonTemplateDataManager>();
+            IInvoiceComparisonTemplateDataManager dataManager = InterconnectInvoiceManagerFactory.GetDataManager<IInvoiceComparisonTemplateDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
@@ -43,7 +43,7 @@ namespace Retail.Interconnect.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetInvoiceCompareTemplates",
                () =>
                {
-                   IInterconnectInvoiceComparisonTemplateDataManager dataManager = InterconnectInvoiceManagerFactory.GetDataManager<IInterconnectInvoiceComparisonTemplateDataManager>();
+                   IInvoiceComparisonTemplateDataManager dataManager = InterconnectInvoiceManagerFactory.GetDataManager<IInvoiceComparisonTemplateDataManager>();
                    IEnumerable<InvoiceComparisonTemplate> invoiceComparisonTemplates = dataManager.GetInvoiceCompareTemplates();
                    return invoiceComparisonTemplates.ToDictionary(cn => cn.InvoiceComparisonTemplateId, cn => cn);
                });

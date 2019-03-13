@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.Interconnect.Data
 {
-    public interface IInterconnectInvoiceComparisonTemplateDataManager : IDataManager
+    public interface IInvoiceComparisonTemplateDataManager : IDataManager
     {
         bool TryAddOrUpdateInvoiceCompareTemplate(InvoiceComparisonTemplate invoiceComparisonTemplate);
         List<InvoiceComparisonTemplate> GetInvoiceCompareTemplates();
