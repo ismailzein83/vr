@@ -467,6 +467,8 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     {
                         if (commandTimeoutInSeconds.HasValue)
                             cmd.CommandTimeout = commandTimeoutInSeconds.Value;
+                        else
+                            cmd.CommandTimeout = this._dataProvider.DBCommandDefaultTimeOutIntervalInSec;
 
                         if (parameters != null)
                             AddParameters(cmd, parameters);
@@ -559,6 +561,8 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
                     using (var cmd = new SqlCommand(queryText, connection))
                     {
+                        cmd.CommandTimeout = this._dataProvider.DBCommandDefaultTimeOutIntervalInSec;
+
                         if (onCommandReady != null)
                             onCommandReady(cmd);
                         retValue = cmd.ExecuteScalar();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using Vanrise.Common;
 using Vanrise.Entities;
 
@@ -7,6 +8,23 @@ namespace Vanrise.Data.RDB
 {
     public abstract class BaseRDBDataProvider
     {
+        private static int s_dbCommandDefaultTimeOutIntervalInSec;
+
+        public int DBCommandDefaultTimeOutIntervalInSec
+        {
+            get
+            {
+                return s_dbCommandDefaultTimeOutIntervalInSec;
+            }
+        }
+
+        static BaseRDBDataProvider()
+        {
+            TimeSpan dbCommandDefaultTimeOutInterval;
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["DBCommandDefaultTimeOutInterval"], out dbCommandDefaultTimeOutInterval))
+                dbCommandDefaultTimeOutInterval = TimeSpan.FromMinutes(30);
+            s_dbCommandDefaultTimeOutIntervalInSec = (int)dbCommandDefaultTimeOutInterval.TotalSeconds;
+        }
         public abstract string UniqueName { get; }
 
         public abstract string NowDateTimeFunction { get; }
