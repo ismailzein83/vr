@@ -231,7 +231,7 @@
     [SciChargeNumber]                   VARCHAR (100) NULL,
     [SWIDTGID]                          VARCHAR (100) NULL,
     [TransmissionMediumRequirement]     INT           NULL,
-    CONSTRAINT [PK_MobileCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
+    CONSTRAINT [PK_MobileCDR_Full] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
 
