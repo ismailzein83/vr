@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Activities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestCallAnalysis.Business;
 using TestCallAnalysis.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
-using Vanrise.GenericData.Business;
 using Vanrise.Queueing;
 
 namespace TestCallAnalysis.BP.Activities
@@ -51,7 +46,7 @@ namespace TestCallAnalysis.BP.Activities
                         hasItem = inputArgument.InputQueueToInsert.TryDequeue((recordBatch) =>
                         {
                             DateTime batchStartTime = DateTime.Now;
-                            correlatedCDRManager.InsertCorrelatedCDRs(recordBatch);
+                            correlatedCDRManager.InsertCorrelatedCDRs(recordBatch.OutputRecordsToInsert);
                             double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
                             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs Batch is done. Events Count: {0}.  ElapsedTime: {1} (s)",
                                 recordBatch.OutputRecordsToInsert.Count, elapsedTime.ToString());

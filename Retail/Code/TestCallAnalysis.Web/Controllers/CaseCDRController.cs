@@ -16,7 +16,6 @@ namespace TestCallAnalysis.Web.Controllers
     [RoutePrefix(TestCallAnalysis.Web.Constants.ROUTE_PREFIX + "CaseCDR")]
     public class CaseCDRController: BaseAPIController
     {
-        static Guid statusBusinessEntityDefinitionId = new Guid("1264c992-479e-45fb-8e8a-7edd54a9bc18");
         CaseCDRManager _manager = new CaseCDRManager();
 
         [HttpGet]
@@ -31,17 +30,16 @@ namespace TestCallAnalysis.Web.Controllers
         [Route("UpdateCaseCDRStatus")]
         public object UpdateCaseCDRStatus(CaseCDRToUpdate caseCDRToUpdate)
         {
-            if (!DoesUserHaveEditAccess(statusBusinessEntityDefinitionId))
+            if (!DoesUserHaveEditAccess())
                 return GetUnauthorizedResponse();
             return _manager.UpdateCaseCDRStatus(caseCDRToUpdate);
         }
 
         [HttpGet]
         [Route("DoesUserHaveEditAccess")]
-        public bool DoesUserHaveEditAccess(Guid businessEntityDefinitionId)
+        public bool DoesUserHaveEditAccess()
         {
-            GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
-            return manager.DoesUserHaveEditAccess(businessEntityDefinitionId);
+            return _manager.DoesUserHaveEditAccess();
         }
     }
 }

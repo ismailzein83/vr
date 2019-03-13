@@ -2,6 +2,7 @@
 using System.Activities;
 using System.Collections.Generic;
 using System.Threading;
+using TestCallAnalysis.Business;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
@@ -54,6 +55,7 @@ namespace TestCallAnalysis.BP.Activities
         {
             int maximumOutputQueueSize = 20;
             long totalRecordsCount = 0;
+            Guid mappedCDRDataRecordStorageId = MappedCDRManager.dataRecordStorage;
 
             RecordBatch recordBatch = new RecordBatch() { Records = new List<dynamic>() };
 
@@ -73,7 +75,7 @@ namespace TestCallAnalysis.BP.Activities
 
                     long recordsCount = 0;
                     DateTime startTime = DateTime.Now;
-                    new DataRecordStorageManager().GetDataRecords(new Guid("58FCA073-8F5C-4A56-A4AF-025EB3B8BB60"), filterGroup.From, filterGroup.To, filterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
+                    new DataRecordStorageManager().GetDataRecords(mappedCDRDataRecordStorageId, filterGroup.From, filterGroup.To, filterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
                     {
                         totalRecordsCount++;
                         recordsCount++;

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestCallAnalysis.Entities;
 using Vanrise.GenericData.Business;
 
@@ -10,7 +7,7 @@ namespace TestCallAnalysis.Business
 {
     public class MappedCDRManager
     {
-        static Guid dataRecordStorage = new Guid("58FCA073-8F5C-4A56-A4AF-025EB3B8BB60");
+        public static Guid dataRecordStorage = new Guid("58FCA073-8F5C-4A56-A4AF-025EB3B8BB60");
 
         public dynamic MappedCDRToRuntime(TCAnalMappedCDR mappedCDR)
         {

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestCallAnalysis.Entities;
-using Vanrise.Common;
 using Vanrise.GenericData.Business;
-using Vanrise.GenericData.Entities;
 
 namespace TestCallAnalysis.Business
 {
@@ -49,17 +45,17 @@ namespace TestCallAnalysis.Business
             return result;
         }
 
-        public void InsertCorrelatedCDRs(Entities.CDRCorrelationBatch cdrCorrelationBatchToInsert)
+        public void InsertCorrelatedCDRs(List<dynamic> correlatedCDRsToInsert)
         {
             var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorage);
-            recordStorageDataManager.InsertRecords(cdrCorrelationBatchToInsert.OutputRecordsToInsert);
+            recordStorageDataManager.InsertRecords(correlatedCDRsToInsert);
         }
 
-        public int UpdateCorrelatedCDRs(Entities.CDRCorrelationBatch cdrCorrelationBatch, Dictionary<long, string> listOfCaseCDRsCallingNumbers)
+        public int UpdateCorrelatedCDRs(List<dynamic> correlatedCDRsToUpdate, Dictionary<long, string> listOfCaseCDRsCallingNumbers)
         {
             var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorage);
             Entities.CDRCorrelationBatch correlationBatch = new Entities.CDRCorrelationBatch();
-            foreach (var correlatedCDR in cdrCorrelationBatch.OutputRecordsToInsert)
+            foreach (var correlatedCDR in correlatedCDRsToUpdate)
             {
                 var index = listOfCaseCDRsCallingNumbers.FirstOrDefault(x => x.Value == correlatedCDR.ReceivedCallingNumber).Key;
                 if (index != 0)

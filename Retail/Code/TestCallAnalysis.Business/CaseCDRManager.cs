@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestCallAnalysis.Entities;
 using Vanrise.Common;
-using Vanrise.GenericData.Entities;
-using Vanrise.Common.Business;
-using Vanrise.GenericData.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 
 namespace TestCallAnalysis.Business
 {
@@ -170,6 +166,12 @@ namespace TestCallAnalysis.Business
             else
                 return null;
              
+        }
+
+        public bool DoesUserHaveEditAccess()
+        {
+            GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+            return manager.DoesUserHaveEditAccess(statusBusinessEntityDefinitionId);
         }
 
         public TCAnalCaseCDR CaseCDRMapper(TCAnalCorrelatedCDR correlatedCDR)

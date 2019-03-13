@@ -4,7 +4,6 @@ using TestCallAnalysis.Business;
 using TestCallAnalysis.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
-using Vanrise.GenericData.Business;
 using Vanrise.Queueing;
 
 namespace TestCallAnalysis.BP.Activities
@@ -21,7 +20,6 @@ namespace TestCallAnalysis.BP.Activities
 
     public class UpdateCorrelatedCDRs : DependentAsyncActivity<UpdateCorrelatedCDRsInput, UpdateCorrelatedCDRsOutput>
     {
-        public InOutArgument<MemoryQueue<Entities.UpdateCorrelatedCDRsBatch>> UpdateCorrelatedCDRsInput { get; set; } // this argument must be deleted
         [RequiredArgument]
         public InOutArgument<MemoryQueue<CDRCorrelationBatch>> InsertedCorrelatedCDRs { get; set; }
 
@@ -53,7 +51,7 @@ namespace TestCallAnalysis.BP.Activities
                             {
                                 if (listOfUpdatedCorrolatedCDRs.OutputRecordsToInsert != null && listOfUpdatedCorrolatedCDRs.OutputRecordsToInsert.Count > 0)
                                 {
-                                    var numberOfUpdatedCorrelation = correlatedCDRManager.UpdateCorrelatedCDRs(listOfUpdatedCorrolatedCDRs, callingNumbersList);
+                                    var numberOfUpdatedCorrelation = correlatedCDRManager.UpdateCorrelatedCDRs(listOfUpdatedCorrolatedCDRs.OutputRecordsToInsert, callingNumbersList);
                                     double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
                                     handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Update 'CaseId' field in CorrelatedCDRs Table is done. Events Count: {0}.  ElapsedTime: {1} (s)",
                                        numberOfUpdatedCorrelation, elapsedTime.ToString());

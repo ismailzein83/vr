@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
+using TestCallAnalysis.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -37,7 +38,7 @@ namespace TestCallAnalysis.BP.Activities
             DateTime? overallMinDate;
             DateTime? overallMaxDate;
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            var inputDataRecordStorageId = new Guid("58FCA073-8F5C-4A56-A4AF-025EB3B8BB60");
+            var inputDataRecordStorageId = MappedCDRManager.dataRecordStorage;
             var dataRecordStorage = dataRecordStorageManager.GetDataRecordStorage(inputDataRecordStorageId);
             
             var dataRecordType = dataRecordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);

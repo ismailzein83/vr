@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.GenericData.Business;
-using Vanrise.Entities;
-using Vanrise.GenericData.Entities;
 using TestCallAnalysis.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 
 namespace TestCallAnalysis.Business
@@ -17,17 +12,11 @@ namespace TestCallAnalysis.Business
         static Guid businessEntityDefinitionId = new Guid("0FEB4453-6951-457A-8BAA-4CB257E906C5");
 
         #region Public Methods
-        public List<string> GetMappingNumber(long operatorID, string number)
+        public IEnumerable<string> GetMappingNumber(long operatorID, string number)
         {
-            List<string> result = new List<string>();
             var calledNumbersMapping = GetCachedCalledNumberMapping();
-
-            foreach(CalledNumberMapping calledNumberMapping in calledNumbersMapping.Values)
-            {
-                if (calledNumberMapping.OperatorID == operatorID && calledNumberMapping.Number == number)
-                    result.Add(calledNumberMapping.MappedNumber);
-            }
-            return result;
+            Func<CalledNumberMapping, bool> filterExpression = (item) => (item.OperatorID == operatorID && item.Number == number );
+            return calledNumbersMapping.MapRecords(MappingNumberMapper,filterExpression);
         }
         #endregion
 
@@ -59,6 +48,14 @@ namespace TestCallAnalysis.Business
                 }
                 return result;
             });
+        }
+        #endregion
+
+
+        #region Mappers
+        private string MappingNumberMapper(CalledNumberMapping calledNumberMapping)
+        {
+            return calledNumberMapping.MappedNumber;
         }
         #endregion
 

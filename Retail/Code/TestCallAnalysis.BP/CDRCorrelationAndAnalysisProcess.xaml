@@ -224,7 +224,7 @@
               </tba1:InsertCorrelatedCDRs.InputQueueToInsert>
               <tba1:InsertCorrelatedCDRs.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">updateMappedCDRsStatus</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">correlateCDRsStatus</mca:CSharpValue>
                 </InArgument>
               </tba1:InsertCorrelatedCDRs.PreviousActivityStatus>
               <tba1:InsertCorrelatedCDRs.Status>
@@ -246,7 +246,7 @@
               </tba1:PrepareCDRCases.PrepareCDRCasesToInsert>
               <tba1:PrepareCDRCases.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">insertCorrelatedCDRsStatus</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">correlateCDRsStatus</mca:CSharpValue>
                 </InArgument>
               </tba1:PrepareCDRCases.PreviousActivityStatus>
               <tba1:PrepareCDRCases.Status>
@@ -255,7 +255,7 @@
                 </OutArgument>
               </tba1:PrepareCDRCases.Status>
             </tba1:PrepareCDRCases>
-            <tba1:InsertOrUpdateCases UpdateCorrelatedCDRs="{x:Null}" sap2010:WorkflowViewState.IdRef="InsertOrUpdateCases_2">
+            <tba1:InsertOrUpdateCases sap2010:WorkflowViewState.IdRef="InsertOrUpdateCases_2">
               <tba1:InsertOrUpdateCases.InputQueueToInsert>
                 <InOutArgument x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesToInsert)">
                   <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesToInsert)">prepareCaseCDRsToInsert</mca:CSharpReference>
@@ -272,7 +272,7 @@
                 </OutArgument>
               </tba1:InsertOrUpdateCases.Status>
             </tba1:InsertOrUpdateCases>
-            <tba1:UpdateCorrelatedCDRs UpdateCorrelatedCDRsInput="{x:Null}" sap2010:WorkflowViewState.IdRef="UpdateCorrelatedCDRs_2">
+            <tba1:UpdateCorrelatedCDRs sap2010:WorkflowViewState.IdRef="UpdateCorrelatedCDRs_2">
               <tba1:UpdateCorrelatedCDRs.InsertedCorrelatedCDRs>
                 <InOutArgument x:TypeArguments="vq:MemoryQueue(te:CDRCorrelationBatch)">
                   <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(te:CDRCorrelationBatch)">updateCorrelatedCDRsListInput</mca:CSharpReference>
@@ -280,7 +280,7 @@
               </tba1:UpdateCorrelatedCDRs.InsertedCorrelatedCDRs>
               <tba1:UpdateCorrelatedCDRs.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">insertOrUpdateCDRsStatus</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareCDRCasesStatus</mca:CSharpValue>
                 </InArgument>
               </tba1:UpdateCorrelatedCDRs.PreviousActivityStatus>
               <tba1:UpdateCorrelatedCDRs.Status>
@@ -316,7 +316,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0xDOlxURlNcUmV0YWlsXENvZGVcVGVzdENhbGxBbmFseXNpcy5CUFxDRFJDb3JyZWxhdGlvbkFuZEFuYWx5c2lzUHJvY2Vzcy54YW1sO0IDwAIOAgEBTQVTIAMBiwVUBVokAwGABVsFdSsDAc0EdgW3AgoCAQ64AgW+AiACAQJQC1CFAQMBjQVNYE2DAQMBjAVXC1eAAQMBgQVeC16JAQMB9gRjC2N4AwHsBG0LbWoDAeIEcgtyYQMB2ARoC2hfAwHOBHkLeVkCAQ99CawCFAIBJa8CCbUCJAIBGbsCC7sChQECAQS4AmC4AoEBAgEDfgukAhYCATGlAgurAisCASayAg+yAokBAgEbrwJkrwKCAQIBGooBDZoBKAMBkwSbAQ3JASIDAecCygEN2gElAwGtAtsBDesBKQMB8wHsAQ2BAiQDAaYBggINkgIoAgFskwINowIpAgEyqAIRqAKTAQIBJ40BE40BiQEDAboElwETlwGAAQMBpwSSAROSAY4BAwGUBMYBE8YBhQEDAYAEwQETwQGUAQMB7QOyAROyAXgDAdoDrQETrQGPAQMBxwO3ARO3AXoDAbQDowETowGGAQMBoQO8ARO8AWYDAY4DqAETqAGMAQMB+wKeAROeAWcDAegCzQETzQF9AwHUAtIBE9IBcgMBwQLXARPXAX0DAa4C3gET3gGPAQMBmgLjARPjAXUDAYcC6AET6AGBAQMB9AH5ARP5AXkDAeAB7wET7wGMAQMBzQH+ARP+AXwDAboB9AET9AGUAQMBpwGFAhOFApQBAwGTAYoCE4oCdAMBgAGPAhOPAn8CAW2bAhObAncCAVmWAhOWApQBAgFGoAIToAKBAQIBMw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0xDOlxURlNcUmV0YWlsXENvZGVcVGVzdENhbGxBbmFseXNpcy5CUFxDRFJDb3JyZWxhdGlvbkFuZEFuYWx5c2lzUHJvY2Vzcy54YW1sO0IDwAIOAgEBTQVTIAMBiwVUBVokAwGABVsFdSsDAc0EdgW3AgoCAQ64AgW+AiACAQJQC1CFAQMBjQVNYE2DAQMBjAVXC1eAAQMBgQVeC16JAQMB9gRjC2N4AwHsBG0LbWoDAeIEcgtyYQMB2ARoC2hfAwHOBHkLeVkCAQ99CawCFAIBJa8CCbUCJAIBGbsCC7sChQECAQS4AmC4AoEBAgEDfgukAhYCATGlAgurAisCASayAg+yAokBAgEbrwJkrwKCAQIBGooBDZoBKAMBkwSbAQ3JASIDAecCygEN2gElAwGtAtsBDesBKQMB8wHsAQ2BAiQDAaYBggINkgIoAgFskwINowIpAgEyqAIRqAKTAQIBJ40BE40BiQEDAboElwETlwGAAQMBpwSSAROSAY4BAwGUBMYBE8YBhQEDAYAEwQETwQGUAQMB7QOyAROyAXgDAdoDrQETrQGPAQMBxwO3ARO3AXoDAbQDowETowGGAQMBoQO8ARO8AWYDAY4DqAETqAGMAQMB+wKeAROeAWcDAegCzQETzQF9AwHUAtIBE9IBcgMBwQLXARPXAX0DAa4C3gET3gGPAQMBmgLjARPjAXIDAYcC6AET6AGBAQMB9AH5ARP5AXIDAeAB7wET7wGMAQMBzQH+ARP+AXwDAboB9AET9AGUAQMBpwGFAhOFApQBAwGTAYoCE4oCdAMBgAGPAhOPAn8CAW2bAhObAnQCAVmWAhOWApQBAgFGoAIToAKBAQIBMw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

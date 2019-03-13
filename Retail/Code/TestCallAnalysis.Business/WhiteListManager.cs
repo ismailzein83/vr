@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestCallAnalysis.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
@@ -16,15 +14,7 @@ namespace TestCallAnalysis.Business
         #region Public Methods
         public List<string> GetWhiteListByOperatorId(long operatorID)
         {
-            List<string> result = new List<string>();
-            var whiteList = GetCachedWhiteList();
-
-            foreach (WhiteList whtList in whiteList.Values)
-            {
-                if (whtList.OperatorID == operatorID)
-                    result.Add(whtList.Number);
-            }
-            return result;
+            return GetCachedWhiteList().FindAllRecords(x => x.OperatorID == operatorID).Select(y => y.Number).ToList();
         }
         #endregion
 

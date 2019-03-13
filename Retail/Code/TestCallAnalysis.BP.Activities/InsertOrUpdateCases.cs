@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TestCallAnalysis.Business;
 using Vanrise.BusinessProcess;
-using Vanrise.Common;
 using Vanrise.Entities;
-using Vanrise.GenericData.Business;
 using Vanrise.Queueing;
 
 namespace TestCallAnalysis.BP.Activities
@@ -26,7 +24,6 @@ namespace TestCallAnalysis.BP.Activities
     {
         [RequiredArgument]
         public InOutArgument<MemoryQueue<PrepareCDRCasesToInsert>> InputQueueToInsert { get; set; }
-        public InOutArgument<MemoryQueue<Entities.UpdateCorrelatedCDRsBatch>> UpdateCorrelatedCDRs { get; set; } // this argument must be deleted
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
