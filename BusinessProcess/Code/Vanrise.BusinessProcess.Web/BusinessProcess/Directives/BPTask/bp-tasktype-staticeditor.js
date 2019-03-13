@@ -62,7 +62,9 @@ app.directive('bpTasktypeStaticeditor', ['UtilsService', 'VRUIUtilsService',
                 };
 
                 api.setData = function (bpTaskType) {
-                    if (bpTaskType.Name == undefined)
+                    if (selectedValues != undefined && selectedValues.BPTaskTypeId != undefined)
+                        bpTaskType.Name = selectedValues.Name;
+                    else
                         bpTaskType.Name = UtilsService.guid();
                     bpTaskType.Settings = baseBPTaskTypeSettingsSelectiveAPI.getData();
                 };
