@@ -45,18 +45,20 @@
                         outputItems.push(inputItem);
                     }
                 }
-                context = parameters.context;
                 isNew = parameters.isNew;
+                context = parameters.context;
             }
         }
 
         function defineScope() {
-            $scope.scopeModel = { };
+            $scope.scopeModel = {};
             $scope.scopeModel.taskTypes = [];
             $scope.scopeModel.inputItems = [];
             $scope.scopeModel.outputItems = [];
             $scope.scopeModel.isVRWorkflowActivityDisabled = false;
             $scope.scopeModel.isBPTaskTypeLoading = true;
+          
+            $scope.scopeModel.context = context;
 
             $scope.modalContext.onModalHide = function () {
                 if ($scope.remove != undefined && isNew == true) {
@@ -105,7 +107,7 @@
 
             function loadStaticData() {
                 $scope.scopeModel.taskTitle = taskTitle;
-                $scope.scopeModel.displayName = displayName;
+                $scope.scopeModel.displayName = displayName;       
             }
 
             function loadBPTaskTypeSelector() {
@@ -123,7 +125,7 @@
                                 $scope.scopeModel.selectedTaskType = taskTypeEntity;
                             }
                         });
-                       
+
                     }
                     $scope.scopeModel.isBPTaskTypeLoading = false;
                 });
@@ -142,10 +144,9 @@
         }
 
         function loadColumns(recordTypeId) {
-            if (recordTypeId == undefined && bpTsakTypeEntity != undefined) {
-                recordTypeId = bpTsakTypeEntity.Settings.RecordTypeId;
-            }
             if (recordTypeId != undefined) {
+                $scope.scopeModel.isInputGridLoading = true;
+                $scope.scopeModel.isOutputGridLoading = true;
                 VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(recordTypeId).then(function (response) {
                     if (response != undefined) {
                         $scope.scopeModel.inputItems = [];
@@ -163,14 +164,25 @@
 
                             gridInputItem.fieldName = item.Title;
                             gridOutputItem.fieldName = item.Title;
-                            if (inputItems != undefined && inputItems.length > 0 && outputItems != undefined && outputItems.length>0) {
-                                gridInputItem.inputValue = inputItems[i].Value;
-                                gridOutputItem.outputTo = outputItems[i].To;
+
+                            if (inputItems.length > 0 && outputItems.length > 0) {
+                                var inputItem = inputItems.find(x => x.FieldName === gridInputItem.fieldName);
+                                if (inputItem != undefined) {
+                                    gridInputItem.inputValue = inputItem.Value;
+                                }
+
+                                var outputItem = outputItems.find(y => y.FieldName === gridOutputItem.fieldName);
+                                if (outputItem != undefined) {
+                                    gridOutputItem.outputTo = outputItem.To;
+                                }
                             }
+
                             $scope.scopeModel.inputItems.push(gridInputItem);
                             $scope.scopeModel.outputItems.push(gridOutputItem);
                         }
                     }
+                    $scope.scopeModel.isInputGridLoading = false;
+                    $scope.scopeModel.isOutputGridLoading = false;
                 });
             }
         }
@@ -199,10 +211,12 @@
             var columns = [];
             for (var i = 0; i < $scope.scopeModel.inputItems.length; i++) {
                 var column = $scope.scopeModel.inputItems[i];
-                columns.push({
-                    FieldName: column.fieldName,
-                    Value: column.inputValue,
-                });
+                if (column.inputValue != undefined) {
+                    columns.push({
+                        FieldName: column.fieldName,
+                        Value: column.inputValue,
+                    });
+                }
             }
             return columns;
         }
@@ -211,10 +225,12 @@
             var columns = [];
             for (var i = 0; i < $scope.scopeModel.outputItems.length; i++) {
                 var column = $scope.scopeModel.outputItems[i];
-                columns.push({
-                    FieldName: column.fieldName,
-                    To: column.outputTo,
-                });
+                if (column.outputTo != undefined) {
+                    columns.push({
+                        FieldName: column.fieldName,
+                        To: column.outputTo,
+                    });
+                }
             }
             return columns;
         }

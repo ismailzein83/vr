@@ -5,9 +5,7 @@
                 <vr-columns colnum="3">
                     <vr-textbox value="scopeModel.displayName" label="Display Name" isrequired="!scopeModel.isVRWorkflowActivityDisabled"></vr-textbox>
                 </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns colnum="6" vr-loader="scopeModel.isBPTaskTypeLoading">
+                <vr-columns colnum="3" vr-loader="scopeModel.isBPTaskTypeLoading">
                     <vr-select on-ready="scopeModel.onBPTaskTypeSelectorReady"
                                datasource="scopeModel.taskTypes"
                                selectedvalues="scopeModel.selectedTaskType"
@@ -30,37 +28,51 @@
 
             <vr-row>
                 <vr-columns colnum="6">
-                    <vr-datagrid on-ready="ctrl.onInputGridReady"
-                                 datasource="scopeModel.inputItems"
-                                 hidegridmenu="true"
-                                 disabledraggablecolumns>
+                    <vr-section title="Task Input" collapsible>
+                        <vr-datagrid on-ready="ctrl.onInputGridReady"
+                                     datasource="scopeModel.inputItems"
+                                     hidegridmenu="true"
+                                     maxheight="500px"
+                                     disabledraggablecolumns
+                                     vr-loader="scopeModel.isInputGridLoading">
 
-                        <vr-datagridcolumn headertext="'Field Name'" disablesorting="true">
-                            <vr-label>{{dataItem.fieldName}}</vr-label>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true">
-                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
-                                                                                    value="dataItem.inputValue" hidelabel="true">
-                            </businessprocess-vr-workflow-activity-expressionbuilder>
-                        </vr-datagridcolumn>
-                    </vr-datagrid>
+                            <vr-datagridcolumn headertext="'Field Name'" disablesorting="true" widthfactor="10">
+                                <vr-label>{{dataItem.fieldName}}</vr-label>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn disablesorting="true" fixedwidth="15">
+                                <vr-label>=</vr-label>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true" widthfactor="20">
+                                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments"
+                                                                                        value="dataItem.inputValue" hidelabel="true">
+                                </businessprocess-vr-workflow-activity-expressionbuilder>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-section>
                 </vr-columns>
 
                 <vr-columns colnum="6">
-                    <vr-datagrid on-ready="ctrl.onOutputGridReady"
-                                 datasource="scopeModel.outputItems"
-                                 hidegridmenu="true"
-                                 disabledraggablecolumns>
+                    <vr-section title="Task Output" collapsible>
+                        <vr-datagrid on-ready="ctrl.onOutputGridReady"
+                                     datasource="scopeModel.outputItems"
+                                     hidegridmenu="true"
+                                     maxheight="500px"
+                                     disabledraggablecolumns
+                                     vr-loader="scopeModel.isOutputGridLoading">
 
-                        <vr-datagridcolumn headertext="'Field Name'" disablesorting="true">
-                            <vr-label>{{dataItem.fieldName}}</vr-label>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'To'" type="'Text'" disablesorting="true">
-                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
-                                                                                    value="dataItem.outputTo" hidelabel="true">
-                            </businessprocess-vr-workflow-activity-expressionbuilder>
-                        </vr-datagridcolumn>
-                    </vr-datagrid>
+                            <vr-datagridcolumn headertext="'Expression To Set'" type="'Text'" disablesorting="true" widthfactor="20">
+                                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments"
+                                                                                        value="dataItem.outputTo" hidelabel="true">
+                                </businessprocess-vr-workflow-activity-expressionbuilder>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn  disablesorting="true" fixedwidth="15">
+                                <vr-label>=</vr-label>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Field Name'" disablesorting="true" widthfactor="10">
+                                <vr-label>{{dataItem.fieldName}}</vr-label>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-section>
                 </vr-columns>
             </vr-row>
         </vr-form>

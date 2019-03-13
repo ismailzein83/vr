@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using Vanrise.BusinessProcess.Data;
-using Vanrise.BusinessProcess.Entities;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
-using System;
-using Vanrise.GenericData.Entities;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -19,19 +18,11 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetCachedBPTaskTypes().GetRecord(taskTypeId);
         }
+
         public BPTaskType GetBPTaskType(string taskTypeName)
         {
-            return GetCachedBPTaskTypes().FindRecord(x => x.Name == taskTypeName);
+            return GetCachedBPTaskTypesByName().GetRecord(taskTypeName);
         }
-
-        //public BPTaskType GetBPTaskType(Guid taskTypeId)
-        //{
-        //    return GetCachedBPTaskTypesById().GetRecord(taskTypeId);
-        //}
-        //public BPTaskType GetBPTaskType(string taskTypeName)
-        //{
-        //    return GetCachedBPTaskTypesByName().GetRecord(taskTypeName);
-        //}
 
         public IEnumerable<BPTaskTypeInfo> GetBPTaskTypesInfo(BPTaskTypeFilter filter)
         {
@@ -45,29 +36,23 @@ namespace Vanrise.BusinessProcess.Business
             };
             return bpTaskTypes.MapRecords(BPTaskTypeInfoMapper, filterExpression);
         }
+
         public BPTaskType GetBPTaskTypeByTaskId(long taskId)
         {
             BPTaskManager bpTaskManager = new BPTaskManager();
             var bpTask = bpTaskManager.GetTask(taskId);
             return GetBPTaskType(bpTask.TypeId);
         }
+
         public IEnumerable<BaseBPTaskTypeSettingsConfig> GetBaseBPTaskTypeSettingsConfigs()
         {
             ExtensionConfigurationManager extensionConfigurationManager = new ExtensionConfigurationManager();
             return extensionConfigurationManager.GetExtensionConfigurations<BaseBPTaskTypeSettingsConfig>(BaseBPTaskTypeSettingsConfig.EXTENSION_TYPE);
         }
+
         #endregion
 
         #region private methods
-        private Dictionary<Guid, BPTaskType> GetCachedBPTaskTypesById()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBPTaskTypesById",
-               () =>
-               {
-                   return GetBPTaskTypes().ToDictionary(cn => cn.BPTaskTypeId, cn => cn);
-               });
-        }
-
         private Dictionary<Guid, BPTaskType> GetCachedBPTaskTypes()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
@@ -92,32 +77,9 @@ namespace Vanrise.BusinessProcess.Business
             });
         }
 
-
-
         private Dictionary<string, BPTaskType> GetCachedBPTaskTypesByName()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBPTaskTypesByName",
-               () =>
-               {
-                   return GetBPTaskTypes().ToDictionary(cn => cn.Name, cn => cn);
-               });
-        }
-
-        private IEnumerable<BPTaskType> GetBPTaskTypes()
-        {
-            IBPTaskTypeDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTaskTypeDataManager>();
-            return dataManager.GetBPTaskTypes();
-        }
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IBPTaskTypeDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTaskTypeDataManager>();
-            object _lastReceivedDataInfo;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return dataManager.AreBPTaskTypesUpdated(ref _lastReceivedDataInfo);
-            }
+            return GetCachedBPTaskTypes().Values.ToDictionary(cn => cn.Name, cn => cn);
         }
         #endregion
 
