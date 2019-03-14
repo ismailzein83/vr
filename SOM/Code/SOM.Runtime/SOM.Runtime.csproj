@@ -58,6 +58,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeAnalysis">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
@@ -386,6 +389,30 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPMExtended.Main.Business\BPMExtended.Main.Business.csproj">
+      <Project>{fe90dd05-a1ee-4b46-b3c5-08c255064742}</Project>
+      <Name>BPMExtended.Main.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMExtended.Main.Common\BPMExtended.Main.Common.csproj">
+      <Project>{3e3a051a-0843-4f74-b115-d3067c305c87}</Project>
+      <Name>BPMExtended.Main.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMExtended.Main.Data.SQL\BPMExtended.Main.Data.SQL.csproj">
+      <Project>{39ad1906-895b-4a7c-88d7-d73e6c866b74}</Project>
+      <Name>BPMExtended.Main.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMExtended.Main.Data\BPMExtended.Main.Data.csproj">
+      <Project>{0d92570d-d518-40e4-9cb6-011f772dea87}</Project>
+      <Name>BPMExtended.Main.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMExtended.Main.Entities\BPMExtended.Main.Entities.csproj">
+      <Project>{69b59125-bef7-4864-a609-85db39f0f177}</Project>
+      <Name>BPMExtended.Main.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMExtended.Main.SOM.Entities\BPMExtended.Main.SOM.csproj">
+      <Project>{25a7b453-cdc4-4c51-86cb-2483386f6bc6}</Project>
+      <Name>BPMExtended.Main.SOM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SOM.Main.BP.Activities\SOM.Main.BP.Activities.csproj">
       <Project>{058a1a33-0c22-4cc8-998f-d60d373a5a13}</Project>
       <Name>SOM.Main.BP.Activities</Name>
@@ -405,6 +432,14 @@
     <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
       <Project>{cdd52ad1-64a7-4255-b9b4-783959756de9}</Project>
       <Name>SOM.Main.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.ST.Business\SOM.ST.Business.csproj">
+      <Project>{a2bf7aeb-78ee-441d-b119-a4d5bd8fb7d2}</Project>
+      <Name>SOM.ST.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.ST.Web\SOM.ST.Web.csproj">
+      <Project>{370c1b39-16a1-4379-a861-ab96c85cc87a}</Project>
+      <Name>SOM.ST.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
