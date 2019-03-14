@@ -216,6 +216,7 @@
             validate: validate,
             validateEmail: validateEmail,
             validateIp: validateIp,
+            validateIpV6: validateIpV6,
             validateTimeRange: validateTimeRange,
             validateTimeEqualorGreaterthanToday: validateTimeEqualorGreaterthanToday
         } );
