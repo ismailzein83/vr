@@ -63,7 +63,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
             {
                 Items = new List<VRAutomatedReportDataItem>()
             };
-            if(this.SubTables!=null && this.SubTables.Count>0){
+            if(this.SubTables!=null && this.SubTables.Count>0)
+            {
                 automatedReportDataList.ItemTables = new Dictionary<Guid,VRAutomatedReportDataSubTable>();
             }
             List<string> dimensionFields = new List<string>();
@@ -144,7 +145,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
             AnalyticRecord summaryRecord;
             List<AnalyticResultSubTable> resultSubTables;
             var dataRecords = analyticManager.GetAllFilteredRecords(query, out summaryRecord, out resultSubTables);
-            BuildSubTableData(automatedReportDataList, resultSubTables, summaryRecord);
+            BuildData(automatedReportDataList, resultSubTables, summaryRecord);
             BuildAutomatedReportDataListItems(dataRecords, automatedReportDataList);
             automatedReportDataResult.Lists.Add("Main", automatedReportDataList);
             automatedReportDataResult.From = fromTime;
@@ -341,7 +342,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                         }
                     }
 
-                    if (dataItem.MeasureValues != null && dataItem.MeasureValues.Count > 0)
+                    if (dataItem.MeasureValues != null && dataItem.MeasureValues.Count > 0 && this.Measures!=null && this.Measures.Count>0)
                     {
                         for (var i = 0; i < this.Measures.Count; i++)
                         {
@@ -402,31 +403,31 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                 }
             }
         }
-        private void BuildSubTableData(VRAutomatedReportDataList automatedReportDataList, List<AnalyticResultSubTable> resultSubTables, AnalyticRecord summaryRecord)
+        private void BuildData(VRAutomatedReportDataList automatedReportDataList, List<AnalyticResultSubTable> resultSubTables, AnalyticRecord summaryRecord)
         {
-            if (this.SubTables != null && this.SubTables.Count > 0 && resultSubTables != null && resultSubTables.Count > 0)
+            if (this.WithSummary && summaryRecord!=null)
             {
-                if (this.WithSummary && summaryRecord != null)
+                automatedReportDataList.SummaryDataItem = new VRAutomatedReportDataItem()
                 {
-                    automatedReportDataList.SummaryDataItem = new VRAutomatedReportDataItem()
+                    SubTables = new Dictionary<Guid, VRAutomatedReportDataSubTable>(),
+                    Fields = new Dictionary<string, VRAutomatedReportDataFieldValue>()
+                };
+                if (this.Measures != null && this.Measures.Count > 0 && summaryRecord.MeasureValues != null && summaryRecord.MeasureValues.Count() > 0)
+                {
+                    for (var i = 0; i < this.Measures.Count; i++)
                     {
-                        SubTables = new Dictionary<Guid, VRAutomatedReportDataSubTable>(),
-                        Fields = new Dictionary<string, VRAutomatedReportDataFieldValue>()
-                    };
-                    if (summaryRecord.MeasureValues != null && summaryRecord.MeasureValues.Count() > 0)
-                    {
-                        for (var i = 0; i < this.Measures.Count; i++)
+                        var measure = Measures[i];
+                        var measureValue = summaryRecord.MeasureValues.ElementAtOrDefault(i);
+                        var dataFieldValue = new VRAutomatedReportDataFieldValue()
                         {
-                            var measure = Measures[i];
-                            var measureValue = summaryRecord.MeasureValues.ElementAtOrDefault(i);
-                            var dataFieldValue = new VRAutomatedReportDataFieldValue()
-                            {
-                                Value = measureValue.Value != null ? measureValue.Value.Value : null
-                            };
-                            automatedReportDataList.SummaryDataItem.Fields.Add(measure.MeasureName, dataFieldValue);
-                        }
+                            Value = measureValue.Value != null ? measureValue.Value.Value : null
+                        };
+                        automatedReportDataList.SummaryDataItem.Fields.Add(measure.MeasureName, dataFieldValue);
                     }
                 }
+            }   
+            if (this.SubTables != null && this.SubTables.Count > 0 && resultSubTables != null && resultSubTables.Count > 0)
+            {
                 for (int l = 0; l < this.SubTables.Count; l++)
                 {
                     var subTable = this.SubTables[l];
@@ -460,38 +461,35 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                         }
                         automatedReportDataList.ItemTables.Add(subTable.SubTableId, reportHeadersSubTable);
                     }
-                    if (this.WithSummary && summaryRecord != null)
+                    if (this.WithSummary && summaryRecord != null && summaryRecord.SubTables != null && summaryRecord.SubTables.Count > 0)
                     {
-                        if (summaryRecord.SubTables != null && summaryRecord.SubTables.Count > 0)
+                        var summarySubTable = summaryRecord.SubTables[l];
+                        if (subTable.Measures != null && subTable.Measures.Count > 0 && summarySubTable != null && summarySubTable.MeasureValues != null && summarySubTable.MeasureValues.Count > 0)
                         {
-                            var summarySubTable = summaryRecord.SubTables[l];
-                            if (subTable.Measures != null && subTable.Measures.Count > 0 && summarySubTable != null && summarySubTable.MeasureValues != null && summarySubTable.MeasureValues.Count > 0)
+                            VRAutomatedReportDataSubTable reportDataSubTable = new VRAutomatedReportDataSubTable()
                             {
-                                VRAutomatedReportDataSubTable reportDataSubTable = new VRAutomatedReportDataSubTable()
+                                Fields = new Dictionary<string, VRAutomatedReportDataSubTableFieldInfo>()
+                            };
+                            for (int k = 0; k < subTable.Measures.Count; k++)
+                            {
+                                VRAutomatedReportDataSubTableFieldInfo reportDataSubTableFieldInfo = new VRAutomatedReportDataSubTableFieldInfo()
                                 {
-                                    Fields = new Dictionary<string, VRAutomatedReportDataSubTableFieldInfo>()
+                                    FieldsValues = new List<VRAutomatedReportDataFieldValue>()
                                 };
-                                for (int k = 0; k < subTable.Measures.Count; k++)
+                                foreach (var measureValues in summarySubTable.MeasureValues)
                                 {
-                                    VRAutomatedReportDataSubTableFieldInfo reportDataSubTableFieldInfo = new VRAutomatedReportDataSubTableFieldInfo()
+                                    var measureValue = measureValues.ElementAtOrDefault(k);
+                                    if (measureValue.Value != null)
                                     {
-                                        FieldsValues = new List<VRAutomatedReportDataFieldValue>()
-                                    };
-                                    foreach (var measureValues in summarySubTable.MeasureValues)
-                                    {
-                                        var measureValue = measureValues.ElementAtOrDefault(k);
-                                        if (measureValue.Value != null)
+                                        reportDataSubTableFieldInfo.FieldsValues.Add(new VRAutomatedReportDataFieldValue()
                                         {
-                                            reportDataSubTableFieldInfo.FieldsValues.Add(new VRAutomatedReportDataFieldValue()
-                                            {
-                                                Value = measureValue.Value.Value
-                                            });
-                                        }
+                                            Value = measureValue.Value.Value
+                                        });
                                     }
-                                    reportDataSubTable.Fields.Add(subTable.Measures[k], reportDataSubTableFieldInfo);
                                 }
-                                automatedReportDataList.SummaryDataItem.SubTables.Add(subTable.SubTableId, reportDataSubTable);
+                                reportDataSubTable.Fields.Add(subTable.Measures[k], reportDataSubTableFieldInfo);
                             }
+                            automatedReportDataList.SummaryDataItem.SubTables.Add(subTable.SubTableId, reportDataSubTable);
                         }
                     }
                 }
