@@ -361,6 +361,26 @@ namespace TOne.WhS.Routing.Business
                 return customerRoutes;
             }
 
+            protected override BigResult<CustomerRouteDetail> AllRecordsToBigResult(DataRetrievalInput<CustomerRouteQuery> input, IEnumerable<CustomerRoute> allRoutes)
+            {
+                IEnumerable<CustomerRouteDetail> allDetailedRoutes = GetCustomerRouteDetails(allRoutes);
+
+                IEnumerable<CustomerRouteDetail> orderedRoutes;
+                if (input.Query.ApplyDefaultSorting)
+                    orderedRoutes = GetOrderedCustomerRoutes(allDetailedRoutes, input);
+                else
+                    orderedRoutes = allDetailedRoutes.VROrderList(input);
+
+                IEnumerable<CustomerRouteDetail> pagedRoutes = orderedRoutes.VRGetPage(input);
+
+                return new BigResult<CustomerRouteDetail>
+                {
+                    ResultKey = input.ResultKey,
+                    Data = pagedRoutes.ToList(),
+                    TotalCount = allRoutes.Count()
+                };
+            }
+
             protected override ResultProcessingHandler<CustomerRouteDetail> GetResultProcessingHandler(DataRetrievalInput<CustomerRouteQuery> input, BigResult<CustomerRouteDetail> bigResult)
             {
                 var resultProcessingHandler = new ResultProcessingHandler<CustomerRouteDetail>() { ExportExcelHandler = new CustomerRouteExcelExportHandler() };
@@ -396,6 +416,32 @@ namespace TOne.WhS.Routing.Business
                         }
                     }
                 }
+            }
+
+            private IEnumerable<CustomerRouteDetail> GetOrderedCustomerRoutes(IEnumerable<CustomerRouteDetail> customerRouteDetails, Vanrise.Entities.DataRetrievalInput input)
+            {
+                IPropValueReader customerNameValueReader = Utilities.GetPropValueReader("CustomerName");
+                Func<CustomerRouteDetail, Object> customerNameSelector = x => customerNameValueReader.GetPropertyValue(x);
+
+                IPropValueReader codeValueReader = Utilities.GetPropValueReader("Code");
+                Func<CustomerRouteDetail, Object> codeSelector = x => codeValueReader.GetPropertyValue(x);
+
+                return customerRouteDetails.OrderBy(customerNameSelector).ThenBy(codeSelector);
+            }
+
+            private IEnumerable<CustomerRouteDetail> GetCustomerRouteDetails(IEnumerable<CustomerRoute> customerRoutes)
+            {
+                List<CustomerRouteDetail> customerRouteDetails = new List<CustomerRouteDetail>();
+
+                if (customerRoutes != null)
+                {
+                    foreach (var customerRoute in customerRoutes)
+                    {
+                        customerRouteDetails.Add(new CustomerRouteManager().CustomerRouteDetailMapper(customerRoute));
+                    }
+                }
+
+                return customerRouteDetails;
             }
         }
 

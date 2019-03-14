@@ -40,8 +40,13 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                     defineAPI();
                 };
 
-                $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
                     var loadGridPromiseDeffered = UtilsService.createPromiseDeferred();
+
+                    if (!retrieveDataContext.isDataSorted)
+                        dataRetrievalInput.Query.ApplyDefaultSorting = true; //customer + code
+                    else
+                        dataRetrievalInput.Query.ApplyDefaultSorting = false;
 
                     WhS_Routing_CustomerRouteAPIService.GetFilteredCustomerRoutes(dataRetrievalInput).then(function (response) {
                         var customerRouteLoadGridPromises = [];

@@ -100,7 +100,7 @@ namespace TOne.WhS.Routing.Data.SQL
             }
 
             queryBuilder.Replace("#FILTER#", string.Format("Where (@Code is null or cr.Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) {0} {1} {2} {3}", customerIdsFilter, saleZoneIdsFilter, sellingNumberPlanId, supplierIdsFilter));
-
+         
             IEnumerable<Entities.CustomerRoute> customerRoutes = GetItemsText(queryBuilder.ToString(), CustomerRouteMapper, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@Code", !string.IsNullOrEmpty(input.Query.Code) ? string.Format("{0}%", input.Query.Code) : (object)DBNull.Value));
@@ -621,7 +621,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId = sz.ID 
                                                   JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID = ca.ID
                                                   JOIN [dbo].[CustomerZoneDetail] as czd ON czd.SaleZoneId = cr.SaleZoneID and czd.CustomerId = cr.CustomerID
-                                                  #FILTER#";
+                                                  #FILTER#
+                                                  Order by cr.CustomerID, cr.Code";
 
         const string query_UpdateCustomerRoutes = @"UPDATE customerRoute set customerRoute.IsBlocked = routes.IsBlocked, customerRoute.ExecutedRuleId = routes.ExecutedRuleId, 
                                                            customerRoute.SupplierIds = routes.SupplierIds, customerRoute.RouteOptions = routes.RouteOptions

@@ -21,5 +21,7 @@ namespace TOne.WhS.Routing.Entities
         public int LimitResult { get; set; }
 
         public bool IncludeBlockedSuppliers { get; set; }
+
+        public bool ApplyDefaultSorting { get; set; }
     }
 }
