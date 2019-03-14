@@ -105,7 +105,7 @@
                     }
                     return errorMessage;
                 }
-            }
+            };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
