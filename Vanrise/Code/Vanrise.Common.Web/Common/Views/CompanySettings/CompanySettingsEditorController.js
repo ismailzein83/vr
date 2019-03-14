@@ -200,7 +200,8 @@
                 contactType: contactType.Name,
                 name: settings != undefined ? settings.ContactName : undefined,
                 title: settings != undefined ? settings.Title : undefined,
-                email: settings != undefined ? settings.Email : undefined
+				email: settings != undefined ? settings.Email : undefined,
+				phone: settings != undefined ? settings.Phone : undefined
             };
             $scope.scopeModel.contacts.push(contact);
         }
@@ -212,7 +213,8 @@
                     var obj = {
                         ContactName: contact.name,
                         Title: contact.title,
-                        Email: contact.email
+						Email: contact.email,
+						Phone:contact.phone
                     };
                     if (obj != null)
                         contacts[contact.contactType] = obj;
@@ -240,12 +242,12 @@
         function loadStaticData() {
 
             if (companySettingEntity == undefined) 
-                return;
-
+				return;
             $scope.scopeModel.companyName = companySettingEntity.CompanyName;
             $scope.scopeModel.profileName = companySettingEntity.ProfileName;
             $scope.scopeModel.registrationNumber = companySettingEntity.RegistrationNumber;
-            $scope.scopeModel.registrationAddress = companySettingEntity.RegistrationAddress;
+			$scope.scopeModel.registrationAddress = companySettingEntity.RegistrationAddress;
+			$scope.scopeModel.moreInfo = companySettingEntity.MoreInfo;
             $scope.scopeModel.vatId = companySettingEntity.VatId;
             if (companySettingEntity.CompanyLogo > 0)
                 $scope.scopeModel.companyLogo = {
@@ -265,7 +267,8 @@
                 CompanyName: $scope.scopeModel.companyName,
                 ProfileName: $scope.scopeModel.profileName,
                 RegistrationNumber: $scope.scopeModel.registrationNumber,
-                RegistrationAddress: $scope.scopeModel.registrationAddress,
+				RegistrationAddress: $scope.scopeModel.registrationAddress,
+				MoreInfo: $scope.scopeModel.moreInfo,
                 VatId: $scope.scopeModel.vatId,
                 CompanyLogo: ($scope.scopeModel.companyLogo != null) ? $scope.scopeModel.companyLogo.fileId : 0,
                 IsDefault: companySettingEntity != undefined ? companySettingEntity.IsDefault : setDefault,

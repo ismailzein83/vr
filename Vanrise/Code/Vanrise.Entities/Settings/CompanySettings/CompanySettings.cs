@@ -23,7 +23,8 @@ namespace Vanrise.Entities
         public string ProfileName { get; set; }
         public long CompanyLogo { get; set; }
         public string RegistrationAddress { get; set; }
-        public string RegistrationNumber { get; set; }
+		public string MoreInfo { get; set; }
+		public string RegistrationNumber { get; set; }
         public string VatId { get; set; }
         public bool IsDefault { get; set; }
         public string BillingEmails { get; set; }
@@ -43,6 +44,7 @@ namespace Vanrise.Entities
         public string ContactName { get; set; }
         public string Title { get; set; }
         public string Email { get; set; }
+		public string Phone { get; set; }
     }
     public abstract class BaseCompanyExtendedSettings
     {
