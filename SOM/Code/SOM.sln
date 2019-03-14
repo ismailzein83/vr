@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOM.ST.Business", "SOM.ST.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPMExtended.Main.ConsoleApp", "BPMExtended.Main.ConsoleApp\BPMExtended.Main.ConsoleApp.csproj", "{0F082F7F-0BDA-4A24-A96B-118FFA18734A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOM.ST.Web", "SOM.ST.Web\SOM.ST.Web.csproj", "{370C1B39-16A1-4379-A861-AB96C85CC87A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +203,14 @@ Global
 		{0F082F7F-0BDA-4A24-A96B-118FFA18734A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F082F7F-0BDA-4A24-A96B-118FFA18734A}.Release|x64.ActiveCfg = Release|Any CPU
 		{0F082F7F-0BDA-4A24-A96B-118FFA18734A}.Release|x64.Build.0 = Release|Any CPU
+		{370C1B39-16A1-4379-A861-AB96C85CC87A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{370C1B39-16A1-4379-A861-AB96C85CC87A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{370C1B39-16A1-4379-A861-AB96C85CC87A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{370C1B39-16A1-4379-A861-AB96C85CC87A}.Debug|x64.Build.0 = Debug|Any CPU
+		{370C1B39-16A1-4379-A861-AB96C85CC87A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{370C1B39-16A1-4379-A861-AB96C85CC87A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{370C1B39-16A1-4379-A861-AB96C85CC87A}.Release|x64.ActiveCfg = Release|Any CPU
+		{370C1B39-16A1-4379-A861-AB96C85CC87A}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -230,14 +240,15 @@ Global
 		{A849381E-49DB-47FD-89F8-4DB3001F894B} = {F5632401-D8B3-4DA7-8C08-21CB6BC9527B}
 		{A2BF7AEB-78EE-441D-B119-A4D5BD8FB7D2} = {A849381E-49DB-47FD-89F8-4DB3001F894B}
 		{0F082F7F-0BDA-4A24-A96B-118FFA18734A} = {8D5E6327-5AA2-4D87-A836-D17B961D84CE}
+		{370C1B39-16A1-4379-A861-AB96C85CC87A} = {A849381E-49DB-47FD-89F8-4DB3001F894B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {96C2408F-65D2-4CEE-AE2C-7FEAAD0B416C}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 22
+		SccNumberOfProjects = 23
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = SOM.sln
@@ -323,5 +334,9 @@ Global
 		SccProjectTopLevelParentUniqueName21 = SOM.sln
 		SccProjectName21 = BPMExtended.Main.ConsoleApp
 		SccLocalPath21 = BPMExtended.Main.ConsoleApp
+		SccProjectUniqueName22 = SOM.ST.Web\\SOM.ST.Web.csproj
+		SccProjectTopLevelParentUniqueName22 = SOM.sln
+		SccProjectName22 = SOM.ST.Web
+		SccLocalPath22 = SOM.ST.Web
 	EndGlobalSection
 EndGlobal
