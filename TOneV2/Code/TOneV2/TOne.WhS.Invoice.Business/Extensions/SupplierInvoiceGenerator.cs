@@ -111,14 +111,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			SupplierInvoiceDetails supplierInvoiceDetails = BuildSupplierInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, canGenerateVoiceInvoice, dealItemSetNames, currencyId);
 			if (supplierInvoiceDetails != null)
 			{
-				decimal totalDealAmount = 0;
-				if (dealItemSetNames != null && dealItemSetNames.Count > 0)
-				{
-					foreach (var dealItemSetName in dealItemSetNames)
-					{
-						totalDealAmount += dealItemSetName.Amount;
-					}
-				}
 				supplierInvoiceDetails.TimeZoneId = resolvedPayload.TimeZoneId;
 				supplierInvoiceDetails.TotalAmount = supplierInvoiceDetails.CostAmount;
 				supplierInvoiceDetails.TotalAmountAfterCommission = supplierInvoiceDetails.AmountAfterCommission;
@@ -129,7 +121,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 				supplierInvoiceDetails.Commission = resolvedPayload.Commission;
 				supplierInvoiceDetails.CommissionType = resolvedPayload.CommissionType;
 				supplierInvoiceDetails.Offset = resolvedPayload.Offset;
-				supplierInvoiceDetails.TotalAmountBeforeTax = supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalAmountAfterCommission + totalDealAmount;
+				supplierInvoiceDetails.TotalAmountBeforeTax = supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalDealAmount;
 
 				if (taxItemDetails != null)
 				{
@@ -211,11 +203,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.InvoiceTypeId == context.InvoiceTypeId);
 					financialAccountInvoiceType.ThrowIfNull("financialAccountInvoiceType");
 
-					if (!financialAccountInvoiceType.IgnoreFromBalance)
-					{
-						SetInvoiceBillingTransactions(context, supplierInvoiceDetails, financialAccount, resolvedPayload.FromDate, resolvedPayload.ToDateForBillingTransaction, currencyId);
-					}
-
+					
 					ConfigManager configManager = new ConfigManager();
 					InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
 
@@ -237,10 +225,23 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					}
 					supplierInvoiceDetails.TotalReccurringChargesAfterTax = totalReccurringChargesAfterTaxInAccountCurrency;
 					supplierInvoiceDetails.TotalReccurringCharges = totalReccurringChargesInAccountCurrency;
-					supplierInvoiceDetails.TotalInvoiceAmount = supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalReccurringChargesAfterTax + supplierInvoiceDetails.TotalSMSAmountAfterCommission + totalDealAmount;
+
+
+                    supplierInvoiceDetails.HasDeals = supplierInvoiceDetails.TotalDealAmount > 0;
+                    supplierInvoiceDetails.HasSMS = supplierInvoiceDetails.TotalSMSAmountAfterCommission > 0;
+                    supplierInvoiceDetails.HasVoice = supplierInvoiceDetails.TotalAmountAfterCommission > 0;
+                    supplierInvoiceDetails.HasRecurringCharges = supplierInvoiceDetails.TotalReccurringChargesAfterTax > 0;
+
+
+                    supplierInvoiceDetails.TotalInvoiceAmount = supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalReccurringChargesAfterTax + supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalDealAmount;
 					supplierInvoiceDetails.TotalAmountBeforeTax += supplierInvoiceDetails.TotalReccurringCharges;
 
-					if (taxItemDetails != null)
+                    if (!financialAccountInvoiceType.IgnoreFromBalance)
+                    {
+                        SetInvoiceBillingTransactions(context, supplierInvoiceDetails, financialAccount, resolvedPayload.FromDate, resolvedPayload.ToDateForBillingTransaction, currencyId);
+                    }
+
+                    if (taxItemDetails != null)
 					{
 						foreach (var tax in taxItemDetails)
 						{

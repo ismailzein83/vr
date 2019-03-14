@@ -115,16 +115,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			CustomerInvoiceDetails customerInvoiceDetails = BuildCustomerInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, canGenerateVoiceInvoice, dealItemSetNames, currencyId);
 			if (customerInvoiceDetails != null)
 			{
-				decimal totalDealAmount = 0;
-				if (dealItemSetNames != null && dealItemSetNames.Count > 0)
-				{
-					foreach (var dealItemSetName in dealItemSetNames)
-					{
-						totalDealAmount += dealItemSetName.Amount;
-					}
-				}
-
-				customerInvoiceDetails.TimeZoneId = resolvedPayload.TimeZoneId;
+         
+                customerInvoiceDetails.TimeZoneId = resolvedPayload.TimeZoneId;
 				customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;
 				customerInvoiceDetails.TotalAmountAfterCommission = customerInvoiceDetails.AmountAfterCommission;
 				customerInvoiceDetails.TotalSMSAmountAfterCommission = customerInvoiceDetails.SMSAmountAfterCommission;
@@ -139,7 +131,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 				customerInvoiceDetails.TotalOriginalAmountAfterCommission = customerInvoiceDetails.OriginalAmountAfterCommission;
 
 
-				customerInvoiceDetails.TotalAmountBeforeTax = customerInvoiceDetails.TotalSMSAmountAfterCommission + customerInvoiceDetails.TotalAmountAfterCommission + totalDealAmount;
+                customerInvoiceDetails.TotalAmountBeforeTax = customerInvoiceDetails.TotalSMSAmountAfterCommission + customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalDealAmount;
 
 				if (taxItemDetails != null)
 				{
@@ -221,10 +213,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					definitionSettings.FinancialAccountInvoiceTypes.ThrowIfNull("definitionSettings.FinancialAccountInvoiceTypes", financialAccount.FinancialAccountDefinitionId);
 					var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.InvoiceTypeId == context.InvoiceTypeId);
 					financialAccountInvoiceType.ThrowIfNull("financialAccountInvoiceType");
-					if (!financialAccountInvoiceType.IgnoreFromBalance)
-					{
-						SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, resolvedPayload.FromDate, resolvedPayload.ToDateForBillingTransaction, currencyId);
-					}
 
 					ConfigManager configManager = new ConfigManager();
 					InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
@@ -247,8 +235,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					customerInvoiceDetails.TotalReccurringCharges = totalReccurringChargesInAccountCurrency;
 					customerInvoiceDetails.TotalAmountBeforeTax += customerInvoiceDetails.TotalReccurringCharges;
 
-					customerInvoiceDetails.TotalInvoiceAmount = customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalReccurringChargesAfterTax + customerInvoiceDetails.TotalSMSAmountAfterCommission + totalDealAmount;
-					if (taxItemDetails != null && taxItemDetails.Count() > 0)
+                    customerInvoiceDetails.HasDeals = customerInvoiceDetails.TotalDealAmount > 0;
+                    customerInvoiceDetails.HasSMS = customerInvoiceDetails.TotalSMSAmountAfterCommission > 0;
+                    customerInvoiceDetails.HasVoice = customerInvoiceDetails.TotalAmountAfterCommission > 0;
+                    customerInvoiceDetails.HasRecurringCharges = customerInvoiceDetails.TotalReccurringChargesAfterTax > 0;
+
+                    customerInvoiceDetails.TotalInvoiceAmount = customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalReccurringChargesAfterTax + customerInvoiceDetails.TotalSMSAmountAfterCommission + customerInvoiceDetails.TotalDealAmount;
+
+                    if (!financialAccountInvoiceType.IgnoreFromBalance)
+                    {
+                        SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, resolvedPayload.FromDate, resolvedPayload.ToDateForBillingTransaction, currencyId);
+                    }
+
+                    if (taxItemDetails != null && taxItemDetails.Count() > 0)
 					{
 						foreach (var tax in taxItemDetails)
 						{
