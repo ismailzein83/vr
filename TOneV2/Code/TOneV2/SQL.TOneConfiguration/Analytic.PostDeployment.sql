@@ -145,7 +145,6 @@ set nocount on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('6FDD628E-C876-4DBF-92BF-77225A88C3B9','VR_Analytic_AnalyticReport','Analytic Reports','7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),
 ('85ABD90F-F9BF-4E0C-87ED-08F067EEA5D4','VR_Analytic_ReportGeneration','Report Generation','61451603-E7B9-40C6-AE27-6CBA974E1B3B',0,'["Manage"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))

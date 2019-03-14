@@ -215,7 +215,8 @@ as (select * from (values
 ('739E072E-E232-4B5B-A1A0-DEFCB95D7ED8','SMSBillingData','SMS Billing Data'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
 ('8DCD6E7B-7F93-4FB5-86C1-77A40939DEC7','CDR_Problems','CDR Problems'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
 ('C2029536-B819-4A10-B293-EA11670DE357','VRDynamicAPIModule','VRDynamicAPIModule'			,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),
-('C3D56166-1778-413F-9615-4F39129DA824','VRDynamicAPI','VRDynamicAPI'			            ,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]')
+('C3D56166-1778-413F-9615-4F39129DA824','VRDynamicAPI','VRDynamicAPI'			            ,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),
+('6FDD628E-C876-4DBF-92BF-77225A88C3B9','VR_Analytic_AnalyticReport','Analytic Reports'		,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
