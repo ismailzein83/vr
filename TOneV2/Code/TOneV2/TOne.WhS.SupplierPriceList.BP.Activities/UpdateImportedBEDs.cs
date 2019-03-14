@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
@@ -57,7 +54,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 if (existingCodesByCode.TryGetValue(importedCode.Code, out importedCodeExistingEntities))
                 {
                     var matchedCode = importedCodeExistingEntities.FindRecord(item => item.IsInTimeRange(importedCode.BED));
-                    if (matchedCode != null && supplierZoneManager.GetSupplierZoneName(matchedCode.ZoneId) == importedCode.ZoneName)
+                    if (matchedCode != null && supplierZoneManager.GetSupplierZoneName(matchedCode.ZoneId).Equals(importedCode.ZoneName, StringComparison.InvariantCultureIgnoreCase))
                         importedCode.BED = matchedCode.BED;
                 }
             }
@@ -71,18 +68,19 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var importedRate in importedRates)
             {
+                string importedZoneName = importedRate.ZoneName.ToLower();
                 List<SupplierRate> importedRateExistingEntities = new List<SupplierRate>();
 
                 if (!importedRate.RateTypeId.HasValue)
                 {
-                    if (!existingNormalRates.TryGetValue(importedRate.ZoneName, out importedRateExistingEntities))
+                    if (!existingNormalRates.TryGetValue(importedZoneName, out importedRateExistingEntities))
                         continue;
                 }
 
                 else
                 {
                     Dictionary<int, List<SupplierRate>> importedOtherRatesExistingEntities = new Dictionary<int, List<SupplierRate>>();
-                    if (!existingOtherRates.TryGetValue(importedRate.ZoneName, out importedOtherRatesExistingEntities))
+                    if (!existingOtherRates.TryGetValue(importedZoneName, out importedOtherRatesExistingEntities))
                         continue;
                     if (!importedOtherRatesExistingEntities.TryGetValue(importedRate.RateTypeId.Value, out importedRateExistingEntities))
                         continue;
@@ -103,9 +101,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 if (importedZone.ImportedZoneServiceGroup == null)
                     continue;
+
+                string importedZoneName = importedZone.ZoneName.ToLower();
                 List<SupplierZoneService> importedZoneExistingEntities = new List<SupplierZoneService>();
 
-                if (existingZoneServicesByZoneName.TryGetValue(importedZone.ZoneName, out importedZoneExistingEntities))
+                if (existingZoneServicesByZoneName.TryGetValue(importedZoneName, out importedZoneExistingEntities))
                 {
                     var matchedZoneService = importedZoneExistingEntities.FindRecord(item => item.IsInTimeRange(importedZone.ImportedZoneServiceGroup.BED));
                     if (matchedZoneService != null && SameServiceIds(matchedZoneService.ReceivedServices, importedZone.ImportedZoneServiceGroup.ServiceIds))
@@ -142,7 +142,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var rate in existingRateEntities)
             {
-                var zoneName = supplierZoneManager.GetSupplierZoneName(rate.ZoneId);
+                var zoneName = supplierZoneManager.GetSupplierZoneName(rate.ZoneId).ToLower();
                 if (!rate.RateTypeId.HasValue)
                 {
                     List<SupplierRate> rateExistingEntities = new List<SupplierRate>();
@@ -179,7 +179,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var zoneService in existingZoneServiceEntities)
             {
-                var zoneName = supplierZoneManager.GetSupplierZoneName(zoneService.ZoneId);
+                var zoneName = supplierZoneManager.GetSupplierZoneName(zoneService.ZoneId).ToLower();
                 List<SupplierZoneService> zoneServiceExistingEntities = new List<SupplierZoneService>();
 
                 if (!existingZoneServicesByZoneName.TryGetValue(zoneName, out zoneServiceExistingEntities))
