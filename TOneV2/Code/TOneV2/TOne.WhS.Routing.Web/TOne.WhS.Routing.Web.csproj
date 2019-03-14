@@ -29,7 +29,7 @@
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -193,6 +193,22 @@
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockCustomeAccount\Templates\BlockCustomerAccountActionDefinition.html" />
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockCustomeAccount\whs-routing-actiondefinition-blockcustomeraccount.js" />
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockCustomeAccount\whs-routing-action-blockcustomeraccount.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockDestinationNumber\whs-routing-action-blockdestinationnumber.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockDestinationNumber\whs-routing-actiondefinition-blockdestinationnumber.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockDestinationNumber\Templates\BlockDestinationNumberAction.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockDestinationNumber\Templates\BlockDestinationNumberActionDefinition.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockPortOut\Templates\BlockPortOutAction.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockPortOut\Templates\BlockPortOutActionDefinition.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockPortOut\whs-routing-action-blockportout.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockPortOut\whs-routing-actiondefinition-blockportout.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockPortIn\whs-routing-action-blockportin.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockPortIn\whs-routing-actiondefinition-blockportin.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockPortIn\Templates\BlockPortInAction.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockPortIn\Templates\BlockPortInActionDefinition.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockOriginationNumber\whs-routing-action-blockoriginationnumber.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockOriginationNumber\whs-routing-actiondefinition-blockoriginationnumber.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockOriginationNumber\Templates\BlockOriginationNumberAction.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockOriginationNumber\Templates\BlockOriginationNumberActionDefinition.html" />
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockSaleZone\Templates\BlockSaleZoneAction.html" />
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockSaleZone\Templates\BlockSaleZoneActionDefinition.html" />
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockSaleZone\whs-routing-action-blocksalezone.js" />
