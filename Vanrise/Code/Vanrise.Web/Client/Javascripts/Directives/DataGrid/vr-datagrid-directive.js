@@ -970,14 +970,14 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateNormalContent);
 
 	                    if (currentColumn.isFieldDynamic) {
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "ctrl.getCellValue(dataItem, colDef)");
+	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "ctrl.getCellValue(dataItem, colDef) || ' ' ");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "ctrl.getCellTooltip(dataItem, colDef)");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "ctrl.getCellClass(dataItem, colDef)");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", "ctrl.isColumnClickable(dataItem, colDef)");
 
 	                    }
 	                    else {
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::" + dataItemColumnPropertyPath + ".dataValue");
+	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::" + dataItemColumnPropertyPath + ".dataValue || ' ' ");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" + dataItemColumnPropertyPath + ".tooltip");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "::" + dataItemColumnPropertyPath + ".cellClass");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", dataItemColumnPropertyPath + ".isClickable");
