@@ -6,7 +6,7 @@ namespace TOne.WhS.Routing.MainExtensions.VRActions
 {
     public class BlockPortOutDefinitionSettings : VRActionDefinitionExtendedSettings
     {
-        public override Guid ConfigId { get { return new Guid("8BC7B9F4 - 872B - 4189 - AA6D - 3C252E6C4019"); } }
+        public override Guid ConfigId { get { return new Guid("8BC7B9F4-872B-4189-AA6D-3C252E6C4019"); } }
 
         public override string RuntimeEditor { get { return "whs-routing-action-blockportout"; } }
 
