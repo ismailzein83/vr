@@ -10,6 +10,7 @@ namespace Vanrise.Invoice.Entities
     {
         public Decimal Value { get; set; }
         public string TaxName { get; set; }
+		public decimal TaxAmount { get; set; }
         public RDLCTaxItemDetail() { }
         public IEnumerable<RDLCTaxItemDetail> GetRDLCTaxItemDetailsSchema()
         {
