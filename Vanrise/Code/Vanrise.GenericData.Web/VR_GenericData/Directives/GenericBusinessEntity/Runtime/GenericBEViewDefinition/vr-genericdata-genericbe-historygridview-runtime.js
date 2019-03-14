@@ -50,16 +50,12 @@
 
                 api.load = function (payload) {
 
-                    $scope.scopeModel.isGridLoading = true;
-
                     if (payload != undefined) {
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         genericBusinessEntityId = payload.genericBusinessEntityId;
                     }
 
-                    return gridAPI.load(buildGridPayload(payload)).then(function () {
-                        $scope.scopeModel.isGridLoading = false;
-                    });
+                    return gridAPI.load(buildGridPayload(payload));
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

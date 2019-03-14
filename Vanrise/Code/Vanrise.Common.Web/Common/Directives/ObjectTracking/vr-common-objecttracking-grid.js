@@ -59,30 +59,33 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
 
                     var directiveAPI = {};
                     directiveAPI.load = function (query) {
-                        var promiseDeferred = UtilsService.createPromiseDeferred();
+                        var rootPromiseNode = {};
                         if (actionHistoryName == null) {
                             uniqueName = query.EntityUniqueName;
-                            getVRLoggableEntitySettings().then(function () {
+                            rootPromiseNode.promises = [getVRLoggableEntitySettings()];
+                            rootPromiseNode.getChildNode = function () {
                                 if (vrLoggableEntitySettings != null) {
                                     actionHistoryName = vrLoggableEntitySettings.ViewHistoryItemClientActionName;
                                     viewHistoryAction = VRCommon_ObjectTrackingService.getActionTrackIfExist(actionHistoryName);
-
-                                    return gridAPI.retrieveData(query).finally(function () {
-                                        promiseDeferred.resolve();
-                                    });
                                 }
+                                return {
+                                    promises: [gridAPI.retrieveData(query)]
+                                };
+                            };
 
-                            }).catch(function (error) {
-                                promiseDeferred.reject(error);
-                                VRNotificationService.notifyException(error, $scope);
-                            });
-                        } else {
-                            gridAPI.retrieveData(query).finally(function () {
-                                promiseDeferred.resolve();
-                            });
+                        }
+                        else {
+                            rootPromiseNode.promises = [gridAPI.retrieveData(query)];
+                            rootPromiseNode.getChildNode = function () {
+                                return {
+                                    promises: []
+                                };
+                            };
                         }
 
-                        return promiseDeferred.promise;
+                        return UtilsService.waitPromiseNode(rootPromiseNode).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
                     };
                     return directiveAPI;
                 }
