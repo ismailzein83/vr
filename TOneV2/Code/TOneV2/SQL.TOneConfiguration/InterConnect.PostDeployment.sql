@@ -472,6 +472,30 @@ WHERE	ID='1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE' and [Data] is null
 --end default data
 
 
+--[sec].[BusinessEntityModule]------------------------201 to 300----------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[ParentId],[BreakInheritance])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('E9F755B1-B844-4170-97E9-5908F70D31C9','Purchase Area'					,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0),
+('8AFF3CE5-A9B4-491D-A142-366737F5987E','Sale Area'					,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ParentId],[BreakInheritance]))
+merge	[sec].[BusinessEntityModule] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
+when not matched by target then
+	insert([ID],[Name],[ParentId],[BreakInheritance])
+	values(s.[ID],s.[Name],s.[ParentId],s.[BreakInheritance]);
+--------------------------------------------------------------------------------------------------------------
+end
+
+
+
 --[common].[VRObjectTypeDefinition]-----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
