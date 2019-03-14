@@ -84,7 +84,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             _activityContext = activityContext;
                             if(task != null)
                             {
-                                var genericTaskData = task.TaskData.CastWithValidate<Vanrise.BusinessProcess.MainExtensions.BPTaskType.BPGenericTaskData>(""task.TaskData"", task.BPTaskId);
+                                var genericTaskData = task.TaskData.CastWithValidate<Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.BPGenericTaskData>(""task.TaskData"", task.BPTaskId);
                                 this.TaskData = new #TASKDATARECORDTYPERUNTIMETYPE#(genericTaskData.FieldValues);
                             }
                             else
@@ -105,10 +105,10 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                             var assignedUserIds = assignedTo.GetUserIds(bpTaskAssigneeContext);
                             if (assignedUserIds == null || assignedUserIds.Count() == 0)
-                                throw new Exception(String.Format(""Could not resolve AssignedTo '{0}'"", AssignedTo));
+                                throw new Exception(String.Format(""Could not resolve AssignedTo""));
 
-                            BPTaskManager bpTaskManager = new BPTaskManager();
-                            var createBPTaskInput = new CreateBPTaskInput
+                            Vanrise.BusinessProcess.Business.BPTaskManager bpTaskManager = new Vanrise.BusinessProcess.Business.BPTaskManager();
+                            var createBPTaskInput = new Vanrise.BusinessProcess.Entities.CreateBPTaskInput
                             {
                                 ProcessInstanceId = sharedData.InstanceInfo.ProcessInstanceID,
                                 Title = GetTaskTitle(),
@@ -119,20 +119,20 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             };
 
                             var createTaskOutput = bpTaskManager.CreateTask(createBPTaskInput);
-                            if (createTaskOutput != null && createTaskOutput.Result == CreateBPTaskResult.Succeeded)
+                            if (createTaskOutput != null && createTaskOutput.Result == Vanrise.BusinessProcess.Entities.CreateBPTaskResult.Succeeded)
                             {
-                                context.CreateBookmark(createTaskOutput.WFBookmarkName, OnTaskCompleted);
+                                _activityContext.CreateBookmark(createTaskOutput.WFBookmarkName, OnTaskCompleted);
                             }
                             else
                             {
-                                throw new Exception(String.Format(""Could not create Task. Title '{0}'"", this.TaskTitle.Get(context)));
+                                throw new Exception(String.Format(""Could not create Task. Title '{0}'"", GetTaskTitle()));
                             }
                         }
 
-                        Vanrise.BusinessProcess.MainExtensions.BPTaskType.BPGenericTaskData GetTaskData()
+                        Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.BPGenericTaskData GetTaskData()
                         {
                             #BUILDTASKDATA#
-                            return Vanrise.BusinessProcess.MainExtensions.BPTaskType.BPGenericTaskData
+                            return new Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.BPGenericTaskData
                             {
                                 TaskTypeId = new Guid(""#TASKTYPEID#""),
                                 FieldValues = this.TaskData.GetDictionaryFromDataRecordType()
@@ -189,7 +189,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 StringBuilder outputItemsBuilder = new StringBuilder();
                 foreach (var prm in this.OutputItems)
                 {
-                    outputItemsBuilder.AppendLine($"{prm.To} = {prm.FieldName};");
+                    outputItemsBuilder.AppendLine($"{prm.To} = TaskData.{prm.FieldName};");
                 }
                 nmSpaceCodeBuilder.Replace("#TASKCOMPLETEDCODE#", outputItemsBuilder.ToString());
             }
