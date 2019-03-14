@@ -69,7 +69,7 @@
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="DataParserDBConnStringKey"                        value="ConfigurationDBConnString"/>
 
-    <add key="MediationDBConnStringKey"                         value="MediationDBConnString"/>
+    <add key="MediationDBConnStringKey"                         value="ConfigurationDBConnString"/>
 
     <!-- Begin, keep only one key depending on the client-->
     <add key="Mediation_CDR_DBConnStringKey"                    value="Mediation_CDR_DBConnString"/>
