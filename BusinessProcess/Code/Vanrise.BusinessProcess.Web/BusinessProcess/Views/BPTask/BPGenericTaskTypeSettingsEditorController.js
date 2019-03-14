@@ -37,9 +37,6 @@
                 return executeTask();
             };
 
-            $scope.scopeModel.stopTask = function () {
-                $scope.modalContext.closeModal();
-            };
         }
 
         function executeTask() {
@@ -68,13 +65,16 @@
                         bpTaskType = taskType;
                         if (bpTaskType != undefined && bpTaskType.Settings != undefined && bpTaskType.Settings.EditorSettings != undefined) {
                             $scope.scopeModel.runtimeEditor = bpTaskType.Settings.EditorSettings.RuntimeEditor;
+                            loadEditorRuntimeDirective();
                         }
-                    }).then(function () {
-                        loadEditorRuntimeDirective();
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error);
                     }).finally(function () {
                         $scope.scopeModel.isLoading = false;
                     });
                 }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error);
             });
         }
 
