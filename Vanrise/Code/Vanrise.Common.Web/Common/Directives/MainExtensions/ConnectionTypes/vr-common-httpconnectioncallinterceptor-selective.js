@@ -64,8 +64,6 @@
                         if (interceptor != undefined) {
                             $scope.selectedInterceptorTemplate = UtilsService.getItemByVal($scope.interceptorTemplates, interceptor.ConfigId, 'ExtensionConfigurationId');
                         }
-                        else if ($scope.interceptorTemplates.length > 0)
-                            $scope.selectedInterceptorTemplate = $scope.interceptorTemplates[0];
                     });
 
                     function loadTemplates() {
@@ -93,6 +91,8 @@
                 };
 
                 api.getData = function () {
+                    if (directiveAPI == null)
+                        return null;
                     var obj = directiveAPI.getData();
                     obj.ConfigId = $scope.selectedInterceptorTemplate.ExtensionConfigurationId;
                     return obj;
