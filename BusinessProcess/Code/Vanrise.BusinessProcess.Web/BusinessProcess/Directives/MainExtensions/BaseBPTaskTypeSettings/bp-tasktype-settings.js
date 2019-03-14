@@ -30,12 +30,15 @@
                 var api = {};
 
                 api.load = function (payload) {
-
+                    if (payload != undefined) {
+                        $scope.scopeModel.editor = payload.Editor;
+                    }
                 };
 
                 api.getData = function () {
                     var data = {
-                        $type: "Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities"
+                        $type: "Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities",
+                        Editor:$scope.scopeModel.editor
                     };
                     return data;
                 };
