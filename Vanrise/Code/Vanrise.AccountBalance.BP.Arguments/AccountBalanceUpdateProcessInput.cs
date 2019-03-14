@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountBalance.Entities;
 
 namespace Vanrise.AccountBalance.BP.Arguments
 {
@@ -12,7 +13,7 @@ namespace Vanrise.AccountBalance.BP.Arguments
         public int UsageCacheDays { get; set; }
         public override string GetTitle()
         {
-            return "Account Balance Update";
+            return $"Account Balance Updater '{BusinessManagerFactory.GetManager<IAccountTypeManager>().GetAccountTypeName(this.AccountTypeId)}'";
         }
     }
 }

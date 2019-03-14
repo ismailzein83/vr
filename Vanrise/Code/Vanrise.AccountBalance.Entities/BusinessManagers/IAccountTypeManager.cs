@@ -8,6 +8,8 @@ namespace Vanrise.AccountBalance.Entities
 {
     public interface IAccountTypeManager : IBusinessManager
     {
-       bool DoesUserHaveViewAccess(int UserId, List<Guid> AccountTypeIds);
+        string GetAccountTypeName(Guid accountTypeId);
+
+        bool DoesUserHaveViewAccess(int UserId, List<Guid> AccountTypeIds);
     }
 }

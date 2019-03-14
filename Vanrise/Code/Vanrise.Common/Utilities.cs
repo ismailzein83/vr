@@ -870,6 +870,14 @@ namespace Vanrise.Common
         {
             return System.IO.Directory.Exists(physicalPath) || System.IO.File.Exists(physicalPath);
         }
+
+        public static string GetRDBProjectNameIfNotDisabled(string moduleName, string dataProjectName)
+        {
+            if (ConfigurationManager.AppSettings["DisableRDB_All"] != "true" && ConfigurationManager.AppSettings[$"DisableRDB_{dataProjectName}"] != "true")
+                return $"{dataProjectName}.RDB";
+            else
+                return $"{dataProjectName}.SQL";
+        }
     }
 
     public interface IPercentageItem
