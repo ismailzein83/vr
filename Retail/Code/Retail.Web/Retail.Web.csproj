@@ -307,6 +307,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Data.RDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Data.SQL">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
     </Reference>
@@ -639,6 +643,10 @@
     <Reference Include="Vanrise.Queueing.Data">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing.Data.RDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing.Data.SQL">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.SQL.dll</HintPath>
     </Reference>
@@ -665,6 +673,10 @@
     </Reference>
     <Reference Include="Vanrise.Reprocess.Data">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.Data.RDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Data.RDB.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Reprocess.Data.SQL">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Data.SQL.dll</HintPath>
