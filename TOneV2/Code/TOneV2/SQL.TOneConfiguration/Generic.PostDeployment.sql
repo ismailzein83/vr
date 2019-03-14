@@ -375,7 +375,8 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('d76e65b5-21be-4c0b-92af-d38feab10c68','BusinessObjects','{"$type":"Vanrise.GenericData.Business.BusinessObjectDataStoreSettings, Vanrise.GenericData.Business","ConfigId":"c9fa9112-6d68-490c-bcbf-bd41a912a865","IsRemoteDataStore":false}'),
-('608A5CC4-A933-4BF3-83A7-3797EDD0BB41','Configuration Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"ConfigurationDBConnString","IsRemoteDataStore":false}')
+('608A5CC4-A933-4BF3-83A7-3797EDD0BB41','Configuration Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"ConfigurationDBConnString","IsRemoteDataStore":false}'),
+('E3D48EB5-BC66-4D21-B7FE-A9AA0E7E85D3','RDB Configuration Store','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"ConfigurationDBConnString","ConnectionStringAppSettingName":"ConfigurationConnectionStringKey","IsRemoteDataStore":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[genericdata].[DataStore] as t
