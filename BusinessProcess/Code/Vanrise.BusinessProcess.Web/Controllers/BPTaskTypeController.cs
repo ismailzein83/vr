@@ -43,5 +43,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return manager.GetBPTaskTypesInfo(deserializedFilter);
         }
 
+        [HttpGet]
+        [Route("GetVRWorkflowTaskAssigneesSettingExtensionConfigs")]
+        public IEnumerable<VRWorkflowTaskAssigneesSettingConfig> GetVRWorkflowTaskAssigneesSettingExtensionConfigs()
+        {
+            BPTaskTypeManager manager = new BPTaskTypeManager();
+            return manager.GetVRWorkflowTaskAssigneesSettingExtensionConfigs();
+        }
     }
 }

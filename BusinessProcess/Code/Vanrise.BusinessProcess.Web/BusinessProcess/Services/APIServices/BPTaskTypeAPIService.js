@@ -5,26 +5,32 @@
 
     function BusinessProcess_BPTaskTypeAPIService(BaseAPIService, UtilsService, BusinessProcess_BP_ModuleConfig) {
 
+        var controllerName = "BPTaskType";
+
         function GetBPTaskTypeByTaskId(taskId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTaskType", "GetBPTaskTypeByTaskId"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBPTaskTypeByTaskId"), {
                 taskId: taskId
             });
         }
 
         function GetBaseBPTaskTypeSettingsConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTaskType", "GetBaseBPTaskTypeSettingsConfigs"));
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBaseBPTaskTypeSettingsConfigs"));
         };
 
         function GetBPTaskType(taskTypeId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTaskType", "GetBPTaskType"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBPTaskType"), {
                 taskTypeId: taskTypeId
             });
         }
 
         function GetBPTaskTypesInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTaskType", "GetBPTaskTypesInfo"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBPTaskTypesInfo"), {
                 filter: filter
             });
+        }
+
+        function GetVRWorkflowTaskAssigneesSettingExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowTaskAssigneesSettingExtensionConfigs"), {});
         }
 
         return ({
@@ -32,6 +38,7 @@
             GetBaseBPTaskTypeSettingsConfigs: GetBaseBPTaskTypeSettingsConfigs,
             GetBPTaskType: GetBPTaskType,
             GetBPTaskTypesInfo: GetBPTaskTypesInfo,
+            GetVRWorkflowTaskAssigneesSettingExtensionConfigs: GetVRWorkflowTaskAssigneesSettingExtensionConfigs,
         });
     }
 

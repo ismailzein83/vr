@@ -10,7 +10,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new workflowAssignTask(ctrl, $scope, $attrs);
+                var ctor = new WorkflowAssignTask(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -21,7 +21,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
             templateUrl: '/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowAssignTaskTemplate.html'
         };
 
-        function workflowAssignTask(ctrl, $scope, $attrs) {
+        function WorkflowAssignTask(ctrl, $scope, $attrs) {
 
             var taskTypeId;
             var taskTitle;
@@ -74,6 +74,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
 
                     function openActivityEditor() {
                         var onActivityUpdated = function (updatedObject) {
+                            console.log(updatedObject);
                             $scope.scopeModel.displayName = updatedObject.displayName;
                             taskTypeId = updatedObject.taskTypeId;
                             taskTitle = updatedObject.taskTitle;
@@ -90,6 +91,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                 };
 
                 api.getData = function () {
+                    console.log(buildObjectFromScope());
                     return buildObjectFromScope();
                 };
 

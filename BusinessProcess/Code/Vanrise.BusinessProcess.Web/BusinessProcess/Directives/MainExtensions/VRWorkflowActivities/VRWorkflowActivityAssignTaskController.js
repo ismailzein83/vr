@@ -10,16 +10,28 @@
         var taskTitle;
         var displayName;
         var taskAssignees;
-        var filter;
         var inputItems = [];
         var outputItems = [];
         var context;
         var isNew;
+        var recordTypeId;
 
         var bpTsakTypeEntity;
 
         var bPTaskTypeSelectorAPI;
         var bPTaskTypeSelectorReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var taskAssigneesAPI;
+        var taskAssigneesPromiseReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var inputGridAPI;
+        var inputGridPromiseReadyDefferd = UtilsService.createPromiseDeferred();
+
+        var outputGridAPI;
+        var outputGridPromiseReadyDefferd = UtilsService.createPromiseDeferred();
+
+        var inputDirectiveGridAPI;
+        var outputDirectiveGridAPI;
 
         loadParameters();
         defineScope();
@@ -27,6 +39,7 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+
 
             if (parameters != undefined && parameters.obj != undefined) {
                 taskTypeId = parameters.obj.TaskTypeId;
@@ -57,13 +70,18 @@
             $scope.scopeModel.outputItems = [];
             $scope.scopeModel.isVRWorkflowActivityDisabled = false;
             $scope.scopeModel.isBPTaskTypeLoading = true;
-          
+
             $scope.scopeModel.context = context;
 
             $scope.modalContext.onModalHide = function () {
                 if ($scope.remove != undefined && isNew == true) {
                     $scope.remove();
                 }
+            };
+
+            $scope.scopeModel.onTaskAssigneesSelectorReady = function (api) {
+                taskAssigneesAPI = api;
+                taskAssigneesPromiseReadyDeffered.resolve();
             };
 
             $scope.scopeModel.onBPTaskTypeSelectorReady = function (api) {
@@ -76,11 +94,21 @@
                     BusinessProcess_BPTaskTypeAPIService.GetBPTaskType(taskTypeField.BPTaskTypeId).then(function (response) {
                         bpTsakTypeEntity = response;
                         if (bpTsakTypeEntity != undefined) {
-                            var recordTypeId = bpTsakTypeEntity.Settings.RecordTypeId;
+                            recordTypeId = bpTsakTypeEntity.Settings.RecordTypeId;
                             loadColumns(recordTypeId);
                         }
                     });
                 }
+            };
+
+            $scope.scopeModel.onInputGridReady = function (api) {
+                inputGridAPI = api;
+                inputGridPromiseReadyDefferd.resolve();
+            };
+
+            $scope.scopeModel.onOutputGridReady = function (api) {
+                outputGridAPI = api;
+                outputGridPromiseReadyDefferd.resolve();
             };
 
             $scope.scopeModel.saveActivity = function () {
@@ -101,16 +129,25 @@
         }
 
         function loadAllControls() {
+            var promises = [];
             function setTitle() {
-                $scope.title = "Edit Assign Task";
+                $scope.title = "Edit Human Activity";
             }
 
             function loadStaticData() {
                 $scope.scopeModel.taskTitle = taskTitle;
-                $scope.scopeModel.displayName = displayName;       
+                $scope.scopeModel.displayName = displayName;
             }
 
             function loadBPTaskTypeSelector() {
+                //var filter = {
+                //    Filters: [{
+                //        $type: "Vanrise.BusinessProcess.Entities.BPGenericTaskTypeSettingsFilter, Vanrise.BusinessProcess.Entities"
+
+                //    }]
+                //};
+
+                var filter;
                 BusinessProcess_BPTaskTypeAPIService.GetBPTaskTypesInfo(filter).then(function (response) {
                     if (response != undefined) {
                         for (var i = 0; i < response.length; i++) {
@@ -131,11 +168,31 @@
                 });
             }
 
-            function loadGrids(recordTypeId) {
-                loadColumns(recordTypeId);
+            //function loadTaskAssigneesSelector() {
+            //    var taskAssigneesLoadDeferred = UtilsService.createPromiseDeferred();
+            //    taskAssigneesPromiseReadyDeffered.promise.then(function () {
+            //        var taskAssigneesPayload = {
+            //            assigneesSettings: taskAssignees,
+            //            getWorkflowArguments: context.getWorkflowArguments,
+            //            getParentVariables: context.getParentVariables,
+            //            isVRWorkflowActivityDisabled: $scope.scopeModel.isVRWorkflowActivityDisabled
+            //        };
+            //        VRUIUtilsService.callDirectiveLoad(taskAssigneesAPI, taskAssigneesPayload, taskAssigneesLoadDeferred);
+            //    });
+            //    return taskAssigneesLoadDeferred.promise;
+            //}
+
+            function loadGrids(promises) {
+                loadColumns(recordTypeId, promises);
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBPTaskTypeSelector, loadGrids]).then(function () {
+
+            promises.push(setTitle);
+            promises.push(loadStaticData);
+            promises.push(loadBPTaskTypeSelector);
+           // promises.push(loadTaskAssigneesSelector);
+            promises.push(loadGrids);
+            return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -143,48 +200,101 @@
             });
         }
 
-        function loadColumns(recordTypeId) {
+        function loadColumns(recordTypeId, promises) {
             if (recordTypeId != undefined) {
+
+                var loadColumnsPromiseDeferred = UtilsService.createPromiseDeferred();
                 $scope.scopeModel.isInputGridLoading = true;
                 $scope.scopeModel.isOutputGridLoading = true;
+
                 VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(recordTypeId).then(function (response) {
                     if (response != undefined) {
-                        $scope.scopeModel.inputItems = [];
-                        $scope.scopeModel.outputItems = [];
+                        inputGridAPI.clearDataSource();
+                        outputGridAPI.clearDataSource();
+
                         for (var i = 0; i < response.Fields.length; i++) {
-                            var item = response.Fields[i];
-
-                            var gridInputItem = {
-                                id: $scope.scopeModel.inputItems.length + 1,
+                            var inputItem = {
+                                payload: response.Fields[i],
+                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            };
+                            var outputItem = {
+                                payload: response.Fields[i],
+                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
                             };
 
-                            var gridOutputItem = {
-                                id: $scope.scopeModel.outputItems.length + 1,
-                            };
+                            addInputGrid(inputItem);
+                            addOutputItem(outputItem);
 
-                            gridInputItem.fieldName = item.Title;
-                            gridOutputItem.fieldName = item.Title;
-
-                            if (inputItems.length > 0 && outputItems.length > 0) {
-                                var inputItem = inputItems.find(x => x.FieldName === gridInputItem.fieldName);
-                                if (inputItem != undefined) {
-                                    gridInputItem.inputValue = inputItem.Value;
-                                }
-
-                                var outputItem = outputItems.find(y => y.FieldName === gridOutputItem.fieldName);
-                                if (outputItem != undefined) {
-                                    gridOutputItem.outputTo = outputItem.To;
-                                }
+                            if (promises != undefined) {
+                                promises.push(inputItem.loadPromiseDeferred.promise);
+                                promises.push(outputItem.loadPromiseDeferred.promise);
                             }
+                        }
 
-                            $scope.scopeModel.inputItems.push(gridInputItem);
-                            $scope.scopeModel.outputItems.push(gridOutputItem);
+                        $scope.scopeModel.isInputGridLoading = false;
+                        $scope.scopeModel.isOutputGridLoading = false;
+                        if (promises != undefined) {
+                            promises.push(loadColumnsPromiseDeferred);
                         }
                     }
-                    $scope.scopeModel.isInputGridLoading = false;
-                    $scope.scopeModel.isOutputGridLoading = false;
                 });
             }
+        }
+
+
+        function addInputGrid(inputItem) {
+            var dataItem = {
+                id: $scope.scopeModel.inputItems.length + 1,
+                fieldName: inputItem.payload.Title,
+            };
+
+            if (inputItems.length > 0) {
+                var item = inputItems.find(x => x.FieldName === dataItem.fieldName);
+                if (item != undefined) {
+                    dataItem.inputValue = item.Value;
+                }
+            }
+
+            var dataItemPayload = inputItem.payload;
+
+            dataItem.onDirectiveReady = function (api) {
+                dataItem.directiveAPI = api;
+                inputItem.readyPromiseDeferred.resolve();
+            };
+
+            inputItem.readyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, inputItem.loadPromiseDeferred);
+            });
+
+            $scope.scopeModel.inputItems.push(dataItem);
+        }
+
+        function addOutputItem(outputItem) {
+            var dataItem = {
+                id: $scope.scopeModel.outputItems.length + 1,
+                fieldName: outputItem.payload.Title,
+            };
+
+            if (outputItems.length > 0) {
+                var item = outputItems.find(y => y.FieldName === dataItem.fieldName);
+                if (item != undefined) {
+                    dataItem.outputTo = item.To;
+                }
+            }
+            var dataItemPayload = outputItem.payload;
+
+            dataItem.onDirectiveReady = function (api) {
+                dataItem.directiveAPI = api;
+                outputItem.readyPromiseDeferred.resolve();
+            };
+
+            outputItem.readyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, outputItem.loadPromiseDeferred);
+            });
+
+            $scope.scopeModel.outputItems.push(dataItem);
         }
 
         function updateActivity() {
@@ -193,6 +303,7 @@
                 taskTypeId: $scope.scopeModel.selectedTaskType.BPTaskTypeId,
                 taskTitle: $scope.scopeModel.taskTitle,
                 displayName: $scope.scopeModel.displayName,
+                //taskAssignees: taskAssigneesAPI.getData(),
                 taskAssignees: {},
                 inputItems: $scope.scopeModel.inputItems.length > 0 ? getInputColumns() : null,
                 outputItems: $scope.scopeModel.outputItems.length > 0 ? getOutputColumns() : null,

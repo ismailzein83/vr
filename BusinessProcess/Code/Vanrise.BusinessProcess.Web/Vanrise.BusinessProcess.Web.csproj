@@ -223,6 +223,10 @@
     <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\Templates\BaseBPTaskTypeSettingsTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-selector.js" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-tasktype-staticeditor.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-processinitiator-taskassignees.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-specificusers-taskassignees.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\Templates\VRWorkflowSpecificUsersTaskAssigneesTemplate.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-taskassignees.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivityAssignTaskEditor.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityAssignTaskController.js" />
     <Content Include="BusinessProcess\Views\BPTask\BPGenericTaskTypeSettingsEditor.html" />

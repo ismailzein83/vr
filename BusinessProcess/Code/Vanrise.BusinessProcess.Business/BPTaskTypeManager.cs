@@ -29,6 +29,15 @@ namespace Vanrise.BusinessProcess.Business
             var bpTaskTypes = GetCachedBPTaskTypes();
             Func<BPTaskType, bool> filterExpression = (itm) =>
             {
+                //if (filter != null && filter.Filters != null)
+                //{
+                //    foreach (IBPTaskTypeSettingsFilter bptaskTypeSettingsFilter in filter.Filters)
+                //    {
+                //        if (!bptaskTypeSettingsFilter.IsMatch(itm))
+                //            return false;
+                //    }
+                //}
+
                 if (filter != null)
                     return false;
 
@@ -48,6 +57,12 @@ namespace Vanrise.BusinessProcess.Business
         {
             ExtensionConfigurationManager extensionConfigurationManager = new ExtensionConfigurationManager();
             return extensionConfigurationManager.GetExtensionConfigurations<BaseBPTaskTypeSettingsConfig>(BaseBPTaskTypeSettingsConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<VRWorkflowTaskAssigneesSettingConfig> GetVRWorkflowTaskAssigneesSettingExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<VRWorkflowTaskAssigneesSettingConfig>(VRWorkflowTaskAssigneesSettingConfig.EXTENSION_TYPE);
         }
 
         #endregion
