@@ -4,10 +4,10 @@
     <ReportItems>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>2.88452in</Top>
-        <Left>1.72315in</Left>
+        <Top>2.49702in</Top>
+        <Left>2.09816in</Left>
         <Height>0.02083in</Height>
-        <Width>6.04989in</Width>
+        <Width>5.67488in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -749,7 +749,7 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>SupplierInvoiceItemDetails</DataSetName>
-        <Top>2.31042in</Top>
+        <Top>1.92292in</Top>
         <Left>0.05697in</Left>
         <Height>0.46875in</Height>
         <Width>7.71608in</Width>
@@ -765,25 +765,25 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.8568in</Width>
+              <Width>0.85829in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.69837in</Width>
+              <Width>0.69986in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.00478in</Width>
+              <Width>1.00627in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.76951in</Width>
+              <Width>0.771in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.85538in</Width>
+              <Width>0.85687in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53025in</Width>
+              <Width>0.53174in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.94938in</Width>
+              <Width>0.95087in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1055,10 +1055,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>SupplierInvoiceItemDetails</DataSetName>
-        <Top>2.91458in</Top>
-        <Left>2.10858in</Left>
+        <Top>2.52708in</Top>
+        <Left>2.09816in</Left>
         <Height>0.25in</Height>
-        <Width>5.66447in</Width>
+        <Width>5.6749in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -1073,22 +1073,22 @@
               <Width>0.83428in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.76469in</Width>
+              <Width>0.72154in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.14058in</Width>
+              <Width>0.99225in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.75135in</Width>
+              <Width>0.79181in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.79178in</Width>
+              <Width>0.82512in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.48185in</Width>
+              <Width>0.56051in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.89337in</Width>
+              <Width>0.95686in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1276,6 +1276,7 @@
                               <Value>=Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -1354,10 +1355,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>SupplierInvoiceItemDetails</DataSetName>
-        <Top>5.53438in</Top>
+        <Top>5.07188in</Top>
         <Left>2.09816in</Left>
         <Height>0.25in</Height>
-        <Width>5.6579in</Width>
+        <Width>5.68237in</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
@@ -1367,10 +1368,10 @@
       </Tablix>
       <Rectangle Name="Rectangle5">
         <KeepTogether>true</KeepTogether>
-        <Top>5.47188in</Top>
-        <Left>1.70616in</Left>
+        <Top>5.00938in</Top>
+        <Left>2.10858in</Left>
         <Height>0.02083in</Height>
-        <Width>6.04989in</Width>
+        <Width>5.64747in</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -1407,7 +1408,7 @@
               <Width>0.53785in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.94937in</Width>
+              <Width>0.97952in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1797,7 +1798,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=CDate(Fields!FromDate.Value).ToString("dd/MM/yyyy")</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -1828,7 +1832,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>-</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -1859,7 +1866,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=CDate(Fields!ToDate.Value).ToString("dd/MM/yyyy")</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -1921,7 +1931,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!NumberOfSMS.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -1952,7 +1965,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=System.Math.Round(Fields!SupplierRate.Value, 4)</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -1983,7 +1999,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!OriginalSupplierCurrencyIdDescription.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -2014,7 +2033,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=System.Math.Round(Fields!OriginalCostAmount.Value, Parameters!NormalPrecisionValue.Value)</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -2066,10 +2088,10 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>SupplierSMSInvoiceItemDetails</DataSetName>
-        <Top>4.84807in</Top>
+        <Top>4.46057in</Top>
         <Left>0.03998in</Left>
         <Height>0.46875in</Height>
-        <Width>7.7104in</Width>
+        <Width>7.74055in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -2096,7 +2118,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox32</rd:DefaultName>
-        <Top>11.67882cm</Top>
+        <Top>10.69457cm</Top>
         <Left>0.1447cm</Left>
         <Height>0.6cm</Height>
         <Width>4.48297cm</Width>
@@ -2129,7 +2151,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox29</rd:DefaultName>
-        <Top>5.23319cm</Top>
+        <Top>4.24894cm</Top>
         <Left>0.1447cm</Left>
         <Height>0.6cm</Height>
         <Width>4.51083cm</Width>
@@ -2173,7 +2195,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Cost Deal</Value>
+                              <Value>Deal</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2473,7 +2495,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Amount.Value</Value>
+                              <Value>=FormatNumber(Fields!Amount.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2523,7 +2545,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CostDealItemDetails</DataSetName>
-        <Top>3.64201in</Top>
+        <Top>3.25451in</Top>
         <Left>0.06739in</Left>
         <Height>0.46875in</Height>
         <Width>7.70566in</Width>
@@ -2539,7 +2561,7 @@
         <Source>Embedded</Source>
         <Value>ATM_Mobilis</Value>
         <Sizing>FitProportional</Sizing>
-        <Top>1.63393cm</Top>
+        <Top>0.64968cm</Top>
         <Left>0.1447cm</Left>
         <Height>2.27187cm</Height>
         <Width>6.52152cm</Width>
@@ -2554,19 +2576,19 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.15172in</Width>
+              <Width>2.05818in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.1514in</Width>
+              <Width>1.56382in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.58235in</Width>
+              <Width>1.80942in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.79176in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.03034in</Width>
+              <Width>1.50988in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2676,7 +2698,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Amount</Value>
+                              <Value>Currency </Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2684,7 +2706,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox52</rd:DefaultName>
@@ -2770,11 +2794,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Currency</Value>
+                              <Value>Amount</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2825,6 +2849,8 @@
                             <TextRun>
                               <Value>=Fields!Name.Value</Value>
                               <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -2884,14 +2910,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox53">
+                    <Textbox Name="CurrencyIdDescription1">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Round(Fields!AmountAfterTaxes.Value, Parameters!NormalPrecisionValue.Value))</Value>
+                              <Value>=Fields!CurrencyIdDescription.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2900,11 +2926,11 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox53</rd:DefaultName>
+                      <rd:DefaultName>CurrencyIdDescription1</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -2971,10 +2997,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!CurrencyIdDescription.Value</Value>
+                              <Value>=FormatNumber(Round(Fields!AmountAfterTaxes.Value, Parameters!NormalPrecisionValue.Value))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -3024,10 +3051,10 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>RecurringChargeItem</DataSetName>
-        <Top>6.24166in</Top>
+        <Top>5.85416in</Top>
         <Left>0.03998in</Left>
         <Height>0.46875in</Height>
-        <Width>7.70757in</Width>
+        <Width>7.73306in</Width>
         <ZIndex>10</ZIndex>
         <Style>
           <Border>
@@ -3038,7 +3065,7 @@
       </Tablix>
       <Rectangle Name="Rectangle6">
         <KeepTogether>true</KeepTogether>
-        <Top>4.1802in</Top>
+        <Top>3.7927in</Top>
         <Left>2.09816in</Left>
         <Height>0.01042in</Height>
         <Width>5.67489in</Width>
@@ -3306,10 +3333,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CostDealItemDetails</DataSetName>
-        <Top>4.23228in</Top>
+        <Top>3.84478in</Top>
         <Left>2.09816in</Left>
         <Height>0.19792in</Height>
-        <Width>5.68238in</Width>
+        <Width>5.68237in</Width>
         <ZIndex>12</ZIndex>
         <Visibility>
           <Hidden>=Microsoft.VisualBasic.Interaction.iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
@@ -3320,11 +3347,325 @@
           </Border>
         </Style>
       </Tablix>
+      <Rectangle Name="Rectangle7">
+        <KeepTogether>true</KeepTogether>
+        <Top>6.39235in</Top>
+        <Left>2.09816in</Left>
+        <Height>0.01042in</Height>
+        <Width>5.70003in</Width>
+        <ZIndex>13</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <BackgroundColor>Black</BackgroundColor>
+        </Style>
+      </Rectangle>
+      <Tablix Name="Tablix10">
+        <TablixBody>
+          <TablixColumns>
+            <TablixColumn>
+              <Width>1.1103in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.51755in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.10881in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.64842in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.79251in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.51661in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.98814in</Width>
+            </TablixColumn>
+          </TablixColumns>
+          <TablixRows>
+            <TablixRow>
+              <Height>0.19792in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox74">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Net Total</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox69</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox117">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox84</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox118">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox71</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox119">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox82</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox120">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox86</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox121">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=FormatNumber(Parameters!TotalReccurringCharges.Value, Parameters!NormalPrecisionValue.Value)+Parameters!Currency.Value</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox87</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                    <ColSpan>2</ColSpan>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell />
+              </TablixCells>
+            </TablixRow>
+          </TablixRows>
+        </TablixBody>
+        <TablixColumnHierarchy>
+          <TablixMembers>
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+          </TablixMembers>
+        </TablixColumnHierarchy>
+        <TablixRowHierarchy>
+          <TablixMembers>
+            <TablixMember />
+          </TablixMembers>
+        </TablixRowHierarchy>
+        <DataSetName>RecurringChargeItem</DataSetName>
+        <Top>6.44444in</Top>
+        <Left>2.09816in</Left>
+        <Height>0.19792in</Height>
+        <Width>5.68234in</Width>
+        <ZIndex>14</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Tablix>
+      <Textbox Name="Textbox42">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Recurring Charges</Value>
+                <Style>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox32</rd:DefaultName>
+        <Top>14.26957cm</Top>
+        <Left>0.10155cm</Left>
+        <Height>0.6cm</Height>
+        <Width>4.48297cm</Width>
+        <ZIndex>15</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>17.13969cm</Height>
+    <Height>18.48906cm</Height>
     <Style />
   </Body>
-  <Width>19.76256cm</Width>
+  <Width>19.81546cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
@@ -3731,6 +4072,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="TotalDealAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalReccurringCharges">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
