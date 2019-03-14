@@ -3,17 +3,153 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RevenueAssurance", "RevenueAssurance", "{087564B1-6AA2-45FC-BB57-5C93DDDACE46}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "International", "International", "{DD47EE1E-A7A5-4293-8863-BDC30258A3C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interconnect", "Interconnect", "{47FD1DC4-279A-4AFA-BF29-559927AC75CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail", "Retail", "{FC65D376-59BE-4735-B3A4-DF6FF80BEDBE}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.RA.ICX", "SQL.RA.ICX\SQL.RA.ICX.sqlproj", "{04CF89A7-32FC-43ED-8A6A-02556F3A52A1}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.RA.INTL", "SQL.RA.INTL\SQL.RA.INTL.sqlproj", "{DEBD97CD-5076-4B05-ACE8-586D9DF64E73}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.RA.Retail", "SQL.RA.Retail\SQL.RA.Retail.sqlproj", "{918A7CEF-286D-4E34-8876-7453344A1349}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.RA.ICX.EDR", "SQL.RA.ICX.EDR\SQL.RA.ICX.EDR.sqlproj", "{994F18A8-217A-44CB-AC50-D08B181D5DF5}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.RA.ICX.Analytics", "SQL.RA.ICX.Analytics\SQL.RA.ICX.Analytics.sqlproj", "{9DB0C3DE-786B-468C-9F14-6F80AFBE8E3D}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.RA.INTL.Analytics", "SQL.RA.INTL.Analytics\SQL.RA.INTL.Analytics.sqlproj", "{739C63B2-D117-4839-B0ED-20120A6809FA}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.RA.INTL.EDR", "SQL.RA.INTL.EDR\SQL.RA.INTL.EDR.sqlproj", "{2BE138EC-AEDB-4AE2-8CB0-C6FACD6C770C}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.RA.Retail.EDR", "SQL.RA.Retail.EDR\SQL.RA.Retail.EDR.sqlproj", "{C31EC10E-A494-441A-BA40-8129A5AA057E}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.RA.Retail.Analytics", "SQL.RA.Retail.Analytics\SQL.RA.Retail.Analytics.sqlproj", "{7803175A-75E8-4C8C-B7FD-C6C054926346}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{04CF89A7-32FC-43ED-8A6A-02556F3A52A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04CF89A7-32FC-43ED-8A6A-02556F3A52A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04CF89A7-32FC-43ED-8A6A-02556F3A52A1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{04CF89A7-32FC-43ED-8A6A-02556F3A52A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04CF89A7-32FC-43ED-8A6A-02556F3A52A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04CF89A7-32FC-43ED-8A6A-02556F3A52A1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{DEBD97CD-5076-4B05-ACE8-586D9DF64E73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEBD97CD-5076-4B05-ACE8-586D9DF64E73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEBD97CD-5076-4B05-ACE8-586D9DF64E73}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{DEBD97CD-5076-4B05-ACE8-586D9DF64E73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEBD97CD-5076-4B05-ACE8-586D9DF64E73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEBD97CD-5076-4B05-ACE8-586D9DF64E73}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{918A7CEF-286D-4E34-8876-7453344A1349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{918A7CEF-286D-4E34-8876-7453344A1349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{918A7CEF-286D-4E34-8876-7453344A1349}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{918A7CEF-286D-4E34-8876-7453344A1349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{918A7CEF-286D-4E34-8876-7453344A1349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{918A7CEF-286D-4E34-8876-7453344A1349}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{994F18A8-217A-44CB-AC50-D08B181D5DF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{994F18A8-217A-44CB-AC50-D08B181D5DF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{994F18A8-217A-44CB-AC50-D08B181D5DF5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{994F18A8-217A-44CB-AC50-D08B181D5DF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{994F18A8-217A-44CB-AC50-D08B181D5DF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{994F18A8-217A-44CB-AC50-D08B181D5DF5}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9DB0C3DE-786B-468C-9F14-6F80AFBE8E3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DB0C3DE-786B-468C-9F14-6F80AFBE8E3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DB0C3DE-786B-468C-9F14-6F80AFBE8E3D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9DB0C3DE-786B-468C-9F14-6F80AFBE8E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DB0C3DE-786B-468C-9F14-6F80AFBE8E3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DB0C3DE-786B-468C-9F14-6F80AFBE8E3D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{739C63B2-D117-4839-B0ED-20120A6809FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{739C63B2-D117-4839-B0ED-20120A6809FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{739C63B2-D117-4839-B0ED-20120A6809FA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{739C63B2-D117-4839-B0ED-20120A6809FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{739C63B2-D117-4839-B0ED-20120A6809FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{739C63B2-D117-4839-B0ED-20120A6809FA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2BE138EC-AEDB-4AE2-8CB0-C6FACD6C770C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE138EC-AEDB-4AE2-8CB0-C6FACD6C770C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE138EC-AEDB-4AE2-8CB0-C6FACD6C770C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2BE138EC-AEDB-4AE2-8CB0-C6FACD6C770C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE138EC-AEDB-4AE2-8CB0-C6FACD6C770C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BE138EC-AEDB-4AE2-8CB0-C6FACD6C770C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C31EC10E-A494-441A-BA40-8129A5AA057E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C31EC10E-A494-441A-BA40-8129A5AA057E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C31EC10E-A494-441A-BA40-8129A5AA057E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C31EC10E-A494-441A-BA40-8129A5AA057E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C31EC10E-A494-441A-BA40-8129A5AA057E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C31EC10E-A494-441A-BA40-8129A5AA057E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{7803175A-75E8-4C8C-B7FD-C6C054926346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7803175A-75E8-4C8C-B7FD-C6C054926346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7803175A-75E8-4C8C-B7FD-C6C054926346}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7803175A-75E8-4C8C-B7FD-C6C054926346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7803175A-75E8-4C8C-B7FD-C6C054926346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7803175A-75E8-4C8C-B7FD-C6C054926346}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DD47EE1E-A7A5-4293-8863-BDC30258A3C5} = {087564B1-6AA2-45FC-BB57-5C93DDDACE46}
+		{47FD1DC4-279A-4AFA-BF29-559927AC75CC} = {087564B1-6AA2-45FC-BB57-5C93DDDACE46}
+		{FC65D376-59BE-4735-B3A4-DF6FF80BEDBE} = {087564B1-6AA2-45FC-BB57-5C93DDDACE46}
+		{04CF89A7-32FC-43ED-8A6A-02556F3A52A1} = {47FD1DC4-279A-4AFA-BF29-559927AC75CC}
+		{DEBD97CD-5076-4B05-ACE8-586D9DF64E73} = {DD47EE1E-A7A5-4293-8863-BDC30258A3C5}
+		{918A7CEF-286D-4E34-8876-7453344A1349} = {FC65D376-59BE-4735-B3A4-DF6FF80BEDBE}
+		{994F18A8-217A-44CB-AC50-D08B181D5DF5} = {47FD1DC4-279A-4AFA-BF29-559927AC75CC}
+		{9DB0C3DE-786B-468C-9F14-6F80AFBE8E3D} = {47FD1DC4-279A-4AFA-BF29-559927AC75CC}
+		{739C63B2-D117-4839-B0ED-20120A6809FA} = {DD47EE1E-A7A5-4293-8863-BDC30258A3C5}
+		{2BE138EC-AEDB-4AE2-8CB0-C6FACD6C770C} = {DD47EE1E-A7A5-4293-8863-BDC30258A3C5}
+		{C31EC10E-A494-441A-BA40-8129A5AA057E} = {FC65D376-59BE-4735-B3A4-DF6FF80BEDBE}
+		{7803175A-75E8-4C8C-B7FD-C6C054926346} = {FC65D376-59BE-4735-B3A4-DF6FF80BEDBE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6368FAF0-4E49-43BC-A244-28822B5F68CE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 1
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
+		SccProjectUniqueName1 = SQL.RA.ICX\\SQL.RA.ICX.sqlproj
+		SccProjectTopLevelParentUniqueName1 = Retail.SQL.sln
+		SccProjectName1 = SQL.RA.ICX
+		SccLocalPath1 = SQL.RA.ICX
+		SccProjectUniqueName2 = SQL.RA.INTL\\SQL.RA.INTL.sqlproj
+		SccProjectTopLevelParentUniqueName2 = Retail.SQL.sln
+		SccProjectName2 = SQL.RA.INTL
+		SccLocalPath2 = SQL.RA.INTL
+		SccProjectUniqueName3 = SQL.RA.Retail\\SQL.RA.Retail.sqlproj
+		SccProjectTopLevelParentUniqueName3 = Retail.SQL.sln
+		SccProjectName3 = SQL.RA.Retail
+		SccLocalPath3 = SQL.RA.Retail
+		SccProjectUniqueName4 = SQL.RA.ICX.EDR\\SQL.RA.ICX.EDR.sqlproj
+		SccProjectTopLevelParentUniqueName4 = Retail.SQL.sln
+		SccProjectName4 = SQL.RA.ICX.EDR
+		SccLocalPath4 = SQL.RA.ICX.EDR
+		SccProjectUniqueName5 = SQL.RA.ICX.Analytics\\SQL.RA.ICX.Analytics.sqlproj
+		SccProjectTopLevelParentUniqueName5 = Retail.SQL.sln
+		SccProjectName5 = SQL.RA.ICX.Analytics
+		SccLocalPath5 = SQL.RA.ICX.Analytics
+		SccProjectUniqueName6 = SQL.RA.INTL.Analytics\\SQL.RA.INTL.Analytics.sqlproj
+		SccProjectTopLevelParentUniqueName6 = Retail.SQL.sln
+		SccProjectName6 = SQL.RA.INTL.Analytics
+		SccLocalPath6 = SQL.RA.INTL.Analytics
+		SccProjectUniqueName7 = SQL.RA.INTL.EDR\\SQL.RA.INTL.EDR.sqlproj
+		SccProjectTopLevelParentUniqueName7 = Retail.SQL.sln
+		SccProjectName7 = SQL.RA.INTL.EDR
+		SccLocalPath7 = SQL.RA.INTL.EDR
+		SccProjectUniqueName8 = SQL.RA.Retail.EDR\\SQL.RA.Retail.EDR.sqlproj
+		SccProjectTopLevelParentUniqueName8 = Retail.SQL.sln
+		SccProjectName8 = SQL.RA.Retail.EDR
+		SccLocalPath8 = SQL.RA.Retail.EDR
+		SccProjectUniqueName9 = SQL.RA.Retail.Analytics\\SQL.RA.Retail.Analytics.sqlproj
+		SccProjectTopLevelParentUniqueName9 = Retail.SQL.sln
+		SccProjectName9 = SQL.RA.Retail.Analytics
+		SccLocalPath9 = SQL.RA.Retail.Analytics
 	EndGlobalSection
 EndGlobal
