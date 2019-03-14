@@ -11,11 +11,19 @@ namespace TOne.WhS.Invoice.Entities
         public long? CostDealZoneGroupNb { get; set; }
         public int? CostDealTierNb { get; set; }
         public int? CostDeal { get; set; }
-        public decimal? CostDealRateTierNb { get; set; }
+		public string  CostDealDescription { get; set; }
+		public decimal? CostDealRateTierNb { get; set; }
         public decimal Duration { get; set; }
         public decimal OriginalAmount { get; set; }
         public int NumberOfCalls { get; set; }
-        public int Currency { get; set; }
-        public decimal Amount { get; set; }
-    }
+        public int CurrencyId { get; set; }
+		public string CurrencyIdDescription { get; set; }
+		public decimal Amount { get; set; }
+		public string AmountDescription { get; set; }
+		public DateTime ToDate { get; set; }
+		public string ToDateDescription { get; set; }
+		public DateTime FromDate { get; set; }
+		public string FromDateDescription { get; set; }
+
+	}
 }
