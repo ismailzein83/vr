@@ -937,6 +937,7 @@
     <None Include="Mediation_Jazz.PostDeployment.sql" />
     <None Include="Mediation_Ogero.PostDeployment.sql" />
     <None Include="Mediation_Multinet.PostDeployment.sql" />
+    <None Include="TOne.Demo.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
