@@ -224,7 +224,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('DD3E3FDA-EA57-445A-9D8E-65FC346CFAE7','Normalization Rules','Normalization Rules',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["6818897d-f588-49a3-a00d-a020633f21e5"]}}',null,'729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',null,null)
+('DD3E3FDA-EA57-445A-9D8E-65FC346CFAE7','Normalization Rules','Normalization Rules',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["6818897d-f588-49a3-a00d-a020633f21e5"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
