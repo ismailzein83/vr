@@ -199,7 +199,7 @@ namespace Retail.Interconnect.Business
                 AccountTypeId = invoiceBalanceAccounts.FirstOrDefault().AccountTypeId,
                 AccountId = context.PartnerId,
                 TransactionTypeId = this._invoiceTransactionTypeId,
-                Amount = invoiceDetails.Amount,
+                Amount = invoiceDetails.TotalInvoiceAmount,
                 CurrencyId = invoiceDetails.InterconnectCurrencyId
             };
 
