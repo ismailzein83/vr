@@ -445,7 +445,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			_invoiceGenerationManager.AddGeneratedInvoiceItemSet("GroupingByCurrency", generatedInvoiceItemSets, supplierVoiceInvoicesBySaleCurrency);
 			_invoiceGenerationManager.AddGeneratedInvoiceItemSet("GroupedByCostZone", generatedInvoiceItemSets, voiceItemSetNames);
 			_invoiceGenerationManager.AddGeneratedInvoiceItemSet("Taxes", generatedInvoiceItemSets, taxItemDetails);
-			_invoiceGenerationManager.AddGeneratedInvoiceItemSet("GroupedByCostMobileNetwork", generatedInvoiceItemSets, smsItemSetNames);
+			_invoiceGenerationManager.AddGeneratedInvoiceItemSet("GroupedByDestinationMobileNetwork", generatedInvoiceItemSets, smsItemSetNames);
 			_invoiceGenerationManager.AddGeneratedInvoiceItemSet("GroupedByCostDeal", generatedInvoiceItemSets, dealItemSetNames);
 			_invoiceGenerationManager.AddGeneratedInvoiceItemSet("RecurringCharge", generatedInvoiceItemSets, supplierRecurringCharges);
 			return generatedInvoiceItemSets;
