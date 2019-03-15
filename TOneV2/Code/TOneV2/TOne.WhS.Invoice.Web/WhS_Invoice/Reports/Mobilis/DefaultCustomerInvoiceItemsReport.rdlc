@@ -2462,7 +2462,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!Amount.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!OriginalAmount.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3245,7 +3245,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!TotalDealAmount.Value+Parameters!Currency.Value</Value>
+                              <Value>=Parameters!TotalDealAmount.Value+ " " + Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3532,7 +3532,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!TotalReccurringCharges.Value, Parameters!NormalPrecisionValue.Value)+Parameters!Currency.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalReccurringCharges.Value, Parameters!NormalPrecisionValue.Value)+ " " + Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3937,6 +3937,10 @@
         </Field>
         <Field Name="Amount">
           <DataField>Amount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="OriginalAmount">
+          <DataField>OriginalAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="AmountDescription">
