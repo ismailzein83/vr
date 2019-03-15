@@ -46,6 +46,9 @@
         var bankDetailsSelectorAPI;
         var bankDetailsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var supplierBankDetailsEditorAPI;
+        var supplierBankDetailsReadyPromiseDeferred = UtilsService.createPromiseDeferred()
+
         loadParameters();
         defineScope();
         load();
@@ -87,6 +90,10 @@
                 defaultCustomerTimeZoneDirectiveAPI = api;
                 defaultCustomerTimeZoneReadyPromiseDeferred.resolve();
 
+            };
+            $scope.scopeModal.onSupplierBankDetailsSettingsEditorReady = function (api) {
+                supplierBankDetailsEditorAPI = api;
+                supplierBankDetailsReadyPromiseDeferred.resolve();
             };
             $scope.scopeModal.onDefaultSupplierTimeZoneSelectorReady = function ( api )
             {
@@ -306,6 +313,18 @@
                 } );
 
                 return loadDefaultCustomerTimeZoneSelectorPromiseDeferred.promise;
+            }
+            function loadSupplierBankDetails() {
+                var supplierBankDetailsLoadDeferred = UtilsService.createPromiseDeferred();
+                supplierBankDetailsReadyPromiseDeferred.promise.then(function () {
+                    var supplierBankDetailsPayload = {
+                        data: {
+                            BankDetails: carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.SupplierBankDetails : undefined
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(supplierBankDetailsEditorAPI, supplierBankDetailsPayload, supplierBankDetailsLoadDeferred);
+                });
+                return supplierBankDetailsLoadDeferred.promise;
             }
 
             function loadDefaultSupplierTimeZoneSelector()
@@ -569,7 +588,7 @@
                 getChildNode: function ()
                 {
                     return {
-                        promises: [UtilsService.waitMultipleAsyncOperations( [setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector, loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector, loadBankDetailsSelector, loadTicketContacts] )]
+                        promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector, loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector, loadBankDetailsSelector, loadTicketContacts, loadSupplierBankDetails] )]
                     };
                 }
             };
@@ -625,6 +644,7 @@
 
         function buildCarrierProfileObjFromScope()
         {
+            var supplierBankSettings = supplierBankDetailsEditorAPI != undefined ? supplierBankDetailsEditorAPI.getData() : undefined;
             var obj = {
                 CarrierProfileId: ( carrierProfileId != null ) ? carrierProfileId : 0,
                 Name: $scope.scopeModal.name,
@@ -647,7 +667,8 @@
                     DefaultCusotmerTimeZoneId: defaultCustomerTimeZoneDirectiveAPI.getSelectedIds(),
                     DefaultSupplierTimeZoneId: defaultSupplierTimeZoneDirectiveAPI.getSelectedIds(),
                     TicketContacts: ticketContactsGridAPI.getData(),
-                    InvoiceSubject: $scope.scopeModal.invoiceSubject
+                    InvoiceSubject: $scope.scopeModal.invoiceSubject,
+                    SupplierBankDetails: supplierBankSettings != undefined ? supplierBankSettings.BankDetails : undefined
                 }
             };
 
