@@ -208,15 +208,18 @@ as (select * from (values
 ('BE46E2DC-CE86-46F5-A071-65656E8CCB25','VRCommon_VRConnection','Connections'				,'0BA03544-A3D8-4570-8855-5162B42B50AB',0,'["View","Add","Edit"]'),
 
 ('A611A651-B60B-483D-BC83-1C2B667A120A','TrafficData','Traffic Data'						,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
-('28D5B4DD-ADD2-4BD7-BC5A-203D26EBD746','SMSTrafficData','SMS Traffic Data'						,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
+
 ('4DFD6381-A5AE-443A-8E2A-0A747BBC8037','FaultTicket','Fault Ticket'						,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View","Add","Edit"]'),
 
 ('AB794846-853C-4402-A8E4-6F5C3A75F5F2','BillingData','Billing Data'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
-('739E072E-E232-4B5B-A1A0-DEFCB95D7ED8','SMSBillingData','SMS Billing Data'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
+
 ('8DCD6E7B-7F93-4FB5-86C1-77A40939DEC7','CDR_Problems','CDR Problems'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
 ('C2029536-B819-4A10-B293-EA11670DE357','VRDynamicAPIModule','VRDynamicAPIModule'			,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),
 ('C3D56166-1778-413F-9615-4F39129DA824','VRDynamicAPI','VRDynamicAPI'			            ,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),
-('6FDD628E-C876-4DBF-92BF-77225A88C3B9','VR_Analytic_AnalyticReport','Analytic Reports'		,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]')
+('6FDD628E-C876-4DBF-92BF-77225A88C3B9','VR_Analytic_AnalyticReport','Analytic Reports'		,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),
+
+('7BE1A6F6-38E3-46D0-930F-A870FE76A4B2','SMSTrafficData','SMS Traffic Data','16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
+('1DE9D8E2-15AE-43ED-BBDB-01D8CE41F491','SMSBillingData','SMS Billing Data','520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t

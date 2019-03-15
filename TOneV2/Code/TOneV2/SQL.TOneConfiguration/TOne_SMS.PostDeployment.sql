@@ -519,8 +519,6 @@ as (select * from (values
 ('8220A69D-695B-4BC9-B22A-E02BD8A23C5D','WhS_SMSBE_SalePriceList','Sale SMS Pricelists','82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View"]'),
 ('C1D4A177-CB5A-4A91-9546-6C67B8FEB03C','WhS_SMSBE_SupplierRate','Supplier SMS Rates','8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["Add","Apply","Cancel","View","View Process History"]'),
 ('255B724F-69F0-4C36-B9AD-724C3B088EC5','WhS_SMSBE_SupplierPriceList','Supplier SMS Pricelists','8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View"]'),
-('7BE1A6F6-38E3-46D0-930F-A870FE76A4B2','SMSTrafficData','SMS Traffic Data','16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
-('1DE9D8E2-15AE-43ED-BBDB-01D8CE41F491','SMSBillingData','SMS Billing Data','520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
 ('8D494183-0C02-45EA-B069-DA9B36B90689','Whs_SMSRules','SMS Rules','B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]'),
 ('58163E8C-937F-4C3F-833C-D4030B3484B5','WhS_BE_SMSSwitch','SMS Switches','D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]') 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
