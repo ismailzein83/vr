@@ -51,7 +51,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.22917in</Height>
+              <Height>0.3125in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -62,11 +62,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Zone Name</Value>
+                              <Value>Nom de la Zone</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -109,11 +109,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Billing Period</Value>
+                              <Value>Période Facturée</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -160,11 +160,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Duration(Min)</Value>
+                              <Value>Volume de Trafic (Mn)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -208,11 +208,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Calls</Value>
+                              <Value>Appels</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -256,11 +256,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Rate/Min</Value>
+                              <Value>Taux/Mn</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -350,11 +350,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Amount</Value>
+                              <Value>Montant</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -392,7 +392,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23958in</Height>
+              <Height>0.32291in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -739,9 +739,9 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.33542in</Top>
-        <Left>0.05499in</Left>
-        <Height>0.46875in</Height>
+        <Top>2.16875in</Top>
+        <Left>0.06596in</Left>
+        <Height>0.63542in</Height>
         <Width>7.71854in</Width>
         <ZIndex>1</ZIndex>
         <Visibility>
@@ -793,7 +793,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Net Total</Value>
+                              <Value>Total Net</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1086,11 +1086,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Mobile Network</Value>
+                              <Value>Réseau Mobile</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1133,11 +1133,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Billing Period</Value>
+                              <Value>Période Facturée</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1280,11 +1280,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Rate/Min</Value>
+                              <Value>Taux/Mn</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1374,11 +1374,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Amount</Value>
+                              <Value>Montant</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1817,7 +1817,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Net Total</Value>
+                              <Value>Total Net</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2056,7 +2056,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>VOIX</Value>
+                <Value>Voix</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontWeight>Bold</FontWeight>
@@ -2067,10 +2067,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox29</rd:DefaultName>
-        <Top>5.2936cm</Top>
-        <Left>0.13967cm</Left>
+        <Top>4.83808cm</Top>
+        <Left>0.16754cm</Left>
         <Height>0.6cm</Height>
-        <Width>4.51083cm</Width>
+        <Width>4.88838cm</Width>
         <ZIndex>6</ZIndex>
         <Visibility>
           <Hidden>=iif((Parameters!NoVoice.Value=true),true,false)</Hidden>
@@ -2106,7 +2106,7 @@
         <Top>11.40372cm</Top>
         <Left>0.16753cm</Left>
         <Height>0.6cm</Height>
-        <Width>4.48297cm</Width>
+        <Width>4.88839cm</Width>
         <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>=iif((Parameters!NoSMS.Value=true),true,false)</Hidden>
@@ -2165,7 +2165,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Deal</Value>
+                              <Value>Accord</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2212,11 +2212,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Billing Period</Value>
+                              <Value>Période Facturée</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2258,7 +2258,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Currency </Value>
+                              <Value>Devise</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2306,11 +2306,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Amount</Value>
+                              <Value>Montant</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2562,7 +2562,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Description of Service</Value>
+                              <Value>Description du Service</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2609,7 +2609,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Billing Period</Value>
+                              <Value>Période Facturée</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2656,7 +2656,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Currency</Value>
+                              <Value>Devise</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2705,7 +2705,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>VAT</Value>
+                              <Value>TVA</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2752,11 +2752,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Amount</Value>
+                              <Value>Montant</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -3076,7 +3076,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Net Total</Value>
+                              <Value>Total Net</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3363,7 +3363,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Net Total</Value>
+                              <Value>Total Net</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3602,7 +3602,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Recurring Charges</Value>
+                <Value>Frais Récurrents</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontWeight>Bold</FontWeight>
