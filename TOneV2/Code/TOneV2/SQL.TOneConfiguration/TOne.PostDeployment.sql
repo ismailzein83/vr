@@ -354,60 +354,60 @@ when not matched by target then
 --[sec].[Module]---------------------------1301 to 1400---------------------------------------------------------
 begin
 set nocount on;
-;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('D7146EBA-A2B1-484C-A498-0DDE876A7580','Switches',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,5,0),
+('D7146EBA-A2B1-484C-A498-0DDE876A7580','Switches',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,5,0,null),
 
 --('7EEDFB12-C71A-4EE0-AC97-0B553B4A0ED1','Carriers',null,'937F4A80-74FD-43BA-BCC1-F674445170BB',null,5,0),
 
-('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',35,0),
-('BBDEFF63-D16B-4936-B3B2-0232D8398B27','Voice',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,10,0),
-('194D667E-CFF2-4195-BAB1-29A57849D487','SMS',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,15,0),
+('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',35,0,null),
+('BBDEFF63-D16B-4936-B3B2-0232D8398B27','Voice',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,10,0,null),
+('194D667E-CFF2-4195-BAB1-29A57849D487','SMS',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,15,0,null),
 
 
-('9C3816A9-EABF-423B-9364-EEBADAD22EB5','Configuration',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,5,0),
-('1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','Sale Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,25,0),
+('9C3816A9-EABF-423B-9364-EEBADAD22EB5','Configuration',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,5,0,1),
+('1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','Sale Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,25,0,1),
 
-('D66F9910-48EC-4FFD-8A09-C7960A6EE434','Purchase Area',null,null,'/images/menu-icons/Purchase Area.png',40,0),
-('0EABABC6-354C-4F13-8028-8C0FF99620CA','Voice',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,5,0),
-('63823963-5F3E-4463-A077-524D2229E6E0','SMS',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,10,0),
+('D66F9910-48EC-4FFD-8A09-C7960A6EE434','Purchase Area',null,null,'/images/menu-icons/Purchase Area.png',40,0,null),
+('0EABABC6-354C-4F13-8028-8C0FF99620CA','Voice',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,5,0,null),
+('63823963-5F3E-4463-A077-524D2229E6E0','SMS',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,10,0,null),
 
-('8F443685-3AC6-4C48-9298-017D74221EAF','Purchase Entities',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,25,0),
+('8F443685-3AC6-4C48-9298-017D74221EAF','Purchase Entities',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,25,0,1),
 
-('AA3D81AD-8F6A-442F-82C6-6AAE37AACA10','Management','Management',null,'/images/menu-icons/Management.png',45,0),
+('AA3D81AD-8F6A-442F-82C6-6AAE37AACA10','Management','Management',null,'/images/menu-icons/Management.png',45,0,null),
 
-('4AB7951A-3659-4A36-9C9F-627E638F3CC7','Invoices',null		,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,5,0),
-('2FBF14B9-FBA8-4926-96F2-10E9846F55A4','Financial',null	,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,10,0),
+('4AB7951A-3659-4A36-9C9F-627E638F3CC7','Invoices',null		,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,5,0,null),
+('2FBF14B9-FBA8-4926-96F2-10E9846F55A4','Financial',null	,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,10,0,null),
 --('DEF902AB-B628-4B3F-9A6E-1A0E9B012428','Reports',null		,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,15,0),
 
-('B8A1B5F8-BA13-4232-AF84-7DD255FCED20','Routing Management',null,null,'/images/menu-icons/Routing.png',55,0),
-('1C182996-2BE3-4461-815E-DB51C5F1E08B','Voice',null,'B8A1B5F8-BA13-4232-AF84-7DD255FCED20',null,5,0),
-('605D5A02-1170-4EB0-ABA7-BC07AD8EB858','SMS',null,'B8A1B5F8-BA13-4232-AF84-7DD255FCED20',null,10,0),
+('B8A1B5F8-BA13-4232-AF84-7DD255FCED20','Routing Management',null,null,'/images/menu-icons/Routing.png',55,0,null),
+('1C182996-2BE3-4461-815E-DB51C5F1E08B','Voice',null,'B8A1B5F8-BA13-4232-AF84-7DD255FCED20',null,5,0,null),
+('605D5A02-1170-4EB0-ABA7-BC07AD8EB858','SMS',null,'B8A1B5F8-BA13-4232-AF84-7DD255FCED20',null,10,0,null),
 
-('5EA95F6C-D3C8-426D-A8F0-8F4B0ECE478C','Routing',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,20,0),--routing rules
+('5EA95F6C-D3C8-426D-A8F0-8F4B0ECE478C','Routing',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,20,0,1),--routing rules
 
-('65CB7925-20DD-4C57-BCD0-8FA4A48EFD01','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',60,0),
+('65CB7925-20DD-4C57-BCD0-8FA4A48EFD01','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',60,0,null),
 
-('3246CCB2-88D4-473E-A229-DC1C7DE22F8C','Traffic Analysis',null,null,'/images/menu-icons/NOC.png',80,1),
-('D977F2C5-5A63-4B03-8F8A-C9CB1C5B5F15','Voice',null,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,5,0),
-('93651496-1407-4B1B-B271-606D628F886C','SMS',null,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,10,1),
+('3246CCB2-88D4-473E-A229-DC1C7DE22F8C','Traffic Analysis',null,null,'/images/menu-icons/NOC.png',80,1,null),
+('D977F2C5-5A63-4B03-8F8A-C9CB1C5B5F15','Voice',null,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,5,0,null),
+('93651496-1407-4B1B-B271-606D628F886C','SMS',null,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,10,1,null),
 
-('17BF5CD6-31D6-4D9F-B8C1-C9878C599EB7','Fault Ticket',null,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,10,0),
+('17BF5CD6-31D6-4D9F-B8C1-C9878C599EB7','Fault Ticket',null,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,10,0,1),
 
-('CC10CB4C-9A52-46BF-88E1-3F2CEFB93F44','Plugins',null,null,'/images/menu-icons/plug.png',100,0)
+('CC10CB4C-9A52-46BF-88E1-3F2CEFB93F44','Plugins',null,null,'/images/menu-icons/plug.png',100,0,null)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
+)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView]))
 merge	[sec].[Module] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
+	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic], [RenderedAsView] = s.[RenderedAsView]
 when not matched by target then
-	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
+	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic],[RenderedAsView])
+	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[RenderedAsView]);
 --------------------------------------------------------------------------------------------------------------
 end
 
