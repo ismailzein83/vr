@@ -326,6 +326,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 updateQuery.Column(COL_TaskData).Value(Serializer.Serialize(taskData));
             else
                 updateQuery.Column(COL_TaskData).Null();
+            updateQuery.Column(COL_LastUpdatedTime).DateNow();
             updateQuery.Where().EqualsCondition(COL_ID).Value(taskId);
             return queryContext.ExecuteNonQuery() > 0;
         }
