@@ -536,17 +536,15 @@
             return loadActivationStatusSelectorPromiseDeferred.promise;
         }
         function loadCustomerSMSServiceTypeSelector() {
-            if (WhS_BE_ToneModuleService.isSMSModuleEnabled()) {
-                $scope.scopeModel.showSMSServiceType = true;
-                var loadSMSServiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                customerSmsServiceTypeSelectorReadyDeferred.promise.then(function () {
-                    var payload = {
-                        selectedIds: getCustomerSMSServiceTypes(),
-                    };
-                    VRUIUtilsService.callDirectiveLoad(customerSmsServiceTypeSelectorAPI, payload, loadSMSServiceTypeSelectorPromiseDeferred);
-                });
-                return loadSMSServiceTypeSelectorPromiseDeferred.promise;
-            }
+          
+            var loadSMSServiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            customerSmsServiceTypeSelectorReadyDeferred.promise.then(function () {
+                var payload = {
+                    selectedIds: getCustomerSMSServiceTypes(),
+                };
+                VRUIUtilsService.callDirectiveLoad(customerSmsServiceTypeSelectorAPI, payload, loadSMSServiceTypeSelectorPromiseDeferred);
+            });
+            return loadSMSServiceTypeSelectorPromiseDeferred.promise;
         }
         function loadCarrierAccountTypeSelector() {
             return carrierAccountTypeSelectorReadyDeferred.promise;
@@ -605,8 +603,12 @@
             var loadCustomerRoutingStatusSelectorPromise = loadCustomerRoutingStatusSelector();
             promises.push(loadCustomerRoutingStatusSelectorPromise);
 
-            var loadCustomerSMSServiceTypeSelectorPromise = loadCustomerSMSServiceTypeSelector();
-            promises.push(loadCustomerSMSServiceTypeSelectorPromise);
+
+            if (WhS_BE_ToneModuleService.isSMSModuleEnabled()) {
+                $scope.scopeModel.showSMSServiceType = true;
+                var loadCustomerSMSServiceTypeSelectorPromise = loadCustomerSMSServiceTypeSelector();
+                promises.push(loadCustomerSMSServiceTypeSelectorPromise);
+            }
 
             var loadPriceListSettingsPromise = loadPriceListSettings();
             promises.push(loadPriceListSettingsPromise);
