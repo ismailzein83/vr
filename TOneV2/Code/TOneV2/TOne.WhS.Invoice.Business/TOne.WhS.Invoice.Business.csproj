@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Extensions\AssignedPartnerInvoiceSettingFilter.cs" />
+    <Compile Include="Extensions\SupplierBankDetailsDataSourceSettings.cs" />
     <Compile Include="Extensions\CarrierPartnerSettings.cs" />
     <Compile Include="Extensions\CheckUnpricedCDRsInvoiceSettingPart.cs" />
     <Compile Include="Extensions\CompareInvoiceAction.cs" />
