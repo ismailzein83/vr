@@ -151,16 +151,28 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_RouteSync\Constant\ModuleConfig.js" />
+    <Content Include="WhS_RouteSync\Constant\TransportProtocolEnum.js" />
     <Content Include="WhS_RouteSync\Constant\TrunkTypeEnum.js" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingCataleyaGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingFreeRadiusGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingHuaweiGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingTelesIdbGridTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-cataleya-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-freeradius-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-huawei-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telesidb-grid.js" />
     <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\Templates\FreeRadiusDataManagersTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiusdatamanagers.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\Templates\CataleyaSWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\Templates\CataleyaCustomerMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\Templates\CataleyaSupplierMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataliyaSwitch\Communication\Templates\CataleyaSwitchCommunicationTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataliyaSwitch\Communication\whs-routesync-cataleyaswitchcommunication.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-customermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-suppliermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-transportprotocol-selector.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\Templates\EricssonSwitchBranchRoutesSettingsRORangeTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\Templates\EricssonSwitchBranchRoutesSettingsFreeTextTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\Templates\EricssonSwitchBranchRoutesSettingsTemplate.html" />

@@ -1,0 +1,49 @@
+﻿<vr-form name="validationContext">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-button type="Add" data-onclick="scopeModel.addSupplierMapping" standalone></vr-button>
+            <vr-datagrid on-ready="scopeModel.onSupplierMappingGridReady"
+                         datasource="scopeModel.supplierMappings"
+                         ondeleterow="scopeModel.onSupplierMappingDeleted"
+                         pagingtype="'PagingOnScroll'" hidegridmenu>
+
+                <vr-datagridcolumn headertext="'IP Address'" fixedwidth="400" disablesorting>
+                    <vr-common-ipaddress on-ready="dataItem.onIPAddressReady" 
+                                         onipaddressblur="dataItem.onFieldBlur" 
+                                         onprefixblur="dataItem.onFieldBlur" 
+                                         isrequired="true" hidesubnetprefix hidelabel gridlayout>
+                    </vr-common-ipaddress>
+                </vr-datagridcolumn>
+
+                <vr-datagridcolumn headertext="'Domain'" disablesorting>
+                    <vr-textbox value="dataItem.Domain" type="text" tonextinput></vr-textbox>
+                </vr-datagridcolumn>
+
+                <vr-datagridcolumn headertext="'Priority'" fixedwidth="100" disablesorting>
+                    <vr-textbox value="dataItem.Priority" type="number" onblurtextbox="dataItem.onFieldBlur(dataItem.Priority)" minvalue="0" isrequired="true" tonextinput></vr-textbox>
+                </vr-datagridcolumn>
+
+                <vr-datagridcolumn headertext="'Weight'" fixedwidth="100" disablesorting>
+                    <vr-textbox value="dataItem.Weight" type="number" onblurtextbox="dataItem.onFieldBlur(dataItem.Weight)" minvalue="0" isrequired="true" tonextinput></vr-textbox>
+                </vr-datagridcolumn>
+
+                <vr-datagridcolumn headertext="'Transport Protocol'" disablesorting>
+                    <whs-routesync-cataleya-transportprotocol-selector on-ready="dataItem.onTransportProtocolReady" isrequired="true" hidelabel hideremoveicon></whs-routesync-cataleya-transportprotocol-selector>
+                </vr-datagridcolumn>
+
+                <vr-datagridcolumn headertext="'National Country Code'" disablesorting>
+                    <vr-textbox value="dataItem.NationalCountryCode" type="text" tonextinput></vr-textbox>
+                </vr-datagridcolumn>
+
+                <vr-datagridcolumn headertext="'Reuse Connection'" fixedwidth="80" disablesorting>
+                    <vr-switch value="dataItem.ReuseConnection"></vr-switch>
+                </vr-datagridcolumn>
+
+                <vr-datagridcolumn headertext="'Is Switch'" fixedwidth="80" disablesorting>
+                    <vr-switch value="dataItem.IsSwitch"></vr-switch>
+                </vr-datagridcolumn>
+
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</vr-form>
