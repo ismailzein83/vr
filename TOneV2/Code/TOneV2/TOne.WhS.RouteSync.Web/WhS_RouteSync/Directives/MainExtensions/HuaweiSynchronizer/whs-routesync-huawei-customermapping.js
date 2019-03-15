@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('whsRoutesyncHuaweiCustomermapping', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_RouteSync_TrunkTypeEnum',
-    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_RouteSync_TrunkTypeEnum) {
+app.directive('whsRoutesyncHuaweiCustomermapping', ['UtilsService',
+    function (UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -34,7 +34,6 @@ app.directive('whsRoutesyncHuaweiCustomermapping', ['VRNotificationService', 'VR
 
                     updateCustomerDescriptions();
                 };
-
 
                 defineAPI();
             }

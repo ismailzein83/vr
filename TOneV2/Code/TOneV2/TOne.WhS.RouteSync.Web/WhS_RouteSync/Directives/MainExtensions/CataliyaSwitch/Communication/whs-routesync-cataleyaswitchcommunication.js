@@ -19,8 +19,8 @@
             controllerAs: "Ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/CataliyaSwitch/Communication/Templates/CataleyaSwitchCommunicationTemplate.html"
-
         };
+
         function SwitchCommunicationCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
@@ -43,6 +43,7 @@
 
                 api.load = function (payload) {
                     var promises = [];
+
                     var vrConnectionId;
 
                     if (payload != undefined) {
@@ -56,15 +57,16 @@
                         var connectionSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         connectionSelectorReadyDeferred.promise.then(function () {
+
                             var selectorPayload = {
                                 filter: {
                                     ConnectionTypeIds: ["071D54D2-463B-4404-8219-45FCD539FF01"] // VRHttpConnectionFilter
                                 }
                             };
 
-                            if (vrConnectionId != undefined)
+                            if (vrConnectionId != undefined) {
                                 selectorPayload.selectedIds = vrConnectionId;
-
+                            }
                             VRUIUtilsService.callDirectiveLoad(connectionSelectorAPI, selectorPayload, connectionSelectorLoadPromiseDeferred);
                         });
 

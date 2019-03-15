@@ -23,16 +23,16 @@ app.directive('whsRoutesyncCataleyaSuppliermapping', ['VRNotificationService', '
             var context;
             var isFirstLoad = true;
 
-            var gridAPI;
+            var supplierMappingGridAPI;
             var supplierMappingGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.supplierMappings = [];
-                $scope.scopeModel.supplierMappingExists = false;
+                //$scope.scopeModel.supplierMappingExists = false;
 
                 $scope.scopeModel.onSupplierMappingGridReady = function (api) {
-                    gridAPI = api;
+                    supplierMappingGridAPI = api;
                     supplierMappingGridReadyPromiseDeferred.resolve();
                 };
 
@@ -44,7 +44,6 @@ app.directive('whsRoutesyncCataleyaSuppliermapping', ['VRNotificationService', '
                 $scope.scopeModel.onSupplierMappingDeleted = function (item) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.supplierMappings, item.tempId, 'tempId');
                     $scope.scopeModel.supplierMappings.splice(index, 1);
-                    updateErrorDescription();
                     updateSupplierDescriptions();
                 };
 
@@ -70,14 +69,12 @@ app.directive('whsRoutesyncCataleyaSuppliermapping', ['VRNotificationService', '
 
                         supplierMappings = payload.supplierMappings;
                         if (supplierMappings != undefined && supplierMappings.length > 0) {
-                            var _promises = [];
 
                             for (var i = 0; i < supplierMappings.length; i++) {
                                 var currentSupplierMapping = supplierMappings[i];
-                                _promises.push(extendSupplierMapping(currentSupplierMapping));
+                                promises.push(extendSupplierMapping(currentSupplierMapping));
                             }
                             updateSupplierDescriptions();
-                            promises.concat(_promises);
                         }
                     }
 
@@ -94,10 +91,9 @@ app.directive('whsRoutesyncCataleyaSuppliermapping', ['VRNotificationService', '
                     ctrl.onReady(api);
             }
 
-
-
             function extendSupplierMapping(supplierMapping) {
                 var extendSupplierMappingPromises = [];
+
                 if (supplierMapping == undefined)
                     supplierMapping = {};
 
@@ -107,22 +103,22 @@ app.directive('whsRoutesyncCataleyaSuppliermapping', ['VRNotificationService', '
                 extendSupplierMappingPromises.push(supplierMapping.ipAddressLoadDeferred.promise);
 
                 supplierMapping.onIPAddressReady = function (api) {
-                    supplierMapping.ipAddressAPI = api;
+                    supplierMapping.ipAddressDirectiveAPI = api;
                     var defaultIPAddress = { SubnetPrefixLength: 32 };
                     var ipAddressPayload = supplierMapping != undefined && supplierMapping.IPAddress != undefined ? supplierMapping.IPAddress : defaultIPAddress;
-                    VRUIUtilsService.callDirectiveLoad(supplierMapping.ipAddressAPI, ipAddressPayload, supplierMapping.ipAddressLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(supplierMapping.ipAddressDirectiveAPI, ipAddressPayload, supplierMapping.ipAddressLoadDeferred);
                 };
 
                 supplierMapping.transportProtocolLoadDeferred = UtilsService.createPromiseDeferred();
                 extendSupplierMappingPromises.push(supplierMapping.transportProtocolLoadDeferred.promise);
 
                 supplierMapping.onTransportProtocolReady = function (api) {
-                    supplierMapping.transportProtocolAPI = api;
+                    supplierMapping.transportProtocolSelectorAPI = api;
                     var transportProtocolPayload = {
                         selectedIds: supplierMapping != undefined ? supplierMapping.TransportProtocol : undefined,
                         setDefaultValue: true
                     };
-                    VRUIUtilsService.callDirectiveLoad(supplierMapping.transportProtocolAPI, transportProtocolPayload, supplierMapping.transportProtocolLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(supplierMapping.transportProtocolSelectorAPI, transportProtocolPayload, supplierMapping.transportProtocolLoadDeferred);
                 };
 
                 supplierMapping.onFieldBlur = function (field) {
@@ -176,11 +172,11 @@ app.directive('whsRoutesyncCataleyaSuppliermapping', ['VRNotificationService', '
                     return undefined;
 
                 var supplierMappingObject = {
-                    IPAddress: supplierMapping.ipAddressAPI != undefined ? supplierMapping.ipAddressAPI.getData() : supplierMapping.IPAddress,
+                    IPAddress: supplierMapping.ipAddressDirectiveAPI != undefined ? supplierMapping.ipAddressDirectiveAPI.getData() : supplierMapping.IPAddress,
                     Domain: supplierMapping.Domain,
                     Priority: supplierMapping.Priority,
                     Weight: supplierMapping.Weight,
-                    TransportProtocol: supplierMapping.transportProtocolAPI != undefined ? supplierMapping.transportProtocolAPI.getSelectedIds() : supplierMapping.TransportProtocol,
+                    TransportProtocol: supplierMapping.transportProtocolSelectorAPI != undefined ? supplierMapping.transportProtocolSelectorAPI.getSelectedIds() : supplierMapping.TransportProtocol,
                     NationalCountryCode: supplierMapping.NationalCountryCode,
                     ReuseConnection: supplierMapping.ReuseConnection,
                     IsSwitch: supplierMapping.IsSwitch
@@ -188,7 +184,5 @@ app.directive('whsRoutesyncCataleyaSuppliermapping', ['VRNotificationService', '
 
                 return supplierMappingObject;
             }
-
-
         }
     }]);

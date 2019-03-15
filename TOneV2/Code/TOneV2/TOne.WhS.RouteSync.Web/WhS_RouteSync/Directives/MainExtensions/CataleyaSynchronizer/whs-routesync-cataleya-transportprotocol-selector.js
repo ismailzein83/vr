@@ -14,7 +14,7 @@ app.directive('whsRoutesyncCataleyaTransportprotocolSelector', ['UtilsService', 
                 isrequired: '=',
                 hideremoveicon: '@',
                 customvalidate: '=',
-                hidelabel:'@'
+                hidelabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -27,7 +27,6 @@ app.directive('whsRoutesyncCataleyaTransportprotocolSelector', ['UtilsService', 
 
                 var ctor = new TransportProtocolsCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -62,19 +61,17 @@ app.directive('whsRoutesyncCataleyaTransportprotocolSelector', ['UtilsService', 
                         selectedIds = payload.selectedIds;
                         setDefaultValue = payload.setDefaultValue;
                     }
+
                     var transportProtocols = UtilsService.getArrayEnum(WhS_RouteSync_TransportProtocolEnum);
 
-                    if (transportProtocols != null) {
-                        for (var i = 0; i < transportProtocols.length; i++) {
-                            ctrl.datasource.push(transportProtocols[i]);
-                        }
+                    for (var i = 0; i < transportProtocols.length; i++) {
+                        ctrl.datasource.push(transportProtocols[i]);
+                    }
 
-                        if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
-                        }
-                        else if (setDefaultValue) {
-                            VRUIUtilsService.setSelectedValues(transportProtocols[0].value, 'value', attrs, ctrl);
-                        }
+                    if (selectedIds != undefined) {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
+                    } else if (setDefaultValue) {
+                        VRUIUtilsService.setSelectedValues(transportProtocols[0].value, 'value', attrs, ctrl);
                     }
                 };
 
@@ -91,7 +88,7 @@ app.directive('whsRoutesyncCataleyaTransportprotocolSelector', ['UtilsService', 
 
             var multipleselection = "";
             var label = "Transport Protocol";
-            var hidelabel="";
+            var hidelabel = "";
 
             if (attrs.ismultipleselection != undefined) {
                 label = "Transport Protocols";
@@ -107,7 +104,7 @@ app.directive('whsRoutesyncCataleyaTransportprotocolSelector', ['UtilsService', 
             if (attrs.hidelabel != undefined)
                 hidelabel = "hidelabel";
 
-            return '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" ' + hidelabel+ ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
+            return '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" ' + hidelabel + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
                 + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" '
                 + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
                 '</vr-select>';

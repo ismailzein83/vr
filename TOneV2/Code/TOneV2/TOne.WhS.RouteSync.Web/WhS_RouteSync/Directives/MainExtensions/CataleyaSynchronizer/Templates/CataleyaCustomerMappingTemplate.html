@@ -7,9 +7,10 @@
                          ondeleterow="scopeModel.onCustomerMappingDeleted"
                          pagingtype="'PagingOnScroll'" hidegridmenu>
 
-                <vr-datagridcolumn headertext="'IP Address'" disablesorting fixedwidth="400">
-                    <vr-common-ipaddress on-ready="dataItem.onIPAddressReady" onipaddressblur="dataItem.onFieldBlur" 
-                                         onprefixblur="dataItem.onFieldBlur" isrequired="true" hidelabel gridlayout></vr-common-ipaddress>
+                <vr-datagridcolumn headertext="'IP Address'" fixedwidth="400" disablesorting>
+                    <vr-common-ipaddress on-ready="dataItem.onIPAddressReady" onipaddressblur="dataItem.onFieldBlur"
+                                         onprefixblur="dataItem.onFieldBlur" isrequired="true" hidelabel gridlayout>
+                    </vr-common-ipaddress>
                 </vr-datagridcolumn>
             </vr-datagrid>
         </vr-columns>

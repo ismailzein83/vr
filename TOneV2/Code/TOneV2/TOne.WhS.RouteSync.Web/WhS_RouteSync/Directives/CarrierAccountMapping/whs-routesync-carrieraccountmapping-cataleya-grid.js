@@ -21,7 +21,6 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
             this.initializeController = initializeController;
 
             var carrierMappings;
-            var context;
 
             var gridAPI;
 
@@ -49,6 +48,7 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
                     return false;
                 };
             }
+
             function defineAPI() {
                 var api = {};
 
@@ -337,6 +337,5 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
                     carrierAccountMapping.isSupplierMappingInvalid = !isValid;
                 }
             }
-
         }
     }]);

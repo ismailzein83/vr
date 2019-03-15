@@ -80,6 +80,7 @@
                         var switchCommunicationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         switchCommunicationReadyPromiseDeferred.promise.then(function () {
+
                             var switchCommunicationPayload;
                             if (cataleyaSWSync != undefined) {
                                 switchCommunicationPayload = { vrConnectionId: vrConnectionId};
@@ -94,7 +95,10 @@
                         var carrierAccountMappingGridLoadDeferred = UtilsService.createPromiseDeferred();
 
                         carrierAccountMappingGridReadyPromiseDeferred.promise.then(function () {
-                            var carrierAccountMappingGridPayload = { carrierMappings: carrierMappings };
+
+                            var carrierAccountMappingGridPayload = {
+                                carrierMappings: carrierMappings
+                            };
                             VRUIUtilsService.callDirectiveLoad(carrierAccountMappingGridAPI, carrierAccountMappingGridPayload, carrierAccountMappingGridLoadDeferred);
                         });
 
@@ -122,5 +126,4 @@
     }
 
     app.directive('whsRoutesyncCataleyaSwsync', CataleyaSWSync);
-
 })(app);

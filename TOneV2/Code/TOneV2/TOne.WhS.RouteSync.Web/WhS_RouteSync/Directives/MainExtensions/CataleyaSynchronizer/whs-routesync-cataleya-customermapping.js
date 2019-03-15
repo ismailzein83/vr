@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('whsRoutesyncCataleyaCustomermapping', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService',
-    function (VRNotificationService, VRUIUtilsService, UtilsService) {
+app.directive('whsRoutesyncCataleyaCustomermapping', ['VRUIUtilsService', 'UtilsService',
+    function (VRUIUtilsService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -23,16 +23,16 @@ app.directive('whsRoutesyncCataleyaCustomermapping', ['VRNotificationService', '
             var context;
             var isFirstLoad = true;
 
-            var gridAPI;
+            var customerMappingGridAPI;
             var customerMappingGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.customerMappings = [];
-                $scope.scopeModel.customerMappingExists = false;
+                //$scope.scopeModel.customerMappingExists = false;
 
                 $scope.scopeModel.onCustomerMappingGridReady = function (api) {
-                    gridAPI = api;
+                    customerMappingGridAPI = api;
                     customerMappingGridReadyPromiseDeferred.resolve();
                 };
 
@@ -64,13 +64,11 @@ app.directive('whsRoutesyncCataleyaCustomermapping', ['VRNotificationService', '
 
                         customerMappings = payload.customerMappings;
                         if (customerMappings != undefined && customerMappings.length > 0) {
-                            var _promises = [];
 
                             for (var i = 0; i < customerMappings.length; i++) {
                                 var currentCustomerMapping = customerMappings[i];
-                                _promises.push(extendCustomerMapping(currentCustomerMapping));
+                                promises.push(extendCustomerMapping(currentCustomerMapping));
                             }
-                            promises.concat(_promises);
                             updateCustomerDescriptions();
                         }
                     }
@@ -98,10 +96,10 @@ app.directive('whsRoutesyncCataleyaCustomermapping', ['VRNotificationService', '
                 customerMapping.ipAddressLoadDeferred = UtilsService.createPromiseDeferred();
 
                 customerMapping.onIPAddressReady = function (api) {
-                    customerMapping.ipAddressAPI = api;
+                    customerMapping.ipAddressDirectiveAPI = api;
                     var defaultIPAddress = { SubnetPrefixLength: 32 };
-                    var ipAddressPayload = customerMapping != undefined && customerMapping.IPAddress != undefined ? customerMapping.IPAddress : defaultIPAddress;
-                    VRUIUtilsService.callDirectiveLoad(customerMapping.ipAddressAPI, ipAddressPayload, customerMapping.ipAddressLoadDeferred);
+                    var ipAddressPayload = (customerMapping != undefined && customerMapping.IPAddress != undefined) ? customerMapping.IPAddress : defaultIPAddress;
+                    VRUIUtilsService.callDirectiveLoad(customerMapping.ipAddressDirectiveAPI, ipAddressPayload, customerMapping.ipAddressLoadDeferred);
                 };
 
                 customerMapping.onFieldBlur = function (field) {
@@ -158,9 +156,8 @@ app.directive('whsRoutesyncCataleyaCustomermapping', ['VRNotificationService', '
                     return undefined;
 
                 return {
-                    IPAddress: customerMapping.ipAddressAPI != undefined ? customerMapping.ipAddressAPI.getData() : customerMapping.IPAddress
+                    IPAddress: customerMapping.ipAddressDirectiveAPI != undefined ? customerMapping.ipAddressDirectiveAPI.getData() : customerMapping.IPAddress
                 };
             }
-
         }
     }]);
