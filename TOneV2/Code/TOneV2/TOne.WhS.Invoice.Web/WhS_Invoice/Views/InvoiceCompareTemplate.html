@@ -259,7 +259,7 @@
             <div transclude-to="buttons">
                 <vr-button type="Export" data-onclick="scopeModel.export" formname="formInvoiceCompareEditor" ng-if="scopeModel.isCompare" vr-disabled="(!scopeModel.voiceEnabled && !scopeModel.smsEnabled)"></vr-button>
                 <vr-button type="Save" data-onclick="scopeModel.save" formname="formInvoiceCompareEditor" vr-disabled="(!scopeModel.voiceEnabled && !scopeModel.smsEnabled)"></vr-button>
-                <vr-button type="Compare" data-onclick="scopeModel.compare" formname="formInvoiceCompareEditor" ng-if="scopeModel.isCompare" vr-disabled="(!scopeModel.voiceEnabled && !scopeModel.smsEnabled)"></vr-button>
+                <vr-button type="Compare" data-onclick="scopeModel.compare" formname="formInvoiceCompareEditor" vr-disabled="(!scopeModel.voiceEnabled && !scopeModel.smsEnabled)"></vr-button>
                 <vr-button type="Reset" data-onclick="scopeModel.reset" vr-disabled="(!scopeModel.voiceEnabled && !scopeModel.smsEnabled)"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
