@@ -228,10 +228,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					supplierInvoiceDetails.TotalReccurringCharges = totalReccurringChargesInAccountCurrency;
 
 
-                    supplierInvoiceDetails.HasDeals = supplierInvoiceDetails.TotalDealAmount > 0;
-                    supplierInvoiceDetails.HasSMS = supplierInvoiceDetails.TotalSMSAmountAfterCommission > 0;
-                    supplierInvoiceDetails.HasVoice = supplierInvoiceDetails.TotalAmountAfterCommission > 0;
-                    supplierInvoiceDetails.HasRecurringCharges = supplierInvoiceDetails.TotalReccurringChargesAfterTax > 0;
+                    supplierInvoiceDetails.NoDeals = supplierInvoiceDetails.TotalDealAmount == 0;
+                    supplierInvoiceDetails.NoSMS = supplierInvoiceDetails.TotalSMSAmountAfterCommission == 0;
+                    supplierInvoiceDetails.NoVoice = supplierInvoiceDetails.TotalAmountAfterCommission == 0;
+                    supplierInvoiceDetails.NoRecurringCharges = supplierInvoiceDetails.TotalReccurringChargesAfterTax == 0;
 
 
                     supplierInvoiceDetails.TotalInvoiceAmount = supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalReccurringChargesAfterTax + supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalDealAmount;
