@@ -57,7 +57,7 @@ app.directive('bpVrWorkflowTaskassignees', ['UtilsService', 'VRUIUtilsService', 
                         getParentVariables: getParentVariables,
                         getWorkflowArguments: getWorkflowArguments,
                         isVRWorkflowActivityDisabled: isVRWorkflowActivityDisabled,
-                    }
+                    };
                     if (settings != undefined && settings.UserIds) {
                         payload.userIds = settings.UserIds;
                     }
@@ -119,7 +119,7 @@ app.directive('bpVrWorkflowTaskassignees', ['UtilsService', 'VRUIUtilsService', 
                                 getWorkflowArguments: getWorkflowArguments,
                                 isVRWorkflowActivityDisabled: isVRWorkflowActivityDisabled,
                                 userIds: settings.UserIds
-                            }
+                            };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
                         });
 
