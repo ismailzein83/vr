@@ -53,6 +53,8 @@
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
 
+                    ctrl.isUnique = true;
+
                     if (ctrl.onReady && typeof ctrl.onReady == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
@@ -65,18 +67,27 @@
                 directiveAPI.load = function (payload) {
 
                     var selectedIds;
+                    var filter;
+                    var connectionTypeIds;
+
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        filter = payload.filter;
+                        connectionTypeIds = (filter != undefined && filter.connectionTypeIds != undefined && filter.connectionTypeIds.length > 0) ? filter.connectionTypeIds : undefined;
                     }
 
                     return VRCommon_VRConnectionAPIService.GetVRConnectionConfigTypes().then(function (response) {
                         selectorAPI.clearDataSource();
                         angular.forEach(response, function (item) {
-                            ctrl.datasource.push(item);
+                            if (connectionTypeIds == undefined || connectionTypeIds.indexOf(item.ExtensionConfigurationId) > -1)
+                                ctrl.datasource.push(item);
                         });
-                        if (selectedIds != undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', attrs, ctrl);
 
+                        if (selectedIds != undefined) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', attrs, ctrl);
+                        } else if (connectionTypeIds != undefined && connectionTypeIds.length == 1) {
+                            VRUIUtilsService.setSelectedValues(connectionTypeIds[0], 'ExtensionConfigurationId', attrs, ctrl);
+                        }
                     });
                 };
 
@@ -101,21 +112,21 @@
 
             return '<div>'
                 + '<vr-select on-ready="ctrl.onSelectorReady"'
-                    + ' label="' + label + '"'
-                    + ' datasource="ctrl.datasource"'
-                    + ' selectedvalues="ctrl.selectedvalues"'
-                    + ' onselectionchanged="ctrl.onselectionchanged"'
-                    + ' onselectitem="ctrl.onselectitem"'
-                    + ' ondeselectitem="ctrl.ondeselectitem"'
-                    + ' datavaluefield="ExtensionConfigurationId"'
-                    + ' datatextfield="Title"'
-                    + ismultipleselection
-                    + ' vr-disabled="ctrl.isdisabled"'
-                    + ' isrequired="ctrl.isrequired"'
-                    + hideremoveicon
-                    + ' entityName="' + label + '">'
+                + ' label="' + label + '"'
+                + ' datasource="ctrl.datasource"'
+                + ' selectedvalues="ctrl.selectedvalues"'
+                + ' onselectionchanged="ctrl.onselectionchanged"'
+                + ' onselectitem="ctrl.onselectitem"'
+                + ' ondeselectitem="ctrl.ondeselectitem"'
+                + ' datavaluefield="ExtensionConfigurationId"'
+                + ' datatextfield="Title"'
+                + ismultipleselection
+                + ' vr-disabled="ctrl.isdisabled"'
+                + ' isrequired="ctrl.isrequired"'
+                + hideremoveicon
+                + ' entityName="' + label + '">'
                 + '</vr-select>'
-            + '</div>';
+                + '</div>';
         }
 
         return directiveDefinitionObject;

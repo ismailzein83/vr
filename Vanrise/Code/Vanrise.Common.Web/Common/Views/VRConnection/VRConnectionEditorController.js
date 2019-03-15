@@ -9,6 +9,7 @@
         var isEditMode;
 
         var vrConnectionId;
+        var connectionTypeIds;
         var vrConnectionEntity;
 
         var connectionTypeAPI;
@@ -25,7 +26,15 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 vrConnectionId = parameters.vrConnectionId;
+                var connectionTypeUpperIds= parameters.connectionTypeIds;
+
+                if (connectionTypeUpperIds != undefined && connectionTypeUpperIds.length > 0) {
+                    connectionTypeIds = [];
+                    for (var i = 0; i < connectionTypeUpperIds.length; i++)
+                        connectionTypeIds.push(connectionTypeUpperIds[i].toLowerCase());
+                }
             }
+
             isEditMode = (vrConnectionId != undefined);
         }
 
@@ -95,7 +104,8 @@
             var loadConnectionConfigTypePromiseDeferred = UtilsService.createPromiseDeferred();
             connectionTypeSelectorReadyDeferred.promise.then(function () {
                 var payloadDirective = {
-                    selectedIds: vrConnectionEntity && vrConnectionEntity.Settings && vrConnectionEntity.Settings.ConfigId || undefined
+                    selectedIds: vrConnectionEntity && vrConnectionEntity.Settings && vrConnectionEntity.Settings.ConfigId || undefined,
+                    filter: { connectionTypeIds: connectionTypeIds }
                 };
                 VRUIUtilsService.callDirectiveLoad(connectionTypeAPI, payloadDirective, loadConnectionConfigTypePromiseDeferred);
             });

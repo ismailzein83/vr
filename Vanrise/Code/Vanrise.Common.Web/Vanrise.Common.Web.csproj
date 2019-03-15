@@ -123,6 +123,7 @@
     <Content Include="Common\Constant\VRCustomCodeDynamicAPIMethodTypeEnum.js" />
     <Content Include="Common\Constant\VRHttpMessageFormatEnum.js" />
     <Content Include="Common\Constant\VRHttpMethodEnum.js" />
+    <Content Include="Common\Constant\VRIPAddressType.js" />
     <Content Include="Common\Directives\AdditionalErrors\AdditionalErrorsTemplate.html" />
     <Content Include="Common\Directives\AdditionalErrors\vr-common-additionalerrors.js" />
     <Content Include="Common\Directives\ConnectionString\Templates\ConnectionStringTemplate.html" />
@@ -134,6 +135,7 @@
     <Content Include="Common\Directives\FiguresTileSettings\Templates\FiguresTileSettingsRuntimeTemplate.html" />
     <Content Include="Common\Directives\FiguresTileSettings\vr-common-figurestilesettings-definition.js" />
     <Content Include="Common\Directives\FiguresTileSettings\vr-common-figurestilesettings-runtime.js" />
+    <Content Include="Common\Directives\VRIPAddress\vr-common-ipaddress.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\FTPConnectionEditorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionCallInterceptorSelectiveTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-ftpconnection-editor.js" />
@@ -952,7 +954,9 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\Directives\VRIPAddress\Templates\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
