@@ -1495,7 +1495,7 @@ namespace Retail.Interconnect.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                    Title = "Destination",
+                    Title = "Destination Mobile Network",
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
@@ -1524,35 +1524,19 @@ namespace Retail.Interconnect.Business
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                    Title = "Sys. Calls",
+                    Title = "Sys. SMS",
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                    Title = string.Format("{0} Calls", invoiceActionSettings.PartnerLabel),
+                    Title = string.Format("{0} SMS", invoiceActionSettings.PartnerLabel),
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                    Title = "Diff. Calls",
+                    Title = "Diff. SMS",
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                    Title = "Diff. Calls %",
-                });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell
-                {
-                    Title = "Sys. Duration",
-                });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell
-                {
-                    Title = string.Format("{0} Duration", invoiceActionSettings.PartnerLabel),
-                });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell
-                {
-                    Title = "Diff. Duration",
-                });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell
-                {
-                    Title = "Diff. Duration %",
+                    Title = "Diff. SMS %",
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
@@ -1588,10 +1572,10 @@ namespace Retail.Interconnect.Business
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.MobileNetwork });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.From });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.To });
-                            //  row.Cells.Add(new ExportExcelCell { Value =  item.Entity.Currency });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.SystemRate });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.ProviderRate });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.SystemSMSs });
+                            row.Cells.Add(new ExportExcelCell { Value = item.Entity.ProviderSMSs });
                             row.Cells.Add(new ExportExcelCell
                             {
                                 Value = item.Entity.DiffSMSs,

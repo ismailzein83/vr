@@ -9,7 +9,7 @@
               <Width>0.50919cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.5cm</Width>
+              <Width>13.36462cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -393,7 +393,7 @@
         <Top>6.17667cm</Top>
         <Left>0.5214cm</Left>
         <Height>0.98915cm</Height>
-        <Width>3.00919cm</Width>
+        <Width>13.87381cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2388,7 +2388,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=iif(First(Fields!DiffPercentage.Value, "ReportInvoiceComparisonSMSResult") &gt; CDec(Parameters!SMSThreshold.Value), "Conformément à la convention la montant de facture sera donc calculé sur la valeur la plus faible des deux chiffres déclarés,", "Conformément à la convention la montant de facture sera donc calculé sur la base de la moyenne arithmétique des deux chiffres déclarés,") + " " + System.Math.Round(First(Fields!Average.Value, "ReportInvoiceComparisonSMSResult"), 2).ToString() + " smss."</Value>
+                              <Value>=iif(First(Fields!DiffPercentage.Value, "ReportInvoiceComparisonSMSResult") &gt; CDec(Parameters!SMSThreshold.Value), "Conformément à la convention la montant de facture sera donc calculé sur la valeur la plus faible des deux chiffres déclarés,", "Conformément à la convention la montant de facture sera donc calculé sur la base de la moyenne arithmétique des deux chiffres déclarés,") + " " + System.Math.Round(First(Fields!Average.Value, "ReportInvoiceComparisonSMSResult"), 2).ToString() + " SMSs."</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
