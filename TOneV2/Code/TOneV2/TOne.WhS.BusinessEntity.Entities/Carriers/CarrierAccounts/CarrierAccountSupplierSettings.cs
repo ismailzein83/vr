@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
@@ -15,6 +16,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public int? EffectiveDateDayOffset { get; set; }
 
 		public int? BPBusinessRuleSetId { get; set; }
+
+        public List<BankDetail> SupplierBankDetails { get; set; }
 
 		public SupplierAutoImportSettings AutoImportSettings { get; set; }
 
