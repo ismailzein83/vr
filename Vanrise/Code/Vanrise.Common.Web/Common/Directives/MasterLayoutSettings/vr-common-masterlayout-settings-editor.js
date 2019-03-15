@@ -40,7 +40,6 @@ function (UtilsService, VRUIUtilsService, MasterLayoutMenuOptionEnum) {
                         break;
                     case MasterLayoutMenuOptionEnum.ModuleFilteredMenu.value:
                         $scope.moduleFilter = true;
-                        $scope.scopeModel.expandedMenu = false;
                         $scope.scopeModel.showApplicationTiles = true;
                         break;
                     case MasterLayoutMenuOptionEnum.NoMenu.value:

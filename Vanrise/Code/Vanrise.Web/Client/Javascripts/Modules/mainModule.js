@@ -158,6 +158,10 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 $scope.toogled = !$scope.toogled;
                 $rootScope.lastToogled = $scope.toogled;
             };
+
+            $rootScope.toogledStatuts = function (status) {
+                $scope.toogled = status;
+            };
             $scope.getPageName = function () {
                 if ($scope.currentPage != null)
                     return $scope.currentPage.Title;
@@ -642,7 +646,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
             $rootScope.menuFilter = function (item) {
                 if ($rootScope.showAllMenuItems) return true;
-                return (($rootScope.selectedMenu && $rootScope.selectedMenu.Id === item.Id) || ($rootScope.selectedMenu && $rootScope.selectedMenu.parent != null && $rootScope.selectedMenu.parent.Id === item.Id));
+                return (
+                    ($rootScope.selectedMenu && $rootScope.selectedMenu.Id === item.Id)
+                    || ($rootScope.selectedMenu && $rootScope.selectedMenu.parent != null && $rootScope.selectedMenu.parent.Id === item.Id)
+                    || ($rootScope.selectedMenu && $rootScope.selectedMenu.parent != null && $rootScope.selectedMenu.parent.parent != null && $rootScope.selectedMenu.parent.parent.Id === item.Id)
+                    );
             };
 
             function setSelectedMenuFromURL() {

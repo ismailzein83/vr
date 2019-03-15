@@ -8,12 +8,13 @@
 
         if ($rootScope.moduleFilter) {
             $rootScope.hideToogleIcon = true;
-            $scope.toogled = false;
+            $rootScope.toogledStatuts(false);
         }
+
         if (UISettingsService.getDefaultPageURl() && (!$rootScope.toTilesView || !$rootScope.showApplicationTiles)) {
             window.location.href = UISettingsService.getDefaultPageURl();
         }
-        $rootScope.selectedMenu = null;
+             $rootScope.selectedMenu = null;
         $rootScope.openMenuTile = function (item) {
             $rootScope.selectedtile = null;
             $rootScope.selectedMenu = null;
