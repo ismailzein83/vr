@@ -741,7 +741,7 @@
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
         <Top>2.16875in</Top>
         <Left>0.06596in</Left>
-        <Height>0.63542in</Height>
+        <Height>0.63541in</Height>
         <Width>7.71854in</Width>
         <ZIndex>1</ZIndex>
         <Visibility>
@@ -962,7 +962,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!AmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value) + " " + Parameters!Currency.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalVoiceAmountBeforeTax.Value, Parameters!NormalPrecisionValue.Value) + " " + Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1986,7 +1986,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!SMSAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value) + " " + Parameters!Currency.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalSMSAmountBeforeTax.Value, Parameters!NormalPrecisionValue.Value) + " " + Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -4106,6 +4106,30 @@
     </ReportParameter>
     <ReportParameter Name="NoDeals">
       <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalSMSAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalVoiceAmountBeforeTax">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalSMSAmountBeforeTax">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalInvoiceAmountBeforeTax">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
