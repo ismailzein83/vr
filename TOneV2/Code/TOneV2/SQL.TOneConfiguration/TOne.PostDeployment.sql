@@ -158,6 +158,9 @@ as (select * from (values
 ('29135479-8150-4E23-9A0D-A42AF69A13AE','WhS_RouteSync_SwitchRouteSynchronizer_TelesIdb','Teles Idb Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'		,'{"Editor":"whs-routesync-telesidb-swsync"}'),
 ('99B59E02-1305-49E5-9342-1B4E08C91439','WhS_RouteSync_SwitchRouteSynchronizer_FreeRadius','Free Radius Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-freeradius-swsync"}'),
 ('376687E2-268D-4DFA-AA39-3205C3CD18E5','WhS_RouteSync_SwitchRouteSynchronizer_Huawei','Huawei Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'				,'{"Editor":"whs-routesync-huawei-swsync", "SettingsEditor":"whs-routesync-huaweisettings-editor"}'),
+('94739CBC-00A7-4CEB-9285-B4CB35D7D003','WhS_RouteSync_SwitchRouteSynchronizer_Ericsson','Ericsson Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'			,'{"Editor":"whs-routesync-ericsson-swsync","SettingsEditor":"whs-routesync-ericssonsettings-editor"}'),
+('D770F53B-057F-4BB8-BF20-883A2DBC510B','WhS_RouteSync_SwitchRouteSynchronizer_Cataleya','Cataleya Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'			,'{"Editor":"whs-routesync-cataleya-swsync"}'),
+
 ('366AB5D3-5083-420D-B5CE-5313DA025106','Whs_RouteSync_RadiusDataManager_SQL','MVTS SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-mvtsradius-sqldatamanager"}'),
 ('09ED9252-AF87-447D-9C40-738CF222C64E','Whs_RouteSync_RadiusDataManager_SQL','Teles SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-telesradius-sqldatamanager"}'),
 ('34F3483D-2572-4349-A6ED-3504B2D9E714','Whs_RouteSync_IdbDataManager_Postgres','Teles Postgres Idb Data Manager','WhS_RouteSync_IdbDataManagerSettings'			,'{"Editor":"whs-routesync-telesidb-postgresdatamanager"}'),
@@ -244,7 +247,6 @@ as (select * from (values
 
 ('B69F4C1B-FAE8-4352-BB9F-A5AA140F30EE','VR_WhS_Routing_QualityConfigurationDefinition','Quality Configuration Definition','VR_Common_VRComponentType','{"Editor":"vr-whs-routing-qualityconfigurationdefinition-settings"}'),
 ('E670425F-2F91-4C9A-BB03-8B85CD77BBD2','VR_WhS_Routing_QCDefinition_TrafficStatistic','Traffic Statistic','WhS_Routing_QualityConfigurationDefinitionExtendedSettings','{"Editor":"vr-whs-routing-qcdefinition-trafficstatistic-settings"}'),
-('94739CBC-00A7-4CEB-9285-B4CB35D7D003','WhS_RouteSync_SwitchRouteSynchronizer_Ericsson','Ericsson Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer','{"Editor":"whs-routesync-ericsson-swsync","SettingsEditor":"whs-routesync-ericssonsettings-editor"}'),
 
 ('70500270-0BFD-4AEA-A20A-969BA0F6489B','WhS_BE_BasicSalePriceListTemplateSettingsMappedValue_OtherRates','Other Rates','WhS_BE_CodesOnEachRowMappedValue','{"Editor":"vr-whs-be-codesoneachrow-mappedvalue-otherrates"}'),
 ('A2E3EBFB-15DC-42AB-B410-AD3328A89E32','WhS_BE_BasicSalePriceListTemplateSettingsMappedValue_OtherRates','Other Rates','WhS_BE_CodesByZoneMappedValue','{"Editor":"vr-whs-be-codesbyzone-mappedvalue-otherrates"}'),
