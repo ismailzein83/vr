@@ -155,7 +155,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2472,7 +2471,7 @@
         <Width>19.33217cm</Width>
         <ZIndex>10</ZIndex>
         <Visibility>
-          <Hidden>=Microsoft.VisualBasic.Interaction.iif(Parameters!IsVoiceCompare.Value = "true", False, True)</Hidden>
+          <Hidden>=iif(Parameters!IsSMSCompare.Value = "true", False, True)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -2543,7 +2542,7 @@
         <Width>19.33217cm</Width>
         <ZIndex>11</ZIndex>
         <Visibility>
-          <Hidden>=Microsoft.VisualBasic.Interaction.iif(Parameters!IsVoiceCompare.Value = "true", False, True)</Hidden>
+          <Hidden>=iif(Parameters!IsSMSCompare.Value = "true", False, True)</Hidden>
         </Visibility>
         <Style>
           <Border>
