@@ -422,30 +422,29 @@
                             loadVoiceMainListListMapping();
                         });
                         $scope.scopeModel.voiceDateTimeFormat = invoiceCompareTemplateEntity.Details.DateTimeFormat;
+                    }
+                    if (invoiceCompareTemplateEntity.Details.SMS != undefined) {
 
-                        if (invoiceCompareTemplateEntity.Details.SMS != undefined) {
-
-                            smsEnableSelectionChangePromise = UtilsService.createPromiseDeferred();
-                            smsMainListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-
-                            mappingTabsReadyPromiseDeferred.promise.then(function () {
-                                $scope.scopeModel.smsEnabled = true;
-                                $scope.scopeModel.smsTab.showTab = true;
-                                $scope.scopeModel.recievedSMSComparisonTab.showTab = true;
+                        smsEnableSelectionChangePromise = UtilsService.createPromiseDeferred();
+                        smsMainListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
-                                if (!$scope.scopeModel.voiceEnabled)
-                                    mappingTabsAPI.setTabSelected(1);
-                                loadSMSMainListListMapping();
-                            });
-                            $scope.scopeModel.smsDateTimeFormat = invoiceCompareTemplateEntity.Details.SMS.DateTimeFormat;
-                        };
+                        mappingTabsReadyPromiseDeferred.promise.then(function () {
+                            $scope.scopeModel.smsEnabled = true;
+                            $scope.scopeModel.smsTab.showTab = true;
+                            $scope.scopeModel.recievedSMSComparisonTab.showTab = true;
+
+                            if (!$scope.scopeModel.voiceEnabled)
+                                mappingTabsAPI.setTabSelected(1);
+                            loadSMSMainListListMapping();
+                        });
+                        $scope.scopeModel.smsDateTimeFormat = invoiceCompareTemplateEntity.Details.SMS.DateTimeFormat;
                     };
-
-                    $scope.scopeModel.voiceComparisonCriterias = UtilsService.getArrayEnum(WhS_Invoice_ComparisonCriteriaEnum);
-                    $scope.scopeModel.smsComparisonCriterias = UtilsService.getArrayEnum(WhS_Invoice_SMSComparisonCriteriaEnum);
                 };
+
+                $scope.scopeModel.voiceComparisonCriterias = UtilsService.getArrayEnum(WhS_Invoice_ComparisonCriteriaEnum);
+                $scope.scopeModel.smsComparisonCriterias = UtilsService.getArrayEnum(WhS_Invoice_SMSComparisonCriteriaEnum);
+
             }
 
             function loadExportButton() {
