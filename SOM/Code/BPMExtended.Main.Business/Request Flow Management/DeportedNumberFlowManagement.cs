@@ -27,6 +27,8 @@ namespace BPMExtended.Main.Business
         string nearByNumberStep = "0EA15672-4E18-4A85-94C5-BD96ECC1154D";
         string reservationStep = "17F57607-72D1-4155-8892-8C038A43029E";
         string networkAdminStep = "8664DD40-00FC-43D5-A72D-6DC28A7F4FA4";
+        string paymentStep = "37858CF1-30F2-4AEA-9F48-1B3A28876679";
+        string attachmentStep = "B3287838-1DB8-493E-9C6D-5A0BDA21C99A";
         string technicalStep = "F360681D-F055-49AB-A04B-6A1913548B3A";
 
         public string GetNextStep(string id, string currentStepId)
@@ -38,7 +40,9 @@ namespace BPMExtended.Main.Business
                 case "c4509023-33cd-454f-a427-62b2538e947c": nextStepId = printStep; break;
                 case "6074bb55-ef09-4ffc-b633-d1902397ac2c": nextStepId = nearByNumberStep; break;
                 case "0ea15672-4e18-4a85-94c5-bd96ecc1154d": nextStepId = reservationStep; break;
-                case "17f57607-72d1-4155-8892-8c038a43029e": nextStepId = technicalStep; break;
+                case "17f57607-72d1-4155-8892-8c038a43029e": nextStepId = paymentStep; break;
+                case "37858cf1-30f2-4aea-9f48-1b3a28876679": nextStepId = attachmentStep; break;
+                case "b3287838-1db8-493e-9c6d-5a0bda21c99a": nextStepId = technicalStep; break;
                     //case "17f57607-72d1-4155-8892-8c038a43029e": nextStepId = networkAdminStep; break;
                     // case "a7fb4f5e-5d2c-4259-8be4-e6506c8e1dc3": nextStepId = GetFirstMic(id) != null ? micTeamStep : newMDFStep; break;
                     //case "6bd597b3-54a4-4b51-b500-ffaeb7d2224b": nextStepId = GetNextMic(id) !=null ? micTeamStep : newMDFStep; break;

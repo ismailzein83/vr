@@ -14,16 +14,11 @@ namespace BPMExtended.Main.Business
 
         const string choosePhoneNumberStep = "94C9BF32-6459-473D-A21E-D940BCAE74F9";
         const string paymentStep = "AD9AE38B-740D-4122-88A3-BFCCD5DBF288";
-        const string validatePaymentStep = "3207851A-4BA6-463C-9D38-77D8B8C60F11";
+        //const string validatePaymentStep = "3207851A-4BA6-463C-9D38-77D8B8C60F11";
+        const string attachmentStep = "CBA12E12-AEE8-4053-877A-88234A877FE1";
+        const string technicalStep = "2B8B0E7C-9925-4ABE-A9E7-145E96F77982";
 
-        const string testToneStep = "7E97071D-2AF6-4FD9-8379-D069C0DD86C5";
-
-        const string mdfOldStep = "FA22EF11-6128-4EF3-B0DD-CEEC70692A93";
-        const string mdfNewStep = "EB654A7F-FC0A-4A82-8477-D95F2B446B06";
-
-        const string completedStep = "A359D1DA-9970-4C97-A669-8F30E7B31550";
-
-        public string GetNextStep(string id, string currentStepId, bool isPaymentTypeCash)
+        public string GetNextStep(string id, string currentStepId)
         {
 
             string nextStepId = "";
@@ -33,11 +28,8 @@ namespace BPMExtended.Main.Business
                 case printStep: nextStepId = lineDescriptionStep; break;
                 case lineDescriptionStep: nextStepId = choosePhoneNumberStep; break;
                 case choosePhoneNumberStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = isPaymentTypeCash ? validatePaymentStep :testToneStep ; break;
-                case validatePaymentStep: nextStepId = testToneStep; break;
-                case testToneStep: nextStepId = mdfOldStep; break;
-                case mdfOldStep: nextStepId = mdfNewStep; break;
-                case mdfNewStep: nextStepId = completedStep; break;
+                case paymentStep: nextStepId = attachmentStep; break;
+                case attachmentStep: nextStepId = technicalStep; break;
 
             }
             return nextStepId;

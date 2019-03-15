@@ -22,6 +22,7 @@ namespace BPMExtended.Main.Business
         const string welcomeStep = "AEB4AA8D-5371-4B09-8862-4D3F5111EE48";
         const string reserveNumbersStep = "2883FC66-8A4C-4D2F-81DD-3109D47D010B";
         const string printStep = "65BB4FBB-121E-4BB8-A4ED-A01F9C2F7803";
+        const string attachmentStep = "5A456A6D-47BE-49B8-BF4A-E0B27CEA2DCA";
         //const string switchTeamStep = "3AE7FEA6-3CEE-4C4D-91D6-015571946B2D";
         const string technicalStep = "4AD46645-AD4A-4F53-83DC-EB38831867FA";
         const string completedStep = "1386C350-017D-400B-855C-04FC427868BF";
@@ -33,37 +34,10 @@ namespace BPMExtended.Main.Business
             {
                 case welcomeStep: nextStepId = reserveNumbersStep; break;
                 case reserveNumbersStep: nextStepId = printStep; break;
-                case printStep: nextStepId = ManualSwitch(id) ? technicalStep : completedStep; break;
-                case technicalStep: nextStepId = completedStep; break;
+                case printStep: nextStepId = attachmentStep; break;
+                case attachmentStep: nextStepId = technicalStep; break;
             }
             return nextStepId;
-        }
-
-        public bool ManualSwitch(string id)
-        {
-            bool ismanualswitch = false;
-            if (id != "")
-            {
-                //get request from bpm
-                Guid idd = new Guid(id.ToUpper());
-                // Creation of query instance with "City" root schema. 
-                var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StManagePabx");
-                esq.AddColumn("Id");
-                esq.AddColumn("StContractId");
-                // Creation of the first filter instance.
-                var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
-                // Adding created filters to query collection. 
-                esq.Filters.Add(esqFirstFilter);
-                // Objects, i.e. query results, filtered by two filters, will be included into this collection.
-                var entities = esq.GetEntityCollection(BPM_UserConnection);
-                if (entities.Count > 0)
-                {
-                    var contractId = entities[0].GetColumnValue("StContractId");
-                    InventoryManager manager = new InventoryManager();
-                    ismanualswitch = manager.IsManualSwitch(contractId.ToString());
-                }
-            }
-            return ismanualswitch;
         }
 
     }

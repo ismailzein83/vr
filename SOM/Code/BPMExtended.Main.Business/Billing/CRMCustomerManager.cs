@@ -361,6 +361,37 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public void PostChangePhoneNumberToOM(Guid requestId)
+        {
+            //TODO: update status in 'request header' table
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
+                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
+            update.Execute();
+
+        }
+
+        public void PostCreatePABXToOM(Guid requestId)
+        {
+            //TODO: update status in 'request header' table
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
+                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
+            update.Execute();
+
+        }
+
+        public void PostEditPABXToOM(Guid requestId)
+        {
+            //TODO: update status in 'request header' table
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
+                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
+            update.Execute();
+
+        }
+
+
         public bool WaitingListPaymentValidation(string customerId, string contractId)
         {
             return true;
@@ -503,6 +534,65 @@ namespace BPMExtended.Main.Business
                 }
 
             return null;
+        }
+
+
+        public bool IsOperationNeedProvisioning(string opType)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter, esqFirstFilter2;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationSetting");
+            esq.AddColumn("Id");
+            esq.AddColumn("StDocumentID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StCustomerCategoryID");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", opType);
+            esqFirstFilter2 = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StNeedProvisioning", "1");
+
+            esq.Filters.Add(esqFirstFilter);
+            esq.Filters.Add(esqFirstFilter2);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        //if a contract has a completed  pabx operation
+        public bool IsRecordExistAndCompletedInRequestHeader(string contractId, string requestType, string statusId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFilter, esqFilter2 , esqFilter3;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("Id");
+
+            esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", contractId);
+            esqFilter2 = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestType", requestType);
+            esqFilter3 = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStatus", statusId);
+
+            esq.Filters.Add(esqFilter);
+            esq.Filters.Add(esqFilter2);
+            esq.Filters.Add(esqFilter3);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public bool IsCommercial(string sysUserId)

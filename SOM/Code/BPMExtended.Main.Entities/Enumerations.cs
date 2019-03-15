@@ -89,5 +89,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.ADSL)]
         ADSLPrintConfiguration = 25,
 
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        ManagePABX = 26,
+
     }
 }
