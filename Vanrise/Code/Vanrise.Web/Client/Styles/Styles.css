@@ -2675,7 +2675,11 @@ vr-switch[class*="divDisabled"] .switch {
     opacity: 0.8;
     background: #8a8a8a;
 }
-
+vr-switch[class*="divDisabled"] .switch.switch.checked {
+    pointer-events: none;
+    opacity: 0.8;
+    background: #64BD63;
+}
 .divDisabled .switch {
     pointer-events: none;
     opacity: 0.8;
