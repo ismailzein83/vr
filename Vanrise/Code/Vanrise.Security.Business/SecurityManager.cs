@@ -40,9 +40,6 @@ namespace Vanrise.Security.Business
                     case SecurityProviderAuthenticateResult.ActivationNeeded:
                         authenticationOperationOutput.Result = AuthenticateOperationResult.ActivationNeeded;
                         break;
-                    case SecurityProviderAuthenticateResult.UserNotExists:
-                        authenticationOperationOutput.Result = AuthenticateOperationResult.UserNotExists;
-                        break;
                     case SecurityProviderAuthenticateResult.WrongCredentials:
                         authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
                         break;

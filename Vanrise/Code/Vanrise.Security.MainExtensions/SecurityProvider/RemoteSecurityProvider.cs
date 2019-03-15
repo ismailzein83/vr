@@ -41,9 +41,6 @@ namespace Vanrise.Security.MainExtensions.SecurityProvider
                 case AuthenticateOperationResult.ActivationNeeded:
                     authenticateResult = SecurityProviderAuthenticateResult.ActivationNeeded;
                     break;
-                case AuthenticateOperationResult.UserNotExists:
-                    authenticateResult = SecurityProviderAuthenticateResult.UserNotExists;
-                    break;
                 case AuthenticateOperationResult.WrongCredentials:
                     authenticateResult = SecurityProviderAuthenticateResult.WrongCredentials;
                     break;

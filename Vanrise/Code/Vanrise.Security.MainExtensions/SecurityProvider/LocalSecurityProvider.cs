@@ -30,7 +30,7 @@ namespace Vanrise.Security.MainExtensions.SecurityProvider
             UserManager manager = new UserManager();
             User user = manager.GetUserbyEmail(payload.Email);
             if (user == null)
-                return SecurityProviderAuthenticateResult.UserNotExists;
+                return SecurityProviderAuthenticateResult.WrongCredentials;
 
             var configManager = new Security.Business.ConfigManager();
 
