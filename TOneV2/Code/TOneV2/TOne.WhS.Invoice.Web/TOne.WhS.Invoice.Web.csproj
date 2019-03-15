@@ -222,6 +222,8 @@
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\Templates\CompareInvoiceActionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\whs-invoicetype-gridactionsettings-originalinvoicedata.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\whs-invoicetype-gridactionsettings-compare.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceDataSourceSettings\Templates\SupplierBankDetailsTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceDataSourceSettings\whs-invoicetype-datasourcesettings-supplierbankdetails.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\Templates\PartnerConditionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-partner.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGridActionFilterCondition\Templates\ModuleTypeConditionTemplate.html" />
@@ -308,7 +310,9 @@
     <!--<EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>-->
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SupplierPaymentDemand.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SupplierPaymentDemand.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultCustomerInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultCustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultSupplierInvoiceItemsReport.rdlc" />
