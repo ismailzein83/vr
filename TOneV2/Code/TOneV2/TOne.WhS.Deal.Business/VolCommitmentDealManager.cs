@@ -16,7 +16,7 @@ namespace TOne.WhS.Deal.Business
     public class VolCommitmentDealManager : BaseDealManager
     {
         #region Public Methods
-        public Dictionary<int, VolCommitmentDealSettings> GetEffectiveVolCommitmentDeals(List<int> carrierAccountIds, DateTime fromDate, DateTime toDate, out DateTime? minBED, out DateTime? maxEED)
+        public Dictionary<int, VolCommitmentDealSettings> GetEffectiveVolCommitmentDeals(VolCommitmentDealType dealType ,List<int> carrierAccountIds, DateTime fromDate, DateTime toDate, out DateTime? minBED, out DateTime? maxEED)
         {
             var cachedVolCommitmentDeals = GetCachedVolCommitmentDeals();
             minBED = null;
@@ -32,6 +32,8 @@ namespace TOne.WhS.Deal.Business
 
                 var volCommitmentDealSettings = deal.Settings.CastWithValidate<VolCommitmentDealSettings>("VolCommitmentDealSettings");
 
+                if (volCommitmentDealSettings.DealType != dealType)
+                    continue;
                 if (volCommitmentDealSettings.Status != DealStatus.Active)
                     continue;
                 if (!volCommitmentDealSettings.RealEED.HasValue)

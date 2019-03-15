@@ -18,6 +18,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.MainExtensions;
+using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Invoice.Business.Extensions
 {
@@ -83,7 +84,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			if (isSMSEnabled)
 			{
 				List<string> smsListMeasures = new List<string> { "CostNetNotNULL", "NumberOfSMS", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
-				List<string> smsListDimensions = new List<string> { "DestinationMobileNetwork", "Supplier", "CostCurrency", "CostRate" };
+				List<string> smsListDimensions = new List<string> { "DestinationMobileNetwork", "Supplier", "CostCurrency", "CostRate", "DestinationMobileCountry" };
 				smsItemSetNames = _invoiceGenerationManager.GetInvoiceSMSMappedRecords(smsListDimensions, smsListMeasures, dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, currencyId, resolvedPayload.OffsetValue, (analyticRecord) =>
 				{
 					return SMSItemSetNamesMapper(analyticRecord, currencyId, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
@@ -464,7 +465,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					CostAmount = costNetValue,
 					NumberOfSMS = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "NumberOfSMS"),
 					OriginalCostAmount = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "CostNet_OrigCurr"),
-				};
+                    MobileCountryId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord, 4),
+                };
 
 				var billingPeriodFromDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodFrom");
 				var billingPeriodToDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodTo");
@@ -727,7 +729,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			VolCommitmentDealManager volCommitmentDealManager = new VolCommitmentDealManager();
 			DateTime? minBED = null;
 			DateTime? maxEED = null;
-			var effectiveVolCommitmentDeals = volCommitmentDealManager.GetEffectiveVolCommitmentDeals(carrierAccountsIds, fromDate, toDate, out minBED, out maxEED);
+			var effectiveVolCommitmentDeals = volCommitmentDealManager.GetEffectiveVolCommitmentDeals(VolCommitmentDealType.Buy, carrierAccountsIds, fromDate, toDate, out minBED, out maxEED);
 
 			if (effectiveVolCommitmentDeals != null && effectiveVolCommitmentDeals.Count() > 0 && minBED.HasValue && maxEED.HasValue)
 			{

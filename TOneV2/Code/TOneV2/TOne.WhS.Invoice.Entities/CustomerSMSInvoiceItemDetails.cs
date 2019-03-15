@@ -11,15 +11,12 @@ namespace TOne.WhS.Invoice.Entities
 		public int NumberOfSMS { get; set; }
 		public decimal SaleAmount { get; set; }
 		public decimal OriginalSaleAmount { get; set; }
-		public int CountryId { get; set; }
+		public int MobileCountryId { get; set; }
 		public int SupplierId { get; set; }
-		public int SupplierZoneId { get; set; }
 		public int CustomerId { get; set; }
-		public long SaleZoneId { get; set; }
 		public long CustomerMobileNetworkId { get; set; }
 		public int OriginalSaleCurrencyId { get; set; }
 		public int SaleCurrencyId { get; set; }
-		public string SaleCurrency { get; set; }
 		public Decimal SaleRate { get; set; }
 		public DateTime FromDate { get; set; }
 		public DateTime ToDate { get; set; }

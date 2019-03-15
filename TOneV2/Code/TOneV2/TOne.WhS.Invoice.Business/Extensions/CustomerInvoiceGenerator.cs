@@ -18,6 +18,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.MainExtensions;
+using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Invoice.Business.Extensions
 {
@@ -86,7 +87,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			if (isSMSEnabled)
 			{
 				List<string> listMeasures = new List<string> { "NumberOfSMS", "BillingPeriodFrom", "BillingPeriodTo", "SaleNetNotNULL", "SaleNet_OrigCurr" };
-				List<string> listDimensions = new List<string> { "OriginationMobileNetwork", "Customer", "SaleCurrency", "SaleRate", "Supplier", "OriginationMobileCountry", "DestinationMobileNetwork" };
+				List<string> listDimensions = new List<string> { "DestinationMobileNetwork",  "DestinationMobileCountry", "Customer", "SaleCurrency", "SaleRate", "Supplier"};
 
 				smsItemSetNames = _invoiceGenerationManager.GetInvoiceSMSMappedRecords(listDimensions, listMeasures, dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, currencyId, resolvedPayload.OffsetValue, (analyticRecord) =>
 				{
@@ -411,7 +412,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					{
 						customerInvoiceDetails.TotalNumberOfSMS += smsInvoiceBillingRecord.NumberOfSMS;
 						customerInvoiceDetails.OriginalSaleCurrencyId = smsInvoiceBillingRecord.OriginalSaleCurrencyId;
-						customerInvoiceDetails.CountryId = smsInvoiceBillingRecord.CountryId;
+						customerInvoiceDetails.CountryId = smsInvoiceBillingRecord.MobileCountryId;
 						customerInvoiceDetails.SupplierId = smsInvoiceBillingRecord.SupplierId;
 						customerInvoiceDetails.SMSAmountAfterCommission += smsInvoiceBillingRecord.AmountAfterCommission;
 						customerInvoiceDetails.SMSOriginalAmountAfterCommission += smsInvoiceBillingRecord.OriginalAmountAfterCommission;
@@ -463,15 +464,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			{
 				CustomerSMSInvoiceItemDetails invoiceBillingRecord = new CustomerSMSInvoiceItemDetails
 				{
-					CustomerId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord, 1),
+					CustomerId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord, 2),
 					SaleCurrencyId = currencyId,
-					OriginalSaleCurrencyId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord, 2),
-					SaleRate = _invoiceGenerationManager.GetDimensionValue<Decimal>(analyticRecord, 3),
+					OriginalSaleCurrencyId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord,3),
+					SaleRate = _invoiceGenerationManager.GetDimensionValue<Decimal>(analyticRecord, 4),
 					CustomerMobileNetworkId = _invoiceGenerationManager.GetDimensionValue<long>(analyticRecord, 0),
-					SaleAmount = saleNetValue,
+                    MobileCountryId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord,1),
+                    SaleAmount = saleNetValue,
 					NumberOfSMS = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "NumberOfSMS"),
 					OriginalSaleAmount = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "SaleNet_OrigCurr"),
-				};
+                    SupplierId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord, 5),
+                };
 				var billingPeriodFromDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodFrom");
 				var billingPeriodToDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodTo");
 				if (offsetValue.HasValue)
@@ -690,7 +693,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			VolCommitmentDealManager volCommitmentDealManager = new VolCommitmentDealManager();
 			DateTime? minBED = null;
 			DateTime? maxEED = null;
-			var effectiveVolCommitmentDeals = volCommitmentDealManager.GetEffectiveVolCommitmentDeals(carrierAccountIds, fromDate, toDate, out minBED, out maxEED);
+			var effectiveVolCommitmentDeals = volCommitmentDealManager.GetEffectiveVolCommitmentDeals(VolCommitmentDealType.Sell,carrierAccountIds, fromDate, toDate, out minBED, out maxEED);
 			if (effectiveVolCommitmentDeals != null && effectiveVolCommitmentDeals.Count() > 0 && minBED.HasValue && maxEED.HasValue)
 			{
 				List<string> dealMeasures = new List<string> { "SaleNet_OrigCurr", "NumberOfCalls", "SaleDuration", "SaleNetNotNULL" };
