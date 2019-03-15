@@ -174,14 +174,14 @@ app.directive('vrCommonIpaddress', ['UtilsService', 'VRUIUtilsService', 'VRCommo
                 ' <span ng-if="ctrl.hidelabel == undefined">' +
                 ' <vr-label>' + ipLabel + '</vr-label>' +
                 ' </span> ' +
-                ' <vr-textbox type="ip" value="ctrl.ipAddress" ' + onIPAddressBlur + ' placeholder=" ' + ipPlaceHolder + ' " isrequired="ctrl.isrequired"></vr-textbox> ' +
+                ' <vr-textbox type="ip" value="ctrl.ipAddress" ' + onIPAddressBlur + ' placeholder=" ' + ipPlaceHolder + ' " isrequired="ctrl.isrequired" tonextinput></vr-textbox> ' +
                 ' </vr-columns> ' +
 
                 ' <vr-columns colnum="{{ctrl.ipv6AddressColNum}}" ng-if="ctrl.selectedvalues != undefined && ctrl.selectedvalues.value == 1" ' + mediumSpacing + '> ' +
                 ' <span ng-if="ctrl.hidelabel == undefined">' +
                 ' <vr-label>' + ipLabel + '</vr-label>' +
                 ' </span > ' +
-                ' <vr-textbox type="ipv6" value="ctrl.ipAddress" ' + onIPAddressBlur + ' placeholder=" ' + ipPlaceHolder + ' " isrequired="ctrl.isrequired"></vr-textbox> ' +
+                ' <vr-textbox type="ipv6" value="ctrl.ipAddress" ' + onIPAddressBlur + ' placeholder=" ' + ipPlaceHolder + ' " isrequired="ctrl.isrequired" tonextinput></vr-textbox> ' +
                 ' </vr-columns> ' +
 
                 ' <vr-columns colnum="{{ctrl.subnetPrefixColNum}}" ng-if="' + showSubnetPrefix + ' && ctrl.selectedvalues != undefined && ctrl.selectedvalues.value == 0" ' + mediumSpacing + '> ' +
@@ -189,7 +189,7 @@ app.directive('vrCommonIpaddress', ['UtilsService', 'VRUIUtilsService', 'VRCommo
                 '   <vr-label>' + subnetLabel + '</vr-label>' +
                 ' </span > ' +
                 ' <vr-textbox type="number" minvalue="0" maxvalue="32" value="ctrl.subnetPrefixLength" ' + onPrefixBlur +
-                '  placeholder="' + subnetPlaceHolder + '" isrequired="ctrl.isrequired" ></vr-textbox> ' +
+                '  placeholder="' + subnetPlaceHolder + '" isrequired="ctrl.isrequired" tonextinput></vr-textbox> ' +
                 ' </vr-columns> ';
         }
     }]);
