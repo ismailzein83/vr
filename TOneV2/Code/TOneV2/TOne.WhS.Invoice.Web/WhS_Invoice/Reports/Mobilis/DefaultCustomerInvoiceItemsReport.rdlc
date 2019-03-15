@@ -8,6 +8,9 @@
         <Left>1.99052in</Left>
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
+        <Visibility>
+          <Hidden>=iif((Parameters!NoVoice.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -741,6 +744,9 @@
         <Height>0.46875in</Height>
         <Width>7.71854in</Width>
         <ZIndex>1</ZIndex>
+        <Visibility>
+          <Hidden>=iif((Parameters!NoVoice.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1011,7 +1017,7 @@
         <Width>5.78301in</Width>
         <ZIndex>2</ZIndex>
         <Visibility>
-          <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
+          <Hidden>=iif((Parameters!NoVoice.Value=true),true,false)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -1026,6 +1032,9 @@
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
         <ZIndex>3</ZIndex>
+        <Visibility>
+          <Hidden>=iif((Parameters!NoSMS.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1759,6 +1768,9 @@
         <Height>0.46875in</Height>
         <Width>7.71302in</Width>
         <ZIndex>4</ZIndex>
+        <Visibility>
+          <Hidden>=iif((Parameters!NoSMS.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2028,6 +2040,9 @@
         <Height>0.19792in</Height>
         <Width>5.78301in</Width>
         <ZIndex>5</ZIndex>
+        <Visibility>
+          <Hidden>=iif((Parameters!NoSMS.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2057,6 +2072,9 @@
         <Height>0.6cm</Height>
         <Width>4.51083cm</Width>
         <ZIndex>6</ZIndex>
+        <Visibility>
+          <Hidden>=iif((Parameters!NoVoice.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2090,6 +2108,9 @@
         <Height>0.6cm</Height>
         <Width>4.48297cm</Width>
         <ZIndex>7</ZIndex>
+        <Visibility>
+          <Hidden>=iif((Parameters!NoSMS.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2498,6 +2519,9 @@
         <Height>0.46875in</Height>
         <Width>7.71862in</Width>
         <ZIndex>9</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((Parameters!NoDeals.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2986,6 +3010,9 @@
         <Height>0.46875in</Height>
         <Width>7.71854in</Width>
         <ZIndex>10</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((Parameters!NoRecurringCharges.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3001,6 +3028,9 @@
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
         <ZIndex>11</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((Parameters!NoDeals.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3270,7 +3300,7 @@
         <Width>5.78301in</Width>
         <ZIndex>12</ZIndex>
         <Visibility>
-          <Hidden>=Microsoft.VisualBasic.Interaction.iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
+          <Hidden>=IIf((Parameters!NoDeals.Value=true),true,false)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -3280,11 +3310,14 @@
       </Tablix>
       <Rectangle Name="Rectangle7">
         <KeepTogether>true</KeepTogether>
-        <Top>6.80555in</Top>
+        <Top>6.81805in</Top>
         <Left>2.00156in</Left>
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
         <ZIndex>13</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((Parameters!NoRecurringCharges.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3548,11 +3581,14 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>6.85764in</Top>
+        <Top>6.87014in</Top>
         <Left>2.00156in</Left>
         <Height>0.19792in</Height>
         <Width>5.78301in</Width>
         <ZIndex>14</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((Parameters!NoRecurringCharges.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3566,7 +3602,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>RecurringCharges</Value>
+                <Value>Recurring Charges</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontWeight>Bold</FontWeight>
@@ -3577,11 +3613,14 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox32</rd:DefaultName>
-        <Top>15.38963cm</Top>
-        <Left>0.16754cm</Left>
+        <Top>15.31907cm</Top>
+        <Left>0.13967cm</Left>
         <Height>0.6cm</Height>
         <Width>4.48297cm</Width>
         <ZIndex>15</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((Parameters!NoRecurringCharges.Value=true),true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -4047,6 +4086,22 @@
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NoVoice">
+      <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NoSMS">
+      <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NoRecurringCharges">
+      <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NoDeals">
+      <DataType>Boolean</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
