@@ -26,13 +26,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 vrConnectionId = parameters.vrConnectionId;
-                var connectionTypeUpperIds= parameters.connectionTypeIds;
-
-                if (connectionTypeUpperIds != undefined && connectionTypeUpperIds.length > 0) {
-                    connectionTypeIds = [];
-                    for (var i = 0; i < connectionTypeUpperIds.length; i++)
-                        connectionTypeIds.push(connectionTypeUpperIds[i].toLowerCase());
-                }
+                connectionTypeIds = parameters.connectionTypeIds;
             }
 
             isEditMode = (vrConnectionId != undefined);
@@ -50,7 +44,7 @@
                 var setLoader = function (value) { $scope.scopeModel.isConnectionDirectiveDirectiveloading = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, connectionEditorAPI, undefined, setLoader, connectionEditorAPIReadyDeferred);
             };
-            
+
             $scope.saveVRConnection = function () {
                 if (isEditMode) {
                     return updateVRConnection();
@@ -89,70 +83,83 @@
         }
 
         function loadAllControls() {
+
+            function setTitle() {
+                if (isEditMode) {
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrConnectionEntity.Name, "Connection");
+                }
+                else {
+                    $scope.title = UtilsService.buildTitleForAddEditor('Connection');
+                }
+            }
+
+            function loadStaticData() {
+                if (vrConnectionEntity != undefined) {
+                    $scope.scopeModel.name = vrConnectionEntity.Name;
+                }
+            }
+
+            function loadVRConnectionType() {
+
+                var loadConnectionConfigTypePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                connectionTypeSelectorReadyDeferred.promise.then(function () {
+                    var payloadDirective = {
+                        selectedIds: vrConnectionEntity && vrConnectionEntity.Settings && vrConnectionEntity.Settings.ConfigId || undefined,
+                        filter: { connectionTypeIds: connectionTypeIds }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(connectionTypeAPI, payloadDirective, loadConnectionConfigTypePromiseDeferred);
+                });
+
+                return loadConnectionConfigTypePromiseDeferred.promise;
+            }
+
+            function loadVRConnectionEditor() {
+                if (isEditMode) {
+                    var loadConnectionEditorPromiseDeferred = UtilsService.createPromiseDeferred();
+                    connectionEditorAPIReadyDeferred.promise.then(function () {
+                        var payloadDirective = {
+                            data: vrConnectionEntity && vrConnectionEntity.Settings || undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(connectionEditorAPI, payloadDirective, loadConnectionEditorPromiseDeferred);
+                    });
+                    return loadConnectionEditorPromiseDeferred.promise;
+                }
+            }
+
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRConnectionType, loadVRConnectionEditor])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
                 .finally(function () {
                     connectionEditorAPIReadyDeferred = undefined;
-                  $scope.scopeModel.isLoading = false;
-              });
+                    $scope.scopeModel.isLoading = false;
+                });
         }
 
-        function loadVRConnectionType() {
-            
-            var loadConnectionConfigTypePromiseDeferred = UtilsService.createPromiseDeferred();
-            connectionTypeSelectorReadyDeferred.promise.then(function () {
-                var payloadDirective = {
-                    selectedIds: vrConnectionEntity && vrConnectionEntity.Settings && vrConnectionEntity.Settings.ConfigId || undefined,
-                    filter: { connectionTypeIds: connectionTypeIds }
-                };
-                VRUIUtilsService.callDirectiveLoad(connectionTypeAPI, payloadDirective, loadConnectionConfigTypePromiseDeferred);
+        function insertVRConnection() {
+            $scope.scopeModel.isLoading = true;
+
+            var connectionObject = buildVRConnectionObjFromScope();
+
+            VRCommon_VRConnectionAPIService.AddVRConnection(connectionObject).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Connection", response, "Name")) {
+                    if ($scope.onVRConnectionAdded != undefined)
+                        $scope.onVRConnectionAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
             });
-            return loadConnectionConfigTypePromiseDeferred.promise;
-        }
-
-        function loadVRConnectionEditor() {
-            if (isEditMode) {
-            var loadConnectionEditorPromiseDeferred = UtilsService.createPromiseDeferred();
-                connectionEditorAPIReadyDeferred.promise.then(function () {
-                var payloadDirective = {
-                    data: vrConnectionEntity && vrConnectionEntity.Settings || undefined
-                    };
-                VRUIUtilsService.callDirectiveLoad(connectionEditorAPI, payloadDirective, loadConnectionEditorPromiseDeferred);
-            });
-            return loadConnectionEditorPromiseDeferred.promise;
-        }
-    }
-        function setTitle() {
-            if (isEditMode) {
-                $scope.title = UtilsService.buildTitleForUpdateEditor(vrConnectionEntity.Name, "Connection");
-            }
-            else {
-                $scope.title = UtilsService.buildTitleForAddEditor('Connection');
-            }
-        }
-
-        function loadStaticData() {
-            if (vrConnectionEntity != undefined) {
-                $scope.scopeModel.name = vrConnectionEntity.Name;
-            }
-        }
-
-        function buildVRConnectionObjFromScope() {
-            return {
-                VRConnectionId: vrConnectionId,
-                Name: $scope.scopeModel.name,
-                Settings: connectionEditorAPI.getData()
-            };
         }
 
         function updateVRConnection() {
             $scope.scopeModel.isLoading = true;
 
             var connectionObject = buildVRConnectionObjFromScope();
-            VRCommon_VRConnectionAPIService.UpdateVRConnection(connectionObject)
-            .then(function (response) {
+            VRCommon_VRConnectionAPIService.UpdateVRConnection(connectionObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Connection", response, "Name")) {
                     if ($scope.onVRConnectionUpdated != undefined)
                         $scope.onVRConnectionUpdated(response.UpdatedObject);
@@ -165,23 +172,12 @@
             });
         }
 
-        function insertVRConnection() {
-            $scope.scopeModel.isLoading = true;
-
-            var connectionObject = buildVRConnectionObjFromScope();
-
-            VRCommon_VRConnectionAPIService.AddVRConnection(connectionObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Connection", response, "Name")) {
-                    if ($scope.onVRConnectionAdded != undefined)
-                        $scope.onVRConnectionAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            });
+        function buildVRConnectionObjFromScope() {
+            return {
+                VRConnectionId: vrConnectionId,
+                Name: $scope.scopeModel.name,
+                Settings: connectionEditorAPI.getData()
+            };
         }
     }
 

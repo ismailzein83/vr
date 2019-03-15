@@ -1,15 +1,16 @@
-﻿
-(function (appControllers) {
+﻿(function (appControllers) {
 
     "use strict";
 
     VRConnectionService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService', 'UtilsService'];
 
     function VRConnectionService(VRModalService, VRCommon_ObjectTrackingService, UtilsService) {
+
         var drillDownDefinitions = [];
+
         function addVRConnection(onVRConnectionAdded, connectionTypeIds) {
             var settings = {};
-            
+
             var parameters = {
                 connectionTypeIds: connectionTypeIds
             };
@@ -31,9 +32,20 @@
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRConnection/VRConnectionEditor.html', parameters, settings);
         }
-        function getEntityUniqueName() {
-            return "VR_Common_Connection";
+
+        function viewVRConnection(vrConnectionId) {
+
+            var parameters = {
+                vrConnectionId: vrConnectionId
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/Common/Views/VRConnection/VRConnectionEditor.html', parameters, settings);
         }
+
         function registerObjectTrackingDrillDownToConnection() {
             var drillDownDefinition = {};
 
@@ -56,6 +68,7 @@
             addDrillDownDefinition(drillDownDefinition);
 
         }
+
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }
@@ -64,29 +77,16 @@
             return drillDownDefinitions;
         }
 
-        function viewVRConnection(vrConnectionId, viewMode) {
-
-            var parameters = {
-                vrConnectionId: vrConnectionId,
-                isReadOnly: true
-            };
-
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                if (viewMode != undefined && viewMode == true) {
-                    UtilsService.setContextReadOnly(modalScope);
-                    modalScope.viewMode = true;
-                }
-            };
-            VRModalService.showModal('/Client/Modules/Common/Views/VRConnection/VRConnectionEditor.html', parameters, settings);
+        function getEntityUniqueName() {
+            return "VR_Common_Connection";
         }
 
         return {
             addVRConnection: addVRConnection,
             editVRConnection: editVRConnection,
+            viewVRConnection: viewVRConnection,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerObjectTrackingDrillDownToConnection: registerObjectTrackingDrillDownToConnection,
-            viewVRConnection: viewVRConnection
+            registerObjectTrackingDrillDownToConnection: registerObjectTrackingDrillDownToConnection
         };
     }
 

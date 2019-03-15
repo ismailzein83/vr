@@ -81,7 +81,7 @@ app.directive('vrCommonConnectionSelector', ['VRCommon_VRConnectionAPIService', 
                 };
 
                 ctrl.onViewIconClicked = function (connection) {
-                    VRCommon_VRConnectionService.viewVRConnection(connection.VRConnectionId, true);
+                    VRCommon_VRConnectionService.viewVRConnection(connection.VRConnectionId);
                 };
 
                 ctrl.addNewConnection = function () {

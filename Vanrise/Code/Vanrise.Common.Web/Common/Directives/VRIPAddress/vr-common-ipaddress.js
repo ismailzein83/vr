@@ -18,12 +18,8 @@ app.directive('vrCommonIpaddress', ['UtilsService', 'VRUIUtilsService', 'VRCommo
                 onprefixblur: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
                 ctrl.datasource = [];
-
-                //ctrl.selectedvalues;
-                //ctrl.initalColNum = $attrs.gridlayout != undefined ? 2 : ctrl.normalColNum;
 
                 var ctor = new IPAddressCtor(ctrl, $attrs);
                 ctor.initializeController();
@@ -34,7 +30,6 @@ app.directive('vrCommonIpaddress', ['UtilsService', 'VRUIUtilsService', 'VRCommo
                 return getTemplate($attrs);
             }
         };
-
 
         function IPAddressCtor(ctrl, attrs) {
             this.initializeController = initializeController;
@@ -137,8 +132,7 @@ app.directive('vrCommonIpaddress', ['UtilsService', 'VRUIUtilsService', 'VRCommo
                 typeLabel = "IP Type";
                 ipLabel = "IP Address";
                 subnetLabel = "Subnet Prefix Length";
-            }
-            else {
+            } else {
                 hidelabel = "hidelabel";
                 ipPlaceHolder = "IP Address";
                 subnetPlaceHolder = "Prefix Size";
@@ -158,7 +152,7 @@ app.directive('vrCommonIpaddress', ['UtilsService', 'VRUIUtilsService', 'VRCommo
             if (attrs.onipaddressblur != undefined)
                 onIPAddressBlur = 'onblurtextbox = "ctrl.onipaddressblur(ctrl.ipAddress)"';
 
-            if (attrs.onaddressblur != undefined)
+            if (attrs.onprefixblur != undefined)
                 onPrefixBlur = 'onblurtextbox = "ctrl.onprefixblur(ctrl.subnetPrefixLength)"';
 
             return '<vr-columns colnum="{{ctrl.ipTypeColNum}}" ' + rightMediumSpacing + '> ' +

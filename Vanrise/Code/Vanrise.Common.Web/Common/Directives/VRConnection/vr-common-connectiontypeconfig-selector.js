@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ConnectionTypeSettingsDirective.$inject = ['VRCommon_VRConnectionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    ConnectionTypeSettingsDirective.$inject = ['VRCommon_VRConnectionAPIService', 'VRUIUtilsService'];
 
-    function ConnectionTypeSettingsDirective(VRCommon_VRConnectionAPIService, UtilsService, VRUIUtilsService) {
+    function ConnectionTypeSettingsDirective(VRCommon_VRConnectionAPIService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -52,16 +52,11 @@
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
-
-                    ctrl.isUnique = true;
-
-                    if (ctrl.onReady && typeof ctrl.onReady == 'function') {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                    defineAPI();
                 };
             }
 
-            function getDirectiveAPI() {
+            function defineAPI() {
                 var directiveAPI = {};
 
                 directiveAPI.load = function (payload) {
@@ -73,13 +68,19 @@
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
-                        connectionTypeIds = (filter != undefined && filter.connectionTypeIds != undefined && filter.connectionTypeIds.length > 0) ? filter.connectionTypeIds : undefined;
+
+                        if (filter != undefined && filter.connectionTypeIds != undefined && filter.connectionTypeIds.length > 0) {
+                            connectionTypeIds = [];
+                            for (var i = 0; i < filter.connectionTypeIds.length; i++) {
+                                connectionTypeIds.push(filter.connectionTypeIds[i].toLowerCase());
+                            }
+                        }
                     }
 
                     return VRCommon_VRConnectionAPIService.GetVRConnectionConfigTypes().then(function (response) {
                         selectorAPI.clearDataSource();
                         angular.forEach(response, function (item) {
-                            if (connectionTypeIds == undefined || connectionTypeIds.indexOf(item.ExtensionConfigurationId) > -1)
+                            if (connectionTypeIds == undefined || connectionTypeIds.indexOf(item.ExtensionConfigurationId.toLowerCase()) > -1)
                                 ctrl.datasource.push(item);
                         });
 
@@ -95,7 +96,8 @@
                     return VRUIUtilsService.getIdSelectedIds('ExtensionConfigurationId', attrs, ctrl);
                 };
 
-                return directiveAPI;
+                if (ctrl.onReady && typeof ctrl.onReady == 'function')
+                    ctrl.onReady(directiveAPI);
             }
         }
 
@@ -133,7 +135,4 @@
     }
 
     app.directive('vrCommonConnectiontypeconfigSelector', ConnectionTypeSettingsDirective);
-
 })(app);
-
-
