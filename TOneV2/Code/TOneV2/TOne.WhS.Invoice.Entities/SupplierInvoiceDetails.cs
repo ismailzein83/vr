@@ -23,6 +23,8 @@ namespace TOne.WhS.Invoice.Entities
         public int? TimeZoneId { get; set; }
         public decimal AmountAfterCommission { get; set; }
         public decimal SMSAmountAfterCommission { get; set; }
+        public decimal TotalVoiceAmountBeforeTax { get; set; }
+        public decimal TotalSMSAmountBeforeTax { get; set; }
         public decimal OriginalAmountAfterCommission { get; set; }
         public decimal SMSOriginalAmountAfterCommission { get; set; }
         public Decimal TotalAmountAfterCommission { get; set; }
@@ -36,7 +38,7 @@ namespace TOne.WhS.Invoice.Entities
         public Decimal TotalReccurringChargesAfterTax { get; set; }
         public Decimal TotalReccurringCharges { get; set; }
         public Decimal TotalInvoiceAmount { get; set; }
-        public decimal TotalAmountBeforeTax { get; set; }
+        public decimal TotalInvoiceAmountBeforeTax { get; set; }
         public bool NoVoice { get; set; }
         public bool NoSMS { get; set; }
         public bool NoRecurringCharges { get; set; }

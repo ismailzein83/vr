@@ -122,9 +122,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
 				supplierInvoiceDetails.Commission = resolvedPayload.Commission;
 				supplierInvoiceDetails.CommissionType = resolvedPayload.CommissionType;
 				supplierInvoiceDetails.Offset = resolvedPayload.Offset;
-				supplierInvoiceDetails.TotalAmountBeforeTax = supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalDealAmount;
+                supplierInvoiceDetails.TotalVoiceAmountBeforeTax = supplierInvoiceDetails.TotalAmountAfterCommission;
+                supplierInvoiceDetails.TotalSMSAmountBeforeTax = supplierInvoiceDetails.TotalSMSAmountAfterCommission;
+                supplierInvoiceDetails.TotalInvoiceAmountBeforeTax = supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalDealAmount;
 
-				if (taxItemDetails != null)
+                if (taxItemDetails != null)
 				{
 					foreach (var tax in taxItemDetails)
 					{
@@ -235,7 +237,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 
                     supplierInvoiceDetails.TotalInvoiceAmount = supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalReccurringChargesAfterTax + supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalDealAmount;
-					supplierInvoiceDetails.TotalAmountBeforeTax += supplierInvoiceDetails.TotalReccurringCharges;
+					supplierInvoiceDetails.TotalInvoiceAmountBeforeTax += supplierInvoiceDetails.TotalReccurringCharges;
 
                     if (!financialAccountInvoiceType.IgnoreFromBalance)
                     {
@@ -246,7 +248,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					{
 						foreach (var tax in taxItemDetails)
 						{
-							tax.TaxAmount = ((supplierInvoiceDetails.TotalAmountBeforeTax * Convert.ToDecimal(tax.Value)) / 100);
+							tax.TaxAmount = ((supplierInvoiceDetails.TotalInvoiceAmountBeforeTax * Convert.ToDecimal(tax.Value)) / 100);
 						}
 					}
 					List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(voiceItemSetNames, smsItemSetNames, taxItemDetails, invoiceByCostCurrency, evaluatedSupplierRecurringCharges, canGenerateVoiceInvoice, dealItemSetNames);

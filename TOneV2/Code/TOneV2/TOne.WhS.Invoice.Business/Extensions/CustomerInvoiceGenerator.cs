@@ -131,8 +131,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
 				customerInvoiceDetails.TotalAmountAfterCommission = customerInvoiceDetails.AmountAfterCommission;
 				customerInvoiceDetails.TotalOriginalAmountAfterCommission = customerInvoiceDetails.OriginalAmountAfterCommission;
 
-
-                customerInvoiceDetails.TotalAmountBeforeTax = customerInvoiceDetails.TotalSMSAmountAfterCommission + customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalDealAmount;
+                customerInvoiceDetails.TotalVoiceAmountBeforeTax = customerInvoiceDetails.TotalAmountAfterCommission;
+                customerInvoiceDetails.TotalSMSAmountBeforeTax = customerInvoiceDetails.TotalSMSAmountAfterCommission;
+                customerInvoiceDetails.TotalInvoiceAmountBeforeTax = customerInvoiceDetails.TotalSMSAmountAfterCommission + customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalDealAmount;
 
 				if (taxItemDetails != null)
 				{
@@ -234,7 +235,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					}
 					customerInvoiceDetails.TotalReccurringChargesAfterTax = totalReccurringChargesAfterTaxInAccountCurrency;
 					customerInvoiceDetails.TotalReccurringCharges = totalReccurringChargesInAccountCurrency;
-					customerInvoiceDetails.TotalAmountBeforeTax += customerInvoiceDetails.TotalReccurringCharges;
+					customerInvoiceDetails.TotalInvoiceAmountBeforeTax += customerInvoiceDetails.TotalReccurringCharges;
 
                     customerInvoiceDetails.NoDeals = customerInvoiceDetails.TotalDealAmount == 0;
                     customerInvoiceDetails.NoSMS = customerInvoiceDetails.TotalSMSAmountAfterCommission == 0;
@@ -252,7 +253,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					{
 						foreach (var tax in taxItemDetails)
 						{
-							tax.TaxAmount = ((customerInvoiceDetails.TotalAmountBeforeTax * Convert.ToDecimal(tax.Value)) / 100);
+							tax.TaxAmount = ((customerInvoiceDetails.TotalInvoiceAmountBeforeTax * Convert.ToDecimal(tax.Value)) / 100);
 						}
 					}
 					List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(voiceItemSetNames, smsItemSetNames, taxItemDetails, invoiceBySaleCurrency, evaluatedCustomerRecurringCharges, dealItemSetNames, canGenerateVoiceInvoice);
@@ -414,7 +415,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 						customerInvoiceDetails.OriginalSaleCurrencyId = smsInvoiceBillingRecord.OriginalSaleCurrencyId;
 						customerInvoiceDetails.CountryId = smsInvoiceBillingRecord.MobileCountryId;
 						customerInvoiceDetails.SupplierId = smsInvoiceBillingRecord.SupplierId;
-						customerInvoiceDetails.SMSAmountAfterCommission += smsInvoiceBillingRecord.AmountAfterCommission;
+                        customerInvoiceDetails.TotalSMSAmount = smsInvoiceBillingRecord.SaleAmount;
+                        customerInvoiceDetails.SMSAmountAfterCommission += smsInvoiceBillingRecord.AmountAfterCommission;
 						customerInvoiceDetails.SMSOriginalAmountAfterCommission += smsInvoiceBillingRecord.OriginalAmountAfterCommission;
 					}
 					if (smsItemSetNames.Count > 0)
