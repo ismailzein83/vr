@@ -21,7 +21,9 @@
         var companySettingsSelectorAPI;
         var companySettingSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-
+        // Supplier Bank Details
+        var supplierBankDetailsEditorAPI;
+        var supplierBankDetailsReadyPromiseDeferred;
 
         // Pricing Settings
         var bpBusinessRuleSetDirectiveAPI;
@@ -167,6 +169,10 @@
                                 };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierTimeZoneSelectorAPI, payload, setLoader);
                         }
+                        if (supplierBankDetailsEditorAPI != undefined) {
+                            var setBankDetailsLoader = function (value) { $scope.scopeModel.isLoadingBankDetailsEditor = value; };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierBankDetailsEditorAPI, undefined, setBankDetailsLoader);
+                        }
 
                         if (WhS_BE_ToneModuleService.isSMSModuleEnabled()) {
                             $scope.scopeModel.showSMSServiceType = true;
@@ -279,6 +285,12 @@
                 zoneServiceConfigSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfigSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, { selectminweight: (!isEditMode) ? true : false }, setLoader, zoneServiceConfigSelectorReadyDeferred);
+            };
+
+            $scope.scopeModel.onSupplierBankDetailsSettingsEditorReady = function (api) {
+                supplierBankDetailsEditorAPI = api;
+                var setLoader = function (value) { $scope.scopeModel.isLoadingBankDetailsEditor = value; };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierBankDetailsEditorAPI, undefined, setLoader, supplierBankDetailsReadyPromiseDeferred);
             };
             $scope.scopeModel.onSupplierRoutingStatusSelectorReady = function (api) {
                 supplierRoutingStatusSelectorAPI = api;
@@ -439,6 +451,7 @@
                     zoneServiceConfigSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     supplierRoutingStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     supplierSmsServiceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+                    supplierBankDetailsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                 }
             }
 
@@ -721,7 +734,7 @@
         }
 
         function loadSupplierSettingsTab() {
-            return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector, loadBPBusinessRuleSetSelector, loadSupplierSMSServiceType]);
+            return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector, loadBPBusinessRuleSetSelector, loadSupplierSMSServiceType, loadSupplierBankDetails]);
         }
         function loadSupplierTimeZoneSelector() {
             var supplierTimeZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -777,6 +790,19 @@
             });
 
             return zoneServiceConfigSelectorLoadDeferred.promise;
+        }
+        function loadSupplierBankDetails() {
+            var supplierBankDetailsLoadDeferred = UtilsService.createPromiseDeferred();
+            supplierBankDetailsReadyPromiseDeferred.promise.then(function () {
+                supplierBankDetailsReadyPromiseDeferred = undefined;
+                var supplierBankDetailsPayload = {
+                    data: {
+                        BankDetails: carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.SupplierBankDetails : undefined 
+                    }
+                };
+                VRUIUtilsService.callDirectiveLoad(supplierBankDetailsEditorAPI, supplierBankDetailsPayload, supplierBankDetailsLoadDeferred);
+            });
+            return supplierBankDetailsLoadDeferred.promise;
         }
         function loadSupplierRoutingStatusSelector() {
             var supplierRoutingStatusSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -889,6 +915,7 @@
         }
 
         function buildCarrierAccountObjFromScope() {
+            var supplierBankSettings = supplierBankDetailsEditorAPI != undefined ? supplierBankDetailsEditorAPI.getData() : undefined;
             var obj = {
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
                 NameSuffix: $scope.scopeModel.name,
@@ -914,6 +941,7 @@
                         AttachmentCode: $scope.scopeModel.automaticPriceListAttachmentCode,
                     },
                     SMSServiceTypes: $scope.scopeModel.showSMSServiceType && supplierSmsServiceTypeSelectorAPI != undefined ? getSelectedSMSServiceTypes(supplierSmsServiceTypeSelectorAPI.getSelectedIds()) : undefined,
+                    SupplierBankDetails: supplierBankSettings != undefined ? supplierBankSettings.BankDetails: undefined
                 },
 
                 CustomerSettings: {
