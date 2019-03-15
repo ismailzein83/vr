@@ -18,7 +18,8 @@ namespace TOne.WhS.Invoice.Entities
         public int NumberOfCalls { get; set; }
         public int CurrencyId { get; set; }
 		public string CurrencyIdDescription { get; set; }
-		public decimal Amount { get; set; }
+        public decimal OriginalAmountAfterTax { get; set; }
+        public decimal Amount { get; set; }
 		public string AmountDescription { get; set; }
 		public DateTime ToDate { get; set; }
 		public string ToDateDescription { get; set; }

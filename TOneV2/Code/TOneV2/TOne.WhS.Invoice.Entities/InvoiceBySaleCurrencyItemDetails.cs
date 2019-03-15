@@ -17,6 +17,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal SMSAmountAfterCommissionWithTaxes { get; set; }
         public decimal TotalSMSAmount { get; set; }
         public decimal TotalTrafficAmount { get; set; }
+        public decimal TotalDealAmount { get; set; }
         public decimal TotalRecurringChargeAmount { get; set; }
         public decimal TotalFullAmount { get; set; }
         public int NumberOfCalls { get; set; }

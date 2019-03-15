@@ -77,10 +77,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					{
 						return VoiceItemSetNamesMapper(analyticRecord, currencyId, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
 					});
-					invoiceBySaleCurrency = loadVoiceCurrencyItemSet(dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
-					dealItemSetNames = GetDealItemSetNames(carrierAccountIds, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.OffsetValue, dimensionName, financialAccountId, context.IssueDate, currencyId);
-				}
-			}
+                    dealItemSetNames = GetDealItemSetNames(carrierAccountIds, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.OffsetValue, dimensionName, financialAccountId, context.IssueDate, currencyId,taxItemDetails);
+                    invoiceBySaleCurrency = loadVoiceCurrencyItemSet(dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
+                    AddDealToCustomerCurrency(invoiceBySaleCurrency, dealItemSetNames);
+                }
+            }
 
 			bool isSMSEnabled = _tOneModuleManager.IsSMSModuleEnabled();
 			List<CustomerSMSInvoiceItemDetails> smsItemSetNames = null;
@@ -283,7 +284,48 @@ namespace TOne.WhS.Invoice.Business.Extensions
 		#endregion
 
 		#region Private Methods
-		private void AddRecurringChargeToCustomerCurrency(List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails, List<RecurringChargeItem> recurringChargeItems)
+
+        private void AddDealToCustomerCurrency(List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails,List<CustomerInvoiceDealItemDetails> dealItemSetNames)
+        {
+            if (dealItemSetNames != null && dealItemSetNames.Count > 0)
+            {
+                if (customerInvoiceBySaleCurrencyItemDetails == null)
+                    customerInvoiceBySaleCurrencyItemDetails = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
+
+                foreach (var item in dealItemSetNames)
+                {
+                    var month = item.ToDate.ToString("MMMM - yyyy");
+                    var customerInvoiceBySaleCurrencyItemDetail = customerInvoiceBySaleCurrencyItemDetails.FindRecord(x => x.CurrencyId == item.CurrencyId && x.Month == month);
+                    if (customerInvoiceBySaleCurrencyItemDetail != null)
+                    {
+                        customerInvoiceBySaleCurrencyItemDetail.Amount += item.OriginalAmount;
+                        customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommission += item.OriginalAmountAfterTax;
+                        customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommissionWithTaxes += item.OriginalAmountAfterTax;
+                        customerInvoiceBySaleCurrencyItemDetail.TotalDealAmount += item.OriginalAmountAfterTax;
+                        customerInvoiceBySaleCurrencyItemDetail.TotalFullAmount += item.OriginalAmountAfterTax;
+                    }
+                    else
+                    {
+                        customerInvoiceBySaleCurrencyItemDetails.Add(new CustomerInvoiceBySaleCurrencyItemDetails
+                        {
+                            FromDate = item.FromDate,
+                            ToDate = item.ToDate,
+                            AmountAfterCommission = item.OriginalAmount,
+                            AmountAfterCommissionWithTaxes = item.OriginalAmountAfterTax,
+                            NumberOfCalls = 0,
+                            TotalFullAmount = item.OriginalAmountAfterTax,
+                            Duration = 0,
+                            CurrencyId = item.CurrencyId,
+                            Amount = item.OriginalAmount,
+                            TotalDealAmount = item.OriginalAmountAfterTax,
+                            TotalTrafficAmount = 0,
+                            Month = month,
+                        });
+                    }
+                }
+            }
+        }
+        private void AddRecurringChargeToCustomerCurrency(List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails, List<RecurringChargeItem> recurringChargeItems)
 		{
 			if (recurringChargeItems != null && recurringChargeItems.Count > 0)
 			{
@@ -690,7 +732,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 				}
 			}
 		}
-		private List<CustomerInvoiceDealItemDetails> GetDealItemSetNames(List<int> carrierAccountIds, DateTime fromDate, DateTime toDate, TimeSpan? offsetValue, string dimensionName, int financialAccountId, DateTime issueDate, int currencyId)
+		private List<CustomerInvoiceDealItemDetails> GetDealItemSetNames(List<int> carrierAccountIds, DateTime fromDate, DateTime toDate, TimeSpan? offsetValue, string dimensionName, int financialAccountId, DateTime issueDate, int currencyId, IEnumerable<VRTaxItemDetail> taxItemDetails)
 		{
 			VolCommitmentDealManager volCommitmentDealManager = new VolCommitmentDealManager();
 			DateTime? minBED = null;
@@ -728,6 +770,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
 										if (expectedAmount > dealItemSet.OriginalAmount && effectiveDealSettings.CurrencyId == dealItemSet.CurrencyId)
 										{
 											var originalAmount = expectedAmount - dealItemSet.OriginalAmount;
+                                            decimal originalAmountAfterTax = originalAmount;
+                                            if(taxItemDetails != null)
+                                            {
+                                                foreach(var taxItemDetail in taxItemDetails)
+                                                {
+                                                    originalAmountAfterTax += ((originalAmount * Convert.ToDecimal(taxItemDetail.Value)) / 100);
+                                                }
+                                            }
 											dealItemSetNames.Add(new CustomerInvoiceDealItemDetails()
 											{
 												OriginalAmount = originalAmount,
@@ -741,12 +791,21 @@ namespace TOne.WhS.Invoice.Business.Extensions
 												Amount = _currencyExchangeRateManager.ConvertValueToCurrency(originalAmount, dealItemSet.CurrencyId, currencyId, issueDate),
 												ToDate = effectiveDealSettings.RealEED.Value,
 												FromDate = fromDate >= effectiveDealSettings.RealBED? fromDate : effectiveDealSettings.RealBED,
-											});
+                                                OriginalAmountAfterTax = originalAmountAfterTax
+                                            });
 										}
 									}
 									else
 									{
-										dealItemSetNames.Add(new CustomerInvoiceDealItemDetails()
+                                        decimal originalAmountAfterTax = expectedAmount;
+                                        if (taxItemDetails != null)
+                                        {
+                                            foreach (var taxItemDetail in taxItemDetails)
+                                            {
+                                                originalAmountAfterTax += ((expectedAmount * Convert.ToDecimal(taxItemDetail.Value)) / 100);
+                                            }
+                                        }
+                                        dealItemSetNames.Add(new CustomerInvoiceDealItemDetails()
 										{
 											OriginalAmount = expectedAmount,
 											Duration = tier.UpToVolume.Value,
@@ -758,7 +817,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 											Amount = _currencyExchangeRateManager.ConvertValueToCurrency(expectedAmount, effectiveDealSettings.CurrencyId, currencyId, issueDate),
 											ToDate = effectiveDealSettings.RealEED.Value ,
 											FromDate = fromDate >= effectiveDealSettings.RealBED? fromDate : effectiveDealSettings.RealBED,
-										});
+                                            OriginalAmountAfterTax = originalAmountAfterTax
+                                        });
 									}
 								}
 							}
