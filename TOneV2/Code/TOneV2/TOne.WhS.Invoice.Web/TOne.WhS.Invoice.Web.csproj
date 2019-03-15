@@ -313,10 +313,10 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultCustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultSupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultSupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\SupplierCompareInvoiceReport.rdlc">
+    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SupplierCompareInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\CustomerCompareInvoiceReport.rdlc">
+    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\CustomerCompareInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\Old\CustomerJazzInvoiceItemsReport1.rdlc">
