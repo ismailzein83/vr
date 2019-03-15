@@ -77,7 +77,7 @@ app.directive('vrWhsBeSmsservicestypeSelector', ['UtilsService', 'VRUIUtilsServi
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 +  '<vr-select '
-                + ' datatextfield = "Name"'
+                + ' datatextfield = "Symbol"'
                 + ' datavaluefield = "SMSServiceTypeInfoId"'
                 + ' label = "' + label
                 + ' "datasource="ctrl.datasource"'

@@ -68,7 +68,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return new SMSServiceTypeInfo()
             {
                 SMSServiceTypeInfoId = smsServiceType.SMSServiceTypeId,
-                Name = smsServiceType.Name,
+                Symbol = smsServiceType.Symbol,
             };
         }
         #endregion

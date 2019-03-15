@@ -10,6 +10,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int SMSServiceTypeInfoId { get; set; }
 
-        public string Name { get; set; }
+        public string Symbol { get; set; }
     }
 }
