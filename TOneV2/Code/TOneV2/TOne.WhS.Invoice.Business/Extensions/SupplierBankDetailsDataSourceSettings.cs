@@ -21,47 +21,41 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var invoice = context.InvoiceActionContext.GetInvoice();
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(invoice.PartnerId));
-            IEnumerable<Guid> bankDetailsIds = null;
+            IEnumerable<BankDetail> bankDetails = null;
             if (financialAccount.CarrierProfileId.HasValue)
             {
                 CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                bankDetailsIds = carrierProfileManager.GetBankDetails(financialAccount.CarrierProfileId.Value);
+                bankDetails = carrierProfileManager.GetSupplierBankDetails(financialAccount.CarrierProfileId.Value);
             }
             else
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                bankDetailsIds = carrierAccountManager.GetBankDetails(financialAccount.CarrierAccountId.Value);
+                bankDetails = carrierAccountManager.GetSupplierBankDetails(financialAccount.CarrierAccountId.Value);
             }
-            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
-            var bankDetails = configManager.GetBankDetails();
             List<BankDetailsDetail> bankDetailsList = new List<BankDetailsDetail>();
-            if (bankDetailsIds != null)
+            if (bankDetails != null)
             {
                 CurrencyManager currencyManager = new CurrencyManager();
-                foreach (var item in bankDetailsIds)
+                foreach (var bankDetail in bankDetails)
                 {
-                    var bankDetail = bankDetails.FirstOrDefault(x => x.BankDetailId == item);
-                    if (bankDetail != null)
+                    bankDetailsList.Add(new BankDetailsDetail
                     {
-                        bankDetailsList.Add(new BankDetailsDetail
-                        {
-                            AccountCode = bankDetail.AccountCode,
-                            SortCode = bankDetail.SortCode,
-                            SwiftCode = bankDetail.SwiftCode,
-                            AccountHolder = bankDetail.AccountHolder,
-                            AccountNumber = bankDetail.AccountNumber,
-                            Address = bankDetail.Address,
-                            Bank = bankDetail.Bank,
-                            IBAN = bankDetail.IBAN,
-                            CurrencyId = bankDetail.CurrencyId,
-                            CurrencyName = currencyManager.GetCurrencySymbol(bankDetail.CurrencyId),
-                            ChannelName = bankDetail.ChannelName,
-                            CorrespondentBank = bankDetail.CorrespondentBank,
-                            CorrespondentBankSwiftCode = bankDetail.CorrespondentBankSwiftCode,
-                            ACH = bankDetail.ACH,
-                            ABARoutingNumber = bankDetail.ABARoutingNumber
-                        });
-                    }
+                        AccountCode = bankDetail.AccountCode,
+                        SortCode = bankDetail.SortCode,
+                        SwiftCode = bankDetail.SwiftCode,
+                        AccountHolder = bankDetail.AccountHolder,
+                        AccountNumber = bankDetail.AccountNumber,
+                        Address = bankDetail.Address,
+                        Bank = bankDetail.Bank,
+                        IBAN = bankDetail.IBAN,
+                        CurrencyId = bankDetail.CurrencyId,
+                        CurrencyName = currencyManager.GetCurrencySymbol(bankDetail.CurrencyId),
+                        ChannelName = bankDetail.ChannelName,
+                        CorrespondentBank = bankDetail.CorrespondentBank,
+                        CorrespondentBankSwiftCode = bankDetail.CorrespondentBankSwiftCode,
+                        ACH = bankDetail.ACH,
+                        ABARoutingNumber = bankDetail.ABARoutingNumber
+                    });
                 }
             }
             return bankDetailsList;

@@ -43,6 +43,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region CarrierAccount
 
+        public List<BankDetail> GetSupplierBankDetails(int carrierAccountId)
+        {
+            var supplier = GetCarrierAccount(carrierAccountId);
+            supplier.ThrowIfNull("supplier", carrierAccountId);
+            supplier.SupplierSettings.ThrowIfNull("supplier.SupplierSettings", carrierAccountId);
+            if (supplier.SupplierSettings.SupplierBankDetails != null)
+                return supplier.SupplierSettings.SupplierBankDetails;
+            return _carrierProfileManager.GetSupplierBankDetails(supplier.CarrierProfileId);
+        }
+
         public Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",

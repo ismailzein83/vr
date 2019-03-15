@@ -408,6 +408,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("carrierProfile.Settings");
             return carrierProfile.Settings.DefaultSupplierTimeZoneId;
         }
+
+        public List<BankDetail> GetSupplierBankDetails(int carrierProfileId)
+        {
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
+            carrierProfile.ThrowIfNull("carrierProfile", carrierProfileId);
+            carrierProfile.Settings.ThrowIfNull("carrierProfile.Settings", carrierProfileId);
+            return carrierProfile.Settings.SupplierBankDetails;
+        }
+
         #endregion
 
         #region Settings
