@@ -43,7 +43,7 @@ namespace TOne.WhS.Deal.Business
                 if (volCommitmentDealSettings.BillingType != DealBillingType.EstimatedVolume)
                     continue;
 
-                if (volCommitmentDealSettings.RealEED.Value <= toDate && volCommitmentDealSettings.RealEED.Value > fromDate)
+                if (volCommitmentDealSettings.RealEED.Value <= toDate && volCommitmentDealSettings.RealEED.Value >= fromDate)
                 {
                     effectiveVolCommitmentDeals.Add(deal.DealId, volCommitmentDealSettings);
                     if (!minBED.HasValue || volCommitmentDealSettings.RealBED < minBED)
