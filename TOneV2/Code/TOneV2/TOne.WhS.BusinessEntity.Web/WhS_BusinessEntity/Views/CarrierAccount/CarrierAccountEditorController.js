@@ -798,9 +798,7 @@
             supplierBankDetailsReadyPromiseDeferred.promise.then(function () {
                 supplierBankDetailsReadyPromiseDeferred = undefined;
                 var supplierBankDetailsPayload = {
-                    data: {
-                        BankDetails: carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.SupplierBankDetails : undefined 
-                    }
+                    BankDetails: carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.SupplierBankDetails : undefined 
                 };
                 VRUIUtilsService.callDirectiveLoad(supplierBankDetailsEditorAPI, supplierBankDetailsPayload, supplierBankDetailsLoadDeferred);
             });
@@ -917,7 +915,6 @@
         }
 
         function buildCarrierAccountObjFromScope() {
-            var supplierBankSettings = supplierBankDetailsEditorAPI != undefined ? supplierBankDetailsEditorAPI.getData() : undefined;
             var obj = {
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
                 NameSuffix: $scope.scopeModel.name,
@@ -943,7 +940,7 @@
                         AttachmentCode: $scope.scopeModel.automaticPriceListAttachmentCode,
                     },
                     SMSServiceTypes: $scope.scopeModel.showSMSServiceType && supplierSmsServiceTypeSelectorAPI != undefined ? getSelectedSMSServiceTypes(supplierSmsServiceTypeSelectorAPI.getSelectedIds()) : undefined,
-                    SupplierBankDetails: supplierBankSettings != undefined ? supplierBankSettings.BankDetails: undefined
+                    SupplierBankDetails: supplierBankDetailsEditorAPI != undefined ? supplierBankDetailsEditorAPI.getData() : undefined
                 },
 
                 CustomerSettings: {

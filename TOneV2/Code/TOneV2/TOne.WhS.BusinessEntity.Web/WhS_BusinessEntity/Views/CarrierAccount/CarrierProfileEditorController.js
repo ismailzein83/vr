@@ -318,9 +318,7 @@
                 var supplierBankDetailsLoadDeferred = UtilsService.createPromiseDeferred();
                 supplierBankDetailsReadyPromiseDeferred.promise.then(function () {
                     var supplierBankDetailsPayload = {
-                        data: {
-                            BankDetails: carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.SupplierBankDetails : undefined
-                        }
+                        BankDetails: carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.SupplierBankDetails : undefined
                     };
                     VRUIUtilsService.callDirectiveLoad(supplierBankDetailsEditorAPI, supplierBankDetailsPayload, supplierBankDetailsLoadDeferred);
                 });
@@ -644,7 +642,6 @@
 
         function buildCarrierProfileObjFromScope()
         {
-            var supplierBankSettings = supplierBankDetailsEditorAPI != undefined ? supplierBankDetailsEditorAPI.getData() : undefined;
             var obj = {
                 CarrierProfileId: ( carrierProfileId != null ) ? carrierProfileId : 0,
                 Name: $scope.scopeModal.name,
@@ -668,7 +665,7 @@
                     DefaultSupplierTimeZoneId: defaultSupplierTimeZoneDirectiveAPI.getSelectedIds(),
                     TicketContacts: ticketContactsGridAPI.getData(),
                     InvoiceSubject: $scope.scopeModal.invoiceSubject,
-                    SupplierBankDetails: supplierBankSettings != undefined ? supplierBankSettings.BankDetails : undefined
+                    SupplierBankDetails: supplierBankDetailsEditorAPI != undefined ? supplierBankDetailsEditorAPI.getData() : undefined
                 }
             };
 
