@@ -8,6 +8,7 @@ namespace BPMExtended.Main.Entities
 {
     public class CustomerCategoryCatalog
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public string SegmentId { get; set; }
         public string IsNormal { get; set; }

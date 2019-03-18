@@ -42,7 +42,7 @@ namespace BPMExtended.Main.Business
             Guid id = new Guid(segmentId.ToUpper());
             var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoryCatalog");
 
-
+            var colId = esq.AddColumn("Id");
             esq.AddColumn("StName");
             esq.AddColumn("StCustomerSegments");
             esq.AddColumn("StCustomerCategory");
@@ -56,6 +56,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             for(int i=0;i < entities.Count; i++)
                 {
+                    var customerCategoryCatalogId = entities[i].GetColumnValue(colId.Name);
                     var name = entities[i].GetColumnValue("StName");
                     var customerSegmentId = entities[i].GetColumnValue("StCustomerSegmentsId");
                     var customerCategories = entities[i].GetColumnValue("StCustomerCategory");
@@ -64,6 +65,7 @@ namespace BPMExtended.Main.Business
 
                     var customerCategoryCatalogItem = new CustomerCategoryCatalog()
                     {
+                        Id = customerCategoryCatalogId.ToString(),
                         Name = name.ToString(),
                         SegmentId = customerSegmentId.ToString(),
                         CustomerCategory = customerCategories.ToString(),
