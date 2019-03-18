@@ -559,6 +559,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Images\flat-mediation-iconheader.ico" />
+    <Content Include="Images\flat-mediation-login.png" />
+    <Content Include="Images\flat-mediation-logoonheader.png" />
     <Content Include="Images\iconheader.ico" />
     <Content Include="Images\login.png" />
     <Content Include="Images\logoonheader.png" />
