@@ -11,7 +11,8 @@ app.directive('bpTasktypeSelector', ['BusinessProcess_BPTaskTypeAPIService', 'Ut
                 onselectionchanged: '=',
                 isrequired: "@",
                 selectedvalues: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                showaddbutton: '@'
 
             },
             controller: function ($scope, $element, $attrs) {
@@ -26,12 +27,23 @@ app.directive('bpTasktypeSelector', ['BusinessProcess_BPTaskTypeAPIService', 'Ut
 
 
                 $scope.addNewBPTaskType = function () {
-                    var onTaskTypeAdded = function (taskTypeObj) {
-                        ctrl.datasource.push(taskTypeObj);
-                        if ($attrs.ismultipleselection != undefined)
-                            ctrl.selectedvalues.push(taskTypeObj);
-                        else
-                            ctrl.selectedvalues = taskTypeObj;
+                    var onTaskTypeAdded = function (genericBusinessEntityObj) {
+                        if (genericBusinessEntityObj != undefined && genericBusinessEntityObj.FieldValues != undefined) {
+                            var bpTaskTypeId = genericBusinessEntityObj.FieldValues["BPTaskTypeId"];
+                            if (bpTaskTypeId != undefined && bpTaskTypeId.Value!=undefined) {
+                                BusinessProcess_BPTaskTypeAPIService.GetBPTaskType(bpTaskTypeId.Value).then(function (bpTaskType) {
+                                    if (bpTaskType != undefined) {
+                                        var bpTaskTypeInfo = { BPTaskTypeId: bpTaskType.BPTaskTypeId, Name: bpTaskType.Name };
+                                        ctrl.datasource.push(bpTaskTypeInfo);
+                                        if ($attrs.ismultipleselection != undefined)
+                                            ctrl.selectedvalues.push(bpTaskTypeInfo);
+                                        else
+                                            ctrl.selectedvalues = bpTaskTypeInfo;
+                                    }
+                                });
+                            }
+                        }
+                    
                     };
                     BusinessProcess_BPTaskTypeService.addBPTaskType(onTaskTypeAdded);
                 };
