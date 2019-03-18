@@ -79,6 +79,7 @@
     <Compile Include="BPTaskAssigne\InitiatorBPTaskAssignee.cs" />
     <Compile Include="BPTaskAssigne\FixedUsersBPTaskAssignee.cs" />
     <Compile Include="BPTaskTypes\BPGenericTaskTypeSettings.cs" />
+    <Compile Include="BPTaskTypes\BPGenericTaskTypeSettingsFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRWorkflowActivities\CodeGenerationHelper.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowAssignTaskActivity.cs" />

@@ -42,6 +42,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     var promises = [];
 
                     var editModeAction = {

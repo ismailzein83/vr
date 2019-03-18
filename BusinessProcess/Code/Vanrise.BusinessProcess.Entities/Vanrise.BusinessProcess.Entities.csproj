@@ -128,7 +128,6 @@
     <Compile Include="IBusinessRuleConditionValidateContext.cs" />
     <Compile Include="IExclude.cs" />
     <Compile Include="Tasks\BaseBPTaskTypeSettingsConfig.cs" />
-    <Compile Include="Tasks\BPGenericTaskTypeSettingsFilter.cs" />
     <Compile Include="Tasks\BPTaskBeforeIdInput.cs" />
     <Compile Include="Tasks\BPTaskDetail.cs" />
     <Compile Include="Tasks\BPTask.cs" />

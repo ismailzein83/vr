@@ -140,12 +140,12 @@
             }
 
             function loadBPTaskTypeSelector() {
-                //var filter = {
-                //    Filters: [{
-                //        $type: "Vanrise.BusinessProcess.Entities.BPGenericTaskTypeSettingsFilter, Vanrise.BusinessProcess.Entities"
+                var filter = {
+                    Filters: [{
+                        $type: "Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.BPGenericTaskTypeSettingsFilter, Vanrise.BusinessProcess.MainExtensions"
 
-                //    }]
-                //};
+                    }]
+                };
 
                 var filter;
                 BusinessProcess_BPTaskTypeAPIService.GetBPTaskTypesInfo(filter).then(function (response) {
@@ -168,19 +168,19 @@
                 });
             }
 
-            //function loadTaskAssigneesSelector() {
-            //    var taskAssigneesLoadDeferred = UtilsService.createPromiseDeferred();
-            //    taskAssigneesPromiseReadyDeffered.promise.then(function () {
-            //        var taskAssigneesPayload = {
-            //            assigneesSettings: taskAssignees,
-            //            getWorkflowArguments: context.getWorkflowArguments,
-            //            getParentVariables: context.getParentVariables,
-            //            isVRWorkflowActivityDisabled: $scope.scopeModel.isVRWorkflowActivityDisabled
-            //        };
-            //        VRUIUtilsService.callDirectiveLoad(taskAssigneesAPI, taskAssigneesPayload, taskAssigneesLoadDeferred);
-            //    });
-            //    return taskAssigneesLoadDeferred.promise;
-            //}
+            function loadTaskAssigneesSelector() {
+                var taskAssigneesLoadDeferred = UtilsService.createPromiseDeferred();
+                taskAssigneesPromiseReadyDeffered.promise.then(function () {
+                    var taskAssigneesPayload = {
+                        assigneesSettings: taskAssignees,
+                        getWorkflowArguments: context.getWorkflowArguments,
+                        getParentVariables: context.getParentVariables,
+                        isVRWorkflowActivityDisabled: $scope.scopeModel.isVRWorkflowActivityDisabled
+                    };
+                    VRUIUtilsService.callDirectiveLoad(taskAssigneesAPI, taskAssigneesPayload, taskAssigneesLoadDeferred);
+                });
+                return taskAssigneesLoadDeferred.promise;
+            }
 
             function loadGrids(promises) {
                 loadColumns(recordTypeId, promises);
@@ -190,7 +190,7 @@
             promises.push(setTitle);
             promises.push(loadStaticData);
             promises.push(loadBPTaskTypeSelector);
-           // promises.push(loadTaskAssigneesSelector);
+            promises.push(loadTaskAssigneesSelector);
             promises.push(loadGrids);
             return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
             }).catch(function (error) {
@@ -303,8 +303,7 @@
                 taskTypeId: $scope.scopeModel.selectedTaskType.BPTaskTypeId,
                 taskTitle: $scope.scopeModel.taskTitle,
                 displayName: $scope.scopeModel.displayName,
-                //taskAssignees: taskAssigneesAPI.getData(),
-                taskAssignees: {},
+                taskAssignees: taskAssigneesAPI.getData(),
                 inputItems: $scope.scopeModel.inputItems.length > 0 ? getInputColumns() : null,
                 outputItems: $scope.scopeModel.outputItems.length > 0 ? getOutputColumns() : null,
             };

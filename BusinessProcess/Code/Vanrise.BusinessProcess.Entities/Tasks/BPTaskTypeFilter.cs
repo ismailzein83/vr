@@ -8,6 +8,11 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class BPTaskTypeFilter
     {
-        //public IEnumerable<IBPTaskTypeSettingsFilter> Filters { get; set; }
+        public IEnumerable<IBPTaskTypeSettingsFilter> Filters { get; set; }
+    }
+
+    public interface IBPTaskTypeSettingsFilter
+    {
+        bool IsMatch(BPTaskType bPTaskType);
     }
 }
