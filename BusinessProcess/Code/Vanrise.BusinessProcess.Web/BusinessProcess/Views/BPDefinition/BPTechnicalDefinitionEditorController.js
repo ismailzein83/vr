@@ -381,6 +381,7 @@
             obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModel.MaxConcurrentWorkflows;
             obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModel.NotVisibleInManagementScreen;
             obj.Configuration.BPInstanceInsertHandler = bpInstanceInsertHandlerSettingsAPI.getData();
+            obj.Configuration.ManualExecEditor = "bp-vr-workflow-manualexeceditor";
             obj.Configuration.Security = {
                 View: viewPermissionAPI.getData(),
                 StartNewInstance: startNewInstancePermissionAPI.getData(),

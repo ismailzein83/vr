@@ -2,9 +2,9 @@
 
     "use strict";
 
-    NewInstanceEditorController.$inject = ['$scope', 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPDefinitionAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    NewInstanceEditorController.$inject = ['$scope', 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPDefinitionAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_DynamicBusinessProcessAPIService'];
 
-    function NewInstanceEditorController($scope, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPDefinitionAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function NewInstanceEditorController($scope, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPDefinitionAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, BusinessProcess_DynamicBusinessProcessAPIService) {
 
         var bpDefinitionId;
 
@@ -56,11 +56,19 @@
                         promises.push(currentCreateNewProcessPromise);
 
                         currentCreateNewProcessPromise.then(function (response) {
-                            if (VRNotificationService.notifyOnItemAdded("Business Instance", response)) {
+                            if ($scope.bpDefinitionObj.VRWorkflowId == undefined) {
+                                if (VRNotificationService.notifyOnItemAdded("Business Instance", response)) {
+                                    if ($scope.onProcessInputCreated != undefined)
+                                        $scope.onProcessInputCreated(response.ProcessInstanceId);
+                                    $scope.modalContext.closeModal();
+                                }
+                            }
+                            else {
                                 if ($scope.onProcessInputCreated != undefined)
-                                    $scope.onProcessInputCreated(response.ProcessInstanceId);
+                                    $scope.onProcessInputCreated(response.ProcessId);
                                 $scope.modalContext.closeModal();
                             }
+
                         }).catch(function (error) {
                             VRNotificationService.notifyException(error);
                         });
@@ -68,7 +76,10 @@
                 }
 
                 function getCreateNewProcessPromise(createProcessInput) {
-                    return BusinessProcess_BPInstanceAPIService.CreateNewProcess(createProcessInput);
+                    if ($scope.bpDefinitionObj.VRWorkflowId == undefined)
+                        return BusinessProcess_BPInstanceAPIService.CreateNewProcess(createProcessInput);
+                    else
+                        return BusinessProcess_DynamicBusinessProcessAPIService.StartProcess(UtilsService.replaceAll($scope.bpDefinitionObj.Title, ' ', ''), createProcessInput);
                 }
 
                 return UtilsService.waitMultiplePromises(promises);
@@ -105,13 +116,13 @@
         function getBPDefinition() {
 
             return BusinessProcess_BPDefinitionAPIService.GetBPDefintion($scope.BPDefinitionID)
-               .then(function (response) {
+                .then(function (response) {
                    $scope.bpDefinitionObj = response;
                }).catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                }).finally(function () {
 
-               });;
+               });
         }
 
         function loadAllControls() {
