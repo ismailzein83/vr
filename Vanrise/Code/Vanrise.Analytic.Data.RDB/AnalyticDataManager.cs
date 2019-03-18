@@ -432,13 +432,12 @@ namespace Vanrise.Analytic.Data.RDB
                         bool hasNullValue = false;
                         List<string> parameterNames = new List<string>();
                         List<BaseRDBExpression> filterValueExpressions = new List<BaseRDBExpression>();
-                        var expressionContext = where.CreateExpressionContext((exp) => filterValueExpressions.Add(exp));
                         foreach (var filterValue in dbFilter.FilterValues)
                         {
                             if (filterValue == null)
                                 hasNullValue = true;
                             else
-                                expressionContext.ObjectValue(filterValue);
+                                where.CreateExpressionContext((exp) => filterValueExpressions.Add(exp)).ObjectValue(filterValue);
                         }
 
                         var conditionContext = where;
