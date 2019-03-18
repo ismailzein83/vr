@@ -35,7 +35,7 @@ namespace Vanrise.Common
             string directoryPhysicalPath = VRWebContext.MapVirtualToPhysicalPath(directoryVirtualPath);
             directoryPhysicalPath.ThrowIfNull(directoryPhysicalPath);
             if (!Directory.Exists(directoryPhysicalPath))
-                throw new Exception($"directory '{directoryPhysicalPath}' not exits");
+                throw new Exception($"directory '{directoryPhysicalPath}' not exists");
             foreach (var filePath in Directory.GetFiles(directoryPhysicalPath, searchPattern, searchSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
             {
                 string fileRelativePath = filePath.Replace(directoryPhysicalPath, directoryVirtualPath).Replace(@"\", "/");

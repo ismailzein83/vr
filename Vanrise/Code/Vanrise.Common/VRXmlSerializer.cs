@@ -75,6 +75,11 @@ namespace Vanrise.Common
             return new DotNetXmlSerializer().Serialize(o, namespaces);
         }
 
+        public string SerializeSOAPRequest<T>(VRSoapRequest<T> soapRequest) where T : IVRSoapRequestBody
+        {
+            return this.Serialize(soapRequest, soapRequest.NameSpaces);
+        }
+
         private static void RemoveNamespace(XDocument xdoc)
         {
             if (xdoc.Root == null) return;
@@ -420,6 +425,51 @@ namespace Vanrise.Common
                         : names.Contains(d.Name.LocalName.RemoveUnderscoresAndDashes()));
         }
     }
+
+    public interface IVRSoapRequestBody
+    {
+        Dictionary<string, string> NameSpaces { get; }
+    }
+
+    [System.Xml.Serialization.XmlRoot("Envelope", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
+    public class VRSoapRequest<T> where T : IVRSoapRequestBody
+    {
+        [System.Xml.Serialization.XmlElement(Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
+        public T Body { get; set; }
+
+        [System.Xml.Serialization.XmlIgnore]
+        public Dictionary<string, string> NameSpaces
+        {
+            get
+            {
+                var namespaces = new Dictionary<string, string>() { { "soapenv", "http://schemas.xmlsoap.org/soap/envelope/" } };
+                if (this.Body != null)
+                {
+                    var bodyNS = this.Body.NameSpaces;
+                    if (bodyNS != null && bodyNS.Count > 0)
+                    {
+                        foreach (var namespaceKVP in bodyNS)
+                        {
+                            if (!namespaces.ContainsKey(namespaceKVP.Key))
+                            {
+                                namespaces.Add(namespaceKVP.Key, namespaceKVP.Value);
+                            }
+                        }
+                    }
+                }
+                return namespaces;
+            }
+        }
+
+        public VRSoapRequest(T body)
+        {
+            Body = body;
+        }
+
+        public VRSoapRequest()
+        {
+        }
+    }    
 
     internal class DotNetXmlSerializer
     {
