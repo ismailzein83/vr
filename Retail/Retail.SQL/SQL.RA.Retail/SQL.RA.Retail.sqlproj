@@ -61,5 +61,19 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="RA_Retail\" />
+    <Folder Include="RA_Retail\Tables\" />
+    <Folder Include="RA_OnNet\" />
+    <Folder Include="RA_OnNet\Tables\" />
+    <Folder Include="RA_OnNet\User Defined Types\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="RA_Retail\Tables\Subscriber.sql" />
+    <Build Include="RA_Retail\Tables\SubscriberPackage.sql" />
+    <Build Include="RA_OnNet\Tables\OperatorDeclaration.sql" />
+    <Build Include="RA_OnNet\User Defined Types\OperatorDeclarationType.sql" />
+    <Build Include="Security\RA_Retail.sql" />
+    <Build Include="Security\RA_OnNet.sql" />
   </ItemGroup>
 </Project>

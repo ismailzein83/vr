@@ -61,5 +61,38 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="RA_ICX_SMSAnalytics\" />
+    <Folder Include="RA_ICX_SMSAnalytics\Tables\" />
+    <Folder Include="RA_ICX_Analytics\" />
+    <Folder Include="RA_ICX_Analytics\Tables\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="COMMON\" />
+    <Folder Include="COMMON\Functions\" />
+    <Folder Include="RA_ICX_SMSAnalytics\User Defined Types\" />
+    <Folder Include="RA_ICX_Analytics\User Defined Types\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="RA_ICX_SMSAnalytics\Tables\BillingStatsDaily.sql" />
+    <Build Include="RA_ICX_SMSAnalytics\Tables\BillingStatsDailyOld.sql" />
+    <Build Include="RA_ICX_SMSAnalytics\Tables\TrafficStats15Min.sql" />
+    <Build Include="RA_ICX_SMSAnalytics\Tables\TrafficStats15MinOld.sql" />
+    <Build Include="RA_ICX_Analytics\Tables\BillingStatsDaily.sql" />
+    <Build Include="RA_ICX_Analytics\Tables\BillingStatsDailyOld.sql" />
+    <Build Include="RA_ICX_Analytics\Tables\TrafficStats15Min.sql" />
+    <Build Include="RA_ICX_Analytics\Tables\TrafficStats15MinOld.sql" />
+    <Build Include="dbo\Functions\ZeroToMax.sql" />
+    <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
+    <Build Include="COMMON\Functions\getExchangeRates.sql" />
+    <Build Include="RA_ICX_SMSAnalytics\User Defined Types\BillingStatsDailyType.sql" />
+    <Build Include="RA_ICX_SMSAnalytics\User Defined Types\TrafficStats15MinType.sql" />
+    <Build Include="RA_ICX_Analytics\User Defined Types\BillingStatsDailyType.sql" />
+    <Build Include="RA_ICX_Analytics\User Defined Types\TrafficStats15MinType.sql" />
+    <Build Include="Security\RA_ICX_SMSAnalytics.sql" />
+    <Build Include="Security\RA_ICX_Analytics.sql" />
+    <Build Include="Security\COMMON.sql" />
   </ItemGroup>
 </Project>

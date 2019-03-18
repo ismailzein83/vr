@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [RA_OnNet]
+    AUTHORIZATION [dbo];
+

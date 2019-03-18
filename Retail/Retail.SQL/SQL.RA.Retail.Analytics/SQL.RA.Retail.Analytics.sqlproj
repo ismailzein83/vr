@@ -61,5 +61,25 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="RA_Retail_Analytics\" />
+    <Folder Include="RA_Retail_Analytics\Tables\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="COMMON\" />
+    <Folder Include="COMMON\Functions\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="RA_Retail_Analytics\Tables\SMSTrafficStats15Min.sql" />
+    <Build Include="RA_Retail_Analytics\Tables\Taxation.sql" />
+    <Build Include="RA_Retail_Analytics\Tables\TrafficStats15Min.sql" />
+    <Build Include="RA_Retail_Analytics\Tables\Reconciliation.sql" />
+    <Build Include="dbo\Functions\ZeroToMax.sql" />
+    <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
+    <Build Include="COMMON\Functions\getExchangeRates.sql" />
+    <Build Include="Security\RA_Retail_Analytics.sql" />
+    <Build Include="Security\COMMON.sql" />
   </ItemGroup>
 </Project>

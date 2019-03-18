@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [RA_INTL_CDR]
+    AUTHORIZATION [dbo];
+

@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [RA_ICX_SMS]
+    AUTHORIZATION [dbo];
+

@@ -61,5 +61,14 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="RA_ICX\" />
+    <Folder Include="RA_ICX\Tables\" />
+    <Folder Include="RA_ICX\User Defined Types\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="RA_ICX\Tables\OperatorDeclaration.sql" />
+    <Build Include="RA_ICX\User Defined Types\OperatorDeclarationType.sql" />
+    <Build Include="Security\RA_ICX.sql" />
   </ItemGroup>
 </Project>
