@@ -4,10 +4,10 @@
     <ReportItems>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>2.52344in</Top>
-        <Left>1.74579in</Left>
+        <Top>2.43085in</Top>
+        <Left>2.13769in</Left>
         <Height>0.02083in</Height>
-        <Width>6.2605in</Width>
+        <Width>5.76875in</Width>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
         </Visibility>
@@ -22,7 +22,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.69077in</Width>
+              <Width>2.05706in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.7765in</Width>
@@ -37,16 +37,16 @@
               <Width>0.99304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83507in</Width>
+              <Width>0.88507in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.53341in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.43705in</Width>
+              <Width>0.90364in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.81914in</Width>
+              <Width>0.79163in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -719,10 +719,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
-        <Top>1.95399in</Top>
-        <Left>0.05502in</Left>
+        <Top>1.8614in</Top>
+        <Left>0.08791in</Left>
         <Height>0.5in</Height>
-        <Width>7.97419in</Width>
+        <Width>7.82956in</Width>
         <ZIndex>1</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
@@ -737,22 +737,22 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.66736in</Width>
+              <Width>1.67299in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.99271in</Width>
+              <Width>0.99304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83474in</Width>
+              <Width>0.88507in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53308in</Width>
+              <Width>0.53341in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.43672in</Width>
+              <Width>0.90364in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.81881in</Width>
+              <Width>0.79163in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -864,7 +864,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox23">
+                    <Textbox Name="Textbox75">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -880,11 +880,11 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Right</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox23</rd:DefaultName>
+                      <rd:DefaultName>Textbox75</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -987,10 +987,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
-        <Top>2.59983in</Top>
-        <Left>1.74579in</Left>
+        <Top>2.50724in</Top>
+        <Left>2.13769in</Left>
         <Height>0.25in</Height>
-        <Width>6.28342in</Width>
+        <Width>5.77978in</Width>
         <ZIndex>2</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
@@ -1005,31 +1005,31 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.69077in</Width>
+              <Width>2.06272in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.7765in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.10541in</Width>
+              <Width>0.12197in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.7838in</Width>
+              <Width>0.76724in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.99304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83507in</Width>
+              <Width>0.88507in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.53341in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.43705in</Width>
+              <Width>0.90364in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.81914in</Width>
+              <Width>0.79163in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1131,7 +1131,7 @@
                 <TablixCell />
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox123">
+                    <Textbox Name="Textbox79">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1147,11 +1147,11 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox123</rd:DefaultName>
+                      <rd:DefaultName>Textbox79</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>Gray</Color>
@@ -1501,7 +1501,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox124">
+                    <Textbox Name="Textbox80">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1516,11 +1516,11 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox124</rd:DefaultName>
+                      <rd:DefaultName>Textbox80</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1702,10 +1702,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectSMSInvoiceItemDetails</DataSetName>
-        <Top>3.54288in</Top>
-        <Left>0.05502in</Left>
+        <Top>3.48211in</Top>
+        <Left>0.08225in</Left>
         <Height>0.5in</Height>
-        <Width>7.97419in</Width>
+        <Width>7.83522in</Width>
         <ZIndex>3</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -1718,10 +1718,10 @@
       </Tablix>
       <Rectangle Name="Rectangle5">
         <KeepTogether>true</KeepTogether>
-        <Top>4.09843in</Top>
-        <Left>1.74579in</Left>
+        <Top>4.05156in</Top>
+        <Left>2.13769in</Left>
         <Height>0.02083in</Height>
-        <Width>6.28342in</Width>
+        <Width>5.77978in</Width>
         <ZIndex>4</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -1737,22 +1737,22 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.1053in</Width>
+              <Width>1.66571in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.53644in</Width>
+              <Width>0.99304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83933in</Width>
+              <Width>0.88507in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53767in</Width>
+              <Width>0.53341in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.44131in</Width>
+              <Width>0.90364in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.8234in</Width>
+              <Width>0.79163in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1794,7 +1794,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox135">
+                    <Textbox Name="Textbox53">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1809,12 +1809,10 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox135</rd:DefaultName>
+                      <rd:DefaultName>Textbox53</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1864,7 +1862,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox134">
+                    <Textbox Name="Textbox84">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1880,11 +1878,11 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Left</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox134</rd:DefaultName>
+                      <rd:DefaultName>Textbox84</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1987,10 +1985,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
-        <Top>4.17482in</Top>
-        <Left>1.74579in</Left>
+        <Top>4.12795in</Top>
+        <Left>2.14497in</Left>
         <Height>0.25in</Height>
-        <Width>6.28345in</Width>
+        <Width>5.7725in</Width>
         <ZIndex>5</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -2005,7 +2003,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>20.25445cm</Width>
+              <Width>19.88708cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2014,7 +2012,7 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox56">
+                    <Textbox Name="Textbox59">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2031,7 +2029,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox56</rd:DefaultName>
+                      <rd:DefaultName>Textbox59</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -2062,10 +2060,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
-        <Top>4.02381cm</Top>
-        <Left>0.13975cm</Left>
+        <Top>3.95157cm</Top>
+        <Left>0.22329cm</Left>
         <Height>0.6cm</Height>
-        <Width>20.25445cm</Width>
+        <Width>19.88708cm</Width>
         <ZIndex>6</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
@@ -2080,7 +2078,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>20.25445cm</Width>
+              <Width>19.92709cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2089,7 +2087,7 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox66">
+                    <Textbox Name="Textbox64">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2106,7 +2104,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox66</rd:DefaultName>
+                      <rd:DefaultName>Textbox64</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -2137,10 +2135,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectSMSInvoiceItemDetails</DataSetName>
-        <Top>8.2578cm</Top>
-        <Left>0.13975cm</Left>
+        <Top>8.06817cm</Top>
+        <Left>0.18329cm</Left>
         <Height>0.6cm</Height>
-        <Width>20.25445cm</Width>
+        <Width>19.92709cm</Width>
         <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -2155,8 +2153,8 @@
         <Source>Embedded</Source>
         <Value>ATM_Mobilis</Value>
         <Sizing>FitProportional</Sizing>
-        <Top>0.45113cm</Top>
-        <Left>0.44843cm</Left>
+        <Top>0.29238cm</Top>
+        <Left>0.22329cm</Left>
         <Height>2.27187cm</Height>
         <Width>6.52152cm</Width>
         <ZIndex>8</ZIndex>
@@ -2170,31 +2168,31 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.69077in</Width>
+              <Width>2.05706in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77364in</Width>
+              <Width>0.7765in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.10255in</Width>
+              <Width>0.12197in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.78094in</Width>
+              <Width>0.76724in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.99018in</Width>
+              <Width>0.99304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83221in</Width>
+              <Width>0.88507in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53055in</Width>
+              <Width>0.53341in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.43419in</Width>
+              <Width>0.90364in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83919in</Width>
+              <Width>0.7806in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2213,6 +2211,7 @@
                               <Value />
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -2340,7 +2339,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox136">
+                    <Textbox Name="Textbox54">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2348,51 +2347,6 @@
                           <TextRuns>
                             <TextRun>
                               <Value />
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox136</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>Gray</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <TopBorder>
-                          <Style>None</Style>
-                        </TopBorder>
-                        <LeftBorder>
-                          <Style>None</Style>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Style>None</Style>
-                        </RightBorder>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox53">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>TVA</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2430,7 +2384,52 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox54">
+                    <Textbox Name="Textbox87">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>TVA</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox87</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>Gray</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <LeftBorder>
+                          <Style>None</Style>
+                        </LeftBorder>
+                        <RightBorder>
+                          <Style>None</Style>
+                        </RightBorder>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox55">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2475,7 +2474,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox55">
+                    <Textbox Name="Textbox56">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2595,7 +2594,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox59">
+                    <Textbox Name="Textbox60">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2630,7 +2629,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox60">
+                    <Textbox Name="Textbox61">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2665,7 +2664,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox61">
+                    <Textbox Name="Textbox62">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2700,7 +2699,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox137">
+                    <Textbox Name="Textbox63">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2708,48 +2707,6 @@
                           <TextRuns>
                             <TextRun>
                               <Value />
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox137</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox62">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!VAT.Value</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                            <TextRun>
-                              <Value>%</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2777,7 +2734,49 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox63">
+                    <Textbox Name="Textbox88">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!VAT.Value</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                            <TextRun>
+                              <Value>%</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox88</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox65">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2812,14 +2811,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox64">
+                    <Textbox Name="Textbox66">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!Amount.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!Amount.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2873,10 +2872,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>FinancialRecurringChargeItem</DataSetName>
-        <Top>4.97493in</Top>
-        <Left>0.05502in</Left>
+        <Top>4.98834in</Top>
+        <Left>0.08791in</Left>
         <Height>0.5in</Height>
-        <Width>7.97422in</Width>
+        <Width>7.81853in</Width>
         <ZIndex>9</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -2889,10 +2888,10 @@
       </Tablix>
       <Rectangle Name="Rectangle6">
         <KeepTogether>true</KeepTogether>
-        <Top>5.53048in</Top>
-        <Left>1.74579in</Left>
+        <Top>5.54389in</Top>
+        <Left>2.13769in</Left>
         <Height>0.02083in</Height>
-        <Width>6.28342in</Width>
+        <Width>5.80729in</Width>
         <ZIndex>10</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -2908,22 +2907,22 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.12678in</Width>
+              <Width>1.67299in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.993in</Width>
+              <Width>0.99304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83503in</Width>
+              <Width>0.88507in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.50586in</Width>
+              <Width>0.53341in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.98361in</Width>
+              <Width>0.90364in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83915in</Width>
+              <Width>0.79163in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2932,7 +2931,7 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox65">
+                    <Textbox Name="Textbox67">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2965,7 +2964,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox67">
+                    <Textbox Name="Textbox68">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2998,7 +2997,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox68">
+                    <Textbox Name="Textbox69">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -3014,7 +3013,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -3033,7 +3032,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox69">
+                    <Textbox Name="Textbox70">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -3068,7 +3067,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox70">
+                    <Textbox Name="Textbox71">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -3084,7 +3083,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -3103,14 +3102,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox71">
+                    <Textbox Name="Textbox72">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!TotalReccurringCharges.Value, Parameters!NormalPrecisionValue.Value)+ " " + Parameters!Currency.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalReccurringCharges.Value, Parameters!NormalPrecisionValue.Value) + " " + Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3156,10 +3155,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>FinancialRecurringChargeItem</DataSetName>
-        <Top>5.60687in</Top>
-        <Left>1.74579in</Left>
+        <Top>5.62028in</Top>
+        <Left>2.13769in</Left>
         <Height>0.25in</Height>
-        <Width>6.28343in</Width>
+        <Width>5.77978in</Width>
         <ZIndex>11</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -3174,7 +3173,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>20.25445cm</Width>
+              <Width>19.88709cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -3183,7 +3182,7 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox72">
+                    <Textbox Name="Textbox73">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -3231,10 +3230,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectSMSInvoiceItemDetails</DataSetName>
-        <Top>11.85993cm</Top>
-        <Left>0.13975cm</Left>
+        <Top>11.89399cm</Top>
+        <Left>0.22329cm</Left>
         <Height>0.6cm</Height>
-        <Width>20.25445cm</Width>
+        <Width>19.88709cm</Width>
         <ZIndex>12</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -3246,10 +3245,10 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>14.87645cm</Height>
+    <Height>14.91051cm</Height>
     <Style />
   </Body>
-  <Width>20.6324cm</Width>
+  <Width>20.25962cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
@@ -3583,13 +3582,13 @@
       <DataType>Boolean</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="Amount">
+    <ReportParameter Name="SMSAmount">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="SMSAmount">
+    <ReportParameter Name="Amount">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

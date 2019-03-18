@@ -147,7 +147,12 @@ namespace Retail.Interconnect.Business
 
                 interconnectInvoiceDetails.TotalRecurringChargesAfterTaxes = totalReccurringChargesAfterTaxInAccountCurrency;
                 interconnectInvoiceDetails.TotalRecurringCharges = totalReccurringChargesInAccountCurrency;
-                interconnectInvoiceDetails.TotalInvoiceAmount = interconnectInvoiceDetails.TotalAmountWithTaxes + interconnectInvoiceDetails.TotalRecurringChargesAfterTaxes;
+
+				interconnectInvoiceDetails.NoVoice = interconnectInvoiceDetails.AmountWithTaxes == 0;
+				interconnectInvoiceDetails.NoSMS = interconnectInvoiceDetails.SMSAmountWithTaxes == 0;
+				interconnectInvoiceDetails.NoRecurringCharges = interconnectInvoiceDetails.TotalRecurringChargesAfterTaxes == 0;
+
+				interconnectInvoiceDetails.TotalInvoiceAmount = interconnectInvoiceDetails.TotalAmountWithTaxes + interconnectInvoiceDetails.TotalRecurringChargesAfterTaxes;
                 interconnectInvoiceDetails.TotalAmountBeforeTaxes += interconnectInvoiceDetails.TotalRecurringCharges;
 
                 if (taxItemDetails != null && taxItemDetails.Count() > 0)

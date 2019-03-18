@@ -24,6 +24,9 @@ namespace Retail.Interconnect.Entities
         public decimal TotalRecurringChargesAfterTaxes { get; set; }
         public decimal TotalRecurringCharges { get; set; }
         public decimal TotalInvoiceAmount { get; set; }
+		public bool NoSMS { get; set; }
+		public bool NoVoice { get; set; }
+		public bool NoRecurringCharges { get; set; }
         public InterconnectInvoiceDetails() { }
         public IEnumerable<InterconnectInvoiceDetails> GetInterconnectInvoiceDetailsRDLCSchema()
         {

@@ -136,15 +136,21 @@ namespace Retail.Interconnect.Business
                             }
                             if (companyProfile.Contacts != null)
                             {
-                                AccountCompanyContact accountCompanyContact;
+								AccountCompanyContact billingCompanyContact;
+								if (companyProfile.Contacts.TryGetValue("Billing", out billingCompanyContact))
+								{
+									AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, billingCompanyContact.Email, true);
+									if (billingCompanyContact.PhoneNumbers != null && billingCompanyContact.PhoneNumbers.Count > 0)
+									{
+										string accountNumbers = string.Join(",", billingCompanyContact.PhoneNumbers);
+										AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountNumber, accountNumbers, true);
+									}
+								}
+
+								AccountCompanyContact accountCompanyContact;
                                 if (companyProfile.Contacts.TryGetValue("Main", out accountCompanyContact))
                                 {
-                                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, accountCompanyContact.Email, true);
-                                    if (accountCompanyContact.PhoneNumbers != null && accountCompanyContact.PhoneNumbers.Count > 0)
-                                    {
-                                        string accountNumbers = string.Join(",", accountCompanyContact.PhoneNumbers);
-                                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountNumber, accountNumbers, true);
-                                    }
+
                                     if (accountCompanyContact.ContactName != null)
                                     {
                                         string contactName = "";
@@ -157,8 +163,8 @@ namespace Retail.Interconnect.Business
                                     }
                                 }
                             }
-                        }
-                    }
+						}
+					}
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, address, true);
                     if (companySetting != null)
                     {
@@ -180,7 +186,7 @@ namespace Retail.Interconnect.Business
 						AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyEmail, companySetting.BillingEmails, true);
 
 					}
-                    return rdlcReportParameters;
+				return rdlcReportParameters;
             }
             return null;
         }
