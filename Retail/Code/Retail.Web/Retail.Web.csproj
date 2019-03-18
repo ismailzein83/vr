@@ -807,9 +807,15 @@
     <Content Include="Images\figure-icons\revenus.png" />
     <Content Include="Images\figure-icons\top-operator.png" />
     <Content Include="Images\figure-icons\volume.png" />
+    <Content Include="Images\flat-cabill-iconheader.ico" />
+    <Content Include="Images\flat-cabill-login.png" />
+    <Content Include="Images\flat-cabill-logoonheader.png" />
     <Content Include="Images\flat-integra-sms-iconheader.ico" />
     <Content Include="Images\flat-integra-sms-login.png" />
     <Content Include="Images\flat-integra-sms-logoonheader.png" />
+    <Content Include="Images\flat-interconnect-iconheader.ico" />
+    <Content Include="Images\flat-interconnect-login.png" />
+    <Content Include="Images\flat-interconnect-logoonheader.png" />
     <Content Include="Images\flat-tone-ra-iconheader.ico" />
     <Content Include="Images\flat-tone-ra-login.png" />
     <Content Include="Images\flat-tone-ra-logoonheader.png" />
