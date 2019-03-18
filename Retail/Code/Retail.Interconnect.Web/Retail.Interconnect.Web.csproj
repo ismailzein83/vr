@@ -115,6 +115,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Retail_Interconnect\Reports\CompareInvoiceReport.aspx.cs">
       <DependentUpon>CompareInvoiceReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Retail_Interconnect\Reports\CompareInvoiceReport.aspx.designer.cs">
       <DependentUpon>CompareInvoiceReport.aspx</DependentUpon>
@@ -201,8 +202,16 @@
     <EmbeddedResource Include="Retail_Interconnect\Reports\Demo\SupplierInterconnectInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\CustomerInterconnectInvoiceItemsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\SupplierInterconnectInvoiceItemsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\SupplierInterconnectInvoiceReport.rdlc" />
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\CustomerInterconnectInvoiceReport.rdlc" />
+    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\CustomerInterconnectInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\SupplierCompareInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

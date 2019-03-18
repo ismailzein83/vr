@@ -33,7 +33,8 @@ namespace Retail.Interconnect.Business
         AccountNumber = 14,
         Attn = 15,
         AssignedNumber = 16,
-		BillingCompanyEmail=17
+		BillingCompanyEmail=17,
+		BillingCompanyPhone = 18
 	}
 
     public class InterconnectPartnerSettings : InvoicePartnerManager
@@ -161,7 +162,12 @@ namespace Retail.Interconnect.Business
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, address, true);
                     if (companySetting != null)
                     {
-                        VRFileManager fileManager = new VRFileManager();
+						CompanyContact companyContact;
+						if (companySetting.Contacts.TryGetValue("Billing", out companyContact))
+						{
+							AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyPhone, companyContact.Phone, true);
+						}
+						VRFileManager fileManager = new VRFileManager();
                         var logo = fileManager.GetFile(companySetting.CompanyLogo);
                         if (logo != null)
                         {

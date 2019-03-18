@@ -21,7 +21,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>1.43532in</Top>
+        <Top>1.26032in</Top>
         <Left>0.27126in</Left>
         <Height>0.26399in</Height>
         <Width>2.69751in</Width>
@@ -54,7 +54,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox72</rd:DefaultName>
-        <Top>7.14635in</Top>
+        <Top>6.65885in</Top>
         <Left>0.27855in</Left>
         <Height>0.17708in</Height>
         <Width>2.07823in</Width>
@@ -71,7 +71,7 @@
       </Textbox>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>7.39287in</Top>
+        <Top>6.90537in</Top>
         <Left>0.27126in</Left>
         <Height>0.01042in</Height>
         <Width>2.24907in</Width>
@@ -118,7 +118,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox13</rd:DefaultName>
-        <Top>3.64571cm</Top>
+        <Top>3.20121cm</Top>
         <Left>13.34326cm</Left>
         <Height>0.67056cm</Height>
         <Width>2.92333cm</Width>
@@ -155,7 +155,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>2.88691in</Top>
+        <Top>2.71191in</Top>
         <Left>0.27854in</Left>
         <Height>0.375in</Height>
         <Width>7.67222in</Width>
@@ -481,7 +481,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>8.84029cm</Top>
+        <Top>8.39579cm</Top>
         <Left>0.70751cm</Left>
         <Height>2.4cm</Height>
         <Width>19.48743cm</Width>
@@ -551,17 +551,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
                         <RightBorder>
                           <Style>None</Style>
                         </RightBorder>
@@ -611,17 +604,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
                         <RightBorder>
                           <Style>None</Style>
                         </RightBorder>
@@ -669,20 +655,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Width>1pt</Width>
-                        </RightBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -723,17 +699,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
                         <RightBorder>
                           <Style>None</Style>
                         </RightBorder>
@@ -768,17 +737,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
                         <RightBorder>
                           <Style>None</Style>
                         </RightBorder>
@@ -813,20 +775,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Width>1pt</Width>
-                        </RightBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -867,17 +819,7 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
-                        <BottomBorder>
-                          <Width>1pt</Width>
-                        </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
                         <RightBorder>
                           <Style>None</Style>
                         </RightBorder>
@@ -910,17 +852,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
                         <RightBorder>
                           <Style>None</Style>
                         </RightBorder>
@@ -953,20 +888,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Width>1pt</Width>
-                        </RightBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1000,7 +925,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>12.27988cm</Top>
+        <Top>11.39088cm</Top>
         <Left>0.70751cm</Left>
         <Height>2.13073cm</Height>
         <Width>19.48743cm</Width>
@@ -1101,7 +1026,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>16.987cm</Top>
+        <Top>16.098cm</Top>
         <Left>5.96772cm</Left>
         <Height>0.6cm</Height>
         <Width>14.22722cm</Width>
@@ -1172,7 +1097,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>21.82576cm</Top>
+        <Top>20.46051cm</Top>
         <Left>0.68901cm</Left>
         <Height>0.6cm</Height>
         <Width>4.53729cm</Width>
@@ -1192,7 +1117,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>1.34083cm</Height>
+              <Height>0.97041cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1252,9 +1177,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>22.42576cm</Top>
+        <Top>21.06051cm</Top>
         <Left>0.68901cm</Left>
-        <Height>1.34083cm</Height>
+        <Height>0.97041cm</Height>
         <Width>19.45771cm</Width>
         <ZIndex>10</ZIndex>
         <Style>
@@ -1579,7 +1504,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>7.57267in</Top>
+        <Top>7.08517in</Top>
         <Left>0.27126in</Left>
         <Height>0.8757in</Height>
         <Width>7.66052in</Width>
@@ -1910,7 +1835,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>4.42211cm</Top>
+        <Top>3.97761cm</Top>
         <Left>13.34326cm</Left>
         <Height>2.4cm</Height>
         <Width>6.85168cm</Width>
@@ -2049,7 +1974,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>unknown</Value>
+                              <Value>=Parameters!BillingCompanyPhone.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                               </Style>
@@ -2167,7 +2092,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>4.42211cm</Top>
+        <Top>3.97761cm</Top>
         <Left>0.70751cm</Left>
         <Height>1.8cm</Height>
         <Width>9.61209cm</Width>
@@ -2220,17 +2145,7 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
-                        <BottomBorder>
-                          <Width>1pt</Width>
-                        </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
                         <RightBorder>
                           <Style>None</Style>
                         </RightBorder>
@@ -2265,17 +2180,7 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <BottomBorder>
-                          <Width>1pt</Width>
-                        </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Width>1pt</Width>
-                        </RightBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2300,7 +2205,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>16.21061cm</Top>
+        <Top>15.32161cm</Top>
         <Left>5.96772cm</Left>
         <Height>0.6cm</Height>
         <Width>14.22722cm</Width>
@@ -2350,17 +2255,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
                         <RightBorder>
                           <Style>None</Style>
                         </RightBorder>
@@ -2393,20 +2291,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Width>1pt</Width>
-                        </RightBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2431,7 +2319,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>14.41061cm</Top>
+        <Top>13.52161cm</Top>
         <Left>5.96772cm</Left>
         <Height>0.6cm</Height>
         <Width>14.22722cm</Width>
@@ -2487,17 +2375,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
                         <RightBorder>
                           <Style>None</Style>
                         </RightBorder>
@@ -2530,20 +2411,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Width>1pt</Width>
-                        </RightBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2568,7 +2439,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>15.01061cm</Top>
+        <Top>14.12161cm</Top>
         <Left>5.96772cm</Left>
         <Height>0.6cm</Height>
         <Width>14.22722cm</Width>
@@ -2618,17 +2489,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
                         <RightBorder>
                           <Style>None</Style>
                         </RightBorder>
@@ -2661,20 +2525,10 @@
                         <Border>
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
-                          <Width>2pt</Width>
                         </Border>
-                        <TopBorder>
-                          <Width>1pt</Width>
-                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
-                        <LeftBorder>
-                          <Width>1pt</Width>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Width>1pt</Width>
-                        </RightBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2701,7 +2555,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>15.61061cm</Top>
+        <Top>14.72161cm</Top>
         <Left>5.96772cm</Left>
         <Height>0.6cm</Height>
         <Width>14.22722cm</Width>
@@ -2712,36 +2566,95 @@
           </Border>
         </Style>
       </Tablix>
+      <Rectangle Name="Rectangle1">
+        <ReportItems>
+          <Subreport Name="CustomerInterconnectInvoiceItemsReportName">
+            <ReportName>CustomerInterconnectInvoiceItemsReport</ReportName>
+            <Parameters>
+              <Parameter Name="Title">
+                <Value>=Parameters!Title.Value</Value>
+              </Parameter>
+              <Parameter Name="TotalDuration">
+                <Value>=Parameters!TotalDuration.Value</Value>
+              </Parameter>
+              <Parameter Name="TotalAmount">
+                <Value>=Parameters!TotalAmount.Value</Value>
+              </Parameter>
+              <Parameter Name="Image">
+                <Value>=Parameters!Image.Value</Value>
+              </Parameter>
+              <Parameter Name="InvoiceNb">
+                <Value>=Parameters!InvoiceNb.Value</Value>
+              </Parameter>
+              <Parameter Name="InvoiceDate">
+                <Value>=Parameters!InvoiceDate.Value</Value>
+              </Parameter>
+              <Parameter Name="Currency">
+                <Value>=Parameters!Currency.Value</Value>
+              </Parameter>
+              <Parameter Name="CarrierCompanyName">
+                <Value>=Parameters!CompanyName.Value</Value>
+              </Parameter>
+              <Parameter Name="NormalPrecisionValue">
+                <Value>=Parameters!NormalPrecisionValue.Value</Value>
+              </Parameter>
+              <Parameter Name="NumberOfCalls">
+                <Value>=Parameters!NumberOfCalls.Value</Value>
+              </Parameter>
+              <Parameter Name="NumberOfSMS">
+                <Value>=Parameters!NumberOfSMS.Value</Value>
+              </Parameter>
+              <Parameter Name="TotalSMSAmount">
+                <Value>=Parameters!TotalSMSAmount.Value</Value>
+              </Parameter>
+              <Parameter Name="TotalReccurringCharges">
+                <Value>=Parameters!TotalRecurringCharges.Value</Value>
+              </Parameter>
+            </Parameters>
+            <Height>0.25738in</Height>
+            <Width>7.93178in</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Subreport>
+        </ReportItems>
+        <PageBreak>
+          <BreakLocation>Start</BreakLocation>
+        </PageBreak>
+        <KeepTogether>true</KeepTogether>
+        <Top>21.96037cm</Top>
+        <Left>0cm</Left>
+        <Height>0.65375cm</Height>
+        <Width>20.21345cm</Width>
+        <ZIndex>18</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Rectangle>
     </ReportItems>
-    <Height>23.8293cm</Height>
+    <Height>22.61411cm</Height>
     <Style>
       <Border>
         <Style>None</Style>
       </Border>
     </Style>
   </Body>
-  <Width>20.47707cm</Width>
+  <Width>20.21345cm</Width>
   <Page>
-    <PageHeader>
-      <Height>1.13771cm</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <Style>
-        <Border>
-          <Style>None</Style>
-        </Border>
-      </Style>
-    </PageHeader>
     <PageFooter>
-      <Height>2.76048cm</Height>
+      <Height>2.07256cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
         <Line Name="Line2">
-          <Top>0.02778in</Top>
+          <Top>0.02777in</Top>
           <Left>0.13291in</Left>
           <Height>0in</Height>
-          <Width>7.92893in</Width>
+          <Width>7.81785in</Width>
           <Style>
             <Border>
               <Style>Solid</Style>
@@ -2767,8 +2680,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox24</rd:DefaultName>
-          <Top>0.53613in</Top>
-          <Left>6.6274in</Left>
+          <Top>0.44445in</Top>
+          <Left>6.60201in</Left>
           <Height>0.25in</Height>
           <Width>1.13542in</Width>
           <ZIndex>1</ZIndex>
@@ -2803,8 +2716,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
-          <Top>0.37396cm</Top>
-          <Left>5.53854cm</Left>
+          <Top>0.14109cm</Top>
+          <Left>5.47404cm</Left>
           <Height>0.40571cm</Height>
           <Width>8.79474cm</Width>
           <ZIndex>2</ZIndex>
@@ -2825,7 +2738,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>unknown</Value>
+                  <Value>=Parameters!BillingCompanyPhone.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -2839,8 +2752,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
-          <Top>1.18537cm</Top>
-          <Left>5.53854cm</Left>
+          <Top>0.9525cm</Top>
+          <Left>5.47404cm</Left>
           <Height>0.40571cm</Height>
           <Width>8.79474cm</Width>
           <ZIndex>3</ZIndex>
@@ -2875,8 +2788,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
-          <Top>0.77967cm</Top>
-          <Left>5.53854cm</Left>
+          <Top>0.5468cm</Top>
+          <Left>5.47404cm</Left>
           <Height>0.40571cm</Height>
           <Width>8.79474cm</Width>
           <ZIndex>4</ZIndex>
@@ -2911,8 +2824,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
-          <Top>1.59108cm</Top>
-          <Left>5.53854cm</Left>
+          <Top>1.35821cm</Top>
+          <Left>5.47404cm</Left>
           <Height>0.40571cm</Height>
           <Width>8.79474cm</Width>
           <ZIndex>5</ZIndex>
@@ -3297,6 +3210,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="TotalAmountBeforeTaxes">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="BillingCompanyPhone">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
