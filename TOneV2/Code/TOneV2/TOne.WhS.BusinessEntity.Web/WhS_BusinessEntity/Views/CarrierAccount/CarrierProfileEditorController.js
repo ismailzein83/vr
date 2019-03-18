@@ -47,7 +47,7 @@
         var bankDetailsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var supplierBankDetailsEditorAPI;
-        var supplierBankDetailsReadyPromiseDeferred = UtilsService.createPromiseDeferred()
+        var supplierBankDetailsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
