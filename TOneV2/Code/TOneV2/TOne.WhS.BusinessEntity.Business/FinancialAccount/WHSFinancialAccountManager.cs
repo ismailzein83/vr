@@ -343,6 +343,8 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<WHSFinancialAccountInfo> GetFinancialAccountsInfo(WHSFinancialAccountInfoFilter filter)
         {
             Dictionary<int, WHSFinancialAccount> allFinancialAccounts = GetCachedFinancialAccounts();
+            if (allFinancialAccounts == null || allFinancialAccounts.Count == 0)
+                return null;
 
             Func<WHSFinancialAccount, bool> filterFunc = null;
 
