@@ -1509,7 +1509,7 @@ when not matched by target then
 end
 
 --[Analytic].[AnalyticReport]---------------------------------------------------------------------------
-delete [Analytic].[AnalyticItemConfig] where ID in ('A5CC3E94-9A18-4389-9A94-E99B7536E2A6')
+delete [Analytic].[AnalyticReport] where ID in ('A5CC3E94-9A18-4389-9A94-E99B7536E2A6')
 
 begin
 set nocount on;
