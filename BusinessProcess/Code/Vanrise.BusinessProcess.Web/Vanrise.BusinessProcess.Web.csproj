@@ -230,6 +230,9 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-taskassignees.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivityAssignTaskEditor.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityAssignTaskController.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-manualexeceditor.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowManualExecEditorTemplate.html" />
+    <Content Include="BusinessProcess\Services\APIServices\DynamicBusinessProcessAPIService.js" />
     <Content Include="BusinessProcess\Services\BPTaskTypeService.js" />
     <Content Include="BusinessProcess\Views\BPTask\BPGenericTaskTypeSettingsEditor.html" />
     <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskTypeStaticEditorTemplate.html" />
