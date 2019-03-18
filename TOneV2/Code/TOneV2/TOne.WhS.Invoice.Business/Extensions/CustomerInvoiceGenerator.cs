@@ -77,7 +77,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					{
 						return VoiceItemSetNamesMapper(analyticRecord, currencyId, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
 					});
-                    dealItemSetNames = GetDealItemSetNames(carrierAccountIds, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.OffsetValue, dimensionName, financialAccountId, context.IssueDate, currencyId,taxItemDetails);
+                    dealItemSetNames = GetDealItemSetNames(carrierAccountIds,context.FromDate, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.OffsetValue, dimensionName, financialAccountId, context.IssueDate, currencyId,taxItemDetails);
                     invoiceBySaleCurrency = loadVoiceCurrencyItemSet(dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
                     AddDealToCustomerCurrency(invoiceBySaleCurrency, dealItemSetNames);
                 }
@@ -732,12 +732,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
 				}
 			}
 		}
-		private List<CustomerInvoiceDealItemDetails> GetDealItemSetNames(List<int> carrierAccountIds, DateTime fromDate, DateTime toDate, TimeSpan? offsetValue, string dimensionName, int financialAccountId, DateTime issueDate, int currencyId, IEnumerable<VRTaxItemDetail> taxItemDetails)
+		private List<CustomerInvoiceDealItemDetails> GetDealItemSetNames(List<int> carrierAccountIds,DateTime fromDateBeforeShift, DateTime fromDate, DateTime toDate, TimeSpan? offsetValue, string dimensionName, int financialAccountId, DateTime issueDate, int currencyId, IEnumerable<VRTaxItemDetail> taxItemDetails)
 		{
 			VolCommitmentDealManager volCommitmentDealManager = new VolCommitmentDealManager();
 			DateTime? minBED = null;
 			DateTime? maxEED = null;
-			var effectiveVolCommitmentDeals = volCommitmentDealManager.GetEffectiveVolCommitmentDeals(VolCommitmentDealType.Sell,carrierAccountIds, fromDate, toDate, out minBED, out maxEED);
+           
+			var effectiveVolCommitmentDeals = volCommitmentDealManager.GetEffectiveVolCommitmentDeals(VolCommitmentDealType.Sell,carrierAccountIds, fromDate, toDate.Date.AddDays(1), out minBED, out maxEED);
 			if (effectiveVolCommitmentDeals != null && effectiveVolCommitmentDeals.Count() > 0 && minBED.HasValue && maxEED.HasValue)
 			{
 				List<string> dealMeasures = new List<string> { "SaleNet_OrigCurr", "NumberOfCalls", "SaleDuration", "SaleNetNotNULL" };
@@ -789,8 +790,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 												SaleDealZoneGroupNb = dealItemSet.SaleDealZoneGroupNb,
 												CurrencyId = dealItemSet.CurrencyId,
 												Amount = _currencyExchangeRateManager.ConvertValueToCurrency(originalAmount, dealItemSet.CurrencyId, currencyId, issueDate),
-												ToDate = effectiveDealSettings.RealEED.Value,
-												FromDate = fromDate >= effectiveDealSettings.RealBED? fromDate : effectiveDealSettings.RealBED,
+												ToDate = effectiveDealSettings.EEDToStore.Value,
+												FromDate = fromDateBeforeShift >= effectiveDealSettings.BeginDate ? fromDateBeforeShift : effectiveDealSettings.BeginDate,
                                                 OriginalAmountAfterTax = originalAmountAfterTax
                                             });
 										}
@@ -815,8 +816,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 											SaleDealZoneGroupNb = dealGroup.ZoneGroupNumber,
 											CurrencyId = effectiveDealSettings.CurrencyId,
 											Amount = _currencyExchangeRateManager.ConvertValueToCurrency(expectedAmount, effectiveDealSettings.CurrencyId, currencyId, issueDate),
-											ToDate = effectiveDealSettings.RealEED.Value ,
-											FromDate = fromDate >= effectiveDealSettings.RealBED? fromDate : effectiveDealSettings.RealBED,
+											ToDate = effectiveDealSettings.EEDToStore.Value ,
+											FromDate = fromDateBeforeShift >= effectiveDealSettings.BeginDate ? fromDateBeforeShift : effectiveDealSettings.BeginDate,
                                             OriginalAmountAfterTax = originalAmountAfterTax
                                         });
 									}

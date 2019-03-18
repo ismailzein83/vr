@@ -76,7 +76,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					{
 						return VoiceItemSetNamesMapper(analyticRecord, currencyId, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
 					});
-                    dealItemSetNames = GetDealItemSetNames(carrierAccountIds, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.OffsetValue, dimensionName, financialAccountId, context.IssueDate, currencyId, taxItemDetails);
+                    dealItemSetNames = GetDealItemSetNames(carrierAccountIds, context.FromDate,resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.OffsetValue, dimensionName, financialAccountId, context.IssueDate, currencyId, taxItemDetails);
                     invoiceByCostCurrency = loadVoiceCurrencyItemSet(dimensionName, financialAccountId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, taxItemDetails, resolvedPayload.OffsetValue);
                     AddDealToSupplierCurrency(invoiceByCostCurrency, dealItemSetNames);
                 }
@@ -767,12 +767,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			}
 		}
 		#endregion
-		private List<SupplierInvoiceDealItemDetails> GetDealItemSetNames(List<int> carrierAccountsIds, DateTime fromDate, DateTime toDate, TimeSpan? offsetValue, string dimensionName, int financialAccountId, DateTime issueDate, int currencyId, IEnumerable<VRTaxItemDetail> taxItemDetails)
+		private List<SupplierInvoiceDealItemDetails> GetDealItemSetNames(List<int> carrierAccountsIds, DateTime fromDateBeforeShift, DateTime fromDate, DateTime toDate, TimeSpan? offsetValue, string dimensionName, int financialAccountId, DateTime issueDate, int currencyId, IEnumerable<VRTaxItemDetail> taxItemDetails)
 		{
 			VolCommitmentDealManager volCommitmentDealManager = new VolCommitmentDealManager();
 			DateTime? minBED = null;
 			DateTime? maxEED = null;
-			var effectiveVolCommitmentDeals = volCommitmentDealManager.GetEffectiveVolCommitmentDeals(VolCommitmentDealType.Buy, carrierAccountsIds, fromDate, toDate, out minBED, out maxEED);
+			var effectiveVolCommitmentDeals = volCommitmentDealManager.GetEffectiveVolCommitmentDeals(VolCommitmentDealType.Buy, carrierAccountsIds, fromDate, toDate.Date.AddDays(1), out minBED, out maxEED);
 
 			if (effectiveVolCommitmentDeals != null && effectiveVolCommitmentDeals.Count() > 0 && minBED.HasValue && maxEED.HasValue)
 			{
@@ -825,8 +825,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 												CostDealZoneGroupNb = dealItemSet.CostDealZoneGroupNb,
 												CurrencyId = dealItemSet.CurrencyId,
 												Amount = _currencyExchangeRateManager.ConvertValueToCurrency(originalAmount, dealItemSet.CurrencyId, currencyId, issueDate),
-												ToDate = effectiveDealSettings.RealEED.Value,
-												FromDate = fromDate >= effectiveDealSettings.RealBED ? fromDate : effectiveDealSettings.RealBED,
+												ToDate = effectiveDealSettings.EEDToStore.Value,
+												FromDate = fromDateBeforeShift >= effectiveDealSettings.BeginDate ? fromDateBeforeShift : effectiveDealSettings.BeginDate,
                                                 OriginalAmountAfterTax = originalAmountAfterTax
                                             });
 										}
@@ -851,8 +851,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 											CostDealZoneGroupNb = dealGroup.ZoneGroupNumber,
 											CurrencyId = effectiveDealSettings.CurrencyId,
 											Amount = _currencyExchangeRateManager.ConvertValueToCurrency(expectedAmount, effectiveDealSettings.CurrencyId, currencyId, issueDate),
-											ToDate = effectiveDealSettings.RealEED.Value,
-											FromDate = fromDate >= effectiveDealSettings.RealBED ? fromDate : effectiveDealSettings.RealBED,
+											ToDate = effectiveDealSettings.EEDToStore.Value,
+											FromDate = fromDateBeforeShift >= effectiveDealSettings.BeginDate ? fromDateBeforeShift : effectiveDealSettings.BeginDate,
                                             OriginalAmountAfterTax = originalAmountAfterTax
                                         });
 									}
