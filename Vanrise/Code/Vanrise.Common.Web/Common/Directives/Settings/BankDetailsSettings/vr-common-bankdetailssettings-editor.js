@@ -25,26 +25,16 @@ app.directive('vrCommonBankdetailssettingsEditor', ['UtilsService', 'VRUIUtilsSe
             this.initializeController = initializeController;
 
             var gridAPI;
+            var gridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                ctrl.datasource = [];
-                ctrl.isValid = function () {
-                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
-                        return null;
-                    return "You Should add at least one action.";
+                $scope.onGridReady = function (api) {
+                    gridAPI = api;
+                    gridReadyPromiseDeferred.resolve();
                 };
-                ctrl.addBankDetail = function () {
-                    var onBankDetailAdded = function (bankDetail) {
-                        ctrl.datasource.push({ Entity: bankDetail });
-                    };
 
-                    VRCommon_BankDetailService.addBankDetail(onBankDetailAdded, ctrl.datasource);
-                };
-                ctrl.removeBankDetail = function (dataItem) {
-                    var index = ctrl.datasource.indexOf(dataItem);
-                    ctrl.datasource.splice(index, 1);
-                };
-                defineMenuActions();
+               
+
                 defineAPI();
             }
             function defineAPI() {
@@ -56,26 +46,25 @@ app.directive('vrCommonBankdetailssettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     if (payload != undefined && payload.data != undefined) {
                         bankDetailsSettingsPayload = payload.data;
                     }
-                    if (bankDetailsSettingsPayload != undefined && bankDetailsSettingsPayload.BankDetails != undefined) {
-                        for (var i = 0; i < bankDetailsSettingsPayload.BankDetails.length; i++) {
-                            var bankDetail = bankDetailsSettingsPayload.BankDetails[i];
-                            ctrl.datasource.push({ Entity: bankDetail });
-                        }
+
+                    function loadGrid() {
+                        var gridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        gridReadyPromiseDeferred.promise.then(function () {
+                            var gridPayload = {
+                                BankDetails: bankDetailsSettingsPayload != undefined ? bankDetailsSettingsPayload.BankDetails : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(gridAPI, gridPayload, gridLoadPromiseDeferred);
+
+                        });
+                        return gridLoadPromiseDeferred.promise;
                     }
+                    return UtilsService.waitMultiplePromises([loadGrid()]);
                 };
 
                 api.getData = function () {
-                    var bankDetails;
-                    if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        bankDetails = [];
-                        for (var i = 0; i < ctrl.datasource.length; i++) {
-                            var currentItem = ctrl.datasource[i];
-                            bankDetails.push(currentItem.Entity);
-                        }
-                    }
                     return {
                         $type: "Vanrise.Entities.BankDetailsSettings, Vanrise.Entities",
-                        BankDetails: bankDetails
+                        BankDetails: gridAPI.getData()
                     };
                 };
 
@@ -84,32 +73,7 @@ app.directive('vrCommonBankdetailssettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
 
             }
-            function defineMenuActions() {
-                var defaultMenuActions =[{
-                    name: "Edit",
-                    clicked: editBankDetail
-                }];
-                if (UtilsService.isContextReadOnly($scope)) {
-                    defaultMenuActions.length = 0;
-                    defaultMenuActions = [{
-                        name: "View",
-                        clicked: viewBankDetail
-                    }];
-                }
-                $scope.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
-            }
-            function editBankDetail(bankDetailObj) {
-                var onBankDetailUpdated = function (bankDetail) {
-                    var index = ctrl.datasource.indexOf(bankDetailObj);
-                    ctrl.datasource[index] = { Entity: bankDetail };
-                };
-                VRCommon_BankDetailService.editBankDetail(bankDetailObj.Entity, onBankDetailUpdated, ctrl.datasource);
-            }
-
-            function viewBankDetail(bankDetailObj) {                
-                 VRCommon_BankDetailService.viewBankDetail(bankDetailObj.Entity);
-            }
+         
+         
         }
     }]);

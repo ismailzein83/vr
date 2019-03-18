@@ -7,6 +7,7 @@ app.directive('vrCommonBankdetailssettingsGrid', ['UtilsService', 'VRUIUtilsServ
             restrict: 'E',
             scope: {
                 onReady: '=',
+                usevalidator: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -28,7 +29,14 @@ app.directive('vrCommonBankdetailssettingsGrid', ['UtilsService', 'VRUIUtilsServ
 
             function initializeController() {
                 ctrl.datasource = [];
-               
+                var useValidator = $attrs.usevalidator!=undefined ? true : false;
+                ctrl.isValid = function () {
+                    if (!useValidator) 
+                        return null;
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
+                        return null;
+                    return "You Should add at least one action.";
+                };
                 ctrl.addBankDetail = function () {
                     var onBankDetailAdded = function (bankDetail) {
                         ctrl.datasource.push({ Entity: bankDetail });
@@ -47,13 +55,10 @@ app.directive('vrCommonBankdetailssettingsGrid', ['UtilsService', 'VRUIUtilsServ
                 var api = {};
 
                 api.load = function (payload) {
-                    var bankDetailsSettingsPayload;
-                    if (payload != undefined && payload.data != undefined) {
-                        bankDetailsSettingsPayload = payload.data;
-                    }
-                    if (bankDetailsSettingsPayload != undefined && bankDetailsSettingsPayload.BankDetails != undefined) {
-                        for (var i = 0; i < bankDetailsSettingsPayload.BankDetails.length; i++) {
-                            var bankDetail = bankDetailsSettingsPayload.BankDetails[i];
+                 
+                    if (payload != undefined && payload.BankDetails != undefined) {
+                        for (var i = 0; i < payload.BankDetails.length; i++) {
+                            var bankDetail = payload.BankDetails[i];
                             ctrl.datasource.push({ Entity: bankDetail });
                         }
                     }
@@ -68,10 +73,7 @@ app.directive('vrCommonBankdetailssettingsGrid', ['UtilsService', 'VRUIUtilsServ
                             bankDetails.push(currentItem.Entity);
                         }
                     }
-                    return {
-                        $type: "Vanrise.Entities.BankDetailsSettings, Vanrise.Entities",
-                        BankDetails: bankDetails
-                    };
+                    return bankDetails;
                 };
 
                 if (ctrl.onReady != null)
