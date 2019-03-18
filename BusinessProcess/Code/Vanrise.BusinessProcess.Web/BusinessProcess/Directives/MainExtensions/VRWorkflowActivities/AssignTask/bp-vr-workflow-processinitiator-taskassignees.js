@@ -39,7 +39,7 @@ app.directive("businessprocessVrWorkflowProcessinitiatorTaskassignees", ["UtilsS
 
                 api.getData = function () {
                     return {
-                        $type: 'Vanrise.BusinessProcess.MainExtensions.VRWorkflow_TaskAssignees.VRWorkflowProcessInitiatorTaskAssignees , Vanrise.BusinessProcess.MainExtensions',
+                        $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflow_TaskAssignees.VRWorkflowProcessInitiatorTaskAssignees, Vanrise.BusinessProcess.MainExtensions",
                     };
                 };
 

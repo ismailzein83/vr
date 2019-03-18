@@ -30,9 +30,6 @@
         var outputGridAPI;
         var outputGridPromiseReadyDefferd = UtilsService.createPromiseDeferred();
 
-        var inputDirectiveGridAPI;
-        var outputDirectiveGridAPI;
-
         loadParameters();
         defineScope();
         load();
@@ -161,11 +158,12 @@
                 var taskAssigneesLoadDeferred = UtilsService.createPromiseDeferred();
                 taskAssigneesPromiseReadyDeffered.promise.then(function () {
                     var taskAssigneesPayload = {
-                        assigneesSettings: taskAssignees,
+                        taskAssignees: taskAssignees,
                         getWorkflowArguments: context.getWorkflowArguments,
                         getParentVariables: context.getParentVariables,
                         isVRWorkflowActivityDisabled: $scope.scopeModel.isVRWorkflowActivityDisabled
                     };
+               
                     VRUIUtilsService.callDirectiveLoad(taskAssigneesAPI, taskAssigneesPayload, taskAssigneesLoadDeferred);
                 });
                 return taskAssigneesLoadDeferred.promise;
@@ -288,11 +286,12 @@
 
         function updateActivity() {
             $scope.scopeModel.isLoading = true;
+            var taskAssigneeSettings = taskAssigneesAPI.getData();
             var updatedObject = {
                 taskTypeId: $scope.scopeModel.selectedTaskType.BPTaskTypeId,
                 taskTitle: $scope.scopeModel.taskTitle,
                 displayName: $scope.scopeModel.displayName,
-                taskAssignees: taskAssigneesAPI.getData(),
+                taskAssignees: { Settings: taskAssigneeSettings},
                 inputItems: $scope.scopeModel.inputItems.length > 0 ? getInputColumns() : null,
                 outputItems: $scope.scopeModel.outputItems.length > 0 ? getOutputColumns() : null,
             };

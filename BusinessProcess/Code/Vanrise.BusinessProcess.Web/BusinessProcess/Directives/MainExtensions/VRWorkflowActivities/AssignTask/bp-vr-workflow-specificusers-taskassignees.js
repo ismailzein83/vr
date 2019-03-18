@@ -45,8 +45,8 @@ app.directive("businessprocessVrWorkflowSpecificusersTaskassignees", ["UtilsServ
 
                 api.getData = function () {
                     return {
-                        $type: 'Vanrise.BusinessProcess.MainExtensions.VRWorkflow_TaskAssignees.VRWorkflowSpecificUsersTaskAssignees,  Vanrise.BusinessProcess.MainExtensions',
-                        UserIds: $scope.scopeModel.userIds
+                        $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflow_TaskAssignees.VRWorkflowSpecificUsersTaskAssignees,  Vanrise.BusinessProcess.MainExtensions",
+                        UserIds: $scope.scopeModel.userIds,
                     };
                 };
 

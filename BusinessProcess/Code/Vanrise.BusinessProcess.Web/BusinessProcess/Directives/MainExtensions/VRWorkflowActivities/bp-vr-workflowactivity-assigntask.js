@@ -6,7 +6,8 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onReady: '='
+                onReady: '=',
+                remove: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -42,7 +43,6 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var promises = [];
 
                     var editModeAction = {
@@ -75,7 +75,6 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
 
                     function openActivityEditor() {
                         var onActivityUpdated = function (updatedObject) {
-                            console.log(updatedObject);
                             $scope.scopeModel.displayName = updatedObject.displayName;
                             taskTypeId = updatedObject.taskTypeId;
                             taskTitle = updatedObject.taskTitle;
@@ -92,7 +91,6 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                 };
 
                 api.getData = function () {
-                    console.log(buildObjectFromScope());
                     return buildObjectFromScope();
                 };
 

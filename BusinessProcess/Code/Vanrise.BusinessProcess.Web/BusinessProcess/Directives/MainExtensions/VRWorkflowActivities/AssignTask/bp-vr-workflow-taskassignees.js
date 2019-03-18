@@ -38,7 +38,6 @@ app.directive('bpVrWorkflowTaskassignees', ['UtilsService', 'VRUIUtilsService', 
 
             var directiveAPI;
             var directiveReadyDeferred;
-            var directivePayload;
 
 
             function initializeController() {
@@ -69,8 +68,6 @@ app.directive('bpVrWorkflowTaskassignees', ['UtilsService', 'VRUIUtilsService', 
             }
 
             function defineAPI() {
-                var bPDefinitionSettings;
-
                 var api = {};
 
                 api.load = function (payload) {
@@ -79,7 +76,9 @@ app.directive('bpVrWorkflowTaskassignees', ['UtilsService', 'VRUIUtilsService', 
                     var promises = [];
 
                     if (payload != undefined) {
-                        settings = payload.assigneesSettings;
+                        if (payload.taskAssignees != undefined) {
+                            settings = payload.taskAssignees.Settings;
+                        }
                         getWorkflowArguments = payload.getWorkflowArguments;
                         getParentVariables = payload.getParentVariables;
                         isVRWorkflowActivityDisabled = payload.isVRWorkflowActivityDisabled;
@@ -113,7 +112,6 @@ app.directive('bpVrWorkflowTaskassignees', ['UtilsService', 'VRUIUtilsService', 
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            console.log(settings);
                             var payload = {
                                 getParentVariables: getParentVariables,
                                 getWorkflowArguments: getWorkflowArguments,
@@ -146,11 +144,9 @@ app.directive('bpVrWorkflowTaskassignees', ['UtilsService', 'VRUIUtilsService', 
         }
 
         function getTemplate(attrs) {
-            var withemptyline = 'withemptyline';
             var label = "label='Task Assignees'";
             if (attrs.hidelabel != undefined) {
                 label = "";
-                withemptyline = '';
             }
             var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + ' <vr-select on-ready="scopeModel.onSelectorReady"'
