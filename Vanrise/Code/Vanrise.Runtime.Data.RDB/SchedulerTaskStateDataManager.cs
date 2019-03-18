@@ -62,7 +62,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_TaskId, COL_Status, COL_LastRunTime, COL_NextRunTime, COL_ExecutionInfo);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             return queryContext.GetItems(TaskStateMapper);
         }
@@ -73,7 +73,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_TaskId, COL_Status, COL_LastRunTime, COL_NextRunTime, COL_ExecutionInfo);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             selectQuery.Where().EqualsCondition(COL_TaskId).Value(taskId);
 
@@ -86,7 +86,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_TaskId, COL_Status, COL_LastRunTime, COL_NextRunTime, COL_ExecutionInfo);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             selectQuery.Where().ListCondition(COL_TaskId, RDBListConditionOperator.IN, taskIds);
 
@@ -100,7 +100,7 @@ namespace Vanrise.Runtime.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
             insertQuery.Column(COL_TaskId).Value(taskId);
-            insertQuery.Column(COL_Status).Value(0);
+            insertQuery.Column(COL_Status).Value((int)SchedulerTaskStatus.NotStarted);
 
             insertQuery.IfNotExists(TABLE_ALIAS).EqualsCondition(COL_TaskId).Value(taskId);
 
@@ -115,24 +115,17 @@ namespace Vanrise.Runtime.Data.RDB
             updateQuery.FromTable(TABLE_NAME);
             updateQuery.Column(COL_NextRunTime).DateNow();
 
-            updateQuery.IfNotExists(TABLE_ALIAS).EqualsCondition(COL_TaskId).Value(taskId);
-
             var whereContext = updateQuery.Where();
             whereContext.EqualsCondition(COL_TaskId).Value(taskId);
             whereContext.NullCondition().Column(COL_LockedByProcessID);
-            whereContext.ListCondition(COL_Status, RDBListConditionOperator.IN, new List<int>() { 0, 2, 3 });
-
-            var childCondition = whereContext.ChildConditionGroup();
-            childCondition.NotNullCondition().Column(COL_NextRunTime);
-
+            whereContext.ListCondition(COL_Status, RDBListConditionOperator.IN, new List<int>() { (int)(SchedulerTaskStatus.NotStarted), (int)(SchedulerTaskStatus.Completed), (int)(SchedulerTaskStatus.Failed) });
+            
             if (!allowRunIfEnabled)
-                childCondition.FalseCondition();
-            else
-                childCondition.TrueCondition();
+                whereContext.NotNullCondition().Column(COL_NextRunTime);
 
             queryContext.ExecuteNonQuery();
         }
-        
+
         public bool UpdateTaskState(SchedulerTaskState taskStateObject)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());

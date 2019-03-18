@@ -58,7 +58,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_ActionTypeInfo);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
 

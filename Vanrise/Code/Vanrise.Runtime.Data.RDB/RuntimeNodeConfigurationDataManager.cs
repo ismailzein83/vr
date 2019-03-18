@@ -61,7 +61,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_Settings);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             return queryContext.GetItems(RuntimeNodeConfigurationMapper);
         }

@@ -77,7 +77,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_ServiceTypeID, COL_ProcessID, COL_ServiceInstanceInfo);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             string runningProcessTableAlias = "runningProcess";
             RunningProcessDataManager.JoinRunningProcess(selectQuery.Join(), RDBJoinType.Inner, runningProcessTableAlias, TABLE_ALIAS, COL_ProcessID);

@@ -75,7 +75,7 @@ namespace Vanrise.Runtime.Data.RDB
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, false);
 
-            selectQuery.SelectColumns().Columns(COL_ID, COL_TransactionUniqueName, COL_ProcessID);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             return queryContext.GetItems(TransactionLockItemMapper);
         }
@@ -86,7 +86,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, false);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_TransactionUniqueName, COL_ProcessID);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             string runningProcessTableAlias = "runningProcess";
             RunningProcessDataManager.JoinRunningProcess(selectQuery.Join(), RDBJoinType.Left, runningProcessTableAlias, TABLE_ALIAS, COL_ProcessID);

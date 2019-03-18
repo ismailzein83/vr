@@ -65,7 +65,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_RuntimeNodeConfigurationID, COL_Name, COL_Settings);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             return queryContext.GetItems(RuntimeNodeMapper);
         }
@@ -99,7 +99,7 @@ namespace Vanrise.Runtime.Data.RDB
                 updateQuery.Column(COL_Settings).Null();
 
             var notExistContext = updateQuery.IfNotExists(TABLE_ALIAS);
-            notExistContext.NotEqualsCondition(COL_ID).Value(runtimeNode.RuntimeNodeConfigurationId);
+            notExistContext.NotEqualsCondition(COL_ID).Value(runtimeNode.RuntimeNodeId);
             notExistContext.EqualsCondition(COL_Name).Value(runtimeNode.Name);
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(runtimeNode.RuntimeNodeId);

@@ -49,13 +49,14 @@ namespace Vanrise.Runtime.Data.RDB
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
 
-            selectQuery.SelectColumns().Column(runtimeNodeStateTableAlias, RuntimeNodeStateDataManager.COL_InstanceID, "RuntimeNodeInstanceID");
-            selectQuery.SelectColumns().Column(runtimeNodeStateTableAlias, RuntimeNodeStateDataManager.COL_ServiceURL, "ServiceURL");
+            var selectcolumns = selectQuery.SelectColumns();
+            selectcolumns.Column(runtimeNodeStateTableAlias, RuntimeNodeStateDataManager.COL_InstanceID, "RuntimeNodeInstanceID");
+            selectcolumns.Column(runtimeNodeStateTableAlias, RuntimeNodeStateDataManager.COL_ServiceURL, "ServiceURL");
 
             var joinContext = selectQuery.Join();
             nodeStateDataManager.JoinRuntimeNodeState(joinContext, runtimeNodeStateTableAlias, TABLE_ALIAS, COL_InstanceID, true);
 
-            selectQuery.Where().EqualsCondition("ID").Value(1);
+            selectQuery.Where().EqualsCondition(COL_ID).Value(1);
 
             queryContext.ExecuteReader(reader =>
             {
@@ -82,7 +83,7 @@ namespace Vanrise.Runtime.Data.RDB
             insertQuery.Column(COL_InstanceID).Value(serviceInstanceId);
             insertQuery.Column(COL_TakenTime).DateNow();
 
-            insertQuery.IfNotExists(TABLE_ALIAS, (RDBConditionGroupOperator)0).EqualsCondition("ID").Value(1);
+            insertQuery.IfNotExists(TABLE_ALIAS).EqualsCondition("ID").Value(1);
 
             if (insertQueryContext.ExecuteNonQuery() > 0)
                 return true;
@@ -117,7 +118,7 @@ namespace Vanrise.Runtime.Data.RDB
             updateQuery.Column(COL_TakenTime).DateNow();
 
             var join = updateQuery.Join(TABLE_ALIAS);
-            nodeStateDataManager.JoinRuntimeNodeState(join, runtimeNodeStateTableAlias, TABLE_ALIAS, COL_InstanceID, true, RDBJoinType.Left);
+            nodeStateDataManager.JoinRuntimeNodeState(join, runtimeNodeStateTableAlias, TABLE_ALIAS, COL_InstanceID, false, RDBJoinType.Left);
 
             var whereContext = updateQuery.Where();
             whereContext.EqualsCondition(COL_ID).Value(1);

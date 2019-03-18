@@ -97,7 +97,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column(COL_IsEnabled).Value(0);
+            updateQuery.Column(COL_IsEnabled).Value(false);
 
             updateQuery.Where().EqualsCondition(COL_Id).Value(taskId);
 
@@ -110,7 +110,7 @@ namespace Vanrise.Runtime.Data.RDB
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column(COL_IsEnabled).Value(1);
+            updateQuery.Column(COL_IsEnabled).Value(true);
 
             updateQuery.Where().EqualsCondition(COL_Id).Value(taskId);
 
@@ -131,7 +131,7 @@ namespace Vanrise.Runtime.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
 
             var selectColumns = selectQuery.SelectColumns();
-            selectColumns.Columns(COL_Id, COL_Name, COL_IsEnabled, COL_TriggerTypeId, COL_ActionTypeId, COL_TaskSettings, COL_OwnerId);
+            selectColumns.AllTableColumns(TABLE_ALIAS);
             selectColumns.Column(schedulerTaskTriggerTypeTableALias, SchedulerTaskTriggerTypeDataManager.COL_TriggerTypeInfo, "TriggerTypeInfo");
             selectColumns.Column(schedulerTaskActionTypeTableALias, SchedulerTaskActionTypeDataManager.COL_ActionTypeInfo, "ActionTypeInfo");
 
