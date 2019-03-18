@@ -42,7 +42,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return new RDBDataRecordFieldAttribute
             {
-                RdbDataType = RDBDataType.NVarchar
+                RdbDataType = RDBDataType.Int
             };
         }
 
