@@ -9,7 +9,9 @@
                 businessEntityDefinitionId: "d33fd65a-721f-4ae1-9d41-628be9425796"
             };
 
-            var modalSettings = {};
+            var modalSettings = {
+                size:"medium"
+            };
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onGenericBEAdded = onTaskTypeAdded;
             };
