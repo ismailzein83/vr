@@ -33,7 +33,8 @@ namespace Vanrise.BusinessProcess.Business
                 {
                     foreach (IBPTaskTypeSettingsFilter bptaskTypeSettingsFilter in filter.Filters)
                     {
-                        if (!bptaskTypeSettingsFilter.IsMatch(itm))
+                        var context = new BPTaskTypeSettingsFilterContext() { BPTaskType = itm};
+                        if (!bptaskTypeSettingsFilter.IsMatch(context))
                             return false;
                     }
                 }

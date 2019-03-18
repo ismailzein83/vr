@@ -13,6 +13,16 @@ namespace Vanrise.BusinessProcess.Entities
 
     public interface IBPTaskTypeSettingsFilter
     {
-        bool IsMatch(BPTaskType bPTaskType);
+        bool IsMatch(IBPTaskTypeSettingsFilterContext context);
+    }
+
+    public interface IBPTaskTypeSettingsFilterContext
+    {
+        BPTaskType BPTaskType { get; }
+    }
+
+    public class BPTaskTypeSettingsFilterContext: IBPTaskTypeSettingsFilterContext
+    {
+        public BPTaskType BPTaskType { get; set; }
     }
 }

@@ -4,20 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
 {
     public class BPGenericTaskTypeSettingsFilter : IBPTaskTypeSettingsFilter
     {
-        public bool IsMatch(BPTaskType bPTaskType)
+        public bool IsMatch(IBPTaskTypeSettingsFilterContext context)
         {
-            if (bPTaskType == null)
-                throw new NullReferenceException("bPTaskType");
+            if (context == null)
+                context.ThrowIfNull("context");
 
-            if (bPTaskType.Settings == null)
-                throw new NullReferenceException("bPTaskType.Settings");
+            if (context.BPTaskType == null)
+                context.BPTaskType.ThrowIfNull("context.BPTaskType");
 
-            if (bPTaskType.Settings is BPGenericTaskTypeSettings)
+            if (context.BPTaskType.Settings == null)
+                context.BPTaskType.Settings.ThrowIfNull("context.BPTaskType.Settings", context.BPTaskType.BPTaskTypeId);
+
+            if (context.BPTaskType.Settings is BPGenericTaskTypeSettings)
                 return true;
 
             else return false;
