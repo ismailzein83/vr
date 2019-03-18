@@ -146,26 +146,15 @@
 
                     }]
                 };
-
-                var filter;
-                BusinessProcess_BPTaskTypeAPIService.GetBPTaskTypesInfo(filter).then(function (response) {
-                    if (response != undefined) {
-                        for (var i = 0; i < response.length; i++) {
-                            var bpTasktype = response[i];
-                            $scope.scopeModel.taskTypes.push(bpTasktype)
-                        }
-                    }
-                    if (taskTypeId != undefined) {
-                        BusinessProcess_BPTaskTypeAPIService.GetBPTaskType(taskTypeId).then(function (response) {
-                            if (response != undefined) {
-                                var taskTypeEntity = response;
-                                $scope.scopeModel.selectedTaskType = taskTypeEntity;
-                            }
-                        });
-
-                    }
-                    $scope.scopeModel.isBPTaskTypeLoading = false;
+                var bPTaskTypeSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                bPTaskTypeSelectorReadyDeffered.promise.then(function () {
+                    var bpTaskTypePayload = {
+                        filter: filter,
+                        selectedIds: taskTypeId
+                    };
+                    VRUIUtilsService.callDirectiveLoad(bPTaskTypeSelectorAPI, bpTaskTypePayload, bPTaskTypeSelectorLoadPromiseDeferred);
                 });
+                return bPTaskTypeSelectorLoadPromiseDeferred.promise;
             }
 
             function loadTaskAssigneesSelector() {

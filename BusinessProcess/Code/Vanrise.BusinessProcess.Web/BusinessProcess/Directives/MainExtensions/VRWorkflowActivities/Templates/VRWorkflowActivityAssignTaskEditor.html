@@ -5,18 +5,7 @@
                 <vr-columns colnum="3">
                     <vr-textbox value="scopeModel.displayName" label="Display Name" isrequired="!scopeModel.isVRWorkflowActivityDisabled"></vr-textbox>
                 </vr-columns>
-                <vr-columns colnum="3" vr-loader="scopeModel.isBPTaskTypeLoading">
-                    <vr-select on-ready="scopeModel.onBPTaskTypeSelectorReady"
-                               datasource="scopeModel.taskTypes"
-                               selectedvalues="scopeModel.selectedTaskType"
-                               datatextfield="Name"
-                               datavaluefield="BPTaskTypeId"
-                               label="Task Type"
-                               isrequired="!scopeModel.isVRWorkflowActivityDisabled"
-                               onselectionchanged="scopeModel.onBPTaskTypeSelectionChanged">
-
-                    </vr-select>
-                </vr-columns>
+                <bp-tasktype-selector on-ready="scopeModel.onBPTaskTypeSelectorReady" selectedvalues="scopeModel.selectedTaskType" isrequired="!scopeModel.isVRWorkflowActivityDisabled" onselectionchanged="scopeModel.onBPTaskTypeSelectionChanged" normal-col-num="3" showaddbutton></bp-tasktype-selector>
                 <vr-columns colnum="6">
                     <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
                                                                             getworkflowarguments="scopeModel.context.getWorkflowArguments"
