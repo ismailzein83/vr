@@ -640,7 +640,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>= Parameters!SMSServiceTypes.Value</Value>
+                              <Value>=iif(Parameters!NoVoice.Value,"","Voice")+ iif(Parameters!NoSMS.Value OR Parameters!NoVoice.Value,""," , ") + iif(Parameters!NoSMS.Value,"","SMS")</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -666,6 +666,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -856,7 +857,11 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember />
+            <TablixMember>
+              <Visibility>
+                <Hidden>=iiF(iif(Parameters!NoVoice.Value,False,True)Or iif( iif(Parameters!NoSMS.Value,False,True),true,false),false,True)</Hidden>
+              </Visibility>
+            </TablixMember>
             <TablixMember />
             <TablixMember />
             <TablixMember />
@@ -1017,7 +1022,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Rubrique Budgétaire:</Value>
+                              <Value>=iif(iiF(iif(Parameters!NoVoice.Value,False,True)Or iif( iif(Parameters!NoSMS.Value,False,True),true,false),false,True),"","Rubrique Budgétaire:  ")</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -1028,17 +1033,18 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value xml:space="preserve">  </Value>
+                              <Value xml:space="preserve"> </Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
+                                <FontSize>11pt</FontSize>
                                 <FontWeight>Normal</FontWeight>
                                 <TextDecoration>None</TextDecoration>
                                 <Color>#000000</Color>
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Parameters!SMSServiceTypes.Value</Value>
+                              <Value>=iif(Parameters!NoVoice.Value,"","Voice")+ iif(Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(Parameters!NoSMS.Value,"","SMS")</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -2763,6 +2769,14 @@
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NoVoice">
+      <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NoSMS">
+      <DataType>Boolean</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
