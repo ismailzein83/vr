@@ -149,8 +149,9 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                 function loadEditorRuntimeDirective() {
                     var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
                     runtimeEditorReadyDeferred.promise.then(function () {
+                        var defaultValues;
                         if (fieldValues != undefined) {
-                            var defaultValues = {};
+                            defaultValues = {};
                             for (var prop in fieldValues) {
                                 var propValue = fieldValues[prop];
                                 if (!propValue.isHidden)
