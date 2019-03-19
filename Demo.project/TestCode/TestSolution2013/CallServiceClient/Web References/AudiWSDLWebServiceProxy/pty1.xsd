@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:simpleType name="LocalityType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Home" />
+      <xsd:enumeration value="Work" />
+      <xsd:enumeration value="Other" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AddressTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Physical" />
+      <xsd:enumeration value="Postal" />
+      <xsd:enumeration value="Registered" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="AddressBaseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="line1" type="xsd:string" />
+      <xsd:element minOccurs="0" name="line2" type="xsd:string" />
+      <xsd:element minOccurs="0" name="line3" type="xsd:string" />
+      <xsd:element minOccurs="0" name="line4" type="xsd:string" />
+      <xsd:element minOccurs="0" name="city" type="xsd:string" />
+      <xsd:element minOccurs="0" name="zipCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="state" type="xsd:string" />
+      <xsd:element minOccurs="0" name="country" type="xsd:string" />
+      <xsd:element minOccurs="0" name="countryCode" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="phoneContactSet" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AddressType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="AddressBaseType">
+        <xsd:attribute name="addressType" type="AddressTypeType" use="optional" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="address" type="AddressType" />
+  <xsd:complexType name="AddressContactType">
+    <xsd:sequence>
+      <xsd:element name="address" type="AddressType" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+    <xsd:attribute name="locality" type="LocalityType" use="optional" />
+    <xsd:attribute name="deliveryMethod" type="xsd:string" use="optional" />
+    <xsd:attribute name="isPreferred" type="xsd:boolean" use="optional" />
+  </xsd:complexType>
+  <xsd:element name="addressContact" type="AddressContactType" />
+  <xsd:complexType name="AddressContactSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="addressContact" type="AddressContactType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="addressContactSet" type="AddressContactSetType" />
+  <xsd:complexType name="EmailAddressContactType">
+    <xsd:sequence>
+      <xsd:element name="email" type="bsc:EmailAddressType" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+    <xsd:attribute name="locality" type="LocalityType" use="optional" />
+    <xsd:attribute name="isPreferred" type="xsd:boolean" use="optional" />
+  </xsd:complexType>
+  <xsd:element name="emailAddressContact" type="EmailAddressContactType" />
+  <xsd:complexType name="EmailAddressContactSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="emailAddressContact" type="EmailAddressContactType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="emailAddressContactSet" type="EmailAddressContactSetType" />
+  <xsd:simpleType name="PhoneTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Landline" />
+      <xsd:enumeration value="Mobile" />
+      <xsd:enumeration value="Fax" />
+      <xsd:enumeration value="Switchboard" />
+      <xsd:enumeration value="Other" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="PhoneType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="countryCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="areaCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="phone" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="phone" type="PhoneType" />
+  <xsd:complexType name="PhoneContactType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="phone" type="bsc:PhoneNoType" />
+      <xsd:element minOccurs="0" name="phoneDetail" type="PhoneType" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+    <xsd:attribute name="type" type="PhoneTypeType" use="optional" />
+    <xsd:attribute name="locality" type="LocalityType" use="optional" />
+    <xsd:attribute name="isPreferred" type="xsd:boolean" use="optional" />
+  </xsd:complexType>
+  <xsd:element name="phoneContact" type="PhoneContactType" />
+  <xsd:complexType name="PhoneContactSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="phoneContact" type="PhoneContactType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="phoneContactSet" type="PhoneContactSetType" />
+  <xsd:complexType name="PrimaryContactsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="addressContact" />
+      <xsd:element minOccurs="0" ref="emailAddressContact" />
+      <xsd:element minOccurs="0" ref="phoneContact" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="primaryContacts" type="PrimaryContactsType" />
+  <xsd:complexType name="ContactsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="addressContactSet" />
+      <xsd:element minOccurs="0" ref="emailAddressContactSet" />
+      <xsd:element minOccurs="0" ref="phoneContactSet" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="contacts" type="ContactsType" />
+</xsd:schema>

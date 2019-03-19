@@ -1,0 +1,1476 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:party="http://www.banqueaudi.com/ebo/pty.party.Party" xmlns:custDetail="http://www.banqueaudi.com/ebo/pty.custdet.Customer" xmlns:branch="http://www.banqueaudi.com/ebo/svl.brn.Branch" xmlns:org="http://www.banqueaudi.com/ebo/pty.org.Organisation" xmlns:contactDetails="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" xmlns:id="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns:AccId="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" xmlns="http://www.banqueaudi.com/ebo/pty.cust.Customer" xmlns:person="http://www.banqueaudi.com/ebo/pty.person.Person" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/pty.cust.Customer" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="pty.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.custdet.Customer_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.custdet.Customer" />
+  <xsd:import schemaLocation="svl.brn.Branch_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.brn.Branch" />
+  <xsd:import schemaLocation="pty.person.Person_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.person.Person" />
+  <xsd:import schemaLocation="pty.org.Organisation_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.org.Organisation" />
+  <xsd:import schemaLocation="pty.party.ContactDetails_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" />
+  <xsd:import schemaLocation="pty.party.Party_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.party.Party" />
+  <xsd:import schemaLocation="psa.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" />
+  <xsd:simpleType name="CustomerTypeType">
+    <xsd:annotation>
+      <xsd:documentation />
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Bank" />
+      <xsd:enumeration value="Card" />
+      <xsd:enumeration value="Investment" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CustomerKindType">
+    <xsd:annotation>
+      <xsd:documentation />
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Person" />
+      <xsd:enumeration value="Organisation" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="PartyRelationshipType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="partyRelationshipLegalStatus" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="partyRelationship" type="PartyRelationshipType" />
+  <xsd:simpleType name="PartyIndexType">
+    <xsd:restriction base="xsd:unsignedInt">
+      <xsd:minInclusive value="1" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="CustomerPartiesType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="numberOfParties" type="PartyIndexType" />
+      <xsd:element minOccurs="0" ref="partyRelationship" />
+      <xsd:element minOccurs="0" ref="customerPartyList" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="customerParties" type="CustomerPartiesType" />
+  <xsd:complexType name="CustomerPartyType">
+    <xsd:sequence>
+      <xsd:element name="index" type="PartyIndexType" />
+      <xsd:element minOccurs="0" ref="customerPartyDetail" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="customerParty" type="CustomerPartyType" />
+  <xsd:complexType name="CustomerPartyCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="customerParty" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="customerPartyList" type="CustomerPartyCollectionType" />
+  <xsd:complexType name="CustomerPartyDetailType">
+    <xsd:annotation>
+      <xsd:documentation>A customer is either a person/individual or an organisation. The party details here will either be a summary of a detailed version of the person or organisation depending on the EBO.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:choice>
+      <xsd:element ref="person:person" />
+      <xsd:element ref="person:personSummary" />
+      <xsd:element ref="org:organisation" />
+      <xsd:element ref="org:organisationSummary" />
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:element name="customerPartyDetail" type="CustomerPartyDetailType" />
+  <xsd:simpleType name="CustomerCategoryCodeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="2" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="CustomerCategoryType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="CustomerCategoryCodeType" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="category" type="CustomerCategoryType" />
+  <xsd:complexType name="AccountingOfficerType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="role" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="accountingOfficer" type="AccountingOfficerType" />
+  <xsd:complexType name="CustomerBaseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="id:customerId" />
+      <xsd:element minOccurs="0" ref="category" />
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="shortName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="status" type="bsc:EntityStatusType" />
+      <xsd:element minOccurs="0" ref="party:identitySet" />
+      <xsd:element minOccurs="0" name="openDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="closeDate" type="xsd:date" />
+      <xsd:element minOccurs="0" ref="branch:branchSummary">
+        <xsd:annotation>
+          <xsd:documentation>The customer's primary or local branch</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="contactDetails:contacts" />
+    </xsd:sequence>
+    <xsd:attribute name="type" type="CustomerTypeType" use="optional" />
+    <xsd:attribute name="isNonCustomer" type="xsd:boolean" use="optional" />
+    <xsd:attribute name="customerKind" type="CustomerKindType" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="CustomerSummaryType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="CustomerBaseType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" ref="customerParties" />
+          <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+          <xsd:element minOccurs="0" ref="userDetails" />
+          <xsd:element minOccurs="0" name="globalIntermediaryId" type="xsd:string" />
+          <xsd:element minOccurs="0" name="customerCategory" type="CustomerCategoryType" />
+          <xsd:element minOccurs="0" name="relatedCustomerIds" type="CustomerIdCollectionType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="customerSummary" type="CustomerSummaryType" />
+  <xsd:complexType name="CustomerSummaryCollectionType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" ref="customerSummary" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="customerSummaryList" type="CustomerSummaryCollectionType" />
+  <xsd:element name="customerSummarySet" type="CustomerSummaryCollectionType" />
+  <xsd:simpleType name="KYCStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Verified" />
+      <xsd:enumeration value="NotRequired" />
+      <xsd:enumeration value="Pending" />
+      <xsd:enumeration value="Failed" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="KnowYourCustomerType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="status" type="KYCStatusType" />
+      <xsd:element minOccurs="0" name="verificationDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="referenceNumber" type="xsd:string" />
+      <xsd:element minOccurs="0" name="kycPropertySet" type="bsc:PropertySetType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="knowYourCustomer" type="KnowYourCustomerType" />
+  <xsd:complexType name="CustomerType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="CustomerBaseType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" ref="knowYourCustomer" />
+          <xsd:element minOccurs="0" ref="accountingOfficer" />
+          <xsd:element minOccurs="0" ref="org:economicSector" />
+          <xsd:element minOccurs="0" ref="customerParties" />
+          <xsd:element minOccurs="0" ref="custDetail:customerDetail" />
+          <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+          <xsd:element minOccurs="0" name="kycgeneric" type="kycGenericType" />
+          <xsd:element minOccurs="0" name="cmageneric" type="cmaGenericType" />
+          <xsd:element minOccurs="0" name="relatedCustomers" type="CustomerCollectionType" />
+          <xsd:element minOccurs="0" ref="userDetails" />
+          <xsd:element minOccurs="0" name="dateOfLastFinancialTransaction" type="xsd:date" />
+          <xsd:element minOccurs="0" name="customerSegment" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="customer" type="CustomerType" />
+  <xsd:complexType name="CustomerCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="customer" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="customerList" type="CustomerCollectionType" />
+  <xsd:element name="customerSet" type="CustomerCollectionType" />
+  <xsd:complexType name="CustomerIdCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="id:customerId" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="customerIdSet" type="CustomerIdCollectionType" />
+  <xsd:element name="jointCustomerIdSet" type="CustomerIdCollectionType" />
+  <xsd:simpleType name="PartyRelationshipLegalStatusTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Joint Account (and)" />
+      <xsd:enumeration value="Joint Account (and/or)" />
+      <xsd:enumeration value="Minor" />
+      <xsd:enumeration value="Secret Account - Individual" />
+      <xsd:enumeration value="Secret Account - Joint(and/or)" />
+      <xsd:enumeration value="Forbidden" />
+      <xsd:enumeration value="General Partnership" />
+      <xsd:enumeration value="Limited Partnership" />
+      <xsd:enumeration value="Joint Stock - (SAL)" />
+      <xsd:enumeration value="Holding - (SAL Holding)" />
+      <xsd:enumeration value="Offshore - (SAL Offshore)" />
+      <xsd:enumeration value="Limited Liability - (SARL)" />
+      <xsd:enumeration value="Public Institution" />
+      <xsd:enumeration value="Association" />
+      <xsd:enumeration value="Joint Stock-(SA)" />
+      <xsd:enumeration value="Cooperative" />
+      <xsd:enumeration value="Syndicate" />
+      <xsd:enumeration value="Wakf" />
+      <xsd:enumeration value="Other" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="PartyRelationshipLegalStatusType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="partyRelationshipLegalStatus" type="PartyRelationshipLegalStatusTypeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="partyRelationshipLegalStatus" type="PartyRelationshipLegalStatusType" />
+  <xsd:simpleType name="DomiciliationType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Local" />
+      <xsd:enumeration value="Domestic" />
+      <xsd:enumeration value="International" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="NetWorthType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="type" type="xsd:string" />
+      <xsd:element minOccurs="0" name="value" type="xsd:string" />
+      <xsd:element minOccurs="0" name="domiciliation" type="DomiciliationType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="NetWorthTypeType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="cashAndDeposits" type="NetWorthType" />
+      <xsd:element minOccurs="0" name="investmentProducts" type="NetWorthType" />
+      <xsd:element minOccurs="0" name="realEstate" type="NetWorthType" />
+      <xsd:element minOccurs="0" name="LoansAndCredit" type="NetWorthType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="netWorth" type="NetWorthTypeType" />
+  <xsd:simpleType name="ExperienceLevelType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="P" />
+      <xsd:enumeration value="G" />
+      <xsd:enumeration value="E" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="tradingExperienceWithInstrument" type="TradingExperienceWithInstrumentType" />
+  <xsd:complexType name="TradingExperienceType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="tradingExperienceWithInstrument" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="tradingExperience" type="TradingExperienceType" />
+  <xsd:simpleType name="InvestmentRiskToleranceTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Low" />
+      <xsd:enumeration value="Medium" />
+      <xsd:enumeration value="High" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="InvestmentRiskToleranceType">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string" />
+      <xsd:element name="description" type="InvestmentRiskToleranceTypeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="investmentRiskTolerance" type="InvestmentRiskToleranceType" />
+  <xsd:simpleType name="InvestmentObjectiveTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Capital Preservation" />
+      <xsd:enumeration value="Income" />
+      <xsd:enumeration value="Moderate Capital Appreciation" />
+      <xsd:enumeration value="Capital Appreciation" />
+      <xsd:enumeration value="Trading/Speculation" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="InvestmentObjectiveType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="InvestmentObjectiveTypeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="investmentObjective" type="InvestmentObjectiveType" />
+  <xsd:simpleType name="YearsOfContinuosInvestingExperienceTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="&lt;5 Years" />
+      <xsd:enumeration value="&gt;=5 Years" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="YearsOfContinuosInvestingExperienceType">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string" />
+      <xsd:element name="description" type="YearsOfContinuosInvestingExperienceTypeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="yearsOfContinuosInvestingExperience" type="YearsOfContinuosInvestingExperienceType" />
+  <xsd:simpleType name="InvestmentsDealingFrequencyTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Monthly" />
+      <xsd:enumeration value="Quaterly" />
+      <xsd:enumeration value="Yearly" />
+      <xsd:enumeration value="Other" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="InvestmentsDealingFrequencyType">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string" />
+      <xsd:element name="description" type="InvestmentsDealingFrequencyTypeType" />
+      <xsd:element name="Other" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="investmentsDealingFrequency" type="InvestmentsDealingFrequencyType" />
+  <xsd:complexType name="ClientCMAClassificationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="ClientCMAClassificationTypeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="ClientCMAClassificationTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Customer" />
+      <xsd:enumeration value="Professional" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="clientCMAClassification" type="ClientCMAClassificationType" />
+  <xsd:complexType name="RetirementStrategyType">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string" />
+      <xsd:element name="description" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="retirementStrategy" type="RetirementStrategyType" />
+  <xsd:simpleType name="InvestmentTimeHorizonTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="&lt;1Year" />
+      <xsd:enumeration value="1-3 Years" />
+      <xsd:enumeration value="3-5 Years" />
+      <xsd:enumeration value="&gt;5 Years" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="InvestmentTimeHorizonType">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string" />
+      <xsd:element name="description" type="InvestmentTimeHorizonTypeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="investmentTimeHorizon" type="InvestmentTimeHorizonType" />
+  <xsd:simpleType name="liquidityNeedsTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="50% Within 1 Month" />
+      <xsd:enumeration value="50% Within 3 Months" />
+      <xsd:enumeration value="50% Within 1 Year" />
+      <xsd:enumeration value="No Liquidity Needs" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="liquidityNeedsType">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:string" />
+      <xsd:element name="description" type="liquidityNeedsTypeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="liquidityNeeds" type="liquidityNeedsType" />
+  <xsd:complexType name="approximateNetInvestibleAssetsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="amount" type="bsc:AccountingMoneyBaseType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PeriodicSalaryDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="periodFrequency" type="xsd:string" />
+      <xsd:element minOccurs="0" name="amount" type="bsc:AccountingMoneyBaseType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="periodicSalaryDetails" type="PeriodicSalaryDetailsType" />
+  <xsd:complexType name="yearlyApproximateIncomeType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="amount" type="bsc:AccountingMoneyBaseType" />
+      <xsd:element minOccurs="0" ref="periodicSalaryDetails" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="expectedAnnualTurnoverType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="amount" type="bsc:AccountingMoneyBaseType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FinancialDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="primaryBankName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="mainAccountNumber" type="AccId:AccountIdType" />
+      <xsd:element minOccurs="0" name="accountOpeningDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="yearlyApproximateIncome" type="yearlyApproximateIncomeType" />
+      <xsd:element minOccurs="0" name="paidUpCapital" type="bsc:AccountingMoneyBaseType" />
+      <xsd:element minOccurs="0" name="expectedAnnualTurnover" type="expectedAnnualTurnoverType" />
+      <xsd:element minOccurs="0" name="approximateNetInvestibleAssets" type="approximateNetInvestibleAssetsType" />
+      <xsd:element minOccurs="0" ref="netWorth" />
+      <xsd:element minOccurs="0" ref="tradingExperience" />
+      <xsd:element minOccurs="0" ref="investmentRiskTolerance" />
+      <xsd:element minOccurs="0" ref="investmentObjective" />
+      <xsd:element minOccurs="0" name="natureOfInvestment" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="yearsOfContinuosInvestingExperience" />
+      <xsd:element minOccurs="0" name="investmentsDealingFrequency" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="clientCMAClassification" />
+      <xsd:element minOccurs="0" ref="retirementStrategy" />
+      <xsd:element minOccurs="0" ref="investmentTimeHorizon" />
+      <xsd:element minOccurs="0" ref="liquidityNeeds" />
+      <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="financialDetails" type="FinancialDetailsType" />
+  <xsd:element name="isCompanyBoardMember" type="CompanyNamePositionsType" />
+  <xsd:element name="isInsiderIssuer" type="CompanyNamePositionsType" />
+  <xsd:element name="CompanyNamePosition" type="CompanyNamePositionType" />
+  <xsd:complexType name="CompanyNamePositionsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="CompanyNamePosition" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CompanyNamePositionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="companyCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="companyName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="positionInCompany" type="xsd:string" />
+    </xsd:sequence>
+    <xsd:attribute name="status" type="YNType" use="optional" />
+  </xsd:complexType>
+  <xsd:element name="relationToPubliclyListedCompany" type="RelationToPubliclyListedCompanyType" />
+  <xsd:element name="relationToPubliclyListed" type="RelationToPubliclyListedType" />
+  <xsd:complexType name="RelationToPubliclyListedCompanyType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="relationToPubliclyListed" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RelationToPubliclyListedType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="companyCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="companyName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="relationship" type="xsd:string" />
+    </xsd:sequence>
+    <xsd:attribute name="status" type="YNType" use="optional" />
+  </xsd:complexType>
+  <xsd:simpleType name="EntityStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="ListedCompany" />
+      <xsd:enumeration value="Issuer" />
+      <xsd:enumeration value="None" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="entityStatus" type="EntityStatusType" />
+  <xsd:complexType name="RelationtType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="legalstatusCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="legalstatusdescription" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="relation" type="RelationtType" />
+  <xsd:complexType name="OverallRiskScoreType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TaxIdentificationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="countrycode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="number" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="taxIdentification" type="TaxIdentificationType" />
+  <xsd:complexType name="TaxIdentificationListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" ref="taxIdentification" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="taxIdentificationList" type="TaxIdentificationListType" />
+  <xsd:complexType name="OtherResidencyTaxType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="taxIdentificationList" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="otherResidencyTax" type="OtherResidencyTaxType" />
+  <xsd:complexType name="CustomerFullDetailsType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="CustomerType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="entityRegulator" type="xsd:string" />
+          <xsd:element minOccurs="0" ref="entityStatus" />
+          <xsd:element minOccurs="0" name="tradingClassification" type="xsd:string" />
+          <xsd:element minOccurs="0" name="overallRiskScore" type="OverallRiskScoreType" />
+          <xsd:element minOccurs="0" name="currentlyPayTaxIn" type="xsd:string" />
+          <xsd:element minOccurs="0" name="taxationNumber" type="xsd:string" />
+          <xsd:element minOccurs="0" name="employerIdentificationNumber" type="xsd:string" />
+          <xsd:element minOccurs="0" name="employeeFlag" type="xsd:string" />
+          <xsd:element minOccurs="0" name="numberOfDependents" type="xsd:decimal" />
+          <xsd:element minOccurs="0" ref="otherResidencyTax" />
+          <xsd:element minOccurs="0" ref="relation" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="customerFullDetails" type="CustomerFullDetailsType" />
+  <xsd:complexType name="CustomerFullTypesCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="customerFullDetails" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="customerFullDetailsList" type="CustomerFullTypesCollectionType" />
+  <xsd:element name="customerFullDetailsSet" type="CustomerFullTypesCollectionType" />
+  <xsd:complexType name="TradingExperienceWithInstrumentType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="instrumentName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="experienceLevel" type="ExperienceLevelType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TradingAndInvestmentType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="tradingExperience" />
+      <xsd:element minOccurs="0" ref="investmentRiskTolerance" />
+      <xsd:element minOccurs="0" ref="investmentObjective" />
+      <xsd:element minOccurs="0" ref="yearsOfContinuosInvestingExperience" />
+      <xsd:element minOccurs="0" ref="investmentsDealingFrequency" />
+      <xsd:element minOccurs="0" ref="clientCMAClassification" />
+      <xsd:element minOccurs="0" ref="investmentTimeHorizon" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="tradingAndInvestment" type="TradingAndInvestmentType" />
+  <xsd:simpleType name="YNType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Y" />
+      <xsd:enumeration value="N" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="UserTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Primary" />
+      <xsd:enumeration value="Secondary" />
+      <xsd:enumeration value="Prospect" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="UserCategoryType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Retail" />
+      <xsd:enumeration value="Corporate" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="StatusAsCustomerType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Customer" />
+      <xsd:enumeration value="Non-Customer" />
+      <xsd:enumeration value="All" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="RelatedUserType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="userId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="firstName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="lastName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="userName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="userStatus" type="bsc:StatusType" />
+      <xsd:element minOccurs="0" name="userCustomerStatus" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="relatedUser" type="RelatedUserType" />
+  <xsd:complexType name="RelatedUserSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" ref="relatedUser" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="relatedUserSet" type="RelatedUserSetType" />
+  <xsd:complexType name="UserDetailsType">
+    <xsd:sequence>
+      <xsd:element name="mainUserId" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="relatedUserSet" />
+      <xsd:element minOccurs="0" name="userType" type="UserTypeType" />
+      <xsd:element minOccurs="0" name="userCategory" type="UserCategoryType" />
+      <xsd:element minOccurs="0" name="statusAsCustomer" type="StatusAsCustomerType" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="showBalances" type="xsd:boolean" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="preferredLanguageForNonSelfService" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="userDetails" type="UserDetailsType" />
+  <xsd:complexType name="KYCType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="rqPB" nillable="true" type="PBType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="kyc" type="KYCType" />
+  <xsd:complexType name="NatofaccType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="natofaccCashdep" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccCashwith" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccChecks" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccCrosTrsfInc" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccCrosTrsfOut" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccDomesTrsfInc" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccDomesTrsfOut" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccEbank" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccFxMmarket" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccLoans" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccOthres" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofaccTradFinance" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="NatofincType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="natofincInterCmp" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofincOthers" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofincOthersDescrip" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofincPmtCust" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="NatofoutType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="natofoutIntercmpPmt" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofoutOthers" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofoutOthersDescrip" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofoutPayrolPmt" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofoutPmtSupVend" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SrcifundType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="srcifundDividend" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundEndemEos" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundFamilyRemitt" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundInheritance" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundInvestment" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundLoan" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundOthers" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundOthersDes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundProf" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundProfDes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundRental" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundRstatRental" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifundRstatSale" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="kycGenericType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="br" type="xsd:string" />
+      <xsd:element minOccurs="0" name="id" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="kycOptionCMD" type="xsd:string" />
+      <xsd:element minOccurs="0" name="cmaOptionCMD" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofacc" type="NatofaccType" />
+      <xsd:element minOccurs="0" name="natofinc" type="NatofincType" />
+      <xsd:element minOccurs="0" name="natofout" type="NatofoutType" />
+      <xsd:element minOccurs="0" name="openDate" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="rsPurposeAccNum" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="rsPurposeAccTyp" type="xsd:string" />
+      <xsd:element minOccurs="0" name="srcifund" type="SrcifundType" />
+      <xsd:element minOccurs="0" name="user" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="cmaGenericType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="cusBlacklistYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="cusHavBlok10AccYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="cusHavPendCheckbookYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="cusOutstNbCheckbook" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="cusOvrclass" type="xsd:string" />
+      <xsd:element minOccurs="0" name="cusOvrclassd" type="xsd:string" />
+      <xsd:element minOccurs="0" name="cusOvrrisk" type="xsd:string" />
+      <xsd:element minOccurs="0" name="cusTraceableYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="customerId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="cmaOptionCMD" type="xsd:string" />
+      <xsd:element minOccurs="0" name="user" type="xsd:string" />
+      <xsd:element minOccurs="0" name="openDate" type="xsd:decimal" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="WealthType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="globalWealth" type="xsd:string" />
+      <xsd:element minOccurs="0" name="othsrcWealth" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthcnDivid" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthcnEeos" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthcnFamilyRemitt" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthcnInherit" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthcnInvestment" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthcnLoan" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthcnProf" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthcnRental" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthcnStatRent" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthcnStatSale" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrDivid" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrEeos" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrFamilyRemitt" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrInherit" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrInvestment" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrLoan" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrOthers" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrOthersDes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrProf" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrRental" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrStatRent" type="xsd:string" />
+      <xsd:element minOccurs="0" name="wealthsrStatSale" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="pbCtsexeType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="pbCtsexeDailyAmt" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="pbCtsexeDailyCur" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbCtsexeYearlAmt" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="pbCtsexeYearlCur" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PbCusCnactCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="PbCusCnact" type="PbCusCnactType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PbCusCnactType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="pbCusCnact" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbCusCnactDa" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PbPrimCntType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="pbPrimCntAreaCd" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbPrimCntCountry" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbPrimCntDesignation" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbPrimCntDialCd" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbPrimCntFaname" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbPrimCntFname" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbPrimCntLname" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbPrimCntPhoTyp" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbPrimCntSerial" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="proxOnaccCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="proxOnacc" type="proxOnaccType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="proxOnaccType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="proxOnaccAccopnbypa" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxOnaccCancDat" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="proxOnaccEffeDat" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="proxOnaccId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxOnaccName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxOnaccParty" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxOnaccPl" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxOnaccRelation" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxOnaccTyp" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="proxToaccCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="proxToacc" type="proxToaccType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="proxToaccType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="proxToaccAccopnbypa" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxToaccCancDat" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="proxToaccEffeDat" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="proxToaccId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxToaccName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxToaccParty" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxToaccPl" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxToaccRelation" type="xsd:string" />
+      <xsd:element minOccurs="0" name="proxToaccTyp" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="pbShareholType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCode" type="xsd:decimal" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCnact" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCnres" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCntax" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCornm" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholFanam" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholFrnam" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholId" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholJob" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholLsnam" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholNat" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholParty" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholPep" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholShares" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholTypib" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="subShareHolSet" type="SubPbShareholCollectionType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SubPbShareholType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCorn" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCode" type="xsd:decimal" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCnact" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCnres" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCntax" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholCornm" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholFanam" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholFrnam" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholId" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholJob" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholLsnam" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholNat" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholParty" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholPep" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholShares" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareholTypib" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PbShareholCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbShareHol" type="pbShareholType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SubPbShareholCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="subPbShareHol" type="SubPbShareholType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PbAuthsignCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbAuthsign" type="PbAuthsignType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PbAuthsignType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="pbAuthsignCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbAuthsignFanam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbAuthsignFrnam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbAuthsignId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbAuthsignLsnam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbAuthsignNat" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbAuthsignParty" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PbBoarddirCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbBoarddir" type="PbBoarddirType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PbBoarddirType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="pbBoarddirCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbBoarddirCorpName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbBoarddirFanam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbBoarddirFrnam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbBoarddirId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbBoarddirLsnam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbBoarddirNat" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbBoarddirParty" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PbExemanagCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbExemanag" type="PbExemanagType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PbExemanagType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="pbExemanagCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbExemanagFanam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbExemanagFrnam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbExemanagId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbExemanagLsnam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbExemanagNat" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbExemanagParty" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CliBodCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="CliBod" type="CliBodType" />
+      <xsd:element minOccurs="0" name="CliBodMemberYn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CliBodType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="CliBodCmpCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="CliBodCmpName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="CliBodPositAr" type="xsd:string" />
+      <xsd:element minOccurs="0" name="CliBodPositEn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CliInsiderCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="CliInsider" type="CliInsiderType" />
+      <xsd:element minOccurs="0" name="CliInsiderYn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CliInsiderType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="CliInsiderCmpCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="CliInsiderCmpName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="CliInsiderPositAr" type="xsd:string" />
+      <xsd:element minOccurs="0" name="CliInsiderPositEn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FrequencyType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="Frequency" type="xsd:string" />
+      <xsd:element minOccurs="0" name="FrequencyOther" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="InvestType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="InvestCashdepLi" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestCashdepTypes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestCashdepValue" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestCashdepYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestInvstprodLi" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestInvstprodTypes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestInvstprodValue" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestInvstprodYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestLoanCredLi" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestLoanCredTypes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestLoanCredValue" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestLoanCredYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestObjective" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestParticipaLi" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestParticipaTypes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestParticipaValue" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestParticipaYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestRealstaLi" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestRealstaTypes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestRealstaValue" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestRealstaYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestRiskTolerance" type="xsd:string" />
+      <xsd:element minOccurs="0" name="InvestTimeHorizon" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="KnowlexpType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="KnowlexpCorpfinanPGE" type="xsd:string" />
+      <xsd:element minOccurs="0" name="KnowlexpDebinstPGE" type="xsd:string" />
+      <xsd:element minOccurs="0" name="KnowlexpDepositPGE" type="xsd:string" />
+      <xsd:element minOccurs="0" name="KnowlexpDerivativPGE" type="xsd:string" />
+      <xsd:element minOccurs="0" name="KnowlexpForexPGE" type="xsd:string" />
+      <xsd:element minOccurs="0" name="KnowlexpFundsPGE" type="xsd:string" />
+      <xsd:element minOccurs="0" name="KnowlexpFuturesPGE" type="xsd:string" />
+      <xsd:element minOccurs="0" name="KnowlexpRealstaPGE" type="xsd:string" />
+      <xsd:element minOccurs="0" name="KnowlexpSharesPGE" type="xsd:string" />
+      <xsd:element minOccurs="0" name="KnowlexpStrproducPGE" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PrimaryBnkCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="primaryBnk" type="PrimaryBnkType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PrimaryBnkType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PrimaryBnkCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PrimaryBnkName" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SubsidiariesCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="subsidiaries" type="SubsidiariesType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SubsidiariesType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="SubsidiariesActivit" type="xsd:string" />
+      <xsd:element minOccurs="0" name="SubsidiariesAffname" type="xsd:string" />
+      <xsd:element minOccurs="0" name="SubsidiariesCountry" type="xsd:string" />
+      <xsd:element minOccurs="0" name="SubsidiariesLocInt" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OthFinancialInfoType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="OthFinancialInfoAr" type="xsd:string" />
+      <xsd:element minOccurs="0" name="OthFinancialInfoEn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PBType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="amtInitdep" type="xsd:string" />
+      <xsd:element minOccurs="0" name="business" type="requestBodyRqPBBusiness" />
+      <xsd:element minOccurs="0" name="globalWealth" type="WealthType" />
+      <xsd:element minOccurs="0" name="pbBusinessActivity" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PbCtsexe" type="pbCtsexeType" />
+      <xsd:element minOccurs="0" name="pbCusCnactSet" type="PbCusCnactCollectionType" />
+      <xsd:element minOccurs="0" name="pbMaturityDate" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="pbPartynum" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbPep" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbPrimCnt" type="PbPrimCntType" />
+      <xsd:element minOccurs="0" name="pbPrintingDate" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="pbRisklevel" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pbYearlexpInf" type="xsd:string" />
+      <xsd:element minOccurs="0" name="personal" type="requestBodyRqPBPersonal" />
+      <xsd:element minOccurs="0" name="proxOnaccSet" type="proxOnaccCollectionType" />
+      <xsd:element minOccurs="0" name="proxToaccSet" type="proxToaccCollectionType" />
+      <xsd:element minOccurs="0" name="srcifund" type="SrcifundType" />
+      <xsd:element minOccurs="0" name="wealth" type="WealthType" />
+      <xsd:element minOccurs="0" name="pbShareHolSet" type="PbShareholCollectionType" />
+      <xsd:element minOccurs="0" name="pbAuthsignSet" type="PbAuthsignCollectionType" />
+      <xsd:element minOccurs="0" name="pbBoarddirSet" type="PbBoarddirCollectionType" />
+      <xsd:element minOccurs="0" name="pbExemanagSet" type="PbExemanagCollectionType" />
+      <xsd:element minOccurs="0" name="pbCorboSet" type="PCorboCollectionType" />
+      <xsd:element minOccurs="0" name="ApproxNetInvestAsset" type="xsd:string" />
+      <xsd:element minOccurs="0" name="CliBodSet" type="CliBodCollectionType" />
+      <xsd:element minOccurs="0" name="CliCmaClassificat" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="CliInsiderSet" type="CliInsiderCollectionType" />
+      <xsd:element minOccurs="0" name="Frequency" type="FrequencyType" />
+      <xsd:element minOccurs="0" name="Invest" type="InvestType" />
+      <xsd:element minOccurs="0" name="Knowlexp" type="KnowlexpType" />
+      <xsd:element minOccurs="0" name="LiquidityNeeds" type="xsd:string" />
+      <xsd:element minOccurs="0" name="OthFinancialInfo" type="OthFinancialInfoType" />
+      <xsd:element minOccurs="0" name="Partynum" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PrimaryBnkSet" type="PrimaryBnkCollectionType" />
+      <xsd:element minOccurs="0" name="Scoring" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="SubsidiariesSet" type="SubsidiariesCollectionType" />
+      <xsd:element minOccurs="0" name="UserHasCmaYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="YearsOfContinExp" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BCorpAssetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BCorpAssetAnnuityYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BCorpAssetDividendYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BCorpAssetGainlossYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BCorpAssetInterestYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BCorpAssetRentYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BCorpAssetRoyaltyYn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BEngagedType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BEngagedCommoditiesYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BEngagedHedgeFundYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BEngagedInvestYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BEngagedMutualFundYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BEngagedPrtnrInterYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BEngagedPrvEnquitYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BEngagedTradSecurYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BEngagedTradingInYn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BGrosIncomType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BGrosIncomAnnuityYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BGrosIncomDividendYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BGrosIncomGainlossYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BGrosIncomInterestYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BGrosIncomRentYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BGrosIncomRoyaltyYn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BHoldType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BHoldPortionYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BHoldiCompanyYn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BLegRepreCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="bLegRepre" type="BLegRepreType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BLegRepreType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BLegRepreArea" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BLegRepreBnam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BLegRepreDial" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BLegRepreFanm" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BLegRepreFrnm" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BLegRepreLsnm" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BLegRepreNat" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BLegReprePho" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BLegRepreSeri" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BLegRepreType" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BMajorCustCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="bMajorCust" type="BMajorCustType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BMajorCustType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BMajorCustCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BMajorCustNam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BMajorCustPro" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BMajorSuplCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="bMajorSupl" type="BMajorSuplType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BMajorSuplType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BMajorSuplCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BMajorSuplNam" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BMajorSuplPro" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BTypsharesType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BTypsharesBearer" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BTypsharesCommon" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BTypsharesOrdinary" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BTypsharesOtherDes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BTypsharesOthers" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BTypsharesPrefered" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BTypsharesRedeemab" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BUsOwnerCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="bUsOwner" type="BUsOwnerType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BUsOwnerType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BUsOwnerAddress" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BUsOwnerName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BUsOwnerTin" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BYearlyexpType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BYearlyexpPrf" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BYearlyexpVol" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="requestBodyRqPBBusiness">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="BAcceptDeposYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BCntryCorp" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BCorpAsset" type="BCorpAssetType" />
+      <xsd:element minOccurs="0" name="BEin" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BEngaged" type="BEngagedType" />
+      <xsd:element minOccurs="0" name="BEntityHasUsOwner" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BEntityHasUsOwner_T" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BGrosIncom" type="BGrosIncomType" />
+      <xsd:element minOccurs="0" name="BHold" type="BHoldType" />
+      <xsd:element minOccurs="0" name="BInsurCompanyYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BLegRepreSet" type="BLegRepreCollectionType" />
+      <xsd:element minOccurs="0" name="BMajorCustSet" type="BMajorCustCollectionType" />
+      <xsd:element minOccurs="0" name="BMajorSuplSet" type="BMajorSuplCollectionType" />
+      <xsd:element minOccurs="0" name="BNbrOfEmployee" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="BProvidTinOfUsOwner" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BSeaonalVariatYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BTypshares" type="BTypsharesType" />
+      <xsd:element minOccurs="0" name="BUsOwner" type="BUsOwnerType" />
+      <xsd:element minOccurs="0" name="BUsOwnerSet" type="BUsOwnerCollectionType" />
+      <xsd:element minOccurs="0" name="BYearlyexp" type="BYearlyexpType" />
+      <xsd:element minOccurs="0" name="BCurrency" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BEntityRegulatdYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BPaidupCapitalAmount" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="BRegulatorName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="BTheEntityIs" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PCorpoType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="pCorpoCnactSet" type="PCorpoCnactCollectionType" />
+      <xsd:element minOccurs="0" name="PCorpoCntryCorp" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PCorpoComReg" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PCorpoFormDate" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="PCorpoId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PCorpoLegalStat" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PCorpoName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PCorpoOwnerYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PCorpoTotexpecInc" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PCorpoUsingAccYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PCorpoYearlexpInf" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PCorpoCnactCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pCorpoCnact" type="PCorpoCnactType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PCorpoCnactType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PCorpoCnact" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PCorpoCnactDa" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PEstabCnactCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pEstabCnact" type="PEstabCnactType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PEstabCnactType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PEstabCnact" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PEstabCnactDa" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PEstabType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PEstabId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PEstabName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PEstabOwnerYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PEstabTotexpecInc" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PEstabUsingAccYn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PEstabYearlexpInf" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PNatCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pNat" type="PNatType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PNatType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PNat" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PNat1Pasp" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PPrvincDivCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pPrvincDiv" type="PPrvincDivType" />
+      <xsd:element minOccurs="0" name="PPrvincOtherDescrip" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PPrvincDivType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PPrvincDivInvCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PPrvincDivInvEco" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PPrvincRstaCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pPrvincRsta" type="PPrvincRstaType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PPrvincRstaType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PPrvincRstaRentCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PPrvincRstaSaleCn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PRetiredType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PRetiredLastCnActi" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PRetiredLastemploy" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PRetiredLastemploySeq" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="PRetiredLastjobTitl" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PSempType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PSempCnact" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PSempCnactDa" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PSempOccup" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PSempTitle" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PSempYn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PSpouseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PSpouseBirthDat" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="PSpouseFn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PSpouseLn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PSpouseProf" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PSrcincType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PSrcincDivid" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PSrcincOther" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PSrcincOtherDes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PSrcincRentl" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PStudentUniversiType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PStudentUniversi" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PStudentUniversiCode" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PTaxCnCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pTaxCn" type="PTaxCnType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PTaxCnType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PTaxCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PTaxNum" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PDepCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pDep" type="PDepType" />
+      <xsd:element minOccurs="0" name="PDepNumber" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PDepType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PDepBirtDate" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PDepFaname" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PDepFrname" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PDepLname" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PDepRelatDescript" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PDepRelation" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PRelated2insidCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pRelated2insid" type="PRelated2insidType" />
+      <xsd:element minOccurs="0" name="PRelated2insidYn" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PRelated2insidType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PRelated2insidCmpcd" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PRelated2insidCmpnm" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PRelated2insidRel" type="xsd:string" />
+      <xsd:element minOccurs="0" name="PRelated2insidRelD" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PhoneCollectionType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="phone" type="PhoneType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PhoneType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="phoCCd" type="xsd:string" />
+      <xsd:element minOccurs="0" name="phoDilCd" type="xsd:string" />
+      <xsd:element minOccurs="0" name="phoPhnTy" type="xsd:string" />
+      <xsd:element minOccurs="0" name="phoAraCd" type="xsd:string" />
+      <xsd:element minOccurs="0" name="phoSer" type="xsd:string" />
+      <xsd:element minOccurs="0" name="phoExt" type="xsd:string" />
+      <xsd:element minOccurs="0" name="phoComnt" type="xsd:string" />
+      <xsd:element minOccurs="0" name="phoCmty" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TaxationCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="taxation" type="TaxationType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TaxationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="taxationCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="taxationNb" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ActivityCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="activity" type="ActivityType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ActivityType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="activityCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="activityDa" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Kyc3type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="type" type="xsd:string" />
+      <xsd:element minOccurs="0" name="id" type="xsd:string" />
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="relation" type="xsd:string" />
+      <xsd:element minOccurs="0" name="relationDes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="reason" type="xsd:string" />
+      <xsd:element minOccurs="0" name="reasonDes" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrCountry" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrLocality" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrZipcode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrCity" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrStrt" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrBloc" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrBuilding" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrAppartm" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrFloor" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrPoboxCn" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrPoboxNb" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrEmail" type="xsd:string" />
+      <xsd:element minOccurs="0" name="adrAddInfo" type="xsd:string" />
+      <xsd:element name="phoneSet" type="PhoneCollectionType" />
+      <xsd:element minOccurs="0" name="yearexpInf" type="xsd:string" />
+      <xsd:element minOccurs="0" name="totexpeInc" type="xsd:string" />
+      <xsd:element minOccurs="0" name="countryBirt" type="xsd:string" />
+      <xsd:element name="taxationSet" type="TaxationCollectionType" />
+      <xsd:element minOccurs="0" maxOccurs="2" name="nationality" type="xsd:string" />
+      <xsd:element name="activitySet" type="ActivityCollectionType" />
+      <xsd:element minOccurs="0" name="fathersName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="lastName" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PCouraCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pCoura" type="Kyc3type" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PCusboCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pCusbo" type="Kyc3type" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PLegarCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pLegar" type="Kyc3type" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PCorboCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="pbCorbo" type="Kyc3type" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="requestBodyRqPBPersonal">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PCoTotexpecInc" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pCorpo" type="PCorpoType" />
+      <xsd:element minOccurs="0" name="pEstabCnactSet" type="PEstabCnactCollectionType" />
+      <xsd:element minOccurs="0" name="pEstab" type="PEstabType" />
+      <xsd:element minOccurs="0" name="PJobTitle" type="xsd:string" />
+      <xsd:element minOccurs="0" name="pNatSet" type="PNatCollectionType" />
+      <xsd:element minOccurs="0" name="pPrvincDivSet" type="PPrvincDivCollectionType" />
+      <xsd:element minOccurs="0" name="pPrvincRstaSet" type="PPrvincRstaCollectionType" />
+      <xsd:element minOccurs="0" name="pRetired" type="PRetiredType" />
+      <xsd:element minOccurs="0" name="pSemp" type="PSempType" />
+      <xsd:element minOccurs="0" name="pSpouse" type="PSpouseType" />
+      <xsd:element minOccurs="0" name="pSrcinc" type="PSrcincType" />
+      <xsd:element minOccurs="0" name="pStudentUniversi" type="PStudentUniversiType" />
+      <xsd:element minOccurs="0" name="pTaxCnSet" type="PTaxCnCollectionType" />
+      <xsd:element minOccurs="0" name="pCouraSet" type="PCouraCollectionType" />
+      <xsd:element minOccurs="0" name="pCusboSet" type="PCusboCollectionType" />
+      <xsd:element minOccurs="0" name="pLegarSet" type="PLegarCollectionType" />
+      <xsd:element minOccurs="0" name="pDepSet" type="PDepCollectionType" />
+      <xsd:element minOccurs="0" name="pRelated2insidSet" type="PRelated2insidCollectionType" />
+      <xsd:element minOccurs="0" name="PRetirementStrategy" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CMAType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="rqPB" nillable="true" type="PBType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cma" type="CMAType" />
+  <xsd:complexType name="RelatedPartyCollectionType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="relatedParty" type="RelatedPartyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="relatedPartyList" type="RelatedPartyCollectionType" />
+  <xsd:complexType name="RelatedPartyType">
+    <xsd:sequence>
+      <xsd:element ref="relatedMatchList" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RelatedMatchType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="benefOwnerYN" type="bsc:YNType" />
+      <xsd:element minOccurs="0" name="clientSince" type="xsd:date" />
+      <xsd:element minOccurs="0" name="countryOfActivity" type="xsd:string" />
+      <xsd:element minOccurs="0" name="detailedActivity" type="xsd:string" />
+      <xsd:element ref="org:economicSector" />
+      <xsd:element minOccurs="0" name="mailingAddresRM" type="xsd:string" />
+      <xsd:element minOccurs="0" name="matchedAbbName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="matchedId" type="id:CustomerIdType" />
+      <xsd:element minOccurs="0" name="matchedIdPl" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="powerAttorneyYN" type="bsc:YNType" />
+      <xsd:element minOccurs="0" name="profileTypeIJE" type="xsd:string" />
+      <xsd:element minOccurs="0" name="yearlexpInflow" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natofacc" type="NatofaccType" />
+      <xsd:element minOccurs="0" name="srcifund" type="SrcifundType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RelatedMatchCollectionType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="relatedMatch" type="RelatedMatchType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="relatedMatchList" type="RelatedMatchCollectionType" />
+</xsd:schema>

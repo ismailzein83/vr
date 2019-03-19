@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ejb.gateway.ebpp.fawryis.com/" name="ApplicationBusinessFacadeService" targetNamespace="http://ejb.gateway.ebpp.fawryis.com/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="GatewayOnlineService_schema.xsd" namespace="http://ejb.gateway.ebpp.fawryis.com/" />
+    </xsd:schema>
+  </types>
+  <message name="process">
+    <part name="parameters" element="tns:process" />
+  </message>
+  <message name="processResponse">
+    <part name="parameters" element="tns:processResponse" />
+  </message>
+  <portType name="ApplicationBusinessFacade">
+    <operation name="process">
+      <input message="tns:process" />
+      <output message="tns:processResponse" />
+    </operation>
+  </portType>
+  <binding name="ApplicationBusinessFacadePortBinding" type="tns:ApplicationBusinessFacade">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="process">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="ApplicationBusinessFacadeService">
+    <port name="ApplicationBusinessFacadePort" binding="tns:ApplicationBusinessFacadePortBinding">
+      <soap:address location="http://localhost:9082/CoreWeb/ApplicationBusinessFacadeService" />
+    </port>
+  </service>
+</definitions>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:condet="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" xmlns:branch="http://www.banqueaudi.com/ebo/svl.brn.Branch" xmlns:id="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" xmlns:tid="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" xmlns:cid="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns:ftx="http://www.banqueaudi.com/ebo/txn.FinancialTransaction" xmlns="http://www.banqueaudi.com/ebo/psa.pft.Transfer" xmlns:sid="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/psa.pft.Transfer" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="txn.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" />
+  <xsd:import schemaLocation="psa.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.party.ContactDetails_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" />
+  <xsd:import schemaLocation="pty.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" />
+  <xsd:import schemaLocation="txn.FinancialTransaction_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/txn.FinancialTransaction" />
+  <xsd:import schemaLocation="svl.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" />
+  <xsd:import schemaLocation="svl.brn.Branch_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.brn.Branch" />
+  <xsd:simpleType name="TransferTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="OwnAccount" />
+      <xsd:enumeration value="Internal" />
+      <xsd:enumeration value="Domestic" />
+      <xsd:enumeration value="International" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="transferType" type="TransferTypeType" />
+  <xsd:simpleType name="TransferTypeIndicatorType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="2" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="BankCodeType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="context" type="xsd:string" use="optional">
+          <xsd:annotation>
+            <xsd:documentation>The context of this bank code, it could the network for example, BIC, or MICR etc</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="bankCode" type="BankCodeType" />
+  <xsd:complexType name="BankDetailsType">
+    <xsd:annotation>
+      <xsd:documentation>The bank details where the account is kept</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="institutionName" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="condet:address">
+        <xsd:annotation>
+          <xsd:documentation>The address of the bank and branch where the account if located</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element ref="id:accountId" />
+      <xsd:element minOccurs="0" ref="bankCode" />
+      <xsd:element minOccurs="0" ref="branch:branchSummary" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="bankDetails" type="BankDetailsType" />
+  <xsd:complexType name="BankDetailsCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="bankDetails" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="bankDetailsSet" type="BankDetailsCollectionType" />
+  <xsd:complexType name="BeneficiaryDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="condet:address" />
+      <xsd:element minOccurs="0" ref="bankDetails" />
+      <xsd:element minOccurs="0" name="reference" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="orderingParty" type="BeneficiaryDetailsType" />
+  <xsd:element name="beneficiaryDetails" type="BeneficiaryDetailsType" />
+  <xsd:element name="ultimateBeneficiaryDetails" type="BeneficiaryDetailsType" />
+  <xsd:simpleType name="ChargeBearerType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="UltimateBeneficiary" />
+      <xsd:enumeration value="Sender" />
+      <xsd:enumeration value="SenderBank" />
+      <xsd:enumeration value="Shared" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="chargeBearer" type="ChargeBearerType" />
+  <xsd:complexType name="ChargeDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="chargeBearer" />
+      <xsd:element minOccurs="0" name="chargesOnTop" type="bsc:YNType" />
+      <xsd:element minOccurs="0" ref="chargeSet" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="chargeDetails" type="ChargeDetailsType" />
+  <xsd:simpleType name="AuthorisationStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Unauthorised" />
+      <xsd:enumeration value="Authorised" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="authorisationStatus" type="AuthorisationStatusType" />
+  <xsd:simpleType name="ProcessingStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Hold" />
+      <xsd:enumeration value="Release" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="processingStatus" type="ProcessingStatusType" />
+  <xsd:simpleType name="BusinessContextType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="businessContext" type="BusinessContextType" />
+  <xsd:complexType name="ChargeType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="chargeBearer" />
+      <xsd:element minOccurs="0" ref="id:accountId" />
+      <xsd:element minOccurs="0" name="amount" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="charge" type="ChargeType" />
+  <xsd:complexType name="TransferChargeSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="charge" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="chargeSet" type="TransferChargeSetType" />
+  <xsd:complexType name="RemittanceInformationSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="remittanceInformation" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="remittanceInformationSet" type="RemittanceInformationSetType" />
+  <xsd:complexType name="TransferType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="tid:transactionIds">
+        <xsd:annotation>
+          <xsd:documentation>A payment is identified in the same way a transaction, as it results in a transaction/voucher on the core</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="type" type="TransferTypeIndicatorType" />
+      <xsd:element minOccurs="0" name="customerIdAuthority" type="cid:CustomerIdType">
+        <xsd:annotation>
+          <xsd:documentation>Customer Id authorising / requesting this transfer</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="ftx:legEntrySet">
+        <xsd:annotation>
+          <xsd:documentation>This describes the leg entries for this transfer.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="executionDate" type="xsd:dateTime" />
+      <xsd:element minOccurs="0" name="valueDate" type="xsd:date">
+        <xsd:annotation>
+          <xsd:documentation>The value date for this transfer as a whole. The interpretation of this over the value date of the leg entries is specific to operation</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="transferCurrency" type="bsc:ISO4217CurrencyType" />
+      <xsd:element minOccurs="0" name="SWIFTDetails" type="ftx:SWIFTDetailsBaseType" />
+      <xsd:element minOccurs="0" ref="orderingParty" />
+      <xsd:element minOccurs="0" ref="ultimateBeneficiaryDetails" />
+      <xsd:element minOccurs="0" name="intermediaryBank" type="BankDetailsType" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="longDescription" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="chargeDetails" />
+      <xsd:element minOccurs="0" ref="remittanceInformationSet" />
+      <xsd:element minOccurs="0" ref="ftx:transactionCode" />
+      <xsd:element minOccurs="0" ref="transferType" />
+      <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+      <xsd:element minOccurs="0" name="forcedTransaction" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute default="Hold" name="processingStatus" type="ProcessingStatusType" use="optional" />
+    <xsd:attribute default="Unauthorised" name="authorisationStatus" type="AuthorisationStatusType" use="optional" />
+    <xsd:attribute name="businessContext" type="BusinessContextType" use="optional" />
+  </xsd:complexType>
+  <xsd:element name="transfer" type="TransferType" />
+</xsd:schema>

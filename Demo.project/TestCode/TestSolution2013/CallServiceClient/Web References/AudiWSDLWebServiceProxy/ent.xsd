@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns="http://www.banqueaudi.com/ebo/ent.cmn.Identifiers" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/ent.cmn.Identifiers" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:complexType name="DocumentIdType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="context" type="xsd:string" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="documentId" type="DocumentIdType" />
+  <xsd:complexType name="DocumentClassIdType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string" />
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="documentClassId" type="DocumentClassIdType" />
+</xsd:schema>

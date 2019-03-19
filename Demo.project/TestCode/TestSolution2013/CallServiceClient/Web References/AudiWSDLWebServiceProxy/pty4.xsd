@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:party="http://www.banqueaudi.com/ebo/pty.party.Party" xmlns:org="http://www.banqueaudi.com/ebo/pty.org.Organisation" xmlns:id="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns:AccId="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" xmlns="http://www.banqueaudi.com/ebo/pty.person.Person" xmlns:cust="http://www.banqueaudi.com/ebo/pty.cust.Customer" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/pty.person.Person" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="pty.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.party.Party_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.party.Party" />
+  <xsd:import schemaLocation="pty.org.Organisation_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.org.Organisation" />
+  <xsd:import schemaLocation="pty.cust.Customer_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cust.Customer" />
+  <xsd:import schemaLocation="psa.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" />
+  <xsd:complexType name="RelationshipType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="type" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="others" type="xsd:string" />
+      <xsd:element minOccurs="0" name="sequence" type="xsd:unsignedInt" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="relationship" type="RelationshipType" />
+  <xsd:complexType name="NameDetailType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="salutation" type="xsd:string" />
+      <xsd:element minOccurs="0" name="firstName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="middleName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="lastName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="fathersName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="mothersName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="birthLastName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="spouseLastName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="nickname" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="nameDetail" type="NameDetailType" />
+  <xsd:complexType name="NameType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="shortName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="longName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="effectiveDate" type="xsd:date" />
+      <xsd:element minOccurs="0" ref="nameDetail" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="name" type="NameType" />
+  <xsd:simpleType name="LanguageAbilityType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Spoken" />
+      <xsd:enumeration value="Written" />
+      <xsd:enumeration value="Spoken and Written" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="LanguageType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="language" type="bsc:IETFLanguageCodeType" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="ability" type="LanguageAbilityType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="language" type="LanguageType" />
+  <xsd:complexType name="LanguageSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="language" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="languageSet" type="LanguageSetType" />
+  <xsd:complexType name="ResidencyType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="country" type="xsd:string" />
+      <xsd:element minOccurs="0" name="status" type="xsd:string" />
+      <xsd:element minOccurs="0" name="dateOfResidency" type="xsd:date" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="residency" type="ResidencyType" />
+  <xsd:simpleType name="MaritalStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Married" />
+      <xsd:enumeration value="Re-Married" />
+      <xsd:enumeration value="Defacto" />
+      <xsd:enumeration value="Single" />
+      <xsd:enumeration value="Divorced" />
+      <xsd:enumeration value="Separated" />
+      <xsd:enumeration value="Spouse Expired" />
+      <xsd:enumeration value="Widow" />
+      <xsd:enumeration value="Widower" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="MaritalDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="maritalStatus" type="MaritalStatusType" />
+      <xsd:element minOccurs="0" name="civilRegisterNumber" type="xsd:string" />
+      <xsd:element minOccurs="0" name="civilRegistryCity" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="maritalDetails" type="MaritalDetailsType" />
+  <xsd:complexType name="ReligionDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="religion" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="religionDetails" type="ReligionDetailsType" />
+  <xsd:complexType name="DependentType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="dateOfBirth" type="xsd:date" />
+      <xsd:element minOccurs="0" ref="relationship" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="dependent" type="DependentType" />
+  <xsd:complexType name="dependentCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="dependent" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="dependentSet" type="dependentCollectionType" />
+  <xsd:complexType name="PersonalDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="placeOfBirth" type="xsd:string" />
+      <xsd:element minOccurs="0" name="countryOfBirth" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="maritalDetails" />
+      <xsd:element minOccurs="0" ref="religionDetails" />
+      <xsd:element minOccurs="0" ref="dependentSet" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="personalDetails" type="PersonalDetailsType" />
+  <xsd:complexType name="EconomicSectorBaseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="EconomicSectorType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="EconomicSectorBaseType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="subSector" type="EconomicSectorBaseType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="economicSector" type="EconomicSectorType" />
+  <xsd:simpleType name="EducationLevelType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Elementary" />
+      <xsd:enumeration value="Intermediary" />
+      <xsd:enumeration value="Secondary" />
+      <xsd:enumeration value="Baccalaureat" />
+      <xsd:enumeration value="Diploma" />
+      <xsd:enumeration value="None" />
+      <xsd:enumeration value="Postgraduate" />
+      <xsd:enumeration value="Bachelor/Licence" />
+      <xsd:enumeration value="Masters/Maitrise" />
+      <xsd:enumeration value="Post Masters/DES" />
+      <xsd:enumeration value="PhD/MD" />
+      <xsd:enumeration value="Illiterate" />
+      <xsd:enumeration value="Technical School" />
+      <xsd:enumeration value="Banking Studies Diploma" />
+      <xsd:enumeration value="Bachelor of Engineering" />
+      <xsd:enumeration value="Medicine Doctorat" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="EducationDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="educationLevel" type="EducationLevelType" />
+      <xsd:element minOccurs="0" name="institutionName" type="xsd:string" />
+      <xsd:element minOccurs="0" name="graduationDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="educationDescription" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="educationDetails" type="EducationDetailsType" />
+  <xsd:simpleType name="EmploymentStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="At Home" />
+      <xsd:enumeration value="Unemployed" />
+      <xsd:enumeration value="Self-Employed" />
+      <xsd:enumeration value="Full-time Permanent" />
+      <xsd:enumeration value="Full-time Temporary" />
+      <xsd:enumeration value="Part-time" />
+      <xsd:enumeration value="Student" />
+      <xsd:enumeration value="Casual" />
+      <xsd:enumeration value="Retired - Pension" />
+      <xsd:enumeration value="Retired - Non-Pensioned" />
+      <xsd:enumeration value="Other Government Benefit" />
+      <xsd:enumeration value="Other" />
+      <xsd:enumeration value="Business Owner of less than 5 Employees" />
+      <xsd:enumeration value="Business Owner of less than 10 Employees" />
+      <xsd:enumeration value="Business Owner of greater than or equal 10 Employees" />
+      <xsd:enumeration value="Independent" />
+      <xsd:enumeration value="Corporation Owner" />
+      <xsd:enumeration value="Establishment Owner" />
+      <xsd:enumeration value="Corporation Owner and Establishment Owner" />
+      <xsd:enumeration value="Full-time Permanent and Establishment Owner and Corporation Owner" />
+      <xsd:enumeration value="Full-time Permanent and Establishment Owner" />
+      <xsd:enumeration value="Full-time Permanent and Corporation Owner" />
+      <xsd:enumeration value="Self-Employed and Establishment Owner and Corporation Owner" />
+      <xsd:enumeration value="Self-Employed and Establishment Owner" />
+      <xsd:enumeration value="Self-Employed and Corporation Owner" />
+      <xsd:enumeration value="Independent and Establishment Owner and Corporation Owner" />
+      <xsd:enumeration value="Independent and Establishment Owner" />
+      <xsd:enumeration value="Independent and Corporation Owner" />
+      <xsd:enumeration value="Not Available" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="EmploymentStatusTypeType">
+    <xsd:simpleContent>
+      <xsd:extension base="EmploymentStatusType">
+        <xsd:attribute name="description" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="EmploymentDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="status" type="EmploymentStatusTypeType" />
+      <xsd:element minOccurs="0" name="role" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="effectiveDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="organisationName" type="org:OrganisationNameType" />
+      <xsd:element minOccurs="0" ref="economicSector" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="employmentDetails" type="EmploymentDetailsType" />
+  <xsd:complexType name="EmploymentDetailsSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="employmentDetails" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="employmentDetailsSet" type="EmploymentDetailsSetType" />
+  <xsd:complexType name="NationalityType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="country" type="xsd:string" />
+      <xsd:element minOccurs="0" name="dateOfAttainment" type="xsd:date" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="nationality" type="NationalityType" />
+  <xsd:complexType name="NationalitySetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="nationality" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="nationalitySet" type="NationalitySetType" />
+  <xsd:complexType name="PersonSummaryType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="party:PartyType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" ref="name" />
+          <xsd:element minOccurs="0" name="alternateName" type="NameType" />
+          <xsd:element minOccurs="0" name="age" type="xsd:unsignedInt" />
+          <xsd:element minOccurs="0" name="gender" type="bsc:GenderType" />
+          <xsd:element minOccurs="0" name="dateOfBirth" type="xsd:date" />
+          <xsd:element minOccurs="0" name="dateOfDeath" type="xsd:date" />
+          <xsd:element minOccurs="0" ref="nationalitySet" />
+          <xsd:element minOccurs="0" ref="residency" />
+          <xsd:element minOccurs="0" ref="employmentDetailsSet" />
+          <xsd:element minOccurs="0" name="personSummaryDetails" type="PersonalDetailsType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="personSummary" type="PersonSummaryType" />
+  <xsd:complexType name="PrincipleAccountsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="mainAccountNumber" type="AccId:AccountIdType" />
+      <xsd:element minOccurs="0" name="accountOpeningDate" type="xsd:date" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="principleAccounts" type="PrincipleAccountsType" />
+  <xsd:complexType name="FinancialDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="primaryBankName" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="principleAccounts" />
+      <xsd:element minOccurs="0" name="yearlyApproximateIncome" type="cust:yearlyApproximateIncomeType" />
+      <xsd:element minOccurs="0" name="approximateNetInvestibleAssets" type="cust:approximateNetInvestibleAssetsType" />
+      <xsd:element minOccurs="0" ref="cust:netWorth" />
+      <xsd:element minOccurs="0" ref="cust:tradingAndInvestment" />
+      <xsd:element minOccurs="0" name="natureOfInvestmentCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natureOfInvestmentDesc" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="cust:retirementStrategy" />
+      <xsd:element minOccurs="0" ref="cust:liquidityNeeds" />
+      <xsd:element minOccurs="0" name="otherFinancialDetails" type="xsd:string" />
+      <xsd:element minOccurs="0" name="clientRiskScore" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="FraudScoreType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Clear" />
+      <xsd:enumeration value="Blocked" />
+      <xsd:enumeration value="Partial" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="PersonType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="PersonSummaryType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" ref="languageSet" />
+          <xsd:element minOccurs="0" ref="personalDetails" />
+          <xsd:element minOccurs="0" ref="educationDetails" />
+          <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+          <xsd:element minOccurs="0" name="financialDetails" type="FinancialDetailsType" />
+          <xsd:element minOccurs="0" ref="cust:isCompanyBoardMember" />
+          <xsd:element minOccurs="0" ref="cust:isInsiderIssuer" />
+          <xsd:element minOccurs="0" ref="cust:relationToPubliclyListedCompany" />
+          <xsd:element minOccurs="0" name="fraudScore" type="FraudScoreType" />
+          <xsd:element minOccurs="0" name="isBlackListed" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="kycParty" type="cust:KYCType" />
+          <xsd:element minOccurs="0" name="cma" type="cust:CMAType" />
+          <xsd:element minOccurs="0" name="preferredLanguage" type="LanguageType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="person" type="PersonType" />
+  <xsd:complexType name="ChannelRetailUserType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="PersonType">
+        <xsd:sequence>
+          <xsd:element ref="cust:userDetails" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="channelRetailUser" type="ChannelRetailUserType" />
+</xsd:schema>

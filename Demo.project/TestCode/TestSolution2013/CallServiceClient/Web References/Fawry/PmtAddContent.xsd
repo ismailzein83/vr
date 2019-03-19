@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns:tns="http://www.fawry-eg.com/ebpp/IFXMessages/" targetNamespace="http://www.fawry-eg.com/ebpp/IFXMessages/" xmlns="http://www.w3.org/2001/XMLSchema">
+  <include schemaLocation="CoreLib.xsd" />
+  <complexType name="PmtAddRqType">
+    <sequence>
+      <element minOccurs="0" maxOccurs="unbounded" name="CustId" type="tns:CustIdType" />
+      <element minOccurs="1" maxOccurs="unbounded" name="PmtInfo" type="tns:PmtInfoType" />
+      <element minOccurs="0" maxOccurs="1" name="AuthInfo" type="tns:AuthInfoType" />
+    </sequence>
+  </complexType>
+  <complexType name="PmtAddRsType">
+    <sequence>
+      <element minOccurs="0" maxOccurs="unbounded" name="CustId" type="tns:CustIdType" />
+      <element minOccurs="0" maxOccurs="unbounded" name="PmtInfoVal" type="tns:PmtInfoValType" />
+    </sequence>
+  </complexType>
+  <complexType name="PmtInfoValType">
+    <sequence>
+      <element minOccurs="0" maxOccurs="1" name="status" type="tns:StatusType" />
+      <element minOccurs="0" maxOccurs="unbounded" name="PmtTransId" type="tns:PmtTransIdType" />
+      <element minOccurs="1" maxOccurs="1" name="PmtInfo" type="tns:PmtInfoType" />
+      <element minOccurs="0" maxOccurs="1" name="AuthInfo" type="tns:AuthInfoType" />
+      <element minOccurs="0" maxOccurs="1" name="VouchInfo" type="tns:VouchInfoType" />
+    </sequence>
+  </complexType>
+</schema>

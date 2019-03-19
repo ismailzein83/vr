@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/TFS/Retail/Documents/Ringo/Fawry/API WSDL and Samples/FawryEBPP_Web service/xsd/FAWRY_IFX.xsd" filename="FAWRY_IFX.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/TFS/Retail/Documents/Ringo/Fawry/API WSDL and Samples/FawryEBPP_Web service/GatewayOnlineService_schema.xsd" filename="GatewayOnlineService_schema.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///C:/TFS/Retail/Documents/Ringo/Fawry/API WSDL and Samples/FawryEBPP_Web service/ChannelGatewayOnlineService.wsdl" filename="ApplicationBusinessFacadeService.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/TFS/Retail/Documents/Ringo/Fawry/API WSDL and Samples/FawryEBPP_Web service/xsd/PmtAddContent.xsd" filename="PmtAddContent.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/TFS/Retail/Documents/Ringo/Fawry/API WSDL and Samples/FawryEBPP_Web service/xsd/FAWRYContent.xsd" filename="FAWRYContent.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/TFS/Retail/Documents/Ringo/Fawry/API WSDL and Samples/FawryEBPP_Web service/xsd/CoreLib.xsd" filename="CoreLib.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/TFS/Retail/Documents/Ringo/Fawry/API WSDL and Samples/FawryEBPP_Web service/xsd/CoreEnum.xsd" filename="CoreEnum.xsd" />
+  </Results>
+</DiscoveryClientResultsFile>

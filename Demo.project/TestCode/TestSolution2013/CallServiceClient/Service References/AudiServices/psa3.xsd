@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:svlid="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" xmlns:txnid="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" xmlns:id="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" xmlns="http://www.banqueaudi.com/ebo/psa.loan.LoanSchedule" xmlns:ptyid="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns:pay="http://www.banqueaudi.com/ebo/psa.pft.Payment" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/psa.loan.LoanSchedule" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="psa.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" />
+  <xsd:import schemaLocation="txn.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" />
+  <xsd:import schemaLocation="svl.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" />
+  <xsd:import schemaLocation="psa.pft.Payment_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.pft.Payment" />
+  <xsd:complexType name="PaymentType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bsc:paymentStatus" />
+      <xsd:element minOccurs="0" name="paymentDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="amount" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" ref="txnid:transactionIdentifierList" />
+      <xsd:element minOccurs="0" name="interestRate" type="InterestRatetype" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="payment" type="PaymentType" />
+  <xsd:complexType name="InterestRatetype">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="appliedRate" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="accrualRate" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="rate" type="xsd:decimal" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="InstalmentEntryType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="amount" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="interestRate" type="InterestRatetype" />
+      <xsd:element minOccurs="0" ref="bsc:paymentStatus" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="InstalmentType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="sequenceNumber" type="xsd:integer" />
+      <xsd:element minOccurs="0" name="dueDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="principalAmount" type="InstalmentEntryType" />
+      <xsd:element minOccurs="0" name="interestAmount" type="InstalmentEntryType" />
+      <xsd:element minOccurs="0" name="chargesAmount" type="InstalmentEntryType" />
+      <xsd:element minOccurs="0" name="instalmentAmount" type="InstalmentEntryType" />
+      <xsd:element minOccurs="0" ref="payment" />
+      <xsd:element minOccurs="0" name="specialPayment" type="InstalmentEntryType" />
+      <xsd:element minOccurs="0" name="additionalFeesAndChargesSet" type="bsc:FeesAndChargesCollectionType" />
+      <xsd:element minOccurs="0" name="unpaidInterest" type="InstalmentEntryType" />
+      <xsd:element minOccurs="0" name="loanInsurrance" type="InstalmentEntryType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="instalment" type="InstalmentType" />
+  <xsd:complexType name="InstalmentListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="instalment" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="instalmentList" type="InstalmentListType" />
+  <xsd:simpleType name="StatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Disbursed" />
+      <xsd:enumeration value="Undisbursed" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="LoanDisbursmentType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="target" type="pay:PaymentSourceType" />
+      <xsd:element minOccurs="0" name="amount" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="date" type="xsd:date" />
+      <xsd:element minOccurs="0" name="status" type="StatusType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="loanDisbursment" type="LoanDisbursmentType" />
+  <xsd:complexType name="loanDisbursmentScheduleType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="loanDisbursment" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="loanDisbursmentSchedule" type="loanDisbursmentScheduleType" />
+  <xsd:simpleType name="LoanComponentType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Principal" />
+      <xsd:enumeration value="Interest" />
+      <xsd:enumeration value="Charges" />
+      <xsd:enumeration value="All" />
+      <xsd:enumeration value="Other" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="loanComponent" type="LoanComponentType" />
+  <xsd:complexType name="LoanComponentSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="loanComponent" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="loanComponentSet" type="LoanComponentSetType" />
+  <xsd:complexType name="PaymentFrequencyType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="loanComponentSet">
+        <xsd:annotation>
+          <xsd:documentation>The type of loan component this frequency describes, e.g. "Principal", "Principal + Interest" etc</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="frequency" type="xsd:duration">
+        <xsd:annotation>
+          <xsd:documentation>The frequency this loan component is expected to be repaid</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="paymentFrequency" type="PaymentFrequencyType" />
+  <xsd:complexType name="PaymentFrequencySetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="paymentFrequency" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="paymentFrequencySet" type="PaymentFrequencySetType" />
+  <xsd:complexType name="InstalmentDetailType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="numberOfInstalmentsPaid" type="xsd:unsignedInt" />
+      <xsd:element minOccurs="0" name="numberOfInstalmentsRemaining" type="xsd:unsignedInt" />
+      <xsd:element minOccurs="0" name="previousInstalment" type="InstalmentType">
+        <xsd:annotation>
+          <xsd:documentation>The previous instalment in this schedule (based on the current date). This might also be included in the instalmentList, but is here for simplicity</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="nextInstalment" type="InstalmentType">
+        <xsd:annotation>
+          <xsd:documentation>The next instalment (due) in this schedule (based on the current date). This might also be included in the instalmentList, but is here for simplicity</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="instalmentList">
+        <xsd:annotation>
+          <xsd:documentation>The list of instalment for this loan schedule (or a part list)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="instalmentDetail" type="InstalmentDetailType" />
+  <xsd:complexType name="LoanScheduleType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="id:accountId" />
+      <xsd:element minOccurs="0" ref="ptyid:customerId" />
+      <xsd:element minOccurs="0" ref="svlid:branchId" />
+      <xsd:element minOccurs="0" ref="id:loanContractId" />
+      <xsd:element minOccurs="0" ref="id:loanScheduleId" />
+      <xsd:element minOccurs="0" name="creationDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="isCurrentSchedule" type="bsc:YNType" />
+      <xsd:element minOccurs="0" name="settlementCurrency" type="bsc:ISO4217CurrencyType" />
+      <xsd:element minOccurs="0" name="interestRate" type="xsd:decimal" />
+      <xsd:element minOccurs="0" ref="instalmentDetail" />
+      <xsd:element minOccurs="0" ref="paymentFrequencySet">
+        <xsd:annotation>
+          <xsd:documentation>Details the payment frequency "formula" for various loan component. This is also reflected in the instalmentList.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+      <xsd:element minOccurs="0" ref="loanDisbursmentSchedule" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="loanSchedule" type="LoanScheduleType" />
+</xsd:schema>

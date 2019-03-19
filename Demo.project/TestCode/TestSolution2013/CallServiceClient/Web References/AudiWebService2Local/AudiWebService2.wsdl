@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.banqueaudi.com/evs/pp.rates.FXRate" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://www.banqueaudi.com/ebo/util.cmn.EBMHeader" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s2="http://www.banqueaudi.com/ebo/util.cmn.Basic" xmlns:s3="http://www.banqueaudi.com/ebo/txn.FinancialTransaction" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.banqueaudi.com/evs/pp.rates.FXRate" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/evs/pp.rates.FXRate">
+      <s:import namespace="http://www.banqueaudi.com/ebo/util.cmn.EBMHeader" />
+      <s:import namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+      <s:import namespace="http://www.banqueaudi.com/ebo/txn.FinancialTransaction" />
+      <s:element name="getFXRates">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getFXRates1" type="tns:GetFXRatesType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="GetFXRatesType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:header" />
+          <s:element minOccurs="0" maxOccurs="1" name="body">
+            <s:complexType>
+              <s:sequence>
+                <s:element minOccurs="0" maxOccurs="1" name="fromCurrencyList" type="tns:ArrayOfISO4217CurrencyType" />
+                <s:element minOccurs="0" maxOccurs="1" name="toCurrencyList" type="tns:ArrayOfISO4217CurrencyType1" />
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfISO4217CurrencyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="fromCurrency" type="s2:ISO4217CurrencyType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfISO4217CurrencyType1">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="toCurrency" type="s2:ISO4217CurrencyType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="GetFXRatesResponseType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:header" />
+          <s:element minOccurs="0" maxOccurs="1" name="body">
+            <s:complexType>
+              <s:sequence>
+                <s:element minOccurs="0" maxOccurs="1" name="FXRateFullDetailsList" type="s3:ArrayOfFXRateFullDetailsType" />
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getFXRatesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getFXRatesResult" type="tns:GetFXRatesResponseType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/util.cmn.EBMHeader">
+      <s:import namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+      <s:element name="header" type="s1:HeaderType" />
+      <s:complexType name="HeaderType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ebmCID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ebmMID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ebmRTID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ebmPID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ebmSID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ebmTimestamp" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="propertySet" type="s2:ArrayOfPropertyType" />
+          <s:element minOccurs="0" maxOccurs="1" name="bankEntityId" type="s1:BankEntityIdType" />
+          <s:element minOccurs="0" maxOccurs="1" name="userID" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="BankEntityIdType">
+        <s:restriction base="s:string">
+          <s:enumeration value="BASAL" />
+          <s:enumeration value="BAEGY" />
+          <s:enumeration value="BAIRQ" />
+          <s:enumeration value="BAJO" />
+          <s:enumeration value="ODEA" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/util.cmn.Basic">
+      <s:complexType name="ArrayOfPropertyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="property" type="s2:PropertyType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PropertyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="value" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="anyValue" />
+        </s:sequence>
+        <s:attribute name="name" type="s:string" />
+        <s:attribute name="description" type="s:string" />
+        <s:attribute name="type" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ISO4217CurrencyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="code" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="number" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="YNType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Y" />
+          <s:enumeration value="N" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/txn.FinancialTransaction">
+      <s:import namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+      <s:complexType name="ArrayOfFXRateFullDetailsType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="FXRateFullDetails" type="s3:FXRateFullDetailsType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="FXRateFullDetailsType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="fromCurrency" type="s2:ISO4217CurrencyType" />
+          <s:element minOccurs="0" maxOccurs="1" name="toCurrency" type="s2:ISO4217CurrencyType" />
+          <s:element minOccurs="0" maxOccurs="1" name="conversionDetails" type="s3:ConversionDetailsType" />
+          <s:element minOccurs="0" maxOccurs="1" name="standardRate" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="buyingRate" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="sellingRate" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="rateDateTime" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="currencyPairRate" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ConversionDetailsType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="mode" type="s3:ConversionModeType" />
+          <s:element minOccurs="0" maxOccurs="1" name="isIndirect" type="s2:YNType" />
+          <s:element minOccurs="0" maxOccurs="1" name="isStandard" type="s2:YNType" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ConversionModeType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Multiply" />
+          <s:enumeration value="Divide" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getFXRatesSoapIn">
+    <wsdl:part name="parameters" element="tns:getFXRates" />
+  </wsdl:message>
+  <wsdl:message name="getFXRatesSoapOut">
+    <wsdl:part name="parameters" element="tns:getFXRatesResponse" />
+  </wsdl:message>
+  <wsdl:portType name="AudiWebService2Soap">
+    <wsdl:operation name="getFXRates">
+      <wsdl:input message="tns:getFXRatesSoapIn" />
+      <wsdl:output message="tns:getFXRatesSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AudiWebService2Soap" type="tns:AudiWebService2Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getFXRates">
+      <soap:operation soapAction="http://www.banqueaudi.com/evs/pp.rates.FXRate/getFXRates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AudiWebService2Soap12" type="tns:AudiWebService2Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getFXRates">
+      <soap12:operation soapAction="http://www.banqueaudi.com/evs/pp.rates.FXRate/getFXRates" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AudiWebService2">
+    <wsdl:port name="AudiWebService2Soap" binding="tns:AudiWebService2Soap">
+      <soap:address location="http://localhost:8881/AudiWebService2.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AudiWebService2Soap12" binding="tns:AudiWebService2Soap12">
+      <soap12:address location="http://localhost:8881/AudiWebService2.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

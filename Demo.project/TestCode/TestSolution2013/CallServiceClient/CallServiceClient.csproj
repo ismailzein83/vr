@@ -1,0 +1,608 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D29E2A8A-6E9A-4FC2-B9EB-E78AEA1E9868}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CallServiceClient</RootNamespace>
+    <AssemblyName>CallServiceClient</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.106.3.1\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\..\..\..\TFS\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MyClientProxy.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RestSharpXMLDeserializer.cs" />
+    <Compile Include="Service References\AudiServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\Service1\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\WebService1\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\AudiWebService2Local\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\AudiWebService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\AudiWSDLWebServiceProxy\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Fawry\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\NovercaMngtWS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Service1Soap\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\WebService1Soap\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="WsProxy.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Service References\AudiServices\CallServiceClient.AudiServices.getCounterValueAmountResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\AudiServices\CallServiceClient.AudiServices.GetCounterValueAmountResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\AudiServices\CallServiceClient.AudiServices.getFXRatesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\AudiServices\CallServiceClient.AudiServices.GetFXRatesResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\AudiServices\ent.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\pp.rates.evs.wsdl" />
+    <None Include="Service References\AudiServices\pp.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\psa.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\psa1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\psa2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\psa3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\psa4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\psa5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\psa6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\pty.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\pty1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\pty2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\pty3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\pty4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\pty5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\pty6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\svl.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\svl1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\txn.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\txn1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\util.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\util1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AudiServices\util2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Service1\CallServiceClient.Service1.TestMethodOutput.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Service1\Service1.wsdl" />
+    <None Include="Service References\Service1\Service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Service1\Service11.wsdl">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Service1\Service11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\Service1\Service12.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WebService1\CallServiceClient.WebService1.HelloWorldResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WebService1\CallServiceClient.WebService1.TestMethod2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WebService1\CallServiceClient.WebService1.TestMethodOutput.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WebService1\WebService1.wsdl">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWebService2Local\AudiWebService2.wsdl" />
+    <None Include="Web References\AudiWebService2Local\GetFXRatesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\AudiWebService2Local\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\AudiWebService\AudiWebService.wsdl" />
+    <None Include="Web References\AudiWebService\getFXRatesResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\AudiWebService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\ent.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\GetCounterValueAmountResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\GetFXRatesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\pp.rates.evs.wsdl" />
+    <None Include="Web References\AudiWSDLWebServiceProxy\pp.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\psa.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\psa0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\psa1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\psa2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\psa3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\psa4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\psa5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\pty.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\pty0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\pty1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\pty2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\pty3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\pty4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\pty5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\svl.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\svl0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\txn.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\txn0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\util.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\util0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\AudiWSDLWebServiceProxy\util1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Fawry\ApplicationBusinessFacadeService.wsdl" />
+    <None Include="Web References\Fawry\CoreEnum.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Fawry\CoreLib.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Fawry\FAWRYContent.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Fawry\FAWRYType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Fawry\FAWRY_IFX.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Fawry\GatewayOnlineService_schema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Fawry\PmtAddContent.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Fawry\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\NovercaMngtWS\ManagementService.wsdl" />
+    <None Include="Web References\NovercaMngtWS\rContainer.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerBookingPromo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerCRMUnifiedInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerHistoryMNP.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerInfoMNPfull.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerInfoSaid.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerPreRatingList.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerPromoAll.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerPromoBags.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerRecharges.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerSCE.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\rContainerService.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\NovercaMngtWS\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Service1Soap\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Service1Soap\Service1.wsdl" />
+    <None Include="Web References\Service1Soap\Service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Service1Soap\Service10.wsdl" />
+    <None Include="Web References\Service1Soap\Service10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Service1Soap\Service11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Service1Soap\TestMethodOutput.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\WebService1Soap\MyTestMethodOutput.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\WebService1Soap\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\WebService1Soap\TestMethodOutput.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\WebService1Soap\WebService1.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\AudiServices\" />
+    <WCFMetadataStorage Include="Service References\Service1\" />
+    <WCFMetadataStorage Include="Service References\WebService1\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WebService1\WebService1.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WebService1\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WebService1\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WebService1\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Service1\Service1.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Service1\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Service1\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Service1\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="C:\TFS\Retail\Documents\Ringo\Fawry\API WSDL and Samples\FawryEBPP_Web service\ChannelGatewayOnlineService.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Fawry\</RelPath>
+      <UpdateFromURL>C:\TFS\Retail\Documents\Ringo\Fawry\API WSDL and Samples\FawryEBPP_Web service\ChannelGatewayOnlineService.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CallServiceClient_Fawry_ApplicationBusinessFacadeService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\Users\ismail.zein\Desktop\pp.rates.tevs.FXRate_1.0_wsdl\pp.rates.evs.FXRate_1.0.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\AudiWSDLWebServiceProxy\</RelPath>
+      <UpdateFromURL>C:\Users\ismail.zein\Desktop\pp.rates.tevs.FXRate_1.0_wsdl\pp.rates.evs.FXRate_1.0.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CallServiceClient_AudiWSDLWebServiceProxy_pp_rates_evs_FXRate_BindingQSService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://94.141.30.27:8080/management/sim%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\NovercaMngtWS\</RelPath>
+      <UpdateFromURL>http://94.141.30.27:8080/management/sim%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CallServiceClient_NovercaMngtWS_ManagementService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://localhost:1206/Service1.svc">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Service1Soap\</RelPath>
+      <UpdateFromURL>http://localhost:1206/Service1.svc</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CallServiceClient_Service1Soap_Service1</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://localhost:1206/WebService1.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\WebService1Soap\</RelPath>
+      <UpdateFromURL>http://localhost:1206/WebService1.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CallServiceClient_WebService1Soap_WebService1</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://localhost:8881/AudiWebService.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\AudiWebService\</RelPath>
+      <UpdateFromURL>http://localhost:8881/AudiWebService.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CallServiceClient_AudiWebService_AudiWebService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://localhost:8881/AudiWebService2.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\AudiWebService2Local\</RelPath>
+      <UpdateFromURL>http://localhost:8881/AudiWebService2.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CallServiceClient_AudiWebService2Local_AudiWebService2</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\WebService1Soap\WebService1.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\Service1Soap\Service1.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\AudiServices\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\AudiServices\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\AudiServices\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\AudiWebService\AudiWebService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\AudiWebService2Local\AudiWebService2.disco" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

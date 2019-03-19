@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns:tns="http://www.fawry-eg.com/ebpp/IFXMessages/" targetNamespace="http://www.fawry-eg.com/ebpp/IFXMessages/" xmlns="http://www.w3.org/2001/XMLSchema">
+  <include schemaLocation="FAWRYContent.xsd" />
+  <complexType name="FAWRYType">
+    <sequence>
+      <choice minOccurs="1" maxOccurs="1">
+        <element name="Request" type="tns:RequestType" />
+        <element name="Response" type="tns:ResponseType" />
+      </choice>
+      <element minOccurs="0" maxOccurs="unbounded" name="Signature" type="tns:SignatureType" />
+    </sequence>
+  </complexType>
+  <element name="FAWRY" type="tns:FAWRYType" />
+  <complexType name="RequestType">
+    <sequence>
+      <element minOccurs="1" maxOccurs="1" name="SignonRq" type="tns:SignonRqType" />
+      <element minOccurs="0" maxOccurs="1" name="IsRetry" type="boolean" />
+      <choice minOccurs="1" maxOccurs="1">
+        <element minOccurs="1" maxOccurs="1" name="PaySvcRq" type="tns:PaySvcRqType" />
+      </choice>
+    </sequence>
+  </complexType>
+  <complexType name="ResponseType">
+    <sequence>
+      <element minOccurs="1" maxOccurs="1" name="SignonRs" type="tns:SignonRsType" />
+      <choice minOccurs="1" maxOccurs="1">
+        <element minOccurs="1" maxOccurs="1" name="PaySvcRs" type="tns:PaySvcRsType" />
+      </choice>
+    </sequence>
+  </complexType>
+</schema>

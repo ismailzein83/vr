@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:party="http://www.banqueaudi.com/ebo/pty.party.Party" xmlns:prodId="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" xmlns:contactDetails="http://www.banqueaudi.com/ebo/pty.person.ContactDetails" xmlns:id="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns="http://www.banqueaudi.com/ebo/pty.org.Organisation" xmlns:person="http://www.banqueaudi.com/ebo/pty.person.Person" xmlns:cust="http://www.banqueaudi.com/ebo/pty.cust.Customer" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/pty.org.Organisation" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="pty.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" />
+  <xsd:import schemaLocation="psa.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.party.ContactDetails_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" />
+  <xsd:import schemaLocation="pty.person.Person_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.person.Person" />
+  <xsd:import schemaLocation="pty.cust.Customer_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cust.Customer" />
+  <xsd:import schemaLocation="pty.party.Party_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.party.Party" />
+  <xsd:complexType name="OrganisationNameType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="tradingName" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="name" type="OrganisationNameType" />
+  <xsd:element name="alternateName" type="OrganisationNameType" />
+  <xsd:complexType name="RelationshipType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="type" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="sequence" type="xsd:unsignedInt" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="relationship" type="RelationshipType" />
+  <xsd:complexType name="RelationshipSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="relationship" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="relationshipSet" type="RelationshipSetType" />
+  <xsd:complexType name="PrincipalContactType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="relationshipSet">
+        <xsd:annotation>
+          <xsd:documentation>The nature of this contact's relationship to this organisation</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="description" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>A description of this principal contact</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="person:personSummary" />
+      <xsd:element minOccurs="0" ref="prodId:accountIdSet" />
+      <xsd:element minOccurs="0" name="relationProperties" type="bsc:PropertySetType">
+        <xsd:annotation>
+          <xsd:documentation>Details about this relationship which are not modelled above</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="principalContact" type="PrincipalContactType" />
+  <xsd:complexType name="PrincipalContactSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="principalContact" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="principalContactSet" type="PrincipalContactSetType" />
+  <xsd:complexType name="EconomicSectorBaseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="EconomicSectorType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="EconomicSectorBaseType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="subSector" type="EconomicSectorBaseType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="economicSector" type="EconomicSectorType" />
+  <xsd:complexType name="AffiliatedOrganisationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="relationshipSet" />
+      <xsd:element minOccurs="0" ref="name" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="affiliationPropertySet" type="bsc:PropertySetType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="affiliatedOrganisation" type="AffiliatedOrganisationType" />
+  <xsd:complexType name="AffiliatedOrganisationSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="affiliatedOrganisation" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="affiliatedOrganisationSet" type="AffiliatedOrganisationSetType" />
+  <xsd:complexType name="OrganisationSummaryType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="party:PartyType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" ref="name" />
+          <xsd:element minOccurs="0" ref="alternateName" />
+          <xsd:element minOccurs="0" name="description" type="xsd:string" />
+          <xsd:element minOccurs="0" name="HQCountry" type="xsd:string" />
+          <xsd:element minOccurs="0" ref="economicSector" />
+          <xsd:element minOccurs="0" name="formationDate" type="xsd:date" />
+        </xsd:sequence>
+        <xsd:attribute name="type" type="xsd:string" use="optional" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="organisationSummary" type="OrganisationSummaryType" />
+  <xsd:complexType name="organisationSummaryCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="organisationSummary" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="employerOrganisation" type="OrganisationSummaryType" />
+  <xsd:complexType name="incorporationDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="country" type="xsd:string" />
+      <xsd:element minOccurs="0" name="date" type="xsd:date" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="incorporationDetails" type="incorporationDetailsType" />
+  <xsd:complexType name="PrincipleAccountsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="accountNumber" type="prodId:AccountIdType" />
+      <xsd:element minOccurs="0" name="openingDate" type="xsd:date" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="principleAccounts" type="PrincipleAccountsType" />
+  <xsd:complexType name="FinancialDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="primaryBankName" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="principleAccounts" />
+      <xsd:element minOccurs="0" name="paidUpCapital" type="bsc:AccountingMoneyBaseType" />
+      <xsd:element minOccurs="0" name="expectedAnnualTurnover" type="cust:expectedAnnualTurnoverType" />
+      <xsd:element minOccurs="0" name="approximateNetInvestibleAssets" type="cust:approximateNetInvestibleAssetsType" />
+      <xsd:element minOccurs="0" ref="cust:netWorth" />
+      <xsd:element minOccurs="0" ref="cust:tradingAndInvestment" />
+      <xsd:element minOccurs="0" name="natureOfInvestmentCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="natureOfInvestmentDesc" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="cust:liquidityNeeds" />
+      <xsd:element minOccurs="0" name="otherFinancialDetails" type="xsd:string" />
+      <xsd:element minOccurs="0" name="yearlyApproximateIncome" type="cust:yearlyApproximateIncomeType" />
+      <xsd:element minOccurs="0" name="clientRiskScore" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OrganisationType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="party:PartyType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" ref="name" />
+          <xsd:element minOccurs="0" ref="alternateName" />
+          <xsd:element minOccurs="0" name="description" type="xsd:string" />
+          <xsd:element minOccurs="0" name="HQCountry" type="xsd:string" />
+          <xsd:element minOccurs="0" ref="economicSector" />
+          <xsd:element minOccurs="0" name="formationDate" type="xsd:date" />
+          <xsd:element minOccurs="0" name="closeDate" type="xsd:date" />
+          <xsd:element minOccurs="0" ref="principalContactSet" />
+          <xsd:element minOccurs="0" ref="affiliatedOrganisationSet" />
+          <xsd:element minOccurs="0" name="commercialRegisterNumber" type="xsd:string" />
+          <xsd:element minOccurs="0" ref="incorporationDetails" />
+          <xsd:element minOccurs="0" name="numberOfEmployees" type="xsd:integer" />
+          <xsd:element minOccurs="0" name="financialDetails" type="FinancialDetailsType" />
+          <xsd:element minOccurs="0" ref="cust:isCompanyBoardMember" />
+          <xsd:element minOccurs="0" ref="cust:isInsiderIssuer" />
+          <xsd:element minOccurs="0" name="regulatorName" type="xsd:string" />
+          <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+          <xsd:element minOccurs="0" name="kycParty" type="cust:KYCType" />
+          <xsd:element minOccurs="0" name="cma" type="cust:CMAType" />
+          <xsd:element minOccurs="0" name="isBlackListed" type="xsd:boolean" />
+        </xsd:sequence>
+        <xsd:attribute name="type" type="xsd:string" use="optional" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="organisation" type="OrganisationType" />
+  <xsd:complexType name="organisationListType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" ref="organisation" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="organisationSet" type="organisationListType" />
+  <xsd:complexType name="ChannelCorporateUserType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="OrganisationType">
+        <xsd:sequence>
+          <xsd:element ref="cust:userDetails" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="channelCorporateUser" type="ChannelCorporateUserType" />
+</xsd:schema>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="c7f81ce7-5116-40f5-bc39-8c19c5bed60b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="C:\Users\ismail.zein\Desktop\pp.rates.tevs.FXRate_1.0_wsdl\pp.rates.evs.FXRate_1.0.wsdl" Protocol="file" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="txn.xsd" MetadataType="Schema" ID="9f334a39-3bf3-451c-91c3-c44abdbd8e19" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/txn.cmn.Identifiers_1.0.xsd" />
+    <MetadataFile FileName="pp.xsd" MetadataType="Schema" ID="4f4f70e7-2c0f-4614-84db-6e0a50c63c2f" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pp.rates.evs.FXRate_1.0.xsd" />
+    <MetadataFile FileName="psa.xsd" MetadataType="Schema" ID="b781890a-768a-4d2f-bd71-eb592feeb8c9" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.acc.Account_1.0.xsd" />
+    <MetadataFile FileName="psa1.xsd" MetadataType="Schema" ID="3d20d27a-f857-435e-af2d-5e613c6aedbf" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.accdet.Account_1.0.xsd" />
+    <MetadataFile FileName="pty.xsd" MetadataType="Schema" ID="123027d4-6a4f-40b2-9b3c-da158119caba" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.cmn.Identifiers_1.0.xsd" />
+    <MetadataFile FileName="psa2.xsd" MetadataType="Schema" ID="b768424a-b0c1-413b-b30a-5a9c5103fb0e" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.pft.Payment_1.0.xsd" />
+    <MetadataFile FileName="psa3.xsd" MetadataType="Schema" ID="9b2fd13e-b720-41a6-bed3-e79badea16b6" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.loan.LoanSchedule_1.0.xsd" />
+    <MetadataFile FileName="pty1.xsd" MetadataType="Schema" ID="ce120a2c-ba22-4088-b618-1f699ec7eb66" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.party.Party_1.0.xsd" />
+    <MetadataFile FileName="util.xsd" MetadataType="Schema" ID="919e87e1-4c8c-4fc7-bfd3-092b0a2c030f" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/util.flt.Fault_1.0.xsd" />
+    <MetadataFile FileName="txn1.xsd" MetadataType="Schema" ID="db768375-947e-4737-ac8d-3fb59635a9bc" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/txn.FinancialTransaction_1.0.xsd" />
+    <MetadataFile FileName="psa4.xsd" MetadataType="Schema" ID="462df7a7-83cd-46e5-9ecd-b439f2e52953" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.cmn.Identifiers_1.0.xsd" />
+    <MetadataFile FileName="util1.xsd" MetadataType="Schema" ID="af0118b5-fcd2-4700-bd05-20e74f6ba319" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/util.cmn.Basic_1.0.xsd" />
+    <MetadataFile FileName="svl.xsd" MetadataType="Schema" ID="39ba09ce-7e69-40cf-ba9f-849e046ea46f" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/svl.brn.Branch_1.0.xsd" />
+    <MetadataFile FileName="pty2.xsd" MetadataType="Schema" ID="c560dc9b-cc68-4873-9848-6bacb46aa000" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.party.ContactDetails_1.0.xsd" />
+    <MetadataFile FileName="svl1.xsd" MetadataType="Schema" ID="707bb6a4-867b-4b09-a7d6-67f3cdb023be" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/svl.cmn.Identifiers_1.0.xsd" />
+    <MetadataFile FileName="pty3.xsd" MetadataType="Schema" ID="681b20f6-2faf-4df7-af70-a9a4d37ea552" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.org.Organisation_1.0.xsd" />
+    <MetadataFile FileName="pty4.xsd" MetadataType="Schema" ID="8545980a-9287-4fa1-a976-07ff8a716ce0" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.custdet.Customer_1.0.xsd" />
+    <MetadataFile FileName="util2.xsd" MetadataType="Schema" ID="7335d0f8-1b22-4238-86c0-184d544eded6" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/util.cmn.EBMHeader_1.0.xsd" />
+    <MetadataFile FileName="pty5.xsd" MetadataType="Schema" ID="9683d676-dad2-49c9-b5fc-da3ec76977c3" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.person.Person_1.0.xsd" />
+    <MetadataFile FileName="pp.rates.evs.wsdl" MetadataType="Wsdl" ID="e9980ab1-4888-4193-9267-82e4929490de" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pp.rates.evs.FXRate_1.0.wsdl" />
+    <MetadataFile FileName="psa5.xsd" MetadataType="Schema" ID="3bfa1de7-595f-4e3e-bd2b-ff86c8335bc4" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.cards.Card_2.0.xsd" />
+    <MetadataFile FileName="ent.xsd" MetadataType="Schema" ID="edf9fafd-5ec2-47ec-88bb-da26fc90fbf4" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/ent.cmn.Identifiers_1.0.xsd" />
+    <MetadataFile FileName="pty6.xsd" MetadataType="Schema" ID="896ee34d-9070-4b9c-af56-e865f63e8554" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.cust.Customer_1.0.xsd" />
+    <MetadataFile FileName="psa6.xsd" MetadataType="Schema" ID="8511cc9e-6af2-4c8d-8570-cbb4f518b9db" SourceId="1" SourceUrl="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.pft.Transfer_1.0.xsd" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://vanrise.bp.services" elementFormDefault="qualified" targetNamespace="http://vanrise.bp.services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:1206/Service1.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WebApplication2" />
+  <xs:element name="DoWork">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DoWorkResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DoWorkResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TestMethod2">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/WebApplication2" minOccurs="0" name="input" nillable="true" type="q1:TestMethodInput" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/WebApplication2" minOccurs="0" name="input2" nillable="true" type="q2:TestMethodInput" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TestMethod2Response">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/WebApplication2" minOccurs="0" name="TestMethod2Result" nillable="true" type="q3:TestMethodOutput" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

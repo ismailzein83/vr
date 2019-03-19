@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns="http://www.banqueaudi.com/ebo/svl.brn.Branch" xmlns:condet="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" xmlns:id="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/svl.brn.Branch" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="svl.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.party.ContactDetails_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" />
+  <xsd:simpleType name="BranchNameType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="branchName" type="BranchNameType" />
+  <xsd:simpleType name="BranchTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="ATM" />
+      <xsd:enumeration value="Kiosk" />
+      <xsd:enumeration value="Virtual Branch" />
+      <xsd:enumeration value="Branch" />
+      <xsd:enumeration value="ITM" />
+      <xsd:enumeration value="NOVO" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="branchType" type="BranchTypeType" />
+  <xsd:complexType name="ManagerType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="condet:emailAddressContact" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="manager" type="ManagerType" />
+  <xsd:simpleType name="CustomerClassType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Corporate" />
+      <xsd:enumeration value="Commercial" />
+      <xsd:enumeration value="Retail" />
+      <xsd:enumeration value="Private Wealth" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="customerClass" type="CustomerClassType">
+    <xsd:annotation>
+      <xsd:documentation>
+                The first member of the list would represent the main specialist of the branch. 
+                (I.e., some branches might offer corporate and retail services, but focus most especially on corporate clients).
+                </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="CustomerClassListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="customerClass" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="customerClassList" type="CustomerClassListType" />
+  <xsd:complexType name="GeographicCoordinatesType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="longitude" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="latitude" type="xsd:decimal" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="geographicCoordinates" type="GeographicCoordinatesType" />
+  <xsd:complexType name="GeographicLocationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="geographicCoordinates" />
+      <xsd:element minOccurs="0" name="distanceFromHeadOffice" type="xsd:decimal" />
+      <xsd:element minOccurs="0" name="distanceFromCurrentLocation" type="xsd:decimal" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="geographicLocation" type="GeographicLocationType" />
+  <xsd:complexType name="BranchAddressType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="condet:addressContact" />
+      <xsd:element minOccurs="0" ref="geographicLocation" />
+      <xsd:element minOccurs="0" ref="condet:emailAddressContact" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="branchAddress" type="BranchAddressType" />
+  <xsd:complexType name="ServiceType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="count" type="xsd:unsignedInt" />
+      <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="service" type="ServiceType">
+    <xsd:annotation>
+      <xsd:documentation>Indicates the Branch's services e.g OpenSaturdays, Accepts Appointments, inside lobby, NightDeposits,ATMs,etc...</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="ServiceSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="service" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="serviceSet" type="ServiceSetType" />
+  <xsd:complexType name="WorkingHoursType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="period" type="bsc:DateRangeType" />
+      <xsd:element minOccurs="0" ref="bsc:dayOfWeek" />
+      <xsd:element minOccurs="0" ref="bsc:timeRange" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="workingHours" type="WorkingHoursType" />
+  <xsd:complexType name="WorkingHoursSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="workingHours" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="workingHoursSet" type="WorkingHoursSetType" />
+  <xsd:complexType name="ClearingHouseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="clearingHouse" type="ClearingHouseType" />
+  <xsd:complexType name="RegionalOfficeType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="manager" type="ManagerType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="regionalOffice" type="RegionalOfficeType" />
+  <xsd:complexType name="BranchType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="id:branchId" />
+      <xsd:element minOccurs="0" ref="branchName" />
+      <xsd:element minOccurs="0" ref="branchType" />
+      <xsd:element minOccurs="0" ref="manager" />
+      <xsd:element minOccurs="0" ref="customerClassList" />
+      <xsd:element minOccurs="0" ref="branchAddress" />
+      <xsd:element minOccurs="0" name="status" type="bsc:EntityStatusType" />
+      <xsd:element minOccurs="0" ref="serviceSet" />
+      <xsd:element minOccurs="0" ref="workingHoursSet" />
+      <xsd:element minOccurs="0" ref="regionalOffice" />
+      <xsd:element minOccurs="0" name="accountingBranchid" type="id:BranchIdType">
+        <xsd:annotation>
+          <xsd:documentation>This is where the branch’s financial entries are linked to</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="clearingHouse" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="branch" type="BranchType" />
+  <xsd:complexType name="BranchSummaryType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="id:branchId" />
+      <xsd:element minOccurs="0" ref="branchName" />
+      <xsd:element minOccurs="0" ref="branchAddress" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="branchSummary" type="BranchSummaryType" />
+  <xsd:complexType name="BranchSummaryCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" ref="branchSummary" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="branchSummaryList" type="BranchSummaryCollectionType" />
+  <xsd:element name="branchSummarySet" type="BranchSummaryCollectionType" />
+  <xsd:complexType name="BranchPerformanceType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchRetailTargetsSet" type="BranchRetailTargetsType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchDepositTargetsSet" type="BranchDepositTargetsType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchMigrationTargetsSet" type="BranchMigrationTargetsType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchProductivitySet" type="BranchProductivityType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchQualitySet" type="BranchQualityType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchWaitingTimeSet" type="BranchWaitingTimeType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchKCRSet" type="BranchKCRType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchCOFSet" type="BranchCOFType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchUnpaidRatioSet" type="BranchUnpaidRatioType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchCollectedCommissionsSet" type="BranchCollectedCommissionsType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchCrossSellSet" type="BranchCrossSellType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchAuditResultsSet" type="BranchAuditResultsType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchScoreSet" type="BranchScoreType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchSMEAchievementSet" type="BranchSMEAchievementType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchRollForwardRateSet" type="BranchRollForwardRateType" />
+      <xsd:element minOccurs="0" maxOccurs="12" name="branchNPSScoreSet" type="BranchNPSScoreType" />
+    </xsd:sequence>
+    <xsd:attribute name="branchId" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchPerformance" type="BranchPerformanceType" />
+  <xsd:complexType name="BranchRetailTargetsType">
+    <xsd:sequence>
+      <xsd:element name="retailAchievement" type="bsc:MoneyType" />
+      <xsd:element name="retailAchievementPercentage" type="xsd:float" />
+      <xsd:element name="retailAchievementServicesPercentage" type="xsd:float" />
+      <xsd:element name="retailAchievementCardsPercentage" type="xsd:float" />
+      <xsd:element name="retailAchievementLoansPercentage" type="xsd:float" />
+      <xsd:element name="retailAchievementAccountsPercentage" type="xsd:float" />
+      <xsd:element name="retailAchievementInsurancePercentage" type="xsd:float" />
+      <xsd:element name="timeElapsedPercentage" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchRetailTargets" type="BranchRetailTargetsType" />
+  <xsd:complexType name="BranchDepositTargetsType">
+    <xsd:sequence>
+      <xsd:element name="totaldeposits" type="bsc:MoneyType" />
+      <xsd:element name="totaldepositsUSD" type="bsc:MoneyType" />
+      <xsd:element name="totaldepositsLBP" type="bsc:MoneyType" />
+      <xsd:element name="depositGrowth" type="bsc:MoneyType" />
+      <xsd:element name="depositGrowthUSD" type="bsc:MoneyType" />
+      <xsd:element name="depositGrowthLBP" type="bsc:MoneyType" />
+      <xsd:element name="depositTarget" type="bsc:MoneyType" />
+      <xsd:element name="depositAchievement" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchDepositTargets" type="BranchDepositTargetsType" />
+  <xsd:complexType name="BranchMigrationTargetsType">
+    <xsd:sequence>
+      <xsd:element name="migrationAchievement" type="xsd:float" />
+      <xsd:element name="migrationTarget" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchMigrationTargets" type="BranchMigrationTargetsType" />
+  <xsd:complexType name="BranchProductivityType">
+    <xsd:sequence>
+      <xsd:element name="productivityAchievement" type="xsd:float" />
+      <xsd:element name="productivityTarget" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchProductivity" type="BranchProductivityType" />
+  <xsd:complexType name="BranchQualityType">
+    <xsd:sequence>
+      <xsd:element name="qualityScore" type="xsd:float" />
+      <xsd:element name="qualityTarget" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchQuality" type="BranchQualityType" />
+  <xsd:complexType name="BranchWaitingTimeType">
+    <xsd:sequence>
+      <xsd:element name="percentageClientWaitingUnder5Mins" type="xsd:float" />
+      <xsd:element name="waitingTimeTarget" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+      <xsd:element name="percentageClientWaitingUnder5MinsTellers" type="xsd:float" />
+      <xsd:element name="percentageClientWaitingUnder5MinsCSOs" type="xsd:float" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchWaitingTime" type="BranchWaitingTimeType" />
+  <xsd:complexType name="BranchKCRType">
+    <xsd:sequence>
+      <xsd:element name="KCRScore" type="xsd:float" />
+      <xsd:element name="KCRTarget" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchKCR" type="BranchKCRType" />
+  <xsd:complexType name="BranchCOFType">
+    <xsd:sequence>
+      <xsd:element name="COF" type="xsd:float" />
+      <xsd:element name="COFLimit" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+      <xsd:element name="COFLBP" type="xsd:float" />
+      <xsd:element name="COFLimitLBP" type="xsd:float" />
+      <xsd:element name="targetAcheivedLBP" type="xsd:boolean" />
+      <xsd:element name="COFUSD" type="xsd:float" />
+      <xsd:element name="COFLimitUSD" type="xsd:float" />
+      <xsd:element name="targetAcheivedUSD" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchCOF" type="BranchCOFType" />
+  <xsd:complexType name="BranchUnpaidRatioType">
+    <xsd:sequence>
+      <xsd:element name="unpaidRatio" type="xsd:float" />
+      <xsd:element name="unpaidLimit" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchUnpaidRatio" type="BranchUnpaidRatioType" />
+  <xsd:complexType name="BranchCollectedCommissionsType">
+    <xsd:sequence>
+      <xsd:element name="collectedCommissionsAchievement" type="xsd:float" />
+      <xsd:element name="collectedCommissionsTarget" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchCollectedCommissions" type="BranchCollectedCommissionsType" />
+  <xsd:complexType name="BranchCrossSellType">
+    <xsd:sequence>
+      <xsd:element name="crossSellRatio" type="xsd:float" />
+      <xsd:element name="crossSellTarget" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchCrossSell" type="BranchCrossSellType" />
+  <xsd:complexType name="BranchAuditResultsType">
+    <xsd:sequence>
+      <xsd:element name="auditResults" type="xsd:string" />
+      <xsd:element name="auditTarget" type="xsd:string" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchAuditResults" type="BranchAuditResultsType" />
+  <xsd:complexType name="BranchScoreType">
+    <xsd:sequence>
+      <xsd:element name="score" type="xsd:float" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchScore" type="BranchScoreType" />
+  <xsd:complexType name="BranchSMEAchievementType">
+    <xsd:sequence>
+      <xsd:element name="branchSMEAchievement" type="xsd:float" />
+      <xsd:element name="branchSMETarget" type="xsd:float" />
+      <xsd:element name="branchSMEAchievementPercentage" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchSMEAchievement" type="BranchSMEAchievementType" />
+  <xsd:complexType name="BranchRollForwardRateType">
+    <xsd:sequence>
+      <xsd:element name="branchRollForwardRateAchievement" type="xsd:float" />
+      <xsd:element name="branchRollForwardRateTarget" type="xsd:float" />
+      <xsd:element name="branchRollForwardRatePercentage" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchRollForwardRate" type="BranchRollForwardRateType" />
+  <xsd:complexType name="BranchNPSScoreType">
+    <xsd:sequence>
+      <xsd:element name="branchNPSScoreAchievement" type="xsd:float" />
+      <xsd:element name="branchNPSScoreTarget" type="xsd:float" />
+      <xsd:element name="branchNPSScorePercentage" type="xsd:float" />
+      <xsd:element name="targetAcheived" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="monthYear" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="branchNPSScore" type="BranchNPSScoreType" />
+</xsd:schema>

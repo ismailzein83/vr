@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns="http://www.banqueaudi.com/ebo/txn.FinancialTransaction" xmlns:id="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" xmlns:aid="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" xmlns:bid="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" xmlns:cid="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns:account="http://www.banqueaudi.com/ebo/psa.acc.Account" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/txn.FinancialTransaction" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="txn.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" />
+  <xsd:import schemaLocation="svl.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" />
+  <xsd:import schemaLocation="psa.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" />
+  <xsd:import schemaLocation="psa.acc.Account_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.acc.Account" />
+  <xsd:import schemaLocation="pty.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" />
+  <xsd:complexType name="TransactionAuditType">
+    <xsd:annotation>
+      <xsd:documentation>The transaction audit can be use to detail who created this
+                      trasaction and when</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="user" type="xsd:string" />
+      <xsd:element minOccurs="0" name="timeStamp" type="xsd:dateTime" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TransactionCodeType">
+    <xsd:annotation>
+      <xsd:documentation>The type of the transaction</xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="transactionCategory" type="TransactionCategoryType" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="transactionCode" type="TransactionCodeType" />
+  <xsd:complexType name="TransactionCodeCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="transactionCode" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="transactionCodeSet" type="TransactionCodeCollectionType" />
+  <xsd:element name="transactionCodeList" type="TransactionCodeCollectionType" />
+  <xsd:complexType name="FinancialTransactionType">
+    <xsd:annotation>
+      <xsd:documentation>Represents a Financial Transaction which has occured
+                      against an account</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="id:transactionIds">
+        <xsd:annotation>
+          <xsd:documentation>A unique identification for the transaction in the bank
+                        core</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="aid:accountId">
+        <xsd:annotation>
+          <xsd:documentation>The Account Id this transaction affected. This may be
+                        non-existent if the account context is established outside of
+                        this EBO.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="bid:branchId">
+        <xsd:annotation>
+          <xsd:documentation>The branch Id where the account is held that this
+                        transaction affected</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="cid:customerId" />
+      <xsd:element minOccurs="0" name="transactionDate" nillable="true" type="xsd:date">
+        <xsd:annotation>
+          <xsd:documentation>The transaction date is the date the
+                        transaction actually occured, for example, the time
+                        someone deposited money in their account</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="valueDate" nillable="true" type="xsd:date">
+        <xsd:annotation>
+          <xsd:documentation>The value date is the date the transaction
+                        is actually realised in the customer's account and
+                        therefore can be used by the customer</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="postingDate" nillable="true" type="xsd:date">
+        <xsd:annotation>
+          <xsd:documentation>The posting date is the actual date the
+                        transaction was process by the bank end and the
+                        accouting entries made.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="instructionDate" nillable="true" type="xsd:date">
+        <xsd:annotation>
+          <xsd:documentation>The date the posting is requested.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="longDescription" type="xsd:string" />
+      <xsd:element minOccurs="1" ref="legEntrySet" />
+      <xsd:element minOccurs="0" ref="instrumentDetail" />
+      <xsd:element minOccurs="0" name="userReference" type="xsd:string" />
+      <xsd:element minOccurs="0" name="audit" type="TransactionAuditType" />
+      <xsd:element minOccurs="0" ref="transactionCode" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="financialTransaction" type="FinancialTransactionType" />
+  <xsd:complexType name="FinancialTransactionCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="financialTransaction" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="financialTransactionSet" type="FinancialTransactionCollectionType" />
+  <xsd:element name="financialTransactionList" type="FinancialTransactionCollectionType" />
+  <xsd:complexType name="InstrumentDetailType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="id" type="xsd:string" />
+      <xsd:element minOccurs="0" name="date" type="xsd:date" />
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:string" use="optional" />
+  </xsd:complexType>
+  <xsd:element name="instrumentDetail" type="InstrumentDetailType" />
+  <xsd:simpleType name="FXRateType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:totalDigits value="15" />
+      <xsd:fractionDigits value="8" />
+      <xsd:minExclusive value="0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="FXRate" type="FXRateType" />
+  <xsd:complexType name="FXDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="rate" type="FXRateType" />
+      <xsd:element minOccurs="0" name="counterValue" type="bsc:MoneyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="FXDetails" type="FXDetailsType" />
+  <xsd:complexType name="LegEntryType">
+    <xsd:annotation>
+      <xsd:documentation>A transaction leg entry describes one 'half' of a transaction line. An entry by itself doesn't balance but two entries can balance</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="aid:accountId" />
+      <xsd:element minOccurs="0" ref="bid:branchId">
+        <xsd:annotation>
+          <xsd:documentation>The branch Id where the account is held that this
+                        transaction affected</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="cid:customerId" />
+      <xsd:element minOccurs="0" name="amount" type="bsc:AccountingMoneyType" />
+      <xsd:element minOccurs="0" name="runningBalance" type="bsc:AccountingMoneyType" />
+      <xsd:element minOccurs="0" ref="FXDetails">
+        <xsd:annotation>
+          <xsd:documentation>Is thie leg resulted in an FX this can document the details of the FX</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="valueDate" type="xsd:date">
+        <xsd:annotation>
+          <xsd:documentation>The value date of this debit or credit on the account</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="longDescription" type="xsd:string" />
+      <xsd:element minOccurs="0" name="installmentBalance" type="bsc:MoneyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="legEntry" type="LegEntryType" />
+  <xsd:element name="debitLegEntry" type="LegEntryType" />
+  <xsd:element name="creditLegEntry" type="LegEntryType" />
+  <xsd:complexType name="LegEntryCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="legEntry" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="legEntrySet" type="LegEntryCollectionType" />
+  <xsd:simpleType name="DirectionType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Inbound" />
+      <xsd:enumeration value="Outbound" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="SWIFTTagType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="field" type="xsd:int" />
+      <xsd:element minOccurs="0" name="subfield" type="xsd:int" />
+      <xsd:element minOccurs="0" name="code" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="value" type="xsd:string" />
+      <xsd:element minOccurs="0" name="errorCode" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="SWIFTTag" type="SWIFTTagType" />
+  <xsd:complexType name="SWIFTTagListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="SWIFTTag" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="SWIFTTagList" type="SWIFTTagListType" />
+  <xsd:complexType name="SWIFTDetailsBaseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="messageId" type="id:SWIFTMessageIdType" />
+      <xsd:element minOccurs="0" name="messageType" type="xsd:string" />
+      <xsd:element minOccurs="0" name="carrier" type="xsd:string" />
+      <xsd:element minOccurs="0" name="direction" type="DirectionType" />
+      <xsd:element minOccurs="0" ref="SWIFTTagList" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SWIFTDetailsType">
+    <xsd:annotation>
+      <xsd:documentation>The details of a swift transaction associated with a transaction leg</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="SWIFTDetailsBaseType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" ref="id:transactionIdentifier" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="SWIFTDetails" type="SWIFTDetailsType" />
+  <xsd:simpleType name="LastNSelectionCriteriaTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Days" />
+      <xsd:enumeration value="Months" />
+      <xsd:enumeration value="Transactions" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="LastNSelectionCriteriaType">
+    <xsd:annotation>
+      <xsd:documentation>The ability to select transactions by the last n
+                      days/months/transaction as defines by the type</xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:unsignedInt">
+        <xsd:attribute name="type" type="LastNSelectionCriteriaTypeType" use="required" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="FinancialTransactionSelectionCriteriaType">
+    <xsd:annotation>
+      <xsd:documentation>The ability to define the selection criteria for
+                      transactions. * LastNCriteria allows one to select the
+                      last transactions within the last n days or months of now
+                      or the last n transactions * dateRange allows one to
+                      select a date range the transaction must be withing. *
+                      financialAmountRange allows one to select the amount range
+                      transaction must be within. * singleDay is a convenient
+                      and easy way to return a single day's transactions without
+                      the need of a date range</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="lastNCriteria" type="LastNSelectionCriteriaType" />
+      <xsd:element minOccurs="0" ref="bsc:dateRange" />
+      <xsd:element minOccurs="0" ref="bsc:financialAmountRange" />
+      <xsd:element minOccurs="0" name="singleDay" type="xsd:date" />
+      <xsd:element minOccurs="0" name="currentStatment" type="xsd:boolean" />
+      <xsd:element minOccurs="0" name="futureTransaction" type="xsd:boolean" />
+      <xsd:element minOccurs="0" name="statmentTerm" type="statmentTermType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="statmentTermType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="7" />
+      <xsd:pattern value="\d{2}-\d{4}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="financialTransactionSelectionCriteria" type="FinancialTransactionSelectionCriteriaType" />
+  <xsd:simpleType name="TransactionCategoryType">
+    <xsd:annotation>
+      <xsd:documentation>The following values existed before the change and were used solely for checks
+			()PURCHASED CHECKS, ADVICES, AUDI CHECKS, ASIB, INTERNATIONAL CHECKS
+		we replaced them in order to use the category as a global description for any transaction</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Cash Deposit" />
+      <xsd:enumeration value="Cash Withdrawal" />
+      <xsd:enumeration value="Cheque Deposit" />
+      <xsd:enumeration value="Cheque Withdrawal" />
+      <xsd:enumeration value="Money Transfer" />
+      <xsd:enumeration value="POS" />
+      <xsd:enumeration value="Others" />
+      <xsd:enumeration value="Internal Transfer" />
+      <xsd:enumeration value="External Transfer" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="MovementCategoryType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="debitTransactionNumber" type="xsd:unsignedInt" />
+      <xsd:element minOccurs="0" name="debitTransactionAmount" type="bsc:NonNegativeFinancialAmountType" />
+      <xsd:element minOccurs="0" name="creditTransactionNumber" type="xsd:unsignedInt" />
+      <xsd:element minOccurs="0" name="creditTransactionAmount" type="bsc:NonNegativeFinancialAmountType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="movementCategory" type="MovementCategoryType" />
+  <xsd:complexType name="MovementCategorySetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="movementCategory" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="movementCategorySet" type="MovementCategorySetType" />
+  <xsd:simpleType name="AccountTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="In Balance" />
+      <xsd:enumeration value="Off Balance" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="MovementSummaryType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="movementCategorySet" />
+      <xsd:element minOccurs="0" name="totalDebitTransactionNumber" type="xsd:unsignedInt" />
+      <xsd:element minOccurs="0" name="totalDebitTransactionAmount" type="bsc:NonNegativeFinancialAmountType" />
+      <xsd:element minOccurs="0" name="totalCreditTransactionNumber" type="xsd:unsignedInt" />
+      <xsd:element minOccurs="0" name="totalCeditTransactionAmount" type="bsc:NonNegativeFinancialAmountType" />
+      <xsd:element minOccurs="0" name="accountType" type="AccountTypeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="movementSummary" type="MovementSummaryType" />
+  <xsd:complexType name="MovementSummarySetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="movementSummary" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="movementSummarySet" type="MovementSummarySetType" />
+  <xsd:simpleType name="ConversionModeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Multiply" />
+      <xsd:enumeration value="Divide" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="ConversionDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="mode" type="ConversionModeType" />
+      <xsd:element minOccurs="0" name="isIndirect" type="bsc:YNType" />
+      <xsd:element minOccurs="0" name="isStandard" type="bsc:YNType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="conversionDetails" type="ConversionDetailsType" />
+  <xsd:simpleType name="FXRateTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Daily" />
+      <xsd:enumeration value="Selling" />
+      <xsd:enumeration value="Buying" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CurrencyPairRateType">
+    <xsd:annotation>
+      <xsd:documentation>Rate to be used</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[A-Z]{1}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="currencyPairRate" type="CurrencyPairRateType" />
+  <xsd:complexType name="FXRateFullDetailsType">
+    <xsd:sequence>
+      <xsd:element name="fromCurrency" type="bsc:ISO4217CurrencyType" />
+      <xsd:element name="toCurrency" type="bsc:ISO4217CurrencyType" />
+      <xsd:element minOccurs="0" ref="conversionDetails" />
+      <xsd:element minOccurs="0" name="standardRate" type="bsc:FinancialRateType" />
+      <xsd:element minOccurs="0" name="buyingRate" type="bsc:FinancialRateType" />
+      <xsd:element minOccurs="0" name="sellingRate" type="bsc:FinancialRateType" />
+      <xsd:element minOccurs="0" name="rateDateTime" type="xsd:dateTime" />
+      <xsd:element minOccurs="0" ref="currencyPairRate" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="FXRateFullDetails" type="FXRateFullDetailsType" />
+  <xsd:complexType name="CounterValueAmountDetailsType">
+    <xsd:sequence>
+      <xsd:element name="counterValueAmount" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="rateApplied" type="bsc:FinancialRateType" />
+      <xsd:element minOccurs="0" name="rateType" type="FXRateTypeType" />
+      <xsd:element minOccurs="0" ref="conversionDetails" />
+      <xsd:element minOccurs="0" ref="currencyPairRate" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="counterValueAmountDetails" type="CounterValueAmountDetailsType" />
+  <xsd:complexType name="CounterValueAmountListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="counterValueAmountDetails" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:accdetail="http://www.banqueaudi.com/ebo/psa.accdet.Account" xmlns:branch="http://www.banqueaudi.com/ebo/svl.brn.Branch" xmlns:id="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" xmlns:cust="http://www.banqueaudi.com/ebo/pty.cust.Customer" xmlns:svl="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" xmlns="http://www.banqueaudi.com/ebo/psa.acc.Account" xmlns:pty="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/psa.acc.Account" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="psa.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.cust.Customer_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cust.Customer" />
+  <xsd:import schemaLocation="svl.brn.Branch_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.brn.Branch" />
+  <xsd:import schemaLocation="psa.accdet.Account_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.accdet.Account" />
+  <xsd:import schemaLocation="pty.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" />
+  <xsd:import schemaLocation="svl.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" />
+  <xsd:simpleType name="AccountBaseTypeType">
+    <xsd:annotation>
+      <xsd:documentation>The type of this account. This could be "CASA, NOSTRO, Loan, etc</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:complexType name="AccountTypeType">
+    <xsd:sequence>
+      <xsd:element name="type" type="AccountBaseTypeType">
+        <xsd:annotation>
+          <xsd:documentation>The type of account - CASA, Term Deposit, Credit, or Loan for example</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="product">
+        <xsd:annotation>
+          <xsd:documentation>What banking product does this account represent</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="isIslamic" type="xsd:boolean">
+        <xsd:annotation>
+          <xsd:documentation>Set to true if this account is an Islamic type of account and therefore conforms to Sharia Law. This is just another dimension to the account base type</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="description" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>A description of this account type</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="accountType" type="AccountTypeType" />
+  <xsd:simpleType name="BlockedForType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="DR" />
+      <xsd:enumeration value="CR" />
+      <xsd:enumeration value="Both" />
+      <xsd:enumeration value="None" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="StatusType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="bsc:EntityStatusType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="blockedFor" type="BlockedForType" />
+          <xsd:element minOccurs="0" ref="bsc:statusByTransactionCodeSet" />
+          <xsd:element minOccurs="0" name="maturityDate" type="xsd:date" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="status" type="StatusType" />
+  <xsd:simpleType name="BalanceSheetType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="ON" />
+      <xsd:enumeration value="OFF" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="BalanceType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="value" type="bsc:AccountingMoneyType" />
+      <xsd:element minOccurs="0" name="counterValue" type="bsc:AccountingMoneyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="balance" />
+  <xsd:complexType name="BalancesType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="minimumBalance" type="BalanceType" />
+      <xsd:element minOccurs="0" name="book" type="BalanceType" />
+      <xsd:element minOccurs="0" name="available" type="BalanceType" />
+      <xsd:element minOccurs="0" name="valueDate" type="BalanceType" />
+      <xsd:element minOccurs="0" name="unclearedFunds" type="BalanceType" />
+      <xsd:element minOccurs="0" name="holdAmount" type="BalanceType" />
+      <xsd:element minOccurs="0" name="netBalance" type="BalanceType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="balances" type="BalancesType" />
+  <xsd:complexType name="LimitType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="type" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="limitAmount" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="utilisationAmount" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="effectiveDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="expiryDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="renewalFrequency" type="xsd:duration" />
+      <xsd:element minOccurs="0" name="properties" type="bsc:PropertySetType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="limit" type="LimitType" />
+  <xsd:complexType name="LimitSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="limit" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="limitSet" type="LimitSetType" />
+  <xsd:complexType name="ActivityDatesType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="open" type="xsd:date" />
+      <xsd:element minOccurs="0" name="lastMovement" type="xsd:date" />
+      <xsd:element minOccurs="0" name="lastOperationDate" type="xsd:date" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="activityDates" type="ActivityDatesType" />
+  <xsd:complexType name="ProductType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="type" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="longDescription" type="xsd:string" />
+      <xsd:element minOccurs="0" name="subType" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AssociatedProductType">
+    <xsd:annotation>
+      <xsd:documentation>A product describes an option or facet of an account which is available or which is active on an account</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="ProductType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="isActive" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="isAvailable" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="effectiveDate" type="xsd:date" />
+          <xsd:element minOccurs="0" name="expiry" type="xsd:date" />
+          <xsd:element minOccurs="0" name="properties" type="bsc:PropertySetType" />
+          <xsd:element minOccurs="0" ref="limitSet">
+            <xsd:annotation>
+              <xsd:documentation>A set of limits which might apply to this facility</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="product" type="ProductType" />
+  <xsd:complexType name="ProductCollectionType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" ref="product" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="associatedProduct" type="AssociatedProductType" />
+  <xsd:complexType name="AssociatedProductSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="associatedProduct" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="associatedProductSet" type="AssociatedProductSetType" />
+  <xsd:simpleType name="JointAccountAuthorityType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="All" />
+      <xsd:enumeration value="One" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="JointAccountType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="isJointAccount" type="xsd:boolean" />
+      <xsd:element minOccurs="0" name="authorityType" type="JointAccountAuthorityType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="StatementInfoType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="statementFrequency" type="xsd:string" />
+      <xsd:element minOccurs="0" name="statementDescrition" type="xsd:string" />
+      <xsd:element minOccurs="0" name="printStatement" type="xsd:boolean" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="AccountCategoryType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CASA" />
+      <xsd:enumeration value="TD" />
+      <xsd:enumeration value="LOAN" />
+      <xsd:enumeration value="Other" />
+      <xsd:enumeration value="Unknown" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="AccountCategorySetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="accountCategory" type="AccountCategoryType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="accountCategorySet" type="AccountCategorySetType" />
+  <xsd:complexType name="AccountBaseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="id:accountIdSet">
+        <xsd:annotation>
+          <xsd:documentation>A account can have many representations of the accountId, for example the local and the IBAN. They both refer to the same account</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="cust:customerSummaryList" />
+      <xsd:element minOccurs="0" ref="branch:branchSummary" />
+      <xsd:element minOccurs="0" ref="accountType" />
+      <xsd:element minOccurs="0" ref="status" />
+      <xsd:element minOccurs="0" name="jointAccount" type="JointAccountType" />
+      <xsd:element minOccurs="0" name="currency" type="bsc:ISO4217CurrencyType" />
+      <xsd:element minOccurs="0" ref="activityDates" />
+      <xsd:element minOccurs="0" ref="balances" />
+      <xsd:element minOccurs="0" ref="associatedProductSet" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="statementInfo" type="StatementInfoType" />
+    </xsd:sequence>
+    <xsd:attribute name="balanceSheet" type="BalanceSheetType" use="optional" />
+    <xsd:attribute name="showBalances" type="xsd:string" use="optional" />
+  </xsd:complexType>
+  <xsd:complexType name="AccountSummaryType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="AccountBaseType" />
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="accountSummary" type="AccountSummaryType" />
+  <xsd:complexType name="AccountType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="AccountSummaryType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" ref="accdetail:accountDetail" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="account" type="AccountType" />
+  <xsd:complexType name="PerformanceType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="bsc:dateRange" />
+      <xsd:element minOccurs="0" name="minimum" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="average" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="maximum" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="cleanupNumber" type="xsd:integer" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="performance" type="PerformanceType" />
+  <xsd:complexType name="PerformanceListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="performance" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AccountPerformanceType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="debitPerformanceList" type="PerformanceListType" />
+      <xsd:element minOccurs="0" name="creditPerformanceList" type="PerformanceListType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="accountPerformance" type="AccountPerformanceType" />
+  <xsd:complexType name="AccountCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="account" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="accountSet" type="AccountCollectionType" />
+  <xsd:element name="accountList" type="AccountCollectionType" />
+  <xsd:complexType name="AccountSummaryCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="accountSummary" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="accountSummarySet" type="AccountSummaryCollectionType" />
+  <xsd:element name="accountSummaryList" type="AccountSummaryCollectionType" />
+  <xsd:complexType name="AccountStatementType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="id:accountId" />
+      <xsd:element minOccurs="0" ref="pty:customerId" />
+      <xsd:element minOccurs="0" ref="svl:branchId" />
+      <xsd:element minOccurs="0" name="statementStartDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="statementEndDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="statementFrequency" type="xsd:string" />
+      <xsd:element minOccurs="0" name="printingCycleDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="accountStatement" type="AccountStatementType" />
+  <xsd:complexType name="AccountStatementCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="accountStatement" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="MoneyBalanceType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="value" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="counterValue" type="bsc:MoneyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

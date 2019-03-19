@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns:tns="http://www.fawry-eg.com/ebpp/IFXMessages/" targetNamespace="http://www.fawry-eg.com/ebpp/IFXMessages/" xmlns="http://www.w3.org/2001/XMLSchema">
+  <include schemaLocation="CoreLib.xsd" />
+  <include schemaLocation="PmtAddContent.xsd" />
+  <complexType name="PaySvcRqType">
+    <complexContent mixed="false">
+      <extension base="tns:SvcCommonType">
+        <choice minOccurs="1" maxOccurs="1">
+          <element minOccurs="1" maxOccurs="1" name="PmtAddRq" type="tns:PmtAddRqType" />
+        </choice>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="PaySvcRsType">
+    <complexContent mixed="false">
+      <extension base="tns:SvcRsCommonType">
+        <choice minOccurs="1" maxOccurs="1">
+          <element minOccurs="1" maxOccurs="1" name="PmtAddRs" type="tns:PmtAddRsType" />
+        </choice>
+      </extension>
+    </complexContent>
+  </complexType>
+</schema>

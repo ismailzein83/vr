@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:simpleType name="BranchIdType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="branchId" type="BranchIdType" />
+  <xsd:complexType name="BranchIdCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="branchId" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="branchIdSet" type="BranchIdCollectionType" />
+  <xsd:element name="branchIdList" type="BranchIdCollectionType" />
+</xsd:schema>

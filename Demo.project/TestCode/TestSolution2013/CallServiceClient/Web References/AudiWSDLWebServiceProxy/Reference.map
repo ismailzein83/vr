@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/txn.cmn.Identifiers_1.0.xsd" filename="txn.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pp.rates.evs.FXRate_1.0.xsd" filename="pp.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.acc.Account_1.0.xsd" filename="psa.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.accdet.Account_1.0.xsd" filename="psa0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.cmn.Identifiers_1.0.xsd" filename="pty.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.pft.Payment_1.0.xsd" filename="psa1.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.loan.LoanSchedule_1.0.xsd" filename="psa2.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.party.Party_1.0.xsd" filename="pty0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/util.flt.Fault_1.0.xsd" filename="util.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/txn.FinancialTransaction_1.0.xsd" filename="txn0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.cmn.Identifiers_1.0.xsd" filename="psa3.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/util.cmn.Basic_1.0.xsd" filename="util0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/svl.brn.Branch_1.0.xsd" filename="svl.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.party.ContactDetails_1.0.xsd" filename="pty1.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/svl.cmn.Identifiers_1.0.xsd" filename="svl0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.org.Organisation_1.0.xsd" filename="pty2.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.custdet.Customer_1.0.xsd" filename="pty3.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/util.cmn.EBMHeader_1.0.xsd" filename="util1.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.person.Person_1.0.xsd" filename="pty4.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pp.rates.evs.FXRate_1.0.wsdl" filename="pp.rates.evs.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.cards.Card_2.0.xsd" filename="psa4.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/ent.cmn.Identifiers_1.0.xsd" filename="ent.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/pty.cust.Customer_1.0.xsd" filename="pty5.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Users/ismail.zein/Desktop/pp.rates.tevs.FXRate_1.0_wsdl/psa.pft.Transfer_1.0.xsd" filename="psa5.xsd" />
+  </Results>
+</DiscoveryClientResultsFile>

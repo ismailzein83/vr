@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:simpleType name="TransactionSerialType">
+    <xsd:restriction base="xsd:unsignedInt">
+      <xsd:minInclusive value="1" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="transactionSerial" type="TransactionSerialType" />
+  <xsd:simpleType name="AccountingLineNumberType">
+    <xsd:restriction base="xsd:unsignedInt">
+      <xsd:minInclusive value="1" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="accountingLineNumber" type="AccountingLineNumberType" />
+  <xsd:complexType name="TransactionIdentifierType">
+    <xsd:annotation>
+      <xsd:documentation>A transaction (or more accurately - a transaction line) is uniquely identified by a tuple of (serial number, date, line number).
+      It is possible that leaving out the line number would allow an operation to return all of the relevent transaciton lines for the banking core.
+      This identifier means the transaction has been processed and the accounting entries have been made</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ref="transactionSerial" />
+      <xsd:element name="transactionDate" type="xsd:date" />
+      <xsd:element minOccurs="0" ref="accountingLineNumber" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="transactionIdentifier" type="TransactionIdentifierType" />
+  <xsd:complexType name="TransactionIdentifierListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="transactionIdentifier" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="transactionIdentifierList" type="TransactionIdentifierListType" />
+  <xsd:complexType name="TransactionIdsType">
+    <xsd:annotation>
+      <xsd:documentation>
+      A transaction can be uniquely identified by a transaction Identifier or a processing reference. Generally on the reference is returned if the core is currently offline.
+      Generally when the core is online an identifier is returned along with a reference.
+      The reference is only known to the application creating the transaction, but the transactionIdentifier is universal.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="transactionIdentifier" />
+      <xsd:element minOccurs="0" ref="bsc:processingReferenceSet" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="transactionIds" type="TransactionIdsType" />
+  <xsd:simpleType name="swiftCodeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="8" />
+      <xsd:maxLength value="11" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="swiftCode" type="swiftCodeType" />
+  <xsd:simpleType name="SWIFTMessageIdTypeType">
+    <xsd:annotation>
+      <xsd:documentation>A SWIFT message Id can be either a SWIFT Id of it could be a RTGC - Real Time Gross Settlement Id in the case of a national transfer</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="SWIFT" />
+      <xsd:enumeration value="RTGS" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="SWIFTMessageIdType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute default="SWIFT" name="type" type="SWIFTMessageIdTypeType" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="SWIFTMessageId" type="SWIFTMessageIdType" />
+</xsd:schema>

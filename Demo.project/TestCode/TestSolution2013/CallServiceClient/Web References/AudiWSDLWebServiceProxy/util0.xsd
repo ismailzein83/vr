@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:complexType name="FlatOrPercentType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="flatAmount" type="FinancialAmountType" />
+      <xsd:element minOccurs="0" name="percentage" type="FinancialRateType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="FrequencyType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Daily" />
+      <xsd:enumeration value="Weekly" />
+      <xsd:enumeration value="BiWeekly" />
+      <xsd:enumeration value="Monthly" />
+      <xsd:enumeration value="Trimester" />
+      <xsd:enumeration value="Semester" />
+      <xsd:enumeration value="Yearly" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="EmptyType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="YNType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Y" />
+      <xsd:enumeration value="N" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PlusMinusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="+" />
+      <xsd:enumeration value="-" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PaymentStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Unpaid" />
+      <xsd:enumeration value="Paid in Full" />
+      <xsd:enumeration value="Partially Paid" />
+      <xsd:enumeration value="Overdue" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="paymentStatus" type="PaymentStatusType" />
+  <xsd:complexType name="FeesAndChargesType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="percentage" type="FinancialRateType" />
+      <xsd:element minOccurs="0" name="flatAmount" type="MoneyType" />
+      <xsd:element minOccurs="0" name="minimumAmount" type="MoneyType" />
+      <xsd:element minOccurs="0" name="maximumAmount" type="MoneyType" />
+      <xsd:element minOccurs="0" ref="paymentStatus" />
+    </xsd:sequence>
+    <xsd:attribute name="description" type="xsd:string" use="optional" />
+  </xsd:complexType>
+  <xsd:element name="feesAndCharges" type="FeesAndChargesType" />
+  <xsd:complexType name="FeesAndChargesCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="feesAndCharges" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="feesAndChargesSet" type="FeesAndChargesCollectionType" />
+  <xsd:complexType name="AddressType">
+    <xsd:sequence>
+      <xsd:element name="street" type="String80Type" />
+      <xsd:element name="street2" type="String80Type" />
+      <xsd:element name="city" type="String80Type" />
+      <xsd:element name="state" type="String32Type" />
+      <xsd:element name="zip" type="String10Type" />
+      <xsd:element name="country" type="String32Type" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="ColourType">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="#[0-9A-Fa-f]{6}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="ContactType">
+    <xsd:sequence>
+      <xsd:element name="firstName" type="String32Type" />
+      <xsd:element name="lastName" type="String32Type" />
+      <xsd:element name="title" type="String20Type" />
+      <xsd:element name="phoneNo" type="PhoneNoType" />
+      <xsd:element name="email" type="EmailAddressType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="ISO3166-1alpha2CountryCodeType">
+    <xsd:annotation>
+      <xsd:documentation>Country Code should be that of ISO 3166-1 alpha-2 - see http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[A-Z]{2}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ISO4217CurrencyCodeType">
+    <xsd:annotation>
+      <xsd:documentation>Currency code should be that of ISO 4217 - see http://en.wikipedia.org/wiki/ISO_4217</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[A-Z]{3}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ISO4217CurrencyNumberType">
+    <xsd:annotation>
+      <xsd:documentation>Currency number should be that of ISO 4217 - see http://en.wikipedia.org/wiki/ISO_4217</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[0-9]{3}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="ISO4217CurrencyType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="ISO4217CurrencyCodeType" />
+      <xsd:element minOccurs="0" name="number" type="ISO4217CurrencyNumberType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ISO4217CurrencyCollectionType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="currency" type="ISO4217CurrencyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="DateOfBirthType">
+    <xsd:restriction base="xsd:date">
+      <xsd:maxInclusive value="2099-12-31" />
+      <xsd:minInclusive value="1900-01-01" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="FinancialAmountType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:fractionDigits value="3" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="FinancialRateType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:fractionDigits value="7" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="NonNegativeFinancialAmountType">
+    <xsd:restriction base="FinancialAmountType">
+      <xsd:minInclusive value="0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="GenderType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Female" />
+      <xsd:enumeration value="Male" />
+      <xsd:enumeration value="" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="MoneyType">
+    <xsd:sequence>
+      <xsd:element name="amount" type="FinancialAmountType" />
+      <xsd:element name="currency" type="ISO4217CurrencyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="PhoneNoType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="36" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="PropertySetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="property" type="PropertyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="propertySet" type="PropertySetType" />
+  <xsd:complexType name="PropertyType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="value" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="anyValue" type="xsd:anyType" />
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required" />
+    <xsd:attribute name="description" type="xsd:string" use="optional" />
+    <xsd:attribute name="type" type="xsd:string" use="optional" />
+  </xsd:complexType>
+  <xsd:simpleType name="EmailAddressType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="64" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SiteIdType">
+    <xsd:restriction base="String10Type" />
+  </xsd:simpleType>
+  <xsd:simpleType name="SiteNameType">
+    <xsd:restriction base="String32Type" />
+  </xsd:simpleType>
+  <xsd:simpleType name="PercentType">
+    <xsd:annotation>
+      <xsd:documentation>Percentage will be the real percentage value: 30% represented as 0.3,
+                etc</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:double">
+      <xsd:minInclusive value="0" />
+      <xsd:maxInclusive value="1" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="String10Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="10" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="String20Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="20" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="String32Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="32" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="String80Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="80" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="String255Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="255" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="UidType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="64" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="UoMType">
+    <xsd:annotation>
+      <xsd:documentation>Represents the Unit of Measure.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="10" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AusStateCode">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="ACT" />
+      <xsd:enumeration value="NSW" />
+      <xsd:enumeration value="NT" />
+      <xsd:enumeration value="QLD" />
+      <xsd:enumeration value="SA" />
+      <xsd:enumeration value="TAS" />
+      <xsd:enumeration value="VIC" />
+      <xsd:enumeration value="WA" />
+      <xsd:enumeration value="" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="StatusType">
+    <xsd:annotation>
+      <xsd:documentation>Holds the current operational status of the record.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="String10Type">
+      <xsd:enumeration value="Active" />
+      <xsd:enumeration value="Inactive" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="XmlCheckSumType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="255" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DRCRType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="DR" />
+      <xsd:enumeration value="CR" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="AccountingMoneyBaseType">
+    <xsd:complexContent mixed="false">
+      <xsd:restriction base="MoneyType">
+        <xsd:sequence>
+          <xsd:element name="amount" type="NonNegativeFinancialAmountType" />
+          <xsd:element name="currency" type="ISO4217CurrencyType" />
+        </xsd:sequence>
+      </xsd:restriction>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="AccountingMoneyType">
+    <xsd:annotation>
+      <xsd:documentation>
+        An accounting money type which represents debit and credit along the amount and currency.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="AccountingMoneyBaseType">
+        <xsd:attribute name="debitOrCredit" type="DRCRType" use="required" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="DateRangeEndType">
+    <xsd:annotation>
+      <xsd:documentation>To specify one of the ends of a date range. If isInclusive is true the date will be included in the range.
+        e.g. isInclusive=true for the start date and false for the end of a date range  == [startDate, endDate)
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:date">
+        <xsd:attribute default="true" name="isInclusive" type="xsd:boolean" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="DateRangeType">
+    <xsd:sequence>
+      <xsd:element name="startDate" type="DateRangeEndType" />
+      <xsd:element name="endDate" type="DateRangeEndType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="dateRange" type="DateRangeType" />
+  <xsd:complexType name="DateTimeRangeEndType">
+    <xsd:annotation>
+      <xsd:documentation>To specify one of the ends of a dateTime range. If isInclusive is true the dateTime will be included in the range.
+        e.g. isInclusive=true for the start dateTime and false for the end of a dateTime range  == [startDateTime, endDateTime)
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:dateTime">
+        <xsd:attribute default="true" name="isInclusive" type="xsd:boolean" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="DateTimeRangeType">
+    <xsd:sequence>
+      <xsd:element name="startDateTime" type="DateTimeRangeEndType" />
+      <xsd:element name="endDateTime" type="DateTimeRangeEndType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="dateTimeRange" type="DateTimeRangeType" />
+  <xsd:complexType name="FinancialAmountEndType">
+    <xsd:simpleContent>
+      <xsd:extension base="FinancialAmountType">
+        <xsd:attribute default="true" name="isInclusive" type="xsd:boolean" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:complexType name="FinancialAmountRangeType">
+    <xsd:sequence>
+      <xsd:element name="startAmount" type="FinancialAmountEndType" />
+      <xsd:element name="endAmount" type="FinancialAmountEndType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="financialAmountRange" type="FinancialAmountRangeType" />
+  <xsd:simpleType name="RecordIndexType">
+    <xsd:annotation>
+      <xsd:documentation>Defines that a record index has a minimum value of 0.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:unsignedLong">
+      <xsd:minInclusive value="0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="PaginationDetailsType">
+    <xsd:annotation>
+      <xsd:documentation>Defines a record pagination type for use where it is not feasible for large record sets to be dealt with in one large structure. The PaginationDetailsType enables large record sets to be handled over 1 or more pages. If the isMoreRecords is false and there are no records then typically the indexes are left out.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="startRecordIndex" type="RecordIndexType" />
+      <xsd:element minOccurs="0" name="endRecordIndex" type="RecordIndexType" />
+      <xsd:element minOccurs="0" name="totalRecords" type="RecordIndexType" />
+      <xsd:element minOccurs="0" name="isMoreRecords" type="YNType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="paginationDetails" type="PaginationDetailsType" />
+  <xsd:complexType name="processingReferenceType">
+    <xsd:annotation>
+      <xsd:documentation>This represents a way to reference a request to process something on the bank core.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="context" type="xsd:string" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="processingReference" type="processingReferenceType" />
+  <xsd:complexType name="ProcessingRefereceSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="processingReference" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="processingReferenceSet" type="ProcessingRefereceSetType" />
+  <xsd:simpleType name="IETFLanguageCodeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="20" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="EntityStatusType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="status" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="effectiveDate" type="xsd:date" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="DayOfWeekType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Monday" />
+      <xsd:enumeration value="Tuesday" />
+      <xsd:enumeration value="Wednesday" />
+      <xsd:enumeration value="Thursday" />
+      <xsd:enumeration value="Friday" />
+      <xsd:enumeration value="Saturday" />
+      <xsd:enumeration value="Sunday" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="dayOfWeek" type="DayOfWeekType" />
+  <xsd:complexType name="TimeRangeType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="startTime" type="xsd:time" />
+      <xsd:element minOccurs="0" name="endTime" type="xsd:time" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="timeRange" type="TimeRangeType" />
+  <xsd:complexType name="TransactionCodeTypeAndStatusType">
+    <xsd:sequence>
+      <xsd:element name="isAllowed" type="xsd:boolean" />
+    </xsd:sequence>
+    <xsd:attribute name="transactionCode" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="statusByTransactionCode" type="TransactionCodeTypeAndStatusType" />
+  <xsd:complexType name="StatusByTransactionCodeCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="statusByTransactionCode" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="statusByTransactionCodeSet" type="StatusByTransactionCodeCollectionType" />
+  <xsd:element name="statusByTransactionCodeList" type="StatusByTransactionCodeCollectionType" />
+</xsd:schema>

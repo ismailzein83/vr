@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:tid="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" xmlns:pty="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" xmlns:id="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" xmlns:bid="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" xmlns:cid="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns:ftx="http://www.banqueaudi.com/ebo/txn.FinancialTransaction" xmlns="http://www.banqueaudi.com/ebo/psa.pft.Payment" xmlns:cards="http://www.banqueaudi.com/ebo/psa.cards.Card/2.0" xmlns:tfr="http://www.banqueaudi.com/ebo/psa.pft.Transfer" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/psa.pft.Payment" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="txn.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" />
+  <xsd:import schemaLocation="psa.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" />
+  <xsd:import schemaLocation="txn.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/txn.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" />
+  <xsd:import schemaLocation="txn.FinancialTransaction_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/txn.FinancialTransaction" />
+  <xsd:import schemaLocation="psa.pft.Transfer_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.pft.Transfer" />
+  <xsd:import schemaLocation="psa.cards.Card_2.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.cards.Card/2.0" />
+  <xsd:import schemaLocation="pty.party.ContactDetails_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" />
+  <xsd:complexType name="BillAmountDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="amountDue" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="minimumAmount" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="maximumAmount" type="bsc:MoneyType" />
+      <xsd:element minOccurs="0" name="dueDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="expiryDate" type="xsd:date" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billAmountDetails" type="BillAmountDetailsType" />
+  <xsd:complexType name="BillAmountDetailsCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="billAmountDetails" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billAmountDetailsSet" type="BillAmountDetailsCollectionType" />
+  <xsd:complexType name="BillerServiceCategoryType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="billerServiceCategoryId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="billerServiceCategoryName" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BillerOrganizationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="billerOrganizationId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="billerOrganizationName" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BillSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="bill" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billSet" type="BillSetType" />
+  <xsd:complexType name="PaymentSourceType">
+    <xsd:sequence>
+      <xsd:choice>
+        <xsd:element minOccurs="0" maxOccurs="1" ref="cards:card" />
+        <xsd:element minOccurs="0" maxOccurs="1" name="accountId" type="id:AccountIdType" />
+        <xsd:element minOccurs="0" maxOccurs="1" ref="id:tellerId" />
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="paymentSource" type="PaymentSourceType" />
+  <xsd:complexType name="BillerInfoType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="cid:customerId" />
+      <xsd:element minOccurs="0" ref="id:billerId" />
+      <xsd:element minOccurs="0" name="currency" type="bsc:ISO4217CurrencyType" />
+      <xsd:element minOccurs="0" ref="id:accountId" />
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="customerMessage" type="xsd:string" />
+      <xsd:element minOccurs="0" name="registrationInstructions" type="xsd:string" />
+      <xsd:element minOccurs="0" name="paymentInstructions" type="xsd:string" />
+      <xsd:element minOccurs="0" name="statusInBank" type="xsd:string" />
+      <xsd:element minOccurs="0" name="statusInProvider" type="xsd:string" />
+      <xsd:element minOccurs="0" name="contactDetails" type="pty:ContactsType" />
+      <xsd:element minOccurs="0" name="billPaymentType" type="xsd:string" />
+      <xsd:element minOccurs="0" name="billerServiceCategory" type="BillerServiceCategoryType" />
+      <xsd:element minOccurs="0" name="billerOrganization" type="BillerOrganizationType" />
+      <xsd:element minOccurs="0" name="customerIdWithBillerDescription" type="xsd:string" />
+      <xsd:element minOccurs="0" name="isBillReferenceMandatory" type="xsd:boolean" />
+      <xsd:element minOccurs="0" name="feesAndCharges" type="bsc:FeesAndChargesType" />
+      <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+      <xsd:element minOccurs="0" name="screenDefinitionProperties" type="screenDefinitionPropertiesType" />
+    </xsd:sequence>
+    <xsd:attribute name="paymentTemplate" type="xsd:string" use="optional" />
+  </xsd:complexType>
+  <xsd:element name="billerInfo" type="BillerInfoType" />
+  <xsd:complexType name="screenDefinitionPropertiesType">
+    <xsd:sequence>
+      <xsd:any />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BillerInfoListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" ref="billerInfo" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billerInfoList" type="BillerInfoListType" />
+  <xsd:complexType name="BillerPaymentDetailsType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="id:billerId" />
+      <xsd:element minOccurs="0" name="billReference" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>The bill id or reference from the biller that
+						this bank customer wants to pay
+					</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="customerIdWithBiller" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>The customer id of the BILLER (not the bank)
+					</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="billDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="paymentPropertiesSet" type="bsc:PropertySetType">
+        <xsd:annotation>
+          <xsd:documentation>The payment properties set is a method for
+						handling biller specific payment information beyond the standard
+						billId and customerId whcih might be needed by the biller to
+						support the payment of this bill
+					</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="billerInfo" type="BillerInfoType" />
+      <xsd:element minOccurs="0" name="billDetails" type="BillType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billerPaymentDetails" type="BillerPaymentDetailsType" />
+  <xsd:simpleType name="BillStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Paid" />
+      <xsd:enumeration value="Unpaid" />
+      <xsd:enumeration value="PartiallyPaid" />
+      <xsd:enumeration value="OverPaid" />
+      <xsd:enumeration value="Deactivated" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="BillType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="BillerPaymentDetailsType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="billAmountDetailsSet" type="BillAmountDetailsCollectionType" />
+          <xsd:element minOccurs="0" name="feesAmountSet" type="bsc:FeesAndChargesCollectionType" />
+          <xsd:element minOccurs="0" name="penaltyChargeSet" type="bsc:FeesAndChargesCollectionType" />
+          <xsd:element minOccurs="0" name="validationRefId" type="ValidationProcessingIdType" />
+          <xsd:element minOccurs="0" name="billStatus" type="BillStatusType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="bill" type="BillType" />
+  <xsd:complexType name="PaymentLegEntryType">
+    <xsd:annotation>
+      <xsd:documentation>A Payment Leg Entry is a simple leg entry or
+				(inclusive) a specialised payment details.
+				The leg entry can be used
+				for the legs there the account details are
+				know, for example the
+				standard Dr leg (i.e. from the customer's
+				account).
+				The payment
+				details can be used for those legs where only the biller
+				details are
+				known. As this request flows through middleware the
+				legentry
+				might be
+				updated or added based on the payment details.
+			</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="ftx:legEntry" />
+      <xsd:element minOccurs="0" ref="billerPaymentDetails" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="paymentLegEntry" type="PaymentLegEntryType" />
+  <xsd:complexType name="PaymentLegEntryCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="paymentLegEntry" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="paymentLegEntrySet" type="PaymentLegEntryCollectionType" />
+  <xsd:simpleType name="PaymentTypeType">
+    <xsd:annotation>
+      <xsd:documentation>The type of payment as a string. This payment type
+				must be known but can be treated as opaque to most services.
+			</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="([A-Za-z])*" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="paymentType" type="PaymentTypeType" />
+  <xsd:simpleType name="ValidationProcessingIdType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="validationProcessingId" type="ValidationProcessingIdType" />
+  <xsd:simpleType name="ExecutionProcessingIdType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="executionProcessingId" type="ExecutionProcessingIdType" />
+  <xsd:simpleType name="PaymentValidationStatusCodeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Valid" />
+      <xsd:enumeration value="Invalid" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="PaymentValidationStatusType">
+    <xsd:sequence>
+      <xsd:element name="paymentValidationStatusCode" type="PaymentValidationStatusCodeType" />
+      <xsd:element minOccurs="0" name="paymentValidationStatusMessage" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="paymentValidationStatus" type="PaymentValidationStatusType" />
+  <xsd:complexType name="PaymentType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="tid:transactionIds">
+        <xsd:annotation>
+          <xsd:documentation>A payment is identified in the same way a
+						transaction, as it results in a transaction/voucher on the core
+					</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="validationProcessingId" />
+      <xsd:element minOccurs="0" ref="executionProcessingId" />
+      <xsd:element minOccurs="0" ref="paymentLegEntrySet" />
+      <xsd:element minOccurs="0" name="valueDate" type="xsd:date">
+        <xsd:annotation>
+          <xsd:documentation>The value date for this transfer as a whole. The
+						interpretation of this over the value date of the leg entries is
+						specific to operation
+					</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="executionDate" type="xsd:dateTime" />
+      <xsd:element minOccurs="0" ref="tfr:ultimateBeneficiaryDetails" />
+      <xsd:element minOccurs="0" name="intermediaryBank" type="tfr:BankDetailsType" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="longDescription" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="ftx:instrumentDetail" />
+      <xsd:element minOccurs="0" ref="tfr:chargeBearer" />
+      <xsd:element minOccurs="0" ref="tfr:chargeSet" />
+      <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+    </xsd:sequence>
+    <xsd:attribute default="BillPayment" name="paymentType" type="PaymentTypeType" use="optional" />
+  </xsd:complexType>
+  <xsd:element name="payment" type="PaymentType" />
+  <xsd:complexType name="PaymentCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="payment" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="paymentList" type="PaymentCollectionType" />
+  <xsd:element name="paymentSet" type="PaymentCollectionType" />
+  <xsd:complexType name="BillerGroupType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="groupId" type="id:BillerIdType" />
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="billerCount" type="xsd:int" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billerGroup" type="BillerGroupType" />
+  <xsd:complexType name="BillerSummaryType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="billerId" type="id:BillerIdType" />
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="groupId" type="id:BillerIdType" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="isActive" type="xsd:boolean" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billerSummary" type="BillerSummaryType" />
+  <xsd:complexType name="BillerGroupCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="billerGroup" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billerGroupList" type="BillerGroupCollectionType" />
+  <xsd:complexType name="BillerGroupIdCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="groupId" type="id:BillerIdType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billerGroupIdList" type="BillerGroupIdCollectionType" />
+  <xsd:complexType name="BillerSummaryCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="billerSummary" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billerSummaryList" type="BillerSummaryCollectionType" />
+  <xsd:complexType name="BillerIdCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="id:billerId" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billerIdList" type="BillerIdCollectionType" />
+</xsd:schema>

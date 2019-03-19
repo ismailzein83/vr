@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:ptyid="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" xmlns:svlid="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="svl.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" />
+  <xsd:simpleType name="AccountIdDomiciliationType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Local">
+        <xsd:annotation>
+          <xsd:documentation>This account Id represents a local account to this institution</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="Domestic">
+        <xsd:annotation>
+          <xsd:documentation>This account Id represents a domestic account</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="International">
+        <xsd:annotation>
+          <xsd:documentation>This account Id represents an international account</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="accountIdDomiciliation" type="AccountIdDomiciliationType" />
+  <xsd:simpleType name="AccountIdFormatType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Local">
+        <xsd:annotation>
+          <xsd:documentation>This accountId is in a local account format</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GL">
+        <xsd:annotation>
+          <xsd:documentation>This accountId is in the GL format</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IBAN">
+        <xsd:annotation>
+          <xsd:documentation>This accountId is in the IBAN format</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="Other" />
+      <xsd:enumeration value="Unknown">
+        <xsd:annotation>
+          <xsd:documentation>This accountId is in an unknown format</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="Display">
+        <xsd:annotation>
+          <xsd:documentation>This accountId is the formatted accountId to be displayed</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="accountIdFormat" type="AccountIdFormatType" />
+  <xsd:simpleType name="AccountIdPatternType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="50" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="AccountIdType">
+    <xsd:annotation>
+      <xsd:documentation>
+          This represents any account identifier. It would be an IBAN, or local Bank Audi account for a non-local account but for a country with no IBAN support.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="AccountIdPatternType">
+        <xsd:attribute name="domiciliation" type="AccountIdDomiciliationType" use="optional">
+          <xsd:annotation>
+            <xsd:documentation>A hint that this account id is a local, domestic, or international institution account id</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="format" type="AccountIdFormatType" use="optional">
+          <xsd:annotation>
+            <xsd:documentation>An indication of the format of this accountId</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="accountId" type="AccountIdType" />
+  <xsd:complexType name="AccountIdCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="accountId" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="accountIdSet" type="AccountIdCollectionType" />
+  <xsd:simpleType name="AccountSerialType">
+    <xsd:annotation>
+      <xsd:documentation>A cusomter might have more that one account in the same branch etc.
+        This uniquely identifies up to 10 accounts within the branch/CIF/Currency/GL combination.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[0-9]{2}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="accountSerial" type="AccountSerialType" />
+  <xsd:simpleType name="AccountTypeType">
+    <xsd:annotation>
+      <xsd:documentation>The Bank's General Ledger Code for an account</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[0-9]{3}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="accountType" type="AccountTypeType" />
+  <xsd:simpleType name="InternalAccountCurrencyCodeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[0-9]{3}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="AccountCurrencyCodeType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="internal" type="InternalAccountCurrencyCodeType">
+        <xsd:annotation>
+          <xsd:documentation>This is the internal currency code, whcih is likely taken directly from the accountId string</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="iso" type="bsc:ISO4217CurrencyType">
+        <xsd:annotation>
+          <xsd:documentation>The ISO code(s) for the currency if available, can be reprensented here for convenience</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="InternalAccountIdType">
+    <xsd:annotation>
+      <xsd:documentation>The internal to Bank Audi account indentification type</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ref="svlid:branchId" />
+      <xsd:element ref="ptyid:CIF" />
+      <xsd:element ref="accountType" />
+      <xsd:element name="currency" type="AccountCurrencyCodeType">
+        <xsd:annotation>
+          <xsd:documentation>The currency code in the account type. Based solely on the account this will NOT be in ISO4217 format. This complex type has elements which would allow for this to be enriched into the same type.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element ref="accountSerial" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="internalAccountId" type="InternalAccountIdType" />
+  <xsd:simpleType name="IBANType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="40" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="IBAN" type="IBANType" />
+  <xsd:simpleType name="BillerIdType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="billerId" type="BillerIdType" />
+  <xsd:simpleType name="ChequeNumberType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="20" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="chequeNumber" type="ChequeNumberType" />
+  <xsd:simpleType name="ChequebookNumberType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="20" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="chequebookNumber" type="ChequebookNumberType" />
+  <xsd:simpleType name="CardFormatType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Token" />
+      <xsd:enumeration value="Clear" />
+      <xsd:enumeration value="Shadow Account" />
+      <xsd:enumeration value="400 Account" />
+      <xsd:enumeration value="Masked" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="CardIdType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="pattern" type="xsd:string" />
+    </xsd:sequence>
+    <xsd:attribute name="format" type="CardFormatType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>An indication of the format of this cardId</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:element name="cardId" type="CardIdType" />
+  <xsd:element name="primaryCardID" type="CardIdType" />
+  <xsd:complexType name="CardIdCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="cardId" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cardIdSet" type="CardIdCollectionType" />
+  <xsd:element name="cardIdList" type="CardIdCollectionType" />
+  <xsd:complexType name="LoanContractIdType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="contractId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="subContractId" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="loanContractId" type="LoanContractIdType" />
+  <xsd:simpleType name="LoanScheduleIdType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="loanScheduleId" type="LoanScheduleIdType" />
+  <xsd:simpleType name="TellerIdType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="tellerId" type="TellerIdType" />
+  <xsd:simpleType name="LoanIdType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="loanId" type="LoanIdType" />
+</xsd:schema>

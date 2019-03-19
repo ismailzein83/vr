@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="WebApplication2.AudiWCFService" CodeBehind="AudiWCFService.svc.cs" %>

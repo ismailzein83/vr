@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns="http://www.banqueaudi.com/ebo/util.cmn.EBMHeader" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/util.cmn.EBMHeader" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:element name="header" type="HeaderType" />
+  <xsd:element name="ebmCID" type="EbmIDType" />
+  <xsd:element name="ebmMID" type="EbmIDType" />
+  <xsd:element name="ebmRTID" type="EbmIDType" />
+  <xsd:element name="ebmPID" type="EbmIDType" />
+  <xsd:element name="ebmSID" type="EbmSIDType" />
+  <xsd:element name="bankEntityId" type="BankEntityIdType" />
+  <xsd:element name="userID" type="UserIDType" />
+  <xsd:complexType name="HeaderType">
+    <xsd:sequence>
+      <xsd:element ref="ebmCID" />
+      <xsd:element ref="ebmMID" />
+      <xsd:element ref="ebmRTID" />
+      <xsd:element minOccurs="0" ref="ebmPID" />
+      <xsd:element ref="ebmSID" />
+      <xsd:element name="ebmTimestamp" type="xsd:dateTime" />
+      <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+      <xsd:element minOccurs="0" ref="bankEntityId" />
+      <xsd:element minOccurs="0" ref="userID" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="BankEntityIdType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="BASAL" />
+      <xsd:enumeration value="BAEGY" />
+      <xsd:enumeration value="BAIRQ" />
+      <xsd:enumeration value="BAJO" />
+      <xsd:enumeration value="ODEA" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="EbmIDType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="64" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="EbmSIDType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="16" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="VersionType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="10" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="EventClassType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CREATE" />
+      <xsd:enumeration value="UPDATE" />
+      <xsd:enumeration value="DELETE" />
+      <xsd:enumeration value="CANCEL" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="EventTimeType">
+    <xsd:restriction base="xsd:dateTime" />
+  </xsd:simpleType>
+  <xsd:simpleType name="UserIDType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="128" />
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:txn="http://www.banqueaudi.com/ebo/txn.FinancialTransaction" xmlns="http://www.banqueaudi.com/evs/pp.rates.FXRate" xmlns:bas="http://www.banqueaudi.com/ebo/util.cmn.Basic" xmlns:hdr="http://www.banqueaudi.com/ebo/util.cmn.EBMHeader" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/evs/pp.rates.FXRate" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="txn.FinancialTransaction_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/txn.FinancialTransaction" />
+  <xsd:import schemaLocation="util.cmn.EBMHeader_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.EBMHeader" />
+  <xsd:complexType name="AmountToConvertType">
+    <xsd:sequence>
+      <xsd:element name="amount" type="bas:MoneyType" />
+      <xsd:element name="toCurrency" type="bas:ISO4217CurrencyType" />
+      <xsd:element minOccurs="0" default="Daily" name="rateType" type="txn:FXRateTypeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="amountToConvert" type="AmountToConvertType" />
+  <xsd:complexType name="AmountToConvertListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="amountToConvert" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="amountToConvertList" type="AmountToConvertListType" />
+  <xsd:complexType name="GetCounterValueAmountType">
+    <xsd:sequence>
+      <xsd:element ref="hdr:header" />
+      <xsd:element name="body">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element ref="amountToConvertList" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="getCounterValueAmount" type="GetCounterValueAmountType" />
+  <xsd:complexType name="GetCounterValueAmountResponseType">
+    <xsd:sequence>
+      <xsd:element ref="hdr:header" />
+      <xsd:element name="body">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="counterValueAmountList" type="txn:CounterValueAmountListType" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="getCounterValueAmountResponse" type="GetCounterValueAmountResponseType" />
+  <xsd:complexType name="FromCurrencyListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="fromCurrency" type="bas:ISO4217CurrencyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="fromCurrencyList" type="FromCurrencyListType" />
+  <xsd:complexType name="ToCurrencyListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="toCurrency" type="bas:ISO4217CurrencyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="toCurrencyList" type="ToCurrencyListType" />
+  <xsd:complexType name="GetFXRatesType">
+    <xsd:sequence>
+      <xsd:element ref="hdr:header" />
+      <xsd:element name="body">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" ref="fromCurrencyList" />
+            <xsd:element minOccurs="0" ref="toCurrencyList" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="getFXRates" type="GetFXRatesType" />
+  <xsd:complexType name="FXRateFullDetailsListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="txn:FXRateFullDetails" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="FXRateFullDetailsList" type="FXRateFullDetailsListType" />
+  <xsd:complexType name="GetFXRatesResponseType">
+    <xsd:sequence>
+      <xsd:element ref="hdr:header" />
+      <xsd:element name="body">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element ref="FXRateFullDetailsList" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="getFXRatesResponse" type="GetFXRatesResponseType" />
+</xsd:schema>

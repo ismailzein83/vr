@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CallServiceClient.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CallServiceClient_NovercaMngtWS_ManagementService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://apimvna.noverca.com:8080/management/sim</Value>
+    </Setting>
+    <Setting Name="CallServiceClient_WebService1Soap_WebService1" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1206/WebService1.asmx</Value>
+    </Setting>
+    <Setting Name="CallServiceClient_Service1Soap_Service1" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1206/Service1.svc</Value>
+    </Setting>
+    <Setting Name="CallServiceClient_Fawry_ApplicationBusinessFacadeService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9082/CoreWeb/ApplicationBusinessFacadeService</Value>
+    </Setting>
+    <Setting Name="CallServiceClient_AudiWebService_AudiWebService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:8881/AudiWebService.asmx</Value>
+    </Setting>
+    <Setting Name="CallServiceClient_AudiWSDLWebServiceProxy_pp_rates_evs_FXRate_BindingQSService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://almwosbuat2:8012/tevs/pp.rates.evs.FXRate_1.0</Value>
+    </Setting>
+    <Setting Name="CallServiceClient_AudiWebService2Local_AudiWebService2" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:8881/AudiWebService2.asmx</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

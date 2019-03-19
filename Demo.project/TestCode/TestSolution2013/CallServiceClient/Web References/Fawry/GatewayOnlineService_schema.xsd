@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://ejb.gateway.ebpp.fawryis.com/" xmlns:ns1="http://www.fawry-eg.com/ebpp/IFXMessages/" targetNamespace="http://ejb.gateway.ebpp.fawryis.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="xsd/FAWRY_IFX.xsd" namespace="http://www.fawry-eg.com/ebpp/IFXMessages/" />
+  <xs:element name="process" type="tns:process" />
+  <xs:element name="processResponse" type="tns:processResponse" />
+  <xs:complexType name="process">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="ns1:FAWRYType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="processResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="ns1:FAWRYType" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

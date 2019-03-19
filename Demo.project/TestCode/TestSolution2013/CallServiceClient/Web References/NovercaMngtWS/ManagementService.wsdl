@@ -1,0 +1,1669 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://api.management.acoteltlc.com/" name="ManagementService" targetNamespace="http://api.management.acoteltlc.com/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xs:schema targetNamespace="http://api.management.acoteltlc.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="rContainer">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="fields" nillable="true" type="tns:inputField" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="modelGeneric">
+        <xs:sequence>
+          <xs:element name="code" type="xs:int" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="inputField">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="value" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="rContainerPromoBags">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="billingProfile" type="xs:string" />
+              <xs:element minOccurs="0" name="billingType" type="xs:string" />
+              <xs:element minOccurs="0" name="credit" type="xs:string" />
+              <xs:element minOccurs="0" name="hasAnyMovements" type="xs:string" />
+              <xs:element minOccurs="0" name="lastCreditUpdate" type="xs:string" />
+              <xs:element minOccurs="0" name="pricePlanName" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="promotions" nillable="true" type="tns:mySubscriptionService" />
+              <xs:element minOccurs="0" name="typeOfLine" type="xs:string" />
+              <xs:element minOccurs="0" name="visualPricePlan" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="mySubscriptionService">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="auxBag" nillable="true" type="tns:myAuxBag" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="auxBagId" nillable="true" type="xs:long" />
+          <xs:element minOccurs="0" name="endDate" type="xs:string" />
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="productId" type="xs:long" />
+          <xs:element minOccurs="0" name="promoInstanceName" type="xs:string" />
+          <xs:element minOccurs="0" name="promoName" type="xs:string" />
+          <xs:element minOccurs="0" name="promotionInstanceId" type="xs:long" />
+          <xs:element minOccurs="0" name="serviceId" type="xs:long" />
+          <xs:element minOccurs="0" name="startDate" type="xs:string" />
+          <xs:element minOccurs="0" name="subTypeId" type="xs:long" />
+          <xs:element minOccurs="0" name="subscriptionStatus" type="xs:long" />
+          <xs:element minOccurs="0" name="subserviceId" type="xs:long" />
+          <xs:element minOccurs="0" name="type" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="myAuxBag">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="amount" type="xs:double" />
+          <xs:element minOccurs="0" name="amountTypeId" type="xs:long" />
+          <xs:element minOccurs="0" name="amountTypeString" type="xs:string" />
+          <xs:element minOccurs="0" name="auxBagDefinitionId" type="xs:long" />
+          <xs:element minOccurs="0" name="auxMBDefId" type="xs:long" />
+          <xs:element minOccurs="0" name="auxmbId" type="xs:long" />
+          <xs:element minOccurs="0" name="bagInitValue" type="xs:double" />
+          <xs:element minOccurs="0" name="endDate" type="xs:string" />
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="startDate" type="xs:string" />
+          <xs:element minOccurs="0" name="type" type="xs:long" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="rContainerService">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="fields" nillable="true" type="tns:modelServiceAggr" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="modelServiceAggr">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element minOccurs="0" name="endDate" type="xs:string" />
+          <xs:element name="hardDisabled" type="xs:int" />
+          <xs:element minOccurs="0" name="incompatibility" type="xs:string" />
+          <xs:element minOccurs="0" name="iniDate" type="xs:string" />
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element name="planType" type="xs:int" />
+          <xs:element name="serviceAggregationId" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="rContainerPromoAll">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="promotions" nillable="true" type="tns:modelPromotions" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="modelPromotions">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element minOccurs="0" name="endDate" type="xs:string" />
+          <xs:element name="id" type="xs:long" />
+          <xs:element minOccurs="0" name="instanceName" type="xs:string" />
+          <xs:element minOccurs="0" name="promoName" type="xs:string" />
+          <xs:element minOccurs="0" name="startDate" type="xs:string" />
+          <xs:element minOccurs="0" name="subscriptionStatus" type="xs:long" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="rContainerRecharges">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="fields" nillable="true" type="tns:modelListRecharges" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="modelListRecharges">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="amount" type="xs:string" />
+          <xs:element minOccurs="0" name="datetime" type="xs:string" />
+          <xs:element name="id" type="xs:int" />
+          <xs:element minOccurs="0" name="realsource" type="xs:string" />
+          <xs:element name="rechargeType" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="rContainerInfoMNPfull">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="esp" type="tns:rContainer" />
+              <xs:element minOccurs="0" name="full" type="tns:rContainer" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="rContainerCRMUnifiedInfo">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:rContainer">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="infoHistoryUNP" nillable="true" type="tns:rContainerHistoryUNP" />
+              <xs:element minOccurs="0" name="infoMNP" type="tns:rContainerInfoMNPfull" />
+              <xs:element minOccurs="0" name="infoSim" type="tns:rContainerInfoSim" />
+              <xs:element minOccurs="0" name="infoUNP" type="tns:rContainerInfoUNP" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="rContainerHistoryUNP">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:rContainer">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="rContainerInfoSim">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:rContainer">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="rContainerInfoUNP">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:rContainer">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="rContainerPreRatingList">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="rating" nillable="true" type="tns:modelPreRating" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="modelPreRating">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="endDate" type="xs:string" />
+          <xs:element minOccurs="0" name="prId" type="xs:long" />
+          <xs:element minOccurs="0" name="preRatingName" type="xs:string" />
+          <xs:element minOccurs="0" name="serviceId" type="xs:long" />
+          <xs:element minOccurs="0" name="startDate" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="inputContainer">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="couple" nillable="true" type="tns:inputs" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="inputs">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="value" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="rContainerSCE">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="fields" nillable="true" type="tns:inputField" />
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="params" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="rContainerHistoryMNP">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="credits" nillable="true" type="tns:modelCreditMNPInfo" />
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="events" nillable="true" type="tns:modelMNPInfo" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="modelCreditMNPInfo">
+        <xs:sequence>
+          <xs:element name="anomalousCreditFlag" type="xs:short" />
+          <xs:element name="aomID" type="xs:short" />
+          <xs:element minOccurs="0" name="creditAmount" type="xs:double" />
+          <xs:element minOccurs="0" name="creditNotificationDate" type="xs:string" />
+          <xs:element minOccurs="0" name="modifyDate" type="xs:string" />
+          <xs:element name="status" type="xs:short" />
+          <xs:element name="typeTransfer" type="xs:short" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="modelMNPInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="aomICCID" type="xs:string" />
+          <xs:element name="aomID" type="xs:short" />
+          <xs:element minOccurs="0" name="aomName" type="xs:string" />
+          <xs:element name="aomServiceID" type="xs:short" />
+          <xs:element minOccurs="0" name="aomServiceName" type="xs:string" />
+          <xs:element minOccurs="0" name="cutoverDate" type="xs:string" />
+          <xs:element minOccurs="0" name="errorDescription" type="xs:string" />
+          <xs:element name="flagCreditTransfer" type="xs:short" />
+          <xs:element name="flagPrevalidation" type="xs:short" />
+          <xs:element name="flagTheft" type="xs:short" />
+          <xs:element minOccurs="0" name="groupCode" type="xs:string" />
+          <xs:element minOccurs="0" name="mnpTypeName" type="xs:string" />
+          <xs:element minOccurs="0" name="refDate" type="xs:string" />
+          <xs:element minOccurs="0" name="schedDate" type="xs:string" />
+          <xs:element name="simType" type="xs:short" />
+          <xs:element name="statusID" type="xs:short" />
+          <xs:element minOccurs="0" name="statusIdName" type="xs:string" />
+          <xs:element name="typeID" type="xs:short" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="rContainerInfoSaid">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="listSaid" nillable="true" type="tns:modelSaidInfo" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="modelSaidInfo">
+        <xs:sequence>
+          <xs:element name="billingProfile" type="xs:short" />
+          <xs:element minOccurs="0" name="description" type="xs:string" />
+          <xs:element name="plafond" type="xs:short" />
+          <xs:element name="said" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="rContainerBookingPromo">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:modelGeneric">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="listBookingPromo" nillable="true" type="tns:bookingPromo" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="bookingPromo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="customerId" type="xs:long" />
+          <xs:element minOccurs="0" name="datasourceId" type="xs:long" />
+          <xs:element minOccurs="0" name="initialBagAmount" type="xs:double" />
+          <xs:element minOccurs="0" name="insertDate" type="xs:string" />
+          <xs:element minOccurs="0" name="instanceName" type="xs:string" />
+          <xs:element minOccurs="0" name="lastRetryUpdate" type="xs:string" />
+          <xs:element minOccurs="0" name="noCharging" type="xs:long" />
+          <xs:element minOccurs="0" name="promotionBookingId" type="xs:long" />
+          <xs:element minOccurs="0" name="promotionId" type="xs:long" />
+          <xs:element minOccurs="0" name="retryCount" type="xs:long" />
+          <xs:element minOccurs="0" name="status" type="xs:long" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="rContainerArray" final="#all">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="item" nillable="true" type="tns:rContainer" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </types>
+  <message name="Management_creditTransferFromDeactivatedResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_changeCustomer">
+    <part name="msisdn" type="xsd:string" />
+    <part name="servicePlanId" type="xsd:int" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+    <part name="flagPay" type="xsd:int" />
+    <part name="allowPromotionBooking" type="xsd:boolean" />
+  </message>
+  <message name="Management_getSaidList" />
+  <message name="Management_setUserPreRating">
+    <part name="msisdn" type="xsd:string" />
+    <part name="preRatingName" type="xsd:string" />
+    <part name="type" type="xsd:int" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_getSIMResearchResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getInfoSimResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getInfoSimByICCID">
+    <part name="iccid" type="xsd:string" />
+  </message>
+  <message name="Management_refundAuxMoneyBag">
+    <part name="msisdn" type="xsd:string" />
+    <part name="auxBagId" type="xsd:long" />
+    <part name="value" type="xsd:double" />
+    <part name="dataSourceId" type="xsd:long" />
+  </message>
+  <message name="Management_removePromotionBookingResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getAllStatusSim">
+    <part name="status" type="xsd:int" />
+    <part name="beginDate" type="xsd:long" />
+  </message>
+  <message name="Management_getAllPromotions" />
+  <message name="Management_getCustomerPromotionBookingResponse">
+    <part name="return" type="tns:rContainerBookingPromo" />
+  </message>
+  <message name="Management_getMainBagCredit">
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_getSIMResearch">
+    <part name="type" type="xsd:string" />
+    <part name="warehouse" type="xsd:string" />
+    <part name="status" type="xsd:string" />
+    <part name="creationDateFrom" type="xsd:string" />
+    <part name="creationDateTo" type="xsd:string" />
+    <part name="exitDateFrom" type="xsd:string" />
+    <part name="exitDateTo" type="xsd:string" />
+    <part name="software" type="xsd:string" />
+  </message>
+  <message name="Management_getUserPromoBags">
+    <part name="fromJid" type="xsd:string" />
+    <part name="fromDomain" type="xsd:string" />
+  </message>
+  <message name="Management_getActivablePromoCRM">
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="warehouseId" type="xsd:int" />
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_changeCustomerPricePlan">
+    <part name="msisdn" type="xsd:string" />
+    <part name="servicePlanId" type="xsd:int" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_rechargeAuxMoneyBagId">
+    <part name="msisdn" type="xsd:string" />
+    <part name="auxBagId" type="xsd:long" />
+    <part name="value" type="xsd:double" />
+    <part name="dataSourceId" type="xsd:long" />
+    <part name="eventType" type="xsd:int" />
+  </message>
+  <message name="Management_getReferenceResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_rechargeCancelResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getRechargesList">
+    <part name="msisdn" type="xsd:string" />
+    <part name="beginDate" type="xsd:long" />
+    <part name="endDate" type="xsd:long" />
+    <part name="maxList" type="xsd:int" />
+    <part name="order" type="xsd:int" />
+  </message>
+  <message name="Management_setPinVoiceMail">
+    <part name="msisdn" type="xsd:string" />
+    <part name="pin" type="xsd:string" />
+  </message>
+  <message name="Management_getInfoSimByICCIDResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getCRMUnifiedInfoResponse">
+    <part name="return" type="tns:rContainerCRMUnifiedInfo" />
+  </message>
+  <message name="Management_cancelDeactivateLineSched">
+    <part name="sourceMsisdn" type="xsd:string" />
+  </message>
+  <message name="Management_getInfoMNPResponse">
+    <part name="return" type="tns:rContainerInfoMNPfull" />
+  </message>
+  <message name="Management_getDeactivateLineSched">
+    <part name="sourceMsisdn" type="xsd:string" />
+  </message>
+  <message name="Management_getHistoryUNPResponse">
+    <part name="return" type="tns:rContainerArray" />
+  </message>
+  <message name="Management_getMsisdnPreRatingResponse">
+    <part name="return" type="tns:rContainerPreRatingList" />
+  </message>
+  <message name="Management_rechargeAuxMoneyBagResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getHistorySIM">
+    <part name="msisdn" type="xsd:string" />
+    <part name="beginDate" type="xsd:long" />
+    <part name="endDate" type="xsd:long" />
+  </message>
+  <message name="Management_setMsisdnPreRating">
+    <part name="msisdn" type="xsd:string" />
+    <part name="preRatingName" type="xsd:string" />
+    <part name="type" type="xsd:int" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_getActivablePromo">
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="warehouseId" type="xsd:int" />
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_getMsisdnPreRating">
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_rechargeAuxMoneyBag">
+    <part name="msisdn" type="xsd:string" />
+    <part name="auxBagId" type="xsd:long" />
+    <part name="value" type="xsd:double" />
+    <part name="dataSourceId" type="xsd:long" />
+  </message>
+  <message name="Management_getMainBagCreditFull">
+    <part name="msisdn" type="xsd:string" />
+    <part name="reserves" type="xsd:boolean" />
+  </message>
+  <message name="Management_getInfoSimByMSISDN">
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_getDeactivateLineSchedResponse">
+    <part name="return" type="tns:rContainerArray" />
+  </message>
+  <message name="Management_getInfoMNP">
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_creditTransferFromDeactivated">
+    <part name="sourceMsisdn" type="xsd:string" />
+    <part name="destinationMsisdn" type="xsd:string" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_getStatusBid">
+    <part name="bid" type="xsd:string" />
+  </message>
+  <message name="Management_getInfoSAIDResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_unsubscribePromotionResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_rechargeManualRefund">
+    <part name="user" type="xsd:string" />
+    <part name="amount" type="xsd:double" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_rechargeUserId">
+    <part name="user" type="xsd:string" />
+    <part name="amount" type="xsd:double" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+    <part name="eventType" type="xsd:int" />
+  </message>
+  <message name="Management_getInfoSimByMSISDNResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getDeactivatedUserProfile">
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_creditTransferResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_setMsisdnPreRatingResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_rechargeUserIdResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_manageSCE">
+    <part name="action" type="xsd:string" />
+    <part name="serviceCode" type="xsd:string" />
+    <part name="msisdn" type="xsd:string" />
+    <part name="params" type="tns:inputContainer" />
+    <part name="noCharging" type="xsd:int" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_changeCustomerResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_manageReferenceResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getBlacklistInfo">
+    <part name="msisdn" type="xsd:string" />
+    <part name="service_id" type="xsd:string" />
+  </message>
+  <message name="Management_setUserPreRatingResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getSimByTaxCode">
+    <part name="taxcode" type="xsd:string" />
+    <part name="status" type="xsd:int" />
+  </message>
+  <message name="Management_getHistoryMNPResponse">
+    <part name="return" type="tns:rContainerHistoryMNP" />
+  </message>
+  <message name="Management_getActivablePricePlanResponse">
+    <part name="return" type="tns:rContainerService" />
+  </message>
+  <message name="Management_getStatusBidResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_forcePromotionRenewal">
+    <part name="msisdn" type="xsd:string" />
+    <part name="promotionName" type="xsd:string" />
+    <part name="forceRating" type="xsd:long" />
+    <part name="value" type="xsd:string" />
+  </message>
+  <message name="Management_unsubscribePromo">
+    <part name="msisdn" type="xsd:string" />
+    <part name="promotion" type="xsd:string" />
+    <part name="token" type="xsd:string" />
+    <part name="hard" type="xsd:int" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_deactivateLineSchedResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getInfoSim">
+    <part name="target" type="xsd:string" />
+  </message>
+  <message name="Management_getMsisdnPromoBagsResponse">
+    <part name="return" type="tns:rContainerPromoBags" />
+  </message>
+  <message name="Management_changeCustomerPricePlanBagResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_creditTransfer">
+    <part name="sourceMsisdn" type="xsd:string" />
+    <part name="destinationMsisdn" type="xsd:string" />
+    <part name="amount" type="xsd:double" />
+    <part name="noCharging" type="xsd:int" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_manageSCEResponse">
+    <part name="return" type="tns:rContainerSCE" />
+  </message>
+  <message name="Management_rechargeUserFastResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_deactivateLineSched">
+    <part name="sourceMsisdn" type="xsd:string" />
+    <part name="destinationMsisdn" type="xsd:string" />
+    <part name="schedDate" type="xsd:string" />
+    <part name="charge" type="xsd:int" />
+    <part name="description" type="xsd:string" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_getSIMSoftwaresResponse">
+    <part name="return" type="tns:rContainerArray" />
+  </message>
+  <message name="Management_getDeactivatedUserProfileResponse">
+    <part name="return" type="tns:rContainerPromoBags" />
+  </message>
+  <message name="Management_updatePersonalDataResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_cancelDeactivateLineSchedResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getVersion" />
+  <message name="Management_getCRMUnifiedInfo">
+    <part name="msisdn" type="xsd:string" />
+    <part name="iccid" type="xsd:string" />
+    <part name="beginDate" type="xsd:long" />
+    <part name="endDate" type="xsd:long" />
+  </message>
+  <message name="Management_getActivablePromoCRMResponse">
+    <part name="return" type="tns:rContainerService" />
+  </message>
+  <message name="Management_getCustomerPromotionBooking">
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_unsubscribePromotion">
+    <part name="msisdn" type="xsd:string" />
+    <part name="promotion" type="xsd:string" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_getInfoUNPResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getUserPreRatingResponse">
+    <part name="return" type="tns:rContainerPreRatingList" />
+  </message>
+  <message name="Management_forcePromotionRenewalResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getSIMSoftwares" />
+  <message name="Management_updatePersonalData">
+    <part name="msisdn" type="xsd:string" />
+    <part name="fiscalCode" type="xsd:string" />
+  </message>
+  <message name="Management_getUserPromoBagsByICCIDResponse">
+    <part name="return" type="tns:rContainerPromoBags" />
+  </message>
+  <message name="Management_getActivablePricePlan">
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="warehouseId" type="xsd:int" />
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_createSaid">
+    <part name="promocode" type="xsd:string" />
+    <part name="promoname" type="xsd:string" />
+    <part name="promoinstance" type="xsd:string" />
+    <part name="visible" type="xsd:int" />
+  </message>
+  <message name="Management_createSaidResponse">
+    <part name="return" type="xsd:long" />
+  </message>
+  <message name="Management_getSaidListResponse">
+    <part name="return" type="tns:rContainerInfoSaid" />
+  </message>
+  <message name="Management_getInfoSAID">
+    <part name="said" type="xsd:int" />
+  </message>
+  <message name="Management_setPinVoiceMailResponse">
+    <part name="return" type="xsd:int" />
+  </message>
+  <message name="Management_getMainBagCreditResponse">
+    <part name="return" type="xsd:double" />
+  </message>
+  <message name="Management_getPinVoiceMailResponse">
+    <part name="return" type="xsd:string" />
+  </message>
+  <message name="Management_getPrincipalCredit">
+    <part name="fromJid" type="xsd:string" />
+    <part name="fromDomain" type="xsd:string" />
+  </message>
+  <message name="Management_removePromotionBooking">
+    <part name="msisdn" type="xsd:string" />
+    <part name="promotionBookingId" type="xsd:long" />
+  </message>
+  <message name="Management_rechargeCancel">
+    <part name="user" type="xsd:string" />
+    <part name="amount" type="xsd:double" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_getHistoryUNP">
+    <part name="msisdn" type="xsd:string" />
+    <part name="beginDate" type="xsd:long" />
+    <part name="endDate" type="xsd:long" />
+  </message>
+  <message name="Management_getPrincipalCreditResponse">
+    <part name="return" type="xsd:double" />
+  </message>
+  <message name="Management_getMainBagCreditFullResponse">
+    <part name="return" type="xsd:double" />
+  </message>
+  <message name="Management_rechargeAuxMoneyBagIdResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getAllStatusSimResponse">
+    <part name="return" type="tns:rContainerArray" />
+  </message>
+  <message name="Management_getHistorySIMResponse">
+    <part name="return" type="tns:rContainerArray" />
+  </message>
+  <message name="Management_changeCustomerPricePlanBag">
+    <part name="msisdn" type="xsd:string" />
+    <part name="servicePlanId" type="xsd:int" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+    <part name="flagPay" type="xsd:int" />
+  </message>
+  <message name="Management_unbindTMPmsisdnResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getUserPromoBagsByICCID">
+    <part name="iccid" type="xsd:string" />
+  </message>
+  <message name="Management_unsubscribePromoResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_rechargeUserResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getActivablePromoResponse">
+    <part name="return" type="tns:rContainerService" />
+  </message>
+  <message name="Management_getInfoUNP">
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_getMnpStatus">
+    <part name="typeMnp" type="xsd:int" />
+    <part name="status" type="xsd:int" />
+    <part name="beginDate" type="xsd:long" />
+    <part name="endDate" type="xsd:long" />
+    <part name="flagCreditTransfer" type="xsd:int" />
+  </message>
+  <message name="Management_getMnpStatusResponse">
+    <part name="return" type="tns:rContainerArray" />
+  </message>
+  <message name="Management_unbindTMPmsisdn">
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_changeCustomerPricePlanResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getHistoryMNP">
+    <part name="msisdn" type="xsd:string" />
+    <part name="order" type="xsd:int" />
+  </message>
+  <message name="Management_manageReference">
+    <part name="msisdn" type="xsd:string" />
+    <part name="servicePlanId" type="xsd:int" />
+    <part name="token" type="xsd:string" />
+    <part name="reference" type="xsd:string" />
+    <part name="referenceType" type="xsd:long" />
+    <part name="operation" type="xsd:int" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+    <part name="noCharging" type="xsd:boolean" />
+  </message>
+  <message name="Management_rechargeUser">
+    <part name="user" type="xsd:string" />
+    <part name="amount" type="xsd:double" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_getUserPreRating">
+    <part name="fromJid" type="xsd:string" />
+    <part name="fromDomain" type="xsd:string" />
+  </message>
+  <message name="Management_rechargeManualRefundResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getSimByTaxCodeResponse">
+    <part name="return" type="tns:rContainerArray" />
+  </message>
+  <message name="Management_getPinVoiceMail">
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_getVersionResponse">
+    <part name="return" type="xsd:string" />
+  </message>
+  <message name="Management_rechargeUserFast">
+    <part name="user" type="xsd:string" />
+    <part name="amount" type="xsd:double" />
+    <part name="token" type="xsd:string" />
+    <part name="dataSourceId" type="xsd:int" />
+    <part name="realSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_getMsisdnPromoBags">
+    <part name="msisdn" type="xsd:string" />
+  </message>
+  <message name="Management_getReference">
+    <part name="msisdn" type="xsd:string" />
+    <part name="promoName" type="xsd:string" />
+    <part name="referenceType" type="xsd:int" />
+    <part name="dataSourceId" type="xsd:int" />
+  </message>
+  <message name="Management_getUserPromoBagsResponse">
+    <part name="return" type="tns:rContainerPromoBags" />
+  </message>
+  <message name="Management_refundAuxMoneyBagResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <message name="Management_getAllPromotionsResponse">
+    <part name="return" type="tns:rContainerPromoAll" />
+  </message>
+  <message name="Management_getRechargesListResponse">
+    <part name="return" type="tns:rContainerRecharges" />
+  </message>
+  <message name="Management_getBlacklistInfoResponse">
+    <part name="return" type="tns:rContainer" />
+  </message>
+  <portType name="Management">
+    <operation name="cancelDeactivateLineSched" parameterOrder="sourceMsisdn">
+      <input message="tns:Management_cancelDeactivateLineSched" />
+      <output message="tns:Management_cancelDeactivateLineSchedResponse" />
+    </operation>
+    <operation name="changeCustomer" parameterOrder="msisdn servicePlanId token dataSourceId realSourceId flagPay allowPromotionBooking">
+      <input message="tns:Management_changeCustomer" />
+      <output message="tns:Management_changeCustomerResponse" />
+    </operation>
+    <operation name="changeCustomerPricePlan" parameterOrder="msisdn servicePlanId token dataSourceId realSourceId">
+      <input message="tns:Management_changeCustomerPricePlan" />
+      <output message="tns:Management_changeCustomerPricePlanResponse" />
+    </operation>
+    <operation name="changeCustomerPricePlanBag" parameterOrder="msisdn servicePlanId token dataSourceId realSourceId flagPay">
+      <input message="tns:Management_changeCustomerPricePlanBag" />
+      <output message="tns:Management_changeCustomerPricePlanBagResponse" />
+    </operation>
+    <operation name="createSaid" parameterOrder="promocode promoname promoinstance visible">
+      <input message="tns:Management_createSaid" />
+      <output message="tns:Management_createSaidResponse" />
+    </operation>
+    <operation name="creditTransfer" parameterOrder="sourceMsisdn destinationMsisdn amount noCharging token dataSourceId realSourceId">
+      <input message="tns:Management_creditTransfer" />
+      <output message="tns:Management_creditTransferResponse" />
+    </operation>
+    <operation name="creditTransferFromDeactivated" parameterOrder="sourceMsisdn destinationMsisdn token dataSourceId realSourceId">
+      <input message="tns:Management_creditTransferFromDeactivated" />
+      <output message="tns:Management_creditTransferFromDeactivatedResponse" />
+    </operation>
+    <operation name="deactivateLineSched" parameterOrder="sourceMsisdn destinationMsisdn schedDate charge description token dataSourceId">
+      <input message="tns:Management_deactivateLineSched" />
+      <output message="tns:Management_deactivateLineSchedResponse" />
+    </operation>
+    <operation name="forcePromotionRenewal" parameterOrder="msisdn promotionName forceRating value">
+      <input message="tns:Management_forcePromotionRenewal" />
+      <output message="tns:Management_forcePromotionRenewalResponse" />
+    </operation>
+    <operation name="getActivablePricePlan" parameterOrder="dataSourceId warehouseId msisdn">
+      <input message="tns:Management_getActivablePricePlan" />
+      <output message="tns:Management_getActivablePricePlanResponse" />
+    </operation>
+    <operation name="getActivablePromo" parameterOrder="dataSourceId warehouseId msisdn">
+      <input message="tns:Management_getActivablePromo" />
+      <output message="tns:Management_getActivablePromoResponse" />
+    </operation>
+    <operation name="getActivablePromoCRM" parameterOrder="dataSourceId warehouseId msisdn">
+      <input message="tns:Management_getActivablePromoCRM" />
+      <output message="tns:Management_getActivablePromoCRMResponse" />
+    </operation>
+    <operation name="getAllPromotions">
+      <input message="tns:Management_getAllPromotions" />
+      <output message="tns:Management_getAllPromotionsResponse" />
+    </operation>
+    <operation name="getAllStatusSim" parameterOrder="status beginDate">
+      <input message="tns:Management_getAllStatusSim" />
+      <output message="tns:Management_getAllStatusSimResponse" />
+    </operation>
+    <operation name="getBlacklistInfo" parameterOrder="msisdn service_id">
+      <input message="tns:Management_getBlacklistInfo" />
+      <output message="tns:Management_getBlacklistInfoResponse" />
+    </operation>
+    <operation name="getCRMUnifiedInfo" parameterOrder="msisdn iccid beginDate endDate">
+      <input message="tns:Management_getCRMUnifiedInfo" />
+      <output message="tns:Management_getCRMUnifiedInfoResponse" />
+    </operation>
+    <operation name="getCustomerPromotionBooking" parameterOrder="msisdn">
+      <input message="tns:Management_getCustomerPromotionBooking" />
+      <output message="tns:Management_getCustomerPromotionBookingResponse" />
+    </operation>
+    <operation name="getDeactivateLineSched" parameterOrder="sourceMsisdn">
+      <input message="tns:Management_getDeactivateLineSched" />
+      <output message="tns:Management_getDeactivateLineSchedResponse" />
+    </operation>
+    <operation name="getDeactivatedUserProfile" parameterOrder="msisdn">
+      <input message="tns:Management_getDeactivatedUserProfile" />
+      <output message="tns:Management_getDeactivatedUserProfileResponse" />
+    </operation>
+    <operation name="getHistoryMNP" parameterOrder="msisdn order">
+      <input message="tns:Management_getHistoryMNP" />
+      <output message="tns:Management_getHistoryMNPResponse" />
+    </operation>
+    <operation name="getHistorySIM" parameterOrder="msisdn beginDate endDate">
+      <input message="tns:Management_getHistorySIM" />
+      <output message="tns:Management_getHistorySIMResponse" />
+    </operation>
+    <operation name="getHistoryUNP" parameterOrder="msisdn beginDate endDate">
+      <input message="tns:Management_getHistoryUNP" />
+      <output message="tns:Management_getHistoryUNPResponse" />
+    </operation>
+    <operation name="getInfoMNP" parameterOrder="msisdn">
+      <input message="tns:Management_getInfoMNP" />
+      <output message="tns:Management_getInfoMNPResponse" />
+    </operation>
+    <operation name="getInfoSAID" parameterOrder="said">
+      <input message="tns:Management_getInfoSAID" />
+      <output message="tns:Management_getInfoSAIDResponse" />
+    </operation>
+    <operation name="getInfoSim" parameterOrder="target">
+      <input message="tns:Management_getInfoSim" />
+      <output message="tns:Management_getInfoSimResponse" />
+    </operation>
+    <operation name="getInfoSimByICCID" parameterOrder="iccid">
+      <input message="tns:Management_getInfoSimByICCID" />
+      <output message="tns:Management_getInfoSimByICCIDResponse" />
+    </operation>
+    <operation name="getInfoSimByMSISDN" parameterOrder="msisdn">
+      <input message="tns:Management_getInfoSimByMSISDN" />
+      <output message="tns:Management_getInfoSimByMSISDNResponse" />
+    </operation>
+    <operation name="getInfoUNP" parameterOrder="msisdn">
+      <input message="tns:Management_getInfoUNP" />
+      <output message="tns:Management_getInfoUNPResponse" />
+    </operation>
+    <operation name="getMainBagCredit" parameterOrder="msisdn">
+      <input message="tns:Management_getMainBagCredit" />
+      <output message="tns:Management_getMainBagCreditResponse" />
+    </operation>
+    <operation name="getMainBagCreditFull" parameterOrder="msisdn reserves">
+      <input message="tns:Management_getMainBagCreditFull" />
+      <output message="tns:Management_getMainBagCreditFullResponse" />
+    </operation>
+    <operation name="getMnpStatus" parameterOrder="typeMnp status beginDate endDate flagCreditTransfer">
+      <input message="tns:Management_getMnpStatus" />
+      <output message="tns:Management_getMnpStatusResponse" />
+    </operation>
+    <operation name="getMsisdnPreRating" parameterOrder="msisdn">
+      <input message="tns:Management_getMsisdnPreRating" />
+      <output message="tns:Management_getMsisdnPreRatingResponse" />
+    </operation>
+    <operation name="getMsisdnPromoBags" parameterOrder="msisdn">
+      <input message="tns:Management_getMsisdnPromoBags" />
+      <output message="tns:Management_getMsisdnPromoBagsResponse" />
+    </operation>
+    <operation name="getPinVoiceMail" parameterOrder="msisdn">
+      <input message="tns:Management_getPinVoiceMail" />
+      <output message="tns:Management_getPinVoiceMailResponse" />
+    </operation>
+    <operation name="getPrincipalCredit" parameterOrder="fromJid fromDomain">
+      <input message="tns:Management_getPrincipalCredit" />
+      <output message="tns:Management_getPrincipalCreditResponse" />
+    </operation>
+    <operation name="getRechargesList" parameterOrder="msisdn beginDate endDate maxList order">
+      <input message="tns:Management_getRechargesList" />
+      <output message="tns:Management_getRechargesListResponse" />
+    </operation>
+    <operation name="getReference" parameterOrder="msisdn promoName referenceType dataSourceId">
+      <input message="tns:Management_getReference" />
+      <output message="tns:Management_getReferenceResponse" />
+    </operation>
+    <operation name="getSIMResearch" parameterOrder="type warehouse status creationDateFrom creationDateTo exitDateFrom exitDateTo software">
+      <input message="tns:Management_getSIMResearch" />
+      <output message="tns:Management_getSIMResearchResponse" />
+    </operation>
+    <operation name="getSIMSoftwares">
+      <input message="tns:Management_getSIMSoftwares" />
+      <output message="tns:Management_getSIMSoftwaresResponse" />
+    </operation>
+    <operation name="getSaidList">
+      <input message="tns:Management_getSaidList" />
+      <output message="tns:Management_getSaidListResponse" />
+    </operation>
+    <operation name="getSimByTaxCode" parameterOrder="taxcode status">
+      <input message="tns:Management_getSimByTaxCode" />
+      <output message="tns:Management_getSimByTaxCodeResponse" />
+    </operation>
+    <operation name="getStatusBid" parameterOrder="bid">
+      <input message="tns:Management_getStatusBid" />
+      <output message="tns:Management_getStatusBidResponse" />
+    </operation>
+    <operation name="getUserPreRating" parameterOrder="fromJid fromDomain">
+      <input message="tns:Management_getUserPreRating" />
+      <output message="tns:Management_getUserPreRatingResponse" />
+    </operation>
+    <operation name="getUserPromoBags" parameterOrder="fromJid fromDomain">
+      <input message="tns:Management_getUserPromoBags" />
+      <output message="tns:Management_getUserPromoBagsResponse" />
+    </operation>
+    <operation name="getUserPromoBagsByICCID" parameterOrder="iccid">
+      <input message="tns:Management_getUserPromoBagsByICCID" />
+      <output message="tns:Management_getUserPromoBagsByICCIDResponse" />
+    </operation>
+    <operation name="getVersion">
+      <input message="tns:Management_getVersion" />
+      <output message="tns:Management_getVersionResponse" />
+    </operation>
+    <operation name="manageReference" parameterOrder="msisdn servicePlanId token reference referenceType operation dataSourceId realSourceId noCharging">
+      <input message="tns:Management_manageReference" />
+      <output message="tns:Management_manageReferenceResponse" />
+    </operation>
+    <operation name="manageSCE" parameterOrder="action serviceCode msisdn params noCharging dataSourceId realSourceId">
+      <input message="tns:Management_manageSCE" />
+      <output message="tns:Management_manageSCEResponse" />
+    </operation>
+    <operation name="rechargeAuxMoneyBag" parameterOrder="msisdn auxBagId value dataSourceId">
+      <input message="tns:Management_rechargeAuxMoneyBag" />
+      <output message="tns:Management_rechargeAuxMoneyBagResponse" />
+    </operation>
+    <operation name="rechargeAuxMoneyBagId" parameterOrder="msisdn auxBagId value dataSourceId eventType">
+      <input message="tns:Management_rechargeAuxMoneyBagId" />
+      <output message="tns:Management_rechargeAuxMoneyBagIdResponse" />
+    </operation>
+    <operation name="rechargeCancel" parameterOrder="user amount token dataSourceId realSourceId">
+      <input message="tns:Management_rechargeCancel" />
+      <output message="tns:Management_rechargeCancelResponse" />
+    </operation>
+    <operation name="rechargeManualRefund" parameterOrder="user amount token dataSourceId realSourceId">
+      <input message="tns:Management_rechargeManualRefund" />
+      <output message="tns:Management_rechargeManualRefundResponse" />
+    </operation>
+    <operation name="rechargeUser" parameterOrder="user amount token dataSourceId realSourceId">
+      <input message="tns:Management_rechargeUser" />
+      <output message="tns:Management_rechargeUserResponse" />
+    </operation>
+    <operation name="rechargeUserFast" parameterOrder="user amount token dataSourceId realSourceId">
+      <input message="tns:Management_rechargeUserFast" />
+      <output message="tns:Management_rechargeUserFastResponse" />
+    </operation>
+    <operation name="rechargeUserId" parameterOrder="user amount token dataSourceId realSourceId eventType">
+      <input message="tns:Management_rechargeUserId" />
+      <output message="tns:Management_rechargeUserIdResponse" />
+    </operation>
+    <operation name="refundAuxMoneyBag" parameterOrder="msisdn auxBagId value dataSourceId">
+      <input message="tns:Management_refundAuxMoneyBag" />
+      <output message="tns:Management_refundAuxMoneyBagResponse" />
+    </operation>
+    <operation name="removePromotionBooking" parameterOrder="msisdn promotionBookingId">
+      <input message="tns:Management_removePromotionBooking" />
+      <output message="tns:Management_removePromotionBookingResponse" />
+    </operation>
+    <operation name="setMsisdnPreRating" parameterOrder="msisdn preRatingName type token dataSourceId realSourceId">
+      <input message="tns:Management_setMsisdnPreRating" />
+      <output message="tns:Management_setMsisdnPreRatingResponse" />
+    </operation>
+    <operation name="setPinVoiceMail" parameterOrder="msisdn pin">
+      <input message="tns:Management_setPinVoiceMail" />
+      <output message="tns:Management_setPinVoiceMailResponse" />
+    </operation>
+    <operation name="setUserPreRating" parameterOrder="msisdn preRatingName type token dataSourceId realSourceId">
+      <input message="tns:Management_setUserPreRating" />
+      <output message="tns:Management_setUserPreRatingResponse" />
+    </operation>
+    <operation name="unbindTMPmsisdn" parameterOrder="msisdn">
+      <input message="tns:Management_unbindTMPmsisdn" />
+      <output message="tns:Management_unbindTMPmsisdnResponse" />
+    </operation>
+    <operation name="unsubscribePromo" parameterOrder="msisdn promotion token hard dataSourceId realSourceId">
+      <input message="tns:Management_unsubscribePromo" />
+      <output message="tns:Management_unsubscribePromoResponse" />
+    </operation>
+    <operation name="unsubscribePromotion" parameterOrder="msisdn promotion token dataSourceId realSourceId">
+      <input message="tns:Management_unsubscribePromotion" />
+      <output message="tns:Management_unsubscribePromotionResponse" />
+    </operation>
+    <operation name="updatePersonalData" parameterOrder="msisdn fiscalCode">
+      <input message="tns:Management_updatePersonalData" />
+      <output message="tns:Management_updatePersonalDataResponse" />
+    </operation>
+  </portType>
+  <binding name="ManagementBinding" type="tns:Management">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <operation name="cancelDeactivateLineSched">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="changeCustomer">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="changeCustomerPricePlan">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="changeCustomerPricePlanBag">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="createSaid">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="creditTransfer">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="creditTransferFromDeactivated">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="deactivateLineSched">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="forcePromotionRenewal">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getActivablePricePlan">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getActivablePromo">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getActivablePromoCRM">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getAllPromotions">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getAllStatusSim">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getBlacklistInfo">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getCRMUnifiedInfo">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getCustomerPromotionBooking">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getDeactivateLineSched">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getDeactivatedUserProfile">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getHistoryMNP">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getHistorySIM">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getHistoryUNP">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getInfoMNP">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getInfoSAID">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getInfoSim">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getInfoSimByICCID">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getInfoSimByMSISDN">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getInfoUNP">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getMainBagCredit">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getMainBagCreditFull">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getMnpStatus">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getMsisdnPreRating">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getMsisdnPromoBags">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getPinVoiceMail">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getPrincipalCredit">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getRechargesList">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getReference">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getSIMResearch">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getSIMSoftwares">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getSaidList">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getSimByTaxCode">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getStatusBid">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getUserPreRating">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getUserPromoBags">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getUserPromoBagsByICCID">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="getVersion">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="manageReference">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="manageSCE">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="rechargeAuxMoneyBag">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="rechargeAuxMoneyBagId">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="rechargeCancel">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="rechargeManualRefund">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="rechargeUser">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="rechargeUserFast">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="rechargeUserId">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="refundAuxMoneyBag">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="removePromotionBooking">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="setMsisdnPreRating">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="setPinVoiceMail">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="setUserPreRating">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="unbindTMPmsisdn">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="unsubscribePromo">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="unsubscribePromotion">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+    <operation name="updatePersonalData">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://api.management.acoteltlc.com/" />
+      </output>
+    </operation>
+  </binding>
+  <service name="ManagementService">
+    <port name="ManagementPort" binding="tns:ManagementBinding">
+      <soap:address location="http://apimvna.noverca.com:8080/management/sim" />
+    </port>
+  </service>
+</definitions>

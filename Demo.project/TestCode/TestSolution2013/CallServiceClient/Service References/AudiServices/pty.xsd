@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns:bid="http://www.banqueaudi.com/ebo/chn.cmn.Identifiers" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:simpleType name="CustomerIdType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="customerId" type="CustomerIdType" />
+  <xsd:complexType name="CustomerIdCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="customerId" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="customerIdList" type="CustomerIdCollectionType" />
+  <xsd:element name="customerIdSet" type="CustomerIdCollectionType" />
+  <xsd:complexType name="EmployeeIdType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="idFormat" type="xsd:string" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="employeeId" type="EmployeeIdType" />
+  <xsd:complexType name="EmployeeIdCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="employeeId" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="employeeIdList" type="EmployeeIdCollectionType" />
+  <xsd:element name="employeeIdSet" type="EmployeeIdCollectionType" />
+  <xsd:simpleType name="CIFType">
+    <xsd:annotation>
+      <xsd:documentation>
+				The Customer or Central Information File (CIF).
+				This uniquely identifies a 'customer' within the bank.
+				It could be a
+				joint customer, corporate customer, or individual.
+				A person could map
+				to more the one CIF, for example, a personal
+				account and a joint
+				account would be two unique CIFs
+			</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[0-9]{6}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="CIF" type="CIFType" />
+  <xsd:simpleType name="SerialType">
+    <xsd:annotation>
+      <xsd:documentation>
+				To identify multiple parties against a CIF.
+			</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="1" />
+      <xsd:pattern value="[1-9]" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="serial" type="SerialType" />
+  <xsd:complexType name="CustomerIdBreakdownType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="CIF" />
+      <xsd:element minOccurs="0" ref="serial" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="customerIdBreakdown" type="CustomerIdBreakdownType" />
+</xsd:schema>

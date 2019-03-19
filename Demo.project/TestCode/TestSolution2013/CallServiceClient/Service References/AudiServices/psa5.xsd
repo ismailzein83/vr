@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:condet="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" xmlns:hdr="http://www.banqueaudi.com/ebo/util.cmn.EBMHeader" xmlns="http://www.banqueaudi.com/ebo/psa.cards.Card/2.0" xmlns:custid="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" xmlns:id="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" xmlns:brn="http://www.banqueaudi.com/ebo/svl.brn.Branch" xmlns:brnid="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" xmlns:acc="http://www.banqueaudi.com/ebo/psa.acc.Account" xmlns:bsc="http://www.banqueaudi.com/ebo/util.cmn.Basic" xmlns:sid="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" elementFormDefault="qualified" targetNamespace="http://www.banqueaudi.com/ebo/psa.cards.Card/2.0" version="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="util.cmn.EBMHeader_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.EBMHeader" />
+  <xsd:import schemaLocation="util.cmn.Basic_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.cmn.Basic" />
+  <xsd:import schemaLocation="psa.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.cmn.Identifiers" />
+  <xsd:import schemaLocation="svl.cmn.Identifiers_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.cmn.Identifiers" />
+  <xsd:import schemaLocation="pty.party.ContactDetails_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/pty.party.ContactDetails" />
+  <xsd:import schemaLocation="psa.acc.Account_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/psa.acc.Account" />
+  <xsd:import schemaLocation="svl.brn.Branch_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/svl.brn.Branch" />
+  <xsd:simpleType name="CardTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Debit" />
+      <xsd:enumeration value="Credit" />
+      <xsd:enumeration value="Prepaid" />
+      <xsd:enumeration value="Unknown" />
+      <xsd:enumeration value="Other" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="cardType" type="CardTypeType" />
+  <xsd:simpleType name="PrimaryNetworkType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Visa" />
+      <xsd:enumeration value="MasterCard" />
+      <xsd:enumeration value="American Express" />
+      <xsd:enumeration value="Maestro" />
+      <xsd:enumeration value="Cirrus" />
+      <xsd:enumeration value="Discover" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="primaryNetwork" type="PrimaryNetworkType" />
+  <xsd:complexType name="SubscriptionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fee" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="frequency" type="xsd:duration" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="subscription" type="SubscriptionType" />
+  <xsd:complexType name="FeatureType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="amount" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="frequency" type="xsd:duration" />
+    </xsd:sequence>
+    <xsd:attribute name="featureType" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="feature" type="FeatureType" />
+  <xsd:complexType name="FeatureSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="feature" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="featureSet" type="FeatureSetType" />
+  <xsd:complexType name="ProductType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="productID" type="xsd:string" />
+      <xsd:element minOccurs="0" name="name" type="xsd:string" />
+      <xsd:element minOccurs="0" name="price" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" ref="subscription" />
+      <xsd:element minOccurs="0" name="cardTechnologyType" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the Card's used technology</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" ref="featureSet">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the Card's features e.g Rewards, Gift Card, Life Insurance</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="bin" type="BinType" />
+      <xsd:element minOccurs="0" name="allowedCurrencySet" type="bsc:ISO4217CurrencyCollectionType" />
+      <xsd:element minOccurs="0" name="allowedAccountProductSet" type="acc:ProductCollectionType" />
+    </xsd:sequence>
+    <xsd:attribute name="allowAllCurrencies" type="xsd:string" use="optional" />
+    <xsd:attribute name="allowAllAccountTypes" type="xsd:string" use="optional" />
+  </xsd:complexType>
+  <xsd:element name="product" type="ProductType" />
+  <xsd:complexType name="ProductCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" ref="product" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ProductFilterType">
+    <xsd:sequence>
+      <xsd:element ref="bin" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FITCategoryType">
+    <xsd:sequence>
+      <xsd:element name="fitCategoryId" type="xsd:integer" />
+      <xsd:element name="fitCategoryDescription" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="WithdrawalLimitsType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="maxAmount" type="bsc:MoneyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FITDetailsType">
+    <xsd:sequence>
+      <xsd:element ref="bin" />
+      <xsd:element name="atmGroupName" type="xsd:string" />
+      <xsd:element name="fitCategory" type="FITCategoryType" />
+      <xsd:element name="waitForOk" type="bsc:YNType" />
+      <xsd:element name="pinLength" type="xsd:positiveInteger" />
+      <xsd:element name="withdrawalLimits" type="WithdrawalLimitsType" />
+      <xsd:element name="showTrack1" type="bsc:YNType" />
+      <xsd:element name="fallbackToMagStripe" type="bsc:YNType" />
+      <xsd:element minOccurs="0" name="binIssuer" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FITDetailsCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="fitDetails" type="FITDetailsType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="StatusTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Active" />
+      <xsd:enumeration value="Blocked" />
+      <xsd:enumeration value="Closed" />
+      <xsd:enumeration value="Expired" />
+      <xsd:enumeration value="Issued" />
+      <xsd:enumeration value="HotListed" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="CardStatusSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="cardStatus" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cardStatusSet" type="CardStatusSetType" />
+  <xsd:complexType name="CardStatusType">
+    <xsd:sequence>
+      <xsd:element name="status" type="StatusTypeType" />
+      <xsd:element minOccurs="0" name="subStatus" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+      <xsd:element minOccurs="0" name="dateOfLastStatusChange" type="xsd:date" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cardStatus" type="CardStatusType" />
+  <xsd:simpleType name="DeliveryTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Email" />
+      <xsd:enumeration value="Mail" />
+      <xsd:enumeration value="SMS" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="deliveryType" type="DeliveryTypeType" />
+  <xsd:complexType name="DeliveryAddressType">
+    <xsd:choice>
+      <xsd:element minOccurs="0" ref="condet:addressContact" />
+      <xsd:element minOccurs="0" ref="condet:emailAddressContact" />
+      <xsd:element minOccurs="0" ref="condet:phoneContact" />
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:element name="deliveryAddress" type="DeliveryAddressType" />
+  <xsd:complexType name="BillingAddressType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="condet:addressContactSet" />
+      <xsd:element minOccurs="0" ref="condet:emailAddressContactSet" />
+      <xsd:element minOccurs="0" ref="condet:phoneContactSet" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="billingAddress" type="BillingAddressType" />
+  <xsd:complexType name="ResidentialAddressType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="condet:addressContactSet" />
+      <xsd:element minOccurs="0" ref="condet:emailAddressContactSet" />
+      <xsd:element minOccurs="0" ref="condet:phoneContactSet" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="residentialAddress" type="ResidentialAddressType" />
+  <xsd:simpleType name="NotificationSubscriptionStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Active" />
+      <xsd:enumeration value="Inactive" />
+      <xsd:enumeration value="DeclinedByCustomer" />
+      <xsd:enumeration value="Unknown" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="NotificationSubscriptionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="fee" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="status" type="NotificationSubscriptionStatusType" />
+      <xsd:element minOccurs="0" name="stopDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="startDate" type="xsd:date" />
+      <xsd:element minOccurs="0" ref="deliveryType" />
+      <xsd:element minOccurs="0" ref="deliveryAddress">
+        <xsd:annotation>
+          <xsd:documentation>Based on the delivery Type, the Address will be chosen </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="notificationSubscription" type="NotificationSubscriptionType" />
+  <xsd:complexType name="NotificationSubscriptionSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="notificationSubscription" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="notificationSubscriptionSet" type="NotificationSubscriptionSetType" />
+  <xsd:simpleType name="CardIssuanceTypeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Primary" />
+      <xsd:enumeration value="Supplementary" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="cardIssuanceType" type="CardIssuanceTypeType" />
+  <xsd:simpleType name="DispatchItemType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Card" />
+      <xsd:enumeration value="PIN" />
+      <xsd:enumeration value="Statement" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="dispatchItem" type="DispatchItemType" />
+  <xsd:simpleType name="DeliveryStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Delivered" />
+      <xsd:enumeration value="Not Delivered" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="deliveryStatus" type="DeliveryStatusType" />
+  <xsd:complexType name="DispatchType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="dispatchItem" />
+      <xsd:element minOccurs="0" name="date" type="xsd:date" />
+      <xsd:element minOccurs="0" ref="deliveryType" />
+      <xsd:element minOccurs="0" ref="deliveryAddress" />
+      <xsd:element minOccurs="0" ref="deliveryStatus" />
+      <xsd:element minOccurs="0" name="deliveryPeriod" type="xsd:string" />
+      <xsd:element minOccurs="0" name="deliveryBranch" type="brn:BranchSummaryType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="dispatch" type="DispatchType" />
+  <xsd:complexType name="DispatchSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="dispatch" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="dispatchSet" type="DispatchSetType" />
+  <xsd:complexType name="ChannelSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="channel" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="channelSet" type="ChannelSetType" />
+  <xsd:complexType name="CardLimitType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="acc:LimitType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" ref="channelSet" />
+          <xsd:element minOccurs="0" name="limitCount" type="xsd:unsignedInt" />
+          <xsd:element minOccurs="0" name="limitCountUtilisation" type="xsd:unsignedInt" />
+          <xsd:element minOccurs="0" name="limitCurrency" type="bsc:ISO4217CurrencyType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="cardLimit" type="CardLimitType" />
+  <xsd:complexType name="CardLimitSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="cardLimit" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cardLimitSet" type="CardLimitSetType" />
+  <xsd:simpleType name="PinFormatType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="PIN Block ISO 9564 Format 0" />
+      <xsd:enumeration value="PIN Block ISO 9564 Format 1" />
+      <xsd:enumeration value="PIN Block ISO 9564 Format 3" />
+      <xsd:enumeration value="Clear" />
+      <xsd:enumeration value="Unknown" />
+      <xsd:enumeration value="Other" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="PinType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="pinFormat" type="PinFormatType" use="required" />
+        <xsd:attribute name="isEncrypted" type="bsc:YNType" use="required" />
+        <xsd:attribute name="encryptionKeyId" type="xsd:string" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="pin" type="PinType" />
+  <xsd:complexType name="CardNumberType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="isEncrypted" type="bsc:YNType" use="required" />
+        <xsd:attribute name="encryptionKeyId" type="xsd:string" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="cardNumber" type="CardNumberType" />
+  <xsd:complexType name="CardNumberCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="cardNumber" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cardNumberSet" type="CardNumberCollectionType" />
+  <xsd:element name="cardNumberList" type="CardNumberCollectionType" />
+  <xsd:simpleType name="MagneticTrackFormatType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Type 1" />
+      <xsd:enumeration value="Type 2" />
+      <xsd:enumeration value="Type 3" />
+      <xsd:enumeration value="Unknown" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="MagneticTrackType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="magneticTrackFormat" type="MagneticTrackFormatType" use="required" />
+        <xsd:attribute name="isEncrypted" type="bsc:YNType" use="required" />
+        <xsd:attribute name="encryptionKeyId" type="xsd:string" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:element name="magneticTrack" type="MagneticTrackType" />
+  <xsd:complexType name="MagneticTrackSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="magneticTrack" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="magneticTrackSet" type="MagneticTrackSetType" />
+  <xsd:complexType name="CardAccountType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="id:accountId" />
+      <xsd:element minOccurs="0" name="currency" type="bsc:ISO4217CurrencyType" />
+      <xsd:element minOccurs="0" name="formattedAccountId" type="id:AccountIdType" />
+      <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cardAccount" type="CardAccountType" />
+  <xsd:complexType name="CardAccountListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="cardAccount" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cardAccountList" type="CardAccountListType" />
+  <xsd:complexType name="CardOperationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="operationCode" type="xsd:string" />
+      <xsd:element minOccurs="0" name="operationName" type="xsd:string" />
+    </xsd:sequence>
+    <xsd:attribute name="allowFX" type="xsd:string" use="required" />
+  </xsd:complexType>
+  <xsd:element name="cardOperation" type="CardOperationType" />
+  <xsd:complexType name="AllowedCardOperationsSetType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" ref="cardOperation" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="allowedCardOperationsSet" type="AllowedCardOperationsSetType" />
+  <xsd:complexType name="DebitCardDetailType">
+    <xsd:sequence>
+      <xsd:element ref="cardAccountList" />
+      <xsd:element minOccurs="0" maxOccurs="1" ref="allowedCardOperationsSet" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="debitCardDetail" type="DebitCardDetailType" />
+  <xsd:complexType name="InstalmentType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="instalmentType" type="xsd:string" />
+      <xsd:element minOccurs="0" name="amount" type="bsc:FinancialAmountType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="instalment" type="InstalmentType" />
+  <xsd:complexType name="BillType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="billAmount" type="bsc:FinancialAmountType">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the transaction amount within the billing life cylce</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="dueDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="minimumAmountDue" type="bsc:FinancialAmountType">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the minimum amount due to be settled within the same billing cycle</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="minimumPercentDue" type="bsc:PercentType" />
+      <xsd:element minOccurs="0" name="currentOutstandingBalance" type="bsc:FinancialAmountType">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the outstanding balance  </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="billCycle" type="xsd:unsignedInt">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the Number of days before Applying the rate on the bill amount</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="totalUnbilledAmount" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="instalmentAmount" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="autoPayment" type="xsd:boolean" />
+      <xsd:element minOccurs="0" name="billCurrency" type="bsc:ISO4217CurrencyType" />
+      <xsd:element minOccurs="0" name="totalBalance" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="paidBillAmount" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="remainingMinimumAmountDue" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="previousMinimumAmountDue" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="totalAmountDue" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" ref="billingAddress" />
+      <xsd:element minOccurs="0" name="totalAmountPaid" type="bsc:FinancialAmountType" />
+      <xsd:element minOccurs="0" name="lastDueDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="pastDueAmount" type="bsc:FinancialAmountType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="bill" type="BillType" />
+  <xsd:complexType name="CreditCardDetailType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="CreditCardDetailBaseType">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="enrolledSettlementAccount" type="CardAccountType" />
+          <xsd:element minOccurs="0" name="shadowAccount" type="CardAccountType" />
+          <xsd:element minOccurs="0" name="availableFacility" type="bsc:FinancialAmountType" />
+          <xsd:element minOccurs="0" ref="bill" />
+          <xsd:element minOccurs="0" name="cashRate" type="bsc:PercentType" />
+          <xsd:element minOccurs="0" name="purchaseRate" type="bsc:PercentType" />
+          <xsd:element minOccurs="0" name="isDelinquent" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>Indicates if the customer is late on his card payments</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="processDate" type="xsd:date" />
+          <xsd:element minOccurs="0" name="frozenAmount" type="bsc:FinancialAmountType" />
+          <xsd:element minOccurs="0" ref="instalment" />
+          <xsd:element minOccurs="0" name="numberOfRemainingInsalments" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="creditCardDetail" type="CreditCardDetailType" />
+  <xsd:complexType name="CreditCardDetailBaseType">
+    <xsd:sequence />
+  </xsd:complexType>
+  <xsd:complexType name="PrepaidCardAccountType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="CardAccountType">
+        <xsd:sequence>
+          <xsd:element ref="acc:status" />
+          <xsd:element name="description" type="xsd:string" />
+          <xsd:element name="bookBalance" type="bsc:AccountingMoneyType" />
+          <xsd:element name="availableBalance" type="bsc:AccountingMoneyType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="prepaidCardAccount" type="PrepaidCardAccountType" />
+  <xsd:complexType name="PrepaidCardAccountListType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="prepaidCardAccount" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="prepaidCardAccountList" type="PrepaidCardAccountListType" />
+  <xsd:complexType name="PrepaidCardDetailType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="CreditCardDetailBaseType">
+        <xsd:sequence>
+          <xsd:element ref="prepaidCardAccountList" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="prepaidCardDetail" type="PrepaidCardDetailType" />
+  <xsd:complexType name="CardDetailType">
+    <xsd:choice>
+      <xsd:element ref="debitCardDetail" />
+      <xsd:element ref="creditCardDetail" />
+      <xsd:element ref="prepaidCardDetail" />
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:element name="cardDetail" type="CardDetailType" />
+  <xsd:simpleType name="BinType">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+  <xsd:element name="bin" type="BinType" />
+  <xsd:complexType name="NEWTYpe">
+    <xsd:choice>
+      <xsd:element minOccurs="0" ref="cardNumber" />
+      <xsd:element minOccurs="0" ref="bin" />
+      <xsd:element minOccurs="0" name="cardCurrency" type="bsc:ISO4217CurrencyType" />
+      <xsd:element minOccurs="0" ref="pin" />
+      <xsd:element minOccurs="0" name="issuingFinancialInstitution" type="xsd:string" />
+      <xsd:element minOccurs="0" name="networkId" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="magneticTrackSet" />
+      <xsd:element minOccurs="0" ref="cardDetail" />
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:complexType name="CardBaseType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" ref="id:cardId" />
+      <xsd:element minOccurs="0" name="maskedCardNumber" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="cardType" />
+      <xsd:element minOccurs="0" ref="primaryNetwork" />
+      <xsd:element minOccurs="0" ref="custid:customerId" />
+      <xsd:element minOccurs="0" ref="brn:branchSummary" />
+      <xsd:element minOccurs="0" ref="product" />
+      <xsd:element minOccurs="0" name="embossedName" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the name printed on the card </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="activationDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="issueDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="expiryDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="renewalDate" type="xsd:date" />
+      <xsd:element minOccurs="0" name="renewalSequence" type="xsd:unsignedInt" />
+      <xsd:element minOccurs="0" ref="notificationSubscriptionSet" />
+      <xsd:element minOccurs="0" ref="cardStatus" />
+      <xsd:element minOccurs="0" ref="cardIssuanceType" />
+      <xsd:element minOccurs="0" ref="id:primaryCardID" />
+      <xsd:element minOccurs="0" ref="dispatchSet" />
+      <xsd:element minOccurs="0" name="lastUsedDate" type="xsd:date" />
+      <xsd:element minOccurs="0" ref="cardLimitSet" />
+      <xsd:element minOccurs="0" name="printLanguage" type="bsc:IETFLanguageCodeType" />
+      <xsd:element minOccurs="0" ref="cardNumber" />
+      <xsd:element minOccurs="0" ref="bin" />
+      <xsd:element minOccurs="0" name="cardCurrency" type="bsc:ISO4217CurrencyType" />
+      <xsd:element minOccurs="0" ref="pin" />
+      <xsd:element minOccurs="0" name="issuingFinancialInstitution" type="xsd:string" />
+      <xsd:element minOccurs="0" name="networkId" type="xsd:string" />
+      <xsd:element minOccurs="0" ref="magneticTrackSet" />
+      <xsd:element minOccurs="0" ref="cardDetail" />
+      <xsd:element minOccurs="0" name="propertySet" type="bsc:PropertySetType" />
+      <xsd:element minOccurs="0" name="loyaltyPoints" type="xsd:integer" />
+      <xsd:element minOccurs="0" ref="residentialAddress" />
+      <xsd:element minOccurs="0" name="lastEmbossingDate" type="xsd:date" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CardType">
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="CardBaseType">
+        <xsd:sequence />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="card" type="CardType" />
+  <xsd:complexType name="CardCollectionType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" ref="card" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cardSet" type="CardCollectionType" />
+  <xsd:element name="cardList" type="CardCollectionType" />
+  <xsd:complexType name="PrinterTypeType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="code" type="xsd:string" />
+      <xsd:element minOccurs="0" name="description" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CardPrinterType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="printerId" type="xsd:string" />
+      <xsd:element minOccurs="0" name="printerType" type="PrinterTypeType" />
+      <xsd:element minOccurs="0" ref="sid:branchId" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cardPrinter" type="CardPrinterType" />
+</xsd:schema>

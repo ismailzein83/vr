@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:WL5G3N3="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:WL5G3N4="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:WL5G3N1="http://www.banqueaudi.com/evs/pp.rates.FXRate" xmlns:WL5G3N2="http://www.banqueaudi.com/ebo/util.flt.Fault" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="pp.rates.evs.FXRate" targetNamespace="http://www.banqueaudi.com/evs/pp.rates.FXRate">
+  <WL5G3N0:documentation>Version 1.0</WL5G3N0:documentation>
+  <wsp:Policy wsu:Id="pp.rates.evs.FXRate.BindingQSPort_Fault_Policy" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+    <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+    <sp:SignedElements xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+    <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+    <sp:EncryptedElements xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="pp.rates.evs.FXRate.BindingQSPort_Input_Policy" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+    <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+    <sp:SignedElements xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+    <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+    <sp:EncryptedElements xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="pp.rates.evs.FXRate.BindingQSPort_Output_Policy" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+    <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+    <sp:SignedElements xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+    <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+    <sp:EncryptedElements xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" />
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="wss10_x509_token_service_policy" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+    <sp:AsymmetricBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+      <wsp:Policy>
+        <sp:InitiatorToken>
+          <wsp:Policy>
+            <sp:X509Token sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/Always">
+              <wsp:Policy>
+                <sp:WssX509V3Token10 />
+              </wsp:Policy>
+            </sp:X509Token>
+          </wsp:Policy>
+        </sp:InitiatorToken>
+        <sp:RecipientToken>
+          <wsp:Policy>
+            <sp:X509Token sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/Always">
+              <wsp:Policy>
+                <sp:WssX509V3Token10 />
+              </wsp:Policy>
+            </sp:X509Token>
+          </wsp:Policy>
+        </sp:RecipientToken>
+        <sp:AlgorithmSuite>
+          <wsp:Policy>
+            <sp:Basic128 />
+          </wsp:Policy>
+        </sp:AlgorithmSuite>
+        <sp:Layout>
+          <wsp:Policy>
+            <sp:Lax />
+          </wsp:Policy>
+        </sp:Layout>
+        <sp:IncludeTimestamp />
+        <sp:OnlySignEntireHeadersAndBody />
+        <sp:ProtectTokens />
+      </wsp:Policy>
+    </sp:AsymmetricBinding>
+    <sp:Wss10 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+      <wsp:Policy />
+    </sp:Wss10>
+  </wsp:Policy>
+  <WL5G3N0:types>
+    <xsd:schema xmlns:flt="http://www.banqueaudi.com/ebo/util.flt.Fault" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:tns="http://www.banqueaudi.com/evs/pp.rates.FXRate" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:WL5G3N4="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:import schemaLocation="pp.rates.evs.FXRate_1.0.xsd" namespace="http://www.banqueaudi.com/evs/pp.rates.FXRate" />
+      <xsd:import schemaLocation="util.flt.Fault_1.0.xsd" namespace="http://www.banqueaudi.com/ebo/util.flt.Fault" />
+    </xsd:schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="getCounterValueAmount">
+    <WL5G3N0:part name="payload" element="WL5G3N1:getCounterValueAmount" />
+  </WL5G3N0:message>
+  <WL5G3N0:message name="getCounterValueAmountResponse">
+    <WL5G3N0:part name="payload" element="WL5G3N1:getCounterValueAmountResponse" />
+  </WL5G3N0:message>
+  <WL5G3N0:message name="svcFault">
+    <WL5G3N0:part name="payload" element="WL5G3N2:fault" />
+  </WL5G3N0:message>
+  <WL5G3N0:message name="getFXRates">
+    <WL5G3N0:part name="payload" element="WL5G3N1:getFXRates" />
+  </WL5G3N0:message>
+  <WL5G3N0:message name="getFXRatesResponse">
+    <WL5G3N0:part name="payload" element="WL5G3N1:getFXRatesResponse" />
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="pp.rates.evs.FXRate">
+    <WL5G3N0:operation name="getCounterValueAmount">
+      <WL5G3N0:input message="WL5G3N1:getCounterValueAmount" />
+      <WL5G3N0:output message="WL5G3N1:getCounterValueAmountResponse" />
+      <WL5G3N0:fault name="svcFault" message="WL5G3N1:svcFault" />
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="getFXRates">
+      <WL5G3N0:input message="WL5G3N1:getFXRates" />
+      <WL5G3N0:output message="WL5G3N1:getFXRatesResponse" />
+      <WL5G3N0:fault name="svcFault" message="WL5G3N1:svcFault" />
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="pp.rates.evs.FXRate.Binding" type="WL5G3N1:pp.rates.evs.FXRate">
+    <WL5G3N3:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsp:PolicyReference URI="#wss10_x509_token_service_policy" wsdl:required="false" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" />
+    <WL5G3N0:operation name="getCounterValueAmount">
+      <WL5G3N3:operation soapAction="getLoanDetail" style="document" />
+      <WL5G3N0:input>
+        <WL5G3N3:body use="literal" />
+        <wsp:PolicyReference URI="#pp.rates.evs.FXRate.BindingQSPort_Input_Policy" wsdl:required="false" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" />
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N3:body use="literal" />
+        <wsp:PolicyReference URI="#pp.rates.evs.FXRate.BindingQSPort_Output_Policy" wsdl:required="false" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" />
+      </WL5G3N0:output>
+      <WL5G3N0:fault name="svcFault">
+        <WL5G3N3:fault use="literal" name="svcFault" namespace="" />
+        <wsp:PolicyReference URI="#pp.rates.evs.FXRate.BindingQSPort_Fault_Policy" wsdl:required="false" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" />
+      </WL5G3N0:fault>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="getFXRates">
+      <WL5G3N3:operation soapAction="getLoanDetail" style="document" />
+      <WL5G3N0:input>
+        <WL5G3N3:body use="literal" />
+        <wsp:PolicyReference URI="#pp.rates.evs.FXRate.BindingQSPort_Input_Policy" wsdl:required="false" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" />
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N3:body use="literal" />
+        <wsp:PolicyReference URI="#pp.rates.evs.FXRate.BindingQSPort_Output_Policy" wsdl:required="false" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" />
+      </WL5G3N0:output>
+      <WL5G3N0:fault name="svcFault">
+        <WL5G3N3:fault use="literal" name="svcFault" namespace="" />
+        <wsp:PolicyReference URI="#pp.rates.evs.FXRate.BindingQSPort_Fault_Policy" wsdl:required="false" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" />
+      </WL5G3N0:fault>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="pp.rates.evs.FXRate.BindingQSService">
+    <WL5G3N0:port name="pp.rates.evs.FXRate.BindingQSPort" binding="WL5G3N1:pp.rates.evs.FXRate.Binding">
+      <WL5G3N3:address location="https://almwosbuat2:8012/tevs/pp.rates.evs.FXRate_1.0" />
+      <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
+        <wsa:Address>https://almwosbuat2:8012/tevs/pp.rates.evs.FXRate_1.0</wsa:Address>
+        <wsid:Identity xmlns:wsid="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <dsig:KeyInfo xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+            <dsig:X509Data>
+              <dsig:X509Certificate>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</dsig:X509Certificate>
+              <dsig:X509IssuerSerial>
+                <dsig:X509IssuerName>CN=BACert, DC=lebanon, DC=banqueaudi, DC=com</dsig:X509IssuerName>
+                <dsig:X509SerialNumber>1382646208187731752914718250386641151078696044</dsig:X509SerialNumber>
+              </dsig:X509IssuerSerial>
+              <dsig:X509SubjectName>CN=alowsmuat, OU=Midware, O=BanqueAudi, L=Lebanon, ST=Beirut, C=LB</dsig:X509SubjectName>
+              <dsig:X509SKI>ZEznqBx9puhyAztBvJ0zmdks60E=</dsig:X509SKI>
+            </dsig:X509Data>
+          </dsig:KeyInfo>
+        </wsid:Identity>
+      </wsa:EndpointReference>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</wsdl:definitions>
