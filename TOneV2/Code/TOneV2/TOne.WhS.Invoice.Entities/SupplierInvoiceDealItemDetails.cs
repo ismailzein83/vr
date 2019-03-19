@@ -13,6 +13,7 @@ namespace TOne.WhS.Invoice.Entities
         public int? CostDeal { get; set; }
 		public string  CostDealDescription { get; set; }
 		public decimal? CostDealRateTierNb { get; set; }
+        public decimal CostRate { get; set; }
         public decimal Duration { get; set; }
         public decimal OriginalAmount { get; set; }
         public int NumberOfCalls { get; set; }

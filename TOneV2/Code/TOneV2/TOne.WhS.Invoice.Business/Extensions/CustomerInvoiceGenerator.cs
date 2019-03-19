@@ -792,7 +792,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 												Amount = _currencyExchangeRateManager.ConvertValueToCurrency(originalAmount, dealItemSet.CurrencyId, currencyId, issueDate),
 												ToDate = effectiveDealSettings.EEDToStore.Value,
 												FromDate = fromDateBeforeShift >= effectiveDealSettings.BeginDate ? fromDateBeforeShift : effectiveDealSettings.BeginDate,
-                                                OriginalAmountAfterTax = originalAmountAfterTax
+                                                OriginalAmountAfterTax = originalAmountAfterTax,
+                                                SaleRate = fixedSaleRateEvaluator.Rate
                                             });
 										}
 									}
@@ -818,7 +819,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 											Amount = _currencyExchangeRateManager.ConvertValueToCurrency(expectedAmount, effectiveDealSettings.CurrencyId, currencyId, issueDate),
 											ToDate = effectiveDealSettings.EEDToStore.Value ,
 											FromDate = fromDateBeforeShift >= effectiveDealSettings.BeginDate ? fromDateBeforeShift : effectiveDealSettings.BeginDate,
-                                            OriginalAmountAfterTax = originalAmountAfterTax
+                                            OriginalAmountAfterTax = originalAmountAfterTax,
+                                            SaleRate = fixedSaleRateEvaluator.Rate
                                         });
 									}
 								}

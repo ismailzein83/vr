@@ -13,6 +13,7 @@ namespace TOne.WhS.Invoice.Entities
         public int? SaleDeal { get; set; }
 		public string SaleDealDescription { get; set; }
 		public decimal? SaleDealRateTierNb { get; set; }
+        public decimal SaleRate { get; set; }
         public decimal Duration { get; set; }
         public decimal OriginalAmount { get; set; }
         public decimal OriginalAmountAfterTax { get; set; }
