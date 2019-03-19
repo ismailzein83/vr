@@ -30,7 +30,6 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
     };
 
     function textCtor(ctrl, $scope, $attrs) {
-
         function initializeController() {
             $scope.scopeModel.value;
 
@@ -52,7 +51,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
             };
 
             $scope.scopeModel.getImportedValues = function (importedValues) {
-                for (var i = 0 ; i < importedValues.length ; i++) {
+                for (var i = 0; i < importedValues.length; i++) {
                     if ($scope.scopeModel.values.indexOf(importedValues[i]) == -1)
                         $scope.scopeModel.values.push(importedValues[i]);
                 }
@@ -82,8 +81,13 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                 var fieldValue;
 
                 if (payload != undefined) {
+
+
+
                     $scope.scopeModel.label = payload.fieldTitle;
                     fieldType = payload.fieldType;
+                    if (fieldType != undefined)
+                        $scope.scopeModel.hint = fieldType.Hint;
                     fieldValue = payload.fieldValue;
                 }
 
@@ -141,29 +145,31 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
         }
         else {
             return '<vr-columns colnum="12" haschildcolumns>'
-                    //+ '<vr-row>'
-                        + getSingleSelectionModeTemplate()
-                        + '<vr-columns withemptyline haschildcolumns colnum="1">'
-                            + '<vr-columns   colnum="6">'
-                                + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled" ></vr-button>'
-                            + '</vr-columns>'
-                            + '<vr-columns   colnum="6">'
-                                    + '<vr-common-excelfileparser  fieldname="{{scopeModel.label}}" onokclicked="scopeModel.getImportedValues" standalone ></vr-common-excelfileparser>'
-                            + '</vr-columns>'
-                        + '</vr-columns>'
-                    //+ '</vr-row>'
-                    //+ '<vr-row>'
-                        + '<vr-columns colnum="12">'
-                            + '<vr-datalist maxitemsperrow="4" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
-                        + '</vr-columns>'
-                    //+ '</vr-row>'
+                //+ '<vr-row>'
+                + getSingleSelectionModeTemplate()
+                + '<vr-columns withemptyline haschildcolumns colnum="1">'
+                + '<vr-columns   colnum="6">'
+                + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled" ></vr-button>'
+                + '</vr-columns>'
+                + '<vr-columns   colnum="6">'
+                + '<vr-common-excelfileparser  fieldname="{{scopeModel.label}}" onokclicked="scopeModel.getImportedValues" standalone ></vr-common-excelfileparser>'
+                + '</vr-columns>'
+                + '</vr-columns>'
+                //+ '</vr-row>'
+                //+ '<vr-row>'
+                + '<vr-columns colnum="12">'
+                + '<vr-datalist maxitemsperrow="4" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
+                + '</vr-columns>'
+                //+ '</vr-row>'
                 + '</vr-columns>';
         }
 
         function getSingleSelectionModeTemplate() {
+          
             return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
-                    + '<vr-textbox type="text" label="{{scopeModel.label}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
+                + '<vr-textbox type="text" label="{{scopeModel.label}}" hint ="{{scopeModel.hint}}"  value="scopeModel.value" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
                 + '</vr-columns>';
+
         }
     }
 
