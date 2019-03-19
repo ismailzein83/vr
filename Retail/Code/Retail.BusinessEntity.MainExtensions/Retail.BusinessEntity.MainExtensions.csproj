@@ -160,6 +160,7 @@
     <Compile Include="AccountRecurringChargeRuleSets\SingleRuleAccountRecurringChargeRuleSetSettings.cs" />
     <Compile Include="AccountSynchronizerInsertHandlers\AssignProductAndPackagesAccountInsertHandler.cs" />
     <Compile Include="AccountSynchronizerInsertHandlers\PortalAccountInsertHandler.cs" />
+    <Compile Include="AccountViews\GenericBEAccountSubview.cs" />
     <Compile Include="AccountViews\AccountManagerAssignmentView.cs" />
     <Compile Include="AccountViews\AccountIdentificationRules.cs" />
     <Compile Include="AccountViews\AccountInfo.cs" />
