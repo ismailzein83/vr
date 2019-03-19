@@ -50,7 +50,7 @@
                 }
                 var getInputeStyle = function () {
                     var div = $element.find('div[validator-section]')[0];
-                    if ($attrs.hint != undefined && $attrs.hint != "") {
+                    if ($attrs.hint != undefined && ctrl.hint != "") {
                         var styleObj = {
                             "display": "inline-block", "width": "calc(100% - 15px)"
                         };
