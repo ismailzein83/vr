@@ -63,6 +63,7 @@
     <Compile Include="BPDefinition\InsertBPDefinitionOperationOutput.cs" />
     <Compile Include="BPDefinition\UpdateBPDefinitionOperationOutput.cs" />
     <Compile Include="BPGenericTaskType\BPGenericTaskTypeAction.cs" />
+    <Compile Include="BPGenericTaskType\BPGenericTaskTypeActionSettingsConfig.cs" />
     <Compile Include="BPInstance\BPInstanceInsertHandler.cs" />
     <Compile Include="BPInstance\BPInstanceInsertHandlerConfig.cs" />
     <Compile Include="BPInputArgument\BaseProcessInputArgument.cs" />
