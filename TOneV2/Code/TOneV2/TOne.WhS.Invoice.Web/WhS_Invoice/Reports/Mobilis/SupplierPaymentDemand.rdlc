@@ -640,12 +640,11 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>= Parameters!SMSServiceTypes.Value</Value>
+                              <Value>=iif(Parameters!NoVoice.Value,"","Voice")+ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value,"",Parameters!SMSServiceTypes.Value)</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
                                 <FontSize>12pt</FontSize>
-                                <FontWeight>Normal</FontWeight>
                                 <TextDecoration>None</TextDecoration>
                                 <Color>#000000</Color>
                               </Style>
@@ -856,7 +855,11 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember />
+            <TablixMember>
+              <Visibility>
+                <Hidden>=iiF(iif(Parameters!NoVoice.Value,False,True)Or iif( iif(Len(Parameters!SMSServiceTypes.Value) = 0,false,true) And iif(Parameters!NoSMS.Value,False,True),true,false),false,True)</Hidden>
+              </Visibility>
+            </TablixMember>
             <TablixMember />
             <TablixMember />
             <TablixMember />
@@ -1017,7 +1020,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Rubrique Budgétaire:</Value>
+                              <Value>=iif(iiF(iif(Parameters!NoVoice.Value,False,True)Or iif( iif(Len(Parameters!SMSServiceTypes.Value) = 0,false,true) And iif(Parameters!NoSMS.Value,False,True),true,false),false,True),"","Rubrique Budgétaire:  ")</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -1028,17 +1031,18 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value xml:space="preserve">  </Value>
+                              <Value xml:space="preserve"> </Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
+                                <FontSize>11pt</FontSize>
                                 <FontWeight>Normal</FontWeight>
                                 <TextDecoration>None</TextDecoration>
                                 <Color>#000000</Color>
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Parameters!SMSServiceTypes.Value</Value>
+                              <Value>=iif(Parameters!NoVoice.Value,"","Voice")+ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value,"",Parameters!SMSServiceTypes.Value)</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -2765,203 +2769,213 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
+    <ReportParameter Name="NoVoice">
+      <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NoSMS">
+      <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
   </ReportParameters>
-  <Code>	Public Function ConvertirEnText(ValNum As Double) As String
-		If ValNum = 1 Then
-			ConvertirEnText = "un"
-			Exit Function
-		End If
+  <Code>
+    Public Function ConvertirEnText(ValNum As Double) As String
+    If ValNum = 1 Then
+    ConvertirEnText = "un"
+    Exit Function
+    End If
 
-		If ValNum = 0 Then
-			ConvertirEnText = "zéro"
-			Exit Function
-		End If
+    If ValNum = 0 Then
+    ConvertirEnText = "zéro"
+    Exit Function
+    End If
 
-		Static Unites(0 To 9) As String
-		Static Dixaines(0 To 9) As String
-		Static LesDixaines(0 To 9) As String
-		Static Milliers(0 To 4) As String
+    Static Unites(0 To 9) As String
+    Static Dixaines(0 To 9) As String
+    Static LesDixaines(0 To 9) As String
+    Static Milliers(0 To 4) As String
 
-		Dim splitedNombre() As String
-		Dim nombreApresVirgule As Double
-		Dim xx As String
-		Dim i As Integer
-		Dim nPosition As Integer
-		Dim ValNb As Integer
-		Dim LesZeros As Integer
-		Dim strResultat As String
-		Dim strTemp As String
-		Dim tmpBuff As String
-
-
-
-
-		Unites(0) = "zero"
-		Unites(1) = "un"
-		Unites(2) = "deux"
-		Unites(3) = "trois"
-		Unites(4) = "quatre"
-		Unites(5) = "cinq"
-		Unites(6) = "six"
-		Unites(7) = "sept"
-		Unites(8) = "huit"
-		Unites(9) = "neuf"
-
-		Dixaines(0) = "dix"
-		Dixaines(1) = "onze"
-		Dixaines(2) = "douze"
-		Dixaines(3) = "treize"
-		Dixaines(4) = "quatorze"
-		Dixaines(5) = "quinze"
-		Dixaines(6) = "seize"
-		Dixaines(7) = "dix-sept"
-		Dixaines(8) = "dix-huit"
-		Dixaines(9) = "dix-neuf"
-
-		LesDixaines(0) = ""
-		LesDixaines(1) = "dix"
-		LesDixaines(2) = "vingt"
-		LesDixaines(3) = "trente"
-		LesDixaines(4) = "quarante"
-		LesDixaines(5) = "cinquante"
-		LesDixaines(6) = "soixante"
-		LesDixaines(7) = "soixante-dix"
-		LesDixaines(8) = "quatre-vingt"
-		LesDixaines(9) = "quatre-vingt-dix"
-
-		Milliers(0) = ""
-		Milliers(1) = "mille"
-		Milliers(2) = "million"
-		Milliers(3) = "millard"
-		Milliers(4) = "mille"
-
-		On Error GoTo NbVersTexteError
-
-		strTemp = CStr(Int(ValNum))
-
-		For i = Len(strTemp) To 1 Step -1
-			ValNb = Val(Mid$(strTemp, i, 1))
-			nPosition = (Len(strTemp) - i) + 1
-			Select Case (nPosition Mod 3)
-				Case 1
-					LesZeros = False
-					If i = 1 Then
-						If ValNb &gt; 1 Then
-							tmpBuff = Unites(ValNb) &amp; " "
-						Else
-							tmpBuff = ""
-						End If
-					ElseIf Mid$(strTemp, i - 1, 1) = "1" Then
-						tmpBuff = Dixaines(ValNb) &amp; " "
-						i = i - 1
-					ElseIf Mid$(strTemp, i - 1, 1) = "9" Then
-						tmpBuff = LesDixaines(8) &amp; " " &amp;
-							Dixaines(ValNb) &amp; " "
-						i = i - 1
-					ElseIf Mid$(strTemp, i - 1, 1) = "7" Then
-						tmpBuff = LesDixaines(6) &amp; " " &amp;
-							 Dixaines(ValNb) &amp; " "
-						i = i - 1
-					ElseIf ValNb &gt; 0 Then
-						tmpBuff = Unites(ValNb) &amp; " "
-					Else
-						LesZeros = True
-						If i &gt; 1 Then
-							If Mid$(strTemp, i - 1, 1) &lt;&gt; "0" Then
-								LesZeros = False
-							End If
-						End If
-						If i &gt; 2 Then
-							If Mid$(strTemp, i - 2, 1) &lt;&gt; "0" Then
-								LesZeros = False
-							End If
-						End If
-						tmpBuff = ""
-					End If
-					If LesZeros = False And nPosition &gt; 1 Then
-						tmpBuff = tmpBuff &amp; Milliers(nPosition / 3) &amp; " "
-					End If
-					strResultat = tmpBuff &amp; strResultat
-				Case 2
-					If ValNb &gt; 0 Then
-						strResultat = LesDixaines(ValNb) &amp; " " &amp;
-						   strResultat
-					End If
-				Case 0
-					If ValNb &gt; 0 Then
-						If ValNb &gt; 1 Then
-							strResultat = Unites(ValNb) &amp; " cent " &amp;
-							   strResultat
-						Else
-							strResultat = "cent " &amp; strResultat
-						End If
-					End If
-			End Select
-		Next i
-		If Len(strResultat) &gt; 0 Then
-			strResultat = UCase$(Left$(strResultat, 1)) &amp;
-			   Mid$(strResultat, 2)
-		End If
-
-EndNbVersTexte:
-		splitedNombre = ValNum.ToString().Split(".")
-		If splitedNombre.Length &gt; 1 Then
-			Dim secondValue As String
-			Dim virgule As String
-			virgule = "virgule "
-			secondValue = splitedNombre(1)
-			While secondValue.StartsWith("0")
-				virgule += "zéro "
-				secondValue = secondValue.Remove(0, 1)
-			End While
-
-
-			nombreApresVirgule = Convert.ToDouble(CDbl(Val(secondValue)))
-			If nombreApresVirgule = 1 Then
-				xx = "un"
-			Else
-
-				xx = ConvertirEnText(nombreApresVirgule)
-			End If
-
-			ConvertirEnText = strResultat + virgule + xx
-		Else
-			ConvertirEnText = strResultat
-		End If
-		Exit Function
-
-NbVersTexteError:
-		strResultat = "Une Erreur !"
-		Resume EndNbVersTexte
-	End Function
+    Dim splitedNombre() As String
+    Dim nombreApresVirgule As Double
+    Dim xx As String
+    Dim i As Integer
+    Dim nPosition As Integer
+    Dim ValNb As Integer
+    Dim LesZeros As Integer
+    Dim strResultat As String
+    Dim strTemp As String
+    Dim tmpBuff As String
 
 
 
-	Public Function convertNumberToFrenchLetters(valNum As Double) As String
-		Dim splitedNumber() As String
-		Dim nombreAvantVirgule As String
-		Dim nombreApresvirgule As String
-		Dim virgule As String
 
-		splitedNumber = valNum.ToString().Split(".")
-		Convert.ToDouble(CDbl(Val(splitedNumber(0))))
-		nombreAvantVirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(splitedNumber(0)))))
-		If splitedNumber.Length &gt; 1 Then
-			Dim secondValue As String
-			virgule = "virgule "
-			secondValue = splitedNumber(1)
-			While secondValue.StartsWith("0")
-				virgule += "zéro "
-				secondValue = secondValue.Remove(0, 1)
-			End While
+    Unites(0) = "zero"
+    Unites(1) = "un"
+    Unites(2) = "deux"
+    Unites(3) = "trois"
+    Unites(4) = "quatre"
+    Unites(5) = "cinq"
+    Unites(6) = "six"
+    Unites(7) = "sept"
+    Unites(8) = "huit"
+    Unites(9) = "neuf"
+
+    Dixaines(0) = "dix"
+    Dixaines(1) = "onze"
+    Dixaines(2) = "douze"
+    Dixaines(3) = "treize"
+    Dixaines(4) = "quatorze"
+    Dixaines(5) = "quinze"
+    Dixaines(6) = "seize"
+    Dixaines(7) = "dix-sept"
+    Dixaines(8) = "dix-huit"
+    Dixaines(9) = "dix-neuf"
+
+    LesDixaines(0) = ""
+    LesDixaines(1) = "dix"
+    LesDixaines(2) = "vingt"
+    LesDixaines(3) = "trente"
+    LesDixaines(4) = "quarante"
+    LesDixaines(5) = "cinquante"
+    LesDixaines(6) = "soixante"
+    LesDixaines(7) = "soixante-dix"
+    LesDixaines(8) = "quatre-vingt"
+    LesDixaines(9) = "quatre-vingt-dix"
+
+    Milliers(0) = ""
+    Milliers(1) = "mille"
+    Milliers(2) = "million"
+    Milliers(3) = "millard"
+    Milliers(4) = "mille"
+
+    On Error GoTo NbVersTexteError
+
+    strTemp = CStr(Int(ValNum))
+
+    For i = Len(strTemp) To 1 Step -1
+    ValNb = Val(Mid$(strTemp, i, 1))
+    nPosition = (Len(strTemp) - i) + 1
+    Select Case (nPosition Mod 3)
+    Case 1
+    LesZeros = False
+    If i = 1 Then
+    If ValNb &gt; 1 Then
+    tmpBuff = Unites(ValNb) &amp; " "
+    Else
+    tmpBuff = ""
+    End If
+    ElseIf Mid$(strTemp, i - 1, 1) = "1" Then
+    tmpBuff = Dixaines(ValNb) &amp; " "
+    i = i - 1
+    ElseIf Mid$(strTemp, i - 1, 1) = "9" Then
+    tmpBuff = LesDixaines(8) &amp; " " &amp;
+    Dixaines(ValNb) &amp; " "
+    i = i - 1
+    ElseIf Mid$(strTemp, i - 1, 1) = "7" Then
+    tmpBuff = LesDixaines(6) &amp; " " &amp;
+    Dixaines(ValNb) &amp; " "
+    i = i - 1
+    ElseIf ValNb &gt; 0 Then
+    tmpBuff = Unites(ValNb) &amp; " "
+    Else
+    LesZeros = True
+    If i &gt; 1 Then
+    If Mid$(strTemp, i - 1, 1) &lt;&gt; "0" Then
+    LesZeros = False
+    End If
+    End If
+    If i &gt; 2 Then
+    If Mid$(strTemp, i - 2, 1) &lt;&gt; "0" Then
+    LesZeros = False
+    End If
+    End If
+    tmpBuff = ""
+    End If
+    If LesZeros = False And nPosition &gt; 1 Then
+    tmpBuff = tmpBuff &amp; Milliers(nPosition / 3) &amp; " "
+    End If
+    strResultat = tmpBuff &amp; strResultat
+    Case 2
+    If ValNb &gt; 0 Then
+    strResultat = LesDixaines(ValNb) &amp; " " &amp;
+    strResultat
+    End If
+    Case 0
+    If ValNb &gt; 0 Then
+    If ValNb &gt; 1 Then
+    strResultat = Unites(ValNb) &amp; " cent " &amp;
+    strResultat
+    Else
+    strResultat = "cent " &amp; strResultat
+    End If
+    End If
+    End Select
+    Next i
+    If Len(strResultat) &gt; 0 Then
+    strResultat = UCase$(Left$(strResultat, 1)) &amp;
+    Mid$(strResultat, 2)
+    End If
+
+    EndNbVersTexte:
+    splitedNombre = ValNum.ToString().Split(".")
+    If splitedNombre.Length &gt; 1 Then
+    Dim secondValue As String
+    Dim virgule As String
+    virgule = "virgule "
+    secondValue = splitedNombre(1)
+    While secondValue.StartsWith("0")
+    virgule += "zéro "
+    secondValue = secondValue.Remove(0, 1)
+    End While
 
 
-			nombreApresvirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(secondValue))))
+    nombreApresVirgule = Convert.ToDouble(CDbl(Val(secondValue)))
+    If nombreApresVirgule = 1 Then
+    xx = "un"
+    Else
 
-		End If
-		convertNumberToFrenchLetters = nombreAvantVirgule + " " + virgule + nombreApresvirgule
+    xx = ConvertirEnText(nombreApresVirgule)
+    End If
 
-	End Function</Code>
+    ConvertirEnText = strResultat + virgule + xx
+    Else
+    ConvertirEnText = strResultat
+    End If
+    Exit Function
+
+    NbVersTexteError:
+    strResultat = "Une Erreur !"
+    Resume EndNbVersTexte
+    End Function
+
+
+
+    Public Function convertNumberToFrenchLetters(valNum As Double) As String
+    Dim splitedNumber() As String
+    Dim nombreAvantVirgule As String
+    Dim nombreApresvirgule As String
+    Dim virgule As String
+
+    splitedNumber = valNum.ToString().Split(".")
+    Convert.ToDouble(CDbl(Val(splitedNumber(0))))
+    nombreAvantVirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(splitedNumber(0)))))
+    If splitedNumber.Length &gt; 1 Then
+    Dim secondValue As String
+    virgule = "virgule "
+    secondValue = splitedNumber(1)
+    While secondValue.StartsWith("0")
+    virgule += "zéro "
+    secondValue = secondValue.Remove(0, 1)
+    End While
+
+
+    nombreApresvirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(secondValue))))
+
+    End If
+    convertNumberToFrenchLetters = nombreAvantVirgule + " " + virgule + nombreApresvirgule
+
+    End Function
+  </Code>
   <EmbeddedImages>
     <EmbeddedImage Name="ATM_Mobilis">
       <MIMEType>image/png</MIMEType>
