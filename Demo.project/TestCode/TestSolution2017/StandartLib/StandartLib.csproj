@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net462;netcoreapp2.0</TargetFrameworks>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CoreWf" Version="1.0.3" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="2.1.1" />
+    <PackageReference Include="Portable.Xaml" Version="0.23.0" />
+    <PackageReference Include="System.CodeDom" Version="4.5.0" />
+    <PackageReference Include="System.ComponentModel.EventBasedAsync" Version="4.3.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
+    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\..\..\TFS\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\..\..\..\TFS\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
