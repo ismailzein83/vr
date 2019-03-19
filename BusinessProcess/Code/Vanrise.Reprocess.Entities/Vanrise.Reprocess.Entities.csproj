@@ -67,6 +67,9 @@
     <Compile Include="ReprocessDefinition\ReprocessDefinitionInfo.cs" />
     <Compile Include="ReprocessDefinition\ReprocessDefinitionInfoFilter.cs" />
     <Compile Include="ReprocessDefinition\ReprocessDefinitionQuery.cs" />
+    <Compile Include="ReprocessDefinition\ReprocessFilter.cs" />
+    <Compile Include="ReprocessDefinition\ReprocessFilterDefinition.cs" />
+    <Compile Include="ReprocessDefinition\ReprocessFilterDefinitionConfig.cs" />
     <Compile Include="ReprocessManagers\IReprocessDefinitionManager.cs" />
     <Compile Include="ReprocessManagers\IReprocessManager.cs" />
     <Compile Include="ReprocessManagers\ReprocessManagerFactory.cs" />
