@@ -168,8 +168,8 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\Templates\CataleyaCustomerMappingTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\Templates\CataleyaSupplierMappingTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-swsync.js" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataliyaSwitch\Communication\Templates\CataleyaSwitchCommunicationTemplate.html" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataliyaSwitch\Communication\whs-routesync-cataleyaswitchcommunication.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSwitch\Communication\Templates\CataleyaSwitchCommunicationTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSwitch\Communication\whs-routesync-cataleyaswitchcommunication.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-customermapping.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-suppliermapping.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\whs-routesync-cataleya-transportprotocol-selector.js" />
