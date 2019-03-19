@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [RA].[Period] (
-    [ID]               INT             NOT NULL,
+    [ID]               INT             IDENTITY (1, 1) NOT NULL,
     [FromDate]         DATETIME        NULL,
     [ToDate]           DATETIME        NULL,
     [Name]             NVARCHAR (1000) NULL,
@@ -9,6 +9,8 @@
     [LastModifiedTime] DATETIME        NULL,
     [Repeat]           INT             NULL,
     [timestamp]        ROWVERSION      NULL,
-    PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK__Period__3214EC270E6E26BF] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

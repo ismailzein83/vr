@@ -1,11 +1,13 @@
 ﻿CREATE TABLE [RA].[Probe] (
-    [ID]               BIGINT         NOT NULL,
+    [ID]               BIGINT         IDENTITY (1, 1) NOT NULL,
     [Name]             NVARCHAR (255) NULL,
     [CreatedTime]      DATETIME       NULL,
     [CreatedBy]        INT            NULL,
     [LastModifiedTime] DATETIME       NULL,
     [LastModifiedBy]   INT            NULL,
     [timestamp]        ROWVERSION     NULL,
-    PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK__Probe__3214EC2709A971A2] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

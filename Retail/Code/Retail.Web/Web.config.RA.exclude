@@ -76,6 +76,19 @@
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
     <add key="RARetailDBConnStringKey"                          value="ConfigurationDBConnString"/>
     <add key="RARetailAnalyticsDBConnStringKey"                 value="RAAnalyticsDBConnString"/>
+
+    <add key="RAINTLAnalyticsDBConnStringKey"                   value="RAINTLAnalyticsDBConnString"/>
+    <add key="RAICXAnalyticsDBConnStringKey"                    value="RAICXAnalyticsDBConnString"/>
+    <add key="RARetailAnalyticsDBConnStringKey"                 value="RARetailAnalyticsDBConnString"/>
+
+    <add key="RAINTLDBConnStringKey="                           value="RAINTLDBConnString"/>
+    <add key="RAICXDBConnStringkey="                            value="RAICXDBConnString"/>
+    <add key="RARetailDBConnStringkey="                         value="RARetailDBConnString"/>
+    <add key="RADBConnStringKey="                               value="RADBConnString"/>
+
+    <add key="RARetailEDRDBConnStringKey"                       value="RARetailEDRDBConnString"/>
+    <add key="RAICXEDRDBConnStringKey"                          value="RAICXEDRDBConnString"/>
+    <add key="RAINTLEDRDBConnStringKey"                         value="RAINTLEDRDBConnString"/>
     
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>

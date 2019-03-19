@@ -74,6 +74,21 @@
     <add key="RARetailDBConnStringKey"                          value="ConfigurationDBConnString"/>
     <add key="RARetailAnalyticsDBConnStringKey"                 value="RAAnalyticsDBConnString"/>
 
+
+    <add key="RAINTLAnalyticsDBConnStringKey"                   value="RAINTLAnalyticsDBConnString"/>
+    <add key="RAICXAnalyticsDBConnStringKey"                    value="RAICXAnalyticsDBConnString"/>
+    <add key="RARetailAnalyticsDBConnStringKey"                 value="RARetailAnalyticsDBConnString"/>
+
+    <add key="RAINTLDBConnStringKey="                           value="RAINTLDBConnString"/>
+    <add key="RAICXDBConnStringkey="                            value="RAICXDBConnString"/>
+    <add key="RARetailDBConnStringkey="                         value="RARetailDBConnString"/>
+    <add key="RADBConnStringKey="                               value="RADBConnString"/>
+
+    <add key="RARetailEDRDBConnStringKey"                       value="RARetailEDRDBConnString"/>
+    <add key="RAICXEDRDBConnStringKey"                          value="RAICXEDRDBConnString"/>
+    <add key="RAINTLEDRDBConnStringKey"                         value="RAINTLEDRDBConnString"/>
+    
+
     <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,RACDRDBConnString,RAAnalyticsDBConnString,LogDBConnString"/>
   </appSettings>
   <runtime>
