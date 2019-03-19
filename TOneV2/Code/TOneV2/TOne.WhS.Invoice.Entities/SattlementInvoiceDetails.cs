@@ -21,15 +21,29 @@ namespace TOne.WhS.Invoice.Entities
         public decimal DueToSystemAmountAfterCommissionWithTaxes { get; set; }
         public decimal DueToSystemAmountRecurringCharges { get; set; }
         public decimal DueToSystemTotalTrafficAmount { get; set; }
+        public decimal DueToSystemTotalDealAmount { get; set; }
+        public decimal DueToSystemTotalSMSAmount { get; set; }
 
         public decimal DueToCarrierAmount { get; set; }
         public decimal DueToCarrierAmountAfterCommission { get; set; }
         public decimal DueToCarrierAmountAfterCommissionWithTaxes { get; set; }
         public decimal DueToCarrierAmountRecurringCharges { get; set; }
         public decimal DueToCarrierTotalTrafficAmount { get; set; }
+        public decimal DueToCarrierTotalDealAmount { get; set; }
+        public decimal DueToCarrierTotalSMSAmount { get; set; }
 
         public decimal DueToSystemDifference { get; set; }
         public decimal DueToCarrierDifference { get; set; }
+
+        public bool NoCarrierVoice { get; set; }
+        public bool NoCarrierSMS { get; set; }
+        public bool NoCarrierRecurringCharges { get; set; }
+        public bool NoCarrierDeals { get; set; }
+
+        public bool NoSystemVoice { get; set; }
+        public bool NoSystemSMS { get; set; }
+        public bool NoSystemRecurringCharges { get; set; }
+        public bool NoSystemDeals { get; set; }
 
         public SattlementInvoiceDetails() { }
         public IEnumerable<SattlementInvoiceDetails> GetSattlementInvoiceDetailsRDLCSchema()
