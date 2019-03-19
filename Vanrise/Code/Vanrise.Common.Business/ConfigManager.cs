@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -76,7 +74,8 @@ namespace Vanrise.Common.Business
             return smsSettings;
         }
 
-        public SMSSendHandler GetSMSSendHandler() {
+        public SMSSendHandler GetSMSSendHandler()
+        {
 
             SMSSettingData smsSettingData = GetSystemSMS();
 
@@ -107,7 +106,7 @@ namespace Vanrise.Common.Business
             var generalSettings = settingManager.GetSetting<GoogleAnalyticsData>(Constants.GATechnicalSettingType);
             return generalSettings;
         }
-       
+
         public ProductInfo GetProductInfo()
         {
             SettingManager settingManager = new SettingManager();
@@ -214,15 +213,14 @@ namespace Vanrise.Common.Business
 
         public IEnumerable<CompanySettingsInfo> GetCompanySettingsInfo()
         {
-            IEnumerable<CompanySetting> companySettings = GetCompanySetting();
-            List<CompanySettingsInfo> lstCompanySettingsInfo = new List<CompanySettingsInfo>();
-            foreach (var company in companySettings)
+            IEnumerable<CompanySetting> cachedCompanySettings = GetCompanySetting();
+            var lstCompanySettingsInfo = new List<CompanySettingsInfo>();
+
+            foreach (var company in cachedCompanySettings)
             {
-                CompanySettingsInfo companySettingsInfo = new CompanySettingsInfo();
-                companySettingsInfo = CompanySettingInfoMapper(company);
+                CompanySettingsInfo companySettingsInfo = CompanySettingInfoMapper(company);
                 lstCompanySettingsInfo.Add(companySettingsInfo);
             }
-
             return lstCompanySettingsInfo;
         }
 
@@ -281,12 +279,16 @@ namespace Vanrise.Common.Business
         }
         public IEnumerable<CompanySetting> GetCompanySetting()
         {
-            SettingManager settingManager = new SettingManager();
-            CompanySettings companySettings = settingManager.GetSetting<CompanySettings>(CompanySettings.SETTING_TYPE);
-            IEnumerable<CompanySetting> settings = companySettings.Settings;
-            if (settings == null)
-                throw new NullReferenceException("companySettings.Settings NullReferenceException");
-            return settings;
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().GetOrCreateObject("ConfigManager_GetCompanySetting",
+                () =>
+                {
+                    SettingManager settingManager = new SettingManager();
+                    CompanySettings companySettings = settingManager.GetSetting<CompanySettings>(CompanySettings.SETTING_TYPE);
+                    IEnumerable<CompanySetting> settings = companySettings.Settings;
+                    if (settings == null)
+                        throw new NullReferenceException("companySettings.Settings NullReferenceException");
+                    return settings;
+                });
         }
         public CompanySetting GetCompanySettingById(Guid companySettingId)
         {
