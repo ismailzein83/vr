@@ -234,7 +234,7 @@
         function addInputGrid(inputItem) {
             var dataItem = {
                 id: $scope.scopeModel.inputItems.length + 1,
-                fieldName: inputItem.payload.Title,
+                fieldName: inputItem.payload.Name,
             };
 
             if (inputItems.length > 0) {
@@ -261,7 +261,7 @@
         function addOutputItem(outputItem) {
             var dataItem = {
                 id: $scope.scopeModel.outputItems.length + 1,
-                fieldName: outputItem.payload.Title,
+                fieldName: outputItem.payload.Name,
             };
 
             if (outputItems.length > 0) {
