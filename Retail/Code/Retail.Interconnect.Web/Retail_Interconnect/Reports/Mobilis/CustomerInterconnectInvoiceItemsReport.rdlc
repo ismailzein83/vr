@@ -5,9 +5,9 @@
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
         <Top>2.52344in</Top>
-        <Left>1.74579in</Left>
+        <Left>1.76454in</Left>
         <Height>0.02083in</Height>
-        <Width>6.2605in</Width>
+        <Width>6.19734in</Width>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
         </Visibility>
@@ -22,7 +22,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.69077in</Width>
+              <Width>1.59761in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.7765in</Width>
@@ -34,19 +34,19 @@
               <Width>0.76724in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.99304in</Width>
+              <Width>0.85762in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83507in</Width>
+              <Width>0.61632in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53341in</Width>
+              <Width>0.71049in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.43705in</Width>
+              <Width>0.74955in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.81914in</Width>
+              <Width>1.60956in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -62,7 +62,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Destination Zone</Value>
+                              <Value>Nom de la Zone</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -107,7 +107,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Billing Period</Value>
+                              <Value>Période Facturée</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -155,7 +155,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Duration</Value>
+                              <Value>Volume de Trafic (Mn)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -200,7 +200,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Calls</Value>
+                              <Value>Appels</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -245,7 +245,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Rate</Value>
+                              <Value>Taux/Mn</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -290,7 +290,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Currency</Value>
+                              <Value>Devise</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -335,7 +335,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Amount</Value>
+                              <Value>Montant</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -720,9 +720,9 @@
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
         <Top>1.95399in</Top>
-        <Left>0.05502in</Left>
+        <Left>0.15502in</Left>
         <Height>0.5in</Height>
-        <Width>7.97419in</Width>
+        <Width>7.80686in</Width>
         <ZIndex>1</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
@@ -737,22 +737,22 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.66736in</Width>
+              <Width>1.6538in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.99271in</Width>
+              <Width>0.85762in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83474in</Width>
+              <Width>0.61632in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53308in</Width>
+              <Width>0.7095in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.43672in</Width>
+              <Width>0.74955in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.81881in</Width>
+              <Width>1.61055in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -768,7 +768,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Net Total</Value>
+                              <Value>Total Net</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -988,9 +988,9 @@
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
         <Top>2.59983in</Top>
-        <Left>1.74579in</Left>
+        <Left>1.76454in</Left>
         <Height>0.25in</Height>
-        <Width>6.28342in</Width>
+        <Width>6.19734in</Width>
         <ZIndex>2</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
@@ -1005,7 +1005,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.69077in</Width>
+              <Width>1.59761in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.7765in</Width>
@@ -1017,19 +1017,19 @@
               <Width>0.7838in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.99304in</Width>
+              <Width>0.85762in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83507in</Width>
+              <Width>0.61632in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53341in</Width>
+              <Width>0.71049in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.43705in</Width>
+              <Width>0.74955in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.81914in</Width>
+              <Width>1.60956in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1045,7 +1045,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Destination Network</Value>
+                              <Value>Réseau Mobile</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1090,7 +1090,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Billing Period</Value>
+                              <Value>Période Facturée</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1228,7 +1228,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Rate</Value>
+                              <Value>Taux/Mn</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1273,11 +1273,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Currency</Value>
+                              <Value>Devise</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
+                                <FontWeight>SemiBold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1318,7 +1318,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Amount</Value>
+                              <Value>Montant</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1385,7 +1385,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectSMSInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1420,7 +1420,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectSMSInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1455,7 +1455,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectSMSInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1490,7 +1490,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectSMSInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1525,7 +1525,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectSMSInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1560,7 +1560,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectSMSInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1595,7 +1595,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectSMSInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1630,7 +1630,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectSMSInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1665,7 +1665,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectSMSInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1703,9 +1703,9 @@
         </TablixRowHierarchy>
         <DataSetName>InterconnectSMSInvoiceItemDetails</DataSetName>
         <Top>3.54288in</Top>
-        <Left>0.05502in</Left>
+        <Left>0.15502in</Left>
         <Height>0.5in</Height>
-        <Width>7.97419in</Width>
+        <Width>7.80686in</Width>
         <ZIndex>3</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -1719,9 +1719,9 @@
       <Rectangle Name="Rectangle5">
         <KeepTogether>true</KeepTogether>
         <Top>4.09843in</Top>
-        <Left>1.74579in</Left>
+        <Left>1.76454in</Left>
         <Height>0.02083in</Height>
-        <Width>6.28342in</Width>
+        <Width>6.19734in</Width>
         <ZIndex>4</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -1737,22 +1737,22 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.1053in</Width>
+              <Width>1.6538in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.53644in</Width>
+              <Width>0.85762in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83933in</Width>
+              <Width>0.61632in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53767in</Width>
+              <Width>0.70623in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.44131in</Width>
+              <Width>0.74953in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.8234in</Width>
+              <Width>1.61384in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1768,7 +1768,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Net Total</Value>
+                              <Value>Total Net</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1988,9 +1988,9 @@
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
         <Top>4.17482in</Top>
-        <Left>1.74579in</Left>
+        <Left>1.76454in</Left>
         <Height>0.25in</Height>
-        <Width>6.28345in</Width>
+        <Width>6.19734in</Width>
         <ZIndex>5</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -2005,7 +2005,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>20.25445cm</Width>
+              <Width>19.82943cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2063,9 +2063,9 @@
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
         <Top>4.02381cm</Top>
-        <Left>0.13975cm</Left>
+        <Left>0.39375cm</Left>
         <Height>0.6cm</Height>
-        <Width>20.25445cm</Width>
+        <Width>19.82943cm</Width>
         <ZIndex>6</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
@@ -2080,7 +2080,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>20.25445cm</Width>
+              <Width>19.82943cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2138,9 +2138,9 @@
         </TablixRowHierarchy>
         <DataSetName>InterconnectSMSInvoiceItemDetails</DataSetName>
         <Top>8.2578cm</Top>
-        <Left>0.13975cm</Left>
+        <Left>0.39375cm</Left>
         <Height>0.6cm</Height>
-        <Width>20.25445cm</Width>
+        <Width>19.82943cm</Width>
         <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -2155,8 +2155,8 @@
         <Source>Embedded</Source>
         <Value>ATM_Mobilis</Value>
         <Sizing>FitProportional</Sizing>
-        <Top>0.45113cm</Top>
-        <Left>0.44843cm</Left>
+        <Top>0.51463cm</Top>
+        <Left>0.39375cm</Left>
         <Height>2.27187cm</Height>
         <Width>6.52152cm</Width>
         <ZIndex>8</ZIndex>
@@ -2170,7 +2170,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.69077in</Width>
+              <Width>1.59761in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.77364in</Width>
@@ -2179,22 +2179,22 @@
               <Width>0.10255in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.78094in</Width>
+              <Width>0.78952in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.99018in</Width>
+              <Width>0.85762in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83221in</Width>
+              <Width>0.61987in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53055in</Width>
+              <Width>0.70694in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.43419in</Width>
+              <Width>0.74955in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83919in</Width>
+              <Width>1.60956in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2210,9 +2210,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>Description du Service</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -2254,7 +2255,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Billing Period</Value>
+                              <Value>Période Facturée</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2532,7 +2533,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Fields!Name.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2549,7 +2550,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("FinancialRecurringChargeItem") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2584,7 +2585,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("FinancialRecurringChargeItem") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2619,7 +2620,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("FinancialRecurringChargeItem") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2654,7 +2655,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("FinancialRecurringChargeItem") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2689,7 +2690,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("FinancialRecurringChargeItem") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2724,7 +2725,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("FinancialRecurringChargeItem") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2766,7 +2767,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("FinancialRecurringChargeItem") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2801,7 +2802,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("FinancialRecurringChargeItem") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2836,7 +2837,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("FinancialRecurringChargeItem") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2874,9 +2875,9 @@
         </TablixRowHierarchy>
         <DataSetName>FinancialRecurringChargeItem</DataSetName>
         <Top>4.97493in</Top>
-        <Left>0.05502in</Left>
+        <Left>0.15502in</Left>
         <Height>0.5in</Height>
-        <Width>7.97422in</Width>
+        <Width>7.80686in</Width>
         <ZIndex>9</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -2889,10 +2890,10 @@
       </Tablix>
       <Rectangle Name="Rectangle6">
         <KeepTogether>true</KeepTogether>
-        <Top>5.53048in</Top>
-        <Left>1.74579in</Left>
+        <Top>5.48882in</Top>
+        <Left>1.76454in</Left>
         <Height>0.02083in</Height>
-        <Width>6.28342in</Width>
+        <Width>6.198in</Width>
         <ZIndex>10</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -2908,22 +2909,22 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.12678in</Width>
+              <Width>1.65772in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.993in</Width>
+              <Width>0.8662in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83503in</Width>
+              <Width>0.83933in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.50586in</Width>
+              <Width>0.70623in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.98361in</Width>
+              <Width>0.74955in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83915in</Width>
+              <Width>1.39081in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2939,7 +2940,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Net Total</Value>
+                              <Value>Total Net</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3156,10 +3157,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>FinancialRecurringChargeItem</DataSetName>
-        <Top>5.60687in</Top>
-        <Left>1.74579in</Left>
+        <Top>5.58187in</Top>
+        <Left>1.75204in</Left>
         <Height>0.25in</Height>
-        <Width>6.28343in</Width>
+        <Width>6.20984in</Width>
         <ZIndex>11</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -3174,7 +3175,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>20.25445cm</Width>
+              <Width>19.82943cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -3190,7 +3191,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Recurring Charges</Value>
+                              <Value>Frais Récurrents</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -3232,9 +3233,9 @@
         </TablixRowHierarchy>
         <DataSetName>InterconnectSMSInvoiceItemDetails</DataSetName>
         <Top>11.85993cm</Top>
-        <Left>0.13975cm</Left>
+        <Left>0.39375cm</Left>
         <Height>0.6cm</Height>
-        <Width>20.25445cm</Width>
+        <Width>19.82943cm</Width>
         <ZIndex>12</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -3249,7 +3250,7 @@
     <Height>14.87645cm</Height>
     <Style />
   </Body>
-  <Width>20.6324cm</Width>
+  <Width>20.35166cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>

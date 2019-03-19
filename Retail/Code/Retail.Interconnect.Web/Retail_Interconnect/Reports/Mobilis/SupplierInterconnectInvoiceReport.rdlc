@@ -42,7 +42,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Bank Details</Value>
+                <Value>Coordonnées Bancaires</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -87,7 +87,7 @@
         <Source>Embedded</Source>
         <Value>ATM_Mobilis</Value>
         <Sizing>FitProportional</Sizing>
-        <Top>0.33787cm</Top>
+        <Top>0.56012cm</Top>
         <Left>0.70752cm</Left>
         <Height>2.27187cm</Height>
         <Width>6.52152cm</Width>
@@ -191,7 +191,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>N°_Facture </Value>
+                              <Value>N° Facture </Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -263,7 +263,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Date_Facture </Value>
+                              <Value>Date Facture </Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -334,7 +334,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Période_Facture  </Value>
+                              <Value>Période Facture</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -405,7 +405,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Object_Facture </Value>
+                              <Value>Objet Facture </Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -439,7 +439,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="Facture du traffic d'interconnexion International sortant du réseau d'"+Parameters!CompanyName.Value+",entrant dans le réseau d'"+Parameters!CompanyName.Value</Value>
+                              <Value>="Facture du traffic d'interconnexion International sortant du réseau d'"+Parameters!CompanyName.Value+",entrant dans le réseau d'"+Parameters!AccountName.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                               </Style>
@@ -583,21 +583,24 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Full payment must be made within 30 days from invoice date</Value>
-                              <Style />
+                              <Value>Le paiement intégral doit être effectué dans les 30 jours suivant la date de facturation.
+La facture doit être payée avant</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                        <Paragraph>
-                          <TextRuns>
                             <TextRun>
-                              <Value>Invoice must be paid before </Value>
-                              <Style />
+                              <Value xml:space="preserve"> </Value>
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                             <TextRun>
                               <Value>=Parameters!InvoiceDueDate.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -807,7 +810,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Bank:</Value>
+                                  <Value>Banque:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -874,7 +877,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Account Nbr:</Value>
+                                  <Value>N° de Compte:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -2706,7 +2709,7 @@
       </Style>
     </PageHeader>
     <PageFooter>
-      <Height>2.76048cm</Height>
+      <Height>2.83985cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -2776,8 +2779,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
-          <Top>0.37396cm</Top>
-          <Left>5.53854cm</Left>
+          <Top>0.27871cm</Top>
+          <Left>5.69729cm</Left>
           <Height>0.40571cm</Height>
           <Width>8.79474cm</Width>
           <ZIndex>2</ZIndex>
@@ -2812,8 +2815,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
-          <Top>1.18537cm</Top>
-          <Left>5.53854cm</Left>
+          <Top>1.09012cm</Top>
+          <Left>5.69729cm</Left>
           <Height>0.40571cm</Height>
           <Width>8.79474cm</Width>
           <ZIndex>3</ZIndex>
@@ -2848,8 +2851,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
-          <Top>0.77967cm</Top>
-          <Left>5.53854cm</Left>
+          <Top>0.68442cm</Top>
+          <Left>5.69729cm</Left>
           <Height>0.40571cm</Height>
           <Width>8.79474cm</Width>
           <ZIndex>4</ZIndex>
@@ -2884,8 +2887,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
-          <Top>1.59108cm</Top>
-          <Left>5.53854cm</Left>
+          <Top>1.49583cm</Top>
+          <Left>5.69729cm</Left>
           <Height>0.40571cm</Height>
           <Width>8.79474cm</Width>
           <ZIndex>5</ZIndex>
