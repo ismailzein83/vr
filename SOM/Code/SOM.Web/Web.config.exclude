@@ -44,18 +44,18 @@
     <add key="ClientValidationEnabled"            value="true" />
     <add key="UnobtrusiveJavaScriptEnabled"       value="true" />
 
-    <add key="RuntimeConnStringKey" value="TransactionDBConnString" />
-    <add key="BusinessProcessDBConnStringKey" value="TransactionDBConnString" />
-    <add key="BigDataServiceDBConnStringKey" value="TransactionDBConnString" />
-    <add key="VRNotificationTransactionDBConnStringKey" value="TransactionDBConnString" />
+    <add key="RuntimeConnStringKey"               value="TransactionDBConnString" />
+    <add key="BusinessProcessDBConnStringKey"     value="TransactionDBConnString" />
+    <add key="BigDataServiceDBConnStringKey"      value="TransactionDBConnString" />
+    <add key="VRNotificationTransactionDBConnStringKey"   value="TransactionDBConnString" />
 
-    <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString" />
-    <add key="LoggingDBConnStringKey" value="LogDBConnString" />
+    <add key="BusinessProcessTrackingDBConnStringKey"     value="LogDBConnString" />
+    <add key="LoggingDBConnStringKey"                     value="LogDBConnString" />
 
 
-    <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString" />
-    <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString" />
-    <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString" />
+    <add key="SecurityDBConnStringKey"                    value="ConfigurationDBConnString" />
+    <add key="BusinessProcessConfigDBConnStringKey"       value="ConfigurationDBConnString" />
+    <add key="RuntimeConfigDBConnStringKey"               value="ConfigurationDBConnString" />
     <add key="ConfigurationDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="RulesDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="LoggingConfigDBConnStringKey" value="ConfigurationDBConnString" />
