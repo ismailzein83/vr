@@ -4,13 +4,15 @@
     [ToDate]           DATETIME        NULL,
     [Name]             NVARCHAR (1000) NULL,
     [CreatedBy]        INT             NULL,
-    [CreatedTime]      DATETIME        NULL,
+    [CreatedTime]      DATETIME        CONSTRAINT [DF_Period_CreatedTime] DEFAULT (getdate()) NULL,
     [LastModifiedBy]   INT             NULL,
     [LastModifiedTime] DATETIME        NULL,
     [Repeat]           INT             NULL,
     [timestamp]        ROWVERSION      NULL,
     CONSTRAINT [PK__Period__3214EC270E6E26BF] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

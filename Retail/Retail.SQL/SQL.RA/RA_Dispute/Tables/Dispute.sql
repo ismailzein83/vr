@@ -11,7 +11,7 @@
     [Scope]             INT              NULL,
     [SendEmail]         INT              NULL,
     [CreatedBy]         INT              NULL,
-    [CreatedTime]       DATETIME         NULL,
+    [CreatedTime]       DATETIME         CONSTRAINT [DF_Dispute_CreatedTime] DEFAULT (getdate()) NULL,
     [LastModifiedBy]    INT              NULL,
     [LastModifiedTime]  DATETIME         NULL,
     [Revenue]           DECIMAL (22, 8)  NULL,
@@ -24,4 +24,6 @@
     [DurationTolerance] DECIMAL (22, 8)  NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

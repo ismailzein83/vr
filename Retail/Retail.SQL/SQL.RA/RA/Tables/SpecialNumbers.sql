@@ -2,13 +2,15 @@
     [ID]               BIGINT         IDENTITY (1, 1) NOT NULL,
     [GroupName]        VARCHAR (MAX)  NOT NULL,
     [Settings]         NVARCHAR (MAX) NOT NULL,
-    [CreatedTime]      DATETIME       NULL,
+    [CreatedTime]      DATETIME       CONSTRAINT [DF_SpecialNumbers_CreatedTime] DEFAULT (getdate()) NULL,
     [CreatedBy]        INT            NULL,
     [LastModifiedTime] DATETIME       NULL,
     [LastModifiedBy]   INT            NULL,
     [timestamp]        ROWVERSION     NOT NULL,
     CONSTRAINT [PK__SpecialN__3214EC2772C60C4A] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
