@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BPGenericTaskTypeSettingsEditorController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRNavigationService', 'UtilsService','VRUIUtilsService'];
+    BPGenericTaskTypeSettingsEditorController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','VRNotificationService'];
 
-    function BPGenericTaskTypeSettingsEditorController($scope, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function BPGenericTaskTypeSettingsEditorController($scope, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var bpTaskId;
         var bpTaskType;
@@ -58,23 +58,47 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-            BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (bpTask) {
-                if (bpTask != undefined) {
-                    fieldValues = bpTask.TaskData != undefined ? bpTask.TaskData.FieldValues : undefined;
-                    BusinessProcess_BPTaskTypeAPIService.GetBPTaskType(bpTask.TypeId).then(function (taskType) {
-                        bpTaskType = taskType;
-                        if (bpTaskType != undefined && bpTaskType.Settings != undefined && bpTaskType.Settings.EditorSettings != undefined) {
-                            $scope.scopeModel.runtimeEditor = bpTaskType.Settings.EditorSettings.RuntimeEditor;
-                            loadEditorRuntimeDirective();
-                        }
-                    }).catch(function (error) {
-                        VRNotificationService.notifyException(error);
-                    }).finally(function () {
-                        $scope.scopeModel.isLoading = false;
-                    });
+
+            var bpTask;
+            function getBPTask() {
+                return BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (task) {
+                    bpTask = task;
+                });
+            }
+
+            function getBPTaskType(typeId) {
+                return BusinessProcess_BPTaskTypeAPIService.GetBPTaskType(typeId).then(function (taskType) {
+                    bpTaskType = taskType;
+                });
+            }
+            function setTitle() {
+                $scope.title = bpTask.Title;
+            }
+          
+            var rootPromiseNode = {
+                promises: [getBPTask()],
+                getChildNode: function () {
+                    if (bpTask != undefined) {
+                        fieldValues = bpTask.TaskData != undefined ? bpTask.TaskData.FieldValues : undefined;
+                        setTitle();
+                        return {
+                            promises: [getBPTaskType(bpTask.TypeId)],
+                            getChildNode: function () {
+                                if (bpTaskType != undefined && bpTaskType.Settings != undefined && bpTaskType.Settings.EditorSettings != undefined) {
+                                    $scope.scopeModel.runtimeEditor = bpTaskType.Settings.EditorSettings.RuntimeEditor;
+                                    return {
+                                        promises: [loadEditorRuntimeDirective()]
+                                    };
+                                }
+                            }
+                        };
+                    }
                 }
-            }).catch(function (error) {
+            };
+            return UtilsService.waitPromiseNode(rootPromiseNode).catch(function (error) {
                 VRNotificationService.notifyException(error);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
             });
         }
 
