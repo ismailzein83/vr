@@ -34,6 +34,14 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', '
                     fileDataSourceDefinitionsSelectorReadyPromiseDeferred.resolve();
                 };
 
+                $scope.scopeModel.onFileDataSourceDefinitionSelectionChanged = function () {
+                    var beforeSelection = $scope.scopeModel.selectedFileDataSourceDefinition == undefined ? false : $scope.scopeModel.selectedFileDataSourceDefinition;
+                    $scope.scopeModel.selectedFileDataSourceDefinition = fileDataSourceDefinitionsSelectorAPI != undefined && fileDataSourceDefinitionsSelectorAPI.getSelectedIds() != undefined ?
+                        true : false;
+                    if (beforeSelection && !$scope.scopeModel.selectedFileDataSourceDefinition)
+                        $scope.scopeModel.duplicatedFilesDirectory = undefined;
+                };
+
                 defineAPI();
             }
 
@@ -54,6 +62,7 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', '
                             $scope.scopeModel.directory = argumentData.Directory;
                             $scope.scopeModel.directorytoMoveFile = argumentData.DirectorytoMoveFile;
                             $scope.scopeModel.selectedAction = UtilsService.getItemByVal($scope.scopeModel.actionsAfterImport, argumentData.ActionAfterImport, "value");
+                            $scope.scopeModel.duplicatedFilesDirectory = argumentData.DuplicatedFilesDirectory;
                         }
                     }
 
@@ -100,7 +109,8 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', '
                         Directory: $scope.scopeModel.directory,
                         DirectorytoMoveFile: $scope.scopeModel.directorytoMoveFile,
                         ActionAfterImport: $scope.scopeModel.selectedAction.value,
-                        FileDataSourceDefinitionId: fileDataSourceDefinitionsSelectorAPI != undefined ? fileDataSourceDefinitionsSelectorAPI.getSelectedIds() : undefined
+                        FileDataSourceDefinitionId: fileDataSourceDefinitionsSelectorAPI != undefined ? fileDataSourceDefinitionsSelectorAPI.getSelectedIds() : undefined,
+                        DuplicatedFilesDirectory: fileDataSourceDefinitionsSelectorAPI != undefined ? $scope.scopeModel.duplicatedFilesDirectory : undefined
                     };
                 };
 

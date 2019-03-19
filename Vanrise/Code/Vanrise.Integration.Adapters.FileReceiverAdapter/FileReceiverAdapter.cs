@@ -101,7 +101,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
 
                             fileAdapterState = SaveOrGetAdapterState(context, fileAdapterArgument, file.Name, file.LastWriteTime);
 
-                            AfterImport(fileAdapterArgument, file);
+                            AfterImport(fileAdapterArgument, file, filePath, fileState);
 
                             numberOfFilesRead++;
                         }
@@ -164,8 +164,14 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             return output;
         }
 
-        private void AfterImport(FileAdapterArgument fileAdapterArgument, FileInfo file)
+        private void AfterImport(FileAdapterArgument fileAdapterArgument, FileInfo file, String filePath, BatchState fileState)
         {
+            if (fileState == BatchState.Duplicated && !string.IsNullOrEmpty(fileAdapterArgument.DuplicatedFilesDirectory))
+            {
+                MoveFile(fileAdapterArgument, file, filePath, fileAdapterArgument.DuplicatedFilesDirectory, fileAdapterArgument.Extension, "duplicate");
+                return;
+            }
+
             if (fileAdapterArgument.ActionAfterImport == (int)Actions.Rename)
             {
                 base.LogVerbose("Renaming file {0} after import", file.Name);
@@ -180,17 +186,23 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             }
             else if (fileAdapterArgument.ActionAfterImport == (int)Actions.Move)
             {
-                base.LogVerbose("Moving file {0} after import to Directory {1}", file.Name, fileAdapterArgument.DirectorytoMoveFile);
-                if (!System.IO.Directory.Exists(fileAdapterArgument.DirectorytoMoveFile))
-                    System.IO.Directory.CreateDirectory(fileAdapterArgument.DirectorytoMoveFile);
-
-                string fileNameWithoutExtension = file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), "");
-                string newFileName = Path.Combine(fileAdapterArgument.DirectorytoMoveFile, string.Format(@"{0}.processed", fileNameWithoutExtension));
-                if (File.Exists(newFileName))
-                    newFileName = newFileName.Replace(fileNameWithoutExtension, string.Format(@"{0}_{1}", fileNameWithoutExtension, Guid.NewGuid()));
-
-                file.MoveTo(newFileName);
+                MoveFile(fileAdapterArgument, file, filePath, fileAdapterArgument.DirectorytoMoveFile, fileAdapterArgument.Extension, "processed");
             }
+        }
+
+        private void MoveFile(FileAdapterArgument fileAdapterArgument, FileInfo file, String filePath, string directorytoMoveFile, string extension, string newExtension)
+        {
+            base.LogVerbose("Moving file {0} after import to Directory {1}", file.Name, directorytoMoveFile);
+
+            if (!System.IO.Directory.Exists(fileAdapterArgument.DirectorytoMoveFile))
+                System.IO.Directory.CreateDirectory(fileAdapterArgument.DirectorytoMoveFile);
+
+            string fileObjWithoutExtension = file.Name.Replace(extension, "");
+            string newFilePath = Path.Combine(directorytoMoveFile, string.Format(@"{0}.{1}", fileObjWithoutExtension, newExtension));
+            if (File.Exists(newFilePath))
+                newFilePath = newFilePath.Replace(fileObjWithoutExtension, string.Format(@"{0}_{1}", fileObjWithoutExtension, Guid.NewGuid()));
+
+            file.MoveTo(newFilePath);
         }
 
         #endregion

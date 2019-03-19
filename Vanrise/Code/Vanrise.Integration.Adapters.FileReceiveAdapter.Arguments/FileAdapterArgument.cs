@@ -15,12 +15,20 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments
 
         public int ActionAfterImport { get; set; }
 
-        public Guid? FileDataSourceDefinitionId { get; set; } //Not Reflected In UI
+        public Guid? FileDataSourceDefinitionId { get; set; }
+
+        public string DuplicatedFilesDirectory { get; set; }
+
+        //public override bool IsFileDataSourceDefinitionInUse(Guid fileDataSourceDefinitionId)
+        //{
+        //    return this.FileDataSourceDefinitionId.HasValue && this.FileDataSourceDefinitionId.Value == fileDataSourceDefinitionId;
+        //}
     }
 
     public class FileAdapterState : BaseAdapterState
     {
         public DateTime LastRetrievedFileTime { get; set; }
+
         public string LastRetrievedFileName { get; set; }
     }
 }
