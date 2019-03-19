@@ -273,7 +273,7 @@ as (select * from (values
 
 ('B06876AD-8DC7-4D45-B805-34A4D4BEBD07','Interconnect EDR DB','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"RAICXEDRDBConnString","ConnectionStringAppSettingName":"RAICXEDRDBConnStringKey","IsRemoteDataStore":false}','2019-03-14 15:07:18.053'),
 ('BB0AAFBB-C536-4DB9-A290-FD8A40BE760C','Interconnect DB','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"RAICXDBConnString","ConnectionStringAppSettingName":"RAICXDBConnStringkey","IsRemoteDataStore":false}','2019-03-14 15:00:33.487'),
-('98CCC417-6626-4562-B050-56DEED597CD3','Interconnect Analytics DB','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"RAICXAnalyticsDBConnString","ConnectionStringAppSettingName":"RAICXAnalyticsDBConnStringKey","IsRemoteDataStore":false}','2019-03-14 14:50:03.190'),
+('98CCC417-6626-4562-B050-56DEED597CD3','Interconnect Analytics DB','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"RAICXAnalyticsDBConnString","ConnectionStringAppSettingName":"RAICXAnalyticsDBConnStringKey","IsRemoteDataStore":false}','2019-03-14 14:50:03.190')
 
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

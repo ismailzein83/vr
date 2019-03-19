@@ -114,7 +114,7 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('F7D8C1E5-DF05-4EA1-B43A-5BE5198BE6ED','Retail_INTL_RA_OperatorDeclaration','Operator Declaration','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"retail-ra-intl-operatordeclaration-beforesavehandler"}'),
-('01E65A5F-E90C-40BB-A0C0-9F344B171874','Provider Settings','Provider Settings','VR_GenericData_BusinessObjectDataRecordStorage','{"Editor":"retail-ra-intl-businessobject-dataprovidersettings"}')
+('01E65A5F-E90C-40BB-A0C0-9F344B171874','Provider Settings','Provider Settings','VR_GenericData_BusinessObjectDataRecordStorage','{"Editor":"retail-ra-intl-businessobject-dataprovidersettings"}'),
 ('DEDB89C0-370F-4DF8-BE63-EE60C73436F6','IntlOperatorDeclarationServices','IntlOperatorDeclarationServices','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"retail-ra-intloperatordeclarationservices-customobjectsettings"}'),
 ('696FCB6C-EE81-4C34-A390-6793ECC7252D','RA_OperatorDeclaration_IntlVoice','IntlVoice','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-ra-intloperatordeclarationservice-voice"}'),
 ('0F35BD74-81D4-4CF3-950D-98DE8CDAD7D9','RA_OperatorDeclaration_IntlSMS','IntlSMS','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-ra-intloperatordeclarationservice-sms"}')

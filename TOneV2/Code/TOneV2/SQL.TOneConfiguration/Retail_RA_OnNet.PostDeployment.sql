@@ -64,14 +64,14 @@ when not matched by target then
 --[genericdata].[DataStore]-------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Name],[Settings])
+;with cte_data([ID],[Name],[Settings],[CreatedTime])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('5D9CD14B-0068-41CF-8109-2E8376064C9B','Retail Analytics DB','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"RARetailAnalyticsDBConnString","ConnectionStringAppSettingName":"RARetailAnalyticsDBConnStringKey","IsRemoteDataStore":false}','2019-03-14 14:50:43.030'),
 ('477A973F-B244-490E-BA57-51A4BE18ECFE','Retail DB','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"RARetailDBConnString","ConnectionStringAppSettingName":"RARetailDBConnStringkey","IsRemoteDataStore":false}','2019-03-14 15:01:12.907'),
 ('65EF0225-26D8-48EF-ADE0-B65421FF31DE','Retail EDR DB','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"RARetailEDRDBConnString","ConnectionStringAppSettingName":"RARetailEDRDBConnStringKey","IsRemoteDataStore":false}','2019-03-14 15:09:34.807')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings]))
+)c([ID],[Name],[Settings],[CreatedTime]))
 merge	[genericdata].[DataStore] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
@@ -79,8 +79,8 @@ when matched then
 	update set
 	[Name] = s.[Name],[Settings] = s.[Settings]
 when not matched by target then
-	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);
+	insert([ID],[Name],[Settings],[CreatedTime])
+	values(s.[ID],s.[Name],s.[Settings],[CreatedTime]);
 
 
 
