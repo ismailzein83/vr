@@ -34,8 +34,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             bool isApplicableToSupplier;
             List<InvoiceAvailableForSettlement> availableCustomerInvoices;
             List<InvoiceAvailableForSettlement> availableSupplierInvoices;
-
-            PrepareDataForProcessing(context.PartnerId, context.InvoiceTypeId, context.CustomSectionPayload, out partnerType, out isApplicableToSupplier, out isApplicableToCustomer, out availableCustomerInvoices, out availableSupplierInvoices);
+            int currencyId;
+            PrepareDataForProcessing(context.PartnerId, context.InvoiceTypeId, context.CustomSectionPayload, out partnerType, out isApplicableToSupplier, out isApplicableToCustomer, out availableCustomerInvoices, out availableSupplierInvoices, out currencyId);
 
 
             IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices = null;
@@ -108,7 +108,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 context.NeedApproval = settings.NeedApproval;
             }
 
-            context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, carrierSummary, systemSummary, carrierRecurringChargesSummary, systemRecurringChargesSummary, settlementInvoiceCurrencyByInvoice, partnerType, isApplicableToCustomer, isApplicableToSupplier, settlementInvoiceByCurrency);
+            context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, carrierSummary, systemSummary, carrierRecurringChargesSummary, systemRecurringChargesSummary, settlementInvoiceCurrencyByInvoice, partnerType, isApplicableToCustomer, isApplicableToSupplier, settlementInvoiceByCurrency, currencyId, context.IssueDate);
         }
 
         private void ProcessItemSetName(IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices, IEnumerable<InvoiceItem> customerInvoiceItems, IEnumerable<Vanrise.Invoice.Entities.Invoice> supplierInvoices,
@@ -546,10 +546,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return true;
         }
-        private void PrepareDataForProcessing(string partnerId, Guid invoiceTypeId, dynamic customSectionPayload, out string partnerType, out bool isApplicableToSupplier, out bool isApplicableToCustomer, out List<InvoiceAvailableForSettlement> availableCustomerInvoices, out List<InvoiceAvailableForSettlement> availableSupplierInvoices)
+        private void PrepareDataForProcessing(string partnerId, Guid invoiceTypeId, dynamic customSectionPayload, out string partnerType, out bool isApplicableToSupplier, out bool isApplicableToCustomer, out List<InvoiceAvailableForSettlement> availableCustomerInvoices, out List<InvoiceAvailableForSettlement> availableSupplierInvoices, out int currencyId)
         {
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(partnerId));
+            currencyId = financialAccountManager.GetFinancialAccountCurrencyId(financialAccount);
 
             var definitionSettings = new WHSFinancialAccountDefinitionManager().GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
             definitionSettings.ThrowIfNull("definitionSettings", financialAccount.FinancialAccountDefinitionId);
@@ -611,7 +612,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         private GeneratedInvoice BuildGeneratedInvoice(List<SattlementInvoiceItemDetails> customerInvoiceItemSet, List<SattlementInvoiceItemDetails> supplierInvoiceItemSet,
             Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryByCurrency, List<SettlementInvoiceDetailSummary> carrierSummary, List<SettlementInvoiceDetailSummary> systemSummary,
             List<SettlementInvoiceDetailSummary> carrierRecurringChargesSummary, List<SettlementInvoiceDetailSummary> systemRecurringChargesSummary,
-            Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, string partnerType, bool isApplicableToCustomer, bool isApplicableToSupplier, Dictionary<String, SettlementInvoiceItemDetail> settlementInvoiceByCurrency)
+            Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, string partnerType, bool isApplicableToCustomer, bool isApplicableToSupplier, Dictionary<String, SettlementInvoiceItemDetail> settlementInvoiceByCurrency, int currencyId, DateTime issueDate)
         {
 
 
@@ -721,16 +722,36 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             if (settlementInvoiceItemSummaryByCurrency != null && settlementInvoiceItemSummaryByCurrency.Count > 0)
             {
+                CurrencyExchangeRateManager exchangeRateManager = new CurrencyExchangeRateManager();
                 GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
                 generatedInvoiceItemSet.SetName = "SettlementInvoiceSummary";
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
                 foreach (var settlementInvoiceItemSummaryDetail in settlementInvoiceItemSummaryByCurrency)
                 {
+                    sattlementInvoiceDetails.DueToCarrierAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToCarrierAmount, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierAmountAfterCommission += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToCarrierAmountAfterCommission, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToCarrierAmountAfterCommissionWithTaxes, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierAmountRecurringCharges += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToCarrierAmountRecurringCharges, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierTotalTrafficAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToCarrierTotalTrafficAmount, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToSystemAmount, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemAmountAfterCommission += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToSystemAmountAfterCommission, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToSystemAmountAfterCommissionWithTaxes, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemAmountRecurringCharges += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToSystemAmountRecurringCharges, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemTotalTrafficAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToSystemTotalTrafficAmount, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
+
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
                         Details = settlementInvoiceItemSummaryDetail.Value,
                         Name = " "
                     });
+                }
+                if (sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes > sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes)
+                {
+                    sattlementInvoiceDetails.DueToCarrierDifference = sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes - sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes;
+                }
+                else 
+                {
+                    sattlementInvoiceDetails.DueToSystemDifference = sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes - sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes;
                 }
                 if (generatedInvoiceItemSet.Items.Count > 0)
                 {
