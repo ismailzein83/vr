@@ -4,7 +4,7 @@
 
     GenericBusinessEntityManagement.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum'];
 
-    function GenericBusinessEntityManagement(UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum) {
+    function GenericBusinessEntityManagement(UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum, VRCommon_ModalWidthEnum) {
         return {
             restrict: "E",
             scope: {
@@ -67,7 +67,8 @@
                     var onGenericBusinessEntityAdded = function (addedGenericBusinessEntity) {
                         gridDirectiveAPI.onGenericBEAdded(addedGenericBusinessEntity);
                     };
-                    var editorSize = undefined;//genericBEDefinitionSettings != undefined ? genericBEDefinitionSettings.editorSize : undefined;
+                    var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", genericBEDefinitionSettings.EditorSize);
+                    var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
                     VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessDefinitionId, editorSize, fieldValues);
                 };
 

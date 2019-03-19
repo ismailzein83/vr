@@ -3,9 +3,9 @@
 
     'use strict';
 
-    GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum'];
+    GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum', 'VRCommon_ModalWidthEnum','VR_GenericData_GenericBEDefinitionAPIService'];
 
-    function GenericBEActionService(VRModalService, UtilsService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum) {
+    function GenericBEActionService(VRModalService, UtilsService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum, VRCommon_ModalWidthEnum, VR_GenericData_GenericBEDefinitionAPIService) {
 
         var actionTypes = [];
 
@@ -107,15 +107,19 @@
                     if (payload == undefined)
                         return;
                     var businessEntityDefinitionId = payload.businessEntityDefinitionId;
-                    var genericBusinessEntityId = payload.genericBusinessEntityId;
-                    var onItemUpdated = payload.onItemUpdated;
-                    var editorSize = undefined;//payload.editorSize;
-                    var fieldValues = payload.fieldValues;
-                    var onGenericBEUpdated = function (updatedGenericBE) {
-                        if (onItemUpdated != undefined)
-                            onItemUpdated(updatedGenericBE);
-                    };
-                    VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues);
+
+                    VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEDefinitionSettings(businessEntityDefinitionId).then(function (response) {
+                        var genericBusinessEntityId = payload.genericBusinessEntityId;
+                        var onItemUpdated = payload.onItemUpdated;
+                        var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", response.EditorSize);
+                        var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
+                        var fieldValues = payload.fieldValues;
+                        var onGenericBEUpdated = function (updatedGenericBE) {
+                            if (onItemUpdated != undefined)
+                                onItemUpdated(updatedGenericBE);
+                        };
+                        VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues);
+                    });
                 }
             };
             registerActionType(editActionType);

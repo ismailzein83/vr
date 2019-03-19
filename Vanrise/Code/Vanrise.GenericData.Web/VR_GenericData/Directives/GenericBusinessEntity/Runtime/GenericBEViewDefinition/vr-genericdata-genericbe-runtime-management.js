@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBERuntimeManagementDirective.$inject = ['VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VR_GenericData_GenericBusinessEntityAPIService'];
+    GenericBERuntimeManagementDirective.$inject = ['VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VR_GenericData_GenericBusinessEntityAPIService','VRCommon_ModalWidthEnum'];
 
-    function GenericBERuntimeManagementDirective(VR_GenericData_GenericBusinessEntityService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum, VR_GenericData_GenericBusinessEntityAPIService) {
+    function GenericBERuntimeManagementDirective(VR_GenericData_GenericBusinessEntityService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum, VR_GenericData_GenericBusinessEntityAPIService, VRCommon_ModalWidthEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -133,7 +133,9 @@
                     var onGenericBusinessEntityAdded = function (addedGenericBusinessEntity) {
                         gridDirectiveAPI.onGenericBEAdded(addedGenericBusinessEntity);
                     };
-                    var editorSize = undefined;//genericBEDefinitionSettings != undefined ? genericBEDefinitionSettings.editorSize : undefined;
+
+                    var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", genericBEDefinitionSettings.EditorSize);
+                    var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
                     VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessEntityDefinitionAPI.getSelectedIds(), editorSize);
                 };
 
