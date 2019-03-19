@@ -25,9 +25,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
 
         public Guid RecordTypeId { get; set; }
 
+        public List<BPGenericTaskTypeAction> TaskTypeActions { get; set; }
         public GenericData.Entities.VRGenericEditorDefinitionSetting EditorSettings { get; set; }
     }
-
     public class BPGenericTaskData : BPTaskData
     {
         public Dictionary<string, dynamic> FieldValues { get; set; }
