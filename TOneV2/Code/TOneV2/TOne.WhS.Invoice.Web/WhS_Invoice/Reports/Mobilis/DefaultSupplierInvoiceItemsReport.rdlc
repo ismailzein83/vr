@@ -37,7 +37,7 @@
               <Width>0.98956in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.76951in</Width>
+              <Width>0.77903in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.84778in</Width>
@@ -756,7 +756,7 @@
         <Top>1.92292in</Top>
         <Left>0.05697in</Left>
         <Height>0.60188in</Height>
-        <Width>7.71608in</Width>
+        <Width>7.7256in</Width>
         <ZIndex>1</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
@@ -772,25 +772,25 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.85829in</Width>
+              <Width>0.85612in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.69986in</Width>
+              <Width>0.69769in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.00627in</Width>
+              <Width>1.0041in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.771in</Width>
+              <Width>0.76883in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.85687in</Width>
+              <Width>0.84425in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53174in</Width>
+              <Width>0.52957in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.95087in</Width>
+              <Width>0.9487in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -978,7 +978,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Currency.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalVoiceAmountBeforeTax.Value, Parameters!NormalPrecisionValue.Value) + " "+ Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -987,7 +987,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                             <LineHeight>8pt</LineHeight>
                           </Style>
                         </Paragraph>
@@ -1003,44 +1003,10 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox106">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=FormatNumber(Parameters!TotalVoiceAmountBeforeTax.Value, Parameters!NormalPrecisionValue.Value)</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Right</TextAlign>
-                            <LineHeight>8pt</LineHeight>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox89</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
+                <TablixCell />
               </TablixCells>
             </TablixRow>
           </TablixRows>
@@ -1065,7 +1031,7 @@
         <Top>2.6243in</Top>
         <Left>2.12082in</Left>
         <Height>0.25in</Height>
-        <Width>5.6749in</Width>
+        <Width>5.64926in</Width>
         <ZIndex>2</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoVoice.Value</Hidden>
@@ -1080,25 +1046,25 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.83428in</Width>
+              <Width>0.83149in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.72154in</Width>
+              <Width>0.71875in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.99225in</Width>
+              <Width>1.01176in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.79181in</Width>
+              <Width>0.81192in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.82512in</Width>
+              <Width>0.85857in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.56051in</Width>
+              <Width>0.52141in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.95686in</Width>
+              <Width>0.92411in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1283,7 +1249,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Currency.Value</Value>
+                              <Value>=FormatNumber(Parameters!TotalSMSAmountBeforeTax.Value, Parameters!NormalPrecisionValue.Value) + " "+ Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1292,7 +1258,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1307,43 +1273,10 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox109">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=FormatNumber(Parameters!TotalSMSAmountBeforeTax.Value, Parameters!NormalPrecisionValue.Value)</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Right</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox89</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
+                <TablixCell />
               </TablixCells>
             </TablixRow>
           </TablixRows>
@@ -1366,9 +1299,9 @@
         </TablixRowHierarchy>
         <DataSetName>SupplierInvoiceItemDetails</DataSetName>
         <Top>5.07188in</Top>
-        <Left>2.09816in</Left>
+        <Left>2.09206in</Left>
         <Height>0.25in</Height>
-        <Width>5.68237in</Width>
+        <Width>5.67801in</Width>
         <ZIndex>3</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -1412,19 +1345,19 @@
               <Width>0.74515in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.98425in</Width>
+              <Width>1.00655in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.76915in</Width>
+              <Width>0.81001in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.84778in</Width>
+              <Width>0.84602in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53785in</Width>
+              <Width>0.52141in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.97952in</Width>
+              <Width>0.92708in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1681,10 +1614,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>Devise</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontWeight>Bold</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>SemiBold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2115,7 +2049,7 @@
         <Top>4.46057in</Top>
         <Left>0.03998in</Left>
         <Height>0.46875in</Height>
-        <Width>7.74055in</Width>
+        <Width>7.73307in</Width>
         <ZIndex>5</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -2206,13 +2140,16 @@
               <Width>2.04119in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.58081in</Width>
+              <Width>3.36996in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.74865in</Width>
+              <Width>0.82958in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.33501in</Width>
+              <Width>0.53785in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.93568in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2298,6 +2235,54 @@
                         <BottomBorder>
                           <Color>Black</Color>
                           <Width>1pt</Width>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>None</Style>
+                        </LeftBorder>
+                        <RightBorder>
+                          <Style>None</Style>
+                        </RightBorder>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox6">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Taux/Mn</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox6</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Color>Black</Color>
                         </BottomBorder>
                         <LeftBorder>
                           <Style>None</Style>
@@ -2486,6 +2471,41 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="CostRate">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=System.Math.Round(Fields!CostRate.Value, 4)</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>CostRate</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>= IIF(RowNumber("CostDealItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="CurrencyIdDescription">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -2564,6 +2584,7 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -2581,7 +2602,7 @@
         <Top>3.25451in</Top>
         <Left>0.06739in</Left>
         <Height>0.46875in</Height>
-        <Width>7.70566in</Width>
+        <Width>7.71426in</Width>
         <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoDeals.Value</Hidden>
@@ -2618,13 +2639,13 @@
               <Width>1.56382in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.80942in</Width>
+              <Width>1.82126in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.79176in</Width>
+              <Width>0.82512in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.50988in</Width>
+              <Width>1.46172in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2791,7 +2812,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox27</rd:DefaultName>
@@ -3008,7 +3031,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -3092,7 +3115,7 @@
         <Top>5.85416in</Top>
         <Left>0.03998in</Left>
         <Height>0.46875in</Height>
-        <Width>7.73306in</Width>
+        <Width>7.7301in</Width>
         <ZIndex>10</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -3137,13 +3160,13 @@
               <Width>0.52183in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.12164in</Width>
+              <Width>0.16215in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.50319in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.83931in</Width>
+              <Width>1.78723in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -3380,7 +3403,7 @@
         <Top>3.84478in</Top>
         <Left>2.09816in</Left>
         <Height>0.19792in</Height>
-        <Width>5.68237in</Width>
+        <Width>5.6708in</Width>
         <ZIndex>12</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoDeals.Value</Hidden>
@@ -3396,7 +3419,7 @@
         <Top>6.39235in</Top>
         <Left>2.09816in</Left>
         <Height>0.01042in</Height>
-        <Width>5.70003in</Width>
+        <Width>5.67192in</Width>
         <ZIndex>13</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -3424,13 +3447,13 @@
               <Width>0.64842in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.79251in</Width>
+              <Width>0.82512in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.51661in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.98814in</Width>
+              <Width>0.95689in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -3667,7 +3690,7 @@
         <Top>6.44444in</Top>
         <Left>2.09816in</Left>
         <Height>0.19792in</Height>
-        <Width>5.68234in</Width>
+        <Width>5.6837in</Width>
         <ZIndex>14</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoRecurringCharges.Value</Hidden>
@@ -3718,7 +3741,7 @@
     <Height>18.48906cm</Height>
     <Style />
   </Body>
-  <Width>19.81546cm</Width>
+  <Width>19.80108cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
@@ -3941,6 +3964,10 @@
         </Field>
         <Field Name="OriginalAmount">
           <DataField>OriginalAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="CostRate">
+          <DataField>CostRate</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="FromDate">
