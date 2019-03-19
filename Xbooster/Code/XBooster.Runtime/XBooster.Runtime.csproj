@@ -168,6 +168,9 @@
     <Reference Include="Vanrise.Common.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
     </Reference>
@@ -198,6 +201,9 @@
     <Reference Include="Vanrise.GenericData.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.SQL.dll</HintPath>
     </Reference>
@@ -226,6 +232,9 @@
     <Reference Include="Vanrise.GenericData.QueueActivators">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.QueueActivators.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.RDBDataStorage">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.RDBDataStorage.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.SQLDataStorage">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.SQLDataStorage.dll</HintPath>
     </Reference>
@@ -253,6 +262,9 @@
     <Reference Include="Vanrise.Rules.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.SQL.dll</HintPath>
     </Reference>
@@ -271,6 +283,9 @@
     <Reference Include="Vanrise.Runtime.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.SQL.dll</HintPath>
     </Reference>
@@ -288,6 +303,9 @@
     </Reference>
     <Reference Include="Vanrise.Security.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.RDB.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Security.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.SQL.dll</HintPath>
