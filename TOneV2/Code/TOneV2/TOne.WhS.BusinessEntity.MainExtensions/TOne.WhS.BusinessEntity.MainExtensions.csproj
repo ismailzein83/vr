@@ -153,6 +153,7 @@
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodesByZoneMappedValue.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodesByZoneOtherRatesMappedValue.cs" />
     <Compile Include="SaleZoneGroups\AllExceptSaleZoneGroup.cs" />
+    <Compile Include="SaleZoneGroups\SaleZoneGroupMatchingSupplierDeals.cs" />
     <Compile Include="SaleZoneGroups\SelectiveSaleZoneGroup.cs" />
     <Compile Include="SellingNumberPlan\SelectiveSellingNumberPlan.cs" />
     <Compile Include="SupplierGroups\SelectiveSupplierGroup.cs" />
