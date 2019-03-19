@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeInvoicefilterconditionConditiongroup", ["UtilsService", "VRNotificationService", "VRUIUtilsService",'VR_Invoice_FilterConditionService','VR_Invoice_LogicalOperatorEnum',
+app.directive("vrInvoicetypeInvoicefilterconditionConditiongroup", ["UtilsService", "VRNotificationService", "VRUIUtilsService", 'VR_Invoice_FilterConditionService', 'VR_Invoice_LogicalOperatorEnum',
     function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_FilterConditionService, VR_Invoice_LogicalOperatorEnum) {
 
         var directiveDefinitionObject = {
@@ -63,6 +63,7 @@ app.directive("vrInvoicetypeInvoicefilterconditionConditiongroup", ["UtilsServic
                     var invoiceFilterConditionEntity;
                     if (payload != undefined) {
                         invoiceFilterConditionEntity = payload.invoiceFilterConditionEntity;
+                        context = payload.context;
                         if (invoiceFilterConditionEntity != undefined) {
 
                             $scope.scopeModel.selectedLogicalOperator = UtilsService.getItemByVal($scope.scopeModel.logicalOperators, invoiceFilterConditionEntity.LogicalOperator, 'value');
@@ -105,13 +106,13 @@ app.directive("vrInvoicetypeInvoicefilterconditionConditiongroup", ["UtilsServic
                     currentContext = {};
                 return currentContext;
             }
-            
+
             function defineMenuActions() {
                 var defaultMenuActions = [
-                {
-                    name: "Edit",
-                    clicked: editFilterCondition,
-                }];
+                    {
+                        name: "Edit",
+                        clicked: editFilterCondition,
+                    }];
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
