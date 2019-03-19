@@ -141,7 +141,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                         Vanrise.BusinessProcess.Entities.BPTaskAssignee GetTaskAssignee()
                         {
-                            return new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee();
+                            #TASKASSIGNEES#
                         }
 
                         string GetTaskTitle()
@@ -199,6 +199,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             }
 
             nmSpaceCodeBuilder.Replace("#TASKTITLECODE#", this.TaskTitle);
+            this.TaskAssignees.ThrowIfNull("this.TaskAssignees");
+            this.TaskAssignees.Settings.ThrowIfNull("this.TaskAssignees.Settings");
+
+            string taskAssigneesCode = this.TaskAssignees.Settings.GetAssigneesCode();
+            nmSpaceCodeBuilder.Replace("#TASKASSIGNEES#", taskAssigneesCode);
 
             string baseExecutionContextClassName = "AssignTaskActivity_BaseExecutionContext";
             string baseExecutionContextClassCode = CodeGenerationHelper.GenerateBaseExecutionClass(context, baseExecutionContextClassName);
