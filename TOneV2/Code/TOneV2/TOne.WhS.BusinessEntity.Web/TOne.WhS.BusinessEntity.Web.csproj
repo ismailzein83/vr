@@ -449,8 +449,10 @@
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-supplierfaultticket-settings.js" />
     <Content Include="WhS_BusinessEntity\Directives\Period\vr-whs-be-period-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\Templates\PointOfInterconnectCustomObjectSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\Templates\PointOfInterconnectFilterTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\Templates\PointOfInterconnectStaticEditorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\whs-be-pointofinterconnect-trunks-customobjectsettings.js" />
+    <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\whs-be-pointofinterconnect-trunks-filter.js" />
     <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\whs-be-pointofinterconnect-trunks-staticeditor.js" />
     <Content Include="WhS_BusinessEntity\Directives\PortalAccount\Templates\PortalAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PortalAccount\vr-whs-be-portalaccount-grid.js" />

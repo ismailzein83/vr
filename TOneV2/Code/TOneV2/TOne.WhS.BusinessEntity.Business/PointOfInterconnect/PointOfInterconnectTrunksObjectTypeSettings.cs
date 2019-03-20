@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -55,7 +57,20 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return null;
         }
+        public override string SelectorUIControl { get { return "whs-be-pointofinterconnect-trunks-filter"; } }
 
+        public override bool IsMatched(IFieldCustomObjectTypeSettingsContext context)
+        {
+            var filterValue = context.RecordFilter.CastWithValidate<PointOfInterconnectRecordFilter>("context.RecordFilter");
+            var trunk = filterValue.Value;
+            if (trunk == null )
+                return true;
+
+            var fieldValue = context.FieldValue.CastWithValidate<PointOfInterconnect>("context.FieldValue");
+            if (fieldValue.Trunks == null || fieldValue.Trunks.Count == 0)
+                return false;
+            return fieldValue.Trunks.Any(x => x.Trunk.Contains(trunk));
+        }
         public override Type GetNonNullableRuntimeType()
         {
             return typeof(PointOfInterconnect);
@@ -71,4 +86,5 @@ namespace TOne.WhS.BusinessEntity.Business
             return "Point Of Interconnect Trunks";
         }
     }
+
 }
