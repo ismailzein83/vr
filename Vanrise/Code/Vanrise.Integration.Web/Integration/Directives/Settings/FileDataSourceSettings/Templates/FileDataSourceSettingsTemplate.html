@@ -7,7 +7,7 @@
 
                 <vr-validator validate="scopeModel.validateFileDataSourceDefinitions()">
                     <vr-datagrid datasource="scopeModel.fileDataSourceDefinitions"
-                                 on-ready="onFileDataSourceDefinitionGridReady"
+                                 on-ready="scopeModel.onFileDataSourceDefinitionGridReady"
                                  ondeleterow="scopeModel.removeFileDataSourceDefinition"
                                  menuactions="scopeModel.gridMenuActions" hidegridmenu>
                         <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" widthfactor="10"></vr-datagridcolumn>
@@ -23,7 +23,7 @@
 
                 <vr-validator validate="scopeModel.validatePeakTimeRanges()">
                     <vr-datagrid datasource="scopeModel.peakTimeRanges"
-                                 on-ready="onPeakTimeRangeGridReady"
+                                 on-ready="scopeModel.onPeakTimeRangeGridReady"
                                  ondeleterow="scopeModel.removePeakTimeRange" hidegridmenu>
                         <vr-datagridcolumn headertext="'From Time'" widthfactor="10">
                             <vr-datetimepicker value="dataItem.Entity.From" type="time" isrequired="true"></vr-datetimepicker>

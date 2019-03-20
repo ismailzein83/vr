@@ -55,6 +55,11 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
 
         #endregion
 
+        public override bool IsFileDataSourceDefinitionInUse(Guid fileDataSourceDefinitionId)
+        {
+            return this.FileDataSourceDefinitionId.HasValue && this.FileDataSourceDefinitionId.Value == fileDataSourceDefinitionId;
+        }
+
         public enum FileCheckCriteriaEnum { DateAndNameCheck = 0, NameCheck = 1, None = 2 }
 
         public enum CompressionTypes { GZip, Zip }

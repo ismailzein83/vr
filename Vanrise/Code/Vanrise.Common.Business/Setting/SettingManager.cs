@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.Security.Entities;
@@ -126,9 +127,15 @@ namespace Vanrise.Common.Business
             }
             else
             {
-                updateOperationOutput.Message = "Validation Errors occurred.";
+                List<UpdateAdditionalMessage> additionalMessages = null;
+                if (!string.IsNullOrEmpty(context.ErrorMessage))
+                    additionalMessages = new List<UpdateAdditionalMessage>() { new UpdateAdditionalMessage { Result = UpdateOperationResult.Failed, Message = context.ErrorMessage } };
+
                 updateOperationOutput.ShowExactMessage = true;
+                updateOperationOutput.Message = "Validation Errors occurred.";
+                updateOperationOutput.AdditionalMessages = additionalMessages;
             }
+
             return updateOperationOutput;
         }
 

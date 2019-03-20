@@ -5,6 +5,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
 {
     public class SFTPAdapterArgument : BaseAdapterArgument
     {
+
         #region Properties
 
         public VRSshParameters SshParameters { get; set; }
@@ -69,6 +70,11 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
         }
 
         #endregion
+
+        public override bool IsFileDataSourceDefinitionInUse(Guid fileDataSourceDefinitionId)
+        {
+            return this.FileDataSourceDefinitionId.HasValue && this.FileDataSourceDefinitionId.Value == fileDataSourceDefinitionId;
+        }
 
         public enum CompressionTypes { GZip, Zip }
 

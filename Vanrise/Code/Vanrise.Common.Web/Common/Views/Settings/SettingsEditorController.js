@@ -11,6 +11,10 @@
 
         var settingsEditorAPI;
         var settingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var additionalErrorsDirectiveAPI;
+        var additionalErrorsReadyDeferred = UtilsService.createPromiseDeferred();
+
         var context;
         var isViewHistoryMode;
         defineScope();
@@ -32,6 +36,11 @@
                 settingsEditorReadyDeferred.resolve();
             };
 
+            $scope.onAdditionalErrorsDirectiveReady = function (api) {
+                additionalErrorsDirectiveAPI = api;
+                additionalErrorsReadyDeferred.resolve();
+            };
+
             $scope.saveSetting = function () {
                 return updateSetting();
             };
@@ -43,6 +52,7 @@
             $scope.hasUpdateSettingPermission = function () {
                 return VRCommon_SettingsAPIService.HasUpdateSettingsPermission();
             };
+
 
         }
 
@@ -70,19 +80,19 @@
                     $scope.isLoading = false;
                 });
             }
-            
+
 
         }
         function getSettingHistory() {
             return VRCommon_SettingsAPIService.GetSettingHistoryDetailbyHistoryId(context.historyId).then(function (response) {
                 $scope.settingEditor = response.Settings.Editor;
                 settingEntity = response;
-             
+
             });
         }
         function getSetting() {
             return VRCommon_SettingsAPIService.GetSetting(settingsId).then(function (setting) {
-               
+
                 $scope.settingEditor = setting.Settings.Editor;
                 settingEntity = setting;
             });
@@ -90,12 +100,12 @@
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingEditor])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.isLoading = false;
-              });
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
         }
 
         function loadSettingEditor() {
@@ -137,9 +147,8 @@
 
             var settingObject = buildSettingObjFromScope();
 
-            VRCommon_SettingsAPIService.UpdateSetting(settingObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Setting", response, "Name")) {
+            return VRCommon_SettingsAPIService.UpdateSetting(settingObject).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("Setting", response, "Name", additionalErrorsDirectiveAPI)) {
                     if ($scope.onSettingsUpdated != undefined)
                         $scope.onSettingsUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

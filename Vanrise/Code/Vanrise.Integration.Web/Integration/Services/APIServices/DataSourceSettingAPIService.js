@@ -31,13 +31,20 @@
             });
         }
 
+        function IsFileDataSourceDefinitionInUse(fileDataSourceDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, controllerName, "IsFileDataSourceDefinitionInUse"), {
+                fileDataSourceDefinitionId: fileDataSourceDefinitionId
+            });
+        }
+
         return {
 
             GetFileDelayCheckerSettingsConfigs: GetFileDelayCheckerSettingsConfigs,
             GetFileMissingCheckerSettingsConfigs: GetFileMissingCheckerSettingsConfigs,
             GetFileDataSourceDefinitionInfo: GetFileDataSourceDefinitionInfo,
             AddFileDataSourceDefinition: AddFileDataSourceDefinition,
-            GetFileDataSourceDefinition: GetFileDataSourceDefinition
+            GetFileDataSourceDefinition: GetFileDataSourceDefinition,
+            IsFileDataSourceDefinitionInUse: IsFileDataSourceDefinitionInUse
         };
     }
 

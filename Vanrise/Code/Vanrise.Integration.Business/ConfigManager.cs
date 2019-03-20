@@ -10,6 +10,8 @@ namespace Vanrise.Integration.Business
 {
     public class ConfigManager
     {
+
+        #region Public Methods
         public Vanrise.Entities.InsertOperationOutput<FileDataSourceDefinition> AddFileDataSourceDefinition(FileDataSourceDefinition fileDataSourceDefinition)
         {
             DataSourceSettingData dataSourceSettingData = this.GetDataSourceSettingData();
@@ -56,6 +58,29 @@ namespace Vanrise.Integration.Business
             return fileDataSourceSettings.FileDataSourceDefinitions;
         }
 
+        public bool IsFileDataSourceDefinitionInUse(Guid fileDataSourceDefinitionId)
+        {
+            var allDataSources = new DataSourceManager().GetAllDataSources();
+            if (allDataSources == null || allDataSources.Count() == 0)
+                return false;
+
+            foreach (var dataSource in allDataSources)
+            {
+                DataSourceSettings settings = dataSource.Settings;
+                if (settings == null || settings.AdapterArgument == null)
+                    continue;
+
+                if (settings.AdapterArgument.IsFileDataSourceDefinitionInUse(fileDataSourceDefinitionId))
+                    return true;
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private FileDataSourceSettings GetFileDataSourceSettings()
         {
             DataSourceSettingData dataSourceSettingData = GetDataSourceSettingData();
@@ -70,5 +95,7 @@ namespace Vanrise.Integration.Business
             dataSourceSettingData.ThrowIfNull("dataSourceSettingData");
             return dataSourceSettingData;
         }
+
+        #endregion
     }
 }

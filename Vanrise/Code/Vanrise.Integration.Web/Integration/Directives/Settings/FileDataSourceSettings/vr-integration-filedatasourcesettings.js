@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidationService", "VRNotificationService", "VRUIUtilsService", "VR_Integration_DataSourceSettingService",
-    function (UtilsService, VRValidationService, VRNotificationService, VRUIUtilsService, VR_Integration_DataSourceSettingService) {
+app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidationService", "VR_Integration_DataSourceSettingService", "VR_Integration_DataSourceSettingAPIService", "VRNotificationService",
+    function (UtilsService, VRValidationService, VR_Integration_DataSourceSettingService, VR_Integration_DataSourceSettingAPIService, VRNotificationService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -21,6 +21,9 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
             this.initializeController = initializeController;
 
             function initializeController() {
+
+                var fileDataSourceDefinitionGrid;
+
                 $scope.scopeModel = {};
                 $scope.scopeModel.peakTimeRanges = [];
                 $scope.scopeModel.fileDataSourceDefinitions = [];
@@ -44,9 +47,23 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
                     $scope.scopeModel.peakTimeRanges.splice(index, 1);
                 };
 
+                $scope.scopeModel.onFileDataSourceDefinitionGridReady = function (api) {
+                    fileDataSourceDefinitionGrid = api;
+                };
+
                 $scope.scopeModel.removeFileDataSourceDefinition = function (item) {
-                    var index = $scope.scopeModel.fileDataSourceDefinitions.indexOf(item);
-                    $scope.scopeModel.fileDataSourceDefinitions.splice(index, 1);
+                    fileDataSourceDefinitionGrid.showLoader();
+
+                    VR_Integration_DataSourceSettingAPIService.IsFileDataSourceDefinitionInUse(item.Entity.FileDataSourceDefinitionId).then(function (reponse) {
+                        if (!reponse) {
+                            var index = $scope.scopeModel.fileDataSourceDefinitions.indexOf(item);
+                            $scope.scopeModel.fileDataSourceDefinitions.splice(index, 1);
+                        }
+                        else {
+                            VRNotificationService.showPromptWarning("Cannot delete this setting because it's used by one or more data sources");
+                        }
+                        fileDataSourceDefinitionGrid.hideLoader();
+                    });
                 };
 
                 $scope.scopeModel.validatePeakTimeRanges = function () {

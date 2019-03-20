@@ -19,10 +19,10 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments
 
         public string DuplicatedFilesDirectory { get; set; }
 
-        //public override bool IsFileDataSourceDefinitionInUse(Guid fileDataSourceDefinitionId)
-        //{
-        //    return this.FileDataSourceDefinitionId.HasValue && this.FileDataSourceDefinitionId.Value == fileDataSourceDefinitionId;
-        //}
+        public override bool IsFileDataSourceDefinitionInUse(Guid fileDataSourceDefinitionId)
+        {
+            return this.FileDataSourceDefinitionId.HasValue && this.FileDataSourceDefinitionId.Value == fileDataSourceDefinitionId;
+        }
     }
 
     public class FileAdapterState : BaseAdapterState
