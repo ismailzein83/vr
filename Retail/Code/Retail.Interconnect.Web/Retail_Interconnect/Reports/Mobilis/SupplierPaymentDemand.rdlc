@@ -351,7 +351,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=First(Fields!Bank.Value, "SupplierBankDetails")</Value>
+                              <Value>=First(Fields!Bank.Value, "OperatorBankDetails")</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -401,7 +401,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=First(Fields!SwiftCode.Value, "SupplierBankDetails")</Value>
+                              <Value>=First(Fields!SwiftCode.Value, "OperatorBankDetails")</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -451,7 +451,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=First(Fields!AccountNumber.Value, "SupplierBankDetails")</Value>
+                              <Value>=First(Fields!AccountNumber.Value, "OperatorBankDetails")</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -512,7 +512,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=First(Fields!Address.Value, "SupplierBankDetails")</Value>
+                              <Value>=First(Fields!Address.Value, "OperatorBankDetails")</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -867,7 +867,7 @@
             <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>SupplierBankDetails</DataSetName>
+        <DataSetName>OperatorBankDetails</DataSetName>
         <Top>1.52523in</Top>
         <Left>0.39308in</Left>
         <Height>2.37598in</Height>
@@ -2669,7 +2669,7 @@
         <rd:ObjectDataSourceType>Vanrise.Invoice.Entities.RDLCBankDetails, Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
-    <DataSet Name="SupplierBankDetails">
+    <DataSet Name="OperatorBankDetails">
       <Query>
         <DataSourceName>VanriseInvoiceEntities1</DataSourceName>
         <CommandText>/* Local Query */</CommandText>

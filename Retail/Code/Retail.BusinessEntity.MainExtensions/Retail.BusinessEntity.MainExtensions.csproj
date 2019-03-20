@@ -105,9 +105,16 @@
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.MainExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Notification.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -176,6 +183,7 @@
     <Compile Include="FinancialRecurringChargePeriod\MonthlyRecurringCharge.cs" />
     <Compile Include="FinancialRecurringChargePeriod\QuarterlyRecurringCharge.cs" />
     <Compile Include="FinancialRecurringChargePeriod\YearlyRecurringCharge.cs" />
+    <Compile Include="OperatorBankDetailsDataSourceSettings.cs" />
     <Compile Include="PackageTypes\PricingPackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageSettings.cs" />
@@ -269,6 +277,10 @@
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Invoice.Business\Retail.Invoice.Business.csproj">
+      <Project>{6E17F958-24A2-4166-BB5D-7E26031B8AFC}</Project>
+      <Name>Retail.Invoice.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.Voice.Entities\Retail.Voice.Entities.csproj">
       <Project>{d1f8761c-baf9-4302-902a-a9ea86cc8ed6}</Project>
