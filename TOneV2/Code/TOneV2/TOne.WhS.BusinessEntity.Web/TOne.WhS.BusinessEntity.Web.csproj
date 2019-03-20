@@ -400,7 +400,9 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\MappedCell\vr-whs-be-mappedcell-header.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\Templates\BasicSalePriceListTemplateSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-settings-basic.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\Templates\SaleZoneMatchingSupplierDealsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\Templates\SaleZoneTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup-matchingsupplierdeals.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\vr-whs-be-salezonegroup.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SourceMigrationReader\whs-be-sourcemigrationreader.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SourceMigrationReader\Templates\SourceMigrationReader.html" />
