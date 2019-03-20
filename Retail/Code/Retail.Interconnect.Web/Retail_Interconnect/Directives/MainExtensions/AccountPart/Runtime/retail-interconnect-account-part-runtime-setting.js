@@ -19,16 +19,17 @@ app.directive('retailInterconnectAccountPartRuntimeSetting', ["UtilsService", "V
 
         function AccountTypeSettingPartRuntime($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            var selectorAPI;
-            var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var smsServiceTypesSelectorSelectorAPI;
+            var smsServiceTypesSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.isSMSModuleEnabled = Retail_Interconnect_RetailModuleService.isSMSModuleEnabled();
 
                 $scope.scopeModel.onSmsServiceTypesSelectorReady = function (api) {
-                    selectorAPI = api;
-                    selectorReadyPromiseDeferred.resolve();
+                    smsServiceTypesSelectorSelectorAPI = api;
+                    smsServiceTypesSelectorReadyPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -45,17 +46,26 @@ app.directive('retailInterconnectAccountPartRuntimeSetting', ["UtilsService", "V
                             $scope.scopeModel.representASwitch = partSettings.RepresentASwitch;
                             if ($scope.scopeModel.isSMSModuleEnabled)
                                 promises.push(loadSelector(partSettings))
-                        }
+                        };
+                    };
 
-                    }
                     function loadSelector(payloadEntity) {
                         var loadpromise = UtilsService.createPromiseDeferred();
+                        var sMSServiceTypesIds = [];
+                        var sMSServiceTypes = payloadEntity.SMSServiceTypes;
+
+                        if (sMSServiceTypes != undefined)
+                            for (var i = 0; i < sMSServiceTypes.length; i++) {
+                                sMSServiceTypesIds.push(sMSServiceTypes[i].Id);
+                            };
+
                         var selectorPayload = {
-                            SMSServiceTypeIds: payloadEntity.SMSServiceTypeIds
+                            SMSServiceTypeIds: sMSServiceTypesIds
                         };
-                        selectorReadyPromiseDeferred.promise
+
+                        smsServiceTypesSelectorReadyPromiseDeferred.promise
                             .then(function () {
-                                VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, loadpromise);
+                                VRUIUtilsService.callDirectiveLoad(smsServiceTypesSelectorSelectorAPI, selectorPayload, loadpromise);
                             });
 
                         return loadpromise.promise;
@@ -65,11 +75,21 @@ app.directive('retailInterconnectAccountPartRuntimeSetting', ["UtilsService", "V
                 };
 
                 api.getData = function () {
-                    var sMSServiceTypeIdsObj = selectorAPI != undefined ? selectorAPI.getData() : undefined;
+                    var sMSServiceTypes = [];
+                    var sMSServiceTypeIdsObj = smsServiceTypesSelectorSelectorAPI != undefined ? smsServiceTypesSelectorSelectorAPI.getData() : undefined;
+
+                    if (sMSServiceTypeIdsObj != undefined) {
+                        var sMSServiceTypeIds = sMSServiceTypeIdsObj.SMSServiceTypeIds;
+                        if (sMSServiceTypeIds != undefined)
+                            for (var i = 0; i < sMSServiceTypeIds.length; i++) {
+                                sMSServiceTypes.push({ Id: sMSServiceTypeIds[i] });
+                            };
+                    };
+
                     return {
                         $type: 'Retail.Interconnect.Business.AccountPartInterconnectSetting,Retail.Interconnect.Business',
                         RepresentASwitch: $scope.scopeModel.representASwitch,
-                        SMSServiceTypeIds: sMSServiceTypeIdsObj != undefined ? sMSServiceTypeIdsObj.SMSServiceTypeIds : undefined
+                        SMSServiceTypes: sMSServiceTypes
                     };
                 };
 

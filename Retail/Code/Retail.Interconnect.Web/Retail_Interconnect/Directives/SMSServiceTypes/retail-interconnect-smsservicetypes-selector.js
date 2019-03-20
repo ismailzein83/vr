@@ -27,7 +27,6 @@
         function SmsservicetypesSelectorDirective(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
-            var rowIndex = 0;
             var selectorAPI;
             var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 

@@ -14,9 +14,9 @@ namespace Retail.Interconnect.Business
         static Guid businessEntityDefinitionId = new Guid("D5153143-A6EF-44D1-A6F8-FEA6B399D853");
 
         #region Public Methods
-        public String GetSMSServiceTypesByIds(List<int> sMSServiceTypeIds)
+        public String GetSMSServiceTypesConcatenatedSymbolsByIds(IEnumerable<int> sMSServiceTypeIds)
         {
-            if (sMSServiceTypeIds == null || sMSServiceTypeIds.Count == 0)
+            if (sMSServiceTypeIds == null || !sMSServiceTypeIds.Any())
                 return null;
 
             return string.Join(",", this.GetSMSServiceTypesEntities(sMSServiceTypeIds).Select(x => x.Symbol));
@@ -55,11 +55,11 @@ namespace Retail.Interconnect.Business
         {
             return GetCachedSMSServicesType().GetRecord(smsServiceTypeId);
         }
-        private List<SMSServiceType> GetSMSServiceTypesEntities(List<int> sMSServiceTypeIds)
+        private List<SMSServiceType> GetSMSServiceTypesEntities(IEnumerable<int> sMSServiceTypeIds)
         {
             List<SMSServiceType> smsServiceTypes = new List<SMSServiceType>();
 
-            if (sMSServiceTypeIds != null && sMSServiceTypeIds.Count > 0)
+            if (sMSServiceTypeIds != null && sMSServiceTypeIds.Any())
             {
                 foreach (var sMSServiceTypeId in sMSServiceTypeIds)
                 {
