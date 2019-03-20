@@ -18,9 +18,26 @@ namespace Retail.Interconnect.Business
         {
             if (sMSServiceTypeIds == null || !sMSServiceTypeIds.Any())
                 return null;
-
-            return string.Join(",", this.GetSMSServiceTypesEntities(sMSServiceTypeIds).Select(x => x.Symbol));
+            var smsServiceTypes = GetSMSServiceTypesByIds(sMSServiceTypeIds);
+            if (smsServiceTypes == null)
+                return null;
+            return string.Join(",", smsServiceTypes.Select(x => x.Symbol));
         }
+        public SMSServiceType GetSMSServiceTypeById(int smsServiceTypeId)
+        {
+            return GetCachedSMSServicesType().GetRecord(smsServiceTypeId);
+        }
+        public IEnumerable<SMSServiceType> GetSMSServiceTypesByIds(IEnumerable<int> sMSServiceTypeIds)
+        {
+            if (sMSServiceTypeIds != null && sMSServiceTypeIds.Any())
+                return null;
+            var smsServiceTypes = GetCachedSMSServicesType();
+            if (smsServiceTypes == null)
+                return null;
+
+            return smsServiceTypes.FindAllRecords(x => sMSServiceTypeIds.Contains(x.SMSServiceTypeId));
+        }
+
         #endregion
 
         #region Private Methods
@@ -51,28 +68,8 @@ namespace Retail.Interconnect.Business
                 return result;
             });
         }
-        private SMSServiceType GetSMSServiceTypeById(int smsServiceTypeId)
-        {
-            return GetCachedSMSServicesType().GetRecord(smsServiceTypeId);
-        }
-        private List<SMSServiceType> GetSMSServiceTypesEntities(IEnumerable<int> sMSServiceTypeIds)
-        {
-            List<SMSServiceType> smsServiceTypes = new List<SMSServiceType>();
-
-            if (sMSServiceTypeIds != null && sMSServiceTypeIds.Any())
-            {
-                foreach (var sMSServiceTypeId in sMSServiceTypeIds)
-                {
-                    SMSServiceType smsServiceType = this.GetSMSServiceTypeById(sMSServiceTypeId);
-                    if (smsServiceType != null)
-                        smsServiceTypes.Add(smsServiceType);
-                }
-            }
-            return smsServiceTypes;
-        }
 
         #endregion
-
 
         #region Mappers
         #endregion

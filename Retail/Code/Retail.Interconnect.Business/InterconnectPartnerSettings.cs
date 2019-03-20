@@ -189,13 +189,13 @@ namespace Retail.Interconnect.Business
                     }
 
                     AccountPart accountPart;
-                    accountBEManager.TryGetAccountPart(this._acountBEDefinitionId, financialAccountData.Account.AccountId, AccountPartInterconnectSetting._ConfigId, false, out accountPart);
-
-                    if (accountPart != null && accountPart.Settings != null)
+                    if (accountBEManager.TryGetAccountPart(this._acountBEDefinitionId, financialAccountData.Account.AccountId, AccountPartInterconnectSetting._ConfigId, false, out accountPart))
                     {
                         var accountPartSettings = accountPart.Settings as AccountPartInterconnectSetting;
-                        if (accountPartSettings != null)
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.SMSServiceTypes, new SMSServiceTypeManager().GetSMSServiceTypesConcatenatedSymbolsByIds(accountPartSettings.SMSServiceTypes.Select(sMSServiceType => sMSServiceType.SMSServiceTypeId)), true);
+                        if (accountPartSettings != null && accountPartSettings.SMSServiceTypes != null)
+                        {
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.SMSServiceTypes, new SMSServiceTypeManager().GetSMSServiceTypesConcatenatedSymbolsByIds(accountPartSettings.SMSServiceTypes.MapRecords(sMSServiceType => sMSServiceType.SMSServiceTypeId)), true);
+                        }
                     }
 
                     return rdlcReportParameters;
