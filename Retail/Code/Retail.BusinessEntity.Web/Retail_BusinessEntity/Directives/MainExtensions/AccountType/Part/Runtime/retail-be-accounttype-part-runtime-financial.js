@@ -26,6 +26,9 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
             var productSelectorAPI;
             var productSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var operatorBanksAPI;
+            var operatorBanksReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -36,6 +39,11 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                 $scope.scopeModel.onProductDirectiveReady = function (api) {
                     productSelectorAPI = api;
                     productSelectorReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onOperatorBanksReady = function (api) {
+                    operatorBanksAPI = api;
+                    operatorBanksReadyPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -57,44 +65,65 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
 
                         if (payload.partDefinition != undefined && payload.partDefinition.Settings != undefined) {
                             $scope.scopeModel.hideProductSelector = payload.partDefinition.Settings.HideProductSelector;
+                            $scope.scopeModel.showOperatorBanks = payload.partDefinition.Settings.ShowOperatorBanks;
                         }
                     }
 
                     //Loading Currency Selector
-                    var currencySelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    currencySelectorReadyPromiseDeferred.promise.then(function () {
-                        var currencySelectorPayload = partSettings != undefined ? { selectedIds: partSettings.CurrencyId } : undefined;
-                        VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencySelectorLoadPromiseDeferred);
-                    });
-                    promises.push(currencySelectorLoadPromiseDeferred.promise);
+                    function loadCurrencySelector() {
+                        var currencySelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        currencySelectorReadyPromiseDeferred.promise.then(function () {
+                            var currencySelectorPayload = partSettings != undefined ? { selectedIds: partSettings.CurrencyId } : undefined;
+                            VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencySelectorLoadPromiseDeferred);
+                        });
+                        return currencySelectorLoadPromiseDeferred.promise;
+                    }
+                
 
                     //Loading Product Selector
-                    var productSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    productSelectorReadyPromiseDeferred.promise.then(function () {
-                        var productSelectorPayload = {
-                            filter: {
-                                Filters: [{
-                                    $type: "Retail.BusinessEntity.Business.AccountDefinitionProductFilter, Retail.BusinessEntity.Business",
-                                    AccountBEDefinitionId: accountBEDefinitionId,
-                                    AccountId: accountId
-                                }]
+                    function loadProductSelector() {
+                        var productSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        productSelectorReadyPromiseDeferred.promise.then(function () {
+                            var productSelectorPayload = {
+                                filter: {
+                                    Filters: [{
+                                        $type: "Retail.BusinessEntity.Business.AccountDefinitionProductFilter, Retail.BusinessEntity.Business",
+                                        AccountBEDefinitionId: accountBEDefinitionId,
+                                        AccountId: accountId
+                                    }]
+                                }
+                            };
+                            if (partSettings != undefined) {
+                                productSelectorPayload.selectedIds = partSettings.ProductId;
                             }
-                        };
-                        if (partSettings != undefined) {
-                            productSelectorPayload.selectedIds = partSettings.ProductId;
-                        }
-                        VRUIUtilsService.callDirectiveLoad(productSelectorAPI, productSelectorPayload, productSelectorLoadPromiseDeferred);
-                    });
-                    promises.push(productSelectorLoadPromiseDeferred.promise);
+                            VRUIUtilsService.callDirectiveLoad(productSelectorAPI, productSelectorPayload, productSelectorLoadPromiseDeferred);
+                        });
+                        return productSelectorLoadPromiseDeferred.promise;
+                    }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    function loadOperatorBanks() {
+                        var operatorBanksLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        operatorBanksReadyPromiseDeferred.promise.then(function () {
+                            var operatorBanksPayload = {};
+                            if (partSettings != undefined) {
+                                operatorBanksPayload.BankDetails = partSettings.OperatorBanks;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(operatorBanksAPI, operatorBanksPayload, operatorBanksLoadPromiseDeferred);
+                        });
+                        return operatorBanksLoadPromiseDeferred.promise;
+                    }
+                    var rootPromiseNode = {
+                        promises: [loadCurrencySelector(), loadProductSelector(), loadOperatorBanks()]
+                    };
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
                     return {
                         $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancial,Retail.BusinessEntity.MainExtensions',
                         CurrencyId: currencySelectorAPI.getSelectedIds(),
-                        ProductId: productSelectorAPI.getSelectedIds()
+                        ProductId: productSelectorAPI.getSelectedIds(),
+                        OperatorBanks: operatorBanksAPI.getData()
                     };
                 };
 

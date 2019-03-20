@@ -1,8 +1,8 @@
 ﻿
 <vr-tab header="'Financial'">
     <vr-row removeline>
-        <vr-common-currency-selector on-ready="scopeModel.onCurrencyDirectiveReady" 
-                                     selectedvalues="scopeModel.currency" 
+        <vr-common-currency-selector on-ready="scopeModel.onCurrencyDirectiveReady"
+                                     selectedvalues="scopeModel.currency"
                                      normal-col-num="4" isrequired="true">
         </vr-common-currency-selector>
         <span ng-show="!scopeModel.hideProductSelector">
@@ -12,4 +12,11 @@
             </retail-be-product-selector>
         </span>
     </vr-row>
+    <span ng-show="scopeModel.showOperatorBanks">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-common-bankdetailssettings-grid on-ready="scopeModel.onOperatorBanksReady"></vr-common-bankdetailssettings-grid>
+            </vr-columns>
+        </vr-row>
+    </span>
 </vr-tab>

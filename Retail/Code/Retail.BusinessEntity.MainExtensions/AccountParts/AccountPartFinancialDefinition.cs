@@ -17,6 +17,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public bool HideProductSelector { get; set; }
 
+        public bool ShowOperatorBanks { get; set; }
+
         static CurrencyManager s_currencyManager = new CurrencyManager();
         static ProductManager s_productManager = new ProductManager();
 

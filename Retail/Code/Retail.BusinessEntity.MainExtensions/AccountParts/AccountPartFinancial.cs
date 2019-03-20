@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
@@ -14,6 +15,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public int CurrencyId { get; set; }
         public int ProductId { get; set; }
+        public List<BankDetail> OperatorBanks { get; set; }
 
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
