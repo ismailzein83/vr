@@ -107,6 +107,7 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Settings]);
 
 
+DELETE FROM [genericdata].[DataRecordType] WHERE ID IN ('E5D60AE6-EA24-4EF0-A70A-7C74CC5FBDBB', 'AF59F7AE-2661-4706-9755-F4BB4B9555EA')--delete RA_INTL_OperatorDeclaration and RA_ICX_OperatorDeclaration
 --[genericdata].[DataRecordType]--------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
