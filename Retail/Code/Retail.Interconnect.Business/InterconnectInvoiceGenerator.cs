@@ -98,7 +98,7 @@ namespace Retail.Interconnect.Business
 
             List<FinancialRecurringChargeItem> evaluatedRecurringCharges = _recurringChargeManager.GetEvaluatedRecurringCharges(financialAccountData.FinancialAccountId, fromDate, toDate, context.IssueDate, classification);
 
-            if (voiceItemSetNames.Count == 0 && smsItemSetNames.Count == 0 && (evaluatedRecurringCharges == null || evaluatedRecurringCharges.Count == 0))
+            if ((voiceItemSetNames==null || voiceItemSetNames.Count == 0) && (smsItemSetNames==null || smsItemSetNames.Count == 0) && (evaluatedRecurringCharges == null || evaluatedRecurringCharges.Count == 0))
             {
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                 return;
@@ -386,7 +386,7 @@ namespace Retail.Interconnect.Business
         }
         private InterconnectInvoiceByCurrencyItemDetails CurrencyItemSetNameMapper(AnalyticRecord analyticRecord, IEnumerable<VRTaxItemDetail> taxItemDetails, bool fillVoiceData)
         {
-            var netValue = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "Amount_OriginalCurrency");
+            var netValue = fillVoiceData ? _invoiceGenerationManager.GetMeasureValue<decimal>(analyticRecord, "Amount_OrigCurr") : _invoiceGenerationManager.GetMeasureValue<decimal>(analyticRecord, "Amount_OriginalCurrency");
             if (netValue != 0)
             {
                 var month = _invoiceGenerationManager.GetDimensionValue<DateTime>(analyticRecord, 1);
@@ -395,7 +395,6 @@ namespace Retail.Interconnect.Business
                     CurrencyId = _invoiceGenerationManager.GetDimensionValue<int>(analyticRecord, 0),
                     FromDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodFrom"),
                     ToDate = _invoiceGenerationManager.GetMeasureValue<DateTime>(analyticRecord, "BillingPeriodTo"),
-                    Duration = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "TotalBillingDuration"),
                     Month = month.ToString("MMMM - yyyy")
                 };
                 if (fillVoiceData)
@@ -403,6 +402,7 @@ namespace Retail.Interconnect.Business
                     invoiceByCurrencyItemDetails.Amount = netValue;
                     invoiceByCurrencyItemDetails.AmountWithTaxes = netValue;
                     invoiceByCurrencyItemDetails.NumberOfCalls = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "CountCDRs");
+                    invoiceByCurrencyItemDetails.Duration = _invoiceGenerationManager.GetMeasureValue<decimal>(analyticRecord, "TotalBillingDuration");
                 }
                 else
                 {
@@ -444,7 +444,7 @@ namespace Retail.Interconnect.Business
                     if (invoiceByCurrencyItem != null)
                     {
                         invoiceByCurrencyItem.TotalSMSAmount += item.TotalSMSAmount;
-                        invoiceByCurrencyItem.TotalFullAmount += item.SMSAmount;
+                        invoiceByCurrencyItem.TotalFullAmount += item.SMSAmountWithTaxes;
                     }
                     else
                     {
@@ -456,10 +456,9 @@ namespace Retail.Interconnect.Business
                             NumberOfSMS = item.NumberOfSMS,
                             CurrencyId = item.CurrencyId,
                             Month = item.Month,
-                            TotalFullAmount = item.SMSAmount,
+                            TotalFullAmount = item.SMSAmountWithTaxes
                         });
                     }
-
                 }
             }
         }
