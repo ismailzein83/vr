@@ -239,7 +239,7 @@ namespace TOne.WhS.Invoice.Business
                     if (invoiceReportFile != null)
                     {
                         var reportName = invoiceReportFileManager.GetInvoiceReportFileName(invoiceReportFile.InvoiceReportFileId);
-                        return string.Format("Module/WhS_Invoice/Reports/{0}.rdlc", reportName);
+                        return string.Format("WhS_Invoice/Reports/{0}.rdlc", reportName);
                     }
                 }
             }
@@ -253,7 +253,7 @@ namespace TOne.WhS.Invoice.Business
                     if (invoiceReportFile != null)
                     {
                         var reportName = invoiceReportFileManager.GetInvoiceReportFileName(invoiceReportFile.InvoiceReportFileId);
-                        return string.Format("Module/WhS_Invoice/Reports/{0}.rdlc", reportName);
+                        return string.Format("WhS_Invoice/Reports/{0}.rdlc", reportName);
                     }
                 }
             }
