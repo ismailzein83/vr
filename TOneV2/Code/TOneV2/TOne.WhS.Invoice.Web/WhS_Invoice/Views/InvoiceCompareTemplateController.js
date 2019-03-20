@@ -151,7 +151,7 @@
                             var smsListPayload = {
                                 context: getContext(),
                                 fieldMappings: [
-                                    { FieldName: "MobileNetwork", FieldTitle: "Mobile Network", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
+                                    { FieldName: "MobileNetwork", FieldTitle: "Destination Mobile Network", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
                                     { FieldName: "FromDate", FieldTitle: "From", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
                                     { FieldName: "ToDate", FieldTitle: "Till", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
                                     { FieldName: "NumberOfSMSs", FieldTitle: "SMS", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Int.value },
@@ -538,7 +538,7 @@
                 smsListPayload = {
                     context: getContext(),
                     fieldMappings: [
-                        { FieldName: "MobileNetwork", FieldTitle: "Mobile Network", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
+                        { FieldName: "MobileNetwork", FieldTitle: "Destination Mobile Network", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
                         { FieldName: "FromDate", FieldTitle: "From", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
                         { FieldName: "ToDate", FieldTitle: "Till", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
                         { FieldName: "NumberOfSMSs", FieldTitle: "SMS", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Int.value },

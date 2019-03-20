@@ -1496,7 +1496,7 @@ namespace TOne.WhS.Invoice.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                    Title = "Mobile Network",
+                    Title = "Destination Mobile Network",
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
