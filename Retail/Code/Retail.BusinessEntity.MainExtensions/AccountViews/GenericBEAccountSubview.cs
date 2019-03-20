@@ -15,8 +15,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
             get { return new Guid("E3148386-1049-416A-876F-19C6C42B30A0"); }
         }
 
-        public DataRecordField BusinessEntityDefinitionId { get; set; }
-        public DataRecordField AccountIdMappingField { get; set; }
+        public string BusinessEntityDefinitionId { get; set; }
+        public string AccountIdMappingField { get; set; }
         public string AccountBEDefinitionMappingField { get; set; }
         public override string RuntimeEditor
         {
