@@ -17,12 +17,4 @@
         </vr-section>
     </vr-tab>
 </vr-tabs>
-<vr-row ng-if="validationMessages != undefined && validationMessages.length > 0">
-    <vr-columns width="fullrow">
-        <label class="alert alert-danger" vr-alert>
-            <ul>
-                <li ng-repeat="message in validationMessages">{{message}}</li>
-            </ul>
-        </label>
-    </vr-columns>
-</vr-row>
+<vr-common-additionalerrors on-ready="scopeModel.onAdditionalErrorsDirectiveReady"></vr-common-additionalerrors>

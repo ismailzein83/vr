@@ -218,10 +218,8 @@
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseInfo.cs" />
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseQuery.cs" />
     <Compile Include="SwitchReleaseCause\UploadSwitchReleaseCauseLog.cs" />
-    <Compile Include="Switch\InsertSwitchOperationOutput.cs" />
     <Compile Include="Switch\ISwitchFilter.cs" />
     <Compile Include="Switch\SwitchFilter.cs" />
-    <Compile Include="Switch\UpdateSwitchOperationOutput.cs" />
     <Compile Include="TechnicalZone.cs" />
     <Compile Include="TechnicalNumberPlanSettings.cs" />
     <Compile Include="TechnicalCodePrefix.cs" />
