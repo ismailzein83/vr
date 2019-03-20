@@ -15,6 +15,6 @@ namespace Retail.Interconnect.Business
 
     public class SMSServiceTypeEntity
     {
-        public int Id { get; set; }
+        public int SMSServiceTypeId { get; set; }
     }
 }

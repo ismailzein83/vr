@@ -56,7 +56,7 @@ app.directive('retailInterconnectAccountPartRuntimeSetting', ["UtilsService", "V
 
                         if (sMSServiceTypes != undefined)
                             for (var i = 0; i < sMSServiceTypes.length; i++) {
-                                sMSServiceTypesIds.push(sMSServiceTypes[i].Id);
+                                sMSServiceTypesIds.push(sMSServiceTypes[i].SMSServiceTypeId);
                             };
 
                         var selectorPayload = {
@@ -82,7 +82,7 @@ app.directive('retailInterconnectAccountPartRuntimeSetting', ["UtilsService", "V
                         var sMSServiceTypeIds = sMSServiceTypeIdsObj.SMSServiceTypeIds;
                         if (sMSServiceTypeIds != undefined)
                             for (var i = 0; i < sMSServiceTypeIds.length; i++) {
-                                sMSServiceTypes.push({ Id: sMSServiceTypeIds[i] });
+                                sMSServiceTypes.push({ SMSServiceTypeId: sMSServiceTypeIds[i] });
                             };
                     };
 

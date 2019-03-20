@@ -195,7 +195,7 @@ namespace Retail.Interconnect.Business
                     {
                         var accountPartSettings = accountPart.Settings as AccountPartInterconnectSetting;
                         if (accountPartSettings != null)
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.SMSServiceTypes, new SMSServiceTypeManager().GetSMSServiceTypesConcatenatedSymbolsByIds(accountPartSettings.SMSServiceTypes.Select(sMSServiceType => sMSServiceType.Id)), true);
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.SMSServiceTypes, new SMSServiceTypeManager().GetSMSServiceTypesConcatenatedSymbolsByIds(accountPartSettings.SMSServiceTypes.Select(sMSServiceType => sMSServiceType.SMSServiceTypeId)), true);
                     }
 
                     return rdlcReportParameters;
