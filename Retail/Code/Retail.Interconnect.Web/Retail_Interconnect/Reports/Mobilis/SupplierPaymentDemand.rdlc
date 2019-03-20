@@ -640,7 +640,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=iif(Parameters!NoVoice.Value,"","Voice")+ iif(Parameters!NoSMS.Value OR Parameters!NoVoice.Value,""," , ") + iif(Parameters!NoSMS.Value,"","SMS")</Value>
+                              <Value>=iif(Parameters!NoVoice.Value,"","Voice")+ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value,"",Parameters!SMSServiceTypes.Value)</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -859,7 +859,7 @@
             <TablixMember />
             <TablixMember>
               <Visibility>
-                <Hidden>=iiF(iif(Parameters!NoVoice.Value,False,True)Or iif( iif(Parameters!NoSMS.Value,False,True),true,false),false,True)</Hidden>
+                <Hidden>=iiF(iif(Parameters!NoVoice.Value,False,True)Or iif( iif(Len(Parameters!SMSServiceTypes.Value) = 0,false,true) And iif(Parameters!NoSMS.Value,False,True),true,false),false,True)</Hidden>
               </Visibility>
             </TablixMember>
             <TablixMember />
@@ -1022,7 +1022,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=iif(iiF(iif(Parameters!NoVoice.Value,False,True)Or iif( iif(Parameters!NoSMS.Value,False,True),true,false),false,True),"","Rubrique Budgétaire:  ")</Value>
+                              <Value>=iif(iiF(iif(Parameters!NoVoice.Value,False,True)Or iif( iif(Len(Parameters!SMSServiceTypes.Value) = 0,false,true) And iif(Parameters!NoSMS.Value,False,True),true,false),false,True),"","Rubrique Budgétaire:  ")</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -1044,7 +1044,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=iif(Parameters!NoVoice.Value,"","Voice")+ iif(Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(Parameters!NoSMS.Value,"","SMS")</Value>
+                              <Value>=iif(Parameters!NoVoice.Value,"","Voice")+ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value,"",Parameters!SMSServiceTypes.Value)</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>

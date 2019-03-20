@@ -1,6 +1,9 @@
 ﻿<vr-tab header="'Setting'">
     <vr-row removeline>
-        <vr-columns width="1/2row">
+        <vr-columns colnum="4" ng-if="scopeModel.isSMSModuleEnabled">
+            <retail-interconnect-smsservicetypes-selector on-ready="scopeModel.onSmsServiceTypesSelectorReady"> </retail-interconnect-smsservicetypes-selector>
+        </vr-columns>
+        <vr-columns colnum="3">
             <vr-switch value="scopeModel.representASwitch" label="Represent A Switch"></vr-switch>
         </vr-columns>
     </vr-row>

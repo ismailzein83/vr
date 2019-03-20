@@ -33,9 +33,10 @@ namespace Retail.Interconnect.Business
         AccountNumber = 14,
         Attn = 15,
         AssignedNumber = 16,
-		BillingCompanyEmail=17,
-		BillingCompanyPhone = 18
-	}
+        BillingCompanyEmail = 17,
+        BillingCompanyPhone = 18,
+        SMSServiceTypes = 19
+    }
 
     public class InterconnectPartnerSettings : InvoicePartnerManager
     {
@@ -89,7 +90,7 @@ namespace Retail.Interconnect.Business
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
             FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-			var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
             switch (context.InfoType)
             {
                 case "Account":
@@ -98,7 +99,7 @@ namespace Retail.Interconnect.Business
                     Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
                     CurrencyManager currencyManager = new CurrencyManager();
                     AccountBEManager accountBEManager = new AccountBEManager();
-                    CompanySetting companySetting = accountBEManager.GetCompanySetting(this._acountBEDefinitionId,financialAccountData.Account.AccountId);
+                    CompanySetting companySetting = accountBEManager.GetCompanySetting(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
                     string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
                     int currencyId = accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
                     string currencySymbol = currencyManager.GetCurrencySymbol(currencyId);
@@ -107,7 +108,7 @@ namespace Retail.Interconnect.Business
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
                     CityManager cityManager = new CityManager();
 
-					IAccountProfile accountProfile;
+                    IAccountProfile accountProfile;
                     string address = null;
                     if (accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountProfile))
                     {
@@ -136,18 +137,18 @@ namespace Retail.Interconnect.Business
                             }
                             if (companyProfile.Contacts != null)
                             {
-								AccountCompanyContact billingCompanyContact;
-								if (companyProfile.Contacts.TryGetValue("Billing", out billingCompanyContact))
-								{
-									AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, billingCompanyContact.Email, true);
-									if (billingCompanyContact.PhoneNumbers != null && billingCompanyContact.PhoneNumbers.Count > 0)
-									{
-										string accountNumbers = string.Join(",", billingCompanyContact.PhoneNumbers);
-										AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountNumber, accountNumbers, true);
-									}
-								}
+                                AccountCompanyContact billingCompanyContact;
+                                if (companyProfile.Contacts.TryGetValue("Billing", out billingCompanyContact))
+                                {
+                                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, billingCompanyContact.Email, true);
+                                    if (billingCompanyContact.PhoneNumbers != null && billingCompanyContact.PhoneNumbers.Count > 0)
+                                    {
+                                        string accountNumbers = string.Join(",", billingCompanyContact.PhoneNumbers);
+                                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountNumber, accountNumbers, true);
+                                    }
+                                }
 
-								AccountCompanyContact accountCompanyContact;
+                                AccountCompanyContact accountCompanyContact;
                                 if (companyProfile.Contacts.TryGetValue("Main", out accountCompanyContact))
                                 {
 
@@ -163,17 +164,17 @@ namespace Retail.Interconnect.Business
                                     }
                                 }
                             }
-						}
-					}
+                        }
+                    }
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, address, true);
                     if (companySetting != null)
                     {
-						CompanyContact companyContact;
-						if (companySetting.Contacts.TryGetValue("Billing", out companyContact))
-						{
-							AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyPhone, companyContact.Phone, true);
-						}
-						VRFileManager fileManager = new VRFileManager();
+                        CompanyContact companyContact;
+                        if (companySetting.Contacts.TryGetValue("Billing", out companyContact))
+                        {
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyPhone, companyContact.Phone, true);
+                        }
+                        VRFileManager fileManager = new VRFileManager();
                         var logo = fileManager.GetFile(companySetting.CompanyLogo);
                         if (logo != null)
                         {
@@ -183,10 +184,21 @@ namespace Retail.Interconnect.Business
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegAddress, companySetting.RegistrationAddress, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.CompanyName, companySetting.CompanyName, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
-						AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyEmail, companySetting.BillingEmails, true);
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyEmail, companySetting.BillingEmails, true);
 
-					}
-				return rdlcReportParameters;
+                    }
+
+                    AccountPart accountPart;
+                    accountBEManager.TryGetAccountPart(this._acountBEDefinitionId, financialAccountData.Account.AccountId, AccountPartInterconnectSetting._ConfigId, false, out accountPart);
+
+                    if (accountPart != null && accountPart.Settings != null)
+                    {
+                        var accountPartSettings = accountPart.Settings as AccountPartInterconnectSetting;
+                        if (accountPartSettings != null)
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.SMSServiceTypes, new SMSServiceTypeManager().GetSMSServiceTypesByIds(accountPartSettings.SMSServiceTypeIds), true);
+                    }
+
+                    return rdlcReportParameters;
             }
             return null;
         }

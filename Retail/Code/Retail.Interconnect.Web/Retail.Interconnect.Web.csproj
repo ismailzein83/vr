@@ -181,6 +181,8 @@
     <Content Include="Retail_Interconnect\Directives\MainExtensions\AccountPart\Runtime\Templates\AccountTypeSettingPartRuntimeTemplate.html" />
     <Content Include="Retail_Interconnect\Directives\retail-interconnect-account-invoice-selector.js" />
     <Content Include="Retail_Interconnect\Directives\retail-invoice-invoicetype-interconnectinvoicesettings.js" />
+    <Content Include="Retail_Interconnect\Directives\SMSServiceTypes\Templates\SMSServiceTypesSelectorTemplate.html" />
+    <Content Include="Retail_Interconnect\Directives\SMSServiceTypes\retail-interconnect-smsservicetypes-selector.js" />
     <Content Include="Retail_Interconnect\Directives\Templates\InterconnectInvoiceSettingsTemplate.html" />
     <Content Include="Retail_Interconnect\ModuleInitialization.js" />
     <Content Include="Retail_Interconnect\Reports\CompareInvoiceReport.aspx" />

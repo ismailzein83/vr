@@ -14,6 +14,13 @@ namespace Retail.Interconnect.Business
         static Guid businessEntityDefinitionId = new Guid("D5153143-A6EF-44D1-A6F8-FEA6B399D853");
 
         #region Public Methods
+        public String GetSMSServiceTypesByIds(List<int> sMSServiceTypeIds)
+        {
+            if (sMSServiceTypeIds == null || sMSServiceTypeIds.Count == 0)
+                return null;
+
+            return string.Join(",", this.GetSMSServiceTypesEntities(sMSServiceTypeIds).Select(x => x.Symbol));
+        }
         #endregion
 
         #region Private Methods
@@ -44,6 +51,26 @@ namespace Retail.Interconnect.Business
                 return result;
             });
         }
+        private SMSServiceType GetSMSServiceTypeById(int smsServiceTypeId)
+        {
+            return GetCachedSMSServicesType().GetRecord(smsServiceTypeId);
+        }
+        private List<SMSServiceType> GetSMSServiceTypesEntities(List<int> sMSServiceTypeIds)
+        {
+            List<SMSServiceType> smsServiceTypes = new List<SMSServiceType>();
+
+            if (sMSServiceTypeIds != null && sMSServiceTypeIds.Count > 0)
+            {
+                foreach (var sMSServiceTypeId in sMSServiceTypeIds)
+                {
+                    SMSServiceType smsServiceType = this.GetSMSServiceTypeById(sMSServiceTypeId);
+                    if (smsServiceType != null)
+                        smsServiceTypes.Add(smsServiceType);
+                }
+            }
+            return smsServiceTypes;
+        }
+
         #endregion
 
 
