@@ -26,7 +26,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
         public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
         {
             FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            return financialAccountManager.DoesUserHaveViewAccess(context.AccountBEDefinitionId);
+            return financialAccountManager.DoesUserHaveViewAccess(context.AccountBEDefinitionId, context.UserId);
         }
     }
 }

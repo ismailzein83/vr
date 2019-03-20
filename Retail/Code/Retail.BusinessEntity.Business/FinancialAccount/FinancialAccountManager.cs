@@ -250,6 +250,10 @@ namespace Retail.BusinessEntity.Business
         public bool DoesUserHaveViewAccess(Guid accountBeDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveViewAccess(accountBeDefinitionId, userId);
+        }
+        public bool DoesUserHaveViewAccess(Guid accountBeDefinitionId, int userId)
+        {
             return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewFinancialAccountRequiredPermission);
         }
         public bool DoesUserHaveAddAccess(Guid accountBeDefinitionId)
