@@ -116,6 +116,7 @@
     <Compile Include="InvoiceComparison\InvoiceCompareManager.cs" />
     <Compile Include="Extensions\ModuleTypeCondition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SMSServiceType\SMSServiceTypeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">

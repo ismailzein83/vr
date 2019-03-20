@@ -70,6 +70,7 @@
     <Compile Include="InvoiceComparison\ReportComparisonInvoiceDetail.cs" />
     <Compile Include="InvoiceComparison\ReportInvoiceSMSComparisonResult.cs" />
     <Compile Include="InvoiceComparison\ReportInvoiceVoiceComparisonResult.cs" />
+    <Compile Include="SMSServiceType\SMSServiceType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
