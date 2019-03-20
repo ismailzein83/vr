@@ -37,7 +37,6 @@
                     selectorAPI = api;
                     selectorReadyPromiseDeferred.resolve();
                 };
-
                 defineAPI();
             }
 
@@ -50,29 +49,25 @@
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-
                 api.getData = function () {
-                    return {
-                        SMSServiceTypeIds: selectorAPI != undefined ? selectorAPI.getSelectedIds() : undefined
-                    };
+                    return selectorAPI.getSelectedIds();
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined)
                     ctrl.onReady(api);
             }
 
             function loadSelector(payloadEntity) {
                 var loadpromise = UtilsService.createPromiseDeferred();
-                var selectorPayload = {
-                    businessEntityDefinitionId: "d5153143-a6ef-44d1-a6f8-fea6b399d853"
-                };
-
-                if (payloadEntity != undefined) {
-                    selectorPayload.selectedIds = payloadEntity.SMSServiceTypeIds;
-                }
-
                 selectorReadyPromiseDeferred.promise
                     .then(function () {
+                        var selectorPayload = {
+                            businessEntityDefinitionId: "d5153143-a6ef-44d1-a6f8-fea6b399d853"
+                        };
+
+                        if (payloadEntity != undefined) {
+                            selectorPayload.selectedIds = payloadEntity.selectedIds;
+                        }
                         VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, loadpromise);
                     });
                 return loadpromise.promise;
