@@ -503,11 +503,16 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\vr-genericdata-fieldtype-businessentity-viewereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\Templates\CustomObjectTypeViewerEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\Templates\CustomObjectFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject-rulefiltereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject-settings.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject-viewereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\Templates\DataRecordTypeListFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\vr-genericdata-fieldtype-datarecordtypelist.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\vr-genericdata-fieldtype-datarecordtypelist-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\vr-genericdata-fieldtype-datarecordtypelist-settings.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\Templates\DatetimeFieldTypeViewerEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\vr-genericdata-fieldtype-datetime-viewereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\Templates\DictionaryFieldTypeRuleFilterEditor.html" />

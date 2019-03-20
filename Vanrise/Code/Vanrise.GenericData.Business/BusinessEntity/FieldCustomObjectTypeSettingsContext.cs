@@ -7,8 +7,10 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Business
 {
+
     public class FieldCustomObjectTypeSettingsContext : IFieldCustomObjectTypeSettingsContext
     {
         public object FieldValue { get; set; }
+        public RecordFilter RecordFilter { get; set; }
     }
 }

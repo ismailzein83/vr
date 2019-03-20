@@ -45,9 +45,7 @@
                     return directiveAPI.load(payload);
                 };
                 api.getValuesAsArray = function () {
-                    var values = [];
-                    values.push(directiveAPI.getData());
-                    return values;
+                    return [directiveAPI.getData()];
                 };
                 api.getData = function () {
                     return directiveAPI.getData();

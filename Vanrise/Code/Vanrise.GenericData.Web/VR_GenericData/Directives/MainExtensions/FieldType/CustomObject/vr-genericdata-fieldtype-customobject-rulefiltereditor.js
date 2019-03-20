@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataFieldtypeCustomobjectRulefiltereditor', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -15,7 +15,7 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
             var ctor = new customobjectCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
-        controllerAs: 'runtimeEditorCtrl',
+        controllerAs: 'ruleFilterEditorCtrl',
         bindToController: true,
         compile: function (element, attrs) {
             return {
@@ -29,7 +29,7 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
         }
     };
 
-	function customobjectCtor(ctrl, $scope, $attrs) {
+    function customobjectCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
             $scope.scopeModel = {};
@@ -47,17 +47,23 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
                 var fieldType;
                 var innerSectionPromises = [];
 
-                if (payload != undefined) {
-                    $scope.scopeModel.fieldTitle = payload.fieldTitle;
-                    fieldType = payload.fieldType;
+               
+                if (payload != undefined && payload.dataRecordTypeField != undefined) {
+                    var dataRecordTypeField = payload.dataRecordTypeField;
+                    var filterObj = payload.filterObj;
+
+                    $scope.scopeModel.fieldTitle = dataRecordTypeField.FieldTitle;
+                    fieldType = dataRecordTypeField.Type;
                 }
 
-                if (fieldType != undefined && fieldType.Settings!=undefined) {
+              
+                if (fieldType != undefined && fieldType.Settings != undefined) {
 
                     if ($scope.selector == undefined) {
-                        $scope.selector = {};
-                        $scope.selector.directive = fieldType.Settings.SelectorUIControl;
-                        $scope.selector.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                        $scope.selector = {
+                            directive: fieldType.Settings.RuleFilterSelectorUIControl,
+                            directiveReadyPromiseDeferred : UtilsService.createPromiseDeferred()
+                        };
                     }
                     $scope.selector.onDirectiveReady = function (api) {
                         $scope.selector.directiveAPI = api;
@@ -67,12 +73,13 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
                     $scope.selector.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
                     $scope.selector.onselectionchanged = function (selectedvalue) {
-                       
+
                     };
 
                     $scope.selector.directiveReadyPromiseDeferred.promise.then(function () {
                         var payload = {
                             fieldTitle: $scope.scopeModel.fieldTitle,
+                            fieldValue: filterObj != undefined ? filterObj : null
                         };
                         VRUIUtilsService.callDirectiveLoad($scope.selector.directiveAPI, payload, $scope.selector.directiveLoadPromiseDeferred);
                     });
@@ -92,20 +99,15 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
     }
 
     function getDirectiveTemplate(attrs) {
-        if (attrs.selectionmode == 'single') { 
-            return getSingleSelectionModeTemplate();
-        }
-     
-        function getSingleSelectionModeTemplate() {
+       
             var multipleselection = "";
 
             if (attrs.selectionmode == "dynamic" || attrs.selectionmode == "multiple") {
                 multipleselection = "ismultipleselection";
             }
-          
-            return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{runtimeEditorCtrl.normalColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
-                    + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>';
-        }
+
+            return '<vr-columns width="1/2row"><vr-directivewrapper directive="selector.directive"   on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
+                + multipleselection + ' isrequired="ruleFilterEditorCtrl.isrequired"></vr-directivewrapper></vr-columns>';
     }
 
     return directiveDefinitionObject;
