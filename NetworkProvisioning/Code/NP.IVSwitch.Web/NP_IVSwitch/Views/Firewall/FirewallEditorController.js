@@ -86,7 +86,7 @@
         }
         function getFirewall() {
             return npIvSwitchFirewallApiService.GetFirewall(firewallId).then(function (response) {
-                firewallEntity = response;
+				firewallEntity = response;
             });
         }
 
@@ -114,7 +114,14 @@
                 if (firewallEntity == undefined)
                     return;
                 $scope.scopeModel.description = firewallEntity.Description;
-                $scope.scopeModel.IPaddress = firewallEntity.Host;
+				$scope.scopeModel.IPaddress = firewallEntity.Host;
+				var ipAddressWithMask = firewallEntity.Host.split("/");
+				if (ipAddressWithMask != undefined) {
+					if (ipAddressWithMask[0] != undefined)
+						$scope.scopeModel.IPaddress = ipAddressWithMask[0];
+					if (ipAddressWithMask[1] != undefined)
+						$scope.scopeModel.subnet= ipAddressWithMask[1];
+				}
             }
         }
 
@@ -132,7 +139,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-        function update() {
+		function update() {
             $scope.scopeModel.isLoading = true;
             return npIvSwitchFirewallApiService.UpdateFirewall(buildFirewallObjFromScope()).then(function (response) {
                 if (vrNotificationService.notifyOnItemUpdated('Firewall', response, 'Host')) {
@@ -145,14 +152,14 @@
                 vrNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-                firewallEntity = undefined;
+                //firewallEntity = undefined;
             });
         }
 
         function buildFirewallObjFromScope() {
             return {
-                Id: firewallEntity != undefined ? firewallEntity.Id : undefined,
-                Host: $scope.scopeModel.IPaddress,
+				Id: firewallEntity != undefined ? firewallEntity.Id : undefined,
+				Host: $scope.scopeModel.subnet != undefined ? $scope.scopeModel.IPaddress + "/" + $scope.scopeModel.subnet : $scope.scopeModel.IPaddress,
                 Description: $scope.scopeModel.description
             };
         }
