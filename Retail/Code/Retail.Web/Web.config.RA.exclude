@@ -59,7 +59,6 @@
     <add key="BusinessProcessTrackingDBConnStringKey"           value="LogDBConnString" />
     <add key="LoggingDBConnStringKey"                           value="LogDBConnString"/>
 
-
     <add key="SecurityDBConnStringKey"                          value="ConfigurationDBConnString"/>
     <add key="BusinessProcessConfigDBConnStringKey"             value="ConfigurationDBConnString"/>
     <add key="IntegrationConfigDBConnStringKey"                 value="ConfigurationDBConnString"/>
@@ -75,20 +74,21 @@
 
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
     <add key="RARetailDBConnStringKey"                          value="ConfigurationDBConnString"/>
+    <add key="RAINTLDBConnStringKey"                           	value="ConfigurationDBConnString"/>
+    <add key="RAICXDBConnStringkey"                            	value="ConfigurationDBConnString"/>
+    <add key="RARetailDBConnStringkey"                         	value="ConfigurationDBConnString"/>
+    <add key="RADBConnStringKey"                               	value="ConfigurationDBConnString"/>
+
+    <!--Begin, keep two keys depending on the RA type ICX/INTL/Retail-->
+    <add key="RAINTLAnalyticsDBConnStringKey"                   value="RAAnalyticsDBConnString"/>
+    <add key="RAINTLEDRDBConnStringKey"                         value="RACDRDBConnString"/>
+
+    <add key="RAICXAnalyticsDBConnStringKey"                    value="RAAnalyticsDBConnString"/>
+    <add key="RAICXEDRDBConnStringKey"                          value="RACDRDBConnString"/>
+
     <add key="RARetailAnalyticsDBConnStringKey"                 value="RAAnalyticsDBConnString"/>
-
-    <add key="RAINTLAnalyticsDBConnStringKey"                   value="RAINTLAnalyticsDBConnString"/>
-    <add key="RAICXAnalyticsDBConnStringKey"                    value="RAICXAnalyticsDBConnString"/>
-    <add key="RARetailAnalyticsDBConnStringKey"                 value="RARetailAnalyticsDBConnString"/>
-
-    <add key="RAINTLDBConnStringKey"                           value="RAINTLDBConnString"/>
-    <add key="RAICXDBConnStringkey"                            value="RAICXDBConnString"/>
-    <add key="RARetailDBConnStringkey"                         value="RARetailDBConnString"/>
-    <add key="RADBConnStringKey"                               value="RADBConnString"/>
-
-    <add key="RARetailEDRDBConnStringKey"                       value="RARetailEDRDBConnString"/>
-    <add key="RAICXEDRDBConnStringKey"                          value="RAICXEDRDBConnString"/>
-    <add key="RAINTLEDRDBConnStringKey"                         value="RAINTLEDRDBConnString"/>
+    <add key="RARetailEDRDBConnStringKey"                       value="RACDRDBConnString"/>
+    <!--End, keep two keys depending on the RA type ICX/INTL/Retail-->
     
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
