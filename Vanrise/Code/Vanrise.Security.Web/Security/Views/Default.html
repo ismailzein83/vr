@@ -1,6 +1,6 @@
 ﻿<vr-panel ng-controller="VR_Sec_DefaultController" ng-if="$root.mainMenuReady">
     <div style="padding-left:15px">
-        <div class="row" ng-show="true">
+        <div class="row" ng-show="$root.showApplicationTiles">
             <div ng-repeat="item in $root.menuItems" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="menu-tile app-tile" ng-click="$root.openMenuTile(item)">
                     <img ng-src="{{::item.tileIcon}}" style="height:50px;width:50px;margin-top:21px" />
