@@ -41,12 +41,13 @@ app.directive('vrGenericdataFieldtypeCustomobjectRulefiltereditor', ['UtilsServi
 
         function defineAPI() {
             var api = {};
+            var directiveAPI;
+            var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             api.load = function (payload) {
 
                 var fieldType;
                 var innerSectionPromises = [];
-
                
                 if (payload != undefined && payload.dataRecordTypeField != undefined) {
                     var dataRecordTypeField = payload.dataRecordTypeField;
@@ -62,33 +63,32 @@ app.directive('vrGenericdataFieldtypeCustomobjectRulefiltereditor', ['UtilsServi
                     if ($scope.selector == undefined) {
                         $scope.selector = {
                             directive: fieldType.Settings.RuleFilterSelectorUIControl,
-                            directiveReadyPromiseDeferred : UtilsService.createPromiseDeferred()
                         };
                     }
                     $scope.selector.onDirectiveReady = function (api) {
-                        $scope.selector.directiveAPI = api;
-                        $scope.selector.directiveReadyPromiseDeferred.resolve();
+                        directiveAPI = api;
+                        directiveReadyPromiseDeferred.resolve();
                     };
 
-                    $scope.selector.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
+                    var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    innerSectionPromises.push(directiveLoadPromiseDeferred.promise);
                     $scope.selector.onselectionchanged = function (selectedvalue) {
 
                     };
 
-                    $scope.selector.directiveReadyPromiseDeferred.promise.then(function () {
+                    directiveReadyPromiseDeferred.promise.then(function () {
                         var payload = {
                             fieldTitle: $scope.scopeModel.fieldTitle,
                             fieldValue: filterObj != undefined ? filterObj : null
                         };
-                        VRUIUtilsService.callDirectiveLoad($scope.selector.directiveAPI, payload, $scope.selector.directiveLoadPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payload,directiveLoadPromiseDeferred);
                     });
                 }
                 return UtilsService.waitMultiplePromises(innerSectionPromises);
             };
 
             api.getData = function () {
-                return $scope.selector.directiveAPI.getData();
+                return directiveAPI.getData();
             };
 
             if (ctrl.onReady != null)
