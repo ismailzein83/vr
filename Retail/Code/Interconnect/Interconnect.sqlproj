@@ -65,6 +65,8 @@
     <Folder Include="ICX_BE\Tables\" />
     <Folder Include="ICX_BE\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="ICX_SMS\" />
+    <Folder Include="ICX_SMS\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ICX_BE\Tables\Switch.sql" />
@@ -72,5 +74,7 @@
     <Build Include="Security\ICX_BE.sql" />
     <Build Include="ICX_BE\Tables\Gateway.sql" />
     <Build Include="ICX_BE\User Defined Types\GatewayType.sql" />
+    <Build Include="ICX_SMS\Tables\SMSServiceType.sql" />
+    <Build Include="Security\ICX_SMS.sql" />
   </ItemGroup>
 </Project>
