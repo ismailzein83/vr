@@ -207,5 +207,7 @@
     <Build Include="Retail_Ticket\User Defined Types\TicketReasonType.sql" />
     <Build Include="Retail_Ticket\User Defined Types\FaultTicketType.sql" />
     <Build Include="Security\Retail_Ticket.sql" />
+    <Build Include="Retail_BE\Tables\RecurringChargeType.sql" />
+    <Build Include="Retail_BE\Tables\RecurringCharge.sql" />
   </ItemGroup>
 </Project>
