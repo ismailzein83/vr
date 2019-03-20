@@ -82,3 +82,26 @@
         </vr-section>
     </vr-columns>
 </vr-row>
+
+<!-- Financial Account Security-->
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="View Financial Account" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewFinancialAccountRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="Add Financial Account" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onAddFinancialAccountRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section header="Edit Financial Account" collapsible collapsed>
+            <vr-sec-requiredpermission-grid on-ready="scopeModel.onEditFinancialAccountRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+        </vr-section>
+    </vr-columns>
+</vr-row>

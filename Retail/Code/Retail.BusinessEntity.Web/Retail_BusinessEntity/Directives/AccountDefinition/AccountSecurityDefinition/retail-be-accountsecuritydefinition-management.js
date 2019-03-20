@@ -59,6 +59,17 @@
             var editProductPermissionAPI;
             var editProductPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
+            // Financial Account Security
+
+            var viewFinancialAccountPermissionAPI;
+            var viewFinancialAccountPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var addFinancialAccountPermissionAPI;
+            var addFinancialAccountPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var editFinancialAccountPermissionAPI;
+            var editFinancialAccountPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
@@ -114,6 +125,20 @@
                     editProductPermissionReadyDeferred.resolve();
                 };
 
+                $scope.scopeModel.onViewFinancialAccountRequiredPermissionReady = function (api) {
+                    viewFinancialAccountPermissionAPI = api;
+                    viewFinancialAccountPermissionReadyDeferred.resolve();
+                };
+   
+                $scope.scopeModel.onAddFinancialAccountRequiredPermissionReady = function (api) {
+                    addFinancialAccountPermissionAPI = api;
+                    addFinancialAccountPermissionReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onEditFinancialAccountRequiredPermissionReady = function (api) {
+                    editFinancialAccountPermissionAPI = api;
+                    editFinancialAccountPermissionReadyDeferred.resolve();
+                };
+
                 defineAPI();
             }
             function defineAPI() {
@@ -158,6 +183,17 @@
 
                     var loadEditProductRequiredPermissionPromise = loadEditProductRequiredPermission();
                     promises.push(loadEditProductRequiredPermissionPromise);
+
+                    // Financial Account
+
+                    var loadViewFinancialAccountRequiredPermissionPromise = loadViewFinancialAccountRequiredPermission();
+                    promises.push(loadViewFinancialAccountRequiredPermissionPromise);
+
+                    var loadAddFinancialAccountRequiredPermissionPromise = loadAddFinancialAccountRequiredPermission();
+                    promises.push(loadAddFinancialAccountRequiredPermissionPromise);
+
+                    var loadEditFinancialAccountRequiredPermissionPromise = loadEditFinancialAccountRequiredPermission();
+                    promises.push(loadEditFinancialAccountRequiredPermissionPromise);
 
                     function loadViewRequiredPermission() {
                         var viewSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
@@ -295,6 +331,41 @@
                         return editProductPermissionLoadDeferred.promise;
                     }
 
+                    function loadViewFinancialAccountRequiredPermission() {
+                        var viewFinancialAccountPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        viewFinancialAccountPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: payload && payload.ViewFinancialAccountRequiredPermission || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(viewFinancialAccountPermissionAPI, dataPayload, viewFinancialAccountPermissionLoadDeferred);
+                        });
+                        return viewFinancialAccountPermissionLoadDeferred.promise;
+                    }
+
+
+                    function loadAddFinancialAccountRequiredPermission() {
+                        var addFinancialAccountPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        addFinancialAccountPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: payload && payload.AddFinancialAccountRequiredPermission || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(addFinancialAccountPermissionAPI, dataPayload, addFinancialAccountPermissionLoadDeferred);
+                        });
+                        return addFinancialAccountPermissionLoadDeferred.promise;
+                    }
+
+                    function loadEditFinancialAccountRequiredPermission() {
+                        var editFinancialAccountPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        editFinancialAccountPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: payload && payload.EditFinancialAccountRequiredPermission || undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(editFinancialAccountPermissionAPI, dataPayload, editFinancialAccountPermissionLoadDeferred);
+                        });
+                        return editFinancialAccountPermissionLoadDeferred.promise;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -312,9 +383,12 @@
                         ViewAccountPackageRequiredPermission: viewAccountPackagePermissionAPI.getData(),
                         AddAccountPackageRequiredPermission: addAccountPackagePermissionAPI.getData(),
                         ViewProductRequiredPermission: viewProductPermissionAPI.getData(),
-                        AddProductRequiredPermission :addProductPermissionAPI.getData(),
-                        EditProductRequiredPermission: editProductPermissionAPI.getData()
-                    }
+                        AddProductRequiredPermission: addProductPermissionAPI.getData(),
+                        EditProductRequiredPermission: editProductPermissionAPI.getData(),
+                        ViewFinancialAccountRequiredPermission: viewFinancialAccountPermissionAPI.getData(),
+                        AddFinancialAccountRequiredPermission: addFinancialAccountPermissionAPI.getData(),
+                        EditFinancialAccountRequiredPermission: editFinancialAccountPermissionAPI.getData()
+                    };
                    
                 };
 

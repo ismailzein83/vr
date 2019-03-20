@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
 
         public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
         {
-            return base.DoesUserHaveAccess(context);
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            return financialAccountManager.DoesUserHaveViewAccess(context.AccountBEDefinitionId);
         }
     }
 }

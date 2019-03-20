@@ -157,5 +157,9 @@ namespace Retail.BusinessEntity.Entities
         public RequiredPermissionSettings ViewProductRequiredPermission { get; set; }
         public RequiredPermissionSettings AddProductRequiredPermission { get; set; }
         public RequiredPermissionSettings EditProductRequiredPermission { get; set; }
+
+        public RequiredPermissionSettings ViewFinancialAccountRequiredPermission { get; set; }
+        public RequiredPermissionSettings AddFinancialAccountRequiredPermission { get; set; }
+        public RequiredPermissionSettings EditFinancialAccountRequiredPermission { get; set; }
     }
 }

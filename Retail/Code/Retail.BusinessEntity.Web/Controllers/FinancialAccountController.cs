@@ -19,12 +19,16 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredFinancialAccounts")]
         public object GetFilteredFinancialAccounts(Vanrise.Entities.DataRetrievalInput<FinancialAccountQuery> input)
         {
+            if (!_manager.DoesUserHaveViewAccess(input.Query.AccountBEDefinitionId))
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredFinancialAccounts(input), "Financial Accounts");
         }
         [HttpPost]
         [Route("AddFinancialAccount")]
         public object AddFinancialAccount(FinancialAccountToInsert financialAccountToInsert)
         {
+            if (!_manager.DoesUserHaveAddAccess(financialAccountToInsert.AccountBEDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.AddFinancialAccount(financialAccountToInsert);
         }
 
@@ -32,6 +36,8 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("UpdateFinancialAccount")]
         public object UpdateFinancialAccount(FinancialAccountToEdit financialAccountToEdit)
         {
+            if (!_manager.DoesUserHaveEditAccess(financialAccountToEdit.AccountBEDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.UpdateFinancialAccount(financialAccountToEdit);
         }
         [HttpGet]

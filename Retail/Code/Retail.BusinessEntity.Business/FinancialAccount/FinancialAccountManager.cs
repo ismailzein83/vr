@@ -12,6 +12,7 @@ using Vanrise.Notification.Business;
 using Vanrise.AccountBalance.Business.Extensions;
 using Retail.BusinessEntity.APIEntities;
 using Vanrise.Invoice.Business;
+using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -23,6 +24,7 @@ namespace Retail.BusinessEntity.Business
         static InvoiceManager s_invoiceManager = new InvoiceManager();
         static InvoiceAccountManager s_invoiceAccountManager = new InvoiceAccountManager();
         static LiveBalanceManager s_liveBalanceManager = new LiveBalanceManager();
+        static SecurityManager s_securityManager = new SecurityManager();
 
 
         #region Main Methods
@@ -244,6 +246,21 @@ namespace Retail.BusinessEntity.Business
             creditLimit = default(Decimal);
             currencyId = default(int);
             return false;
+        }
+        public bool DoesUserHaveViewAccess(Guid accountBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.ViewFinancialAccountRequiredPermission);
+        }
+        public bool DoesUserHaveAddAccess(Guid accountBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.AddFinancialAccountRequiredPermission);
+        }
+        public bool DoesUserHaveEditAccess(Guid accountBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.EditFinancialAccountRequiredPermission);
         }
 
 
@@ -836,7 +853,14 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
                 }
             }
         }
-
+        private bool DoesUserHaveAccess(int userId, Guid accountBEDefinitionId, Func<AccountBEDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
+        {
+            var accountBEDefinitionSettings = s_accountBEDefinitionManager.GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.Security != null && getRequiredPermissionSetting(accountBEDefinitionSettings.Security) != null)
+                return s_securityManager.IsAllowed(getRequiredPermissionSetting(accountBEDefinitionSettings.Security), userId);
+            else
+                return true;
+        }
         private FinancialAccountData CreateFinancialAccountData(FinancialAccount financialAccount, Account account, Guid accountBEDefinitionId)
         {
             var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
