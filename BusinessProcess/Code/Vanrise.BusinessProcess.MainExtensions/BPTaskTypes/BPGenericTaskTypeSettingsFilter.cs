@@ -12,14 +12,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
     {
         public bool IsMatch(IBPTaskTypeSettingsFilterContext context)
         {
-            if (context == null)
-                context.ThrowIfNull("context");
+            context.ThrowIfNull("context");
 
-            if (context.BPTaskType == null)
-                context.BPTaskType.ThrowIfNull("context.BPTaskType");
+            context.BPTaskType.ThrowIfNull("context.BPTaskType");
 
-            if (context.BPTaskType.Settings == null)
-                context.BPTaskType.Settings.ThrowIfNull("context.BPTaskType.Settings", context.BPTaskType.BPTaskTypeId);
+            context.BPTaskType.Settings.ThrowIfNull("context.BPTaskType.Settings", context.BPTaskType.BPTaskTypeId);
 
             if (context.BPTaskType.Settings is BPGenericTaskTypeSettings)
                 return true;
