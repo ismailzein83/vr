@@ -295,3 +295,10 @@ when not matched by target then
 	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
 
+
+	
+																				--delete useless views
+BEGIN
+delete from [sec].[View] where [Id] in ('921D4669-64B1-4889-838C-D39F971EB7E6')--'Recurring Charge Types'
+----------------------------------------------------------------------------------------------------
+END

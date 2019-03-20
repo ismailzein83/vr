@@ -43,8 +43,10 @@ delete from [sec].[View] where [Id] in ('E68EFF9C-879E-4A6C-B412-8E225A966571',-
 										'3C53D6DC-BBE7-49CA-A222-8211AF25DD31',--'Business Rules'
 										'FF5E429A-CFF0-4095-8AD0-987FD3CAD502', --'Action Rules'
 										'ADBB44FE-5470-413C-A5F6-8AE8C585FA31',--'Report Generation'
-										'55C42E70-4A75-46A3-9F05-123EDD668122'--Account Package
+										'55C42E70-4A75-46A3-9F05-123EDD668122',--Account Package
+										'921D4669-64B1-4889-838C-D39F971EB7E6'--'Recurring Charge Types'
 										)
+
 
 --[sec].[View]-------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
