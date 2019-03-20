@@ -18,7 +18,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/CataliyaSwitch/Communication/Templates/CataleyaSwitchCommunicationTemplate.html"
+            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/CataleyaSwitch/Communication/Templates/CataleyaSwitchCommunicationTemplate.html"
         };
 
         function SwitchCommunicationCtor($scope, ctrl, $attrs) {
