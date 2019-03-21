@@ -303,7 +303,8 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('d2776cd1-0900-4ff6-99bc-454866eaad74','Interconnect Invoice','Interconnect Invoice','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig'		,'{"Editor":"retail-invoice-invoicetype-interconnectinvoicesettings"}'),
-('1ECEEBC8-9EE2-4690-9B10-32351F8F0096','Interconnect Settings','Interconnect Settings','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-interconnect-account-part-definition-setting" , "RuntimeEditor":"retail-interconnect-account-part-runtime-setting"}')
+('1ECEEBC8-9EE2-4690-9B10-32351F8F0096','Interconnect Settings','Interconnect Settings','Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-interconnect-account-part-definition-setting" , "RuntimeEditor":"retail-interconnect-account-part-runtime-setting"}'),
+('C3499B05-C2AE-4C04-B5F8-6B12E3E77544','Compare','Compare','VR_Invoice_InvoiceType_InvoiceGridActionSettings','{"Editor":"retail-interconnect-invoicetype-gridactionsettings-compare"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

@@ -290,7 +290,8 @@ as (select * from (values
 
 ('a9497ef9-2074-4a1e-a999-08253b68f448','Ericsson Special Routing Settings Service Language','Service Language','WhS_RouteSync_EricssonSpecialRoutingServiceLanguageConfig','{"Editor":"whs-routesync-ericsson-specialrouting-servicelanguage"}'),
 
-('DA50B323-DAB4-4E5D-807F-7BF9642215B4','TechnicalZone','Technical Zone','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor": "vr-whs-be-technicalzone-onbeforesavehandler"}')
+('DA50B323-DAB4-4E5D-807F-7BF9642215B4','TechnicalZone','Technical Zone','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor": "vr-whs-be-technicalzone-onbeforesavehandler"}'),
+('2CD52A5A-5C91-4D58-AB31-AF94D4CC8AF0','Supplier Bank Details','Supplier Bank Details','VR_Invoice_InvoiceType_RDLCDataSourceSettings','{"Editor":"whs-invoicetype-datasourcesettings-supplierbankdetails"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
