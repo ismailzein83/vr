@@ -5,4 +5,7 @@
     <add name="TOneSMSAnalyticsDBConnString"  connectionString="Server=localhost;Database=TOneV2_Analytics_SMS;User ID=sa;Password="/>
     <add name="TOneV2SMSDBConnString"  connectionString="Server=localhost;Database=TOneV2_Dev_SMSBE;User ID=sa;Password="/>
   </connectionStrings>
+  <appSettings>
+    <add key="TOneWhS_SMSBE_DBConnStringKey"                    value="ConfigurationDBConnString"/>
+  </appSettings>
 </configuration>
