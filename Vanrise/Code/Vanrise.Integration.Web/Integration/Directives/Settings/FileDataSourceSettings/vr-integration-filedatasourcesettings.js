@@ -79,7 +79,7 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
 
                 $scope.scopeModel.validateFileDataSourceDefinitions = function () {
                     if ($scope.scopeModel.fileDataSourceDefinitions.length == 0) {
-                        return "You should add at least one File DataSource Definition.";
+                        return "You should add at least one setting.";
                     }
                     return null;
                 };
