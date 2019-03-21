@@ -763,6 +763,19 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public void ActivateGSHDSLService(Guid requestId)
+        {
+            //TODO: OM sends the request back after completion on other systems to  GSHDSL team to activate the service.
+
+            //TODO : Update gshdsl object
+
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StGSHDSL").Set("StIsServiceActivated", Column.Parameter(true))
+                .Where("Id").IsEqual(Column.Parameter(requestId));
+            update.Execute();
+
+        }
+
         public bool AttachPhoneNumberToPathId(string phoneNumber , string pathId)
         {
 

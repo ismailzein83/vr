@@ -24,6 +24,8 @@ namespace BPMExtended.Main.Business
         const string discount = "BF730CB5-396F-4720-A663-E16A8A09C7FB";
         const string paymentMethod = "16A296DF-6695-4FD7-AA11-4381BC4A9874";
         const string print = "E7C4431A-615D-44A6-8811-8DD731A378DB"; // to technical
+        const string attachmentStep = "013C02E5-203A-424C-8F7A-F10A82B1466E";
+        const string technicalStep = "0545B38D-F1BA-4CD6-BC96-1BEFD85C9B3A";
 
         //Technical Teams
         const string site1MDFCabling = "48CE764E-C1DD-4B8B-A5FF-A111B43E6028";
@@ -51,16 +53,19 @@ namespace BPMExtended.Main.Business
                 case services: nextStepId = isFiber ? discount : isMicrowave ? paymentMethod : print; break;
                 case discount: nextStepId = paymentMethod; break;
                 case paymentMethod: nextStepId = isMicrowave ? paymentMethod : print; break;
-                case print: nextStepId = site1MDFCabling; break;
-                case site1MDFCabling: nextStepId = site1CabinetTeam; break;
-                case site1CabinetTeam: nextStepId = site1DPTeam; break;
-                case site1DPTeam: nextStepId = mic; break;
-                case mic: nextStepId = site2MDFCabling; break;
-                case site2MDFCabling: nextStepId = site2CabinetTeam; break;
-                case site2CabinetTeam: nextStepId = site2DPTeam; break;
-                case site2DPTeam: nextStepId = fiberTeam; break;
-                case fiberTeam: nextStepId = microwaveTeam; break;
-                case microwaveTeam: nextStepId = Completed; break;
+                case print: nextStepId = attachmentStep; break;
+                case attachmentStep: nextStepId = technicalStep; break;
+
+                //case print: nextStepId = site1MDFCabling; break;
+                //case site1MDFCabling: nextStepId = site1CabinetTeam; break;
+                //case site1CabinetTeam: nextStepId = site1DPTeam; break;
+                //case site1DPTeam: nextStepId = mic; break;
+                //case mic: nextStepId = site2MDFCabling; break;
+                //case site2MDFCabling: nextStepId = site2CabinetTeam; break;
+                //case site2CabinetTeam: nextStepId = site2DPTeam; break;
+                //case site2DPTeam: nextStepId = fiberTeam; break;
+                //case fiberTeam: nextStepId = microwaveTeam; break;
+                //case microwaveTeam: nextStepId = Completed; break;
             }
             return nextStepId;
         }

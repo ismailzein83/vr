@@ -26,7 +26,7 @@ namespace BPMExtended.Main.Business
         const string printTemplateStep = "48EB7E35-A501-442A-B628-57472BF330D1";
 
         const string nearByNumberStep = "821E7FF9-3303-4F89-96FF-688CEA98D8FB";
-        const string technicalStep = "0000461F-10D0-4476-AC56-33C741460DFC";
+        const string freeTechnicalStep = "0000461F-10D0-4476-AC56-33C741460DFC";
         const string networkTeamStep = "04C32E1E-A212-4B30-AA00-C5072DD8DD42";
 
         const string addressStep = "25C17DAA-A88C-49EA-80EA-E592A9062C2C";
@@ -38,10 +38,14 @@ namespace BPMExtended.Main.Business
         const string credentialsStep = "21FDEC10-505B-4A6A-BA7D-634B387BBDCF";
 
         const string printCredentialsStep = "B6A7D392-3F98-434E-98C1-C8FDE914186F";
+        const string attachmentStep = "30B4782C-18AA-494C-A1D3-F4DBD25A840B";
+        const string waitingListStep = "ED5E126A-3336-47E6-9138-2788FF96B78A";
+        const string reservePhoneNumberStep = "004A1891-960D-4D0B-9995-BE3DF680D2B8";
+        const string technicalStep = "4A64F6DD-F60A-4D7D-ABB8-CC1AE8D501F6";
 
         const string completedStep = "2B0CDA46-E3DF-449B-A4A1-C677781CF4B9";
 
-        public string GetNextStep(string id, string currentStepId)
+        public string GetNextStep(string id, string currentStepId , bool isWaitingList = false, bool isNetworkTeam = false)
         {
 
             string nextStepId = "";
@@ -50,15 +54,25 @@ namespace BPMExtended.Main.Business
                 case welcomeStep: nextStepId = decisionIdStep; break;
                 case decisionIdStep: nextStepId = printTemplateStep; break;
                 case printTemplateStep: nextStepId = nearByNumberStep; break;
-                case nearByNumberStep: nextStepId = technicalStep; break;
-                case technicalStep: nextStepId = canReserve(id)? addressStep : networkTeamStep; break;
-                case networkTeamStep: nextStepId = addressStep; break;
+                case nearByNumberStep: nextStepId = freeTechnicalStep; break;
+                //case freeTechnicalStep: nextStepId = canReserve(id)? addressStep : networkTeamStep; break;
+                case freeTechnicalStep:
+
+                    if (!isWaitingList && !isNetworkTeam) nextStepId = addressStep;
+                    else if (isWaitingList) nextStepId = waitingListStep;
+                    else nextStepId = networkTeamStep;
+                    break;
+
+                case waitingListStep: nextStepId = freeTechnicalStep; break;
+                //case networkTeamStep: nextStepId = addressStep; break;
+                case reservePhoneNumberStep: nextStepId = addressStep; break;
                 case addressStep: nextStepId = servicesStep; break;
                 case servicesStep: nextStepId = paymentStep; break;
                 case paymentStep: nextStepId = printContractStep; break;
                 case printContractStep: nextStepId = credentialsStep; break;
                 case credentialsStep: nextStepId = printCredentialsStep; break;
-                case printCredentialsStep: nextStepId = completedStep; break;
+                case printCredentialsStep: nextStepId = attachmentStep; break;
+                case attachmentStep: nextStepId = technicalStep; break;
 
             }
             return nextStepId;

@@ -116,5 +116,11 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         DeactivatePABX = 27,
 
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        CptRequest = 28,
+
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        DeactivateCpt = 29,
+
     }
 }
