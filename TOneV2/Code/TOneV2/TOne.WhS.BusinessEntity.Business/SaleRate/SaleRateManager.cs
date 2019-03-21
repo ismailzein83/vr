@@ -105,7 +105,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public SaleEntityZoneRate GetCachedCustomerZoneRate(int customerId, long saleZoneId, DateTime effectiveOn)
         {
-            if (!IsCountrySellToCustomer(customerId, saleZoneId, effectiveOn))
+            if (!new SaleZoneManager().IsSaleZoneSoldToCustomer(customerId, saleZoneId, effectiveOn))
                 return null;
 
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
@@ -608,7 +608,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 else
                 {
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate" , CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal});
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Change" });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Inherited" });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Id" });
@@ -639,19 +639,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 context.MainSheet = sheet;
             }
-        }
-
-        private bool IsCountrySellToCustomer(int customerId, long saleZoneId, DateTime effectiveOn)
-        {
-            int? saleZoneCountryId = new SaleZoneManager().GetSaleZoneCountryId(saleZoneId);
-            if (!saleZoneCountryId.HasValue)
-                throw new NullReferenceException(string.Format("saleZoneCountryId of saleZoneId: {0}", saleZoneId));
-
-            CustomerCountry2 customerCountry = new CustomerCountryManager().GetCustomerCountry(customerId, saleZoneCountryId.Value, effectiveOn, false);
-            if (customerCountry == null)
-                return false;
-
-            return true;
         }
 
         #endregion

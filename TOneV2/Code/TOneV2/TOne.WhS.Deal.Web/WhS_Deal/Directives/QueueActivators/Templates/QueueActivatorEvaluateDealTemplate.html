@@ -18,6 +18,38 @@
     <vr-select datasource="scopeModel.outputStages"
                datavaluefield="stageName"
                datatextfield="stageName"
+               selectedvalues="scopeModel.selectedFailedOutputStages"
+               ismultipleselection label="Failed Output Stages">
+    </vr-select>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.outputStages"
+               datavaluefield="stageName"
+               datatextfield="stageName"
+               selectedvalues="scopeModel.selectedInvalidOutputStages"
+               ismultipleselection label="Invalid Output Stages">
+    </vr-select>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.outputStages"
+               datavaluefield="stageName"
+               datatextfield="stageName"
+               selectedvalues="scopeModel.selectedInvalidInterconnectOutputStages"
+               ismultipleselection label="Invalid Interconnect Output Stages">
+    </vr-select>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.outputStages"
+               datavaluefield="stageName"
+               datatextfield="stageName"
+               selectedvalues="scopeModel.selectedInterconnectOutputStages"
+               ismultipleselection label="Interconnect Output Stages">
+    </vr-select>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.outputStages"
+               datavaluefield="stageName"
+               datatextfield="stageName"
                selectedvalues="scopeModel.selectedBillingOutputStages"
                ismultipleselection label="Billing Output Stages">
     </vr-select>

@@ -24,7 +24,7 @@ namespace TOne.WhS.Deal.MainExtensions.ReprocessFilterDefinition
             DealReprocessFilter dealReprocessFilter = context.ReprocessFilter.CastWithValidate<DealReprocessFilter>("context.ReprocessFilter");
 
             Dictionary<string, string> mappings = MappingFields != null ? MappingFields.GetRecord(recordTypeId) : null;
-            RecordFilter cdrTypeRecordFilter = new ObjectListRecordFilter() { FieldName = mappings.GetRecord("Type"), CompareOperator = ListRecordFilterOperator.In, Values = new List<object>() { 1, 4 } };
+            RecordFilter cdrTypeRecordFilter = new ObjectListRecordFilter() { FieldName = mappings.GetRecord("Type"), CompareOperator = ListRecordFilterOperator.In, Values = new List<object>() { 1, 2, 3, 4 } };
 
             RecordFilterGroup recordFilterGroup = new RecordFilterGroup() { Filters = new List<RecordFilter>() { cdrTypeRecordFilter }, LogicalOperator = RecordQueryLogicalOperator.And };
 

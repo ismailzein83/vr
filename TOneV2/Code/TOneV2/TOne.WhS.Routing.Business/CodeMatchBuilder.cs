@@ -80,16 +80,18 @@ namespace TOne.WhS.Routing.Business
             if (!customerANumberId.HasValue)
                 return customerSaleCodeMatchWithMaster;
 
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+
             bool hasSameSNP = codeMatchForCustomer.CustomerSellingNumberPlanId.Value == codeMatchForCustomerANumber.CustomerSellingNumberPlanId.Value;
             if (hasSameSNP)
             {
                 if (codeMatchForCustomer.SaleCodeMatch == null) // SaleCodeMatch will be the same for codeMatchForCustomer and codeMatchForCustomerANumber
                     return customerANumberSaleCodeMatchWithMaster;
 
-                if (IsCountrySoldToCustomer(customerANumberId.Value, codeMatchForCustomerANumber.SaleCodeMatch.SaleZoneId, effectiveOn))
+                if (saleZoneManager.IsSaleZoneSoldToCustomer(customerANumberId.Value, codeMatchForCustomerANumber.SaleCodeMatch.SaleZoneId, effectiveOn))
                     return customerANumberSaleCodeMatchWithMaster;
 
-                if (IsCountrySoldToCustomer(customerId.Value, codeMatchForCustomer.SaleCodeMatch.SaleZoneId, effectiveOn))
+                if (saleZoneManager.IsSaleZoneSoldToCustomer(customerId.Value, codeMatchForCustomer.SaleCodeMatch.SaleZoneId, effectiveOn))
                     return customerSaleCodeMatchWithMaster;
 
                 return customerANumberSaleCodeMatchWithMaster;
@@ -102,8 +104,8 @@ namespace TOne.WhS.Routing.Business
                 if (codeMatchForCustomerANumber.SaleCodeMatch == null)
                     return customerSaleCodeMatchWithMaster;
 
-                bool isCountrySoldToCustomer = IsCountrySoldToCustomer(customerId.Value, codeMatchForCustomer.SaleCodeMatch.SaleZoneId, effectiveOn);
-                bool isCountrySoldToCustomerANumber = IsCountrySoldToCustomer(customerANumberId.Value, codeMatchForCustomerANumber.SaleCodeMatch.SaleZoneId, effectiveOn);
+                bool isCountrySoldToCustomer = saleZoneManager.IsSaleZoneSoldToCustomer(customerId.Value, codeMatchForCustomer.SaleCodeMatch.SaleZoneId, effectiveOn);
+                bool isCountrySoldToCustomerANumber = saleZoneManager.IsSaleZoneSoldToCustomer(customerANumberId.Value, codeMatchForCustomerANumber.SaleCodeMatch.SaleZoneId, effectiveOn);
 
                 if (isCountrySoldToCustomer == isCountrySoldToCustomerANumber)//Country is sold to both customers or not sold for both
                 {
@@ -333,19 +335,6 @@ namespace TOne.WhS.Routing.Business
         {
             List<SupplierCodeIteratorInfo> supplierCodeIteratorInfos = GetSupplierCodeIterators(supplierId, effectiveOn);
             return TOne.WhS.BusinessEntity.Business.Helper.GetBusinessEntityInfo<SupplierCodeIteratorInfo>(supplierCodeIteratorInfos, effectiveOn);
-        }
-
-        private bool IsCountrySoldToCustomer(int customerId, long saleZoneId, DateTime effectiveOn)
-        {
-            int? saleZoneCountryId = new SaleZoneManager().GetSaleZoneCountryId(saleZoneId);
-            if (!saleZoneCountryId.HasValue)
-                throw new NullReferenceException(string.Format("saleZoneCountryId of saleZoneId: {0}", saleZoneId));
-
-            CustomerCountry2 customerCountry = new CustomerCountryManager().GetCustomerCountry(customerId, saleZoneCountryId.Value, effectiveOn, false);
-            if (customerCountry == null)
-                return false;
-
-            return true;
         }
 
         private struct GetSellingNumberPlanSaleCodeIteratorCacheName : IBEDayFilterCacheName

@@ -563,6 +563,19 @@ namespace TOne.WhS.BusinessEntity.Business
             return startingId;
         }
 
+        public bool IsSaleZoneSoldToCustomer(int customerId, long saleZoneId, DateTime effectiveOn)
+        {
+            int? saleZoneCountryId = this.GetSaleZoneCountryId(saleZoneId);
+            if (!saleZoneCountryId.HasValue)
+                throw new NullReferenceException(string.Format("saleZoneCountryId of saleZoneId: {0}", saleZoneId));
+
+            CustomerCountry2 customerCountry = new CustomerCountryManager().GetCustomerCountry(customerId, saleZoneCountryId.Value, effectiveOn, false);
+            if (customerCountry == null)
+                return false;
+
+            return true;
+        }
+
         #endregion
 
         #region Private Members
