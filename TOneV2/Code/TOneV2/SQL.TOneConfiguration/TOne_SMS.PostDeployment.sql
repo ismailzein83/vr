@@ -63,7 +63,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('126BE491-CCE3-4618-9EBB-7D5645C0F0E3','SMS Store','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"TOneSMSDBConnString","IsRemoteDataStore":false}'),
 ('97F51BA0-3BA3-4BA9-BA0C-AA7C7B37EFC5','SMS Analytics Store','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"TOneSMSAnalyticsDBConnString","IsRemoteDataStore":false}'),
-('EAA586B8-C355-4104-A567-CA0DE4EED585','ToneV2Store RDB','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionString":"Server=192.168.110.185;Database=TOneV2_Dev;User ID=Development;Password=dev!123","IsRemoteDataStore":false}')
+('EAA586B8-C355-4104-A567-CA0DE4EED585','ToneV2Store RDB','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"TOneV2DBConnString","ConnectionStringAppSettingName":"TOneWhS_BE_DBConnStringKey","IsRemoteDataStore":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[genericdata].[DataStore] as t
