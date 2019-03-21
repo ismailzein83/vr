@@ -59,6 +59,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
@@ -88,6 +91,7 @@
     <Compile Include="BPDefinitionRuleSetFilter.cs" />
     <Compile Include="BPDefintionArgumentStateManager.cs" />
     <Compile Include="BPDefinitionScheduleTaskFilter.cs" />
+    <Compile Include="Extensions\OpenBPInstanceViewerAction.cs" />
     <Compile Include="ProcessSynchronisationManager.cs" />
     <Compile Include="BPTimeSubscriptionManager.cs" />
     <Compile Include="BPEventManager.cs" />
