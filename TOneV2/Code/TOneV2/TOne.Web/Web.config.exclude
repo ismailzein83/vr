@@ -90,7 +90,7 @@
     <add key="TOneWhS_RouteSync_DBConnStringKey"                value="RouteSyncDBConnString"/>
 
     <add key="StateBackupDatabase"                              value="TOneV2_StateBackup"/>
-    
+    <add key="TOneWhS_BE_DBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="ImportPriceListTemplatePath" value="/Client/Modules/WhS_SupplierPriceList/Template/Supplier Price List Sample.xls"/>
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/WhS_CodePreparation/Template/Code preparation sample.xls"/>
     <add key="DownloadCodeGroupTemplatePath" value="/Client/Modules/WhS_BusinessEntity/Templates/CodeGroupTemplate.xlsx"/>    
