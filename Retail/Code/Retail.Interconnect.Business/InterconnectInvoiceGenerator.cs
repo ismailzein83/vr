@@ -163,7 +163,7 @@ namespace Retail.Interconnect.Business
                     }
                 }
 
-                if (interconnectInvoiceDetails.TotalAmountWithTaxes != 0)
+                if (interconnectInvoiceDetails.TotalInvoiceAmount != 0)
                 {
                     List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(voiceItemSetNames, smsItemSetNames, taxItemDetails, invoiceByCurrency, evaluatedRecurringCharges);
 
@@ -225,11 +225,10 @@ namespace Retail.Interconnect.Business
         private InterconnectInvoiceDetails BuildInterconnectInvoiceDetails(List<InvoiceBillingRecord> voiceItemSetNames, List<InvoiceSMSBillingRecord> smsItemSetNames, DateTime fromDate, DateTime toDate)
         {
             CurrencyManager currencyManager = new CurrencyManager();
-            InterconnectInvoiceDetails interconnectInvoiceDetails = null;
+            InterconnectInvoiceDetails interconnectInvoiceDetails = new InterconnectInvoiceDetails();
 
             if (voiceItemSetNames != null && voiceItemSetNames.Count > 0)
             {
-                interconnectInvoiceDetails = new InterconnectInvoiceDetails();
                 foreach (var invoiceBillingRecord in voiceItemSetNames)
                 {
                     interconnectInvoiceDetails.Duration += invoiceBillingRecord.InvoiceMeasures.TotalBillingDuration;
@@ -238,11 +237,10 @@ namespace Retail.Interconnect.Business
                     interconnectInvoiceDetails.InterconnectCurrencyId = invoiceBillingRecord.CurrencyId;
                     interconnectInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
                 }
+                interconnectInvoiceDetails.InterconnectCurrency = currencyManager.GetCurrencySymbol(interconnectInvoiceDetails.InterconnectCurrencyId);
             }
             if (smsItemSetNames != null && smsItemSetNames.Count > 0)
             {
-                if (interconnectInvoiceDetails == null)
-                    interconnectInvoiceDetails = new InterconnectInvoiceDetails();
                 foreach (var invoiceBillingRecord in smsItemSetNames)
                 {
                     interconnectInvoiceDetails.TotalAmount += invoiceBillingRecord.InvoiceMeasures.Amount;
@@ -250,11 +248,10 @@ namespace Retail.Interconnect.Business
                     interconnectInvoiceDetails.InterconnectCurrencyId = invoiceBillingRecord.CurrencyId;
                     interconnectInvoiceDetails.TotalNumberOfSMS += invoiceBillingRecord.InvoiceMeasures.NumberOfSMS;
                 }
-            }
-
-            if (interconnectInvoiceDetails != null)
-            {
-                interconnectInvoiceDetails.InterconnectCurrency = currencyManager.GetCurrencySymbol(interconnectInvoiceDetails.InterconnectCurrencyId);
+                if (interconnectInvoiceDetails.InterconnectCurrency == null)
+                {
+                    interconnectInvoiceDetails.InterconnectCurrency = currencyManager.GetCurrencySymbol(interconnectInvoiceDetails.InterconnectCurrencyId);
+                }
             }
             return interconnectInvoiceDetails;
         }
