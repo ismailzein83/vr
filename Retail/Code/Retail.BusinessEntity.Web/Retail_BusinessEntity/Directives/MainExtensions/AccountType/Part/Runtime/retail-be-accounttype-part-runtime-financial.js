@@ -5,7 +5,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -27,7 +27,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
             var productSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var operatorBanksAPI;
-            var operatorBanksReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var operatorBanksReadyPromiseDeferred;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -43,7 +43,8 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
 
                 $scope.scopeModel.onOperatorBanksReady = function (api) {
                     operatorBanksAPI = api;
-                    operatorBanksReadyPromiseDeferred.resolve();
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingOperatorBanks = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, operatorBanksAPI, undefined, setLoader, operatorBanksReadyPromiseDeferred);
                 };
 
                 defineAPI();
@@ -52,7 +53,6 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
 
                     var accountBEDefinitionId;
                     var accountId;
@@ -66,6 +66,9 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                         if (payload.partDefinition != undefined && payload.partDefinition.Settings != undefined) {
                             $scope.scopeModel.hideProductSelector = payload.partDefinition.Settings.HideProductSelector;
                             $scope.scopeModel.showOperatorBanks = payload.partDefinition.Settings.ShowOperatorBanks;
+                            if ($scope.scopeModel.showOperatorBanks) {
+                                operatorBanksReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                            }
                         }
                     }
 
@@ -104,16 +107,23 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                     function loadOperatorBanks() {
                         var operatorBanksLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                         operatorBanksReadyPromiseDeferred.promise.then(function () {
-                            var operatorBanksPayload = {};
+                            operatorBanksReadyPromiseDeferred = undefined;
+                            var operatorBanksPayload;
                             if (partSettings != undefined) {
-                                operatorBanksPayload.BankDetails = partSettings.OperatorBanks;
+                                operatorBanksPayload = {
+                                    BankDetails: partSettings.OperatorBanks
+                                };
                             }
                             VRUIUtilsService.callDirectiveLoad(operatorBanksAPI, operatorBanksPayload, operatorBanksLoadPromiseDeferred);
                         });
                         return operatorBanksLoadPromiseDeferred.promise;
                     }
+                    var promises = [loadCurrencySelector(), loadProductSelector()];
+
+                    if ($scope.scopeModel.showOperatorBanks)
+                        promises.push(loadOperatorBanks());
                     var rootPromiseNode = {
-                        promises: [loadCurrencySelector(), loadProductSelector(), loadOperatorBanks()]
+                        promises: promises
                     };
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
@@ -123,7 +133,7 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                         $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancial,Retail.BusinessEntity.MainExtensions',
                         CurrencyId: currencySelectorAPI.getSelectedIds(),
                         ProductId: productSelectorAPI.getSelectedIds(),
-                        OperatorBanks: operatorBanksAPI.getData()
+                        OperatorBanks: $scope.scopeModel.showOperatorBanks && operatorBanksAPI != undefined ? operatorBanksAPI.getData() : undefined
                     };
                 };
 

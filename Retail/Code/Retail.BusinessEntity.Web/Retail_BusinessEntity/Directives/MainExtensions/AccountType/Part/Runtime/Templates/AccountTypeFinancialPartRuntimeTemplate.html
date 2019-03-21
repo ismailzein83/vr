@@ -12,9 +12,9 @@
             </retail-be-product-selector>
         </span>
     </vr-row>
-    <span ng-show="scopeModel.showOperatorBanks">
+    <span ng-if="scopeModel.showOperatorBanks">
         <vr-row>
-            <vr-columns width="fullrow">
+            <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingOperatorBanks">
                 <vr-common-bankdetailssettings-grid on-ready="scopeModel.onOperatorBanksReady"></vr-common-bankdetailssettings-grid>
             </vr-columns>
         </vr-row>
