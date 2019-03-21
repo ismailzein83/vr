@@ -13,6 +13,11 @@ namespace Vanrise.GenericData.MainExtensions
         {
             get { return new Guid("99458A8F-28B4-44F9-A8F0-EF20ED53061C"); }
         }
+        public string FieldName { get; set; }
+        public string RootFQTN { get; set; }
+        public string RootFieldName { get; set; }
+        public string ChildFQTN { get; set; }
+        public string ChildFieldName { get; set; }
         public override string RuntimeEditor
         {
             get

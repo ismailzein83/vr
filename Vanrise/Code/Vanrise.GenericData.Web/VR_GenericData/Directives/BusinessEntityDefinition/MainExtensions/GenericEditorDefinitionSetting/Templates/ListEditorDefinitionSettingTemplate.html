@@ -1,10 +1,25 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorReady"
+                                                      label="Field" selectedvalues="scopeModel.selectedField"
+                                                      isrequired="true"
+                                                      hideremoveicon>
+        </vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox label="Root FQTN" type="text" value="rootFQTN" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox label="Root Field Name" type="text" value="rootFieldName" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox label="Child FQTN" type="text" value="childFQTN" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox label="Child Field Name" type="text" value="childFieldName" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-row>

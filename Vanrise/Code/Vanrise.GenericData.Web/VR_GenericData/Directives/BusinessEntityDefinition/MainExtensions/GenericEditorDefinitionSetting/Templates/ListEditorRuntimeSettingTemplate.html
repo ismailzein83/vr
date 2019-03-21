@@ -1,10 +1,15 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-row>
+    <vr-columns colnum="4">
+        <vr-textbox value="scopeModel.itemToAdd" type="text" label="Value" customvalidate="scopeModel.isItemValid()"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="1" withemptyline haschildcolumns>
+        <vr-button type="Add" data-onclick="scopeModel.addItem" standalone vr-disabled="scopeModel.isItemValid()!=null"></vr-button>
+    </vr-columns>
+    <vr-columns colnum="12" haschildcolumns>
+        <vr-datalist maxitemsperrow="4" datasource="scopeModel.itemList" autoremoveitem="true">
+            <vr-columns colnum="4">
+                <vr-label>{{dataItem}}</vr-label>
+            </vr-columns>
+        </vr-datalist>
+    </vr-columns>
+</vr-row>
