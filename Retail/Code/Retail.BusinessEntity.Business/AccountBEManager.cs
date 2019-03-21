@@ -895,11 +895,48 @@ namespace Retail.BusinessEntity.Business
                 return false;
             }
         }
+
+
         public bool TryGetAccountPart(Guid accountBEDefinitionId, long accountId, Guid partDefinitionId, bool getInherited, out AccountPart accountPart)
         {
             var account = GetAccount(accountBEDefinitionId, accountId);
             return TryGetAccountPart(accountBEDefinitionId, account, partDefinitionId, getInherited, out accountPart);
         }
+
+        public bool TryGetAccountPart<T>(Guid accountBEDefinitionId, long accountId, bool getInherited, out AccountPart accountPart) where T : AccountPartSettings
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            return TryGetAccountPart<T>(accountBEDefinitionId, account, getInherited, out accountPart);
+        }
+        public bool TryGetAccountPart<T>(Guid accountBEDefinitionId, Account account, bool getInherited, out AccountPart accountPart) where T : AccountPartSettings
+        {
+            accountPart = null;
+            if (account.Settings == null || account.Settings.Parts == null)
+                return false;
+            foreach (var part in account.Settings.Parts)
+            {
+                if (part.Value.Settings is T)
+                {
+                    accountPart = part.Value;
+                    return true;
+                }
+            }
+
+            if (getInherited && account.ParentAccountId.HasValue)
+            {
+                var parentAccount = GetAccount(accountBEDefinitionId, account.ParentAccountId.Value);
+                if (parentAccount == null)
+                    throw new NullReferenceException(String.Format("parentAccount '{0}'", account.ParentAccountId.Value));
+                return TryGetAccountPart<T>(accountBEDefinitionId, parentAccount, getInherited, out accountPart);
+            }
+            else
+            {
+                accountPart = null;
+                return false;
+            }
+        }
+
+
         public bool IsFinancial(Account account)
         {
             IAccountPayment accountPayment;
