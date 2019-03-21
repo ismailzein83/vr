@@ -189,7 +189,7 @@ namespace Retail.Interconnect.Business
                     }
 
                     AccountPart accountPart;
-                    if (accountBEManager.TryGetAccountPart(this._acountBEDefinitionId, financialAccountData.Account.AccountId, AccountPartInterconnectSetting._ConfigId, false, out accountPart))
+                    if (accountBEManager.TryGetAccountPart<AccountPartInterconnectSetting>(this._acountBEDefinitionId, financialAccountData.Account, false, out accountPart))
                     {
                         var accountPartSettings = accountPart.Settings as AccountPartInterconnectSetting;
                         if (accountPartSettings != null && accountPartSettings.SMSServiceTypes != null)

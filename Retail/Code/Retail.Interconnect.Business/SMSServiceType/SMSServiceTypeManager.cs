@@ -29,7 +29,7 @@ namespace Retail.Interconnect.Business
         }
         public IEnumerable<SMSServiceType> GetSMSServiceTypesByIds(IEnumerable<int> sMSServiceTypeIds)
         {
-            if (sMSServiceTypeIds != null && sMSServiceTypeIds.Any())
+            if (sMSServiceTypeIds == null || !sMSServiceTypeIds.Any())
                 return null;
             var smsServiceTypes = GetCachedSMSServicesType();
             if (smsServiceTypes == null)

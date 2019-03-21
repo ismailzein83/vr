@@ -451,6 +451,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountSubViewRuntimeSearchTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AssignAccountManagerAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\ICX\retail-be-icx-operatorwithlocal-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\InvoiceDataSourceSettings\retail-be-account-datasourcesettings-operatorbankdetails.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\InvoiceDataSourceSettings\Templates\OperatorBankDetailsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\Invoice\retail-be-account-invoice-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faulttickets-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faultticket-customobjectsettings.js" />

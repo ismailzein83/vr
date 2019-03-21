@@ -29,19 +29,16 @@ namespace Retail.BusinessEntity.MainExtensions
 
             IEnumerable<BankDetail> bankDetails = null;
 
-            if (financialAccountData != null && financialAccountData.Account != null && financialAccountData.Account.Settings != null && financialAccountData.Account.Settings.Parts != null)
+            if (financialAccountData != null && financialAccountData.Account != null)
             {
-                foreach (var accountPart in financialAccountData.Account.Settings.Parts)
+                AccountPart accountPart;
+                if (accountBEManager.TryGetAccountPart<AccountPartFinancial>(invoiceSettings.AccountBEDefinitionId, financialAccountData.Account, false, out accountPart))
                 {
-                    if (accountPart.Value.Settings.ConfigId != AccountPartFinancial._ConfigId)
-                        continue;
-
-                    var accountPartSettings = accountPart.Value.Settings as AccountPartFinancial;
+                    var accountPartSettings = accountPart.Settings as AccountPartFinancial;
                     if (accountPartSettings != null && accountPartSettings.OperatorBanks != null)
                     {
                         bankDetails = accountPartSettings.OperatorBanks;
                     }
-                    break;
                 }
             }
 

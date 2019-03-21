@@ -37,9 +37,9 @@ namespace Retail.BusinessEntity.Business
 
         #region Public Methods
 
-        public List<string> GetAccountClassifications(Guid accountBEDefinition,long accountId)
+        public List<string> GetAccountClassifications(Guid accountBEDefinition, long accountId)
         {
-           return _accountBEDefinitionManager.GetAccountBEDefinitionClassifications(accountBEDefinition);
+            return _accountBEDefinitionManager.GetAccountBEDefinitionClassifications(accountBEDefinition);
         }
         public Vanrise.Entities.IDataRetrievalResult<AccountClientDetail> GetFilteredClientAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
         {
@@ -70,7 +70,7 @@ namespace Retail.BusinessEntity.Business
             List<AccountClientDetail> accountClientDetails = null;
             if (bigResult != null && bigResult.Data != null)
             {
-                 accountClientDetails = new List<AccountClientDetail>();
+                accountClientDetails = new List<AccountClientDetail>();
                 foreach (var accountDetail in bigResult.Data)
                 {
                     accountClientDetails.Add(new AccountClientDetail
@@ -196,7 +196,7 @@ namespace Retail.BusinessEntity.Business
             {
                 IAccountTaxes accountTaxes;
 
-                if (HasAccountTaxes(accountBEDefinitionId, accountId, false, out  accountTaxes))
+                if (HasAccountTaxes(accountBEDefinitionId, accountId, false, out accountTaxes))
                 {
                     var taxes = accountTaxes.GetAccountTaxes();
                     if (taxes != null)
@@ -342,7 +342,7 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
             long accountId;
 
-            Account accountBE;          
+            Account accountBE;
             if (TryAddAccount(accountToInsert, out accountId, false, out accountBE))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -361,10 +361,10 @@ namespace Retail.BusinessEntity.Business
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;            
-            Account account;        
+            updateOperationOutput.UpdatedObject = null;
+            Account account;
             if (TryUpdateAccount(accountToEdit, out account))
-            {                
+            {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = AccountDetailMapper(account);
             }
@@ -394,11 +394,11 @@ namespace Retail.BusinessEntity.Business
                         if (filter.Filters.Any(x => x.IsExcluded(context)))
                             return false;
                     }
-              
+
                     if (filter.AccountTypeId.HasValue && filter.AccountTypeId.Value != account.TypeId)
                         return false;
                 }
-           
+
 
                 return true;
             };
@@ -422,9 +422,9 @@ namespace Retail.BusinessEntity.Business
             if (context.FieldType != null)
             {
                 var beFieldType = context.FieldType.CastWithValidate<FieldBusinessEntityType>("context.FieldType");
-                var beDefinitionId =beFieldType.BusinessEntityDefinitionId; 
+                var beDefinitionId = beFieldType.BusinessEntityDefinitionId;
                 var cachedAccountsByName = GetCachedAccountsByName(beDefinitionId);
-                
+
                 if (cachedAccountsByName != null)
                 {
                     var matchingAccounts = cachedAccountsByName.GetRecord(context.FieldDescription.ToString().Trim().ToLower());
@@ -451,7 +451,7 @@ namespace Retail.BusinessEntity.Business
                                     break;
                                 }
                             }
-                            if(!isMatched)
+                            if (!isMatched)
                                 context.ErrorMessage = string.Format("The account {0} does not exist.", context.FieldDescription.ToString());
                         }
                     }
@@ -601,7 +601,7 @@ namespace Retail.BusinessEntity.Business
         {
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
             var companySettingsId = GetCompanySettingId(accountBEDefinitionId, accountId);
-            if(companySettingsId.HasValue)
+            if (companySettingsId.HasValue)
                 return configManager.GetCompanySettingById(companySettingsId.Value);
             return configManager.GetDefaultCompanySetting();
         }
@@ -610,7 +610,7 @@ namespace Retail.BusinessEntity.Business
         {
             var account = GetAccount(accountBEDefinitionId, accountId);
             IAccountProfile accountProfile;
-            if (HasAccountProfile(account, true, out accountProfile)) 
+            if (HasAccountProfile(account, true, out accountProfile))
             {
                 if (accountProfile.CompanySettingsId.HasValue)
                     return accountProfile.CompanySettingsId.Value;
@@ -622,7 +622,7 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<Guid> GetBankDetailsIds(Guid accountBEDefinitionId, long accountId)
         {
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
-            var companySettings = GetCompanySetting(accountBEDefinitionId,accountId);
+            var companySettings = GetCompanySetting(accountBEDefinitionId, accountId);
             return companySettings.BankDetails;
         }
 
@@ -695,12 +695,12 @@ namespace Retail.BusinessEntity.Business
         //    UpdateStatuses(accountBEDefinitionId, accounts, statusId, statusChangedDate, allowOverlapping, applicableOnStatuses, withCacheExpire, actionName);
         //}
 
-        public void UpdateStatuses(Guid accountBEDefinitionId, List<Account> accounts, Guid statusId, DateTime statusChangedDate, bool allowOverlapping, List<Guid> applicableOnStatuses,out string errorMessage, bool withCacheExpire = true, string actionName = null)
+        public void UpdateStatuses(Guid accountBEDefinitionId, List<Account> accounts, Guid statusId, DateTime statusChangedDate, bool allowOverlapping, List<Guid> applicableOnStatuses, out string errorMessage, bool withCacheExpire = true, string actionName = null)
         {
             errorMessage = null;
             if (accounts != null)
             {
-                if(statusChangedDate.Date > DateTime.Today)
+                if (statusChangedDate.Date > DateTime.Today)
                 {
                     errorMessage = "Date cannot be greater than today.";
                     return;
@@ -710,10 +710,10 @@ namespace Retail.BusinessEntity.Business
 
                 if (accountStatusesByAccountId != null)
                 {
-                    foreach(var account in accountStatusesByAccountId)
+                    foreach (var account in accountStatusesByAccountId)
                     {
-                        if (!CheckIfAllowStatusesOverlapping(account.Value, allowOverlapping,statusId, applicableOnStatuses, statusChangedDate, out errorMessage))
-                            return; 
+                        if (!CheckIfAllowStatusesOverlapping(account.Value, allowOverlapping, statusId, applicableOnStatuses, statusChangedDate, out errorMessage))
+                            return;
                     }
                 }
 
@@ -722,7 +722,7 @@ namespace Retail.BusinessEntity.Business
                 var status = s_statusDefinitionManager.GetStatusDefinition(statusId);
                 status.ThrowIfNull("status", statusId);
                 status.Settings.ThrowIfNull("status.Settings", statusId);
-             
+
                 VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
                 VRAccountStatus vrInvoiceAccountStatus = status.Settings.IsInvoiceActive ? VRAccountStatus.Active : VRAccountStatus.InActive;
                 VRAccountStatus vrBalanceAccountStatus = status.Settings.IsAccountBalanceActive ? VRAccountStatus.Active : VRAccountStatus.InActive;
@@ -735,7 +735,7 @@ namespace Retail.BusinessEntity.Business
 
                 foreach (var account in accounts)
                 {
-                 
+
                     IOrderedEnumerable<AccountStatusHistory> accountStatusHistories = null;
                     if (accountStatusesByAccountId != null)
                         accountStatusHistories = accountStatusesByAccountId.GetRecord(account.AccountId);
@@ -773,7 +773,7 @@ namespace Retail.BusinessEntity.Business
                         string previousStatusName = null;
                         if (previousStatusId.HasValue)
                             previousStatusName = s_statusDefinitionManager.GetStatusDefinitionName(previousStatusId.Value);
-                        
+
                         int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
                         bool updateStatus = dataManager.UpdateStatus(account.AccountId, statusId, lastModifiedBy);
                         if (updateStatus)
@@ -803,7 +803,7 @@ namespace Retail.BusinessEntity.Business
                     }
 
                 }
-  
+
                 if (withCacheExpire)
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
             }
@@ -822,7 +822,7 @@ namespace Retail.BusinessEntity.Business
             }
             return accountStatusHistoryDicByAccountId.ToDictionary(itm => itm.Key, itm => itm.Value.OrderBy(historyItem => historyItem.StatusChangedDate));
         }
-        private bool CheckIfAllowStatusesOverlapping(IOrderedEnumerable<AccountStatusHistory> accountStatusHistories, bool allowOverlapping,Guid statusId, List<Guid> applicableOnStatuses, DateTime statusChangedDate, out string errorMessage)
+        private bool CheckIfAllowStatusesOverlapping(IOrderedEnumerable<AccountStatusHistory> accountStatusHistories, bool allowOverlapping, Guid statusId, List<Guid> applicableOnStatuses, DateTime statusChangedDate, out string errorMessage)
         {
             errorMessage = null;
             if (accountStatusHistories != null)
@@ -851,7 +851,7 @@ namespace Retail.BusinessEntity.Business
             }
             return true;
         }
-        
+
         public long? GetFinancialAccountId(Guid accountBEDefinitionId, long? accountId)
         {
             if (!accountId.HasValue)
@@ -925,8 +925,7 @@ namespace Retail.BusinessEntity.Business
             if (getInherited && account.ParentAccountId.HasValue)
             {
                 var parentAccount = GetAccount(accountBEDefinitionId, account.ParentAccountId.Value);
-                if (parentAccount == null)
-                    throw new NullReferenceException(String.Format("parentAccount '{0}'", account.ParentAccountId.Value));
+                parentAccount.ThrowIfNull("parentAccount", account.ParentAccountId.Value);
                 return TryGetAccountPart<T>(accountBEDefinitionId, parentAccount, getInherited, out accountPart);
             }
             else
@@ -973,7 +972,7 @@ namespace Retail.BusinessEntity.Business
         public List<Account> GetChildAccounts(Account account, bool withSubChildren)
         {
             var accountBEDefinitionId = s_accountTypeManager.GetAccountBEDefinitionId(account.TypeId);
-            return GetChildAccounts( accountBEDefinitionId, account.AccountId,  withSubChildren);
+            return GetChildAccounts(accountBEDefinitionId, account.AccountId, withSubChildren);
         }
         public List<Account> GetChildAccounts(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
         {
@@ -1005,7 +1004,7 @@ namespace Retail.BusinessEntity.Business
             if (childAccounts == null)
                 return null;
             return childAccounts.MapRecords(ClientChildAccountInfoMapper);
-           
+
         }
         public IEnumerable<ClientAccountInfo> GetClientAccountInfoWithChildren(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
         {
@@ -1253,7 +1252,7 @@ namespace Retail.BusinessEntity.Business
             Account account = GetAccount(accountBEDefinitionId, accountId);
             SetExtendedSettings<T>(extendedSettings, account);
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-            
+
             int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
 
             if (dataManager.UpdateExtendedSettings(accountId, account.ExtendedSettings, lastModifiedBy))
@@ -1319,7 +1318,7 @@ namespace Retail.BusinessEntity.Business
             public byte[] LastTimeStamp { get; set; }
         }
 
-        static Dictionary<Guid, CachedAccountsByDefId> s_allAccountsByDefId = new Dictionary<Guid,CachedAccountsByDefId>();
+        static Dictionary<Guid, CachedAccountsByDefId> s_allAccountsByDefId = new Dictionary<Guid, CachedAccountsByDefId>();
 
         public Dictionary<long, Account> GetCachedAccounts(Guid accountBEDefinitionId)
         {
@@ -1327,7 +1326,7 @@ namespace Retail.BusinessEntity.Business
                 () =>
                 {
                     CachedAccountsByDefId cachedAccountsByDefId;
-                    lock(s_allAccountsByDefId)
+                    lock (s_allAccountsByDefId)
                     {
                         cachedAccountsByDefId = s_allAccountsByDefId.GetOrCreateItem(accountBEDefinitionId);
                     }
@@ -1338,7 +1337,7 @@ namespace Retail.BusinessEntity.Business
                     if (cachedAccountsByDefId.AllAccounts == null)
                     {
                         cachedAccountsByDefId.AllAccounts = new Dictionary<long, Account>(accounts.Count());
-                        foreach(var a in accounts)
+                        foreach (var a in accounts)
                         {
                             cachedAccountsByDefId.AllAccounts.Add(a.AccountId, a);
                         }
@@ -1346,11 +1345,11 @@ namespace Retail.BusinessEntity.Business
                     else
                     {
                         Dictionary<long, Account> finalAccounts = new Dictionary<long, Account>(cachedAccountsByDefId.AllAccounts.Count + accounts.Count());
-                        foreach(var entry in cachedAccountsByDefId.AllAccounts)
+                        foreach (var entry in cachedAccountsByDefId.AllAccounts)
                         {
                             finalAccounts.Add(entry.Key, entry.Value);
                         }
-                        foreach(var a in accounts)
+                        foreach (var a in accounts)
                         {
                             if (finalAccounts.ContainsKey(a.AccountId))
                             {
@@ -1466,14 +1465,14 @@ namespace Retail.BusinessEntity.Business
             ValidateAccountToAdd(accountToInsert, donotValidateParent);
 
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-          
+
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
             accountToInsert.CreatedBy = loggedInUserId;
             accountToInsert.LastModifiedBy = loggedInUserId;
 
             if (dataManager.Insert(accountToInsert, out accountId))
             {
-                new AccountStatusHistoryManager().AddAccountStatusHistory(accountToInsert.AccountBEDefinitionId, accountId, accountToInsert.StatusId, null,DateTime.Today);
+                new AccountStatusHistoryManager().AddAccountStatusHistory(accountToInsert.AccountBEDefinitionId, accountId, accountToInsert.StatusId, null, DateTime.Today);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
                 account = GetAccount(accountToInsert.AccountBEDefinitionId, accountId);
                 VRActionLogger.Current.TrackAndLogObjectAdded(new AccountBELoggableEntity(accountToInsert.AccountBEDefinitionId), account);
@@ -1543,11 +1542,11 @@ namespace Retail.BusinessEntity.Business
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
                 var fieldDefinitions = new AccountTypeManager().GetGenericFieldDefinitionsInfo(_query.AccountBEDefinitionId);
-                if (fieldDefinitions != null && _query.Columns  != null)
+                if (fieldDefinitions != null && _query.Columns != null)
                 {
                     foreach (var exportColumn in _query.Columns)
                     {
-                        var fieldDefinition = fieldDefinitions.FindRecord(x=>x.Name == exportColumn);
+                        var fieldDefinition = fieldDefinitions.FindRecord(x => x.Name == exportColumn);
                         if (fieldDefinition != null)
                             sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = fieldDefinition.Title });
                     }
@@ -1879,9 +1878,9 @@ namespace Retail.BusinessEntity.Business
             Dictionary<string, DataRecordFieldValue> fieldValues = new Dictionary<string, DataRecordFieldValue>();
             Dictionary<string, AccountGenericField> accountGenericFields = accountTypeManager.GetAccountGenericFields(accountBEDefinitionId);
 
-            if(columns != null )
+            if (columns != null)
             {
-                foreach(var col in columns)
+                foreach (var col in columns)
                 {
                     AccountGenericField field;
                     if (!accountGenericFields.TryGetValue(col, out field))
@@ -1914,7 +1913,7 @@ namespace Retail.BusinessEntity.Business
                 }
             }
 
-            
+
 
             return new AccountDetail()
             {
