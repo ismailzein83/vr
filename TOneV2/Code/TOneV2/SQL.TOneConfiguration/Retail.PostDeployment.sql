@@ -153,7 +153,8 @@ as (select * from (values
 ('2F5C2FB4-4380-4A18-986C-210459134B4B','Centrex Subscriber Invoice','Centrex Subscriber Invoice','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig'		,'{"Editor":"retail-invoice-invoicetype-retailsubscriberinvoicesettings"}'),
 ('A5A8B72B-F834-4DAA-80F8-25157C2C3D37','Quarterly Financial Recurring Charge Period','Quarterly','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-quarterly"}'),
 ('A1D0F08B-B8F7-4B9C-9C83-49DABD2A68D5','Monthly Recurring Charge Period','Monthly','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-monthly"}'),
-('447B67A5-DBEA-4410-9C00-C8D297B8F81C','Yearly Recurring Charge Period','Yearly','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-yearly"}')
+('447B67A5-DBEA-4410-9C00-C8D297B8F81C','Yearly Recurring Charge Period','Yearly','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-yearly"}'),
+('F0871B89-11BC-42D0-BA88-244DE96F581A','Operator Bank Details','Operator Bank Details','VR_Invoice_InvoiceType_RDLCDataSourceSettings','{"Editor":"retail-be-account-datasourcesettings-operatorbankdetails"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
@@ -461,7 +462,9 @@ set nocount on;
 ;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('509E467B-4562-4CA6-A32E-E50473B74D2C','Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Retail","VersionNumber":"version #VersionNumber# ~ #VersionDate#"}}',1)
+('509E467B-4562-4CA6-A32E-E50473B74D2C','Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Retail","VersionNumber":"version #VersionNumber# ~ #VersionDate#"}}',1),
+('7C4DE35F-9435-47EE-924E-1885E96F9206','General Technical','VR_Common_GeneralTechnicalSetting','General','{"Editor":"vr-common-general-technical-settings-editor"}','{"$type":"Vanrise.Entities.GeneralTechnicalSettingData, Vanrise.Entities","CompanySettingDefinition":{"$type":"Vanrise.Entities.CompanySettingDefinition, Vanrise.Entities","ContactTypes":{"$type":"System.Collections.Generic.List`1[[Vanrise.Entities.CompanyContactType, Vanrise.Entities]], mscorlib","$values":[{"$type":"Vanrise.Entities.CompanyContactType, Vanrise.Entities","Name":"Main Contacts","Title":"Main"},{"$type":"Vanrise.Entities.CompanyContactType, Vanrise.Entities","Name":"Billing","Title":"Billing"}]},"ExtendedSettings":{"$type":"System.Collections.Generic.Dictionary`2[[System.Guid, mscorlib],[Vanrise.Entities.CompanyDefinitionSetting, Vanrise.Entities]], mscorlib"}},"IsLocalizationEnabled":false}',1)
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
