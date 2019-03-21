@@ -398,7 +398,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -3150,7 +3149,7 @@ La facture doit être payée avant </Value>
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=string.Format("{0} of {1}",Globals!PageNumber ,Globals!TotalPages)</Value>
+                  <Value>=string.Format("{0} de {1}",Globals!PageNumber ,Globals!TotalPages)</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>9pt</FontSize>
