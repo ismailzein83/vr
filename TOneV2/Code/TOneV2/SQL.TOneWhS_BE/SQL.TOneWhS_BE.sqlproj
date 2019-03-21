@@ -659,15 +659,7 @@
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_ExcludedItems_GetProcessInstanceIds.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_ExcludedItems_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListRateChangeNew_GetCustomerOtherRatePreviews.sql" />
-    <Build Include="TOneWhS_SMSBE\Tables\SupplierRate.sql" />
-    <Build Include="TOneWhS_SMSBE\Tables\SupplierPriceList.sql" />
-    <Build Include="TOneWhS_SMSBE\Tables\SMSSwitch.sql" />
-    <Build Include="TOneWhS_SMSBE\Tables\ProcessDraft.sql" />
-    <Build Include="TOneWhS_SMSBE\Tables\SaleRate.sql" />
-    <Build Include="TOneWhS_SMSBE\Tables\SalePriceList.sql" />
-    <Build Include="Security\TOneWhS_SMSBE.sql" />
     <Build Include="TOneWhS_BE\Tables\TechnicalZone.sql" />
     <Build Include="TOneWhS_BE\Tables\TechnicalCode.sql" />
-    <Build Include="TOneWhS_SMSBE\Tables\SMSServiceType.sql" />
   </ItemGroup>
 </Project>
