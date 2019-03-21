@@ -176,6 +176,8 @@ namespace Vanrise.GenericData.Business
         protected override bool IsRuleStillValid(T rule)
         {
             GenericRuleDefinition ruleDefinition = _genericRuleDefinitionManager.GetGenericRuleDefinition(rule.DefinitionId);
+            ruleDefinition.ThrowIfNull("ruleDefinition", rule.DefinitionId);
+
             return rule.IsRuleStillValid(new GenericRuleIsRuleStillValidContext() { RuleDefinitionSettings = ruleDefinition.SettingsDefinition });
         }
 
