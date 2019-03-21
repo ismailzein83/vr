@@ -47,7 +47,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
 
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("TOneWhS_SMSBuisenessEntity", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
+            return RDBDataProviderFactory.CreateProvider("TOneWhS_SMSBuisenessEntity", "TOneWhS_SMSBE_DBConnStringKey", "TOneV2SMSDBConnString");
         }
 
         public List<SupplierSMSPriceList> GetSupplierSMSPriceLists()
