@@ -220,6 +220,9 @@
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-log-search.js" />
     <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\bp-basebptasktypesettings-customobject.js" />
+    <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\BPGenericTaskTypeAction\bp-generictasktype-actionfiltercondition.js" />
+    <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\BPGenericTaskTypeAction\bp-generictasktype-actionsettings-execute.js" />
+    <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\BPGenericTaskTypeAction\bp-generictasktype-actionsettings.js" />
     <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\Templates\BaseBPTaskTypeSettingsTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-selector.js" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-tasktype-selector.js" />
@@ -234,6 +237,8 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowManualExecEditorTemplate.html" />
     <Content Include="BusinessProcess\Services\APIServices\DynamicBusinessProcessAPIService.js" />
     <Content Include="BusinessProcess\Services\BPTaskTypeService.js" />
+    <Content Include="BusinessProcess\Views\BPGenericTaskType\BPGenericTaskTypeActionEditorController.js" />
+    <Content Include="BusinessProcess\Views\BPGenericTaskType\Templates\BPGenericTaskTypeActionEditorTemplate.html" />
     <Content Include="BusinessProcess\Views\BPTask\BPGenericTaskTypeSettingsEditor.html" />
     <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskTypeStaticEditorTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\BaseBPTaskTypeSettings\bp-generictasktype-settings.js" />
@@ -388,6 +393,7 @@
     <Content Include="BusinessProcess\Services\VRWorkflowService.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\BPGenericTaskTypeAction\Templates\" />
     <Folder Include="System\" />
   </ItemGroup>
   <ItemGroup>
