@@ -18,10 +18,22 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 {
     public class EvaluateDealActivator : QueueActivator, IReprocessStageActivator
     {
-        private List<int> cdrTypesToEvaluate = new List<int>() { 1, 4 };
+        private const int mainCDRType = 1;
+        private const int invalidCDRType = 2;
+        private const int failedCDRType = 3;
+        private const int partialPricedCDRType = 4;
+        private const int interconnectCDRType = 5;
+        private const int invalidInterconnectCDRType = 6;
+
+        private List<int> cdrTypesToEvaluate = new List<int>() { mainCDRType, partialPricedCDRType, failedCDRType };
 
         public List<string> MainOutputStages { get; set; }
+        public List<string> InvalidOutputStages { get; set; }
+        public List<string> FailedOutputStages { get; set; }
         public List<string> PartialPricedOutputStages { get; set; }
+        public List<string> InterconnectOutputStages { get; set; }
+        public List<string> InvalidInterconnectOutputStages { get; set; }
+
         public List<string> BillingOutputStages { get; set; }
         public List<string> TrafficOutputStages { get; set; }
 
@@ -45,18 +57,17 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
 
-            List<dynamic> mainCDRs;
-            List<dynamic> partialPricedCDRs;
-            List<dynamic> billingRecords = new List<dynamic>(); //for billing stats and traffic stats
-            List<dynamic> trafficRecords = new List<dynamic>(); //for traffic stats
-
             DateTime minAttemptDateTime;
             DateTime maxAttemptDateTime;
             HashSet<DealZoneGroup> saleDealZoneGroups;
             HashSet<DealZoneGroup> costDealZoneGroups;
+            Dictionary<int, List<dynamic>> billingCDRsByType;
+
+            PrepareLists(batchRecords, out billingCDRsByType, out saleDealZoneGroups, out costDealZoneGroups, out minAttemptDateTime, out maxAttemptDateTime);
 
             bool hasDealData = false;
-            PrepareLists(batchRecords, out saleDealZoneGroups, out costDealZoneGroups, out mainCDRs, out partialPricedCDRs, out minAttemptDateTime, out maxAttemptDateTime);
+            List<dynamic> billingRecords = new List<dynamic>(); //for billing stats and traffic stats
+            List<dynamic> trafficRecords = new List<dynamic>(); //for traffic stats
 
             if (saleDealZoneGroups.Count > 0 || costDealZoneGroups.Count > 0)
             {
@@ -82,8 +93,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
                 foreach (var record in batchRecords)
                 {
-                    int cdrType = record.Type;
-                    if (!cdrTypesToEvaluate.Contains(cdrType))
+                    if (!cdrTypesToEvaluate.Contains(record.Type))
                     {
                         trafficRecords.Add(record);
                         continue;
@@ -104,7 +114,8 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                         var saleZoneId = record.GetFieldValue(salePropertyNames[PropertyName.Zone]);
                         DealZoneGroup saleDealZoneGroup = new DealZoneGroup() { DealId = saleOrigDealId.Value, ZoneGroupNb = saleOrigZoneGroupNb.Value };
                         Func<int, DealZoneGroupTierDetails> getSaleDealZoneGroupTierDetails = GetSaleDealZoneGroupTierDetails(saleDealZoneGroup, saleZoneId, attemptDateTime);
-                        UpdateBillingCDRData(saleDealProgresses, newSaleDealProgresses, saleDealDetailedProgresses, newSaleDealDetailedProgresses, saleDealZoneGroup, record, true, salePropertyNames, getSaleDealZoneGroupTierDetails, out firstSaleCDR, out secondSaleCDR);
+                        UpdateBillingCDRData(saleDealProgresses, newSaleDealProgresses, saleDealDetailedProgresses, newSaleDealDetailedProgresses, saleDealZoneGroup, record, true, salePropertyNames,
+                            getSaleDealZoneGroupTierDetails, out firstSaleCDR, out secondSaleCDR);
                     }
 
                     int? costOrigDealId = record.OrigCostDealId;
@@ -114,10 +125,16 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                         var supplierZoneId = record.GetFieldValue(costPropertyNames[PropertyName.Zone]);
                         DealZoneGroup costDealZoneGroup = new DealZoneGroup() { DealId = costOrigDealId.Value, ZoneGroupNb = costOrigZoneGroupNb.Value };
                         Func<int, DealZoneGroupTierDetails> getSupplierDealZoneGroupTierDetails = GetSupplierDealZoneGroupTierDetails(costDealZoneGroup, supplierZoneId, attemptDateTime);
-                        UpdateBillingCDRData(costDealProgresses, newCostDealProgresses, costDealDetailedProgresses, newCostDealDetailedProgresses, costDealZoneGroup, record, false, costPropertyNames, getSupplierDealZoneGroupTierDetails, out firstCostCDR, out secondCostCDR);
+                        UpdateBillingCDRData(costDealProgresses, newCostDealProgresses, costDealDetailedProgresses, newCostDealDetailedProgresses, costDealZoneGroup, record, false, costPropertyNames,
+                            getSupplierDealZoneGroupTierDetails, out firstCostCDR, out secondCostCDR);
                     }
-                    CreateBillingStatsCDRRecords(billingRecords, record, salePropertyNames, firstSaleCDR, secondSaleCDR, costPropertyNames, firstCostCDR, secondCostCDR, recordTypeId);
+
+                    if (record.Type != failedCDRType)
+                        CreateBillingStatsCDRRecords(billingRecords, record, salePropertyNames, firstSaleCDR, secondSaleCDR, costPropertyNames, firstCostCDR, secondCostCDR, recordTypeId);
+                    else
+                        trafficRecords.Add(record);
                 }
+
                 DealProgressManager dealProgressManager = new DealProgressManager();
                 dealProgressManager.UpdateDealProgresses(existingSaleDealProgresses.Union(existingCostDealProgresses));
                 dealProgressManager.InsertDealProgresses(newSaleDealProgresses.Union(newCostDealProgresses));
@@ -128,38 +145,67 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             }
             else
             {
+                List<dynamic> mainCDRs = billingCDRsByType.GetOrCreateItem(mainCDRType);
+                List<dynamic> partialPricedCDRs = billingCDRsByType.GetOrCreateItem(partialPricedCDRType);
                 billingRecords = mainCDRs.Union(partialPricedCDRs).ToList();
             }
 
-            DataRecordBatch mainTransformedBatch = DataRecordBatch.CreateBatchFromRecords(mainCDRs, queueItemType.BatchDescription, recordTypeId);
-            DataRecordBatch partialPricedTransformedBatch = DataRecordBatch.CreateBatchFromRecords(partialPricedCDRs, queueItemType.BatchDescription, recordTypeId);
+            DataRecordBatch mainTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingCDRsByType.GetOrCreateItem(mainCDRType), queueItemType.BatchDescription, recordTypeId);
+            DataRecordBatch partialPricedTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingCDRsByType.GetOrCreateItem(partialPricedCDRType), queueItemType.BatchDescription, recordTypeId);
+            DataRecordBatch failedTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingCDRsByType.GetOrCreateItem(failedCDRType), queueItemType.BatchDescription, recordTypeId);
+            DataRecordBatch invalidTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingCDRsByType.GetOrCreateItem(invalidCDRType), queueItemType.BatchDescription, recordTypeId);
+            DataRecordBatch invalidInterconnectTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingCDRsByType.GetOrCreateItem(invalidInterconnectCDRType), queueItemType.BatchDescription, recordTypeId);
+            DataRecordBatch interconnectTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingCDRsByType.GetOrCreateItem(interconnectCDRType), queueItemType.BatchDescription, recordTypeId);
             DataRecordBatch billingTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingRecords, queueItemType.BatchDescription, recordTypeId);
-            
+
             DataRecordBatch trafficTransformedBatch;
-            if(hasDealData)
+            if (hasDealData)
                 trafficTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingRecords.Union(trafficRecords).ToList(), queueItemType.BatchDescription, recordTypeId);
             else
                 trafficTransformedBatch = DataRecordBatch.CreateBatchFromRecords(batchRecords, queueItemType.BatchDescription, recordTypeId);
 
-            SendOutputData(context, mainTransformedBatch, partialPricedTransformedBatch, billingTransformedBatch, trafficTransformedBatch);
+            SendOutputData(context, mainTransformedBatch, partialPricedTransformedBatch, failedTransformedBatch, invalidTransformedBatch, invalidInterconnectTransformedBatch,
+                interconnectTransformedBatch, billingTransformedBatch, trafficTransformedBatch);
         }
 
-        private void PrepareLists(List<dynamic> batchRecords, out HashSet<DealZoneGroup> saleDealZoneGroups, out HashSet<DealZoneGroup> costDealZoneGroups, out List<dynamic> mainCDRs, out List<dynamic> partialPricedCDRs,
+        private void PrepareLists(List<dynamic> batchRecords, out Dictionary<int, List<dynamic>> billingCDRsByType, out HashSet<DealZoneGroup> saleDealZoneGroups, out HashSet<DealZoneGroup> costDealZoneGroups,
             out DateTime minAttemptDateTime, out DateTime maxAttemptDateTime)
         {
+            billingCDRsByType = new Dictionary<int, List<dynamic>>();
             saleDealZoneGroups = new HashSet<DealZoneGroup>();
             costDealZoneGroups = new HashSet<DealZoneGroup>();
-            mainCDRs = new List<dynamic>();
-            partialPricedCDRs = new List<dynamic>();
-
             minAttemptDateTime = DateTime.MaxValue;
             maxAttemptDateTime = DateTime.MinValue;
 
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
 
             foreach (var record in batchRecords)
             {
                 int cdrType = record.Type;
+                switch (cdrType)
+                {
+                    case mainCDRType:
+                    case partialPricedCDRType:
+                    case failedCDRType:
+                    case invalidCDRType:
+                        if (IsSaleValid(record, record.SaleRateId, record.SaleCurrencyId, carrierAccountManager, saleZoneManager))
+                            dealDefinitionManager.FillOrigSaleDealValues(record);
+                        if (IsCostValid(record, record.CostRateId, record.CostCurrencyId))
+                            dealDefinitionManager.FillOrigCostDealValues(record);
+                        break;
+
+                    case interconnectCDRType:
+                    case invalidInterconnectCDRType:
+                        break;
+
+                    default: throw new NotSupportedException(string.Format("CDRType '{0}'", cdrType));
+                }
+
+                List<dynamic> billingCDRs = billingCDRsByType.GetOrCreateItem(cdrType);
+                billingCDRs.Add(record);
+
                 if (!cdrTypesToEvaluate.Contains(cdrType))
                     continue;
 
@@ -169,28 +215,6 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
                 if (attemptDateTime < minAttemptDateTime)
                     minAttemptDateTime = attemptDateTime;
-
-                decimal? recordSaleRateId = record.SaleRateId;
-                decimal? recordSaleCurrencyId = record.SaleCurrencyId;
-                decimal? recordCostRateId = record.CostRateId;
-                decimal? recordCostCurrencyId = record.CostCurrencyId;
-
-                bool saleValid = recordSaleRateId.HasValue && recordSaleCurrencyId.HasValue;
-                bool costValid = recordCostRateId.HasValue && recordCostCurrencyId.HasValue;
-
-                if (!saleValid && !costValid)
-                    throw new VRBusinessException(string.Format("Sale Part and Cost Part doesn't exist for CDR Id: {0}", record.CDRId));
-
-                if (saleValid && costValid)
-                    mainCDRs.Add(record);
-                else
-                    partialPricedCDRs.Add(record);
-
-                if (saleValid)
-                    dealDefinitionManager.FillOrigSaleDealValues(record);
-
-                if (costValid)
-                    dealDefinitionManager.FillOrigCostDealValues(record);
 
                 int? saleOrigDealId = record.OrigSaleDealId;
                 int? saleOrigZoneGroupNb = record.OrigSaleDealZoneGroupNb;
@@ -294,15 +318,22 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             Func<int, DealZoneGroupTierDetails> getDealZoneGroupTierDetails, out CDRPricingDataOutput firstPartOutput, out CDRPricingDataOutput secondPartOutput)
         {
             firstPartOutput = null; secondPartOutput = null;
-            decimal pricedDurationInSeconds = record.GetFieldValue(propertyNames[PropertyName.PricedDurationInSeconds]);
+            decimal pricedDurationInSeconds = (record.Type != failedCDRType) ? record.GetFieldValue(propertyNames[PropertyName.PricedDurationInSeconds]) : 0;
 
             DealProgress dealProgress;
             if (dealProgresses.TryGetValue(dealZoneGroup, out dealProgress))
             {
                 decimal reachedDuration = dealProgress.ReachedDurationInSeconds.HasValue ? dealProgress.ReachedDurationInSeconds.Value : 0;
 
-                if (!dealProgress.TargetDurationInSeconds.HasValue || (dealProgress.TargetDurationInSeconds - reachedDuration) >= pricedDurationInSeconds)
+                if (!dealProgress.TargetDurationInSeconds.HasValue || (dealProgress.TargetDurationInSeconds.Value - reachedDuration) >= pricedDurationInSeconds)
                 {
+                    if (dealProgress.IsComplete && pricedDurationInSeconds == 0) //CurrentTier is completed and cdrType is Failed
+                    {
+                        DealZoneGroupTierDetails nextDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealProgress.CurrentTierNb + 1);
+                        if (nextDealZoneGroupTierDetails == null)
+                            return;
+                    }
+
                     dealProgress.ReachedDurationInSeconds = reachedDuration + pricedDurationInSeconds;
                     DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealProgress.CurrentTierNb);
 
@@ -407,6 +438,9 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
         private void AdjustDealDetailedProgress(dynamic record, Dictionary<PropertyName, string> propertyNames, bool isSale, Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgresses,
             List<DealDetailedProgress> newDealDetailedProgresses, int dealId, int zoneGroupNb, int? tierNb, decimal durationInSeconds)
         {
+            if (record.Type == failedCDRType)
+                return;
+
             int intervalOffsetInMinutes = new TOne.WhS.Deal.Business.ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
             DateTime attemptDateTime = record.GetFieldValue(propertyNames[PropertyName.AttemptDateTime]);
             DateTime fromTime = new DateTime(attemptDateTime.Year, attemptDateTime.Month, attemptDateTime.Day, attemptDateTime.Hour, ((int)(attemptDateTime.Minute / intervalOffsetInMinutes)) * intervalOffsetInMinutes, 0);
@@ -421,6 +455,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 FromTime = fromTime,
                 ToTime = toTime
             };
+
             DealDetailedProgress tempDealDetailedProgress;
             if (dealDetailedProgresses.TryGetValue(dealDetailedZoneGroupTier, out tempDealDetailedProgress))
             {
@@ -460,8 +495,8 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             };
         }
 
-        private void SetPricingData(dynamic record, Dictionary<PropertyName, string> propertyNames, CDRPricingDataInput firstPartInput, CDRPricingDataInput secondPartInput, out CDRPricingDataOutput firstPartOutput,
-            out CDRPricingDataOutput secondPartOutput)
+        private void SetPricingData(dynamic record, Dictionary<PropertyName, string> propertyNames, CDRPricingDataInput firstPartInput, CDRPricingDataInput secondPartInput,
+            out CDRPricingDataOutput firstPartOutput, out CDRPricingDataOutput secondPartOutput)
         {
             CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
             decimal firstPartNet = firstPartInput.Rate * firstPartInput.PricedDurationInSeconds / 60;
@@ -837,8 +872,9 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.CDRPartDurInSec], durationInSeconds);
         }
 
-        private void SendOutputData(IQueueActivatorExecutionContext context, DataRecordBatch mainTransformedBatch, DataRecordBatch partialPricedTransformedBatch,
-            DataRecordBatch billingTransformedBatch, DataRecordBatch trafficTransformedBatch)
+        private void SendOutputData(IQueueActivatorExecutionContext context, DataRecordBatch mainTransformedBatch, DataRecordBatch partialPricedTransformedBatch, DataRecordBatch failedTransformedBatch,
+            DataRecordBatch invalidTransformedBatch, DataRecordBatch invalidInterconnectTransformedBatch, DataRecordBatch interconnectTransformedBatch, DataRecordBatch billingTransformedBatch,
+            DataRecordBatch trafficTransformedBatch)
         {
             if (mainTransformedBatch != null && mainTransformedBatch.GetRecordCount() > 0 && this.MainOutputStages != null)
             {
@@ -850,6 +886,30 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             {
                 foreach (var partialPricedOutputStage in this.PartialPricedOutputStages)
                     context.OutputItems.Add(partialPricedOutputStage, partialPricedTransformedBatch);
+            }
+
+            if (failedTransformedBatch != null && failedTransformedBatch.GetRecordCount() > 0 && this.FailedOutputStages != null)
+            {
+                foreach (var failedOutputStage in this.FailedOutputStages)
+                    context.OutputItems.Add(failedOutputStage, failedTransformedBatch);
+            }
+
+            if (invalidTransformedBatch != null && invalidTransformedBatch.GetRecordCount() > 0 && this.InvalidOutputStages != null)
+            {
+                foreach (var invalidOutputStage in this.InvalidOutputStages)
+                    context.OutputItems.Add(invalidOutputStage, invalidTransformedBatch);
+            }
+
+            if (invalidInterconnectTransformedBatch != null && invalidInterconnectTransformedBatch.GetRecordCount() > 0 && this.InvalidInterconnectOutputStages != null)
+            {
+                foreach (var invalidInterconnectOutputStage in this.InvalidInterconnectOutputStages)
+                    context.OutputItems.Add(invalidInterconnectOutputStage, invalidInterconnectTransformedBatch);
+            }
+
+            if (interconnectTransformedBatch != null && interconnectTransformedBatch.GetRecordCount() > 0 && this.InterconnectOutputStages != null)
+            {
+                foreach (var interconnectOutputStage in this.InterconnectOutputStages)
+                    context.OutputItems.Add(interconnectOutputStage, interconnectTransformedBatch);
             }
 
             if (billingTransformedBatch != null && billingTransformedBatch.GetRecordCount() > 0 && this.BillingOutputStages != null)
@@ -865,6 +925,51 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             }
         }
 
+        private bool IsSaleValid(dynamic record, decimal? saleRateId, decimal? saleCurrencyId, CarrierAccountManager carrierAccountManager, SaleZoneManager saleZoneManager)
+        {
+            int? customerId = record.CustomerId;
+
+            switch (record.Type)
+            {
+                case mainCDRType:
+                case partialPricedCDRType:
+                    bool isCustomerPassThrough = carrierAccountManager.IsCustomerPassThrough(customerId.Value);
+                    return (saleRateId.HasValue || isCustomerPassThrough) && saleCurrencyId.HasValue;
+
+                case failedCDRType:
+                case invalidCDRType:
+                case interconnectCDRType:
+                case invalidInterconnectCDRType:
+                    long? saleZoneId = record.SaleZoneId;
+                    if (!customerId.HasValue || !saleZoneId.HasValue)
+                        return false;
+
+                    return saleZoneManager.IsSaleZoneSoldToCustomer(customerId.Value, saleZoneId.Value, record.AttemptDateTime);
+
+                default: throw new NotSupportedException(string.Format("CDRType '{0}'", record.Type));
+            }
+        }
+
+        private bool IsCostValid(dynamic record, decimal? costRateId, decimal? costCurrencyId)
+        {
+            switch (record.Type)
+            {
+                case mainCDRType:
+                case partialPricedCDRType:
+                    return costRateId.HasValue && costCurrencyId.HasValue;
+
+                case failedCDRType:
+                case invalidCDRType:
+                case interconnectCDRType:
+                case invalidInterconnectCDRType:
+                    int? supplierId = record.SupplierId;
+                    long? supplierZoneId = record.SupplierZoneId;
+                    return supplierId.HasValue && supplierZoneId.HasValue;
+
+                default: throw new NotSupportedException(string.Format("CDRType '{0}'", record.Type));
+            }
+        }
+
         #endregion
 
         #region IReprocessStageActivator
@@ -876,18 +981,20 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
         public void ExecuteStage(Vanrise.Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
+
             Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> saleDealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgressesByDate(true, null, context.To);
             Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> costDealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgressesByDate(false, null, context.To);
 
-            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
-
             Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedData, DealDuration>>> saleDealDetailedProgressesDict;
             Dictionary<DealZoneGroup, DealDetailedProgress> previousSaleDealDetailedProgressesDict;
+            BuildDealDetailedProgressDict(context.From, saleDealDetailedProgresses, out saleDealDetailedProgressesDict, out previousSaleDealDetailedProgressesDict);
+
             Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedData, DealDuration>>> costDealDetailedProgressesDict;
             Dictionary<DealZoneGroup, DealDetailedProgress> previousCostDealDetailedProgressesDict;
-            BuildDealDetailedProgressDict(context.From, saleDealDetailedProgresses, out saleDealDetailedProgressesDict, out previousSaleDealDetailedProgressesDict);
             BuildDealDetailedProgressDict(context.From, costDealDetailedProgresses, out costDealDetailedProgressesDict, out previousCostDealDetailedProgressesDict);
 
             Dictionary<PropertyName, string> salePropertyNames = BuildPropertyNames("Sale", "Sale");
@@ -899,10 +1006,15 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
             var recordTypeId = queueItemType.DataRecordTypeId;
 
-            List<string> validMainOutputStages = BuildValidOutputStage(context.StageNames, this.MainOutputStages);
-            List<string> validPartialPricedOutputStages = BuildValidOutputStage(context.StageNames, this.PartialPricedOutputStages);
-            List<string> validBillingOutputStages = BuildValidOutputStage(context.StageNames, this.BillingOutputStages);
-            List<string> validTrafficOutputStages = BuildValidOutputStage(context.StageNames, this.TrafficOutputStages);
+            List<string> mainOutputStages = BuildValidOutputStage(context.StageNames, this.MainOutputStages);
+            List<string> invalidOutputStages = BuildValidOutputStage(context.StageNames, this.InvalidOutputStages);
+            List<string> failedOutputStages = BuildValidOutputStage(context.StageNames, this.FailedOutputStages);
+            List<string> partialPricedOutputStages = BuildValidOutputStage(context.StageNames, this.PartialPricedOutputStages);
+            List<string> interconnectOutputStages = BuildValidOutputStage(context.StageNames, this.InterconnectOutputStages);
+            List<string> invalidInterconnectOutputStages = BuildValidOutputStage(context.StageNames, this.InvalidInterconnectOutputStages);
+
+            List<string> billingOutputStages = BuildValidOutputStage(context.StageNames, this.BillingOutputStages);
+            List<string> trafficOutputStages = BuildValidOutputStage(context.StageNames, this.TrafficOutputStages);
 
             context.DoWhilePreviousRunning(() =>
             {
@@ -915,38 +1027,55 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                         if (genericDataRecordBatch == null)
                             throw new Exception(String.Format("reprocessBatch should be of type 'Reprocess.Entities.GenericDataRecordBatch'. and not of type '{0}'", reprocessBatch.GetType()));
 
-                        List<dynamic> mainCDRs = new List<dynamic>();
-                        List<dynamic> partialPricedCDRs = new List<dynamic>();
+                        Dictionary<int, List<dynamic>> billingCDRsByType = new Dictionary<int, List<dynamic>>();
                         List<dynamic> billingRecords = new List<dynamic>(); //for billing stats and traffic stats
                         List<dynamic> trafficRecords = new List<dynamic>(); //for traffic stats
 
                         foreach (var record in genericDataRecordBatch.Records)
                         {
                             int cdrType = record.Type;
+                            switch (cdrType)
+                            {
+                                case mainCDRType:
+                                case partialPricedCDRType:
+                                case failedCDRType:
+                                case invalidCDRType:
+                                    if (IsSaleValid(record, record.OrigSaleRateId, record.OrigSaleCurrencyId, carrierAccountManager, saleZoneManager))
+                                    {
+                                        dealDefinitionManager.FillOrigSaleDealValues(record);
+                                    }
+                                    else
+                                    {
+                                        record.OrigSaleDealId = null;
+                                        record.OrigSaleDealZoneGroupNb = null;
+                                    }
+
+                                    if (IsCostValid(record, record.OrigCostRateId, record.OrigCostCurrencyId))
+                                    {
+                                        dealDefinitionManager.FillOrigCostDealValues(record);
+                                    }
+                                    else
+                                    {
+                                        record.OrigCostDealId = null;
+                                        record.OrigCostDealZoneGroupNb = null;
+                                    }
+                                    break;
+
+                                case interconnectCDRType:
+                                case invalidInterconnectCDRType:
+                                    break;
+
+                                default: throw new NotSupportedException(string.Format("CDRType '{0}'", cdrType));
+                            }
+
+                            List<dynamic> billingCDRs = billingCDRsByType.GetOrCreateItem(cdrType);
+                            billingCDRs.Add(record);
+
                             if (!cdrTypesToEvaluate.Contains(cdrType))
                             {
                                 trafficRecords.Add(record);
                                 continue;
                             }
-
-                            int customerId = record.CustomerId;
-                            bool isCustomerPassThrough = carrierAccountManager.IsCustomerPassThrough(customerId);
-
-                            decimal? recordSaleRateId = record.OrigSaleRateId;
-                            decimal? recordSaleCurrencyId = record.OrigSaleCurrencyId;
-                            decimal? recordCostRateId = record.OrigCostRateId;
-                            decimal? recordCostCurrencyId = record.OrigCostCurrencyId;
-
-                            bool saleValid = (recordSaleRateId.HasValue || isCustomerPassThrough) && recordSaleCurrencyId.HasValue;
-                            bool costValid = recordCostRateId.HasValue && recordCostCurrencyId.HasValue;
-
-                            if (!saleValid && !costValid)
-                                throw new VRBusinessException(string.Format("Sale Part and Cost Part doesn't exist for CDR Id: {0}", record.CDRId));
-
-                            if (saleValid && costValid)
-                                mainCDRs.Add(record);
-                            else
-                                partialPricedCDRs.Add(record);
 
                             CDRPricingDataOutput firstSaleCDR = null;
                             CDRPricingDataOutput secondSaleCDR = null;
@@ -958,106 +1087,59 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                             DateTime attemptDateTime = record.GetFieldValue(salePropertyNames[PropertyName.AttemptDateTime]);//same value for sale and cost
                             DateTime batchStart = new DateTime(attemptDateTime.Year, attemptDateTime.Month, attemptDateTime.Day, attemptDateTime.Hour, ((int)(attemptDateTime.Minute / intervalOffsetInMinutes)) * intervalOffsetInMinutes, 0);
 
-                            if (saleValid)
-                            {
-                                dealDefinitionManager.FillOrigSaleDealValues(record);
-                            }
-                            else
-                            {
-                                record.OrigSaleDealId = null;
-                                record.OrigSaleDealZoneGroupNb = null;
-                            }
-
                             int? saleOrigDealId = record.OrigSaleDealId;
                             int? saleOrigZoneGroupNb = record.OrigSaleDealZoneGroupNb;
-
                             if (saleOrigDealId.HasValue && saleOrigZoneGroupNb.HasValue)
                             {
                                 var saleZoneId = record.GetFieldValue(salePropertyNames[PropertyName.Zone]);
                                 DealZoneGroup saleDealZoneGroup = new DealZoneGroup() { DealId = saleOrigDealId.Value, ZoneGroupNb = saleOrigZoneGroupNb.Value };
                                 Func<int, DealZoneGroupTierDetails> getSaleDealZoneGroupTierDetails = GetSaleDealZoneGroupTierDetails(saleDealZoneGroup, saleZoneId, attemptDateTime);
-                                UpdateReprocessBillingCDRData(saleDealDetailedProgressesDict.GetRecord(saleDealZoneGroup), previousSaleDealDetailedProgressesDict.GetRecord(saleDealZoneGroup), record, true, salePropertyNames, batchStart, getSaleDealZoneGroupTierDetails, saleDealZoneGroup, context.From, out firstSaleCDR, out secondSaleCDR);
+                                UpdateReprocessBillingCDRData(saleDealDetailedProgressesDict.GetRecord(saleDealZoneGroup), previousSaleDealDetailedProgressesDict.GetRecord(saleDealZoneGroup), record,
+                                    true, salePropertyNames, batchStart, getSaleDealZoneGroupTierDetails, saleDealZoneGroup, context.From, out firstSaleCDR, out secondSaleCDR);
                             }
                             else
                             {
                                 FillDataFromOriginalValues(record, salePropertyNames);
                             }
 
-                            if (costValid)
-                            {
-                                dealDefinitionManager.FillOrigCostDealValues(record);
-                            }
-                            else
-                            {
-                                record.OrigCostDealId = null;
-                                record.OrigCostDealZoneGroupNb = null;
-                            }
-
                             int? costOrigDealId = record.OrigCostDealId;
                             int? costOrigZoneGroupNb = record.OrigCostDealZoneGroupNb;
-
                             if (costOrigDealId.HasValue && costOrigZoneGroupNb.HasValue)
                             {
                                 var supplierZoneId = record.GetFieldValue(costPropertyNames[PropertyName.Zone]);
                                 DealZoneGroup costDealZoneGroup = new DealZoneGroup() { DealId = costOrigDealId.Value, ZoneGroupNb = costOrigZoneGroupNb.Value };
                                 Func<int, DealZoneGroupTierDetails> getSupplierDealZoneGroupTierDetails = GetSupplierDealZoneGroupTierDetails(costDealZoneGroup, supplierZoneId, attemptDateTime);
-                                UpdateReprocessBillingCDRData(costDealDetailedProgressesDict.GetRecord(costDealZoneGroup), previousCostDealDetailedProgressesDict.GetRecord(costDealZoneGroup), record, false, costPropertyNames, batchStart, getSupplierDealZoneGroupTierDetails, costDealZoneGroup, context.From, out firstCostCDR, out secondCostCDR);
+                                UpdateReprocessBillingCDRData(costDealDetailedProgressesDict.GetRecord(costDealZoneGroup), previousCostDealDetailedProgressesDict.GetRecord(costDealZoneGroup), record,
+                                    false, costPropertyNames, batchStart, getSupplierDealZoneGroupTierDetails, costDealZoneGroup, context.From, out firstCostCDR, out secondCostCDR);
                             }
                             else
                             {
                                 FillDataFromOriginalValues(record, costPropertyNames);
                             }
-                            CreateBillingStatsCDRRecords(billingRecords, record, salePropertyNames, firstSaleCDR, secondSaleCDR, costPropertyNames, firstCostCDR, secondCostCDR, recordTypeId);
+
+                            if (record.Type != failedCDRType)
+                                CreateBillingStatsCDRRecords(billingRecords, record, salePropertyNames, firstSaleCDR, secondSaleCDR, costPropertyNames, firstCostCDR, secondCostCDR, recordTypeId);
+                            else
+                                trafficRecords.Add(record);
+
                         }
 
-                        if (validMainOutputStages != null && mainCDRs.Count > 0)
-                        {
-                            Vanrise.Reprocess.Entities.GenericDataRecordBatch mainGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = mainCDRs };
-                            foreach (var mainOutputStageName in validMainOutputStages)
-                            {
-                                context.EnqueueBatch(mainOutputStageName, mainGenericDataRecordBatch);
-                            }
-                        }
-
-                        if (validPartialPricedOutputStages != null && partialPricedCDRs.Count > 0)
-                        {
-                            Vanrise.Reprocess.Entities.GenericDataRecordBatch partialPricedGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = partialPricedCDRs };
-                            foreach (var partialPricedOutputStageName in validPartialPricedOutputStages)
-                            {
-                                context.EnqueueBatch(partialPricedOutputStageName, partialPricedGenericDataRecordBatch);
-                            }
-                        }
-
-                        if (validBillingOutputStages != null && billingRecords.Count > 0)
-                        {
-                            Vanrise.Reprocess.Entities.GenericDataRecordBatch billingGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = billingRecords };
-                            foreach (var billingOutputStageName in validBillingOutputStages)
-                            {
-                                context.EnqueueBatch(billingOutputStageName, billingGenericDataRecordBatch);
-                            }
-                        }
-
-                        if (validTrafficOutputStages != null && (billingRecords.Count > 0 || trafficRecords.Count > 0))
-                        {
-                            Vanrise.Reprocess.Entities.GenericDataRecordBatch trafficGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = billingRecords.Union(trafficRecords).ToList() };
-                            foreach (var trafficOutputStageName in validTrafficOutputStages)
-                            {
-                                context.EnqueueBatch(trafficOutputStageName, trafficGenericDataRecordBatch);
-                            }
-                        }
+                        SendOutputData(billingCDRsByType, billingRecords, trafficRecords, mainOutputStages, partialPricedOutputStages, failedOutputStages, invalidOutputStages,
+                            invalidInterconnectOutputStages, interconnectOutputStages, billingOutputStages, trafficOutputStages, context);
                     });
                 } while (!context.ShouldStop() && hasItem);
             });
         }
 
-        private void UpdateReprocessBillingCDRData(Dictionary<DateTime, SortedList<DealDetailedData, DealDuration>> currentdealDetailedProgresses, DealDetailedProgress previousDealDetailedProgress,
+        private void UpdateReprocessBillingCDRData(Dictionary<DateTime, SortedList<DealDetailedData, DealDuration>> currentDealDetailedProgresses, DealDetailedProgress previousDealDetailedProgress,
             dynamic record, bool isSale, Dictionary<PropertyName, string> propertyNames, DateTime batchStart, Func<int, DealZoneGroupTierDetails> getDealZoneGroupTierDetails, DealZoneGroup dealZoneGroup,
             DateTime firstBatchStart, out CDRPricingDataOutput firstPartOutput, out CDRPricingDataOutput secondPartOutput)
         {
             firstPartOutput = null; secondPartOutput = null;
-            SortedList<DealDetailedData, DealDuration> dealDetailedProgressList = currentdealDetailedProgresses.GetRecord(batchStart);
+            SortedList<DealDetailedData, DealDuration> dealDetailedProgressList = currentDealDetailedProgresses.GetRecord(batchStart);
 
-            decimal pricedDurationInSeconds = record.GetFieldValue(propertyNames[PropertyName.PricedDurationInSeconds]);
+            decimal pricedDurationInSeconds = (record.Type != failedCDRType) ? record.GetFieldValue(propertyNames[PropertyName.PricedDurationInSeconds]) : 0;
+
             if (dealDetailedProgressList != null && dealDetailedProgressList.Count > 0)
             {
                 var firstDealDetailedProgressItem = dealDetailedProgressList.First();
@@ -1066,6 +1148,15 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
                 if (dealDetailedProgressList.Count == 1 || (dealDetailedProgress.ReachedDurationInSeconds - dealDuration.AssignedDurationInSeconds) >= pricedDurationInSeconds)
                 {
+                    if (dealDetailedProgressList.Count > 1 && pricedDurationInSeconds == 0)
+                    {
+                        dealDetailedProgressList.RemoveAt(0);
+
+                        firstDealDetailedProgressItem = dealDetailedProgressList.First();
+                        dealDetailedProgress = firstDealDetailedProgressItem.Key;
+                        dealDuration = firstDealDetailedProgressItem.Value;
+                    }
+
                     if (dealDetailedProgress.TierNb.HasValue)
                     {
                         DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealDetailedProgress.RateTierNb.Value);
@@ -1147,7 +1238,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                     {
                         if (dealDetailedProgress.TierNb.HasValue)
                         {
-                            UpdateReprocessBillingCDRData(currentdealDetailedProgresses, previousDealDetailedProgress, record, isSale, propertyNames, batchStart, getDealZoneGroupTierDetails,
+                            UpdateReprocessBillingCDRData(currentDealDetailedProgresses, previousDealDetailedProgress, record, isSale, propertyNames, batchStart, getDealZoneGroupTierDetails,
                                 dealZoneGroup, firstBatchStart, out firstPartOutput, out secondPartOutput);
                         }
                         else
@@ -1162,10 +1253,11 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             {
                 int intervalOffsetInMinutes = new TOne.WhS.Deal.Business.ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
                 DateTime currentBatchStart = batchStart.AddMinutes(-1 * intervalOffsetInMinutes);
+
                 bool tierFound = false;
                 while (!tierFound && currentBatchStart >= firstBatchStart)
                 {
-                    var item = currentdealDetailedProgresses.GetRecord(currentBatchStart);
+                    var item = currentDealDetailedProgresses.GetRecord(currentBatchStart);
                     if (item == null)
                     {
                         currentBatchStart = currentBatchStart.AddMinutes(-1 * intervalOffsetInMinutes);
@@ -1261,20 +1353,6 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             record.SetFieldValue(propertyNames[PropertyName.DealDurInSec], null);
         }
 
-        private class DealDetailedDataComparer : IComparer<DealDetailedData>
-        {
-            public int Compare(DealDetailedData firstDealDetailedData, DealDetailedData secondDealDetailedData)
-            {
-                if (!firstDealDetailedData.TierNb.HasValue)
-                    return 1;
-
-                if (!secondDealDetailedData.TierNb.HasValue)
-                    return -1;
-
-                return firstDealDetailedData.TierNb.Value < secondDealDetailedData.TierNb.Value ? -1 : 1;
-            }
-        }
-
         private void BuildDealDetailedProgressDict(DateTime firstBatchStart, Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgresses,
             out Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedData, DealDuration>>> currentDealDetailedProgressesDict,
             out Dictionary<DealZoneGroup, DealDetailedProgress> previousDealDetailedProgressesDict)
@@ -1297,8 +1375,18 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 if (dealDetailedZoneGroupTier.FromTime >= firstBatchStart)
                 {
                     Dictionary<DateTime, SortedList<DealDetailedData, DealDuration>> dealDetailedZoneGroupTierByDate = currentDealDetailedProgressesDict.GetOrCreateItem(dealZoneGroup);
-                    SortedList<DealDetailedData, DealDuration> dealDetailedProgressList = dealDetailedZoneGroupTierByDate.GetOrCreateItem(dealDetailedZoneGroupTier.FromTime, () => { return new SortedList<DealDetailedData, DealDuration>(new DealDetailedDataComparer()); });
-                    dealDetailedProgressList.Add(new DealDetailedData() { DealId = dealDetailedProgress.DealId, ReachedDurationInSeconds = dealDetailedProgress.ReachedDurationInSeconds, TierNb = dealDetailedProgress.TierNb, RateTierNb = dealDetailedProgress.RateTierNb }, new DealDuration() { AssignedDurationInSeconds = 0 });
+                    SortedList<DealDetailedData, DealDuration> dealDetailedProgressList = dealDetailedZoneGroupTierByDate.GetOrCreateItem(dealDetailedZoneGroupTier.FromTime, () =>
+                    {
+                        return new SortedList<DealDetailedData, DealDuration>(new DealDetailedDataComparer());
+                    });
+
+                    dealDetailedProgressList.Add(new DealDetailedData()
+                    {
+                        DealId = dealDetailedProgress.DealId,
+                        ReachedDurationInSeconds = dealDetailedProgress.ReachedDurationInSeconds,
+                        TierNb = dealDetailedProgress.TierNb,
+                        RateTierNb = dealDetailedProgress.RateTierNb
+                    }, new DealDuration() { AssignedDurationInSeconds = 0 });
                 }
                 else
                 {
@@ -1340,6 +1428,89 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             return null;
         }
 
+        private void SendOutputData(Dictionary<int, List<dynamic>> billingCDRsByType, List<dynamic> billingRecords, List<dynamic> trafficRecords, List<string> mainOutputStages,
+            List<string> partialPricedOutputStages, List<string> failedOutputStages, List<string> invalidOutputStages, List<string> invalidInterconnectOutputStages,
+            List<string> interconnectOutputStages, List<string> billingOutputStages, List<string> trafficOutputStages, IReprocessStageActivatorExecutionContext context)
+        {
+            List<dynamic> mainCDRs = billingCDRsByType.GetOrCreateItem(mainCDRType);
+            if (mainOutputStages != null && mainCDRs.Count > 0)
+            {
+                var mainGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = mainCDRs };
+                foreach (var mainOutputStageName in mainOutputStages)
+                {
+                    context.EnqueueBatch(mainOutputStageName, mainGenericDataRecordBatch);
+                }
+            }
+
+            List<dynamic> partialPricedCDRs = billingCDRsByType.GetOrCreateItem(partialPricedCDRType);
+            if (partialPricedOutputStages != null && partialPricedCDRs.Count > 0)
+            {
+                var partialPricedGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = partialPricedCDRs };
+                foreach (var partialPricedOutputStageName in partialPricedOutputStages)
+                {
+                    context.EnqueueBatch(partialPricedOutputStageName, partialPricedGenericDataRecordBatch);
+                }
+            }
+
+            List<dynamic> failedCDRs = billingCDRsByType.GetOrCreateItem(failedCDRType);
+            if (failedOutputStages != null && failedCDRs.Count > 0)
+            {
+                var failedGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = failedCDRs };
+                foreach (var failedOutputStageName in failedOutputStages)
+                {
+                    context.EnqueueBatch(failedOutputStageName, failedGenericDataRecordBatch);
+                }
+            }
+
+            List<dynamic> invalidCDRs = billingCDRsByType.GetOrCreateItem(invalidCDRType);
+            if (invalidOutputStages != null && invalidCDRs.Count > 0)
+            {
+                var invalidGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = invalidCDRs };
+                foreach (var invalidOutputStageName in invalidOutputStages)
+                {
+                    context.EnqueueBatch(invalidOutputStageName, invalidGenericDataRecordBatch);
+                }
+            }
+
+            List<dynamic> invalidInterconnectCDRs = billingCDRsByType.GetOrCreateItem(invalidInterconnectCDRType);
+            if (invalidInterconnectOutputStages != null && invalidInterconnectCDRs.Count > 0)
+            {
+                var invalidInterconnectGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = invalidInterconnectCDRs };
+                foreach (var invalidInterconnectOutputStageName in invalidInterconnectOutputStages)
+                {
+                    context.EnqueueBatch(invalidInterconnectOutputStageName, invalidInterconnectGenericDataRecordBatch);
+                }
+            }
+
+            List<dynamic> interconnectCDRs = billingCDRsByType.GetOrCreateItem(interconnectCDRType);
+            if (interconnectOutputStages != null && interconnectCDRs.Count > 0)
+            {
+                var interconnectGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = interconnectCDRs };
+                foreach (var interconnectOutputStageName in interconnectOutputStages)
+                {
+                    context.EnqueueBatch(interconnectOutputStageName, interconnectGenericDataRecordBatch);
+                }
+            }
+
+            if (billingOutputStages != null && billingRecords.Count > 0)
+            {
+                Vanrise.Reprocess.Entities.GenericDataRecordBatch billingGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = billingRecords };
+                foreach (var billingOutputStageName in billingOutputStages)
+                {
+                    context.EnqueueBatch(billingOutputStageName, billingGenericDataRecordBatch);
+                }
+            }
+
+            if (trafficOutputStages != null && (billingRecords.Count > 0 || trafficRecords.Count > 0))
+            {
+                Vanrise.Reprocess.Entities.GenericDataRecordBatch trafficGenericDataRecordBatch = new Vanrise.Reprocess.Entities.GenericDataRecordBatch() { Records = billingRecords.Union(trafficRecords).ToList() };
+                foreach (var trafficOutputStageName in trafficOutputStages)
+                {
+                    context.EnqueueBatch(trafficOutputStageName, trafficGenericDataRecordBatch);
+                }
+            }
+        }
+
         public void FinalizeStage(Vanrise.Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
         {
         }
@@ -1359,7 +1530,8 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
         public List<string> GetOutputStages(List<string> stageNames)
         {
-            if (MainOutputStages == null && PartialPricedOutputStages == null && BillingOutputStages == null && TrafficOutputStages == null)
+            if (MainOutputStages == null && InvalidOutputStages == null && FailedOutputStages == null && PartialPricedOutputStages == null && InterconnectOutputStages == null &&
+                InvalidInterconnectOutputStages == null && BillingOutputStages == null && TrafficOutputStages == null)
                 return null;
 
             if (stageNames == null)
@@ -1369,8 +1541,20 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             if (MainOutputStages != null)
                 allStages.AddRange(MainOutputStages);
 
+            if (InvalidOutputStages != null)
+                allStages.AddRange(InvalidOutputStages);
+
+            if (FailedOutputStages != null)
+                allStages.AddRange(FailedOutputStages);
+
             if (PartialPricedOutputStages != null)
                 allStages.AddRange(PartialPricedOutputStages);
+
+            if (InterconnectOutputStages != null)
+                allStages.AddRange(InterconnectOutputStages);
+
+            if (InvalidInterconnectOutputStages != null)
+                allStages.AddRange(InvalidInterconnectOutputStages);
 
             if (BillingOutputStages != null)
                 allStages.AddRange(BillingOutputStages);
@@ -1434,6 +1618,20 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             public decimal Percentage { get; set; }
             public decimal PricedDurationInSeconds { get; set; }
             public int CurrencyId { get; set; }
+        }
+
+        private class DealDetailedDataComparer : IComparer<DealDetailedData>
+        {
+            public int Compare(DealDetailedData firstDealDetailedData, DealDetailedData secondDealDetailedData)
+            {
+                if (!firstDealDetailedData.TierNb.HasValue)
+                    return 1;
+
+                if (!secondDealDetailedData.TierNb.HasValue)
+                    return -1;
+
+                return firstDealDetailedData.TierNb.Value < secondDealDetailedData.TierNb.Value ? -1 : 1;
+            }
         }
 
         #endregion
