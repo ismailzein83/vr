@@ -1,62 +1,101 @@
-﻿//(function (app) {
+﻿(function (app) {
 
-//    'use strict';
+    'use strict';
 
-//    GenericBEAccountViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_ActionDefinitionService', 'Retail_BE_EntityTypeEnum'];
+    GenericBEAccountViewDirective.$inject = ['UtilsService',  'Retail_BE_AccountBEAPIService'];
 
-//    function GenericBEAccountViewDirective(UtilsService, VRNotificationService, Retail_BE_ActionDefinitionService, Retail_BE_EntityTypeEnum) {
-//        return {
-//            restrict: 'E',
-//            scope: {
-//                onReady: '=',
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var ctor = new ActionsViewCtor($scope, ctrl);
-//                ctor.initializeController();
-//            },
-//            controllerAs: 'ctrl',
-//            bindToController: true,
-//            compile: function (element, attrs) {
-//                return {
-//                    pre: function ($scope, iElem, iAttrs, ctrl) {
+    function GenericBEAccountViewDirective(UtilsService, Retail_BE_AccountBEAPIService) {
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new GenericBEAccountViewCtor($scope, ctrl);
+                ctor.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            compile: function (element, attrs) {
+                return {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
 
-//                    }
-//                };
-//            },
-//            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/GenericBEAccountViewTemplate.html'
-//        };
+                    }
+                };
+            },
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/GenericBEAccountViewTemplate.html'
+        };
 
-//        function ActionsViewCtor($scope, ctrl) {
-//            this.initializeController = initializeController;
+        function GenericBEAccountViewCtor($scope, ctrl) {
+            this.initializeController = initializeController;
 
+            var gridAPI;
+            var accountViewDefinitionSettings;
+            var parentIdFieldValue;
+            var parentBusinessEntityDefinitionId;
 
-//            var gridAPI;
+            function initializeController() {
+                $scope.scopeModel = {};
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
+                };
+            }
+            function defineAPI() {
+                var api = {};
 
-//            }
-//            function defineAPI() {
-//                var api = {};
+                api.load = function (payload) {
 
-//                api.load = function (payload) {
+                    $scope.scopeModel.isGridLoading = true;
+                    var gridPayload;
 
-//                    if (payload != undefined) {
-//                        accountBEDefinitionId = payload.accountBEDefinitionId;
-//                        parentAccountId = payload.parentAccountId;
-//                    }
+                    if (payload != undefined && payload.accountViewDefinition != undefined && payload.accountViewDefinition.Settings != undefined) {
+                        parentBusinessEntityDefinitionId = payload.accountBEDefinitionId;
+                        accountViewDefinitionSettings = payload.accountViewDefinition.Settings;
+                        parentIdFieldValue = payload.parentAccountId;
+                        var businessEntityDefinitionId = accountViewDefinitionSettings.BusinessEntityDefinitionId;
+                        gridPayload = {
+                            businessEntityDefinitionId: businessEntityDefinitionId,
+                            fieldValues: buildMappingfields(),
+                            filterValues: buildMappingfields()
+                        };
+                    }
+                    return gridAPI.load(gridPayload).then(function () {
+                        $scope.scopeModel.isGridLoading = false;
+                    });
+                };
 
-//                };
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
+                }
+            }
+            function buildMappingfields() {
 
-//                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-//                    ctrl.onReady(api);
-//                }
-//            }
+                var fields = {};
+                var accountIdMappingField = accountViewDefinitionSettings.AccountIdMappingField;
+                var accountBEDefinitionMappingField = accountViewDefinitionSettings.AccountBEDefinitionMappingField;
 
-//        }
-//    }
+                if (accountIdMappingField != undefined) {
+                    fields[accountIdMappingField] = {
+                        value: parentIdFieldValue,
+                        isHidden: true,
+                        isDisabled: false
+                    };
+                }
+                if (accountBEDefinitionMappingField != undefined) {
+                    fields[accountBEDefinitionMappingField] = {
+                        value: parentBusinessEntityDefinitionId,
+                        isHidden: true,
+                        isDisabled: false
+                    };
+                }
+                return fields;
+            }
+        }
+    }
 
-//    app.directive('retailBeGenericbeaccountView', GenericBEAccountViewDirective);
+    app.directive('retailBeGenericbeaccountView', GenericBEAccountViewDirective);
 
-//})(app);
+})(app);
