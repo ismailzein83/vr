@@ -296,6 +296,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\Templates\BPAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\Open360DegreeAccountAction\retail-be-accountactiondefinitionsettings-open360degree.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\Open360DegreeAccountAction\Templates\Open360DegreeAccountActionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\StartBPProcessAction\retail-be-accountactiondefinitionsettings-startbpprocess.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\StartBPProcessAction\Templates\StartBPProcessAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-backendexecutor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\Templates\BackendExecutorEditorTemplate.html" />
@@ -909,6 +911,8 @@
     <Content Include="Retail_BusinessEntity\Views\Account\BulkActionsEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\ChangeStatusActionEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\ChangeStatusActionEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Account\StartBPProcessEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Account\StartBPProcessEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\FinancialAccount\FinancialAccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\FinancialAccount\FinancialAccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\Templates\VolumePackageDefinitionSettingsEditorTemplate.html" />
