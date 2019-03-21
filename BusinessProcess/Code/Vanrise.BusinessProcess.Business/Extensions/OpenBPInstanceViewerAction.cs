@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 
-namespace Vanrise.BusinessProcess.Business.Extensions
+namespace Vanrise.BusinessProcess.Business
 {
 	public class OpenBPInstanceViewerAction : GenericBEActionSettings
 	{
@@ -13,9 +13,15 @@ namespace Vanrise.BusinessProcess.Business.Extensions
 			get { return "OpenBPInstanceViewer"; }
 
 		}
+		public override string ActionTypeName 
+		{
+			get { return "OpenBPInstanceViewer"; }
+
+		}
 		public override Guid ConfigId {
 			get { return new Guid("0AD405A3-9BCF-4796-9A1A-6CC2C3F9AAA3"); }
 		}
+		public string ProcessInstanceIdFieldName { get; set; }
 
 
 	}
