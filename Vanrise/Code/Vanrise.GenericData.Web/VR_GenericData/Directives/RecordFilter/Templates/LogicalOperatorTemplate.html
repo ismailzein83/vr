@@ -1,0 +1,5 @@
+﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-choices isradio selectedindex="scopeModel.operator">
+        <vr-choice ng-repeat="operator in scopeModel.operators">{{ operator.description }}</vr-choice>
+    </vr-choices>
+</vr-columns>
