@@ -17,6 +17,8 @@ namespace TOne.WhS.BusinessEntity.Business
         public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             Dictionary<int, WHSFinancialAccount> cachedWHSFinancialAccounts = whsFinancialAccountManager.GetCachedFinancialAccounts();
+            if (cachedWHSFinancialAccounts == null || cachedWHSFinancialAccounts.Count == 0)
+                return null;
             return cachedWHSFinancialAccounts.Values.Select(itm => itm as dynamic).ToList();
         }
 

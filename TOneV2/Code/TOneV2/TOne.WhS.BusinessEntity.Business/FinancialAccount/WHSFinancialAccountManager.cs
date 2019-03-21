@@ -34,6 +34,8 @@ namespace TOne.WhS.BusinessEntity.Business
         public IDataRetrievalResult<WHSFinancialAccountDetail> GetFilteredFinancialAccounts(Vanrise.Entities.DataRetrievalInput<WHSFinancialAccountQuery> input)
         {
             var allFinancialAccounts = GetCachedFinancialAccounts();
+            if (allFinancialAccounts == null || allFinancialAccounts.Count == 0)
+                return null;
 
             Func<WHSFinancialAccount, bool> filterExpression = (prod) =>
             {
@@ -152,6 +154,8 @@ namespace TOne.WhS.BusinessEntity.Business
         public WHSFinancialAccount GetFinancialAccount(int financialAccountId)
         {
             var allFinancialAccounts = GetCachedFinancialAccounts();
+            if (allFinancialAccounts == null || allFinancialAccounts.Count == 0)
+                return null;
             return allFinancialAccounts.GetRecord(financialAccountId);
         }
 
@@ -424,12 +428,16 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<WHSFinancialAccount> GetFinancialAccountsByCarrierAccountId(int carrierAccountId)
         {
             var financialAccounts = GetCachedFinancialAccounts();
+            if (financialAccounts == null || financialAccounts.Count == 0)
+                return null;
             return financialAccounts.Values.FindAllRecords(x => x.CarrierAccountId.HasValue && x.CarrierAccountId.Value == carrierAccountId);
         }
 
         public IEnumerable<WHSFinancialAccount> GetFinancialAccountsByCarrierProfileId(int carrierProfileId)
         {
             var financialAccounts = GetCachedFinancialAccounts();
+            if (financialAccounts == null || financialAccounts.Count == 0)
+                return null;
             return financialAccounts.Values.FindAllRecords(x => x.CarrierProfileId.HasValue && x.CarrierProfileId.Value == carrierProfileId);
         }
 
