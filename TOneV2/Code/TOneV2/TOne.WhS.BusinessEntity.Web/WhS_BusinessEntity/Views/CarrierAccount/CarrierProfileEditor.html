@@ -149,7 +149,11 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Supplier Banks'">
-                    <vr-common-bankdetailssettings-grid on-ready="scopeModal.onSupplierBankDetailsSettingsEditorReady"></vr-common-bankdetailssettings-grid>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-common-bankdetailssettings-grid on-ready="scopeModal.onSupplierBankDetailsSettingsEditorReady"></vr-common-bankdetailssettings-grid>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

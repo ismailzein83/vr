@@ -168,7 +168,11 @@
                     </vr-tabs>
                 </vr-tab>
                 <vr-tab ng-if="scopeModel.showZoneServiceConfig" header="'Supplier Banks'">
-                    <vr-common-bankdetailssettings-grid on-ready="scopeModel.onSupplierBankDetailsSettingsEditorReady"></vr-common-bankdetailssettings-grid>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-common-bankdetailssettings-grid on-ready="scopeModel.onSupplierBankDetailsSettingsEditorReady"></vr-common-bankdetailssettings-grid>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
             </vr-tabs>
             <vr-row ng-if="validationMessages != undefined && validationMessages.length > 0">
