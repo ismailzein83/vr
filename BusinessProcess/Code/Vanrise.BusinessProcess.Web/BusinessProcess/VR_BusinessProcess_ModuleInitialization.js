@@ -4,5 +4,6 @@
         BusinessProcess_BPDefinitionService.registerObjectTrackingDrillDownToBPDefinition();
         BusinessProcess_VRWorkflowService.registerObjectTrackingDrillDownToVRWorkflow();
         BusinessProcess_ProcessSynchronisationService.registerObjectTrackingDrillDownToProcessSynchronisation();
-        BusinessProcess_BPInstanceService.registerDrillDownToSchdeulerTask();
+		BusinessProcess_BPInstanceService.registerDrillDownToSchdeulerTask();
+		BusinessProcess_BPInstanceService.registerOpenBPInstanceViewerAction();
     }]);

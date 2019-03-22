@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService', 'VR_Runtime_SchedulerTaskService'];
+	BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService', 'VR_Runtime_SchedulerTaskService', 'VR_GenericData_GenericBusinessEntityAPIService','VR_GenericData_GenericBEActionService'];
 
-    function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService, VR_Runtime_SchedulerTaskService) {
+	function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService, VR_Runtime_SchedulerTaskService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBEActionService) {
         function getStatusColor(status) {
 
             if (status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.New.color;
@@ -98,14 +98,35 @@
 
                 });
             return displayRunningInstancePromiseDeferred.promise;
-        }
+		}
+
+		function registerOpenBPInstanceViewerAction() {
+			var openBPInstanceViewerAction = {
+				ActionTypeName: "OpenBPInstanceViewer",
+				ExecuteAction: function (payload) {
+					if (payload != undefined) {
+						var businessEntityDefinitionId = payload.businessEntityDefinitionId;
+						var genericBusinessEntityId = payload.genericBusinessEntityId;
+						VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
+							if (payload.genericBEAction != undefined && payload.genericBEAction.Settings != undefined) {
+								var processInstanceFieldName = payload.genericBEAction.Settings.ProcessInstanceIdFieldName;
+								if (processInstanceFieldName != undefined)
+									openProcessTracking(response.FieldValues[processInstanceFieldName].Value);
+							}
+						});
+					}
+				}
+			};
+			VR_GenericData_GenericBEActionService.registerActionType(openBPInstanceViewerAction);
+		}
 
         return ({
             getStatusColor: getStatusColor,
             openProcessTracking: openProcessTracking,
             startNewInstance: startNewInstance,
             registerDrillDownToSchdeulerTask: registerDrillDownToSchdeulerTask,
-            displayRunningInstancesIfExist: displayRunningInstancesIfExist
+			displayRunningInstancesIfExist: displayRunningInstancesIfExist,
+			registerOpenBPInstanceViewerAction: registerOpenBPInstanceViewerAction
         });
     }
 

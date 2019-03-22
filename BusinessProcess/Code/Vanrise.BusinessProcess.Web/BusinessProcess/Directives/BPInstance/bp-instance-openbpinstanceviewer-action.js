@@ -45,29 +45,18 @@ app.directive("bpInstanceOpenbpinstanceviewerAction", ["BusinessProcess_BPInstan
 
 				api.load = function (payload) {
 					var loadAPIDeferred = UtilsService.createPromiseDeferred();
-					if (payload != undefined && payload.settings != undefined && payload.settings.ProcessInstanceIdFieldName && payload.context != undefined) {
+					if (payload != undefined) {
 						dataRecordTypeTitleFieldsSelectorReadyPromiseDeferred.promise.then(function () {
-							var typeFieldsPayload = {
-								dataRecordTypeId: payload.context.getDataRecordTypeId(),
-								selectedIds: payload.settings.ProcessInstanceIdFieldName
-							};
+							var typeFieldsPayload = {};
+							if (payload.context != undefined)
+								typeFieldsPayload.dataRecordTypeId = payload.context.getDataRecordTypeId();
+							if (payload.settings != undefined)
+								typeFieldsPayload.selectedIds = payload.settings.ProcessInstanceIdFieldName;
+
 							VRUIUtilsService.callDirectiveLoad(dataRecordTypeTitleFieldsSelectorAPI, typeFieldsPayload, loadAPIDeferred);
 						});
 					}
-					else {
-						if (payload != undefined && payload.context != undefined) {
-							dataRecordTypeTitleFieldsSelectorReadyPromiseDeferred.promise.then(function () {
-								var typeFieldsPayload = {
-									dataRecordTypeId: payload.context.getDataRecordTypeId(),
-								};
-								VRUIUtilsService.callDirectiveLoad(dataRecordTypeTitleFieldsSelectorAPI, typeFieldsPayload, loadAPIDeferred);
-							});
-						}
-					}
-					var promises = [];
-					promises.push(loadAPIDeferred.promise);
-					return UtilsService.waitMultiplePromises(promises);
-
+					return loadAPIDeferred.promise;
 				};
 
 				api.getData = function () {
