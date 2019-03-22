@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Vanrise.Analytic.Data.RDB;
-using Vanrise.GenericData.Business;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.GenericData.RDBDataStorage
 {
@@ -15,6 +13,13 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         static DataRecordStorageManager s_recordStorageManager = new DataRecordStorageManager();
         static DataStoreManager s_dataStoreManager = new DataStoreManager();
+
+        public static string GetRDBTableNameByRecordStorageId(Guid recordStorageId)
+        {
+            var recordStorageRDBAnalyticDataProviderTable = new RecordStorageRDBAnalyticDataProviderTable();
+            recordStorageRDBAnalyticDataProviderTable.RecordStorageId = recordStorageId;
+            return recordStorageRDBAnalyticDataProviderTable.GetRDBTableName();
+        }
 
         public override string GetRDBTableName()
         {
