@@ -48,7 +48,7 @@ namespace Retail.Interconnect.Data.RDB
         #region Private Methods
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("Retail_Interconnect", "Retail_Interconnect_DBConnStringKey", "RetailDBConnString");
+            return RDBDataProviderFactory.CreateProvider("Retail_Interconnect", "ICXDBConnStringKey", "RetailDBConnString");
         }
         #endregion
 
