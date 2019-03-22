@@ -799,6 +799,12 @@
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\default-interconnect-iconheader.ico" />
+    <Content Include="Images\default-interconnect-login.png" />
+    <Content Include="Images\default-interconnect-logoonheader.png" />
+    <Content Include="Images\default-tone-ra-iconheader.ico" />
+    <Content Include="Images\default-tone-ra-login.png" />
+    <Content Include="Images\default-tone-ra-logoonheader.png" />
     <Content Include="Images\figure-icons\sms.png" />
     <Content Include="Images\figure-icons\inbound-traffic.png" />
     <Content Include="Images\figure-icons\income.png" />
