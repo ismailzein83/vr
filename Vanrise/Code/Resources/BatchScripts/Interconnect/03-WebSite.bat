@@ -8,10 +8,11 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO Interconnect WebSite
 
 xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\RetailSource\list-of-excluded-files.txt
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.Interconnect.exclude" /y /v /z /Q /R								"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\"
 rename																												"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Web.config.Interconnect.exclude" "Web.config"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Bin\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\menu-icons" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\menu-icons\"
-
 ::by default load flat theme
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-interconnect-logoonheader.png" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\logoonheader.png*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-interconnect-login.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\login.png*"
@@ -22,7 +23,6 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-member.png" /S /R 
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-support.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Images\support.png*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Home\Index-flat.cshtml" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\CSViews\Home\Index.cshtml*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Security\Login-flat.cshtml" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\CSViews\Security\Login.cshtml*"
-
 ::default theme
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\default-interconnect-logoonheader.png" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Default-theme\Images\logoonheader.png*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\default-interconnect-login.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Default-theme\Images\login.png*"
@@ -33,7 +33,6 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\default-member.png" /S /R /
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\default-support.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Default-theme\Client\Images\support.png*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Home\Index-default.cshtml" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Default-theme\Client\CSViews\Home\Index.cshtml*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Security\Login-default.cshtml" /S /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Default-theme\Client\CSViews\Security\Login.cshtml*"
-
 ::flat theme
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-interconnect-logoonheader.png" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Flat-theme\Images\logoonheader.png*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-interconnect-login.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Flat-theme\Images\login.png*"
@@ -44,9 +43,6 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-member.png" /S /R 
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-support.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Flat-theme\Client\Images\support.png*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Home\Index-flat.cshtml" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Flat-theme\Client\CSViews\Home\Index.cshtml*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Security\Login-flat.cshtml" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Flat-theme\Client\CSViews\Security\Login.cshtml*"
-
-xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Bin\"
-xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Common\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\VR_AccountBalance\"

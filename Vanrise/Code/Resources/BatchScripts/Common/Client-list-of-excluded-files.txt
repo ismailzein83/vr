@@ -12,4 +12,7 @@
 \CSViews\Home\Index-default.cshtml
 \CSViews\Security\Login-default.cshtml
 
+\CSViews\Home\default.cshtml
+\CSViews\Security\default.cshtml
+
 NImages\
