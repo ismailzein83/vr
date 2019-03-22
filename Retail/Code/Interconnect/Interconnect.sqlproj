@@ -67,6 +67,8 @@
     <Folder Include="Security\" />
     <Folder Include="ICX_SMS\" />
     <Folder Include="ICX_SMS\Tables\" />
+    <Folder Include="Retail_Interconnect\" />
+    <Folder Include="Retail_Interconnect\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ICX_BE\Tables\Switch.sql" />
@@ -76,5 +78,7 @@
     <Build Include="ICX_BE\User Defined Types\GatewayType.sql" />
     <Build Include="ICX_SMS\Tables\SMSServiceType.sql" />
     <Build Include="Security\ICX_SMS.sql" />
+    <Build Include="Retail_Interconnect\Tables\InvoiceComparisonTemplate.sql" />
+    <Build Include="Security\Retail_Interconnect.sql" />
   </ItemGroup>
 </Project>
