@@ -18,22 +18,24 @@
             },
             controllerAs: 'filterCtrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: '/Client/Modules/Reprocess/Directives/MainExtensions/Runtime/ReprocessFilterDefinition/Templates/ReprocessFilterDefinitionGenericFilter.html'
         };
 
         function ReprocessFilterFieldDefinition($scope, ctrl) {
             this.initializeController = initializeController;
 
-            $scope.scopeModel = { fields: [], isLoadingDirective: false };
+            var logicalOperatorDirectiveAPI;
+            var logicalOperatorDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+
+                $scope.scopeModel = { fields: [], isLoadingDirective: false };
+
+                $scope.scopeModel.onLogicalOperatorDirectiveReady = function (api) {
+                    logicalOperatorDirectiveAPI = api;
+                    logicalOperatorDirectiveReadyPromiseDeferred.resolve();
+                };
+
                 defineAPI();
             }
 
@@ -53,7 +55,7 @@
                         var currentField = fields[x];
 
                         var selectedIds;
-                        if (filter != undefined && filter.Fields!=undefined) {
+                        if (filter != undefined && filter.Fields != undefined) {
                             selectedIds = filter.Fields[currentField.FieldName];
                         }
                         var currentItem = {
@@ -69,6 +71,23 @@
                         promises.push(filterItem.loadPromiseDeferred.promise);
                         $scope.scopeModel.fields.push(currentItem);
                     }
+
+                    var logicalOperatorDirectiveLoadedPromise = loadLogicalOperatorDirective();
+                    promises.push(logicalOperatorDirectiveLoadedPromise);
+
+                    function loadLogicalOperatorDirective() {
+                        var logicalOperatorDirectiveLoadedPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        logicalOperatorDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var logicalOperatorDirectivePayload;
+                            VRUIUtilsService.callDirectiveLoad(logicalOperatorDirectiveAPI, logicalOperatorDirectivePayload, logicalOperatorDirectiveLoadedPromiseDeferred);
+                        });
+
+                        return logicalOperatorDirectiveLoadedPromiseDeferred.promise;
+                    }
+
+
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         $scope.scopeModel.isLoadingDirective = false;
                     });
@@ -78,18 +97,19 @@
                     var obj = {
                         $type: "Vanrise.Reprocess.Entities.GenericReprocessFilter, Vanrise.Reprocess.Entities",
                         Fields: {},
-                        LogicalOperator: 0 // AND
+                        LogicalOperator: logicalOperatorDirectiveAPI.getData()
                     };
 
                     var oneItemIsAddedAtLeast = false;
                     for (var x = 0; x < $scope.scopeModel.fields.length; x++) {
                         var currentField = $scope.scopeModel.fields[x];
                         var fieldData = currentField.directiveAPI != undefined ? currentField.directiveAPI.getData() : undefined;
-                        if (fieldData != undefined){
+                        if (fieldData != undefined) {
                             obj.Fields[currentField.fieldName] = fieldData;
                             oneItemIsAddedAtLeast = true;
                         }
                     }
+
                     return oneItemIsAddedAtLeast ? obj : undefined;
                 };
 
