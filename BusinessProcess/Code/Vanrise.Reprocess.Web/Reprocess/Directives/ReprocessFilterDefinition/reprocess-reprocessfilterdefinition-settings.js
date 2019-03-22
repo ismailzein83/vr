@@ -77,6 +77,9 @@ app.directive('reprocessReprocessfilterdefinitionSettings', ['UtilsService', 'VR
                 };
 
                 $scope.scopeModel.onselectDataRecordType = function (dataRecordType) {
+
+                    reloadFields();
+
                     var dataItem = {
                         Id: dataRecordType.DataRecordTypeId,
                         Name: dataRecordType.Name,
@@ -225,10 +228,6 @@ app.directive('reprocessReprocessfilterdefinitionSettings', ['UtilsService', 'VR
                         return directiveLoadDeferred.promise;
                     };
 
-                    return UtilsService.waitMultiplePromises(promises).then(function () {
-                        isFirstTimeLoading = false;
-                    });
-
                     function loadDataRecordTypeSelector(selectedRecordTypes) {
 
                         var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -248,7 +247,9 @@ app.directive('reprocessReprocessfilterdefinitionSettings', ['UtilsService', 'VR
                         });
                     };
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        isFirstTimeLoading = false;
+                    });
                 };
 
                 api.getData = function () {
@@ -278,34 +279,49 @@ app.directive('reprocessReprocessfilterdefinitionSettings', ['UtilsService', 'VR
             function buildFilterDefinitionContext() {
                 return {
                     onFieldAdded: function (fieldName) {
-                        var fieldObject = {
-                            columnName: fieldName,
-                            onDataRecordFieldSelectorReadyPath: "dataItem.Mappings." + fieldName + ".onDataRecordFieldSelectorReady"
-                        };
-                        $scope.scopeModel.loadingMappingFields = true;
-                        var promises = [];
-                        for (var x = 0; x < $scope.scopeModel.mappingFields.length; x++) {
-                            var currentItem = $scope.scopeModel.mappingFields[x];
-
-                            var filterItem = {
-                                loadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                readyPromiseDeferred: UtilsService.createPromiseDeferred()
-                            };
-                            promises.push(filterItem.loadPromiseDeferred.promise);
-                            addMappingFieldAPI(filterItem, currentItem, fieldName);
-                        }
-
-                        UtilsService.waitMultiplePromises(promises).then(function () {
-                            $scope.scopeModel.loadingMappingFields = false;
-                        });
-                        $scope.scopeModel.fields.push(fieldObject);
+                        addField(fieldName);
                     },
                     onFieldDeleted: function (fieldName) {
                         var itemIndex = UtilsService.getItemIndexByVal($scope.scopeModel.fields, fieldName, 'columnName');
                         $scope.scopeModel.fields.splice(itemIndex, 1);
-                    },
+                    }
                 };
             };
+
+            function reloadFields() {
+                var obj = $scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined ? directiveAPI.getData() : undefined;
+                if (obj != undefined && obj.Fields != undefined && obj.Fields.length > 0) {
+                    $scope.scopeModel.fields.length = 0;
+                    for (var i = 0; i < obj.Fields.length; i++) {
+                        var fieldName = obj.Fields[i].FieldName;
+                        addField(fieldName);
+                    }
+                }
+            }
+
+            function addField(fieldName) {
+                var fieldObject = {
+                    columnName: fieldName,
+                    onDataRecordFieldSelectorReadyPath: "dataItem.Mappings." + fieldName + ".onDataRecordFieldSelectorReady"
+                };
+                $scope.scopeModel.loadingMappingFields = true;
+                var promises = [];
+                for (var x = 0; x < $scope.scopeModel.mappingFields.length; x++) {
+                    var currentItem = $scope.scopeModel.mappingFields[x];
+
+                    var filterItem = {
+                        loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                        readyPromiseDeferred: UtilsService.createPromiseDeferred()
+                    };
+                    promises.push(filterItem.loadPromiseDeferred.promise);
+                    addMappingFieldAPI(filterItem, currentItem, fieldName);
+                }
+
+                UtilsService.waitMultiplePromises(promises).then(function () {
+                    $scope.scopeModel.loadingMappingFields = false;
+                });
+                $scope.scopeModel.fields.push(fieldObject);
+            }
 
             function addMappingFieldAPI(filterItem, currentItem, fieldName, selectedvalue) {
                 var currentFieldItem = currentItem.Mappings[fieldName] = {};
