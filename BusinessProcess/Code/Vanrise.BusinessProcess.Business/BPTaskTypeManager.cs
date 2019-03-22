@@ -63,6 +63,17 @@ namespace Vanrise.BusinessProcess.Business
             return manager.GetExtensionConfigurations<VRWorkflowTaskAssigneesSettingConfig>(VRWorkflowTaskAssigneesSettingConfig.EXTENSION_TYPE);
         }
 
+        public IEnumerable<BPGenericTaskTypeActionSettingsConfig> GetBPGenericTaskTypeActionSettingsExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<BPGenericTaskTypeActionSettingsConfig>(BPGenericTaskTypeActionSettingsConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<BPGenericTaskTypeActionFilterConditionConfig> GetBPGenericTaskTypeActionFilterConditionExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<BPGenericTaskTypeActionFilterConditionConfig>(BPGenericTaskTypeActionFilterConditionConfig.EXTENSION_TYPE);
+        }
         #endregion
 
         #region private methods

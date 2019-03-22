@@ -15,7 +15,7 @@
 
         function GetBaseBPTaskTypeSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBaseBPTaskTypeSettingsConfigs"));
-        };
+        }
 
         function GetBPTaskType(taskTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBPTaskType"), {
@@ -33,12 +33,22 @@
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowTaskAssigneesSettingExtensionConfigs"), {});
         }
 
+        function GetBPGenericTaskTypeActionSettingsExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBPGenericTaskTypeActionSettingsExtensionConfigs"), {});
+        }
+
+        function GetBPGenericTaskTypeActionFilterConditionExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBPGenericTaskTypeActionFilterConditionExtensionConfigs"), {});
+        }
+
         return ({
             GetBPTaskTypeByTaskId: GetBPTaskTypeByTaskId,
             GetBaseBPTaskTypeSettingsConfigs: GetBaseBPTaskTypeSettingsConfigs,
             GetBPTaskType: GetBPTaskType,
             GetBPTaskTypesInfo: GetBPTaskTypesInfo,
             GetVRWorkflowTaskAssigneesSettingExtensionConfigs: GetVRWorkflowTaskAssigneesSettingExtensionConfigs,
+            GetBPGenericTaskTypeActionSettingsExtensionConfigs: GetBPGenericTaskTypeActionSettingsExtensionConfigs,
+            GetBPGenericTaskTypeActionFilterConditionExtensionConfigs: GetBPGenericTaskTypeActionFilterConditionExtensionConfigs
         });
     }
 

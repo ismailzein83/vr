@@ -1,7 +1,27 @@
-﻿<vr-row>
-    <vr-columns width="1/3row">
-        <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" label="Data Record Type" isrequired="true" onselectionchanged="scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModel.selectedDataRecordType" showaddbutton></vr-genericdata-datarecordtype-selector>
-    </vr-columns>
-</vr-row>
-<vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="4"></vr-genericdata-genericbe-editordefinition-settings>
+﻿<vr-columns width="1/3row">
+    <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" label="Data Record Type" isrequired="true" onselectionchanged="scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModel.selectedDataRecordType" showaddbutton></vr-genericdata-datarecordtype-selector>
+</vr-columns>
+<vr-columns width="fullrow">
+    <vr-row>
+        <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="4"></vr-genericdata-genericbe-editordefinition-settings>
+    </vr-row>
+</vr-columns>
 
+<vr-section title="Actions">
+    <vr-row>
+        <vr-columns colnum="12">
+            <vr-button type="Add" data-onclick="scopeModel.onAddTaskTypeAction" standalone></vr-button>
+            <vr-validator validate="scopeModel.validateColumns()">
+                <vr-datagrid datasource="scopeModel.taskTypeActions"
+                             on-ready="scopeModel.onGridReady"
+                             idfield="TaskTypeActionId"
+                             menuactions="gridMenuActions"
+                             ondeleterow="scopeModel.removeTaskTypeAction"
+                             hidegridmenu
+                             vr-loader="scopeModel.isGridLoading">
+                    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+        </vr-columns>
+    </vr-row>
+</vr-section>

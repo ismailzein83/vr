@@ -18,10 +18,36 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', modalParameters, modalSettings);
         }
 
+        function addTaskTypeAction(onBPTaskTypeActionAdded) {
+            var modalParameters = {};
 
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onBPTaskTypeActionAdded = onBPTaskTypeActionAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPGenericTaskType/Templates/BPGenericTaskTypeActionEditorTemplate.html', modalParameters, modalSettings);
+        }
+
+        function editTaskTypeAction(taskTypeActionEntity, onBPTaskTypeActionUpdated) {
+            var modalParameters = {
+                taskTypeActionEntity: taskTypeActionEntity
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onBPTaskTypeActionUpdated = onBPTaskTypeActionUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPGenericTaskType/Templates/BPGenericTaskTypeActionEditorTemplate.html', modalParameters, modalSettings);
+        }
 
         return {
-            addBPTaskType: addBPTaskType
+            addBPTaskType: addBPTaskType,
+            addTaskTypeAction: addTaskTypeAction,
+            editTaskTypeAction: editTaskTypeAction
         };
     }
     appControllers.service('BusinessProcess_BPTaskTypeService', BusinessProcess_BPTaskTypeService);
