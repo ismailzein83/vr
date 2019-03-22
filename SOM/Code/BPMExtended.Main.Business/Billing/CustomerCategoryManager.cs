@@ -38,25 +38,24 @@ namespace BPMExtended.Main.Business
 
         public List<CustomerCategoryCatalog> GetCustomerCategoriesCatalogBySegmentId(string segmentId)
         {
-            var customerCategoryCatalogItems = new List<CustomerCategoryCatalog>();
+            List<CustomerCategoryCatalog> customerCategoryCatalogItems = null;
             Guid id = new Guid(segmentId.ToUpper());
             var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoryCatalog");
 
-            var colId = esq.AddColumn("Id");
+
             esq.AddColumn("StName");
-            esq.AddColumn("StCustomerSegments");
+            esq.AddColumn("StCustomerSegmentsId");
             esq.AddColumn("StCustomerCategory");
             esq.AddColumn("StIsSkipPayment");
             esq.AddColumn("StIsNormal");
 
 
-            var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerSegments", id);
+            var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerSegmentsId", id);
             esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
-            for(int i=0;i < entities.Count; i++)
+            for(int i=0;i> entities.Count; i++)
                 {
-                    var customerCategoryCatalogId = entities[i].GetColumnValue(colId.Name);
                     var name = entities[i].GetColumnValue("StName");
                     var customerSegmentId = entities[i].GetColumnValue("StCustomerSegmentsId");
                     var customerCategories = entities[i].GetColumnValue("StCustomerCategory");
@@ -65,7 +64,6 @@ namespace BPMExtended.Main.Business
 
                     var customerCategoryCatalogItem = new CustomerCategoryCatalog()
                     {
-                        Id = customerCategoryCatalogId.ToString(),
                         Name = name.ToString(),
                         SegmentId = customerSegmentId.ToString(),
                         CustomerCategory = customerCategories.ToString(),

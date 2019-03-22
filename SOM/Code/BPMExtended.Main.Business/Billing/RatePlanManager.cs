@@ -29,7 +29,7 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetCustomerCategories(customerType);
         }
 
-        public CustomerCategory GetCustomerCategoryById(string customerCategoryId)
+        public SOM.Main.Entities.CustomerCategory GetCustomerCategoryById(string customerCategoryId)
         {
             return RatePlanMockDataGenerator.GetCustomerCategory(customerCategoryId);
         }
@@ -64,6 +64,31 @@ namespace BPMExtended.Main.Business
                 return ratePlans.MapRecords(RatePlanInfoMapper, filterExpression).ToList();
             }
 
+        }
+
+        public List<RatePlanInfo> GetRatePlansInfo()
+        {
+            var ratePlanInfoItems = new List<RatePlanInfo>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<BPMExtended.Main.SOMAPI.RatePlan> items = client.Get<List<BPMExtended.Main.SOMAPI.RatePlan>>(String.Format("api/SOM.ST/Billing/GetRatePlans"));
+                foreach (var item in items)
+                {
+                    var ratePlanInfoItem = RatePlanToInfoMapper(item);
+                    ratePlanInfoItems.Add(ratePlanInfoItem);
+                }
+            }
+            return ratePlanInfoItems;
+        }
+
+        public RatePlanInfo RatePlanToInfoMapper(BPMExtended.Main.SOMAPI.RatePlan item)
+        {
+            return new RatePlanInfo
+            {
+                Name = item.Name,
+                RatePlanId = item.RatePlanId
+
+            };
         }
 
         public List<ServiceDetail> ValidateServices(string selectedRatePlanId , string oldRatePlanId)

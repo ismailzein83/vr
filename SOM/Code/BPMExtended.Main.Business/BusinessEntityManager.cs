@@ -1,6 +1,7 @@
 ﻿using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using SOM.Main.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +21,11 @@ namespace BPMExtended.Main.Business
         //    {
         //        return (UserConnection)HttpContext.Current.Session["UserConnection"];
         //    }
-        //}
-       
+        //}    
         public Array GetLineOfBusniessArray()
         {
-            return Enum.GetValues(typeof(LineOfBusiness));
+            var lineOfBusinessArray = Enum.GetNames(typeof(LineOfBusiness));
+            return lineOfBusinessArray;
         }
 
     }
