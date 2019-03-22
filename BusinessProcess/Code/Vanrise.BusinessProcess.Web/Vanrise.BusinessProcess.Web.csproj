@@ -189,6 +189,8 @@
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpServiceMethodEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowTrackingMessageSeverityEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowArgumentDirectionEnum.js" />
+    <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-openbpinstanceviewer-action.js" />
+    <Content Include="BusinessProcess\Directives\BPInstance\Templates\OpenBPInstanceViewerActionTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\bp-basebptasktypesettings-selective.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-actions-selective.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-information-action.js" />
