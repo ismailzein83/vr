@@ -61,19 +61,23 @@ namespace NP.IVSwitch.Business
 				Result = InsertOperationResult.Failed,
 				InsertedObject = null
 			};
-			Dictionary<int, Firewall> firewalls = GetCachedFirewalls();
-			if (firewalls != null)
+			Dictionary<int, Firewall> allFirewalls = GetCachedFirewalls();
+			if (allFirewalls != null)
 			{
 				IpAddressHelper helper = new IpAddressHelper();
-				List<string> allHosts = new List<string>();
-				allHosts = firewalls.Values.FindAllRecords(x => x.Id != firewall.Id).Select(x => x.Host).ToList();
-				string message = "";
-				if (helper.IsNotValidSubnetORInSameSubnet(allHosts, firewall.Host, out message))
+				IEnumerable<Firewall> firewalls = allFirewalls.Values.FindAllRecords(x => x.Id != firewall.Id);
+				if (firewalls != null)
 				{
-					insertOperationOutput.ShowExactMessage = true;
-					insertOperationOutput.Message = message;
-					return insertOperationOutput;
+					IEnumerable<string> allHosts = firewalls.Select(x => x.Host);
+					string message = "";
+					if (allHosts != null && helper.IsNotValidSubnetORInSameSubnet(allHosts.ToList(), firewall.Host, out message))
+					{
+						insertOperationOutput.ShowExactMessage = true;
+						insertOperationOutput.Message = message;
+						return insertOperationOutput;
+					}
 				}
+
 			}
 			IFirewallDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IFirewallDataManager>();
 			Helper.SetSwitchConfig(dataManager);
@@ -101,21 +105,25 @@ namespace NP.IVSwitch.Business
 				Result = UpdateOperationResult.Failed,
 				UpdatedObject = null
 			};
-			Dictionary<int, Firewall> firewalls = GetCachedFirewalls();
 
-			if (firewalls != null)
+			Dictionary<int, Firewall> allFirewalls = GetCachedFirewalls();
+			if (allFirewalls != null)
 			{
 				IpAddressHelper helper = new IpAddressHelper();
-				List<string> allHosts = new List<string>();
-				allHosts = firewalls.Values.FindAllRecords(x => x.Id != firewallItem.Id).Select(x => x.Host).ToList();
-				string message = "";
-				if (helper.IsNotValidSubnetORInSameSubnet(allHosts, firewallItem.Host, out message))
+				IEnumerable<Firewall> firewalls = allFirewalls.Values.FindAllRecords(x => x.Id != firewallItem.Id);
+				if (firewalls != null)
 				{
-					updateOperationOutput.ShowExactMessage = true;
-					updateOperationOutput.Message = message;
-					return updateOperationOutput;
+					IEnumerable<string> allHosts = firewalls.Select(x => x.Host);
+					string message = "";
+					if (allHosts != null && helper.IsNotValidSubnetORInSameSubnet(allHosts.ToList(), firewallItem.Host, out message))
+					{
+						updateOperationOutput.ShowExactMessage = true;
+						updateOperationOutput.Message = message;
+						return updateOperationOutput;
+					}
 				}
 			}
+
 			IFirewallDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IFirewallDataManager>();
 			Helper.SetSwitchConfig(dataManager);
 			if (dataManager.Update(firewallItem))
