@@ -29,8 +29,7 @@ namespace Retail.BusinessEntity.MainExtensions.FinancialRecurringChargePeriod
                 DateTime fromDate = new DateTime(currentDateTime.Year, currentDateTime.Month, 1);
                 DateTime toDate = fromDate.GetLastDayOfMonth();
 
-                if (!InAdvance)
-                    currentDateTime = fromDate.AddMonths(1).GetLastDayOfMonth();
+              
 
                 periodsList.Add(new RecurringChargePeriodOutput
                 {
@@ -38,6 +37,8 @@ namespace Retail.BusinessEntity.MainExtensions.FinancialRecurringChargePeriod
                     To = toDate,
                     RecurringChargeDate = currentDateTime
                 });
+                if (!InAdvance)
+                    currentDateTime = fromDate.AddMonths(1).GetLastDayOfMonth();
             }
             context.Periods = periodsList;
         }
