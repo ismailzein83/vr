@@ -53,6 +53,7 @@
     <Compile Include="CodeIterator.cs" />
     <Compile Include="MobileCountry\MobileCountryManager.cs" />
     <Compile Include="MobileCountry\MobileCountryOnBeforeSaveHandler.cs" />
+    <Compile Include="MobileCountry\MobileCountrySettingsCustomObjectTypeSettings.cs" />
     <Compile Include="MobileNetwork\MobileNetworkManager.cs" />
     <Compile Include="MobileNetwork\MobileNetworkOnBeforeSaveHandler.cs" />
     <Compile Include="MobileNetwork\MobileNetworkSettingsCustomObjectTypeSettings.cs" />

@@ -78,8 +78,12 @@
   <ItemGroup>
     <Content Include="VR_MobileNetwork\Constants\ModuleConfig.js" />
     <Content Include="VR_MobileNetwork\Directives\MobileCountry\Templates\MobileCountryOnBeforeSaveHandler.html" />
+    <Content Include="VR_MobileNetwork\Directives\MobileCountry\Templates\MobileCountrySettingsTemplate.html" />
+    <Content Include="VR_MobileNetwork\Directives\MobileCountry\Templates\MobileCountrySettingsCustomObjectSettingsTemplate.html" />
+    <Content Include="VR_MobileNetwork\Directives\MobileCountry\vr-mobilecountry-customobjectsettings.js" />
     <Content Include="VR_MobileNetwork\Directives\MobileCountry\vr-mobilenetwork-mobilecountry-onbeforesavehandler.js" />
     <Content Include="VR_MobileNetwork\Directives\MobileCountry\vr-mobilenetwork-mobilecountry-selector.js" />
+    <Content Include="VR_MobileNetwork\Directives\MobileCountry\vr-mobilecountry-settings.js" />
     <Content Include="VR_MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkOnBeforeSaveHandler.html" />
     <Content Include="VR_MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsCustomObjectSettingsTemplate.html" />
     <Content Include="VR_MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsTemplate.html" />

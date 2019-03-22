@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.MobileNetwork.Entities;
-using System.Linq;
 
 namespace Vanrise.MobileNetwork.Business
 {
@@ -25,7 +25,7 @@ namespace Vanrise.MobileNetwork.Business
                 return true;
             };
 
-            return mobileCountries.MapRecords(MobileCountryInfoMapper, filterFunc).OrderBy(item=> item.MobileCountryName);
+            return mobileCountries.MapRecords(MobileCountryInfoMapper, filterFunc).OrderBy(item => item.MobileCountryName);
         }
 
         public int? GetMobileCountryEntityCountryID(string code)
@@ -49,10 +49,10 @@ namespace Vanrise.MobileNetwork.Business
             return mobileCountry;
         }
 
-        public Dictionary<string, MobileCountry> GetMobileCoutriesByCodes()
-        {
-            return GetCachedMobileCountriesByCode();
-        }
+        //public Dictionary<string, MobileCountry> GetMobileCoutriesByCodes()
+        //{
+        //    return GetCachedMobileCountriesByCode();
+        //}
 
         public int? GetMobileCountryEntityCountryID(int mobileCountryId)
         {
@@ -79,11 +79,17 @@ namespace Vanrise.MobileNetwork.Business
             if (string.IsNullOrEmpty(mcc))
                 return null;
 
-            var cachedMobileCountriesByCode = GetCachedMobileCountriesByCode();
-            if (cachedMobileCountriesByCode == null || cachedMobileCountriesByCode.Count == 0)
+            var cachedMobileCountries = GetCachedMobileCountries();
+            if (cachedMobileCountries == null || cachedMobileCountries.Count == 0)
                 return null;
 
-            var mobileCountry = cachedMobileCountriesByCode.GetRecord(mcc);
+            var mobileCountry = cachedMobileCountries.FindRecord(item => item != null && item.MobileCountrySettings != null && item.MobileCountrySettings.Codes != null && item.MobileCountrySettings.Codes.Any(itm => itm.Code.Equals(mcc)));
+
+            //var cachedMobileCountriesByCode = GetCachedMobileCountriesByCode();
+            //if (cachedMobileCountriesByCode == null || cachedMobileCountriesByCode.Count == 0)
+            //    return null;
+
+            //var mobileCountry = cachedMobileCountriesByCode.GetRecord(mcc);
 
             return mobileCountry;
         }
@@ -139,7 +145,8 @@ namespace Vanrise.MobileNetwork.Business
                         MobileCountry mobileCountry = new MobileCountry
                         {
                             Id = (int)genericBusinessEntity.FieldValues.GetRecord("ID"),
-                            Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
+                            //Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
+                            MobileCountrySettings = (MobileCountrySettings)genericBusinessEntity.FieldValues.GetRecord("Settings"),
                             CountryId = (int)genericBusinessEntity.FieldValues.GetRecord("Country"),
                         };
                         MobileCountryList.Add(mobileCountry);
@@ -149,30 +156,31 @@ namespace Vanrise.MobileNetwork.Business
             });
         }
 
-        private Dictionary<string, MobileCountry> GetCachedMobileCountriesByCode()
-        {
-            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMobileCountriesByCode", BeDefinitionId, () =>
-            {
-                List<MobileCountry> mobileCountries = GetCachedMobileCountries();
+        //private Dictionary<string, MobileCountry> GetCachedMobileCountriesByCode()
+        //{
+        //    IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+        //    return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMobileCountriesByCode", BeDefinitionId, () =>
+        //    {
+        //        List<MobileCountry> mobileCountries = GetCachedMobileCountries();
 
-                Dictionary<string, MobileCountry> mobileCountriesByCode = new Dictionary<string, MobileCountry>();
+        //        Dictionary<string, MobileCountry> mobileCountriesByCode = new Dictionary<string, MobileCountry>();
 
-                if (mobileCountries != null)
-                {
-                    foreach (MobileCountry mobileCountry in mobileCountries)
-                    {
-                        mobileCountriesByCode.Add(mobileCountry.Code, new MobileCountry
-                        {
-                            Id = mobileCountry.Id,
-                            Code = mobileCountry.Code,
-                            CountryId = mobileCountry.CountryId
-                        });
-                    }
-                }
-                return mobileCountriesByCode;
-            });
-        }
+        //        if (mobileCountries != null)
+        //        {
+        //            foreach (MobileCountry mobileCountry in mobileCountries)
+        //            {
+        //                mobileCountriesByCode.Add(mobileCountry.Code, new MobileCountry
+        //                {
+        //                    Id = mobileCountry.Id,
+        //                    //Code = mobileCountry.Code,
+        //                    Codes = mobileCountry.Codes,
+        //                    CountryId = mobileCountry.CountryId
+        //                });
+        //            }
+        //        }
+        //        return mobileCountriesByCode;
+        //    });
+        //}
 
         private Dictionary<int, MobileCountry> GetCachedMobileCountriesByID()
         {
@@ -189,7 +197,8 @@ namespace Vanrise.MobileNetwork.Business
                         mobileCountriesById.Add(mobileCountry.Id, new MobileCountry
                         {
                             Id = mobileCountry.Id,
-                            Code = mobileCountry.Code,
+                            //Code = mobileCountry.Code,
+                            MobileCountrySettings = mobileCountry.MobileCountrySettings,
                             CountryId = mobileCountry.CountryId
                         });
                     }
@@ -213,7 +222,8 @@ namespace Vanrise.MobileNetwork.Business
                         mobileCountriesById.Add(mobileCountry.CountryId, new MobileCountry
                         {
                             Id = mobileCountry.Id,
-                            Code = mobileCountry.Code,
+                            //Code = mobileCountry.Code,
+                            MobileCountrySettings = mobileCountry.MobileCountrySettings,
                             CountryId = mobileCountry.CountryId
                         });
                     }
