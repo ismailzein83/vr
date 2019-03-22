@@ -3,9 +3,9 @@
 
     'use strict';
 
-	GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBEDefinitionAPIService','BusinessProcess_BPInstanceService'];
+	GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBEDefinitionAPIService'];
 
-	function GenericBEActionService(VRModalService, UtilsService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum, VRCommon_ModalWidthEnum, VR_GenericData_GenericBEDefinitionAPIService, BusinessProcess_BPInstanceService) {
+	function GenericBEActionService(VRModalService, UtilsService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum, VRCommon_ModalWidthEnum, VR_GenericData_GenericBEDefinitionAPIService) {
 
         var actionTypes = [];
 
@@ -125,26 +125,6 @@
             registerActionType(editActionType);
 		}
 
-		function registerOpenBPInstanceViewerAction() {
-			var openBPInstanceViewerAction = {
-				ActionTypeName: "OpenBPInstanceViewer",
-				ExecuteAction: function (payload) {
-					if (payload != undefined) {
-						var businessEntityDefinitionId = payload.businessEntityDefinitionId;
-						var genericBusinessEntityId = payload.genericBusinessEntityId;
-						VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
-							if (payload.genericBEAction != undefined && payload.genericBEAction.Settings != undefined) {
-								var processInstanceFieldName = payload.genericBEAction.Settings.ProcessInstanceIdFieldName;
-								if (processInstanceFieldName!=undefined)
-								BusinessProcess_BPInstanceService.openProcessTracking(response.FieldValues[processInstanceFieldName].Value);
-							}
-						});
-					}
-				}
-			};
-			registerActionType(openBPInstanceViewerAction);
-		}
-
         function registerDeleteBEAction()
         {
             var deleteActionType = {
@@ -202,8 +182,7 @@
             getActionTypeIfExist: getActionTypeIfExist,
             registerActionType: registerActionType,
             registerEditBEAction: registerEditBEAction,
-			registerDeleteBEAction: registerDeleteBEAction,
-			registerOpenBPInstanceViewerAction: registerOpenBPInstanceViewerAction
+			registerDeleteBEAction: registerDeleteBEAction
         });
     };
 
