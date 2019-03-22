@@ -43,9 +43,15 @@
     [CostTariffRuleId]               INT             NULL,
     [SaleFinancialAccountId]         INT             NULL,
     [CostFinancialAccountId]         INT             NULL,
+    [OrigSaleDealID]                 INT             NULL,
+    [OrigSaleDealZoneGroupNb]        INT             NULL,
+    [OrigCostDealID]                 INT             NULL,
+    [OrigCostDealZoneGroupNb]        INT             NULL,
     [Type]                           INT             NULL,
     [QueueItemId]                    BIGINT          NULL
 );
+
+
 
 
 

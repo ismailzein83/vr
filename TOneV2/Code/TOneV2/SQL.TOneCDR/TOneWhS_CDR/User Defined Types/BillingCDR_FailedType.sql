@@ -39,8 +39,22 @@
     [CountryId]                      INT             NULL,
     [SaleFinancialAccountId]         INT             NULL,
     [CostFinancialAccountId]         INT             NULL,
+    [OrigSaleDealID]                 INT             NULL,
+    [OrigSaleDealZoneGroupNb]        INT             NULL,
+    [SaleDealID]                     INT             NULL,
+    [SaleDealZoneGroupNb]            INT             NULL,
+    [SaleDealTierNb]                 INT             NULL,
+    [SaleDealRateTierNb]             INT             NULL,
+    [OrigCostDealID]                 INT             NULL,
+    [OrigCostDealZoneGroupNb]        INT             NULL,
+    [CostDealID]                     INT             NULL,
+    [CostDealZoneGroupNb]            INT             NULL,
+    [CostDealTierNb]                 INT             NULL,
+    [CostDealRateTierNb]             INT             NULL,
     [Type]                           INT             NULL,
     [QueueItemId]                    BIGINT          NULL);
+
+
 
 
 
