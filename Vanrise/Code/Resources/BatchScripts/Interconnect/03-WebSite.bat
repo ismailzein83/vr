@@ -43,6 +43,7 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-member.png" /S /R 
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-support.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Flat-theme\Client\Images\support.png*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Home\Index-flat.cshtml" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Flat-theme\Client\CSViews\Home\Index.cshtml*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Security\Login-flat.cshtml" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Flat-theme\Client\CSViews\Security\Login.cshtml*"
+
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Common\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\VR_AccountBalance\"
