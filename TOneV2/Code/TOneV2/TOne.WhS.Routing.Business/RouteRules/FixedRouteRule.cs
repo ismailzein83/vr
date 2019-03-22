@@ -51,7 +51,9 @@ namespace TOne.WhS.Routing.Business
         }
 
         #endregion
+
         #region Public Methods
+
         public override bool AreSuppliersIncluded(IRouteRuleAreSuppliersIncludedContext context)
         {
             if (context.SupplierIds == null || context.SupplierIds.Count == 0)
@@ -213,6 +215,7 @@ namespace TOne.WhS.Routing.Business
         {
             throw new NotSupportedException("ExecuteForSaleEntity is not supported for FixedRouteRule.");
         }
+
         public override RouteRuleSettings ExtendSuppliersList(RouteRuleSettings routeRuleSettings, List<RouteOption> routeOptions)
         {
             var fixedRouteRule = routeRuleSettings.CastWithValidate<FixedRouteRule>("FixedRouteRule");
@@ -315,7 +318,7 @@ namespace TOne.WhS.Routing.Business
             return options;
         }
 
-        private void FilterOption(HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option, RoutingDatabase RoutingDatabase)
+        private void FilterOption(HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option, RoutingDatabase routingDatabase)
         {
             IFixedRouteOptionSettings fixedOption = option.OptionSettings as IFixedRouteOptionSettings;
 
@@ -335,9 +338,10 @@ namespace TOne.WhS.Routing.Business
                     SupplierServices = option.SupplierServiceIds,
                     SupplierId = option.SupplierId,
                     SupplierZoneId = option.SupplierZoneId,
-                    RoutingDatabase = RoutingDatabase
+                    RoutingDatabase = routingDatabase
                 };
                 optionFilter.Execute(routeOptionFilterExecutionContext);
+
                 if (routeOptionFilterExecutionContext.FilterOption)
                 {
                     option.FilterOption = true;
