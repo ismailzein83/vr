@@ -27,10 +27,18 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
             var filterObj;
             var context;
 
+            var logicalOperatorDirectiveAPI;
+            var logicalOperatorDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 ctrl.rules = [];
                 ctrl.groups = [];
                 ctrl.conditions = UtilsService.getArrayEnum(VR_GenericData_RecordQueryLogicalOperatorEnum);
+
+                ctrl.onLogicalOperatorDirectiveReady = function (api) {
+                    logicalOperatorDirectiveAPI = api;
+                    logicalOperatorDirectiveReadyPromiseDeferred.resolve();
+                };
 
                 ctrl.isValid = function () {
                     if (ctrl.groups.length == 0 && ctrl.rules.length == 0)
@@ -51,11 +59,11 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                     ctrl.rules.push(rule);
                 };
 
-                $scope.removeRule = function (rule) {
+                ctrl.removeRule = function (rule) {
                     ctrl.rules.splice(ctrl.rules.indexOf(rule), 1);
                 };
 
-                $scope.removeGroup = function (group) {
+                ctrl.removeGroup = function (group) {
                     ctrl.groups.splice(ctrl.groups.indexOf(group), 1);
                 };
 
@@ -89,10 +97,26 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                         context = payload.context;
 
                         filterObj = payload.filterObj;
-                        if (filterObj) {
+                        if (filterObj)
                             buildData(filterObj.Filters, promises);
-                            ctrl.condition = filterObj.LogicalOperator; //UtilsService.getEnum(VR_GenericData_RecordQueryLogicalOperatorEnum, 'value', payload.filterObj.LogicalOperator).description;
-                        }
+                    }
+
+                    var logicalOperatorDirectiveLoadedPromise = loadLogicalOperatorDirective();
+                    promises.push(logicalOperatorDirectiveLoadedPromise);
+
+                    function loadLogicalOperatorDirective() {
+                        var logicalOperatorDirectiveLoadedPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        logicalOperatorDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var logicalOperatorDirectivePayload;
+                            if (filterObj != undefined) {
+                                logicalOperatorDirectivePayload = { LogicalOperator: filterObj.LogicalOperator };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(logicalOperatorDirectiveAPI, logicalOperatorDirectivePayload, logicalOperatorDirectiveLoadedPromiseDeferred);
+                        });
+
+                        return logicalOperatorDirectiveLoadedPromiseDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -116,12 +140,12 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                         }
                     }
 
-                    //var logicalOperator = UtilsService.getEnum(VR_GenericData_RecordQueryLogicalOperatorEnum, 'description', ctrl.condition);
                     var filterGroup = {
                         $type: "Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities",
-                        LogicalOperator: ctrl.condition,//logicalOperator.value,
+                        LogicalOperator: logicalOperatorDirectiveAPI.getData(),
                         Filters: filters
                     };
+
                     return filterGroup;
                 };
 

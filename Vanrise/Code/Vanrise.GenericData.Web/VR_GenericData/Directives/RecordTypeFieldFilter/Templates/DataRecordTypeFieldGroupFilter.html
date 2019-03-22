@@ -1,11 +1,7 @@
 ﻿<vr-validator validate="ctrl.isValid()">
-    <vr-section  collapsible level="2" light>
+    <vr-section collapsible level="2" light>
         <vr-row removeline>
-            <vr-columns width="1/2row">
-                <vr-choices isradio selectedindex="ctrl.condition">
-                    <vr-choice ng-repeat="condition in ctrl.conditions">{{condition.description}}</vr-choice>
-                </vr-choices>
-            </vr-columns>
+            <vr-genericdata-recordfilter-logicaloperator on-ready="ctrl.onLogicalOperatorDirectiveReady" normal-col-num="6"></vr-genericdata-recordfilter-logicaloperator>
 
             <vr-columns width="1/4row" class="vr-groupfilter-button">
                 <button type="button" class="btn btn-xs" data-add="group" ng-click="ctrl.addGroup()" style="background-color:#6DA279;color:white;">
@@ -24,7 +20,7 @@
                 <div style="display:inline-block;width:calc(100% - 18px);">
                     <vr-directivewrapper directive="'vr-genericdata-datarecordtypefield-rulefilter'" on-ready="rule.onRuleFilterReady"></vr-directivewrapper>
                 </div>
-                <i class="glyphicon glyphicon-remove hand-cursor" style="position:absolute;top: 5px;" ng-click="removeRule(rule)"></i>
+                <i class="glyphicon glyphicon-remove hand-cursor" style="position:absolute;top: 5px;" ng-click="ctrl.removeRule(rule)"></i>
             </vr-columns>
         </vr-row>
 
@@ -33,7 +29,7 @@
                 <div style="display:inline-block;width:calc(100% - 18px);">
                     <vr-directivewrapper directive="'vr-genericdata-datarecordtypefield-groupfilter'" on-ready="group.onGroupFilterReady"></vr-directivewrapper>
                 </div>
-                <i class="glyphicon glyphicon-remove hand-cursor" style="position:absolute;top: 5px;" ng-click="removeGroup(group)"></i>
+                <i class="glyphicon glyphicon-remove hand-cursor" style="position:absolute;top: 5px;" ng-click="ctrl.removeGroup(group)"></i>
             </vr-columns>
         </vr-row>
     </vr-section>

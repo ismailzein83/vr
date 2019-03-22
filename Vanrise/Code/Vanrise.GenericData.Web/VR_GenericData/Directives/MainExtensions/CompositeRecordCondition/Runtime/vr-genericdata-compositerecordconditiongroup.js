@@ -27,11 +27,19 @@
             var compositeRecordConditionResolvedDataList;
             var compositeRecordConditionDefinitionGroup;
 
+            var logicalOperatorDirectiveAPI;
+            var logicalOperatorDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.conditions = [];
                 $scope.scopeModel.compositeRecordConditionConfigs = [];
                 $scope.scopeModel.logicalOperators = UtilsService.getArrayEnum(VR_GenericData_RecordQueryLogicalOperatorEnum);
+
+                $scope.scopeModel.onLogicalOperatorDirectiveReady = function (api) {
+                    logicalOperatorDirectiveAPI = api;
+                    logicalOperatorDirectiveReadyPromiseDeferred.resolve();
+                };
 
                 $scope.scopeModel.validateCompositeRecordCondition = function () {
                     if ($scope.scopeModel.conditions.length == 0)
@@ -96,6 +104,9 @@
                         });
                     }
 
+                    var logicalOperatorDirectiveLoadedPromise = loadLogicalOperatorDirective();
+                    promises.push(logicalOperatorDirectiveLoadedPromise);
+
                     function getCompositeRecordConditionConfigs() {
                         return VR_GenericData_CompositeRecordConditionAPIService.GetCompositeRecordConditionConfigs().then(function (response) {
                             if (response != null) {
@@ -149,6 +160,23 @@
                         $scope.scopeModel.conditions.push(condition);
                     }
 
+                    function loadLogicalOperatorDirective() {
+                        var logicalOperatorDirectiveLoadedPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        logicalOperatorDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var logicalOperatorDirectivePayload;
+                            if (compositeRecordCondition != undefined) {
+                                logicalOperatorDirectivePayload = {
+                                    LogicalOperator: compositeRecordCondition.LogicalOperator
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(logicalOperatorDirectiveAPI, logicalOperatorDirectivePayload, logicalOperatorDirectiveLoadedPromiseDeferred);
+                        });
+
+                        return logicalOperatorDirectiveLoadedPromiseDeferred.promise;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -157,7 +185,7 @@
                         $type: "Vanrise.GenericData.MainExtensions.CompositeRecordCondition.Runtime.CompositeRecordConditionGroup, Vanrise.GenericData.MainExtensions",
                         ConfigId: "9ADCEA46-87C2-4747-8B88-20796AA99CA0",
                         RecordConditions: getRecordConditions(),
-                        LogicalOperator: $scope.scopeModel.logicalOperator
+                        LogicalOperator: logicalOperatorDirectiveAPI.getData()
                     };
                 };
 

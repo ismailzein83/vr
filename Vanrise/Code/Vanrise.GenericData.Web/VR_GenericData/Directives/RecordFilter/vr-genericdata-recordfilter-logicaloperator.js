@@ -13,17 +13,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new LogicalOperator($scope, ctrl, $attrs);
+                var ctor = new LogicalOperatorCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordFilter/Templates/LogicalOperatorTemplate.html"
-
         };
 
-
-        function LogicalOperator($scope, ctrl, $attrs) {
+        function LogicalOperatorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -40,8 +38,9 @@
 
                     $scope.scopeModel.operators = UtilsService.getArrayEnum(VR_GenericData_RecordQueryLogicalOperatorEnum);
 
-                    if (payload != undefined)
+                    if (payload != undefined) {
                         $scope.scopeModel.operator = payload.LogicalOperator;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };

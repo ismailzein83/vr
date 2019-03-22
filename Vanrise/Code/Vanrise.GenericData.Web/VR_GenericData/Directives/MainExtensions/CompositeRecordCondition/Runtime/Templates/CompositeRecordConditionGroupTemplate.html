@@ -1,11 +1,7 @@
 ﻿<vr-columns width="fullrow">
     <vr-validator validate="scopeModel.validateCompositeRecordCondition()">
-        <vr-section level="2" light >
-            <vr-columns width="1/4row">
-                <vr-choices isradio selectedindex="scopeModel.logicalOperator">
-                    <vr-choice ng-repeat="logicalOperator in scopeModel.logicalOperators">{{logicalOperator.description}}</vr-choice>
-                </vr-choices>
-            </vr-columns>
+        <vr-section level="2" light>
+            <vr-genericdata-recordfilter-logicaloperator on-ready="scopeModel.onLogicalOperatorDirectiveReady" normal-col-num="3"></vr-genericdata-recordfilter-logicaloperator>
 
             <div ng-repeat="btn in scopeModel.compositeRecordConditionConfigs">
                 <vr-columns width="1/4row" class="vr-groupfilter-button">
