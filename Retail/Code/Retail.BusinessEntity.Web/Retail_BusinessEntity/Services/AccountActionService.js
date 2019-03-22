@@ -177,14 +177,32 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
         function openChangeStatusEditor(onItemUpdated, accountBEDefinitionId, accountId, accountActionDefinitionId) {
             var settings = {};
             settings.onScopeReady = function (modalScope) {
-                modalScope.onItemUpdated = onItemUpdated
+                modalScope.onItemUpdated = onItemUpdated;
             };
             var parameters = {
                 accountBEDefinitionId: accountBEDefinitionId,
                 accountActionDefinitionId: accountActionDefinitionId,
-                accountId: accountId,
+                accountId: accountId
             };
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/ChangeStatusActionEditor.html', parameters, settings);
+        }
+
+        function registerStartBPProcessAction() {
+
+            var actionType = {
+                ActionTypeName: "StartBPProcess",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+
+                    var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var account = payload.account;
+                    var actionDefinitionSettings = payload.accountActionDefinition.ActionDefinitionSettings;
+
+                    Retail_BE_AccountBEService.startBPProcessAction(accountBEDefinitionId, account.AccountId, actionDefinitionSettings);
+                }
+            };
+            registerActionType(actionType);
         }
 
         return ({
@@ -196,6 +214,7 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
             registerBPActionAccount: registerBPActionAccount,
             registerChangeStatusAction: registerChangeStatusAction,
             registerExportRatesAction: registerExportRatesAction,
-            registerAccountManagerAssignment: registerAccountManagerAssignment
+            registerAccountManagerAssignment: registerAccountManagerAssignment,
+            registerStartBPProcessAction: registerStartBPProcessAction
         });
     }]);

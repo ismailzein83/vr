@@ -1,12 +1,11 @@
-﻿<!--<div vr-modalcontent ng-controller="Retail_BE_StartBPProcessEditorController" size="medium" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="Retail_BE_StartBPProcessEditorController" size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formStartBPProcess">
             <vr-row>
-                <vr-columns>
-                    <bp-vr-workflow-manualexeceditor on-ready="scopeModel.onWorkflowManualExecEditorReady"></bp-vr-workflow-manualexeceditor>
+                <vr-columns width="fullrow" ng-if="bpDefinitionObj.Configuration.ManualExecEditor">
+                    <vr-directivewrapper directive="bpDefinitionObj.Configuration.ManualExecEditor" on-ready="scopeModel.onBPDefinitionManualDirectiveReady"></vr-directivewrapper>
                 </vr-columns>
             </vr-row>
-           
         </vr-form>
     </vr-modalbody>
     <div>
@@ -17,4 +16,4 @@
             </div>
         </vr-actionbar>
     </div>
-</div>-->
+</div>

@@ -112,7 +112,7 @@
             var parameters = {
                 viewId: viewId,
                 bulkAction: bulkAction,
-                accountBEDefinitionId: accountBEDefinitionId,
+                accountBEDefinitionId: accountBEDefinitionId
             };
             var settings = {};
 
@@ -123,13 +123,29 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/BulkActionsEditor.html', parameters, settings);
         }
 
+        function startBPProcessAction(accountBEDefinitionId, accountId, actionDefinitionSettings) {
+            var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountId: accountId,
+                actionDefinitionSettings: actionDefinitionSettings
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/StartBPProcessEditor.html', parameters, settings);
+        }
+
         return {
             addAccount: addAccount,
             editAccount: editAccount,
             getEntityUniqueName: getEntityUniqueName,
             defineAccountViewTabs: defineAccountViewTabs,
             openAccount360DegreeEditor: openAccount360DegreeEditor,
-            openBulkActionsEditor: openBulkActionsEditor
+            openBulkActionsEditor: openBulkActionsEditor,
+            startBPProcessAction: startBPProcessAction
         };
          
     }

@@ -16,7 +16,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
         public string AccountBEDefinitionIdInputFieldName { get; set; }
         public override string ClientActionName
         {
-            get { return "Start BP Process"; }
+            get { return "StartBPProcess"; }
         }
         public override bool DoesUserHaveAccess(IAccountActionDefinitionCheckAccessContext context)
         {
