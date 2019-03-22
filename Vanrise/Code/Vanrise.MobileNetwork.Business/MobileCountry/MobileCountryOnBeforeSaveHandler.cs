@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Vanrise.GenericData.Business;
-using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 using Vanrise.MobileNetwork.Entities;
 
 namespace Vanrise.MobileNetwork.Business
@@ -20,16 +17,30 @@ namespace Vanrise.MobileNetwork.Business
             context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
             var countryId = context.GenericBusinessEntity.FieldValues.GetRecord("Country");
             countryId.ThrowIfNull("country");
-            var code = context.GenericBusinessEntity.FieldValues.GetRecord("Code");
-            code.ThrowIfNull("code");
+            var settingsObject = context.GenericBusinessEntity.FieldValues.GetRecord("Settings");
+            settingsObject.ThrowIfNull("Settings");
+            var settings = settingsObject as MobileCountrySettings;
+            settings.ThrowIfNull("Settings");
+
             var id = context.GenericBusinessEntity.FieldValues.GetRecord("ID");
             int? mobileCountryId = (int?)id;
-           var mobileCountryByCode = mobileCountryManager.GetMobileCountryByMCC((string)code);
-            if(mobileCountryByCode != null && mobileCountryId != mobileCountryByCode.Id)
+
+            List<string> existingCodes = new List<string>();
+            if (settings.Codes != null && settings.Codes.Count > 0)
             {
-                context.OutputResult.Result = false;
-                context.OutputResult.Messages.Add(string.Format("The code '{0}' is already used by another Mobile Country",code));
+                foreach (var codeObject in settings.Codes)
+                {
+                    var mobileCountryByCode = mobileCountryManager.GetMobileCountryByMCC(codeObject.Code);
+                    if (mobileCountryByCode != null && mobileCountryId != mobileCountryByCode.Id)
+                    {
+                        context.OutputResult.Result = false;
+                        existingCodes.Add(codeObject.Code);
+                    }
+                }
+                if (existingCodes.Count > 0)
+                    context.OutputResult.Messages.Add(string.Format("Codes '{0}' are already used by another Mobile Country", string.Join(",", existingCodes)));
             }
+
             var mobileCountryByCountryId = mobileCountryManager.GetMobileCountryByCountryId(Convert.ToInt32(countryId));
             if (mobileCountryByCountryId != null && mobileCountryId != mobileCountryByCountryId.Id)
             {
