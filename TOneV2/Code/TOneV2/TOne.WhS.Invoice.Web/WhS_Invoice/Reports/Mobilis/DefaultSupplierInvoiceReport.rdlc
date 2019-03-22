@@ -375,7 +375,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="Facture du trafic d'interconnexion International "+If(Parameters!NoSMS.Value = False, Parameters!SMSServiceTypes.Value, "Voix")+" sortant du réseau d'"+Parameters!Carrier.Value+", entrant dans le réseau d'"+Parameters!CarrierCompanyName.Value</Value>
+                              <Value>="Facture du trafic d'interconnexion International "+If(Parameters!NoSMS.Value = False, Parameters!SMSServiceTypes.Value, "Voix")+" sortant du réseau d'"+Parameters!Name.Value+", entrant dans le réseau d'"+Parameters!CarrierCompanyName.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -1225,8 +1225,9 @@ La facture doit être payée avant </Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Name.Value</Value>
+                              <Value>=Parameters!CarrierCompanyName.Value</Value>
                               <Style>
+                                <FontStyle>Normal</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1285,7 +1286,7 @@ La facture doit être payée avant </Value>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox85">
+                    <Textbox Name="Textbox57">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1295,13 +1296,15 @@ La facture doit être payée avant </Value>
                               <Value />
                               <Style>
                                 <FontStyle>Italic</FontStyle>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox85</rd:DefaultName>
+                      <rd:DefaultName>Textbox56</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1351,25 +1354,26 @@ La facture doit être payée avant </Value>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox56">
+                    <Textbox Name="Textbox94">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!CarrierCompanyName.Value</Value>
+                              <Value>=Parameters!Name.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <FontWeight>Normal</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox56</rd:DefaultName>
+                      <rd:DefaultName>Textbox91</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1431,7 +1435,7 @@ La facture doit être payée avant </Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!RegAddress.Value</Value>
+                              <Value>=Parameters!Address.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -1458,7 +1462,7 @@ La facture doit être payée avant </Value>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox86">
+                    <Textbox Name="Textbox59">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1468,13 +1472,15 @@ La facture doit être payée avant </Value>
                               <Value />
                               <Style>
                                 <FontStyle>Italic</FontStyle>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox86</rd:DefaultName>
+                      <rd:DefaultName>Textbox57</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1524,14 +1530,14 @@ La facture doit être payée avant </Value>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox57">
+                    <Textbox Name="Textbox100">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Address.Value</Value>
+                              <Value>=Parameters!RegAddress.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -1542,7 +1548,7 @@ La facture doit être payée avant </Value>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox57</rd:DefaultName>
+                      <rd:DefaultName>Textbox91</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1604,7 +1610,7 @@ La facture doit être payée avant </Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!BillingCompanyPhone.Value</Value>
+                              <Value>=Parameters!Phone.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -1631,7 +1637,7 @@ La facture doit être payée avant </Value>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox87">
+                    <Textbox Name="Textbox61">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1641,13 +1647,15 @@ La facture doit être payée avant </Value>
                               <Value />
                               <Style>
                                 <FontStyle>Italic</FontStyle>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox87</rd:DefaultName>
+                      <rd:DefaultName>Textbox58</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1697,14 +1705,14 @@ La facture doit être payée avant </Value>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox58">
+                    <Textbox Name="Textbox5">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Phone.Value</Value>
+                              <Value>=Parameters!BillingCompanyPhone.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -1715,7 +1723,7 @@ La facture doit être payée avant </Value>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox58</rd:DefaultName>
+                      <rd:DefaultName>Textbox5</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1777,7 +1785,7 @@ La facture doit être payée avant </Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!BillingCompanyEmail.Value</Value>
+                              <Value>=Parameters!Email.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -1804,7 +1812,7 @@ La facture doit être payée avant </Value>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox88">
+                    <Textbox Name="Textbox130">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1814,13 +1822,15 @@ La facture doit être payée avant </Value>
                               <Value />
                               <Style>
                                 <FontStyle>Italic</FontStyle>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox88</rd:DefaultName>
+                      <rd:DefaultName>Textbox67</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1870,14 +1880,14 @@ La facture doit être payée avant </Value>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox67">
+                    <Textbox Name="Textbox6">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Email.Value</Value>
+                              <Value>=Parameters!BillingCompanyEmail.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -1888,7 +1898,7 @@ La facture doit être payée avant </Value>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox67</rd:DefaultName>
+                      <rd:DefaultName>Textbox6</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -3167,7 +3177,7 @@ La facture doit être payée avant </Value>
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!Name.Value</Value>
+                  <Value>=Parameters!CarrierCompanyName.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -3203,7 +3213,7 @@ La facture doit être payée avant </Value>
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!BillingCompanyPhone.Value</Value>
+                  <Value>=Parameters!Phone.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -3219,7 +3229,7 @@ La facture doit être payée avant </Value>
           <rd:DefaultName>Textbox31</rd:DefaultName>
           <Top>1.0733cm</Top>
           <Left>5.49707cm</Left>
-          <Height>0.40571cm</Height>
+          <Height>0.44099cm</Height>
           <Width>8.79474cm</Width>
           <ZIndex>3</ZIndex>
           <Style>
@@ -3239,7 +3249,7 @@ La facture doit être payée avant </Value>
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!RegAddress.Value</Value>
+                  <Value>=Parameters!Address.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -3255,7 +3265,7 @@ La facture doit être payée avant </Value>
           <rd:DefaultName>Textbox31</rd:DefaultName>
           <Top>0.6676cm</Top>
           <Left>5.49707cm</Left>
-          <Height>0.40571cm</Height>
+          <Height>0.4057cm</Height>
           <Width>8.79474cm</Width>
           <ZIndex>4</ZIndex>
           <Style>
@@ -3275,7 +3285,7 @@ La facture doit être payée avant </Value>
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!BillingCompanyEmail.Value</Value>
+                  <Value>=Parameters!Email.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -3289,7 +3299,7 @@ La facture doit être payée avant </Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
-          <Top>1.47901cm</Top>
+          <Top>1.54957cm</Top>
           <Left>5.49707cm</Left>
           <Height>0.40571cm</Height>
           <Width>8.79474cm</Width>
