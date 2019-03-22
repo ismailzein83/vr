@@ -8,7 +8,8 @@
 
         var isEditMode;
         var actionDefinition;
-        var context;
+		var context;
+		var dataRecordTypeId;
 
 
         var actionSettingsDirectiveAPI;
@@ -22,10 +23,11 @@
         load();
 
         function loadParameters() {
-            var parameters = VRNavigationService.getParameters($scope);
-
+			var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                actionDefinition = parameters.actionDefinition;
+				actionDefinition = parameters.actionDefinition;
+				if (parameters.context != undefined)
+					dataRecordTypeId = parameters.context.getDataRecordTypeId();
             }
             isEditMode = (actionDefinition != undefined);
         }
@@ -153,6 +155,7 @@
 				}
 				$scope.scopeModel.showSecurityGrid = showGrid;
 			};
+			currentContext.getDataRecordTypeId = function () { return dataRecordTypeId; };
 			return currentContext;
 		}
 

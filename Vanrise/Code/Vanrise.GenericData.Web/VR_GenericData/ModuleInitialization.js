@@ -10,5 +10,6 @@
     VR_GenericData_BELookupRuleDefinitionService.registerObjectTrackingDrillDownToBELookupRuleDefinition();
     VR_GenericData_DataRecordFieldChoiceService.registerObjectTrackingDrillDownToDataRecordFieldChoice();
     VR_GenericData_GenericBEActionService.registerEditBEAction();
-    VR_GenericData_GenericBEActionService.registerDeleteBEAction();
+		VR_GenericData_GenericBEActionService.registerDeleteBEAction();
+		VR_GenericData_GenericBEActionService.registerOpenBPInstanceViewerAction();
 }]);
