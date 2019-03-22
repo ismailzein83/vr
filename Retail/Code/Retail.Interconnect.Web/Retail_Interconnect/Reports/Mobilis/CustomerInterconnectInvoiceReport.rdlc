@@ -375,7 +375,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="Facture du trafic d'interconnexion International "+If(Parameters!NoSMS.Value = False, Parameters!SMSServiceTypes.Value, "Voix")+" sortant du réseau d'"+Parameters!AccountName.Value+", entrant dans le réseau d'"+Parameters!CompanyName.Value</Value>
+                              <Value>="Facture du trafic d'interconnexion national "+If(Parameters!NoSMS.Value = False, Parameters!SMSServiceTypes.Value, "Voix")+" sortant du réseau de "+Parameters!AccountName.Value+", entrant dans le réseau de "+Parameters!CompanyName.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
