@@ -64,7 +64,7 @@
                     if (payload != undefined) {
                         definitionSettings = payload.definitionSettings;
                         if (definitionSettings.ItemTitle != undefined && definitionSettings.ItemTitle != "")
-                            $scope.scopeModel.itemLabel = definitionSettings.   ;
+                            $scope.scopeModel.itemLabel = definitionSettings.ItemTitle;
                         else
                             $scope.scopeModel.itemLabel = "Value";
 
