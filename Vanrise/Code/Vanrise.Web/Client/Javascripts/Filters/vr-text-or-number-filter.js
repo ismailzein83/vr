@@ -1,7 +1,7 @@
 ﻿'use strict';
 app.filter('vrtextOrNumber', ['$filter', function ($filter) {
     return function (input, fractionSize) {
-        if (input == undefined || input == null || input === '' || input === "")
+        if (input == undefined || input == null || input === '' || input === "" || input === " ")
             return null;
         if (isNaN(input)) {
             return input;
