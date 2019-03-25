@@ -1264,7 +1264,7 @@ La facture doit être payée avant </Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Client</Value>
+                              <Value />
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
