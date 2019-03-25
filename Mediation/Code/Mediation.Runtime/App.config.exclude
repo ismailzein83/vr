@@ -88,7 +88,7 @@
     <!--<add key="Runtime_DontDisableUseShellExecute"               value="true" />-->
     <!--<add key="DBCommandDefaultTimeOutInterval"                  value="01:00:00" />-->
     
-    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,Mediation_CDR_DBConnString,LogDBConnString"/>
+    <add key="ExposedConnectionStringNames"                     value="ConfigurationDBConnString,Mediation_CDR_DBConnString,LogDBConnString"/>
   </appSettings>
   <system.codedom>
     <compilers>
