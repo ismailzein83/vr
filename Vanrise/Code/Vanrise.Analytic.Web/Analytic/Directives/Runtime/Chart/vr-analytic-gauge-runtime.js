@@ -143,9 +143,11 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
             }
 
             function onTimerElapsed(){
-               return getFilteredRecords(query).then(function (response) {
-                    measureValue = response;
-                    gaugeAPI.updateValue(measureValue);
+                return getFilteredRecords(query).then(function (response) {
+                    if (response != undefined) {
+                        measureValue = response;
+                        gaugeAPI.updateValue(measureValue);
+                    }
                 });
             }
             function getFilteredRecords(query) {
@@ -157,12 +159,16 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
                     SortByColumnName: 'MeasureValues.' + measures[0].MeasureName + '.Value',
                     Query: query
                 };
-                 VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
+                VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                     .then(function (response) {
                         if (response != undefined && response.Data != undefined && response.Data.length > 0) {
                             measureValue = eval("response.Data[0].MeasureValues." + measures[0].MeasureName + ".ModifiedValue");
                             promiseDeferred.resolve(measureValue);
+                        } else {
+                            promiseDeferred.resolve();
                         }
+                    }).catch(function (error) {
+                        promiseDeferred.reject(error);
                     });
 
                 return promiseDeferred.promise;
