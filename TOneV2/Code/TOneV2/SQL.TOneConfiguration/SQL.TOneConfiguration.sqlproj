@@ -141,6 +141,7 @@
     <Folder Include="common\User Defined Types\" />
     <Folder Include="VR_MobNet\" />
     <Folder Include="VR_MobNet\Tables\" />
+    <Folder Include="VR_MobNet\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -840,6 +841,9 @@
     <Build Include="VR_MobNet\Tables\MobileNetwork.sql" />
     <Build Include="VR_MobNet\Tables\MobileCountry.sql" />
     <Build Include="Security\VR_MobNet.sql" />
+    <Build Include="VR_MobNet\User Defined Types\NumberPrefixType.sql" />
+    <Build Include="VR_MobNet\User Defined Types\MobileNetworkType.sql" />
+    <Build Include="VR_MobNet\User Defined Types\MobileCountryType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
