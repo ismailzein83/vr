@@ -43,8 +43,8 @@
 
   <!-- BEGIN CUSTOMER VARYING SECTION -->
   <appSettings>
-    <add key="IsRuntimeService" value="true"/>
-    <add key="RuntimeNodeId" value="72efc332-c1f7-4c51-a2a6-febca97f9dc9"/>
+    <add key="IsRuntimeService"       value="true"/>
+    <add key="RuntimeNodeId"          value="72efc332-c1f7-4c51-a2a6-febca97f9dc9"/>
     <add key="BCPTempFilesDirectory"  value="C:\BCPFiles" />
 
     <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
