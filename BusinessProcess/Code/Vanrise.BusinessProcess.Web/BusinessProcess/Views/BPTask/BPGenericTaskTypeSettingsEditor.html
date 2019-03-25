@@ -7,7 +7,9 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Continue" data-onclick="scopeModel.continueTask" formname="formBPGenericTaskTypeSettings"></vr-button>
+                <span ng-repeat="action in scopeModel.actions" ng-if="scopeModel.actions.length > 0">
+                    <vr-directivewrapper directive="'vr-button'" type="{{action.type}}" data-onclick="action.onclick" menuactions="action.menuActions" formname="formBPGenericTaskTypeSettings"></vr-directivewrapper>
+                </span>
             </div>
         </vr-actionbar>
     </div>

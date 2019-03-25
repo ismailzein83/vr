@@ -238,6 +238,7 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-manualexeceditor.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowManualExecEditorTemplate.html" />
     <Content Include="BusinessProcess\Services\APIServices\DynamicBusinessProcessAPIService.js" />
+    <Content Include="BusinessProcess\Services\BPTaskTypeActionService.js" />
     <Content Include="BusinessProcess\Services\BPTaskTypeService.js" />
     <Content Include="BusinessProcess\Views\BPGenericTaskType\BPGenericTaskTypeActionEditorController.js" />
     <Content Include="BusinessProcess\Views\BPGenericTaskType\Templates\BPGenericTaskTypeActionEditorTemplate.html" />
