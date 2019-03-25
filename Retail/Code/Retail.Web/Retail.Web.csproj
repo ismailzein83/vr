@@ -1220,7 +1220,16 @@
     <Content Include="Web.config.RecordAnalysis.exclude">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Web.config.RA.exclude">
+    <None Include="Web.config.RA.ICX.exclud">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.config.RA.Retail.exclud">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.config.RA.INTL.exclud">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.config.RA.exclud">
       <SubType>Designer</SubType>
     </None>
     <None Include="Web.config.exclude">

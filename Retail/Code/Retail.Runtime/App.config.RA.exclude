@@ -75,17 +75,6 @@
     <add key="RAICXDBConnStringkey"                            	value="ConfigurationDBConnString"/>
     <add key="RARetailDBConnStringkey"                         	value="ConfigurationDBConnString"/>
     <add key="RADBConnStringKey"                               	value="ConfigurationDBConnString"/>
-	
-	  <!--Begin, keep two keys depending on the RA type ICX/INTL/Retail-->
-    <add key="RAINTLAnalyticsDBConnStringKey"                   value="RAAnalyticsDBConnString"/>
-	  <add key="RAINTLEDRDBConnStringKey"                         value="RACDRDBConnString"/>
-	
-    <add key="RAICXAnalyticsDBConnStringKey"                    value="RAAnalyticsDBConnString"/>
-    <add key="RAICXEDRDBConnStringKey"                          value="RACDRDBConnString"/>
-	
-	  <add key="RARetailAnalyticsDBConnStringKey"                 value="RAAnalyticsDBConnString"/>
-    <add key="RARetailEDRDBConnStringKey"                       value="RACDRDBConnString"/>
-    <!--End, keep two keys depending on the RA type ICX/INTL/Retail-->
     
     <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,RACDRDBConnString,RAAnalyticsDBConnString,LogDBConnString"/>
   </appSettings>
