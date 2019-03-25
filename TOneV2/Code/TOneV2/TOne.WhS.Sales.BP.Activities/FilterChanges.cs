@@ -85,7 +85,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 filteredChanges.CountryChanges.NewCountries = newCountriesToSold;
             }
 
-            filteredChanges.ZoneChanges = FilterZoneChanges(customerId, effectiveDate, followPublisherRatesBED, followPublisherRoutingProduct, publisherId, excludedCountries, excludedZones, subscriberZoneChangesByCountryId, processInstanceId, filteredChanges, changes, subscriberSoldCountriesByCountryId,newCountriesToSold);
+            filteredChanges.ZoneChanges = FilterZoneChanges(customerId, effectiveDate, followPublisherRatesBED, followPublisherRoutingProduct, publisherId, excludedCountries, excludedZones, subscriberZoneChangesByCountryId, processInstanceId, filteredChanges, changes, subscriberSoldCountriesByCountryId, newCountriesToSold);
             filteredChanges.CurrencyId = changes.CurrencyId;
             foreach (var publisherZoneChangesCountryId in publisherZoneChangesByCountryId.Keys)
             {
@@ -93,7 +93,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 if ((subscriberZoneChange == null || subscriberZoneChange.Count() == 0) && excludedCountries.GetRecord(publisherZoneChangesCountryId) == null && !newCountriesToSold.Any(x => x.CountryId == publisherZoneChangesCountryId))
                 {
                     var countryName = countryManager.GetCountryName(publisherZoneChangesCountryId);
-                    var reason = String.Format("Country '{0}' has been excluded for subscriber '{1}' because all country zone changes has been also excluded due to some errors", countryName, carrierName);
+                    var reason = String.Format("Country '{0}' have been excluded for subscriber '{1}' because all country zone changes has been also excluded due to mentioned errors", countryName, carrierName);
                     AddExcludedCountry(excludedCountries, publisherZoneChangesCountryId, reason, processInstanceId);
                 }
             }
@@ -160,8 +160,7 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 if (subscriberSoldCountriesByCountryId.GetRecord(countryId) == null && excludedCountries.GetRecord(countryId) == null && !newCountriesToSold.Any(x => x.CountryId == countryId))
                 {
-                    var countryName = countryManager.GetCountryName(countryId);
-                    var reason = String.Format("Country'{0}' is not sold or closed for subscriber '{1}'", countryName, _carrierAccountManager.GetCarrierAccountName(subscriberId));
+                    var reason = String.Format("Modifications will not be applied to pending closed and un-sold countries");
                     AddExcludedCountry(excludedCountries, countryId, reason, processInstanceId);
                 }
             }
@@ -177,12 +176,12 @@ namespace TOne.WhS.Sales.BP.Activities
             var pricingSettings = _carrierAccountManager.GetCustomerPricingSettings(customerId);
 
 
-           
-                // TOne.WhS.BusinessEntity.Business.ConfigManager configManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
 
-                var effectiveRateLocator = GetNewRateLocator(customerId, zoneChanges, sellingProductId); ;
+            // TOne.WhS.BusinessEntity.Business.ConfigManager configManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
+
+            var effectiveRateLocator = GetNewRateLocator(customerId, zoneChanges, sellingProductId); ;
             var closedRateLocator = GetClosedRateLocator(customerId, zoneChanges, sellingProductId);
-           // var zoneRoutingProductLocator = GetZoneRoutingProductLocator(customerId, zoneChanges);
+            // var zoneRoutingProductLocator = GetZoneRoutingProductLocator(customerId, zoneChanges);
             //var zoneNewRateRoutingProductLocator = GetZoneNewRateRoutingProductLocator(customerId, publisherId, zoneChanges);
 
             foreach (var zoneChange in zoneChanges)
@@ -191,8 +190,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     rateTypeIds = BusinessEntity.Business.Helper.GetRateTypeIds(customerId, zoneChange.ZoneId, DateTime.Now).ToList();
                 }
-                    var subscriberZoneChange = subscriberZoneChangesByCountryId.GetOrCreateItem(zoneChange.CountryId);
-             
+                var subscriberZoneChange = subscriberZoneChangesByCountryId.GetOrCreateItem(zoneChange.CountryId);
+
                 if (excludedCountries.GetRecord(zoneChange.CountryId) != null)
                 {
                     var excludedCountry = excludedCountries.GetRecord(zoneChange.CountryId);
@@ -206,7 +205,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     continue;
                 }
 
-                if (newCountriesToSold.Any(x=>x.CountryId==zoneChange.CountryId))
+                if (newCountriesToSold.Any(x => x.CountryId == zoneChange.CountryId))
                 {
                     //Zone Change is added directly because the country is new sold
                     subscriberZoneChange.Add(zoneChange);
@@ -226,12 +225,12 @@ namespace TOne.WhS.Sales.BP.Activities
                 if (zoneChange.NewRates != null && zoneChange.NewRates.Any())
                 {
                     List<DraftRateToChange> filteredRates = new List<DraftRateToChange>();
-                    
-                        bool isRateValid = FilterZoneNewRates(customerId, sellingProductId, zoneChange.NewRates, customerCountry.BED, effectiveDate, pricingSettings.IncreasedRateDayOffset.Value, pricingSettings.DecreasedRateDayOffset.Value, effectiveRateLocator, changes.CurrencyId.Value, followPublisherRatesBED, excludedZones, zoneChange, processInstanceId, out filteredRates, rateTypeIds);
-                        if (!isRateValid)
-                            continue;
-                    
-                   // subscriberZoneChange.Add(filteredZoneChange);
+
+                    bool isRateValid = FilterZoneNewRates(customerId, sellingProductId, zoneChange.NewRates, customerCountry.BED, effectiveDate, pricingSettings.IncreasedRateDayOffset.Value, pricingSettings.DecreasedRateDayOffset.Value, effectiveRateLocator, changes.CurrencyId.Value, followPublisherRatesBED, excludedZones, zoneChange, processInstanceId, out filteredRates, rateTypeIds);
+                    if (!isRateValid)
+                        continue;
+
+                    // subscriberZoneChange.Add(filteredZoneChange);
                     filteredZoneChange.NewRates = filteredRates;
                 }
 
@@ -249,21 +248,35 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 if (zoneChange.NewRoutingProduct != null)
                 {
+                    string reason;
                     DraftNewSaleZoneRoutingProduct newRoutingProduct = new DraftNewSaleZoneRoutingProduct();
-                    bool isNewRoutingProductValid = FilterZoneNewRoutingProduct(zoneChange, customerCountry, followPublisherRatesBED, filteredZoneChange, customerId, publisherId, zoneChanges, sellingProductId, publisherSellingProductId, excludedZones, processInstanceId, out newRoutingProduct);
+                    bool isNewRoutingProductValid = FilterZoneNewRoutingProduct(zoneChange, customerCountry, followPublisherRatesBED, filteredZoneChange, customerId, publisherId, zoneChanges, sellingProductId, publisherSellingProductId, excludedZones, processInstanceId, out newRoutingProduct, out reason);
                     if (!isNewRoutingProductValid)
+                    {
+                        if (IsRPTheOnlyZoneChange(filteredZoneChange, excludedZones))
+                        {
+                            AddExcludedZone(excludedZones, zoneChange.ZoneId, reason, null, processInstanceId);
+                        }
                         continue;
+                    }
                     filteredZoneChange.NewRoutingProduct = newRoutingProduct;
                 }
                 if (zoneChange.RoutingProductChange != null)
                 {
+                    string reason;
                     DraftChangedSaleZoneRoutingProduct routingProductChange = new DraftChangedSaleZoneRoutingProduct();
-                    bool isRoutingProductCloseValid = closeZoneRoutingProduct(zoneChange, customerId, sellingProductId, zoneChanges, excludedZones, processInstanceId, out routingProductChange);
+                    bool isRoutingProductCloseValid = closeZoneRoutingProduct(zoneChange, customerId, sellingProductId, zoneChanges, excludedZones, processInstanceId, out routingProductChange, out reason);
                     if (!isRoutingProductCloseValid)
+                    {
+                        if (IsRPTheOnlyZoneChange(filteredZoneChange, excludedZones))
+                        {
+                            AddExcludedZone(excludedZones, zoneChange.ZoneId, reason, null, processInstanceId);
+                        }
                         continue;
+                    }
+                   
                     filteredZoneChange.RoutingProductChange = routingProductChange;
                 }
-
 
                 //Adding Subscriber filtered changes to a separate dictionary
                 subscriberZoneChange.Add(filteredZoneChange);
@@ -272,8 +285,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
             return filteredZoneChanges;
         }
-        private bool FilterZoneNewRoutingProduct(ZoneChanges zoneChange, CustomerCountry2 customerCountry, bool followPublisherRoutingProduct, ZoneChanges filteredZoneChange, int customerId, int publisherId, IEnumerable<ZoneChanges> zoneChanges, int sellingProductId, int publisherSellingProductId, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, long processInstanceId, out DraftNewSaleZoneRoutingProduct newRoutingProduct)
+        private bool FilterZoneNewRoutingProduct(ZoneChanges zoneChange, CustomerCountry2 customerCountry, bool followPublisherRoutingProduct, ZoneChanges filteredZoneChange, int customerId, int publisherId, IEnumerable<ZoneChanges> zoneChanges, int sellingProductId, int publisherSellingProductId, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, long processInstanceId, out DraftNewSaleZoneRoutingProduct newRoutingProduct, out string reason)
         {
+            reason = null;
             RoutingProductManager routingProductManager = new RoutingProductManager();
             var zoneNewRateRoutingProductLocator = GetZoneNewRateRoutingProductLocator(customerId, publisherId, zoneChanges);
             newRoutingProduct = new DraftNewSaleZoneRoutingProduct();
@@ -284,8 +298,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 string routingProductName = routingProductManager.GetRoutingProductName(zoneChange.NewRoutingProduct.ZoneRoutingProductId);
                 routingProductName.ThrowIfNull("routingProductName");
                 string zoneName = _saleZoneManager.GetSaleZoneName(zoneChange.ZoneId);
-                string reason = String.Format("Cannot create new routing product '{0}' for subscriber '{1}' because subscriber country BED '{2}' is greater than the new routing product BED '{3}'", routingProductName, subscriberName, customerCountry.BED, zoneChange.NewRoutingProduct.BED);
-                AddExcludedZone(excludedZonesByCountryId, zoneChange.ZoneId, reason, null, processInstanceId);
+                reason = String.Format("Modifications on routing product '{0}' will not be applied for subscribers '{1}' having countries with BED '{2}' greater than routing product BED '{3}'", routingProductName, subscriberName, customerCountry.BED.Date, zoneChange.NewRoutingProduct.BED.Date);
+                // AddExcludedZone(excludedZonesByCountryId, zoneChange.ZoneId, reason, null, processInstanceId);
                 return false;
             }
             else
@@ -314,15 +328,16 @@ namespace TOne.WhS.Sales.BP.Activities
                     string routingProductName = routingProductManager.GetRoutingProductName(publisherRoutingProduct.RoutingProductId);
                     routingProductName.ThrowIfNull("routingProductName");
                     string zoneName = _saleZoneManager.GetSaleZoneName(zoneChange.ZoneId);
-                    string reason = String.Format("Routing product '{0}' already exists at subscriber : '{1}'", routingProductName, subscriberName);
-                    AddExcludedZone(excludedZonesByCountryId, zoneChange.ZoneId, reason, null, processInstanceId);
+                    reason = String.Format("Routing product '{0}' already exists at subscriber : '{1}'", routingProductName, subscriberName);
+                    // AddExcludedZone(excludedZonesByCountryId, zoneChange.ZoneId, reason, null, processInstanceId);
                     return false;
                 }
             }
             return true;
         }
-        private bool closeZoneRoutingProduct(ZoneChanges zoneChange, int customerId, int sellingProductId, IEnumerable<ZoneChanges> zoneChanges, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, long processInstanceId, out DraftChangedSaleZoneRoutingProduct routingProductChange)
+        private bool closeZoneRoutingProduct(ZoneChanges zoneChange, int customerId, int sellingProductId, IEnumerable<ZoneChanges> zoneChanges, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, long processInstanceId, out DraftChangedSaleZoneRoutingProduct routingProductChange, out string reason)
         {
+            reason = null;
             RoutingProductManager routingProductManager = new RoutingProductManager();
             var zoneRoutingProductLocator = GetZoneRoutingProductLocator(customerId, zoneChanges);
             routingProductChange = new DraftChangedSaleZoneRoutingProduct();
@@ -334,27 +349,27 @@ namespace TOne.WhS.Sales.BP.Activities
                 string routingProductName = routingProductManager.GetRoutingProductName(zoneChange.RoutingProductChange.ZoneRoutingProductId);
                 routingProductName.ThrowIfNull("routingProductName");
                 string zoneName = _saleZoneManager.GetSaleZoneName(zoneChange.ZoneId);
-                string reason = String.Format("Cannot close routing product '{0}' for subscriber '{1}' because his routing product source is not Customer Zone ", routingProductName, subscriberName);
-                AddExcludedZone(excludedZonesByCountryId, zoneChange.ZoneId, reason, null, processInstanceId);
+                reason = String.Format("Routing product's EED ({0}) cannot be set for subscriber '{1}' having inherited routing products", routingProductName, subscriberName);
+                // AddExcludedZone(excludedZonesByCountryId, zoneChange.ZoneId, reason, null, processInstanceId);
                 return false;
             }
             routingProductChange = zoneChange.RoutingProductChange;
             return true;
         }
 
-        private bool FilterZoneNewRates(int customerId, int sellingProductId, IEnumerable<DraftRateToChange> newRates, DateTime countrySellDate, DateTime effectiveDate, int increasedRateDayOffset, int decreasedRateDayOffset, SaleEntityZoneRateLocator effectiveRateLocator, int currencyId, bool followPublisherRatesBED, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, ZoneChanges zoneChange, long processInstanceId, out List<DraftRateToChange> filteredRates,List<int> rateTypeIds)
+        private bool FilterZoneNewRates(int customerId, int sellingProductId, IEnumerable<DraftRateToChange> newRates, DateTime countrySellDate, DateTime effectiveDate, int increasedRateDayOffset, int decreasedRateDayOffset, SaleEntityZoneRateLocator effectiveRateLocator, int currencyId, bool followPublisherRatesBED, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, ZoneChanges zoneChange, long processInstanceId, out List<DraftRateToChange> filteredRates, List<int> rateTypeIds)
         {
             long zoneId = zoneChange.ZoneId;
             RateTypeManager rateTypeManager = new RateTypeManager();
             List<DraftRateToChange> excludedOtherRates = new List<DraftRateToChange>();
             filteredRates = new List<DraftRateToChange>();
-           
+
             var rateAtActionDate = effectiveRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
-             
+
             if (rateAtActionDate != null && rateAtActionDate.EffectiveCurrencyId != currencyId)
             {
                 string zoneName = _saleZoneManager.GetSaleZoneName(zoneId);
-                var reason = String.Format("Zone : '{0}' have different currency than publisher", zoneName);
+                var reason = String.Format("Zone : '{0}' has different currency than publisher", zoneName);
                 AddExcludedZone(excludedZonesByCountryId, zoneId, reason, null, processInstanceId);
 
                 return false;
@@ -366,11 +381,11 @@ namespace TOne.WhS.Sales.BP.Activities
                     string zoneName = _saleZoneManager.GetSaleZoneName(zoneId);
                     string reason;
                     if (newRate.RateTypeId == null)
-                        reason = String.Format("New rate for zone '{0}' has BED : '{1}' less than country sell date : '{2}'", zoneName, newRate.BED, countrySellDate);
+                        reason = String.Format("New rate for zone '{0}' has BED : '{1}' less than country sell date : '{2}'", zoneName, newRate.BED.Date, countrySellDate.Date);
                     else
                     {
                         var otherRateName = rateTypeManager.GetRateTypeName(newRate.RateTypeId.Value);
-                        reason = String.Format("New other rate ({0}) for zone '{1}' has BED : '{2}' less than country sell date : '{3}'", otherRateName, zoneName, newRate.BED, countrySellDate);
+                        reason = String.Format("New other rate ({0}) for zone '{1}' has BED : '{2}' less than country sell date : '{3}'", otherRateName, zoneName, newRate.BED.Date, countrySellDate.Date);
                     }
                     AddExcludedZone(excludedZonesByCountryId, newRate.ZoneId, reason, null, processInstanceId);
                     return false;
@@ -383,7 +398,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     else
                     {
                         var otherRateName = rateTypeManager.GetRateTypeName(newRate.RateTypeId.Value);
-                        reason = String.Format("Country is not sold at this zone other rate change ({0}) date:'{1}'", otherRateName, effectiveDate);
+                        reason = String.Format("Country is not sold at this zone other rate change ({0}) date:'{1}'", otherRateName, effectiveDate.Date);
                     }
                     AddExcludedZone(excludedZonesByCountryId, newRate.ZoneId, reason, null, processInstanceId);
                     return false;
@@ -428,14 +443,14 @@ namespace TOne.WhS.Sales.BP.Activities
             if (excludedOtherRates.Count() != 0 && (excludedOtherRates.Count() == newRates.Count()))
             {
                 string zoneName = _saleZoneManager.GetSaleZoneName(zoneId);
-                string reason = String.Format("Other rates changes on zone {0} is not applicable because zone does not contain this other rate type", zoneName);
+                string reason = String.Format("Modifications on other rates will not be applied to zones that don't support corresponding other-rate types.");
                 AddExcludedZone(excludedZonesByCountryId, zoneId, reason, null, processInstanceId);
                 return false;
             }
             return true;
         }
 
-        private bool FilterZoneClosedRates(int customerId, IEnumerable<DraftRateToClose> closedRates, DateTime countrySellDate, SaleEntityZoneRateLocator closedRateLocator, int sellingProductId, int currencyId, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, ZoneChanges zoneChange, long processInstanceId, out List<DraftRateToClose> ratesToClose,List<int> rateTypeIds)
+        private bool FilterZoneClosedRates(int customerId, IEnumerable<DraftRateToClose> closedRates, DateTime countrySellDate, SaleEntityZoneRateLocator closedRateLocator, int sellingProductId, int currencyId, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, ZoneChanges zoneChange, long processInstanceId, out List<DraftRateToClose> ratesToClose, List<int> rateTypeIds)
         {
             long zoneId = zoneChange.ZoneId;
             RateTypeManager rateTypeManager = new RateTypeManager();
@@ -447,11 +462,11 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     string reason;
                     if (closedRate.RateTypeId == null)
-                        reason = String.Format("Closed rate EED '{0}' is less than country sell date : '{1}'", closedRate.EED, countrySellDate);
+                        reason = String.Format("Rate EED '{0}' is less than country sell date : '{1}'", closedRate.EED, countrySellDate);
                     else
                     {
                         var otherRateName = rateTypeManager.GetRateTypeName(closedRate.RateTypeId.Value);
-                        reason = String.Format("Closed other rate ({0}) EED '{1}' is less than country sell date : '{2}'", otherRateName, closedRate.EED, countrySellDate);
+                        reason = String.Format("Other rate ({0}) EED '{1}' is less than country sell date : '{2}'", otherRateName, closedRate.EED.Date, countrySellDate.Date);
                     }
                     AddExcludedZone(excludedZonesByCountryId, closedRate.ZoneId, reason, null, processInstanceId);
                     return false;
@@ -633,6 +648,13 @@ namespace TOne.WhS.Sales.BP.Activities
             }
 
             return publisherZoneChangesByCountryId;
+        }
+        private bool IsRPTheOnlyZoneChange(ZoneChanges filteredZoneChange, Dictionary<int, List<ExcludedItem>> excludedZones)
+        {
+            var countryExcludedZones = excludedZones.GetRecord(filteredZoneChange.CountryId);
+            if ((filteredZoneChange.NewRates != null && filteredZoneChange.NewRates.Count() > 0) || (filteredZoneChange.ClosedRates != null && filteredZoneChange.ClosedRates.Count() > 0) || (countryExcludedZones != null && !countryExcludedZones.Any(x => x.ItemId == filteredZoneChange.ZoneId.ToString())))
+                return false;
+            return true;
         }
     }
 
