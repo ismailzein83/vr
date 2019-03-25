@@ -68,6 +68,14 @@
                             });
                         }
                     }
+                    else {
+                        var editorDefinitionPayload = {
+                            context: getContext()
+                        };
+                        var setLoader = function (value) {
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, editorDefinitionAPI, editorDefinitionPayload, setLoader);
+                    }
                 };
 
 
