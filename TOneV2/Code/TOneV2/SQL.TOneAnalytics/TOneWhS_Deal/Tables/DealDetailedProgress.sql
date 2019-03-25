@@ -9,9 +9,12 @@
     [ToTime]               DATETIME        NOT NULL,
     [ReachedDurationInSec] DECIMAL (20, 4) NOT NULL,
     [CreatedTime]          DATETIME        CONSTRAINT [DF_DealDetailedProgress_CreatedTime] DEFAULT (getdate()) NULL,
+    [LastModifiedTime]     DATETIME        CONSTRAINT [DF_DealDetailedProgress_LastModifiedTime] DEFAULT (getdate()) NULL,
     [timestamp]            ROWVERSION      NULL,
     CONSTRAINT [PK_DealDetailedProgress_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -5,9 +5,11 @@
     [timestamp]        ROWVERSION     NULL,
     [CreatedTime]      DATETIME       CONSTRAINT [DF_Deal_CreatedTime] DEFAULT (getdate()) NULL,
     [IsDeleted]        BIT            CONSTRAINT [DF_Deal_IsDeleted] DEFAULT ((0)) NOT NULL,
-    [LastModifiedTime] DATETIME       NULL,
+    [LastModifiedTime] DATETIME       CONSTRAINT [DF_Deal_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_Deal_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -8,9 +8,12 @@
     [TargetDurationInSec]  DECIMAL (20, 4) NULL,
     [IsComplete]           AS              (case when [ReachedDurationInSec]=[TargetDurationInSec] then (1) else (0) end),
     [CreatedTime]          DATETIME        CONSTRAINT [DF_DealProgress_CreatedTime] DEFAULT (getdate()) NOT NULL,
+    [LastModifiedTime]     DATETIME        CONSTRAINT [DF_DealProgress_LastModifiedTime] DEFAULT (getdate()) NULL,
     [timestamp]            ROWVERSION      NULL,
     CONSTRAINT [PK_DealProgress] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -1,4 +1,4 @@
-﻿Create Procedure [TOneWhS_RouteSync].[sp_RouteSyncDefinition_Update]
+﻿CREATE Procedure [TOneWhS_RouteSync].[sp_RouteSyncDefinition_Update]
 	@ID int,
 	@Name nvarchar(255),
 	@Settings nvarchar(MAX)
@@ -8,7 +8,8 @@ BEGIN
 	BEGIN
 		update TOneWhS_RouteSync.RouteSyncDefinition
 		set Name = @Name,
-			Settings = @Settings
+			Settings = @Settings,
+			LastModifiedTime= GETDATE()
 		where ID = @ID
 	END
 END

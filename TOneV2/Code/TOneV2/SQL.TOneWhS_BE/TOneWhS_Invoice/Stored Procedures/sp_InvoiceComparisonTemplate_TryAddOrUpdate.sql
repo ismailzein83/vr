@@ -14,7 +14,7 @@ BEGIN
 	IF EXISTS(SELECT 1 from  [TOneWhS_Invoice].[InvoiceComparisonTemplate] WHERE InvoiceTypeId = @InvoiceTypeId AND PartnerId=@PartnerId)
 	BEGIN
 		UPDATE [TOneWhS_Invoice].[InvoiceComparisonTemplate]
-		SET		Details = @Details
+		SET		Details = @Details, LastModifiedTime = GETDATE()
 		WHERE InvoiceTypeId = @InvoiceTypeId AND PartnerId=@PartnerId
 	END
 	ELSE
