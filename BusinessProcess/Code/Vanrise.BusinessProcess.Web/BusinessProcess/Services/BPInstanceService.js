@@ -110,7 +110,7 @@
 						VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
 							if (payload.genericBEAction != undefined && payload.genericBEAction.Settings != undefined) {
 								var processInstanceFieldName = payload.genericBEAction.Settings.ProcessInstanceIdFieldName;
-								if (processInstanceFieldName != undefined)
+								if (processInstanceFieldName != undefined && response.FieldValues != undefined && response.FieldValues[processInstanceFieldName]!=undefined)
 									openProcessTracking(response.FieldValues[processInstanceFieldName].Value);
 							}
 						});
