@@ -1,5 +1,6 @@
 ﻿body {
     background: #FFF;
+    font-family: "Open Sans" !important;
 }
 
 /* start main-menu*/
@@ -1621,6 +1622,7 @@ loader .outer-loader {
 .panel-heading-vr {
     border-radius: 0px !important;
     padding: 8px 5px !important;
+    color: #fff;
 }
 
 .vr-company-name {
@@ -1640,19 +1642,19 @@ loader .outer-loader {
     position: relative;
 }
 
-#dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"],
-.vr-tabs-expander.previous > ul {
-    margin: 0px;
-    margin-top: -3px;
-    flex-wrap: wrap;
-    flex-wrap: wrap-reverse;
-}
+    #dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"],
+    .vr-tabs-expander.previous > ul {
+        margin: 0px;
+        margin-top: -3px;
+        flex-wrap: wrap;
+        flex-wrap: wrap-reverse;
+    }
 
-#dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"] > li,
-.vr-tabs-expander.previous > ul > li {
-    display: inline-flex;
-    width: 100%;
-}
+    #dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"] > li,
+    .vr-tabs-expander.previous > ul > li {
+        display: inline-flex;
+        width: 100%;
+    }
 
 #dropdownTabsPrev:hover > ul[aria-labelledby="dropdownTabsPrev"] {
     display: flex;
@@ -2390,7 +2392,19 @@ vr-fieldset[notopspace] > .fieldset-vr {
 .action-item {
     padding-left: 2px;
 }
-
+.action-item .grouped .chevron-icon {
+    right: 0px;
+    position: absolute;
+    top: 5px;
+    font-size: 8px;
+}
+.action-item .grouped.left .group-name {
+   padding-left:10px;
+}
+.action-item .grouped.left .chevron-icon {
+    right: unset;
+    left:0px;
+}
 .pagination > li > a, .pagination > li > span {
     color: #FFF;
 }
@@ -2675,11 +2689,11 @@ vr-switch[class*="divDisabled"] .switch {
     opacity: 0.8;
     background: #8a8a8a;
 }
-vr-switch[class*="divDisabled"] .switch.switch.checked {
-    pointer-events: none;
-    opacity: 0.8;
-    background: #64BD63;
-}
+    vr-switch[class*="divDisabled"] .switch.switch.checked {
+        pointer-events: none;
+        opacity: 0.8;
+        background: #64BD63;
+    }
 .divDisabled .switch {
     pointer-events: none;
     opacity: 0.8;

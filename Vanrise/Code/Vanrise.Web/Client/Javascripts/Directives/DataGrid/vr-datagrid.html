@@ -132,11 +132,28 @@
 
             <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event,dataItem);showMenu=$parent.ctrl.isActionMenuVisible(dataItem) ; " ng-mouseleave="showMenu = false">
                 <div ng-class="::$parent.ctrl.hasDefinedMenuAction(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;"></div>
-                <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" showMenu == true"
+                <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="showMenu == true"
                     ng-style="{'position': 'fixed', 'left': ctrl.menuLeft,'top': ctrl.menuTop}">
                     <li role="presentation" ng-if="showMenu==true">
-                        <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select action-item" style=" ">
-                            <div ng-hide="action.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
+                        <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select action-item" >
+                            <div ng-if="!action.childsactions" ng-hide="action.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)">
+                                <span style="font-size:11px">{{action.name}}</span>
+                            </div>
+                            <div ng-if="action.childsactions.length > 0" ng-show="$parent.ctrl.hasVisibleMenuAction(action.childsactions)" ng-class="$parent.ctrl.toLeftDirection ? 'left' : ''" class=" hand-cursor grouped" style="position:relative" ng-mouseleave="action.showChilsMenu = false" ng-mouseenter="$parent.ctrl.onGroupMenuActionHover($event,action);">
+                                <span style="font-size:11px;" class="group-name">
+                                    {{action.name}}
+                                    <ul class="dropdown-menu" ng-style="{'top': $parent.ctrl.toTopDirection ? - ($parent.ctrl.visibleActionCount * 17) : 0 , 'left': $parent.ctrl.toLeftDirection ? '-160px' : '100%' }" ng-class="action.showChilsMenu ? 'show' : ''" style="position: absolute;">
+                                        <li role="presentation">
+                                            <div class="mark-select action-item"  ng-repeat="childAction in $parent.ctrl.getGroupMenuActionItem(dataItem,action)">
+                                                <div ng-hide="childAction.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(childAction, dataItem)">
+                                                    <span style="font-size:11px">{{childAction.name}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </span>
+                                <span class="chevron-icon glyphicon " ng-class="$parent.ctrl.toLeftDirection ? 'glyphicon-chevron-left':'glyphicon-chevron-right'"  style="right: 0px;position: absolute;top: 5px;font-size: 8px;"></span>
+                            </div>
                         </div>
                     </li>
                 </ul>

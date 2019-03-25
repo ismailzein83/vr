@@ -1,11 +1,47 @@
 ﻿<div vr-modalcontent ng-controller="RowActionPopupController" vr-loader="isLoading" ismenu>
     <vr-modalbody>
-        <ul role="menu" class="gid-cell-menu am-fade-and-slide-top" style="list-style-type:none">
+
+        <div class="actionbar-popup-modal">
+            <div ng-class="action.childsactions.length > 0?'sub-menu':''" ng-repeat="action in ctrl.getMenuActions(dataItem)" style="position:relative;display:block;">
+                <button ng-if="!action.childsactions" ng-hide="action.disable" style="border-radius: 0px; color: #333;" type="button" class="btn btn-default" aria-label="Left Align" ng-click="clickActionAndCloseModal(action, dataItem)">
+                    {{action.name}}
+                </button>                
+                <div ng-if="action.childsactions.length > 0 " ng-show="ctrl.hasVisibleMenuAction(action.childsactions)">
+                    <button   style="border-radius: 0px; color: #333;" type="button" class="btn btn-default" aria-label="Left Align" ng-click="clickActionAndCloseModal(action, dataItem)">
+                        {{action.name}}
+                    </button>
+                    <div  class="sub-menu-container" ng-repeat="childAction in ctrl.getGroupMenuActionItem(dataItem,action)">
+                        <button style="border-radius: 0px; color: #333; " ng-hide="childAction.disable"  ng-click="clickActionAndCloseModal(childAction, dataItem)" style="border-radius: 0px; color: #333; " type="button" class="btn btn-default">
+                            {{childAction.name}}
+                        </button>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+
+
+        <!--<ul role="menu" class="gid-cell-menu am-fade-and-slide-top" style="list-style-type:none">
             <li role="presentation">
                 <div ng-repeat="action in ctrl.getMenuActions(dataItem)" class="mark-select action-item" style=" ">
-                    <div ng-hide="action.disable" class=" hand-cursor" ng-click="clickActionAndCloseModal(action, dataItem)"><span style="font-size:24px">{{action.name}}</span></div>
+                    <div ng-if="!action.childsactions" ng-hide="action.disable" class=" hand-cursor" ng-click="clickActionAndCloseModal(action, dataItem)">
+                        <span style="font-size:24px">{{action.name}}</span>
+                    </div>
+                    <div ng-if="action.childsactions.length > 0" ng-show="ctrl.hasVisibleMenuAction(action.childsactions)">
+                        <span style="font-size:24px">
+                            {{action.name}}
+                            <ul class="gid-cell-menu am-fade-and-slide-top" style="list-style-type:none;padding-left:10px">
+                                <li role="presentation">
+                                    <div class="mark-select action-item" ng-repeat="childAction in ctrl.getGroupMenuActionItem(dataItem,action)">
+                                        <div ng-hide="childAction.disable" class="hand-cursor" ng-click="clickActionAndCloseModal(childAction, dataItem)">
+                                            <span style="font-size:20px">{{childAction.name}}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
                 </div>
             </li>
-        </ul>
+        </ul>-->
     </vr-modalbody>
 </div>

@@ -647,12 +647,18 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                var self = angular.element(evnt.currentTarget);
 	                var menu = self.find('.gid-cell-menu')[0];
 	                var menuTop = evnt.clientY;
+	                var menuLeft = evnt.clientX;
 	                $(menu).hide();
 	                setTimeout(function () {
 	                    var self = angular.element(evnt.currentTarget);
+	                    ctrl.toLeftDirection = false;
 	                    var menuHeigth = $(menu).height();
 	                    if (innerHeight - menuTop - 30 < menuHeigth) {
 	                        menuTop -= menuHeigth;
+	                        ctrl.toTopDirection = true;
+	                    }
+	                    if (innerWidth - menuLeft < 160) {
+	                        ctrl.toLeftDirection = true;
 	                    }
 	                    ctrl.menuLeft = (VRLocalizationService.isLocalizationRTL()) ? evnt.clientX - 90 : evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
 	                    ctrl.menuTop = menuTop;
@@ -661,6 +667,36 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                }, 1);
 	            };
 
+	            ctrl.onGroupMenuActionHover = function (evnt, action) {
+	                ctrl.toTopDirection = false;
+	                ctrl.visibleActionCount;
+	                var menuTop = evnt.clientY;
+	                ctrl.visibleActionCount = getVisibleMenuItemActionCount(action.childsactions);
+	                if (innerHeight - menuTop - 30 < (ctrl.visibleActionCount * 17)) {
+	                    ctrl.toTopDirection = true;
+	                }	                
+	                action.showChilsMenu = true;
+	            };
+
+
+	            function getVisibleMenuItemActionCount(childsactions) {
+	                var visibleaction = childsactions.filter(function (action) {
+	                    return !action.disable;
+	                });
+	                return visibleaction.length;
+	            }
+
+	            ctrl.getGroupMenuActionItem = function (dataItem, action) {
+	                var actionsItemAttribute = action.childsactions; 
+	                return actionsItemAttribute;
+	            };
+
+	            ctrl.hasVisibleMenuAction = function (actions) {
+	                var haseEnabledActions = actions.some(function (action) {
+	                    return !action.disable;
+	                });
+	                return haseEnabledActions;
+	            };
 	            ctrl.openRowContextMenuPopup = function (evnt, dataItem) {
 	                if (ctrl.isMobile) {
 	                    var modalSettings = {
@@ -798,9 +834,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                if (menuAction.onClicked != undefined) {
 	                    menuAction.isExecuting = true;
 	                    UtilsService.convertToPromiseIfUndefined(menuAction.onClicked())
-							.finally(function () {
-							    menuAction.isExecuting = false;
-							});
+                            .finally(function () {
+                                menuAction.isExecuting = false;
+                            });
 	                }
 	            };
 
@@ -988,32 +1024,32 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    cellTemplate = getCellTemplateWithFilter(cellTemplate, currentColumn);
 	                    var tooltipSection = ctrl.mobileGridView ? 'bs-tooltip data-title="' + currentColumn.name + ' : {{dataItem.' + currentColumn.field + ' ' + tooltipFilter + '}}" ' : '';
 	                    ctrl.rowHtml += ctrl.isMobile ? '<div class="mobile-label-container" ng-hide="ctrl.mobileGridView"><label class="mobile-label" >' + currentColumn.name + ': </label></div><div ' + tooltipSection + '  class="mobile-value-container" ng-style=' + mobileStyle + '>'
-							+ '<div class="vr-datagrid-celltext ">'
-							+ cellTemplate
-							+ '</div>'
-							+ '</div>'
-							+ '</div>' :
-							'<div class="vr-datagrid-cell">'
-							+ '<div class="vr-datagrid-celltext ">'+ cellTemplate
-							+ '</div>'
-							+ '</div>'
-							+ '</div>';
+                            + '<div class="vr-datagrid-celltext ">'
+                            + cellTemplate
+                            + '</div>'
+                            + '</div>'
+                            + '</div>' :
+                            '<div class="vr-datagrid-cell">'
+                            + '<div class="vr-datagrid-celltext ">'+ cellTemplate
+                            + '</div>'
+                            + '</div>'
+                            + '</div>';
 	                }
 	            }
 	            if (ctrl.isMobile && ctrl.rowClickDetails == false) {
 	                ctrl.rowHtml += '<div ng-if="!ctrl.isMainItemsShown" style="width:60px;display:inline-flex">'
-						+ '<span ng-style="::$parent.ctrl.cellLayoutStyle" class="span-summary"> {{ dataItem.actionType}}</span>'
-						+ '</div>'
-						+ '<div class="mobile-label-container action-main-container" style="align-self: flex-end;margin-left: auto;font-size:22px;margin-top:-5px">'
-						+ '<div class="vr-datagrid-celltext">'
-						+ '<i ng-if="ctrl.showDeleteRowSection &&  !ctrl.readOnly" class="glyphicon glyphicon-remove hand-cursor" ng-click="ctrl.deleteRowClicked(dataItem)" title="{{ctrl.getRowDeleteIconTitle()}}"></i>'
-						+ '<span ng-if="ctrl.showDraggableRowSection && !ctrl.readOnly">'
-						+ '<i class="glyphicon glyphicon-circle-arrow-up hand-cursor" ng-show="!$first" ng-click="ctrl.moveRowUp($index)" ></i>'
-						+ '<i class="glyphicon glyphicon-circle-arrow-down hand-cursor" ng-show="!$last" ng-click="ctrl.moveRowDown($index)"></i>'
-						+ '</span>'
-						+ '<i class="glyphicon glyphicon-circle-arrow-right hand-cursor" ng-click="$parent.ctrl.expandRow(dataItem,$event)" style="padding: 2px;top: 5px;" ng-if="$parent.ctrl.expandableColumnWidth != undefined || $parent.ctrl.isActionMenuVisible(dataItem)"></i>'
-						+ '</div>'
-						+ '</div>';
+                        + '<span ng-style="::$parent.ctrl.cellLayoutStyle" class="span-summary"> {{ dataItem.actionType}}</span>'
+                        + '</div>'
+                        + '<div class="mobile-label-container action-main-container" style="align-self: flex-end;margin-left: auto;font-size:22px;margin-top:-5px">'
+                        + '<div class="vr-datagrid-celltext">'
+                        + '<i ng-if="ctrl.showDeleteRowSection &&  !ctrl.readOnly" class="glyphicon glyphicon-remove hand-cursor" ng-click="ctrl.deleteRowClicked(dataItem)" title="{{ctrl.getRowDeleteIconTitle()}}"></i>'
+                        + '<span ng-if="ctrl.showDraggableRowSection && !ctrl.readOnly">'
+                        + '<i class="glyphicon glyphicon-circle-arrow-up hand-cursor" ng-show="!$first" ng-click="ctrl.moveRowUp($index)" ></i>'
+                        + '<i class="glyphicon glyphicon-circle-arrow-down hand-cursor" ng-show="!$last" ng-click="ctrl.moveRowDown($index)"></i>'
+                        + '</span>'
+                        + '<i class="glyphicon glyphicon-circle-arrow-right hand-cursor" ng-click="$parent.ctrl.expandRow(dataItem,$event)" style="padding: 2px;top: 5px;" ng-if="$parent.ctrl.expandableColumnWidth != undefined || $parent.ctrl.isActionMenuVisible(dataItem)"></i>'
+                        + '</div>'
+                        + '</div>';
 	            }
 	            buildSummaryRowHtml();
 	        }
@@ -1037,23 +1073,23 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    var mobilelableTemplate = '<div class="mobile-label-container" ng-hide="ctrl.mobileGridView" ><label class="mobile-label" >' + currentColumn.name + ': </label></div>';
 	                    var tooltipSection = ctrl.mobileGridView ? 'bs-tooltip data-title="' + currentColumn.name + ' : {{' + dataItemColumnPropertyPath + '.dataValue' + tooltipFilter + '}}" ' : '';
 	                    var innerSummaryRow = ctrl.isMobile ? mobilelableTemplate
-							+ '<div ng-style=' + mobileStyle + ' class="mobile-value-container" ' + tooltipSection + ' >'
-							+ '<div class="vr-datagrid-cell">'
-							+ ' <div class="vr-datagrid-celltext">'
-							+ UtilsService.replaceAll(currentColumn.summaryCellTemplate, "#COLUMNVALUES#", dataItemColumnPropertyPath)
-							+ '</div>'
-							+ '</div>'
-							+ '</div>' : '<div class="vr-datagrid-cell">'
-							+ ' <div class="vr-datagrid-celltext">'
-							+ UtilsService.replaceAll(currentColumn.summaryCellTemplate, "#COLUMNVALUES#", dataItemColumnPropertyPath)
-							+ '</div>'
-							+ '</div>';
+                            + '<div ng-style=' + mobileStyle + ' class="mobile-value-container" ' + tooltipSection + ' >'
+                            + '<div class="vr-datagrid-cell">'
+                            + ' <div class="vr-datagrid-celltext">'
+                            + UtilsService.replaceAll(currentColumn.summaryCellTemplate, "#COLUMNVALUES#", dataItemColumnPropertyPath)
+                            + '</div>'
+                            + '</div>'
+                            + '</div>' : '<div class="vr-datagrid-cell">'
+                            + ' <div class="vr-datagrid-celltext">'
+                            + UtilsService.replaceAll(currentColumn.summaryCellTemplate, "#COLUMNVALUES#", dataItemColumnPropertyPath)
+                            + '</div>'
+                            + '</div>';
 	                    innerSummaryRow = UtilsService.replaceAll(innerSummaryRow, "#SUMMARYTOOLTIPFILTER#", tooltipFilter);
 
 	                    ctrl.summaryRowHtml +=
-							'<div ng-if="!' + currentColumnHtml + '.isHidden" class="' + cellClass + '" ng-style="{ \'width\': ' + currentColumnHtml + '.' + cellWidth + ', \'display\':\'inline-flex\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
-							+ innerSummaryRow +
-							'</div>';
+                            '<div ng-if="!' + currentColumnHtml + '.isHidden" class="' + cellClass + '" ng-style="{ \'width\': ' + currentColumnHtml + '.' + cellWidth + ', \'display\':\'inline-flex\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
+                            + innerSummaryRow +
+                            '</div>';
 	                }
 	            }
 	        }
@@ -1255,15 +1291,15 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    Query: query
 	                };
 	                return retrieveData(true, false, false, DataGridRetrieveDataEventType.ExternalTrigger);
-				};
-				gridApi.exportData = function (query) {
-					//retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
-					//setMainItemsViewVisible();
-					retrieveDataInput = {
-						Query: query
-					};
-					return retrieveData(true, true, false, DataGridRetrieveDataEventType.ExternalTrigger);
-				};
+	            };
+	            gridApi.exportData = function (query) {
+	                //retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
+	                //setMainItemsViewVisible();
+	                retrieveDataInput = {
+	                    Query: query
+	                };
+	                return retrieveData(true, true, false, DataGridRetrieveDataEventType.ExternalTrigger);
+	            };
 	            setTimeout(function () {
 
 	                isGridReady = true;
@@ -1556,7 +1592,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                });
 	                return (haseEnabledActions);
 	            };
-
+                
 	            ctrl.hasDefinedMenuAction = function (dataItem) {
 	                return ctrl.getActionMenuArray(dataItem) != undefined && ctrl.getActionMenuArray(dataItem).length > 0;
 	            };
@@ -1611,7 +1647,12 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	                    function invokeHasPermission(menuAction, dataItem) {
 	                        if (menuAction.haspermission == undefined || menuAction.haspermission == null) {
-	                            return;
+	                            if (menuAction.childsactions != undefined && menuAction.childsactions.length > 0) {
+	                                for (var j = 0; j < menuAction.childsactions.length; j++) {
+	                                    invokeHasPermission(menuAction.childsactions[j], dataItem);
+	                                }
+	                            }
+                                return;
 	                        }
 	                        menuAction.disable = true;
 	                        UtilsService.convertToPromiseIfUndefined(menuAction.haspermission(dataItem)).then(function (isAllowed) {
