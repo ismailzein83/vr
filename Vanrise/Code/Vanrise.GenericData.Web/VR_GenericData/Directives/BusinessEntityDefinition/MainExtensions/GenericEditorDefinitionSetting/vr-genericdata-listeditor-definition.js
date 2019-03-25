@@ -40,6 +40,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     var context;
                     var recordTypeId;
                     var settings;
@@ -54,6 +55,7 @@
                             $scope.rootFieldName = settings.RootFieldName;
                             $scope.childFQTN = settings.ChildFQTN;
                             $scope.childFieldName = settings.ChildFieldName;
+                            $scope.itemTitle = settings.ItemTitle;
                         }
                         if (context == undefined) return;
                         recordTypeId = context.getDataRecordTypeId();
@@ -88,7 +90,8 @@
                         RootFQTN: $scope.rootFQTN,
                         RootFieldName: $scope.rootFieldName,
                         ChildFQTN: $scope.childFQTN,
-                        ChildFieldName: $scope.childFieldName
+                        ChildFieldName: $scope.childFieldName,
+                        ItemTitle : $scope.itemTitle
                     };
                     return data;
                 };

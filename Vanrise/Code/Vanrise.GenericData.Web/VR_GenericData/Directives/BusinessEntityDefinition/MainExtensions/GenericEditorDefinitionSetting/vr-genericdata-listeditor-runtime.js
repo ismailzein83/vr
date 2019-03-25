@@ -63,6 +63,11 @@
                     var settings;
                     if (payload != undefined) {
                         definitionSettings = payload.definitionSettings;
+                        if (definitionSettings.ItemTitle != undefined && definitionSettings.ItemTitle != "")
+                            $scope.scopeModel.itemLabel = definitionSettings.   ;
+                        else
+                            $scope.scopeModel.itemLabel = "Value";
+
                         selectedValues = payload.selectedValues;
                         if (selectedValues != undefined)
                             settings = selectedValues.Settings;

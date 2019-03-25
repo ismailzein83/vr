@@ -18,6 +18,7 @@ namespace Vanrise.GenericData.MainExtensions
         public string RootFieldName { get; set; }
         public string ChildFQTN { get; set; }
         public string ChildFieldName { get; set; }
+        public string ItemTitle { get; set; }
         public override string RuntimeEditor
         {
             get

@@ -1,6 +1,6 @@
 ﻿<vr-row>
     <vr-columns colnum="4">
-        <vr-textbox value="scopeModel.itemToAdd" type="text" label="Value" customvalidate="scopeModel.isItemValid()"></vr-textbox>
+        <vr-textbox value="scopeModel.itemToAdd" type="text" label="{{scopeModel.itemLabel}}" customvalidate="scopeModel.isItemValid()"></vr-textbox>
     </vr-columns>
     <vr-columns colnum="1" withemptyline haschildcolumns>
         <vr-button type="Add" data-onclick="scopeModel.addItem" standalone vr-disabled="scopeModel.isItemValid()!=null"></vr-button>
