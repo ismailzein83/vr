@@ -15,7 +15,7 @@ namespace Vanrise.Invoice.Business
         public CompareOperator CompareOperator { get; set; }
         public List<InvoiceSubSectionGridColumn> GridColumns { get; set; }
         public List<InvoiceItemSubSectionOfSubSuction> SubSections { get; set; }
-        public override List<InvoiceSubSectionGridColumn> GetSubsectionGridColumns(InvoiceType invoiceType, Guid uniqueSectionID)
+        public override List<InvoiceSubSectionGridColumn> GetSubsectionGridColumns(InvoiceType invoiceType, Guid uniqueSectionID, Guid? itemGroupingId)
         {
             List<InvoiceSubSectionGridColumn> gridColumns = null;
             foreach (var subsection in invoiceType.Settings.SubSections)

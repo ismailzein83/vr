@@ -13,30 +13,35 @@ namespace Vanrise.Invoice.MainExtensions
         public override Guid ConfigId { get { return new Guid("8A958396-18C2-4913-BABB-FF31683C6A17"); } }
         public Guid ItemGroupingId { get; set; }
         public ItemGroupingSectionSettings Settings { get; set; }
-        public override List<InvoiceSubSectionGridColumn> GetSubsectionGridColumns(InvoiceType invoiceType, Guid uniqueSectionID)
+        public override List<InvoiceSubSectionGridColumn> GetSubsectionGridColumns(InvoiceType invoiceType, Guid uniqueSectionID, Guid? itemGroupingId)
         {
             List<InvoiceSubSectionGridColumn> gridColumns = null;
-            foreach (var subsection in invoiceType.Settings.SubSections)
+            if (itemGroupingId.HasValue)
             {
-                var invoiceItemSubSection = subsection.Settings as ItemGroupingSection;
-                if (invoiceItemSubSection != null)
+                var itemGrouping = invoiceType.Settings.ItemGroupings.FindRecord(x => x.ItemGroupingId == itemGroupingId.Value);
+                itemGrouping.ThrowIfNull("itemGrouping", itemGroupingId.Value);
+                foreach (var subsection in invoiceType.Settings.SubSections)
                 {
-                    if (subsection.InvoiceSubSectionId == uniqueSectionID)
+                    var invoiceItemSubSection = subsection.Settings as ItemGroupingSection;
+                    if (invoiceItemSubSection != null)
                     {
-                        gridColumns = GetGridColumns(invoiceItemSubSection.Settings.GridDimesions, invoiceItemSubSection.Settings.GridMeasures, invoiceType.Settings.ItemGroupings);
-                        break;
-                    }
-                    else
-                    {
-                        gridColumns = GetInvoiceSubSectionGridColumn(invoiceItemSubSection.Settings.SubSections, uniqueSectionID, invoiceType.Settings.ItemGroupings);
-                        if (gridColumns != null)
+                        if (subsection.InvoiceSubSectionId == uniqueSectionID)
+                        {
+                            gridColumns = GetGridColumns(invoiceItemSubSection.Settings.GridDimesions, invoiceItemSubSection.Settings.GridMeasures, itemGrouping);
                             break;
+                        }
+                        else
+                        {
+                            gridColumns = GetInvoiceSubSectionGridColumn(invoiceItemSubSection.Settings.SubSections, uniqueSectionID, itemGrouping);
+                            if (gridColumns != null)
+                                break;
+                        }
                     }
                 }
             }
             return gridColumns;
         }
-        public List<InvoiceSubSectionGridColumn> GetInvoiceSubSectionGridColumn(List<ItemGroupingSubSection> subSections, Guid uniqueSectionID, List<ItemGrouping> itemGroupings)
+        public List<InvoiceSubSectionGridColumn> GetInvoiceSubSectionGridColumn(List<ItemGroupingSubSection> subSections, Guid uniqueSectionID, ItemGrouping itemGrouping)
         {
             if (subSections == null || subSections.Count == 0)
                 return null;
@@ -46,56 +51,50 @@ namespace Vanrise.Invoice.MainExtensions
             {
                 if (subsection.InvoiceSubSectionId == uniqueSectionID)
                 {
-                    gridColumns = GetGridColumns(subsection.Settings.GridDimesions, subsection.Settings.GridMeasures, itemGroupings);
+                    gridColumns = GetGridColumns(subsection.Settings.GridDimesions, subsection.Settings.GridMeasures, itemGrouping);
                     break;
                 }
                 else
                 {
-                    gridColumns = GetInvoiceSubSectionGridColumn(subsection.Settings.SubSections, uniqueSectionID, itemGroupings);
+                    gridColumns = GetInvoiceSubSectionGridColumn(subsection.Settings.SubSections, uniqueSectionID, itemGrouping);
                     if (gridColumns != null)
                         break;
                 }
             }
             return gridColumns;
         }
-        private List<InvoiceSubSectionGridColumn> GetGridColumns(List<GridDimesionItemGrouping> dimensions, List<GridMeasureItemGrouping> measures, List<ItemGrouping> itemGroupings)
+        private List<InvoiceSubSectionGridColumn> GetGridColumns(List<GridDimesionItemGrouping> dimensions, List<GridMeasureItemGrouping> measures, ItemGrouping itemGrouping)
         {
-            if (itemGroupings == null || itemGroupings.Count == 0)
-                return null;
             List<InvoiceSubSectionGridColumn> gridColumns = new List<InvoiceSubSectionGridColumn>();
-            ItemGrouping itemGrouping = itemGroupings.FindRecord(x => x.ItemGroupingId == ItemGroupingId);
-            if (itemGrouping != null)
+            if (itemGrouping.DimensionItemFields != null && itemGrouping.DimensionItemFields.Count > 0 && dimensions != null && dimensions.Count > 0)
             {
-                if (itemGrouping.DimensionItemFields != null && itemGrouping.DimensionItemFields.Count>0 && dimensions != null && dimensions.Count > 0)
+                foreach (var dim in dimensions)
                 {
-                    foreach (var dim in dimensions)
+                    var dimensionInfo = itemGrouping.DimensionItemFields.FindRecord(x => x.DimensionItemFieldId == dim.DimensionId);
+                    if (dimensionInfo != null)
                     {
-                        var dimensionInfo = itemGrouping.DimensionItemFields.FindRecord(x => x.DimensionItemFieldId == dim.DimensionId);
-                        if (dimensionInfo != null)
+                        gridColumns.Add(new InvoiceSubSectionGridColumn()
                         {
-                            gridColumns.Add(new InvoiceSubSectionGridColumn()
-                            {
-                                FieldName = dimensionInfo.FieldName,
-                                FieldType = dimensionInfo.FieldType,
-                                Header = dim.Header
-                            });
-                        }
+                            FieldName = dimensionInfo.FieldName,
+                            FieldType = dimensionInfo.FieldType,
+                            Header = dim.Header
+                        });
                     }
                 }
-                if (itemGrouping.AggregateItemFields != null && itemGrouping.AggregateItemFields.Count>0 && measures != null && measures.Count > 0)
+            }
+            if (itemGrouping.AggregateItemFields != null && itemGrouping.AggregateItemFields.Count > 0 && measures != null && measures.Count > 0)
+            {
+                foreach (var measure in measures)
                 {
-                    foreach (var measure in measures)
+                    var measureInfo = itemGrouping.AggregateItemFields.FindRecord(x => x.AggregateItemFieldId == measure.MeasureId);
+                    if (measureInfo != null)
                     {
-                        var measureInfo = itemGrouping.AggregateItemFields.FindRecord(x => x.AggregateItemFieldId == measure.MeasureId);
-                        if (measureInfo != null)
+                        gridColumns.Add(new InvoiceSubSectionGridColumn()
                         {
-                            gridColumns.Add(new InvoiceSubSectionGridColumn()
-                            {
-                                FieldName = measureInfo.FieldName,
-                                FieldType = measureInfo.FieldType,
-                                Header = measure.Header
-                            });
-                        }
+                            FieldName = measureInfo.FieldName,
+                            FieldType = measureInfo.FieldType,
+                            Header = measure.Header
+                        });
                     }
                 }
             }

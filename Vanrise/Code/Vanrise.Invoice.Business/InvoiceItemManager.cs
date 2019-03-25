@@ -194,7 +194,7 @@ namespace Vanrise.Invoice.Business
                 List<InvoiceSubSectionGridColumn> gridColumns = null;
                 foreach (var subsection in invoiceType.Settings.SubSections)
                 {
-                    gridColumns = subsection.Settings.GetSubsectionGridColumns(invoiceType, input.Query.UniqueSectionID);
+                    gridColumns = subsection.Settings.GetSubsectionGridColumns(invoiceType, input.Query.UniqueSectionID, null);
                     if (gridColumns != null)
                         break;
                 }
@@ -287,7 +287,7 @@ namespace Vanrise.Invoice.Business
                 List<InvoiceSubSectionGridColumn> gridColumns = null;
                 foreach(var subsection in invoiceType.Settings.SubSections)
                 {
-                    gridColumns = subsection.Settings.GetSubsectionGridColumns(invoiceType, _query.UniqueSectionID);
+                    gridColumns = subsection.Settings.GetSubsectionGridColumns(invoiceType, _query.UniqueSectionID, null);
                     if (gridColumns != null)
                         break;
                 }
@@ -352,7 +352,7 @@ namespace Vanrise.Invoice.Business
                 List<InvoiceSubSectionGridColumn> gridColumns = null;
                 foreach (var subsection in invoiceType.Settings.SubSections)
                 {
-                    gridColumns = subsection.Settings.GetSubsectionGridColumns(invoiceType, _query.UniqueSectionID);
+                    gridColumns = subsection.Settings.GetSubsectionGridColumns(invoiceType, _query.UniqueSectionID, _query.ItemGroupingId);
                     if (gridColumns != null)
                         break;
                 }
