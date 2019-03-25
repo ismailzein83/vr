@@ -823,8 +823,14 @@
     <Content Include="Images\flat-interconnect-login.png" />
     <Content Include="Images\flat-interconnect-logoonheader.png" />
     <Content Include="Images\flat-tone-ra-iconheader.ico" />
+    <Content Include="Images\flat-tone-ra-icx-login.png" />
+    <Content Include="Images\flat-tone-ra-icx-logoonheader.png" />
+    <Content Include="Images\flat-tone-ra-intl-login.png" />
+    <Content Include="Images\flat-tone-ra-intl-logoonheader.png" />
     <Content Include="Images\flat-tone-ra-login.png" />
     <Content Include="Images\flat-tone-ra-logoonheader.png" />
+    <Content Include="Images\flat-tone-ra-retail-login.png" />
+    <Content Include="Images\flat-tone-ra-retail-logoonheader.png" />
     <Content Include="Images\iconheader.ico" />
     <Content Include="Images\ICX-iconheader.ico" />
     <Content Include="Images\ICX-login.png" />
