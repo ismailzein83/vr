@@ -45,6 +45,9 @@ namespace Retail.Interconnect.Business
 
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
+
+           
+
             Guid voiceAnalyticTableId = new Guid("6cd535c0-ac49-46bb-aecf-0eae33823b20");
             Guid smsAnalyticTableId = new Guid("c1bd3f2f-6213-44d1-9d58-99f81e169930");
 
@@ -75,22 +78,41 @@ namespace Retail.Interconnect.Business
             {
                 List<string> voiceListMeasures = new List<string> { "TotalBillingDuration", "Amount", "CountCDRs", "BillingPeriodTo", "BillingPeriodFrom", "Amount_OrigCurr" };
                 List<string> voiceListDimensions = new List<string> { "DestinationZone", "OriginationZone", "Operator", "Rate", "RateType", "BillingType", "Currency" };
+                var billingType = new DimensionFilter
+                {
+                    Dimension = "BillingType",
+                    FilterValues = new List<object>()
+                };
+                if (_type == InterconnectInvoiceType.Customer)
+                    billingType.FilterValues.Add(1);
+                else
+                    billingType.FilterValues.Add(2);
+
                 voiceItemSetNames = _invoiceGenerationManager.GetInvoiceVoiceMappedRecords(voiceListDimensions, voiceListMeasures, dimensionName, dimensionValue, fromDate, toDate, currencyId, (analyticRecord) =>
                  {
                      return VoiceItemSetNameMapper(analyticRecord);
-                 });
-                invoiceByCurrency = LoadVoiceCurrencyItemSetName(dimensionName, financialAccountData.FinancialAccountId, fromDate, toDate, taxItemDetails);
+                 }, billingType);
+                invoiceByCurrency = LoadVoiceCurrencyItemSetName(dimensionName, financialAccountData.FinancialAccountId, fromDate, toDate, taxItemDetails, billingType);
             }
             if (interconnectModuleManager.IsSMSModuleEnabled())
             {
+                var billingType = new DimensionFilter
+                {
+                    Dimension = "BillingType",
+                    FilterValues = new List<object>()
+                };
+                if (_type == InterconnectInvoiceType.Customer)
+                    billingType.FilterValues.Add(1);
+                else
+                    billingType.FilterValues.Add(2);
                 List<string> smsListMeasures = new List<string> { "Amount", "DeliveredSMS", "BillingPeriodTo", "BillingPeriodFrom", "Amount_OriginalCurrency" };
                 List<string> smsListDimensions = new List<string> { "DestinationMobileNetwork", "OriginationMobileNetwork", "Operator", "Rate", "RateType", "BillingType", "Currency" };
 
                 smsItemSetNames = _invoiceGenerationManager.GetInvoiceSMSMappedRecords(smsListDimensions, smsListMeasures, dimensionName, dimensionValue, fromDate, toDate, currencyId, (analyticRecord) =>
                 {
                     return SMSItemSetNameMapper(analyticRecord);
-                });
-                var smsInvoiceByCurrency = LoadSMSCurrencyItemSetName(dimensionName, financialAccountData.FinancialAccountId, fromDate, toDate, taxItemDetails);
+                }, billingType);
+                var smsInvoiceByCurrency = LoadSMSCurrencyItemSetName(dimensionName, financialAccountData.FinancialAccountId, fromDate, toDate, taxItemDetails, billingType);
                 if (invoiceByCurrency == null)
                     invoiceByCurrency = new List<InterconnectInvoiceByCurrencyItemDetails>();
                 TryMergeByCurrencyItemSets(invoiceByCurrency, smsInvoiceByCurrency);
@@ -352,7 +374,7 @@ namespace Retail.Interconnect.Business
             }
             return generatedInvoiceItemSets;
         }
-        private List<InterconnectInvoiceByCurrencyItemDetails> LoadVoiceCurrencyItemSetName(string dimensionName, string dimensionValue, DateTime fromDate, DateTime toDate, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        private List<InterconnectInvoiceByCurrencyItemDetails> LoadVoiceCurrencyItemSetName(string dimensionName, string dimensionValue, DateTime fromDate, DateTime toDate, IEnumerable<VRTaxItemDetail> taxItemDetails, DimensionFilter billingTypeFilter)
         {
             List<string> listMeasures = new List<string> { "CountCDRs", "TotalBillingDuration", "BillingPeriodTo", "BillingPeriodFrom", "Amount_OrigCurr" };
             List<string> listDimensions = new List<string> { "Currency", "YearMonth"};
@@ -360,9 +382,9 @@ namespace Retail.Interconnect.Business
             return _invoiceGenerationManager.GetInvoiceVoiceMappedRecords(listDimensions, listMeasures, dimensionName, dimensionValue, fromDate, toDate, null, (analyticRecord) =>
             {
                 return CurrencyItemSetNameMapper(analyticRecord, taxItemDetails, true);
-            });
+            }, billingTypeFilter);
         }
-        private List<InterconnectInvoiceByCurrencyItemDetails> LoadSMSCurrencyItemSetName(string dimensionName, string dimensionValue, DateTime fromDate, DateTime toDate, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        private List<InterconnectInvoiceByCurrencyItemDetails> LoadSMSCurrencyItemSetName(string dimensionName, string dimensionValue, DateTime fromDate, DateTime toDate, IEnumerable<VRTaxItemDetail> taxItemDetails, DimensionFilter billingTypeFilter)
         {
             List<string> listMeasures = new List<string> { "DeliveredSMS", "BillingPeriodTo", "BillingPeriodFrom", "Amount_OriginalCurrency" };
             List<string> listDimensions = new List<string> { "Currency", "YearMonth" };
@@ -370,7 +392,7 @@ namespace Retail.Interconnect.Business
             return _invoiceGenerationManager.GetInvoiceSMSMappedRecords(listDimensions, listMeasures, dimensionName, dimensionValue, fromDate, toDate, null, (analyticRecord) =>
             {
                 return CurrencyItemSetNameMapper(analyticRecord, taxItemDetails, false);
-            });
+            }, billingTypeFilter);
         }
 
 

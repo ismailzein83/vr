@@ -191,27 +191,26 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<VRTaxItemDetail> GetTaxItemDetails(Guid invoiceTypeId, Guid accountBEDefinitionId, long accountId)
         {
             List<VRTaxItemDetail> taxItemDetails = new List<VRTaxItemDetail>();
-            var taxesDefinitions = new ConfigManager().GetRetailTaxesDefinitions();
-            if (taxesDefinitions != null)
+            IAccountTaxes accountTaxes;
+            if (HasAccountTaxes(accountBEDefinitionId, accountId, false, out accountTaxes))
             {
-                IAccountTaxes accountTaxes;
-
-                if (HasAccountTaxes(accountBEDefinitionId, accountId, false, out accountTaxes))
+                var taxes = accountTaxes.GetAccountTaxes();
+                if (taxes != null)
                 {
-                    var taxes = accountTaxes.GetAccountTaxes();
-                    if (taxes != null)
+                    var invoiceTypeTaxes = taxes.FindRecord(x => x.InvoiceTypeId == invoiceTypeId);
+                    if (invoiceTypeTaxes != null)
                     {
-                        var invoiceTypeTaxes = taxes.FindRecord(x => x.InvoiceTypeId == invoiceTypeId);
-                        if (invoiceTypeTaxes != null)
+                        if (invoiceTypeTaxes.VRTaxSetting.VAT.HasValue)
                         {
-                            if (invoiceTypeTaxes.VRTaxSetting.VAT.HasValue)
+                            taxItemDetails.Add(new VRTaxItemDetail
                             {
-                                taxItemDetails.Add(new VRTaxItemDetail
-                                {
-                                    TaxName = "VAT",
-                                    Value = invoiceTypeTaxes.VRTaxSetting.VAT.Value
-                                });
-                            }
+                                TaxName = "VAT",
+                                Value = invoiceTypeTaxes.VRTaxSetting.VAT.Value
+                            });
+                        }
+                        var taxesDefinitions = new ConfigManager().GetRetailTaxesDefinitions();
+                        if (taxesDefinitions != null)
+                        {
                             foreach (var tax in invoiceTypeTaxes.VRTaxSetting.Items)
                             {
                                 var taxDefinition = taxesDefinitions.ItemDefinitions.FindRecord(x => x.ItemId == tax.ItemId);
@@ -229,6 +228,7 @@ namespace Retail.BusinessEntity.Business
                     }
                 }
             }
+           
             return taxItemDetails;
         }
 

@@ -44,13 +44,13 @@ namespace Retail.Interconnect.Business
                 generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
             }
         }
-        public List<T> GetInvoiceVoiceMappedRecords<T>(List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId,  Func<AnalyticRecord, T> mapper) where T : class
+        public List<T> GetInvoiceVoiceMappedRecords<T>(List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId,  Func<AnalyticRecord, T> mapper,DimensionFilter billingTypeFilter) where T : class
         {
-            return GetInvoiceMappedRecords(invoiceVoiceAnalyticTableId, listDimensions, listMeasures, dimensionFilterName, dimensionFilterValue, fromDate, toDate, currencyId, mapper);
+            return GetInvoiceMappedRecords(invoiceVoiceAnalyticTableId, listDimensions, listMeasures, dimensionFilterName, dimensionFilterValue, fromDate, toDate, currencyId, mapper, billingTypeFilter);
         }
-        public List<T> GetInvoiceSMSMappedRecords<T>(List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId  ,Func<AnalyticRecord, T> mapper) where T : class
+        public List<T> GetInvoiceSMSMappedRecords<T>(List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId  ,Func<AnalyticRecord, T> mapper, DimensionFilter billingTypeFilter) where T : class
         {
-            return GetInvoiceMappedRecords(invoiceSMSAnalyticTableId, listDimensions, listMeasures, dimensionFilterName, dimensionFilterValue, fromDate, toDate, currencyId,  mapper);
+            return GetInvoiceMappedRecords(invoiceSMSAnalyticTableId, listDimensions, listMeasures, dimensionFilterName, dimensionFilterValue, fromDate, toDate, currencyId,  mapper, billingTypeFilter);
         }
         public T GetMeasureValue<T>(AnalyticRecord analyticRecord, string measureName)
         {
@@ -95,16 +95,16 @@ namespace Retail.Interconnect.Business
             else
                 return nullableType;
         }
-        private List<T> GetInvoiceMappedRecords<T>(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId,  Func<AnalyticRecord, T> mapper) where T : class
+        private List<T> GetInvoiceMappedRecords<T>(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId,  Func<AnalyticRecord, T> mapper, DimensionFilter billingTypeFilter) where T : class
         {
-            var analyticRecords = GetInvoiceAnalyticRecords(analyticTableId, listDimensions, listMeasures, dimensionFilterName, dimensionFilterValue, fromDate, toDate, currencyId);
+            var analyticRecords = GetInvoiceAnalyticRecords(analyticTableId, listDimensions, listMeasures, dimensionFilterName, dimensionFilterValue, fromDate, toDate, currencyId, billingTypeFilter);
             if (analyticRecords != null && analyticRecords.Data != null && analyticRecords.Data.Count() > 0)
             {
                 return PrepareItemSetNames<T>(analyticRecords.Data, mapper);
             }
             return default(List<T>);
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetInvoiceAnalyticRecords(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId)
+        private AnalyticSummaryBigResult<AnalyticRecord> GetInvoiceAnalyticRecords(Guid analyticTableId, List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, DimensionFilter billingTypeFilter)
         {
             Dictionary<string, dynamic> queryParameters = null;
             AnalyticManager analyticManager = new AnalyticManager();
@@ -130,6 +130,10 @@ namespace Retail.Interconnect.Business
                 FilterValues = new List<object> { dimensionFilterValue }
             };
             analyticQuery.Query.Filters.Add(dimensionFilter);
+            if(billingTypeFilter != null)
+                analyticQuery.Query.Filters.Add(billingTypeFilter);
+
+
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
         public List<T> PrepareItemSetNames<T>(IEnumerable<AnalyticRecord> analyticRecords, Func<AnalyticRecord, T> mapper) where T : class
