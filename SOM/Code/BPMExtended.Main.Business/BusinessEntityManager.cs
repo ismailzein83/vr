@@ -1,5 +1,6 @@
 ﻿using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using System.ComponentModel;
 using BPMExtended.Main.SOMAPI;
 using SOM.Main.Entities;
 using System;
@@ -28,5 +29,30 @@ namespace BPMExtended.Main.Business
             return lineOfBusinessArray;
         }
 
+        public List<OperationTypeDescriptiveObject> GetOperationTypeInfo()
+        {
+            var operationTypeDescriptiveObjectList = new List<OperationTypeDescriptiveObject>();
+            var operationTypeArray = Enum.GetValues(typeof(OperationType));
+
+            for (int i = 0; i < operationTypeArray.Length; i++)
+            {
+                var operationTypeInstance = (OperationType)operationTypeArray.GetValue(i);
+                var operationTypeDecriptiveObj = new OperationTypeDescriptiveObject()
+                {
+                    Id = i,
+                    Description = Utilities.GetEnumAttribute<OperationType, DescriptionAttribute>(operationTypeInstance).Description
+                };
+                operationTypeDescriptiveObjectList.Add(operationTypeDecriptiveObj);
+            }
+            return operationTypeDescriptiveObjectList;
+        }
+
+        public class OperationTypeDescriptiveObject
+        {
+            public int Id { get; set; }
+            public string Description { get; set; }
+        }
+
     }
+
 }

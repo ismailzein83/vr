@@ -31,4 +31,14 @@ namespace SOM.Main.Entities
             this.LOB = lob;
         }
     }
+
+    //public class Description : Attribute
+    //{
+    //    public LineOfBusiness LOB { get; private set; }
+
+    //    public LineOfBusinessAttribute(LineOfBusiness lob)
+    //    {
+    //        this.LOB = lob;
+    //    }
+    //}
 }

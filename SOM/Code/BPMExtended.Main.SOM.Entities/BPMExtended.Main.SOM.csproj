@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BillingCommonInputArgument.cs" />
+    <Compile Include="Billing\ServiceResponse\ServiceDefinition.cs" />
     <Compile Include="Billing\ServiceResponse\CustomerCategory.cs" />
     <Compile Include="Billing\ServiceResponse\RatePlan.cs" />
     <Compile Include="Inventory\ServiceResponse\Device.cs" />

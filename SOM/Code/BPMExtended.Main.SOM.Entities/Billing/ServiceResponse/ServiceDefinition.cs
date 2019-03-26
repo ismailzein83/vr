@@ -1,0 +1,10 @@
+﻿namespace BPMExtended.Main.SOMAPI
+{
+    public class ServiceDefinition
+    {
+        public int Id { get; set; }
+        public string PublicId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+    }
+}
