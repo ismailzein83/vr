@@ -181,7 +181,7 @@
                         <div class="vr-top-nav-container">
                             <div class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-if="$root.moduleRenderedAsView && currentPage.parent.RenderedAsView ==  true && !$root.masterLayoutSettings.IsBreadcrumbVisible">
                                 <span id="dropdownTabsPrev" style="position:relative" ng-show="($root.viewsCountLimit >  $root.viewsPageSize && $root.moduleRenderedAsView.Childs.length > $root.viewsPageSize) ||  ( $root.moduleRenderedAsView.Childs.length  <  $root.limitRenderAsViewTo &&  $root.viewsCountStart > 0 )">
-                                    <a style="color:#333" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                                    <a style="color:#333" aria-haspopup="false" aria-expanded="false">
                                         <span class="glyphicon glyphicon-backward hand-cursor list-view-icon"></span>
                                     </a>
                                     <ul class="dropdown-menu " aria-labelledby="dropdownTabsPrev">
@@ -214,7 +214,7 @@
                                     </ul>
                                 </span>
                             </div>
-                            <div class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-if="!$root.masterLayoutSettings.IsBreadcrumbVisible">
+                            <div class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-if="!$root.masterLayoutSettings.IsBreadcrumbVisible && ($root.showModuleViewToggle || $root.showApplicationViewToggle)">
                                 <span class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-show="$root.showModuleViewToggle">
                                     <a href="" ng-click="$root.switchModuleDefaultView(false)">
                                         <label class="hand-cursor" ng-class=" getModuleSelectedViewClass() == false ? 'choiced-view' : ''"> {{$root.selectedMenu.Title}}</label>

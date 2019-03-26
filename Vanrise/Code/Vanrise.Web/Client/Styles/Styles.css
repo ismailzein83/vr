@@ -1555,6 +1555,9 @@ loader .outer-loader {
     border: 0px solid transparent !important;
     font-size: 13px !important;
 }
+.module-icon {
+    background-color: #b7b7b7 !important;
+}
 
     .menu-item-list.last {
         margin-bottom: 92px;
@@ -1642,20 +1645,33 @@ loader .outer-loader {
     position: relative;
 }
 
+
     #dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"],
     .vr-tabs-expander.previous > ul {
         margin: 0px;
         margin-top: -3px;
-        flex-wrap: wrap;
-        flex-wrap: wrap-reverse;
+        overflow-y: auto;
+        flex-flow: column-reverse;
+        display: none;
     }
+
+    .vr-tabs-expander.previous > ul {
+        max-height: 125px;
+    }
+
+#dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"] {
+    max-height: 240px;
+}
 
     #dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"] > li,
     .vr-tabs-expander.previous > ul > li {
         display: inline-flex;
         width: 100%;
     }
-
+#dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"] > li > a,
+.vr-tabs-expander.previous > ul > li > a{   
+    width: 100%;
+}
 #dropdownTabsPrev:hover > ul[aria-labelledby="dropdownTabsPrev"] {
     display: flex;
 }
@@ -1664,6 +1680,16 @@ loader .outer-loader {
 .vr-tabs-expander.forward > ul {
     margin: 0px;
     margin-top: -3px;
+    overflow: auto;
+    display:none;
+}
+
+#dropdownTabsFor > ul[aria-labelledby="dropdownTabsFor"] {
+    max-height: 240px;
+}
+
+.vr-tabs-expander.forward > ul {
+    max-height: 125px;
 }
 
 #dropdownTabsFor:hover > ul[aria-labelledby="dropdownTabsFor"] {
@@ -2330,6 +2356,7 @@ vr-fieldset[notopspace] > .fieldset-vr {
     color: transparent;
     display: block;
     top: 9px;
+    background-color: #829EBF;
 }
 
 .vr-grid-menu-h-dote {
@@ -2689,11 +2716,11 @@ vr-switch[class*="divDisabled"] .switch {
     opacity: 0.8;
     background: #8a8a8a;
 }
-    vr-switch[class*="divDisabled"] .switch.switch.checked {
-        pointer-events: none;
-        opacity: 0.8;
-        background: #64BD63;
-    }
+vr-switch[class*="divDisabled"] .switch.switch.checked {
+    pointer-events: none;
+    opacity: 0.8;
+    background: #64BD63;
+}
 .divDisabled .switch {
     pointer-events: none;
     opacity: 0.8;
