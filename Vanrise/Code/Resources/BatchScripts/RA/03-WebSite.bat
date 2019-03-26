@@ -26,12 +26,12 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-support.png" /S /R
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Home\Index-flat.cshtml" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\CSViews\Home\Index.cshtml*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Security\Login-flat.cshtml" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\CSViews\Security\Login.cshtml*"
 ::RA.ICX & RA.INTL & RA.Retail images
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.ICX\%YYYYMMDD%\Images\logoonheader.png*"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\RA.ICX\%YYYYMMDD%\Images\login.png*"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.INTL\%YYYYMMDD%\Images\logoonheader.png*"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\RA.INTL\%YYYYMMDD%\Images\login.png*"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.Retail\%YYYYMMDD%\Images\logoonheader.png*"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\RA.Retail\%YYYYMMDD%\Images\login.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-icx-logoonheader.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\RA.ICX\%YYYYMMDD%\Images\logoonheader.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-icx-login.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.ICX\%YYYYMMDD%\Images\login.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-intl-logoonheader.png" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\RA.INTL\%YYYYMMDD%\Images\logoonheader.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-intl-login.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.INTL\%YYYYMMDD%\Images\login.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-retail-logoonheader.png" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\RA.Retail\%YYYYMMDD%\Images\logoonheader.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-retail-login.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.Retail\%YYYYMMDD%\Images\login.png*"
 ::default theme
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-logoonheader.png" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Default-theme\Images\logoonheader.png*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-login.png" /S /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Default-theme\Images\login.png*"
@@ -60,12 +60,12 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-support.png" /S /R
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Home\Index-flat.cshtml" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Flat-theme\Client\CSViews\Home\Index.cshtml*"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Security\Login-flat.cshtml" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Flat-theme\Client\CSViews\Security\Login.cshtml*"
 ::RA.ICX & RA.INTL & RA.Retail images
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.ICX\%YYYYMMDD%\Flat-theme\Images\logoonheader.png*"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\RA.ICX\%YYYYMMDD%\Flat-theme\Images\login.png*"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.INTL\%YYYYMMDD%\Flat-theme\Images\logoonheader.png*"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\RA.INTL\%YYYYMMDD%\Flat-theme\Images\login.png*"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.Retail\%YYYYMMDD%\Flat-theme\Images\logoonheader.png*"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\RA.Retail\%YYYYMMDD%\Flat-theme\Images\login.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-icx-logoonheader.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\RA.ICX\%YYYYMMDD%\Flat-theme\Images\logoonheader.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-icx-login.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.ICX\%YYYYMMDD%\Flat-theme\Images\login.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-intl-logoonheader.png" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\RA.INTL\%YYYYMMDD%\Flat-theme\Images\logoonheader.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-intl-login.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.INTL\%YYYYMMDD%\Flat-theme\Images\login.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-retail-logoonheader.png" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\RA.Retail\%YYYYMMDD%\Flat-theme\Images\logoonheader.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-retail-login.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.Retail\%YYYYMMDD%\Flat-theme\Images\login.png*"
 
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Bin\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
