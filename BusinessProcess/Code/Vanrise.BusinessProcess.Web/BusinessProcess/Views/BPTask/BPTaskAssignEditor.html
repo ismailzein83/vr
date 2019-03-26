@@ -1,0 +1,15 @@
+﻿<div vr-modalcontent ng-controller="BusinessProcess_BP_BPTaskAssignEditorController" width="'50%'">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formBPTaskAssignEditor" vr-loader="scopeModel.isLoading">
+            <vr-sec-user-selector on-ready="scopeModel.onUserSelectorReady" normal-col-num="2" isrequired="true"></vr-sec-user-selector>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Assign" data-onclick="scopeModel.assign" formname="formBPTaskAssignEditor"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
