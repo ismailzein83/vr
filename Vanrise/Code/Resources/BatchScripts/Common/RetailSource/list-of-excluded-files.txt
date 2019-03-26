@@ -3,6 +3,7 @@
 \ConnectionStrings.config
 
 \Images
+Demo\
 
 \bin\Retail.Ringo.
 \bin\Retail.Zajil.
