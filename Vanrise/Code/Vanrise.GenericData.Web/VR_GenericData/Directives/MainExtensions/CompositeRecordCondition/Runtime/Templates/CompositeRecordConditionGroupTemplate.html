@@ -1,6 +1,7 @@
 ﻿<vr-columns width="fullrow">
-    <vr-validator validate="scopeModel.validateCompositeRecordCondition()">
-        <vr-section level="2" light>
+    <vr-section level="2" light>
+        <vr-validator validate="scopeModel.validateCompositeRecordCondition()">
+
             <vr-genericdata-recordfilter-logicaloperator on-ready="scopeModel.onLogicalOperatorDirectiveReady" normal-col-num="3"></vr-genericdata-recordfilter-logicaloperator>
 
             <div ng-repeat="btn in scopeModel.compositeRecordConditionConfigs">
@@ -19,6 +20,6 @@
                     <i class="glyphicon glyphicon-remove hand-cursor" style="position:absolute;top: 5px;" ng-click="scopeModel.removeCondition(condition)"></i>
                 </vr-columns>
             </span>
-        </vr-section>
-    </vr-validator>
+        </vr-validator>
+    </vr-section>
 </vr-columns>
