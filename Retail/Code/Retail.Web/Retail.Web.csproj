@@ -816,6 +816,9 @@
     <Content Include="Images\flat-cabill-iconheader.ico" />
     <Content Include="Images\flat-cabill-login.png" />
     <Content Include="Images\flat-cabill-logoonheader.png" />
+    <Content Include="Images\flat-fzero-iconheader.ico" />
+    <Content Include="Images\flat-fzero-login.png" />
+    <Content Include="Images\flat-fzero-logoonheader.png" />
     <Content Include="Images\flat-integra-sms-iconheader.ico" />
     <Content Include="Images\flat-integra-sms-login.png" />
     <Content Include="Images\flat-integra-sms-logoonheader.png" />
