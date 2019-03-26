@@ -257,6 +257,19 @@ namespace NP.IVSwitch.Business
 					updateOperationOutput.Message = message;
 					return updateOperationOutput;
 				}
+				if (hosts != null)
+				{
+					List<int> exceptedIds = new List<int>();
+					exceptedIds.Add(endPointItem.Entity.EndPointId);
+					if (helper.IsInSameSubnet(hosts, endPointItem.Entity.Host, exceptedIds, out message))
+					{
+						updateOperationOutput.Message = message;
+						updateOperationOutput.ShowExactMessage = true;
+						return updateOperationOutput;
+					}
+				}
+
+
 				if (helper.ValidateSameAccountHost(hosts, endPointItem.Entity, out message))
 				{
 					if (!string.IsNullOrEmpty(message))
@@ -581,6 +594,26 @@ namespace NP.IVSwitch.Business
 						insertOperationOutput.ShowExactMessage = true;
 						return insertOperationOutput;
 					}
+					List<EndPointToAdd> remainedEndPointsToAdd = new List<EndPointToAdd>();
+					remainedEndPointsToAdd = endPointsToAdd.FindAllRecords(x => x != endPointToAdd) != null ? endPointsToAdd.FindAllRecords(x => x != endPointToAdd).ToList() : null;
+					if (remainedEndPointsToAdd != null && remainedEndPointsToAdd.Count()>0)
+					{
+						Dictionary<int, EndPoint> remainedEndPoints = new Dictionary<int, EndPoint>();
+						remainedEndPoints = remainedEndPointsToAdd.ToDictionary(x => x.Entity.EndPointId, x => x.Entity);
+						if (remainedEndPoints != null)
+						{
+							IpAddressHelper helper = new IpAddressHelper();
+							string message = "";
+							if (helper.IsInSameSubnet(remainedEndPoints, endPointToAdd.Entity.Host, null, out message))
+							{
+								insertOperationOutput.Message = message;
+								insertOperationOutput.ShowExactMessage = true;
+								return insertOperationOutput;
+							}
+						}
+
+					}
+
 				}
 				foreach (var endPointToAdd in endPointsToAdd)
 				{
@@ -780,12 +813,12 @@ namespace NP.IVSwitch.Business
 		{
 			IpAddressHelper helper = new IpAddressHelper();
 			Dictionary<int, Entities.EndPoint> hosts = GetCachedEndPoint();
+			if (helper.IsInSameSubnet(hosts, endPointItem.Entity.Host, null, out mssg)) return true;
 			if (accountExtended != null && accountExtended.CustomerAccountId.HasValue)
 			{
 				endPointItem.Entity.AccountId = accountExtended.CustomerAccountId.Value;
 				return helper.ValidateSameAccountHost(hosts, endPointItem.Entity, out mssg);
 			}
-			if (helper.IsInSameSubnet(hosts, endPointItem.Entity.Host, out mssg)) return true;
 			endPointItem.Entity.AccountId = CreateNewAccount(profileId);
 			return false;
 		}
