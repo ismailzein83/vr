@@ -92,6 +92,7 @@
     <Compile Include="BPDefintionArgumentStateManager.cs" />
     <Compile Include="BPDefinitionScheduleTaskFilter.cs" />
     <Compile Include="Extensions\OpenBPInstanceViewerAction.cs" />
+    <Compile Include="Extensions\StartBPProcessAction.cs" />
     <Compile Include="ProcessSynchronisationManager.cs" />
     <Compile Include="BPTimeSubscriptionManager.cs" />
     <Compile Include="BPEventManager.cs" />
