@@ -1220,18 +1220,18 @@
     </Content>
     <Content Include="appSettings.config" />
     <None Include="Properties\PublishProfiles\Retail.pubxml" />
-    <Content Include="Web.config.Interconnect.exclude">
+    <None Include="Web.config.Interconnect.exclud">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.config.NR.exclude">
+    </None>
+    <None Include="Web.config.NR.exclud">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.config.SMS-WHS.exclude">
+    </None>
+    <None Include="Web.config.SMS-WHS.exclud">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.config.RecordAnalysis.exclude">
+    </None>
+    <None Include="Web.config.RecordAnalysis.exclud">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
     <None Include="Web.config.RA.ICX.exclud">
       <SubType>Designer</SubType>
     </None>
@@ -1244,13 +1244,13 @@
     <None Include="Web.config.RA.exclud">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Web.config.exclude">
+    <None Include="Web.config.exclud">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Web.config.Zajil.exclude" />
-    <Content Include="Web.config.Ringo.exclude" />
-    <Content Include="Web.config.MultiNet.exclude" />
-    <Content Include="Web.config.TestCallAnalysis.exclude" />
+    <None Include="Web.config.Zajil.exclud" />
+    <None Include="Web.config.Ringo.exclud" />
+    <None Include="Web.config.MultiNet.exclud" />
+    <None Include="Web.config.TestCallAnalysis.exclud" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
