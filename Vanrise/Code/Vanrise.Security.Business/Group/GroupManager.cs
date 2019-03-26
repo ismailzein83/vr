@@ -258,6 +258,14 @@ namespace Vanrise.Security.Business
             }
             return assignedUserGroups.Count > 0 ? assignedUserGroups : null;
         }
+
+        public List<int> GetGroupMembers(int groupId)
+        {
+            var group = GetGroup(groupId);
+            group.ThrowIfNull("group", groupId);
+            group.Settings.ThrowIfNull("group.Settings", groupId);
+            return group.Settings.GetUserIds(null);
+        }
         #endregion
 
         #region Private Methods

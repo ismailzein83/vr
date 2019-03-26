@@ -12,6 +12,11 @@ namespace Vanrise.Security.Business
         public override Guid ConfigId { get { return new Guid("be6619ae-687f-45e3-bd7b-90d1db4626b6"); } }
         public List<int> MemberIds { get; set; }
 
+        public override List<int> GetUserIds(IGroupSettingsGetUserIdsContext context)
+        {
+            return this.MemberIds;
+        }
+
         public override bool IsMember(IGroupSettingsContext context)
         {
             if (context == null)

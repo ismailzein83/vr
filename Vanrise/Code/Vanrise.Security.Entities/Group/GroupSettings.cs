@@ -20,5 +20,12 @@ namespace Vanrise.Security.Entities
         {
             return false;
         }
+
+        public abstract List<int> GetUserIds(IGroupSettingsGetUserIdsContext context);
+    }
+
+    public interface IGroupSettingsGetUserIdsContext
+    {
+
     }
 }
