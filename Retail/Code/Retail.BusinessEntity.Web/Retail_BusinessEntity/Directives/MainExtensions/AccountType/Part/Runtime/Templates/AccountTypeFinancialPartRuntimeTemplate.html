@@ -15,7 +15,9 @@
     <span ng-if="scopeModel.showOperatorBanks">
         <vr-row>
             <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingOperatorBanks">
-                <vr-common-bankdetailssettings-grid on-ready="scopeModel.onOperatorBanksReady"></vr-common-bankdetailssettings-grid>
+                <vr-section header="Operator Banks">
+                    <vr-common-bankdetailssettings-grid on-ready="scopeModel.onOperatorBanksReady"></vr-common-bankdetailssettings-grid>
+                </vr-section>
             </vr-columns>
         </vr-row>
     </span>
