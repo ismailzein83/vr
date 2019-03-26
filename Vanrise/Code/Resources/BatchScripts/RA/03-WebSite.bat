@@ -9,6 +9,7 @@ ECHO.
 ECHO RA WebSite
 
 xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\RetailSource\list-of-excluded-files.txt
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.RA.exclud" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Web.config*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.RA.ICX.exclud" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\RA.ICX\%YYYYMMDD%\Web.RA.ICX.config*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.RA.INTL.exclud" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\RA.INTL\%YYYYMMDD%\Web.RA.INLT.config*"
@@ -68,7 +69,6 @@ xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-retail-logoonheader.png
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-tone-ra-retail-login.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA.Retail\%YYYYMMDD%\Flat-theme\Images\login.png*"
 
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Bin\"
-xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Common\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\VR_AccountBalance\"

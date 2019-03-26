@@ -8,6 +8,7 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO TOne V2 WebSite
 
 xcopy "C:\Publish\TOneV2" /S /E /R /y /v /i /z /Q																			"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\TOneSource\list-of-excluded-files.txt
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q														"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Web.config.exclud" /y /v /z /i /Q /R												"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\Web.config*"
 ::by default load flat theme
 xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Images\flat-tone-logoonheader.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\Images\logoonheader.png*"
@@ -46,7 +47,6 @@ xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\microsoft.sqlserver.*" /S /E /R /y /v 
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\Client\Modules\Common\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\Client\Modules\ExcelConversion\"
-xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q														"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\Client\Modules\BusinessProcess\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\Client\Modules\Runtime\"
 xcopy "C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\Client\Modules\Queueing\"
