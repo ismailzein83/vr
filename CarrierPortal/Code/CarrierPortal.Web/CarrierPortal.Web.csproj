@@ -520,11 +520,11 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <None Include="Web.config.exclude" />
-    <Content Include="Web.config.PartnerPortal.exclude" />
-    <Content Include="Web.config.RingoPortal.exclude" />
-    <Content Include="Web.config.MultinetPortal.exclude" />
-    <Content Include="Web.config.SupplierPricelist.exclude" />
+    <None Include="Web.config.exclud" />
+    <None Include="Web.config.PartnerPortal.exclud" />
+    <None Include="Web.config.RingoPortal.exclud" />
+    <None Include="Web.config.MultinetPortal.exclud" />
+    <None Include="Web.config.SupplierPricelist.exclud" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
