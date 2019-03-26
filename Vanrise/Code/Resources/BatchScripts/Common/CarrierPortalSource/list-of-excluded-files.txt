@@ -2,6 +2,8 @@
 \appSettings.config
 \ConnectionStrings.config
 
+\Images
+
 \bin\PartnerPortal.
 \bin\CP.
 \bin\Retail.

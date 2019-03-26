@@ -9,8 +9,7 @@ ECHO Mediation WebSite
 
 xcopy "C:\Publish\Mediation" /S /E /R /y /v /i /z /Q															"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Mediation\list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
-xcopy "C:\TFS\Mediation\Code\Mediation.Web\Web.config.exclude" /y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\"
-rename																											"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Web.config.exclude" "Web.config"
+xcopy "C:\TFS\Mediation\Code\Mediation.Web\Web.config.exclud" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Web.config*"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Bin\"
 ::by default load flat theme
 xcopy "C:\TFS\Mediation\Code\Mediation.Web\Images\flat-mediation-logoonheader.png" /S /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Images\logoonheader.png*"
