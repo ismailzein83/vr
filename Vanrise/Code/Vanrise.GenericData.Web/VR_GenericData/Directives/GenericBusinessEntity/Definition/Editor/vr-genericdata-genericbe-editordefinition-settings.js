@@ -11,7 +11,9 @@
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isnotrequired: '=',
+                showremoveicon:'@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -142,6 +144,8 @@
             var label = "Editor Type";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
+            var isrequired = attrs.isnotrequired == undefined ? ' isrequired="true"' : ' ';
+            var hideremoveicon = attrs.showremoveicon == undefined ? 'hideremoveicon' : ' ';
             var template =
                 '<vr-row>'
                     + '<vr-columns colnum="{{editorDefinitionCtrl.normalColNum}}">'
@@ -151,8 +155,9 @@
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
                             + ' label="' + label + '"'
-                            + ' isrequired="true"'
-                            + 'hideremoveicon>'
+                            + isrequired
+                            + hideremoveicon
+                            +'>'
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
