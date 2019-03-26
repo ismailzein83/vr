@@ -273,7 +273,7 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
                 if (customerMappings == undefined || customerMappings.length == 0)
                     return "";
 
-                var customerMappingDescription = "";
+                var customerMappingDescription = [];
                 for (var i = 0; i < customerMappings.length; i++) {
                     var currentCustomerMapping = customerMappings[i];
                     var ipAddressObj = currentCustomerMapping.IPAddress;
@@ -281,17 +281,17 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
                         var ipAddressValue = ipAddressObj.IPAddress;
 
                         if (VRValidationService.validateIp(ipAddressValue) || VRValidationService.validateIpV6(ipAddressValue))
-                            customerMappingDescription += ipAddressValue + "; ";
+                            customerMappingDescription.push(ipAddressValue);
                     }
                 }
-                return customerMappingDescription;
+                return customerMappingDescription.join("; ");
             }
 
             function buildSupplierMappingDescription(supplierMappings) {
                 if (supplierMappings == undefined || supplierMappings.length == 0)
                     return "";
 
-                var supplierMappingDescription = "";
+                var supplierMappingDescription = [];
                 for (var i = 0; i < supplierMappings.length; i++) {
                     var currentsupplierMapping = supplierMappings[i];
                     var ipAddressObj = currentsupplierMapping.IPAddress;
@@ -299,10 +299,10 @@ app.directive('whsRoutesyncCarrieraccountmappingCataleyaGrid', ['VRValidationSer
                         var ipAddressValue = ipAddressObj.IPAddress;
 
                         if (VRValidationService.validateIp(ipAddressValue) || VRValidationService.validateIpV6(ipAddressValue))
-                            supplierMappingDescription += ipAddressValue + "; ";
+                            supplierMappingDescription.push(ipAddressValue);
                     }
                 }
-                return supplierMappingDescription;
+                return supplierMappingDescription.join("; ");
             }
 
             function buildCustomerMappingDirectiveContext(carrierAccountMapping) {
