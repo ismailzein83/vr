@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Vanrise.Entities;
 using Vanrise.Security.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.BusinessProcess.Entities
 {
@@ -26,6 +27,7 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public string ProcessTitle { get; set; }
         public int? MaxConcurrentWorkflows { get; set; }
+        public VRGenericEditorDefinitionSetting EditorSettings { get; set; }
         public string Url { get; set; }
         public string ScheduleTemplateURL { get; set; }
         public string ManualExecEditor { get; set; }

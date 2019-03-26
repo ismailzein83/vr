@@ -22,5 +22,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes
         {
             return FieldType.GetRuntimeTypeDescription();
         }
+        public override GenericData.Entities.DataRecordFieldType GetFieldType()
+        {
+            return FieldType;
+        }
     }
 }

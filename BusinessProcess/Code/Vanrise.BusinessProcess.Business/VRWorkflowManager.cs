@@ -41,6 +41,30 @@ namespace Vanrise.BusinessProcess.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRWorkflows.ToBigResult(input, filterExpression, VRWorkflowDetailMapper));
         }
 
+        public List<VRWorkflowField> GetVRWorkflowFields(Guid vrWorkflowId)
+        {
+            var vrWorkflow = GetVRWorkflow(vrWorkflowId);
+            vrWorkflow.ThrowIfNull("vrWorkflow", vrWorkflowId);
+            vrWorkflow.Settings.ThrowIfNull("vrWorkflow.Settings", vrWorkflowId);
+            vrWorkflow.Settings.Arguments.ThrowIfNull("vrWorkflow.Settings.Arguments", vrWorkflowId);
+            List<VRWorkflowField> vrWorkflowFields = new List<VRWorkflowField>();
+            foreach (var argument in vrWorkflow.Settings.Arguments)
+            {
+                if (argument.Direction == VRWorkflowArgumentDirection.In)
+                {
+                    var fieldType = argument.Type.GetFieldType();
+                    if (fieldType != null)
+                    {
+                        vrWorkflowFields.Add(new VRWorkflowField()
+                        {
+                            Name = argument.Name,
+                            Type = fieldType
+                        });
+                    }
+                }
+            }
+            return vrWorkflowFields;
+        }
         public IEnumerable<VRWorkflowInfo> GetVRWorkflowsInfo(VRWorkflowFilter filter)
         {
             Func<VRWorkflow, bool> filterExpression = (item) =>
@@ -796,5 +820,10 @@ namespace Vanrise.BusinessProcess.Business
     {
         public List<string> ClassMembersErrors { get; set; }
         public bool Result { get; set; }
+    }
+    public class VRWorkflowField
+    {
+        public string Name { get; set; }
+        public GenericData.Entities.DataRecordFieldType Type { get; set; }
     }
 }

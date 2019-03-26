@@ -13,6 +13,10 @@ namespace Vanrise.BusinessProcess.Entities
         public abstract Type GetRuntimeType(IVRWorkflowVariableTypeGetRuntimeTypeContext context);
 
         public abstract string GetRuntimeTypeDescription();
+        public virtual GenericData.Entities.DataRecordFieldType GetFieldType()
+        {
+            return null;
+        }
     }
 
     public interface IVRWorkflowVariableTypeGetRuntimeTypeContext
