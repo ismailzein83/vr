@@ -859,13 +859,13 @@
     <Content Include="images\flat-tone-login.png" />
     <Content Include="images\flat-tone-logoonheader.png" />
     <Content Include="images\flat-tone-iconheader.ico" />
-    <Content Include="Web.config.CloudXPoint.exclude" />
-    <Content Include="WebBI.config.exclude" />
-    <Content Include="Web.config.CentralAuth.exclude">
+    <None Include="Web.config.CloudXPoint.exclud" />
+    <None Include="WebBI.config.exclud" />
+    <None Include="Web.config.CentralAuth.exclud">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.config.JAZZ.exclude" />
-    <Content Include="Web.config.SMS.exclude" />
+    </None>
+    <None Include="Web.config.JAZZ.exclud" />
+    <None Include="Web.config.SMS.exclud" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -948,14 +948,8 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Web.config.exclude">
+    <None Include="Web.config.exclud">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Web.config.Debug.exclude">
-      <DependentUpon>Web.config.exclude</DependentUpon>
-    </None>
-    <None Include="Web.config.Release.exclude">
-      <DependentUpon>Web.config.exclude</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
