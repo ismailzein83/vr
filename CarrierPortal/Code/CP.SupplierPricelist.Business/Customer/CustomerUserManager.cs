@@ -91,7 +91,7 @@ namespace CP.SupplierPricelist.Business
             return deleteOperationOutput;
         }
         #region Private Methods
-        Dictionary<int, CustomerUser> GetCachedCustomersUsers()
+        public Dictionary<int, CustomerUser> GetCachedCustomersUsers()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCustomers",
                () =>

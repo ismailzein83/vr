@@ -10,6 +10,12 @@ namespace CP.SupplierPricelist.Business
     public class CustomerGroup : GroupSettings
     {
         public override Guid ConfigId { get { return new Guid("9a1c1152-b9dc-4e4c-b2ff-181325cd6d9b"); } }
+
+        public override List<int> GetUserIds(IGroupSettingsGetUserIdsContext context)
+        {
+            return new CustomerUserManager().GetCachedCustomersUsers().Keys.ToList();
+        }
+
         public override bool IsMember(IGroupSettingsContext context)
         {
             if (context == null)

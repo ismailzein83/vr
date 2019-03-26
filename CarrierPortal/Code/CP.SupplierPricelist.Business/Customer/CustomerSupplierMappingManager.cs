@@ -177,7 +177,7 @@ namespace CP.SupplierPricelist.Business
         }
 
 
-        Dictionary<int, CustomerSupplierMapping> GetCachedCustomerSupplierMappings()
+        public Dictionary<int, CustomerSupplierMapping> GetCachedCustomerSupplierMappings()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCustomersSupplierMappings",
                () =>
