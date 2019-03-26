@@ -13,29 +13,27 @@ namespace Vanrise.Invoice.MainExtensions
         public override Guid ConfigId { get { return new Guid("8A958396-18C2-4913-BABB-FF31683C6A17"); } }
         public Guid ItemGroupingId { get; set; }
         public ItemGroupingSectionSettings Settings { get; set; }
-        public override List<InvoiceSubSectionGridColumn> GetSubsectionGridColumns(InvoiceType invoiceType, Guid uniqueSectionID, Guid? itemGroupingId)
+        public override List<InvoiceSubSectionGridColumn> GetSubsectionGridColumns(InvoiceType invoiceType, Guid uniqueSectionID)
         {
             List<InvoiceSubSectionGridColumn> gridColumns = null;
-            if (itemGroupingId.HasValue)
+
+            foreach (var subsection in invoiceType.Settings.SubSections)
             {
-                var itemGrouping = invoiceType.Settings.ItemGroupings.FindRecord(x => x.ItemGroupingId == itemGroupingId.Value);
-                itemGrouping.ThrowIfNull("itemGrouping", itemGroupingId.Value);
-                foreach (var subsection in invoiceType.Settings.SubSections)
+                var invoiceItemSubSection = subsection.Settings as ItemGroupingSection;
+                if (invoiceItemSubSection != null)
                 {
-                    var invoiceItemSubSection = subsection.Settings as ItemGroupingSection;
-                    if (invoiceItemSubSection != null)
+                    var itemGrouping = invoiceType.Settings.ItemGroupings.FindRecord(x => x.ItemGroupingId == invoiceItemSubSection.ItemGroupingId);
+                    itemGrouping.ThrowIfNull("itemGrouping", invoiceItemSubSection.ItemGroupingId);
+                    if (subsection.InvoiceSubSectionId == uniqueSectionID)
                     {
-                        if (subsection.InvoiceSubSectionId == uniqueSectionID)
-                        {
-                            gridColumns = GetGridColumns(invoiceItemSubSection.Settings.GridDimesions, invoiceItemSubSection.Settings.GridMeasures, itemGrouping);
+                        gridColumns = GetGridColumns(invoiceItemSubSection.Settings.GridDimesions, invoiceItemSubSection.Settings.GridMeasures, itemGrouping);
+                        break;
+                    }
+                    else
+                    {
+                        gridColumns = GetInvoiceSubSectionGridColumn(invoiceItemSubSection.Settings.SubSections, uniqueSectionID, itemGrouping);
+                        if (gridColumns != null)
                             break;
-                        }
-                        else
-                        {
-                            gridColumns = GetInvoiceSubSectionGridColumn(invoiceItemSubSection.Settings.SubSections, uniqueSectionID, itemGrouping);
-                            if (gridColumns != null)
-                                break;
-                        }
                     }
                 }
             }
