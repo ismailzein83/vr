@@ -38,24 +38,8 @@ namespace Vanrise.MobileNetwork.Business
 
         public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix)
         {
-            if (!string.IsNullOrEmpty(mnc) && !string.IsNullOrEmpty(mcc))
-            {
-                var mobileCountryId = new MobileCountryManager().GetMobileCountryIdByMCC(mcc);
-
-                if (mobileCountryId.HasValue)
-                    return new MobileNetworkManager().GetMobileNetwork(mnc, mobileCountryId.Value);
-            }
-
-            if (string.IsNullOrEmpty(mnc) && string.IsNullOrEmpty(mcc))
-            {
-                long? matchedNumberPrefixId;
-                var mobileNetworkId = new NumberPrefixManager().GetMobileNetworkByNumberPrefix(numberPrefix, out matchedNumberPrefixId);
-
-                if (mobileNetworkId.HasValue)
-                    return new MobileNetworkManager().GetMobileNetworkById(mobileNetworkId.Value);
-            }
-
-            return null;
+            long? matchedNumberPrefixId;
+            return GetMobileNetwork(mnc, mcc, numberPrefix, out matchedNumberPrefixId);
         }
 
         public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix, out long? matchedPrefixId)
@@ -67,7 +51,7 @@ namespace Vanrise.MobileNetwork.Business
                 var mobileCountryId = new MobileCountryManager().GetMobileCountryIdByMCC(mcc);
 
                 if (mobileCountryId.HasValue)
-                    return new MobileNetworkManager().GetMobileNetwork(mnc, mobileCountryId.Value);
+                    return GetMobileNetwork(mnc, mobileCountryId.Value);
             }
 
             if (string.IsNullOrEmpty(mnc) && string.IsNullOrEmpty(mcc))
@@ -75,7 +59,30 @@ namespace Vanrise.MobileNetwork.Business
                 var mobileNetworkId = new NumberPrefixManager().GetMobileNetworkByNumberPrefix(numberPrefix, out matchedPrefixId);
 
                 if (mobileNetworkId.HasValue)
-                    return new MobileNetworkManager().GetMobileNetworkById(mobileNetworkId.Value);
+                    return GetMobileNetworkById(mobileNetworkId.Value);
+            }
+
+            return null;
+        }
+
+        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix, out string matchedPrefix)
+        {
+            matchedPrefix = null;
+
+            if (!string.IsNullOrEmpty(mnc) && !string.IsNullOrEmpty(mcc))
+            {
+                var mobileCountryId = new MobileCountryManager().GetMobileCountryIdByMCC(mcc);
+
+                if (mobileCountryId.HasValue)
+                    return GetMobileNetwork(mnc, mobileCountryId.Value);
+            }
+
+            if (string.IsNullOrEmpty(mnc) && string.IsNullOrEmpty(mcc))
+            {
+                var mobileNetworkId = new NumberPrefixManager().GetMobileNetworkByNumberPrefix(numberPrefix, out matchedPrefix);
+
+                if (mobileNetworkId.HasValue)
+                    return GetMobileNetworkById(mobileNetworkId.Value);
             }
 
             return null;

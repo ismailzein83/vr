@@ -17,14 +17,25 @@ namespace Vanrise.MobileNetwork.Business
             return numberPrefixes.GetRecord(code);
         }
 
-        public int? GetMobileNetworkByNumberPrefix(string numberPrefix, out long? matchedPrefix)
+        public int? GetMobileNetworkByNumberPrefix(string numberPrefix, out long? matchedPrefixId)
+        {
+            matchedPrefixId = null;
+            CodeIterator<NumberPrefix> codeIterator = GetCodeIterator();
+            var matchedNumberPrefix = codeIterator.GetLongestMatch(numberPrefix);
+            if (matchedNumberPrefix == null)
+                return null;
+            matchedPrefixId = matchedNumberPrefix.Id;
+            return matchedNumberPrefix.MobileNetworkId;
+        }
+
+        public int? GetMobileNetworkByNumberPrefix(string numberPrefix, out string matchedPrefix)
         {
             matchedPrefix = null;
             CodeIterator<NumberPrefix> codeIterator = GetCodeIterator();
             var matchedNumberPrefix = codeIterator.GetLongestMatch(numberPrefix);
             if (matchedNumberPrefix == null)
                 return null;
-            matchedPrefix = matchedNumberPrefix.Id;
+            matchedPrefix = matchedNumberPrefix.Code;
             return matchedNumberPrefix.MobileNetworkId;
         }
         #endregion
