@@ -102,9 +102,14 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                         
                             List<TimeSpan> delays = GetDelays();
                             bool throwIfError = (delays == null || delays.Count == retryCount) && #THROWIFERROR#;
+
+                            WriteInformation(""'#SERVICENAME#' started"");
+
                             #ASSIGNISSUCCEEDED#vrHttpConnection.TrySendRequest(#ACTIONPATH#, Vanrise.Entities.VRHttpMethod.#HTTPMETHOD#, Vanrise.Entities.VRHttpMessageFormat.#MESSAGEFORMAT#, #URLPARAMETERS#,
                             #HEADERS#, #BODY#, (response) => OnResponseReceived(new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceResponse(response)),
                             throwIfError, (error) => OnError(new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceFault(error), onDelayCompleted, retryCount));
+
+                            WriteInformation(""'#SERVICENAME#' completed"");
                         }
 
                         #BUILDURLPARAMETERSMETHOD#
@@ -169,6 +174,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             nmSpaceCodeBuilder.Replace("#HTTPMETHOD#", this.Method.ToString());
             nmSpaceCodeBuilder.Replace("#RetrySettings#", this.RetrySettings.ToString());
             nmSpaceCodeBuilder.Replace("#ClassMembersCode#", this.ClassMembersCode);
+            nmSpaceCodeBuilder.Replace("#SERVICENAME#", this.ServiceName);
 
             if (this.URLParameters != null && this.URLParameters.Count > 0)
             {

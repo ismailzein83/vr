@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="BPInstanceProgressViews\SimilarProcessesProgressView.cs" />
     <Compile Include="BPInstance\TestingBPInstanceBeforeInsertHandler.cs" />
+    <Compile Include="BPTaskAssigne\GroupsBPTaskAssignee.cs" />
     <Compile Include="BPTaskAssigne\InitiatorBPTaskAssignee.cs" />
     <Compile Include="BPTaskAssigne\FixedUsersBPTaskAssignee.cs" />
     <Compile Include="BPTaskTypes\BPGenericTaskTypeAction\ExecuteBPGenericTaskTypeAction.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="VRWorkflowVariableTypes\VRWorkflowCustomClassType.cs" />
     <Compile Include="VRWorkflowVariableTypes\VRWorkflowGenericVariableType.cs" />
     <Compile Include="VRWorkflow_TaskAssignees\VRWorkflowProcessInitiatorTaskAssignees.cs" />
+    <Compile Include="VRWorkflow_TaskAssignees\VRWorkflowSpecificGroupsTaskAssignees.cs" />
     <Compile Include="VRWorkflow_TaskAssignees\VRWorkflowSpecificUsersTaskAssignees.cs" />
   </ItemGroup>
   <ItemGroup>

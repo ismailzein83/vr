@@ -43,6 +43,12 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                         {
                             _activityContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Error, message);
                         }
+
+                        public long GetProcessInstanceId()
+                        {
+                            return _activityContext.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+                        }
+
                         #VARIABLESPROPERTIES#
                     }
                 ");

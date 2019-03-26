@@ -122,6 +122,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             if (createTaskOutput != null && createTaskOutput.Result == Vanrise.BusinessProcess.Entities.CreateBPTaskResult.Succeeded)
                             {
                                 _activityContext.CreateBookmark(createTaskOutput.WFBookmarkName, OnTaskCompleted);
+                                WriteInformation(""'#TASKTITLE#' started"");
                             }
                             else
                             {
@@ -152,6 +153,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                         public void OnTaskCompleted()
                         {
                             #TASKCOMPLETEDCODE#
+                            WriteInformation(""'#TASKTITLE#' completed"");
                         }
                     }
                 }");
@@ -169,6 +171,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             dataRecordRuntimeType.ThrowIfNull("dataRecordRuntimeType", genericTaskTypeSettings.RecordTypeId);
 
             nmSpaceCodeBuilder.Replace("#TASKDATARECORDTYPERUNTIMETYPE#", CSharpCompiler.TypeToString(dataRecordRuntimeType));
+            nmSpaceCodeBuilder.Replace("#TASKTITLE#", this.DisplayName);
+
 
             if (this.InputItems != null && this.InputItems.Count > 0)
             {

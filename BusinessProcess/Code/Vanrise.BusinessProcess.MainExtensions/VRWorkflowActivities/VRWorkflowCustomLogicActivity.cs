@@ -24,11 +24,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                 namespace #NAMESPACE#
                 {
-                    public class #CLASSNAME# : CodeActivity
+                    public class #CLASSNAME# : BaseCodeActivity
                     {
-                        protected override void Execute(CodeActivityContext context)
+                        protected override void VRExecute(IBaseCodeActivityContext context)
                         {
-                            var executionContext = new #CLASSNAME#ExecutionContext(context);
+                            var executionContext = new #CLASSNAME#ExecutionContext(context.ActivityContext);
                             executionContext.Execute();
                         }
                     }
