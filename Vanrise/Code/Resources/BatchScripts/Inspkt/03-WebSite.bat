@@ -9,18 +9,14 @@ ECHO.
 ECHO Inspkt WebSite
 
 xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\RetailSource\list-of-excluded-files.txt
-xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.RecordAnalysis.exclude" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\Inspkt-logoonheader.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\Inspkt-login.png" /S /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\Inspkt-iconheader.ico" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
+xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.RecordAnalysis.exclud" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Web.config*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\Inspkt-logoonheader.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\logoonheader.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\Inspkt-login.png" /S /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\login.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\Inspkt-iconheader.ico" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\iconheader.ico*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\menu-icons" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\menu-icons\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\figure-icons" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\figure-icons\"
-rename																												"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Web.config.RecordAnalysis.exclude" "Web.config"
-rename																												"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\Inspkt-logoonheader.png" "logoonheader.png"
-rename																												"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\Inspkt-login.png" "login.png"
-rename																												"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Images\Inspkt-iconheader.ico" "iconheader.ico"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Bin\"
-xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Client\Modules\Common\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Inspkt\%YYYYMMDD%\Client\Modules\VR_Notification\"
