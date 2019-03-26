@@ -16,6 +16,7 @@
                         <span ng-if="scopeModel.loadVRWorklowSelector">
                             <businessprocess-vr-workflow-selector on-ready="scopeModel.onVRWorkflowSelectorReady"
                                                                   onselectionchanged="scopeModel.onVRWorkflowSelectionChanged"
+                                                                  selectedvalues="scopeModel.selectedVRWorkflow"
                                                                   normal-col-num="4" isrequired="true" hideremoveicon></businessprocess-vr-workflow-selector>
                         </span>
                         <span ng-if="scopeModel.loadVRWorklowSelector">
@@ -32,6 +33,9 @@
                             </vr-columns>
                         </span>
                     </vr-row>
+                </vr-tab>
+                <vr-tab header="'Editor'" ng-if="scopeModel.selectedVRWorkflow!=undefined">
+                    <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="4" selectedvalues="scopeModel.selectedEditor" isnotrequired showremoveicon></vr-genericdata-genericbe-editordefinition-settings>
                 </vr-tab>
                 <vr-tab header="'Security'">
                     <vr-row>

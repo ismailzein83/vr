@@ -29,6 +29,11 @@
         var bpInstanceInsertHandlerSettingsAPI;
         var bpInstanceInsertHandlerSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var editorDefinitionAPI;
+        var editorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var vrWorkflowFields;
+
         loadParameters();
         defineScope();
         load();
@@ -71,6 +76,11 @@
                 bpInstanceInsertHandlerSettingsReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onGenericBEEditorDefinitionDirectiveReady = function (api) {
+                editorDefinitionAPI = api;
+                editorDefinitionReadyPromiseDeferred.resolve();
+            };
+
             $scope.scopeModel.onVRWorkflowSelectionChanged = function (selectedVRWorkflow) {
                 validationMessages = undefined;
                 if (selectedVRWorkflow != undefined) {
@@ -83,9 +93,18 @@
                         getVRWorkflowArguments(selectedVRWorkflow.VRWorkflowId).then(function () {
                             $scope.scopeModel.processTitle = "";
                             $scope.scopeModel.isLoadingArguments = false;
-                        }).catch(function () {
+                        }).catch(function (error) {
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
                             $scope.scopeModel.isLoadingArguments = false;
+                        });
+                        getVRWorkflowFields(selectedVRWorkflow.VRWorkflowId).then(function () {
+                            if (editorDefinitionAPI != undefined) {
+                                var setEditorLoader = function (value) { $scope.scopeModel.isLoadingEditor = value; };
+                                var editorPayload = {
+                                    context: getContext()
+                                };
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, editorDefinitionAPI, editorPayload, setEditorLoader);
+                            }
                         });
                     }
                 }
@@ -172,6 +191,18 @@
             return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowArguments(vrWorkflowId).then(function (response) {
                 vrWorkflowArguments = response;
             });
+        }
+
+        function loadEditorDefinitionDirective() {
+            var loadEditorDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+            editorDefinitionReadyPromiseDeferred.promise.then(function () {
+                var editorPayload = {
+                    settings: businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.Configuration != undefined ? businessProcessDefinitionEntity.Configuration.EditorSettings : undefined,
+                    context: getContext()
+                };
+                VRUIUtilsService.callDirectiveLoad(editorDefinitionAPI, editorPayload, loadEditorDefinitionDirectivePromiseDeferred);
+            });
+            return loadEditorDefinitionDirectivePromiseDeferred.promise;
         }
 
         function loadAllControls() {
@@ -277,7 +308,7 @@
 
                 return bpInstanceInsertHandlerSettingsLoadPromiseDeferred.promise;
             }
-
+       
             function GetVRWorkflowArguments() {
                 if (!isEditMode || businessProcessDefinitionEntity.VRWorkflowId == undefined)
                     return;
@@ -290,7 +321,7 @@
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     getVRWorkflowArgumentsLoadDeferred.reject();
-                });
+                    });
 
                 vrWorkflowSelectorSelectionChangedDeferred.promise.then(function () {
                     vrWorkflowSelectorSelectionChangedDeferred = undefined;
@@ -298,9 +329,13 @@
 
                 return getVRWorkflowArgumentsLoadDeferred.promise;
             }
-
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRWorkflowSelector, GetVRWorkflowArguments, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission,
-                loadScheduleTaskRequiredPermission, loadBPInstanceInsertHandlerSettings]).then(function () {
+            var operations = [setTitle, loadStaticData, loadVRWorkflowSelector, GetVRWorkflowArguments, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission,
+                loadScheduleTaskRequiredPermission, loadBPInstanceInsertHandlerSettings];
+            if (businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.VRWorkflowId != undefined) {
+                operations.push(getVRWorkflowFields);
+                operations.push(loadEditorDefinitionDirective);
+            }
+            return UtilsService.waitMultipleAsyncOperations(operations).then(function () {
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
@@ -308,7 +343,13 @@
                 });
         }
 
-
+        function getVRWorkflowFields(vrWorkflowId) {
+            if (vrWorkflowId == undefined)
+                vrWorkflowId = businessProcessDefinitionEntity.VRWorkflowId;
+            return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowFields(vrWorkflowId).then(function (response) {
+                vrWorkflowFields = response;
+            });
+        }
         function insert() {
             $scope.scopeModel.isLoading = true;
             validationMessages = undefined;
@@ -363,6 +404,40 @@
 
             return updateBPDefintionPromiseDeferred.promise;
         }
+        function getContext() {
+            return {
+                getDataRecordTypeId: function () {
+                    return undefined;
+                },
+                getRecordTypeFields: function () {
+                    var data = [];
+                    if (vrWorkflowFields != undefined && vrWorkflowFields.length > 0) {
+                        for (var i = 0; i < vrWorkflowFields.length; i++) {
+                            data.push(vrWorkflowFields[i]);
+                        }
+                    }
+                    return data;
+                },
+                getFields: function () {
+                    var dataFields = [];
+                    if (vrWorkflowFields != undefined && vrWorkflowFields.length > 0) {
+                        for (var i = 0; i < vrWorkflowFields.length; i++) {
+                            var field = vrWorkflowFields[i];
+                            dataFields.push({
+                                FieldName: field.Name,
+                                FieldTitle: field.Name,
+                                Type: field.Type
+                            });
+                        }
+                    }
+                    return dataFields;
+                },
+                getActionInfos: function () {
+                    var data = [];
+                    return data;
+                }
+            };
+        }
 
         function buildBPEntityObjFromScope() {
             var obj;
@@ -387,6 +462,7 @@
                 StartNewInstance: startNewInstancePermissionAPI.getData(),
                 ScheduleTask: scheduleTaskPermissionAPI.getData()
             };
+            obj.Configuration.EditorSettings = editorDefinitionAPI != undefined ? editorDefinitionAPI.getData() : undefined;
             return obj;
         }
     }
