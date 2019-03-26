@@ -818,6 +818,9 @@
     <Content Include="images\cloudXPoint-flat-iconheader.ico" />
     <Content Include="images\cloudXPoint-flat-login.png" />
     <Content Include="images\cloudXPoint-flat-logoonheader.png" />
+    <Content Include="images\flat-CentralAuth-iconheader.ico" />
+    <Content Include="images\flat-CentralAuth-login.png" />
+    <Content Include="images\flat-CentralAuth-logoonheader.png" />
     <Content Include="images\menu-icons\CDR Compare Tool-tile.png" />
     <Content Include="images\menu-icons\CDR Compare Tool.png" />
     <Content Include="images\menu-icons\Deals Module-tile.png" />
