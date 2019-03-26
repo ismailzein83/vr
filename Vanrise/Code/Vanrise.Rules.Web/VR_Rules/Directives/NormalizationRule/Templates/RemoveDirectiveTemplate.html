@@ -7,15 +7,15 @@
     </vr-select>
 </vr-columns>
 <vr-columns width="1/4row">
-    <vr-textbox value="scopeModel.textToRemove" label="Text" type="text" isrequired="true"></vr-textbox>
-</vr-columns>
-<vr-columns width="1/4row">
     <vr-select datasource="scopeModel.textOccurrences"
                selectedvalues="scopeModel.selectedTextOccurrence"
                datavaluefield="value"
                datatextfield="description"
                label="Text Occurrence" isrequired="true" hideremoveicon>
     </vr-select>
+</vr-columns>
+<vr-columns width="1/4row">
+    <vr-textbox value="scopeModel.textToRemove" label="Text" type="text" isrequired="true"></vr-textbox>
 </vr-columns>
 <vr-columns width="1/4row">
     <vr-switch value="scopeModel.includingText" label="Including Text" type="text"></vr-switch>
