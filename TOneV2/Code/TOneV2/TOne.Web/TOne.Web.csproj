@@ -798,6 +798,9 @@
     <Content Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="images\default-tone-iconheader.ico" />
+    <Content Include="images\default-tone-login.png" />
+    <Content Include="images\default-tone-logoonheader.png" />
     <Content Include="images\figure-icons\inbound-traffic.png" />
     <Content Include="images\figure-icons\income.png" />
     <Content Include="images\figure-icons\kpi.png" />
@@ -853,9 +856,9 @@
     <Content Include="NImages\menu-icons\switch.png" />
     <Content Include="NImages\menu-icons\SystemProcesses.png" />
     <Content Include="NImages\menu-icons\NOC.png" />
-    <Content Include="images\TOne-flat-login.png" />
-    <Content Include="images\TOne-flat-logoonheader.png" />
-    <Content Include="images\TOne-flat-iconheader.ico" />
+    <Content Include="images\flat-tone-login.png" />
+    <Content Include="images\flat-tone-logoonheader.png" />
+    <Content Include="images\flat-tone-iconheader.ico" />
     <Content Include="Web.config.CloudXPoint.exclude" />
     <Content Include="WebBI.config.exclude" />
     <Content Include="Web.config.CentralAuth.exclude">
