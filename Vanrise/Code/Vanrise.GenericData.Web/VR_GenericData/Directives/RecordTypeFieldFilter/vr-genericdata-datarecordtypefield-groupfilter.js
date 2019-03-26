@@ -59,11 +59,11 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                     ctrl.rules.push(rule);
                 };
 
-                ctrl.removeRule = function (rule) {
+                $scope.removeRule = function (rule) {
                     ctrl.rules.splice(ctrl.rules.indexOf(rule), 1);
                 };
 
-                ctrl.removeGroup = function (group) {
+                $scope.removeGroup = function (group) {
                     ctrl.groups.splice(ctrl.groups.indexOf(group), 1);
                 };
 
