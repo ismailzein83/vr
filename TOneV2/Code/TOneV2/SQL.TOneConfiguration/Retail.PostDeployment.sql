@@ -155,7 +155,8 @@ as (select * from (values
 ('A1D0F08B-B8F7-4B9C-9C83-49DABD2A68D5','Monthly Recurring Charge Period','Monthly','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-monthly"}'),
 ('447B67A5-DBEA-4410-9C00-C8D297B8F81C','Yearly Recurring Charge Period','Yearly','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-yearly"}'),
 ('F0871B89-11BC-42D0-BA88-244DE96F581A','Operator Bank Details','Operator Bank Details','VR_Invoice_InvoiceType_RDLCDataSourceSettings','{"Editor":"retail-be-account-datasourcesettings-operatorbankdetails"}'),
-('A5FDAE33-89A4-457E-889F-CFA004B74395','StartBPProcessAction','Start BP Process','Retail_BE_AccountActionDefinitionConfig',' {"Editor":"retail-be-accountactiondefinitionsettings-startbpprocess"}')
+('A5FDAE33-89A4-457E-889F-CFA004B74395','StartBPProcessAction','Start BP Process','Retail_BE_AccountActionDefinitionConfig',' {"Editor":"retail-be-accountactiondefinitionsettings-startbpprocess"}'),
+('E3148386-1049-416A-876F-19C6C42B30A0','Retail_BE_GenericBEView','Generic BE ','Retail_BE_AccountViewDefinitionConfig','{ "Editor":"retail-be-accountviewdefinitionsettings-genericbeaccount"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
