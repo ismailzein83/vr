@@ -16,6 +16,9 @@
         var viewSettingsDirectiveAPI;
         var viewSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var viewConditionDirectiveAPI;
+        var viewConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -28,16 +31,19 @@
             }
             isEditMode = (viewDefinition != undefined);
         }
+
         function defineScope() {
             $scope.scopeModel = {};
-
-
 
             $scope.scopeModel.onViewDefinitionSettingDirectiveReady = function (api) {
                 viewSettingsDirectiveAPI = api;
                 viewSettingsReadyPromiseDeferred.resolve();
             };
 
+            $scope.scopeModel.onViewDefinitionConditionDirectiveReady = function (api) {
+                viewConditionDirectiveAPI = api;
+                viewConditionReadyPromiseDeferred.resolve();
+            };
 
 
             $scope.scopeModel.saveViewDefinition = function () {
@@ -87,7 +93,19 @@
                     return loadViewSettingsPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadSettingDirectiveSection]).then(function () {
+                function loadConditionDirectiveSection() {
+                    var loadViewConditionPromiseDeferred = UtilsService.createPromiseDeferred();
+                    viewConditionReadyPromiseDeferred.promise.then(function () {
+                        var payload = {
+                            condition: viewDefinition != undefined && viewDefinition.Condition != undefined ? viewDefinition.Condition : undefined,
+                            context: context
+                        };
+                        VRUIUtilsService.callDirectiveLoad(viewConditionDirectiveAPI, payload, loadViewConditionPromiseDeferred);
+                    });
+                    return loadViewConditionPromiseDeferred.promise;
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadSettingDirectiveSection, loadConditionDirectiveSection]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -102,7 +120,8 @@
             return {
                 GenericBEViewDefinitionId: viewDefinition != undefined ? viewDefinition.GenericBEViewDefinitionId : UtilsService.guid(),
                 Name: $scope.scopeModel.name,
-                Settings: viewSettingsDirectiveAPI.getData()
+                Settings: viewSettingsDirectiveAPI.getData(),
+                Condition: viewConditionDirectiveAPI.getData()
             };
         }
 

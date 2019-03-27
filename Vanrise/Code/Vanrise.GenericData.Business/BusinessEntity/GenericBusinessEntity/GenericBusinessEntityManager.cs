@@ -1258,11 +1258,11 @@ namespace Vanrise.GenericData.Business
             var gridDefinition = _genericBEDefinitionManager.GetGenericBEDefinitionGridDefinition(businessEntityDefinitionId);
             if (gridDefinition != null)
             {
+                var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
                 if (gridDefinition.GenericBEGridActions != null)
                 {
                     var genericBeActions = _genericBEDefinitionManager.GetCachedGenericBEActionsByActionId(businessEntityDefinitionId);
                     genericBusinessEntityDetail.AvailableGridActionIds = new List<Guid>();
-                    var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
                     GenericBEActionFilterConditionContext genericBEActionFilterConditionContext = new GenericBEActionFilterConditionContext { Entity = genericBusinessEntity, DefinitionSettings = genericBEDefinitionSetting };
                     foreach (var genericBEGridAction in gridDefinition.GenericBEGridActions)
                     {
@@ -1291,12 +1291,17 @@ namespace Vanrise.GenericData.Business
                 if (gridDefinition.GenericBEGridViews != null)
                 {
                     genericBusinessEntityDetail.AvailableGridViewIds = new List<Guid>();
+                    GenericBEGridConditionContext genericBEGridConditionContext = new GenericBEGridConditionContext { Entity = genericBusinessEntity, DefinitionSettings = genericBEDefinitionSetting };
                     foreach (var genericBEGridView in gridDefinition.GenericBEGridViews)
                     {
                         var viewSettings = genericBEGridView.Settings;
                         viewSettings.ThrowIfNull("Generic BE View Settings", genericBEGridView.GenericBEViewDefinitionId);
-                        if (viewSettings.DoesUserHaveAccess(viewContext))
-                            genericBusinessEntityDetail.AvailableGridViewIds.Add(genericBEGridView.GenericBEViewDefinitionId);
+
+                        if (genericBEGridView.Condition == null || genericBEGridView.Condition.IsMatch(genericBEGridConditionContext))
+                        {
+                            if (viewSettings.DoesUserHaveAccess(viewContext))
+                                genericBusinessEntityDetail.AvailableGridViewIds.Add(genericBEGridView.GenericBEViewDefinitionId);
+                        }
                     }
                 }
             }

@@ -305,6 +305,12 @@ namespace Vanrise.GenericData.Business
             return extensionConfigurationManager.GetExtensionConfigurations<GenericBEBulkActionSettingsConfig>(GenericBEBulkActionSettingsConfig.EXTENSION_TYPE);
         }
 
+        public IEnumerable<GenericBEGridConditionConfig> GetGenericBEGridConditionConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<GenericBEGridConditionConfig>(GenericBEGridConditionConfig.EXTENSION_TYPE);
+        }
+
         #endregion
     }
 }

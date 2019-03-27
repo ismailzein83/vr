@@ -77,6 +77,11 @@
         function GetGenericBEBulkActionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEBulkActionSettingsConfigs"));
         }
+
+        function GetGenericBEGridConditionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEGridConditionConfigs"));
+        }
+
         return ({
             
             GetGenericBEDefinitionSettings: GetGenericBEDefinitionSettings,
@@ -99,7 +104,8 @@
             GetRemoteGenericBEDefinitionInfo: GetRemoteGenericBEDefinitionInfo,
             GetUpdateBulkActionGenericBEFieldsRuntime: GetUpdateBulkActionGenericBEFieldsRuntime,
             GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs: GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs,
-            GetGenericBEBulkActionSettingsConfigs: GetGenericBEBulkActionSettingsConfigs
+            GetGenericBEBulkActionSettingsConfigs: GetGenericBEBulkActionSettingsConfigs,
+            GetGenericBEGridConditionConfigs: GetGenericBEGridConditionConfigs
         });
     }
     appControllers.service("VR_GenericData_GenericBEDefinitionAPIService", genericBusinessEntityDefinitionAPIService);
