@@ -23,6 +23,7 @@ IF (@AfterLastUpdateTime IS NULL)
 			, [Decision]
 			, [CreatedTime] 
 			, [LastUpdatedTime]
+			, [TakenBy]
             INTO #temp_table
             FROM [BP].[BPTask]  WITH(NOLOCK) 
             
@@ -49,6 +50,7 @@ ELSE
 			, [Decision]
 			, [CreatedTime] 
 			, [LastUpdatedTime]
+			, [TakenBy]
             INTO #temp2_table
             FROM [BP].[BPTask]  WITH(NOLOCK) 
             

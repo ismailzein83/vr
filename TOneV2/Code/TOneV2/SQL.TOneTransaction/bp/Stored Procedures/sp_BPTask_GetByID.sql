@@ -9,7 +9,7 @@ CREATE PROCEDURE [bp].[sp_BPTask_GetByID]
 AS
 BEGIN
 Select	[ID], [ProcessInstanceID], [TypeID] , [Title] , [AssignedUsers], [AssignedUsersDescription], [ExecutedBy] , [Status] , 
-		[TaskData] ,[TaskExecutionInformation] , [CreatedTime] , [LastUpdatedTime], [Notes], [Decision]
+		[TaskData] ,[TaskExecutionInformation] , [CreatedTime] , [LastUpdatedTime], [Notes], [Decision], [TakenBy]
 from	[bp].[BPTask] WITH(NOLOCK) 
 where	ID = @TaskID 
 END

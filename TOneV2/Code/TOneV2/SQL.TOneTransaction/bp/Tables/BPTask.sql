@@ -13,9 +13,12 @@
     [Decision]                 NVARCHAR (255)   NULL,
     [CreatedTime]              DATETIME         CONSTRAINT [DF_BPTask_CreatedTime] DEFAULT (getdate()) NOT NULL,
     [LastUpdatedTime]          DATETIME         NOT NULL,
+    [TakenBy]                  INT              NULL,
     [timestamp]                ROWVERSION       NULL,
     CONSTRAINT [PK_BPTask] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -22,6 +22,7 @@ SELECT TOP(@NbOfRows)[ID]
 			, [CreatedTime] 
 			, [LastUpdatedTime]
 			, [timestamp]
+			, [TakenBy]
 	FROM	[BP].[BPTask]   WITH(NOLOCK) 
 	WHERE	ID < @LessThanID 
 			AND (@ProcessInstanceId is null or ProcessInstanceID = @ProcessInstanceId)

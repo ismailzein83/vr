@@ -247,6 +247,8 @@
     <Build Include="runtime\Stored Procedures\sp_RuntimeManager_GetNonTimedOutRuntimeManagerInstanceID.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetByID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTask_UpdateTask.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTask_Release.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTask_Assign.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessProcess.PostDeployment.sql" />
