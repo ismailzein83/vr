@@ -11,6 +11,7 @@ xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.NR.exclud" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Web.config*"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Bin\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\menu-icons" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Images\menu-icons\"
 ::by default load flat theme
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-retail-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Images\logoonheader.png*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-retail-login.png" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Images\login.png*"
