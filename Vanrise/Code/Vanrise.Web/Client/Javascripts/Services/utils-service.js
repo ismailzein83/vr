@@ -7,7 +7,7 @@
 
         "use strict";
 
-        var  dateFormat = function () {
+        var dateFormat = function () {
             var token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
                 timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
                 timezoneClip = /[^-+\dA-Z]/g,
@@ -101,8 +101,8 @@
             isoDateTime: "yyyy-mm-dd'T'HH:MM:ss",
             isoFullDateTime: "yyyy-mm-dd'T'HH:MM:ss.l",
             isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'",
-            LongDateTime:"yyyy-mm-dd HH:MM:ss",
-            DateTime:"yyyy-mm-dd HH:MM",
+            LongDateTime: "yyyy-mm-dd HH:MM:ss",
+            DateTime: "yyyy-mm-dd HH:MM",
             Date: "yyyy-mm-dd"
         };
 
@@ -310,8 +310,7 @@
             if (pendingPromises == 0)
                 deferred.resolve();
             angular.forEach(promises, function (promise) {
-
-                promise.then(function () {
+                promise && promise.then(function () {
                     if (isRejected)
                         return;
                     pendingPromises--;
@@ -557,7 +556,7 @@
         }
 
         function getDateTimeFormat(date, dateTimeFormatEnumObject) {
-          return dateFormat(date, dateFormat.masks[dateTimeFormatEnumObject.mask]);
+            return dateFormat(date, dateFormat.masks[dateTimeFormatEnumObject.mask]);
         }
 
 
@@ -938,7 +937,7 @@
             $.fn.textWidth = function (text, font) {
                 if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
                 $.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
-                var width =  $.fn.textWidth.fakeEl.width();
+                var width = $.fn.textWidth.fakeEl.width();
                 $.fn.textWidth.fakeEl.remove();
                 return width;
             };
@@ -948,7 +947,7 @@
         function getUnitCeildWidthNextStepValue(x) {
             var step = 1;
             if (x <= step)
-                return step;           
+                return step;
             while (step < x) {
                 step = step * 2;
             }
@@ -977,7 +976,7 @@
             getLogEntryTypeColor: getLogEntryTypeColor,
             getLogEntryType: getLogEntryType,
             getEnum: getEnum,
-            getDateTimeFormat:getDateTimeFormat,
+            getDateTimeFormat: getDateTimeFormat,
             dateToServerFormat: dateToServerFormat,
             getPropMinValueFromArray: getPropMinValueFromArray,
             getShortDate: getShortDate,
