@@ -1,50 +1,86 @@
-﻿
-<vr-row removeline>
-    <vr-devtools-columns-selector vr-loader="scopeModel.isIdentifierColumnsDirectiveloading" label="Identifier Columns" onselectionchanged="scopeModel.onIdentifierColumnsChanged" on-ready="scopeModel.onIdentifierColumnsDirectiveReady" ismultipleselection isrequired="true" normal-col-num="2"></vr-devtools-columns-selector>
-    <vr-columns colnum="2">
-        <vr-label>Identity</vr-label>
-        <vr-switch value="scopeModel.IsIdentity"></vr-switch>
-    </vr-columns>
-    <vr-devtools-generated-script-query-type-selector vr-loader="scopeModel.isQueryTypeDirectiveloading" label="Query Type" on-ready="scopeModel.onQueryTypeDirectiveReady" normal-col-num="2" onselectionchanged="scopeModel.onQueryTypeChanged"></vr-devtools-generated-script-query-type-selector>
-    <vr-devtools-columns-selector vr-loader="scopeModel.isInsertColumnsDirectiveloading" label="Insert Columns" onselectionchanged="scopeModel.onInsertColumnsChanged" on-ready="scopeModel.onInsertColumnsDirectiveReady" ismultipleselection isrequired="scopeModel.insertColumnsRequired" normal-col-num="2"></vr-devtools-columns-selector>
-    <vr-devtools-columns-selector vr-loader="scopeModel.isUpdateColumnsDirectiveloading" label="Update Columns" onselectionchanged="scopeModel.onUpdateColumnsChanged" on-ready="scopeModel.onUpdateColumnsDirectiveReady" ismultipleselection isrequired="scopeModel.updateColumnsRequired" normal-col-num="2"></vr-devtools-columns-selector>
-</vr-row>
-<vr-label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Where Condition:</vr-label>
-<vr-row removeline>
-    <vr-columns colnum="11">
-        <vr-textarea value="scopeModel.sqlFilter"></vr-textarea>
-    </vr-columns>
-    <vr-columns colnum="1">
-        <vr-button type="Search" buttontitle="Execute Query" customlabel="Execute Query" standalone data-onclick="scopeModel.executeQuery" vr-disabled="scopeModel.disableExecuteQuery()"></vr-button>
-    </vr-columns>
-</vr-row>
-<div removeline>
-    <vr-row removeline>
-        <vr-columns colnum="5">
-        </vr-columns>
-    </vr-row>
-    <vr-row removeline>
-        <vr-columns colnum="5">
-            <vr-section header="All Table Data">
-                <vr-devtools-table-data-grid on-ready="scopeModel.onTableDataGridReady"></vr-devtools-table-data-grid>
-            </vr-section>
-        </vr-columns>
-        <vr-columns colnum="2">
-            <vr-button type="Comment" standalone data-onclick="scopeModel.generateSelectedTableDataGrid" vr-disabled="scopeModel.disablegenerateSelectedTableDataGrid()"></vr-button>
-        </vr-columns>
-        <vr-columns colnum="5">
-            <vr-section header="Selected Table Data">
-                <div removeline>
-                    <vr-devtools-selected-table-data-grid on-ready="scopeModel.onSelectedTableDataGridReady"></vr-devtools-selected-table-data-grid>
-                </div>
-            </vr-section>
-        </vr-columns>
-    </vr-row>
-    <vr-row removeline>
-        <vr-columns colnum="5">
-            <vr-section header="Variables">
-                <vr-devtools-generated-script-variables-grid on-ready="scopeModel.onVariablesGridReady"></vr-devtools-generated-script-variables-grid>
-            </vr-section>
-        </vr-columns>
-    </vr-row>
-</div>
+﻿<vr-panel vr-loader="scopeModel.isLoading">
+    <vr-tabs>
+        <vr-tab header="'Data Structure'">
+            <vr-row>
+                <vr-devtools-columns-selector on-ready="scopeModel.onColumnsDirectiveReady" vr-loader="scopeModel.isColumnsDirectiveloading" label="Columns"
+                                              selectedvalues="scopeModel.selectedColumns" onselectitem="scopeModel.onColumnSelected" ondeselectitem="scopeModel.onColumnDeselected"
+                                              onselectionchanged="scopeModel.onColumnsChanged" ismultipleselection isrequired="true" normal-col-num="2" ondeselectallitems="scopeModel.clearAllColumns"></vr-devtools-columns-selector>
+                <vr-columns colnum="2">
+                    <vr-label>Identity</vr-label>
+                    <vr-switch value="scopeModel.IsIdentity"></vr-switch>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-section title="Columns">
+                        <vr-validator validate="scopeModel.validateColumnsSelection()">
+                            <vr-datagrid datasource="ctrl.datasource"
+                                         enabledraggablerow="true"
+                                         hidegridmenu
+                                         ondeleterow="scopeModel.onDeleteColumn">
+                                <vr-datagridcolumn headertext="'Column'">
+                                    <vr-label>{{dataItem.data.ColumnName}}</vr-label>
+                                </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Identifier'">
+                                    <vr-switch value="dataItem.data.IsIdentifier"></vr-switch>
+                                </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Include In Insert'">
+                                    <vr-switch value="dataItem.data.IncludeInInsert"></vr-switch>
+                                </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Include In Update'">
+                                    <vr-switch value="dataItem.data.IncludeInUpdate"></vr-switch>
+                                </vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-validator>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+        </vr-tab>
+        <vr-tab header="'Data'" ontabselected="scopeModel.onDataTabSelected">
+            <vr-label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Where Condition:</vr-label>
+            <vr-row removeline>
+                <vr-columns colnum="10">
+                    <vr-textarea value="scopeModel.sqlFilter"  hint="Example: Name like'name'"></vr-textarea>
+                </vr-columns>
+                <vr-columns colnum="1">
+                    <vr-button type="Search" buttontitle="Execute Query" customlabel="Execute Query" standalone data-onclick="scopeModel.executeQuery" vr-disabled="scopeModel.disableExecuteQuery()"></vr-button>
+                </vr-columns>
+            </vr-row>
+            <vr-label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Join Statement:</vr-label>
+                <vr-row removeline>
+                    <vr-columns colnum="10">
+                        <vr-textarea value="scopeModel.sqlJoinStatement" hint="Example: Join [source].[data] as src on MainTable.SourceID=src.ID"></vr-textarea>
+                    </vr-columns>
+                </vr-row>
+                <vr-row removeline>
+                    <vr-columns colnum="5">
+                    </vr-columns>
+                </vr-row>
+                <vr-row removeline>
+                    <vr-columns colnum="6">
+                        <vr-section header="All Table Data">
+                            <vr-devtools-table-data-grid on-ready="scopeModel.onTableDataGridReady"></vr-devtools-table-data-grid>
+                        </vr-section>
+                    </vr-columns>
+
+                    <vr-columns colnum="6">
+                        <vr-section header="Selected Table Data">
+                            <div removeline>
+                                <vr-devtools-selected-table-data-grid on-ready="scopeModel.onSelectedTableDataGridReady"></vr-devtools-selected-table-data-grid>
+                            </div>
+                        </vr-section>
+                    </vr-columns>
+                </vr-row>
+        </vr-tab>
+        <vr-tab header="'Variables'">
+            <vr-row removeline>
+                <vr-columns colnum="12">
+                    <vr-section header="Variables">
+                        <vr-devtools-generated-script-variables-grid on-ready="scopeModel.onVariablesGridReady"></vr-devtools-generated-script-variables-grid>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+        </vr-tab>
+    </vr-tabs>
+
+    </vr-panel>

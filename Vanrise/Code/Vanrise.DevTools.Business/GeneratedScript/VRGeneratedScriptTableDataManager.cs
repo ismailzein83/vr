@@ -14,51 +14,48 @@ namespace Vanrise.DevTools.Business
         #region Public Methods
 
         VRGeneratedScriptTableDataQuery query = new VRGeneratedScriptTableDataQuery();
-        public IDataRetrievalResult<VRGeneratedScriptTableDataDetails> GetFilteredTableData(DataRetrievalInput<VRGeneratedScriptTableDataQuery> input)
+        public IEnumerable<VRGeneratedScriptTableDataDetails> GetFilteredTableData(VRGeneratedScriptTableDataQuery query)
         {
             IVRGeneratedScriptTableDataDataManager tableDataDataManager = VRDevToolsFactory.GetDataManager<IVRGeneratedScriptTableDataDataManager>();
 
-            Guid connectionId = input.Query.ConnectionId;
+            Guid connectionId = query.ConnectionId;
             SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
             string connectionString = (settings != null) ? settings.ConnectionString : null;
             tableDataDataManager.Connection_String = connectionString;
 
-            query = input.Query;
-            string resultKey = input.ResultKey;
-            List<GeneratedScriptItemTableRow> allTableData = tableDataDataManager.GetTableData(input.Query.SchemaName, input.Query.TableName, input.Query.WhereCondition);
-            Func<GeneratedScriptItemTableRow, bool> filterExpression = (TableData) =>
-            {
-                return true;
-            };
+            return tableDataDataManager.GetTableData(query.SchemaName, query.TableName, query.JoinStatement, query.WhereCondition).MapRecords(x=>TableDataDetailsMapper(x),x=> { return true; });
+            //Func<GeneratedScriptItemTableRow, bool> filterExpression = (TableData) =>
+            //{
+            //    return true;
+            //};
 
-            VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
+            //VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
 
-            var cachedAccountWithSelectionHandling = bulkActionDraftManager.GetOrCreateCachedWithSelectionHandling<GeneratedScriptItemTableRow, CacheManager>(ref resultKey, input.Query.BulkActionState, () =>
-            {
-                return allTableData.FindAllRecords(filterExpression);
-            }, (tableDatas) =>
-            {
-                List<BulkActionItem> bulkActionItems = new List<BulkActionItem>();
-                foreach (var tableData in tableDatas)
-                {
-                    string identifierKey = "";
-                    foreach (var identifierColumn in input.Query.IdentifierColumns)
-                    {
-                        string key = identifierColumn.ColumnName;
-                        if (tableData.FieldValues[key] != null)
-                            identifierKey += tableData.FieldValues[key] + "_";
-                    }
+            //var cachedAccountWithSelectionHandling = bulkActionDraftManager.GetOrCreateCachedWithSelectionHandling<GeneratedScriptItemTableRow, CacheManager>(ref resultKey, query.BulkActionState, () =>
+            //{
+            //    return allTableData.FindAllRecords(filterExpression);
+            //}, (tableDatas) =>
+            //{
+            //    List<BulkActionItem> bulkActionItems = new List<BulkActionItem>();
+            //    foreach (var tableData in tableDatas)
+            //    {
+            //        string identifierKey = "";
+            //        foreach (var identifierColumn in query.IdentifierColumns)
+            //        {
+            //            string key = identifierColumn.ColumnName;
+            //            if (tableData.FieldValues[key] != null)
+            //                identifierKey += tableData.FieldValues[key] + "_";
+            //        }
 
-                    bulkActionItems.Add(new BulkActionItem
-                    {
-                        ItemId = identifierKey.ToString()
-                    });
-                }
-                return bulkActionItems;
-            });
-            input.ResultKey = resultKey;
+            //        bulkActionItems.Add(new BulkActionItem
+            //        {
+            //            ItemId = identifierKey.ToString()
+            //        });
+            //    }
+            //    return bulkActionItems;
+            //});
 
-            return DataRetrievalManager.Instance.ProcessResult(input, allTableData.ToBigResult(input, filterExpression, TableDataDetailsMapper));
+            //return DataRetrievalManager.Instance.ProcessResult(input, allTableData.ToBigResult(input, filterExpression, TableDataDetailsMapper));
 
         }
 
@@ -71,10 +68,9 @@ namespace Vanrise.DevTools.Business
             string connectionString = (settings != null) ? settings.ConnectionString : null;
             tableDataDataManager.Connection_String = connectionString;
 
-            List<GeneratedScriptItemTableRow> allTableData = tableDataDataManager.GetTableData(query.SchemaName, query.TableName, query.WhereCondition);
+            List<GeneratedScriptItemTableRow> allTableData = tableDataDataManager.GetTableData(query.SchemaName, query.TableName,query.JoinStatement, query.WhereCondition);
             VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
             IEnumerable<VRBulkActionDraft> bulkaActionFinalState = bulkActionDraftManager.GetVRBulkActionDrafts(query.BulkActionFinalState);
-
             List<GeneratedScriptItemTableRow> selectedTableData = new List<GeneratedScriptItemTableRow>();
 
             foreach (var row in allTableData)

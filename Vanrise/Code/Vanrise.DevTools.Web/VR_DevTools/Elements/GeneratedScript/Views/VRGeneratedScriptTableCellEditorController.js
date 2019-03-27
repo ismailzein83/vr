@@ -7,11 +7,14 @@
         $scope.scopeModel = {};
         $scope.scopeModel.variables = [];
         var cellValue;
+        var originalCellValue;
+
         var fieldValueTypeDirectiveAPI;
         var fieldValueTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var fieldValueTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
         var variablesDirectiveAPI;
         var variablesReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        
 
         loadParameters();
         defineScope();
@@ -21,6 +24,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 cellValue = parameters.cellValue;
+                originalCellValue = parameters.originalCellValue;
             }
         }
 
@@ -62,14 +66,26 @@
                         }
                         else {
                             if (!$scope.scopeModel.isFieldTypeText()) {
-                                $scope.scopeModel.variables = $scope.getVariables();
+                                $scope.scopeModel.variables = $scope.getVariables(); 
                                 $scope.scopeModel.cellValue = undefined;
+
                             }
                             else $scope.scopeModel.selectedVariable=undefined;
                         }
                     }
                 }
             };
+            $scope.scopeModel.originalCellValue = $scope.scopeModel.originalCellValue = (originalCellValue != undefined && typeof (cellValue) == "object" && cellValue != null && !cellValue.IsVariable) ? JSON.stringify(originalCellValue) : originalCellValue;
+
+            $scope.scopeModel.moveOriginalCellValue = function () {
+                $scope.scopeModel.cellValue = $scope.scopeModel.originalCellValue;
+
+            };
+            $scope.scopeModel.compareValues = function () {
+                return ($scope.scopeModel.originalCellValue == $scope.scopeModel.cellValue )? true : false;
+
+            };
+
         }
 
         function load() {
@@ -96,8 +112,8 @@
                     }
                     else $scope.scopeModel.cellValue = JSON.stringify(cellValue);
                 }
-                else 
-                    $scope.scopeModel.cellValue = cellValue;
+                else
+                    $scope.scopeModel.cellValue = cellValue == "*" ? undefined : cellValue;
             }
 
             function loadFieldValueTypeDirective() {

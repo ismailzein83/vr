@@ -141,6 +141,7 @@
     <Content Include="VR_DevTools\Constant\VRGeneratedScriptModuleConfig.js" />
     <Content Include="VR_DevTools\Constant\VRGeneratedScriptQueryType.js" />
     <Content Include="VR_DevTools\Constant\VRGenertedScriptFieldValueType.js" />
+    <Content Include="VR_DevTools\Constant\VRGenertedScriptColumnsSelectionType.js" />
     <Content Include="VR_DevTools\Constant\VRGenertedScriptType.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptColumns\vr-devtools-columns-selector.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptMainExtensions\Templates\VRGeneratedScriptMergeTemplate.html" />
@@ -152,6 +153,7 @@
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSchema\vr-devtools-schema-selector.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSettings\vr-devtools-generated-script-settings.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSettings\vr-devtools-generated-script-field-value-type-selector.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSettings\vr-devtools-generated-script-columns-selection-type-selector.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSettings\vr-devtools-generated-script-type-selector.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSettings\vr-devtools-generated-script-query-type-selector.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptTable\vr-devtools-table-selector.js" />
@@ -169,7 +171,9 @@
     <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptSchemaAPIService.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptColumnsAPIService.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Services\VRGeneratedScriptService.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptColumnsSelectorEditor.html" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptVariableEditor.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptColumnsSelectorEditorController.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptVariableEditorController.js" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptTableCellEditor.html" />
     <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptQueriesDisplayer.html" />

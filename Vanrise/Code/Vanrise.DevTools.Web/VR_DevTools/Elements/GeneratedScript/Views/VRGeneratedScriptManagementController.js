@@ -96,7 +96,7 @@
                     for (var i = 0; i < designs.length; i++) {
                         generatedScripts.push(designs[i].Entity);
                     }
-                    $scope.scopeModel.tableDataSource = angular.toJson({ Scripts: generatedScripts });
+                    $scope.scopeModel.tableDataSource = JSON.stringify({ Scripts: generatedScripts }, null, 2);
                 }
             };
         }

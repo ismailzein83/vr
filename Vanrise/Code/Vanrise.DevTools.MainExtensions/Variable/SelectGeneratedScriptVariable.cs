@@ -23,7 +23,7 @@ namespace Vanrise.DevTools.MainExtensions
         {
             StringBuilder variableBuilder = new StringBuilder();
 
-            variableBuilder.Append(string.Format("SELECT {0} FROM {1}.[{2}] where [{3}]={4}", ColumnName, SchemaName, TableName, FilterColumnName, FilterValue));
+            variableBuilder.Append(string.Format("(SELECT {0} FROM {1}.[{2}] where [{3}]={4})", ColumnName, SchemaName, TableName, FilterColumnName, FilterValue));
 
             return variableBuilder.ToString();
 

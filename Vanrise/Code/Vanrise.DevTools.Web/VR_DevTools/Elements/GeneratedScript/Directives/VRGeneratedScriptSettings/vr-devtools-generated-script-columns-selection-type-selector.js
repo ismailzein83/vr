@@ -1,6 +1,6 @@
 ﻿
-appControllers.directive('vrDevtoolsColumnsSelector', ['VRNotificationService', 'VR_Devtools_ColumnsAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VRNotificationService, VR_Devtools_ColumnsAPIService, UtilsService, VRUIUtilsService) {
+appControllers.directive('vrDevtoolsGeneratedScriptColumnsSelectionTypeSelector', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VR_Devtools_GeneratedScriptColumnsSelectionTypeEnum',
+    function (VRNotificationService, UtilsService, VRUIUtilsService, VR_Devtools_GeneratedScriptColumnsSelectionTypeEnum) {
         'use strict';
 
         var directiveDefinitionObject = {
@@ -9,15 +9,13 @@ appControllers.directive('vrDevtoolsColumnsSelector', ['VRNotificationService', 
                 onReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
-                ondeselectallitems: '=',
                 selectedvalues: '=',
                 isrequired: "=",
                 onselectitem: "=",
                 ondeselectitem: "=",
                 hideremoveicon: '@',
                 normalColNum: '@',
-                isdisabled: '=',
-                label: '@'
+                isdisabled: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -27,33 +25,35 @@ appControllers.directive('vrDevtoolsColumnsSelector', ['VRNotificationService', 
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var identifierColumnsSelector = new IdentifierColumnsSelector(ctrl, $scope, $attrs);
-                identifierColumnsSelector.initializeController();
+                var typeSelector = new TypeSelector(ctrl, $scope, $attrs);
+                typeSelector.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
 
-                return getIdentifierColumnsTemplate(attrs);
+                return getGeneratedScriptColumnsSelectionTypeTemplate(attrs);
             }
         };
 
-        function getIdentifierColumnsTemplate(attrs) {
+        function getGeneratedScriptColumnsSelectionTypeTemplate(attrs) {
 
 
             var multipleselection = "";
+            var label = "Columns Selection Type";
             if (attrs.ismultipleselection != undefined) {
+                label = "Columns Selection Type";
                 multipleselection = "ismultipleselection";
             }
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Name" datavaluefield="Name" label="{{ctrl.label}}" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" ondeselectallitems="ctrl.ondeselectallitems" onselectionchanged="ctrl.onselectionchanged" entityName="Columns"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="description" datavaluefield="value" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
 
         }
 
 
-        function IdentifierColumnsSelector(ctrl, $scope, attrs) {
+        function TypeSelector(ctrl, $scope, attrs) {
 
 
             var selectorAPI;
@@ -75,32 +75,18 @@ appControllers.directive('vrDevtoolsColumnsSelector', ['VRNotificationService', 
                 api.load = function (payload) { //payload is an object that has selectedids and filter
                     selectorAPI.clearDataSource();
                     var selectedIds;
-                    var filter;
+
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
-                        filter = payload.filter;
                     }
-                    return VR_Devtools_ColumnsAPIService.GetColumnsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                        if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
-                            }
-
-                            if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
-                            }
-                        }
-                    });
+                    ctrl.datasource = UtilsService.getArrayEnum(VR_Devtools_GeneratedScriptColumnsSelectionTypeEnum);
+                    if (selectedIds != undefined) {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
+                    }
                 };
 
                 api.getSelectedIds = function () {
-                    var selectedIds = [];
-                    selectedIds = VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
-                    return selectedIds;
-                };
-
-                api.clear = function () {
-                    selectorAPI.clearDataSource();
+                    return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                 };
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
@@ -112,4 +98,3 @@ appControllers.directive('vrDevtoolsColumnsSelector', ['VRNotificationService', 
         return directiveDefinitionObject;
 
     }]);
-

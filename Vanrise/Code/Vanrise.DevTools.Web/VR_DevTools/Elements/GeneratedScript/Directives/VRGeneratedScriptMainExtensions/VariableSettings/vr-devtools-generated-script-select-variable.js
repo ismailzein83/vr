@@ -220,7 +220,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptSelectVariable", ["UtilsServi
                                 promises.push(loadTableDirective(payload));
                                 promises.push(loadColumnsDirective(payload));
                                 promises.push(loadFilterColumnsDirective(payload));
-                                $scope.scopeModel.filterColumnValue = payload.settings.FilterColumnValue;
+                                $scope.scopeModel.filterColumnValue = payload.settings.FilterValue;
                             }
                         }
                         return UtilsService.waitMultiplePromises(promises);

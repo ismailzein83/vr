@@ -1,5 +1,5 @@
-﻿appControllers.directive("vrDevtoolsTableDataGrid", ["UtilsService", "VRNotificationService", "VR_Devtools_TableDataAPIService", "VR_Devtools_ColumnsAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService", "VRCommon_VRBulkActionDraftService",
-    function (UtilsService, VRNotificationService, VR_Devtools_TableDataAPIService, VR_Devtools_ColumnsAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService, VRCommon_VRBulkActionDraftService) {
+﻿appControllers.directive("vrDevtoolsTableDataGrid", ["UtilsService", "VRNotificationService", "VR_Devtools_TableDataAPIService", "VR_Devtools_ColumnsAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService", "VRCommon_VRBulkActionDraftService", "VR_Devtools_GeneratedScriptService","LabelColorsEnum",
+    function (UtilsService, VRNotificationService, VR_Devtools_TableDataAPIService, VR_Devtools_ColumnsAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService, VRCommon_VRBulkActionDraftService, VR_Devtools_GeneratedScriptService, LabelColorsEnum) {
         "use strict";
 
         var directiveDefinitionObject = {
@@ -20,57 +20,109 @@
         function TableDataGrid($scope, ctrl) {
 
 
-            var gridApi;
             $scope.scopeModel = {};
             $scope.scopeModel.tableData = [];
+            $scope.scopeModel.tableDataGridDS = [];
             $scope.scopeModel.columnNames = [];
-            var name;
+
+            var gridApi;
             var context;
             var bulkActionDraftInstance;
             var gridQuery;
             var query;
+            var selectedTableDataContext;
+            var getNonIdentifierColumnNames;
+            var compareTables;
+            var generateSelectedTableDataGrid;
             this.initializeController = initializeController;
 
             function initializeController() {
 
+
+
+                $scope.scopeModel.disableSelectAll = true;
+
+                $scope.scopeModel.disableDeSelectAll = true;
+
                 $scope.scopeModel.selectAll = function () {
 
                     bulkActionDraftInstance.selectAllItems();
+
+                    for (var i = 0; i < $scope.scopeModel.tableData.length; i++) {
+                        $scope.scopeModel.tableData[i].isSelected = true;
+                    } 
                     gridQuery.allSelected = true;
                 };
 
                 $scope.scopeModel.deSelectAll = function () {
 
                     bulkActionDraftInstance.deselectAllItems();
+
+                    for (var i = 0; i < $scope.scopeModel.tableData.length; i++) {
+                        $scope.scopeModel.tableData[i].isSelected = false;
+                    } 
                     gridQuery.allSelected = false;
+                };
+
+                $scope.scopeModel.getRowStyle = function (row) {
+                    var rowStyle;
+                    if (row) {
+                        if (row.rowExists == undefined || row.rowExists == false)
+                            rowStyle = { CssClass: 'alert-danger' };
+                        return rowStyle;
+                    }
+                };
+
+                $scope.getStatusColor = function (dataItem, column) {
+
+                    if (dataItem.DescriptionEntity[column.name] != undefined && dataItem.DescriptionEntity[column.name].differentValue)
+                        return LabelColorsEnum.Processing.color;
+                };
+
+                $scope.scopeModel.generateSelectedTableDataGrid = function () {
+                    getGridQuery(); 
+
+                    var payload = {
+                        Query: gridQuery,
+                        tableData: $scope.scopeModel.tableData,
+                        context: selectedTableDataContext,
+                        moveItems: true
+                    };
+                    VR_Devtools_GeneratedScriptService.chooseSelectedTableDataColumns(payload, $scope.scopeModel.deSelectAll, getNonIdentifierColumnNames,generateSelectedTableDataGrid);
 
                 };
 
-                $scope.scopeModel.disableSelectAll = true;
+                $scope.scopeModel.disablegenerateSelectedTableDataGrid = function () {
+                    getGridQuery();
+                    if (gridQuery == undefined || gridQuery.BulkActionFinalState == undefined || gridQuery.BulkActionFinalState.TargetItems == undefined || (gridQuery.BulkActionFinalState.TargetItems.length == 0 && gridQuery.allSelected == false))
+                        return true;
+                    return false;
+                };
 
-                $scope.scopeModel.disableDeSelectAll = true;
+                $scope.scopeModel.loadMoreData = function () {
+                    return loadMoreRows();
+                };
 
+                $scope.scopeModel.totalRows = function () {
+                    return $scope.scopeModel.tableData.length;
+                };
+                $scope.scopeModel.newRows = function () {
+                    var newRowsCount = 0;
+                    for (var i = 0; i < $scope.scopeModel.tableData.length; i++) {
+                        if (!$scope.scopeModel.tableData[i].rowExists)
+                            newRowsCount++;
+                    }
+                    return newRowsCount;
+                };
+               
                 $scope.scopeModel.onGridReady = function (api) {
                     gridApi = api;
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                         ctrl.onReady(getDirectiveApi());
                     }
-                    function getColumnNames(filter) {
-                        return VR_Devtools_ColumnsAPIService.GetColumnsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                            if (response != null) {
-                                $scope.scopeModel.columnNames = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    if (i == 0) {
-                                        name = response[i].Name;
-                                        $scope.scopeModel.key = 'FieldValues["' + name + '"]';
-                                    }
-                                    $scope.scopeModel.columnNames.push(response[i]);
-                                }
-                            }
-                        });
-                    }
 
+    
                     function getDirectiveApi() {
 
                         var directiveApi = {};
@@ -78,21 +130,42 @@
                         directiveApi.load = function (payload) {
                             var loadPromise = UtilsService.createPromiseDeferred();
                             context = payload.context;
+                            selectedTableDataContext = context.selectedTableDataContext;
                             context.setSelectAllEnablity = function (enablity) {
                                 $scope.scopeModel.disableSelectAll = !enablity;
                             };
                             context.setDeselectAllEnablity = function (enablity) {
                                 $scope.scopeModel.disableDeSelectAll = !enablity;
                             };
+                            getNonIdentifierColumnNames = context.nonIdentifierColumnNames;
+                            compareTables = context.selectedTableDataContext.compareTables;
+
                             query = payload.query;
                             gridQuery = query;
                             gridQuery.allSelected = false;
+                            
+                            $scope.scopeModel.columnNames = payload.columnNames;
+                            $scope.scopeModel.key = 'FieldValues["' + $scope.scopeModel.columnNames[0].Name + '"]';
 
-                            getColumnNames(query).then(function (response) {
-                                bulkActionDraftInstance = VRCommon_VRBulkActionDraftService.createBulkActionDraft(getContext());
-                                gridApi.retrieveData(query);
+                            generateSelectedTableDataGrid = payload.generateSelectedTableDataGrid;
+                            bulkActionDraftInstance = VRCommon_VRBulkActionDraftService.createBulkActionDraft(getContext());
+
+                            VR_Devtools_TableDataAPIService.GetFilteredTableData(query).then(function (response) {
+                                if (response) {
+                                    $scope.scopeModel.tableData = [];
+                                    $scope.scopeModel.tableDataGridDS.length=0;
+
+                                    for (var i = 0; i < response.length; i++) {
+                                        var row = response[i];
+                                        prepareRow(row);
+                                        $scope.scopeModel.tableData.push(row);
+                                    } 
+                                } 
+                                bulkActionDraftInstance.reEvaluateButtonsStatus();
+                                loadMoreRows();
                                 loadPromise.resolve();
                             });
+
                             return loadPromise.promise;
                         };
 
@@ -101,9 +174,13 @@
                                 if (bulkActionDraftInstance) {
                                     gridQuery.BulkActionState = bulkActionDraftInstance.getBulkActionState();
                                     gridQuery.BulkActionFinalState = bulkActionDraftInstance.finalizeBulkActionDraft().$$state.value;
-                                    return { gridQuery: gridQuery, columnNames: $scope.scopeModel.columnNames };
+                                  
                                 }
-                            }
+                            } 
+                            return {
+                                gridQuery: gridQuery,
+                                tableData: $scope.scopeModel.tableData,
+                            };
                         };
 
                         directiveApi.deselectAllAcounts = function () {
@@ -148,28 +225,51 @@
                         if (row.FieldValues[identifierColumn] != undefined && row.FieldValues[identifierColumn] != null && row.FieldValues[identifierColumn] != "")
                             identifierKey += row.FieldValues[identifierColumn] + "_";
                     }
+                    row.identifierKey = identifierKey;
+                    
                     row.isSelected = bulkActionDraftInstance.isItemSelected(identifierKey);
+                   
                     row.onSelectItem = function () {
-                        bulkActionDraftInstance.onSelectItem({ ItemId: identifierKey }, row.isSelected);
+                        bulkActionDraftInstance.onSelectItem({ ItemId: row.identifierKey },row.isSelected);
                     };
+                    row.DescriptionEntity = {};
+                    //for (var i = 0; i < $scope.scopeModel.columnNames.length; i++) {
+                    //    var columnName = $scope.scopeModel.columnNames[i];
+                    //    row.DescriptionEntity[columnName] = { value: row[i].FieldValues[columnName]};
+                    //}
+                }
+     
+                function getGridQuery() {
+                    if (gridQuery) {
+                        if (bulkActionDraftInstance) {
+                            gridQuery.BulkActionState = bulkActionDraftInstance.getBulkActionState();
+                            gridQuery.BulkActionFinalState = bulkActionDraftInstance.finalizeBulkActionDraft().$$state.value;
+
+                        }
+                    }
+
+
                 }
 
+
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return VR_Devtools_TableDataAPIService.GetFilteredTableData(dataRetrievalInput)
-                        .then(function (response) {
-                            if (response && response.Data) {
-                                for (var i = 0; i < response.Data.length; i++) {
-                                    var row = response.Data[i];
-                                    prepareRow(row);
-                                }
-                            }
-                            onResponseReady(response);
-                            bulkActionDraftInstance.reEvaluateButtonsStatus();
-                        })
-                        .catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        });
                 };
+            }
+            function loadMoreRows() {
+
+                var pageInfo = gridApi.getPageInfo();
+                var itemsLength = pageInfo.toRow; 
+                if (pageInfo.toRow > $scope.scopeModel.tableData.length) {
+                    if (pageInfo.fromRow < $scope.scopeModel.tableData.length) { itemsLength = $scope.scopeModel.tableData.length; }
+                    else
+                        return;
+                }
+                var items = [];
+                for (var i = pageInfo.fromRow - 1; i < itemsLength; i++) {
+                    items.push($scope.scopeModel.tableData[i]);
+                } 
+                gridApi.addItemsToSource(items);
+                compareTables();
             }
         }
 

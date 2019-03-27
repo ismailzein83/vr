@@ -16,9 +16,9 @@ namespace Vanrise.DevTools.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredTableData")]
-        public object GetFilteredTableData(DataRetrievalInput<VRGeneratedScriptTableDataQuery> input)
+        public IEnumerable<VRGeneratedScriptTableDataDetails> GetFilteredTableData(VRGeneratedScriptTableDataQuery query)
         {
-            return GetWebResponse(input, tableDataManager.GetFilteredTableData(input));
+            return tableDataManager.GetFilteredTableData(query);
 
         }
 

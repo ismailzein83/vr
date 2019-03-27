@@ -1,15 +1,40 @@
 ﻿<div vr-modalcontent ng-controller="VR_Devtools_GeneratedScriptTableCellEditorController" vr-loader="scopeModel.isLoading" size="medium">
     <vr-modalbody>
         <vr-form name="formGeneratedScripTableCellEditor">
-                <vr-devtools-generated-script-field-value-type-selector on-ready="scopeModel.onFieldValueTypeSelectorReady" normal-col-num="4" onselectionchanged="scopeModel.onFieldValueTypeChanged" ></vr-devtools-generated-script-field-value-type-selector>
-                <vr-columns width="fullrow" ng-if="scopeModel.isFieldTypeText()">
-                    <vr-textarea value="scopeModel.cellValue" rows="10"></vr-textarea>
-                </vr-columns>
+            <vr-row>
+                <vr-devtools-generated-script-field-value-type-selector on-ready="scopeModel.onFieldValueTypeSelectorReady" normal-col-num="4" onselectionchanged="scopeModel.onFieldValueTypeChanged"></vr-devtools-generated-script-field-value-type-selector>
+                <div ng-if="!scopeModel.isFieldTypeText()">
+                    <vr-columns colnum="4">
+                        <vr-select on-ready="scopeModel.onVariablesSelectorReady" datatextfield="Name" isrequired="true"
+                                   datavaluefield="Name" label="Variables" datasource="scopeModel.variables" selectedvalues="scopeModel.selectedVariable"></vr-select>
+                    </vr-columns>
 
-                <vr-columns ng-if="!scopeModel.isFieldTypeText()" colnum="4">
-                    <vr-select  on-ready="scopeModel.onVariablesSelectorReady" datatextfield="Name" isrequired="true" 
-                               datavaluefield="Name" label="Variables" datasource="scopeModel.variables" selectedvalues="scopeModel.selectedVariable"></vr-select>
-                </vr-columns>
+                </div>
+            </vr-row>
+            <div ng-if="scopeModel.isFieldTypeText()">
+                <vr-row>
+                    <vr-columns width="fullrow">
+                        <vr-textarea label="New Value" value="scopeModel.cellValue" rows="10"></vr-textarea>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="fullrow">
+                        <vr-button type="Move" standalone data-onclick="scopeModel.moveOriginalCellValue"></vr-button>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="fullrow">
+                        <vr-textarea label="Original Value" value="scopeModel.originalCellValue" rows="10" vr-disabled="true"></vr-textarea>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns colnum="4">
+                        <label ng-if="!scopeModel.compareValues()" class="alert alert-danger" vr-alert>Values Do Not Match</label>
+                        <label ng-if="scopeModel.compareValues()" class="label label-success" vr-alert>Values  Match</label>
+                    </vr-columns>
+                </vr-row>
+            </div>
+            
         </vr-form>
     </vr-modalbody>
     <div>

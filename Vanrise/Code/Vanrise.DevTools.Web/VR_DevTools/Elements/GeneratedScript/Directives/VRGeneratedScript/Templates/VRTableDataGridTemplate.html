@@ -1,18 +1,26 @@
 ﻿<vr-button type="SelectAll" standalone data-onclick="scopeModel.selectAll" vr-disabled="scopeModel.disableSelectAll"></vr-button>
 <vr-button type="DeselectAll" standalone data-onclick="scopeModel.deSelectAll" vr-disabled="scopeModel.disableDeSelectAll"></vr-button>
-<vr-datagrid datasource="scopeModel.tableData"
+<vr-button type="Comment" standalone data-onclick="scopeModel.generateSelectedTableDataGrid" vr-disabled="scopeModel.disablegenerateSelectedTableDataGrid()"></vr-button>
+<vr-datagrid datasource="scopeModel.tableDataGridDS"
              on-ready="scopeModel.onGridReady"
-             dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             pagingtype="'Pager'"
+             loadmoredata="scopeModel.loadMoreData"
+             pagingtype="'PagingOnScroll'"
              menuactions="scopeModel.gridMenuActions"
              idfield="Connection"
              enableautoexport="true"
              defaultsortbyfieldname="scopeModel.key"
-             >
-    <vr-datagridcolumn>
+             getrowstyle="scopeModel.getRowStyle"
+             isdynamicrowstyle="true"
+             alternativecolor="false"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction">
+    <vr-datagridcolumn widthfactor="1">
         <vr-check value="dataItem.isSelected" onvaluechanged="dataItem.onSelectItem"></vr-check>
     </vr-datagridcolumn>
-    <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x.Name" field="'FieldValues.'+ x.Name"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x.Name" field="'FieldValues.'+ x.Name" getcolor="getStatusColor" expendablecolumn expendablecolumndescription="'FieldValues.'+ x.Name" isfielddynamic="true"></vr-datagridcolumn>
 </vr-datagrid>
+<label class="label label-success" vr-alert>Total Rows:</label>
+<label>{{scopeModel.totalRows()}}</label>
+<label class="label label-success" vr-alert>  New Rows:</label>
+<label>{{scopeModel.newRows()}}</label>
 
 

@@ -19,10 +19,11 @@ namespace Vanrise.DevTools.Data.SQL
             return Connection_String;
         }
         string table_Name;
-        public List<GeneratedScriptItemTableRow> GetTableData(string schemaName, string tableName, string whereCondition)
+        public List<GeneratedScriptItemTableRow> GetTableData(string schemaName, string tableName,string joinCondition ,string whereCondition)
         {
             table_Name = tableName;
-            return GetItemsText("select * from [" + schemaName + "].[" + tableName + "]" + whereCondition, TableDataMapper, null);
+            return GetItemsText(string.Format("select * from [{0}].[{1}] as MainTable {2} {3}", schemaName,tableName,joinCondition,(whereCondition != null && whereCondition.Length > 0) ? string.Format("where {0}", whereCondition) : null), TableDataMapper, null);
+
         }
 
 

@@ -1,14 +1,25 @@
 ﻿<vr-validator validate="scopeModel.validateTableSelection()">
     <vr-columns width="fullrow">
-        <vr-datagrid datasource="scopeModel.selectedTableData"
+        <vr-datagrid datasource="scopeModel.selectedTableDataGridDS"
                      on-ready="scopeModel.onGridReady"
+                     loadmoredata="scopeModel.loadMoreData"
                      pagingtype="'PagingOnScroll'"
                      menuactions="scopeModel.gridMenuActions"
                      ondeleterow="scopeModel.deleteTableDataRow"
-                     enableautoexport="true">
-            <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x" field="'DescriptionEntity.'+ x" isclickable="true" onclicked="scopeModel.editCell" isfielddynamic="true"></vr-datagridcolumn>
+                     enableautoexport="true"
+                     getrowstyle="scopeModel.getRowStyle"
+                     isdynamicrowstyle="true"
+                     alternativecolor="false">
+            <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x" field="'DescriptionEntity.'+ x!=undefined? 'DescriptionEntity.'+ x+'.value':''" getcolor="getStatusColor" isclickable="true" onclicked="scopeModel.editCell" isfielddynamic="true"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
 </vr-validator>
-
+<vr-columns width="fullrow">
+    <label class="label label-success" vr-alert>Total Rows:</label>
+    <label>{{scopeModel.totalRows()}}</label>
+    <label class="label label-success" vr-alert>  Unmatched Rows:</label>
+    <label>{{scopeModel.newRows()}}</label>
+    <label class="label label-success" vr-alert>  Rows Having Differences:</label>
+    <label>{{scopeModel.rowsHavingDifferences}}</label>
+</vr-columns>
 

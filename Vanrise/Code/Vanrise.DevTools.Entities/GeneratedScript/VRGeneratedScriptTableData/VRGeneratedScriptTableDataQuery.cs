@@ -14,6 +14,7 @@ namespace Vanrise.DevTools.Entities
         public string TableName { get; set; }
         public List<IdentifierColumn> IdentifierColumns { get; set; }
         public string WhereCondition { get; set; }
+        public string JoinStatement { get; set; }
         public BulkActionState BulkActionState { get; set; }
         public BulkActionFinalState BulkActionFinalState { get; set; }
     }

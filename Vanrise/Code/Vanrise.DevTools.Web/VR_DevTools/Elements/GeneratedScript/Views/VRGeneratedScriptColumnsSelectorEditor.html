@@ -1,0 +1,18 @@
+﻿<div vr-modalcontent ng-controller="VR_Devtools_GeneratedScriptColumnsSelectorEditorController" size="medium">
+    <vr-modalbody>
+        <vr-columns colnum="6">
+            <vr-devtools-generated-script-columns-selection-type-selector on-ready="scopeModel.onColumnsSelectionTypeDirectiveReady" onselectionchanged="scopeModel.onColumnsChanged"></vr-devtools-generated-script-columns-selection-type-selector>
+        </vr-columns>
+        <vr-columns colnum="6" ng-show="scopeModel.isColumnsSelection()">
+            <vr-devtools-columns-selector on-ready="scopeModel.onColumnsDirectiveReady" ismultipleselection vr-loader="scopeModel.isColumnsDirectiveloading" label="Columns" selectedvalues="scopeModel.selectedColumns"></vr-devtools-columns-selector>
+</vr-columns>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Generate" formname="formGeneratedScriptDesignEditor" data-onclick="scopeModel.generateSelectedTableData"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

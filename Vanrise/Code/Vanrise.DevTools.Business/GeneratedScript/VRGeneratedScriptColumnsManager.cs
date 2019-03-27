@@ -26,6 +26,10 @@ namespace Vanrise.DevTools.Business
 
             Func<VRGeneratedScriptColumns, bool> filterFunc = (columns) =>
             {
+                if (columnInfoFilter.ColumnNames != null && columnInfoFilter.ColumnNames.Count > 0)
+                {
+                    return columnInfoFilter.ColumnNames.Any(x => x.Name == columns.Name);
+                }
                 return true;
             };
             return allColumns.MapRecords(ColumnsInfoMapper, filterFunc).OrderBy(columns => columns.Name);

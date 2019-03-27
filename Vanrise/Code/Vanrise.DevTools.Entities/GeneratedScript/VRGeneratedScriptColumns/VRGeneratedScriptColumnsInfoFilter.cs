@@ -11,6 +11,7 @@ namespace Vanrise.DevTools.Entities
         public Guid ConnectionId { get; set; }
         public string TableName { get; set; }
         public string SchemaName { get; set; }
+        public List<VRGeneratedScriptColumns> ColumnNames { get; set; }
 
     }
 }

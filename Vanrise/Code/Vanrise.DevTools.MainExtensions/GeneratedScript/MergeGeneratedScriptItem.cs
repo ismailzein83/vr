@@ -18,12 +18,8 @@ namespace Vanrise.DevTools.MainExtensions
         {
             var errors = new List<string>();
 
-            if (this.IdentifierColumns == null)
-                errors.Add("IdentifierColumns cannot be null");
-            if (this.UpdateColumns == null)
-                errors.Add("UpdateColumns cannot be null");
-            if (this.InsertColumns == null)
-                errors.Add("InsertColumns cannot be null");
+            if (this.Columns == null)
+                errors.Add("Columns cannot be null");
             if (this.DataRows == null)
                 errors.Add("DataRows cannot be null");
 
@@ -45,21 +41,14 @@ namespace Vanrise.DevTools.MainExtensions
             }
 
         }
-
-        #region to be removed
-
-        public List<GeneratedScriptItemTableColumn> InsertColumns { get; set; }
-        public List<GeneratedScriptItemTableColumn> UpdateColumns { get; set; }
-        public List<GeneratedScriptItemTableColumn> IdentifierColumns { get; set; }
-        public GeneratedScriptQueryType? QueryType { get; set; }
-
-        #endregion
         public List<MergeGeneratedScriptItemColumn> Columns { get; set; }
         public List<GeneratedScriptItemTableRow> DataRows { get; set; }
         public List<GeneratedScriptVariable> Variables { get; set; }
        
 
         public string LastWhereCondition { get; set; }
+        public string LastJoinStatement { get; set; }
+
         public bool IsIdentity { get; set; }
         private string MapRecord(object value)
         {
@@ -144,32 +133,32 @@ namespace Vanrise.DevTools.MainExtensions
             }
 
             StringBuilder queryTypeBuilder = new StringBuilder();
-            if (!this.QueryType.HasValue || this.QueryType.Value == GeneratedScriptQueryType.Update)
+            if (Columns.Exists(x=>x.IncludeInUpdate))
             {
                 queryTypeBuilder.Append(@"
                   when matched then
                  update set
                  #Update#");
 
-                queryTypeBuilder.Replace("#Update#", string.Join(",", this.UpdateColumns.MapRecords(x => string.Format("[{0}]=s.[{0}] ", x.ColumnName))));
+                queryTypeBuilder.Replace("#Update#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]=s.[{0}] ", x.ColumnName), x =>x.IncludeInUpdate)));
             }
-            if (!this.QueryType.HasValue || this.QueryType.Value == GeneratedScriptQueryType.Insert)
+            if (Columns.Exists(x => x.IncludeInInsert))
             {
                 queryTypeBuilder.Append(@"
                  when not matched by target then
                  insert(#InsertColumns#)
                  values(#InsertColumnsValues#)");
 
-                queryTypeBuilder.Replace("#InsertColumns#", string.Join(",", this.InsertColumns.MapRecords(x => string.Format("[{0}]", x.ColumnName))));
-                queryTypeBuilder.Replace("#InsertColumnsValues#", string.Join(", ", this.InsertColumns.MapRecords(x => string.Format("s.[{0}]", x.ColumnName))));
+                queryTypeBuilder.Replace("#InsertColumns#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]", x.ColumnName),x=>x.IncludeInInsert)));
+                queryTypeBuilder.Replace("#InsertColumnsValues#", string.Join(", ", this.Columns.MapRecords(x => string.Format("s.[{0}]", x.ColumnName),x=>x.IncludeInInsert)));
             }
             queryTypeBuilder.Append(";");
             queryBuilder.Replace("#Variables#", variablesBuilder.ToString());
-            queryBuilder.Replace("#Columns#", string.Join(",", this.DataRows[0].FieldValues.MapRecords(x => string.Format("[{0}]", x.Key))));
+            queryBuilder.Replace("#Columns#", string.Join(",", this.Columns.MapRecords(x => string.Format("[{0}]", x.ColumnName))));
             queryBuilder.Replace("#Values#", valuesBuilder.ToString());
             queryBuilder.Replace("#Schema#", item.Schema);
             queryBuilder.Replace("#TableName#", item.TableName);
-            queryBuilder.Replace("#IdentifierColumns#", string.Join(" and ", this.IdentifierColumns.MapRecords(x => string.Format("t.[{0}]=s.[{0}]", x.ColumnName))));
+            queryBuilder.Replace("#IdentifierColumns#", string.Join(" and ", this.Columns.MapRecords(x => string.Format("t.[{0}]=s.[{0}]", x.ColumnName),x=>x.IsIdentifier)));
             queryBuilder.Replace("#QueryType#", queryTypeBuilder.ToString());
             queryBuilder.Replace("#IdentityOn#", identityOnBuilder.ToString());
             queryBuilder.Replace("#IdentityOff#", identityOffBuilder.ToString());
@@ -200,7 +189,6 @@ namespace Vanrise.DevTools.MainExtensions
         }
 
     }
-    public enum GeneratedScriptQueryType { Insert = 1, Update = 2 }
 
     public class MergeGeneratedScriptItemColumn
     {

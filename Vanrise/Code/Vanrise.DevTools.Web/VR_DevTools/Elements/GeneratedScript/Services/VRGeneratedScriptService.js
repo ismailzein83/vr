@@ -11,7 +11,7 @@
 
             };
             VRModalService.showModal('/Client/Modules/VR_DevTools/Elements/GeneratedScript/Views/VRGeneratedScriptDesignEditor.html', parameters, settings);
-        }
+        } 
 
         function editGeneratedScriptDesign(onGeneratedScriptDesignUpdated, design) {
             var settings = {};
@@ -25,6 +25,21 @@
             VRModalService.showModal('/Client/Modules/VR_DevTools/Elements/GeneratedScript/Views/VRGeneratedScriptDesignEditor.html', parameters, settings);
         }
 
+        function chooseSelectedTableDataColumns(payload,deselectAllItems,columnNames, generateSelectedTableDataGrid) {
+            var settings = {};
+            var parameters = {
+                payload: payload,
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.generateSelectedTableDataGrid = generateSelectedTableDataGrid;
+                modalScope.columnNames = columnNames;
+                modalScope.deselectAllItems = deselectAllItems;
+
+            };
+            VRModalService.showModal('/Client/Modules/VR_DevTools/Elements/GeneratedScript/Views/VRGeneratedScriptColumnsSelectorEditor.html', parameters, settings);
+        }
+
         function displayQueries(queries) {
             var settings = {};
             var parameters = {
@@ -36,10 +51,11 @@
             VRModalService.showModal('/Client/Modules/VR_DevTools/Elements/GeneratedScript/Views/VRGeneratedScriptQueriesDisplayer.html', parameters, settings);
         }
 
-        function editTableCell(modifySelectedTableData, cellValue, getVariables) {
+        function editTableCell(modifySelectedTableData, cellValue, getVariables, originalCellValue) {
             var settings = {};
             var parameters = {
                 cellValue: cellValue,
+                originalCellValue: originalCellValue
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -81,7 +97,8 @@
             displayQueries: displayQueries,
             editTableCell: editTableCell,
             addGeneratedScriptVariable: addGeneratedScriptVariable,
-            editGeneratedScriptVariable: editGeneratedScriptVariable
+            editGeneratedScriptVariable: editGeneratedScriptVariable,
+            chooseSelectedTableDataColumns: chooseSelectedTableDataColumns
         };
 
     }]);
