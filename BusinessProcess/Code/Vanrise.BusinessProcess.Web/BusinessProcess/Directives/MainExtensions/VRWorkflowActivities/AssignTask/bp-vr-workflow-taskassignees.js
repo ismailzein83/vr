@@ -116,7 +116,7 @@ app.directive('bpVrWorkflowTaskassignees', ['UtilsService', 'VRUIUtilsService', 
                                 getParentVariables: getParentVariables,
                                 getWorkflowArguments: getWorkflowArguments,
                                 isVRWorkflowActivityDisabled: isVRWorkflowActivityDisabled,
-                                userIds: settings.UserIds
+                                settings: settings
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
                         });
