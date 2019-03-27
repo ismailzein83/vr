@@ -46,7 +46,8 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                 };
                 ctrl.disableAddTabContainer = function () {
                     if (context == undefined) return true;
-                    return context.getDataRecordTypeId() == undefined && (context.getRecordTypeFields() == undefined || context.getRecordTypeFields().length==0);
+                    var recordTypeFields = context.getRecordTypeFields();
+                    return context.getDataRecordTypeId() == undefined && (recordTypeFields == undefined || recordTypeFields.length==0);
                 };
                 ctrl.removeTabContainer = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
