@@ -684,6 +684,11 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetInstallmentsByPaymentPlanId(paymentPlanId);
         }
 
+        public List<PaymentPlanDetail> GetPaymentPlansByInvoiceId(string invoiceId)
+        {
+            return RatePlanMockDataGenerator.GetPaymentPlansByInvoiceId(invoiceId);
+        }
+
         public List<PaymentPlanTemplateInfo> GetAllPaymentPlanTemplatesInfo()
         {
             return RatePlanMockDataGenerator.GetAllTemplatesInfo();

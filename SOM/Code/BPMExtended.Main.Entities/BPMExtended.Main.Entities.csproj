@@ -103,6 +103,7 @@
     <Compile Include="PaymentDetail.cs" />
     <Compile Include="PaymentMethod.cs" />
     <Compile Include="PaymentPlan.cs" />
+    <Compile Include="PaymentPlanDetail.cs" />
     <Compile Include="PaymentPlanTemplate.cs" />
     <Compile Include="PaymentPlanTemplateInfo.cs" />
     <Compile Include="PhoneNumberDetail.cs" />

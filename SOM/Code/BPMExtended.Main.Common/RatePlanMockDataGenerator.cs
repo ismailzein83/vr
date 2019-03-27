@@ -2049,9 +2049,9 @@ namespace BPMExtended.Main.Common
 
         #region Payment Plans
 
-        public static List<PaymentPlan> GetPaymentPlansByInvoiceId(string invoiceId)
+        public static List<PaymentPlanDetail> GetPaymentPlansByInvoiceId(string invoiceId)
         {
-            return GetAllPaymentPlans().FindAll(x => x.InvoiceId.ToLower() == invoiceId.ToLower());
+            return GetAllPaymentPlans().FindAllRecords(x => x.InvoiceId == invoiceId).MapRecords(PaymentPlanDetailMapper).ToList();
         }
         public static PaymentPlan GetPaymentPlanById(string paymentPlanId)
         {
@@ -2135,6 +2135,18 @@ namespace BPMExtended.Main.Common
                  },                
             };
 
+        }
+
+        private static PaymentPlanDetail PaymentPlanDetailMapper(PaymentPlan paymentPlan)
+        {
+            return new PaymentPlanDetail
+            {
+                Id = paymentPlan.Id,
+                Name = paymentPlan.Name,
+                Description = paymentPlan.Description,
+                TotalAmount = paymentPlan.TotalAmount,
+                InvoiceId = paymentPlan.InvoiceId
+            };
         }
 
         #endregion
