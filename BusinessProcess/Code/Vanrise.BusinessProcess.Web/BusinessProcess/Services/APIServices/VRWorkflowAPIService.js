@@ -84,8 +84,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetSuggestions"), input);
         }
 
-        function GetVRWorkflowFields(vrWorkflowId){
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowFields"), { vrWorkflowId: vrWorkflowId});
+        function GetVRWorkflowInputArgumentFields(vrWorkflowId){
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowInputArgumentFields"), { vrWorkflowId: vrWorkflowId});
         }
 
         return ({
@@ -107,7 +107,7 @@
             GetVRWorkflowsInfo: GetVRWorkflowsInfo,
             GetSuggestions: GetSuggestions,
             TryCompileWorkflowClassMembers: TryCompileWorkflowClassMembers,
-            GetVRWorkflowFields: GetVRWorkflowFields
+            GetVRWorkflowInputArgumentFields: GetVRWorkflowInputArgumentFields
         });
     }
 

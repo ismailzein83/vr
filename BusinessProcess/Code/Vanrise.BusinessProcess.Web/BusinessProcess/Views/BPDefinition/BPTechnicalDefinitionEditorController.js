@@ -97,7 +97,7 @@
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
                             $scope.scopeModel.isLoadingArguments = false;
                         });
-                        getVRWorkflowFields(selectedVRWorkflow.VRWorkflowId).then(function () {
+                        getVRWorkflowInputArgumentFields(selectedVRWorkflow.VRWorkflowId).then(function () {
                             if (editorDefinitionAPI != undefined) {
                                 var setEditorLoader = function (value) { $scope.scopeModel.isLoadingEditor = value; };
                                 var editorPayload = {
@@ -332,7 +332,7 @@
             var operations = [setTitle, loadStaticData, loadVRWorkflowSelector, GetVRWorkflowArguments, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission,
                 loadScheduleTaskRequiredPermission, loadBPInstanceInsertHandlerSettings];
             if (businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.VRWorkflowId != undefined) {
-                operations.push(getVRWorkflowFields);
+                operations.push(getVRWorkflowInputArgumentFields);
                 operations.push(loadEditorDefinitionDirective);
             }
             return UtilsService.waitMultipleAsyncOperations(operations).then(function () {
@@ -343,10 +343,10 @@
                 });
         }
 
-        function getVRWorkflowFields(vrWorkflowId) {
+        function getVRWorkflowInputArgumentFields(vrWorkflowId) {
             if (vrWorkflowId == undefined)
                 vrWorkflowId = businessProcessDefinitionEntity.VRWorkflowId;
-            return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowFields(vrWorkflowId).then(function (response) {
+            return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowInputArgumentFields(vrWorkflowId).then(function (response) {
                 vrWorkflowFields = response;
             });
         }

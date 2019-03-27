@@ -41,7 +41,7 @@ namespace Vanrise.BusinessProcess.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRWorkflows.ToBigResult(input, filterExpression, VRWorkflowDetailMapper));
         }
 
-        public List<VRWorkflowField> GetVRWorkflowFields(Guid vrWorkflowId)
+        public List<VRWorkflowField> GetVRWorkflowInputArgumentFields(Guid vrWorkflowId)
         {
             var vrWorkflow = GetVRWorkflow(vrWorkflowId);
             vrWorkflow.ThrowIfNull("vrWorkflow", vrWorkflowId);

@@ -42,10 +42,10 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetVRWorkflowFields")]
-        public List<VRWorkflowField> GetVRWorkflowFields(Guid vrWorkflowId)
+        [Route("GetVRWorkflowInputArgumentFields")]
+        public List<VRWorkflowField> GetVRWorkflowInputArgumentFields(Guid vrWorkflowId)
         {
-            return _manager.GetVRWorkflowFields(vrWorkflowId);
+            return _manager.GetVRWorkflowInputArgumentFields(vrWorkflowId);
         }
         [HttpPost]
         [Route("GetVRWorkflowVariablesTypeDescription")]
