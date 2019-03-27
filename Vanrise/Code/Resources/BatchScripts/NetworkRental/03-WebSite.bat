@@ -8,12 +8,40 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO NetworkRental WebSite
 
 xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\RetailSource\list-of-excluded-files.txt
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\logoonheader.png" /S /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Images\"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\login.png" /S /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Images\"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Images\iconheader.ico" /S /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Images\"
-xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.NR.exclude" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
+xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.NR.exclud" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Web.config*"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Bin\"
-xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\RetailSource\Client-list-of-excluded-files.txt
+::by default load flat theme
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-retail-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Images\logoonheader.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-retail-login.png" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Images\login.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-retail-iconheader.ico" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Images\iconheader.ico*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-01.png" 		 /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Images\01.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-02.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Images\02.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-member.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Images\member.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-support.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Images\support.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Home\Index-flat.cshtml" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\CSViews\Home\Index.cshtml*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Security\Login-flat.cshtml" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\CSViews\Security\Login.cshtml*"
+::default theme
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\default-retail-logoonheader.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Default-theme\Images\logoonheader.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\default-retail-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Default-theme\Images\login.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\default-retail-iconheader.ico" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Default-theme\Images\iconheader.ico*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\default-01.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Default-theme\Client\Images\01.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\default-02.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Default-theme\Client\Images\02.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\default-member.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Default-theme\Client\Images\member.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\default-support.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Default-theme\Client\Images\support.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Home\Index-default.cshtml" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Default-theme\Client\CSViews\Home\Index.cshtml*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Security\Login-default.cshtml" /S /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Default-theme\Client\CSViews\Security\Login.cshtml*"
+::flat theme
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-retail-logoonheader.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Flat-theme\Images\logoonheader.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-retail-login.png" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Flat-theme\Images\login.png*"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-retail-iconheader.ico" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Flat-theme\Images\iconheader.ico*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-01.png" 		 /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Flat-theme\Client\Images\01.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-02.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Flat-theme\Client\Images\02.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-member.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Flat-theme\Client\Images\member.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\Images\new-flat-support.png" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Flat-theme\Client\Images\support.png*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Home\Index-flat.cshtml" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Flat-theme\Client\CSViews\Home\Index.cshtml*"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client\CSViews\Security\Login-flat.cshtml" /S /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Flat-theme\Client\CSViews\Security\Login.cshtml*"
+
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\Common\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\VR_AccountBalance\"
@@ -32,6 +60,5 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanc
 xcopy "C:\TFS\Retail\Code\Retail.BusinessEntity.Web\Retail_BusinessEntity" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\Retail_BusinessEntity\"
 xcopy "C:\TFS\Retail\Code\Retail.Demo.Web\Retail_Demo" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\Retail_Demo\"
 xcopy "C:\Publish\Retail\bin\Retail.Demo*" /S /E /R /y /v /i /z /Q													"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Bin\"
-rename																												"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Web.config.NR.exclude" "Web.config"
 del /s /q /f /Q																										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Bin\*.pdb"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Bin\*.config"
