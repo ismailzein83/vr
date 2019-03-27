@@ -159,7 +159,7 @@ namespace Vanrise.Common.Business
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Region Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
 
                 sheet.Rows = new List<ExportExcelRow>();
