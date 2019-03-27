@@ -1051,6 +1051,11 @@ namespace Vanrise.GenericData.FileDataStorage
             throw new NotImplementedException();
         }
 
+        public DataRecord GetDataRecord(object dataRecordId, List<string> fieldNames)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 

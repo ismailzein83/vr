@@ -127,12 +127,23 @@ namespace Vanrise.GenericData.RDBDataStorage
             bulkInsertContext.CloseStream();
             return bulkInsertContext;
         }
-
+        public DataRecord GetDataRecord(Object dataRecordId, List<string> fieldNames)
+        {
+            var dynamicManager = this.DynamicManager;
+            DataRecord dataRecord = null;
+            SelectRecords(fieldNames, null, null, null, false, null, null, null,dataRecordId,
+                (reader) =>
+                {
+                    if (reader.Read())
+                        dataRecord = dynamicManager.GetDataRecordFromReader(reader, fieldNames);
+                });
+            return dataRecord;
+        }
         public List<DataRecord> GetAllDataRecords(List<string> columns)
         {
             List<DataRecord> dataRecords = new List<DataRecord>();
             var dynamicManager = this.DynamicManager;
-            SelectRecords(columns, null, null, null, false, null, null, null,
+            SelectRecords(columns, null, null, null, false, null, null, null,null,
                 (reader) =>
                 {
                     while (reader.Read())
@@ -146,7 +157,7 @@ namespace Vanrise.GenericData.RDBDataStorage
         public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
         {
             var dynamicManager = this.DynamicManager;
-            SelectRecords(null, null, from, to, false, recordFilterGroup, isOrderAscending ? OrderDirection.Ascending : OrderDirection.Descending, orderColumnName, (reader) =>
+            SelectRecords(null, null, from, to, false, recordFilterGroup, isOrderAscending ? OrderDirection.Ascending : OrderDirection.Descending, orderColumnName,null, (reader) =>
             {
                 while (reader.Read())
                 {
@@ -166,7 +177,7 @@ namespace Vanrise.GenericData.RDBDataStorage
         {
             List<DataRecord> dataRecords = new List<DataRecord>();
             var dynamicManager = this.DynamicManager;
-            SelectRecords(context.FieldNames, context.LimitResult, context.FromTime, context.ToTime, true, context.FilterGroup, context.Direction, null,
+            SelectRecords(context.FieldNames, context.LimitResult, context.FromTime, context.ToTime, true, context.FilterGroup, context.Direction, null,null,
                 (reader) =>
                 {
                     while (reader.Read())
@@ -784,7 +795,7 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         void SelectRecords(List<string> fieldNames, int? numberOfRecords,
             DateTime? fromtime, DateTime? toTime, bool toTimeLessOrEqual, RecordFilterGroup filterGroup,
-            OrderDirection? orderDirection, string orderByFieldName,
+            OrderDirection? orderDirection, string orderByFieldName,Object dataRecordId,
             Action<IRDBDataReader> onReaderReady)
         {
             var rdbRegistrationInfo = GetRDBRegistrationInfo();
@@ -832,7 +843,11 @@ namespace Vanrise.GenericData.RDBDataStorage
                 if (!rdbRegistrationInfo.NullableFieldNames.Contains(orderByFieldName))
                     selectQuery.Sort().ByColumn(orderByFieldName, orderDirection.Value == OrderDirection.Ascending ? RDBSortDirection.ASC : RDBSortDirection.DESC);
             }
-
+            if(dataRecordId != null)
+            {
+                where.EqualsCondition(GetIdFieldNameWithValidate()).ObjectValue(dataRecordId);
+            }
+                
             queryContext.ExecuteReader(onReaderReady);
         }
 
@@ -964,7 +979,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             }
         }
 
- 
+
 
         #endregion
 

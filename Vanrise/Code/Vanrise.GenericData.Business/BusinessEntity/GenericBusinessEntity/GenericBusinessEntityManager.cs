@@ -151,61 +151,16 @@ namespace Vanrise.GenericData.Business
             if (genericBEDefinitionSetting.DataRecordStorageId.HasValue)
             {
                 var idDataRecordField = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(businessEntityDefinitionId);
-
                 List<string> columns = new List<string>();
-                List<string> columnTitles = new List<string>();
                 var dataRecordFields = _genericBEDefinitionManager.GetDataRecordTypeFieldsByBEDefinitionId(businessEntityDefinitionId);
                 foreach (var field in dataRecordFields)
                 {
                     columns.Add(field.Key);
-                    columnTitles.Add(field.Value.Title);
                 }
-
-                //  GetGridColumnNamesAndTitles(businessEntityDefinitionId, out columns, out columnTitles);
-
-                var storageRecords = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
+                var dataRecord = _dataRecordStorageManager.GetDataRecord(genericBEDefinitionSetting.DataRecordStorageId.Value, genericBusinessEntityId, columns);
+                if (dataRecord != null && dataRecord.FieldValues != null)
                 {
-                    FromRow = 0,
-                    ToRow = 2,
-                    SortByColumnName = string.Format("FieldValues.{0}.Description", idDataRecordField.Name),
-                    Query = new DataRecordQuery
-                    {
-                        Columns = columns,
-                        Filters = new List<DataRecordFilter>
-                    {
-                        new DataRecordFilter {
-                            FieldName = idDataRecordField.Name,
-                            FilterValues =  new List<object> {
-                                genericBusinessEntityId
-                            }
-                        }
-                    },
-                        FromTime = DateTime.MinValue,
-                        ColumnTitles = columnTitles,
-                        DataRecordStorageIds = new List<Guid> { genericBEDefinitionSetting.DataRecordStorageId.Value },
-                        //Direction=,
-                      //  LimitResult = 1000,
-                        //SortColumns=,
-                        //ToTime
-                    },
-                }) as BigResult<DataRecordDetail>;
-                if (storageRecords.Data != null)
-                {
-                    var item = storageRecords.Data.FirstOrDefault();
-                    if (item != null && item.FieldValues != null)
-                    {
-                        Dictionary<string, Object> fieldValues = new Dictionary<string, Object>();
-                        foreach (var fieldValue in item.FieldValues)
-                        {
-                            if (fieldValue.Value.Value != null)
-                                fieldValues.Add(fieldValue.Key, fieldValue.Value.Value);
-                        }
-                        return new GenericBusinessEntity
-                        {
-                            FieldValues = fieldValues,
-                        };
-                    }
-
+                    return DataRecordStorageToGenericBEMapper(dataRecord);
                 }
                 return null;
             }
@@ -497,7 +452,10 @@ namespace Vanrise.GenericData.Business
 
                     if (hasInsertedId)
                     {
-                        genericBusinessEntityToAdd.FieldValues.Add(idFieldType.Name, insertedId);
+                        if (genericBusinessEntityToAdd.FieldValues.ContainsKey(idFieldType.Name))
+                            genericBusinessEntityToAdd.FieldValues[idFieldType.Name] = insertedId;
+                        else
+                            genericBusinessEntityToAdd.FieldValues.Add(idFieldType.Name, insertedId);
                     }
                     VRActionLogger.Current.TrackAndLogObjectAdded(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToAdd.BusinessEntityDefinitionId), genericBusinessEntityToAdd);
 
@@ -1280,7 +1238,7 @@ namespace Vanrise.GenericData.Business
 
             foreach (var fieldValue in genericBusinessEntity.FieldValues)
             {
-                var dataRecordTypeField = dataRecordTypeFields.FindRecord(x => x.Name == fieldValue.Key);
+                var dataRecordTypeField = dataRecordTypeFields.GetRecord(fieldValue.Key);
                 if (dataRecordTypeField != null)
                 {
                     genericBusinessEntityDetail.FieldValues.Add(fieldValue.Key, new GenericBusinessEntityValue

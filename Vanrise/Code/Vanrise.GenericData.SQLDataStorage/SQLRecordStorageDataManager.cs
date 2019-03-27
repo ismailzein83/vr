@@ -467,6 +467,16 @@ namespace Vanrise.GenericData.SQLDataStorage
             });
         }
 
+        public DataRecord GetDataRecord(object dataRecordId, List<string> fieldNames)
+        {
+            Columns = GetColumnNamesFromFieldNames(fieldNames);
+            string query = BuildGetByIdQuery();
+            return GetItemText(query, DataRecordMapper, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@IdFieldValue", dataRecordId));
+            });
+        }
+
         public List<DataRecord> GetAllDataRecords(List<string> columns)
         {
             Columns = GetColumnNamesFromFieldNames(columns);
@@ -1173,6 +1183,15 @@ namespace Vanrise.GenericData.SQLDataStorage
                                                                     tableName));
             return str.ToString();
         }
+        private string BuildGetByIdQuery()
+        {
+            string tableName = GetTableNameWithSchema();
+            var idColumn = GetIdColumn();
+            StringBuilder str = new StringBuilder(string.Format(@"  select {0} from {1} WITH (NOLOCK) Where {2} = @IdFieldValue ",
+                                                                     string.Join<string>(",", Columns),
+                                                                    tableName, GetColumnNameFromFieldName(idColumn.Name)));
+            return str.ToString();
+        }
 
         private string BuildUpdateQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues, int? modifiedUserId, RecordFilterGroup filterGroup)
         {
@@ -1337,7 +1356,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             return datatable;
         }
 
-      
+       
 
         #endregion
     }

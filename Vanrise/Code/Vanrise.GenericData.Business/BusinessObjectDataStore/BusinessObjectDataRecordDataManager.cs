@@ -187,6 +187,11 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
+        public DataRecord GetDataRecord(object dataRecordId, List<string> fieldNames)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Classes
 
         private class BusinessObjectDataProviderLoadRecordsContext : IBusinessObjectDataProviderLoadRecordsContext

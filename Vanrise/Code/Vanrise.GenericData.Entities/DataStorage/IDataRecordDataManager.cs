@@ -11,6 +11,7 @@ namespace Vanrise.GenericData.Entities
 
         void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false);
 
+        DataRecord GetDataRecord(Object dataRecordId, List<string> fieldNames);
         List<DataRecord> GetAllDataRecords(List<string> columns);
 
         bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId);

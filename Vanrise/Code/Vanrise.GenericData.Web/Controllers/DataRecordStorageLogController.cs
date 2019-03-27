@@ -22,6 +22,12 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             if (!_manager.DoesUserHaveAccess(input))
                 return GetUnauthorizedResponse();
+
+            foreach (var id in input.Query.DataRecordStorageIds)
+            {
+                if (_manager.DoesDataRecordStorageDenyAPICall(id))
+                    throw new NotSupportedException("External calls are not allowed.");
+            }
             return GetWebResponse(input, _manager.GetFilteredDataRecords(input), input.Query.ReportName);
         }
     }
