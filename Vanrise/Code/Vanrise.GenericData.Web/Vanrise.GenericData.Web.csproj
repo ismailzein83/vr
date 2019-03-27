@@ -517,7 +517,9 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeDefinition\vr-genericdata-fieldtype-datarecordtypelist-grideditorview-definition.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeDefinition\vr-genericdata-fieldtype-datarecordtypelist-gridview-definition.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeDefinition\vr-genericdata-fieldtype-datarecordtypelist-fieldview-definition.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeRuntime\GridViewEditorController.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeRuntime\Templates\GridEditorViewTypeRuntimeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeRuntime\Templates\GridViewEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeRuntime\Templates\GridViewTypeRuntimeTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeRuntime\Templates\FieldViewTypeRuntimeTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeRuntime\vr-genericdata-fieldtype-datarecordtypelist-grideditorview-runtime.js" />
