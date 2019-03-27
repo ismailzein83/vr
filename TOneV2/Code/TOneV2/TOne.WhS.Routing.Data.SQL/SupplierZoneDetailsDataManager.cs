@@ -150,7 +150,11 @@ namespace TOne.WhS.Routing.Data.SQL
                 dr["SupplierServiceIds"] = supplierZoneServiceIds;
                 dr["ExactSupplierServiceIds"] = exactSupplierZoneServiceIds;
                 dr["SupplierServiceWeight"] = supplierZoneDetail.SupplierServiceWeight;
-                dr["SupplierRateId"] = supplierZoneDetail.SupplierRateId;
+
+                if (supplierZoneDetail.SupplierRateId.HasValue)
+                    dr["SupplierRateId"] = supplierZoneDetail.SupplierRateId.Value;
+                else
+                    dr["SupplierRateId"] = DBNull.Value;
 
                 if (supplierZoneDetail.SupplierRateEED.HasValue)
                     dr["SupplierRateEED"] = supplierZoneDetail.SupplierRateEED.Value;
