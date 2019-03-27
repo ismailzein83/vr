@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -31,7 +32,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(object value)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
@@ -75,6 +76,23 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             throw new NotImplementedException();
         }
+        protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
+        {
+            return originalValue;
+        }
+        public override bool StoreValueSerialized => true;
+        public override string SerializeValue(ISerializeDataRecordFieldValueContext context)
+        {
+            return base.SerializeValue(context);
+        }
+
+        public override object DeserializeValue(IDeserializeDataRecordFieldValueContext context)
+        {
+            context.ThrowIfNull("context");
+            if (string.IsNullOrEmpty(context.Value))
+                return null;
+            return Vanrise.Common.Serializer.Deserialize(context.Value, GetRuntimeType());
+        }
     }
 
     public abstract class ListRecordRuntimeViewType
@@ -86,17 +104,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     public class GridViewListRecordRuntimeViewType : ListRecordRuntimeViewType
     {
         public override Guid ConfigId =>  new Guid("661E02F1-7A44-4D56-A73F-7912EF3017B1");
-        public override string RuntimeEditor => "";
+        public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-gridview-runtime";
     }
     public class GridEditorViewListRecordRuntimeViewType : ListRecordRuntimeViewType
     {
         public override Guid ConfigId => new Guid("03925E9D-6A0F-4D4F-A4A4-36F5757D71EB");
-        public override string RuntimeEditor => "";
+        public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-grideditorview-runtime";
     }
     public class FieldViewListRecordRuntimeViewType : ListRecordRuntimeViewType
     {
         public override Guid ConfigId => new Guid("6A8E0D5E-318C-4C6E-A99B-991EAE562B7C");
-        public override string RuntimeEditor => "";
+        public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-fieldview-runtime";
         public DataRecordField RecordField { get; set; }
     }
 }

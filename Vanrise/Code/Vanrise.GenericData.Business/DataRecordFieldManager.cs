@@ -98,6 +98,12 @@ namespace Vanrise.GenericData.Business
             return manager.GetExtensionConfigurations<DataRecordFieldTypeConfig>(DataRecordFieldTypeConfig.EXTENSION_TYPE);
         }
 
+        public IEnumerable<ListRecordRuntimeViewTypeConfig> GetListRecordRuntimeViewTypeConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<ListRecordRuntimeViewTypeConfig>(ListRecordRuntimeViewTypeConfig.EXTENSION_TYPE);
+        }
+
         #endregion
 
         #region Config

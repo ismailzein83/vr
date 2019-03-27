@@ -1,10 +1,20 @@
-﻿<vr-columns width="1/3row">
-    <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
-                                            selectedvalues="scopeModel.selectedDataRecordType"
-                                            onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"
-                                            isrequired="true"
-                                            hideremoveicon
-                                            showaddbutton>
-    </vr-genericdata-datarecordtype-selector>
-</vr-columns>
-<vr-genericdata-fieldtype-datarecordtypelist-settings on-ready="scopeModel.onListRecordRuntimeViewTypeSelectorReady"></vr-genericdata-fieldtype-datarecordtypelist-settings>
+﻿<vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-row>
+                <vr-section title={{scopeModel.fieldTitle}}>
+                    <vr-button type="Add" data-onclick="scopeModel.addRecord" standalone></vr-button>
+                    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                                 on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
+                        <vr-datagridcolumn ng-repeat="column in scopeModel.columns" headertext="column" columnindex="$index">
+                            <span vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
+                                <vr-directivewrapper directive="dataItem.Entity[colDef.columnIndex].runtimeEditor" selectionmode=single isrequired="true" on-ready="dataItem.Entity[{{colDef.columnIndex}}].onRunTimeEditorDirectiveReady"></vr-directivewrapper>
+                            </span>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-section>
+            </vr-row>
+        </vr-columns>
+    </vr-row>
+</vr-row>    
+

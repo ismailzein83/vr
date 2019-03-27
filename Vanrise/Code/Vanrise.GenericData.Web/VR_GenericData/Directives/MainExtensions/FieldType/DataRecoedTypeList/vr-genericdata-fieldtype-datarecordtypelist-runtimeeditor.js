@@ -1,178 +1,96 @@
-﻿//'use strict';
-//app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsService', 'VR_GenericData_FieldNumberDataTypeEnum', function (UtilsService, VR_GenericData_FieldNumberDataTypeEnum) {
+﻿'use strict';
+app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsService','VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
 
-//    var directiveDefinitionObject = {
-//        restrict: 'E',
-//        scope: {
-//            onReady: '=',
-//            selectionmode: '@',
-//            normalColNum: '@',
-//            isrequired: '='
-//        },
-//        controller: function ($scope, $element, $attrs) {
-//            var ctrl = this;
-//            $scope.scopeModel = {};
-//            var ctor = new numberCtor(ctrl, $scope, $attrs);
-//            ctor.initializeController();
-//        },
-//        controllerAs: 'runtimeEditorCtrl',
-//        bindToController: true,
-//        compile: function (element, attrs) {
-//            return {
-//                pre: function ($scope, iElem, iAttrs, ctrl) {
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+                selectionmode: '@',
+                normalColNum: '@',
+                isrequired: '='
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                $scope.scopeModel = {};
+                var ctor = new dataRecordTypeListCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: 'runtimeEditorCtrl',
+            bindToController: true,
+            compile: function (element, attrs) {
+                return {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
 
-//                }
-//            };
-//        },
-//        template: function (element, attrs) {
-//            return getDirectiveTemplate(attrs);
-//        }
-//    };
+                    }
+                };
+            },
+            template: function (element, attrs) {
+                return getDirectiveTemplate(attrs);
+            }
+        };
 
-//    function numberCtor(ctrl, $scope, $attrs) {
-//        var fieldType;
-//        function initializeController() {
-//            $scope.scopeModel.value;
+        function dataRecordTypeListCtor(ctrl, $scope, $attrs) {
 
-//            if (ctrl.selectionmode != 'single') {
-//                defineScopeForMultiModes();
-//            }
+            var runtimeEditorDirectiveAPI;
+            var runtimeEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-//            defineAPI();
-//        }
+            function initializeController() {
+                $scope.scopeModel = {};
 
-//        function defineScopeForMultiModes() {
-//            $scope.scopeModel.values = [];
-//            $scope.scopeModel.isAddButtonDisabled = true;
+                $scope.scopeModel.onRuntimeEditorDirectiveReady = function (api) {
+                    runtimeEditorDirectiveAPI = api;
+                    runtimeEditorReadyPromiseDeferred.resolve();
+                };
 
-//            $scope.scopeModel.addValue = function () {
-//                $scope.scopeModel.values.push($scope.scopeModel.value);
-//                $scope.scopeModel.value = undefined;
-//            };
+                defineAPI();
+            }
 
-//            $scope.scopeModel.validateValue = function () {
-//                if ($scope.scopeModel.value == undefined || $scope.scopeModel.value == null || $scope.scopeModel.value == '') {
-//                    $scope.scopeModel.isAddButtonDisabled = true;
-//                    return null;
-//                }
-//                if (UtilsService.contains(getValuesAsNumber($scope.scopeModel.values), getValueAsNumber($scope.scopeModel.value))) {                   
-//                    $scope.scopeModel.isAddButtonDisabled = true;
-//                    return 'Value already exists';
-//                }
-//                $scope.scopeModel.isAddButtonDisabled = false;
-//                return null;
-//            };
-//        }
 
-//        function defineAPI() {
-//            var api = {};
+            function defineAPI() {
+                var api = {};
 
-//            api.load = function (payload) {
-//                $scope.scopeModel.values = [];
-//                $scope.scopeModel.value = undefined;
+                api.load = function (payload) {
 
-//                var fieldValue;
+                    var fieldValue;
+                    var fieldType;
+                    var fieldTitle;
 
-//                if (payload != undefined) {
-//                    $scope.scopeModel.label = payload.fieldTitle;
-//                    fieldType = payload.fieldType;
-//                    fieldValue = payload.fieldValue;
-//                }
+                    if (payload != undefined) {
+                        fieldType = payload.fieldType;
+                        fieldValue = payload.fieldValue;
+                        fieldTitle = payload.fieldTitle;
+                        $scope.scopeModel.runtimeEditor = fieldType.RuntimeViewType.RuntimeEditor;
 
-//                if (fieldValue != undefined) {
-//                    if (ctrl.selectionmode == "dynamic") {
-//                        angular.forEach(fieldValue.Values, function (val) {
-//                            $scope.scopeModel.values.push(val);
-//                        });
-//                    }
-//                    else if (ctrl.selectionmode == "multiple") {
-//                        for (var i = 0; i < fieldValue.length; i++) {
-//                            $scope.scopeModel.values.push(fieldValue[i]);
-//                        }
-//                    }
-//                    else {
-//                        $scope.scopeModel.value = fieldValue;
-//                    }
-//                }
-//            };
+                        var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        runtimeEditorReadyPromiseDeferred.promise.then(function () {
+                            VRUIUtilsService.callDirectiveLoad(runtimeEditorDirectiveAPI, {
+                                fieldTitle: fieldTitle,
+                                fieldValue: fieldValue,
+                                dataRecordTypeId: fieldType.DataRecordTypeId
+                            }, runtimeEditorLoadPromiseDeferred);
+                        });
+                        return runtimeEditorLoadPromiseDeferred.promise;
+                    }
 
-//            api.getData = function () {
-//                var retVal;
+                };
+                api.getData = function () {
+                    return runtimeEditorDirectiveAPI.getData();
+                };
 
-//                if (ctrl.selectionmode == "dynamic") {
-//                    if ($scope.scopeModel.values.length > 0) {
-//                        retVal = {
-//                            $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-//                            Values: getValuesAsNumber($scope.scopeModel.values)
-//                        };
-//                    }
-//                }
-//                else if (ctrl.selectionmode == 'multiple') {
-//                    if ($scope.scopeModel.values.length > 0) {
-//                        retVal = getValuesAsNumber($scope.scopeModel.values);
-//                    }
-//                }
-//                else {
-//                    retVal = getValueAsNumber($scope.scopeModel.value);
-//                }
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
+            this.initializeController = initializeController;
+        }
 
-//                return retVal;
-//            };
+        function getDirectiveTemplate(attrs) {
 
-//            if (ctrl.onReady != null)
-//                ctrl.onReady(api);
-//        }
+            return '<vr-columns colnum="12">'
+                + '<vr-directivewrapper directive="scopeModel.runtimeEditor" on-ready="scopeModel.onRuntimeEditorDirectiveReady"   isrequired="true"></vr-directivewrapper>'
+                + '</vr-columns>';
+        }
 
-//        function getValuesAsNumber(valuesAsString) {
-//            if (valuesAsString != undefined) {
-//                var values = [];
-//                for (var i = 0; i < valuesAsString.length; i++) {
-//                    values.push(getValueAsNumber(valuesAsString[i]));
-//                }
-//                return values;
-//            }
-//            return null;
-//        }
-
-//        function getValueAsNumber(valueAsString) {
-//            if (valueAsString != undefined)
-//                return parseFloat(valueAsString);
-//            else
-//                return null;
-//        }
-
-//        this.initializeController = initializeController;
-
-//    }
-
-//    function getDirectiveTemplate(attrs) {
-
-//        if (attrs.selectionmode == 'single') {
-//            return getSingleSelectionModeTemplate();
-//        }
-//        else {
-//            return '<vr-columns colnum="12" haschildcolumns>'
-//                    //+ '<vr-row>'
-//                        + getSingleSelectionModeTemplate()
-//                        + '<vr-columns withemptyline>'
-//                            + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
-//                        + '</vr-columns>'
-//                    //+ '</vr-row>'
-//                    //+ '<vr-row>'
-//                        + '<vr-columns colnum="12">'
-//                            + '<vr-datalist maxitemsperrow="4" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
-//                        + '</vr-columns>'
-//                    //+ '</vr-row>'
-//                + '</vr-columns>';
-//        }
-
-//        function getSingleSelectionModeTemplate() {
-//            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
-//                    + '<vr-textbox type="number" label="{{scopeModel.label}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
-//                + '</vr-columns>';
-//        }
-//    }
-
-//    return directiveDefinitionObject;
-//}]);
+        return directiveDefinitionObject;
+    }]);
 

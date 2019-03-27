@@ -18,7 +18,14 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordFieldManager manager = new DataRecordFieldManager();
             return manager.GetDataRecordFieldTypeConfigs();
         }
-
+        [HttpGet]
+        [Route("GetListRecordRuntimeViewTypeConfigs")]
+        public IEnumerable<ListRecordRuntimeViewTypeConfig> GetListRecordRuntimeViewTypeConfigs()
+        {
+            DataRecordFieldManager manager = new DataRecordFieldManager();
+            return manager.GetListRecordRuntimeViewTypeConfigs();
+        }
+        
         [HttpGet]
         [Route("GetDataRecordFieldsInfo")]
         public IEnumerable<DataRecordFieldInfo> GetDataRecordFieldsInfo(Guid dataRecordTypeId, string serializedFilter = null)

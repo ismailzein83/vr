@@ -26,7 +26,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public FieldCustomObjectTypeSettings Settings { get; set; }
 
-        public override string RuntimeEditor { get { return null; } }
+        public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-customobject-runtimeeditor"; } }
 
         public override bool StoreValueSerialized { get { return true; } }
 

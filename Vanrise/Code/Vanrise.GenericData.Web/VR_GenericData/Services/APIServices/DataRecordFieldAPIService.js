@@ -28,7 +28,9 @@
         function GetDataRecordFieldTypeConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetDataRecordFieldTypeConfigs"));
         }
-
+        function GetListRecordRuntimeViewTypeConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetListRecordRuntimeViewTypeConfigs"));
+        }
         function TryResolveDifferences(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "TryResolveDifferences"), input);
         }
@@ -44,7 +46,8 @@
             GetDataRecordFieldFormulaExtensionConfigs: GetDataRecordFieldFormulaExtensionConfigs,
             GetDataRecordFieldTypeConfigs: GetDataRecordFieldTypeConfigs,
             TryResolveDifferences: TryResolveDifferences,
-            GetFieldCustomObjectTypeSettingsConfig: GetFieldCustomObjectTypeSettingsConfig
+            GetFieldCustomObjectTypeSettingsConfig: GetFieldCustomObjectTypeSettingsConfig,
+            GetListRecordRuntimeViewTypeConfigs: GetListRecordRuntimeViewTypeConfigs
         });
 
     }
