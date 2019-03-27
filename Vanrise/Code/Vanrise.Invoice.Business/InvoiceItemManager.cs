@@ -277,7 +277,7 @@ namespace Vanrise.Invoice.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<InvoiceItemDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() } };
+                ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }, Rows = new List<ExportExcelRow>() };
                 InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
                 InvoiceItemRequestHandler invoiceItemRequestHandler = new InvoiceItemRequestHandler();
                 var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
@@ -305,7 +305,6 @@ namespace Vanrise.Invoice.Business
                 }
                 if (context.BigResult != null && context.BigResult.Data != null && context.BigResult.Data.Count() > 0)
                 {
-                    sheet.Rows = new List<ExportExcelRow>();
                     foreach (var record in context.BigResult.Data)
                     {
                         var row = new ExportExcelRow();
@@ -338,7 +337,7 @@ namespace Vanrise.Invoice.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<GroupingInvoiceItemDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() } };
+                ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }, Rows = new List<ExportExcelRow>() };
                 InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
                 var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
                 invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
@@ -398,7 +397,6 @@ namespace Vanrise.Invoice.Business
                 }
                 if (context.BigResult != null && context.BigResult.Data != null && context.BigResult.Data.Count() > 0)
                 {
-                    sheet.Rows = new List<ExportExcelRow>();
                     foreach (var record in context.BigResult.Data)
                     {
                         var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
