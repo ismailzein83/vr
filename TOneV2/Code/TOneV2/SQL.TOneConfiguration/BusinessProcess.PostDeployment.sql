@@ -37,6 +37,7 @@ as (select * from (values
 ('9C73540F-97E8-4F7A-BD02-594F6DD29741','BaseBPTaskTypeSettingsCustomObject','Base BP Task Type Settings','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"bp-basebptasktypesettings-customobject"}'),
 ('A9445F70-1188-4F39-8135-419954E88A8B','VRWorkflowAssignTaskActivity','Human Activity','BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-assigntask"}'),
 ('B55A355A-66BA-4036-AC47-261B80C93CA2','VRWorkflowSpecificUsersTaskAssignees','Specific Users','BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-specificusers-taskassignees"}'),
+('F9C477A8-4374-4C58-A859-02F5A26EDCD7','VRWorkflowSpecificGroupsTaskAssignees','Specific Groups','BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-specificgroups-taskassignees"}'),
 ('D297A8B8-997D-4127-91FA-353238296940','VRWorkflowProcessInitiatorTaskAssignees','Process Initiator','BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-processinitiator-taskassignees"}'),
 ('36F6C817-A40F-4F8C-A2D6-9377EAF2169D','ExecuteBPGenericTaskTypeAction','Execute','BP_Generic_TaskType_ActionSettings','{"Editor":"businessprocess-generictasktype-actionsettings-execute"}'),
 ('0AD405A3-9BCF-4796-9A1A-6CC2C3F9AAA3','OpenBPInstanceViewer','Open BP Instance Viewer','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-openbpinstanceviewer-action"}')
