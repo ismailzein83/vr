@@ -120,7 +120,9 @@ as (select * from (values
 ('F8DD5B05-7F69-4F16-BFC6-D65EF9B65BF8','RDB','RDB','VR_GenericData_DataStoreConfig','{"Editor":"vr-genericdata-datastoresetting-rdb","DataRecordSettingsEditor":"vr-genericdata-datarecordstoragesettings-rdb"}'),
 ('6623B11A-333D-487C-8906-B07F1784F944','RDB Record Storage','RDB Record Storage','VR_Analytic_AnalyticDataProviderTableConfig','{"Editor":"vr-rdb-analytic-dataprovider-table"}'),
 ('77EEF180-EED0-46A8-BBAB-F19BFDB43F60','GenericBE_Grid_View','GenericBE Grid View','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-genericdata-genericbe-genericbegridview-definition"}'),
-('34FB0901-6270-4EE2-901E-78F6A2C40E4F','FilterGroupGenericBEGridCondition','Filter Group','VR_GenericData_GenericBEGridCondition','{"Editor":"vr-genericdata-genericbe-gridviewcondition-filtergroup"}')
+('34FB0901-6270-4EE2-901E-78F6A2C40E4F','FilterGroupGenericBEGridCondition','Filter Group','VR_GenericData_GenericBEGridCondition','{"Editor":"vr-genericdata-genericbe-gridviewcondition-filtergroup"}'),
+('8C0574CD-8862-4F29-828A-CE398635F2F7','Data Record Type List','Data Record Type List','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist","RuntimeEditor":"vr-genericdata-fieldtype-datarecordtypelist-runtimeeditor","FilterEditor":"","RuleFilterEditor":""}'),
+('661E02F1-7A44-4D56-A73F-7912EF3017B1','Grid_View','Grid View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-gridview-definition"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
