@@ -679,9 +679,19 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetPayments(customerId);
         }
 
-        public List<Installment> GetInstallmentsByInvoiceId(string invoiceId)
+        public List<Installment> GetInstallmentsByPaymentPlanId(string paymentPlanId)
         {
-            return RatePlanMockDataGenerator.GetInstallmentsByInvoiceId(invoiceId);
+            return RatePlanMockDataGenerator.GetInstallmentsByPaymentPlanId(paymentPlanId);
+        }
+
+        public List<PaymentPlanTemplateInfo> GetAllPaymentPlanTemplatesInfo()
+        {
+            return RatePlanMockDataGenerator.GetAllTemplatesInfo();
+        }
+
+        public List<InstallmentDetail> GetInstallments(string templateId,string invoiceId,string reductionId)
+        {
+            return RatePlanMockDataGenerator.GetInstallments();
         }
 
         public bool GetCollectionStatus(string invoiceId)

@@ -93,6 +93,7 @@
     <Compile Include="Billing\PabxManager.cs" />
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="Request Flow Management\AdministrativeComplaintFlowManagement.cs" />
+    <Compile Include="Request Flow Management\CreatePaymentPlanFlowManagement.cs" />
     <Compile Include="Request Flow Management\LeasedLineComplaintFlowManagement.cs" />
     <Compile Include="TelephonyTechnicalComplaintManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />

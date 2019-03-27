@@ -11,6 +11,7 @@ using SOM.Main.BP.Arguments;
 using SOM.Main.Entities;
 using Terrasoft.Core;
 using Terrasoft.Core.DB;
+using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
 {
@@ -767,12 +768,28 @@ namespace BPMExtended.Main.Business
         {
             //TODO: OM sends the request back after completion on other systems to  GSHDSL team to activate the service.
 
-            //TODO : Update gshdsl object
 
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StGSHDSL").Set("StIsServiceActivated", Column.Parameter(true))
-                .Where("Id").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //TODO : Update gshdsl object
+            var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("StGSHDSL");
+            var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+            var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, "StGSHDSL");
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId));
+            var collection = eSQ.GetEntityCollection(UserConnection);
+            if (collection.Count > 0)
+            {
+                recordEntity = collection[0];
+                recordEntity.SetColumnValue("StIsServiceActivated", true);
+            }
+            recordEntity.Save();
+
+            //UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            //var update = new Update(connection, "StGSHDSL").Set("StIsServiceActivated", Column.Parameter(true))
+            //    .Where("Id").IsEqual(Column.Parameter(requestId));
+            //update.Execute();
 
         }
 

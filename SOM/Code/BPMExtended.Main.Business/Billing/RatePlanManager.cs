@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Terrasoft.Core;
 using Terrasoft.Core.DB;
+using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
 {
@@ -17,11 +18,20 @@ namespace BPMExtended.Main.Business
     {
         CPTManager _cptManager = new CPTManager();
 
+        public UserConnection BPM_UserConnection
+        {
+            get
+            {
+                return (UserConnection)HttpContext.Current.Session["UserConnection"];
+            }
+        }
+
         public List<CustomerCategoryInfo> GetCustomerCategoryInfo(BPMCustomerType customerType)
         {
-           
+
             var customerCategories = RatePlanMockDataGenerator.GetCustomerCategories(customerType);
             return customerCategories.MapRecords(CustomerCategroryInfoMapper).ToList();
+            
         }
         
         public List<CustomerCategoryDetail> GetCustomerCategories(BPMCustomerType customerType)

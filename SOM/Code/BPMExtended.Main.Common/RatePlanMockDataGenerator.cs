@@ -1897,60 +1897,10 @@ namespace BPMExtended.Main.Common
         }
 
         #endregion
+    
+        #region Invoices
 
-        #region Invoice Installments
-
-        public static List<Installment> GetInstallmentsByInvoiceId(string invoiceId)
-        {
-            return GetAllInstallments().FindAll(x => x.InvoiceId.ToLower() == invoiceId.ToLower());
-        }
-
-        private static List<Installment> GetAllInstallments()
-        {
-
-            return new List<Installment>
-            {
-                 new Installment
-                 {
-                    Id ="INST_1",
-                    InvoiceId = "INV_ID_1",
-                    Template = "t1",
-                    Amount ="200",
-                    Date ="01/01/2019"                   
-                 },
-                  new Installment
-                 {
-                    Id ="INST_2",
-                    InvoiceId = "INV_ID_1",
-                    Template = "t1",
-                    Amount ="400",
-                    Date ="04/04/2019"
-                 },
-                   new Installment
-                 {
-                    Id ="INST_3",
-                    InvoiceId = "INV_ID_2",
-                    Template = "t2",
-                    Amount ="600",
-                    Date ="02/02/2019"
-                 },
-                    new Installment
-                 {
-                    Id ="INST_4",
-                    InvoiceId = "INV_ID_2",
-                    Template = "t2",
-                    Amount ="500",
-                    Date ="04/04/2019"
-                 }
-            };
-
-         }
-
-        #endregion
-
-                #region Invoices
-
-            public static List<InvoiceDetail> GetInvoices(string customerId)
+        public static List<InvoiceDetail> GetInvoices(string customerId)
         {
             return GetAllInvoices().FindAll(x => x.CustomerID.ToLower() == customerId.ToLower());
         }
@@ -2096,6 +2046,221 @@ namespace BPMExtended.Main.Common
         }
 
         #endregion
+
+        #region Payment Plans
+
+        public static List<PaymentPlan> GetPaymentPlansByInvoiceId(string invoiceId)
+        {
+            return GetAllPaymentPlans().FindAll(x => x.InvoiceId.ToLower() == invoiceId.ToLower());
+        }
+        public static PaymentPlan GetPaymentPlanById(string paymentPlanId)
+        {
+            return GetAllPaymentPlans().Find(x => x.Id.ToLower() == paymentPlanId.ToLower());
+        }
+
+        private static List<PaymentPlan> GetAllPaymentPlans()
+        {
+
+            return new List<PaymentPlan>
+            {
+                 new PaymentPlan
+                 {
+                     Id= "1",
+                     Name ="Payment Plan A",
+                     Description  = "dddd",
+                     TotalAmount ="2000",
+                     StartDate = "10/10/2019",
+                     EndDate = "20/10/2019",
+                     NextInstallmentDueDate = "12/10/2019",
+                     Status ="s1",
+                     PaymentPlanTemplateId ="1",
+                     InvoiceId ="INV_ID_1"
+
+                 },
+                 new PaymentPlan
+                 {
+                    Id= "2",
+                    Name ="Payment Plan B",
+                    Description  = "dddd",
+                    TotalAmount ="2200",
+                    StartDate = "10/1/2019",
+                    EndDate = "20/2/2019",
+                    NextInstallmentDueDate = "14/1/2019",
+                    Status ="s2",
+                    PaymentPlanTemplateId ="2",
+                    InvoiceId ="INV_ID_1"
+
+                 },
+                 new PaymentPlan
+                 {
+                     Id= "3",
+                     Name ="Payment Plan C",
+                     Description  = "eeee",
+                    TotalAmount ="2250",
+                    StartDate = "10/1/2019",
+                    EndDate = "20/2/2019",
+                    NextInstallmentDueDate = "14/1/2019",
+                    Status ="s2",
+                    PaymentPlanTemplateId ="3",
+                     InvoiceId ="INV_ID_2"
+
+                 },
+                 new PaymentPlan
+                 {
+                      Id= "4",
+                     Name ="Payment Plan D",
+                      Description  = "aaaa",
+                    TotalAmount ="2200",
+                    StartDate = "10/1/2019",
+                    EndDate = "20/2/2019",
+                    NextInstallmentDueDate = "14/1/2019",
+                    Status ="s3",
+                    PaymentPlanTemplateId ="4",
+                     InvoiceId ="INV_ID_3"
+
+                 },
+                 new PaymentPlan
+                 {
+                     Id= "5",
+                     Name ="Payment Plan E",
+                      Description  = "aaaa",
+                    TotalAmount ="2200",
+                    StartDate = "10/1/2019",
+                    EndDate = "20/2/2019",
+                    NextInstallmentDueDate = "14/1/2019",
+                    Status ="s3",
+                    PaymentPlanTemplateId ="5",
+                     InvoiceId ="INV_ID_4"
+
+                 },                
+            };
+
+        }
+
+        #endregion
+
+        #region  Installments
+
+        public static List<Installment> GetInstallmentsByPaymentPlanId(string paymentPlanId)
+        {
+            return GetAllInstallments().FindAll(x => x.PaymentPlanId.ToLower() == paymentPlanId.ToLower());
+        }
+
+        public static List<InstallmentDetail> GetInstallments()
+        {
+            return GetAllInstallments().MapRecords(InstallmentDetailMapper).ToList();
+            //return GetAllInstallments().FindAllRecords(x => (int)x.CustomerType == (int)customerType).MapRecords(InstallmentDetailMapper).ToList();
+        }
+
+        private static List<Installment> GetAllInstallments()
+        {
+
+            return new List<Installment>
+            {
+                 new Installment
+                 {
+                    Id ="INST_1",
+                    PaymentPlanId = "1",
+                    Amount ="200",
+                    Date ="01/01/2019"
+                 },
+                  new Installment
+                 {
+                    Id ="INST_2",
+                    PaymentPlanId = "2",
+                    Amount ="400",
+                    Date ="04/04/2019"
+                 },
+                   new Installment
+                 {
+                    Id ="INST_3",
+                    PaymentPlanId = "3",
+                    Amount ="600",
+                    Date ="02/02/2019"
+                 },
+                    new Installment
+                 {
+                    Id ="INST_4",
+                    PaymentPlanId = "4",
+                    Amount ="500",
+                    Date ="04/04/2019"
+                 },
+                    new Installment
+                 {
+                    Id ="INST_5",
+                    PaymentPlanId = "1",
+                    Amount ="500",
+                    Date ="04/04/2019"
+                 }
+            };
+
+        }
+
+        private static InstallmentDetail InstallmentDetailMapper(Installment installment)
+        {
+            return new InstallmentDetail
+            {
+                Id = installment.Id,
+                Date = installment.Date,
+                Amount = installment.Amount
+            };
+        }
+
+
+        #endregion
+
+        #region Templates
+
+        public static List<PaymentPlanTemplate> GetTemplateById(string templateId)
+        {
+            return GetAllTemplates().FindAll(x => x.Id.ToLower() == templateId.ToLower());
+        }
+
+        public static List<PaymentPlanTemplateInfo> GetAllTemplatesInfo()
+        {
+            return GetAllTemplates().MapRecords(TemplatesInfoMapper).ToList();
+        }
+
+        private static List<PaymentPlanTemplate> GetAllTemplates()
+        {
+
+            return new List<PaymentPlanTemplate>
+            {
+                 new PaymentPlanTemplate
+                 {
+                    Id ="1",
+                    Name ="Template A"
+                 },
+                 new PaymentPlanTemplate
+                 {
+                    Id ="2",
+                    Name ="Template B"
+                 },
+                 new PaymentPlanTemplate
+                 {
+                    Id ="3",
+                    Name ="Template C"
+                 },
+                 new PaymentPlanTemplate
+                 {
+                    Id ="4",
+                    Name ="Template D"
+                 },
+            };
+
+        }
+
+        private static PaymentPlanTemplateInfo TemplatesInfoMapper(PaymentPlanTemplate template)
+        {
+            return new PaymentPlanTemplateInfo
+            {
+                Id = template.Id,
+                Name = template.Name
+            };
+        }
+
+        #endregion
+
         #region Payments
 
         public static List<PaymentDetail> GetPayments(string customerId)
