@@ -119,7 +119,8 @@ as (select * from (values
 ('9ADCEA46-87C2-4747-8B88-20796AA99CA0','CompositeRecordConditionGroup','Condition Group','VR_GenericData_CompositeRecordConditionConfig','{"Editor":"vr-genericdata-compositerecordconditiongroup"}'),
 ('F8DD5B05-7F69-4F16-BFC6-D65EF9B65BF8','RDB','RDB','VR_GenericData_DataStoreConfig','{"Editor":"vr-genericdata-datastoresetting-rdb","DataRecordSettingsEditor":"vr-genericdata-datarecordstoragesettings-rdb"}'),
 ('6623B11A-333D-487C-8906-B07F1784F944','RDB Record Storage','RDB Record Storage','VR_Analytic_AnalyticDataProviderTableConfig','{"Editor":"vr-rdb-analytic-dataprovider-table"}'),
-('77EEF180-EED0-46A8-BBAB-F19BFDB43F60','GenericBE_Grid_View','GenericBE Grid View','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-genericdata-genericbe-genericbegridview-definition"}')
+('77EEF180-EED0-46A8-BBAB-F19BFDB43F60','GenericBE_Grid_View','GenericBE Grid View','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-genericdata-genericbe-genericbegridview-definition"}'),
+('34FB0901-6270-4EE2-901E-78F6A2C40E4F','FilterGroupGenericBEGridCondition','Filter Group','VR_GenericData_GenericBEGridCondition','{"Editor":"vr-genericdata-genericbe-gridviewcondition-filtergroup"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
