@@ -777,7 +777,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            ctrl.getCellValue = function (dataItem, colDef) {
 	                if (colDef == undefined)
 	                    return;
-	                return eval('dataItem.' + colDef.field);
+	                var cellValue = eval('dataItem.' + colDef.field);
+	                return cellValue != undefined && cellValue != null && cellValue || ' ';
 	            };
 
 	            ctrl.getCellTooltip = function (dataItem, colDef) {
@@ -1006,15 +1007,15 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateNormalContent);
 
 	                    if (currentColumn.isFieldDynamic) {
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "ctrl.getCellValue(dataItem, colDef) || ' ' ");
+	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "ctrl.getCellValue(dataItem, colDef)");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "ctrl.getCellTooltip(dataItem, colDef)");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "ctrl.getCellClass(dataItem, colDef)");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", "ctrl.isColumnClickable(dataItem, colDef)");
 
 	                    }
 	                    else {
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::" + dataItemColumnPropertyPath + ".dataValue || ' ' ");
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" + dataItemColumnPropertyPath + ".tooltip");
+	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::" + dataItemColumnPropertyPath + ".dataValue != null && " + dataItemColumnPropertyPath + ".dataValue != undefined ? " + dataItemColumnPropertyPath + ".dataValue : ' ' ");
+                            cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" +dataItemColumnPropertyPath + ".tooltip");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "::" + dataItemColumnPropertyPath + ".cellClass");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", dataItemColumnPropertyPath + ".isClickable");
 	                    }
