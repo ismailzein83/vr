@@ -1,4 +1,4 @@
-﻿app.directive('vrGenericdataGenericbeGridviewdefinitionFiltergroupcondition', ['UtilsService', 'VRUIUtilsService',
+﻿app.directive('vrGenericdataGenericbeGridviewconditionFiltergroup', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -32,7 +32,8 @@
 
         function filterGroupCondition(ctrl, $scope, $attrs) {
 
-            var selectedValues;
+            var condition;
+            var context;
             var initialPromises = [];
 
             var filterAPI;
@@ -67,7 +68,18 @@
             function defineApi() {
                 var api = {};
                 api.load = function (payload) {
-                    filterAPI.load(payload);
+
+                    if (payload != undefined) {
+                        context = payload.context;
+                        condition = payload.condition;
+                    }
+
+                   var filterPayload = {
+                        context: context,
+                        FilterGroup: condition != undefined ? condition.FilterGroup : undefined
+                    };
+
+                    return filterAPI.load(filterPayload);
                 };
 
                 api.getData = function () {

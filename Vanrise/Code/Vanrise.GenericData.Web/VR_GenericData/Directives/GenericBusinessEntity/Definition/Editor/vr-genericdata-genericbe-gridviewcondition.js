@@ -93,7 +93,7 @@
                             directiveReadyDeferred = undefined;
                             var directivePayload = {
                                 context: getContext(),
-                                FilterGroup: condition != undefined ? condition.FilterGroup : undefined
+                                condition: condition
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
@@ -171,6 +171,6 @@
         }
     }
 
-    app.directive('vrGenericdataGenericbeGridviewdefinitionCondition', gridViewConditionDirective);
+    app.directive('vrGenericdataGenericbeGridviewcondition', gridViewConditionDirective);
 
 })(app);
