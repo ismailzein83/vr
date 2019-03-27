@@ -778,7 +778,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                if (colDef == undefined)
 	                    return;
 	                var cellValue = eval('dataItem.' + colDef.field);
-	                return cellValue != undefined && cellValue != null && cellValue || ' ';
+	                if(cellValue != undefined && cellValue != null) return cellValue;
+	                return ' ';
 	            };
 
 	            ctrl.getCellTooltip = function (dataItem, colDef) {
@@ -1014,7 +1015,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	                    }
 	                    else {
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::" + dataItemColumnPropertyPath + ".dataValue != null && " + dataItemColumnPropertyPath + ".dataValue != undefined ? " + dataItemColumnPropertyPath + ".dataValue : ' ' ");
+	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::(" +dataItemColumnPropertyPath + ".dataValue!=null && " +dataItemColumnPropertyPath + ".dataValue!= undefined ) ? "+dataItemColumnPropertyPath + ".dataValue : ' '");
                             cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" +dataItemColumnPropertyPath + ".tooltip");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "::" + dataItemColumnPropertyPath + ".cellClass");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", dataItemColumnPropertyPath + ".isClickable");
