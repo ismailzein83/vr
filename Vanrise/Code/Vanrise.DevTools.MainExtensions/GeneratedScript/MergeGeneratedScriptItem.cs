@@ -59,7 +59,9 @@ namespace Vanrise.DevTools.MainExtensions
                 return "NULL";
             if (value is int || value is float || value is decimal || value is long || value is double)
                 return string.Format("{0}", value);
-            else return string.Format("'{0}'", value);
+            if (value is DateTime)
+                return $"'{((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss.fff")}'";
+            else return string.Format("'{0}'", value.ToString().Replace("'", "''"));
         }
         private string GenerateSQLQuery(GeneratedScriptItemTable item)
         {

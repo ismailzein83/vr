@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
@@ -82,6 +83,26 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
             throw new NotImplementedException();
+        }
+
+        public override bool StoreValueSerialized => true;
+
+        public override string SerializeValue(ISerializeDataRecordFieldValueContext context)
+        {
+            context.ThrowIfNull("context");
+            if (context.Object == null)
+                return string.Empty;
+
+            return Vanrise.Common.Serializer.Serialize(context.Object, true);
+        }
+
+        public override object DeserializeValue(IDeserializeDataRecordFieldValueContext context)
+        {
+            context.ThrowIfNull("context");
+            if (string.IsNullOrEmpty(context.Value))
+                return null;
+
+            return Vanrise.Common.Serializer.Deserialize(context.Value, GetRuntimeType());
         }
     }
 }

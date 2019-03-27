@@ -32,12 +32,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(object value)
         {
-            return null;
+            return value == null ? null : $"{(value as dynamic).Count} Items";
         }
 
         public override GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
         {
-            throw new NotImplementedException();
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal", Field = context != null ? context.DescriptionFieldPath : null };
         }
 
         Type _nonNullableRuntimeType;
@@ -78,12 +78,24 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
         protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
-            return originalValue;
+            if (originalValue.GetType() != GetRuntimeType())
+            {
+                return Serializer.Deserialize(Serializer.Serialize(originalValue, true), GetRuntimeType());
+            }
+            else
+            {
+                return originalValue;
+            }
         }
+
         public override bool StoreValueSerialized => true;
         public override string SerializeValue(ISerializeDataRecordFieldValueContext context)
         {
-            return base.SerializeValue(context);
+            context.ThrowIfNull("context");
+            if (context.Object == null)
+                return string.Empty;
+
+            return Vanrise.Common.Serializer.Serialize(context.Object, true);
         }
 
         public override object DeserializeValue(IDeserializeDataRecordFieldValueContext context)
