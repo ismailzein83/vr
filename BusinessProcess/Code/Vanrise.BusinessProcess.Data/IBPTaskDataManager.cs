@@ -21,5 +21,7 @@ namespace Vanrise.BusinessProcess.Data
         List<BPTask> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId);
 
         void CancelNotCompletedTasks(long processInstanceId);
+        bool AssignTask(long taskId, int userId);
+        bool ReleaseTask(long taskId);
     }
 }

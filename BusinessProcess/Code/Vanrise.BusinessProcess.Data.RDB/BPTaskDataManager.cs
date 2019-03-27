@@ -29,6 +29,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
         const string COL_Decision = "Decision";
         const string COL_CreatedTime = "CreatedTime";
         const string COL_LastUpdatedTime = "LastUpdatedTime";
+        const string COL_TakenBy = "TakenBy";
 
 
         static BPTaskDataManager()
@@ -48,6 +49,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             columns.Add(COL_Decision, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_LastUpdatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_TakenBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "bp",
@@ -241,6 +243,47 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             queryContext.ExecuteNonQuery();
         }
+
+        public bool UpdateTask(long taskId, BPTaskData taskData)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            if (taskData != null)
+                updateQuery.Column(COL_TaskData).Value(Serializer.Serialize(taskData));
+            else
+                updateQuery.Column(COL_TaskData).Null();
+            updateQuery.Column(COL_LastUpdatedTime).DateNow();
+            updateQuery.Where().EqualsCondition(COL_ID).Value(taskId);
+            return queryContext.ExecuteNonQuery() > 0;
+        }
+
+        public bool AssignTask(long taskId, int userId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_TakenBy).Value(userId);
+            var whereStatement = updateQuery.Where();
+            whereStatement.EqualsCondition(COL_ID).Value(taskId);
+            var ifNotExists = whereStatement.NotExistsCondition();
+            ifNotExists.From(TABLE_NAME, TABLE_ALIAS, 1, false);
+            ifNotExists.SelectColumns().AllTableColumns(TABLE_ALIAS);
+            var ifNotExistsCondition = ifNotExists.Where();
+            ifNotExistsCondition.EqualsCondition(COL_ID).Value(taskId);
+            ifNotExistsCondition.NotNullCondition(COL_TakenBy);
+            return queryContext.ExecuteNonQuery() > 0;
+        }
+
+        public bool ReleaseTask(long taskId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_TakenBy).Null();
+            updateQuery.Where().EqualsCondition(COL_ID).Value(taskId);
+            return queryContext.ExecuteNonQuery() > 0;
+        }
         #endregion
 
         #region Private Methods
@@ -297,7 +340,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 LastUpdatedTime = reader.GetDateTime(COL_LastUpdatedTime),
                 AssignedUsersDescription = reader.GetString(COL_AssignedUsersDescription),
                 Notes = reader.GetString(COL_Notes),
-                Decision = reader.GetString(COL_Decision)
+                Decision = reader.GetString(COL_Decision),
+                TakenBy = reader.GetNullableInt(COL_TakenBy)
             };
 
             string taskData = reader.GetString(COL_TaskData);
@@ -317,19 +361,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
             return bpTask;
         }
 
-        public bool UpdateTask(long taskId, BPTaskData taskData)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var updateQuery = queryContext.AddUpdateQuery();
-            updateQuery.FromTable(TABLE_NAME);
-            if (taskData != null)
-                updateQuery.Column(COL_TaskData).Value(Serializer.Serialize(taskData));
-            else
-                updateQuery.Column(COL_TaskData).Null();
-            updateQuery.Column(COL_LastUpdatedTime).DateNow();
-            updateQuery.Where().EqualsCondition(COL_ID).Value(taskId);
-            return queryContext.ExecuteNonQuery() > 0;
-        }
 
         #endregion
     }

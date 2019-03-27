@@ -125,6 +125,15 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 id = long.Parse(data[1]);
             }
         }
+        public bool AssignTask(long taskId, int userId)
+        {
+            return ExecuteNonQuerySP("bp.sp_BPTask_Assign", taskId, userId) > 0;
+        }
+
+        public bool ReleaseTask(long taskId)
+        {
+            return ExecuteNonQuerySP("bp.sp_BPTask_Release", taskId) > 0;
+        }
         #endregion
 
         #region Mappers
@@ -143,7 +152,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime"),
                 AssignedUsersDescription = reader["AssignedUsersDescription"] as string,
                 Notes = reader["Notes"] as string,
-                Decision = reader["Decision"] as string
+                Decision = reader["Decision"] as string,
+                TakenBy = GetReaderValue<int?>(reader, "TakenBy")
             };
 
             string taskData = reader["TaskData"] as string;

@@ -42,5 +42,6 @@ namespace Vanrise.BusinessProcess.Entities
         public DateTime CreatedTime { get; set; }
 
         public DateTime LastUpdatedTime { get; set; }
+        public int? TakenBy { get; set; }
     }
 }

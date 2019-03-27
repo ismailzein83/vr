@@ -58,5 +58,35 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return manager.GetTask(taskId);
         }
 
+        [HttpGet]
+        [Route("TakeTask")]
+        public BPTaskDefaultActionsVisibility TakeTask(long taskId)
+        {
+            BPTaskManager manager = new BPTaskManager();
+            return manager.TakeTask(taskId);
+        }
+
+        [HttpGet]
+        [Route("ReleaseTask")]
+        public BPTaskDefaultActionsVisibility ReleaseTask(long taskId)
+        {
+            BPTaskManager manager = new BPTaskManager();
+            return manager.ReleaseTask(taskId);
+        }
+
+        [HttpGet]
+        [Route("AssignTask")]
+        public BPTaskDefaultActionsVisibility AssignTask(long taskId, int userId)
+        {
+            BPTaskManager manager = new BPTaskManager();
+            return manager.AssignTask(taskId, userId);
+        }
+        [HttpGet]
+        [Route("GetAssignedUsers")]
+        public List<int> GetAssignedUsers(long taskId)
+        {
+            BPTaskManager manager = new BPTaskManager();
+            return manager.GetAssignedUsers(taskId);
+        }
     }
 }

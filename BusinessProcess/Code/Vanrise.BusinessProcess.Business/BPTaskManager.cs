@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using System.Linq;
+using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -59,7 +60,13 @@ namespace Vanrise.BusinessProcess.Business
 
             task = taskDataManager.GetTask(executeBPTaskInput.TaskId);
         }
-
+        public List<int> GetAssignedUsers(long taskId)
+        {
+            var task = GetTask(taskId);
+            task.ThrowIfNull("task", taskId);
+            task.AssignedUsers.ThrowIfNull("task.AssignedUsers", taskId);
+            return task.AssignedUsers;
+        }
         public BPTaskUpdateOutput GetMyTasksUpdated(object lastUpdateHandle, int nbOfRows)
         {
             int userId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
@@ -99,6 +106,66 @@ namespace Vanrise.BusinessProcess.Business
         {
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
             return taskDataManager.GetTask(taskId);
+        }
+
+        public BPTaskDefaultActionsVisibility TakeTask(long taskId)
+        {
+            int userId = Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
+            IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
+            if (taskDataManager.AssignTask(taskId, userId))
+            {
+                return new BPTaskDefaultActionsVisibility()
+                {
+                    ShowRelease = true,
+                    ShowTake = false,
+                    ShowAssign = false
+                };
+            }
+            return new BPTaskDefaultActionsVisibility()
+            {
+                ShowAssign = true,
+                ShowTake = true,
+                ShowRelease = false
+            };
+        }
+
+        public BPTaskDefaultActionsVisibility AssignTask(long taskId, int userId)
+        {
+            IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
+            if(taskDataManager.AssignTask(taskId, userId))
+            {
+                return new BPTaskDefaultActionsVisibility()
+                {
+                    ShowRelease = Security.Entities.ContextFactory.GetContext().GetLoggedInUserId() == userId,
+                    ShowAssign = false,
+                    ShowTake = false
+                };
+            }
+            return new BPTaskDefaultActionsVisibility()
+            {
+                ShowAssign = true,
+                ShowTake = true,
+                ShowRelease = false
+            };
+        }
+        public BPTaskDefaultActionsVisibility ReleaseTask(long taskId)
+        {
+            IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
+            if (taskDataManager.ReleaseTask(taskId))
+            {
+                return new BPTaskDefaultActionsVisibility()
+                {
+                    ShowTake = true, 
+                    ShowAssign = true,
+                    ShowRelease = false
+                };
+            }
+            return new BPTaskDefaultActionsVisibility()
+            {
+                ShowRelease = true,
+                ShowAssign = false,
+                ShowTake = false
+            };
         }
         #endregion
 
