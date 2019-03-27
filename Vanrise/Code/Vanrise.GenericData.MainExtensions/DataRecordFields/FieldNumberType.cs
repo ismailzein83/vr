@@ -85,71 +85,31 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (value == null)
                 return null;
 
-            IEnumerable<object> numberValues = FieldTypeHelper.ConvertFieldValueToList<object>(value);
-            string defaultStringDescription = "#,###";
-            string decimalPrecision = null;
+            string numberFormat;
             switch (DataType)
             {
+                case FieldNumberDataType.Int:
+                case FieldNumberDataType.BigInt: numberFormat = "{0:n0}"; break;
                 case FieldNumberDataType.Decimal:
                     switch (DataPrecision)
                     {
-                        case FieldNumberPrecision.Long:
-                            var longPrecision = new GeneralSettingsManager().GetLongPrecision();
-                            decimalPrecision = longPrecision;
-                            break;
-                        case FieldNumberPrecision.Normal:
-                            var normalPrecision = new GeneralSettingsManager().GetNormalPrecision();
-                            decimalPrecision = normalPrecision;
-                            break;
-                        default: decimalPrecision = "2"; break;
+                        case FieldNumberPrecision.Long: numberFormat = string.Concat("{0:n", new GeneralSettingsManager().GetLongPrecision(), "}"); break;
+                        case FieldNumberPrecision.Normal: numberFormat = string.Concat("{0:n", new GeneralSettingsManager().GetNormalPrecision(), "}"); break;
+                        default: throw new NotSupportedException(string.Format("DataFieldNumberPrecisionType '{0}' is not supported", DataPrecision));
                     }
                     break;
-
-                default: break;
-            }
-            if (!string.IsNullOrEmpty(decimalPrecision))
-            {
-                var numberPrecision = new String('0', int.Parse(decimalPrecision));
-                defaultStringDescription = string.Join(".", defaultStringDescription, numberPrecision);
+                default: throw new NotSupportedException(string.Format("FieldNumberDataType '{0}' is not supported", DataType));
             }
 
+            IEnumerable<object> numberValues = FieldTypeHelper.ConvertFieldValueToList<object>(value);
             if (numberValues == null)
-            {
-                if (string.IsNullOrEmpty(decimalPrecision))
-                    switch (DataType)
-                    {
-                        case FieldNumberDataType.Int:
-                            return Convert.ToInt32(value).ToString(defaultStringDescription);
-                        case FieldNumberDataType.BigInt:
-                            return Convert.ToInt64(value).ToString(defaultStringDescription);
-                    }
+                return String.Format(numberFormat, value);
 
-                else
-                    return Convert.ToDecimal(value).ToString(defaultStringDescription);
-            }
+            List<string> descriptions = new List<string>();
+            foreach (var numberValue in numberValues)
+                descriptions.Add(String.Format(numberFormat, numberValue));
 
-            var descriptions = new List<string>();
-
-            if (DataType == FieldNumberDataType.Decimal)
-            {
-                foreach (var numberValue in numberValues)
-                    descriptions.Add(Convert.ToDecimal(numberValue).ToString(defaultStringDescription));
-            }
-            else
-            {
-                foreach (var numberValue in numberValues)
-                    switch (DataType)
-                    {
-                        case FieldNumberDataType.Int:
-                            descriptions.Add(Convert.ToInt32(numberValue).ToString(defaultStringDescription));
-                            break;
-                        case FieldNumberDataType.BigInt:
-                            descriptions.Add(Convert.ToInt64(numberValue).ToString(defaultStringDescription));
-                            break;
-                    }
-
-            }
-            return String.Join(",", descriptions);
+            return String.Join("; ", descriptions);
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
