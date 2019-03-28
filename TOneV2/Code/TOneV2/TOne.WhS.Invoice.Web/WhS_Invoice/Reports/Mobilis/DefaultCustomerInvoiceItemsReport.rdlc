@@ -2794,7 +2794,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>TVA</Value>
+                              <Value />
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2999,14 +2999,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!VAT.Value</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                            <TextRun>
-                              <Value>%</Value>
+                              <Value />
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3427,16 +3420,16 @@
               <Width>1.12067in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.66028in</Width>
+              <Width>0.64923in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.82202in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.52847in</Width>
+              <Width>0.54995in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>0.98958in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -3673,7 +3666,7 @@
         <Top>6.87014in</Top>
         <Left>2.00156in</Left>
         <Height>0.19792in</Height>
-        <Width>5.78301in</Width>
+        <Width>5.78302in</Width>
         <ZIndex>14</ZIndex>
         <Visibility>
           <Hidden>=IIf((Parameters!NoRecurringCharges.Value=true),true,false)</Hidden>
