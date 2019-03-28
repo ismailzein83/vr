@@ -880,9 +880,12 @@
     <Content Include="Images\menu-icons\Taxes Management-tile.png" />
     <Content Include="Images\menu-icons\Traffic Monitoring.png" />
     <Content Include="Images\menu-icons\Traffic Monitoring-tile.png" />
+    <Content Include="Images\nTegra-flat-logoonheader.png" />
+    <Content Include="Images\nTegra-flat-login.png" />
     <Content Include="Images\nTegra-iconheader.ico" />
     <Content Include="Images\nTegra-login.png" />
     <Content Include="Images\nTegra-logoonheader.png" />
+    <Content Include="Images\nTegra-flat-iconheader.ico" />
     <Content Include="Images\RA-iconheader.ico" />
     <Content Include="Images\RA-login.png" />
     <Content Include="Images\RA-logoonheader.png" />
