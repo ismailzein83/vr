@@ -1,12 +1,17 @@
-﻿<div vr-modalcontent ng-controller="BusinessProcess_BP_BPGenericTaskTypeSettingsEditorController" width="'85%'">
+﻿<div vr-modalcontent ng-controller="BusinessProcess_BP_BPGenericTaskTypeSettingsEditorController" width="'85%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody maxheight="'700px'">
-        <vr-form name="formBPGenericTaskTypeSettings" vr-loader="scopeModel.isLoading">
-            <vr-directivewrapper ng-if="scopeModel.runtimeEditor != undefined" directive="scopeModel.runtimeEditor" on-ready="scopeModel.onEditorRuntimeDirectiveReady"></vr-directivewrapper>
+        <vr-form name="formBPGenericTaskTypeSettings">
+            <vr-directivewrapper ng-if="scopeModel.runtimeEditor != undefined" directive="scopeModel.runtimeEditor" on-ready="scopeModel.onEditorRuntimeDirectiveReady" vr-disabled="!scopeModel.showRelease" ></vr-directivewrapper>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
+                <span ng-if="scopeModel.showDefaultActions">
+                    <vr-button type="Take" data-onclick="scopeModel.take" ng-if="scopeModel.showTake"></vr-button>
+                    <vr-button type="Release" data-onclick="scopeModel.release" ng-if="scopeModel.showRelease"></vr-button>
+                    <vr-button type="Assign" data-onclick="scopeModel.assign"  ng-if="scopeModel.showAssign"></vr-button>
+                </span>
                 <span ng-repeat="action in scopeModel.actions" ng-if="scopeModel.actions.length > 0">
                     <vr-directivewrapper directive="'vr-button'" type="{{action.type}}" data-onclick="action.onclick" menuactions="action.menuActions" formname="formBPGenericTaskTypeSettings"></vr-directivewrapper>
                 </span>

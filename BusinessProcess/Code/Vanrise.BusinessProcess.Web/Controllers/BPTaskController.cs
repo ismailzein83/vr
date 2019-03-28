@@ -60,7 +60,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpGet]
         [Route("TakeTask")]
-        public BPTaskDefaultActionsVisibility TakeTask(long taskId)
+        public BPTaskDefaultActionsState TakeTask(long taskId)
         {
             BPTaskManager manager = new BPTaskManager();
             return manager.TakeTask(taskId);
@@ -68,7 +68,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpGet]
         [Route("ReleaseTask")]
-        public BPTaskDefaultActionsVisibility ReleaseTask(long taskId)
+        public BPTaskDefaultActionsState ReleaseTask(long taskId)
         {
             BPTaskManager manager = new BPTaskManager();
             return manager.ReleaseTask(taskId);
@@ -76,7 +76,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpGet]
         [Route("AssignTask")]
-        public BPTaskDefaultActionsVisibility AssignTask(long taskId, int userId)
+        public BPTaskDefaultActionsState AssignTask(long taskId, int userId)
         {
             BPTaskManager manager = new BPTaskManager();
             return manager.AssignTask(taskId, userId);
@@ -87,6 +87,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         {
             BPTaskManager manager = new BPTaskManager();
             return manager.GetAssignedUsers(taskId);
+        }
+        [HttpPost]
+        [Route("GetInitialBPTaskDefaultActionsState")]
+        public BPTaskDefaultActionsState GetInitialBPTaskDefaultActionsState(BPTaskDefaultActionsStateInput input)
+        {
+            BPTaskManager manager = new BPTaskManager();
+            return manager.GetInitialBPTaskDefaultActionsState(input.UserId);
         }
     }
 }

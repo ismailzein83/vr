@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public class BPTaskDefaultActionsVisibility
+    public class BPTaskDefaultActionsStateInput
     {
-        public bool ShowTake { get; set; }
-        public bool ShowRelease { get; set; }
-        public bool ShowAssign { get; set; }
+        public int? UserId { get; set; }
     }
 }

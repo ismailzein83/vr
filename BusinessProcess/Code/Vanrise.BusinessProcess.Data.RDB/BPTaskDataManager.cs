@@ -267,7 +267,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             var whereStatement = updateQuery.Where();
             whereStatement.EqualsCondition(COL_ID).Value(taskId);
             var ifNotExists = whereStatement.NotExistsCondition();
-            ifNotExists.From(TABLE_NAME, TABLE_ALIAS, 1, false);
+            ifNotExists.From(TABLE_NAME, TABLE_ALIAS, 1, true);
             ifNotExists.SelectColumns().AllTableColumns(TABLE_ALIAS);
             var ifNotExistsCondition = ifNotExists.Where();
             ifNotExistsCondition.EqualsCondition(COL_ID).Value(taskId);

@@ -133,13 +133,16 @@
                     var initialPromises = [];
 
                     if (payload != undefined) {
+                        $scope.scopeModel.showDefaultActions = payload.ShowDefaultActions;
                         dataRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                         initialPromises.push(getDataRecordFieldsInfo(payload.RecordTypeId));
 
                         var taskTypeActions = payload.TaskTypeActions;
-                        for (var i = 0; i < taskTypeActions.length; i++) {
-                            var taskTypeAction = taskTypeActions[i];
-                            $scope.scopeModel.taskTypeActions.push(taskTypeAction);
+                        if (taskTypeActions != undefined && taskTypeActions.length > 0) {
+                            for (var i = 0; i < taskTypeActions.length; i++) {
+                                var taskTypeAction = taskTypeActions[i];
+                                $scope.scopeModel.taskTypeActions.push(taskTypeAction);
+                            }
                         }
                     }
 
@@ -193,7 +196,8 @@
                         $type: "Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.BPGenericTaskTypeSettings, Vanrise.BusinessProcess.MainExtensions",
                         RecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         EditorSettings: editorDefinitionAPI.getData(),
-                        TaskTypeActions: ($scope.scopeModel.taskTypeActions.length > 0) ? $scope.scopeModel.taskTypeActions : undefined
+                        TaskTypeActions: ($scope.scopeModel.taskTypeActions.length > 0) ? $scope.scopeModel.taskTypeActions : undefined,
+                        ShowDefaultActions: $scope.scopeModel.showDefaultActions
                     };
                     return data;
                 };

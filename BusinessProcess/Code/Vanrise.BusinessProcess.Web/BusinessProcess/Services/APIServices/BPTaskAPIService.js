@@ -30,6 +30,35 @@
                 taskId: taskId
             });
         }
+        function TakeTask(taskId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "TakeTask"), {
+                taskId: taskId
+            });
+        }
+
+        function ReleaseTask(taskId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "ReleaseTask"), {
+                taskId: taskId
+            });
+        }
+        function GetAssignedUsers(taskId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "GetAssignedUsers"), {
+                taskId: taskId
+            });
+        }
+
+        function AssignTask(taskId, userId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "AssignTask"), {
+                taskId: taskId,
+                userId: userId
+            });
+        }
+
+        function GetInitialBPTaskDefaultActionsState(userId) {
+            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "GetInitialBPTaskDefaultActionsState"), {
+                UserId: userId
+            });
+        }
 
         
 
@@ -39,7 +68,12 @@
             GetMyUpdatedTasks: GetMyUpdatedTasks,
             GetMyTasksBeforeId: GetMyTasksBeforeId,
             ExecuteTask: ExecuteTask,
-            GetTask: GetTask
+            GetTask: GetTask,
+            TakeTask: TakeTask,
+            ReleaseTask: ReleaseTask,
+            GetAssignedUsers: GetAssignedUsers,
+            AssignTask: AssignTask,
+            GetInitialBPTaskDefaultActionsState: GetInitialBPTaskDefaultActionsState
         });
     }
 

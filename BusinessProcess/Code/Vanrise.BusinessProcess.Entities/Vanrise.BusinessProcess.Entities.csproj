@@ -134,8 +134,9 @@
     <Compile Include="IBusinessRuleConditionValidateContext.cs" />
     <Compile Include="IExclude.cs" />
     <Compile Include="Tasks\BaseBPTaskTypeSettingsConfig.cs" />
-    <Compile Include="Tasks\BPTaskDefaultActionsVisibility.cs" />
+    <Compile Include="Tasks\BPTaskDefaultActionsState.cs" />
     <Compile Include="Tasks\BPTaskBeforeIdInput.cs" />
+    <Compile Include="Tasks\BPTaskDefaultActionsStateInput.cs" />
     <Compile Include="Tasks\BPTaskDetail.cs" />
     <Compile Include="Tasks\BPTask.cs" />
     <Compile Include="Tasks\BPTaskAction.cs" />

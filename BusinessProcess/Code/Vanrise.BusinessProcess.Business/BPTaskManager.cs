@@ -57,7 +57,6 @@ namespace Vanrise.BusinessProcess.Business
         {
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
             taskDataManager.UpdateTaskExecution(executeBPTaskInput, BPTaskStatus.Completed);
-
             task = taskDataManager.GetTask(executeBPTaskInput.TaskId);
         }
         public List<int> GetAssignedUsers(long taskId)
@@ -77,6 +76,19 @@ namespace Vanrise.BusinessProcess.Business
         {
             int userId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             return GetBeforeId(input.LessThanID, input.NbOfRows, null, userId);
+        }
+
+        public BPTaskDefaultActionsState GetInitialBPTaskDefaultActionsState(int? takenByUserId)
+        {
+            var visibility = new BPTaskDefaultActionsState()
+            {
+                ShowTake = !takenByUserId.HasValue,
+                ShowAssign = !takenByUserId.HasValue
+            };
+            if (takenByUserId.HasValue && Security.Entities.ContextFactory.GetContext().GetLoggedInUserId() == takenByUserId.Value)
+                visibility.ShowRelease = true;
+          
+            return visibility;
         }
 
         public BPTaskUpdateOutput GetProcessTaskUpdated(object lastUpdateHandle, int nbOfRows, int processInstanceId)
@@ -108,63 +120,42 @@ namespace Vanrise.BusinessProcess.Business
             return taskDataManager.GetTask(taskId);
         }
 
-        public BPTaskDefaultActionsVisibility TakeTask(long taskId)
+        public BPTaskDefaultActionsState TakeTask(long taskId)
         {
             int userId = Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
+            var state = new BPTaskDefaultActionsState();
             if (taskDataManager.AssignTask(taskId, userId))
-            {
-                return new BPTaskDefaultActionsVisibility()
-                {
-                    ShowRelease = true,
-                    ShowTake = false,
-                    ShowAssign = false
-                };
-            }
-            return new BPTaskDefaultActionsVisibility()
-            {
-                ShowAssign = true,
-                ShowTake = true,
-                ShowRelease = false
-            };
+                state.ShowRelease = true;
+         
+            return state;
         }
 
-        public BPTaskDefaultActionsVisibility AssignTask(long taskId, int userId)
+        public BPTaskDefaultActionsState AssignTask(long taskId, int userId)
         {
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
-            if(taskDataManager.AssignTask(taskId, userId))
-            {
-                return new BPTaskDefaultActionsVisibility()
-                {
-                    ShowRelease = Security.Entities.ContextFactory.GetContext().GetLoggedInUserId() == userId,
-                    ShowAssign = false,
-                    ShowTake = false
-                };
-            }
-            return new BPTaskDefaultActionsVisibility()
-            {
-                ShowAssign = true,
-                ShowTake = true,
-                ShowRelease = false
-            };
+            var state = new BPTaskDefaultActionsState();
+            if (taskDataManager.AssignTask(taskId, userId))
+                state.ShowRelease = Security.Entities.ContextFactory.GetContext().GetLoggedInUserId() == userId;
+            return state;
         }
-        public BPTaskDefaultActionsVisibility ReleaseTask(long taskId)
+        public BPTaskDefaultActionsState ReleaseTask(long taskId)
         {
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
             if (taskDataManager.ReleaseTask(taskId))
             {
-                return new BPTaskDefaultActionsVisibility()
+                return new BPTaskDefaultActionsState()
                 {
                     ShowTake = true, 
                     ShowAssign = true,
                     ShowRelease = false
                 };
             }
-            return new BPTaskDefaultActionsVisibility()
+            return new BPTaskDefaultActionsState()
             {
-                ShowRelease = true,
+                ShowTake = false,
                 ShowAssign = false,
-                ShowTake = false
+                ShowRelease = true
             };
         }
         #endregion

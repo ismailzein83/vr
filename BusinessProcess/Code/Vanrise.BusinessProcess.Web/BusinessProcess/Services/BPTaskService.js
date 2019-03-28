@@ -28,9 +28,22 @@
 
         };
 
+        function assignTask(onUserAssigned, userIds) {
+            var modalParameters = { userIds: userIds};
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onUserAssigned = onUserAssigned;
+            };
+
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTask/BPTaskAssignEditor.html', modalParameters, modalSettings);
+        }
+
         return ({
             getStatusColor: getStatusColor,
-            openTask: openTask
+            openTask: openTask,
+            assignTask: assignTask
         });
     }
     appControllers.service('BusinessProcess_BPTaskService', BusinessProcess_BPTaskService);

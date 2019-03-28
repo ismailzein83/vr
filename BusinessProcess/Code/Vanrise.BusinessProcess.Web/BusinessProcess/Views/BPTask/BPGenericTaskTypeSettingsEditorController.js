@@ -2,18 +2,17 @@
 
     "use strict";
 
-    BPGenericTaskTypeSettingsEditorController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRButtonTypeEnum', 'BusinessProcess_TaskTypeActionService'];
+    BPGenericTaskTypeSettingsEditorController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRButtonTypeEnum', 'BusinessProcess_TaskTypeActionService', 'BusinessProcess_BPTaskService'];
 
-    function BPGenericTaskTypeSettingsEditorController($scope, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRNavigationService, UtilsService, VRUIUtilsService,
-        VRNotificationService, VRButtonTypeEnum, BusinessProcess_TaskTypeActionService) {
+    function BPGenericTaskTypeSettingsEditorController($scope, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VRButtonTypeEnum, BusinessProcess_TaskTypeActionService, BusinessProcess_BPTaskService) {
 
         var bpTaskId;
         var bpTaskType;
         var fieldValues;
+        var bpTask;
+
 
         var runtimeEditorAPI;
-        var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
-
         loadParameters();
         defineScope();
         load();
@@ -31,47 +30,103 @@
 
             $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
                 runtimeEditorAPI = api;
-                runtimeEditorReadyDeferred.resolve();
+                var defaultValues = {};
+
+                for (var prop in fieldValues) {
+                    if (prop != "$type")
+                        defaultValues[prop] = fieldValues[prop];
+                }
+                var setLoader = function (value) {
+                };
+
+                var runtimeEditorPayload = {
+                    selectedValues: defaultValues,
+                    dataRecordTypeId: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.RecordTypeId : undefined,
+                    definitionSettings: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.EditorSettings : undefined
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, runtimeEditorAPI, runtimeEditorPayload, setLoader);
             };
-        }
 
-        function load() {
-            $scope.scopeModel.isLoading = true;
-
-            var bpTask;
-            function getBPTask() {
-                return BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (task) {
-                    bpTask = task;
-                });
-            }
-
-            function getBPTaskType(typeId) {
-                return BusinessProcess_BPTaskTypeAPIService.GetBPTaskType(typeId).then(function (taskType) {
-                    if (taskType != undefined) {
-                        bpTaskType = taskType;
-                        var actions = bpTaskType.Settings.TaskTypeActions;
-                        var actionsDictionary = getActionsDictionary();
-                        buildActionsFromDictionary(actionsDictionary);
+            $scope.scopeModel.take = function () {
+                BusinessProcess_BPTaskAPIService.TakeTask(bpTaskId).then(function (response) {
+                    load(true);
+                    if (response != undefined) {
+                        $scope.scopeModel.showTake = response.ShowTake;
+                        $scope.scopeModel.showRelease = response.ShowRelease;
+                        $scope.scopeModel.showAssign = response.ShowAssign;
                     }
                 });
-            }
-            function setTitle() {
-                $scope.title = bpTask.Title;
-            }
+            };
 
+            $scope.scopeModel.release = function () {
+                BusinessProcess_BPTaskAPIService.ReleaseTask(bpTaskId).then(function (response) {
+                    load(true);
+                    if (response != undefined) {
+                        $scope.scopeModel.showTake = response.ShowTake;
+                        $scope.scopeModel.showRelease = response.ShowRelease;
+                        $scope.scopeModel.showAssign = response.ShowAssign;
+                    }
+                });
+
+            };
+
+            $scope.scopeModel.assign = function () {
+                BusinessProcess_BPTaskAPIService.GetAssignedUsers(bpTaskId).then(function (userIds) {
+                    var onUserAssigned = function (userId) {
+                        BusinessProcess_BPTaskAPIService.AssignTask(bpTaskId, userId).then(function (response) {
+                            load(true);
+                            if (response != undefined) {
+                                $scope.scopeModel.showTake = response.ShowTake;
+                                $scope.scopeModel.showRelease = response.ShowRelease;
+                                $scope.scopeModel.showAssign = response.ShowAssign;
+                            }
+                        });
+                    };
+                    BusinessProcess_BPTaskService.assignTask(onUserAssigned, userIds);
+                });
+            };
+        }
+        function getBPTask() {
+            return BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (task) {
+                bpTask = task;
+            });
+        }
+        function getBPTaskType(typeId) {
+            return BusinessProcess_BPTaskTypeAPIService.GetBPTaskType(typeId).then(function (taskType) {
+                if (taskType != undefined) {
+                    bpTaskType = taskType;
+                    var actionsDictionary = getActionsDictionary();
+                    buildActionsFromDictionary(actionsDictionary);
+                }
+            });
+        }
+
+        function setTitle() {
+            $scope.title = bpTask.Title;
+        }
+
+        function load(isReload) {
+            $scope.scopeModel.isLoading = true;
+            if (isReload) {
+                $scope.scopeModel.runtimeEditor = undefined;
+                bpTask = undefined;
+            }
             var rootPromiseNode = {
                 promises: [getBPTask()],
                 getChildNode: function () {
                     if (bpTask != undefined) {
                         fieldValues = bpTask.TaskData != undefined ? bpTask.TaskData.FieldValues : undefined;
-                        setTitle();
+                        if (!isReload)
+                            setTitle();
                         return {
                             promises: [getBPTaskType(bpTask.TypeId)],
                             getChildNode: function () {
-                                if (bpTaskType != undefined && bpTaskType.Settings != undefined && bpTaskType.Settings.EditorSettings != undefined) {
-                                    $scope.scopeModel.runtimeEditor = bpTaskType.Settings.EditorSettings.RuntimeEditor;
+                                if (bpTaskType != undefined && bpTaskType.Settings != undefined) {
+                                    $scope.scopeModel.runtimeEditor = bpTaskType.Settings.EditorSettings != undefined ? bpTaskType.Settings.EditorSettings.RuntimeEditor : undefined;
+                                    $scope.scopeModel.showDefaultActions = bpTaskType.Settings.ShowDefaultActions;
+                                    
                                     return {
-                                        promises: [loadEditorRuntimeDirective()]
+                                        promises: !isReload ? [getInitialBPTaskDefaultActionsState()] : []
                                     };
                                 }
                             }
@@ -86,30 +141,21 @@
             });
         }
 
+
+        function getInitialBPTaskDefaultActionsState() {
+            return BusinessProcess_BPTaskAPIService.GetInitialBPTaskDefaultActionsState(bpTask.TakenBy).then(function (response) {
+                if (response != undefined) {
+                    $scope.scopeModel.showTake = response.ShowTake;
+                    $scope.scopeModel.showRelease = response.ShowRelease;
+                    $scope.scopeModel.showAssign = response.ShowAssign;
+
+                }
+            });
+        }
         function getFieldValues() {
             var fieldValuesObj = {};
             runtimeEditorAPI.setData(fieldValuesObj);
             return fieldValuesObj;
-        }
-
-        function loadEditorRuntimeDirective() {
-            var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
-            runtimeEditorReadyDeferred.promise.then(function () {
-                var defaultValues = {};
-                for (var prop in fieldValues) {
-                    if (prop != "$type")
-                        defaultValues[prop] = fieldValues[prop];
-                }
-
-                var runtimeEditorPayload = {
-                    selectedValues: defaultValues,
-                    dataRecordTypeId: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.RecordTypeId : undefined,
-                    definitionSettings: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.EditorSettings : undefined
-                };
-                VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
-            });
-
-            return runtimeEditorLoadDeferred.promise;
         }
 
         function getActionsDictionary() {
@@ -143,15 +189,6 @@
                             var object = actionsDictionary[prop][i];
                             addMenuAction(object.taskTypeAction);
                         }
-                        function addMenuAction(taskTypeAction) {
-                            menuActions.push({
-                                name: taskTypeAction.Name,
-                                clicked: function () {
-                                    return callActionMethod(taskTypeAction);
-                                },
-                            });
-                        }
-
                         addActionToList(object.buttonType, undefined, menuActions);
                     } else {
                         var object = actionsDictionary[prop][0];
@@ -161,6 +198,14 @@
                         addActionToList(object.buttonType, clickFunc, undefined);
                     }
                 }
+            }
+            function addMenuAction(taskTypeAction) {
+                menuActions.push({
+                    name: taskTypeAction.Name,
+                    clicked: function () {
+                        return callActionMethod(taskTypeAction);
+                    },
+                });
             }
 
             function addActionToList(buttonType, clickEvent, menuActions) {
