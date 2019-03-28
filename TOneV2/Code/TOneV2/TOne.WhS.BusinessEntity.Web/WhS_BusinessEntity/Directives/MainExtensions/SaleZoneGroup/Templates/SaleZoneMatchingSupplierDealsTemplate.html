@@ -1,1 +1,8 @@
-﻿
+﻿<vr-whs-deal-dealdefinition-selector on-ready="scopeModel.onDealDefinitionSelectorReady"
+                                     onselectionchanged="scopeModel.onDealDefinitionSelectionChanged"
+                                     normal-col-num="3" isrequired="true" customlabel="Supplier Deals" ismultipleselection>
+</vr-whs-deal-dealdefinition-selector>
+
+<span vr-loader="scopeModel.isSaleZoneSelectorLoading">
+    <vr-whs-be-salezone-selector on-ready="scopeModel.onSaleZoneSelectorReady" ng-show="scopeModel.showSaleZoneSelector" normal-col-num="3" isrequired="true" ismultipleselection></vr-whs-be-salezone-selector>
+</span>

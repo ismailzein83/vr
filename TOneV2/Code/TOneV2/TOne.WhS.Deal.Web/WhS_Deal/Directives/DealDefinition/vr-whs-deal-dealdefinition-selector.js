@@ -18,7 +18,8 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                 hidelabel: '@',
                 normalColNum: '@',
                 hideremoveicon: '@',
-                hasviewpremission: '='
+                hasviewpremission: '=',
+                customlabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -33,22 +34,21 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             template: function (element, attrs) {
                 return getTemplate(attrs);
             }
-
         };
+
         function getTemplate(attrs) {
+
             var label;
-            if (attrs.hidelabel == undefined)
-                label = attrs.ismultipleselection != undefined ? 'label="Deals"' : 'label="Deal"';
+            if (attrs.hidelabel == undefined) {
+                label = (attrs.ismultipleselection != undefined) ? 'Deals' : 'Deal';
+            }
+
+            var customlabel = '';
+            if (attrs.customlabel != undefined)
+                customlabel = 'customlabel="{{ctrl.customlabel}}"';
 
             var disabled = "";
             if (attrs.isdisabled)
@@ -75,7 +75,7 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                 onviewclicked = "onviewclicked='onViewIconClicked'";
 
             return '<vr-columns  colnum="{{ctrl.normalColNum}}" ' + disabled + ' ' + haschildcolumns + '  > <vr-select on-ready="scopeModel.onSelectorReady" hasviewpermission="ctrl.hasviewpremission" ' + onviewclicked + ' ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId"'
-                + 'entityname="Deal" ' + label + ' ' + hideremoveicon + '></vr-select> </vr-columns>';
+                + 'entityname="Deal" label="' + label + '" ' + customlabel + ' ' + hideremoveicon + '></vr-select> </vr-columns>';
 
         }
         function directiveCtor(ctrl, $scope, $attrs) {

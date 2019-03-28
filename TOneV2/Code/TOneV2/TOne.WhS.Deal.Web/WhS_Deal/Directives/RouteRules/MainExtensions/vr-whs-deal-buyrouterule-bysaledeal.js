@@ -148,7 +148,7 @@ app.directive('vrWhsDealBuyrouteruleBysaledeal', ['UtilsService', 'VRUIUtilsServ
 
                 var saleZoneMatchingSupplierDealFilter = {
                     $type: "TOne.WhS.Routing.MainExtensions.SaleZoneMatchingSupplierDealFilter,TOne.WhS.Routing.MainExtensions",
-                    SupplierDealId: parentDealId,
+                    SupplierDealId: [parentDealId]
                 };
                 saleZoneSelectorFilters.push(saleZoneMatchingSupplierDealFilter);
 

@@ -8,15 +8,22 @@ namespace TOne.WhS.Routing.MainExtensions
 {
     public class SaleZoneMatchingSupplierDealFilter : ISaleZoneFilter
     {
-        public int SupplierDealId { get; set; }
+        public List<int> SupplierDealIds { get; set; }
 
         public bool IsExcluded(ISaleZoneFilterContext context)
         {
-            if (context.CustomData == null)
+            if (context.CustomData == null && SupplierDealIds != null)
             {
-                var supplierDeal = new DealDefinitionManager().GetDealDefinition(SupplierDealId);
-                var supplierZoneIds = supplierDeal.Settings.GetDealSupplierZoneIds();
-                context.CustomData = new CodeZoneMatchManager().GetSaleZonesMatchedToSupplierZones(supplierZoneIds, context.SellingNumberPlanId);
+                List<long> allDealSupplierZoneIds = new List<long>();
+                foreach (var supplierDealId in SupplierDealIds)
+                {
+                    var supplierDeal = new DealDefinitionManager().GetDealDefinition(supplierDealId);
+                    List<long> supplierZoneIds = supplierDeal.Settings.GetDealSupplierZoneIds();
+                    if (supplierZoneIds != null)
+                        allDealSupplierZoneIds.AddRange(supplierZoneIds);
+                }
+
+                context.CustomData = new CodeZoneMatchManager().GetSaleZonesMatchedToSupplierZones(allDealSupplierZoneIds, context.SellingNumberPlanId);
             }
 
             if (context.CustomData != null)
