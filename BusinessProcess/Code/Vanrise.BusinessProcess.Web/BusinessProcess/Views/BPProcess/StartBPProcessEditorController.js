@@ -97,11 +97,7 @@
             }
 
             function setTitle() {
-                VR_GenericData_GenericBusinessEntityAPIService.GetGenericBETitleFieldValue(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
-                    if (response != undefined) {
-                        $scope.title = (genericBusinessEntity != undefined) ? "GenericBE name: " + response : undefined;
-                    }
-                });
+                $scope.title = 'Start New Process';
             }
 
             function loadBPDefinition() {
