@@ -1,25 +1,27 @@
-﻿<!--<vr-row removeline>
-    <vr-columns width="1/3row">
+﻿<vr-row removeline>
+    <vr-columns width="1/2row">
         <businessprocess-bp-definition-selector on-ready="scopeModel.onBPDefinitionDirectiveReady"
                                                 onselectionchanged="scopeModel.onBPDefinitionSelectionChanged"
                                                 selectedvalues="scopeModel.selectedBPDefinition"
+                                                hideremoveicon
                                                 isrequired="true">
         </businessprocess-bp-definition-selector>
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-datagrid datasource="scopeModel.inputFields"
-                 on-ready="scopeModel.onGridReady"
-                 hidegridmenu="true"
-                 maxheight="500px"
-                 disabledraggablecolumns
-                vr-loader="scopeModel.isInputGridLoading">
-        <vr-datagridcolumn headertext="'Input Argument'" disablesorting="true">
-            <vr-label>{{dataItem.fieldName}}</vr-label>
-        </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Data Record Type'" disablesorting="true">
-            
-        </vr-datagridcolumn>
-
-    </vr-datagrid>
-</vr-row>-->
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="scopeModel.inputFields"
+                     on-ready="scopeModel.onGridReady"
+                     hidegridmenu="true"
+                     maxheight="500px"
+                     disabledraggablecolumns
+                     vr-loader="scopeModel.isGridLoading">
+            <vr-datagridcolumn headertext="'Input Argument'" disablesorting="true">
+                <vr-label>{{dataItem.fieldName}}</vr-label>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Data Record Type'" disablesorting="true">
+                <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onDataRecordTypeFieldsSelectorReady" hidelabel hideremoveicon></vr-genericdata-datarecordtypefields-selector>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
