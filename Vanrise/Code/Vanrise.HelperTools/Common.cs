@@ -217,13 +217,10 @@ namespace Vanrise.HelperTools
                 var orgDirectoryName = Path.GetFileName(directory);
                 var directoryName = overridden ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
 
-                //create file if not exist
+                //create file if not exist in order to create root output file
                 if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".sql")))
                 {
-                    StringBuilder fileContent = new StringBuilder();
-
                     string[] allFiles = Directory.GetFiles(directory, "*.sql", SearchOption.AllDirectories); ;
-                    Array.Sort(allFiles);
 
                     if (File.Exists(string.Format("{0}\\{1}{2}", directory, orgDirectoryName, ".txt")))
                     {
@@ -239,6 +236,7 @@ namespace Vanrise.HelperTools
                         }
                     }
 
+                    StringBuilder fileContent = new StringBuilder();
                     //add folder content to created file
                     foreach (var file in allFiles)
                     {
@@ -286,8 +284,10 @@ namespace Vanrise.HelperTools
             var retailFiles = Directory.GetFiles(binFullPath, "Retail*Entities.dll");
             var mediationFiles = Directory.GetFiles(binFullPath, "Mediation*Entities.dll");
             var sOMFiles = Directory.GetFiles(binFullPath, "SOM*Entities.dll");
-            var inspktFiles = Directory.GetFiles(binFullPath, "RecordAnalysis*Entities.dll");
-            
+            var inspktFiles = Directory.GetFiles(binFullPath, "RecordAnalysis*Entities.dll"); 
+            var testCallAnalysisFiles = Directory.GetFiles(binFullPath, "TestCallAnalysis*Entities.dll");
+
+
 
             foreach (var file in tOneFiles)
                 assemblies.Add(Assembly.LoadFile(file));
@@ -300,6 +300,8 @@ namespace Vanrise.HelperTools
             foreach (var file in sOMFiles)
                 assemblies.Add(Assembly.LoadFile(file));
             foreach (var file in inspktFiles)
+                assemblies.Add(Assembly.LoadFile(file));
+            foreach (var file in testCallAnalysisFiles)
                 assemblies.Add(Assembly.LoadFile(file));
 
             List<Enumeration> allEnumerations = new List<Enumeration>();
@@ -478,16 +480,21 @@ when not matched by target then
                 }
             }
 
-            sb = sb.Replace(item, string.Format("{0}_{1}", item, currentDateShort));
+            sb = sb.Replace(item, string.Format("{0}_{1}", currentDateShort, item));
 
             if (item != mainItem && !item.Contains(mainItem) && !mainItem.Contains(item))
             {
-                sb = sb.Replace(mainItem, string.Format("{0}_{1}", mainItem, currentDateShort));
+                sb = sb.Replace(mainItem, string.Format("{0}_{1}", currentDateShort, mainItem));
             }
 
             if (projectName == "RA")
             {
                 sb = sb.Replace(mainItem, "StandardRAStructure");
+            }
+
+            if (projectName == "TestCallAnalysis")
+            {
+                sb = sb.Replace(mainItem, "StandardTestCallAnalysis");
             }
 
             if (projectName == "Inspkt")
@@ -519,7 +526,7 @@ when not matched by target then
             {
                 Directory.CreateDirectory(sqlFilesOutputPath);
             }
-            File.WriteAllText(string.Format("{0}\\{1}_{2}.sql", sqlFilesOutputPath, item, currentDate), sb.ToString());
+            File.WriteAllText(string.Format("{0}\\{1}_{2}.sql", sqlFilesOutputPath, currentDate, item), sb.ToString());
         }
 
         private static bool DbExist(string script, bool autoGeneration)

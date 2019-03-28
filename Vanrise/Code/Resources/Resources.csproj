@@ -116,6 +116,9 @@
     <Content Include="BatchScripts\Inspkt\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Inspkt\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Inspkt\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\TestCallAnalysis\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\TestCallAnalysis\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\TestCallAnalysis\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOne.SMS\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOne.SMS\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOne.SMS\runtime-list-of-excluded-files.txt" />
@@ -495,6 +498,15 @@
     <None Include="BatchScripts\Inspkt\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Inspkt\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Inspkt\All.bat" />
+    <None Include="BatchScripts\TestCallAnalysis\01-Runtime.bat" />
+    <None Include="BatchScripts\TestCallAnalysis\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\TestCallAnalysis\03-WebSite.bat" />
+    <None Include="BatchScripts\TestCallAnalysis\05-CompressFiles.bat" />
+    <None Include="BatchScripts\TestCallAnalysis\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\TestCallAnalysis\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\TestCallAnalysis\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\TestCallAnalysis\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\TestCallAnalysis\All.bat" />
     <None Include="BatchScripts\TOne.SMS\01-Runtime.bat" />
     <None Include="BatchScripts\TOne.SMS\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\TOne.SMS\03-WebSite.bat" />
