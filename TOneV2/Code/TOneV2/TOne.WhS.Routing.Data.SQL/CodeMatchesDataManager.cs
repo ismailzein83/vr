@@ -220,6 +220,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     SupplierId = (int)reader["SupplierID"],
                     SupplierZoneId = supplierZoneId.Value
                 },
+                DealId = GetReaderValue<int?>(reader, "DealId"),
                 SupplierServiceIds = !string.IsNullOrEmpty(supplierServiceIds) ? Vanrise.Common.ExtensionMethods.ToHashSet(supplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? Vanrise.Common.ExtensionMethods.ToHashSet(exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 RateValue = (decimal)reader["EffectiveRateValue"],
@@ -387,6 +388,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                      ,cszm.[SupplierID]
                                                                      ,cszm.[SupplierZoneID]
 		                                                             ,null as SupplierCode
+                                                                     ,szd.DealId
 		                                                             ,szd.SupplierServiceIds
 		                                                             ,szd.ExactSupplierServiceIds
 		                                                             ,szd.EffectiveRateValue
@@ -402,6 +404,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                                        ,cszm.[SupplierID]
                                                                                        ,cszm.[SupplierZoneID]
 		                                                                               ,cszm.CodeMatch as SupplierCode
+                                                                                       ,szd.DealId
 		                                                                               ,szd.SupplierServiceIds
 		                                                                               ,szd.ExactSupplierServiceIds
 		                                                                               ,szd.EffectiveRateValue

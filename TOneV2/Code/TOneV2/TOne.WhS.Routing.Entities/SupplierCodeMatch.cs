@@ -18,6 +18,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public SupplierCodeMatch CodeMatch { get; set; }
 
+        public int? DealId { get; set; }
+
         public Decimal RateValue { get; set; }
 
         public HashSet<int> SupplierServiceIds { get; set; }

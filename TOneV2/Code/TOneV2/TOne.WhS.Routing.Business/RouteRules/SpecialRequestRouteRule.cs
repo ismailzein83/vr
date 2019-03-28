@@ -425,6 +425,16 @@ namespace TOne.WhS.Routing.Business
             if (specialRequestOption == null)
                 throw new NullReferenceException("option.OptionSettings should be of type ISpecialRequestRouteOptionSettings");
 
+            if (specialRequestOption.SupplierDeals != null && specialRequestOption.SupplierDeals.Count > 0)
+            {
+                var supplierDeals = specialRequestOption.SupplierDeals.Select(item => item as BaseRouteSupplierDeal).ToList();
+                if (!Entities.Helper.IsSupplierDealMatch(supplierDeals, option.SupplierDealId))
+                {
+                    option.FilterOption = true;
+                    return;
+                }
+            }
+
             if (ExecuteRateOptionFilter(target.SaleRate, option.SupplierRate))
             {
                 if (specialRequestOption.ForceOption)

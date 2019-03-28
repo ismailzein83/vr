@@ -914,6 +914,7 @@ namespace TOne.WhS.Routing.Business
                             SupplierId = supplierZoneDetail.SupplierId,
                             SupplierZoneId = supplierZoneDetail.SupplierZoneId
                         },
+                        DealId = supplierZoneDetail.DealId,
                         ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds,
                         RateValue = supplierZoneDetail.EffectiveRateValue,
                         SupplierRateEED = supplierZoneDetail.SupplierRateEED,

@@ -173,7 +173,7 @@ namespace TOne.WhS.Routing.Business
                         {
                             foreach (var supplierCodeMatch in optionSupplierCodeMatches)
                             {
-                                var option = CreateOption(target, supplierCodeMatch, optionSettings.Percentage);
+                                var option = CreateOption(target, supplierCodeMatch, optionSettings);
                                 FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option, context.RoutingDatabase);
                                 if (!option.FilterOption)
                                     context.TryAddSupplierZoneOption(option);
@@ -289,7 +289,7 @@ namespace TOne.WhS.Routing.Business
                         SupplierCodeMatchWithRate optionSupplierCodeMatch = context.GetSupplierCodeMatch(optionSettings.SupplierId);
                         if (optionSupplierCodeMatch != null)
                         {
-                            var option = CreateOption(target, optionSupplierCodeMatch, optionSettings.Percentage);
+                            var option = CreateOption(target, optionSupplierCodeMatch, optionSettings);
                             options.Add(option);
                         }
                     }
@@ -310,7 +310,7 @@ namespace TOne.WhS.Routing.Business
             return options;
         }
 
-        private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, int? percentage)
+        private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, RouteOptionSettings routeOption)
         {
             var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
             var option = new RouteOptionRuleTarget
@@ -319,6 +319,7 @@ namespace TOne.WhS.Routing.Business
                 SupplierId = supplierCodeMatch.SupplierId,
                 SupplierCode = supplierCodeMatch.SupplierCode,
                 SupplierZoneId = supplierCodeMatch.SupplierZoneId,
+                SupplierDealId = supplierCodeMatchWithRate.DealId,
                 SupplierRate = supplierCodeMatchWithRate.RateValue,
                 EffectiveOn = routeRuleTarget.EffectiveOn,
                 IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture,
@@ -329,8 +330,12 @@ namespace TOne.WhS.Routing.Business
                 SupplierRateId = supplierCodeMatchWithRate.SupplierRateId,
                 SupplierRateEED = supplierCodeMatchWithRate.SupplierRateEED
             };
-            if (percentage.HasValue)
-                option.Percentage = percentage.Value;
+
+            if (routeOption != null && routeOption.Percentage.HasValue)
+                option.Percentage = routeOption.Percentage.Value;
+
+            option.OptionSettings = routeOption;
+
             return option;
         }
 
@@ -351,6 +356,7 @@ namespace TOne.WhS.Routing.Business
                 return options.ToList();
             else return null;
         }
+
         private IEnumerable<T> OrderOptionsByOrder<T>(IEnumerable<T> options, RoutingDatabase routingDatabase) where T : IRouteOptionOrderTarget
         {
             RouteOptionOrderSettings optionOrderSettings = OptionOrderSettings[0];
@@ -362,7 +368,6 @@ namespace TOne.WhS.Routing.Business
             }
             return options;
         }
-
 
         private IEnumerable<T> OrderOptionsBySequential<T>(IEnumerable<T> options, RoutingDatabase routingDatabase) where T : IRouteOptionOrderTarget
         {
@@ -586,6 +591,17 @@ namespace TOne.WhS.Routing.Business
 
         private void FilterOption(SupplierCodeMatchWithRate supplierCodeMatchWithRate, HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option, RoutingDatabase routingDatabase)
         {
+            RouteOptionSettings routeOption = option.OptionSettings as RouteOptionSettings;
+            if (routeOption != null && routeOption.SupplierDeals != null && routeOption.SupplierDeals.Count > 0)
+            {
+                var supplierDeals = routeOption.SupplierDeals.Select(item => item as BaseRouteSupplierDeal).ToList();
+                if (!Entities.Helper.IsSupplierDealMatch(supplierDeals, option.SupplierDealId))
+                {
+                    option.FilterOption = true;
+                    return;
+                }
+            }
+
             if (this.OptionFilters != null)
             {
                 foreach (var optionFilter in this.OptionFilters)

@@ -592,6 +592,14 @@ namespace TOne.WhS.Routing.Entities
             return null;
         }
 
+        public static bool IsSupplierDealMatch(List<BaseRouteSupplierDeal> supplierDeals, int? dealId)
+        {
+            if (supplierDeals == null || supplierDeals.Count == 0)
+                return true;
+
+            return dealId.HasValue && supplierDeals.Exists(item => item.SupplierDealId == dealId.Value);
+        }
+
         #endregion
 
         #region Private Methods
@@ -605,6 +613,7 @@ namespace TOne.WhS.Routing.Entities
             option.SupplierId = supplierCodeMatch.SupplierId;
             option.SupplierCode = supplierCodeMatch.SupplierCode;
             option.SupplierZoneId = supplierCodeMatch.SupplierZoneId;
+            option.SupplierDealId = supplierCodeMatchWithRate.DealId;
             option.SupplierRate = supplierCodeMatchWithRate.RateValue;
             option.EffectiveOn = routeRuleTarget.EffectiveOn;
             option.IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture;

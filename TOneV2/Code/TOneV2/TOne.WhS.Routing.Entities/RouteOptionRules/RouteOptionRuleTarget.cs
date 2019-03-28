@@ -16,6 +16,8 @@ namespace TOne.WhS.Routing.Entities
 
         public long SupplierZoneId { get; set; }
 
+        public int? SupplierDealId { get; set; }
+
         public long? SupplierRateId { get; set; }
 
         public Decimal SupplierRate { get; set; }
@@ -94,7 +96,8 @@ namespace TOne.WhS.Routing.Entities
                 SupplierRateId = this.SupplierRateId,
                 SupplierServiceIds = Vanrise.Common.Utilities.CloneHashSet<int>(this.SupplierServiceIds),
                 SupplierServiceWeight = this.SupplierServiceWeight,
-                SupplierZoneId = this.SupplierZoneId
+                SupplierZoneId = this.SupplierZoneId,
+                SupplierDealId = this.SupplierDealId
             };
             return target;
         }
@@ -135,7 +138,8 @@ namespace TOne.WhS.Routing.Entities
                 SupplierRateId = this.SupplierRateId,
                 SupplierServiceIds = Vanrise.Common.Utilities.CloneHashSet<int>(this.SupplierServiceIds),
                 SupplierServiceWeight = this.SupplierServiceWeight,
-                SupplierZoneId = this.SupplierZoneId
+                SupplierZoneId = this.SupplierZoneId,
+                SupplierDealId = this.SupplierDealId
             };
             return target;
         }

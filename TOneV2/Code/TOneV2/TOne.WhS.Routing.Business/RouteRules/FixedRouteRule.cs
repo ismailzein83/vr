@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 
@@ -321,9 +320,18 @@ namespace TOne.WhS.Routing.Business
         private void FilterOption(HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option, RoutingDatabase routingDatabase)
         {
             IFixedRouteOptionSettings fixedOption = option.OptionSettings as IFixedRouteOptionSettings;
-
             if (fixedOption == null)
                 throw new NullReferenceException("option.OptionSettings should be of type IFixedRouteOptionSettings");
+
+            if (fixedOption.SupplierDeals != null && fixedOption.SupplierDeals.Count > 0)
+            {
+                var supplierDeals = fixedOption.SupplierDeals.Select(item => item as BaseRouteSupplierDeal).ToList();
+                if (!Entities.Helper.IsSupplierDealMatch(supplierDeals, option.SupplierDealId))
+                {
+                    option.FilterOption = true;
+                    return;
+                }
+            }
 
             if (fixedOption.Filters == null)
                 return;

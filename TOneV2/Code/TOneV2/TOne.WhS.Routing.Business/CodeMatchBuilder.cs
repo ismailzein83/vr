@@ -303,7 +303,8 @@ namespace TOne.WhS.Routing.Business
                                 ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds,
                                 SupplierServiceWeight = supplierZoneDetail.SupplierServiceWeight,
                                 SupplierRateId = supplierZoneDetail.SupplierRateId,
-                                SupplierRateEED = supplierZoneDetail.SupplierRateEED
+                                SupplierRateEED = supplierZoneDetail.SupplierRateEED,
+                                DealId = supplierZoneDetail.DealId
                             };
                             supplierCodeMatches.Add(supplierCodeMatchWithRate);
                             supplierCodeMatchBySupplier.Add(supplierCodeIterator.SupplierId, supplierCodeMatchWithRate);

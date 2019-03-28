@@ -24,8 +24,10 @@ namespace TOne.WhS.Routing.Entities
         public int NumberOfTries { get; set; }
 
         public bool ForceOption { get; set; }
+
+        public List<SpecialRequestRouteSupplierDeal> SupplierDeals { get; set; }
     }
-    
+
     public class SpecialRequestRouteSupplierDeal : BaseRouteSupplierDeal
     {
     }

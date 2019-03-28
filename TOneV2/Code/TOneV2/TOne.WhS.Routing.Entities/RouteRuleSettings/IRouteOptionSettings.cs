@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -25,10 +21,14 @@ namespace TOne.WhS.Routing.Entities
     public interface IFixedRouteOptionSettings
     {
         List<RouteOptionFilterSettings> Filters { get; set; }
+
+        List<FixedRouteSupplierDeal> SupplierDeals { get; set; }
     }
 
     public interface ISpecialRequestRouteOptionSettings
     {
         bool ForceOption { get; set; }
+
+        List<SpecialRequestRouteSupplierDeal> SupplierDeals { get; set; }
     }
 }
