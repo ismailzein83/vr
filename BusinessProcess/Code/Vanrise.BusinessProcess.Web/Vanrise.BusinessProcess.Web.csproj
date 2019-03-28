@@ -231,6 +231,10 @@
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-selector.js" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-tasktype-selector.js" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-tasktype-staticeditor.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\BPGenericTaskTypeActionFilterCondition\bp-generictasktypeactionfiltercondition-filtergroup.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\BPGenericTaskTypeActionFilterCondition\bp-generictasktypeactionfiltercondition-istaken.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\BPGenericTaskTypeActionFilterCondition\Templates\FilterGroupFilterCondition.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\BPGenericTaskTypeActionFilterCondition\Templates\IsTakenFilterCondition.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-processinitiator-taskassignees.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-specificgroups-taskassignees.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-specificusers-taskassignees.js" />
