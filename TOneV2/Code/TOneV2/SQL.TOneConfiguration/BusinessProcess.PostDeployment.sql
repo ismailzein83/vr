@@ -40,7 +40,8 @@ as (select * from (values
 ('F9C477A8-4374-4C58-A859-02F5A26EDCD7','VRWorkflowSpecificGroupsTaskAssignees','Specific Groups','BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-specificgroups-taskassignees"}'),
 ('D297A8B8-997D-4127-91FA-353238296940','VRWorkflowProcessInitiatorTaskAssignees','Process Initiator','BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-processinitiator-taskassignees"}'),
 ('36F6C817-A40F-4F8C-A2D6-9377EAF2169D','ExecuteBPGenericTaskTypeAction','Execute','BP_Generic_TaskType_ActionSettings','{"Editor":"businessprocess-generictasktype-actionsettings-execute"}'),
-('0AD405A3-9BCF-4796-9A1A-6CC2C3F9AAA3','OpenBPInstanceViewer','Open BP Instance Viewer','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-openbpinstanceviewer-action"}')
+('0AD405A3-9BCF-4796-9A1A-6CC2C3F9AAA3','OpenBPInstanceViewer','Open BP Instance Viewer','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-openbpinstanceviewer-action"}'),
+('0E9730F4-1197-456B-9261-E745FE4AFB3B','StartBPProcess_Generic','Start BP Process','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-genericbe-startbpprocess-action"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
