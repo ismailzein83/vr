@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountactiondefinitionsettingsStartbpprocess', ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_VRWorkflowAPIService', 'VRWorkflowArgumentDirectionEnum',
-    function (UtilsService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_VRWorkflowAPIService, VRWorkflowArgumentDirectionEnum) {
+app.directive('retailBeAccountactiondefinitionsettingsStartbpprocess', ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_VRWorkflowAPIService', 'VRWorkflowArgumentDirectionEnum','VRNotificationService',
+    function (UtilsService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_VRWorkflowAPIService, VRWorkflowArgumentDirectionEnum, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
