@@ -96,8 +96,12 @@
                     });
             }
 
-            function settitle() {
-                $scope.title = (genericBusinessEntity != undefined) ? "GenericBE name: " + genericBusinessEntity.FieldValues['Name'].Value : undefined;
+            function setTitle() {
+                VR_GenericData_GenericBusinessEntityAPIService.GetGenericBETitleFieldValue(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
+                    if (response != undefined) {
+                        $scope.title = (genericBusinessEntity != undefined) ? "GenericBE name: " + response : undefined;
+                    }
+                });
             }
 
             function loadBPDefinition() {
@@ -113,7 +117,7 @@
                 promises: initialPromises,
                 getChildNode: function () {
                     return {
-                        promises: [UtilsService.waitMultipleAsyncOperations([settitle, loadBPDefinition])]
+                        promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadBPDefinition])]
                     };
                 }
             };
@@ -132,10 +136,13 @@
                 if (createProcessInput.InputArguments == undefined)
                     createProcessInput.InputArguments = {};
 
-                for (var i = 0; i < genericBEActionSettings.InputArgumentsMapping.length; i++) {
-                    var inputArgumentMapped = genericBEActionSettings.InputArgumentsMapping[i];
-                    createProcessInput.InputArguments[inputArgumentMapped.InputArgumentName] = genericBusinessEntity.FieldValues[inputArgumentMapped.MappedFieldName].Value;
+                if (genericBEActionSettings.InputArgumentsMapping != undefined) {
+                    for (var i = 0; i < genericBEActionSettings.InputArgumentsMapping.length; i++) {
+                        var inputArgumentMapped = genericBEActionSettings.InputArgumentsMapping[i];
+                        createProcessInput.InputArguments[inputArgumentMapped.InputArgumentName] = genericBusinessEntity.FieldValues[inputArgumentMapped.MappedFieldName].Value;
+                    }
                 }
+
 
             }
             return createProcessInput;
