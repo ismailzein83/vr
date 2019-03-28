@@ -259,14 +259,14 @@ namespace NP.IVSwitch.Business
 				}
 				if (hosts != null)
 				{
-					List<int> exceptedIds = new List<int>();
-					exceptedIds.Add(endPointItem.Entity.EndPointId);
-					if (helper.IsInSameSubnet(hosts, endPointItem.Entity.Host, exceptedIds, out message))
-					{
-						updateOperationOutput.Message = message;
-						updateOperationOutput.ShowExactMessage = true;
-						return updateOperationOutput;
-					}
+						List<int> exceptedIds = new List<int>();
+						exceptedIds.Add(endPointItem.Entity.EndPointId);
+						if (helper.IsInSameSubnet(hosts.Values, endPointItem.Entity.Host, exceptedIds, out message))
+						{
+							updateOperationOutput.Message = message;
+							updateOperationOutput.ShowExactMessage = true;
+							return updateOperationOutput;
+						}
 				}
 
 
@@ -594,17 +594,17 @@ namespace NP.IVSwitch.Business
 						insertOperationOutput.ShowExactMessage = true;
 						return insertOperationOutput;
 					}
+					var allRemainedEndPoints = endPointsToAdd.FindAllRecords(x => x.Entity.Host != endPointToAdd.Entity.Host);
 					List<EndPointToAdd> remainedEndPointsToAdd = new List<EndPointToAdd>();
-					remainedEndPointsToAdd = endPointsToAdd.FindAllRecords(x => x != endPointToAdd) != null ? endPointsToAdd.FindAllRecords(x => x != endPointToAdd).ToList() : null;
-					if (remainedEndPointsToAdd != null && remainedEndPointsToAdd.Count()>0)
+					remainedEndPointsToAdd = allRemainedEndPoints != null ? allRemainedEndPoints.ToList() : null;
+					if (remainedEndPointsToAdd != null && remainedEndPointsToAdd.Count() > 0)
 					{
-						Dictionary<int, EndPoint> remainedEndPoints = new Dictionary<int, EndPoint>();
-						remainedEndPoints = remainedEndPointsToAdd.ToDictionary(x => x.Entity.EndPointId, x => x.Entity);
-						if (remainedEndPoints != null)
+						var selectedRemainedEndPoints = remainedEndPointsToAdd.Select(x => x.Entity);
+						if (selectedRemainedEndPoints!=null)
 						{
 							IpAddressHelper helper = new IpAddressHelper();
 							string message = "";
-							if (helper.IsInSameSubnet(remainedEndPoints, endPointToAdd.Entity.Host, null, out message))
+							if (helper.IsInSameSubnet(selectedRemainedEndPoints.ToList(), endPointToAdd.Entity.Host, null, out message))
 							{
 								insertOperationOutput.Message = message;
 								insertOperationOutput.ShowExactMessage = true;
@@ -813,7 +813,7 @@ namespace NP.IVSwitch.Business
 		{
 			IpAddressHelper helper = new IpAddressHelper();
 			Dictionary<int, Entities.EndPoint> hosts = GetCachedEndPoint();
-			if (helper.IsInSameSubnet(hosts, endPointItem.Entity.Host, null, out mssg)) return true;
+			if (helper.IsInSameSubnet(hosts.Values, endPointItem.Entity.Host, null, out mssg)) return true;
 			if (accountExtended != null && accountExtended.CustomerAccountId.HasValue)
 			{
 				endPointItem.Entity.AccountId = accountExtended.CustomerAccountId.Value;

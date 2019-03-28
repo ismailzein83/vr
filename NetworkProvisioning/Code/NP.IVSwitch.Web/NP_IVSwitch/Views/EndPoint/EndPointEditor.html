@@ -52,7 +52,7 @@
 							<vr-textbox-multiple datatype="ip" label="Hosts/Network Address's" value="scopeModel.hosts" ng-if="scopeModel.ShowACL" isrequired></vr-textbox-multiple>
 						</vr-columns>
 						<vr-columns colnum="4">
-							<vr-textbox type="number" label="SubNet Mask" value="scopeModel.subnet" ng-if="scopeModel.ShowACL" minvalue="1" maxvalue="32">
+							<vr-textbox type="number" label="SubNet Mask" decimalprecision="0" value="scopeModel.subnet" ng-if="scopeModel.ShowACL" minvalue="1" maxvalue="32">
 							</vr-textbox>
 						</vr-columns>
 					</vr-columns>
