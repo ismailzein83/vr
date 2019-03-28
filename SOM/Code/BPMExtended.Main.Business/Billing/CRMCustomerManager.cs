@@ -701,7 +701,43 @@ namespace BPMExtended.Main.Business
                 return isCommercial;
         }
 
+        public void CustomerCreationProcess(string contactId, string accountId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            
+            //Get infos from contact table in CRM database 
 
+            if (contactId != null && contactId!="")
+            {
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
+                esq.AddColumn("Name");
+                esq.AddColumn("StDocumentID");
+                esq.AddColumn("StCustomerId");
+                esq.AddColumn("StCustomersCategory");
+
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
+                esq.Filters.Add(esqFirstFilter);
+
+                var entities = esq.GetEntityCollection(BPM_UserConnection);
+                if (entities.Count > 0)
+                {
+                    var name = entities[0].GetColumnValue("Name");
+                    var documentId = entities[0].GetColumnValue("StDocumentID");
+                    var customerId = entities[0].GetColumnValue("StCustomerId");
+                    var customerCategoryId = entities[0].GetColumnValue("StCustomersCategoryId");
+                    var customerCategoryName = entities[0].GetColumnValue("StCustomersCategoryStName");
+                    
+
+                    // call SOM to Create Cutomer
+                }
+
+            }
+            else
+            {
+                //account
+            }
+        }
         //public void convertFileToBinaryCode()
         //{
         //    byte[] file;

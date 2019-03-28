@@ -1,2 +1,2 @@
-C:\BPMV1\Terrasoft.WebApp\DesktopBin\WorkspaceConsole\Terrasoft.Tools.WorkspaceConsole.exe -workspaceName=Default -operation=BuildConfiguration -destinationPath=C:\TempPackages -webApplicationPath=C:\BPMV2 -logPath=C:\Log -force=true
+D:\BPMOnline113\Terrasoft.WebApp\DesktopBin\WorkspaceConsole\Terrasoft.Tools.WorkspaceConsole.exe -workspaceName=Default -operation=BuildConfiguration -destinationPath=C:\TempPackages -webApplicationPath=D:\BPMOnline113 -logPath=C:\Log -force=true
 pause

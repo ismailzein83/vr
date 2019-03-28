@@ -87,6 +87,7 @@
     <Compile Include="Billing\BillingManager.cs" />
     <Compile Include="Billing\ContractManager.cs" />
     <Compile Include="Billing\CRMCustomerManager.cs" />
+    <Compile Include="Billing\IDManager.cs" />
     <Compile Include="Billing\ServiceManager.cs" />
     <Compile Include="Billing\CustomerCategoryManager.cs" />
     <Compile Include="Billing\CustomerRequestManager.cs" />
