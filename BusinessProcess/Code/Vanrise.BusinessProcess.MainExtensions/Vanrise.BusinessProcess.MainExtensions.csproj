@@ -80,7 +80,7 @@
     <Compile Include="BPTaskAssigne\InitiatorBPTaskAssignee.cs" />
     <Compile Include="BPTaskAssigne\FixedUsersBPTaskAssignee.cs" />
     <Compile Include="BPTaskTypes\BPGenericTaskTypeActionFilterCondition\FilterGroupBPGenericTaskTypeActionFilterCondition.cs" />
-    <Compile Include="BPTaskTypes\BPGenericTaskTypeActionFilterCondition\TakenByBPGenericTaskTypeActionFilterCondition.cs" />
+    <Compile Include="BPTaskTypes\BPGenericTaskTypeActionFilterCondition\IsTakenBPGenericTaskTypeActionFilterCondition.cs" />
     <Compile Include="BPTaskTypes\BPGenericTaskTypeAction\ExecuteBPGenericTaskTypeAction.cs" />
     <Compile Include="BPTaskTypes\BPGenericTaskTypeSettings.cs" />
     <Compile Include="BPTaskTypes\BPGenericTaskTypeSettingsFilter.cs" />
