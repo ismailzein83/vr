@@ -1970,7 +1970,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Top>0.64167in</Top>
+                          <Top>0.65494in</Top>
                           <Left>0.00402in</Left>
                           <Height>0.2in</Height>
                           <Width>0.59791in</Width>
@@ -2404,6 +2404,23 @@
         <ReportItems>
           <Subreport Name="DefaultCustomerInvoiceItemsReport">
             <ReportName>DefaultCustomerInvoiceItemsReport</ReportName>
+            <Parameters>
+              <Parameter Name="NoVoice">
+                <Value>=Parameters!NoVoice.Value</Value>
+              </Parameter>
+              <Parameter Name="NormalPrecisionValue">
+                <Value>=Parameters!NormalPrecisionValue.Value</Value>
+              </Parameter>
+              <Parameter Name="TotalVoiceAmountBeforeTax">
+                <Value>=Parameters!TotalVoiceAmountBeforeTax.Value</Value>
+              </Parameter>
+              <Parameter Name="TotalDuration">
+                <Value>=Parameters!TotalDuration.Value</Value>
+              </Parameter>
+              <Parameter Name="Currency">
+                <Value>=Parameters!Currency.Value</Value>
+              </Parameter>
+            </Parameters>
             <Top>0cm</Top>
             <Left>0cm</Left>
             <Height>1.77917cm</Height>
@@ -2419,9 +2436,9 @@
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>18.29876cm</Top>
+        <Top>18.24602cm</Top>
         <Left>0.55844cm</Left>
-        <Height>1.79699cm</Height>
+        <Height>1.84973cm</Height>
         <Width>14.85278cm</Width>
         <ZIndex>10</ZIndex>
         <Style>
