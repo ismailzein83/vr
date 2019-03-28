@@ -22,6 +22,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int? CarrierProfileId { get; set; }
         public Guid? BusinessEntityDefinitionId { get; set; }
         public IEnumerable<ICarrierAccountFilter> Filters { get; set; }
+        public IEnumerable<ActivationStatus> ActivationStatuses { get; set; }
 	}
 
     public interface ICarrierAccountFilter

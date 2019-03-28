@@ -37,7 +37,11 @@
         </vr-section>
     </vr-tab>
     <vr-tab header="'Carrier Mapping'">
-        <whs-routesync-carrieraccountmapping-ericsson-grid on-ready="scopeModel.onCarrierAccountMappingGridReady"></whs-routesync-carrieraccountmapping-ericsson-grid>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <whs-routesync-carrieraccountmapping-ericsson-grid on-ready="scopeModel.onCarrierAccountMappingGridReady"></whs-routesync-carrieraccountmapping-ericsson-grid>
+            </vr-columns>
+        </vr-row>
     </vr-tab>
     <vr-tab header="'Manual Routes'">
         <vr-section header="A-Number" collapsible>

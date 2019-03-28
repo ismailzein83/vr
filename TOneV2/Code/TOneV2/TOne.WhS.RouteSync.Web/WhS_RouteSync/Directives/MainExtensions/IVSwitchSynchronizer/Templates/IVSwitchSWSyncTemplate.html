@@ -26,8 +26,10 @@
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-column width="fullrow" vr-loader="scopeModel.isLoading">
-        <vr-datagrid datasource="scopeModel.carrierAccountMappings"
+    <vr-columns width="fullrow" vr-loader="scopeModel.isLoading">
+        <vr-datagrid on-ready="scopeModel.onGridReady"
+                     datasource="scopeModel.carrierAccountMappingsGridDS"
+                     loadmoredata="scopeModel.loadMoreData"
                      maxheight="500px"
                      pagingtype="'PagingOnScroll'"
                      idfield="CarrierAccountId">
@@ -41,5 +43,5 @@
                 <vr-textbox type="text" tonextinput value="dataItem.SupplierMapping"></vr-textbox>
             </vr-datagridcolumn>
         </vr-datagrid>
-    </vr-column>
+    </vr-columns>
 </vr-row>

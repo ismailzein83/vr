@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ivswitchSwSync.$inject = ["UtilsService", 'VRUIUtilsService', 'WhS_BE_CarrierAccountAPIService', 'VRNotificationService'];
+    ivswitchSwSync.$inject = ['UtilsService', 'WhS_BE_CarrierAccountAPIService', 'VRNotificationService', 'WhS_BE_CarrierAccountActivationStatusEnum'];
 
-    function ivswitchSwSync(utilsService, vruiUtilsService, whSBeCarrierAccountApiService, vrNotificationService) {
+    function ivswitchSwSync(UtilsService, WhS_BE_CarrierAccountAPIService, VRNotificationService, WhS_BE_CarrierAccountActivationStatusEnum) {
         return {
             restrict: "E",
             scope: {
@@ -20,8 +20,133 @@
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/IVSwitchSynchronizer/Templates/IVSwitchSWSyncTemplate.html"
 
         };
+
         function IVSWSyncronizer($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
+
             var gridAPI;
+
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.isLoading = false;
+                $scope.scopeModel.carrierAccountMappings = [];
+                $scope.scopeModel.carrierAccountMappingsGridDS = [];
+
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineApi();
+                };
+
+                $scope.scopeModel.loadMoreData = function () {
+                    return loadMoreCarrierMappings();
+                };
+            }
+
+            function defineApi() {
+                var api = {};
+
+                api.load = function (payload) {
+
+                    var promises = [];
+
+                    var ivSwSynSettings;
+
+                    if (payload != undefined) {
+                        ivSwSynSettings = payload.switchSynchronizerSettings;
+                    }
+                    else {
+                        $scope.scopeModel.Uid = UtilsService.guid();
+                    }
+
+                    if (ivSwSynSettings) {
+                        $scope.scopeModel.MasterConnectionString = ivSwSynSettings.MasterConnectionString;
+                        $scope.scopeModel.RouteConnectionString = ivSwSynSettings.RouteConnectionString;
+                        $scope.scopeModel.TariffConnectionString = ivSwSynSettings.TariffConnectionString;
+                        $scope.scopeModel.OwnerName = ivSwSynSettings.OwnerName;
+                        $scope.scopeModel.NumberOfOptions = ivSwSynSettings.NumberOfOptions;
+                        $scope.scopeModel.Separator = ivSwSynSettings.Separator;
+                        $scope.scopeModel.BlockedAccountMapping = ivSwSynSettings.BlockedAccountMapping;
+                        $scope.scopeModel.Uid = ivSwSynSettings.Uid;
+                    }
+
+                    var loadCarrierMappingPromise = loadCarrierMappings(payload);
+                    promises.push(loadCarrierMappingPromise);
+
+                    function loadCarrierMappings(payload) {
+                        $scope.scopeModel.isLoading = true;
+
+                        var carrierAccountfilter = {
+                            ActivationStatuses: [WhS_BE_CarrierAccountActivationStatusEnum.Active.value, WhS_BE_CarrierAccountActivationStatusEnum.Testing.value]
+                        };
+
+                        var serilizedCarrierAccountFilter = UtilsService.serializetoJson(carrierAccountfilter);
+
+                        return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serilizedCarrierAccountFilter).then(function (response) {
+                            if (response) {
+                                var carrierMapping;
+                                var i;
+                                if (payload && payload.switchSynchronizerSettings && payload.switchSynchronizerSettings.CarrierMappings) {
+                                    for (i = 0; i < response.length; i++) {
+
+                                        var accountCarrierMappings = payload.switchSynchronizerSettings.CarrierMappings[response[i].CarrierAccountId];
+                                        carrierMapping = {
+                                            CarrierAccountId: response[i].CarrierAccountId,
+                                            CarrierAccountName: response[i].Name,
+                                            CustomerMapping: accountCarrierMappings != undefined && accountCarrierMappings.CustomerMapping != null ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.Separator) : undefined,
+                                            SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != null ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.Separator) : undefined
+                                        };
+                                        $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
+                                    }
+                                }
+                                else {
+                                    for (i = 0; i < response.length; i++) {
+                                        carrierMapping = {
+                                            CarrierAccountId: response[i].CarrierAccountId,
+                                            CarrierAccountName: response[i].Name,
+                                            CustomerMapping: '',
+                                            SupplierMapping: '',
+                                            InnerPrefix: ''
+                                        };
+                                        $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
+                                    }
+                                }
+
+                                loadMoreCarrierMappings();
+                            }
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                            $scope.scopeModel.isLoading = false;
+                        }).finally(function () {
+                            $scope.scopeModel.isLoading = false;
+                        });
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+
+                api.getData = function () {
+
+                    var data = {
+                        $type: "TOne.WhS.RouteSync.IVSwitch.IVSwitchSWSync, TOne.WhS.RouteSync.IVSwitch",
+                        CarrierMappings: getCarrierMappings(),
+                        MasterConnectionString: $scope.scopeModel.MasterConnectionString,
+                        RouteConnectionString: $scope.scopeModel.RouteConnectionString,
+                        TariffConnectionString: $scope.scopeModel.TariffConnectionString,
+                        OwnerName: $scope.scopeModel.OwnerName,
+                        NumberOfOptions: $scope.scopeModel.NumberOfOptions,
+                        Separator: $scope.scopeModel.Separator,
+                        BlockedAccountMapping: $scope.scopeModel.BlockedAccountMapping,
+                        Uid: $scope.scopeModel.Uid
+                    };
+
+                    return data;
+                };
+
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
+                }
+            }
+
             function getCarrierMappings() {
                 var result = {};
                 if ($scope.scopeModel.carrierAccountMappings != undefined)
@@ -35,111 +160,30 @@
                     }
                 return result;
             }
-            function loadCarrierMappings(payload) {
-                $scope.scopeModel.isLoading = true;
-                var serializedFilter = {};
-                return whSBeCarrierAccountApiService.GetCarrierAccountInfo(serializedFilter)
-                 .then(function (response) {
-                     if (response) {
-                         var carrierMapping;
-                         var i;
-                         if (payload && payload.switchSynchronizerSettings && payload.switchSynchronizerSettings.CarrierMappings) {
-                             for (i = 0; i < response.length; i++) {
 
-                                 var accountCarrierMappings = payload.switchSynchronizerSettings.CarrierMappings[response[i].CarrierAccountId];
-                                 carrierMapping = {
-                                     CarrierAccountId: response[i].CarrierAccountId,
-                                     CarrierAccountName: response[i].Name,
-                                     CustomerMapping: accountCarrierMappings != undefined && accountCarrierMappings.CustomerMapping != null ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.Separator) : undefined,
-                                     SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != null ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.Separator) : undefined
-                                 };
-                                 $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
-                             }
-                         }
-                         else {
-                             for (i = 0; i < response.length; i++) {
-                                 carrierMapping = {
-                                     CarrierAccountId: response[i].CarrierAccountId,
-                                     CarrierAccountName: response[i].Name,
-                                     CustomerMapping: '',
-                                     SupplierMapping: '',
-                                     InnerPrefix: ''
-                                 };
-                                 $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
-                             }
-                         }
-                     }
-                 })
-                  .catch(function (error) {
-                      vrNotificationService.notifyException(error, $scope);
-                      $scope.scopeModel.isLoading = false;
-                  }).finally(function () {
-                      $scope.scopeModel.isLoading = false;
-                  });
-            }
+            function loadMoreCarrierMappings() {
 
-            function defineApi() {
-                var api = {};
-                api.load = function (payload) {
+                var pageInfo = gridAPI.getPageInfo();
+                var itemsLength = pageInfo.toRow;
 
-                    var promises = [];
-                    var ivSwSynSettings;
-
-                    if (payload != undefined) {
-                        ivSwSynSettings = payload.switchSynchronizerSettings;
-                    }
-                    else {
-                        $scope.scopeModel.Uid = utilsService.guid();
-                    }
-                    if (ivSwSynSettings) {
-                        $scope.scopeModel.MasterConnectionString = ivSwSynSettings.MasterConnectionString;
-                        $scope.scopeModel.RouteConnectionString = ivSwSynSettings.RouteConnectionString;
-                        $scope.scopeModel.TariffConnectionString = ivSwSynSettings.TariffConnectionString;
-                        $scope.scopeModel.OwnerName = ivSwSynSettings.OwnerName;
-                        $scope.scopeModel.NumberOfOptions = ivSwSynSettings.NumberOfOptions;
-                        $scope.scopeModel.Separator = ivSwSynSettings.Separator;
-                        $scope.scopeModel.BlockedAccountMapping = ivSwSynSettings.BlockedAccountMapping;
-                        $scope.scopeModel.Uid = ivSwSynSettings.Uid;
-                    }
-                    var loadCarrierMappingPromise = loadCarrierMappings(payload);
-                    promises.push(loadCarrierMappingPromise);
-                    return utilsService.waitMultiplePromises(promises);
-                };
-
-                function getData() {
-                    var data = {
-                        $type: "TOne.WhS.RouteSync.IVSwitch.IVSwitchSWSync,TOne.WhS.RouteSync.IVSwitch",
-                        CarrierMappings: getCarrierMappings(),
-                        MasterConnectionString: $scope.scopeModel.MasterConnectionString,
-                        RouteConnectionString: $scope.scopeModel.RouteConnectionString,
-                        TariffConnectionString: $scope.scopeModel.TariffConnectionString,
-                        OwnerName: $scope.scopeModel.OwnerName,
-                        NumberOfOptions: $scope.scopeModel.NumberOfOptions,
-                        Separator: $scope.scopeModel.Separator,
-                        BlockedAccountMapping: $scope.scopeModel.BlockedAccountMapping,
-                        Uid: $scope.scopeModel.Uid
-                    };
-                    return data;
+                if (pageInfo.toRow > $scope.scopeModel.carrierAccountMappings.length) {
+                    if (pageInfo.fromRow < $scope.scopeModel.carrierAccountMappings.length)
+                        itemsLength = $scope.scopeModel.carrierAccountMappings.length;
+                    else
+                        return;
                 }
 
-                api.getData = getData;
+                var items = [];
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                    ctrl.onReady(api);
+                for (var i = pageInfo.fromRow - 1; i < itemsLength; i++) {
+                    var currentCarrierAccountMapping = $scope.scopeModel.carrierAccountMappings[i];
+                    items.push(currentCarrierAccountMapping);
                 }
-            }
 
-            function initializeController() {
-                $scope.scopeModel = {};
-                $scope.scopeModel.isLoading = false;
-                $scope.scopeModel.carrierAccountMappings = [];
-                defineApi();
+                gridAPI.addItemsToSource(items);
             }
-
-            this.initializeController = initializeController;
         }
     }
 
     app.directive('whsRoutesyncIvswitchSwsync', ivswitchSwSync);
-
 })(app);

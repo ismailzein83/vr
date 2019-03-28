@@ -1,7 +1,8 @@
 ﻿'use strict';
 
-app.directive('whsRoutesyncCarrieraccountmappingGrid', ['WhS_BE_CarrierAccountAPIService', 'VRNotificationService', 'UtilsService',
-    function (WhS_BE_CarrierAccountAPIService, VRNotificationService, UtilsService) {
+app.directive('whsRoutesyncCarrieraccountmappingMvtsGrid', ['WhS_BE_CarrierAccountAPIService', 'VRNotificationService', 'UtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum',
+    function (WhS_BE_CarrierAccountAPIService, VRNotificationService, UtilsService, WhS_BE_CarrierAccountActivationStatusEnum) {
+
         return {
             restrict: 'E',
             scope: {
@@ -23,7 +24,7 @@ app.directive('whsRoutesyncCarrieraccountmappingGrid', ['WhS_BE_CarrierAccountAP
 
         function getTemplate(attrs) {
 
-            return '<vr-datagrid datasource="scopeModel.filterdCarrierMappings" loadmoredata="scopeModel.loadMoreData" maxheight="250px" on-ready="scopeModel.onGridReady">'
+            return '<vr-datagrid datasource="scopeModel.filterdCarrierMappings" loadmoredata="scopeModel.loadMoreData" maxheight="500px" on-ready="scopeModel.onGridReady">'
                 + '<vr-datagridcolumn headertext="\'ID\'" field="\'CarrierId\'" type="\'Text\'" widthfactor="2"></vr-datagridcolumn>'
                 + '<vr-datagridcolumn headertext="\'Account Name\'" field="\'CarrierAccountName\'" type="\'Text\'"></vr-datagridcolumn>'
                 + '<vr-datagridcolumn ng-repeat="mapping in ctrl.mappingColumns" headertext="mapping.Name" widthfactor="6" field="mapping" columnindex="$index" >'
@@ -37,12 +38,15 @@ app.directive('whsRoutesyncCarrieraccountmappingGrid', ['WhS_BE_CarrierAccountAP
             this.initializeController = initializeController;
 
             var gridAPI;
+
             var separator = ";";
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.mappingColumns = ctrl.mappingColumns;
                 $scope.scopeModel.filterdCarrierMappings = [];
                 $scope.scopeModel.carrierAccountMappings = [];
+
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -98,50 +102,56 @@ app.directive('whsRoutesyncCarrieraccountmappingGrid', ['WhS_BE_CarrierAccountAP
                 if (query && query.switchSynchronizerSettings)
                     separator = query.switchSynchronizerSettings.MappingSeparator;
                 $scope.scopeModel.isLoading = true;
-                var serializedFilter = {};
-                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter)
-                 .then(function (response) {
 
-                     if (response) {
-                         if (query && query.switchSynchronizerSettings && query.switchSynchronizerSettings.CarrierMappings) {
-                             for (var i = 0; i < response.length; i++) {
-                                 var carrierAccount = response[i];
-                                 var carrierMapping = {
-                                     CarrierId: carrierAccount.CarrierAccountId,
-                                     CarrierAccountName: carrierAccount.Name
-                                 };
-                                 for (var j = 0; j < $scope.scopeModel.mappingColumns.length; j++) {
-                                     var mapping = $scope.scopeModel.mappingColumns[j];
-                                     var accountCarrierMappings = query.switchSynchronizerSettings.CarrierMappings[carrierAccount.CarrierAccountId];
+                var carrierAccountfilter = {
+                    ActivationStatuses: [WhS_BE_CarrierAccountActivationStatusEnum.Active.value, WhS_BE_CarrierAccountActivationStatusEnum.Testing.value]
+                };
 
-                                     carrierMapping[mapping['Column']] = accountCarrierMappings != undefined && accountCarrierMappings[mapping['Column']] != null ? accountCarrierMappings[mapping['Column']].join(separator) : undefined;
-                                 }
-                                 $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
-                             }
-                         }
-                         else {
-                             for (var i = 0; i < response.length; i++) {
-                                 var carrierAccount = response[i];
-                                 var carrierMapping = {
-                                     CarrierId: carrierAccount.CarrierAccountId,
-                                     CarrierAccountName: carrierAccount.Name,
-                                 };
-                                 for (var j = 0; j < $scope.scopeModel.mappingColumns.length; j++) {
-                                     var mapping = $scope.scopeModel.mappingColumns[j];
-                                     carrierMapping[mapping['Column']] = '';
-                                 }
-                                 $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
-                             }
-                         }
-                     }
-                     loadMoreCarrierMappings();
-                 })
-                  .catch(function (error) {
-                      VRNotificationService.notifyException(error, $scope);
-                      $scope.scopeModel.isLoading = false;
-                  }).finally(function () {
-                      $scope.scopeModel.isLoading = false;
-                  });
+                var serilizedCarrierAccountFilter = UtilsService.serializetoJson(carrierAccountfilter);
+
+                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serilizedCarrierAccountFilter)
+                    .then(function (response) {
+
+                        if (response) {
+                            if (query && query.switchSynchronizerSettings && query.switchSynchronizerSettings.CarrierMappings) {
+                                for (var i = 0; i < response.length; i++) {
+                                    var carrierAccount = response[i];
+                                    var carrierMapping = {
+                                        CarrierId: carrierAccount.CarrierAccountId,
+                                        CarrierAccountName: carrierAccount.Name
+                                    };
+                                    for (var j = 0; j < $scope.scopeModel.mappingColumns.length; j++) {
+                                        var mapping = $scope.scopeModel.mappingColumns[j];
+                                        var accountCarrierMappings = query.switchSynchronizerSettings.CarrierMappings[carrierAccount.CarrierAccountId];
+
+                                        carrierMapping[mapping['Column']] = accountCarrierMappings != undefined && accountCarrierMappings[mapping['Column']] != null ? accountCarrierMappings[mapping['Column']].join(separator) : undefined;
+                                    }
+                                    $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
+                                }
+                            }
+                            else {
+                                for (var i = 0; i < response.length; i++) {
+                                    var carrierAccount = response[i];
+                                    var carrierMapping = {
+                                        CarrierId: carrierAccount.CarrierAccountId,
+                                        CarrierAccountName: carrierAccount.Name,
+                                    };
+                                    for (var j = 0; j < $scope.scopeModel.mappingColumns.length; j++) {
+                                        var mapping = $scope.scopeModel.mappingColumns[j];
+                                        carrierMapping[mapping['Column']] = '';
+                                    }
+                                    $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
+                                }
+                            }
+                        }
+                        loadMoreCarrierMappings();
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                        $scope.scopeModel.isLoading = false;
+                    }).finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
             }
 
             function loadMoreCarrierMappings() {

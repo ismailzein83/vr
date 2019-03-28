@@ -658,6 +658,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             Func<CarrierAccount, bool> filterPredicate = null;
             List<object> customObjects = null;
+
             if (filter != null)
             {
                 HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(filter.SupplierFilterSettings);
@@ -707,6 +708,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (filter.CarrierProfileId.HasValue && carr.CarrierProfileId != filter.CarrierProfileId.Value)
                         return false;
+
                     if (filter.UserId.HasValue)
                     {
                         CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
@@ -717,8 +719,14 @@ namespace TOne.WhS.BusinessEntity.Business
                                 return false;
                         }
                     }
+
+                    carr.CarrierAccountSettings.ThrowIfNull("carr.CarrierAccountSettings", carr.CarrierAccountId);
+                    if (filter.ActivationStatuses != null && filter.ActivationStatuses.Count() != 0 && !filter.ActivationStatuses.Contains(carr.CarrierAccountSettings.ActivationStatus))
+                        return false;
+
                     //if (filter.AssignableToUserId.HasValue && !IsCarrierAccountAssignableToUser(carr, filter.GetCustomers, filter.GetSuppliers, assignedCarriers))
                     //    return false;
+
                     if (filter.Filters != null)
                     {
                         for (int i = 0; i < filter.Filters.Count(); i++)
@@ -729,6 +737,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             customObjects[i] = context.CustomObject;
                         }
                     }
+
                     return true;
                 };
             }

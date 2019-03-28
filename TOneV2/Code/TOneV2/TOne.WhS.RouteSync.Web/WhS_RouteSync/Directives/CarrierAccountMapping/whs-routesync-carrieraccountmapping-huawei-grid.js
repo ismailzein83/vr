@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountTypeEnum',
-    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum) {
+app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountTypeEnum', 'WhS_BE_CarrierAccountActivationStatusEnum',
+    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CarrierAccountActivationStatusEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -121,8 +121,13 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
 
                 var loadHuaweiCarrierAccountMappingsGridPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                var serializedFilter = {};
-                WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter).then(function (response) {
+                var carrierAccountfilter = {
+                    ActivationStatuses: [WhS_BE_CarrierAccountActivationStatusEnum.Active.value, WhS_BE_CarrierAccountActivationStatusEnum.Testing.value]
+                };
+
+                var serilizedCarrierAccountFilter = UtilsService.serializetoJson(carrierAccountfilter);
+
+                WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serilizedCarrierAccountFilter).then(function (response) {
 
                     if (response != undefined) {
                         for (var i = 0; i < response.length; i++) {

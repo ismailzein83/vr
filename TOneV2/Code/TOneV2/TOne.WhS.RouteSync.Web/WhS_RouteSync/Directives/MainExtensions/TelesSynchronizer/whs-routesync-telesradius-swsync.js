@@ -2,9 +2,10 @@
 
     'use strict';
 
-    TelesRadiusSWSync.$inject = ["UtilsService", 'VRUIUtilsService', 'WhS_BE_CarrierAccountAPIService', 'VRNotificationService'];
+    TelesRadiusSWSync.$inject = ["UtilsService", 'VRUIUtilsService', 'WhS_BE_CarrierAccountAPIService', 'VRNotificationService', 'WhS_BE_CarrierAccountActivationStatusEnum'];
 
-    function TelesRadiusSWSync(UtilsService, VRUIUtilsService, WhS_BE_CarrierAccountAPIService, VRNotificationService) {
+    function TelesRadiusSWSync(UtilsService, VRUIUtilsService, WhS_BE_CarrierAccountAPIService, VRNotificationService, WhS_BE_CarrierAccountActivationStatusEnum) {
+
         return {
             restrict: "E",
             scope: {
@@ -18,35 +19,40 @@
             controllerAs: "Ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/TelesSynchronizer/Templates/TelesRadiusSWSyncTemplate.html"
-
         };
+
         function TelesRadiusSWSyncronizer($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
+
             var gridAPI;
 
             var radiusDataManager;
-            var carrierAccountsAPI;
-            var carrierAccountsPromiseDiffered;
 
             var radiusDataManagerSettingsDirectiveAPI;
             var radiusDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-            this.initializeController = initializeController;
 
             function initializeController() {
-
                 $scope.scopeModel = {};
                 $scope.scopeModel.isLoading = false;
                 $scope.scopeModel.separator = ';';
                 $scope.scopeModel.carrierAccountMappings = [];
+                $scope.scopeModel.carrierAccountMappingsGridDS = [];
 
                 $scope.onRadiusDataManagerSettingsDirectiveReady = function (api) {
                     radiusDataManagerSettingsDirectiveAPI = api;
                     radiusDataManagerSettingsDirectiveReadyDeferred.resolve();
                 };
 
-                defineAPI();
-            }
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    defineAPI();
+                };
 
+                $scope.scopeModel.loadMoreData = function () {
+                    return loadMoreCarrierMappings();
+                };
+            }
 
             function defineAPI() {
                 var api = {};
@@ -71,67 +77,87 @@
                     var loadDataManagerSettings = loadSwitchSyncSettingsDirective();
                     promises.push(loadDataManagerSettings);
 
+
+                    function loadCarrierMappings(payload) {
+                        $scope.scopeModel.isLoading = true;
+
+                        var carrierAccountfilter = {
+                            ActivationStatuses: [WhS_BE_CarrierAccountActivationStatusEnum.Active.value, WhS_BE_CarrierAccountActivationStatusEnum.Testing.value]
+                        };
+
+                        var serilizedCarrierAccountFilter = UtilsService.serializetoJson(carrierAccountfilter);
+
+                        return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serilizedCarrierAccountFilter).then(function (response) {
+
+                            if (response) {
+                                if (payload && payload.switchSynchronizerSettings && payload.switchSynchronizerSettings.CarrierMappings) {
+                                    for (var i = 0; i < response.length; i++) {
+
+                                        var accountCarrierMappings = payload.switchSynchronizerSettings.CarrierMappings[response[i].CarrierAccountId];
+                                        var carrierMapping = {
+                                            CarrierAccountId: response[i].CarrierAccountId,
+                                            CarrierAccountName: response[i].Name,
+                                            CustomerMapping: accountCarrierMappings != undefined && accountCarrierMappings.CustomerMapping != undefined ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.separator) : undefined,
+                                            SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != undefined ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined
+                                        };
+
+                                        $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
+                                    }
+                                }
+                                else {
+                                    for (var i = 0; i < response.length; i++) {
+
+                                        var carrierMapping = {
+                                            CarrierAccountId: response[i].CarrierAccountId,
+                                            CarrierAccountName: response[i].Name,
+                                            CustomerMapping: '',
+                                            SupplierMapping: ''
+                                        };
+                                        $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
+                                    }
+                                }
+
+                                loadMoreCarrierMappings();
+                            }
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            $scope.scopeModel.isLoading = false;
+                        });
+                    }
+
+                    function loadSwitchSyncSettingsDirective() {
+                        var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        radiusDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
+
+                            var settingsDirectivePayload;
+                            if (radiusDataManager != undefined) {
+                                settingsDirectivePayload = { radiusDataManagersSettings: radiusDataManager };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(radiusDataManagerSettingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
+                        });
+
+                        return settingsDirectiveLoadDeferred.promise;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-                api.getData = getData;
-
-                function getData() {
+                api.getData = function () {
                     var data = {
                         $type: "TOne.WhS.RouteSync.TelesRadius.TelesRadiusSWSync, TOne.WhS.RouteSync.TelesRadius",
-                        DataManager: getDataManager(),
+                        DataManager: radiusDataManagerSettingsDirectiveAPI.getData().DataManager,
                         CarrierMappings: getCarrierMappings(),
                         MappingSeparator: $scope.scopeModel.separator
                     };
+
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
-            }
-
-            function loadCarrierMappings(payload) {
-                $scope.scopeModel.isLoading = true;
-                var serializedFilter = {};
-                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter)
-                 .then(function (response) {
-
-                     if (response) {
-                         if (payload && payload.switchSynchronizerSettings && payload.switchSynchronizerSettings.CarrierMappings) {
-                             for (var i = 0; i < response.length; i++) {
-
-                                 var accountCarrierMappings = payload.switchSynchronizerSettings.CarrierMappings[response[i].CarrierAccountId];
-                                 var carrierMapping = {
-                                     CarrierAccountId: response[i].CarrierAccountId,
-                                     CarrierAccountName: response[i].Name,
-                                     CustomerMapping: accountCarrierMappings != undefined && accountCarrierMappings.CustomerMapping != undefined ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.separator) : undefined,
-                                     SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != undefined ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined
-                                 };
-
-                                 $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
-                             }
-                         }
-                         else {
-                             for (var i = 0; i < response.length; i++) {
-                                 var carrierMapping = {
-                                     CarrierAccountId: response[i].CarrierAccountId,
-                                     CarrierAccountName: response[i].Name,
-                                     CustomerMapping: '',
-                                     SupplierMapping: ''
-                                 };
-
-                                 $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
-                             }
-                         }
-                     }
-                 })
-                  .catch(function (error) {
-                      VRNotificationService.notifyException(error, $scope);
-                      $scope.scopeModel.isLoading = false;
-                  }).finally(function () {
-                      $scope.scopeModel.isLoading = false;
-                  });
             }
 
             function getCarrierMappings() {
@@ -148,26 +174,29 @@
                 return result;
             }
 
-            function getDataManager() {
-                return radiusDataManagerSettingsDirectiveAPI.getData().DataManager;
-            }
+            function loadMoreCarrierMappings() {
 
-            function loadSwitchSyncSettingsDirective() {
-                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                var pageInfo = gridAPI.getPageInfo();
+                var itemsLength = pageInfo.toRow;
 
-                radiusDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
-                    var settingsDirectivePayload;
-                    if (radiusDataManager != undefined) {
-                        settingsDirectivePayload = { radiusDataManagersSettings: radiusDataManager };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(radiusDataManagerSettingsDirectiveAPI, settingsDirectivePayload, radiusDataManagerSettingsDirectiveReadyDeferred);
-                });
+                if (pageInfo.toRow > $scope.scopeModel.carrierAccountMappings.length) {
+                    if (pageInfo.fromRow < $scope.scopeModel.carrierAccountMappings.length)
+                        itemsLength = $scope.scopeModel.carrierAccountMappings.length;
+                    else
+                        return;
+                }
 
-                return radiusDataManagerSettingsDirectiveReadyDeferred.promise;
+                var items = [];
+
+                for (var i = pageInfo.fromRow - 1; i < itemsLength; i++) {
+                    var currentCarrierAccountMapping = $scope.scopeModel.carrierAccountMappings[i];
+                    items.push(currentCarrierAccountMapping);
+                }
+
+                gridAPI.addItemsToSource(items);
             }
         }
     }
 
     app.directive('whsRoutesyncTelesradiusSwsync', TelesRadiusSWSync);
-
 })(app);
