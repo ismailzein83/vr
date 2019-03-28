@@ -30,6 +30,7 @@ namespace NP.IVSwitch.Entities
 
         public TransportMode TransportModeId { get; set; }
         public int ConnectionTimeOut { get; set; }
+		public string SIPProfile { get; set; }
 
         // Custom Route Params ???
 

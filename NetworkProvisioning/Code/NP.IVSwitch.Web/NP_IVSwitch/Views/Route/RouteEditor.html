@@ -1,23 +1,23 @@
 ﻿<div vr-modalcontent ng-controller="NP_IVSwitch_RouteEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
-    <vr-modalbody>
-        <vr-form name="formRouteEditor">
-            <vr-tabs>
-                <vr-tab header="'Info'">
+	<vr-modalbody>
+		<vr-form name="formRouteEditor">
+			<vr-tabs>
+				<vr-tab header="'Info'">
 
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Description" value="scopeModel.description" isrequired></vr-textbox>
-                    </vr-columns>
+					<vr-columns width="1/2row">
+						<vr-textbox label="Description" value="scopeModel.description" isrequired></vr-textbox>
+					</vr-columns>
 
 
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Log Alias" value="scopeModel.logalias" isrequired maxlength="20"></vr-textbox>
-                    </vr-columns>
+					<vr-columns width="1/2row">
+						<vr-textbox label="Log Alias" value="scopeModel.logalias" isrequired maxlength="20"></vr-textbox>
+					</vr-columns>
 
-                    <np-ivswitch-codecprofile-selector on-ready="scopeModel.onSelectorCodecProfileReady" onselectionchanged="scopeModel.onSelectionCodecProfileChanged"
-                                                       normal-col-num="6"></np-ivswitch-codecprofile-selector>
-                    <np-ivswitch-translationrule-selector on-ready="scopeModel.onSelectorTranslationRuleReady" onselectionchanged="scopeModel.onSelectionTranslationRuleChanged"
-                                                          normal-col-num="6"></np-ivswitch-translationrule-selector>
-                </vr-tab>
+					<np-ivswitch-codecprofile-selector on-ready="scopeModel.onSelectorCodecProfileReady" onselectionchanged="scopeModel.onSelectionCodecProfileChanged"
+													   normal-col-num="6"></np-ivswitch-codecprofile-selector>
+					<np-ivswitch-translationrule-selector on-ready="scopeModel.onSelectorTranslationRuleReady" onselectionchanged="scopeModel.onSelectionTranslationRuleChanged"
+														  normal-col-num="6"></np-ivswitch-translationrule-selector>
+				</vr-tab>
 				<vr-tab header="'Control'">
 					<vr-columns width="1/2row">
 						<vr-select datatextfield="description" datavaluefield="value" label="Current State"
@@ -54,18 +54,19 @@
 					<vr-columns width="1/2row">
 						<vr-textbox label="Percentage" value="scopeModel.percentage" type="number" maxvalue="100"></vr-textbox>
 					</vr-columns>
-
-
+					<vr-columns width="1/2row">
+						<np-ivswitch-sipprofile-selector on-ready="scopeModel.onSelectorSIPProfileReady"  normal-col-num="6" isrequired="true"></np-ivswitch-sipprofile-selector>
+					</vr-columns>
 				</vr-tab>
-            </vr-tabs>
-        </vr-form>
-    </vr-modalbody>
-    <div>
-        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-            <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRouteEditor" data-onclick="scopeModel.save"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-            </div>
-        </vr-actionbar>
-    </div>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" formname="formRouteEditor" data-onclick="scopeModel.save"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
 </div>

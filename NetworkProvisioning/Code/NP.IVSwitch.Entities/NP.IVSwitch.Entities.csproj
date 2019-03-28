@@ -125,6 +125,8 @@
     <Compile Include="Route\Route.cs" />
     <Compile Include="Route\RouteDetail.cs" />
     <Compile Include="Route\RouteQuery.cs" />
+    <Compile Include="SIPProfile\SIPProfile.cs" />
+    <Compile Include="SIPProfile\SIPProfileInfo.cs" />
     <Compile Include="SwitchMapping\EndPointLink.cs" />
     <Compile Include="SwitchMapping\RouteLink.cs" />
     <Compile Include="SwitchMapping\SwitchMapping.cs" />

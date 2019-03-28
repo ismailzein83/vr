@@ -20,6 +20,9 @@
 		var selectorTranslationRuleAPI;
 		var selectorTranslationRuleReadyDeferred = UtilsService.createPromiseDeferred();
 
+		var selectorSIPProfileAPI;
+		var selectorSIPProfileReadyDeferred = UtilsService.createPromiseDeferred();
+
 		var context;
 		var isViewHistoryMode;
 
@@ -117,6 +120,11 @@
 				}
 			};
 
+			$scope.scopeModel.onSelectorSIPProfileReady = function (api) {
+				selectorSIPProfileAPI = api;
+				selectorSIPProfileReadyDeferred.resolve();
+			};
+
 		}
 		function load() {
 			$scope.scopeModel.isLoading = true;
@@ -158,7 +166,7 @@
 		}
 
 		function loadAllControls() {
-			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSelectorCodecProfile, loadSelectorTranslationRule, loadWakeUpTime]).catch(function (error) {
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSelectorCodecProfile, loadSelectorTranslationRule, loadWakeUpTime, loadSIPProfileSelector]).catch(function (error) {
 				VRNotificationService.notifyExceptionWithClose(error, $scope);
 			}).finally(function () {
 				$scope.scopeModel.isLoading = false;
@@ -228,6 +236,7 @@
 
 			return selectorTranslationRuleLoadDeferred.promise;
 		}
+
 		function loadWakeUpTime() {
 			if (routeEntity != undefined && routeEntity.WakeUpTime != undefined)
 				$scope.scopeModel.wakeuptime = routeEntity.WakeUpTime;
@@ -235,6 +244,20 @@
 				npIvSwitchRouteApiService.GetSwitchDateTime().then(function (response) {
 					$scope.scopeModel.wakeuptime = response;
 				});
+		}
+
+		function loadSIPProfileSelector() {
+			var selectorSIPProfileLoadDeferred = UtilsService.createPromiseDeferred();
+	
+			selectorSIPProfileReadyDeferred.promise.then(function () {
+				var selectorSIPProfilePayload = {};
+				if (routeEntity != undefined && routeEntity.SIPProfile != undefined)
+					selectorSIPProfilePayload.selectedIds = routeEntity.SIPProfile;
+				else
+					selectorSIPProfilePayload.selectedIds = "internal";
+				VRUIUtilsService.callDirectiveLoad(selectorSIPProfileAPI, selectorSIPProfilePayload, selectorSIPProfileLoadDeferred);
+			});
+			return selectorSIPProfileLoadDeferred.promise;
 		}
 
 		function insert() {
@@ -299,7 +322,8 @@
 							TransRuleId: $scope.scopeModel.translationruleid,
 							WakeUpTime: $scope.scopeModel.wakeuptime,
 							TransportModeId: $scope.scopeModel.transportmodeid != undefined ? $scope.scopeModel.transportmodeid.value : undefined,
-							Percentage: $scope.scopeModel.percentage
+							Percentage: $scope.scopeModel.percentage,
+							SIPProfile: selectorSIPProfileAPI.getSelectedIds()
 						},
 
 						CarrierAccountId: carrierAccountId
@@ -326,7 +350,8 @@
 					TransRuleId: $scope.scopeModel.translationruleid,
 					WakeUpTime: $scope.scopeModel.wakeuptime,
 					TransportModeId: $scope.scopeModel.transportmodeid != undefined ? $scope.scopeModel.transportmodeid.value : undefined,
-					Percentage: $scope.scopeModel.percentage
+					Percentage: $scope.scopeModel.percentage,
+					SIPProfile: selectorSIPProfileAPI.getSelectedIds()
 				},
 
 				CarrierAccountId: carrierAccountId

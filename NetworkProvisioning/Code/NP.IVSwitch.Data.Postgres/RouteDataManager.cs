@@ -36,7 +36,8 @@ namespace NP.IVSwitch.Data.Postgres
                 Host = reader["host"] as string,
                 Port = reader["port"] as string,
                 TransportModeId = (TransportMode)(int)reader["transport_mode_id"],
-                ConnectionTimeOut = (int)reader["timeout"]
+                ConnectionTimeOut = (int)reader["timeout"],
+				SIPProfile=reader["sip_profile"]as string
             };
             return route;
         }
@@ -66,7 +67,7 @@ namespace NP.IVSwitch.Data.Postgres
         public List<Route> GetRoutes()
         {
             String cmdText = @"SELECT route_id,user_id,account_id,description,group_id,tariff_id,log_alias,codec_profile_id,trans_rule_id,state_id,channels_limit,
-                                      wakeup_time,host,port ,transport_mode_id,timeout          
+                                      wakeup_time,host,port ,transport_mode_id,timeout,sip_profile          
                                        FROM routes;";
             return GetItemsText(cmdText, RouteMapper, (cmd) =>
             {
@@ -80,7 +81,7 @@ namespace NP.IVSwitch.Data.Postgres
             String cmdText = @"UPDATE routes
 	                             SET  description=@description,log_alias=@log_alias,codec_profile_id=@codec_profile_id,trans_rule_id=@trans_rule_id,state_id=@state_id,
                                    channels_limit=@channels_limit, wakeup_time=@wakeup_time,host=@host,port=@port,transport_mode_id=@transport_mode_id,
-                                     timeout=@timeout 
+                                     timeout=@timeout,sip_profile=@sipProfile 
                                    WHERE  route_id = @route_id;";
 
             int recordsEffected = ExecuteNonQueryText(cmdText, (cmd) =>
@@ -97,8 +98,9 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@port", CheckIfNull(route.Port, "5060"));
                 cmd.Parameters.AddWithValue("@transport_mode_id", transportPortId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
-            }
-           );
+				cmd.Parameters.AddWithValue("@sipProfile",route.SIPProfile);
+			}
+		   );
             return recordsEffected > 0;
         }
 
@@ -120,9 +122,9 @@ namespace NP.IVSwitch.Data.Postgres
         {
             String cmdText = @"INSERT INTO routes(account_id,user_id,description,group_id,tariff_id,
                                    log_alias,codec_profile_id,trans_rule_id,state_id, channels_limit, wakeup_time, host,port,transport_mode_id,
-                                    timeout  )
+                                    timeout,sip_profile)
 	                             SELECT  @account_id,@user_id, @description, @group_id, @tariff_id, @log_alias, @codec_profile_id, @trans_rule_id,@state_id,
-                                 @channels_limit,  @wakeup_time, @host, @port, @transport_mode_id, @timeout 
+                                 @channels_limit,  @wakeup_time, @host, @port, @transport_mode_id, @timeout,@sipProfile 
  	                             returning  route_id;";
 
             return (int?)ExecuteScalarText(cmdText, (cmd) =>
@@ -142,8 +144,10 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@port", CheckIfNull(route.Port, "5060"));
                 cmd.Parameters.AddWithValue("@transport_mode_id", (int)route.TransportModeId);
                 cmd.Parameters.AddWithValue("@timeout", route.ConnectionTimeOut);
-            }
-                );
+				cmd.Parameters.AddWithValue("@sipProfile",route.SIPProfile);
+
+			}
+				);
         }
         public int? Insert(Route route)
         {

@@ -29,7 +29,7 @@
     <TargetFrameworkProfile />
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -141,6 +141,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CodecDefController.cs" />
     <Compile Include="Controllers\CodecProfileController.cs" />
+    <Compile Include="Controllers\SIPProfileController.cs" />
     <Compile Include="Controllers\DomainController.cs" />
     <Compile Include="Controllers\LiveCdrController.cs" />
     <Compile Include="Controllers\RouteTableRouteController.cs" />
@@ -216,6 +217,7 @@
     <Content Include="NP_IVSwitch\Directives\CodecDef\Templates\CodecDefGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\CodecProfile\np-ivswitch-codecprofile-grid.js" />
     <Content Include="NP_IVSwitch\Directives\CodecProfile\Templates\CodecProfileGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\SIPProfile\np-ivswitch-sipprofile-selector.js" />
     <Content Include="NP_IVSwitch\Directives\SwitchMapping\np-ivswitch-switchmapping-grid.js" />
     <Content Include="NP_IVSwitch\Directives\SwitchMapping\Templates\SwitchMappingGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrulecli-grid.js" />
@@ -235,6 +237,7 @@
     <Content Include="NP_IVSwitch\Services\APIServices\LiveCdrAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteTableRouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteTableAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\APIServices\SIPProfileAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\SwitchMappingAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\SwitchDashboardAPIService.js" />

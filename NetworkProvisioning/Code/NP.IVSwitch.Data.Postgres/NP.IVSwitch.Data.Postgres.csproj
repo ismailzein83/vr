@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -92,6 +92,7 @@
     <Compile Include="RouteDataManager.cs" />
     <Compile Include="RouteTableDataManager.cs" />
     <Compile Include="RouteTableRouteDataManager.cs" />
+    <Compile Include="SIPProfileDataManager.cs" />
     <Compile Include="TariffDataManager.cs" />
     <Compile Include="TranslationRuleDataManager.cs" />
   </ItemGroup>
