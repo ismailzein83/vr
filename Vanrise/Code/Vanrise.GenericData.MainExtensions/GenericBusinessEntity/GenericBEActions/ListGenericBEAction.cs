@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 
-namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEActions
+namespace Vanrise.GenericData.MainExtensions
 {
     public class ListGenericBEAction : GenericBEActionSettings
     {
