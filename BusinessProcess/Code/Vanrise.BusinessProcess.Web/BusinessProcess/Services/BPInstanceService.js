@@ -2,9 +2,9 @@
 
     "use strict";
 
-	BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService', 'VR_Runtime_SchedulerTaskService', 'VR_GenericData_GenericBusinessEntityAPIService','VR_GenericData_GenericBEActionService'];
+    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService', 'VR_Runtime_SchedulerTaskService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VR_GenericData_GenericBEActionService'];
 
-	function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService, VR_Runtime_SchedulerTaskService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBEActionService) {
+    function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService, VR_Runtime_SchedulerTaskService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBEActionService) {
         function getStatusColor(status) {
 
             if (status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.New.color;
@@ -98,35 +98,71 @@
 
                 });
             return displayRunningInstancePromiseDeferred.promise;
-		}
+        }
 
-		function registerOpenBPInstanceViewerAction() {
-			var openBPInstanceViewerAction = {
-				ActionTypeName: "OpenBPInstanceViewer",
-				ExecuteAction: function (payload) {
-					if (payload != undefined) {
-						var businessEntityDefinitionId = payload.businessEntityDefinitionId;
-						var genericBusinessEntityId = payload.genericBusinessEntityId;
-						VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
-							if (payload.genericBEAction != undefined && payload.genericBEAction.Settings != undefined) {
-								var processInstanceFieldName = payload.genericBEAction.Settings.ProcessInstanceIdFieldName;
-								if (processInstanceFieldName != undefined && response.FieldValues != undefined && response.FieldValues[processInstanceFieldName]!=undefined)
-									openProcessTracking(response.FieldValues[processInstanceFieldName].Value);
-							}
-						});
-					}
-				}
-			};
-			VR_GenericData_GenericBEActionService.registerActionType(openBPInstanceViewerAction);
-		}
+        function registerOpenBPInstanceViewerAction() {
+            var openBPInstanceViewerAction = {
+                ActionTypeName: "OpenBPInstanceViewer",
+                ExecuteAction: function (payload) {
+                    if (payload != undefined) {
+                        var businessEntityDefinitionId = payload.businessEntityDefinitionId;
+                        var genericBusinessEntityId = payload.genericBusinessEntityId;
+                        VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
+                            if (payload.genericBEAction != undefined && payload.genericBEAction.Settings != undefined) {
+                                var processInstanceFieldName = payload.genericBEAction.Settings.ProcessInstanceIdFieldName;
+                                if (processInstanceFieldName != undefined && response.FieldValues != undefined && response.FieldValues[processInstanceFieldName] != undefined)
+                                    openProcessTracking(response.FieldValues[processInstanceFieldName].Value);
+                            }
+                        });
+                    }
+                }
+            };
+            VR_GenericData_GenericBEActionService.registerActionType(openBPInstanceViewerAction);
+        }
+
+        function registerStartBPProcessAction() {
+            var actionType = {
+                ActionTypeName: "StartBPProcess",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+
+                    var businessEntityDefinitionId = payload.businessEntityDefinitionId;
+                    var genericBusinessEntityId = payload.genericBusinessEntityId;
+                    if (payload.genericBEAction != undefined && payload.genericBEAction.Settings != undefined) {
+                        var genericBEActionSettings = payload.genericBEAction.Settings;
+                    }
+
+                    startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings);
+                }
+            };
+            VR_GenericData_GenericBEActionService.registerActionType(actionType);
+        }
+
+        function startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings) {
+            var parameters = {
+                businessEntityDefinitionId: businessEntityDefinitionId,
+                genericBusinessEntityId: genericBusinessEntityId,
+                genericBEActionSettings: genericBEActionSettings
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+            };
+           
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPProcess/Templates/StartBPProcessEditor.html', parameters, settings);
+        }
+
 
         return ({
             getStatusColor: getStatusColor,
             openProcessTracking: openProcessTracking,
             startNewInstance: startNewInstance,
             registerDrillDownToSchdeulerTask: registerDrillDownToSchdeulerTask,
-			displayRunningInstancesIfExist: displayRunningInstancesIfExist,
-			registerOpenBPInstanceViewerAction: registerOpenBPInstanceViewerAction
+            displayRunningInstancesIfExist: displayRunningInstancesIfExist,
+            registerOpenBPInstanceViewerAction: registerOpenBPInstanceViewerAction,
+            registerStartBPProcessAction: registerStartBPProcessAction
         });
     }
 

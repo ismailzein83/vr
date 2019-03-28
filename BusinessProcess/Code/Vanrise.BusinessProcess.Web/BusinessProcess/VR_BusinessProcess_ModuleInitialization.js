@@ -9,5 +9,5 @@
 		BusinessProcess_BPInstanceService.registerDrillDownToSchdeulerTask();
         BusinessProcess_BPInstanceService.registerOpenBPInstanceViewerAction();
         BusinessProcess_TaskTypeActionService.registerExecuteAction();
-
+        BusinessProcess_BPInstanceService.registerStartBPProcessAction();
     }]);
