@@ -843,6 +843,8 @@
     <Content Include="Images\flat-tone-ra-logoonheader.png" />
     <Content Include="Images\flat-tone-ra-retail-login.png" />
     <Content Include="Images\flat-tone-ra-retail-logoonheader.png" />
+    <Content Include="Images\flat-tone-retail-login.png" />
+    <Content Include="Images\flat-tone-retail-logoonheader.png" />
     <Content Include="Images\flat-tone-sms-iconheader.ico" />
     <Content Include="Images\flat-tone-sms-login.png" />
     <Content Include="Images\flat-tone-sms-logoonheader.png" />
