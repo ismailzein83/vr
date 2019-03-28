@@ -133,5 +133,9 @@ namespace BPMExtended.Main.Entities
         [Description("Deactivate Cpt")]
         DeactivateCpt = 29,
 
+        [LineOfBusiness(LineOfBusiness.Administrative)]
+        [Description("Create Payment Plan")]
+        CreatePaymentPlan = 30,
+
     }
 }

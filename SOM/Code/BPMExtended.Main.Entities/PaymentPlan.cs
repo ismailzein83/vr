@@ -16,6 +16,7 @@ namespace BPMExtended.Main.Entities
         public string EndDate { get; set; }
         public string NextInstallmentDueDate { get; set; }
         public string Status { get; set; }
+        public string Rate { get; set; }
         public string PaymentPlanTemplateId { get; set; }
         public string InvoiceId { get; set; }
     }

@@ -2073,6 +2073,7 @@ namespace BPMExtended.Main.Common
                      EndDate = "20/10/2019",
                      NextInstallmentDueDate = "12/10/2019",
                      Status ="s1",
+                     Rate ="5%",
                      PaymentPlanTemplateId ="1",
                      InvoiceId ="INV_ID_1"
 
@@ -2087,6 +2088,7 @@ namespace BPMExtended.Main.Common
                     EndDate = "20/2/2019",
                     NextInstallmentDueDate = "14/1/2019",
                     Status ="s2",
+                    Rate ="15%",
                     PaymentPlanTemplateId ="2",
                     InvoiceId ="INV_ID_1"
 
@@ -2101,6 +2103,7 @@ namespace BPMExtended.Main.Common
                     EndDate = "20/2/2019",
                     NextInstallmentDueDate = "14/1/2019",
                     Status ="s2",
+                    Rate ="25%",
                     PaymentPlanTemplateId ="3",
                      InvoiceId ="INV_ID_2"
 
@@ -2115,6 +2118,7 @@ namespace BPMExtended.Main.Common
                     EndDate = "20/2/2019",
                     NextInstallmentDueDate = "14/1/2019",
                     Status ="s3",
+                    Rate ="45%",
                     PaymentPlanTemplateId ="4",
                      InvoiceId ="INV_ID_3"
 
@@ -2129,6 +2133,7 @@ namespace BPMExtended.Main.Common
                     EndDate = "20/2/2019",
                     NextInstallmentDueDate = "14/1/2019",
                     Status ="s3",
+                    Rate ="95%",
                     PaymentPlanTemplateId ="5",
                      InvoiceId ="INV_ID_4"
 
@@ -2145,6 +2150,8 @@ namespace BPMExtended.Main.Common
                 Name = paymentPlan.Name,
                 Description = paymentPlan.Description,
                 TotalAmount = paymentPlan.TotalAmount,
+                Rate = paymentPlan.Rate,
+                PaymentPlanTemplateId = paymentPlan.PaymentPlanTemplateId,
                 InvoiceId = paymentPlan.InvoiceId
             };
         }
@@ -2152,11 +2159,6 @@ namespace BPMExtended.Main.Common
         #endregion
 
         #region  Installments
-
-        public static List<Installment> GetInstallmentsByPaymentPlanId(string paymentPlanId)
-        {
-            return GetAllInstallments().FindAll(x => x.PaymentPlanId.ToLower() == paymentPlanId.ToLower());
-        }
 
         public static List<InstallmentDetail> GetInstallments()
         {
@@ -2174,35 +2176,40 @@ namespace BPMExtended.Main.Common
                     Id ="INST_1",
                     PaymentPlanId = "1",
                     Amount ="200",
-                    Date ="01/01/2019"
+                    Date ="01/01/2019",
+                    Currency = "200"
                  },
                   new Installment
                  {
                     Id ="INST_2",
                     PaymentPlanId = "2",
                     Amount ="400",
-                    Date ="04/04/2019"
+                    Date ="04/04/2019",
+                    Currency = "55"
                  },
                    new Installment
                  {
                     Id ="INST_3",
                     PaymentPlanId = "3",
                     Amount ="600",
-                    Date ="02/02/2019"
+                    Date ="02/02/2019",
+                    Currency = "200"
                  },
                     new Installment
                  {
                     Id ="INST_4",
                     PaymentPlanId = "4",
                     Amount ="500",
-                    Date ="04/04/2019"
+                    Date ="04/04/2019",
+                    Currency = "1200"
                  },
                     new Installment
                  {
                     Id ="INST_5",
                     PaymentPlanId = "1",
                     Amount ="500",
-                    Date ="04/04/2019"
+                    Date ="04/04/2019",
+                    Currency = "2200"
                  }
             };
 
@@ -2214,7 +2221,8 @@ namespace BPMExtended.Main.Common
             {
                 Id = installment.Id,
                 Date = installment.Date,
-                Amount = installment.Amount
+                Amount = installment.Amount,
+                Currency = installment.Currency
             };
         }
 
