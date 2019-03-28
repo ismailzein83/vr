@@ -6,52 +6,43 @@ using System.Text;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
-using Vanrise.GenericData.Entities;
-using Vanrise.Entities;
+
 namespace Vanrise.Analytic.Data.RDB
 {
     internal class DynamicTypeGenerator
     {
         const string RDBExpressionSetter_CLASS_CODETEMPLATE = @"
-
-public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
-{
-    public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
-    {
-        #CODE#
-    }
-}
-
-";
+            public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetter
+            {
+                public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticItemRDBExpressionSetterContext context)
+                {
+                    #CODE#
+                }
+            }";
 
         const string RDBReaderValueGetter_CLASS_CODETEMPLATE = @"
-
-public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
-{
-    public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
-    {
-        return reader.#METHODNAME#(fieldName);
-    }
-}
-
-";
+            public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValueGetter
+            {
+                public Object GetReaderValue(Vanrise.Data.RDB.IRDBDataReader reader, string fieldName)
+                {
+                    return reader.#METHODNAME#(fieldName);
+                }
+            }";
 
         const string JoinRDBExpressionSetter_CLASS_CODETEMPLATE = @"
-
-public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionSetter
-{
-    public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionSetterContext context)
-    {
-        #CODE#
-    }
-}
-
-";
+            public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionSetter
+            {
+                public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionSetterContext context)
+                {
+                    #CODE#
+                }
+            }";
 
         public static ResolvedConfigs GetResolvedConfigs(IAnalyticTableQueryContext queryContext)
         {
             Guid tableId = queryContext.GetTable().AnalyticTableId;
             String cacheName = String.Concat("Vanrise.Analytic.Data.RDB_GetDynamicManager_", tableId);
+
             return queryContext.GetOrCreateCachedObjectBasedOnItemConfig(cacheName,
                 () =>
                 {                    
@@ -59,15 +50,15 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionS
                     List<ResolvedAnalyticAggregateConfig> resolvedAggregateConfigs = new List<ResolvedAnalyticAggregateConfig>();
                     List<ResolvedAnalyticJoinConfig> resolvedJoinConfigs = new List<ResolvedAnalyticJoinConfig>();
                     StringBuilder codeBuilder = new StringBuilder(@"
-                using System;                
-                using System.Data;
-                using System.Linq;
-                using System.Collections.Generic;
+                        using System;                
+                        using System.Data;
+                        using System.Linq;
+                        using System.Collections.Generic;
 
-                namespace #NAMESPACE#
-                {
-                    #CLASSES#
-                }");
+                        namespace #NAMESPACE#
+                        {
+                            #CLASSES#
+                        }");
 
                     List<string> classes = new List<string>();
                     List<Action<Assembly, string>> actionsAfterCompilation = new List<Action<Assembly, string>>();
@@ -139,6 +130,7 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionS
                             afterCompilationAct(compilationOutput.OutputAssembly, classNamespace);
                         }
                     }
+
                     ResolvedConfigs resolvedConfigs = new ResolvedConfigs
                     {
                         DimensionConfigs = resolvedDimensionConfigs.ToDictionary(itm => itm.DimensionConfig.Name, itm => itm),
@@ -153,14 +145,19 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionS
         {
             if(String.IsNullOrWhiteSpace(sqlExpression))
                 return;
-            StringBuilder rdbExpressionSetterClassBuilder = new StringBuilder(RDBExpressionSetter_CLASS_CODETEMPLATE);
+
             string className = string.Concat("RDBExpressionSetter", itemName, "_", itemId.ToString().Replace("-", ""));
+
+            StringBuilder rdbExpressionSetterClassBuilder = new StringBuilder(RDBExpressionSetter_CLASS_CODETEMPLATE);
             rdbExpressionSetterClassBuilder.Replace("#CLASSNAME#", className);
+
             if (sqlExpression.Contains("RDBExpressionContext."))
                 rdbExpressionSetterClassBuilder.Replace("#CODE#", sqlExpression);
             else
                 rdbExpressionSetterClassBuilder.Replace("#CODE#", $@"context.RDBExpressionContext.Column(""{sqlExpression}"");");
+
             classes.Add(rdbExpressionSetterClassBuilder.ToString());
+
             actionsAfterCompilation.Add((assbly, nmspace) =>
             {
                 Type type = assbly.GetType($"{nmspace}.{className}");
@@ -171,11 +168,14 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionS
 
         private static void GenerateAndAddRDBReaderValueGetterClass(Type fieldType, Guid itemId, string itemName, IResolvedAnalyticItemConfig resolvedDimensionConfig, List<string> classes, List<Action<Assembly, string>> actionsAfterCompilation)
         {
-            StringBuilder rdbReaderValueGetterClassBuilder = new StringBuilder(RDBReaderValueGetter_CLASS_CODETEMPLATE);
             string className = string.Concat("RDBReaderValueGetter", itemName, "_", itemId.ToString().Replace("-", ""));
+
+            StringBuilder rdbReaderValueGetterClassBuilder = new StringBuilder(RDBReaderValueGetter_CLASS_CODETEMPLATE);
             rdbReaderValueGetterClassBuilder.Replace("#CLASSNAME#", className);
             rdbReaderValueGetterClassBuilder.Replace("#METHODNAME#", RDBUtilities.GetGetReaderValueMethodNameWithValidate(fieldType, true));
+
             classes.Add(rdbReaderValueGetterClassBuilder.ToString());
+
             actionsAfterCompilation.Add((assbly, nmspace) =>
             {
                 Type type = assbly.GetType($"{nmspace}.{className}");
@@ -186,11 +186,13 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionS
 
         private static void GenerateAndAddJoinRDBExpressionSetterClass(ResolvedAnalyticJoinConfig resolvedJoinConfig, List<string> classes, List<Action<Assembly, string>> actionsAfterCompilation)
         {
-            StringBuilder joinRDBExpressionSetterClassBuilder = new StringBuilder(JoinRDBExpressionSetter_CLASS_CODETEMPLATE);
             string className = string.Concat("JoinRDBExpressionSetter", "_", resolvedJoinConfig.JoinName);
+
+            StringBuilder joinRDBExpressionSetterClassBuilder = new StringBuilder(JoinRDBExpressionSetter_CLASS_CODETEMPLATE);
             joinRDBExpressionSetterClassBuilder.Replace("#CLASSNAME#", className);
             joinRDBExpressionSetterClassBuilder.Replace("#CODE#", resolvedJoinConfig.JoinConfig.Config.JoinStatement);
             classes.Add(joinRDBExpressionSetterClassBuilder.ToString());
+
             actionsAfterCompilation.Add((assbly, nmspace) =>
             {
                 Type type = assbly.GetType($"{nmspace}.{className}");
