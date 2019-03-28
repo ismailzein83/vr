@@ -17,6 +17,7 @@
 
         var currencySelectorAPI;
         var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var currencySelectedDeferred;
 
         var companySettingsSelectorAPI;
         var companySettingSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -216,7 +217,8 @@
                 else {
                     var sellingProductSelectorPayload = {
                         filter: {
-                            SellingNumberPlanId: selectedSellingNumberPlan.SellingNumberPlanId
+                            SellingNumberPlanId: selectedSellingNumberPlan.SellingNumberPlanId,
+                            CurrencyId: currencySelectorAPI.getSelectedIds()
                         },
                         selectifsingleitem: (!isEditMode) ? true : false
                     };
@@ -266,6 +268,28 @@
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, passThroughCustomerRateEvaluatorDirectiveAPI, undefined, setLoader, passThroughCustomerRateEvaluatorDirectiveReadyDeferred);
             };
+
+            $scope.scopeModel.onCurrencyChanged = function (selectedCurrency) {
+                if (selectedCurrency != undefined && isCustomer) {
+                    if (currencySelectedDeferred != undefined)
+                        currencySelectedDeferred.resolve();
+                    else {
+                        var sellingProductSelectorPayload = {
+                            filter: {
+                                SellingNumberPlanId: sellingNumberPlanSelectorAPI != undefined ? sellingNumberPlanSelectorAPI.getSelectedIds() : null,
+                                CurrencyId: currencySelectorAPI.getSelectedIds()
+                            },
+                            selectifsingleitem: (!isEditMode) ? true : false
+                        };
+                        var setLoader = function (value) { $scope.scopeModel.isLoadingSellingProductSelector = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope,
+                            sellingProductSelectorAPI,
+                            sellingProductSelectorPayload,
+                            setLoader,
+                            sellingProductSelectorReadyDeferred);
+                    }
+                }
+            }
 
             // Supplier Settings
             $scope.scopeModel.onSupplierTimeSelectorReady = function (api) {
@@ -439,6 +463,7 @@
                     customerTimeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     sellingNumberPlanSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     sellingNumberPlanSelectedDeferred = UtilsService.createPromiseDeferred();
+                    currencySelectedDeferred = UtilsService.createPromiseDeferred();
                     sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     customerRoutingStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     priceListSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -536,7 +561,7 @@
             return loadActivationStatusSelectorPromiseDeferred.promise;
         }
         function loadCustomerSMSServiceTypeSelector() {
-          
+
             var loadSMSServiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             customerSmsServiceTypeSelectorReadyDeferred.promise.then(function () {
                 var payload = {
@@ -654,15 +679,17 @@
         function loadSellingProductSelector() {
             var sellingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            UtilsService.waitMultiplePromises([sellingProductSelectorReadyDeferred.promise, sellingNumberPlanSelectedDeferred.promise]).then(function () {
+            UtilsService.waitMultiplePromises([sellingProductSelectorReadyDeferred.promise, sellingNumberPlanSelectedDeferred.promise, currencySelectedDeferred.promise]).then(function () {
                 sellingProductSelectorReadyDeferred = undefined;
                 sellingNumberPlanSelectedDeferred = undefined;
+                currencySelectedDeferred = undefined;
                 var sellingProductSelectorPayload = {
                     selectifsingleitem: (!isEditMode) ? true : false
                 };
                 if (carrierAccountEntity != undefined) {
                     sellingProductSelectorPayload.filter = {
-                        SellingNumberPlanId: carrierAccountEntity.SellingNumberPlanId
+                        SellingNumberPlanId: carrierAccountEntity.SellingNumberPlanId,
+                        CurrencyId: carrierAccountEntity.CarrierAccountSettings.CurrencyId
                     };
                     sellingProductSelectorPayload.selectedIds = carrierAccountEntity.SellingProductId;
                 }
@@ -673,7 +700,8 @@
         }
         function areEffectiveOrFutureCountriesSoldToCustomer() {
             return WhS_BE_CustomerCountryAPIService.AreEffectiveOrFutureCountriesSoldToCustomer(carrierAccountEntity.CarrierAccountId, UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime())).then(function (response) {
-                $scope.scopeModel.isSellingProductSelectorDisabled = (response === true);
+                $scope.scopeModel.hasSoldCountries = response;
+                $scope.scopeModel.hasSoldCountries = response;
             });
         }
         function loadCustomerRoutingStatusSelector() {
@@ -798,7 +826,7 @@
             supplierBankDetailsReadyPromiseDeferred.promise.then(function () {
                 supplierBankDetailsReadyPromiseDeferred = undefined;
                 var supplierBankDetailsPayload = {
-                    BankDetails: carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.SupplierBankDetails : undefined 
+                    BankDetails: carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.SupplierBankDetails : undefined
                 };
                 VRUIUtilsService.callDirectiveLoad(supplierBankDetailsEditorAPI, supplierBankDetailsPayload, supplierBankDetailsLoadDeferred);
             });

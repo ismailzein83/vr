@@ -8,7 +8,7 @@ Post-Deployment Script Template
  Example:      :setvar TableName MyTable							
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
-*/
+*/ 
 --[BI].[SchemaConfiguration]------------------------------------------------------------------------
 begin 
 set nocount on;
@@ -985,6 +985,7 @@ set nocount on;
 ;with cte_data([Settings],[BusinessRuleDefinitionId])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
+('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"715f7f90-2c23-4185-aeb8-eda947de3978"}}','5A5F593D-59F7-497C-AB81-53691D8A4894'),
 ('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"715f7f90-2c23-4185-aeb8-eda947de3978"}}','F78EED6E-773D-465E-9246-DF7CAB35896C'),
 ('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"715f7f90-2c23-4185-aeb8-eda947de3978"}}','8BEE56CB-C4A2-4BB1-9696-AAF49FCD7818'),
 ('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"715f7f90-2c23-4185-aeb8-eda947de3978"}}','30558B30-2C54-4CB6-8B82-26B901103747'),
@@ -1103,6 +1104,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[BPDefintionId],[Settings],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
+('5A5F593D-59F7-497C-AB81-53691D8A4894','RatePlan_ValidateAfterProcessing','8ABA2EC4-04FD-4BB1-A593-B651943C6411','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Selling Countries For A Customer Cannot Be Done With Multiple Currencies","Condition":{"$type":"TOne.WhS.Sales.Business.SellCountriesWithMultipleCurrenciesCondition, TOne.WhS.Sales.Business"},"ActionTypes":["715f7f90-2c23-4185-aeb8-eda947de3978"]}',1),
 ('84A2F891-2115-438D-9761-3B791BF77965','ValidateZones','6EF1A7A7-9B70-4A8F-B94E-F9BB5E347CF2','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Title":"Rate Is Zero","Description":"Rate can not be zero.","Condition":{"$type":"TOne.WhS.SupplierPriceList.Business.RateIsZero, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":["715F7F90-2C23-4185-AEB8-EDA947DE3978"]}',6),
 ('E800C551-0137-4891-84CA-D75E935D60B1','ValidateZones','6EF1A7A7-9B70-4A8F-B94E-F9BB5E347CF2','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Title":"Other Rate Is Zero","Description":"Other rate can not be zero.","Condition":{"$type":"TOne.WhS.SupplierPriceList.Business.OtherRateIsZero, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":["715F7F90-2C23-4185-AEB8-EDA947DE3978"]}',6),
 ('A7AC5B16-01A3-48DB-93DA-07748066483C','CP_ValidateCountries','3E7D6A05-3C43-460A-BA6C-6914BCCBB64F','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Changes For Empty Country","Condition":{"$type":"TOne.WhS.CodePreparation.Business.ChangesInPastCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":["715f7f90-2c23-4185-aeb8-eda947de3978"]}',1),

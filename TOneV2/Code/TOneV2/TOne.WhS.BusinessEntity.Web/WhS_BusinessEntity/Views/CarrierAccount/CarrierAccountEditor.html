@@ -29,7 +29,11 @@
                                 </vr-select>
                             </vr-columns>
                         </span>
-                        <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" normal-col-num="6" showaddbutton></vr-common-currency-selector>
+                        <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true"
+                                                     onselectionchanged="scopeModel.onCurrencyChanged"
+                                                     vr-disabled="scopeModel.hasSoldCountries"
+                                                     normal-col-num="6" showaddbutton>
+                        </vr-common-currency-selector>
                         <vr-common-company-setting-selector on-ready="scopeModel.onCompanySettingSelectorReady" normal-col-num="6"></vr-common-company-setting-selector>
 
                         <vr-columns width="1/2row">
@@ -61,7 +65,7 @@
                                                                               hideremoveicon showaddbutton>
                                         </vr-whs-be-sellingnumberplan-selector>
                                     </span>
-                                    <span vr-disabled="scopeModel.isSellingProductSelectorDisabled" vr-loader="scopeModel.isLoadingSellingProductSelector">
+                                    <span vr-disabled="scopeModel.hasSoldCountries" vr-loader="scopeModel.isLoadingSellingProductSelector">
                                         <vr-whs-be-sellingproduct-selector on-ready="scopeModel.onSellingProductSelectorReady"
                                                                            normal-col-num="6"
                                                                            isrequired="true"

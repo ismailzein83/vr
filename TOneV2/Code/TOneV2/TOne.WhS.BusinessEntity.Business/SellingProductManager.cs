@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -66,6 +63,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (filter.AssignableToCustomerId.HasValue && !IsAssignableToCustomer(prod, filter.AssignableToCustomerId.Value, assignableToCustomer, effectiveSellingProductId))
                         return false;
 
+                    if (filter.CurrencyId.HasValue && prod.Settings != null && prod.Settings.CurrencyId != filter.CurrencyId.Value)
+                        return false;
+
                     return true;
                 };
             }
@@ -110,12 +110,12 @@ namespace TOne.WhS.BusinessEntity.Business
             var configManager = new ConfigManager();
 
             var sellingProduct = GetSellingProduct(sellingProductId);
-            
+
             sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
             sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
             //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Settings.PricingSettings", sellingProductId);
 
-            if (sellingProduct.Settings.PricingSettings!=null)
+            if (sellingProduct.Settings.PricingSettings != null)
             {
                 if (sellingProduct.Settings.PricingSettings.DefaultRate != null)
                 {
@@ -131,12 +131,12 @@ namespace TOne.WhS.BusinessEntity.Business
             var configManager = new ConfigManager();
 
             var sellingProduct = GetSellingProduct(sellingProductId);
-            
+
             sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
             sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
             //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Settings.PricingSettings", sellingProductId);
 
-            if (sellingProduct.Settings.PricingSettings!=null)
+            if (sellingProduct.Settings.PricingSettings != null)
             {
                 if (sellingProduct.Settings.PricingSettings.DefaultRate != null)
                     return sellingProduct.Settings.PricingSettings.DefaultRate.Value;
@@ -331,7 +331,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return configManager.GetSaleAreaCompressPriceListFileStatus();
         }
-        public string GetSellingProductPricelistFileNamePattern (int sellingProductId)
+        public string GetSellingProductPricelistFileNamePattern(int sellingProductId)
         {
             var configManager = new ConfigManager();
 

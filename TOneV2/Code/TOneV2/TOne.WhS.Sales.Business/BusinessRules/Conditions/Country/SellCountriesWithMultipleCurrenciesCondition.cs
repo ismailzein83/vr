@@ -17,7 +17,6 @@ namespace TOne.WhS.Sales.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            return true;
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
 
             var zoneDataByCountryIds = context.Target as ZoneDataByCountryIds;
@@ -46,23 +45,44 @@ namespace TOne.WhS.Sales.Business
                         if (normalRate.CurrencyId.Value != customerCurrencyId)
                         {
                             invalidCustomerCurrencyCountryName.Add(countryName);
+                            break;
                         }
-                        else if (normalRate.CurrencyId.Value != sellingProductCurrencyId)
+                        if (normalRate.CurrencyId.Value != sellingProductCurrencyId)
                         {
                             invalidSellingProductCurrencyCountryName.Add(countryName);
+                            break;
                         }
                     }
+                    if (zoneData.OtherRatesToChange != null)
+                    {
+                        var otherRates = zoneData.OtherRatesToChange;
+                        foreach (var otherRateToChange in otherRates)
+                        {
+                            if (!otherRateToChange.CurrencyId.HasValue)
+                                continue;
 
+                            if (otherRateToChange.CurrencyId.Value != customerCurrencyId)
+                            {
+                                invalidCustomerCurrencyCountryName.Add(countryName);
+                                break;
+                            }
+                            if (otherRateToChange.CurrencyId.Value != sellingProductCurrencyId)
+                            {
+                                invalidSellingProductCurrencyCountryName.Add(countryName);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             if (invalidCustomerCurrencyCountryName.Count > 0)
             {
-                context.Message = $"Selling countries for a customer cannot be done with currency different than customer currency : {string.Join(", ", invalidCustomerCurrencyCountryName)}";
+                context.Message = $"Country currency cannot be different than customer currency : {string.Join(", ", invalidCustomerCurrencyCountryName)}";
                 return false;
             }
             if (invalidSellingProductCurrencyCountryName.Count > 0)
             {
-                context.Message = $"Selling countries for a customer cannot be done with currency different than selling product currency : {string.Join(", ", invalidSellingProductCurrencyCountryName)}";
+                context.Message = $"Country currency cannot be different than selling product currency : {string.Join(", ", invalidSellingProductCurrencyCountryName)}";
                 return false;
             }
             return true;

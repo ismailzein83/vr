@@ -1347,7 +1347,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     throw new DataIntegrityValidationException(String.Format("{0} must be associated with a SellingNumberPlan", carrierAccount.AccountType.ToString()));
             }
 
-
             if (carrierAccount.SupplierSettings != null && carrierAccount.SupplierSettings.AutoImportSettings != null)
             {
                 string email = carrierAccount.SupplierSettings.AutoImportSettings.Email;
@@ -1364,7 +1363,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
 
-            return ValidateCarrierAccount(carrierAccount.NameSuffix, carrierAccount.CarrierAccountSettings);
+            return ValidateCarrierAccount(carrierAccount.NameSuffix, carrierAccount.CarrierAccountSettings, carrierAccount.SellingProductId, validationMessages);
         }
 
         private bool ValidateCarrierAccountToEdit(CarrierAccountToEdit carrierAccount, out int carrierProfileId, List<string> validationMessages)
@@ -1377,6 +1376,19 @@ namespace TOne.WhS.BusinessEntity.Business
             var carrierProfile = _carrierProfileManager.GetCarrierProfile(carrierAccountEntity.CarrierProfileId);
             if (carrierProfile == null)
                 throw new DataIntegrityValidationException(String.Format("CarrierAccount '{0}' does not belong to a CarrierProfile", carrierAccount.CarrierAccountId));
+
+            if (carrierAccountEntity.CarrierAccountSettings.CurrencyId != carrierAccount.CarrierAccountSettings.CurrencyId)
+            {
+                var areEffectiveOrFutureCountriesSoldToCustomer = new CustomerCountryManager().AreEffectiveOrFutureCountriesSoldToCustomer(carrierAccount.CarrierAccountId, DateTime.Now);
+                if (areEffectiveOrFutureCountriesSoldToCustomer)
+                    validationMessages.Add("Cannot modify selling product cannot in case of customer has sold countries");
+            }
+            if (carrierAccountEntity.SellingProductId != carrierAccount.SellingProductId)
+            {
+                var areEffectiveOrFutureCountriesSoldToCustomer = new CustomerCountryManager().AreEffectiveOrFutureCountriesSoldToCustomer(carrierAccount.CarrierAccountId, DateTime.Now);
+                if (areEffectiveOrFutureCountriesSoldToCustomer)
+                    validationMessages.Add("Cannot modify currency cannot in case of customer has sold countries");
+            }
 
             carrierProfileId = carrierProfile.CarrierProfileId;
 
@@ -1396,7 +1408,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
 
-            return ValidateCarrierAccount(carrierAccount.NameSuffix, carrierAccount.CarrierAccountSettings);
+            return ValidateCarrierAccount(carrierAccount.NameSuffix, carrierAccount.CarrierAccountSettings, carrierAccount.SellingProductId, validationMessages);
         }
 
         public CarrierAccount GetSupplierByAutomaticEmailAndSubjectCode(string email, string subjectCode)
@@ -1429,7 +1441,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
-        private bool ValidateCarrierAccount(string caNameSuffix, CarrierAccountSettings caSettings)
+        private bool ValidateCarrierAccount(string caNameSuffix, CarrierAccountSettings caSettings, int? sellingProductId, List<string> validationMessages)
         {
             //if (String.IsNullOrWhiteSpace(caNameSuffix))
             //    throw new MissingArgumentValidationException("CarrierAccount.NameSuffix"); // bug: 2164
@@ -1441,9 +1453,21 @@ namespace TOne.WhS.BusinessEntity.Business
             //    throw new MissingArgumentValidationException("CarrierAccount.CarrierAccountSettings.Mask");
 
             var currencyManager = new CurrencyManager();
-            Currency currency = currencyManager.GetCurrency(caSettings.CurrencyId);
+            var currencyId = caSettings.CurrencyId;
+            Currency currency = currencyManager.GetCurrency(currencyId);
             if (currency == null)
                 throw new DataIntegrityValidationException(String.Format("Currency '{0}' does not exist", caSettings.CurrencyId));
+
+            if (sellingProductId.HasValue)
+            {
+                var sellingProductCurrencyId = new SellingProductManager().GetSellingProductCurrencyId(sellingProductId.Value);
+
+                if (currencyId != sellingProductCurrencyId)
+                {
+                    validationMessages.Add("Carrier account and selling product must have the same currency");
+                    return false;
+                }
+            }
 
             return true;
         }
