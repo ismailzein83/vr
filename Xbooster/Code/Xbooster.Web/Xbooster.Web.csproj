@@ -407,6 +407,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Images\flat-iconheader.ico" />
+    <Content Include="Images\flat-logoonheader.png" />
+    <Content Include="Images\flat-login.png" />
     <Content Include="Images\iconheader.ico" />
     <Content Include="Images\login.png" />
     <Content Include="Images\logoonheader.png" />
