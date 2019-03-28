@@ -157,6 +157,11 @@ namespace Vanrise.Security.Business
                     if (filter == null || !filter.IncludeSystemUsers)
                         return false;
                 }
+                if (filter != null && filter.OnlyUserIds != null && filter.OnlyUserIds.Count > 0)
+                {
+                    if (!filter.OnlyUserIds.Contains(user.UserId))
+                        return false;
+                }
                 return (filter == null || filter.GetOnlyTenantUsers || (filter.ExcludeInactive == false || IsUserEnable(user)));
             };
 
