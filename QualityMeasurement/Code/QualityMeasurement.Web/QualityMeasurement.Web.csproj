@@ -431,8 +431,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Images\default-iconheader.ico" />
+    <Content Include="Images\flat-iconheader-.ico" />
+    <Content Include="Images\flat-login.png" />
+    <Content Include="Images\flat-logoonheader.png" />
     <Content Include="Images\iconheader.ico" />
+    <Content Include="Images\default-login.png" />
     <Content Include="Images\login.png" />
+    <Content Include="Images\default-logoonheader.png" />
     <Content Include="Images\logoonheader.png" />
     <Content Include="Images\menu-icons\admin.png" />
     <Content Include="Images\menu-icons\Administration.png" />
