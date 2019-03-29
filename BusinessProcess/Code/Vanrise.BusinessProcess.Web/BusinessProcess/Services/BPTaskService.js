@@ -37,7 +37,7 @@
                 modalScope.onUserAssigned = onUserAssigned;
             };
 
-            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTask/BPTaskAssignEditor.html', modalParameters, modalSettings);
+            return VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTask/BPTaskAssignEditor.html', modalParameters, modalSettings);
         }
 
         return ({

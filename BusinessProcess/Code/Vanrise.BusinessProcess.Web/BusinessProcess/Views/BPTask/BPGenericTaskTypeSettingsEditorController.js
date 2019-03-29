@@ -11,8 +11,9 @@
         var fieldValues;
         var bpTask;
 
-
         var runtimeEditorAPI;
+        var runtimeEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -30,60 +31,118 @@
 
             $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
                 runtimeEditorAPI = api;
-                var defaultValues = {};
-
-                for (var prop in fieldValues) {
-                    if (prop != "$type")
-                        defaultValues[prop] = fieldValues[prop];
-                }
-                var setLoader = function (value) {
-                };
-
-                var runtimeEditorPayload = {
-                    selectedValues: defaultValues,
-                    dataRecordTypeId: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.RecordTypeId : undefined,
-                    definitionSettings: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.EditorSettings : undefined
-                };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, runtimeEditorAPI, runtimeEditorPayload, setLoader);
+                runtimeEditorReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.take = function () {
-                BusinessProcess_BPTaskAPIService.TakeTask(bpTaskId).then(function (response) {
-                    load(true);
-                    if (response != undefined) {
-                        $scope.scopeModel.showTake = response.ShowTake;
-                        $scope.scopeModel.showRelease = response.ShowRelease;
-                        $scope.scopeModel.showAssign = response.ShowAssign;
+                var takeTaskResponse;
+                
+                function takeTask() {
+                    return BusinessProcess_BPTaskAPIService.TakeTask(bpTaskId).then(function (response) {
+                        takeTaskResponse = response;
+                    });
+                }
+                var rootPromiseNode = {
+                    promises: [takeTask()],
+                    getChildNode: function () {
+                        return {
+                            promises: [load(true)],
+                            getChildNode: function () {
+                                if (takeTaskResponse != undefined) {
+                                    $scope.scopeModel.showTake = takeTaskResponse.ShowTake;
+                                    $scope.scopeModel.showRelease = takeTaskResponse.ShowRelease;
+                                    $scope.scopeModel.showAssign = takeTaskResponse.ShowAssign;
+                                }
+                                return {
+                                    promises:[]
+                                };
+                            }
+                        };
                     }
-                });
+                };
+                return UtilsService.waitPromiseNode(rootPromiseNode);
+             
             };
 
             $scope.scopeModel.release = function () {
-                BusinessProcess_BPTaskAPIService.ReleaseTask(bpTaskId).then(function (response) {
-                    load(true);
-                    if (response != undefined) {
-                        $scope.scopeModel.showTake = response.ShowTake;
-                        $scope.scopeModel.showRelease = response.ShowRelease;
-                        $scope.scopeModel.showAssign = response.ShowAssign;
+                var releaseTaskResponse;
+                function releaseTask() {
+                    return BusinessProcess_BPTaskAPIService.ReleaseTask(bpTaskId).then(function (response) {
+                        releaseTaskResponse = response;
+                    });
+                }
+           
+                var rootPromiseNode = {
+                    promises: [releaseTask()],
+                    getChildNode: function () {
+                     
+                        return {
+                            promises: [load(true)],
+                            getChildNode: function () {
+                                if (releaseTaskResponse != undefined) {
+                                    $scope.scopeModel.showTake = releaseTaskResponse.ShowTake;
+                                    $scope.scopeModel.showRelease = releaseTaskResponse.ShowRelease;
+                                    $scope.scopeModel.showAssign = releaseTaskResponse.ShowAssign;
+                                }
+                                return {
+                                    promises: []
+                                };
+                            }
+                        };
                     }
-                });
-
+                };
+                return UtilsService.waitPromiseNode(rootPromiseNode);
             };
 
             $scope.scopeModel.assign = function () {
-                BusinessProcess_BPTaskAPIService.GetAssignedUsers(bpTaskId).then(function (userIds) {
-                    var onUserAssigned = function (userId) {
-                        BusinessProcess_BPTaskAPIService.AssignTask(bpTaskId, userId).then(function (response) {
-                            load(true);
-                            if (response != undefined) {
-                                $scope.scopeModel.showTake = response.ShowTake;
-                                $scope.scopeModel.showRelease = response.ShowRelease;
-                                $scope.scopeModel.showAssign = response.ShowAssign;
+                var userIdsResponse;
+                var assignTaskResponse;
+                function getAssignedUsers() {
+                   return  BusinessProcess_BPTaskAPIService.GetAssignedUsers(bpTaskId).then(function (userIds) {
+                       userIdsResponse = userIds;
+                    });
+
+                }
+
+                function assignTask(userId) {
+                    return BusinessProcess_BPTaskAPIService.AssignTask(bpTaskId, userId).then(function (response) {
+                        assignTaskResponse = response;
+                    });
+                }
+
+                var rootPromiseNode = {
+                    promises: [getAssignedUsers()],
+                    getChildNode: function () {
+                        var userIdResponse;
+                        var onUserAssigned = function (userId) {
+                            userIdResponse = userId;
+                        };
+                        return {
+                            promises: [BusinessProcess_BPTaskService.assignTask(onUserAssigned, userIdsResponse)],
+                            getChildNode: function () {
+                                return {
+                                    promises: [assignTask(userIdResponse)],
+                                    getChildNode: function () {
+                                        return {
+                                            promises: [load(true)],
+                                            getChildNode: function () {
+                                                if (assignTaskResponse != undefined) {
+                                                    $scope.scopeModel.showTake = assignTaskResponse.ShowTake;
+                                                    $scope.scopeModel.showRelease = assignTaskResponse.ShowRelease;
+                                                    $scope.scopeModel.showAssign = assignTaskResponse.ShowAssign;
+                                                }
+                                                return {
+                                                    promises: []
+                                                };
+                                            }
+                                        };
+                                    }
+                                };
                             }
-                        });
-                    };
-                    BusinessProcess_BPTaskService.assignTask(onUserAssigned, userIds);
-                });
+                        };
+                    }
+                };
+                return UtilsService.waitPromiseNode(rootPromiseNode);
             };
         }
         function getBPTask() {
@@ -109,6 +168,7 @@
             $scope.scopeModel.isLoading = true;
             if (isReload) {
                 $scope.scopeModel.runtimeEditor = undefined;
+                runtimeEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                 bpTask = undefined;
             }
             var rootPromiseNode = {
@@ -124,9 +184,8 @@
                                 if (bpTaskType != undefined && bpTaskType.Settings != undefined) {
                                     $scope.scopeModel.runtimeEditor = bpTaskType.Settings.EditorSettings != undefined ? bpTaskType.Settings.EditorSettings.RuntimeEditor : undefined;
                                     $scope.scopeModel.showDefaultActions = bpTaskType.Settings.ShowDefaultActions;
-                                    
                                     return {
-                                        promises: !isReload ? [getInitialBPTaskDefaultActionsState()] : []
+                                        promises: !isReload ? [getInitialBPTaskDefaultActionsState(), loadRuntimeEditor()] : [loadRuntimeEditor()]
                                     };
                                 }
                             }
@@ -140,7 +199,27 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+        function loadRuntimeEditor() {
+            var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            runtimeEditorReadyPromiseDeferred.promise.then(function () {
+                runtimeEditorReadyPromiseDeferred = undefined;
+                var defaultValues = {};
+                if (fieldValues != undefined && fieldValues.length > 0) {
+                    for (var prop in fieldValues) {
+                        if (prop != "$type")
+                            defaultValues[prop] = fieldValues[prop];
+                    }
+                }
 
+                var runtimeEditorPayload = {
+                    selectedValues: defaultValues,
+                    dataRecordTypeId: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.RecordTypeId : undefined,
+                    definitionSettings: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.EditorSettings : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadPromiseDeferred);
+            });
+            return runtimeEditorLoadPromiseDeferred.promise;
+        }
 
         function getInitialBPTaskDefaultActionsState() {
             return BusinessProcess_BPTaskAPIService.GetInitialBPTaskDefaultActionsState(bpTask.TakenBy).then(function (response) {
