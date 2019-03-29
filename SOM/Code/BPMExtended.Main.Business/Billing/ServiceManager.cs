@@ -10,6 +10,7 @@ namespace BPMExtended.Main.Business
 {
     public class ServiceManager
     {
+        #region User Connection
         public UserConnection BPM_UserConnection
         {
             get
@@ -17,6 +18,8 @@ namespace BPMExtended.Main.Business
                 return (UserConnection)HttpContext.Current.Session["UserConnection"];
             }
         }
+        #endregion
+
         public List<ServiceInfo> GetServicesInfo()
         {
             var servicesInfoItems = new List<ServiceInfo>();
@@ -31,6 +34,22 @@ namespace BPMExtended.Main.Business
             }
             return servicesInfoItems;
         }
+        public List<POSServiceInfo> GetPOSServicesInfo()
+        {
+            var servicesInfoItems = new List<POSServiceInfo>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<ServiceDefinition> items = client.Get<List<ServiceDefinition>>(String.Format("api/SOM.ST/Billing/GetPOSServices"));
+                foreach (var item in items)
+                {
+                    var serviceInfoItem = POSServiceDefinitionToInfoMapper(item);
+                    servicesInfoItems.Add(serviceInfoItem);
+                }
+            }
+            return servicesInfoItems;
+        }
+
+        #region Mappers
         public ServiceInfo ServiceDefinitionToInfoMapper(ServiceDefinition item)
         {
             return new ServiceInfo
@@ -40,5 +59,17 @@ namespace BPMExtended.Main.Business
 
             };
         }
+
+        public POSServiceInfo POSServiceDefinitionToInfoMapper(ServiceDefinition item)
+        {
+            return new POSServiceInfo
+            {
+                Name = item.Title,
+                Id = item.PublicId
+
+            };
+        }
+        #endregion
+
     }
 }
