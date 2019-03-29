@@ -28,7 +28,6 @@
     <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=TestCallAnalysis_Queueing;User ID=sa; Password=" />
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=TestCallAnalysis_Transaction;User ID=sa; Password=" />
     <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=TestCallAnalysis_Logging;User ID=sa; Password=" />
-    
     <add name="TestCallAnalysisCDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=TestCallAnalysis_CDR;User ID=sa; Password=" />
 
     <add name="MainDBConnString" connectionString=""/>
@@ -73,12 +72,15 @@
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
 
     <add key="TestCallAnalysis_DBConnStringKey"                 value="ConfigurationDBConnString"/>
+   
     <add key="TestCallAnalysisCDRDBConnStringKey"               value="TestCallAnalysisCDRDBConnString"/>
-    <add key="Retail_BE_DBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
-    <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
+   
+    <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
+    
+    <add key="ImportCodePreparationTemplatePath"                value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
+    <add key="DownloadVRCodeGroupTemplatePath"                  value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
-    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,LogDBConnString"/>
+    <add key="ExposedConnectionStringNames"                     value="ConfigurationDBConnString,LogDBConnString"/>
   </appSettings>
 
   <system.web>
