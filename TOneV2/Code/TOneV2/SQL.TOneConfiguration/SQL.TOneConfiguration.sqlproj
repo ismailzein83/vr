@@ -142,6 +142,7 @@
     <Folder Include="VR_MobNet\" />
     <Folder Include="VR_MobNet\Tables\" />
     <Folder Include="VR_MobNet\User Defined Types\" />
+    <Folder Include="VRJSON_PostScripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -942,6 +943,8 @@
     <None Include="Mediation_Ogero.PostDeployment.sql" />
     <None Include="Mediation_Multinet.PostDeployment.sql" />
     <None Include="TOne.Demo.PostDeployment.sql" />
+    <None Include="VRJSON_PostScripts\Retail_NetworkRental.PostDeployment_OrdersAndContracts.json" />
+    <None Include="Retail_NetworkRental_OrdersAndContracts.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
