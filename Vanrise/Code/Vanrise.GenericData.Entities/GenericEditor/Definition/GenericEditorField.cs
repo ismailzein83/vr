@@ -10,5 +10,6 @@ namespace Vanrise.GenericData.Entities
     {
         public bool IsRequired { get; set; }
         public bool IsDisabled { get; set; }
+       // public bool IsDisabledOnEdit { get; set; }
     }
 }
