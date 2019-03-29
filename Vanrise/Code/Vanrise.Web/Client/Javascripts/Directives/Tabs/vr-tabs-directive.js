@@ -1,12 +1,14 @@
 ﻿'use strict';
 
-app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificationService', function (MultiTranscludeService, UtilsService, VRNotificationService) {
+app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificationService', 'MobileService', function (MultiTranscludeService, UtilsService, VRNotificationService, MobileService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
             onReady: '=',
-            onselectionchanged: '&'
+            onselectionchanged: '&',
+            hidepaginationcontrols: '='
+
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -14,6 +16,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
             ctrl.tabs = [];
             var isLock = false;
             var tempTabs = [];
+            var isMobile = MobileService.isMobile();
 
             ctrl.addTab = function (tab) {
                 if (!isLock) {
@@ -35,9 +38,19 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                     tempTabs.push(tab);
                 }
             };
+            ctrl.pageSize = 5;
+            ctrl.tabsCountStart = ctrl.selectedTabIndex;
+            ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;         
 
-            function addRemainingTabs()
-            {
+            ctrl.isBackwardPaginationVisible = function () {
+                return (ctrl.tabsCountLimit > ctrl.pageSize && ctrl.tabs.length > ctrl.pageSize) || (ctrl.tabs.length < ctrl.tabsCountLimit && ctrl.tabsCountStart > 0);
+            };
+
+            ctrl.isForwardPaginationVisible = function () {
+                return ctrl.tabs.length > ctrl.pageSize && ctrl.tabsCountLimit < ctrl.tabs.length;
+            };
+
+            function addRemainingTabs() {
                 isLock = false;
                 if (tempTabs.length > 0) {
                     var nextTab = tempTabs[0];
@@ -54,7 +67,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
             }
 
             ctrl.getMinHeight = function () {
-                return { 'min-height': (ctrl.tabs.length * 26 + 1) + 'px' };
+                return { 'min-height': (ctrl.pageSize * 26 + 1) + 'px' };
             };
             ctrl.tabSelectionChanged = function () {
                 if (ctrl.tabs[ctrl.selectedTabIndex] != undefined)
@@ -63,7 +76,11 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                     ctrl.onselectionchanged();
                 }
             };
+            ctrl.hideTab = function ($index) {
+                if (ctrl.hidepaginationcontrols != undefined) return false;
+                return ($index >= ctrl.tabsCountLimit || $index < ctrl.tabsCountStart) && !($index == 0 && ctrl.tabs.length == 1);
 
+            };
             ctrl.removeTab = function (tab) {
                 var index = ctrl.tabs.indexOf(tab);
                 ctrl.tabs.splice(index, 1);
@@ -75,8 +92,39 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                     UtilsService.safeApply($scope);
                 }, 1);
                 tab.removed = true;
-                if (ctrl.tabs[0] != undefined)
-                    ctrl.tabs[0].isSelected = true;
+                if (isMobile) {
+                    if (ctrl.tabs[0] != undefined) {
+                        ctrl.tabs[index].isSelected = true;
+                    }
+                }
+                else {
+                    if (ctrl.tabs[0] != undefined && tab.onremove == undefined) {
+                        ctrl.selectedTabIndex = 0;
+                    }
+                    else if (tab.onremove != undefined) {
+                        if (tab.isSelected == false) {
+                            return;
+                        }
+                        if (ctrl.tabs[index] != undefined) {
+                            ctrl.tabs[index].isSelected = true;
+                            ctrl.selectedTabIndex = index;
+                            ctrl.tabsCountStart = index;
+                            ctrl.tabsCountLimit = ctrl.selectedTabIndex + ctrl.pageSize;
+                            return;
+                        }
+                        if (ctrl.tabs.length == index && ctrl.tabs[index - 1] != undefined) {
+                            ctrl.tabs[index - 1].isSelected = true;
+                            ctrl.selectedTabIndex = index - 1;
+                            ctrl.tabsCountStart = index - 1;
+                            ctrl.tabsCountLimit = ctrl.selectedTabIndex + ctrl.pageSize;
+                            return;
+                        }
+                        if (ctrl.tabs[0] != undefined) {
+                            ctrl.tabs[0].isSelected = true;
+                            ctrl.selectedTabIndex = 0;
+                        }
+                    }
+                }
 
             };
             ctrl.removeTabAndHeader = function (tab) {
@@ -91,6 +139,20 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                         ctrl.tabs[ctrl.tabs.length - 1].isSelected = true;
                 }
             };
+            ctrl.setTabSelectedIndex = function (index) {
+                ctrl.tabsCountStart = index;
+                ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;
+                ctrl.selectedTabIndex = ctrl.tabsCountStart;
+                ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
+            };
+
+            ctrl.setlastTabSelectedIndex = function (index) {
+                ctrl.tabsCountLimit = index + 1;
+                ctrl.tabsCountStart = ctrl.tabsCountLimit - ctrl.pageSize;
+                ctrl.selectedTabIndex = index;
+                ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
+            };
+
             var api = {};
             api.removeAllTabs = function () {
                 ctrl.tabs.length = 0;
@@ -108,6 +170,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
             api.setLastTabSelected = function () {
                 setTimeout(function () {
                     ctrl.tabs[ctrl.tabs.length - 1].isSelected = true;
+                    ctrl.setlastTabSelectedIndex(ctrl.tabs.length - 1);
                 });
             };
             if (ctrl.onReady != null)

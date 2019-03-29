@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrTabsHeader', ['MobileService', 'VRModalService', function (MobileService, VRModalService) {
+app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService', function (MobileService, VRModalService, UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -20,11 +20,10 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', function (Mobi
                 pre: function (scope, elem, attrs, tabsCtrl) {
                     scope.ctrl = tabsCtrl;
                     scope.isMobile = MobileService.isMobile();
-                    scope.isTabHeaderHidden = function (index) {
-                        return index != tabsCtrl.selectedTabIndex && scope.isMobile;
+                    scope.isTabHeaderHidden = function (tab) {
+                        return !tab.isSelected && scope.isMobile;
                     };
-
-                    scope.showTabSelctorButton = function () {                       
+                    scope.showTabSelctorButton = function () {
                         var visibletabs = 0;
                         for (var i = 0 ; i < tabsCtrl.tabs.length ; i++) {
                             var tab = tabsCtrl.tabs[i];
@@ -35,6 +34,35 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', function (Mobi
                         }
                         return false;
                     };
+
+
+                    scope.dropdownPreviousTabsId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
+                    scope.dropdownForwardTabsId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
+
+                    scope.initPaginitionControlsBehavior = function () {
+                        setTimeout(function () {
+                            $("#" + scope.dropdownPreviousTabsId).hover(function (event) {
+                                var selfOffset = $(this).offset();
+                                var baseleft = selfOffset.left - $(window).scrollLeft();
+                                var basetop = selfOffset.top - $(window).scrollTop() + 20;
+                                $(this).find(".dropdown-menu").css({ display: "flex", position: "fixed", left: baseleft, top: basetop });
+
+                            }, function () {
+                                $(this).find(".dropdown-menu").css({ display: "none" });
+                            });
+                            $("#" + scope.dropdownForwardTabsId).hover(function () {
+
+                                var selfOffset = $(this).offset();
+                                var baseleft = selfOffset.left - $(window).scrollLeft();
+                                var basetop = selfOffset.top - $(window).scrollTop() + 20;
+                                $(this).find(".dropdown-menu").css({ display: "block", position: "fixed", left: baseleft, top: basetop });
+                            }, function () {
+                                $(this).find(".dropdown-menu").css({ display: "none" });
+                            });
+                        }, 500);
+                    };
+                  
+                   
 
                     scope.hasInvalidTab = function () {
                         for (var i = 0 ; i < tabsCtrl.tabs.length ; i++) {
@@ -59,18 +87,39 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', function (Mobi
         template: function (element) {
             var isvertical = element.parent().attr("vertical") != undefined;
             var flatflag = element.parent().attr("flat") != undefined ? "flat" : "";
+            var hidepaginationcontrols = element.parent().attr("hidepaginationcontrols") != undefined ? "hidepaginationcontrols" : "";
             var starttemplate = isvertical ? '' : '<vr-row removeline ><vr-columns width="fullrow" >';
             var endtemplate = isvertical ? '' : '</vr-columns> </vr-row>';
             var verticalflag = isvertical == true ? "vertical" : " ";
 
-            var template = '<vr-tab-header-links ' + verticalflag + ' ' + flatflag  + ' selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()" ng-if="ctrl.tabs.length > 0">'
-                                     + '      <vr-tab-header-link  ng-repeat="tab in ctrl.tabs" id="header-{{tab.guid}}" ng-show="tab.showTab == undefined || tab.showTab == true" isvisible="tab.showTab == undefined || tab.showTab == true"  isselected="tab.isSelected" >{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span></vr-tab-header-link>'
-                                     + '</vr-tab-header-links>';
+            var template = '<vr-tab-header-links ' + verticalflag + ' ' + flatflag + ' ' + hidepaginationcontrols + '  backwardvisible="{{ctrl.isBackwardPaginationVisible()}}" forwardvisible="{{ctrl.isForwardPaginationVisible()}}" selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()" ng-if="ctrl.tabs.length > 0" >'
+                            + ' <span ng-if="!ctrl.hidepaginationcontrols" ng-init="initPaginitionControlsBehavior()" class="vr-tabs-expander previous" id="{{dropdownPreviousTabsId}}" style="position:relative" ng-show="(ctrl.tabsCountLimit > ctrl.pageSize && ctrl.tabs.length > ctrl.pageSize) ||  ( ctrl.tabs.length  <  ctrl.tabsCountLimit &&  ctrl.tabsCountStart > 0 )" >'
+                                    + '  <span  data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">'
+                                            + ' <span class="glyphicon  glyphicon-backward hand-cursor list-view-icon" ></span>'
+                                    + ' </span>'
+                                    + '<ul class="dropdown-menu" >'
+                                            + '<li  ng-repeat="tab in ctrl.tabs "  ng-hide="$index >= ctrl.tabsCountStart ">'
+                                                    + ' <a href="" ng-click="ctrl.setTabSelectedIndex($index)" ><span>{{ tab.header }}</span> </a>'
+                                            + '</li>'
+                                    + '</ul>'
+                            + '</span>'
+                            + '<vr-tab-header-link   ng-repeat="tab in ctrl.tabs " id="header-{{tab.guid}}" ng-show="tab.showTab == undefined || tab.showTab == true" ng-hide="ctrl.hideTab($index)" isvisible="tab.showTab == undefined || tab.showTab == true"  isselected="tab.isSelected" >{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span></vr-tab-header-link>'
+                            + ' <span ng-if="!ctrl.hidepaginationcontrols" class="vr-tabs-expander forward" id="{{dropdownForwardTabsId}}"   ng-show="ctrl.tabs.length > ctrl.pageSize && ctrl.tabsCountLimit < ctrl.tabs.length " >'
+                                + '  <span  data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">'
+                                        + ' <span class="glyphicon  glyphicon-forward hand-cursor list-view-icon" ></span>'
+                                 + ' </span>'
+                                + '<ul class="dropdown-menu" >'
+                                        + '<li  ng-repeat="tab in ctrl.tabs " ng-hide="$index < ctrl.tabsCountLimit">'
+                                             + ' <a href="" ng-click="ctrl.setlastTabSelectedIndex($index)" ><span>{{ tab.header }}</span> </a>'
+                                        + '</li>'
+                                + '</ul>'
+                            +'</span>'
+                        + '</vr-tab-header-links>';
 
             if (MobileService.isMobile()) {
                 template = '';
                 template = '<vr-tab-header-links ' + verticalflag + ' selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()" ng-if="ctrl.tabs.length > 0">'
-                            + '      <vr-tab-header-link ng-click="openTabsSelectorPopup()"id="header-{{tab.guid}}" ng-repeat="tab in ctrl.tabs"  isvisible="tab.showTab == undefined || tab.showTab == true" isselected="tab.isSelected" ng-hide="isTabHeaderHidden($index)">{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span></vr-tab-header-link>'
+                            + '      <vr-tab-header-link ng-click="openTabsSelectorPopup()"id="header-{{tab.guid}}" ng-repeat="tab in ctrl.tabs "  isvisible="tab.showTab == undefined || tab.showTab == true" isselected="tab.isSelected" ng-hide="isTabHeaderHidden(tab)">{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span></vr-tab-header-link>'
                             + '      <label class="hand-cursor" ng-click="openTabsSelectorPopup()" ng-show="showTabSelctorButton()"><span class="glyphicon glyphicon-chevron-right" style="font-size:18px;"></span><span ng-if="hasInvalidTab()" class="tab-validation-sign"  title="has validation errors!">*</span></label>'
                        + '</vr-tab-header-links>';
             }

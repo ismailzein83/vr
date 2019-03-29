@@ -36,10 +36,14 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 var m = 1;
                 if (choiceCtrls.indexOf(ctrl) == choiceCtrls.length - 1)
                     m = 0;
-
-                return { 'width': 'calc(' + 100 / choiceCtrls.length + '% - ' + m + 'px )', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' };
-
-
+                var len = $attrs.hidepaginationcontrols != undefined || choiceCtrls.length < 5 ? choiceCtrls.length : 5;
+                if ($attrs.hidepaginationcontrols == undefined) {
+                    if ($attrs.backwardvisible == "true")
+                        m += 4;
+                    if ($attrs.forwardvisible == "true")
+                        m += 4;
+                }
+                return { 'width': 'calc(' + 100 / len + '% - ' + m + 'px )', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' };
 
             };
 
