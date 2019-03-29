@@ -229,7 +229,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!InvoiceDueDate.Value</Value>
+                              <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                               </Style>
@@ -300,7 +300,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="du "+Parameters!FromDate.Value+" au "+Parameters!ToDate.Value</Value>
+                              <Value>="Du "+CDate(Parameters!FromDate.Value).ToString("dd MMM yyyy")+" au "+CDate(Parameters!ToDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                               </Style>
@@ -371,7 +371,9 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="Facture du trafic d'interconnexion national "+If(Parameters!NoSMS.Value = False, Parameters!SMSServiceTypes.Value, "Voix")+" sortant du réseau de "+Parameters!CompanyName.Value+", entrant dans le réseau de "+Parameters!AccountName.Value</Value>
+                              <Value>="Facture du trafic d'interconnexion national "+
+iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value,"",Parameters!SMSServiceTypes.Value)
++" sortant du réseau de "+Parameters!CompanyName.Value+", entrant dans le réseau de "+Parameters!AccountName.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                               </Style>
@@ -775,7 +777,7 @@ La facture doit être payée avant</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Siege:</Value>
+                                  <Value>Siège:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
