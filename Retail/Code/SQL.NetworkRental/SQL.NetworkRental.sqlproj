@@ -81,5 +81,19 @@
     <Build Include="NetworkRentalManager\User Defined Types\DisputeTypeType.sql" />
     <Build Include="NetworkRentalManager\User Defined Types\DisputeType.sql" />
     <Build Include="NetworkRentalManager\User Defined Types\DisputeReasonType.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonyTerminationOrder.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonySubscriptionOrder.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonyServicesAdditionOrder.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonyService.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonyRP.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonyContractService.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonyContract.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonyComplaintType.sql" />
+    <Build Include="NetworkRentalManager\Tables\OrderType.sql" />
+    <Build Include="NetworkRentalManager\Tables\Order.sql" />
+    <Build Include="NetworkRentalManager\Tables\ISPDSLRP.sql" />
+    <Build Include="NetworkRentalManager\Tables\DarkFiberRP.sql" />
+    <Build Include="NetworkRentalManager\Tables\ContractType.sql" />
+    <Build Include="NetworkRentalManager\Tables\Contract.sql" />
   </ItemGroup>
 </Project>
