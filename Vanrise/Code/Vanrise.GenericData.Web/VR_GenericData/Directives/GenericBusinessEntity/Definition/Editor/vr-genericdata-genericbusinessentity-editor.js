@@ -629,7 +629,14 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 							});
 						}
 						return dataFields;
-					},
+                    },
+                    getFieldType: function (fieldName) {
+                        for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                            var field = dataRecordTypeFields[i];
+                            if (field.Name == fieldName)
+                                return field.Type;
+                        }
+                    },
 					getActionInfos: function () {
 						var data = [];
 						if (actionDefinitionGridAPI == undefined)
