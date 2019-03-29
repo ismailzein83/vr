@@ -316,6 +316,10 @@
     <!--<EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>-->
+    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SettlementInvoiceDetail.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SettlementInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SettlementPaymentDemand.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
