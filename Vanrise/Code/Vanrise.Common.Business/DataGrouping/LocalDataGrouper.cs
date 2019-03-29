@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -37,7 +38,7 @@ namespace Vanrise.Common.Business
             }
         }
 
-        public override void StartGettingFinalResults(Action<List<dynamic>> onFinalGroupingItemReceived)
+        public override void StartGettingFinalResults(Action<List<dynamic>> onFinalGroupingItemReceived, Action<LogEntryType, string> logMessage)
         {
             DataGroupingItemsDetails dataGroupingItemsDetails;
             groupingItems.TryRemove(_dataAnalysisUniqueName, out dataGroupingItemsDetails);
@@ -45,7 +46,7 @@ namespace Vanrise.Common.Business
             {
                 IEnumerable<IDataGroupingItem> groupedItems = dataGroupingItemsDetails.DataGroupingItemsByGroupingKey.Values;
                 List<dynamic> finalResults = groupedItems.Select(itm => itm as dynamic).ToList();
-                _groupingHandler.FinalizeGrouping(new DataGroupingHandlerFinalizeGroupingContext() { FinalResults = finalResults, GroupedItems = groupedItems.ToList() });
+                _groupingHandler.FinalizeGrouping(new DataGroupingHandlerFinalizeGroupingContext() { FinalResults = finalResults, GroupedItems = groupedItems.ToList(), LogMessage = logMessage });
             }
         }
 
@@ -55,9 +56,9 @@ namespace Vanrise.Common.Business
             return new List<DataGroupingResultDistributionInfo>() { dataGroupingResultDistributionInfo };
         }
 
-        public override void StartGettingResultsFromOneExecutor(object executorId, Action<List<dynamic>> onFinalGroupingItemReceived)
+        public override void StartGettingResultsFromOneExecutor(object executorId, Action<List<dynamic>> onFinalGroupingItemReceived, Action<LogEntryType, string> logMessage)
         {
-            StartGettingFinalResults(onFinalGroupingItemReceived);
+            StartGettingFinalResults(onFinalGroupingItemReceived, logMessage);
         }
 
         private class DataGroupingItemsDetails

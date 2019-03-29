@@ -216,7 +216,7 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                         AlertRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds(),
                         MinDAProfCalcAnalysisPeriod: minDataAnalysisPeriodAPI.getData(),
                         MaxDAProfCalcAnalysisPeriod: maxDataAnalysisPeriodAPI.getData(),
-                        ChunkTime: chunkTimeSelectorAPI != undefined ? chunkTimeSelectorAPI.getSelectedIds() : undefined
+                        ChunkTime: $scope.showChunkTimeSelector && chunkTimeSelectorAPI != undefined ? chunkTimeSelectorAPI.getSelectedIds() : undefined
                     };
                 };
 

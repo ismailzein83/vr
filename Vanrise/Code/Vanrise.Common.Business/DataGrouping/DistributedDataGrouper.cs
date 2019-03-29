@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
 using Vanrise.Common.Data;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -32,9 +33,9 @@ namespace Vanrise.Common.Business
             dataGrouper.DistributeGroupingItems(items);
         }
 
-        public void StartGettingFinalResults(Action<List<dynamic>> onFinalGroupingItemReceived)
+        public void StartGettingFinalResults(Action<List<dynamic>> onFinalGroupingItemReceived, Action<LogEntryType, string> logMessage)
         {
-            dataGrouper.StartGettingFinalResults(onFinalGroupingItemReceived);
+            dataGrouper.StartGettingFinalResults(onFinalGroupingItemReceived, logMessage);
         }
 
         public List<DataGroupingResultDistributionInfo> GetResultDistributionInfo()
@@ -42,9 +43,9 @@ namespace Vanrise.Common.Business
             return dataGrouper.GetResultDistributionInfo();
         }
 
-        public void StartGettingResultsFromOneExecutor(object executorId, Action<List<dynamic>> onFinalGroupingItemReceived)
+        public void StartGettingResultsFromOneExecutor(object executorId, Action<List<dynamic>> onFinalGroupingItemReceived, Action<LogEntryType, string> logMessage)
         {
-            dataGrouper.StartGettingResultsFromOneExecutor(executorId, onFinalGroupingItemReceived);
+            dataGrouper.StartGettingResultsFromOneExecutor(executorId, onFinalGroupingItemReceived, logMessage);
         }
 
         #endregion

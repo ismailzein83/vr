@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -75,23 +76,18 @@ namespace Vanrise.Common.Business
     {
         List<IDataGroupingItem> GroupedItems { get; }
 
+        Action<LogEntryType, string> LogMessage { get; }
+
         List<dynamic> FinalResults { set; }
     }
 
     public class DataGroupingHandlerFinalizeGroupingContext : IDataGroupingHandlerFinalizeGroupingContext
     {
+        public List<IDataGroupingItem> GroupedItems { get; set; }
 
-        public List<IDataGroupingItem> GroupedItems
-        {
-            get;
-            set;
-        }
+        public Action<LogEntryType, string> LogMessage { get; set; }
 
-        public List<dynamic> FinalResults
-        {
-            get;
-            set;
-        }
+        public List<dynamic> FinalResults { get; set; }
     }
 
     public class DataGroupingHandlerUpdateExistingFromNewContext : IDataGroupingHandlerUpdateExistingFromNewContext

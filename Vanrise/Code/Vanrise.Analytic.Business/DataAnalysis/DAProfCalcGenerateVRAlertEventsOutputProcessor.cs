@@ -13,13 +13,7 @@ namespace Vanrise.Analytic.Business
     public class DAProfCalcGenerateVRAlertEventsOutputProcessor : IDAProfCalcOutputRecordProcessor
     {
         public DateTime EffectiveDate { get; set; }
-        public Action<LogEntryType, string> LogMessage { get; set; }
 
-        public DAProfCalcGenerateVRAlertEventsOutputProcessor(DateTime effectiveDate, Action<LogEntryType, string> logMessage)
-        {
-            this.EffectiveDate = effectiveDate;
-            this.LogMessage = logMessage;
-        }
         public void Initialize(IDAProfCalcOutputRecordProcessorIntializeContext context)
         {
 
@@ -100,7 +94,10 @@ namespace Vanrise.Analytic.Business
                          daProfCalcNotificationData.DAProfCalcAlertRuleSettings.MinNotificationInterval, daProfCalcOutputSettings.RecordTypeId, description, daProfCalcNotificationData.AlertRule.UserId, out numberOfNotificationsCreated);
 
                     if (createNotification)
-                        LogMessage(LogEntryType.Information, string.Format("Action Rule {0} created {1} notification(s)", daProfCalcNotificationData.AlertRule.Name, numberOfNotificationsCreated));
+                    {
+                        context.LogMessage.ThrowIfNull("context.LogMessage");
+                        context.LogMessage(LogEntryType.Information, string.Format("Action Rule {0} created {1} notification(s)", daProfCalcNotificationData.AlertRule.Name, numberOfNotificationsCreated));
+                    }
                 }
             }
         }

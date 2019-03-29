@@ -122,7 +122,7 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocessinput", ['UtilsService', 
                             AlertRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds(),
                             MinDAProfCalcAnalysisPeriod: minDataAnalysisPeriodAPI.getData(),
                             MaxDAProfCalcAnalysisPeriod: maxDataAnalysisPeriodAPI.getData(),
-                            ChunkTime: $scope.scopeModel.selectedChunkTime != undefined ? $scope.scopeModel.selectedChunkTime.value : undefined
+                            ChunkTime: $scope.showChunkTimeSelector && $scope.scopeModel.selectedChunkTime != undefined ? $scope.scopeModel.selectedChunkTime.value : undefined
                         }
                     };
                 };

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -27,8 +28,8 @@ namespace Vanrise.Common.Business
         }
 
         public abstract void DistributeGroupingItems(List<IDataGroupingItem> items);
-        public abstract void StartGettingFinalResults(Action<List<dynamic>> onFinalGroupingItemReceived);
+        public abstract void StartGettingFinalResults(Action<List<dynamic>> onFinalGroupingItemReceived, Action<LogEntryType, string> logMessage);
         public abstract List<DataGroupingResultDistributionInfo> GetResultDistributionInfo();
-        public abstract void StartGettingResultsFromOneExecutor(object executorId, Action<List<dynamic>> onFinalGroupingItemReceived);
+        public abstract void StartGettingResultsFromOneExecutor(object executorId, Action<List<dynamic>> onFinalGroupingItemReceived, Action<LogEntryType, string> logMessage);
     }
 }

@@ -46,7 +46,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                     OutputRecordProcessor = inputArgument.OutputRecordProcessor
                 }, inputArgument.UseRemoteDataGrouper);
 
-            distributedDataGrouper.StartGettingFinalResults(null);
+            distributedDataGrouper.StartGettingFinalResults(null, (logEntryType, message) => { handle.SharedInstanceData.WriteTrackingMessage(logEntryType, message); });
 
             return output;
         }

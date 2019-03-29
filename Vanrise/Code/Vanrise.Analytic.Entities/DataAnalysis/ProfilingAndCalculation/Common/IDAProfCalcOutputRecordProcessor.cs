@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -25,6 +26,8 @@ namespace Vanrise.Analytic.Entities
         DAProfCalcExecInput DAProfCalcExecInput { get; }
 
         List<DAProfCalcOutputRecord> OutputRecords { get; }
+
+        Action<LogEntryType, string> LogMessage { get; }
     }
 
     public interface IDAProfCalcOutputRecordProcessorFinalizeContext

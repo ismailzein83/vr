@@ -18,9 +18,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             DateTime effectivceDate = EffectiveDate.Get(context);
             var sharedInstance = context.GetSharedInstanceData();
 
-            var outputProcessor = new DAProfCalcGenerateVRAlertEventsOutputProcessor(effectivceDate,
-             (logEntryType, message) => { sharedInstance.WriteTrackingMessage(logEntryType, message); });
-
+            var outputProcessor = new DAProfCalcGenerateVRAlertEventsOutputProcessor() { EffectiveDate = effectivceDate };
             OutputProcessor.Set(context, outputProcessor);
         }
     }

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 {
@@ -50,7 +52,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             DAProfCalcOutputRecordProcessorProcessContext daProfCalcOutputRecordProcessorProcessContext = new DAProfCalcOutputRecordProcessorProcessContext()
             {
                 OutputRecords = new List<DAProfCalcOutputRecord>(),
-                DAProfCalcExecInput = this.DAProfCalcExecInput
+                DAProfCalcExecInput = this.DAProfCalcExecInput,
+                LogMessage = context.LogMessage
             };
 
             RecordProfilingOutputSettingsManager recordProfilingOutputSettingsManager = new RecordProfilingOutputSettingsManager();
@@ -106,6 +109,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             public List<DAProfCalcOutputRecord> OutputRecords { get; set; }
 
             public DAProfCalcExecInput DAProfCalcExecInput { get; set; }
+
+            public Action<LogEntryType, string> LogMessage { get; set; }
         }
 
         private class DARecordAggregateGetResultContext : IDARecordAggregateGetResultContext

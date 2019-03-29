@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
+using Vanrise.Entities;
 using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
 
@@ -38,7 +39,7 @@ namespace Vanrise.Common.Business
             }
         }
 
-        public override void StartGettingFinalResults(Action<List<dynamic>> onFinalGroupingItemReceived)
+        public override void StartGettingFinalResults(Action<List<dynamic>> onFinalGroupingItemReceived, Action<LogEntryType, string> logMessage)
         {
             List<Guid> executorServiceInstanceIds = GetAnalysisExecutorIds();
             Parallel.ForEach(executorServiceInstanceIds, (executorServiceInstanceId) =>
@@ -52,7 +53,7 @@ namespace Vanrise.Common.Business
             return GetAnalysisExecutorIds().Select(executorId => new DataGroupingResultDistributionInfo { ExecutorId = executorId }).ToList();
         }
 
-        public override void StartGettingResultsFromOneExecutor(object executorId, Action<List<dynamic>> onFinalGroupingItemReceived)
+        public override void StartGettingResultsFromOneExecutor(object executorId, Action<List<dynamic>> onFinalGroupingItemReceived, Action<LogEntryType, string> logMessage)
         {
             if (!(executorId is Guid))
                 throw new Exception(String.Format("Invalid executorId '{0}'", executorId));
