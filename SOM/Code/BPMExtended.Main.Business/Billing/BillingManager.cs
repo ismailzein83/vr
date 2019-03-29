@@ -699,6 +699,18 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetInstallments();
         }
 
+        public bool InstallmentsApproval(string templateId, string invoiceId, string discount)
+        {
+            return true;
+
+        }
+
+        public bool CancelInvoiceInstallment(string templateId, string invoiceId, string paymentPlanId)
+        {
+            return true;
+
+        }
+
         public bool GetCollectionStatus(string invoiceId)
         {
             //TODO:Get collection status by invoice Id

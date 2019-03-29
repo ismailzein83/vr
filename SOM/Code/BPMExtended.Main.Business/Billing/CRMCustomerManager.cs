@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using BPMExtended.Main.Entities;
+using Newtonsoft.Json;
 using Terrasoft.Core;
 using Terrasoft.Core.DB;
 using Terrasoft.Core.Entities;
@@ -111,8 +112,8 @@ namespace BPMExtended.Main.Business
             return isNormal;
         }
 
-        public bool IsCustomerSyrian (string contactId, string accountId)
-        { 
+        public bool IsCustomerSyrian(string contactId, string accountId)
+        {
 
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -123,7 +124,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("Id");
             var c = esq.AddColumn("Country");
             var country = esq.AddColumn("Country.Id");
-            
+
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
             esq.Filters.Add(esqFirstFilter);
             entities = esq.GetEntityCollection(BPM_UserConnection);
@@ -136,10 +137,10 @@ namespace BPMExtended.Main.Business
                 if (countryId.ToString().ToLower() == "F9EB7E62-DADB-4D0C-BC2C-38A9A33995B5".ToLower()) return true;
             }
 
-                return false;
+            return false;
         }
 
-        public OutputResult NeedsAttachment(string contactId , string accountId , string customerCategoryId)
+        public OutputResult NeedsAttachment(string contactId, string accountId, string customerCategoryId)
         {
             bool isNormal;
             string msg = "";
@@ -148,16 +149,16 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             EntityCollection entities;
 
-                isNormal = IsCustomerCategoryNormal(customerCategoryId);
+            isNormal = IsCustomerCategoryNormal(customerCategoryId);
 
-                if(isNormal)
-                {
-                    msg = "No need for attachments";
-                    status = ResultStatus.Success;
+            if (isNormal)
+            {
+                msg = "No need for attachments";
+                status = ResultStatus.Success;
 
-                }
-                else
-                {
+            }
+            else
+            {
 
                 if (contactId != null)
                 {
@@ -187,12 +188,12 @@ namespace BPMExtended.Main.Business
                     //account
                 }
 
-                }
-            
+            }
+
             return new OutputResult()
             {
-                    messages = new List<string>() { msg },
-                    status = status
+                messages = new List<string>() { msg },
+                status = status
             };
         }
 
@@ -224,10 +225,10 @@ namespace BPMExtended.Main.Business
             var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
                 .Where("StRequestId").IsEqual(Column.Parameter(requestId));
             update.Execute();
-         
+
         }
 
-        public void PostADSLSubscriptionToOM (Guid requestId)
+        public void PostADSLSubscriptionToOM(Guid requestId)
         {
             UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
             var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
@@ -452,7 +453,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-       public void PostGSHDSLRequestToOM(Guid requestId)
+        public void PostGSHDSLRequestToOM(Guid requestId)
         {
             //TODO: update status in 'request header' table
             UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
@@ -472,12 +473,54 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public void PostCreatePaymentPlanRequestToOM(Guid requestId)
+        {
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string flags;
+            string statusId;
+
+            //Call Categories catalog and check the 'IsNormal' field if true => no need for attachments (optional), if false => attachment is required 
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCreatePaymentPlan");
+            esq.AddColumn("Id");
+            esq.AddColumn("StFlags");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                flags = (string)entities[0].GetColumnValue("StFlags");
+
+                Flag flag = JsonConvert.DeserializeObject<Flag>(flags);
+
+                if (flag.isApproval)
+                {
+                    statusId = "8057E9A4-24DE-484D-B202-0D189F5B7758";
+                }
+                else
+                {
+                    statusId = "87486F6C-FD2B-498D-8E4A-90935299058E";
+                }
+
+                //TODO: update status in 'request header' table
+                UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+                var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter(statusId))
+                    .Where("StRequestId").IsEqual(Column.Parameter(requestId));
+                update.Execute();
+
+            }
+        }
+
         public bool WaitingListPaymentValidation(string customerId, string contractId)
         {
             return true;
         }
 
-        public bool AddDepositForWaitingList(string customerId , string contractId)
+        public bool AddDepositForWaitingList(string customerId, string contractId)
         {
             return true;
         }
@@ -510,9 +553,9 @@ namespace BPMExtended.Main.Business
                     var customerCategoryId = entities[0].GetColumnValue("StCustomersCategoryId");
                     var customerCategoryName = entities[0].GetColumnValue("StCustomersCategoryStName");
 
-                    customerInfo.Add(new CRMCustomerInfoLabelAutoGenerated() { Label = "Customer Name" , Description = name.ToString()});
-                    customerInfo.Add(new CRMCustomerInfoLabelAutoGenerated() { Label = "Document Id", Description = documentId.ToString()});
-                    customerInfo.Add(new CRMCustomerInfoLabelAutoGenerated() { Label = "Customer Category", Description = customerCategoryName.ToString()});
+                    customerInfo.Add(new CRMCustomerInfoLabelAutoGenerated() { Label = "Customer Name", Description = name.ToString() });
+                    customerInfo.Add(new CRMCustomerInfoLabelAutoGenerated() { Label = "Document Id", Description = documentId.ToString() });
+                    customerInfo.Add(new CRMCustomerInfoLabelAutoGenerated() { Label = "Customer Category", Description = customerCategoryName.ToString() });
 
                 }
 
@@ -584,36 +627,36 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
 
 
-                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysUserInRole");
-                esq.AddColumn("SysUser");
-                var cashierColumn =  esq.AddColumn("SysUser.Contact.StCSO.StCashier");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysUserInRole");
+            esq.AddColumn("SysUser");
+            var cashierColumn = esq.AddColumn("SysUser.Contact.StCSO.StCashier");
 
-                //var csoidcol = esq.AddColumn("StCSO.Id");
+            //var csoidcol = esq.AddColumn("StCSO.Id");
 
-                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "SysUser", sysUserId);
-                esq.Filters.Add(esqFirstFilter);
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "SysUser", sysUserId);
+            esq.Filters.Add(esqFirstFilter);
 
-                var entities = esq.GetEntityCollection(BPM_UserConnection);
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
 
-                if (entities.Count > 0)
-                {
-                    bool isCashier = entities[0].GetTypedColumnValue<bool>(cashierColumn.Name);
-            
-                    if (isCashier)
-                        return new PaymentMethod()
-                        {
-                            Id = "E78BC2E8-119B-475B-AFB1-962B11842597",
-                            Name = "Cash"
-                        };
+            if (entities.Count > 0)
+            {
+                bool isCashier = entities[0].GetTypedColumnValue<bool>(cashierColumn.Name);
 
-                    else
-                        return new PaymentMethod()
-                        {
-                            Id = "E9F030F4-BF08-4E99-96C2-86C92134FC0F",
-                            Name = "Invoice"
-                        };
-                    
-                }
+                if (isCashier)
+                    return new PaymentMethod()
+                    {
+                        Id = "E78BC2E8-119B-475B-AFB1-962B11842597",
+                        Name = "Cash"
+                    };
+
+                else
+                    return new PaymentMethod()
+                    {
+                        Id = "E9F030F4-BF08-4E99-96C2-86C92134FC0F",
+                        Name = "Invoice"
+                    };
+
+            }
 
             return null;
         }
@@ -652,7 +695,7 @@ namespace BPMExtended.Main.Business
         public bool IsRecordExistAndCompletedInRequestHeader(string contractId, string requestType, string statusId)
         {
             EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFilter, esqFilter2 , esqFilter3;
+            IEntitySchemaQueryFilterItem esqFilter, esqFilter2, esqFilter3;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
             esq.AddColumn("Id");
@@ -695,20 +738,20 @@ namespace BPMExtended.Main.Business
 
             if (entities.Count > 0)
             {
-                 isCommercial = entities[0].GetTypedColumnValue<bool>(commercialColumn.Name);
+                isCommercial = entities[0].GetTypedColumnValue<bool>(commercialColumn.Name);
             }
 
-                return isCommercial;
+            return isCommercial;
         }
 
         public void CustomerCreationProcess(string contactId, string accountId)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
-            
+
             //Get infos from contact table in CRM database 
 
-            if (contactId != null && contactId!="")
+            if (contactId != null && contactId != "")
             {
                 esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
                 esq.AddColumn("Name");
@@ -727,7 +770,7 @@ namespace BPMExtended.Main.Business
                     var customerId = entities[0].GetColumnValue("StCustomerId");
                     var customerCategoryId = entities[0].GetColumnValue("StCustomersCategoryId");
                     var customerCategoryName = entities[0].GetColumnValue("StCustomersCategoryStName");
-                    
+
 
                     // call SOM to Create Cutomer
                 }
@@ -847,4 +890,13 @@ namespace BPMExtended.Main.Business
         //}
 
     }
+
+    class Flag
+    {
+        public string templateId { get; set; }
+        public string invoiceId { get; set; }
+        public string rate { get; set; }
+        public bool isApproval { get; set; }
+    }
+
 }
