@@ -54,12 +54,12 @@ namespace TOne.WhS.Deal.Business
                 holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, dealEvaluatorReprocessDefinition.Settings.ExecutionFlowDefinitionId, dateTimeRange.From, 
                     dateTimeRange.To, dealEvaluatorReprocessDefinition.Settings.StagesToHoldNames, dealEvaluatorReprocessDefinition.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
 
-                context.Reason = "Waiting CDR Import";
+                context.Reason = "Checking for a running CDR import process";
                 return false;
             }
             else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
             {
-                context.Reason = "Waiting CDR Import";
+                context.Reason = "Checking for a running CDR import process";
                 return false;
             }
 
