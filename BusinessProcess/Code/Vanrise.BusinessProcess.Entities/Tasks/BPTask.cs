@@ -28,13 +28,14 @@ namespace Vanrise.BusinessProcess.Entities
         public string AssignedUsersDescription { get; set; }
 
         public int? ExecutedById { get; set; }
+        public string ExecutedByIdDescription { get; set; }
 
         public BPTaskStatus Status { get; set; }
 
         public BPTaskData TaskData { get; set; }
 
         public BPTaskExecutionInformation TaskExecutionInformation { get; set; }
-        
+
         public string Notes { get; set; }
 
         public string Decision { get; set; }
@@ -43,5 +44,6 @@ namespace Vanrise.BusinessProcess.Entities
 
         public DateTime LastUpdatedTime { get; set; }
         public int? TakenBy { get; set; }
+        public string TakenByDescription { get; set; }
     }
 }

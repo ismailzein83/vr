@@ -4,6 +4,7 @@ using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using System.Linq;
 using Vanrise.Common;
+using Vanrise.Security.Business;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -190,7 +191,9 @@ namespace Vanrise.BusinessProcess.Business
             if (bpTask == null)
                 return null;
             BPTaskTypeManager bpTaskTypeManager = new BPTaskTypeManager();
-
+            UserManager userManager = new UserManager();
+            bpTask.ExecutedByIdDescription = bpTask.ExecutedById.HasValue ? userManager.GetUserName(bpTask.ExecutedById.Value) : null;
+            bpTask.TakenByDescription = bpTask.TakenBy.HasValue ? userManager.GetUserName(bpTask.TakenBy.Value) : null;
             return new BPTaskDetail()
             {
                 Entity = bpTask,
