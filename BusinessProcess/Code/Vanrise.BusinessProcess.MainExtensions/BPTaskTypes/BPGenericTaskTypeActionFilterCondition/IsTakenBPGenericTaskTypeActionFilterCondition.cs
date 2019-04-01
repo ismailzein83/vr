@@ -14,12 +14,19 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
         public bool IsTaken { get; set; }
         public override bool IsFilterMatch(IBPGenericTaskTypeActionFilterConditionContext context)
         {
-            if (!IsTaken || !context.Task.TakenBy.HasValue)
-                return true;
-            if(IsTaken && context.Task.TakenBy.HasValue)
+            if (IsTaken)
             {
-                int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
-                return loggedInUserId == context.Task.TakenBy.Value;
+                if (!context.Task.TakenBy.HasValue)
+                    return false;
+                if (context.Task.TakenBy.HasValue)
+                {
+                    int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+                    return loggedInUserId == context.Task.TakenBy.Value;
+                }
+            }
+            else
+            {
+                return context.Task.TakenBy.HasValue ? false : true;
             }
             return true;
         }
