@@ -69,19 +69,19 @@ namespace Vanrise.BusinessProcess.Business
             var taskType = taskTypeManager.GetBPTaskType(task.TypeId);
             taskType.ThrowIfNull("taskType", task.TypeId);
             taskType.Settings.ThrowIfNull("taskType.Settings", task.TypeId);
-            //var actions = taskType.Settings.GetActions();
-            //if (actions != null && actions.Count > 0)
-            //{
-            //    var context = new BPGenericTaskTypeActionFilterConditionContext()
-            //    {
-            //        Task = task
-            //    };
-            //    foreach (var action in actions)
-            //    {
-            //        if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(context))
-            //            taskTypeActions.Add(action);
-            //    }
-            //}
+            var actions = taskType.Settings.GetActions();
+            if (actions != null && actions.Count > 0)
+            {
+                var context = new BPGenericTaskTypeActionFilterConditionContext()
+                {
+                    Task = task
+                };
+                foreach (var action in actions)
+                {
+                    if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(context))
+                        taskTypeActions.Add(action);
+                }
+            }
             return taskTypeActions;
         }
         public List<int> GetAssignedUsers(long taskId)
