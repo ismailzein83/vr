@@ -50,12 +50,12 @@ namespace Vanrise.Reprocess.Business
                     holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, reprocessDefinition.Settings.ExecutionFlowDefinitionId, reprocessInputArg.FromTime, reprocessInputArg.ToTime,
                         reprocessDefinition.Settings.StagesToHoldNames, reprocessDefinition.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
 
-                    context.Reason = "Waiting CDR Import";
+                    context.Reason = "Checking for a running CDR import process";
                     return false;
                 }
                 else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
                 {
-                    context.Reason = "Waiting CDR Import";
+                    context.Reason = "Checking for a running CDR import process";
                     return false;
                 }
             }
