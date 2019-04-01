@@ -69,13 +69,13 @@ namespace Vanrise.BusinessProcess.Business
             taskType.ThrowIfNull("taskType", task.TypeId);
             taskType.Settings.ThrowIfNull("taskType.Settings", task.TypeId);
             var actions = taskType.Settings.GetActions();
-            var context = new BPGenericTaskTypeActionFilterConditionContext()
-            {
-                Task = task
-            };
             if (actions != null && actions.Count > 0)
             {
-                foreach(var action in actions)
+                var context = new BPGenericTaskTypeActionFilterConditionContext()
+                {
+                    Task = task
+                };
+                foreach (var action in actions)
                 {
                     if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(context))
                         taskTypeActions.Add(action);

@@ -50,7 +50,7 @@ app.directive('bpGenerictasktypeActionfiltercondition', ['UtilsService', 'VRUIUt
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var payload = {
-                        context: context
+                        context: getContext()
                     };
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
@@ -94,7 +94,7 @@ app.directive('bpGenerictasktypeActionfiltercondition', ['UtilsService', 'VRUIUt
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
                             var payload = {
-                                context : context,
+                                context : getContext(),
                                 filter: filterCondition
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
@@ -135,6 +135,13 @@ app.directive('bpGenerictasktypeActionfiltercondition', ['UtilsService', 'VRUIUt
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
+            }
+
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
             }
         }
 

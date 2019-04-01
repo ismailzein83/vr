@@ -90,9 +90,6 @@
                 return BusinessProcess_BPDefinitionAPIService.GetBPDefintion($scope.BPDefinitionID)
                     .then(function (response) {
                         $scope.bpDefinitionObj = response;
-                    }).catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    }).finally(function () {
                     });
             }
 
