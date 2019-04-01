@@ -65,6 +65,7 @@
     <Folder Include="TOneWhS_SMS\Tables\" />
     <Folder Include="TOneWhS_SMS\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="TOneWhS_SMS\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_SMS\Tables\BillingSMS_PartialPriced.sql" />
@@ -80,5 +81,7 @@
     <Build Include="TOneWhS_SMS\User Defined Types\BillingSMS_InvalidType.sql" />
     <Build Include="TOneWhS_SMS\User Defined Types\BillingSMS_InterconnectType.sql" />
     <Build Include="Security\TOneWhS_SMS.sql" />
+    <Build Include="TOneWhS_SMS\Views\vw_SMSProblems.sql" />
+    <Build Include="TOneWhS_SMS\Views\vw_SMSInvalidAndRaw.sql" />
   </ItemGroup>
 </Project>
