@@ -61,7 +61,7 @@
             <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>CustomerInvoiceItemDetails</DataSetName>
+        <DataSetName>SupplierInvoiceItemDetails</DataSetName>
         <Top>0.41056in</Top>
         <Height>0.25in</Height>
         <Width>7.58334in</Width>
@@ -723,14 +723,14 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="SaleZoneIdDescription">
+                        <Textbox Name="SupplierZoneIdDescription">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!SaleZoneIdDescription.Value</Value>
+                                  <Value>=Fields!SupplierZoneIdDescription.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -740,7 +740,7 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>SaleZoneIdDescription</rd:DefaultName>
+                          <rd:DefaultName>SupplierZoneIdDescription</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -909,7 +909,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Round(Fields!SaleRate.Value, 4)</Value>
+                                  <Value>=Round(Fields!SupplierRate.Value, 4)</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -946,7 +946,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!OriginalSaleCurrencyIdDescription.Value</Value>
+                                  <Value>=Fields!OriginalSupplierCurrencyIdDescription.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1038,7 +1038,7 @@
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>CustomerInvoiceItemDetails</DataSetName>
+            <DataSetName>SupplierInvoiceItemDetails</DataSetName>
             <Height>0.70833in</Height>
             <Width>7.58334in</Width>
             <Style>
@@ -1100,69 +1100,69 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="CustomerInvoiceItemDetails">
+    <DataSet Name="SupplierInvoiceItemDetails">
       <Query>
         <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="CustomerId">
-          <DataField>CustomerId</DataField>
+        <Field Name="SupplierId">
+          <DataField>SupplierId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="CustomerIdDescription">
-          <DataField>CustomerIdDescription</DataField>
+        <Field Name="SupplierIdDescription">
+          <DataField>SupplierIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleZoneId">
-          <DataField>SaleZoneId</DataField>
+        <Field Name="SupplierZoneId">
+          <DataField>SupplierZoneId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleZoneIdDescription">
-          <DataField>SaleZoneIdDescription</DataField>
+        <Field Name="SupplierZoneIdDescription">
+          <DataField>SupplierZoneIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleCurrencyId">
-          <DataField>OriginalSaleCurrencyId</DataField>
+        <Field Name="OriginalSupplierCurrencyId">
+          <DataField>OriginalSupplierCurrencyId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleCurrencyIdDescription">
-          <DataField>OriginalSaleCurrencyIdDescription</DataField>
+        <Field Name="OriginalSupplierCurrencyIdDescription">
+          <DataField>OriginalSupplierCurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrencyId">
-          <DataField>SaleCurrencyId</DataField>
+        <Field Name="SupplierCurrencyId">
+          <DataField>SupplierCurrencyId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrencyIdDescription">
-          <DataField>SaleCurrencyIdDescription</DataField>
+        <Field Name="SupplierCurrencyIdDescription">
+          <DataField>SupplierCurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleRateTypeId">
-          <DataField>SaleRateTypeId</DataField>
+        <Field Name="SupplierRateTypeId">
+          <DataField>SupplierRateTypeId</DataField>
           <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="SaleRateTypeIdDescription">
-          <DataField>SaleRateTypeIdDescription</DataField>
+        <Field Name="SupplierRateTypeIdDescription">
+          <DataField>SupplierRateTypeIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleRate">
-          <DataField>SaleRate</DataField>
+        <Field Name="SupplierRate">
+          <DataField>SupplierRate</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="SaleRateDescription">
-          <DataField>SaleRateDescription</DataField>
+        <Field Name="SupplierRateDescription">
+          <DataField>SupplierRateDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="NumberOfCalls">
           <DataField>NumberOfCalls</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="SaleAmount">
+        <Field Name="CostAmount">
           <DataField>SaleAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleAmount">
+        <Field Name="OriginalCostAmount">
           <DataField>OriginalSaleAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
@@ -1209,27 +1209,27 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>RDLCCustomerInvoiceItemDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetRDLCCustomerInvoiceItemDetailsSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCCustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>RDLCSupplierInvoiceItemDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetRDLCSupplierInvoiceItemDetailsSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCSupplierInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
-    <DataSet Name="CustomerSMSInvoiceItemDetails">
+    <DataSet Name="SupplierSMSInvoiceItemDetails">
       <Query>
         <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="CustomerId">
-          <DataField>CustomerId</DataField>
+        <Field Name="SupplierId">
+          <DataField>SupplierId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="CustomerMobileNetworkId">
-          <DataField>CustomerMobileNetworkId</DataField>
+        <Field Name="SupplierMobileNetworkId">
+          <DataField>SupplierMobileNetworkId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="CustomerMobileNetworkIdDescription">
-          <DataField>CustomerMobileNetworkIdDescription</DataField>
+        <Field Name="SupplierMobileNetworkIdDescription">
+          <DataField>SupplierMobileNetworkIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="OriginalSaleCurrencyId">
@@ -1292,20 +1292,20 @@
           <DataField>OriginalAmountAfterCommissionWithTaxes</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleAmountWithTaxes">
+        <Field Name="OriginalCostAmountWithTaxes">
           <DataField>OriginalSaleAmountWithTaxes</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="SaleAmountWithTaxes">
+        <Field Name="CostAmountWithTaxes">
           <DataField>SaleAmountWithTaxes</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>RDLCCustomerSMSInvoiceItemDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetCustomerSMSInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCCustomerSMSInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>RDLCSupplierSMSInvoiceItemDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetSupplierSMSInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCSupplierSMSInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="RecurringChargeItem">
@@ -1358,17 +1358,17 @@
         <rd:ObjectDataSourceType>TOne.WhS.BusinessEntity.Entities.RecurringChargeItem, TOne.WhS.BusinessEntity.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
-    <DataSet Name="SaleDealItemDetails">
+    <DataSet Name="CostDealItemDetails">
       <Query>
         <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="SaleDeal">
+        <Field Name="CostDeal">
           <DataField>SaleDeal</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleDealDescription">
+        <Field Name="CostDealDescription">
           <DataField>SaleDealDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
@@ -1380,7 +1380,7 @@
           <DataField>OriginalAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="SaleRate">
+        <Field Name="CostRate">
           <DataField>SaleRate</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
@@ -1415,9 +1415,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.BusinessEntity.Entities</rd:DataSetName>
-        <rd:TableName>SaleDealItemDetails</rd:TableName>
+        <rd:TableName>CostDealItemDetails</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetRecurringChargeItemRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.BusinessEntity.Entities.CustomerInvoiceDealItemDetails, TOne.WhS.BusinessEntity.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceType>TOne.WhS.BusinessEntity.Entities.SupplierInvoiceDealItemDetails, TOne.WhS.BusinessEntity.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="TaxesDetails">
@@ -1482,5 +1482,5 @@
     </ReportParameter>
   </ReportParameters>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
-  <rd:ReportID>aaac3e6f-79b5-437a-ac40-f6370221eef4</rd:ReportID>
+  <rd:ReportID>60f5ed4b-b320-4b83-b9ba-3e56e0828636</rd:ReportID>
 </Report>

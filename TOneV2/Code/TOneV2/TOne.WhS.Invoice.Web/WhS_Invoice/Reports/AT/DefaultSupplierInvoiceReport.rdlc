@@ -2,195 +2,6 @@
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
-      <Tablix Name="Tablix1">
-        <TablixBody>
-          <TablixColumns>
-            <TablixColumn>
-              <Width>3.69383in</Width>
-            </TablixColumn>
-          </TablixColumns>
-          <TablixRows>
-            <TablixRow>
-              <Height>0.25in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox1">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>ALGERIE TELECOM / SPA</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox1</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.25in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox2">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Division Interconnexion et Relations Internationales</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox2</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.25in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox7">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Direction de Linterconnexion Internationale</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox7</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.25in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox8">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Département des Comptes et Produits Internationaux</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox8</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-          </TablixRows>
-        </TablixBody>
-        <TablixColumnHierarchy>
-          <TablixMembers>
-            <TablixMember />
-          </TablixMembers>
-        </TablixColumnHierarchy>
-        <TablixRowHierarchy>
-          <TablixMembers>
-            <TablixMember />
-            <TablixMember />
-            <TablixMember />
-            <TablixMember />
-          </TablixMembers>
-        </TablixRowHierarchy>
-        <DataSetName>InvoiceHeader</DataSetName>
-        <Top>0.07167in</Top>
-        <Left>0.13236in</Left>
-        <Height>1in</Height>
-        <Width>3.69383in</Width>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Tablix>
       <Tablix Name="Tablix2">
         <TablixBody>
           <TablixColumns>
@@ -214,7 +25,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= "De " + Parameters!Name.Value</Value>
+                              <Value>= "De " + Parameters!CarrierCompanyName.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -247,7 +58,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= "A "+ Parameters!CarrierCompanyName.Value</Value>
+                              <Value>= "A "+ Parameters!Name.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -292,7 +103,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Parameters!BillingCompanyContact.Value</Value>
+                              <Value>=Parameters!CarrierCompanyBillingContact.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -332,7 +143,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Parameters!CarrierCompanyBillingContact.Value</Value>
+                              <Value>=Parameters!BillingCompanyContact.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -377,7 +188,14 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Parameters!RegAddress.Value</Value>
+                              <Value>=Parameters!Address.Value</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                            <TextRun>
+                              <Value xml:space="preserve"> </Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -417,7 +235,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Parameters!Address.Value</Value>
+                              <Value>=Parameters!RegAddress.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -459,11 +277,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>1.155in</Top>
+        <Top>0.405in</Top>
         <Left>0.13236in</Left>
         <Height>0.75in</Height>
         <Width>7.55729in</Width>
-        <ZIndex>1</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -519,14 +336,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox19">
+                    <Textbox Name="Textbox29">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!BillingCompanyPhone.Value</Value>
+                              <Value>=Parameters!Phone.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -536,7 +353,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox19</rd:DefaultName>
+                      <rd:DefaultName>Textbox29</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -590,14 +407,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox24">
+                    <Textbox Name="Textbox30">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!BillingCompanyEmail.Value</Value>
+                              <Value>=Parameters!Email.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -607,7 +424,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox24</rd:DefaultName>
+                      <rd:DefaultName>Textbox30</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -638,11 +455,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>2.01333in</Top>
+        <Top>1.26333in</Top>
         <Left>0.13236in</Left>
         <Height>0.49479in</Height>
         <Width>3.69383in</Width>
-        <ZIndex>2</ZIndex>
+        <ZIndex>1</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -747,11 +564,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>2.87583in</Top>
+        <Top>2.12583in</Top>
         <Left>0.13236in</Left>
         <Height>0.48622in</Height>
         <Width>3.69383in</Width>
-        <ZIndex>3</ZIndex>
+        <ZIndex>2</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -820,11 +637,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>3.46264in</Top>
+        <Top>2.71264in</Top>
         <Left>0.13237in</Left>
         <Height>0.25in</Height>
         <Width>7.55728in</Width>
-        <ZIndex>4</ZIndex>
+        <ZIndex>3</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1461,11 +1278,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>3.87028in</Top>
+        <Top>3.12028in</Top>
         <Left>0.13237in</Left>
         <Height>1.46875in</Height>
         <Width>7.55729in</Width>
-        <ZIndex>5</ZIndex>
+        <ZIndex>4</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1568,11 +1385,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InvoiceHeader</DataSetName>
-        <Top>5.40848in</Top>
+        <Top>4.65848in</Top>
         <Left>1.34192in</Left>
         <Height>0.25in</Height>
         <Width>6.34774in</Width>
-        <ZIndex>6</ZIndex>
+        <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1641,11 +1458,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>5.72792in</Top>
+        <Top>4.97792in</Top>
         <Left>0.08944in</Left>
         <Height>0.25in</Height>
         <Width>7.60021in</Width>
-        <ZIndex>7</ZIndex>
+        <ZIndex>6</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2015,11 +1832,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>6.02298in</Top>
+        <Top>5.27298in</Top>
         <Left>0.08944in</Left>
         <Height>1.1257in</Height>
         <Width>3.73675in</Width>
-        <ZIndex>8</ZIndex>
+        <ZIndex>7</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2028,8 +1845,8 @@
       </Tablix>
       <Rectangle Name="Rectangle6">
         <ReportItems>
-          <Subreport Name="DefaultCustomerInvoiceItemsReport">
-            <ReportName>DefaultCustomerInvoiceItemsReport</ReportName>
+          <Subreport Name="DefaultSupplierInvoiceItemsReport">
+            <ReportName>DefaultSupplierInvoiceItemsReport</ReportName>
             <Parameters>
               <Parameter Name="NoVoice">
                 <Value>=Parameters!NoVoice.Value</Value>
@@ -2065,11 +1882,11 @@
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>18.24602cm</Top>
+        <Top>16.34102cm</Top>
         <Left>0.22718cm</Left>
         <Height>2.36125cm</Height>
         <Width>19.30455cm</Width>
-        <ZIndex>9</ZIndex>
+        <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>=IIf(Parameters!NoVoice.Value,True,False)</Hidden>
         </Visibility>
@@ -2442,11 +2259,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>6.00909in</Top>
+        <Top>5.25909in</Top>
         <Left>3.9529in</Left>
         <Height>1.1257in</Height>
         <Width>3.73675in</Width>
-        <ZIndex>10</ZIndex>
+        <ZIndex>9</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2454,13 +2271,13 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>20.94242cm</Height>
+    <Height>18.85221cm</Height>
     <Style />
   </Body>
   <Width>19.53174cm</Width>
   <Page>
     <PageHeader>
-      <Height>2.30188cm</Height>
+      <Height>2.51355cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -2509,7 +2326,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!Name.Value</Value>
+                  <Value>=Parameters!CarrierCompanyName.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -2544,7 +2361,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!BillingCompanyPhone.Value</Value>
+                  <Value>=Parameters!Phone.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -2580,7 +2397,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!RegAddress.Value</Value>
+                  <Value>=Parameters!Address.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -2616,7 +2433,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Parameters!BillingCompanyEmail.Value</Value>
+                  <Value>=Parameters!Email.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
                     <FontSize>8pt</FontSize>
@@ -2846,9 +2663,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>CustomerInvoiceDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>SupplierInvoiceDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetSupplierInvoiceDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.SupplierInvoiceDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="BankDetails">
@@ -2949,8 +2766,8 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="CustomerId">
-          <DataField>CustomerId</DataField>
+        <Field Name="SupplierId">
+          <DataField>SupplierId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="SaleZoneId">
@@ -3016,9 +2833,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>RDLCCustomerSMSInvoiceItemDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetCustomerSMSInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCCustomerSMSInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>RDLCSupplierSMSInvoiceItemDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetSupplierSMSInvoiceItemDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCSupplierSMSInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="RecurringChargeItem">
@@ -3189,206 +3006,219 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
+    <ReportParameter Name="Phone">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Email">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
   </ReportParameters>
-  <Code>	Public Function ConvertirEnText(ValNum As Double) As String
-		If ValNum = 1 Then
-			ConvertirEnText = "un"
-			Exit Function
-		End If
+  <Code>
+    Public Function ConvertirEnText(ValNum As Double) As String
+    If ValNum = 1 Then
+    ConvertirEnText = "un"
+    Exit Function
+    End If
 
-		If ValNum = 0 Then
-			ConvertirEnText = "zéro"
-			Exit Function
-		End If
+    If ValNum = 0 Then
+    ConvertirEnText = "zéro"
+    Exit Function
+    End If
 
-		Static Unites(0 To 9) As String
-		Static Dixaines(0 To 9) As String
-		Static LesDixaines(0 To 9) As String
-		Static Milliers(0 To 4) As String
+    Static Unites(0 To 9) As String
+    Static Dixaines(0 To 9) As String
+    Static LesDixaines(0 To 9) As String
+    Static Milliers(0 To 4) As String
 
-		Dim splitedNombre() As String
-		Dim nombreApresVirgule As Double
-		Dim xx As String
-		Dim i As Integer
-		Dim nPosition As Integer
-		Dim ValNb As Integer
-		Dim LesZeros As Integer
-		Dim strResultat As String
-		Dim strTemp As String
-		Dim tmpBuff As String
-
-
-
-
-		Unites(0) = "zero"
-		Unites(1) = "un"
-		Unites(2) = "deux"
-		Unites(3) = "trois"
-		Unites(4) = "quatre"
-		Unites(5) = "cinq"
-		Unites(6) = "six"
-		Unites(7) = "sept"
-		Unites(8) = "huit"
-		Unites(9) = "neuf"
-
-		Dixaines(0) = "dix"
-		Dixaines(1) = "onze"
-		Dixaines(2) = "douze"
-		Dixaines(3) = "treize"
-		Dixaines(4) = "quatorze"
-		Dixaines(5) = "quinze"
-		Dixaines(6) = "seize"
-		Dixaines(7) = "dix-sept"
-		Dixaines(8) = "dix-huit"
-		Dixaines(9) = "dix-neuf"
-
-		LesDixaines(0) = ""
-		LesDixaines(1) = "dix"
-		LesDixaines(2) = "vingt"
-		LesDixaines(3) = "trente"
-		LesDixaines(4) = "quarante"
-		LesDixaines(5) = "cinquante"
-		LesDixaines(6) = "soixante"
-		LesDixaines(7) = "soixante-dix"
-		LesDixaines(8) = "quatre-vingt"
-		LesDixaines(9) = "quatre-vingt-dix"
-
-		Milliers(0) = ""
-		Milliers(1) = "mille"
-		Milliers(2) = "million"
-		Milliers(3) = "millard"
-		Milliers(4) = "mille"
-
-		On Error GoTo NbVersTexteError
-
-		strTemp = CStr(Int(ValNum))
-
-		For i = Len(strTemp) To 1 Step -1
-			ValNb = Val(Mid$(strTemp, i, 1))
-			nPosition = (Len(strTemp) - i) + 1
-			Select Case (nPosition Mod 3)
-				Case 1
-					LesZeros = False
-					If i = 1 Then
-						If ValNb &gt; 1 Then
-							tmpBuff = Unites(ValNb) &amp; " "
-						Else
-							tmpBuff = ""
-						End If
-					ElseIf Mid$(strTemp, i - 1, 1) = "1" Then
-						tmpBuff = Dixaines(ValNb) &amp; " "
-						i = i - 1
-					ElseIf Mid$(strTemp, i - 1, 1) = "9" Then
-						tmpBuff = LesDixaines(8) &amp; " " &amp;
-							Dixaines(ValNb) &amp; " "
-						i = i - 1
-					ElseIf Mid$(strTemp, i - 1, 1) = "7" Then
-						tmpBuff = LesDixaines(6) &amp; " " &amp;
-							 Dixaines(ValNb) &amp; " "
-						i = i - 1
-					ElseIf ValNb &gt; 0 Then
-						tmpBuff = Unites(ValNb) &amp; " "
-					Else
-						LesZeros = True
-						If i &gt; 1 Then
-							If Mid$(strTemp, i - 1, 1) &lt;&gt; "0" Then
-								LesZeros = False
-							End If
-						End If
-						If i &gt; 2 Then
-							If Mid$(strTemp, i - 2, 1) &lt;&gt; "0" Then
-								LesZeros = False
-							End If
-						End If
-						tmpBuff = ""
-					End If
-					If LesZeros = False And nPosition &gt; 1 Then
-						tmpBuff = tmpBuff &amp; Milliers(nPosition / 3) &amp; " "
-					End If
-					strResultat = tmpBuff &amp; strResultat
-				Case 2
-					If ValNb &gt; 0 Then
-						strResultat = LesDixaines(ValNb) &amp; " " &amp;
-						   strResultat
-					End If
-				Case 0
-					If ValNb &gt; 0 Then
-						If ValNb &gt; 1 Then
-							strResultat = Unites(ValNb) &amp; " cent " &amp;
-							   strResultat
-						Else
-							strResultat = "cent " &amp; strResultat
-						End If
-					End If
-			End Select
-		Next i
-		If Len(strResultat) &gt; 0 Then
-			strResultat = UCase$(Left$(strResultat, 1)) &amp;
-			   Mid$(strResultat, 2)
-		End If
-
-EndNbVersTexte:
-		splitedNombre = ValNum.ToString().Split(".")
-		If splitedNombre.Length &gt; 1 Then
-			Dim secondValue As String
-			Dim virgule As String
-			virgule = "virgule "
-			secondValue = splitedNombre(1)
-			While secondValue.StartsWith("0")
-				virgule += "zéro "
-				secondValue = secondValue.Remove(0, 1)
-			End While
-
-
-			nombreApresVirgule = Convert.ToDouble(CDbl(Val(secondValue)))
-			If nombreApresVirgule = 1 Then
-				xx = "un"
-			Else
-
-				xx = ConvertirEnText(nombreApresVirgule)
-			End If
-
-			ConvertirEnText = strResultat + virgule + xx
-		Else
-			ConvertirEnText = strResultat
-		End If
-		Exit Function
-
-NbVersTexteError:
-		strResultat = "Une Erreur !"
-		Resume EndNbVersTexte
-	End Function
+    Dim splitedNombre() As String
+    Dim nombreApresVirgule As Double
+    Dim xx As String
+    Dim i As Integer
+    Dim nPosition As Integer
+    Dim ValNb As Integer
+    Dim LesZeros As Integer
+    Dim strResultat As String
+    Dim strTemp As String
+    Dim tmpBuff As String
 
 
 
-	Public Function convertNumberToFrenchLetters(valNum As Double) As String
-		Dim splitedNumber() As String
-		Dim nombreAvantVirgule As String
-		Dim nombreApresvirgule As String
-		Dim virgule As String
 
-		splitedNumber = valNum.ToString().Split(".")
-		Convert.ToDouble(CDbl(Val(splitedNumber(0))))
-		nombreAvantVirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(splitedNumber(0)))))
-		If splitedNumber.Length &gt; 1 Then
-			Dim secondValue As String
-			virgule = "virgule "
-			secondValue = splitedNumber(1)
-			While secondValue.StartsWith("0")
-				virgule += "zéro "
-				secondValue = secondValue.Remove(0, 1)
-			End While
+    Unites(0) = "zero"
+    Unites(1) = "un"
+    Unites(2) = "deux"
+    Unites(3) = "trois"
+    Unites(4) = "quatre"
+    Unites(5) = "cinq"
+    Unites(6) = "six"
+    Unites(7) = "sept"
+    Unites(8) = "huit"
+    Unites(9) = "neuf"
+
+    Dixaines(0) = "dix"
+    Dixaines(1) = "onze"
+    Dixaines(2) = "douze"
+    Dixaines(3) = "treize"
+    Dixaines(4) = "quatorze"
+    Dixaines(5) = "quinze"
+    Dixaines(6) = "seize"
+    Dixaines(7) = "dix-sept"
+    Dixaines(8) = "dix-huit"
+    Dixaines(9) = "dix-neuf"
+
+    LesDixaines(0) = ""
+    LesDixaines(1) = "dix"
+    LesDixaines(2) = "vingt"
+    LesDixaines(3) = "trente"
+    LesDixaines(4) = "quarante"
+    LesDixaines(5) = "cinquante"
+    LesDixaines(6) = "soixante"
+    LesDixaines(7) = "soixante-dix"
+    LesDixaines(8) = "quatre-vingt"
+    LesDixaines(9) = "quatre-vingt-dix"
+
+    Milliers(0) = ""
+    Milliers(1) = "mille"
+    Milliers(2) = "million"
+    Milliers(3) = "millard"
+    Milliers(4) = "mille"
+
+    On Error GoTo NbVersTexteError
+
+    strTemp = CStr(Int(ValNum))
+
+    For i = Len(strTemp) To 1 Step -1
+    ValNb = Val(Mid$(strTemp, i, 1))
+    nPosition = (Len(strTemp) - i) + 1
+    Select Case (nPosition Mod 3)
+    Case 1
+    LesZeros = False
+    If i = 1 Then
+    If ValNb &gt; 1 Then
+    tmpBuff = Unites(ValNb) &amp; " "
+    Else
+    tmpBuff = ""
+    End If
+    ElseIf Mid$(strTemp, i - 1, 1) = "1" Then
+    tmpBuff = Dixaines(ValNb) &amp; " "
+    i = i - 1
+    ElseIf Mid$(strTemp, i - 1, 1) = "9" Then
+    tmpBuff = LesDixaines(8) &amp; " " &amp;
+    Dixaines(ValNb) &amp; " "
+    i = i - 1
+    ElseIf Mid$(strTemp, i - 1, 1) = "7" Then
+    tmpBuff = LesDixaines(6) &amp; " " &amp;
+    Dixaines(ValNb) &amp; " "
+    i = i - 1
+    ElseIf ValNb &gt; 0 Then
+    tmpBuff = Unites(ValNb) &amp; " "
+    Else
+    LesZeros = True
+    If i &gt; 1 Then
+    If Mid$(strTemp, i - 1, 1) &lt;&gt; "0" Then
+    LesZeros = False
+    End If
+    End If
+    If i &gt; 2 Then
+    If Mid$(strTemp, i - 2, 1) &lt;&gt; "0" Then
+    LesZeros = False
+    End If
+    End If
+    tmpBuff = ""
+    End If
+    If LesZeros = False And nPosition &gt; 1 Then
+    tmpBuff = tmpBuff &amp; Milliers(nPosition / 3) &amp; " "
+    End If
+    strResultat = tmpBuff &amp; strResultat
+    Case 2
+    If ValNb &gt; 0 Then
+    strResultat = LesDixaines(ValNb) &amp; " " &amp;
+    strResultat
+    End If
+    Case 0
+    If ValNb &gt; 0 Then
+    If ValNb &gt; 1 Then
+    strResultat = Unites(ValNb) &amp; " cent " &amp;
+    strResultat
+    Else
+    strResultat = "cent " &amp; strResultat
+    End If
+    End If
+    End Select
+    Next i
+    If Len(strResultat) &gt; 0 Then
+    strResultat = UCase$(Left$(strResultat, 1)) &amp;
+    Mid$(strResultat, 2)
+    End If
+
+    EndNbVersTexte:
+    splitedNombre = ValNum.ToString().Split(".")
+    If splitedNombre.Length &gt; 1 Then
+    Dim secondValue As String
+    Dim virgule As String
+    virgule = "virgule "
+    secondValue = splitedNombre(1)
+    While secondValue.StartsWith("0")
+    virgule += "zéro "
+    secondValue = secondValue.Remove(0, 1)
+    End While
 
 
-			nombreApresvirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(secondValue))))
+    nombreApresVirgule = Convert.ToDouble(CDbl(Val(secondValue)))
+    If nombreApresVirgule = 1 Then
+    xx = "un"
+    Else
 
-		End If
-		convertNumberToFrenchLetters = nombreAvantVirgule + " " + virgule + nombreApresvirgule
+    xx = ConvertirEnText(nombreApresVirgule)
+    End If
 
-	End Function
+    ConvertirEnText = strResultat + virgule + xx
+    Else
+    ConvertirEnText = strResultat
+    End If
+    Exit Function
+
+    NbVersTexteError:
+    strResultat = "Une Erreur !"
+    Resume EndNbVersTexte
+    End Function
 
 
-</Code>
+
+    Public Function convertNumberToFrenchLetters(valNum As Double) As String
+    Dim splitedNumber() As String
+    Dim nombreAvantVirgule As String
+    Dim nombreApresvirgule As String
+    Dim virgule As String
+
+    splitedNumber = valNum.ToString().Split(".")
+    Convert.ToDouble(CDbl(Val(splitedNumber(0))))
+    nombreAvantVirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(splitedNumber(0)))))
+    If splitedNumber.Length &gt; 1 Then
+    Dim secondValue As String
+    virgule = "virgule "
+    secondValue = splitedNumber(1)
+    While secondValue.StartsWith("0")
+    virgule += "zéro "
+    secondValue = secondValue.Remove(0, 1)
+    End While
+
+
+    nombreApresvirgule = ConvertirEnText(Convert.ToDouble(CDbl(Val(secondValue))))
+
+    End If
+    convertNumberToFrenchLetters = nombreAvantVirgule + " " + virgule + nombreApresvirgule
+
+    End Function
+
+
+  </Code>
   <EmbeddedImages>
     <EmbeddedImage Name="EttisalatJazaer">
       <MIMEType>image/jpeg</MIMEType>
@@ -3405,5 +3235,5 @@ ZXARFpDw0XOVrm6i+ntfcmu2mmTiRfFGPfh74h4SZWxQROkc0Q2sQASe6G639EmE5uNGWsRM+EjaFLpi
     </EmbeddedImage>
   </EmbeddedImages>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
-  <rd:ReportID>cd6af99e-0a62-496d-8fb9-11c0484de725</rd:ReportID>
+  <rd:ReportID>cbe75953-ed41-4894-ad02-6cdafe2f9ede</rd:ReportID>
 </Report>
