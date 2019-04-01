@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="/images/iconheader.ico" type="image/ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title ">Home Page</title>
+    <link href="/Client/Libraries/Bootstrap/bootstrap-switch.css?v=1508" rel="stylesheet">
+    <link href="/Client/Libraries/Bootstrap/bootstrap.css?v=1508" rel="stylesheet">
+    <link href="/Client/Libraries/AngularExtensions/jQueryFileUpload/css/jquery.fileupload-ui.css?v=1508" rel="stylesheet">
+    <link href="/Client/Libraries/AngularExtensions/jQueryFileUpload/css/jquery.fileupload.css?v=1508" rel="stylesheet">
+    <link href="/Client/Libraries/AngularExtensions/JSTreeView/jstree/src/themes/default/style.css?v=1508" rel="stylesheet">
+    <link href="/Client/Libraries/AngularExtensions/JSTreeView/jstree/src/themes/default-dark/style.css?v=1508" rel="stylesheet">
+    <link href="/Client/Libraries/AngularExtensions/treeview/css/angular.treeview.css?v=1508" rel="stylesheet">
+    <link href="/Client/Libraries/HandsonTable/handsontable.full.css?v=1508" rel="stylesheet">
+    <link href="/Client/Libraries/Bower/codemirror/lib/codemirror.css?v=1508" rel="stylesheet">
+    <link href="/Client/FontStyle/open-sans.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/jquery-ui.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/angular-motion.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/angular-notify.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/angular-ui-switch.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/bootstrap-datetimepicker.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/custom.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/editor.min.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/ivh-treeview.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/loader.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/ng-sortable.style.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/simple-sidebar.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/Style-flat.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/Style-mobile.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/Style-rtl.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/Styles.css?v=1508" rel="stylesheet">
+    <link href="/Client/Styles/waves.css?v=1508" rel="stylesheet">
+    <link href="/Client/Themes/theme.css?v=1508" rel="stylesheet">
+    <link href="/Client/Themes/theme-extended.css?v=1508" rel="stylesheet">
+</head>
+<body class="flat">
+    <div id="mainBodyContainer" style="display: block;">
+
+        <div class="normal-view ng-scope">
+            <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
+
+                <div class="navbar-header">
+
+                    <div class="vr-sidebar-header">
+                        <div class="toggel-icon-container">
+                            <span class="hand-cursor glyphicon glyphicon-menu-hamburger toggel-icon"></span>
+                        </div>
+                        <div class="logo-container">
+                            <img src="/images/logoonheader.png" class="hand-cursor index-logo" title="Home">
+                        </div>
+                    </div>
+
+                    <div class="vr-page-header">
+                        <div class="page-header-wrapper">
+                            <div class="header-item info-container">
+                                <div class="company-name-container">
+                                    <span title="Sama S.A.L Offshore" class="vr-company-name">Sama S.A.L Offshore</span>
+                                </div>
+                                <label class="vr-user-separator ng-hide">|</label>
+                                <span class="vr-page-title ng-binding"></span>
+                            </div>
+                            <div class="header-item action-container">
+                                <div class="vr-user-menu-wrapper">
+                                    <div class="dropdown vr-user-menu">
+                                        <div class="dropdown-toggle flex-user-menu" id="dropdownMenuCu-test">
+                                            <div class="vr-user-icon">
+                                                <vr-preview-image height="26px" width="26px">
+                                                    <div style="height: 26px; width: 26px;">
+                                                        <img src="/Client/Images/member.png" style="width:100%;height:100%;">
+                                                    </div>
+                                                </vr-preview-image>
+                                            </div>
+                                            <label class="vr-user-label ">Dev User</label>
+                                        </div>
+                                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
+                                            <li role="presentation">
+                                                <a href="">Edit My Profile</a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="">Change My Password</a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="">Logout</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <label class="vr-user-separator">|</label>
+                                <div class="header-action-item vr-support-item">
+                                    <a href="">
+                                        <img src="/Client/Images/support.png">
+                                    </a>
+                                </div>
+                                <div class="header-action-item vr-notfication-item" title="Alert(s)">
+                                    <img src="/Client/Images/02.png">
+                                    <span class="badge bg-flat">0</span>
+                                </div>
+                                <div class="header-action-item vr-notfication-item" title="Notification(s)">
+                                    <img src="/Client/Images/01.png">
+                                    <span class="badge bg-flat">0</span>
+                                </div>
+                                <div class="vr-dateclock-item">
+                                    <div class="vr-date-container ng-binding">Tue 19 Mar , 2019</div>
+                                    <div class="vr-clock-container">
+                                        <div class="vr-clock-item ng-binding">14:20:05</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div id="wrapper" class="wrapper-toogled">
+                <div id="sidebar-wrapper" style="overflow-x: hidden; width: 200px;">
+
+                    <div class="panel-group ng-scope" id="accordion" role="tablist" aria-multiselectable="true">
+
+                        <div style="overflow-x:hidden;position:absolute;width:200px;height:calc(100% - 115px);">
+                            <div class="panel panel-default menu-item-list">
+                                <div class="panel-heading panel-heading-vr hand-cursor boxes float-box waves-effect waves-block dll-menu-theme bgcolor-0">
+                                    <span ng-if="item.Childs.length > 0" class="ng-scope">
+                                        <span class="glyphicon module-icon"><img class="icon" ng-src="/Client/Images/menu-icons/configuration.png" src="/Client/Images/menu-icons/configuration.png"></span>
+                                        <span class="vr-module-name ng-binding" title="Configuration">Configuration</span>
+                                        <span class=" hand-cursor  toggel">
+                                            <span ng-if="item.Childs.length>0" class="glyphicon chevron-direction ng-scope glyphicon-chevron-right"></span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="panel panel-default menu-item-list ng-scope">
+                                <div class="panel-heading panel-heading-vr hand-cursor boxes float-box waves-effect waves-block dll-menu-theme bgcolor-1">
+                                    <span ng-if="item.Childs.length > 0" class="ng-scope">
+                                        <span class="glyphicon module-icon"><img class="icon" ng-src="/Client/Images/menu-icons/admin.png" src="/Client/Images/menu-icons/admin.png"></span>
+                                        <span class="vr-module-name ng-binding" title="Administration">Administration</span>
+                                        <span class=" hand-cursor  toggel">
+                                            <span ng-if="item.Childs.length>0" class="glyphicon chevron-direction ng-scope glyphicon-chevron-right"></span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="panel panel-default menu-item-list ng-scope" ng-repeat="item in $root.menuItems | filter: $root.menuFilter">
+                                <div class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme bgcolor-2">
+                                    <span ng-if="item.Childs.length > 0" class="ng-scope">
+                                        <span class="glyphicon module-icon"><img class="icon" ng-src="/Client/Images/menu-icons/SystemProcesses.png" src="/Client/Images/menu-icons/SystemProcesses.png"></span>
+                                        <span class="vr-module-name ng-binding" title="System Processes">System Processes</span>
+                                        <span class=" hand-cursor  toggel">
+                                            <span ng-if="item.Childs.length>0" class="glyphicon chevron-direction ng-scope glyphicon-chevron-right"></span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="panel panel-default menu-item-list ng-scope">
+                                <div class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme bgcolor-3" ng-click="setIndex(item)">
+                                    <span>
+                                        <span class="glyphicon module-icon"><img class="icon" ng-src="/Client/Images/menu-icons/Business Entities.png" src="/Client/Images/menu-icons/Business Entities.png"></span>
+                                        <span class="vr-module-name ng-binding" title="Business Partner">Business Partner</span>
+                                        <span class=" hand-cursor  toggel">
+                                            <span class="glyphicon chevron-direction ng-scope glyphicon-chevron-right"></span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="panel panel-default menu-item-list ng-scope">
+                                <div class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme bgcolor-4">
+                                    <span ng-if="item.Childs.length > 0" class="ng-scope">
+                                        <span class="glyphicon module-icon"><img class="icon" ng-src="/Client/Images/menu-icons/billing.png" src="/Client/Images/menu-icons/billing.png"></span>
+                                        <span class="vr-module-name ng-binding" title="Billing Management">Billing Management</span>
+                                        <span class=" hand-cursor  toggel">
+                                            <span ng-if="item.Childs.length>0" class="glyphicon chevron-direction ng-scope glyphicon-chevron-right"></span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="panel panel-default menu-item-list ng-scope">
+                                <div class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme bgcolor-5">
+                                    <span ng-if="item.Childs.length > 0">
+                                        <span class="glyphicon module-icon"><img class="icon" ng-src="/Client/Images/menu-icons/rules.png" src="/Client/Images/menu-icons/rules.png"></span>
+                                        <span class="vr-module-name ng-binding" title="Rules">Rules</span>
+                                        <span class=" hand-cursor  toggel">
+                                            <span ng-if="item.Childs.length>0" class="glyphicon chevron-direction ng-scope glyphicon-chevron-right"></span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="panel panel-default menu-item-list ng-scope">
+                                <div class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme bgcolor-6">
+                                    <span ng-if="item.Childs.length > 0" class="ng-scope">
+                                        <span class="glyphicon module-icon"><img class="icon" ng-src="/Client/Images/menu-icons/busines intel.png" src="/Client/Images/menu-icons/busines intel.png"></span>
+                                        <span class="vr-module-name ng-binding" title="Reports &amp; Dashboards">Reports &amp; Dashboards</span>
+                                        <span class=" hand-cursor  toggel">
+                                            <span ng-if="item.Childs.length>0" class="glyphicon chevron-direction ng-scope glyphicon-chevron-right"></span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="page-content-wrapper">
+                    <div class="container-fluid vr-container">
+                        <div class="vr-top-nav-container">
+                            <div class="vr-breadcrumb ng-scope" style="">
+                                <span>
+                                    <a href="">Application Home</a>
+                                </span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12 ng-scope" id="mainNgView">
+                            <vr-panel>
+                                <div class="panel panel-primary panel-over-color">
+                                    <div class="panel-body">
+                                        <div style="padding-left:15px">
+                                            <div class="row" ng-show="true">
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ng-scope">
+                                                    <div class="menu-tile app-tile bgcolor-0" ng-click="$root.openMenuTile(item)">
+                                                        <img ng-src="/Client/Images/menu-icons/configuration-tile.png" style="height:50px;width:50px;margin-top:21px" src="/Client/Images/menu-icons/configuration-tile.png">
+                                                        <h3 class="ng-binding">
+                                                            Configuration
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ng-scope">
+                                                    <div class="menu-tile app-tile bgcolor-1">
+                                                        <img ng-src="/Client/Images/menu-icons/admin-tile.png" style="height:50px;width:50px;margin-top:21px" src="/Client/Images/menu-icons/admin-tile.png">
+                                                        <h3 class="ng-binding">
+                                                            Administration
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ng-scope">
+                                                    <div class="menu-tile app-tile bgcolor-2">
+                                                        <img ng-src="/Client/Images/menu-icons/SystemProcesses-tile.png" style="height:50px;width:50px;margin-top:21px" src="/Client/Images/menu-icons/SystemProcesses-tile.png">
+                                                        <h3 class="ng-binding">
+                                                            System Processes
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div ng-repeat="item in $root.menuItems" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ng-scope">
+                                                    <div class="menu-tile app-tile bgcolor-3">
+                                                        <img ng-src="/Client/Images/menu-icons/Business Entities-tile.png" style="height:50px;width:50px;margin-top:21px" src="/Client/Images/menu-icons/Business Entities-tile.png">
+                                                        <h3 class="ng-binding">
+                                                            Business Partner
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ng-scope">
+                                                    <div class="menu-tile app-tile bgcolor-4">
+                                                        <img ng-src="/Client/Images/menu-icons/billing-tile.png" style="height:50px;width:50px;margin-top:21px" src="/Client/Images/menu-icons/billing-tile.png">
+                                                        <h3 class="ng-binding">
+                                                            Billing Management
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ng-scope">
+                                                    <div class="menu-tile app-tile bgcolor-5">
+                                                        <img ng-src="/Client/Images/menu-icons/rules-tile.png" style="height:50px;width:50px;margin-top:21px" src="/Client/Images/menu-icons/rules-tile.png">
+                                                        <h3 class="ng-binding">
+                                                            Rules
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ng-scope">
+                                                    <div class="menu-tile app-tile bgcolor-6" ng-click="$root.openMenuTile(item)">
+                                                        <img ng-src="/Client/Images/menu-icons/busines intel-tile.png" style="height:50px;width:50px;margin-top:21px" src="/Client/Images/menu-icons/busines intel-tile.png">
+                                                        <h3 class="ng-binding">
+                                                            Reports &amp; Dashboards
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </vr-panel>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="version-container">
+                <div class="version-label">version 1.0 ~ 2018-05-28</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

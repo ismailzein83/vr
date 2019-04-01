@@ -130,6 +130,9 @@
     <Content Include="Common\Directives\ConnectionString\vr-common-connectionstring.js" />
     <Content Include="Common\Directives\Country\vr-common-country-remoteselector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
+    <Content Include="Common\Directives\GeneralSettings\Templates\TemplateTheme.html" />
+    <Content Include="Common\Directives\GeneralSettings\vr-common-themepreview.js" />
+    <Content Include="Common\Directives\ThemeExtended\vr-common-themeextended-selector.js" />
     <Content Include="Common\Directives\FigureIcon\vr-common-figureicon-selective.js" />
     <Content Include="Common\Directives\FiguresTileSettings\Templates\FiguresTileSettingsDefinitionTemplate.html" />
     <Content Include="Common\Directives\FiguresTileSettings\Templates\FiguresTileSettingsRuntimeTemplate.html" />
@@ -206,6 +209,7 @@
     <Content Include="Common\Directives\MasterLayoutSettings\Templates\MasterLayoutTemplateSettings.html" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-masterlayout-settings-editor.js" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
+    <Content Include="Common\Services\APIServices\ThemeExtendedAPIService.js" />
     <Content Include="Common\Services\APIServices\FigureIconAPIService.js" />
     <Content Include="Common\Services\APIServices\HttpCallConnectionInterceptorAPIService.js" />
     <Content Include="Common\Services\APIServices\RDBDataTypeAPIService.js" />
@@ -243,6 +247,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ThemeExtendedController.cs" />
     <Compile Include="Controllers\FigureIconController.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
     <Compile Include="Controllers\CacheRefreshController.cs" />
