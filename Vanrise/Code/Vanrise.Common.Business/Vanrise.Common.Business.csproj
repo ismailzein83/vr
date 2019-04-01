@@ -79,6 +79,7 @@
     <Compile Include="DBReplicationDefinitionManager.cs" />
     <Compile Include="ErlangBCalculatorManager.cs" />
     <Compile Include="ExcelFileUploader\ExcelFileUploaderManager.cs" />
+    <Compile Include="ThemeExtendedManager.cs" />
     <Compile Include="Filters\CommentBEDefinitionFilter.cs" />
     <Compile Include="FigureIconManager.cs" />
     <Compile Include="LicenseManager.cs" />

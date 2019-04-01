@@ -58,6 +58,8 @@ namespace Vanrise.Entities
 
         public bool VerticalLine { get; set; }
 
+        public string Theme { get; set; }
+
     }
 
     public class CacheSettingData

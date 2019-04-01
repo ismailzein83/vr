@@ -268,7 +268,11 @@ namespace Vanrise.Common.Business
             generalSettingData.UIData.ThrowIfNull("generalSettingData.UIData");
             return generalSettingData.UIData;
         }
-
+        public string GetExtendedTheme()
+        {
+            var uiData = GetUISettingData();
+            return uiData.Theme;
+        }
         public Dictionary<Guid, CompanyDefinitionSetting> GetCompanyDefinitionSettings()
         {
             var companyDefinitionSettings = new Dictionary<Guid, CompanyDefinitionSetting>();
