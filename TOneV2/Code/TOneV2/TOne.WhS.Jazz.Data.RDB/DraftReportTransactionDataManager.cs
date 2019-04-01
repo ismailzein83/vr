@@ -24,6 +24,7 @@ namespace TOne.WhS.Jazz.Data.RDB
         const string COL_TransactionDescription = "TransactionDescription";
         const string COL_Credit = "Credit";
         const string COL_Debit = "Debit";
+        const string COL_CarriersNames = "CarriersNames";
         const string COL_CreatedTime = "CreatedTime";
         #endregion
 
@@ -37,6 +38,7 @@ namespace TOne.WhS.Jazz.Data.RDB
             columns.Add(COL_TransactionDescription, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar});
             columns.Add(COL_Credit, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal,Size=26,Precision=6 });
             columns.Add(COL_Debit, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 26, Precision = 6 });
+            columns.Add(COL_CarriersNames, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -74,7 +76,7 @@ namespace TOne.WhS.Jazz.Data.RDB
                           TransactionCode = reader.GetString(COL_TransactionCode),
                           TransationDescription = reader.GetString(COL_TransactionDescription),
                           Credit = reader.GetDecimal(COL_Credit),
-                          Debit = reader.GetDecimal(COL_Debit)
+                          Debit = reader.GetDecimal(COL_Debit),
                       };
                       List<ERPDraftReportTransaction> transactionsReportsData = data.GetOrCreateItem(draftReportId);
                       transactionsReportsData.Add(transactionsReportData);
@@ -98,6 +100,7 @@ namespace TOne.WhS.Jazz.Data.RDB
                     row.Column(COL_TransactionDescription).Value(data.TransationDescription);
                     row.Column(COL_Credit).Value(data.Credit);
                     row.Column(COL_Debit).Value(data.Debit);
+                    row.Column(COL_CarriersNames).Value(data.CarriersNames);
                 }
             }
              queryContext.ExecuteNonQuery();
@@ -116,7 +119,7 @@ namespace TOne.WhS.Jazz.Data.RDB
             queryContext.ExecuteNonQuery();
         }
 
-        internal void SetSelectQuery(RDBSelectQuery selectQuery,string tableAlias,long processInstanceId,string transactionCodeAlias,string transactionDescriptionAlias,string creditAlias,string debitAlias)
+        internal void SetSelectQuery(RDBSelectQuery selectQuery,string tableAlias,long processInstanceId,string transactionCodeAlias,string transactionDescriptionAlias,string creditAlias,string debitAlias, string switchNameAlias, string directionAlias, string carriersNamesAlias, string transactionTypeAlias)
         {
             DraftReportDataManager draftReportDataManager = new DraftReportDataManager();
 
@@ -126,12 +129,14 @@ namespace TOne.WhS.Jazz.Data.RDB
             selectColumns.Column(COL_TransactionDescription, transactionDescriptionAlias);
             selectColumns.Column(COL_Credit, creditAlias);
             selectColumns.Column(COL_Debit, debitAlias);
+            selectColumns.Column(COL_CarriersNames, carriersNamesAlias);
 
             var joinContext = selectQuery.Join();
-            draftReportDataManager.AddJoinToDraftReport(joinContext, tableAlias, "draftReport", COL_ERPDraftReportID);
+            draftReportDataManager.SetSelectQuery(selectQuery, selectColumns, tableAlias, "draftReport", COL_ERPDraftReportID, switchNameAlias, directionAlias, transactionTypeAlias, processInstanceId);
 
             var whereCondition = selectQuery.Where();
             draftReportDataManager.AddProcessInstanceIdCondition(whereCondition, "draftReport", processInstanceId);
+
         }
         #endregion
 

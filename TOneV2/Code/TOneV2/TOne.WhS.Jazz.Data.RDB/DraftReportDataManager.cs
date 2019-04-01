@@ -16,7 +16,7 @@ namespace TOne.WhS.Jazz.Data.RDB
     {
         #region Local Variables
         static string TABLE_NAME = "Jazz_ERP_ERPDraftReport";
-        static string TABLE_ALIAS = "draftReport";
+        static string TABLE_ALIAS = "draftReportAlias";
         const string COL_ID = "ID";
         const string COL_ReportDefinitionID = "ReportDefinitionID";
         const string COL_ProcessInstanceID = "ProcessInstanceID";
@@ -24,6 +24,10 @@ namespace TOne.WhS.Jazz.Data.RDB
         const string COL_TransactionTypeID = "TransactionTypeID";
         const string COL_CreatedTime = "CreatedTime";
         const string COL_IsTaxTransaction = "IsTaxTransaction";
+        const string COL_SwitchName = "SwitchName";
+        const string COL_Direction = "Direction";
+        const string COL_TransactionType = "TransactionType";
+
         #endregion
 
         #region Constructors
@@ -37,6 +41,10 @@ namespace TOne.WhS.Jazz.Data.RDB
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_TransactionTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_IsTaxTransaction, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_SwitchName, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
+            columns.Add(COL_Direction, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_TransactionType, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "Jazz_ERP",
@@ -62,6 +70,9 @@ namespace TOne.WhS.Jazz.Data.RDB
             if (transactionsReport.TransactionTypeId.HasValue)
                 insertQuery.Column(COL_TransactionTypeID).Value(transactionsReport.TransactionTypeId.Value);
             insertQuery.Column(COL_IsTaxTransaction).Value(transactionsReport.IsTaxTransaction);
+            insertQuery.Column(COL_SwitchName).Value(transactionsReport.SwitchName);
+            insertQuery.Column(COL_Direction).Value((int)transactionsReport.Direction);
+            insertQuery.Column(COL_TransactionType).Value(transactionsReport.TransactionTypeName);
 
             insertedId = queryContext.ExecuteScalar().LongValue;
         }
@@ -88,7 +99,16 @@ namespace TOne.WhS.Jazz.Data.RDB
 
             queryContext.ExecuteNonQuery();
         }
-        internal void AddJoinToDraftReport(RDBJoinContext joinContext,string originalTableAlias,string draftReportTableAlias,string originalTableReportIdColumnName)
+        internal void SetSelectQuery(RDBSelectQuery selectQuery,RDBSelectColumnsContext selectColumns, string originalTableAlias,string draftReportTableAlias,string originalTableReportIdColumnName,string switchNameAlias,string directionAlias,string transactionTypeAlias,long processInstanceId)
+        {
+            var joinContext = selectQuery.Join();
+            joinContext.JoinOnEqualOtherTableColumn(TABLE_NAME, draftReportTableAlias, COL_ID, originalTableAlias, originalTableReportIdColumnName);
+
+            selectColumns.Column(draftReportTableAlias,COL_SwitchName, switchNameAlias);
+            selectColumns.Column(draftReportTableAlias,COL_Direction, directionAlias);
+            selectColumns.Column(draftReportTableAlias,COL_TransactionType, transactionTypeAlias);
+        }
+        internal void AddJoinToDraftReport(RDBJoinContext joinContext, string originalTableAlias, string draftReportTableAlias, string originalTableReportIdColumnName)
         {
             joinContext.JoinOnEqualOtherTableColumn(TABLE_NAME, draftReportTableAlias, COL_ID, originalTableAlias, originalTableReportIdColumnName);
         }
@@ -101,7 +121,7 @@ namespace TOne.WhS.Jazz.Data.RDB
 
         #region Private Methods
 
-        private BaseRDBDataProvider GetDataProvider()
+        private BaseRDBDataProvider GetDataProvider() 
         {
             return RDBDataProviderFactory.CreateProvider("WhS_Jazz", "WhSJAZZERPIntegTransactionDBConnStringKey", "WhSJAZZERPIntegTransactionDBConnString");
         }
@@ -116,7 +136,7 @@ namespace TOne.WhS.Jazz.Data.RDB
                 ReportDefinitionId = reader.GetGuid(COL_ReportDefinitionID),
                 ReportId = reader.GetLong(COL_ID),
                 SheetName = reader.GetString(COL_SheetName),
-                TransactionTypeId = reader.GetNullableGuid(COL_TransactionTypeID)
+                TransactionTypeId = reader.GetNullableGuid(COL_TransactionTypeID),
             };
         }
 

@@ -12,6 +12,9 @@ namespace TOne.WhS.Jazz.Entities
         public string SheetName { get; set; }
         public Guid? TransactionTypeId { get; set; }
         public bool IsTaxTransaction { get; set; }
+        public string SwitchName { get; set; }
+        public ReportDefinitionDirection Direction { get; set; }
+        public string TransactionTypeName { get; set; }
         public List<JazzTransactionsReportData> ReportData { get; set; }
     }
     public class JazzTransactionsReportData
@@ -20,7 +23,6 @@ namespace TOne.WhS.Jazz.Entities
         public string TransactionCode { get; set; }
         public decimal Credit { get; set; }
         public decimal Debit { get; set; }
+        public string CarriersNames { get; set; }
     }
-
-
 }

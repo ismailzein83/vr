@@ -25,6 +25,10 @@ namespace TOne.WhS.Jazz.Data.RDB
         const string COL_TransactionDescription = "TransactionDescription";
         const string COL_Credit = "Credit";
         const string COL_Debit = "Debit";
+        const string COL_SwitchName = "SwitchName";
+        const string COL_Direction = "Direction";
+        const string COL_CarriersNames = "CarriersNames";
+        const string COL_TransactionType = "TransactionType";
         const string COL_CreatedTime = "CreatedTime";
 
         #endregion
@@ -41,6 +45,10 @@ namespace TOne.WhS.Jazz.Data.RDB
             columns.Add(COL_TransactionDescription, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_Credit, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 26, Precision = 6 });
             columns.Add(COL_Debit, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 26, Precision = 6 });
+            columns.Add(COL_SwitchName, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
+            columns.Add(COL_Direction, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CarriersNames, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_TransactionType, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -68,7 +76,7 @@ namespace TOne.WhS.Jazz.Data.RDB
             var fromSelect = insertQuery.FromSelect();
 
             DraftReportTransactionDataManager draftReportTransactionDataManager = new DraftReportTransactionDataManager();
-            draftReportTransactionDataManager.SetSelectQuery(fromSelect, TABLE_ALIAS, processInstanceId, COL_TransactionCode, COL_TransactionDescription, COL_Credit, COL_Debit);
+            draftReportTransactionDataManager.SetSelectQuery(fromSelect, "draftReportTransactions", processInstanceId, COL_TransactionCode, COL_TransactionDescription, COL_Credit, COL_Debit,COL_SwitchName,COL_Direction,COL_CarriersNames,COL_TransactionType);
             queryContext.ExecuteNonQuery();
         }
 
