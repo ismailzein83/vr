@@ -30,9 +30,9 @@ namespace TOne.WhS.Jazz.Business
             {
                 JazzReportDefinitionManager jazzReportDefinitionManager = new JazzReportDefinitionManager();
 
-                transactionsReports = transactionsReports.OrderBy(x => jazzReportDefinitionManager.GetJazzReportDefinitionName(x.ReportDefinitionId)).ThenBy(x => x.SheetName).ToList();
+                transactionsReports = transactionsReports.OrderBy(x => jazzReportDefinitionManager.GetJazzReportDefinitionOrder(x.ReportDefinitionId)).ThenBy(x => jazzReportDefinitionManager.GetJazzReportDefinitionName(x.ReportDefinitionId)).ThenBy(x => x.SheetName).ToList();
 
-                var reportsIds = transactionsReports.MapRecords(x=>x.ReportId).ToList();
+                var reportsIds = transactionsReports.MapRecords(x => x.ReportId).ToList();
                 var transactionsReportsDictionary = transactionsReports.ToDictionary(x => x.ReportId, x => x);
                 IDraftReportTransactionDataManager draftReportTransactionDataManager = JazzDataManagerFactory.GetDataManager<IDraftReportTransactionDataManager>();
                 var transactionsReportsData = draftReportTransactionDataManager.GetTransactionsReportsData(reportsIds);

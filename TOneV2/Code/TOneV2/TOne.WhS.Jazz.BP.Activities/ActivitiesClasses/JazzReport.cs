@@ -13,6 +13,7 @@ namespace TOne.WhS.Jazz.BP.Activities
         public ReportDefinitionDirection Direction { get; set; }
         public AmountMeasureType? AmountMeasureType { get; set; }
         public TaxOption? TaxOption { get; set; }
+        public int? Order { get; set; }
         public List<JazzReportData> ReportData { get; set; }
     }
     public class JazzReportData

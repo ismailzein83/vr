@@ -27,7 +27,11 @@ namespace TOne.WhS.Jazz.Business
             return GetJazzReportDefinitionById(reportId).Name;
 
         }
-
+        public int GetJazzReportDefinitionOrder(Guid reportId)
+        {
+            var order = GetJazzReportDefinitionById(reportId).Order;
+            return order.HasValue ? order.Value : Int32.MaxValue;
+        }
         public JazzReportDefinition GetJazzReportDefinitionById(Guid reportId)
         {
             var reports = GetCachedReportDefinitions();
@@ -72,6 +76,10 @@ namespace TOne.WhS.Jazz.Business
                         var currencyId = genericBusinessEntity.FieldValues.GetRecord("CurrencyId");
                         if (currencyId != null)
                             reportDefintion.CurrencyId = (int)currencyId;
+                        var order = genericBusinessEntity.FieldValues.GetRecord("Order");
+                        if (order != null)
+                            reportDefintion.Order = (int)order;
+
 
                         reportDefintion.Settings = (JazzReportDefinitionSettings)genericBusinessEntity.FieldValues.GetRecord("Settings");
                         result.Add(reportDefintion.JazzReportDefinitionId, reportDefintion);

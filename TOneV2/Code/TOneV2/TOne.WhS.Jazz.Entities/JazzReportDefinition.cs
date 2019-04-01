@@ -23,6 +23,8 @@ namespace TOne.WhS.Jazz.Entities
         public decimal? SplitRateValue { get; set; }
         public JazzReportDefinitionSettings Settings { get; set; }
         public bool IsEnabled { get; set; }
+        public int? Order { get; set;
+        }
 
     }
     public class JazzReportDefinitionSettings

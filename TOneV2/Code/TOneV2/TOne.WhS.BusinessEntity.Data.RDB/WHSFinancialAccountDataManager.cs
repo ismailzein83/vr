@@ -78,6 +78,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (financialAccountToEdit.EED.HasValue)
                 updateQuery.Column(COL_EED).Value(financialAccountToEdit.EED.Value);
 
+            if (financialAccountToEdit.Settings != null)
+                updateQuery.Column(COL_FinancialAccountSettings).Value(Serializer.Serialize(financialAccountToEdit.Settings));
+
             if (financialAccountToEdit.LastModifiedBy.HasValue)
                 updateQuery.Column(COL_LastModifiedBy).Value(financialAccountToEdit.LastModifiedBy.Value);
 

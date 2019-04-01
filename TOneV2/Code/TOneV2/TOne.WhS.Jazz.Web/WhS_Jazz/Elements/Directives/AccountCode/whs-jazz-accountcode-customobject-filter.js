@@ -2,9 +2,9 @@
 
     'use strict';
 
-    whsJazzAccountCodeCustomObjectFilterDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService','WhS_Jazz_AccountCodeAPIService'];
+    whsJazzAccountCodeCustomObjectFilter.$inject = ["UtilsService", "VRUIUtilsService","VR_GenericData_ListRecordFilterOperatorEnum"];
 
-    function whsJazzAccountCodeCustomObjectFilterDirective(UtilsService, VRUIUtilsService, VRNotificationService, WhS_Jazz_AccountCodeAPIService) {
+    function whsJazzAccountCodeCustomObjectFilter(UtilsService, VRUIUtilsService, VR_GenericData_ListRecordFilterOperatorEnum) {
         return {
             restrict: "E",
             scope: {
@@ -36,15 +36,15 @@
                     carriersSelectorAPI = api;
                     carriersSelectorReadyPromiseDeferred.resolve();
                 };
-                $scope.scopeModel.normalColNum = ctrl.normalColNum;
+                $scope.scopeModel.normalColNum = ctrl.normalColNum ? ctrl.normalColNum : 8;  
                 
                 defineAPI();
             }
 
-            function loadCarriersSelector() {
+            function loadCarriersSelector(payload) {
                 var carriersSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 carriersSelectorReadyPromiseDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(carriersSelectorAPI, undefined, carriersSelectorLoadPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(carriersSelectorAPI, payload, carriersSelectorLoadPromiseDeferred);
                 });
                 return carriersSelectorLoadPromiseDeferred.promise;
             } 
@@ -52,27 +52,18 @@
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
-                    return loadCarriersSelector();
+                api.load = function (payload) {
+                    var fieldValue = payload.fieldValue;
+                    return loadCarriersSelector({ selectedIds: (fieldValue != undefined) ? fieldValue.CarriersIds : undefined });
                 };
 
-                api.getSelectedIds = function () {
-                    var payload = {};
-                    var Carriers = [];
-                    if (carriersSelectorAPI != undefined && carriersSelectorAPI.getSelectedIds() != undefined) {
-                        var selectedIds = carriersSelectorAPI.getSelectedIds();
-                        for (var i = 0; i < selectedIds.length; i++) {
-                            Carriers.push({
-                                CarrierAccountId: selectedIds[i]
-                            });
-                        }
-                    }
-                    
-                    payload.Carriers = {
-                        $type:"TOne.WhS.Jazz.Entities.AccountCodeCarriers,TOne.WhS.Jazz.Entities",
-                        Carriers: Carriers
+                api.getData = function () {
+                   var data= {
+                       $type: "TOne.WhS.Jazz.Entities.AccountCodeCarriersRecordFilter,TOne.WhS.Jazz.Entities",
+                       CarriersIds: carriersSelectorAPI.getSelectedIds(),
+                       CompareOperator: VR_GenericData_ListRecordFilterOperatorEnum.In.value
                     };
-                    return payload; 
+                    return data;
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -82,6 +73,6 @@
         }
     }
 
-    app.directive('whsJazzAccountcodeCustomobjectFilterDirective', whsJazzAccountCodeCustomObjectFilterDirective);
+    app.directive('whsJazzAccountcodeCustomobjectFilter', whsJazzAccountCodeCustomObjectFilter);
 
 })(app);

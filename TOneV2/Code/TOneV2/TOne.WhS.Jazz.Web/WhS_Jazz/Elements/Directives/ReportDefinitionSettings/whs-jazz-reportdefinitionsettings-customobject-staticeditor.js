@@ -89,7 +89,7 @@
                 };
 
                 $scope.scopeModel.validateRegions = function () {
-                    if ($scope.scopeModel.regions.length == 0 )
+                    if ($scope.scopeModel.regions.length == 0)
                         return 'You Should At Least Add One Region ';
                     if (validateRegionDuplicates($scope.scopeModel.regions))
                         return 'Duplicate Regions  Exists';
@@ -122,17 +122,14 @@
                     currencySelectorReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.onAmountTypeSelectionChanged = function (value) {
-                    if (amountTypeSelectorAPI) {
-                        if (value) {
-                            $scope.scopeModel.isCurrencyRequired = true;
-                            if (amountTypeSelectedPromise != undefined) {
-                                amountTypeSelectedPromise = undefined;
-                            }
-                            else {
-
-                                currencySelectorAPI.load({ selectSystemCurrency: true });
-                                $scope.scopeModel.splitRateValue = undefined;
-                            }
+                    if (value) {
+                        $scope.scopeModel.isCurrencyRequired = true;
+                        if (amountTypeSelectedPromise != undefined) {
+                            amountTypeSelectedPromise = undefined;
+                        }
+                        else {
+                            currencySelectorAPI.load({ selectSystemCurrency: true });
+                            $scope.scopeModel.splitRateValue = undefined;
                         }
                     }
                 };
@@ -255,7 +252,6 @@
                 var amountTypeSelectorLoadromiseDeferred = UtilsService.createPromiseDeferred();
                 amountTypeSelectorReadyPromiseDeferred.promise.then(function () {
                     VRUIUtilsService.callDirectiveLoad(amountTypeSelectorAPI, payload, amountTypeSelectorLoadromiseDeferred);
-                    amountTypeSelectedPromise = UtilsService.createPromiseDeferred();
                 });
                 return amountTypeSelectorLoadromiseDeferred.promise;
             }
@@ -277,7 +273,9 @@
                         if (payload != undefined && payload.selectedValues != undefined && payload.selectedValues.Settings != undefined) {
                             selectedValues = payload.selectedValues;
                             var settings = selectedValues.Settings;
-                          
+                            if (selectedValues != undefined && selectedValues.AmountType != undefined)
+                                amountTypeSelectedPromise = UtilsService.createPromiseDeferred();
+
                             reportDefintionFilterGroup = settings.ReportFilter;
                             if (settings.MarketSettings != undefined) {
                                 var marketOptions = settings.MarketSettings.MarketOptions;

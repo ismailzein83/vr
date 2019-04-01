@@ -23,7 +23,7 @@ namespace TOne.WhS.Jazz.BP.Activities
             var excelFile = new VRExcelFile();
             if (jazzReports != null && jazzReports.Count > 0)
             {
-                jazzReports= jazzReports.OrderBy(x => x.ReportName).ToList();
+                jazzReports = jazzReports.OrderBy(x => x.Order.HasValue ? x.Order.Value : Int32.MaxValue).ThenBy(x => x.ReportName).ToList();
                 foreach(var report in jazzReports)
                 {
                     var excelSheet = excelFile.CreateSheet();
