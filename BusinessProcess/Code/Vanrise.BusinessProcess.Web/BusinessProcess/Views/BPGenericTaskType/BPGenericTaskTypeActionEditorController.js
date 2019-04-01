@@ -168,9 +168,7 @@
                 }
             };
 
-            return UtilsService.waitPromiseNode(rootPromiseNode).finally(function () {
-                taskTypeActionEntity = undefined;
-            });
+            return UtilsService.waitPromiseNode(rootPromiseNode);
         }
 
 
@@ -194,6 +192,7 @@
 
         function buildTaskTypeActionObjFromScope() {
             var obj = {};
+            obj.TaskTypeActionId = taskTypeActionEntity != undefined ? taskTypeActionEntity.TaskTypeActionId : UtilsService.guid();
             obj.Name = $scope.scopeModel.Name;
             obj.ButtonType = buttonTypesSelectorAPI.getSelectedIds();
             obj.Settings = actionSettingsSelectorAPI.getData();
