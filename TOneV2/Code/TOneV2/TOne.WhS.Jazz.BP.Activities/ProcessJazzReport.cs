@@ -82,6 +82,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                     Direction = reportDefinition.Direction,
                     AmountMeasureType = reportDefinition.AmountMeasureType,
                     TaxOption= reportDefinition.TaxOption,
+                    Order=reportDefinition.Order,
                     ReportData = reportData
                 };
 
@@ -251,20 +252,24 @@ namespace TOne.WhS.Jazz.BP.Activities
         {
             SwitchCodeManager switchCodeManager = new SwitchCodeManager();
             TaxCodeManager taxCodeManger = new TaxCodeManager();
+            SwitchManager switchManager = new SwitchManager();
+            var switchName = switchManager.GetSwitchName(reportDefinition.SwitchId);
 
             var switchCode = switchCodeManager.GetSwitchCodeBySwitchId(reportDefinition.SwitchId);
             switchCode.ThrowIfNull("switchCode", reportDefinition.JazzReportDefinitionId);
             var taxCode = taxCodeManger.GetTaxCode(reportDefinition.SwitchId, reportDefinition.Direction);
             if (taxCode == null)
             {
-                SwitchManager switchManager = new SwitchManager();
-                throw new VRBusinessException(string.Format("Missing Tax Code For Switch: '{0}' & Direction: '{1}'", switchManager.GetSwitchName(reportDefinition.SwitchId), reportDefinition.Direction));
+                throw new VRBusinessException(string.Format("Missing Tax Code For Switch: '{0}' & Direction: '{1}'", switchName, reportDefinition.Direction));
             }
             return new JazzTransactionsReport
             {
                 ReportDefinitionId = reportDefinition.JazzReportDefinitionId,
                 SheetName = string.Concat(reportDefinition.Name, " Tax"),
                 IsTaxTransaction = true,
+                SwitchName = switchName,
+                Direction = reportDefinition.Direction,
+                TransactionTypeName = "Zero Tax",
                 ReportData = new List<JazzTransactionsReportData>
                 {
                     new JazzTransactionsReportData
@@ -272,7 +277,8 @@ namespace TOne.WhS.Jazz.BP.Activities
                         TransationDescription = string.Format("{0} {1}",switchCode.Name,taxCode.Name ),
                         TransactionCode =string.Format("{0}-0000-0000-0000-0000-0000-0000-000000-{1}-0000-0000-0000",switchCode.Code, taxCode.Code),
                         Credit = 0,
-                        Debit = 0
+                        Debit = 0,
+                        CarriersNames = null
                     }
                 }
             };
@@ -280,31 +286,31 @@ namespace TOne.WhS.Jazz.BP.Activities
         private List<JazzTransactionsReport> GetTransactionsReports(JazzReportDefinition reportDefinition, Dictionary<int,JazzReportInfo> reportsInfoDictionary, List<TransactionType> transactionTypes,bool applyTax,  CodeActivityContext context)
         {
             var transactionsReports = new List<JazzTransactionsReport>();
-
+            SwitchManager switchManager = new SwitchManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            SwitchCodeManager switchCodeManager = new SwitchCodeManager();
+            TaxCodeManager taxCodeManger = new TaxCodeManager();
+            var switchName = switchManager.GetSwitchName(reportDefinition.SwitchId);
             foreach (var transactionType in transactionTypes)
             {
                 List<JazzTransactionsReportData> transactionsReportsData = null;
                 AccountCodeManager accountCodeManager = new AccountCodeManager();
                 var accountCodes = accountCodeManager.GetAccountCodes(transactionType.ID, reportDefinition.SwitchId).ToList();
-
                 if (accountCodes != null && accountCodes.Count > 0)
                 {
-                    SwitchCodeManager switchCodeManager = new SwitchCodeManager();
-                    TaxCodeManager taxCodeManger = new TaxCodeManager();
                     transactionsReportsData = new List<JazzTransactionsReportData>();
 
 
                     var switchCode = switchCodeManager.GetSwitchCodeBySwitchId(reportDefinition.SwitchId);
                     if (switchCode == null)
                     {
-                        SwitchManager switchManager = new SwitchManager();
-                        throw new VRBusinessException(string.Format("Missing Switch Code For Switch:'{0}'", switchManager.GetSwitchName(reportDefinition.SwitchId)));
+                        throw new VRBusinessException(string.Format("Missing Switch Code For Switch:'{0}'", switchName));
                     }
-
                     foreach (var accountCode in accountCodes)
                     {
                         if (accountCode.Carriers != null && accountCode.Carriers.Carriers != null && accountCode.Carriers.Carriers.Count > 0)
                         {
+                            List<string> carriersNames = new List<string>();
                             if (transactionType.TransactionScope == TransactionScope.Account)
                             {
                                 decimal amount = 0;
@@ -317,6 +323,7 @@ namespace TOne.WhS.Jazz.BP.Activities
 
                                         if (reportsInfoDictionary.TryGetValue(carrier.CarrierAccountId, out reportInfo))
                                         {
+                                            carriersNames.Add(carrierAccountManager.GetCarrierAccountName(carrier.CarrierAccountId));
                                             var reportData = reportInfo.ReportData;
                                             amount += reportData.Amount;
                                             tax += reportData.Tax;
@@ -327,8 +334,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                             }
                                             else
                                             {
-                                                SwitchManager switchManager = new SwitchManager();
-                                                throw new VRBusinessException(string.Format("Duplicate Account Code Found For The Combination: Carrier Account: '{0}' Switch: '{1}' & Transaction Type: '{2}'", reportData.CarrierAccountName, switchManager.GetSwitchName(reportDefinition.SwitchId), transactionType.Name));
+                                                throw new VRBusinessException(string.Format("Duplicate Account Code Found For The Combination: Carrier Account: '{0}' Switch: '{1}' & Transaction Type: '{2}'", reportData.CarrierAccountName, switchName, transactionType.Name));
                                             }
                                         }
                                     }
@@ -343,6 +349,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                         TransactionCode = string.Format("{0}-0000-0000-0000-0000-0000-0000-000000-{1}-0000-0000-0000", switchCode.Code, accountCode.Code),
                                         Credit = transactionType.IsCredit ? amount : 0,
                                         Debit = transactionType.IsCredit ? 0 : amount,
+                                        CarriersNames =carriersNames.Count!=0? string.Join(",", carriersNames):null
                                     });
                                 }
                                 else
@@ -350,8 +357,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                     var taxCode = taxCodeManger.GetTaxCode(reportDefinition.SwitchId, reportDefinition.Direction);
                                     if (taxCode == null)
                                     {
-                                        SwitchManager switchManager = new SwitchManager();
-                                        throw new VRBusinessException(string.Format("Missing Tax Code For Switch: '{0}' & Direction: '{1}'", switchManager.GetSwitchName(reportDefinition.SwitchId), reportDefinition.Direction));
+                                        throw new VRBusinessException(string.Format("Missing Tax Code For Switch: '{0}' & Direction: '{1}'", switchName, reportDefinition.Direction));
                                     }
 
                                     transactionsReportsData.Add(new JazzTransactionsReportData
@@ -360,6 +366,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                         TransactionCode = string.Format("{0}-0000-0000-0000-0000-0000-0000-000000-{1}-0000-0000-0000", switchCode.Code, taxCode.Code),
                                         Credit = transactionType.IsCredit ? 0 : tax,
                                         Debit = transactionType.IsCredit ? tax : 0,
+                                        CarriersNames = carriersNames.Count != 0 ? string.Join(",", carriersNames) : null
                                     });
                                 }
                             }
@@ -372,11 +379,14 @@ namespace TOne.WhS.Jazz.BP.Activities
                                 ProductServiceManager productServiceManager = new ProductServiceManager();
                                 foreach (var carrier in accountCode.Carriers.Carriers)
                                 {
+
                                     if (reportsInfoDictionary != null)
                                     {
                                         JazzReportInfo reportInfo = null;
                                         if (reportsInfoDictionary.TryGetValue(carrier.CarrierAccountId, out reportInfo) && reportInfo.ReportData.Markets != null && reportInfo.ReportData.Markets.Count > 0)
                                         {
+                                            carriersNames.Add(carrierAccountManager.GetCarrierAccountName(carrier.CarrierAccountId));
+
                                             var reportData = reportInfo.ReportData;
                                             if (reportInfo.AccountCodeFound == false)
                                             {
@@ -384,8 +394,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                             }
                                             else
                                             {
-                                                SwitchManager switchManager = new SwitchManager();
-                                                throw new VRBusinessException(string.Format("Duplicate Account Code Found For The Combination: Carrier Account: '{0}' Switch: '{1}' & Transaction Type: '{2}'", reportData.CarrierAccountName, switchManager.GetSwitchName(reportDefinition.SwitchId), transactionType.Name));
+                                                throw new VRBusinessException(string.Format("Duplicate Account Code Found For The Combination: Carrier Account: '{0}' Switch: '{1}' & Transaction Type: '{2}'", reportData.CarrierAccountName,switchName, transactionType.Name));
                                             }
 
                                             foreach (var market in reportData.Markets)
@@ -395,7 +404,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                                     foreach (var region in market.Regions)
                                                     {
                                                         JazzTransactionsReportData transactionData = null;
-                                                        var regionUniqueKey = string.Concat(market.MarketId, "_", region.RegionId);
+                                                        var regionUniqueKey = string.Concat(market.MarketId, "_", market.CustomerTypeId, "_", region.RegionId);
 
                                                         if (!transactionReportsByRegionKey.TryGetValue(regionUniqueKey, out transactionData))
                                                         {
@@ -414,7 +423,8 @@ namespace TOne.WhS.Jazz.BP.Activities
                                                                 TransationDescription = string.Format("{0} {1} {2} {3} {4} {5}", switchCode.Name, transactionRegion.Name, transactionMarket.Name, transactionCustomerType.Name, transactionProductService.Name, accountCode.Name),
                                                                 TransactionCode = string.Format("{0}-{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}-{9}-{10}-{11}", switchCode.Code, transactionRegion.Code, departement, lobs, transactionMarket.Code, transactionCustomerType.Code, transactionProductService.Code, productsPricing, accountCode.Code, relatedParties, future1, future2),
                                                                 Credit = transactionType.IsCredit ? region.RegionValue : 0,
-                                                                Debit = transactionType.IsCredit ? 0 : region.RegionValue
+                                                                Debit = transactionType.IsCredit ? 0 : region.RegionValue,
+                                                                CarriersNames = carriersNames.Count != 0 ? string.Join(",", carriersNames) : null
                                                             };
                                                             transactionsReportsData.Add(newTransactionReportData);
                                                             transactionReportsByRegionKey.Add(regionUniqueKey, newTransactionReportData);
@@ -436,12 +446,12 @@ namespace TOne.WhS.Jazz.BP.Activities
                         }
                     }
                     var jazzReportsWithNoCarrierAccounts = reportsInfoDictionary.FindAllRecords(x => !x.AccountCodeFound).ToList();
+
                     if (jazzReportsWithNoCarrierAccounts != null && jazzReportsWithNoCarrierAccounts.Count > 0)
                     {
-                        SwitchManager switchManager = new SwitchManager();
                         foreach (var report in jazzReportsWithNoCarrierAccounts)
                         {
-                            context.WriteBusinessTrackingMsg(LogEntryType.Warning, $"Carrier '{report.ReportData.CarrierAccountName}' does not have an Account Code on Switch '{switchManager.GetSwitchName(reportDefinition.SwitchId)}' & Transaction Type '{transactionType.Name}'");
+                            context.WriteBusinessTrackingMsg(LogEntryType.Warning, $"Carrier '{report.ReportData.CarrierAccountName}' does not have an Account Code on Switch '{switchName}' & Transaction Type '{transactionType.Name}'");
                         }
                     }
                     foreach (var report in reportsInfoDictionary.Values)
@@ -456,7 +466,10 @@ namespace TOne.WhS.Jazz.BP.Activities
                     ReportDefinitionId = reportDefinition.JazzReportDefinitionId,
                     SheetName = string.Concat(reportDefinition.Name.Length > 27 ? reportDefinition.Name.Substring(0, 27) : reportDefinition.Name, " ", applyTax ? "Tax" : transactionType.Name.Substring(0, 3)),
                     TransactionTypeId = transactionType.ID,
-                    IsTaxTransaction = false
+                    IsTaxTransaction = false,
+                    SwitchName = switchName,
+                    Direction = reportDefinition.Direction,
+                    TransactionTypeName = applyTax ? "Tax" : transactionType.Name,
                 };
 
                 if (transactionsReportsData != null && transactionsReportsData.Count > 0)
