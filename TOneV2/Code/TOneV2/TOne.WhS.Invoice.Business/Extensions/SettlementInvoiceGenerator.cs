@@ -180,6 +180,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoicedetail.DueToSystemAmountAfterCommission += originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoicedetail.DueToSystemAmountAfterCommissionWithTaxes += originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoicedetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
+                                        settlementInvoicedetail.DueToSystemFullAmount += originalDataCurrrency.OriginalAmount.Value;
+
                                     }
                                     else
                                     {
@@ -201,9 +203,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoicedetail.DueToSystemAmount += invoiceItemDetails.AmountAfterCommissionWithTaxes;
                                         settlementInvoicedetail.DueToSystemAmountAfterCommission += invoiceItemDetails.AmountAfterCommissionWithTaxes;
                                         settlementInvoicedetail.DueToSystemAmountAfterCommissionWithTaxes += invoiceItemDetails.AmountAfterCommissionWithTaxes;
+                                        settlementInvoicedetail.DueToSystemFullAmount += invoiceItemDetails.TotalFullAmount;
                                         settlementInvoicedetail.DueToSystemNumberOfCalls += invoiceItemDetails.NumberOfCalls;
                                         settlementInvoicedetail.DueToSystemAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
                                         settlementInvoicedetail.DueToSystemTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
+                                        settlementInvoicedetail.DueToSystemTotalDealAmount += invoiceItemDetails.TotalDealAmount;
+                                        settlementInvoicedetail.DueToSystemTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
+
                                     }
                                     settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
                                 }
@@ -296,6 +302,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoicedetail.DueToCarrierAmountAfterCommission += originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoicedetail.DueToCarrierAmountAfterCommissionWithTaxes += originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoicedetail.DueToCarrierNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
+                                        settlementInvoicedetail.DueToCarrierFullAmount += originalDataCurrrency.OriginalAmount.Value;
+
                                     }
                                     else
                                     {
@@ -320,6 +328,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoicedetail.DueToCarrierNumberOfCalls += invoiceItemDetails.NumberOfCalls;
                                         settlementInvoicedetail.DueToCarrierAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
                                         settlementInvoicedetail.DueToCarrierTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
+                                        settlementInvoicedetail.DueToCarrierTotalDealAmount += invoiceItemDetails.TotalDealAmount;
+                                        settlementInvoicedetail.DueToCarrierFullAmount += invoiceItemDetails.TotalFullAmount;
+
+                                        settlementInvoicedetail.DueToCarrierTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
                                     }
                                     settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
 
@@ -615,7 +627,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, string partnerType, bool isApplicableToCustomer, bool isApplicableToSupplier, Dictionary<String, SettlementInvoiceItemDetail> settlementInvoiceByCurrency, int currencyId, DateTime issueDate)
         {
 
-
+            CurrencyExchangeRateManager exchangeRateManager = new CurrencyExchangeRateManager();
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
 
             var sattlementInvoiceDetails = new SattlementInvoiceDetails
@@ -707,6 +719,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     generatedInvoiceItemSet.SetName = string.Format("SettlementInvoiceByCurrency");
                     generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
 
+                    sattlementInvoiceDetails.DueToCarrierTotalDealAmount += settlementInvoice.Value.DueToCarrierTotalDealAmount;
+                    sattlementInvoiceDetails.DueToCarrierTotalSMSAmount += settlementInvoice.Value.DueToCarrierTotalSMSAmount;
+                    sattlementInvoiceDetails.DueToSystemTotalDealAmount += settlementInvoice.Value.DueToSystemTotalDealAmount;
+                    sattlementInvoiceDetails.DueToSystemTotalSMSAmount += settlementInvoice.Value.DueToSystemTotalSMSAmount;
+
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
                         Details = settlementInvoice.Value,
@@ -722,7 +739,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             if (settlementInvoiceItemSummaryByCurrency != null && settlementInvoiceItemSummaryByCurrency.Count > 0)
             {
-                CurrencyExchangeRateManager exchangeRateManager = new CurrencyExchangeRateManager();
                 GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
                 generatedInvoiceItemSet.SetName = "SettlementInvoiceSummary";
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
@@ -833,6 +849,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
                 }
             }
+            sattlementInvoiceDetails.NoCarrierDeals = sattlementInvoiceDetails.DueToCarrierTotalDealAmount == 0;
+            sattlementInvoiceDetails.NoCarrierSMS = sattlementInvoiceDetails.DueToCarrierTotalSMSAmount == 0;
+            sattlementInvoiceDetails.NoCarrierVoice = sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes == 0;
+            sattlementInvoiceDetails.NoCarrierRecurringCharges = sattlementInvoiceDetails.DueToCarrierAmountRecurringCharges == 0;
+
+            sattlementInvoiceDetails.NoSystemDeals = sattlementInvoiceDetails.DueToSystemTotalDealAmount == 0;
+            sattlementInvoiceDetails.NoSystemSMS = sattlementInvoiceDetails.DueToSystemTotalSMSAmount == 0;
+            sattlementInvoiceDetails.NoSystemVoice = sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes == 0;
+            sattlementInvoiceDetails.NoSystemRecurringCharges = sattlementInvoiceDetails.DueToSystemAmountRecurringCharges == 0;
 
             return new GeneratedInvoice
             {

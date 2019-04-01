@@ -664,12 +664,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					Duration = _invoiceGenerationManager.GetMeasureValue<Decimal>(analyticRecord, "SaleDuration"),
 					NumberOfCalls = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "NumberOfCalls"),
 					NumberOfSMS = _invoiceGenerationManager.GetMeasureValue<int>(analyticRecord, "NumberOfSMS"),
-					Amount = saleNetValue,
 					Month = _invoiceGenerationManager.GetDimensionValue<string>(analyticRecord, 1),
-					TotalSMSAmount = saleNetValue
 				};
+                if (fillVoiceData)
+                    customerInvoiceBySaleCurrencyItemDetails.Amount = saleNetValue;
+                else
+                    customerInvoiceBySaleCurrencyItemDetails.TotalSMSAmount = saleNetValue;
 
-				if (commission.HasValue)
+                if (commission.HasValue)
 				{
 					customerInvoiceBySaleCurrencyItemDetails.AmountAfterCommission = customerInvoiceBySaleCurrencyItemDetails.Amount + ((customerInvoiceBySaleCurrencyItemDetails.Amount * commission.Value) / 100);
 					customerInvoiceBySaleCurrencyItemDetails.SMSAmountAfterCommission = customerInvoiceBySaleCurrencyItemDetails.TotalSMSAmount + ((customerInvoiceBySaleCurrencyItemDetails.TotalSMSAmount * commission.Value) / 100);
@@ -726,7 +728,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 							SMSAmountAfterCommissionWithTaxes = item.SMSAmountAfterCommissionWithTaxes,
 							Month = item.Month,
 							TotalFullAmount = item.SMSAmountAfterCommissionWithTaxes,
-						});
+                        });
 					}
 
 				}
