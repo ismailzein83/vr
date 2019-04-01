@@ -24,9 +24,11 @@ namespace Vanrise.BusinessProcess.Entities
     }
     public interface IBPGenericTaskTypeActionFilterConditionContext
     {
+        BPTask Task { get; set; }
     }
     public class BPGenericTaskTypeActionFilterConditionContext : IBPGenericTaskTypeActionFilterConditionContext
     {
+        public BPTask Task { get; set; }
     }
     public abstract class BPGenericTaskTypeActionSettings
     {
