@@ -17,6 +17,9 @@ namespace TOne.WhS.Invoice.Entities
         public decimal DueToSystemAmountAfterCommissionWithTaxes { get; set; }
         public decimal DueToSystemAmountRecurringCharges { get; set; }
         public decimal DueToSystemTotalTrafficAmount { get; set; }
+        public decimal DueToSystemTotalDealAmount { get; set; }
+        public decimal DueToSystemTotalSMSAmount { get; set; }
+        public decimal DueToSystemFullAmount { get; set; }
 
 
         public decimal DueToCarrierAmount { get; set; }
@@ -24,6 +27,9 @@ namespace TOne.WhS.Invoice.Entities
         public decimal DueToCarrierAmountAfterCommissionWithTaxes { get; set; }
         public decimal DueToCarrierAmountRecurringCharges { get; set; }
         public decimal DueToCarrierTotalTrafficAmount { get; set; }
+        public decimal DueToCarrierTotalDealAmount { get; set; }
+        public decimal DueToCarrierTotalSMSAmount { get; set; }
+        public decimal DueToCarrierFullAmount { get; set; }
 
         public int DueToSystemNumberOfCalls { get; set; }
         public int DueToCarrierNumberOfCalls { get; set; }

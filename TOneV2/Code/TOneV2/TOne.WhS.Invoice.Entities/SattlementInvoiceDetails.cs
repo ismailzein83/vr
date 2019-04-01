@@ -23,6 +23,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal DueToSystemTotalTrafficAmount { get; set; }
         public decimal DueToSystemTotalDealAmount { get; set; }
         public decimal DueToSystemTotalSMSAmount { get; set; }
+        public decimal DueToSystemFullAmount { get; set; }
 
         public decimal DueToCarrierAmount { get; set; }
         public decimal DueToCarrierAmountAfterCommission { get; set; }
@@ -31,6 +32,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal DueToCarrierTotalTrafficAmount { get; set; }
         public decimal DueToCarrierTotalDealAmount { get; set; }
         public decimal DueToCarrierTotalSMSAmount { get; set; }
+        public decimal DueToCarrierFullAmount { get; set; }
 
         public decimal DueToSystemDifference { get; set; }
         public decimal DueToCarrierDifference { get; set; }

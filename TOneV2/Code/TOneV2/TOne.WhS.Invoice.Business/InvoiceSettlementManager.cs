@@ -182,7 +182,7 @@ namespace TOne.WhS.Invoice.Business
                             var supplierInvoiceDetail = supplierInvoiceDetails.FindRecord(x => x.InvoiceId == invoiceDetail.Entity.InvoiceId && x.CurrencyId == currentInvoiceItemDetail.CurrencyId);
                             if (supplierInvoiceDetail != null)
                             {
-                                supplierInvoiceDetail.TotalAmountAfterCommission += currentInvoiceItemDetail.AmountAfterCommissionWithTaxes;
+                                supplierInvoiceDetail.TotalAmountAfterCommission += currentInvoiceItemDetail.TotalFullAmount;
                                 supplierInvoiceDetail.TotalNumberOfCalls += currentInvoiceItemDetail.NumberOfCalls;
                                 supplierInvoiceDetail.Duration += currentInvoiceItemDetail.Duration;
                                 supplierInvoiceDetail.OriginalAmount = originalAmount;
@@ -198,7 +198,7 @@ namespace TOne.WhS.Invoice.Business
                                 TotalNumberOfCalls = currentInvoiceItemDetail.NumberOfCalls,
                                 TimeZoneId = supplierDetail.TimeZoneId,
                                 CurrencyId = currentInvoiceItemDetail.CurrencyId,
-                                TotalAmountAfterCommission = currentInvoiceItemDetail.AmountAfterCommissionWithTaxes,
+                                TotalAmountAfterCommission = currentInvoiceItemDetail.TotalFullAmount,
                                 SupplierCurrency = _currencyManager.GetCurrencySymbol(currentInvoiceItemDetail.CurrencyId),
                                 DueDate = invoiceDetail.Entity.DueDate,
                                 Commission = supplierDetail.Commission,
@@ -496,11 +496,11 @@ namespace TOne.WhS.Invoice.Business
                                             decimal amountValue;
                                             if (!amountByCurrency.TryGetValue(currencySymbol, out amountValue))
                                             {
-                                                amountByCurrency.Add(currencySymbol, Math.Round(invoiceItemDetail.AmountAfterCommissionWithTaxes, normalPrecisionValue));
+                                                amountByCurrency.Add(currencySymbol, Math.Round(invoiceItemDetail.TotalFullAmount, normalPrecisionValue));
                                             }
                                             else
                                             {
-                                                amountByCurrency[currencySymbol] = amountValue + Math.Round(invoiceItemDetail.AmountAfterCommissionWithTaxes, normalPrecisionValue);
+                                                amountByCurrency[currencySymbol] = amountValue + Math.Round(invoiceItemDetail.TotalFullAmount, normalPrecisionValue);
                                             }
                                         }
                                     }

@@ -172,6 +172,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommission += originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommissionWithTaxes += originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += originalDataCurrrency.OriginalAmount.Value;
+
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = originalDataCurrrency.OriginalAmount.Value;
@@ -193,6 +195,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += invoiceItemDetails.NumberOfCalls;
                                         settlementInvoiceItemSummaryDetail.DueToSystemAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
                                         settlementInvoiceItemSummaryDetail.DueToSystemTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemTotalDealAmount += invoiceItemDetails.TotalDealAmount;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += invoiceItemDetails.TotalFullAmount;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = invoiceItemDetails.AmountAfterCommissionWithTaxes;
@@ -294,6 +299,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceItemSummaryDetail.DueToCarrierAmountAfterCommission += originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoiceItemSummaryDetail.DueToCarrierAmountAfterCommissionWithTaxes += originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoiceItemSummaryDetail.DueToCarrierNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
+                                       // settlementInvoiceItemSummaryDetail.DueToCarrierTotalDealAmount += invoiceItemDetails.TotalDealAmount;
+                                        settlementInvoiceItemSummaryDetail.DueToCarrierFullAmount += originalDataCurrrency.OriginalAmount.Value;
+                                       // settlementInvoiceItemSummaryDetail.DueToCarrierTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
+
+
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = originalDataCurrrency.OriginalAmount.Value;
@@ -315,6 +325,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceItemSummaryDetail.DueToCarrierNumberOfCalls += invoiceItemDetails.NumberOfCalls;
                                         settlementInvoiceItemSummaryDetail.DueToCarrierAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
                                         settlementInvoiceItemSummaryDetail.DueToCarrierTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
+                                        settlementInvoiceItemSummaryDetail.DueToCarrierTotalDealAmount += invoiceItemDetails.TotalDealAmount;
+                                        settlementInvoiceItemSummaryDetail.DueToCarrierFullAmount += invoiceItemDetails.TotalFullAmount;
+                                        settlementInvoiceItemSummaryDetail.DueToCarrierTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
+
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = invoiceItemDetails.AmountAfterCommissionWithTaxes;
@@ -393,29 +407,29 @@ namespace TOne.WhS.Invoice.Business.Extensions
             {
                 foreach (var settlementInvoiceItemSummary in settlementInvoiceItemSummaryByCurrency)
                 {
-                    decimal sum = settlementInvoiceItemSummary.Value.DueToCarrierAmountAfterCommissionWithTaxes - settlementInvoiceItemSummary.Value.DueToSystemAmountAfterCommissionWithTaxes;
-                    if (sum > 0)
+                    decimal difference = settlementInvoiceItemSummary.Value.DueToCarrierFullAmount - settlementInvoiceItemSummary.Value.DueToSystemFullAmount;
+                    if (difference > 0)
                     {
-                        settlementInvoiceItemSummary.Value.DueToCarrierDifference = sum;
+                        settlementInvoiceItemSummary.Value.DueToCarrierDifference = difference;
                         if (carrierSummary == null)
                             carrierSummary = new List<SettlementInvoiceDetailSummary>();
 
                         carrierSummary.Add(new SettlementInvoiceDetailSummary
                         {
-                            Amount = sum,
+                            Amount = difference,
                             CurrencyId = settlementInvoiceItemSummary.Value.CurrencyId,
                             CurrencyIdDescription = settlementInvoiceItemSummary.Value.CurrencyIdDescription,
                             // OriginalAmountWithCommission = commission.HasValue ? sum + ((sum * commission.Value) / 100) : sum,
                         });
 
                     }
-                    else if (sum < 0)
+                    else if (difference < 0)
                     {
-                        settlementInvoiceItemSummary.Value.DueToSystemDifference = Math.Abs(sum);
+                        settlementInvoiceItemSummary.Value.DueToSystemDifference = Math.Abs(difference);
 
                         if (systemSummary == null)
                             systemSummary = new List<SettlementInvoiceDetailSummary>();
-                        var amount = Math.Abs(sum);
+                        var amount = Math.Abs(difference);
                         systemSummary.Add(new SettlementInvoiceDetailSummary
                         {
                             Amount = amount,
@@ -719,12 +733,27 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     generatedInvoiceItemSet.SetName = string.Format("SettlementInvoiceByCurrency");
                     generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
 
-                    sattlementInvoiceDetails.DueToCarrierTotalDealAmount += settlementInvoice.Value.DueToCarrierTotalDealAmount;
-                    sattlementInvoiceDetails.DueToCarrierTotalSMSAmount += settlementInvoice.Value.DueToCarrierTotalSMSAmount;
-                    sattlementInvoiceDetails.DueToSystemTotalDealAmount += settlementInvoice.Value.DueToSystemTotalDealAmount;
-                    sattlementInvoiceDetails.DueToSystemTotalSMSAmount += settlementInvoice.Value.DueToSystemTotalSMSAmount;
+                    sattlementInvoiceDetails.DueToCarrierAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCarrierAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierAmountAfterCommission += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCarrierAmountAfterCommission, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCarrierAmountAfterCommissionWithTaxes, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierAmountRecurringCharges += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCarrierAmountRecurringCharges, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierTotalTrafficAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCarrierTotalTrafficAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierTotalDealAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCarrierTotalDealAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierTotalSMSAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCarrierTotalSMSAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToCarrierFullAmount += sattlementInvoiceDetails.DueToCarrierTotalTrafficAmount + sattlementInvoiceDetails.DueToCarrierAmountRecurringCharges + sattlementInvoiceDetails.DueToCarrierTotalDealAmount + sattlementInvoiceDetails.DueToCarrierTotalSMSAmount;
 
-                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                    sattlementInvoiceDetails.DueToSystemAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemAmountAfterCommission += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemAmountAfterCommission, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemAmountAfterCommissionWithTaxes, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemAmountRecurringCharges += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemAmountRecurringCharges, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemTotalTrafficAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemTotalTrafficAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemTotalDealAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemTotalDealAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemTotalSMSAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemTotalSMSAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
+                    sattlementInvoiceDetails.DueToSystemFullAmount += sattlementInvoiceDetails.DueToSystemTotalTrafficAmount + sattlementInvoiceDetails.DueToSystemAmountRecurringCharges + sattlementInvoiceDetails.DueToSystemTotalDealAmount + sattlementInvoiceDetails.DueToSystemTotalSMSAmount;
+
+
+
+                 generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
                         Details = settlementInvoice.Value,
                         Name = " "
@@ -737,6 +766,25 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             }
 
+            if (sattlementInvoiceDetails.DueToCarrierFullAmount > sattlementInvoiceDetails.DueToSystemFullAmount)
+            {
+                sattlementInvoiceDetails.DueToCarrierDifference = sattlementInvoiceDetails.DueToCarrierFullAmount - sattlementInvoiceDetails.DueToSystemFullAmount;
+            }
+            else
+            {
+                sattlementInvoiceDetails.DueToSystemDifference = sattlementInvoiceDetails.DueToSystemFullAmount - sattlementInvoiceDetails.DueToCarrierFullAmount;
+            }
+            sattlementInvoiceDetails.NoCarrierDeals = sattlementInvoiceDetails.DueToCarrierTotalDealAmount == 0;
+            sattlementInvoiceDetails.NoCarrierSMS = sattlementInvoiceDetails.DueToCarrierTotalSMSAmount == 0;
+            sattlementInvoiceDetails.NoCarrierVoice = sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes == 0;
+            sattlementInvoiceDetails.NoCarrierRecurringCharges = sattlementInvoiceDetails.DueToCarrierAmountRecurringCharges == 0;
+
+            sattlementInvoiceDetails.NoSystemDeals = sattlementInvoiceDetails.DueToSystemTotalDealAmount == 0;
+            sattlementInvoiceDetails.NoSystemSMS = sattlementInvoiceDetails.DueToSystemTotalSMSAmount == 0;
+            sattlementInvoiceDetails.NoSystemVoice = sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes == 0;
+            sattlementInvoiceDetails.NoSystemRecurringCharges = sattlementInvoiceDetails.DueToSystemAmountRecurringCharges == 0;
+
+
             if (settlementInvoiceItemSummaryByCurrency != null && settlementInvoiceItemSummaryByCurrency.Count > 0)
             {
                 GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
@@ -744,30 +792,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
                 foreach (var settlementInvoiceItemSummaryDetail in settlementInvoiceItemSummaryByCurrency)
                 {
-                    sattlementInvoiceDetails.DueToCarrierAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToCarrierAmount, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToCarrierAmountAfterCommission += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToCarrierAmountAfterCommission, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToCarrierAmountAfterCommissionWithTaxes, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToCarrierAmountRecurringCharges += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToCarrierAmountRecurringCharges, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToCarrierTotalTrafficAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToCarrierTotalTrafficAmount, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToSystemAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToSystemAmount, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToSystemAmountAfterCommission += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToSystemAmountAfterCommission, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToSystemAmountAfterCommissionWithTaxes, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToSystemAmountRecurringCharges += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToSystemAmountRecurringCharges, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToSystemTotalTrafficAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoiceItemSummaryDetail.Value.DueToSystemTotalTrafficAmount, settlementInvoiceItemSummaryDetail.Value.CurrencyId, currencyId, issueDate);
 
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
                         Details = settlementInvoiceItemSummaryDetail.Value,
                         Name = " "
                     });
-                }
-                if (sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes > sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes)
-                {
-                    sattlementInvoiceDetails.DueToCarrierDifference = sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes - sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes;
-                }
-                else 
-                {
-                    sattlementInvoiceDetails.DueToSystemDifference = sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes - sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes;
                 }
                 if (generatedInvoiceItemSet.Items.Count > 0)
                 {
@@ -849,15 +879,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
                 }
             }
-            sattlementInvoiceDetails.NoCarrierDeals = sattlementInvoiceDetails.DueToCarrierTotalDealAmount == 0;
-            sattlementInvoiceDetails.NoCarrierSMS = sattlementInvoiceDetails.DueToCarrierTotalSMSAmount == 0;
-            sattlementInvoiceDetails.NoCarrierVoice = sattlementInvoiceDetails.DueToCarrierAmountAfterCommissionWithTaxes == 0;
-            sattlementInvoiceDetails.NoCarrierRecurringCharges = sattlementInvoiceDetails.DueToCarrierAmountRecurringCharges == 0;
-
-            sattlementInvoiceDetails.NoSystemDeals = sattlementInvoiceDetails.DueToSystemTotalDealAmount == 0;
-            sattlementInvoiceDetails.NoSystemSMS = sattlementInvoiceDetails.DueToSystemTotalSMSAmount == 0;
-            sattlementInvoiceDetails.NoSystemVoice = sattlementInvoiceDetails.DueToSystemAmountAfterCommissionWithTaxes == 0;
-            sattlementInvoiceDetails.NoSystemRecurringCharges = sattlementInvoiceDetails.DueToSystemAmountRecurringCharges == 0;
+         
 
             return new GeneratedInvoice
             {
