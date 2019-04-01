@@ -9,7 +9,7 @@ namespace Vanrise.Common.Data.SQL
     {
         #region ctor/Local Variables
         public ProcessStateDataManager()
-            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
+            : base(GetConnectionStringName("VRCommonTransactionDBConnStringKey", "TransactionDBConnString"))
         {
 
         }
