@@ -54,6 +54,7 @@ namespace Vanrise.Analytic.Data.RDB
                         using System.Data;
                         using System.Linq;
                         using System.Collections.Generic;
+                        using Vanrise.Data.RDB;
 
                         namespace #NAMESPACE#
                         {
