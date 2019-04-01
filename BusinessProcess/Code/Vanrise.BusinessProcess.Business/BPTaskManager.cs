@@ -60,30 +60,7 @@ namespace Vanrise.BusinessProcess.Business
             taskDataManager.UpdateTaskExecution(executeBPTaskInput, BPTaskStatus.Completed);
             task = taskDataManager.GetTask(executeBPTaskInput.TaskId);
         }
-        public List<BPGenericTaskTypeAction> GetTaskTypeActions(long taskId)
-        {
-            var taskTypeActions = new List<BPGenericTaskTypeAction>();
-            BPTaskTypeManager taskTypeManager = new BPTaskTypeManager();
-            var task = GetTask(taskId);
-            task.ThrowIfNull("task", taskId);
-            var taskType = taskTypeManager.GetBPTaskType(task.TypeId);
-            taskType.ThrowIfNull("taskType", task.TypeId);
-            taskType.Settings.ThrowIfNull("taskType.Settings", task.TypeId);
-            var actions = taskType.Settings.GetActions();
-            if (actions != null && actions.Count > 0)
-            {
-                var context = new BPGenericTaskTypeActionFilterConditionContext()
-                {
-                    Task = task
-                };
-                foreach (var action in actions)
-                {
-                    if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(context))
-                        taskTypeActions.Add(action);
-                }
-            }
-            return taskTypeActions;
-        }
+       
         public List<int> GetAssignedUsers(long taskId)
         {
             var task = GetTask(taskId);

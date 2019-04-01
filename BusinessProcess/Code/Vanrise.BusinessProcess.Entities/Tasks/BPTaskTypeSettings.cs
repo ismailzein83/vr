@@ -13,10 +13,6 @@ namespace Vanrise.BusinessProcess.Entities
         public virtual string Editor { get; set; }
 
         public virtual bool AutoOpenTask { get; set; }
-        public virtual List<BPGenericTaskTypeAction> GetActions()
-        {
-            return null;
-        }
     }
 
     public class BPTaskTypeSettings : BaseBPTaskTypeSettings

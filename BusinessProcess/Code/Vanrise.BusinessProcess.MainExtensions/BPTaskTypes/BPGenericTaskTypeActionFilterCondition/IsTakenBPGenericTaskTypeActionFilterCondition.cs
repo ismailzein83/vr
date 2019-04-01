@@ -11,10 +11,10 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
     public class IsTakenBPGenericTaskTypeActionFilterCondition : BPGenericTaskTypeActionFilterCondition
     {
         public override Guid ConfigId { get { return new Guid("9B435BE4-43CD-4942-B5D3-95C8927D6885"); } }
-        public bool IsTaken { get; set; }
+        public bool TakenByLoggedInUser { get; set; }
         public override bool IsFilterMatch(IBPGenericTaskTypeActionFilterConditionContext context)
         {
-            if (IsTaken)
+            if (TakenByLoggedInUser)
             {
                 if (!context.Task.TakenBy.HasValue)
                     return false;
@@ -26,9 +26,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
             }
             else
             {
-                return context.Task.TakenBy.HasValue ? false : true;
+                return !context.Task.TakenBy.HasValue;
             }
-            return true;
+            return false;
         }
     }
 }

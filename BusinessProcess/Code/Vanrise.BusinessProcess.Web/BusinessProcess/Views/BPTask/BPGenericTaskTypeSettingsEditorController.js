@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BPGenericTaskTypeSettingsEditorController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRButtonTypeEnum', 'BusinessProcess_TaskTypeActionService', 'BusinessProcess_BPTaskService'];
+    BPGenericTaskTypeSettingsEditorController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRButtonTypeEnum', 'BusinessProcess_TaskTypeActionService', 'BusinessProcess_BPTaskService', 'BusinessProcess_BPGenericTaskTypeActionAPIService'];
 
-    function BPGenericTaskTypeSettingsEditorController($scope, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VRButtonTypeEnum, BusinessProcess_TaskTypeActionService, BusinessProcess_BPTaskService) {
+    function BPGenericTaskTypeSettingsEditorController($scope, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VRButtonTypeEnum, BusinessProcess_TaskTypeActionService, BusinessProcess_BPTaskService, BusinessProcess_BPGenericTaskTypeActionAPIService) {
 
         var bpTaskId;
         var bpTaskType;
@@ -184,7 +184,7 @@
                             getChildNode: function () {
                                 if (bpTaskType != undefined && bpTaskType.Settings != undefined) {
                                     $scope.scopeModel.runtimeEditor = bpTaskType.Settings.EditorSettings != undefined ? bpTaskType.Settings.EditorSettings.RuntimeEditor : undefined;
-                                    $scope.scopeModel.showDefaultActions = bpTaskType.Settings.ShowDefaultActions;
+                                    $scope.scopeModel.includeTaskLock = bpTaskType.Settings.IncludeTaskLock;
                                     return {
                                         promises: !isReload ? [getInitialBPTaskDefaultActionsState(), loadRuntimeEditor()] : [loadRuntimeEditor()]
                                     };
@@ -240,7 +240,7 @@
 
         function getActionsDictionary() {
             var actionsDictionaryPromise = UtilsService.createPromiseDeferred();
-            BusinessProcess_BPTaskAPIService.GetTaskTypeActions(bpTaskId).then(function (actions) {
+            BusinessProcess_BPGenericTaskTypeActionAPIService.GetTaskTypeActions(bpTaskId).then(function (actions) {
                 var dictionary = {};
                 if (actions != undefined && actions.length > 0) {
                     for (var i = 0; i < actions.length; i++) {

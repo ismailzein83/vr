@@ -41,7 +41,7 @@ app.directive('bpGenerictasktypeactionfilterconditionIstaken', ['UtilsService', 
                     if (payload != undefined) {
                         context = payload.context;
                         if (payload.filter != undefined) {
-                            $scope.scopeModel.isTaken = payload.filter.IsTaken;
+                            $scope.scopeModel.takenByLoggedInUser = payload.filter.TakenByLoggedInUser;
                         }
                     }
                     var rootPromiseNode = {
@@ -53,7 +53,7 @@ app.directive('bpGenerictasktypeactionfilterconditionIstaken', ['UtilsService', 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.IsTakenBPGenericTaskTypeActionFilterCondition, Vanrise.BusinessProcess.MainExtensions",
-                        IsTaken: $scope.scopeModel.isTaken
+                        TakenByLoggedInUser: $scope.scopeModel.takenByLoggedInUser
                     };
                 };
 

@@ -133,7 +133,7 @@
                     var initialPromises = [];
 
                     if (payload != undefined) {
-                        $scope.scopeModel.showDefaultActions = payload.ShowDefaultActions;
+                        $scope.scopeModel.includeTaskLock = payload.IncludeTaskLock;
                         dataRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                         initialPromises.push(getDataRecordFieldsInfo(payload.RecordTypeId));
 
@@ -197,7 +197,7 @@
                         RecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         EditorSettings: editorDefinitionAPI.getData(),
                         TaskTypeActions: ($scope.scopeModel.taskTypeActions.length > 0) ? $scope.scopeModel.taskTypeActions : undefined,
-                        ShowDefaultActions: $scope.scopeModel.showDefaultActions
+                        IncludeTaskLock: $scope.scopeModel.includeTaskLock
                     };
                     return data;
                 };

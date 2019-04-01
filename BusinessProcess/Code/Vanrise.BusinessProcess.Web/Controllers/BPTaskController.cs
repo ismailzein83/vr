@@ -89,13 +89,6 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return manager.GetAssignedUsers(taskId);
         }
 
-        [HttpGet]
-        [Route("GetTaskTypeActions")]
-        public List<BPGenericTaskTypeAction> GetTaskTypeActions(long taskId)
-        {
-            BPTaskManager manager = new BPTaskManager();
-            return manager.GetTaskTypeActions(taskId);
-        }
 
         [HttpPost]
         [Route("GetInitialBPTaskDefaultActionsState")]

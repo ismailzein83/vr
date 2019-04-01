@@ -27,11 +27,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
 
         public List<BPGenericTaskTypeAction> TaskTypeActions { get; set; }
         public GenericData.Entities.VRGenericEditorDefinitionSetting EditorSettings { get; set; }
-        public bool ShowDefaultActions { get; set; }
-        public override List<BPGenericTaskTypeAction> GetActions()
-        {
-            return TaskTypeActions;
-        }
+        public bool IncludeTaskLock { get; set; }
     }
     public class BPGenericTaskData : BPTaskData
     {
