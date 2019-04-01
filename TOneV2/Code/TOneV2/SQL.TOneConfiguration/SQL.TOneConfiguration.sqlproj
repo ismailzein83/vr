@@ -834,9 +834,6 @@
     <Build Include="common\Stored Procedures\sp_VRNamespaceItem_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_VRNamespaceItem_GetAll.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_SaveMeasureStyles.sql" />
-    <Build Include="common\Tables\ProcessState.sql" />
-    <Build Include="common\Stored Procedures\sp_ProcessState_InsertOrUpdate.sql" />
-    <Build Include="common\Stored Procedures\sp_ProcessState_GetAll.sql" />
     <Build Include="common\Stored Procedures\sp_File_Delete.sql" />
     <Build Include="VR_MobNet\Tables\NumberPrefix.sql" />
     <Build Include="VR_MobNet\Tables\MobileNetwork.sql" />
