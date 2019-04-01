@@ -361,7 +361,7 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('C30E1CB7-A894-484A-BB5E-010FD4D1FC0C','Supplier SMS Usage',1,'{"ManualAdditionDisabled":true}'),
-('2BE8A381-1458-4E55-B2B8-C25B82BF3FAD','Customer SMS Usage',1,'{"ManualAdditionDisabled":true}')
+('2BE8A381-1458-4E55-B2B8-C25B82BF3FAD','Customer SMS Usage',0,'{"ManualAdditionDisabled":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[IsCredit],[Settings]))
 merge	[VR_AccountBalance].[BillingTransactionType] as t
@@ -373,6 +373,7 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[IsCredit],[Settings])
 	values(s.[ID],s.[Name],s.[IsCredit],s.[Settings]);
+
 
 --[Analytic].[AnalyticTable]------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
