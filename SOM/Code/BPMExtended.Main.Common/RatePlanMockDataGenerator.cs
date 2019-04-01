@@ -2281,6 +2281,200 @@ namespace BPMExtended.Main.Common
 
         #endregion
 
+
+        #region Normal DI
+
+        public static List<NormalDI> GetFilteredNormalDI(string firstName, string fatherName, string lastName, string street, string province, string city)
+        {
+            return GetAllNormalDI().FindAll(x => x.FirstName.ToLower() == firstName.ToLower() || x.FatherName.ToLower() == fatherName.ToLower() || x.LastName.ToLower() == lastName.ToLower() || x.Street.ToLower() == street.ToLower() || x.Province.ToLower() == province.ToLower() || x.City.ToLower() == city.ToLower());
+        }
+     
+        private static List<NormalDI> GetAllNormalDI()
+        {
+
+            return new List<NormalDI>
+            {
+                 new NormalDI
+                 {
+                    FirstName="MHD",
+                    FatherName ="aaaa",
+                    MotherName="asasas",
+                    LastName="saas",
+                    City="beirut",
+                    Province="beirut",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="768888555"
+                 },
+                 new NormalDI
+                 {
+                    FirstName="MaaHD",
+                    FatherName ="ee",
+                    MotherName="tr",
+                    LastName="sammmas",
+                    City="tyr",
+                    Province="aa",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="768888555"
+                 },
+                 new NormalDI
+                 {
+                    FirstName ="ff",
+                    FatherName ="nvb",
+                    MotherName="qewq",
+                    LastName="zxz",
+                    City="saida",
+                    Province="p1",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="76169059"
+                 },
+                 new NormalDI
+                 {
+                    FirstName="MaaHD",
+                    FatherName ="oii",
+                    MotherName="bn",
+                    LastName="fdg",
+                    City="nabatieh",
+                    Province="cc",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="76169059"
+                 },
+            };
+
+        }
+
+        #endregion
+
+
+        #region Company DI
+
+        public static List<CompanyDI> GetFilteredCompaniesDI(string accountName, string city, string province, string street)
+        {
+            return GetAllCompaniesDI().FindAll(x => x.AccountName.ToLower() == accountName.ToLower() && x.City.ToLower() == city.ToLower() && x.Province.ToLower() == province.ToLower() && x.Street.ToLower() == street.ToLower());
+        }
+
+        private static List<CompanyDI> GetAllCompaniesDI()
+        {
+
+            return new List<CompanyDI>
+            {
+                 new CompanyDI
+                 {
+                    AccountName="Company A",
+                    City="beirut",
+                    Province="beirut",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="768821555"
+                 },
+                 new CompanyDI
+                 {
+                    AccountName="Company B",
+                    City="tyr",
+                    Province="aa",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="768888555"
+                 },
+                 new CompanyDI
+                 {
+                    AccountName="Company C",
+                    City="saida",
+                    Province="p1",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="76654568"
+                 },
+                 new CompanyDI
+                 {
+                    AccountName="Company D",
+                    City="nabatieh",
+                    Province="cc",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="761908768"
+                 },
+            };
+
+        }
+
+        #endregion
+
+        #region Professional DI
+
+        public static List<ProfessionalDI> GetFilteredProfessionalDI(string firstName, string fatherName, string lastName, string street, string province, string city, string profession)
+        {
+            return GetAllProfessionalDI().FindAll(x => x.FirstName.ToLower() == firstName.ToLower() && x.FatherName.ToLower() == fatherName.ToLower() && x.LastName.ToLower() == lastName.ToLower() && x.Street.ToLower() == street.ToLower() && x.Province.ToLower() == province.ToLower() && x.City.ToLower() == city.ToLower() && x.Profession.ToLower() == profession.ToLower());
+        }
+
+        private static List<ProfessionalDI> GetAllProfessionalDI()
+        {
+
+            return new List<ProfessionalDI>
+            {
+                 new ProfessionalDI
+                 {
+                    FirstName="MHD",
+                    FatherName ="aaaa",
+                    MotherName="asasas",
+                    LastName="saas",
+                    City="beirut",
+                    Province="beirut",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="768888555",
+                    Profession ="p1"
+                    
+                 },
+                 new ProfessionalDI
+                 {
+                    FirstName="MaaHD",
+                    FatherName ="ee",
+                    MotherName="tr",
+                    LastName="sammmas",
+                    City="tyr",
+                    Province="aa",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="768888555",
+                    Profession ="p2"
+                 },
+                 new ProfessionalDI
+                 {
+                    FirstName ="ff",
+                    FatherName ="nvb",
+                    MotherName="qewq",
+                    LastName="zxz",
+                    City="saida",
+                    Province="p1",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="76169059",
+                    Profession ="p3"
+                 },
+                 new ProfessionalDI
+                 {
+                    FirstName="MaaHD",
+                    FatherName ="oii",
+                    MotherName="bn",
+                    LastName="fdg",
+                    City="nabatieh",
+                    Province="cc",
+                    Street="saaas",
+                    Building="bb",
+                    PhoneNumber="76169059",
+                    Profession ="p4"
+                 },
+            };
+
+        }
+
+        #endregion
+
+
         #region Payments
 
         public static List<PaymentDetail> GetPayments(string customerId)

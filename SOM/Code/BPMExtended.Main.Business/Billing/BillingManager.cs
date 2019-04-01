@@ -699,6 +699,21 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetInstallments();
         }
 
+        public List<ProfessionalDI> GetFilteredProfessionalDI(string firstName, string fatherName, string lastName, string street, string province, string city, string profession)
+        {
+            return RatePlanMockDataGenerator.GetFilteredProfessionalDI(firstName,fatherName,lastName,street,province,city,profession);
+        }
+
+        public List<NormalDI> GetFilteredNormalDI(string firstName, string fatherName, string lastName, string street, string province, string city)
+        {
+            return RatePlanMockDataGenerator.GetFilteredNormalDI(firstName, fatherName, lastName, street, province, city);
+        }
+
+        public List<CompanyDI> GetFilteredCompaniesDI(string accountName, string city, string province, string street)
+        {
+            return RatePlanMockDataGenerator.GetFilteredCompaniesDI(accountName, city, province, street);
+        }
+
         public bool InstallmentsApproval(string templateId, string invoiceId, string discount)
         {
             return true;
