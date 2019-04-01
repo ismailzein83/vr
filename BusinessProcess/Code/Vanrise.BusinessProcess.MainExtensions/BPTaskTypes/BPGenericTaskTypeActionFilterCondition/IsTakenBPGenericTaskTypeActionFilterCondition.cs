@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
 {
@@ -13,7 +14,14 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
         public bool IsTaken { get; set; }
         public override bool IsFilterMatch(IBPGenericTaskTypeActionFilterConditionContext context)
         {
-            throw new NotImplementedException();
+            if (!IsTaken || !context.Task.TakenBy.HasValue)
+                return true;
+            if(IsTaken && context.Task.TakenBy.HasValue)
+            {
+                int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+                return loggedInUserId == context.Task.TakenBy.Value;
+            }
+            return true;
         }
     }
 }
