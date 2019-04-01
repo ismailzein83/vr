@@ -249,6 +249,9 @@
     <Build Include="bp\Stored Procedures\sp_BPTask_UpdateTask.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTask_Release.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTask_Assign.sql" />
+    <Build Include="common\Tables\ProcessState.sql" />
+    <Build Include="common\Stored Procedures\sp_ProcessState_InsertOrUpdate.sql" />
+    <Build Include="common\Stored Procedures\sp_ProcessState_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessProcess.PostDeployment.sql" />
