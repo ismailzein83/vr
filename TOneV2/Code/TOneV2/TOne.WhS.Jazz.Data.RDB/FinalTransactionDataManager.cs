@@ -45,10 +45,10 @@ namespace TOne.WhS.Jazz.Data.RDB
             columns.Add(COL_TransactionDescription, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_Credit, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 26, Precision = 6 });
             columns.Add(COL_Debit, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 26, Precision = 6 });
-            columns.Add(COL_SwitchName, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
+            columns.Add(COL_SwitchName, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar,Size=255 });
             columns.Add(COL_Direction, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_CarriersNames, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            columns.Add(COL_TransactionType, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
+            columns.Add(COL_TransactionType, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar,Size=255});
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {

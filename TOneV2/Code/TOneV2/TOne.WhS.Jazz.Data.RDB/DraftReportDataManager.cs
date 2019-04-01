@@ -41,9 +41,9 @@ namespace TOne.WhS.Jazz.Data.RDB
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_TransactionTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_IsTaxTransaction, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add(COL_SwitchName, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
+            columns.Add(COL_SwitchName, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar,Size=255 });
             columns.Add(COL_Direction, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add(COL_TransactionType, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
+            columns.Add(COL_TransactionType, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar,Size=255 });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
