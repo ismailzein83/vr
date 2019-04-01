@@ -82,7 +82,7 @@
                             $scope.scopeModel.taskTypeActions.push(taskTypeAction);
                         }
                     };
-                    BusinessProcess_BPTaskTypeService.addTaskTypeAction(onTaskTypeActionAdded);
+                    BusinessProcess_BPTaskTypeService.addTaskTypeAction(onTaskTypeActionAdded, getContext());
                 };
 
                 $scope.scopeModel.removeTaskTypeAction = function (dataItem) {
@@ -273,7 +273,7 @@
                     $scope.scopeModel.taskTypeActions[index] = taskTypeAction;
                 };
 
-                BusinessProcess_BPTaskTypeService.editTaskTypeAction(taskTypeActionObj, onBPTaskTypeActionUpdated);
+                BusinessProcess_BPTaskTypeService.editTaskTypeAction(taskTypeActionObj, onBPTaskTypeActionUpdated, getContext());
             }
 
         }

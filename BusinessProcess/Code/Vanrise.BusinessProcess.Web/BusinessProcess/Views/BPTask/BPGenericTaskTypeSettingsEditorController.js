@@ -154,8 +154,9 @@
             return BusinessProcess_BPTaskTypeAPIService.GetBPTaskType(typeId).then(function (taskType) {
                 if (taskType != undefined) {
                     bpTaskType = taskType;
-                    var actionsDictionary = getActionsDictionary();
-                    buildActionsFromDictionary(actionsDictionary);
+                    getActionsDictionary().then(function (actionsDictionary) {
+                        buildActionsFromDictionary(actionsDictionary);
+                    });
                 }
             });
         }
@@ -204,7 +205,7 @@
             runtimeEditorReadyPromiseDeferred.promise.then(function () {
                 runtimeEditorReadyPromiseDeferred = undefined;
                 var defaultValues = {};
-                if (fieldValues != undefined && fieldValues.length > 0) {
+                if (fieldValues != undefined) {
                     for (var prop in fieldValues) {
                         if (prop != "$type")
                             defaultValues[prop] = fieldValues[prop];
@@ -238,21 +239,26 @@
         }
 
         function getActionsDictionary() {
-            var dictionay = {};
-            var actions = bpTaskType.Settings.TaskTypeActions;
-            for (var i = 0; i < actions.length; i++) {
-                var taskTypeAction = actions[i];
-                var buttonType = UtilsService.getEnum(VRButtonTypeEnum, "value", taskTypeAction.ButtonType);
+            var actionsDictionaryPromise = UtilsService.createPromiseDeferred();
+            BusinessProcess_BPTaskAPIService.GetTaskTypeActions(bpTaskId).then(function (actions) {
+                var dictionary = {};
+                if (actions != undefined && actions.length > 0) {
+                    for (var i = 0; i < actions.length; i++) {
+                        var taskTypeAction = actions[i];
+                        var buttonType = UtilsService.getEnum(VRButtonTypeEnum, "value", taskTypeAction.ButtonType);
 
-                if (dictionay[buttonType.value] == undefined) {
-                    dictionay[buttonType.value] = [];
+                        if (dictionary[buttonType.value] == undefined) {
+                            dictionary[buttonType.value] = [];
+                        }
+                        dictionary[buttonType.value].push({
+                            buttonType: buttonType,
+                            taskTypeAction: taskTypeAction,
+                        });
+                    }
                 }
-                dictionay[buttonType.value].push({
-                    buttonType: buttonType,
-                    taskTypeAction: taskTypeAction,
-                });
-            }
-            return dictionay;
+                actionsDictionaryPromise.resolve(dictionary);
+            });
+            return actionsDictionaryPromise.promise;
         }
 
         function buildActionsFromDictionary(actionsDictionary) {

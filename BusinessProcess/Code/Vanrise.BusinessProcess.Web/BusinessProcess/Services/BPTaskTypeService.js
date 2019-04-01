@@ -18,8 +18,8 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', modalParameters, modalSettings);
         }
 
-        function addTaskTypeAction(onBPTaskTypeActionAdded) {
-            var modalParameters = {};
+        function addTaskTypeAction(onBPTaskTypeActionAdded, context) {
+            var modalParameters = { context: context};
 
             var modalSettings = {};
 
@@ -30,9 +30,10 @@
             VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPGenericTaskType/Templates/BPGenericTaskTypeActionEditorTemplate.html', modalParameters, modalSettings);
         }
 
-        function editTaskTypeAction(taskTypeActionEntity, onBPTaskTypeActionUpdated) {
+        function editTaskTypeAction(taskTypeActionEntity, onBPTaskTypeActionUpdated, context) {
             var modalParameters = {
-                taskTypeActionEntity: taskTypeActionEntity
+                taskTypeActionEntity: taskTypeActionEntity,
+                context: context
             };
 
             var modalSettings = {};

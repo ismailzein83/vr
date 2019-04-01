@@ -17,6 +17,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
         public RecordFilter FilterGroup { get; set; }
         public override bool IsFilterMatch(IBPGenericTaskTypeActionFilterConditionContext context)
         {
+            if (FilterGroup == null)
+                return true;
             var genericTaskData = context.Task.TaskData.CastWithValidate<BPGenericTaskData>("genericTaskData");
             if (genericTaskData.FieldValues == null)
                 genericTaskData.FieldValues = new Dictionary<string, dynamic>();

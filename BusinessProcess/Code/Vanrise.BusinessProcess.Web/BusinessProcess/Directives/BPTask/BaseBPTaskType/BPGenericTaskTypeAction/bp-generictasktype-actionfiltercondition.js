@@ -35,6 +35,7 @@ app.directive('bpGenerictasktypeActionfiltercondition', ['UtilsService', 'VRUIUt
             var directiveAPI;
             var directiveReadyDeferred;
 
+            var context;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -49,6 +50,7 @@ app.directive('bpGenerictasktypeActionfiltercondition', ['UtilsService', 'VRUIUt
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var payload = {
+                        context: context
                     };
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
@@ -64,8 +66,8 @@ app.directive('bpGenerictasktypeActionfiltercondition', ['UtilsService', 'VRUIUt
                     selectorAPI.clearDataSource();
 
                     var initialPromises = [];
-
                     if (payload != undefined) {
+                        context = payload.context;
                         if (payload.filterCondition != undefined) {
                             filterCondition = payload.filterCondition;
                         }
@@ -92,6 +94,8 @@ app.directive('bpGenerictasktypeActionfiltercondition', ['UtilsService', 'VRUIUt
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
                             var payload = {
+                                context : context,
+                                filter: filterCondition
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
                         });
@@ -139,18 +143,21 @@ app.directive('bpGenerictasktypeActionfiltercondition', ['UtilsService', 'VRUIUt
             if (attrs.hidelabel != undefined) {
                 label = "";
             }
-            var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
+            var template ='<vr-row>'
+                + '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                 + ' datasource="scopeModel.templateConfigs"'
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                 + ' datavaluefield="ExtensionConfigurationId"'
                 + ' datatextfield="Title"'
                 + label
-                //+ ' isrequired="true"'
-                + 'hideremoveicon>'
+                + '>'
                 + '</vr-select>'
                 + '</vr-columns>'
-                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
+                + '</vr-row>'
+                + '<vr-row>'
+                +   '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>'
+                + '</vr-row>';
             return template;
 
         }

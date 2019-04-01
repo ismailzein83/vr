@@ -60,6 +60,11 @@
             });
         }
 
+        function GetTaskTypeActions(taskId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "GetTaskTypeActions"), {
+                taskId: taskId
+            });
+        }
         
 
         return ({
@@ -73,7 +78,8 @@
             ReleaseTask: ReleaseTask,
             GetAssignedUsers: GetAssignedUsers,
             AssignTask: AssignTask,
-            GetInitialBPTaskDefaultActionsState: GetInitialBPTaskDefaultActionsState
+            GetInitialBPTaskDefaultActionsState: GetInitialBPTaskDefaultActionsState,
+            GetTaskTypeActions: GetTaskTypeActions
         });
     }
 

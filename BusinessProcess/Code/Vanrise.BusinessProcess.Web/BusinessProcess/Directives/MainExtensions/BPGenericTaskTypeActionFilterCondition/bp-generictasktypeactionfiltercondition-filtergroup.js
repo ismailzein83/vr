@@ -26,31 +26,65 @@ app.directive('bpGenerictasktypeactionfilterconditionFiltergroup', ['UtilsServic
         function FilterCondition(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
+            var filterAPI;
+            var filterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var context;
 
             function initializeController() {
                 $scope.scopeModel = {};
 
+                $scope.scopeModel.onfilterReady = function (api) {
+                    filterAPI = api;
+                    filterReadyPromiseDeferred.resolve();
+                };
 
-                defineAPI();
+                UtilsService.waitMultiplePromises([filterReadyPromiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
-
-                    return UtilsService.waitMultiplePromises(promises);
+                    if (payload != undefined) {
+                        context = payload.context;
+                    }
+                    function loadFilterGroup() {
+                        var filterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        filterReadyPromiseDeferred.promise.then(function () {
+                            var filterGroupPayload = {
+                                context: getContext(),
+                                FilterGroup: payload != undefined && payload.filter != undefined ? payload.filter.FilterGroup : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(filterAPI, filterGroupPayload, filterLoadPromiseDeferred);
+                        });
+                        return filterLoadPromiseDeferred.promise;
+                    }
+                    var rootPromiseNode = {
+                        promises:[loadFilterGroup()]
+                    };
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
+                    var filter = filterAPI.getData();
                     return {
-                        $type: "Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.FilterGroupBPGenericTaskTypeActionFilterCondition, Vanrise.BusinessProcess.MainExtensions"
+                        $type: "Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.FilterGroupBPGenericTaskTypeActionFilterCondition, Vanrise.BusinessProcess.MainExtensions",
+                        FilterGroup: filter != undefined ? filter.filterObj : undefined
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
             }
         }
 

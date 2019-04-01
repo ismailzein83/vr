@@ -25,7 +25,7 @@ app.directive('bpGenerictasktypeactionfilterconditionIstaken', ['UtilsService', 
 
         function FilterCondition(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
-
+            var context;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -38,14 +38,22 @@ app.directive('bpGenerictasktypeactionfilterconditionIstaken', ['UtilsService', 
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
-
-                    return UtilsService.waitMultiplePromises(promises);
+                    if (payload != undefined) {
+                        context = payload.context;
+                        if (payload.filter != undefined) {
+                            $scope.scopeModel.isTaken = payload.filter.IsTaken;
+                        }
+                    }
+                    var rootPromiseNode = {
+                        promises:[]
+                    };
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.IsTakenBPGenericTaskTypeActionFilterCondition, Vanrise.BusinessProcess.MainExtensions"
+                        $type: "Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.IsTakenBPGenericTaskTypeActionFilterCondition, Vanrise.BusinessProcess.MainExtensions",
+                        IsTaken: $scope.scopeModel.isTaken
                     };
                 };
 

@@ -21,6 +21,7 @@
         var requiredPermissionAPI;
         var requiredPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var context;
         loadParameters();
         defineScope();
         load();
@@ -31,6 +32,7 @@
 
             if (parameters != undefined && parameters != null) {
                 taskTypeActionEntity = parameters.taskTypeActionEntity;
+                context = parameters.context;
             }
             isEditMode = (taskTypeActionEntity != undefined);
         }
@@ -129,7 +131,7 @@
             function loadActionFilterConditionSelector() {
                 var actionFilterConditionSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 actionFilterConditionSelectorReadyPromiseDeferred.promise.then(function () {
-                    var actionFilterConditionSelectorPayload = {};
+                    var actionFilterConditionSelectorPayload = { context: getContext()};
                     if (taskTypeActionEntity != undefined) {
                         actionFilterConditionSelectorPayload.filterCondition = taskTypeActionEntity.FilterCondition;
                     }
@@ -199,6 +201,13 @@
             obj.RequiredPermission = requiredPermissionAPI.getData();
 
             return obj;
+        }
+
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
 
     }
