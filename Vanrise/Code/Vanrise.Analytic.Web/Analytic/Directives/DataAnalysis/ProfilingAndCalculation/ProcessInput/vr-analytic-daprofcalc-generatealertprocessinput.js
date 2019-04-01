@@ -37,6 +37,7 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocessinput", ['UtilsService', 
 
             $scope.showChunkTimeSelector = false;
             $scope.isLoading = false;
+            $scope.timeUnits = UtilsService.getArrayEnum(VR_Analytic_DAProfCalcTimeUnitEnum);
 
             var alertRuleTypeSelectorAPI;
             var alertRuleTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -90,7 +91,8 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocessinput", ['UtilsService', 
             };
 
             $scope.validateDataAnalysisPeriod = function () {
-                $scope.timeUnits = UtilsService.getArrayEnum(VR_Analytic_DAProfCalcTimeUnitEnum);
+                if (maxDataAnalysisPeriodAPI == undefined || minDataAnalysisPeriodAPI == undefined)
+                    return null;
 
                 var maxAnalysisPeriod = maxDataAnalysisPeriodAPI.getData();
                 var minAnalysisPeriod = minDataAnalysisPeriodAPI.getData();
