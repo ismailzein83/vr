@@ -112,7 +112,7 @@
                 + hideremoveicon
                 + ' isrequired="ctrl.isrequired">'
                 + '</vr-select>'
-                + '</vr-columns>'
+                + '</vr-columns>';
             return template;
 
         }
