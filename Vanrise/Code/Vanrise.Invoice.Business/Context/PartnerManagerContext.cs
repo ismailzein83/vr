@@ -20,7 +20,7 @@ namespace Vanrise.Invoice.Business.Context
         public string PartnerId { get; set; }
 
         public string InfoType { get; set; }
-
+        public Entities.Invoice Invoice { get; set; }
         public InvoicePartnerManager InvoicePartnerManager { get; set; }
     }
 }

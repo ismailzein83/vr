@@ -172,7 +172,7 @@ namespace Vanrise.Invoice.MainExtensions
                     }
                 }
                 PartnerManager partnerManager = new PartnerManager();
-                var partnerInfo = partnerManager.GetPartnerInfo(invoice.InvoiceTypeId, invoice.PartnerId, "InvoiceRDLCReport") as Dictionary<string, VRRdlcReportParameter>;
+                var partnerInfo = partnerManager.GetPartnerInfo(invoice.InvoiceTypeId, invoice.PartnerId, "InvoiceRDLCReport", invoice) as Dictionary<string, VRRdlcReportParameter>;
                 if (partnerInfo != null)
                 {
                     foreach (var par in partnerInfo)

@@ -85,6 +85,7 @@ namespace Vanrise.Invoice.Entities
 
     public interface IPartnerManagerInfoContext : IBasePartnerManagerContext
     {
+        Entities.Invoice Invoice { get;}
         string InfoType { get; }
         InvoicePartnerManager InvoicePartnerManager { get; }
     }

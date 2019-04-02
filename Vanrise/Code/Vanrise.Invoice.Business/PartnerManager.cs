@@ -40,7 +40,7 @@ namespace Vanrise.Invoice.Business
             var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
             return invoicePartnerManager.PartnerInvoiceSettingFilterFQTN;
         }
-        public dynamic GetPartnerInfo(Guid invoiceTypeId, string partnerId, string infoType)
+        public dynamic GetPartnerInfo(Guid invoiceTypeId, string partnerId, string infoType, Entities.Invoice invoice)
         {
             var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
 
@@ -48,7 +48,8 @@ namespace Vanrise.Invoice.Business
             {
                 InfoType = infoType,
                 PartnerId = partnerId,
-                InvoicePartnerManager = invoicePartnerManager
+                InvoicePartnerManager = invoicePartnerManager,
+                Invoice = invoice
             };
             var partnerInfo = invoicePartnerManager.GetPartnerInfo(context);
             if (partnerInfo == null)

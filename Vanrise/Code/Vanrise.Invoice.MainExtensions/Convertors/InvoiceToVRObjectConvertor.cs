@@ -34,7 +34,7 @@ namespace Vanrise.Invoice.MainExtensions.Convertors
                     foreach (var infoObject in PartnerInfoObjects)
                     {
                         PartnerManager partnerManager = new PartnerManager();
-                        dynamic partner = partnerManager.GetPartnerInfo(invoice.InvoiceTypeId, invoice.PartnerId, infoObject.InfoType);
+                        dynamic partner = partnerManager.GetPartnerInfo(invoice.InvoiceTypeId, invoice.PartnerId, infoObject.InfoType, invoice);
                         targetBe.TargetObjects.Add(infoObject.ObjectName, partner);
                     }
                     targetBEs.Add(targetBe);
