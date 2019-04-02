@@ -56,7 +56,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 DBTableName = "BPTask",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastUpdatedTime
             });
         }
         BaseRDBDataProvider GetDataProvider()
@@ -266,12 +267,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             updateQuery.Column(COL_TakenBy).Value(userId);
             var whereStatement = updateQuery.Where();
             whereStatement.EqualsCondition(COL_ID).Value(taskId);
-            var ifNotExists = whereStatement.NotExistsCondition();
-            ifNotExists.From(TABLE_NAME, TABLE_ALIAS, 1, true);
-            ifNotExists.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            var ifNotExistsCondition = ifNotExists.Where();
-            ifNotExistsCondition.EqualsCondition(COL_ID).Value(taskId);
-            ifNotExistsCondition.NotNullCondition(COL_TakenBy);
+            whereStatement.NullCondition(COL_TakenBy);
             return queryContext.ExecuteNonQuery() > 0;
         }
 
