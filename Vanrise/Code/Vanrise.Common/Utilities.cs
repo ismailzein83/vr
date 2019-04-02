@@ -4,17 +4,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 
 namespace Vanrise.Common
 {
     public static class Utilities
     {
-       
         public static Dictionary<T, Q> GetEnumAttributes<T, Q>()
             where T : struct
             where Q : Attribute
@@ -91,10 +88,12 @@ namespace Vanrise.Common
         {
             return date1 > date2 ? date1 : date2;
         }
+
         public static string NewLine()
         {
             return "<br/>";
         }
+
         public static List<T> ConvertJsonToList<T>(Object value)
         {
             List<T> valueList = new List<T>();
@@ -115,6 +114,7 @@ namespace Vanrise.Common
             }
             return valueList;
         }
+
         public static DateTime Min(DateTime date1, DateTime date2)
         {
             return date1 < date2 ? date1 : date2;
@@ -136,6 +136,7 @@ namespace Vanrise.Common
             }
             return convertedDateTime;
         }
+
         public static bool AreTimePeriodsOverlapped(DateTime? p1From, DateTime? p1To, DateTime? p2From, DateTime? p2To)
         {
             DateTime effectiveP1From = p1From.HasValue ? p1From.Value : DateTime.MinValue;
@@ -224,21 +225,7 @@ namespace Vanrise.Common
             return propValueReader;
         }
 
-        public static void CompilePredefinedPropValueReaders()
-        {
-            var compilationStepTypes = GetAllImplementations<IPropValueReaderCompilationStep>();
-            HashSet<string> propNames = new HashSet<string>();
-            foreach (var stepType in compilationStepTypes)
-            {
-                foreach (var propName in (Activator.CreateInstance(stepType) as IPropValueReaderCompilationStep).GetPropertiesToCompile(null))
-                {
-                    propNames.Add(propName);
-                }
-            }
-            AddPropValueReaders(propNames);
-        }
-
-        static void AddPropValueReaders(HashSet<string> propNames)
+        private static void AddPropValueReaders(HashSet<string> propNames)
         {
             List<string> propNamesToInclude = propNames.Where(itm => !s_cachedProbValueReaders.ContainsKey(itm)).ToList();
             if (propNamesToInclude.Count > 0)
@@ -302,7 +289,21 @@ namespace Vanrise.Common
                 }
             }
         }
-         
+
+        public static void CompilePredefinedPropValueReaders()
+        {
+            var compilationStepTypes = GetAllImplementations<IPropValueReaderCompilationStep>();
+            HashSet<string> propNames = new HashSet<string>();
+            foreach (var stepType in compilationStepTypes)
+            {
+                foreach (var propName in (Activator.CreateInstance(stepType) as IPropValueReaderCompilationStep).GetPropertiesToCompile(null))
+                {
+                    propNames.Add(propName);
+                }
+            }
+            AddPropValueReaders(propNames);
+        }
+
         public static string GetConnectionStringByName(string connectionStringName)
         {
             var connStringEntry = ConfigurationManager.ConnectionStrings[connectionStringName];
@@ -596,6 +597,8 @@ namespace Vanrise.Common
             return inputString;
         }
 
+        private const string TECHNICAL_EXCEPTION_MESSAGE = "Unexpected error occurred. Please consult technical support. Click to see technical details";
+
         public static Exception WrapException(Exception originalException, string message)
         {
             VRBusinessException origExceptionAsBusinessException = originalException as VRBusinessException;
@@ -609,8 +612,6 @@ namespace Vanrise.Common
             VRBusinessException businessException = ex as VRBusinessException;
             return businessException != null ? businessException.Message : TECHNICAL_EXCEPTION_MESSAGE;
         }
-
-        private const string TECHNICAL_EXCEPTION_MESSAGE = "Unexpected error occurred. Please consult technical support. Click to see technical details";
 
         public static IEnumerable<DateTimeRange> GenerateDateTimeRanges(DateTime from, DateTime to, TimeSpan timeSpan)
         {
@@ -859,13 +860,6 @@ namespace Vanrise.Common
             }
         }
 
-        class PercentageItemWithDecimalPart
-        {
-            public IPercentageItem PercentageItem { get; set; }
-            public int CalculatedPercentage { get; set; }
-            public decimal DecimalPart { get; set; }
-        }
-
         public static bool PhysicalPathExists(string physicalPath)
         {
             return System.IO.Directory.Exists(physicalPath) || System.IO.File.Exists(physicalPath);
@@ -877,6 +871,13 @@ namespace Vanrise.Common
                 return $"{dataProjectName}.RDB";
             else
                 return $"{dataProjectName}.SQL";
+        }
+
+        class PercentageItemWithDecimalPart
+        {
+            public IPercentageItem PercentageItem { get; set; }
+            public int CalculatedPercentage { get; set; }
+            public decimal DecimalPart { get; set; }
         }
     }
 
