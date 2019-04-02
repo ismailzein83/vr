@@ -114,12 +114,14 @@
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intl-operatordeclaration-beforesavehandler.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intloperatordeclarationservices-customobjectsettings.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intloperatordeclarationservice.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-operatordeclaration.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperationDirectionServicesTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperatorDeclarationOnBeforeSaveHandler.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperatorDirectionServicesCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperationDirectionServicesTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDeclarationOnBeforeSaveHandler.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDirectionServicesCustomObjectSettingsTemplate.html" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\OperatorDeclarationTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnAfterSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnBeforeSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-aftersavehandler.js" />
