@@ -33,6 +33,7 @@ namespace TOne.WhS.Invoice.Entities
         public Decimal TotalOriginalAmountAfterCommission { get; set; }
         public Decimal TotalSMSOriginalAmountAfterCommission { get; set; }
         public Dictionary<int, OriginalDataCurrrency> OriginalAmountByCurrency { get; set; }
+        public bool IsOriginalAmountSetted { get; set; }
         public string Reference { get; set; }
         public List<AttachementFile> AttachementFiles { get; set; }
         public Decimal TotalReccurringChargesAfterTax { get; set; }

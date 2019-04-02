@@ -28,7 +28,7 @@ namespace TOne.WhS.Invoice.Entities
         public DateTime DueDate { get; set; }
         public decimal? OriginalAmount { get; set; }
         public bool MultipleCurrencies { get; set; }
-
+        public bool IsOriginalAmountSetted { get; set; }
         public SattlementInvoiceItemDetails() { }
         public IEnumerable<SattlementInvoiceItemDetails> GetSattlementInvoiceItemDetailsRDLCSchema()
         {

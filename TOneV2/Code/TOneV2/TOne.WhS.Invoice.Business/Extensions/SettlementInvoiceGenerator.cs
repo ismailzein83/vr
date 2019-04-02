@@ -260,7 +260,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     var supplierInvoiceDetails = supplierInvoice.Details as SupplierInvoiceDetails;
                     if (supplierInvoiceDetails != null)
                     {
-
+                        bool isOriginalAmountSetted = false;
                         var invoiceItems = supplierInvoiceItems.FindAllRecords(x => x.InvoiceId == supplierInvoice.InvoiceId);
                         if (invoiceItems != null)
                         {
@@ -293,6 +293,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                     if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetails.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
                                     {
+                                        isOriginalAmountSetted = true;
                                         var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
                                         settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
                                         settlementInvoiceItemSummaryDetail.DueToCarrierAmount += originalDataCurrrency.OriginalAmount.Value;
@@ -301,9 +302,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceItemSummaryDetail.DueToCarrierNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
                                        // settlementInvoiceItemSummaryDetail.DueToCarrierTotalDealAmount += invoiceItemDetails.TotalDealAmount;
                                         settlementInvoiceItemSummaryDetail.DueToCarrierFullAmount += originalDataCurrrency.OriginalAmount.Value;
-                                       // settlementInvoiceItemSummaryDetail.DueToCarrierTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
-
-
+                                        // settlementInvoiceItemSummaryDetail.DueToCarrierTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = originalDataCurrrency.OriginalAmount.Value;
@@ -375,6 +374,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             OriginalAmount = !multipleCurrencies && supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.Count > 0 ? supplierInvoiceDetails.OriginalAmountByCurrency.First().Value.OriginalAmount : default(decimal?),
                             TimeZoneId = supplierInvoiceDetails.TimeZoneId,
                             ToDate = supplierInvoice.ToDate,
+                            IsOriginalAmountSetted = isOriginalAmountSetted
                         };
                         supplierInvoiceItemSet.Add(sattlementInvoiceItemDetails);
                     }
@@ -689,12 +689,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     sattlementInvoiceDetails.SupplierDuration += supplierInvoice.DurationInSeconds;
                     sattlementInvoiceDetails.SupplierTotalNumberOfCalls += supplierInvoice.TotalNumberOfCalls;
+                   
                     supplierItemSet.Items.Add(new GeneratedInvoiceItem
                     {
                         Details = supplierInvoice,
                         Name = " "
                     });
                 }
+
+                sattlementInvoiceDetails.IsOriginalAmountSetted = supplierInvoiceItemSet.All(x => x.IsOriginalAmountSetted);
 
                 if (supplierItemSet.Items.Count > 0)
                     generatedInvoiceItemSets.Add(supplierItemSet);

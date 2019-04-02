@@ -46,7 +46,7 @@ namespace TOne.WhS.Invoice.Entities
         public bool NoSystemSMS { get; set; }
         public bool NoSystemRecurringCharges { get; set; }
         public bool NoSystemDeals { get; set; }
-
+        public bool IsOriginalAmountSetted { get; set; }
         public SattlementInvoiceDetails() { }
         public IEnumerable<SattlementInvoiceDetails> GetSattlementInvoiceDetailsRDLCSchema()
         {
