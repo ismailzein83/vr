@@ -122,7 +122,12 @@ namespace Retail.BusinessEntity.Business
             }
             return insertOperationOutput;
         }
-
+        public int? GetAccountCurrency(Guid accountBEDefinitionId, string financialAccountId)
+        {
+            var financialAccountData = GetFinancialAccountData(accountBEDefinitionId, financialAccountId);
+            financialAccountData.ThrowIfNull("financialAccountData", string.Format("accountBEDefinitionId:{0}, financialAccountId:{1}", accountBEDefinitionId, financialAccountId));
+            return financialAccountData.AccountCurrencyId;
+        }
         public Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail> UpdateFinancialAccount(FinancialAccountToEdit financialAccountToEdit)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail>();

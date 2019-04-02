@@ -79,5 +79,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetClientBalanceAccounts(accountTypeId, accountId);
         }
+        [HttpGet]
+        [Route("GetAccountCurrency")]
+        public int? GetAccountCurrency(Guid accountBEDefinitionId, string financialAccountId)
+        {
+            return _manager.GetAccountCurrency(accountBEDefinitionId, financialAccountId);
+        }
     }
 }

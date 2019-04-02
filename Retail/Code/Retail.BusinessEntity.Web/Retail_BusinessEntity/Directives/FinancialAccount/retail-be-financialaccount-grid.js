@@ -106,7 +106,7 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
 
             function editFinancialAccount(financialAccount) {
                 var onFinancialAccountUpdated = function (updatedFinancialAccount) {
-                    if (context != undefined && context.checkAllowAddFinancialAccount != undefined)
+                    if (context != undefined && context.checkAllowAddFinancialAccount != undefined) 
                         context.checkAllowAddFinancialAccount();
                     if (updatedFinancialAccount.BalanceAccountTypeId != undefined)
                         gridDrillDownTabManager.setDrillDownExtensionObject(financialAccount);
@@ -152,34 +152,53 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
                     };
                     recurringChargeDrillDownTab.loadDirective = function (genericBusinessEntityAPI, financialAccount) {
                         var financialAccountId = financialAccount.FinancialAccountId;
-                        var genericBusinessEntityPayload = {
-                            businessEntityDefinitionId: "DD2CBB22-0FC8-4AD2-BDCD-CB63A3E5DEA8",
-                            fieldValues: {
-                                FinancialAccountId: {
-                                    value: financialAccountId,
-                                    isHidden: true,
-                                    isDisabled: false
-                                },
-                                Classification: {
-                                    value: classification,
-                                    isHidden: true,
-                                    isDisabled: false
-                                }
-                            },
-                            filterValues: {
-                                FinancialAccountId: {
-                                    value: financialAccountId,
-                                    isHidden: true,
-                                    isDisabled: false
-                                },
-                                Classification: {
-                                    value: classification,
-                                    isHidden: true,
-                                    isDisabled: false
-                                }
+                        var currencyId;
+                        function getAccountCurrency() {
+                            return Retail_BE_FinancialAccountAPIService.GetAccountCurrency(accountBEDefinitionId, financialAccountId).then(function (response) {
+                                currencyId = response;
+                            });
+                        }
+                        var rootPromiseNode = {
+                            promises: [getAccountCurrency()],
+                            getChildNode: function () {
+                                var genericBusinessEntityPayload = {
+                                    businessEntityDefinitionId: "DD2CBB22-0FC8-4AD2-BDCD-CB63A3E5DEA8",
+                                    fieldValues: {
+                                        FinancialAccountId: {
+                                            value: financialAccountId,
+                                            isHidden: true,
+                                            isDisabled: false
+                                        },
+                                        Classification: {
+                                            value: classification,
+                                            isHidden: true,
+                                            isDisabled: false
+                                        },
+                                        CurrencyId: {
+                                            value: currencyId,
+                                            isDisabled: false,
+                                            isHidden: false
+                                        }
+                                    },
+                                    filterValues: {
+                                        FinancialAccountId: {
+                                            value: financialAccountId,
+                                            isHidden: true,
+                                            isDisabled: false
+                                        },
+                                        Classification: {
+                                            value: classification,
+                                            isHidden: true,
+                                            isDisabled: false
+                                        }
+                                    }
+                                };
+                                return {
+                                    promises: [genericBusinessEntityAPI.load(genericBusinessEntityPayload)]
+                                };
                             }
                         };
-                    return genericBusinessEntityAPI.load(genericBusinessEntityPayload);
+                        return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
                 drillDownTabDefinitions.push(recurringChargeDrillDownTab);
             }

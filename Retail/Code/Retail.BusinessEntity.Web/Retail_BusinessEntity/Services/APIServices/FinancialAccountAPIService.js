@@ -46,6 +46,13 @@
             });
         }
 
+        function GetAccountCurrency(accountBEDefinitionId, financialAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountCurrency"), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                financialAccountId: financialAccountId
+            });
+        }
+
         return {
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             AddFinancialAccount: AddFinancialAccount,
@@ -53,7 +60,8 @@
             GetFinancialAccountEditorRuntime: GetFinancialAccountEditorRuntime,
             CheckAllowAddFinancialAccounts: CheckAllowAddFinancialAccounts,
             GetFinancialAccountsInfo: GetFinancialAccountsInfo,
-            GetAccountIdsByFinancialAccountIds: GetAccountIdsByFinancialAccountIds
+            GetAccountIdsByFinancialAccountIds: GetAccountIdsByFinancialAccountIds,
+            GetAccountCurrency: GetAccountCurrency
         };
     }
 
