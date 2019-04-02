@@ -37,6 +37,8 @@ namespace Retail.BusinessEntity.Entities
 
         public List<AccountActionDefinition> ActionDefinitions { get; set; }
 
+        public List<AccountActionGroupDefinition> ActionGroupDefinitions { get; set; }
+
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
 
         public AccountCondition PackageAssignmentCondition { get; set; }
@@ -50,6 +52,12 @@ namespace Retail.BusinessEntity.Entities
         {
             return BEManagerFactory.GetManager<IAccountBEManager>().GetAccountLoggableEntity(context.BEDefinition.BusinessEntityDefinitionId);
         }
+    }
+
+    public class AccountActionGroupDefinition
+    {
+        public Guid AccountActionGroupId { get; set; }
+        public string Title { get; set; }
     }
 
     public class AccountBEClassification

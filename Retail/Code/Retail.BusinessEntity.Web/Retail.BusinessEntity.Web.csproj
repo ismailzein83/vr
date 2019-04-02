@@ -274,6 +274,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\SubAccountConditionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\retail-be-accountcondition-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\Templates\AccountConditionSelectiveTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\AccountActionGroupDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\ProvisionPostAction\retail-be-actionbpdefinition-definitionpostaction-revertstatus.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\ProvisionPostAction\retail-be-actionbpdefinition-definitionpostaction-changestatus.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\ProvisionPostAction\retail-be-actionbpdefinition-runtimepostaction-revertstatus.js" />
@@ -298,8 +299,12 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\Open360DegreeAccountAction\Templates\Open360DegreeAccountActionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\StartBPProcessAction\retail-be-accountactiondefinitionsettings-startbpprocess.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\StartBPProcessAction\Templates\StartBPProcessAccountActionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinition-actiongroup-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-actiongroup-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-backendexecutor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\Templates\AccountActionGroupDefinitionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\Templates\ActionGroupDefinitionGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\Templates\BackendExecutorEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\AccountBulkActionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\retail-be-accountbulkactionsettings-sendrates-runtimeeditor.js" />

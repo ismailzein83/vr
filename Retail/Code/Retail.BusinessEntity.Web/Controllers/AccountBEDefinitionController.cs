@@ -73,6 +73,14 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetAccountActionGroupDefinitions")]
+        public List<AccountActionGroupDefinition> GetAccountActionGroupDefinitions(Guid accountBEDefinitionId)
+        {
+            return _manager.GetAccountActionGroupDefinitions(accountBEDefinitionId);
+        }
+
+
+        [HttpGet]
         [Route("GetAccountActionDefinitionsInfo")]
         public IEnumerable<AccountActionDefinitionInfo> GetAccountActionDefinitionsInfo(Guid accountBEDefinitionId, string serializedFilter = null)
         {

@@ -25,6 +25,7 @@ function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retai
         var gridColumnFieldNames = [];
         var accountViewDefinitions = [];
         var accountActionDefinitions = [];
+        var accountActionGroups = [];
 
         var gridAPI;
         var gridQuery;
@@ -57,7 +58,7 @@ function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retai
                             }else
                             {
                                 Retail_BE_AccountBEService.defineAccountViewTabs(accountBEDefinitionId, account, gridAPI, accountViewDefinitions);
-                                Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, account, gridAPI, accountViewDefinitions, accountActionDefinitions);
+                                Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, account, gridAPI, accountViewDefinitions, accountActionDefinitions, accountActionGroups);
                             }
                         }
                         
@@ -117,9 +118,13 @@ function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retai
                     var accountViewDefinitionsLoadPromise = getAccountViewDefinitionsLoadPromise();
                     promises.push(accountViewDefinitionsLoadPromise);
 
-                    //Loading AccountViewDefinitions
+                    //Loading AccountActionDefinitions
                     var accountActionDefinitionsLoadPromise = getAccountActionDefinitionsLoadPromise();
                     promises.push(accountActionDefinitionsLoadPromise);
+
+                    //Loading AccountActionGroupDefinitions
+                    var accountActionGroupDefinitionsLoadPromise = getAccountActionGroupDefinitionsLoadPromise();
+                    promises.push(accountActionGroupDefinitionsLoadPromise);
                 }
 
                 var gridLoadDeferred = UtilsService.createPromiseDeferred();
@@ -193,6 +198,18 @@ function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retai
 
                     return accountActionDefinitionsLoadPromiseDeferred.promise;
                 }
+                function getAccountActionGroupDefinitionsLoadPromise() {
+                    var accountActionGroupDefinitionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    Retail_BE_AccountBEDefinitionAPIService.GetAccountActionGroupDefinitions(accountBEDefinitionId).then(function (response) {
+                        accountActionGroups = response;
+                        accountActionGroupDefinitionsLoadPromiseDeferred.resolve();
+                    }).catch(function (error) {
+                        accountViewRuntimeEditorsLoadPromiseDeferred.reject(error);
+                    });
+
+                    return accountActionGroupDefinitionsLoadPromiseDeferred.promise;
+                }
           
 
                 return gridLoadDeferred.promise;
@@ -200,7 +217,7 @@ function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retai
 
             api.onAccountAdded = function (addedAccount) {
                 Retail_BE_AccountBEService.defineAccountViewTabs(accountBEDefinitionId, addedAccount, gridAPI, accountViewDefinitions);
-                Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, addedAccount, gridAPI, accountViewDefinitions, accountActionDefinitions);
+                Retail_BE_AccountActionService.defineAccountMenuActions(accountBEDefinitionId, addedAccount, gridAPI, accountViewDefinitions, accountActionDefinitions, accountActionGroups);
                 gridAPI.itemAdded(addedAccount);
             };
 

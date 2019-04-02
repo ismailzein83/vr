@@ -49,6 +49,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
             var accountActionDefinitionDirectiveAPI;
             var accountActionDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
 
+            var accountActionGroupDefinitionDirectiveAPI;
+            var accountActionGroupDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred(); 
+
             var accountExtraFieldDefinitionsDirectiveAPI;
             var accountExtraFieldDefinitionsDirectiveDeferred = UtilsService.createPromiseDeferred();
 
@@ -104,6 +107,11 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     accountActionDefinitionDirectiveDeferred.resolve();
                 };
 
+                $scope.scopeModel.onAccountActionGroupDefinitionsReady = function (api) {
+                    accountActionGroupDefinitionDirectiveAPI = api;
+                    accountActionGroupDefinitionDirectiveDeferred.resolve();
+                };
+
                 $scope.scopeModel.onAccountExtraFieldDefinitionsReady = function (api) {
                     accountExtraFieldDefinitionsDirectiveAPI = api;
                     accountExtraFieldDefinitionsDirectiveDeferred.resolve();
@@ -145,6 +153,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountGridDefinitionExportExcel;
                     var accountViewDefinitions;
                     var accountActionDefinitions;
+                    var accountActionGroupDefinitions;
                     var accountExtraFieldDefinitions;
                     var securityDefinition;
                     var packageAssignmentCondition;
@@ -162,6 +171,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             accountGridDefinitionExportExcel = payload.businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions;
                             accountViewDefinitions = payload.businessEntityDefinitionSettings.AccountViewDefinitions;
                             accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
+                            accountActionGroupDefinitions = payload.businessEntityDefinitionSettings.ActionGroupDefinitions;
                             accountExtraFieldDefinitions = payload.businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
                             securityDefinition = payload.businessEntityDefinitionSettings.Security;
                             packageAssignmentCondition = payload.businessEntityDefinitionSettings.PackageAssignmentCondition;
@@ -207,6 +217,10 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     //Loading AccountActionDefinition Directive
                     var accountActionDefinitionLoadPromise = getAccountActionDefinitionLoadPromise();
                     promises.push(accountActionDefinitionLoadPromise);
+
+                    //Loading AccountActionGroupDefinition Directive
+                    var accountActionGroupDefinitionLoadPromise = getAccountActionGroupDefinitionLoadPromise();
+                    promises.push(accountActionGroupDefinitionLoadPromise);
 
                     //Loading AccountExtraFieldDefinition Directive
                     var accountExtraFieldDefinitionsLoadPromise = getAccountExtraFieldDefinitionsLoadPromise();
@@ -286,10 +300,19 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                     function getAccountActionDefinitionLoadPromise() {
                         var accountActionDefinitionPayload = {
+                            context: getContext(),
                             accountBEDefinitionId: accountBEDefinitionId,
-                            accountActionDefinitions: accountActionDefinitions
+                            accountActionDefinitions: accountActionDefinitions,
                         };
                         return accountActionDefinitionDirectiveAPI.load(accountActionDefinitionPayload);
+                    }
+
+                    function getAccountActionGroupDefinitionLoadPromise() {
+                        var accountActionGroupDefinitionPayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            accountActionGroupDefinitions: accountActionGroupDefinitions,
+                        };
+                        return accountActionGroupDefinitionDirectiveAPI.load(accountActionGroupDefinitionPayload);
                     }
 
                     function getAccountExtraFieldDefinitionsLoadPromise() {
@@ -321,6 +344,24 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         return accountBulkActionsDirectiveAPI.load(accountBulkActionsPayload);
                     }
 
+                    function getContext() {
+                        return {
+                            getActionGroupInfos: function () {
+                                var data = [];
+                                if (accountActionGroupDefinitionDirectiveAPI == undefined)
+                                    return data;
+                                var accountActionGroups = accountActionGroupDefinitionDirectiveAPI.getData();
+                                for (var i = 0; i < accountActionGroups.length; i++) {
+                                    data.push({
+                                        AccountActionGroupId: accountActionGroups[i].AccountActionGroupId,
+                                        Title: accountActionGroups[i].Title,
+                                    });
+                                }
+                                return data;
+                            }
+                        };
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -340,6 +381,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         GridDefinition: gridDefinition,
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
                         ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
+                        ActionGroupDefinitions: accountActionGroupDefinitionDirectiveAPI.getData(),
                         AccountExtraFieldDefinitions: accountExtraFieldDefinitionsDirectiveAPI.getData(),
                         PackageAssignmentCondition: accountConditionSelectiveDirectiveAPI.getData(),
                         UseFinancialAccountModule:$scope.scopeModel.useFinancialAccountModule,

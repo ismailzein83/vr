@@ -7,12 +7,13 @@
                         <vr-columns width="1/2row">
                             <vr-textbox label="Name" value="scopeModel.name" isrequired="true"></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="1/4row">
                             <vr-switch label="Visible In Balance Alert Rule" value="scopeModel.visibleInBalanceAlertRule" isrequired="true"></vr-switch>
                         </vr-columns>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="1/4row">
                             <vr-switch label="Visible In Action Menu" value="scopeModel.visibleInActionMenu" isrequired="true"></vr-switch>
                         </vr-columns>
+                        <retail-be-accountactiondefinition-actiongroup-selector on-ready="scopeModel.onAccountActionGroupDefinitionSelectorReady" normal-col-num="6"></retail-be-accountactiondefinition-actiongroup-selector>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'">

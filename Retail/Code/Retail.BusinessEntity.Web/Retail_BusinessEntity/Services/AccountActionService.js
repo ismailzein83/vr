@@ -1,29 +1,64 @@
 ﻿'use strict';
 
-app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService', 'Retail_BE_ActionRuntimeService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_ChangeStatusActionAPIService', 'Retail_BE_AccountPackageAPIService','Retail_BE_AccountManagerAssignmentService',
+app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService', 'Retail_BE_ActionRuntimeService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_ChangeStatusActionAPIService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountManagerAssignmentService',
     function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService, Retail_BE_ActionRuntimeService, Retail_BE_AccountBEAPIService, Retail_BE_ChangeStatusActionAPIService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountManagerAssignmentService) {
 
         var actionTypes = [];
 
-        function defineAccountMenuActions(accountBEDefinitionId, account, gridAPI, accountViewDefinitions, accountActionDefinitions) {
+        function defineAccountMenuActions(accountBEDefinitionId, account, gridAPI, accountViewDefinitions, accountActionDefinitions, accountActionGroups) {
 
             account.menuActions = [];
-
             if (account.AvailableAccountActions != undefined) {
-                for (var j = 0; j < account.AvailableAccountActions.length; j++) {
-                    var actionId = account.AvailableAccountActions[j];
-                    var accountActionDefinition = UtilsService.getItemByVal(accountActionDefinitions, actionId, "AccountActionDefinitionId");
+                var groupedActionsByGroupId = getGroupedActions(account.AvailableAccountActions);
+                for (var i = 0; i < account.AvailableAccountActions.length; i++) {
+                    var availableAccountActionId = account.AvailableAccountActions[i];
+                    var accountActionDefinition = UtilsService.getItemByVal(accountActionDefinitions, availableAccountActionId, "AccountActionDefinitionId");
                     if (accountActionDefinition != undefined) {
-                        var actionType = getActionTypeIfExist(accountActionDefinition.ActionDefinitionSettings.ClientActionName);
-                        if (actionType != undefined) {
-                            addGridMenuAction(accountActionDefinition, actionType);
+                        var groupedActions = groupedActionsByGroupId[accountActionDefinition.AccountActionGroupId];
+                        if (groupedActions != undefined) {
+                            if (!groupedActions.isUsed) {
+                                groupedActions.isUsed = true;
+                                var groupGridAction = UtilsService.getItemByVal(accountActionGroups, accountActionDefinition.AccountActionGroupId, "AccountActionGroupId");
+                                account.menuActions.push({
+                                    name: groupGridAction.Title,
+                                    childsactions: groupedActions.childActions
+                                });
+                            }
+
+                        } else {
+                            var actionType = getActionTypeIfExist(accountActionDefinition.ActionDefinitionSettings.ClientActionName);
+                            if (actionType != undefined) {
+                                account.menuActions.push(addGridMenuAction(accountActionDefinition, actionType));
+                            }
                         }
                     }
                 }
             }
 
+            function getGroupedActions(availableAccountActionIds) {
+                var groupActions = {};
+                if (availableAccountActionIds != undefined) {
+                    for (var j = 0; j < availableAccountActionIds.length; j++) {
+                        var actionId = availableAccountActionIds[j];
+                        var accountActionDefinition = UtilsService.getItemByVal(accountActionDefinitions, actionId, "AccountActionDefinitionId");
+                        if (accountActionDefinition != undefined && accountActionDefinition.AccountActionGroupId != undefined) {
+                            var actionType = getActionTypeIfExist(accountActionDefinition.ActionDefinitionSettings.ClientActionName);
+                            if (actionType != undefined) {
+                                if (groupActions[accountActionDefinition.AccountActionGroupId] == undefined)
+                                    groupActions[accountActionDefinition.AccountActionGroupId] = {
+                                        isUsed: false,
+                                        childActions: []
+                                    };
+                                groupActions[accountActionDefinition.AccountActionGroupId].childActions.push(addGridMenuAction(accountActionDefinition, actionType));
+                            }
+                        }
+                    }
+                }
+                return groupActions;
+            }
+
             function addGridMenuAction(accountActionDefinition, actionType) {
-                account.menuActions.push({
+                return {
                     name: accountActionDefinition.Name,
                     clicked: function (selectedAccount) {
                         Retail_BE_AccountBEAPIService.GetAccount(accountBEDefinitionId, account.AccountId).then(function (response) {
@@ -33,15 +68,16 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                                 accountActionDefinition: accountActionDefinition,
                                 onItemUpdated: function (updatedItem) {
                                     Retail_BE_AccountBEService.defineAccountViewTabs(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions);
-                                    defineAccountMenuActions(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions, accountActionDefinitions);
+                                    defineAccountMenuActions(accountBEDefinitionId, updatedItem, gridAPI, accountViewDefinitions, accountActionDefinitions, accountActionGroups);
                                     gridAPI.itemUpdated(updatedItem);
                                 }
                             };
                             var promise = actionType.ExecuteAction(payload);
                         });
                     }
-                });
+                };
             }
+
         }
 
         function getActionTypeIfExist(actionTypeName) {

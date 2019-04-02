@@ -14,6 +14,8 @@ namespace Retail.BusinessEntity.Entities
 
         public string Name { get; set; }
 
+        public Guid? AccountActionGroupId { get; set; }
+
         public bool VisibleInActionMenu { get; set; }
 
         public bool VisibleInBalanceAlertRule { get; set; }

@@ -8,8 +8,12 @@
 
         var isEditMode;
 
+        var context;
         var accountBEDefinitionId;
         var accountActionDefinitionEntity;
+
+        var accountActionGroupSelectorAPI;
+        var accountActionGroupSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -25,6 +29,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
+                context = parameters.context;
                 accountBEDefinitionId = parameters.accountBEDefinitionId;
                 accountActionDefinitionEntity = parameters.accountActionDefinitionEntity;
             }
@@ -33,10 +38,16 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.onAccountActionGroupDefinitionSelectorReady = function (api) {
+                accountActionGroupSelectorAPI = api;
+                accountActionGroupSelectorReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.onAccountActionDefinitionSettingsReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsDirectiveReadyDeferred.resolve();
             };
+
             $scope.scopeModel.onAccountConditionSelectiveReady = function (api) {
                 accountConditionSelectiveAPI = api;
                 accountConditionSelectiveReadyDeferred.resolve();
@@ -72,6 +83,20 @@
                 $scope.scopeModel.visibleInActionMenu = accountActionDefinitionEntity.VisibleInActionMenu;
 
             }
+            function loadActionGroupSelectorDirective() {
+                var accountActionGroupSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                accountActionGroupSelectorReadyDeferred.promise.then(function () {
+                    var accountActionGroupSelectorPayload = {
+                        context: context,
+                        selectedIds: accountActionDefinitionEntity != undefined && accountActionDefinitionEntity.AccountActionGroupId != undefined ? accountActionDefinitionEntity.AccountActionGroupId : undefined
+                    };
+                   
+                    VRUIUtilsService.callDirectiveLoad(accountActionGroupSelectorAPI, accountActionGroupSelectorPayload, accountActionGroupSelectorLoadDeferred);
+                });
+
+                return accountActionGroupSelectorLoadDeferred.promise;
+            }
             function loadSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
                 settingsDirectiveReadyDeferred.promise.then(function () {
@@ -102,7 +127,7 @@
                 return accountConditionSelectiveLoadDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective, loadAccountConditionSelective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadActionGroupSelectorDirective, loadSettingsDirective, loadAccountConditionSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -130,6 +155,7 @@
             return {
                 AccountActionDefinitionId: accountActionDefinitionEntity != undefined ? accountActionDefinitionEntity.AccountActionDefinitionId : UtilsService.guid(),
                 Name: $scope.scopeModel.name,
+                AccountActionGroupId: accountActionGroupSelectorAPI.getSelectedIds(),
                 ActionDefinitionSettings: settingsDirectiveAPI.getData(),
                 AvailabilityCondition: accountConditionSelectiveAPI.getData(),
                 VisibleInBalanceAlertRule: $scope.scopeModel.visibleInBalanceAlertRule,

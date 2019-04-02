@@ -27,7 +27,7 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
             this.initializeController = initializeController;
 
             var accountBEDefinitionId;
-
+            var context;
             var gridAPI;
 
             function initializeController() {
@@ -37,7 +37,7 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
                     var onAccountActionDefinitionAdded = function (accountActionDefinition) {
                         ctrl.datasource.push({ Entity: accountActionDefinition });
                     };
-                    Retail_BE_AccountBEDefinitionService.addAccountActionDefinition(accountBEDefinitionId, onAccountActionDefinitionAdded);
+                    Retail_BE_AccountBEDefinitionService.addAccountActionDefinition(accountBEDefinitionId, onAccountActionDefinitionAdded, context);
                 };
 
                 ctrl.removeAccountActionDefinition = function (dataItem) {
@@ -56,6 +56,7 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
+                        context = payload.context;
 
                         if (payload.accountActionDefinitions != undefined) {
                             for (var i = 0; i < payload.accountActionDefinitions.length; i++) {
@@ -101,7 +102,7 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
                     ctrl.datasource[index] = { Entity: accountActionDefinition };
                 };
 
-                Retail_BE_AccountBEDefinitionService.editAccountActionDefinition(accountActionDefinitionObj.Entity, accountBEDefinitionId, onAccountActionDefinitionUpdated);
+                Retail_BE_AccountBEDefinitionService.editAccountActionDefinition(accountActionDefinitionObj.Entity, accountBEDefinitionId, onAccountActionDefinitionUpdated, context);
             }
         }
 

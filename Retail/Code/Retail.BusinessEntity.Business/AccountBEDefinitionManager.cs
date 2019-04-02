@@ -209,6 +209,17 @@ namespace Retail.BusinessEntity.Business
 
             return accountActionDefinitions;
         }
+
+        public List<AccountActionGroupDefinition> GetAccountActionGroupDefinitions(Guid accountBEDefinitionId)
+        {
+            AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
+
+            List<AccountActionGroupDefinition> accountActionGroupDefinitions = accountBEDefinitionSettings.ActionGroupDefinitions;
+            accountActionGroupDefinitions.ThrowIfNull("accountActionGroupDefinitions", accountBEDefinitionId);
+            return accountActionGroupDefinitions;
+        }
+
+
         public AccountActionDefinition GetAccountActionDefinition(Guid accountBEDefinitionId, Guid actionDefinitionId)
         {
             var accountActionDefinitions = GetAccountActionDefinitions(accountBEDefinitionId);
