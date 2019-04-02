@@ -488,6 +488,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.RouteSync.Cataleya
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.SupplierPriceList.Data.RDB", "TOne.WhS.SupplierPriceList.Data.RDB\TOne.WhS.SupplierPriceList.Data.RDB.csproj", "{76D2567A-A428-41B5-985C-94CD6B1EF0E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResolveInvoiceIssue", "ResolveInvoiceIssue\ResolveInvoiceIssue.csproj", "{92399A39-F93D-4A30-93E9-1C2C5AC356EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -8434,6 +8436,54 @@ Global
 		{76D2567A-A428-41B5-985C-94CD6B1EF0E9}.SingleImage|x64.Build.0 = Release|Any CPU
 		{76D2567A-A428-41B5-985C-94CD6B1EF0E9}.SingleImage|x86.ActiveCfg = Release|Any CPU
 		{76D2567A-A428-41B5-985C-94CD6B1EF0E9}.SingleImage|x86.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.CD_ROM|x64.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.CD_ROM|x64.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.CD_ROM|x86.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.CD_ROM|x86.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Debug|x64.Build.0 = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Debug|x86.Build.0 = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.DVD-5|x64.ActiveCfg = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.DVD-5|x64.Build.0 = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.DVD-5|x86.ActiveCfg = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.DVD-5|x86.Build.0 = Debug|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Optimized|Any CPU.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Optimized|x64.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Optimized|x64.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Optimized|x86.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Optimized|x86.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Release|x64.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Release|x64.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Release|x86.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.Release|x86.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.SingleImage|x64.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.SingleImage|x64.Build.0 = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.SingleImage|x86.ActiveCfg = Release|Any CPU
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF}.SingleImage|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -8674,12 +8724,13 @@ Global
 		{A561F7D5-763D-44D9-BBB0-18ACA131E19F} = {AFCE007F-63FD-4982-A774-461D14440BEC}
 		{9454AA0D-2A5D-4902-B6C5-0F705881222A} = {A561F7D5-763D-44D9-BBB0-18ACA131E19F}
 		{76D2567A-A428-41B5-985C-94CD6B1EF0E9} = {FF465CDF-B0DC-46AF-B9CD-DD7D2AEFEC80}
+		{92399A39-F93D-4A30-93E9-1C2C5AC356EF} = {FF0FAC91-E262-491A-BFFD-A3DA5DFBD19E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9AA4648-5D8B-487B-A34E-74D631BBC0B1}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 204
+		SccNumberOfProjects = 205
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -9495,5 +9546,9 @@ Global
 		SccProjectTopLevelParentUniqueName203 = TOneV2.sln
 		SccProjectName203 = TOne.WhS.SupplierPriceList.Data.RDB
 		SccLocalPath203 = TOne.WhS.SupplierPriceList.Data.RDB
+		SccProjectUniqueName204 = ResolveInvoiceIssue\\ResolveInvoiceIssue.csproj
+		SccProjectTopLevelParentUniqueName204 = TOneV2.sln
+		SccProjectName204 = ResolveInvoiceIssue
+		SccLocalPath204 = ResolveInvoiceIssue
 	EndGlobalSection
 EndGlobal
