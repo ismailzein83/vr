@@ -36,7 +36,7 @@ app.directive("businessprocessVrWorkflowSpecificgroupsTaskassignees", ["UtilsSer
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        $scope.scopeModel.groupIds = payload.groupIds;
+                        $scope.scopeModel.groupIds = (payload.settings) != undefined ? payload.settings.GroupIds : undefined;
                         $scope.scopeModel.getParentVariables = payload.getParentVariables;
                         $scope.scopeModel.getWorkflowArguments = payload.getWorkflowArguments;
                         $scope.scopeModel.isVRWorkflowActivityDisabled = payload.isVRWorkflowActivityDisabled;
