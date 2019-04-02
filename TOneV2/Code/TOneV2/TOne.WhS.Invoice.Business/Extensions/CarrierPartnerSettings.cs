@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Invoice.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -34,8 +35,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
         SMSServiceTypes = 17,
         BillingCompanyPhone = 18,
         CustomerSMSServiceTypes = 19,
-        SupplierSMSServiceTypes = 20
+        SupplierSMSServiceTypes = 20,
+        BillingCompanyContact = 21,
+        CarrierCompanyBillingContact = 22,
+        OriginalAmount = 23
     }
+
     public enum CarrierInvoiceType { Customer = 1, Supplier = 2, Settlement = 3 }
     public class CarrierPartnerSettings : InvoicePartnerManager
     {
@@ -88,6 +93,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         string pricingContact = null;
                         string pricingEmail = null;
                         string billingEmail = null;
+                        string billingContactPerson = null;
+
                         if (financialAccount.CarrierProfileId.HasValue)
                         {
                             companySetting = carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
@@ -105,6 +112,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             var billingEmailObject = carrierProfile.Settings.Contacts.FindRecord(x => x.Type == CarrierContactType.BillingEmail);
                             if (billingEmailObject != null)
                                 billingEmail = billingEmailObject.Description;
+
+                            var billingContactPersonObject = carrierProfile.Settings.Contacts.FindRecord(x => x.Type == CarrierContactType.BillingContactPerson);
+                            if (billingContactPersonObject != null)
+                                billingContactPerson = billingContactPersonObject.Description;
 
                             carrierCompanyName = carrierProfile.Settings.Company;
                             currencySymbol = currencyManager.GetCurrencySymbol(carrierProfile.Settings.CurrencyId);
@@ -130,6 +141,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             if (billingEmailObject != null)
                                 billingEmail = billingEmailObject.Description;
 
+                            var billingContactPersonObject = carrierProfile.Settings.Contacts.FindRecord(x => x.Type == CarrierContactType.BillingContactPerson);
+                            if (billingContactPersonObject != null)
+                                billingContactPerson = billingContactPersonObject.Description;
+
                             currencySymbol = currencyManager.GetCurrencySymbol(carrierAccount.CarrierAccountSettings.CurrencyId);
                         }
                         List<SMSServiceType> customerSMSServiceTypes = new List<SMSServiceType>();
@@ -143,6 +158,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             case CarrierInvoiceType.Supplier:
                                 supplierSMSServiceTypes = financialAccountManager.GetFinancialAccountSupplierSMSServiceTypes(financialAccount.FinancialAccountId);
                                 AddRDLCParameter(rdlcReportParameters, RDLCParameter.SMSServiceTypes, string.Join(",", supplierSMSServiceTypes.Select(x => x.Symbol)), true);
+
+                                var supplierInvoiceDetails = context.Invoice.Details as SupplierInvoiceDetails;
+
+                                decimal? originalAmount;
+                                var originalDataCurrency = supplierInvoiceDetails.OriginalAmountByCurrency != null ? supplierInvoiceDetails.OriginalAmountByCurrency.GetRecord(supplierInvoiceDetails.SupplierCurrencyId) : null;
+                                originalAmount = originalDataCurrency != null ? originalDataCurrency.OriginalAmount : null;
+
+                                if (originalAmount.HasValue)
+                                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.OriginalAmount, originalAmount.Value.ToString(), true);
+
                                 break;
                             case CarrierInvoiceType.Settlement:
                                 customerSMSServiceTypes = financialAccountManager.GetFinancialAccountCustomerSMSServiceTypes(financialAccount.FinancialAccountId);
@@ -154,6 +179,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, billingEmail, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Attention, pricingContact, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.CarrierCompanyName, carrierCompanyName, true);
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.CarrierCompanyBillingContact, billingContactPerson, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Carrier, carrierName, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
                         if (carrierProfile != null)
@@ -185,6 +211,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             if (companySetting.Contacts.TryGetValue("Billing", out companyContact))
                             {
                                 AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyPhone, companyContact.Phone, true);
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyContact, $"{companyContact.Title} {companyContact.ContactName}", true);
                             }
                             VRFileManager fileManager = new VRFileManager();
                             var logo = fileManager.GetFile(companySetting.CompanyLogo);
