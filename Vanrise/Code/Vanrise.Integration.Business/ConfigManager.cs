@@ -10,15 +10,17 @@ namespace Vanrise.Integration.Business
 {
     public class ConfigManager
     {
-
         #region Public Methods
+
         public Vanrise.Entities.InsertOperationOutput<FileDataSourceDefinition> AddFileDataSourceDefinition(FileDataSourceDefinition fileDataSourceDefinition)
         {
             DataSourceSettingData dataSourceSettingData = this.GetDataSourceSettingData();
             if (dataSourceSettingData == null)
                 dataSourceSettingData = new DataSourceSettingData();
+
             if (dataSourceSettingData.FileDataSourceSettings == null)
                 dataSourceSettingData.FileDataSourceSettings = new FileDataSourceSettings();
+
             if (dataSourceSettingData.FileDataSourceSettings.FileDataSourceDefinitions == null)
                 dataSourceSettingData.FileDataSourceSettings.FileDataSourceDefinitions = new List<FileDataSourceDefinition>();
 
@@ -30,31 +32,48 @@ namespace Vanrise.Integration.Business
                 SettingId = new Guid("0D693835-9A45-4D35-826B-A6DA59011B4B"),
                 Data = dataSourceSettingData
             };
-            new SettingManager().UpdateSetting(dataSourceSettingToEdit);
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<FileDataSourceDefinition>();
 
-            Vanrise.Entities.InsertOperationOutput<FileDataSourceDefinition> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<FileDataSourceDefinition>();
-            insertOperationOutput.InsertedObject = fileDataSourceDefinition;
-            insertOperationOutput.Result = InsertOperationResult.Succeeded;
+            UpdateOperationOutput<SettingDetail> updateOperationOutput = new SettingManager().UpdateSetting(dataSourceSettingToEdit);
+            if (updateOperationOutput.Result == UpdateOperationResult.Succeeded && updateOperationOutput.UpdatedObject != null)
+            {
+                insertOperationOutput.InsertedObject = fileDataSourceDefinition;
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+            }
+            else
+            {
+                insertOperationOutput.InsertedObject = null;
+                insertOperationOutput.Result = InsertOperationResult.Failed;
+            }
+
             return insertOperationOutput;
         }
 
         public List<PeakTimeRange> GetPeakTimeRanges()
         {
             FileDataSourceSettings fileDataSourceSettings = GetFileDataSourceSettings();
+            if (fileDataSourceSettings == null)
+                return null;
+
             return fileDataSourceSettings.PeakTimeRanges;
         }
 
         public FileDataSourceDefinition GetFileDataSourceDefinition(Guid fileDataSourceDefinitionId)
         {
-            FileDataSourceDefinition fileDataSourceDefinition = GetFileDataSourceDefinitions().FindRecord(itm => itm.FileDataSourceDefinitionId == fileDataSourceDefinitionId);
+            IEnumerable<FileDataSourceDefinition> fileDataSourceDefinitions = this.GetFileDataSourceDefinitions();
+            fileDataSourceDefinitions.ThrowIfNull("fileDataSourceDefinitions", fileDataSourceDefinitionId);
+
+            FileDataSourceDefinition fileDataSourceDefinition = fileDataSourceDefinitions.FindRecord(itm => itm.FileDataSourceDefinitionId == fileDataSourceDefinitionId);
             fileDataSourceDefinition.ThrowIfNull("fileDataSourceDefinition", fileDataSourceDefinitionId);
             return fileDataSourceDefinition;
         }
 
         public IEnumerable<FileDataSourceDefinition> GetFileDataSourceDefinitions()
         {
-            FileDataSourceSettings fileDataSourceSettings = GetFileDataSourceSettings();
-            fileDataSourceSettings.FileDataSourceDefinitions.ThrowIfNull("fileDataSourceSettings.FileDataSourceDefinitions");
+            FileDataSourceSettings fileDataSourceSettings = this.GetFileDataSourceSettings();
+            if (fileDataSourceSettings == null)
+                return null;
+
             return fileDataSourceSettings.FileDataSourceDefinitions;
         }
 
@@ -84,7 +103,9 @@ namespace Vanrise.Integration.Business
         private FileDataSourceSettings GetFileDataSourceSettings()
         {
             DataSourceSettingData dataSourceSettingData = GetDataSourceSettingData();
-            dataSourceSettingData.FileDataSourceSettings.ThrowIfNull("dataSourceSettingData.FileDataSourceSettings");
+            if (dataSourceSettingData == null)
+                return null;
+
             return dataSourceSettingData.FileDataSourceSettings;
         }
 
@@ -92,7 +113,6 @@ namespace Vanrise.Integration.Business
         {
             SettingManager settingManager = new SettingManager();
             DataSourceSettingData dataSourceSettingData = settingManager.GetSetting<DataSourceSettingData>(Constants.DataSourceSettings);
-            dataSourceSettingData.ThrowIfNull("dataSourceSettingData");
             return dataSourceSettingData;
         }
 

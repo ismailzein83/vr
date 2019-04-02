@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Integration.Entities;
@@ -24,6 +23,9 @@ namespace Vanrise.Integration.Business
         public IEnumerable<FileDataSourceDefinitionInfo> GetFileDataSourceDefinitionInfo(FileDataSourceDefinitionInfoFilter filter)
         {
             var fileDataSourceDefinitions = new ConfigManager().GetFileDataSourceDefinitions();
+            if (fileDataSourceDefinitions == null)
+                return null;
+
             return fileDataSourceDefinitions.MapRecords(FileDataSourceDefinitionInfoMapper);
         }
 
