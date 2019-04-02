@@ -122,13 +122,17 @@
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDeclarationOnBeforeSaveHandler.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDirectionServicesCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\OperatorDeclarationTemplate.html" />
+    <Content Include="Retail_RA\Directives\Operator\retail-ra-operator-selector.js" />
+    <Content Include="Retail_RA\Directives\Operator\Template\OperatorSelectorTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnAfterSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnBeforeSaveHandlerTemplate.html" />
+    <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionSelectorTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-aftersavehandler.js" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-beforesavehandler.js" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\ra-genericruledefinitionsettings-voicetax.js" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\ra-rules-voicetaxrule-overall.js" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\ra-rules-voicetaxrule-perminute.js" />
+    <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-selector.js" />
     <Content Include="Retail_RA\Directives\Settings\retail-ra-dispute-settings-editor.js" />
     <Content Include="Retail_RA\Directives\Settings\Templates\DisputeSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\TaxRules\ra-rules-taxrulesettings-voice.js" />
