@@ -2160,124 +2160,124 @@ namespace BPMExtended.Main.Common
 
         #region  Installments
 
-        public static List<InstallmentDetail> GetInstallments()
-        {
-            return GetAllInstallments().MapRecords(InstallmentDetailMapper).ToList();
-            //return GetAllInstallments().FindAllRecords(x => (int)x.CustomerType == (int)customerType).MapRecords(InstallmentDetailMapper).ToList();
-        }
+        //public static List<InstallmentDetail> GetInstallments()
+        //{
+        //    return GetAllInstallments().MapRecords(InstallmentDetailMapper).ToList();
+        //    //return GetAllInstallments().FindAllRecords(x => (int)x.CustomerType == (int)customerType).MapRecords(InstallmentDetailMapper).ToList();
+        //}
 
-        private static List<Installment> GetAllInstallments()
-        {
+        //private static List<Installment> GetAllInstallments()
+        //{
 
-            return new List<Installment>
-            {
-                 new Installment
-                 {
-                    Id ="INST_1",
-                    PaymentPlanId = "1",
-                    Amount ="200",
-                    Date ="01/01/2019",
-                    Currency = "200"
-                 },
-                  new Installment
-                 {
-                    Id ="INST_2",
-                    PaymentPlanId = "2",
-                    Amount ="400",
-                    Date ="04/04/2019",
-                    Currency = "55"
-                 },
-                   new Installment
-                 {
-                    Id ="INST_3",
-                    PaymentPlanId = "3",
-                    Amount ="600",
-                    Date ="02/02/2019",
-                    Currency = "200"
-                 },
-                    new Installment
-                 {
-                    Id ="INST_4",
-                    PaymentPlanId = "4",
-                    Amount ="500",
-                    Date ="04/04/2019",
-                    Currency = "1200"
-                 },
-                    new Installment
-                 {
-                    Id ="INST_5",
-                    PaymentPlanId = "1",
-                    Amount ="500",
-                    Date ="04/04/2019",
-                    Currency = "2200"
-                 }
-            };
+        //    return new List<Installment>
+        //    {
+        //         new Installment
+        //         {
+        //            Id ="INST_1",
+        //            PaymentPlanId = "1",
+        //            Amount ="200",
+        //            Date ="01/01/2019",
+        //            Currency = "200"
+        //         },
+        //          new Installment
+        //         {
+        //            Id ="INST_2",
+        //            PaymentPlanId = "2",
+        //            Amount ="400",
+        //            Date ="04/04/2019",
+        //            Currency = "55"
+        //         },
+        //           new Installment
+        //         {
+        //            Id ="INST_3",
+        //            PaymentPlanId = "3",
+        //            Amount ="600",
+        //            Date ="02/02/2019",
+        //            Currency = "200"
+        //         },
+        //            new Installment
+        //         {
+        //            Id ="INST_4",
+        //            PaymentPlanId = "4",
+        //            Amount ="500",
+        //            Date ="04/04/2019",
+        //            Currency = "1200"
+        //         },
+        //            new Installment
+        //         {
+        //            Id ="INST_5",
+        //            PaymentPlanId = "1",
+        //            Amount ="500",
+        //            Date ="04/04/2019",
+        //            Currency = "2200"
+        //         }
+        //    };
 
-        }
+        //}
 
-        private static InstallmentDetail InstallmentDetailMapper(Installment installment)
-        {
-            return new InstallmentDetail
-            {
-                Id = installment.Id,
-                Date = installment.Date,
-                Amount = installment.Amount,
-                Currency = installment.Currency
-            };
-        }
+        //private static InstallmentDetail InstallmentDetailMapper(Installment installment)
+        //{
+        //    return new InstallmentDetail
+        //    {
+        //        Id = installment.Id,
+        //        Date = installment.Date,
+        //        Amount = installment.Amount,
+        //        Currency = installment.Currency
+        //    };
+        //}
 
 
         #endregion
 
         #region Templates
 
-        public static List<PaymentPlanTemplate> GetTemplateById(string templateId)
-        {
-            return GetAllTemplates().FindAll(x => x.Id.ToLower() == templateId.ToLower());
-        }
+        //public static List<PaymentPlanTemplate> GetTemplateById(string templateId)
+        //{
+        //    return GetAllTemplates().FindAll(x => x.Id.ToLower() == templateId.ToLower());
+        //}
 
-        public static List<PaymentPlanTemplateInfo> GetAllTemplatesInfo()
-        {
-            return GetAllTemplates().MapRecords(TemplatesInfoMapper).ToList();
-        }
+        //public static List<PaymentPlanTemplateInfo> GetAllTemplatesInfo()
+        //{
+        //    return GetAllTemplates().MapRecords(TemplatesInfoMapper).ToList();
+        //}
 
-        private static List<PaymentPlanTemplate> GetAllTemplates()
-        {
+        //private static List<PaymentPlanTemplate> GetAllTemplates()
+        //{
 
-            return new List<PaymentPlanTemplate>
-            {
-                 new PaymentPlanTemplate
-                 {
-                    Id ="1",
-                    Name ="Template A"
-                 },
-                 new PaymentPlanTemplate
-                 {
-                    Id ="2",
-                    Name ="Template B"
-                 },
-                 new PaymentPlanTemplate
-                 {
-                    Id ="3",
-                    Name ="Template C"
-                 },
-                 new PaymentPlanTemplate
-                 {
-                    Id ="4",
-                    Name ="Template D"
-                 },
-            };
+        //    return new List<PaymentPlanTemplate>
+        //    {
+        //         new PaymentPlanTemplate
+        //         {
+        //            Id ="1",
+        //            Name ="Template A"
+        //         },
+        //         new PaymentPlanTemplate
+        //         {
+        //            Id ="2",
+        //            Name ="Template B"
+        //         },
+        //         new PaymentPlanTemplate
+        //         {
+        //            Id ="3",
+        //            Name ="Template C"
+        //         },
+        //         new PaymentPlanTemplate
+        //         {
+        //            Id ="4",
+        //            Name ="Template D"
+        //         },
+        //    };
 
-        }
+        //}
 
-        private static PaymentPlanTemplateInfo TemplatesInfoMapper(PaymentPlanTemplate template)
-        {
-            return new PaymentPlanTemplateInfo
-            {
-                Id = template.Id,
-                Name = template.Name
-            };
-        }
+        //private static PaymentPlanTemplateInfo TemplatesInfoMapper(PaymentPlanTemplate template)
+        //{
+        //    return new PaymentPlanTemplateInfo
+        //    {
+        //        Id = template.Id,
+        //        Name = template.Name
+        //    };
+        //}
 
         #endregion
 
@@ -2286,7 +2286,7 @@ namespace BPMExtended.Main.Common
 
         public static List<NormalDI> GetFilteredNormalDI(string firstName, string fatherName, string lastName, string street, string province, string city)
         {
-            return GetAllNormalDI().FindAll(x => x.FirstName.ToLower() == firstName.ToLower() || x.FatherName.ToLower() == fatherName.ToLower() || x.LastName.ToLower() == lastName.ToLower() || x.Street.ToLower() == street.ToLower() || x.Province.ToLower() == province.ToLower() || x.City.ToLower() == city.ToLower());
+            return GetAllNormalDI().FindAll(x => (x.FirstName.ToLower() == firstName.ToLower() || firstName == "") && (x.FatherName.ToLower() == fatherName.ToLower() || fatherName == "") && (x.LastName.ToLower() == lastName.ToLower() || lastName == "" ) && (x.Street.ToLower() == street.ToLower() || street == "") && (x.Province.ToLower() == province.ToLower() || province == "") && (x.City.ToLower() == city.ToLower() || city== ""));
         }
      
         private static List<NormalDI> GetAllNormalDI()
@@ -2301,7 +2301,7 @@ namespace BPMExtended.Main.Common
                     MotherName="asasas",
                     LastName="saas",
                     City="beirut",
-                    Province="beirut",
+                    Province="Florida",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="768888555"
@@ -2313,7 +2313,7 @@ namespace BPMExtended.Main.Common
                     MotherName="tr",
                     LastName="sammmas",
                     City="tyr",
-                    Province="aa",
+                    Province="California",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="768888555"
@@ -2325,7 +2325,7 @@ namespace BPMExtended.Main.Common
                     MotherName="qewq",
                     LastName="zxz",
                     City="saida",
-                    Province="p1",
+                    Province="Florida",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="76169059"
@@ -2337,7 +2337,7 @@ namespace BPMExtended.Main.Common
                     MotherName="bn",
                     LastName="fdg",
                     City="nabatieh",
-                    Province="cc",
+                    Province="California",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="76169059"
@@ -2353,7 +2353,7 @@ namespace BPMExtended.Main.Common
 
         public static List<CompanyDI> GetFilteredCompaniesDI(string accountName, string city, string province, string street)
         {
-            return GetAllCompaniesDI().FindAll(x => x.AccountName.ToLower() == accountName.ToLower() && x.City.ToLower() == city.ToLower() && x.Province.ToLower() == province.ToLower() && x.Street.ToLower() == street.ToLower());
+            return GetAllCompaniesDI().FindAll(x => (x.AccountName.ToLower() == accountName.ToLower() || accountName == "") && (x.City.ToLower() == city.ToLower() || city== "") && (x.Province.ToLower() == province.ToLower() || province== "") && (x.Street.ToLower() == street.ToLower() || street== ""));
         }
 
         private static List<CompanyDI> GetAllCompaniesDI()
@@ -2365,7 +2365,7 @@ namespace BPMExtended.Main.Common
                  {
                     AccountName="Company A",
                     City="beirut",
-                    Province="beirut",
+                    Province="Florida",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="768821555"
@@ -2374,7 +2374,7 @@ namespace BPMExtended.Main.Common
                  {
                     AccountName="Company B",
                     City="tyr",
-                    Province="aa",
+                    Province="California",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="768888555"
@@ -2383,7 +2383,7 @@ namespace BPMExtended.Main.Common
                  {
                     AccountName="Company C",
                     City="saida",
-                    Province="p1",
+                    Province="Florida",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="76654568"
@@ -2392,7 +2392,7 @@ namespace BPMExtended.Main.Common
                  {
                     AccountName="Company D",
                     City="nabatieh",
-                    Province="cc",
+                    Province="California",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="761908768"
@@ -2407,7 +2407,7 @@ namespace BPMExtended.Main.Common
 
         public static List<ProfessionalDI> GetFilteredProfessionalDI(string firstName, string fatherName, string lastName, string street, string province, string city, string profession)
         {
-            return GetAllProfessionalDI().FindAll(x => x.FirstName.ToLower() == firstName.ToLower() && x.FatherName.ToLower() == fatherName.ToLower() && x.LastName.ToLower() == lastName.ToLower() && x.Street.ToLower() == street.ToLower() && x.Province.ToLower() == province.ToLower() && x.City.ToLower() == city.ToLower() && x.Profession.ToLower() == profession.ToLower());
+            return GetAllProfessionalDI().FindAll(x => (x.FirstName.ToLower() == firstName.ToLower() || firstName == "") && (x.FatherName.ToLower() == fatherName.ToLower() || fatherName == "") && (x.LastName.ToLower() == lastName.ToLower() || lastName == "") && (x.Street.ToLower() == street.ToLower() || street == "") && (x.Province.ToLower() == province.ToLower() || province == "") && (x.City.ToLower() == city.ToLower() || city == "") && (x.Profession.ToLower() == profession.ToLower() || profession == ""));
         }
 
         private static List<ProfessionalDI> GetAllProfessionalDI()
@@ -2422,7 +2422,7 @@ namespace BPMExtended.Main.Common
                     MotherName="asasas",
                     LastName="saas",
                     City="beirut",
-                    Province="beirut",
+                    Province="Florida",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="768888555",
@@ -2436,7 +2436,7 @@ namespace BPMExtended.Main.Common
                     MotherName="tr",
                     LastName="sammmas",
                     City="tyr",
-                    Province="aa",
+                    Province="Florida",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="768888555",
@@ -2449,7 +2449,7 @@ namespace BPMExtended.Main.Common
                     MotherName="qewq",
                     LastName="zxz",
                     City="saida",
-                    Province="p1",
+                    Province="California",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="76169059",
@@ -2462,7 +2462,7 @@ namespace BPMExtended.Main.Common
                     MotherName="bn",
                     LastName="fdg",
                     City="nabatieh",
-                    Province="cc",
+                    Province="California",
                     Street="saaas",
                     Building="bb",
                     PhoneNumber="76169059",

@@ -91,7 +91,6 @@
     <Compile Include="DeviceItemDetail.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="FriendAndFamily.cs" />
-    <Compile Include="Installment.cs" />
     <Compile Include="InstallmentDetail.cs" />
     <Compile Include="InventoryItemDetail.cs" />
     <Compile Include="InvoiceDetail.cs" />
@@ -106,7 +105,6 @@
     <Compile Include="PaymentMethod.cs" />
     <Compile Include="PaymentPlan.cs" />
     <Compile Include="PaymentPlanDetail.cs" />
-    <Compile Include="PaymentPlanTemplate.cs" />
     <Compile Include="PaymentPlanTemplateInfo.cs" />
     <Compile Include="PhoneNumberDetail.cs" />
     <Compile Include="ProfessionalDI.cs" />

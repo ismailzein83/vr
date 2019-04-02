@@ -22,6 +22,7 @@ using MigraDoc.Rendering;
 using System.Diagnostics;
 using System.IO;
 using SOM.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 
 namespace BPMExtended.Main.Business
 {
@@ -691,12 +692,39 @@ namespace BPMExtended.Main.Business
 
         public List<PaymentPlanTemplateInfo> GetAllPaymentPlanTemplatesInfo()
         {
-            return RatePlanMockDataGenerator.GetAllTemplatesInfo();
+            var templatesInfoItems = new List<PaymentPlanTemplateInfo>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<PaymentPlanTemplate> items = client.Get<List<PaymentPlanTemplate>>(String.Format("api/SOM.ST/Billing/GetPaymentPlanTemplates"));
+                foreach (var item in items)
+                {
+                    var templateInfoItem = TemplateToInfoMapper(item);
+                    templatesInfoItems.Add(templateInfoItem);
+                }
+            }
+            return templatesInfoItems;
         }
 
-        public List<InstallmentDetail> GetInstallments(string templateId,string invoiceId,string reductionValue)
+        public List<InstallmentDetail> GetInstallments(string templateId, string invoiceId)
         {
-            return RatePlanMockDataGenerator.GetInstallments();
+            return SimulatePaymentPlan(templateId,invoiceId);
+
+        }
+
+        public List<InstallmentDetail> SimulatePaymentPlan(string templateId,string invoiceId)
+        {
+            // return RatePlanMockDataGenerator.GetInstallments();
+            var installmentsDetailItems = new List<InstallmentDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<Installment> items = client.Get<List<Installment>>(String.Format("api/SOM.ST/Billing/SimulatePaymentPlan?invoiceId={0}&paymentPlanTemplateIdPub={1}",invoiceId,templateId));
+                foreach (var item in items)
+                {
+                    var installmentsDetaiItem = InstallmentToDetailMapper(item);
+                    installmentsDetailItems.Add(installmentsDetaiItem);
+                }
+            }
+            return installmentsDetailItems;
         }
 
         public List<ProfessionalDI> GetFilteredProfessionalDI(string firstName, string fatherName, string lastName, string street, string province, string city, string profession)
@@ -747,7 +775,34 @@ namespace BPMExtended.Main.Business
             return value.Next(10) <= 5 ? true : false;
         }
 
+        #region Mappers
+        public PaymentPlanTemplateInfo TemplateToInfoMapper(PaymentPlanTemplate item)
+        {
+            return new PaymentPlanTemplateInfo
+            {
+                Id = item.Id,
+                Name = item.Name
+
+            };
+        }
+
+        public InstallmentDetail InstallmentToDetailMapper(Installment item)
+        {
+            return new InstallmentDetail
+            {
+                Id = item.Id,
+                Amount = item.Amount.ToString(),
+                Currency = item.Currency,
+                Date = item.DueDate.ToString()
+
+            };
+        }
+
+        #endregion
+
     }
+
+
 
     public class PDFDocument
     {
