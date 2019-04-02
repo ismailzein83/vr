@@ -41,7 +41,9 @@ as (select * from (values
 ('D297A8B8-997D-4127-91FA-353238296940','VRWorkflowProcessInitiatorTaskAssignees','Process Initiator','BP_VR_Workflow_TaskAssignees_Setting','{"Editor":"businessprocess-vr-workflow-processinitiator-taskassignees"}'),
 ('36F6C817-A40F-4F8C-A2D6-9377EAF2169D','ExecuteBPGenericTaskTypeAction','Execute','BP_Generic_TaskType_ActionSettings','{"Editor":"businessprocess-generictasktype-actionsettings-execute"}'),
 ('0AD405A3-9BCF-4796-9A1A-6CC2C3F9AAA3','OpenBPInstanceViewer','Open BP Instance Viewer','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-openbpinstanceviewer-action"}'),
-('0E9730F4-1197-456B-9261-E745FE4AFB3B','StartBPProcess_Generic','Start BP Process','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-genericbe-startbpprocess-action"}')
+('0E9730F4-1197-456B-9261-E745FE4AFB3B','StartBPProcess_Generic','Start BP Process','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-genericbe-startbpprocess-action"}'),
+('68DEA8B2-8817-40EE-977D-4EE683CE5092','FilterGroupBPGenericTaskTypeActionFilterCondition','Filter Group','BP_Generic_TaskType_ActionFilterCondition','{"Editor":"bp-generictasktypeactionfiltercondition-filtergroup"}'),
+('9B435BE4-43CD-4942-B5D3-95C8927D6885','IsTakenBPGenericTaskTypeActionFilterCondition','Taken By','BP_Generic_TaskType_ActionFilterCondition','{"Editor":"bp-generictasktypeactionfiltercondition-istaken"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

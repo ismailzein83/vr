@@ -444,8 +444,8 @@ as (select * from (values
 ('5F14D26D-7B43-41BE-9A3A-6BA0A7EB8316','VRCommon_HttpProxyDynamicCodeSettings','Http Service Proxy','VRCommon_DynamicCode','{"Editor":"vr-common-dynamiccode-httpproxy"}'),
 ('BE0BBEC6-F506-4805-AF5C-068843EF7481','Figure Tile Settings','Figure','VRCommon_VRTileExtendedSettings','{"Editor":"vr-common-figurestilesettings-definition"}'),
 ('A3F635B1-2C76-4419-A636-0A6625048DF9','TabTiles','Tab Tiles','VRCommon_VRTileExtendedSettings','{"Editor":"vr-common-tabtiles-definition"}'),
-('F48249D1-C20D-4B36-BBEA-8AAF8A87B18E','LastMonthTimePeriod','Last Month','VRCommon_VRTimePeriod','{"Editor":"vr-common-timeperiod-lastmonth"}')
-
+('F48249D1-C20D-4B36-BBEA-8AAF8A87B18E','LastMonthTimePeriod','Last Month','VRCommon_VRTimePeriod','{"Editor":"vr-common-timeperiod-lastmonth"}'),
+('F0FCE857-0119-4895-9459-648E14EFA60A','Comment View','Comment','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-common-comment-genericbeview-definition"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
