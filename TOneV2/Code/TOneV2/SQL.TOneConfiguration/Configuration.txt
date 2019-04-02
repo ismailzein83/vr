@@ -132,6 +132,7 @@ Retail_ISP.PostDeployment.sql
 
 NetworkRental
 Retail_NetworkRental.PostDeployment.sql
+Retail_NetworkRental_OrdersAndContracts.PostDeployment.sql
 
 Voucher
 Voucher.PostDeployment.sql
