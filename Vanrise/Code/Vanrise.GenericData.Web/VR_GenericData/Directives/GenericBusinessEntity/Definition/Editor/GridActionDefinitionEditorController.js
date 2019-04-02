@@ -8,10 +8,14 @@
 
         var isEditMode;
         var gridActionDefinition;
-        var context;        
+        var context;
+
+        var actionGroupSelectorAPI;
+        var actionGroupSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var filterConditionAPI;
         var filterConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        
+
         loadParameters();
         defineScope();
         load();
@@ -21,7 +25,7 @@
 
             if (parameters != undefined && parameters != null) {
                 gridActionDefinition = parameters.gridActionDefinition;
-                context = parameters.context; 
+                context = parameters.context;
             }
             isEditMode = (gridActionDefinition != undefined);
         }
@@ -29,11 +33,16 @@
             $scope.scopeModel = {};
 
             $scope.scopeModel.bEActionsDefinitionInfos = context.getActionInfos();
+
+            $scope.scopeModel.onGenericBEGridActionGroupSelectorReady = function (api) {
+                actionGroupSelectorAPI = api;
+                actionGroupSelectorReadyPromiseDeferred.resolve();
+            };
+
             $scope.scopeModel.onGenericBEGridactiondefinitionFilterReady = function (api) {
                 filterConditionAPI = api;
                 filterConditionReadyPromiseDeferred.resolve();
             };
-
 
             $scope.scopeModel.saveGridActionDefinition = function () {
                 if (isEditMode) {
@@ -71,12 +80,26 @@
                     $scope.scopeModel.selectedActionDefnition = UtilsService.getItemByVal($scope.scopeModel.bEActionsDefinitionInfos, gridActionDefinition.GenericBEActionId, "GenericBEActionId");
 
                 }
+
+                function loadActionGroupSelector() {
+                    var loadActionGroupSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                    actionGroupSelectorReadyPromiseDeferred.promise.then(function () {
+                        var actionGroupPayload = {
+                            context: getContext(),
+                            selectedIds: gridActionDefinition != undefined && gridActionDefinition.GenericBEGridActionGroupId != undefined ? gridActionDefinition.GenericBEGridActionGroupId : undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(actionGroupSelectorAPI, actionGroupPayload, loadActionGroupSelectorPromiseDeferred);
+                    });
+                    return loadActionGroupSelectorPromiseDeferred.promise;
+                }
+
+
                 function loadFilterConditionEditor() {
                     var loadFilterConditionEditorPromiseDeferred = UtilsService.createPromiseDeferred();
                     filterConditionReadyPromiseDeferred.promise.then(function () {
                         var settingPayload = {
                             context: getContext(),
-                            filterCondition: gridActionDefinition!=undefined?gridActionDefinition.FilterCondition:undefined
+                            filterCondition: gridActionDefinition != undefined ? gridActionDefinition.FilterCondition : undefined
                         };
 
                         VRUIUtilsService.callDirectiveLoad(filterConditionAPI, settingPayload, loadFilterConditionEditorPromiseDeferred);
@@ -84,7 +107,7 @@
                     return loadFilterConditionEditorPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadFilterConditionEditor]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadActionGroupSelector, loadFilterConditionEditor]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -101,6 +124,7 @@
                 GenericBEActionId: $scope.scopeModel.selectedActionDefnition != undefined ? $scope.scopeModel.selectedActionDefnition.GenericBEActionId : undefined,
                 Title: $scope.scopeModel.title,
                 ReloadGridItem: $scope.scopeModel.reloadGridItem,
+                GenericBEGridActionGroupId: actionGroupSelectorAPI.getSelectedIds(),
                 FilterCondition: filterConditionAPI.getData()
             };
         }
@@ -109,7 +133,7 @@
             var gridActionObj = buildGridActionDefinitionFromScope();
             if ($scope.onGenericBEGridActionDefinitionAdded != undefined) {
                 $scope.onGenericBEGridActionDefinitionAdded(gridActionObj);
-            } 
+            }
             $scope.modalContext.closeModal();
         }
 

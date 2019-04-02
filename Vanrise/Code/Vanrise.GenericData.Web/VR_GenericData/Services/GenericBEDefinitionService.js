@@ -12,6 +12,7 @@
         var actionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionEditor.html";
         var bulkActionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBEBulkActionDefinition/Templates/GenericBEBulkActionDefinitionEditor.html";
         var gridActionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/GridActionDefinitionEditor.html";
+        var gridActionGroupModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/GridActionGroupDefinitionEditor.html";
         var conditionalHandlerPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/OnAfterSaveHandler/Templates/AfterSaveHandlerConditionalEditor.html";
         var conditionGroupPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBESaveCondition/MainExtensions/Templates/GenericBEConditionGroupEditor.html";
         var partDefinitionPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/OnBeforeInsertHandler/Templates/SerialNumberPartDefinitionEditor.html";
@@ -29,6 +30,8 @@
             editGenericBEActionDefinition: editGenericBEActionDefinition,
             addGenericBEGridActionDefinition: addGenericBEGridActionDefinition,
             editGenericBEGridActionDefinition: editGenericBEGridActionDefinition,
+            addGenericBEGridActionGroupDefinition: addGenericBEGridActionGroupDefinition,
+            editGenericBEGridActionGroupDefinition: editGenericBEGridActionGroupDefinition,
             addGenericBEConditionalHandler: addGenericBEConditionalHandler,
             editGenericBEConditionalHandler: editGenericBEConditionalHandler,
             addGenericBEConditionGroup: addGenericBEConditionGroup,
@@ -209,6 +212,32 @@
                 modalScope.onGenericBEGridActionDefinitionUpdated = onGenericBEGridActionDefinitionUpdated;
             };
             VRModalService.showModal(gridActionModalPath, parameters, settings);
+        }
+
+        function addGenericBEGridActionGroupDefinition(onGridActionGroupAdded, context) {
+            var parameters = {
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGridActionGroupAdded = onGridActionGroupAdded;
+            };
+
+            VRModalService.showModal(gridActionGroupModalPath, parameters, settings);
+        }
+
+        function editGenericBEGridActionGroupDefinition(onGridActionGroupUpdated, gridActionGroupDefinition, context) {
+            var parameters = {
+                gridActionGroupDefinition: gridActionGroupDefinition,
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGridActionGroupUpdated = onGridActionGroupUpdated;
+            };
+            VRModalService.showModal(gridActionGroupModalPath, parameters, settings);
         }
 
         function addGenericBEConditionalHandler(onConditionalHandlerAdded, context) {

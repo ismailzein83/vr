@@ -3,35 +3,74 @@
 
     'use strict';
 
-	GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBEDefinitionAPIService'];
 
-	function GenericBEActionService(VRModalService, UtilsService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum, VRCommon_ModalWidthEnum, VR_GenericData_GenericBEDefinitionAPIService) {
+    function GenericBEActionService(VRModalService, UtilsService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum, VRCommon_ModalWidthEnum, VR_GenericData_GenericBEDefinitionAPIService) {
 
         var actionTypes = [];
 
-		function defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType, fieldValues) {
+        function defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridActionGroups, genericBEGridViews, idFieldType, fieldValues) {
 
-			genericBusinessEntity.menuActions = [];
+            genericBusinessEntity.menuActions = [];
 
             if (genericBusinessEntity.AvailableGridActionIds != undefined) {
-                for (var j = 0; j < genericBusinessEntity.AvailableGridActionIds.length; j++) {
-                    var actionId = genericBusinessEntity.AvailableGridActionIds[j];
-                    var genericBEGridAction = UtilsService.getItemByVal(genericBEGridActions, actionId, "GenericBEGridActionId");
+                var groupedActionsByGroupId = getGroupedActions(genericBusinessEntity.AvailableGridActionIds);
+                for (var i = 0; i < genericBusinessEntity.AvailableGridActionIds.length; i++) {
+                    var availableGridActionId = genericBusinessEntity.AvailableGridActionIds[i];
+                    var genericBEGridAction = UtilsService.getItemByVal(genericBEGridActions, availableGridActionId, "GenericBEGridActionId");
                     if (genericBEGridAction != undefined) {
-                        var genericBEAction = UtilsService.getItemByVal(genericBEActions, genericBEGridAction.GenericBEActionId, "GenericBEActionId");
-                        if (genericBEAction != undefined && genericBEAction.Settings != undefined) {
-                            var actionType = getActionTypeIfExist(genericBEAction.Settings.ActionTypeName);
-                            if (actionType != undefined) {
-                                addGridMenuAction(genericBEAction, actionType, genericBEGridAction, fieldValues);
+                        var groupedActions = groupedActionsByGroupId[genericBEGridAction.GenericBEGridActionGroupId];
+                        if (groupedActions != undefined) {
+                            if (!groupedActions.isUsed) {
+                                groupedActions.isUsed = true;
+                                var groupGridAction = UtilsService.getItemByVal(genericBEGridActionGroups, genericBEGridAction.GenericBEGridActionGroupId, "GenericBEGridActionGroupId");
+                                genericBusinessEntity.menuActions.push({
+                                    name: groupGridAction.Title,
+                                    childsactions: groupedActions.childActions
+                                });
+                            }
+                           
+                        } else {
+                            var genericBEAction = UtilsService.getItemByVal(genericBEActions, genericBEGridAction.GenericBEActionId, "GenericBEActionId");
+                            if (genericBEAction != undefined && genericBEAction.Settings != undefined) {
+                                var actionType = getActionTypeIfExist(genericBEAction.Settings.ActionTypeName);
+                                if (actionType != undefined) {
+                                    genericBusinessEntity.menuActions.push(getGridMenuAction(genericBEAction, actionType, genericBEGridAction, fieldValues));
+                                }
                             }
                         }
-                    }
-
+                    } 
                 }
             }
 
-            function addGridMenuAction(genericBEAction, actionType, genericBEGridAction, fieldValues) {
-                genericBusinessEntity.menuActions.push({
+
+            function getGroupedActions(availableGridActionIds) {
+                var groupActions = {};
+                if (availableGridActionIds != undefined) {
+                    for (var j = 0; j < availableGridActionIds.length; j++) {
+                        var actionId = availableGridActionIds[j];
+                        var genericBEGridAction = UtilsService.getItemByVal(genericBEGridActions, actionId, "GenericBEGridActionId");
+                        if (genericBEGridAction != undefined && genericBEGridAction.GenericBEGridActionGroupId != undefined) {
+                            if (genericBEGridAction != undefined) {
+                                var genericBEAction = UtilsService.getItemByVal(genericBEActions, genericBEGridAction.GenericBEActionId, "GenericBEActionId");
+                                var actionType = getActionTypeIfExist(genericBEAction.Settings.ActionTypeName);
+                                if (actionType != undefined) {
+                                    if (groupActions[genericBEGridAction.GenericBEGridActionGroupId] == undefined)
+                                        groupActions[genericBEGridAction.GenericBEGridActionGroupId] = {
+                                            isUsed: false,
+                                            childActions: []
+                                        };
+                                    groupActions[genericBEGridAction.GenericBEGridActionGroupId].childActions.push(getGridMenuAction(genericBEAction, actionType, genericBEGridAction, fieldValues));
+                                }
+                            }
+                        }
+                    }
+                }
+                return groupActions;
+            }
+
+            function getGridMenuAction(genericBEAction, actionType, genericBEGridAction, fieldValues) {
+                return {
                     name: genericBEGridAction.Title,
                     clicked: function (selectedGenericBusinessEntity) {
                         var genericBusinessEntityId;
@@ -47,24 +86,24 @@
                             fieldValues: fieldValues,
                             onItemUpdated: function (updatedItem) {
                                 VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, updatedItem, gridAPI, genericBEGridViews, idFieldType);
-                                defineGenericBEMenuActions(businessEntityDefinitionId, updatedItem, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType, fieldValues);
+                                defineGenericBEMenuActions(businessEntityDefinitionId, updatedItem, gridAPI, genericBEActions, genericBEGridActions, genericBEGridActionGroups, genericBEGridViews, idFieldType, fieldValues);
                                 gridAPI.itemUpdated(updatedItem);
                             },
                             onItemDeleted: function () {
                                 gridAPI.itemDeleted(selectedGenericBusinessEntity);
                             },
-                            refreshGrid: function(){
+                            refreshGrid: function () {
                                 gridAPI.refreshGrid();
-                            }
+                            },
                         };
                         var promise = actionType.ExecuteAction(payload);
 
-                              
+
                         if (promise != undefined && promise.then != undefined) {
-						gridAPI.showLoader();
-						 var promiseDeffered = UtilsService.createPromiseDeferred();
-                            promise.then(function(response) {
-                                if(genericBEGridAction.ReloadGridItem && response) {
+                            gridAPI.showLoader();
+                            var promiseDeffered = UtilsService.createPromiseDeferred();
+                            promise.then(function (response) {
+                                if (genericBEGridAction.ReloadGridItem && response) {
                                     VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
                                         if (payload != undefined)
                                             payload.onItemUpdated(response);
@@ -72,20 +111,20 @@
                                     }).catch(function (error) {
                                         promiseDeffered.reject(error);
                                     });
-                                        } else {
+                                } else {
                                     promiseDeffered.resolve();
                                 }
-                                }).catch(function (error) {
+                            }).catch(function (error) {
                                 promiseDeffered.reject(error);
                             }).finally(function () {
                                 gridAPI.hideLoader();
-                                        });
-						 return promiseDeffered.promise;
+                            });
+                            return promiseDeffered.promise;
 
                         }
 
                     }
-                });
+                };
             }
         }
 
@@ -96,6 +135,7 @@
                     return actionType;
             }
         }
+
         function registerActionType(actionType) {
             actionTypes.push(actionType);
         }
@@ -123,13 +163,12 @@
                 }
             };
             registerActionType(editActionType);
-		}
+        }
 
-        function registerDeleteBEAction()
-        {
+        function registerDeleteBEAction() {
             var deleteActionType = {
                 ActionTypeName: "DeleteGenericBEAction",
-				ExecuteAction: function (payload) {
+                ExecuteAction: function (payload) {
                     if (payload == undefined)
                         return;
                     var genericBusinessEntityId = payload.genericBusinessEntityId;
@@ -137,8 +176,8 @@
                     var genericBusinessEntityIds = [genericBusinessEntityId];
                     var input = {
                         GenericBusinessEntityIds: genericBusinessEntityIds,
-						BusinessEntityDefinitionId: businessEntityDefinitionId,
-						BusinessEntityActionTypeId: payload.genericBEAction.GenericBEActionId
+                        BusinessEntityDefinitionId: businessEntityDefinitionId,
+                        BusinessEntityActionTypeId: payload.genericBEAction.GenericBEActionId
                     };
                     var onItemDeleted = payload.onItemDeleted;
                     var deletePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -175,14 +214,14 @@
                 }
             };
             registerActionType(deleteActionType);
-		}
+        }
 
         return ({
             defineGenericBEMenuActions: defineGenericBEMenuActions,
             getActionTypeIfExist: getActionTypeIfExist,
             registerActionType: registerActionType,
             registerEditBEAction: registerEditBEAction,
-			registerDeleteBEAction: registerDeleteBEAction
+            registerDeleteBEAction: registerDeleteBEAction,
         });
     };
 

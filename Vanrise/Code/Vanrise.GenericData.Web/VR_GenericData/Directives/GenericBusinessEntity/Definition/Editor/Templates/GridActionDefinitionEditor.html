@@ -8,12 +8,13 @@
                             <vr-textbox value="scopeModel.title" label="Title" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
+                            <vr-switch value="scopeModel.reloadGridItem" label="Reload Grid Item"></vr-switch>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
                             <vr-select datasource="scopeModel.bEActionsDefinitionInfos" selectedvalues="scopeModel.selectedActionDefnition" datavaluefield="GenericBEActionId" datatextfield="Name" label="Generic BE Action" text="None" isrequired="true" hideremoveicon>
                             </vr-select>
                         </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-switch value="scopeModel.reloadGridItem" label="Reload Grid Item"></vr-switch>
-                        </vr-columns>
+                        <vr-genericdata-genericbe-gridactiongroupdefinition-selector on-ready="scopeModel.onGenericBEGridActionGroupSelectorReady" normal-col-num="6"></vr-genericdata-genericbe-gridactiongroupdefinition-selector>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Filter'">

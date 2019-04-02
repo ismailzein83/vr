@@ -237,6 +237,11 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionGroupTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\GridActionGroupDefintionEditorController.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiongroupdefinition-grid.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiongroupdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition-filtergroup.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\GenericBEBulkActionDefinitionEditorController.js" />

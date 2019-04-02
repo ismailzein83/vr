@@ -9,15 +9,15 @@ using Vanrise.Common;
 using Vanrise.Security.Entities;
 namespace Vanrise.GenericData.Business
 {
-    public enum GenericBEDefinitionType { RecordStorage = 0 , Remote = 1}
+    public enum GenericBEDefinitionType { RecordStorage = 0, Remote = 1 }
     public class GenericBEDefinitionSettings : BusinessEntityDefinitionSettings
     {
         public static Guid s_configId = new Guid("6F3FBD7B-275A-4D92-8E06-AD7F7B04C7D6");
         public override Guid ConfigId { get { return s_configId; } }
 
-        public override string DefinitionEditor 
-        { 
-            get { return "vr-genericdata-genericbusinessentity-editor"; } 
+        public override string DefinitionEditor
+        {
+            get { return "vr-genericdata-genericbusinessentity-editor"; }
         }
         public override string ViewerEditor
         {
@@ -27,7 +27,7 @@ namespace Vanrise.GenericData.Business
         {
             get
             {
-               return new DataRecordTypeManager().GetIdFieldRuntimeTypeAsString(DataRecordTypeId);
+                return new DataRecordTypeManager().GetIdFieldRuntimeTypeAsString(DataRecordTypeId);
             }
         }
         public override string SelectorUIControl
@@ -42,30 +42,30 @@ namespace Vanrise.GenericData.Business
         {
             return new DataRecordTypeManager().GetDataRecordTypeFields(this.DataRecordTypeId);
         }
-		public override Object GetEditorRuntimeAdditionalData(IBEDefinitionSettingsGetEditorRuntimeAdditionalDataContext context)
-		{
-			GenericBEDefinitionSettings settings = context.BEDefinition.Settings.CastWithValidate<GenericBEDefinitionSettings>("GenericBEDefinitionSettings");
-			Dictionary<string, DataRecordField> dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(settings.DataRecordTypeId);
+        public override Object GetEditorRuntimeAdditionalData(IBEDefinitionSettingsGetEditorRuntimeAdditionalDataContext context)
+        {
+            GenericBEDefinitionSettings settings = context.BEDefinition.Settings.CastWithValidate<GenericBEDefinitionSettings>("GenericBEDefinitionSettings");
+            Dictionary<string, DataRecordField> dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(settings.DataRecordTypeId);
 
-			List<GenericBEAddedValue> genericBEAddedValues = new List<GenericBEAddedValue>();
-			if (settings.UploadFields != null)
-				foreach (var uploadField in settings.UploadFields)
-				{
-					var fieldValue = dataRecordFields.GetRecord(uploadField.FieldName);
-					if (fieldValue != null)
-					{
-						genericBEAddedValues.Add(new GenericBEAddedValue
-						{
+            List<GenericBEAddedValue> genericBEAddedValues = new List<GenericBEAddedValue>();
+            if (settings.UploadFields != null)
+                foreach (var uploadField in settings.UploadFields)
+                {
+                    var fieldValue = dataRecordFields.GetRecord(uploadField.FieldName);
+                    if (fieldValue != null)
+                    {
+                        genericBEAddedValues.Add(new GenericBEAddedValue
+                        {
 
-							FieldName = uploadField.FieldName,
-							IsRequired = uploadField.IsRequired,
-							FieldTitle = fieldValue.Title
-						});
-					}
-				}
-			return genericBEAddedValues;
-		}
-		public GenericBEDefinitionType GenericBEType { get; set; }
+                            FieldName = uploadField.FieldName,
+                            IsRequired = uploadField.IsRequired,
+                            FieldTitle = fieldValue.Title
+                        });
+                    }
+                }
+            return genericBEAddedValues;
+        }
+        public GenericBEDefinitionType GenericBEType { get; set; }
         public Guid? VRConnectionId { get; set; }
         public Guid? RemoteGenericBEDefinitionId { get; set; }
 
@@ -76,12 +76,12 @@ namespace Vanrise.GenericData.Business
         public string SelectorSingularTitle { get; set; }
         public string SelectorPluralTitle { get; set; }
         public GenericBEDefinitionSecurity Security { get; set; }
-       // public string FieldPath { get; set; }
+        // public string FieldPath { get; set; }
         public ModalWidthEnum EditorSize { get; set; }
         public Guid DataRecordTypeId { get; set; }
         public Guid? DataRecordStorageId { get; set; }
         public string TitleFieldName { get; set; }
-        public List<GenericBEAction> GenericBEActions{get;set;}
+        public List<GenericBEAction> GenericBEActions { get; set; }
         public GenericBEGridDefinition GridDefinition { get; set; }
         public GenericBEEditorDefinition EditorDefinition { get; set; }
         public GenericBEFilterDefinition FilterDefinition { get; set; }
@@ -99,7 +99,7 @@ namespace Vanrise.GenericData.Business
     public class GenericBEUploadField
     {
         public string FieldName { get; set; }
-		public bool IsRequired { get; set; }
+        public bool IsRequired { get; set; }
 
     }
 
@@ -125,7 +125,7 @@ namespace Vanrise.GenericData.Business
     public interface IGenericBEExtendedSettingsContext
     {
         GenericBusinessEntity GenericBusinessEntity { get; }
-        GenericBEDefinitionSettings DefinitionSettings { get;  }
+        GenericBEDefinitionSettings DefinitionSettings { get; }
         string InfoType { get; }
     }
 
@@ -168,7 +168,7 @@ namespace Vanrise.GenericData.Business
     public interface IGenericBEOnBeforeUpdateHandlerContext
     {
         GenericBusinessEntityToUpdate GenericBusinessEntityToUpdate { get; }
-        Guid? VRConnectionId { get;}
+        Guid? VRConnectionId { get; }
     }
 
     public interface IGenericBEOnBeforeGetFilteredHandlerPrepareQueryContext
@@ -196,7 +196,7 @@ namespace Vanrise.GenericData.Business
     }
     public abstract class GenericBEOnBeforeInsertHandler
     {
-        public abstract Guid ConfigId { get;  }
+        public abstract Guid ConfigId { get; }
         public virtual object TryGetInfoByType(IGenericBEOnBeforeInsertHandlerInfoByTypeContext context)
         {
             return null;
@@ -208,10 +208,10 @@ namespace Vanrise.GenericData.Business
         string InfoType { get; }
         GenericBEDefinitionSettings DefinitionSettings { get; }
     }
-    public enum HandlerOperationType { Add = 0,Update = 1}
+    public enum HandlerOperationType { Add = 0, Update = 1 }
     public interface IGenericBEOnBeforeInsertHandlerContext
     {
-        HandlerOperationType OperationType { get;}
+        HandlerOperationType OperationType { get; }
         GenericBusinessEntity GenericBusinessEntity { get; set; }
         GenericBEDefinitionSettings DefinitionSettings { get; }
         GenericBusinessEntity OldGenericBusinessEntity { get; }
@@ -238,8 +238,8 @@ namespace Vanrise.GenericData.Business
     public interface IGenericBEOnAfterSaveHandlerContext
     {
         HandlerOperationType OperationType { get; }
-        GenericBusinessEntity NewEntity { get;  }
-        GenericBusinessEntity OldEntity { get;  }
+        GenericBusinessEntity NewEntity { get; }
+        GenericBusinessEntity OldEntity { get; }
         GenericBEDefinitionSettings DefinitionSettings { get; }
         Guid BusinessEntityDefinitionId { get; }
     }
@@ -296,19 +296,20 @@ namespace Vanrise.GenericData.Business
     }
     public abstract class GenericBEFilterDefinitionSettings
     {
-        public abstract Guid ConfigId { get;  }
+        public abstract Guid ConfigId { get; }
         public abstract string RuntimeEditor { get; }
     }
-   
+
     public class GenericBEEditorDefinition
     {
         public VRGenericEditorDefinitionSetting Settings { get; set; }
     }
-  
+
     public class GenericBEGridDefinition
     {
         public List<GenericBEGridColumn> ColumnDefinitions { get; set; }
         public List<GenericBEGridAction> GenericBEGridActions { get; set; }
+        public List<GenericBEGridActionGroup> GenericBEGridActionGroups { get; set; }
         public List<GenericBEViewDefinition> GenericBEGridViews { get; set; }
 
     }
@@ -324,9 +325,16 @@ namespace Vanrise.GenericData.Business
         public Guid GenericBEActionId { get; set; }
         public string Title { get; set; }
         public bool ReloadGridItem { get; set; }
+        public Guid? GenericBEGridActionGroupId { get; set; }
         public GenericBEActionFilterCondition FilterCondition { get; set; }
-
     }
+
+    public class GenericBEGridActionGroup
+    {
+        public Guid GenericBEGridActionGroupId { get; set; }
+        public string Title { get; set; }
+    }
+
     public abstract class GenericBEActionFilterCondition
     {
         public abstract Guid ConfigId { get; }
@@ -351,7 +359,7 @@ namespace Vanrise.GenericData.Business
     }
     public interface IGenericBEConditionContext
     {
-        GenericBusinessEntity Entity { get;  }
+        GenericBusinessEntity Entity { get; }
         GenericBEDefinitionSettings DefinitionSettings { get; }
     }
     public class GenericBEConditionContext : IGenericBEConditionContext
@@ -383,20 +391,20 @@ namespace Vanrise.GenericData.Business
     {
         public Guid GenericBEActionId { get; set; }
         public string Name { get; set; }
-		public GenericBEActionSettings Settings { get; set; }
-		public RequiredPermissionSettings RequiredPermission { get; set; }
+        public GenericBEActionSettings Settings { get; set; }
+        public RequiredPermissionSettings RequiredPermission { get; set; }
 
-	}
-	public abstract class GenericBEActionSettings
+    }
+    public abstract class GenericBEActionSettings
     {
         public virtual string ActionTypeName { get; set; }
-		public abstract string ActionKind { get; }
+        public abstract string ActionKind { get; }
         public abstract Guid ConfigId { get; }
         public virtual bool DoesUserHaveAccess(IGenericBEActionDefinitionCheckAccessContext context)
         {
-			return ContextFactory.GetContext().IsAllowed(context.GenericBEAction.RequiredPermission, context.UserId);
-		}
-	}
+            return ContextFactory.GetContext().IsAllowed(context.GenericBEAction.RequiredPermission, context.UserId);
+        }
+    }
 
     public interface IGenericBEActionDefinitionCheckAccessContext
     {
@@ -404,8 +412,8 @@ namespace Vanrise.GenericData.Business
 
         int UserId { get; }
 
-		GenericBEAction GenericBEAction { get; set; }
-	}
+        GenericBEAction GenericBEAction { get; set; }
+    }
 
     public class GenericBEActionDefinitionCheckAccessContext : IGenericBEActionDefinitionCheckAccessContext
     {
@@ -413,11 +421,11 @@ namespace Vanrise.GenericData.Business
 
         public int UserId { get; set; }
 
-		public GenericBEAction GenericBEAction { get; set; }
+        public GenericBEAction GenericBEAction { get; set; }
 
-	}
+    }
 
-	public interface IGenericBEViewDefinitionCheckAccessContext
+    public interface IGenericBEViewDefinitionCheckAccessContext
     {
         Guid BusinessEntityDefinitionId { get; }
 
@@ -435,18 +443,18 @@ namespace Vanrise.GenericData.Business
     public class GenericBEDefinitionSecurity
     {
         public RequiredPermissionSettings ViewRequiredPermission { get; set; }
-       
+
         public RequiredPermissionSettings AddRequiredPermission { get; set; }
-       
+
         public RequiredPermissionSettings EditRequiredPermission { get; set; }
 
         public RequiredPermissionSettings DeleteRequiredPermission { get; set; }
     }
-	public class GenericBEAddedValue
-	{
-		public string FieldName { get; set; }
-		public bool IsRequired { get; set; }
-		public string FieldTitle { get; set; }
+    public class GenericBEAddedValue
+    {
+        public string FieldName { get; set; }
+        public bool IsRequired { get; set; }
+        public string FieldTitle { get; set; }
 
-	}
+    }
 }

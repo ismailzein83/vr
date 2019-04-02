@@ -27,6 +27,7 @@
             var genericBEActions = [];
             var genericBEGridActions = [];
             var genericBEGridViews = [];
+            var genericBEGridActionGroups = [];
             var fieldValues;
             var idFieldType;
             var bulkActionId;
@@ -81,7 +82,7 @@
                                 } else {
 
                                     VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, businessEntity, gridAPI, genericBEGridViews, idFieldType);
-                                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, businessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType, fieldValues);
+                                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, businessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridActionGroups ,genericBEGridViews, idFieldType, fieldValues);
                                 }
                             }
                         }
@@ -202,6 +203,7 @@
                                 if (response.GridDefinition != undefined) {
                                     genericBEGridActions = response.GridDefinition.GenericBEGridActions;
                                     genericBEGridViews = response.GridDefinition.GenericBEGridViews;
+                                    genericBEGridActionGroups = response.GridDefinition.GenericBEGridActionGroups;
                                 }
                             }
                         });
@@ -221,7 +223,7 @@
 
                 api.onGenericBEAdded = function (addedBusinessEntity) {
                     VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEGridViews, idFieldType);
-                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType, fieldValues);
+                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridActionGroups ,genericBEGridViews, idFieldType, fieldValues);
                     gridAPI.itemAdded(addedBusinessEntity);
                 };
 
