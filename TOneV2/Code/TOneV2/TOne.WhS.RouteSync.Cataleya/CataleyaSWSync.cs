@@ -49,7 +49,7 @@ namespace TOne.WhS.RouteSync.Cataleya
 
         public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
         {
-            throw new NotImplementedException();
+           
         }
 
         #endregion
