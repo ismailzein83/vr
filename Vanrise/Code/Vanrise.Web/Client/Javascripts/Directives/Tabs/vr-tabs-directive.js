@@ -59,6 +59,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 }
             }
             function addTabObject(tab) {
+                tab.orderedIndex = ctrl.tabs.length;
                 if (ctrl.tabs.length == 0) {
                     tab.isLoaded = true;
                     tab.isSelected = true;
@@ -75,6 +76,15 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
                     ctrl.onselectionchanged();
                 }
+            };
+
+            ctrl.getPreviousReversedTabs = function () {
+                var items = [];
+                for (var i = 0 ; i < ctrl.tabs.length ; i++) {
+                    if (ctrl.tabs[i].orderedIndex < ctrl.tabsCountStart)
+                        items.push(ctrl.tabs[i]);
+                }
+                return items.slice().reverse();
             };
             ctrl.hideTab = function ($index) {
                 if (ctrl.hidepaginationcontrols != undefined) return false;
@@ -144,6 +154,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 ctrl.tabsCountLimit = ctrl.tabsCountStart + ctrl.pageSize;
                 ctrl.selectedTabIndex = ctrl.tabsCountStart;
                 ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
+                $($element).find(".vr-tabs-expander").find(".dropdown-menu").css({ display: "none" });
             };
 
             ctrl.setlastTabSelectedIndex = function (index) {
@@ -151,6 +162,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificati
                 ctrl.tabsCountStart = ctrl.tabsCountLimit - ctrl.pageSize;
                 ctrl.selectedTabIndex = index;
                 ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
+                $($element).find(".vr-tabs-expander").find(".dropdown-menu").css({ display: "none" });
             };
 
             var api = {};

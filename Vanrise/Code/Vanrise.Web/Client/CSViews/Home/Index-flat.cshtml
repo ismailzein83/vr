@@ -181,12 +181,12 @@
                         <div class="vr-top-nav-container">
                             <div class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-if="$root.moduleRenderedAsView && currentPage.parent.RenderedAsView ==  true && !$root.masterLayoutSettings.IsBreadcrumbVisible">
                                 <span id="dropdownTabsPrev" style="position:relative" ng-show="($root.viewsCountLimit >  $root.viewsPageSize && $root.moduleRenderedAsView.Childs.length > $root.viewsPageSize) ||  ( $root.moduleRenderedAsView.Childs.length  <  $root.limitRenderAsViewTo &&  $root.viewsCountStart > 0 )">
-                                    <a style="color:#333" aria-haspopup="false" aria-expanded="false">
+                                    <a style="color:#333" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
                                         <span class="glyphicon glyphicon-backward hand-cursor list-view-icon"></span>
                                     </a>
                                     <ul class="dropdown-menu " aria-labelledby="dropdownTabsPrev">
-                                        <li ng-repeat="a in $root.moduleRenderedAsView.Childs " ng-hide="$index >= $root.viewsCountStart ">
-                                            <a href="{{::a.Location}}" ng-click="$root.setViewSelectedIndex($index)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
+                                        <li ng-repeat="a in $root.getPreviousReversedViews()">
+                                            <a href="{{::a.Location}}" ng-click="$root.setViewSelectedIndex(a.orderedIndex)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
                                                 <label class="hand-cursor">
                                                     {{a.Name}}
                                                 </label>
@@ -286,8 +286,8 @@
                                                 <span class="glyphicon glyphicon-backward hand-cursor list-view-icon"></span>
                                             </a>
                                             <ul class="dropdown-menu " aria-labelledby="dropdownTabsPrev">
-                                                <li ng-repeat="a in $root.moduleRenderedAsView.Childs " ng-hide="$index >= $root.viewsCountStart ">
-                                                    <a href="{{::a.Location}}" ng-click="$root.setViewSelectedIndex($index)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
+                                                <li ng-repeat="a in $root.getPreviousReversedViews()" >
+                                                    <a href="{{::a.Location}}" ng-click="$root.setViewSelectedIndex(a.orderedIndex)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
                                                         <label class="hand-cursor">
                                                             {{a.Name}}
                                                         </label>

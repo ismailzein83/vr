@@ -8,7 +8,7 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService", "VRLocalizatio
         restrict: "E",
         scope: {
             tabobject: "=",
-            ontabselected:'='
+            ontabselected: '='
         },
         require: "^vrTabs",
         controller: function ($scope, $element, $attrs) {
@@ -57,7 +57,7 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService", "VRLocalizatio
             });
 
             $scope.$watch('ctrl.tabobject.isSelected', function (value) {
-                if (ctrl.tabobject.isSelected) {
+                if (ctrl.tabobject && ctrl.tabobject.isSelected) {
                     if (ctrl.ontabselected != undefined && typeof (ctrl.ontabselected) == 'function')
                         ctrl.ontabselected();
                 }

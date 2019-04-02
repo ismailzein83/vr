@@ -43,23 +43,23 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService'
                         setTimeout(function () {
                             $("#" + scope.dropdownPreviousTabsId).hover(function (event) {
                                 var selfOffset = $(this).offset();
-                                var baseleft = selfOffset.left - $(window).scrollLeft();
+                                var baseleft = selfOffset.left - $(window).scrollLeft() ;
                                 var basetop = selfOffset.top - $(window).scrollTop() + 20;
-                                $(this).find(".dropdown-menu").css({ display: "flex", position: "fixed", left: baseleft, top: basetop });
+                                $("#" + scope.dropdownPreviousTabsId).find(".dropdown-menu").css({ display: "block", position: "fixed", left: baseleft, top: basetop });
 
                             }, function () {
-                                $(this).find(".dropdown-menu").css({ display: "none" });
+                                $("#" + scope.dropdownPreviousTabsId).find(".dropdown-menu").css({ display: "none" });
                             });
                             $("#" + scope.dropdownForwardTabsId).hover(function () {
 
                                 var selfOffset = $(this).offset();
                                 var baseleft = selfOffset.left - $(window).scrollLeft();
                                 var basetop = selfOffset.top - $(window).scrollTop() + 20;
-                                $(this).find(".dropdown-menu").css({ display: "block", position: "fixed", left: baseleft, top: basetop });
+                                $("#" + scope.dropdownForwardTabsId).find(".dropdown-menu").css({ display: "block", position: "fixed", left: baseleft, top: basetop });
                             }, function () {
-                                $(this).find(".dropdown-menu").css({ display: "none" });
+                                $("#" + scope.dropdownForwardTabsId).find(".dropdown-menu").css({ display: "none" });
                             });
-                        }, 500);
+                        }, 100);
                     };
                   
                    
@@ -93,24 +93,24 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService'
             var verticalflag = isvertical == true ? "vertical" : " ";
 
             var template = '<vr-tab-header-links ' + verticalflag + ' ' + flatflag + ' ' + hidepaginationcontrols + '  backwardvisible="{{ctrl.isBackwardPaginationVisible()}}" forwardvisible="{{ctrl.isForwardPaginationVisible()}}" selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()" ng-if="ctrl.tabs.length > 0" >'
-                            + ' <span ng-if="!ctrl.hidepaginationcontrols" ng-init="initPaginitionControlsBehavior()" class="vr-tabs-expander previous" id="{{dropdownPreviousTabsId}}" style="position:relative" ng-show="(ctrl.tabsCountLimit > ctrl.pageSize && ctrl.tabs.length > ctrl.pageSize) ||  ( ctrl.tabs.length  <  ctrl.tabsCountLimit &&  ctrl.tabsCountStart > 0 )" >'
+                            + ' <span  ng-init="initPaginitionControlsBehavior()"   ng-if="!ctrl.hidepaginationcontrols" class="vr-tabs-expander previous" id="{{dropdownPreviousTabsId}}" style="position:relative" ng-show="(ctrl.tabsCountLimit > ctrl.pageSize && ctrl.tabs.length > ctrl.pageSize) ||  ( ctrl.tabs.length  <  ctrl.tabsCountLimit &&  ctrl.tabsCountStart > 0 )" >'
                                     + '  <span  data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">'
                                             + ' <span class="glyphicon  glyphicon-backward hand-cursor list-view-icon" ></span>'
                                     + ' </span>'
                                     + '<ul class="dropdown-menu" >'
-                                            + '<li  ng-repeat="tab in ctrl.tabs "  ng-hide="$index >= ctrl.tabsCountStart ">'
-                                                    + ' <a href="" ng-click="ctrl.setTabSelectedIndex($index)" ><span>{{ tab.header }}</span> </a>'
+                                            + '<li  ng-repeat="tab in ctrl.getPreviousReversedTabs() " >'
+                                                    + ' <a  ng-click="ctrl.setTabSelectedIndex(tab.orderedIndex)" class="hand-cursor"><span>{{ tab.header }}</span> </a>'
                                             + '</li>'
                                     + '</ul>'
                             + '</span>'
-                            + '<vr-tab-header-link   ng-repeat="tab in ctrl.tabs " id="header-{{tab.guid}}" ng-show="tab.showTab == undefined || tab.showTab == true" ng-hide="ctrl.hideTab($index)" isvisible="tab.showTab == undefined || tab.showTab == true"  isselected="tab.isSelected" >{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span></vr-tab-header-link>'
+                            + '<vr-tab-header-link  ng-repeat="tab in ctrl.tabs " id="header-{{tab.guid}}" ng-show="tab.showTab == undefined || tab.showTab == true" ng-hide="ctrl.hideTab($index)" isvisible="tab.showTab == undefined || tab.showTab == true"  isselected="tab.isSelected" >{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span></vr-tab-header-link>'
                             + ' <span ng-if="!ctrl.hidepaginationcontrols" class="vr-tabs-expander forward" id="{{dropdownForwardTabsId}}"   ng-show="ctrl.tabs.length > ctrl.pageSize && ctrl.tabsCountLimit < ctrl.tabs.length " >'
                                 + '  <span  data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">'
                                         + ' <span class="glyphicon  glyphicon-forward hand-cursor list-view-icon" ></span>'
                                  + ' </span>'
                                 + '<ul class="dropdown-menu" >'
-                                        + '<li  ng-repeat="tab in ctrl.tabs " ng-hide="$index < ctrl.tabsCountLimit">'
-                                             + ' <a href="" ng-click="ctrl.setlastTabSelectedIndex($index)" ><span>{{ tab.header }}</span> </a>'
+                                        + '<li  ng-repeat="tab in ctrl.tabs " ng-hide="tab.orderedIndex < ctrl.tabsCountLimit">'
+                                             + ' <a class="hand-cursor" ng-click="ctrl.setlastTabSelectedIndex(tab.orderedIndex)" ><span>{{ tab.header }}</span> </a>'
                                         + '</li>'
                                 + '</ul>'
                             +'</span>'

@@ -1650,22 +1650,21 @@ loader .outer-loader {
     .vr-tabs-expander.previous > ul {
         margin: 0px;
         margin-top: -3px;
-        overflow-y: auto;
-        flex-flow: column-reverse;
-        display: none;
+        display:none;
     }
 
     .vr-tabs-expander.previous > ul {
         max-height: 125px;
+        overflow: auto;
     }
 
 #dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"] {
     max-height: 240px;
+    overflow: auto;
 }
 
     #dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"] > li,
     .vr-tabs-expander.previous > ul > li {
-        display: inline-flex;
         width: 100%;
     }
 #dropdownTabsPrev > ul[aria-labelledby="dropdownTabsPrev"] > li > a,
@@ -1673,7 +1672,7 @@ loader .outer-loader {
     width: 100%;
 }
 #dropdownTabsPrev:hover > ul[aria-labelledby="dropdownTabsPrev"] {
-    display: flex;
+    display: block;
 }
 
 #dropdownTabsFor > ul[aria-labelledby="dropdownTabsFor"],
@@ -1681,7 +1680,7 @@ loader .outer-loader {
     margin: 0px;
     margin-top: -3px;
     overflow: auto;
-    display:none;
+    display: none;
 }
 
 #dropdownTabsFor > ul[aria-labelledby="dropdownTabsFor"] {
@@ -2775,10 +2774,10 @@ vr-switch[class*="divDisabled"] .switch.switch.checked {
     vertical-align: top;
 }
 
-    .vr-tabs[vertical] {
-        width: 150px;
-        margin-right: -5px;
-    }
+.vr-tabs[vertical] {
+    width: 150px;
+    margin-right: -5px;
+}
 
     .vr-tabs label {
         padding: 1px 9px;

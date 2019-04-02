@@ -414,11 +414,15 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             $rootScope.evalModuleViewToggle = function () {
                 if (window.location.hash == "#/view/default")
                     return;
-                $rootScope.showModuleViewToggle = (
+                setTimeout(function () {
+                    $rootScope.showModuleViewToggle = (
                     ($rootScope.showModuleTiles == true && $rootScope.selectedtile && $rootScope.selectedtile.DefaultURL != undefined && window.location.hash.indexOf("ModuleDefault") > -1)
                     ||
                     ($rootScope.showModuleTiles == true && $rootScope.selectedtile && $rootScope.selectedtile.DefaultURL != undefined && decodeURIComponent(window.location.href) == VRNavigationService.getFullPageURl($rootScope.selectedtile.DefaultURL))
-                        );
+                    );
+                    $scope.$apply();
+                }, 1);
+
             };
 
             $rootScope.switchDefaultView = function (state) {
@@ -487,7 +491,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                     });
                 }
 
-            }
+            }        
             function buildTileIconPath(icon) {
                 if (icon == null) return "";
                 var iconpath = icon.substring(0, icon.lastIndexOf("."));
@@ -611,7 +615,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
             $rootScope.moduleRenderedAsView;
             $rootScope.startView = 0;
-            var viewPageSize = $scope.isMobile ? 1: 5;
+            var viewPageSize = $scope.isMobile ? 1 : 5;
             $rootScope.limitRenderAsViewTo = viewPageSize;
             $rootScope.goToFirstPageFromSubModule = function (c) {
                 if ($rootScope.moduleRenderedAsView && c.Id == $rootScope.moduleRenderedAsView.Id) return;
@@ -644,6 +648,21 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 window.location.href = $rootScope.moduleRenderedAsView.Childs[index].Location;
             };
 
+
+           
+            $rootScope.getPreviousRevesedViews = function () {
+                var items = [];
+                var pagesRenderdAsView = $rootScope.moduleRenderedAsView.Childs;
+                for (var i = 0 ; i < pagesRenderdAsView.length ; i++) {
+                    if (i < $rootScope.viewsCountStart) {
+                        var view = pagesRenderdAsView[i];
+                        view.orderedIndex = i;
+                        items.push(view);
+                    }
+                }
+                return items.slice().reverse();
+            };
+
             $rootScope.menuFilter = function (item) {
                 if ($rootScope.showAllMenuItems) return true;
                 return (
@@ -667,7 +686,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                     setMenuItemSelectedFlag(selectedMenuItem, true);
                     $rootScope.setSelectedMenuTile();
                 }
-                if (matchMenuItem != null) {
+                if (matchMenuItem != null && matchMenuItem.parent != null) {
                     selectedMenuItem = matchMenuItem;
                     $rootScope.selectedMenu = matchMenuItem.parent;
                     $rootScope.seledtedModuleId = matchMenuItem.parent.Id;
@@ -678,7 +697,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 if ($('#navbar').attr("aria-expanded") == 'true') {
                     $('.navbar-toggle').click();
                 }
-
+             
             }
             $rootScope.setSelectedMenuTile = function () {
                 if ($rootScope.seledtedModuleId != undefined) {
@@ -697,10 +716,9 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                         $scope.menuItemsCurrent = selectedModule.parent.parent;
                         $scope.menusubItemsCurrent = selectedModule.parent;
                     }
-                                        
                 }
                 $rootScope.evalModuleViewToggle();
-            };
+            };           
             $scope.currentPage = null;
             function setMenuItemSelectedFlag(menuItem, isSelected) {
                 $scope.menusubItemsCurrent = null;
