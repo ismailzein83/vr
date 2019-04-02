@@ -140,6 +140,10 @@
     <Content Include="Common\Directives\FiguresTileSettings\vr-common-figurestilesettings-runtime.js" />
     <Content Include="Common\Directives\Settings\BankDetailsSettings\Templates\BankDetailsSettingsGridTemplate.html" />
     <Content Include="Common\Directives\Settings\BankDetailsSettings\vr-common-bankdetailssettings-grid.js" />
+    <Content Include="Common\Directives\VRComment\Templates\CommentGenericBEViewRuntime.html" />
+    <Content Include="Common\Directives\VRComment\Templates\CommentGenericBEViewDefinition.html" />
+    <Content Include="Common\Directives\VRComment\vr-common-comment-genericbeview-runtime.js" />
+    <Content Include="Common\Directives\VRComment\vr-common-comment-genericbeview-definition.js" />
     <Content Include="Common\Directives\VRIPAddress\vr-common-ipaddress.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\FTPConnectionEditorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionCallInterceptorSelectiveTemplate.html" />
