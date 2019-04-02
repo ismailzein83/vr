@@ -2,17 +2,15 @@
 using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Business.Reader;
 using TOne.WhS.Sales.Entities;
+using Vanrise.BusinessProcess;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-using Vanrise.BusinessProcess;
 using Vanrise.Entities;
-using TOne.WhS.Sales.Business;
 
 
 namespace TOne.WhS.Sales.BP.Activities
@@ -246,11 +244,11 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 //New Routing Product Filtering
 
-                if (zoneChange.NewRoutingProduct != null)
+                if (zoneChange.NewRoutingProduct != null && followPublisherRoutingProduct)
                 {
                     string reason;
                     DraftNewSaleZoneRoutingProduct newRoutingProduct = new DraftNewSaleZoneRoutingProduct();
-                    bool isNewRoutingProductValid = FilterZoneNewRoutingProduct(zoneChange, customerCountry, followPublisherRatesBED, filteredZoneChange, customerId, publisherId, zoneChanges, sellingProductId, publisherSellingProductId, excludedZones, processInstanceId, out newRoutingProduct, out reason);
+                    bool isNewRoutingProductValid = FilterZoneNewRoutingProduct(zoneChange, customerCountry, filteredZoneChange, customerId, publisherId, zoneChanges, sellingProductId, publisherSellingProductId, excludedZones, processInstanceId, out newRoutingProduct, out reason);
                     if (!isNewRoutingProductValid)
                     {
                         if (IsRPTheOnlyZoneChange(filteredZoneChange, excludedZones))
@@ -274,7 +272,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         }
                         continue;
                     }
-                   
+
                     filteredZoneChange.RoutingProductChange = routingProductChange;
                 }
 
@@ -285,12 +283,12 @@ namespace TOne.WhS.Sales.BP.Activities
 
             return filteredZoneChanges;
         }
-        private bool FilterZoneNewRoutingProduct(ZoneChanges zoneChange, CustomerCountry2 customerCountry, bool followPublisherRoutingProduct, ZoneChanges filteredZoneChange, int customerId, int publisherId, IEnumerable<ZoneChanges> zoneChanges, int sellingProductId, int publisherSellingProductId, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, long processInstanceId, out DraftNewSaleZoneRoutingProduct newRoutingProduct, out string reason)
+        private bool FilterZoneNewRoutingProduct(ZoneChanges zoneChange, CustomerCountry2 customerCountry, ZoneChanges filteredZoneChange, int customerId, int publisherId, IEnumerable<ZoneChanges> zoneChanges, int sellingProductId, int publisherSellingProductId, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, long processInstanceId, out DraftNewSaleZoneRoutingProduct newRoutingProduct, out string reason)
         {
             reason = null;
+            newRoutingProduct = null;
+
             RoutingProductManager routingProductManager = new RoutingProductManager();
-            var zoneNewRateRoutingProductLocator = GetZoneNewRateRoutingProductLocator(customerId, publisherId, zoneChanges);
-            newRoutingProduct = new DraftNewSaleZoneRoutingProduct();
 
             if (customerCountry.BED > zoneChange.NewRoutingProduct.BED)
             {
@@ -302,38 +300,30 @@ namespace TOne.WhS.Sales.BP.Activities
                 // AddExcludedZone(excludedZonesByCountryId, zoneChange.ZoneId, reason, null, processInstanceId);
                 return false;
             }
-            else
-                newRoutingProduct = zoneChange.NewRoutingProduct;
 
-            if (followPublisherRoutingProduct && filteredZoneChange.NewRates != null && filteredZoneChange.NewRates.Any(item => item.RateTypeId == null))
+            var zoneNewRateRoutingProductLocator = GetZoneNewRateRoutingProductLocator(customerId, publisherId, zoneChanges);
+            var subscriberRoutingProduct = zoneNewRateRoutingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneChange.ZoneId);
+
+            if (subscriberRoutingProduct.RoutingProductId != zoneChange.NewRoutingProduct.ZoneRoutingProductId)
             {
-
-                var subscriberRoutingProduct = zoneNewRateRoutingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneChange.ZoneId);
-                var publisherRoutingProduct = zoneNewRateRoutingProductLocator.GetCustomerZoneRoutingProduct(publisherId, publisherSellingProductId, zoneChange.ZoneId);
-
-                if (subscriberRoutingProduct.RoutingProductId != publisherRoutingProduct.RoutingProductId)
+                newRoutingProduct = new DraftNewSaleZoneRoutingProduct()
                 {
-                    var draftNewSaleZoneRoutingProduct = new DraftNewSaleZoneRoutingProduct()
-                    {
-                        ZoneId = zoneChange.ZoneId,
-                        ZoneRoutingProductId = publisherRoutingProduct.RoutingProductId,
-                        BED = publisherRoutingProduct.BED,
-                        EED = publisherRoutingProduct.EED,
-                    };
-                    newRoutingProduct = draftNewSaleZoneRoutingProduct;
-                }
-                else
-                {
-                    string subscriberName = _carrierAccountManager.GetCarrierAccountName(customerId);
-                    string routingProductName = routingProductManager.GetRoutingProductName(publisherRoutingProduct.RoutingProductId);
-                    routingProductName.ThrowIfNull("routingProductName");
-                    string zoneName = _saleZoneManager.GetSaleZoneName(zoneChange.ZoneId);
-                    reason = String.Format("Routing product '{0}' already exists at subscriber : '{1}'", routingProductName, subscriberName);
-                    // AddExcludedZone(excludedZonesByCountryId, zoneChange.ZoneId, reason, null, processInstanceId);
-                    return false;
-                }
+                    ZoneId = zoneChange.ZoneId,
+                    ZoneRoutingProductId = zoneChange.NewRoutingProduct.ZoneRoutingProductId,
+                    BED = zoneChange.NewRoutingProduct.BED,
+                    EED = zoneChange.NewRoutingProduct.EED,
+                };
+                return true;
             }
-            return true;
+            else
+            {
+                string subscriberName = _carrierAccountManager.GetCarrierAccountName(customerId);
+                string routingProductName = routingProductManager.GetRoutingProductName(zoneChange.NewRoutingProduct.ZoneRoutingProductId);
+                routingProductName.ThrowIfNull("routingProductName");
+                string zoneName = _saleZoneManager.GetSaleZoneName(zoneChange.ZoneId);
+                reason = String.Format("Routing product '{0}' already exists at subscriber : '{1}'", routingProductName, subscriberName);
+                return false;
+            }
         }
         private bool closeZoneRoutingProduct(ZoneChanges zoneChange, int customerId, int sellingProductId, IEnumerable<ZoneChanges> zoneChanges, Dictionary<int, List<ExcludedItem>> excludedZonesByCountryId, long processInstanceId, out DraftChangedSaleZoneRoutingProduct routingProductChange, out string reason)
         {
@@ -429,7 +419,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     if (matchedRate != null)
                     {
                         if (newRate.Rate <= matchedRate.Rate)
-                            newRate.BED = saleZoneBED > effectiveDate.AddDays(decreasedRateDayOffset) ? saleZoneBED : effectiveDate.AddDays(increasedRateDayOffset);
+                            newRate.BED = saleZoneBED > effectiveDate.AddDays(decreasedRateDayOffset) ? saleZoneBED : effectiveDate.AddDays(decreasedRateDayOffset);
 
                         else
                             newRate.BED = saleZoneBED > effectiveDate.AddDays(increasedRateDayOffset) ? saleZoneBED : effectiveDate.AddDays(increasedRateDayOffset);
