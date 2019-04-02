@@ -740,7 +740,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     sattlementInvoiceDetails.DueToCarrierTotalTrafficAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCarrierTotalTrafficAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     sattlementInvoiceDetails.DueToCarrierTotalDealAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCarrierTotalDealAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     sattlementInvoiceDetails.DueToCarrierTotalSMSAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToCarrierTotalSMSAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToCarrierFullAmount += sattlementInvoiceDetails.DueToCarrierTotalTrafficAmount + sattlementInvoiceDetails.DueToCarrierAmountRecurringCharges + sattlementInvoiceDetails.DueToCarrierTotalDealAmount + sattlementInvoiceDetails.DueToCarrierTotalSMSAmount;
+                    sattlementInvoiceDetails.DueToCarrierFullAmount += settlementInvoice.Value.DueToCarrierFullAmount;// sattlementInvoiceDetails.ful.DueToCarrierTotalTrafficAmount + sattlementInvoiceDetails.DueToCarrierAmountRecurringCharges + sattlementInvoiceDetails.DueToCarrierTotalDealAmount + sattlementInvoiceDetails.DueToCarrierTotalSMSAmount;
 
                     sattlementInvoiceDetails.DueToSystemAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     sattlementInvoiceDetails.DueToSystemAmountAfterCommission += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemAmountAfterCommission, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
@@ -749,11 +749,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     sattlementInvoiceDetails.DueToSystemTotalTrafficAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemTotalTrafficAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     sattlementInvoiceDetails.DueToSystemTotalDealAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemTotalDealAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
                     sattlementInvoiceDetails.DueToSystemTotalSMSAmount += exchangeRateManager.ConvertValueToCurrency(settlementInvoice.Value.DueToSystemTotalSMSAmount, settlementInvoice.Value.CurrencyId, currencyId, issueDate);
-                    sattlementInvoiceDetails.DueToSystemFullAmount += sattlementInvoiceDetails.DueToSystemTotalTrafficAmount + sattlementInvoiceDetails.DueToSystemAmountRecurringCharges + sattlementInvoiceDetails.DueToSystemTotalDealAmount + sattlementInvoiceDetails.DueToSystemTotalSMSAmount;
+                    sattlementInvoiceDetails.DueToSystemFullAmount += settlementInvoice.Value.DueToSystemFullAmount;//sattlementInvoiceDetails.DueToSystemTotalTrafficAmount + sattlementInvoiceDetails.DueToSystemAmountRecurringCharges + sattlementInvoiceDetails.DueToSystemTotalDealAmount + sattlementInvoiceDetails.DueToSystemTotalSMSAmount;
 
 
 
-                 generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
                         Details = settlementInvoice.Value,
                         Name = " "
