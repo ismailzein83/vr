@@ -452,6 +452,12 @@
     <Content Include="Global.asax" />
     <Content Include="Images\BIL-login.png" />
     <Content Include="Images\BIL-logoonheader.png" />
+    <Content Include="Images\default-iconheader.ico" />
+    <Content Include="Images\default-login.png" />
+    <Content Include="Images\default-logoonheader.png" />
+    <Content Include="Images\flat-iconheader.ico" />
+    <Content Include="Images\flat-login.png" />
+    <Content Include="Images\flat-logoonheader.png" />
     <Content Include="Images\iconheader.ico" />
     <Content Include="Images\login.png" />
     <Content Include="Images\logoonheader.png" />
@@ -544,7 +550,7 @@
     <Content Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Web.config.exclude" />
+    <None Include="Web.config.exclud" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
