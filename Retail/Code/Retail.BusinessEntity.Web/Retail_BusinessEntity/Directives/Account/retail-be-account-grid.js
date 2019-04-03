@@ -198,19 +198,14 @@ function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retai
 
                     return accountActionDefinitionsLoadPromiseDeferred.promise;
                 }
-                function getAccountActionGroupDefinitionsLoadPromise() {
-                    var accountActionGroupDefinitionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    Retail_BE_AccountBEDefinitionAPIService.GetAccountActionGroupDefinitions(accountBEDefinitionId).then(function (response) {
+                function getAccountActionGroupDefinitionsLoadPromise() {
+                    return Retail_BE_AccountBEDefinitionAPIService.GetAccountActionGroupDefinitions(accountBEDefinitionId).then(function (response) {
                         accountActionGroups = response;
-                        accountActionGroupDefinitionsLoadPromiseDeferred.resolve();
                     }).catch(function (error) {
                         accountViewRuntimeEditorsLoadPromiseDeferred.reject(error);
                     });
-
-                    return accountActionGroupDefinitionsLoadPromiseDeferred.promise;
                 }
-          
 
                 return gridLoadDeferred.promise;
             };

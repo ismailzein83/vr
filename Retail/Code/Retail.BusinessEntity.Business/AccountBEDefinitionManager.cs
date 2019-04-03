@@ -213,12 +213,8 @@ namespace Retail.BusinessEntity.Business
         public List<AccountActionGroupDefinition> GetAccountActionGroupDefinitions(Guid accountBEDefinitionId)
         {
             AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
-
-            List<AccountActionGroupDefinition> accountActionGroupDefinitions = accountBEDefinitionSettings.ActionGroupDefinitions;
-            accountActionGroupDefinitions.ThrowIfNull("accountActionGroupDefinitions", accountBEDefinitionId);
-            return accountActionGroupDefinitions;
+            return accountBEDefinitionSettings.ActionGroupDefinitions;
         }
-
 
         public AccountActionDefinition GetAccountActionDefinition(Guid accountBEDefinitionId, Guid actionDefinitionId)
         {

@@ -44,11 +44,6 @@ app.directive("vrGenericdataGenericbeGridactiongroupdefinitionGrid", ["UtilsServ
                     VR_GenericData_GenericBEDefinitionService.addGenericBEGridActionGroupDefinition(onGridActionGroupAdded, getContext());
                 };
 
-                ctrl.disableAddGridActionGroup = function () {
-                    if (context == undefined) return true;
-                    return context.getActionGroupInfos().length == 0;
-                };
-
                 ctrl.removeGridActionGroup = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
