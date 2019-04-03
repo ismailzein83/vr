@@ -154,9 +154,6 @@
             return BusinessProcess_BPTaskTypeAPIService.GetBPTaskType(typeId).then(function (taskType) {
                 if (taskType != undefined) {
                     bpTaskType = taskType;
-                    getActionsDictionary().then(function (actionsDictionary) {
-                        buildActionsFromDictionary(actionsDictionary);
-                    });
                 }
             });
         }
@@ -173,7 +170,7 @@
                 bpTask = undefined;
             }
             var rootPromiseNode = {
-                promises: [getBPTask()],
+                promises: [getBPTask(), getActions()],
                 getChildNode: function () {
                     if (bpTask != undefined) {
                         fieldValues = bpTask.TaskData != undefined ? bpTask.TaskData.FieldValues : undefined;
@@ -238,70 +235,60 @@
             return fieldValuesObj;
         }
 
-        function getActionsDictionary() {
-            var actionsDictionaryPromise = UtilsService.createPromiseDeferred();
-            BusinessProcess_BPGenericTaskTypeActionAPIService.GetTaskTypeActions(bpTaskId).then(function (actions) {
-                var dictionary = {};
+        function getActions() {
+            return BusinessProcess_BPGenericTaskTypeActionAPIService.GetTaskTypeActions(bpTaskId).then(function (actions) {
                 if (actions != undefined && actions.length > 0) {
+                    var actionsDictionary = {};
                     for (var i = 0; i < actions.length; i++) {
                         var taskTypeAction = actions[i];
                         var buttonType = UtilsService.getEnum(VRButtonTypeEnum, "value", taskTypeAction.ButtonType);
 
-                        if (dictionary[buttonType.value] == undefined) {
-                            dictionary[buttonType.value] = [];
+                        if (actionsDictionary[buttonType.value] == undefined) {
+                            actionsDictionary[buttonType.value] = [];
                         }
-                        dictionary[buttonType.value].push({
+                        actionsDictionary[buttonType.value].push({
                             buttonType: buttonType,
                             taskTypeAction: taskTypeAction,
                         });
                     }
-                }
-                actionsDictionaryPromise.resolve(dictionary);
-            });
-            return actionsDictionaryPromise.promise;
-        }
-
-        function buildActionsFromDictionary(actionsDictionary) {
-            $scope.scopeModel.actions.length = 0;
-            if (actionsDictionary != undefined) {
-                for (var prop in actionsDictionary) {
-
-                    if (actionsDictionary[prop].length > 1) {
-                        var menuActions = [];
-                        for (var i = 0; i < actionsDictionary[prop].length; i++) {
-                            if (menuActions == undefined)
-                                menuActions = [];
-                            var object = actionsDictionary[prop][i];
-                            addMenuAction(object.taskTypeAction);
+                    $scope.scopeModel.actions.length = 0;
+                    for (var prop in actionsDictionary) {
+                        if (actionsDictionary[prop].length > 1) {
+                            var menuActions = [];
+                            for (var i = 0; i < actionsDictionary[prop].length; i++) {
+                                if (menuActions == undefined)
+                                    menuActions = [];
+                                var object = actionsDictionary[prop][i];
+                                addMenuAction(object.taskTypeAction);
+                            }
+                            addActionToList(object.buttonType, undefined, menuActions);
+                        } else {
+                            var object = actionsDictionary[prop][0];
+                            var clickFunc = function () {
+                                return callActionMethod(object.taskTypeAction);
+                            };
+                            addActionToList(object.buttonType, clickFunc, undefined);
                         }
-                        addActionToList(object.buttonType, undefined, menuActions);
-                    } else {
-                        var object = actionsDictionary[prop][0];
-                        var clickFunc = function () {
-                            return callActionMethod(object.taskTypeAction);
-                        };
-                        addActionToList(object.buttonType, clickFunc, undefined);
                     }
                 }
-            }
-            function addMenuAction(taskTypeAction) {
-                menuActions.push({
-                    name: taskTypeAction.Name,
-                    clicked: function () {
-                        return callActionMethod(taskTypeAction);
-                    },
-                });
-            }
+            });
+        }
+        function addMenuAction(taskTypeAction) {
+            menuActions.push({
+                name: taskTypeAction.Name,
+                clicked: function () {
+                    return callActionMethod(taskTypeAction);
+                },
+            });
+        }
 
-            function addActionToList(buttonType, clickEvent, menuActions) {
-                var type = buttonType != undefined ? buttonType.type : undefined;
-                $scope.scopeModel.actions.push({
-                    type: type,
-                    onclick: clickEvent,
-                    menuActions: menuActions
-                });
-            }
-
+        function addActionToList(buttonType, clickEvent, menuActions) {
+            var type = buttonType != undefined ? buttonType.type : undefined;
+            $scope.scopeModel.actions.push({
+                type: type,
+                onclick: clickEvent,
+                menuActions: menuActions
+            });
         }
 
         function callActionMethod(taskTypeAction) {
