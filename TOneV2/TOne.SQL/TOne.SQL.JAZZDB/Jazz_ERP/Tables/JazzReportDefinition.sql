@@ -15,8 +15,11 @@
     [AmountType]        INT              NULL,
     [SplitRateValue]    DECIMAL (20, 8)  NULL,
     [CurrencyId]        INT              NULL,
+    [OrderNumber]       INT              NULL,
     CONSTRAINT [PK_JazzReportDefinition] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
