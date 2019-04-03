@@ -650,7 +650,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
 
            
-            $rootScope.getPreviousRevesedViews = function () {
+            $rootScope.getPreviousReversedViews = function () {
                 var items = [];
                 var pagesRenderdAsView = $rootScope.moduleRenderedAsView.Childs;
                 for (var i = 0 ; i < pagesRenderdAsView.length ; i++) {
