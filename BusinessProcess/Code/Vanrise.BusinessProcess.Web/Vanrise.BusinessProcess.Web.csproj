@@ -227,6 +227,7 @@
     <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\BPGenericTaskTypeAction\bp-generictasktype-actionfiltercondition.js" />
     <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\BPGenericTaskTypeAction\bp-generictasktype-actionsettings-execute.js" />
     <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\BPGenericTaskTypeAction\bp-generictasktype-actionsettings.js" />
+    <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\BPGenericTaskTypeAction\Templates\ExecuteBPGenericTaskTypeActionTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\Templates\BaseBPTaskTypeSettingsTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-selector.js" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-tasktype-selector.js" />
@@ -409,7 +410,6 @@
     <Content Include="BusinessProcess\Services\VRWorkflowService.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BusinessProcess\Directives\BPTask\BaseBPTaskType\BPGenericTaskTypeAction\Templates\" />
     <Folder Include="System\" />
   </ItemGroup>
   <ItemGroup>
