@@ -40,6 +40,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -177,6 +181,7 @@
     <Compile Include="VRWorkflow\VRWorkflowActivityConfig.cs" />
     <Compile Include="VRWorkflow\VRWorkflowArgument.cs" />
     <Compile Include="VRWorkflow\VRWorkflowDetail.cs" />
+    <Compile Include="VRWorkflow\VRWorkflowExpression.cs" />
     <Compile Include="VRWorkflow\VRWorkflowFilter.cs" />
     <Compile Include="VRWorkflow\VRWorkflowInfo.cs" />
     <Compile Include="VRWorkflow\VRWorkflowQuery.cs" />
