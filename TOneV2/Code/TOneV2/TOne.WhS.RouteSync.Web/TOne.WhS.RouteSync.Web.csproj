@@ -157,11 +157,13 @@
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingFreeRadiusGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingHuaweiGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingTelesIdbGridTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingTelestaxGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-cataleya-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-freeradius-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-mvts-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-huawei-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telesidb-grid.js" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telestax-grid.js" />
     <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\Templates\FreeRadiusDataManagersTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiusdatamanagers.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\CataleyaSynchronizer\Templates\CataleyaSWSyncTemplate.html" />
@@ -254,6 +256,8 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesidb-manualroutes.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesidb-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesradius-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\TelestaxSynchronizer\Templates\TelestaxSWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\TelestaxSynchronizer\whs-routesync-telestax-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Normal\Templates\RouteSyncProcessManualTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Normal\whs-routesync-process-manual.js" />
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Scheduled\Templates\RouteSyncProcessScheduledTemplate.html" />

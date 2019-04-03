@@ -1,0 +1,12 @@
+﻿<vr-tabs>
+    <vr-tab header="'Communication'">
+        <whs-routesync-ericssonswitchcommunication on-ready="scopeModel.onEricssonSwitchCommunicationReady"></whs-routesync-ericssonswitchcommunication>
+    </vr-tab>
+    <vr-tab header="'Carrier Mapping'">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <whs-routesync-carrieraccountmapping-telestax-grid on-ready="scopeModel.onCarrierAccountMappingGridReady"></whs-routesync-carrieraccountmapping-telestax-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>
