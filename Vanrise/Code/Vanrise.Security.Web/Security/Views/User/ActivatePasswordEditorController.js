@@ -24,7 +24,7 @@
         }
 
         function defineScope() {
-            $scope.passwordHint = "";
+            $scope.passwordHint = " ";
             $scope.save = function () {
                 var activatePasswordInput = {
                     Email: email,

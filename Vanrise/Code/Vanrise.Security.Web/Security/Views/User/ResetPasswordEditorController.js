@@ -19,6 +19,7 @@
         }
 
         function defineScope() {
+            $scope.passwordHint = " ";
             $scope.save = function () {
                 var resetPasswordInput = {
                     UserId: userId,
