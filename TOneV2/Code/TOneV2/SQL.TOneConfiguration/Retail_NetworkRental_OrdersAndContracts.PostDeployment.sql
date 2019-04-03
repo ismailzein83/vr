@@ -291,6 +291,7 @@
                  --//////////////////////////////////////////////////////////////////////////////////////////////////
                        ('34515cac-a56d-4954-911a-0aed8f7d8ef9','VRWorkflowInputArgument_34515caca56d4954911a0aed8f7d8ef9','Telephony Complaint Process','db00a21b-e6d6-4401-932e-9cc901a37083',NULL,'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","ProcessTitle":"","ManualExecEditor":"bp-vr-workflow-manualexeceditor","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}},"BusinessRuleSetSupported":false}','2019-03-28 17:45:29.850','2019-03-28 17:45:29.850'),
 ('db42ef0f-cebe-4df5-9685-1b7581f0c09e','VRWorkflowInputArgument_db42ef0fcebe4df596851b7581f0c09e','Telephony Services Addition Process','8c6c0cbb-1311-451f-bef4-ef14028d2e2a',NULL,'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","ProcessTitle":"","ManualExecEditor":"bp-vr-workflow-manualexeceditor","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}},"BusinessRuleSetSupported":false}','2019-03-27 14:42:41.510','2019-03-27 14:42:41.510'),
+('2f618fa9-cb0c-4c5a-8ef1-ad107d1ccedf','VRWorkflowInputArgument_2f618fa9cb0c4c5a8ef1ad107d1ccedf','Network Rental Dark Fiber Subscription Process','803a9829-e55a-4710-af3b-df3c8e7dc3b7',NULL,'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","ProcessTitle":"","ManualExecEditor":"bp-vr-workflow-manualexeceditor","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}},"BusinessRuleSetSupported":false}','2019-04-02 10:37:43.347','2019-04-02 10:37:43.347'),
 ('4956cb2e-9b3a-4fb5-9c80-b96bef0dcb97','VRWorkflowInputArgument_4956cb2e9b3a4fb59c80b96bef0dcb97','Telephony Line Termination Process','bc6bbaef-b4cb-4989-97b9-19cabdad7930',NULL,'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","ProcessTitle":"","ManualExecEditor":"bp-vr-workflow-manualexeceditor","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}},"BusinessRuleSetSupported":false}','2019-03-26 11:40:49.423','2019-03-26 11:41:13.187'),
 ('c9b4d9fd-a71c-466d-b0c2-e2d024bad1f8','VRWorkflowInputArgument_c9b4d9fda71c466db0c2e2d024bad1f8','Telephony Line Subscription Process','a2c71486-0ac3-4933-ae75-4c8fb36e2e80',NULL,'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","ProcessTitle":"","ManualExecEditor":"bp-vr-workflow-manualexeceditor","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[]}}},"BusinessRuleSetSupported":false}','2019-03-25 10:49:05.780','2019-03-25 10:49:05.780')
                  --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -576,6 +577,104 @@
                  when not matched by target then
                  insert([ID],[Name],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
                  values(s.[ID], s.[Name], s.[CreatedBy], s.[CreatedTime], s.[LastModifiedBy], s.[LastModifiedTime]);
+                  
+            ----------------------------------------------------------------------------------------------------
+              end
+            ----------------------------------------------------------------------------------------------------
+              
+
+                 --- [NetworkRentalManager].[TelephonyComplaintType]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 begin
+                 
+                 set nocount on;
+                 
+                 ;with cte_data([ID],[Name],[CreatedTime],[LastModifiedTime])
+                  as (select* from (values
+                 --//////////////////////////////////////////////////////////////////////////////////////////////////
+                       ('12d29a6f-5177-4794-86c0-715754f81148','noisy','2019-03-28 18:03:38.897','2019-03-28 18:03:38.897'),
+('561dbb0a-8288-4ee0-b7c5-906115ef5003','Others','2019-03-28 18:03:48.097','2019-03-28 18:03:48.097'),
+('b2eb3c9c-d867-4726-a501-ae9973fdcc46','Incoming only','2019-03-28 18:03:14.270','2019-03-28 18:03:14.270'),
+('a5c7327e-5b37-4694-9cd9-b782df40464f','SP ADSL not working','2019-03-28 18:03:57.207','2019-03-28 18:03:57.207'),
+('daca9869-bd8d-43d7-b3d3-c746c2cb8a04','No Tone','2019-03-28 18:03:31.110','2019-03-28 18:03:31.110'),
+('7393c2fd-172e-47c6-b067-ce6d15f52186','ISP IPTV is not working','2019-03-28 18:03:23.473','2019-03-28 18:03:23.473')
+                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                )c([ID],[Name],[CreatedTime],[LastModifiedTime]))
+                merge[NetworkRentalManager].[TelephonyComplaintType] as t
+                using  cte_data as s
+                on            1=1 and t.[ID]=s.[ID]
+                  
+                  when matched then
+                 update set
+                 [Name]=s.[Name] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] 
+                 when not matched by target then
+                 insert([ID],[Name],[CreatedTime],[LastModifiedTime])
+                 values(s.[ID], s.[Name], s.[CreatedTime], s.[LastModifiedTime]);
+                  
+            ----------------------------------------------------------------------------------------------------
+              end
+            ----------------------------------------------------------------------------------------------------
+              
+
+                 --- [NetworkRentalManager].[TelephonyComplaintDamageType]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 begin
+                 
+                 set nocount on;
+                 
+                 ;with cte_data([ID],[Name],[CreatedTime],[LastModifiedTime])
+                  as (select* from (values
+                 --//////////////////////////////////////////////////////////////////////////////////////////////////
+                       ('46b3304e-c971-45d9-98ac-fa59b3b9c03e','Subscribers Equipments Damages','2019-03-28 17:58:58.537','2019-03-28 17:58:58.537'),
+('73a6707f-c7f8-4eb5-a3f8-c835c395003c','Financial','2019-03-28 17:59:07.720','2019-03-28 17:59:07.720'),
+('a68c912c-3f56-477c-a035-f5452bd633e0','Wired Network','2019-03-28 17:59:19.703','2019-03-28 17:59:19.703'),
+('dea4685f-9690-470a-a38c-d1602397bbd7','Wireless Extensions','2019-03-28 17:59:29.183','2019-03-28 17:59:29.183'),
+('df5a9881-889f-4368-af15-ca03ffee293a','Wireless Network','2019-03-28 17:59:42.417','2019-03-28 17:59:42.417')
+                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                )c([ID],[Name],[CreatedTime],[LastModifiedTime]))
+                merge[NetworkRentalManager].[TelephonyComplaintDamageType] as t
+                using  cte_data as s
+                on            1=1 and t.[ID]=s.[ID]
+                  
+                  when matched then
+                 update set
+                 [Name]=s.[Name] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] 
+                 when not matched by target then
+                 insert([ID],[Name],[CreatedTime],[LastModifiedTime])
+                 values(s.[ID], s.[Name], s.[CreatedTime], s.[LastModifiedTime]);
+                  
+            ----------------------------------------------------------------------------------------------------
+              end
+            ----------------------------------------------------------------------------------------------------
+              
+
+                 --- [NetworkRentalManager].[TelephonyComplaintBrokenCategory]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 begin
+                 
+                 set nocount on;
+                 
+                 ;with cte_data([ID],[Name],[CreatedTime],[LastModifiedTime])
+                  as (select* from (values
+                 --//////////////////////////////////////////////////////////////////////////////////////////////////
+                       ('34cf3e8d-b30b-46e0-9e39-09b0616b245e','No Tone','2019-03-28 18:01:43.583','2019-03-28 18:01:43.583'),
+('c018ff0c-6bf5-40f9-9fd3-53d51f1b5814','Incoming only','2019-03-28 18:00:45.930','2019-03-28 18:00:45.930'),
+('ea127826-e062-49f0-b2b9-7e9764a55ac7','ISP ADSL not working','2019-03-28 18:01:00.580','2019-03-28 18:01:00.580'),
+('c4c2f2df-d405-4aff-ab9d-9e115585115a','Others','2019-03-28 18:02:01.327','2019-03-28 18:02:01.327'),
+('5621b899-9fb1-4740-a46d-b613d1a24951','Noisy','2019-03-28 18:01:52.080','2019-03-28 18:01:52.080'),
+('b3e410f9-4892-463d-8702-fd8ddfc3872b','ISP IPTV is not working','2019-03-28 18:01:35.430','2019-03-28 18:01:35.430')
+                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                )c([ID],[Name],[CreatedTime],[LastModifiedTime]))
+                merge[NetworkRentalManager].[TelephonyComplaintBrokenCategory] as t
+                using  cte_data as s
+                on            1=1 and t.[ID]=s.[ID]
+                  
+                  when matched then
+                 update set
+                 [Name]=s.[Name] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] 
+                 when not matched by target then
+                 insert([ID],[Name],[CreatedTime],[LastModifiedTime])
+                 values(s.[ID], s.[Name], s.[CreatedTime], s.[LastModifiedTime]);
                   
             ----------------------------------------------------------------------------------------------------
               end

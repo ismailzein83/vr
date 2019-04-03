@@ -1577,6 +1577,18 @@
           },
           {
             "FieldValues": {
+              "ID": "2f618fa9-cb0c-4c5a-8ef1-ad107d1ccedf",
+              "Name": "VRWorkflowInputArgument_2f618fa9cb0c4c5a8ef1ad107d1ccedf",
+              "Title": "Network Rental Dark Fiber Subscription Process",
+              "VRWorkflowId": "803a9829-e55a-4710-af3b-df3c8e7dc3b7",
+              "FQTN": null,
+              "Config": "{\"$type\":\"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities\",\"ProcessTitle\":\"\",\"ManualExecEditor\":\"bp-vr-workflow-manualexeceditor\",\"IsPersistable\":false,\"HasChildProcesses\":false,\"HasBusinessRules\":false,\"NotVisibleInManagementScreen\":false,\"Security\":{\"$type\":\"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities\",\"View\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}},\"StartNewInstance\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}},\"ScheduleTask\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}}},\"BusinessRuleSetSupported\":false}",
+              "CreatedTime": "2019-04-02T10:37:43.347",
+              "LastModifiedTime": "2019-04-02T10:37:43.347"
+            }
+          },
+          {
+            "FieldValues": {
               "ID": "4956cb2e-9b3a-4fb5-9c80-b96bef0dcb97",
               "Name": "VRWorkflowInputArgument_4956cb2e9b3a4fb59c80b96bef0dcb97",
               "Title": "Telephony Line Termination Process",
@@ -1652,7 +1664,7 @@
         ],
         "IsIdentity": false,
         "Variables": [],
-        "LastWhereCondition": "Title like '%Telephon%'",
+        "LastWhereCondition": "Title like '%Telephon%' or title like 'Network%'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
@@ -2840,6 +2852,262 @@
             "ColumnName": "LastModifiedTime",
             "IncludeInInsert": true,
             "IncludeInUpdate": false,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "62b733f6-3daa-4f2c-8fa8-5d4615dd9dd9",
+      "Schema": "NetworkRentalManager",
+      "TableName": "TelephonyComplaintType",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "12d29a6f-5177-4794-86c0-715754f81148",
+              "Name": "noisy",
+              "CreatedTime": "2019-03-28T18:03:38.897",
+              "LastModifiedTime": "2019-03-28T18:03:38.897"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "561dbb0a-8288-4ee0-b7c5-906115ef5003",
+              "Name": "Others",
+              "CreatedTime": "2019-03-28T18:03:48.097",
+              "LastModifiedTime": "2019-03-28T18:03:48.097"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "b2eb3c9c-d867-4726-a501-ae9973fdcc46",
+              "Name": "Incoming only",
+              "CreatedTime": "2019-03-28T18:03:14.27",
+              "LastModifiedTime": "2019-03-28T18:03:14.27"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a5c7327e-5b37-4694-9cd9-b782df40464f",
+              "Name": "SP ADSL not working",
+              "CreatedTime": "2019-03-28T18:03:57.207",
+              "LastModifiedTime": "2019-03-28T18:03:57.207"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "daca9869-bd8d-43d7-b3d3-c746c2cb8a04",
+              "Name": "No Tone",
+              "CreatedTime": "2019-03-28T18:03:31.11",
+              "LastModifiedTime": "2019-03-28T18:03:31.11"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "7393c2fd-172e-47c6-b067-ce6d15f52186",
+              "Name": "ISP IPTV is not working",
+              "CreatedTime": "2019-03-28T18:03:23.473",
+              "LastModifiedTime": "2019-03-28T18:03:23.473"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "62b733f6-3daa-4f2c-8fa8-5d4615dd9dd9",
+      "Schema": "NetworkRentalManager",
+      "TableName": "TelephonyComplaintDamageType",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "46b3304e-c971-45d9-98ac-fa59b3b9c03e",
+              "Name": "Subscribers Equipments Damages",
+              "CreatedTime": "2019-03-28T17:58:58.537",
+              "LastModifiedTime": "2019-03-28T17:58:58.537"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "73a6707f-c7f8-4eb5-a3f8-c835c395003c",
+              "Name": "Financial",
+              "CreatedTime": "2019-03-28T17:59:07.72",
+              "LastModifiedTime": "2019-03-28T17:59:07.72"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a68c912c-3f56-477c-a035-f5452bd633e0",
+              "Name": "Wired Network",
+              "CreatedTime": "2019-03-28T17:59:19.703",
+              "LastModifiedTime": "2019-03-28T17:59:19.703"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "dea4685f-9690-470a-a38c-d1602397bbd7",
+              "Name": "Wireless Extensions",
+              "CreatedTime": "2019-03-28T17:59:29.183",
+              "LastModifiedTime": "2019-03-28T17:59:29.183"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "df5a9881-889f-4368-af15-ca03ffee293a",
+              "Name": "Wireless Network",
+              "CreatedTime": "2019-03-28T17:59:42.417",
+              "LastModifiedTime": "2019-03-28T17:59:42.417"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "62b733f6-3daa-4f2c-8fa8-5d4615dd9dd9",
+      "Schema": "NetworkRentalManager",
+      "TableName": "TelephonyComplaintBrokenCategory",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "34cf3e8d-b30b-46e0-9e39-09b0616b245e",
+              "Name": "No Tone",
+              "CreatedTime": "2019-03-28T18:01:43.583",
+              "LastModifiedTime": "2019-03-28T18:01:43.583"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "c018ff0c-6bf5-40f9-9fd3-53d51f1b5814",
+              "Name": "Incoming only",
+              "CreatedTime": "2019-03-28T18:00:45.93",
+              "LastModifiedTime": "2019-03-28T18:00:45.93"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "ea127826-e062-49f0-b2b9-7e9764a55ac7",
+              "Name": "ISP ADSL not working",
+              "CreatedTime": "2019-03-28T18:01:00.58",
+              "LastModifiedTime": "2019-03-28T18:01:00.58"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "c4c2f2df-d405-4aff-ab9d-9e115585115a",
+              "Name": "Others",
+              "CreatedTime": "2019-03-28T18:02:01.327",
+              "LastModifiedTime": "2019-03-28T18:02:01.327"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "5621b899-9fb1-4740-a46d-b613d1a24951",
+              "Name": "Noisy",
+              "CreatedTime": "2019-03-28T18:01:52.08",
+              "LastModifiedTime": "2019-03-28T18:01:52.08"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "b3e410f9-4892-463d-8702-fd8ddfc3872b",
+              "Name": "ISP IPTV is not working",
+              "CreatedTime": "2019-03-28T18:01:35.43",
+              "LastModifiedTime": "2019-03-28T18:01:35.43"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": false,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
             "IsIdentifier": false
           }
         ],
