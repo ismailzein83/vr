@@ -256,7 +256,9 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesidb-manualroutes.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesidb-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesradius-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\TelestaxSynchronizer\Templates\TelestaxCustomerMappingTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelestaxSynchronizer\Templates\TelestaxSWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\TelestaxSynchronizer\whs-routesync-telestax-customermapping.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelestaxSynchronizer\whs-routesync-telestax-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Normal\Templates\RouteSyncProcessManualTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Normal\whs-routesync-process-manual.js" />

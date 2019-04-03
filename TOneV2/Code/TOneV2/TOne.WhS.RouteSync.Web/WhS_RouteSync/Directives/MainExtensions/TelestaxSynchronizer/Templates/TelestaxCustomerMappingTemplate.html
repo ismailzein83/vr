@@ -1,0 +1,20 @@
+﻿<vr-form name="validationContext">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-button type="Add" data-onclick="scopeModel.addCustomerMapping" standalone></vr-button>
+            <vr-datagrid on-ready="scopeModel.onCustomerMappingGridReady"
+                         datasource="scopeModel.customerMappings"
+                         ondeleterow="scopeModel.onCustomerMappingDeleted"
+                         pagingtype="'PagingOnScroll'" hidegridmenu>
+
+                <vr-datagridcolumn headertext="'Network Id'" fixedwidth="400" disablesorting>
+                    <vr-textbox type="number" value="networkId" onblurtextbox="dataItem.onFieldBlur" hidelabel isrequired minvalue="0"></vr-textbox> 
+                    
+                    <!--<vr-common-ipaddress on-ready="dataItem.onIPAddressReady" onipaddressblur="dataItem.onFieldBlur"
+                                         onprefixblur="dataItem.onFieldBlur" isrequired="true" hidelabel gridlayout>
+                    </vr-common-ipaddress>-->
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</vr-form>

@@ -192,7 +192,7 @@ app.directive('whsRoutesyncCarrieraccountmappingTelestaxGrid', ['VRValidationSer
                 function buildCustomerMappingDrillDownTab() {
                     var drillDownTab = {};
                     drillDownTab.title = "In Network ID";
-                    drillDownTab.directive = "whs-routesync-cataleya-customermapping";
+                    drillDownTab.directive = "whs-routesync-telestax-customermapping";
 
                     drillDownTab.loadDirective = function (customerMappingGridAPI, carrierAccountMapping) {
                         carrierAccountMapping.customerMappingGridAPI = customerMappingGridAPI;
@@ -212,7 +212,7 @@ app.directive('whsRoutesyncCarrieraccountmappingTelestaxGrid', ['VRValidationSer
                 function buildSupplierMappingDrillDownTab() {
                     var drillDownTab = {};
                     drillDownTab.title = "Out Network ID";
-                    drillDownTab.directive = "whs-routesync-cataleya-customermapping";
+                    drillDownTab.directive = "whs-routesync-telestax-customermapping";
 
                     drillDownTab.loadDirective = function (supplierMappingGridAPI, carrierAccountMapping) {
                         carrierAccountMapping.supplierMappingGridAPI = supplierMappingGridAPI;
