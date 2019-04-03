@@ -289,7 +289,7 @@
                             sellingProductSelectorReadyDeferred);
                     }
                 }
-            }
+            };
 
             // Supplier Settings
             $scope.scopeModel.onSupplierTimeSelectorReady = function (api) {
