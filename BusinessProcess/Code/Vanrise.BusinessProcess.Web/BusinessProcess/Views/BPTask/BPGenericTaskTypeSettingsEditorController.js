@@ -259,7 +259,12 @@
                                 if (menuActions == undefined)
                                     menuActions = [];
                                 var object = actionsDictionary[prop][i];
-                                addMenuAction(object.taskTypeAction);
+                                menuActions.push({
+                                    name: object.taskTypeAction.Name,
+                                    clicked: function () {
+                                        return callActionMethod(object.taskTypeAction);
+                                    }
+                                });
                             }
                             addActionToList(object.buttonType, undefined, menuActions);
                         } else {
@@ -273,14 +278,7 @@
                 }
             });
         }
-        function addMenuAction(taskTypeAction) {
-            menuActions.push({
-                name: taskTypeAction.Name,
-                clicked: function () {
-                    return callActionMethod(taskTypeAction);
-                },
-            });
-        }
+       
 
         function addActionToList(buttonType, clickEvent, menuActions) {
             var type = buttonType != undefined ? buttonType.type : undefined;
