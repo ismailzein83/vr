@@ -113,7 +113,23 @@
                 };
 
                 api.setData = function (payload) {
-                    return carriersSelectorAPI.getSelectedIds();
+                    var Carriers = [];
+                    if (carriersSelectorAPI != undefined && carriersSelectorAPI.getSelectedIds() != undefined) {
+                        var selectedIds = carriersSelectorAPI.getSelectedIds();
+                        for (var i = 0; i < selectedIds.length; i++) {
+                            Carriers.push({
+                                CarrierAccountId: selectedIds[i]
+                            });
+                        }
+                    }
+
+                    payload.Carriers = {
+                        $type: "TOne.WhS.Jazz.Entities.AccountCodeCarriers,TOne.WhS.Jazz.Entities",
+                        Carriers: Carriers
+                    };
+
+                    payload.TransactionTypeId = transactionTypeSelectorAPI.getSelectedIds();
+                    return payload;
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
