@@ -10,12 +10,14 @@
     [CreatedTime]            DATETIME        CONSTRAINT [DF_ERPFinalTransaction_CreatedTime] DEFAULT (getdate()) NOT NULL,
     [timestamp]              ROWVERSION      NOT NULL,
     [SwitchName]             VARCHAR (255)   NULL,
-    [Direction]              INT             NOT NULL,
+    [Direction]              INT             NULL,
     [CarriersNames]          NVARCHAR (MAX)  NULL,
     [TransactionType]        VARCHAR (255)   NULL,
     [Processed]              BIT             NULL,
     CONSTRAINT [PK_ERPFinalTransaction] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

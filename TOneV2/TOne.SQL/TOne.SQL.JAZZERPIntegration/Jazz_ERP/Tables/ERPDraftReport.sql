@@ -8,11 +8,13 @@
     [CreatedTime]        DATETIME         CONSTRAINT [DF_ERPDraftReport_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]          ROWVERSION       NULL,
     [SwitchName]         VARCHAR (255)    NULL,
-    [Direction]          INT              NOT NULL,
+    [Direction]          INT              NULL,
     [TransactionType]    VARCHAR (255)    NULL,
     [Processed]          BIT              NULL,
     CONSTRAINT [PK_ERPDraftReport] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
