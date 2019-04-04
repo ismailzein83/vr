@@ -40,6 +40,17 @@ namespace Vanrise.Analytic.Data.RDB
             });
         }
 
+        public RDBTempTableQuery CreateExchangeRateTempTable(RDBQueryContext queryContext)
+        {
+            var tempTableQuery = queryContext.CreateTempTable();
+            
+            tempTableQuery.AddColumn(COL_CurrencyID, RDBDataType.Int, true);
+            tempTableQuery.AddColumn(COL_Rate, RDBDataType.Decimal, 18, 6);
+            tempTableQuery.AddColumn(COL_BED, RDBDataType.DateTime, true);
+            tempTableQuery.AddColumn(COL_EED, RDBDataType.DateTime);
+            return tempTableQuery;
+        }
+
         public void SetSelectQueryForExchangeRatesConvertedToCurrency(RDBSelectQuery selectQuery, int currencyId, DateTime fromTime, DateTime? toTime)
         {
             string exRate1Alias = "exRate1";
@@ -282,8 +293,7 @@ namespace Vanrise.Analytic.Data.RDB
                 int systemCurrencyId = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();
                 if (query.CurrencyId.HasValue && query.CurrencyId.Value != systemCurrencyId)
                 {
-                    currencyExchRateTempTable = queryContext.CreateTempTable();
-                    currencyExchRateTempTable.AddColumnsFromTable(CurrencyExchangeRateWithEEDDataManager.TABLE_NAME);
+                    currencyExchRateTempTable = s_currencyExchangeRateWithEEDDataManager.CreateExchangeRateTempTable(queryContext);
 
                     var insertExchRateQuery = queryContext.AddInsertQuery();
                     insertExchRateQuery.IntoTable(currencyExchRateTempTable);
