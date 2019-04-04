@@ -90,7 +90,41 @@ namespace BPMExtended.Main.Business
             }
             return ratePlanInfoItems;
         }
+        public List<RatePlanInfo> GetRatePlansDetail(string catalogId, string customerCategory)
+        {
+            List<string> rateplanids = new List<string>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRatePlansInCatalog");
+            var rpId = esq.AddColumn("StRatePlanID");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRatePlanCatalog", catalogId);
+            esq.Filters.Add(esqFirstFilter);
 
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                foreach(var item in entities)
+                {
+                    rateplanids.Add(item.GetTypedColumnValue<string>(rpId.Name));
+                }
+            }
+
+
+            var ratePlanInfoItems = new List<RatePlanInfo>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<BPMExtended.Main.SOMAPI.RatePlan> items = client.Get<List<BPMExtended.Main.SOMAPI.RatePlan>>(String.Format("api/SOM.ST/Billing/GetRatePlans"));
+                foreach (var item in items)
+                {
+                    var ratePlanInfoItem = RatePlanToInfoMapper(item);
+                    ratePlanInfoItems.Add(ratePlanInfoItem);
+                }
+            }
+
+            var rateplans = new List<RatePlanInfo>();
+            rateplans= ratePlanInfoItems.Where(p => !rateplanids.Any(p2 => p2.ToString() == p.RatePlanId.ToString())).ToList();
+            return rateplans;
+        }
         public RatePlanInfo RatePlanToInfoMapper(BPMExtended.Main.SOMAPI.RatePlan item)
         {
             return new RatePlanInfo
