@@ -30,9 +30,6 @@
 
             var selectorAPI;
 
-            var modalWidthSelectorAPI;
-            var modalWidthSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
             var directiveAPI;
             var directiveReadyDeferred;
             var directivePayload;
@@ -45,11 +42,6 @@
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                };
-
-                $scope.scopeModel.onModalWidthSelectorReady = function (api) {
-                    modalWidthSelectorAPI = api;
-                    modalWidthSelectorReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
@@ -85,9 +77,6 @@
                     var getBaseBPTaskTypeSettingsExtensionConfigsPromise = getBaseBPTaskTypeSettingsExtensionConfigs();
                     promises.push(getBaseBPTaskTypeSettingsExtensionConfigsPromise);
 
-                    var loadModalWidthSelectorPromise = loadModalWidthSelector();
-                    promises.push(loadModalWidthSelectorPromise);
-
                     function getBaseBPTaskTypeSettingsExtensionConfigs() {
                         return BusinessProcess_BPTaskTypeAPIService.GetBaseBPTaskTypeSettingsConfigs().then(function (response) {
                             if (response != null) {
@@ -100,19 +89,6 @@
                                 }
                             }
                         });
-                    }
-
-                    function loadModalWidthSelector() {
-                       var  modalWidthLoadReadyDeferred = UtilsService.createPromiseDeferred();
-
-                        modalWidthSelectorReadyPromiseDeferred.promise.then(function () {
-                            var selectorPayload = {
-                                selectedIds: settings != undefined ? settings.EditorSize : undefined
-                            };
-                            VRUIUtilsService.callDirectiveLoad(modalWidthSelectorAPI, selectorPayload, modalWidthLoadReadyDeferred);
-                        });
-
-                        return modalWidthLoadReadyDeferred.promise;
                     }
 
                     function loadDirective() {
@@ -137,7 +113,6 @@
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                             data.AutoOpenTask = $scope.scopeModel.autoOpenTask;
-                            data.EditorSize = modalWidthSelectorAPI.getSelectedIds();
                         }
                     }
                     return data;
@@ -167,9 +142,6 @@
                 + 'hideremoveicon>'
                 + '</vr-select>'
                 + '</vr-columns>'
-                + ' <vr-columns colnum="4">'
-                + ' <vr-common-modalwidth-selector on-ready="scopeModel.onModalWidthSelectorReady" isrequired="true"></vr-common-modalwidth-selector>'
-                + ' </vr-columns>'
                 + '<vr-columns colnum="1">'
                 + '<vr-switch value="scopeModel.autoOpenTask" label="Auto Open Task"></vr-switch>'
                 + '</vr-columns>'

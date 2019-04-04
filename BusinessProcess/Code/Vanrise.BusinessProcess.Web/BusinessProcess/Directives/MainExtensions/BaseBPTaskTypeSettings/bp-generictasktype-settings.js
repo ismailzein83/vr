@@ -31,6 +31,9 @@
             var dataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var dataRecordTypeSelectedPromiseDeferred;
 
+            var modalWidthSelectorAPI;
+            var modalWidthSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var editorDefinitionAPI;
             var editorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -44,6 +47,11 @@
                 $scope.scopeModel.onDataRecordTypeSelectorDirectiveReady = function (api) {
                     dataRecordTypeSelectorAPI = api;
                     dataRecordTypeSelectorReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onModalWidthSelectorReady = function (api) {
+                    modalWidthSelectorAPI = api;
+                    modalWidthSelectorReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onGenericBEEditorDefinitionDirectiveReady = function (api) {
@@ -157,6 +165,20 @@
                         return dataRecordTypeSelectorLoadDeferred.promise;
                     }
 
+                    function loadModalWidthSelector() {
+                        var modalWidthLoadReadyDeferred = UtilsService.createPromiseDeferred();
+
+                        modalWidthSelectorReadyPromiseDeferred.promise.then(function () {
+                            var selectorPayload = {
+                                selectedIds: payload != undefined ? payload.EditorSize : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(modalWidthSelectorAPI, selectorPayload, modalWidthLoadReadyDeferred);
+                        });
+
+                        return modalWidthLoadReadyDeferred.promise;
+                    }
+
+
                     function loadEditorDefinitionDirective() {
                         var loadEditorDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         var editorPromises = [editorDefinitionReadyPromiseDeferred.promise];
@@ -180,6 +202,7 @@
                         getChildNode: function () {
                             var directivePromises = [];
                             directivePromises.push(loadDataRecordTypeSelector());
+                            directivePromises.push(loadModalWidthSelector());
                             directivePromises.push(loadEditorDefinitionDirective());
 
                             return {
@@ -195,6 +218,7 @@
                     var data = {
                         $type: "Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.BPGenericTaskTypeSettings, Vanrise.BusinessProcess.MainExtensions",
                         RecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
+                        EditorSize: modalWidthSelectorAPI.getSelectedIds(),
                         EditorSettings: editorDefinitionAPI.getData(),
                         TaskTypeActions: ($scope.scopeModel.taskTypeActions.length > 0) ? $scope.scopeModel.taskTypeActions : undefined,
                         IncludeTaskLock: $scope.scopeModel.includeTaskLock
