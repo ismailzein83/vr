@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService', 'VR_Runtime_SchedulerTaskService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VR_GenericData_GenericBEActionService'];
+    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService', 'VR_Runtime_SchedulerTaskService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VR_GenericData_GenericBEActionService', 'BusinessProcess_BPDefinitionAPIService', 'VRCommon_ModalWidthEnum'];
 
-    function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService, VR_Runtime_SchedulerTaskService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBEActionService) {
+    function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService, VR_Runtime_SchedulerTaskService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBEActionService, BusinessProcess_BPDefinitionAPIService, VRCommon_ModalWidthEnum) {
         function getStatusColor(status) {
 
             if (status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.New.color;
@@ -127,26 +127,34 @@
                     if (payload == undefined)
                         return;
 
+                   
                     var businessEntityDefinitionId = payload.businessEntityDefinitionId;
                     var genericBusinessEntityId = payload.genericBusinessEntityId;
                     if (payload.genericBEAction != undefined && payload.genericBEAction.Settings != undefined) {
                         var genericBEActionSettings = payload.genericBEAction.Settings;
+                        BusinessProcess_BPDefinitionAPIService.GetBPDefintion(genericBEActionSettings.BPDefinitionId).then(function (response) {
+                            var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", response.Configuration.EditorSize);
+                            var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
+
+                            startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings, editorSize);
+                        });
                     }
 
-                    startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings);
+                   
                 }
             };
             VR_GenericData_GenericBEActionService.registerActionType(actionType);
         }
 
-        function startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings) {
+        function startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings, editorSize) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
                 genericBusinessEntityId: genericBusinessEntityId,
                 genericBEActionSettings: genericBEActionSettings
             };
-
-            var settings = {};
+            var settings = {
+                size: editorSize != undefined ? editorSize : "medium"
+            };
 
             settings.onScopeReady = function (modalScope) {
             };

@@ -13,6 +13,9 @@
         var businessProcessDefinitionId;
         var businessProcessDefinitionEntity;
 
+        var modalWidthSelectorAPI;
+        var modalWidthSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var vrWorkflowSelectorAPI;
         var vrWorkflowSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var vrWorkflowSelectorSelectionChangedDeferred;
@@ -50,6 +53,11 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.loadVRWorklowSelector = isEditMode ? false : true;
+
+            $scope.scopeModel.onModalWidthSelectorReady = function (api) {
+                modalWidthSelectorAPI = api;
+                modalWidthSelectorReadyPromiseDeferred.resolve();
+            };
 
             $scope.scopeModel.onVRWorkflowSelectorReady = function (api) {
                 vrWorkflowSelectorAPI = api;
@@ -244,6 +252,17 @@
 
                 return vrWorkflowLoadDeferred.promise;
             }
+            function loadModalWidthSelector() {
+                var loadModalWidthSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                modalWidthSelectorReadyPromiseDeferred.promise.then(function () {
+                    var selectorPayload = {
+                        selectedIds: businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.Configuration != undefined ? businessProcessDefinitionEntity.Configuration.EditorSize : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(modalWidthSelectorAPI, selectorPayload, loadModalWidthSelectorPromiseDeferred);
+                });
+
+                return loadModalWidthSelectorPromiseDeferred.promise;
+            }
             function loadViewRequiredPermission() {
                 var viewPermissionLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -329,7 +348,7 @@
 
                 return getVRWorkflowArgumentsLoadDeferred.promise;
             }
-            var operations = [setTitle, loadStaticData, loadVRWorkflowSelector, GetVRWorkflowArguments, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission,
+            var operations = [setTitle, loadStaticData, loadVRWorkflowSelector, loadModalWidthSelector, GetVRWorkflowArguments, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission,
                 loadScheduleTaskRequiredPermission, loadBPInstanceInsertHandlerSettings];
             if (businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.VRWorkflowId != undefined) {
                 operations.push(getVRWorkflowInputArgumentFields);
@@ -382,7 +401,6 @@
             validationMessages = undefined;
 
             var updateBPDefintionPromiseDeferred = UtilsService.createPromiseDeferred();
-
             BusinessProcess_BPDefinitionAPIService.UpdateBPDefinition(buildBPEntityObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('BP Definition', response, 'Title')) {
                     if ($scope.onBPDefenitionUpdated != undefined)
@@ -453,6 +471,7 @@
             obj.Title = $scope.scopeModel.title;
             obj.VRWorkflowId = $scope.scopeModel.loadVRWorklowSelector ? vrWorkflowSelectorAPI.getSelectedIds() : null;
             obj.Configuration.ProcessTitle = $scope.scopeModel.loadVRWorklowSelector ? $scope.scopeModel.processTitle : null;
+            obj.Configuration.EditorSize = modalWidthSelectorAPI.getSelectedIds();
             obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModel.MaxConcurrentWorkflows;
             obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModel.NotVisibleInManagementScreen;
             obj.Configuration.BPInstanceInsertHandler = bpInstanceInsertHandlerSettingsAPI.getData();

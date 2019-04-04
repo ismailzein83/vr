@@ -27,6 +27,7 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public string ProcessTitle { get; set; }
         public int? MaxConcurrentWorkflows { get; set; }
+        public ModalWidthEnum? EditorSize { get; set; }
         public VRGenericEditorDefinitionSetting EditorSettings { get; set; }
         public string Url { get; set; }
         public string ScheduleTemplateURL { get; set; }

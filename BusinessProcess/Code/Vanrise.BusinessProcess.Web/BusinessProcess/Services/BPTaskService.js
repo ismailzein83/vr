@@ -1,8 +1,8 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    BusinessProcess_BPTaskService.$inject = ['LabelColorsEnum', 'BPTaskStatusEnum', 'VRModalService', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService'];
-    function BusinessProcess_BPTaskService(LabelColorsEnum, BPTaskStatusEnum, VRModalService, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService) {
+    BusinessProcess_BPTaskService.$inject = ['LabelColorsEnum', 'BPTaskStatusEnum', 'VRModalService', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRCommon_ModalWidthEnum','UtilsService'];
+    function BusinessProcess_BPTaskService(LabelColorsEnum, BPTaskStatusEnum, VRModalService, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRCommon_ModalWidthEnum, UtilsService) {
         function getStatusColor(status) {
             if (status === BPTaskStatusEnum.New.value) return LabelColorsEnum.Primary.color;
             if (status === BPTaskStatusEnum.Started.value) return LabelColorsEnum.Info.color;
@@ -16,14 +16,21 @@
             BusinessProcess_BPTaskTypeAPIService.GetBPTaskTypeByTaskId(bpTaskId).then(function (bpTaskType) {
                 var url = bpTaskType.Settings.Editor;
 
-                //VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTask/BPTaskEditor.html', {
-                VRModalService.showModal(url, {
+                var parameters = {
                     TaskId: bpTaskId
-                }, {
+                };
+
+                var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", bpTaskType.Settings.EditorSize);
+
+                var settings = {
+                    size: editorEnum != undefined ? editorEnum.modalAttr : "medium",
                     onScopeReady: function (modalScope) {
                         modalScope.title = "Task";
                     }
-                });
+                };
+
+                //VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTask/BPTaskEditor.html', {
+                VRModalService.showModal(url, parameters, settings);
             });
 
         };

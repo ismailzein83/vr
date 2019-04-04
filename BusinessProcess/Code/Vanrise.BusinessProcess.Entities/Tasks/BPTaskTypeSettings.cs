@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Entities
 {
@@ -13,6 +14,8 @@ namespace Vanrise.BusinessProcess.Entities
         public virtual string Editor { get; set; }
 
         public virtual bool AutoOpenTask { get; set; }
+
+        public ModalWidthEnum? EditorSize { get; set; }
     }
 
     public class BPTaskTypeSettings : BaseBPTaskTypeSettings

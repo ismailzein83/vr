@@ -19,6 +19,9 @@
                                                                   selectedvalues="scopeModel.selectedVRWorkflow"
                                                                   normal-col-num="4" isrequired="true" hideremoveicon></businessprocess-vr-workflow-selector>
                         </span>
+                        <vr-columns width="1/3row">
+                            <vr-common-modalwidth-selector on-ready="scopeModel.onModalWidthSelectorReady" ></vr-common-modalwidth-selector>
+                        </vr-columns>
                         <span ng-if="scopeModel.loadVRWorklowSelector">
                             <vr-columns colnum="11">
                                 <span vr-loader="scopeModel.isLoadingArguments">
