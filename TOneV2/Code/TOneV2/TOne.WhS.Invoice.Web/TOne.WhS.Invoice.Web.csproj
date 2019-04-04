@@ -303,6 +303,12 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\AT\DefaultSupplierInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\AT\SettlementInvoiceDetail.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\AT\SettlementInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultCustomerInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultCustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceItemsReport.rdlc" />
@@ -353,7 +359,9 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceItemsReport1.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceReport1.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceReport1.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

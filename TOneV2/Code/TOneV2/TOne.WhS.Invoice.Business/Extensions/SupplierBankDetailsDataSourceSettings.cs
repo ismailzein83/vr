@@ -36,8 +36,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
             if (bankDetails != null)
             {
                 CurrencyManager currencyManager = new CurrencyManager();
+
                 foreach (var bankDetail in bankDetails)
                 {
+                    StringBuilder secondaryAccounts = new StringBuilder();
+                    var mainAccountCurrency = currencyManager.GetCurrencySymbol(bankDetail.CurrencyId);
+                    secondaryAccounts.AppendLine($"{mainAccountCurrency} N° {bankDetail.AccountNumber} ");
+
+                    if (bankDetail.SecondaryAccounts != null && bankDetail.SecondaryAccounts.Count > 0)
+                        foreach (var secondaryAccount in bankDetail.SecondaryAccounts)
+                            secondaryAccounts.AppendLine($"{currencyManager.GetCurrencySymbol(secondaryAccount.CurrencyId)} N° {secondaryAccount.AccountNumber} ");
+
                     bankDetailsList.Add(new BankDetailsDetail
                     {
                         AccountCode = bankDetail.AccountCode,
@@ -49,12 +58,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         Bank = bankDetail.Bank,
                         IBAN = bankDetail.IBAN,
                         CurrencyId = bankDetail.CurrencyId,
-                        CurrencyName = currencyManager.GetCurrencySymbol(bankDetail.CurrencyId),
+                        CurrencyName = mainAccountCurrency,
                         ChannelName = bankDetail.ChannelName,
                         CorrespondentBank = bankDetail.CorrespondentBank,
                         CorrespondentBankSwiftCode = bankDetail.CorrespondentBankSwiftCode,
                         ACH = bankDetail.ACH,
-                        ABARoutingNumber = bankDetail.ABARoutingNumber
+                        ABARoutingNumber = bankDetail.ABARoutingNumber,
+                        MoreInfo = bankDetail.MoreInfo,
+                        SecondaryAccounts = secondaryAccounts.ToString()
                     });
                 }
             }
