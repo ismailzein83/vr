@@ -107,6 +107,7 @@
     <Compile Include="PaymentPlanDetail.cs" />
     <Compile Include="PaymentPlanTemplateInfo.cs" />
     <Compile Include="PhoneNumberDetail.cs" />
+    <Compile Include="POSServiceDetail.cs" />
     <Compile Include="ProfessionalDI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="POSServiceInfo.cs" />
