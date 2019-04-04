@@ -263,7 +263,7 @@ namespace TOne.WhS.Invoice.Business
                             var customerInvoiceDetail = customerInvoiceDetails.FindRecord(x => x.InvoiceId == invoiceDetail.Entity.InvoiceId && x.CurrencyId == currentInvoiceItemDetail.CurrencyId);
                             if (customerInvoiceDetail != null)
                             {
-                                customerInvoiceDetail.TotalAmountAfterCommission += currentInvoiceItemDetail.AmountAfterCommissionWithTaxes;
+                                customerInvoiceDetail.TotalAmountAfterCommission += currentInvoiceItemDetail.TotalFullAmount;
                                 customerInvoiceDetail.TotalNumberOfCalls += currentInvoiceItemDetail.NumberOfCalls;
                                 customerInvoiceDetail.Duration += currentInvoiceItemDetail.Duration;
                                 customerInvoiceDetail.OriginalAmount = originalAmount;
@@ -278,7 +278,7 @@ namespace TOne.WhS.Invoice.Business
                                     TotalNumberOfCalls = currentInvoiceItemDetail.NumberOfCalls,
                                     CurrencyId = currentInvoiceItemDetail.CurrencyId,
                                     TimeZoneId = customerDetail.TimeZoneId,
-                                    TotalAmountAfterCommission = currentInvoiceItemDetail.AmountAfterCommissionWithTaxes,
+                                    TotalAmountAfterCommission = currentInvoiceItemDetail.TotalFullAmount,
                                     SaleCurrency = _currencyManager.GetCurrencySymbol(currentInvoiceItemDetail.CurrencyId),
                                     DueDate = invoiceDetail.Entity.DueDate,
                                     Commission = customerDetail.Commission,
