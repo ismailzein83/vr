@@ -25,7 +25,8 @@ namespace Vanrise.BusinessProcess.Entities
 
     public class BPConfiguration
     {
-        public string ProcessTitle { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression ProcessTitle { get; set; }
         public int? MaxConcurrentWorkflows { get; set; }
         public ModalWidthEnum EditorSize { get; set; }
         public VRGenericEditorDefinitionSetting EditorSettings { get; set; }
