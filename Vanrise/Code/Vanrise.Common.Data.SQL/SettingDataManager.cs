@@ -23,7 +23,7 @@ namespace Vanrise.Common.Data.SQL
 
         public bool UpdateSetting(SettingToEdit setting)
         {
-            return ExecuteNonQuerySP("common.sp_Setting_Update", setting.SettingId, setting.Name, Vanrise.Common.Serializer.Serialize(setting.Data)) > 0;
+            return ExecuteNonQuerySP("common.sp_Setting_Update", setting.SettingId, Vanrise.Common.Serializer.Serialize(setting.Data)) > 0;
         }
 
         public bool AreSettingsUpdated(ref object updateHandle)

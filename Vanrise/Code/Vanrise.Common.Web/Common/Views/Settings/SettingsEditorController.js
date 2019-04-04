@@ -136,7 +136,6 @@
         function buildSettingObjFromScope() {
             var obj = {
                 SettingId: settingsId,
-                Name: $scope.name,
                 Data: settingsEditorAPI.getData()
             };
             return obj;

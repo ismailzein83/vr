@@ -74,13 +74,7 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryContext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
-
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
-			ifNotExist.NotEqualsCondition(COL_ID).Value(setting.SettingId);
-			ifNotExist.EqualsCondition(COL_Name).Value(setting.Name);
-
-			updateQuery.Column(COL_Name).Value(setting.Name);
-
+            
 			if (setting.Data != null)
 				updateQuery.Column(COL_Data).Value(Vanrise.Common.Serializer.Serialize(setting.Data));
 			else
