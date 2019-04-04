@@ -490,7 +490,7 @@ namespace TestRuntime
             while (reader.Read())
             {
                 dynamic sms = Activator.CreateInstance(smsRuntimeType) as dynamic;
-                sms.SwitchId = 1;
+                sms.Switch = 1;
                 sms.IDonSwitch = Utils.GetReaderValue<long>(reader, "ID");
                 sms.Tag = reader["Tag"] as string;
                 sms.SentDateTime = (DateTime)reader["ClientRequestDate"];
