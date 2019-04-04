@@ -99,7 +99,9 @@
     <Compile Include="BPTaskTypes\BPGenericTaskTypeSettingsFilter.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VRWorkflowActivities\BEActivities\VRWorkflowAddGenericBEActivity.cs" />
     <Compile Include="VRWorkflowActivities\CodeGenerationHelper.cs" />
+    <Compile Include="VRWorkflowActivities\VRWorkflowAddBEActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowAssignTaskActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowDelayActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowSubProcessActivity.cs" />
@@ -109,6 +111,8 @@
     <Compile Include="VRWorkflowActivities\VRWorkflowCallHttpServiceActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowCustomLogicActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowForEachActivity.cs" />
+    <Compile Include="VRWorkflowActivities\VRWorkflowUpdateBEActivity.cs" />
+    <Compile Include="VRWorkflowActivities\VRWorkflowWhileActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowWriteTrackingMessageActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowIfElseActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowSequenceActivity.cs" />
