@@ -159,43 +159,26 @@ when not matched by target then
 	insert([ID],[Name],[Title],[FQTN],[VRWorkflowId],[Config])
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[VRWorkflowId],s.[Config]);
 
-
-
-	--[SOM_Online].[sec].[BusinessEntity]---------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[Group]--------------------------------------------------------------------------------
+BEGIN
 set nocount on;
-;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+;with cte_data([PSIdentifier],[Name],[Description],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('D1F22BCE-CCE7-4EB1-9C07-3D1225103338','Billing_API','Billing API','FAC9D166-18B0-4907-AA6C-B6EB04F4350C',0,'["Invoke","ViewLogs"]')
+('SOM_Billing','Billing',null,'{"$type":"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business","ConfigId":"be6619ae-687f-45e3-bd7b-90d1db4626b6","MemberIds":{"$type":"System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib","$values":[]}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
-merge	[sec].[BusinessEntity] as t
+)c([PSIdentifier],[Name],[Description],[Settings]))
+merge	[sec].[Group] as t
 using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+on		1=1 and t.[PSIdentifier] = s.[PSIdentifier]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Description] = s.[Description],[Settings] = s.[Settings]
 when not matched by target then
-	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+	insert([PSIdentifier],[Name],[Description],[Settings])
+	values(s.[PSIdentifier],s.[Name],s.[Description],s.[Settings]);
 
+END
 
---[SOM_Online].[sec].[BusinessEntityModule]---------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([ID],[Name],[ParentId],[BreakInheritance])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('FAC9D166-18B0-4907-AA6C-B6EB04F4350C','External System','5A9E78AE-229E-41B9-9DBF-492997B42B61',0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ParentId],[BreakInheritance]))
-merge	[sec].[BusinessEntityModule] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
-when not matched by target then
-	insert([ID],[Name],[ParentId],[BreakInheritance])
-	values(s.[ID],s.[Name],s.[ParentId],s.[BreakInheritance]);
+DECLARE @SOM_BillingGroupId int = (SELECT ID FROM sec.[Group] where [PSIdentifier] = 'SOM_Billing')
+--[sec].[Permission]------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////(1,@SOM_BillingGroupId,1,'d1f22bce-cce7-4eb1-9c07-3d1225103338','[{"Name":"Invoke","Value":1},{"Name":"ViewLogs","Value":1}]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))merge	[sec].[Permission] as tusing	cte_data as son		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]--when matched then--	update set--	[PermissionFlags] = s.[PermissionFlags]when not matched by target then	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
