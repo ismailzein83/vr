@@ -15,7 +15,6 @@ namespace Vanrise.BusinessProcess.Entities
 
         public virtual bool AutoOpenTask { get; set; }
 
-        public ModalWidthEnum? EditorSize { get; set; }
     }
 
     public class BPTaskTypeSettings : BaseBPTaskTypeSettings

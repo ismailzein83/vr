@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
 {
@@ -22,7 +23,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
 
             }
         }
-
+        public ModalWidthEnum EditorSize { get; set; }
         public Guid RecordTypeId { get; set; }
 
         public List<BPGenericTaskTypeAction> TaskTypeActions { get; set; }
