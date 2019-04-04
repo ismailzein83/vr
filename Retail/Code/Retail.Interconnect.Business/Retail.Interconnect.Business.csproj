@@ -108,6 +108,8 @@
     <Compile Include="InterconnectInvoiceGenerationManager.cs" />
     <Compile Include="InterconnectInvoiceGenerator.cs" />
     <Compile Include="InterconnectInvoiceManager.cs" />
+    <Compile Include="InterconnectSettlementGenerationCustomSection.cs" />
+    <Compile Include="InterconnectSettlementInvoiceSettings.cs" />
     <Compile Include="InterconnectInvoiceSettings.cs" />
     <Compile Include="InterconnectModuleManager.cs" />
     <Compile Include="InterconnectPartnerSettings.cs" />
