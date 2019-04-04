@@ -16,7 +16,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override string Title { get { return "ForEach"; } }
 
-        public string List { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression List { get; set; }
 
         public string IterationVariableName { get; set; }
 
@@ -78,7 +79,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSNAME#", baseExecutionClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionClassCode);
             nmSpaceCodeBuilder.Replace("#CLASSNAME#", className);
-            nmSpaceCodeBuilder.Replace("#LISTNAME#", this.List);
+            nmSpaceCodeBuilder.Replace("#LISTNAME#", this.List.GetCode(null));
             nmSpaceCodeBuilder.Replace("#ITERATIONVARIABLERUNTIMETYPE#", iterationVariableRuntimeType);
 
 

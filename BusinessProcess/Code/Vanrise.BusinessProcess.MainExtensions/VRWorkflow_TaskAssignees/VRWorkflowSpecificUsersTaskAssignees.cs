@@ -11,11 +11,12 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflow_TaskAssignees
     {
         public override Guid ConfigId => new Guid("B55A355A-66BA-4036-AC47-261B80C93CA2");
 
-        public string UserIds { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression UserIds { get; set; }
 
         public override string GetAssigneesCode()
         {
-            return string.Concat("return new Vanrise.BusinessProcess.MainExtensions.FixedUsersBPTaskAssignee { UserIds = ", this.UserIds, "};");
+            return string.Concat("return new Vanrise.BusinessProcess.MainExtensions.FixedUsersBPTaskAssignee { UserIds = ", this.UserIds.GetCode(null), "};");
         }
     }
 }

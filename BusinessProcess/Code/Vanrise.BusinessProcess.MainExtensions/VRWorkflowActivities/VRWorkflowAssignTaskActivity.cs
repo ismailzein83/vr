@@ -20,7 +20,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public Guid TaskTypeId { get; set; }
 
-        public string TaskTitle { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression TaskTitle { get; set; }
 
         public string DisplayName { get; set; }
 
@@ -179,7 +180,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 StringBuilder inputItemsBuilder = new StringBuilder();
                 foreach (var prm in this.InputItems)
                 {
-                    inputItemsBuilder.AppendLine($"TaskData.{prm.FieldName} = {prm.Value};");
+                    inputItemsBuilder.AppendLine($"TaskData.{prm.FieldName} = {prm.Value.GetCode(null)};");
                 }
                 nmSpaceCodeBuilder.Replace("#BUILDTASKDATA#", inputItemsBuilder.ToString());
             }
@@ -193,7 +194,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 StringBuilder outputItemsBuilder = new StringBuilder();
                 foreach (var prm in this.OutputItems)
                 {
-                    outputItemsBuilder.AppendLine($"{prm.To} = TaskData.{prm.FieldName};");
+                    outputItemsBuilder.AppendLine($"{prm.To.GetCode(null)} = TaskData.{prm.FieldName};");
                 }
                 nmSpaceCodeBuilder.Replace("#TASKCOMPLETEDCODE#", outputItemsBuilder.ToString());
             }
@@ -202,7 +203,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 nmSpaceCodeBuilder.Replace("#TASKCOMPLETEDCODE#", "");
             }
 
-            nmSpaceCodeBuilder.Replace("#TASKTITLECODE#", this.TaskTitle);
+            nmSpaceCodeBuilder.Replace("#TASKTITLECODE#", this.TaskTitle.GetCode(null));
             this.TaskAssignees.ThrowIfNull("this.TaskAssignees");
             this.TaskAssignees.Settings.ThrowIfNull("this.TaskAssignees.Settings");
 
@@ -229,12 +230,14 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
     {
         public string FieldName { get; set; }
 
-        public string Value { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression Value { get; set; }
     }
 
     public class VRWorkflowAssignTaskActivityOutputItem
     {
-        public string To { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression To { get; set; }
 
         public string FieldName { get; set; }
     }

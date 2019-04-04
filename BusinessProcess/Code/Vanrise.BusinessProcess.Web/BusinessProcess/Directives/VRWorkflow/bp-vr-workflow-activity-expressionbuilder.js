@@ -34,18 +34,41 @@ app.directive('businessprocessVrWorkflowActivityExpressionbuilder', ['UtilsServi
 		function workflowAssign(ctrl, $scope, $attrs) {
 
 			this.initializeController = initializeController;
-			function initializeController() {
-				if (ctrl.label == undefined)
-					ctrl.label = "Value";
+            function initializeController() {
+                $scope.scopeModel = {};
 
-				$scope.scopeModel = {};
+				if (ctrl.label == undefined)
+                    ctrl.label = "Value";
+                setTimeout(function () {
+                    if (ctrl.value != undefined) {
+                        $scope.scopeModel.codeExpression = ctrl.value.CodeExpression;
+                        $scope.$apply();
+                    }
+
+                    $scope.$watch('scopeModel.codeExpression', function (newCodeExpression) {
+                        if (newCodeExpression == undefined || newCodeExpression == '') {
+                            ctrl.value = undefined;
+                        }
+                        else {
+                            ctrl.value = {
+                                "$type": "Vanrise.BusinessProcess.Entities.VRWorkflowCodeExpression, Vanrise.BusinessProcess.Entities",
+                                "CodeExpression": newCodeExpression
+                            };
+                        }
+                    });
+
+                }, 500);
+               
+               
+                
+				
 				$scope.scopeModel.openExpressionBuilder = function () {
 					var args = (ctrl.getworkflowarguments != undefined) ? ctrl.getworkflowarguments() : undefined;
 					var vars = (ctrl.getactivityvariables != undefined) ? ctrl.getactivityvariables() : undefined;
 					var onSetExpressionBuilder = function (expressionBuilderValue) {
-						ctrl.value = expressionBuilderValue;
+                        $scope.scopeModel.codeExpression = expressionBuilderValue;
 					};
-					BusinessProcess_VRWorkflowService.openExpressionBuilder(onSetExpressionBuilder, args, vars, ctrl.value);
+                    BusinessProcess_VRWorkflowService.openExpressionBuilder(onSetExpressionBuilder, args, vars, $scope.scopeModel.codeExpression);
 				};
 			}
 		}

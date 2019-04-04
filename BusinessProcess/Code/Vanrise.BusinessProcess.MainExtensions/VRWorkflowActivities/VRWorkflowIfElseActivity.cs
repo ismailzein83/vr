@@ -16,7 +16,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override string Title { get { return "If Else"; } }
 
-        public string Condition { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression Condition { get; set; }
 
         public VRWorkflowActivity TrueActivity { get; set; }
 
@@ -67,7 +68,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSNAME#", baseExecutionClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionClassCode);
             nmSpaceCodeBuilder.Replace("#CLASSNAME#", className);
-            nmSpaceCodeBuilder.Replace("#CONDITION#", this.Condition);
+            nmSpaceCodeBuilder.Replace("#CONDITION#", this.Condition.GetCode(null));
 
             context.AddFullNamespaceCode(nmSpaceCodeBuilder.ToString());
 

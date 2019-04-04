@@ -13,7 +13,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override string Title { get { return "Log Message"; } }
 
-        public string Message { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression Message { get; set; }
 
         public VRWorkflowTrackingMessageSeverityEnum Severity { get; set; }
 
@@ -54,7 +55,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             string baseExecutionContextClassCode = CodeGenerationHelper.GenerateBaseExecutionClass(context, baseExecutionContextClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionContextClassCode);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSNAME#", baseExecutionContextClassName);
-            nmSpaceCodeBuilder.Replace("#MESSAGE#", this.Message);
+            nmSpaceCodeBuilder.Replace("#MESSAGE#", this.Message.GetCode(null));
             nmSpaceCodeBuilder.Replace("#SEVERITY#", this.Severity.ToString());
             string codeNamespace = context.GenerateUniqueNamespace("WriteTrackingMessageActivity");
             string className = "WriteTrackingMessageActivity";

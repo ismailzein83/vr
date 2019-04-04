@@ -107,8 +107,9 @@ namespace Vanrise.BusinessProcess.Business
             }
 
             string getTitleExecutionCode;
-            if (bpDefinition.Configuration != null && !string.IsNullOrEmpty(bpDefinition.Configuration.ProcessTitle))
-                getTitleExecutionCode = bpDefinition.Configuration.ProcessTitle;
+            string processTitleCode = (bpDefinition.Configuration != null && bpDefinition.Configuration.ProcessTitle != null) ? bpDefinition.Configuration.ProcessTitle.GetCode(null) : null;
+            if (!string.IsNullOrEmpty(processTitleCode))
+                getTitleExecutionCode = processTitleCode;
             else
                 getTitleExecutionCode = string.Concat("\"", vrWorkflow.Title, "\"");
 

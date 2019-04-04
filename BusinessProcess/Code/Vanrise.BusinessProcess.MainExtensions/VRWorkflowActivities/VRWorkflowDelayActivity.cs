@@ -12,7 +12,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override string Title { get { return "Delay"; } }
 
-        public string Delay { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression Delay { get; set; }
 
         protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
@@ -63,7 +64,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionContextClassCode);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSNAME#", baseExecutionContextClassName);
             
-            nmSpaceCodeBuilder.Replace("#DELAY#", this.Delay);
+            nmSpaceCodeBuilder.Replace("#DELAY#", this.Delay.GetCode(null));
 
             string codeNamespace = context.GenerateUniqueNamespace("DelayActivity");
             string className = "DelayActivity";

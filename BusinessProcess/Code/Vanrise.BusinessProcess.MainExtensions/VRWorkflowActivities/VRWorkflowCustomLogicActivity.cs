@@ -16,7 +16,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override string Title { get { return "Custom Code"; } }
 
-        public string Code { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression Code { get; set; }
 
         protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
@@ -49,7 +50,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     }
                 }");
 
-            nmSpaceCodeBuilder.Replace("#CUSTOMCODE#", this.Code);
+            nmSpaceCodeBuilder.Replace("#CUSTOMCODE#", this.Code.GetCode(null));
             string baseExecutionContextClassName = "CustomLogicWFActivity_BaseExecutionContext";
             string baseExecutionContextClassCode = CodeGenerationHelper.GenerateBaseExecutionClass(context, baseExecutionContextClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionContextClassCode);

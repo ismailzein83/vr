@@ -99,7 +99,7 @@
                     else {
                         $scope.scopeModel.isLoadingArguments = true;
                         getVRWorkflowArguments(selectedVRWorkflow.VRWorkflowId).then(function () {
-                            $scope.scopeModel.processTitle = "";
+                            $scope.scopeModel.processTitle = undefined;
                             $scope.scopeModel.isLoadingArguments = false;
                         }).catch(function (error) {
                             VRNotificationService.notifyExceptionWithClose(error, $scope);

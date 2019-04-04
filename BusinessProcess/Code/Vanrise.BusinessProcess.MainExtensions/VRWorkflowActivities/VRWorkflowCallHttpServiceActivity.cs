@@ -20,21 +20,26 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public VRWorkflowCallHttpServiceMethod Method { get; set; }
 
-        public string ActionPath { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression ActionPath { get; set; }
 
         public List<VRWorkflowCallHttpServiceURLParameter> URLParameters { get; set; }
 
         public List<VRWorkflowCallHttpServiceHeader> Headers { get; set; }
 
-        public string BuildBodyLogic { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression BuildBodyLogic { get; set; }
 
         public VRWorkflowCallHttpServiceMessageFormat MessageFormat { get; set; }
 
-        public string ResponseLogic { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression ResponseLogic { get; set; }
 
-        public string ErrorLogic { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression ErrorLogic { get; set; }
 
-        public string IsSucceeded { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression IsSucceeded { get; set; }
 
         public bool ContinueWorkflowIfCallFailed { get; set; }
 
@@ -170,7 +175,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 }");
 
             nmSpaceCodeBuilder.Replace("#CONNECTIONID#", this.ConnectionId.ToString());
-            nmSpaceCodeBuilder.Replace("#ACTIONPATH#", this.ActionPath);
+            nmSpaceCodeBuilder.Replace("#ACTIONPATH#", this.ActionPath.GetCode(null));
             nmSpaceCodeBuilder.Replace("#HTTPMETHOD#", this.Method.ToString());
             nmSpaceCodeBuilder.Replace("#RetrySettings#", this.RetrySettings.ToString());
             nmSpaceCodeBuilder.Replace("#ClassMembersCode#", this.ClassMembersCode);
@@ -181,7 +186,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 StringBuilder urlParametersBuilder = new StringBuilder();
                 foreach (var prm in this.URLParameters)
                 {
-                    urlParametersBuilder.AppendLine(String.Concat("parameters.Add(\"", prm.Name, "\", ", prm.Value, ");"));
+                    urlParametersBuilder.AppendLine(String.Concat("parameters.Add(\"", prm.Name, "\", ", prm.Value.GetCode(null), ");"));
                 }
                 nmSpaceCodeBuilder.Replace("#BUILDURLPARAMETERSMETHOD#", String.Concat(@"Dictionary<string, string> GetUrlParameters() 
                                             {
@@ -202,7 +207,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 StringBuilder headersBuilder = new StringBuilder();
                 foreach (var header in this.Headers)
                 {
-                    headersBuilder.AppendLine(String.Concat("headers.Add(\"", header.Key, "\", ", header.Value, ");"));
+                    headersBuilder.AppendLine(String.Concat("headers.Add(\"", header.Key, "\", ", header.Value.GetCode(null), ");"));
                 }
                 nmSpaceCodeBuilder.Replace("#BUILDHEADERSMETHOD#", String.Concat(@"Dictionary<string, string> GetHeaders() 
                                             {
@@ -220,12 +225,13 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
             nmSpaceCodeBuilder.Replace("#MESSAGEFORMAT#", this.MessageFormat.ToString());
 
-            if (this.BuildBodyLogic != null)
+            string bodyLogicCode = this.BuildBodyLogic != null ? this.BuildBodyLogic.GetCode(null) : null;
+            if (!string.IsNullOrEmpty(bodyLogicCode))
             {
                 nmSpaceCodeBuilder.Replace("#BODY#", "GetBody()");
                 nmSpaceCodeBuilder.Replace("#BUILDBODYMETHOD#", String.Concat(@"string GetBody() 
                                             {
-                                            ", this.BuildBodyLogic, @"
+                                            ", bodyLogicCode, @"
                                             }"));
             }
             else
@@ -234,27 +240,30 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 nmSpaceCodeBuilder.Replace("#BUILDBODYMETHOD#", "");
             }
 
-            if (this.ResponseLogic != null)
+            string responseLogicCode = this.ResponseLogic != null ? this.ResponseLogic.GetCode(null) : null;
+            if (!string.IsNullOrEmpty(responseLogicCode))
             {
-                nmSpaceCodeBuilder.Replace("#RESPONSELOGIC#", this.ResponseLogic);
+                nmSpaceCodeBuilder.Replace("#RESPONSELOGIC#", responseLogicCode);
             }
             else
             {
                 nmSpaceCodeBuilder.Replace("#RESPONSELOGIC#", "");
             }
 
-            if (!string.IsNullOrEmpty(this.ErrorLogic))
+            string errorLogicCode = this.ErrorLogic != null ? this.ErrorLogic.GetCode(null) : null;
+            if (!string.IsNullOrEmpty(errorLogicCode))
             {
-                nmSpaceCodeBuilder.Replace("#ERRORLOGIC#", this.ErrorLogic);
+                nmSpaceCodeBuilder.Replace("#ERRORLOGIC#", errorLogicCode);
             }
             else
             {
                 nmSpaceCodeBuilder.Replace("#ERRORLOGIC#", "");
             }
 
-            if (!String.IsNullOrEmpty(this.IsSucceeded))
+            string isSucceededCode = this.IsSucceeded != null ? this.IsSucceeded.GetCode(null) : null;
+            if (!string.IsNullOrEmpty(isSucceededCode))
             {
-                nmSpaceCodeBuilder.Replace("#ASSIGNISSUCCEEDED#", string.Concat(this.IsSucceeded, " = "));
+                nmSpaceCodeBuilder.Replace("#ASSIGNISSUCCEEDED#", string.Concat(isSucceededCode, " = "));
             }
             else
             {
@@ -304,14 +313,16 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
     {
         public string Name { get; set; }
 
-        public string Value { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression Value { get; set; }
     }
 
     public class VRWorkflowCallHttpServiceHeader
     {
         public string Key { get; set; }
 
-        public string Value { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression Value { get; set; }
     }
 
     public class VRWorkflowCallHttpServiceResponse

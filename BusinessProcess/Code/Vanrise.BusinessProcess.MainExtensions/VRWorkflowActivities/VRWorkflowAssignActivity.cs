@@ -27,21 +27,23 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 {
                     item.To.ThrowIfNull("item.To");
                     item.Value.ThrowIfNull("item.Value", item.To);
-                    codeBuilder.Append(item.To);
+                    codeBuilder.Append(item.To.GetCode(null));
                     codeBuilder.Append(" = ");
-                    codeBuilder.Append(item.Value);
+                    codeBuilder.Append(item.Value.GetCode(null));
                     codeBuilder.Append(";");
                     codeBuilder.AppendLine();
                 }
             }
-            return (new VRWorkflowCustomLogicActivity { Code = codeBuilder.ToString() }).GenerateWFActivityCode(context);
+            return (new VRWorkflowCustomLogicActivity { Code = new VRWorkflowCodeExpression { CodeExpression = codeBuilder.ToString() } }).GenerateWFActivityCode(context);
         }
     }
 
     public class VRWorkflowAssignActivityItem
     {
-        public string To { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression To { get; set; }
 
-        public string Value { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public VRWorkflowExpression Value { get; set; }
     }
 }
