@@ -28,6 +28,7 @@ app.directive('vrSecSecurityproviderFinduserLocalprovider', ['UtilsService', 'VR
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.passwordHint = " ";
                 $scope.scopeModel.showPasswordSection = true;
                 $scope.scopeModel.isEditMode = false;
 
