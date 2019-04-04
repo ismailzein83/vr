@@ -333,7 +333,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 							supplierInvoiceBySaleCurrencyItemDetail.AmountAfterCommission += item.Amount;
 							supplierInvoiceBySaleCurrencyItemDetail.AmountAfterCommissionWithTaxes += item.AmountAfterTaxes;
 							supplierInvoiceBySaleCurrencyItemDetail.TotalRecurringChargeAmount += item.AmountAfterTaxes;
-						}
+                            supplierInvoiceBySaleCurrencyItemDetail.TotalFullAmount += item.AmountAfterTaxes;
+                        }
 						else
 						{
 							costCurrencyItemDetails.Add(new SupplierInvoiceBySaleCurrencyItemDetails
@@ -343,7 +344,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 								AmountAfterCommission = item.Amount,
 								AmountAfterCommissionWithTaxes = item.AmountAfterTaxes,
 								NumberOfCalls = 0,
-								Duration = 0,
+                                TotalFullAmount = item.AmountAfterTaxes,
+                                Duration = 0,
 								CurrencyId = item.CurrencyId,
 								Amount = item.Amount,
 								TotalRecurringChargeAmount = item.AmountAfterTaxes,
