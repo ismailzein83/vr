@@ -28,6 +28,8 @@
         }
 
         function defineScope() {
+            $scope.scopeModel = {};
+            $scope.scopeModel.secondaryAccounts = [];
 
             $scope.onCurrencyDirectiveReady = function (api) {
                 currencyDirectiveApi = api;
@@ -41,10 +43,24 @@
                     return insertBankDetails();
             };
 
+            $scope.scopeModel.addSecondaryAccount = function () {
+
+                var dataItem = {
+                    currencyReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                    currencyLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                };
+
+                extendSecondaryAccountDataItem(dataItem);
+            };
+
+            $scope.scopeModel.removeSecondaryAccount = function (dataItem) {
+                var index = $scope.scopeModel.secondaryAccounts.indexOf(dataItem);
+                $scope.scopeModel.secondaryAccounts.splice(index, 1);
+            };
+
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
-
 
         }
 
@@ -54,13 +70,13 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCurrencySelector])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.isLoading = false;
-              });
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCurrencySelector, loadSecondaryAccounts])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
         }
 
         function setTitle() {
@@ -88,6 +104,55 @@
             $scope.correspondentBankSwiftCode = bankDetailEntity.CorrespondentBankSwiftCode;
             $scope.ach = bankDetailEntity.ACH;
             $scope.abaRoutingNumber = bankDetailEntity.ABARoutingNumber;
+            $scope.moreInfo = bankDetailEntity.MoreInfo;
+        }
+        function loadSecondaryAccounts() {
+
+            if (bankDetailEntity == undefined || bankDetailEntity.SecondaryAccounts == undefined || bankDetailEntity.SecondaryAccounts.length == 0)
+                return;
+
+            var secondaryAccounts = bankDetailEntity.SecondaryAccounts;
+            var promises = [];
+
+            for (var j = 0; j < secondaryAccounts.length; j++) {
+                var dataItem = {
+                    currencyReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                    currencyLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                };
+                promises.push(dataItem.currencyLoadPromiseDeferred.promise);
+
+                var secondaryAccountEntity = secondaryAccounts[j];
+
+                extendSecondaryAccountDataItem(dataItem, secondaryAccountEntity);
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
+
+        }
+
+        function extendSecondaryAccountDataItem(dataItem, payloadEntity) {
+            var selectedCurrencyId;
+
+            if (payloadEntity != undefined) {
+                selectedCurrencyId = payloadEntity.CurrencyId;
+                dataItem.AccountNumber = payloadEntity.AccountNumber;
+            };
+
+            dataItem.onCurrencyDirectiveReady = function (api) {
+                dataItem.currencyDirectiveApi = api;
+                dataItem.currencyReadyPromiseDeferred.resolve();
+            };
+
+            dataItem.currencyReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: selectedCurrencyId
+                    };
+
+                    VRUIUtilsService.callDirectiveLoad(dataItem.currencyDirectiveApi, directivePayload, dataItem.currencyLoadPromiseDeferred);
+                });
+
+            $scope.scopeModel.secondaryAccounts.push(dataItem);
         }
 
         function loadCurrencySelector() {
@@ -115,11 +180,28 @@
                 SwiftCode: $scope.swiftCode,
                 SortCode: $scope.sortCode,
                 ChannelName: $scope.channelName,
-                CorrespondentBank: $scope.correspondentBank ,
+                CorrespondentBank: $scope.correspondentBank,
                 CorrespondentBankSwiftCode: $scope.correspondentBankSwiftCode,
                 ACH: $scope.ach,
-                ABARoutingNumber: $scope.abaRoutingNumber
+                ABARoutingNumber: $scope.abaRoutingNumber,
+                MoreInfo: $scope.moreInfo
             };
+
+            var secondaryAccounts;
+            if ($scope.scopeModel.secondaryAccounts != undefined && $scope.scopeModel.secondaryAccounts.length > 0) {
+                secondaryAccounts = [];
+
+                for (var i = 0; i < $scope.scopeModel.secondaryAccounts.length; i++) {
+                    var secondaryAccount = $scope.scopeModel.secondaryAccounts[i];
+
+                    secondaryAccounts.push({
+                        CurrencyId: secondaryAccount.currencyDirectiveApi != undefined ? secondaryAccount.currencyDirectiveApi.getSelectedIds() : undefined,
+                        AccountNumber: secondaryAccount.AccountNumber
+                    });
+                }
+            }
+
+            obj.SecondaryAccounts = secondaryAccounts;
             return obj;
         }
 
@@ -128,17 +210,17 @@
             bankDetailsObject.BankDetailId = UtilsService.guid();
             if (isSingleInsert == true) {
                 return VRCommon_BankDetailAPIService.AddBank(bankDetailsObject)
-                   .then(function (response) {
-                       if (VRNotificationService.notifyOnItemAdded("Bank", response, "Bank")) {
-                           if ($scope.onBankDetailsAdded != undefined)
-                               $scope.onBankDetailsAdded(bankDetailsObject);
-                           $scope.modalContext.closeModal();
-                       }
-                   }).catch(function (error) {
-                       VRNotificationService.notifyException(error, $scope);
-                   }).finally(function () {
-                       $scope.isLoading = false;
-                   });
+                    .then(function (response) {
+                        if (VRNotificationService.notifyOnItemAdded("Bank", response, "Bank")) {
+                            if ($scope.onBankDetailsAdded != undefined)
+                                $scope.onBankDetailsAdded(bankDetailsObject);
+                            $scope.modalContext.closeModal();
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        $scope.isLoading = false;
+                    });
             }
             else {
                 if ($scope.onBankDetailsAdded != undefined)

@@ -35,8 +35,8 @@
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-textbox value="correspondentBankSwiftCode" label="Correspondent Bank Swift Code" localizedlabel="VRRes.CorrespondentBankSwiftCode.VREnd"></vr-textbox>
-                </vr-columns>               
-                
+                </vr-columns>
+
                 <vr-common-currency-selector on-ready="onCurrencyDirectiveReady" isrequired="true" normal-col-num="6" showaddbutton></vr-common-currency-selector>
 
                 <vr-columns width="1/2row">
@@ -45,7 +45,31 @@
                 <vr-columns width="1/2row">
                     <vr-textbox value="abaRoutingNumber" label="ABA Routing Number" localizedlabel="VRRes.ABARoutingNumber.VREnd"></vr-textbox>
                 </vr-columns>
-
+                <vr-columns width="1/2row">
+                    <vr-textarea value="moreInfo" label="More Info" localizedlabel="VRRes.MoreInfo.VREnd" rows="4"></vr-textarea>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-section header="Secondary Accounts">
+                        <vr-row>
+                            <vr-columns width="1/3row" haschildcolumns>
+                                <vr-button type="Add" data-onclick="scopeModel.addSecondaryAccount" standalone></vr-button>
+                            </vr-columns>
+                            <vr-columns width="fullrow" haschildcolumns>
+                                <vr-datagrid datasource="scopeModel.secondaryAccounts" norowhighlightonclick="true" enabledraggablerow="true"
+                                             on-ready="onGridReady" hidegridmenu ondeleterow="scopeModel.removeSecondaryAccount">
+                                    <vr-datagridcolumn headertext="'Account Number'" widthfactor="12" disablesorting="true">
+                                        <vr-textbox value="dataItem.AccountNumber" isrequired="true"></vr-textbox>
+                                    </vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Currency'" widthfactor="12" disablesorting="true">
+                                        <vr-common-currency-selector hidelabel on-ready="dataItem.onCurrencyDirectiveReady" hideremoveicon isrequired="true" normal-col-num="12" showaddbutton></vr-common-currency-selector>
+                                    </vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
+                </vr-columns>
             </vr-row>
         </vr-form>
     </vr-modalbody>

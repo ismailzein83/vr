@@ -13,7 +13,7 @@ namespace Vanrise.Invoice.MainExtensions
 {
     public class BankDetailsDataSourceSettings : InvoiceDataSourceSettings
     {
-        public override Guid ConfigId { get { return  new Guid("DE6F2641-A4A8-4F56-AEB4-2A0A25000408"); } }
+        public override Guid ConfigId { get { return new Guid("DE6F2641-A4A8-4F56-AEB4-2A0A25000408"); } }
         public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {
             var invoice = context.InvoiceActionContext.GetInvoice();
@@ -35,6 +35,15 @@ namespace Vanrise.Invoice.MainExtensions
                     var bankDetail = bankDetails.FirstOrDefault(x => x.BankDetailId == item);
                     if (bankDetail != null)
                     {
+                        StringBuilder secondaryAccounts = new StringBuilder();
+                        var mainAccountCurrency = currencyManager.GetCurrencySymbol(bankDetail.CurrencyId);
+                        secondaryAccounts.AppendLine($"{mainAccountCurrency} N° {bankDetail.AccountNumber} ");
+
+                        if (bankDetail.SecondaryAccounts != null && bankDetail.SecondaryAccounts.Count > 0)
+                            foreach (var secondaryAccount in bankDetail.SecondaryAccounts)
+                                secondaryAccounts.AppendLine($"{currencyManager.GetCurrencySymbol(secondaryAccount.CurrencyId)} N° {secondaryAccount.AccountNumber} ");
+
+
                         bankDetailsList.Add(new BankDetailsDetail
                         {
                             AccountCode = bankDetail.AccountCode,
@@ -46,12 +55,14 @@ namespace Vanrise.Invoice.MainExtensions
                             Bank = bankDetail.Bank,
                             IBAN = bankDetail.IBAN,
                             CurrencyId = bankDetail.CurrencyId,
-                            CurrencyName = currencyManager.GetCurrencySymbol(bankDetail.CurrencyId),
+                            CurrencyName = mainAccountCurrency,
                             ChannelName = bankDetail.ChannelName,
                             CorrespondentBank = bankDetail.CorrespondentBank,
                             CorrespondentBankSwiftCode = bankDetail.CorrespondentBankSwiftCode,
                             ACH = bankDetail.ACH,
-                            ABARoutingNumber = bankDetail.ABARoutingNumber
+                            ABARoutingNumber = bankDetail.ABARoutingNumber,
+                            MoreInfo = bankDetail.MoreInfo,
+                            SecondaryAccounts = secondaryAccounts.ToString()
                         });
                     }
                 }

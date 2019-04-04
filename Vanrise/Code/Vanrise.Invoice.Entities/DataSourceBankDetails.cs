@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
@@ -24,6 +25,9 @@ namespace Vanrise.Invoice.Entities
         public string CorrespondentBankSwiftCode { get; set; }
         public string ACH { get; set; }
         public string ABARoutingNumber { get; set; }
+        public string MoreInfo { get; set; }
+        public List<SecondaryAccount> SecondaryAccounts { get; set; }
+
         public IEnumerable<DataSourceBankDetails> GetBankDetailsRDLCSchema()
         {
             return null;

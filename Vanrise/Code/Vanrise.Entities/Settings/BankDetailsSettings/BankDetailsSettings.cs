@@ -28,8 +28,7 @@ namespace Vanrise.Entities
         public string CorrespondentBankSwiftCode { get; set; }
         public string ACH { get; set; }
         public string ABARoutingNumber { get; set; }
-
-
+        public string MoreInfo { get; set; }
+        public List<SecondaryAccount> SecondaryAccounts { get; set; }
     }
 }
- 
