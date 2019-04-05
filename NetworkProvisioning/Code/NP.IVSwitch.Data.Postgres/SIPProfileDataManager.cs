@@ -10,7 +10,7 @@ using Vanrise.Data.Postgres;
 
 namespace NP.IVSwitch.Data.Postgres
 {
-	class SIPProfileDataManager : BasePostgresDataManager, ISIPProfileDataManager
+	public class SIPProfileDataManager : BasePostgresDataManager, ISIPProfileDataManager
 	{
 		public TOne.WhS.RouteSync.IVSwitch.BuiltInIVSwitchSWSync IvSwitchSync { get; set; }
 		protected override string GetConnectionString()
