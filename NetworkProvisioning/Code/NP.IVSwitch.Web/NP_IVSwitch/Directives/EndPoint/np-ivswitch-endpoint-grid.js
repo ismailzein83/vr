@@ -103,11 +103,11 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 					clicked: cloneEndPoint,
 					haspermission: hasCloneEndPointPermisssion
 				});
-				$scope.scopeModel.menuActions.push({
-					name: 'Delete',
-					clicked: deleteEndPoint,
-					haspermission: hasDeletePermisssion
-				});
+				//$scope.scopeModel.menuActions.push({
+				//	name: 'Delete',
+				//	clicked: deleteEndPoint,
+				//	haspermission: hasDeletePermisssion
+				//});
             }
             function editEndPoint(EndPointItem) {
                 var onEndPointUpdated = function (updatedEndPoint) {

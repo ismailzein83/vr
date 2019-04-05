@@ -93,11 +93,11 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 					haspermission: hasCloneRoutePermission
 				});
 
-				$scope.scopeModel.menuActions.push({
-					name: 'Delete',
-					clicked: deleteRoute,
-					haspermission: hasDeleteRoutePermission
-				});
+				//$scope.scopeModel.menuActions.push({
+				//	name: 'Delete',
+				//	clicked: deleteRoute,
+				//	haspermission: hasDeleteRoutePermission
+				//});
             }
             function editRoute(RouteItem) {
                 var onRouteUpdated = function (updatedRoute) {

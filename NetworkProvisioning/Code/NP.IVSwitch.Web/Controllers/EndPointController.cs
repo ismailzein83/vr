@@ -61,7 +61,8 @@ namespace NP.IVSwitch.Web.Controllers
 		[Route("DeleteEndPoint")]
 		public Vanrise.Entities.DeleteOperationOutput<object> DeleteEndPoint(int endPointId)
 		{
-			return _manager.DeleteEndPoint(endPointId);
+			//return _manager.DeleteEndPoint(endPointId);
+			throw new NotImplementedException();
 		}
 
 	}

@@ -68,7 +68,8 @@ namespace NP.IVSwitch.Web.Controllers
 		[Route("DeleteRoute")]
 		public Vanrise.Entities.DeleteOperationOutput<object> DeleteRoute(int routeId)
 		{
-			return _manager.DeleteRoute(routeId);
+			//return _manager.DeleteRoute(routeId);
+			throw new NotImplementedException();
 		}
 
 	}
