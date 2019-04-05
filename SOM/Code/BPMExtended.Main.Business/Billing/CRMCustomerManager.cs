@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using Newtonsoft.Json;
 using Terrasoft.Core;
@@ -742,6 +744,58 @@ namespace BPMExtended.Main.Business
             }
 
             return isCommercial;
+        }
+
+        public List<RequestHeaderDetail> GetRequestHeaderData(string contactId, string accountId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            List<RequestHeaderDetail> requests = new List<RequestHeaderDetail>();
+
+            //Call Categories catalog and check the 'IsNormal' field if true => no need for attachments (optional), if false => attachment is required 
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("Id");
+            esq.AddColumn("StStep");
+            esq.AddColumn("StTechnicalStep");
+            esq.AddColumn("StRequestId");
+            esq.AddColumn("StStatus");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StRequestType");
+           // var c = esq.AddColumn("StContact");
+           // var contact = esq.AddColumn("StContact.Id");
+
+            if (contactId != null) { 
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContact", contactId);
+            }
+            else
+            {
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StAccount", accountId);
+            }
+
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                int value = int.Parse((string)entity.GetColumnValue("StRequestType"));
+
+
+                requests.Add(new RequestHeaderDetail()
+                {
+                    step = (string)entity.GetColumnValue("StStep"),
+                    technicalStep = (string)entity.GetColumnValue("StTechnicalStep"),
+                    RequestId = (Guid)entity.GetColumnValue("StRequestId"),
+                    status = (string)entity.GetColumnValue("StStatusName"),
+                    contractId = (string)entity.GetColumnValue("StContractID"),
+                    RequestTypeName = Utilities.GetEnumAttribute<OperationType, DescriptionAttribute>((OperationType)value).Description,
+                    EntityName =  Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)value).schemaName
+            });
+
+            }
+
+
+            return requests;
         }
 
         public void CustomerCreationProcess(string contactId, string accountId)

@@ -754,6 +754,12 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public bool GenerateBillOnDemand(string billingType)
+        {
+            return true;
+
+        }
+
         public bool GetCollectionStatus(string invoiceId)
         {
             //TODO:Get collection status by invoice Id
