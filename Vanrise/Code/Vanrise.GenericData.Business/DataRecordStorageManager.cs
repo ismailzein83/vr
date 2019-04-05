@@ -23,7 +23,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Public Methods Data Record
-        public List<DataRecord> GetDataRecords(DateTime fromTime,DateTime toTime ,RecordFilterGroup filterGroup , List<string> fieldNames,int? limitResult,OrderDirection direction, Guid dataRecordStorageId)
+        public List<DataRecord> GetDataRecords(DateTime fromTime, DateTime toTime, RecordFilterGroup filterGroup, List<string> fieldNames, int? limitResult, OrderDirection direction, Guid dataRecordStorageId)
         {
             var storageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorageId);
             storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
@@ -48,7 +48,7 @@ namespace Vanrise.GenericData.Business
             recordTypeIdField.ThrowIfNull("recordTypeIdField", dataRecordStorage.DataRecordTypeId);
             var parsedDataRecordId = recordTypeIdField.Type.ParseValueToFieldType(new DataRecordFieldTypeParseValueToFieldTypeContext(dataRecordId));
 
-            
+
 
             if (dataRecordStorage.Settings.EnableUseCaching)
             {
@@ -92,7 +92,7 @@ namespace Vanrise.GenericData.Business
                 }
             }
             input.Query.DataRecordStorageIds.ThrowIfNull("input.Query.DataRecordStorageIds");
-            
+
             var dataRecordStorageId = input.Query.DataRecordStorageIds.First();
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
             dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
@@ -259,7 +259,7 @@ namespace Vanrise.GenericData.Business
                 if (result != null)
                     records.AddRange(result);
             }
-            return GetOrderedDataRecordResults(recordType.DataRecordTypeId, clonedInput.Query.Direction,input.Query.LimitResult,input.Query.Columns, records, formulaDataRecordFieldsDict);
+            return GetOrderedDataRecordResults(recordType.DataRecordTypeId, clonedInput.Query.Direction, input.Query.LimitResult, input.Query.Columns, records, formulaDataRecordFieldsDict);
         }
 
         private void FillDataRecordFormulaFields(Guid dataRecordTypeId, DataRecord record, Dictionary<string, DataRecordField> formulaDataRecordFieldsDict)
@@ -371,7 +371,7 @@ namespace Vanrise.GenericData.Business
             return storageDataManager.GetMinDateTimeWithMaxIdAfterId(id, out maxId);
         }
 
-        public DateTime? GetMinDateTimeWithMaxIdByFilter (Guid dataRecordStorageId, RecordFilterGroup filterGroup, out long? maxId)
+        public DateTime? GetMinDateTimeWithMaxIdByFilter(Guid dataRecordStorageId, RecordFilterGroup filterGroup, out long? maxId)
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId);
             storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
@@ -898,42 +898,42 @@ namespace Vanrise.GenericData.Business
                     case DataRecordFieldOrderType.ByFieldValue: orderedRecords = sortColumn.IsDescending ? orderedRecords.ThenByDescending(itm => itm.FieldValues[sortColumn.FieldName].Value) : orderedRecords.ThenBy(itm => itm.FieldValues[sortColumn.FieldName].Value); break;
                     default: break;
                 }
-        //    }
-        //    return orderedRecords;
-        //}
+                //    }
+                //    return orderedRecords;
+                //}
 
-        //private static IEnumerable<DataRecord> GetOrderedDataRecords(OrderType orderType, List<string> fieldNames, GenericBEAdvancedOrderOptionsBase advancedOrderOptions,
-        //    IEnumerable<DataRecord> allRecords, Func<Dictionary<string, Object>, string, Object> getDataRecord)
-        //{
-        //    IEnumerable<DataRecord> orderedRecords;
-        //    switch (orderType)
-        //    {
-        //        case OrderType.ByAllFields: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, getDataRecord, false); break;
-        //        case OrderType.ByAllFieldsDescending: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, getDataRecord, true); break;
-        //        case OrderType.AdvancedFieldOrder: orderedRecords = GetOrderedByAdvancedFieldOrder(fieldNames, advancedOrderOptions, allRecords, getDataRecord); break;
-        //        default: orderedRecords = null; break;
-        //    }
-        //    return orderedRecords;
-        //}
-        //private static IEnumerable<DataRecord> GetOrderedByAllFields(List<string> fieldNames, IEnumerable<DataRecord> allRecords, Func<Dictionary<string, Object>, string, Object> getDataRecord, bool descOrder)
-        //{
-        //    List<string> orderByFields = fieldNames;
-        //    if (orderByFields == null || orderByFields.Count == 0)
-        //        throw new NullReferenceException($"orderByFields '{orderByFields}'");
+                //private static IEnumerable<DataRecord> GetOrderedDataRecords(OrderType orderType, List<string> fieldNames, GenericBEAdvancedOrderOptionsBase advancedOrderOptions,
+                //    IEnumerable<DataRecord> allRecords, Func<Dictionary<string, Object>, string, Object> getDataRecord)
+                //{
+                //    IEnumerable<DataRecord> orderedRecords;
+                //    switch (orderType)
+                //    {
+                //        case OrderType.ByAllFields: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, getDataRecord, false); break;
+                //        case OrderType.ByAllFieldsDescending: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, getDataRecord, true); break;
+                //        case OrderType.AdvancedFieldOrder: orderedRecords = GetOrderedByAdvancedFieldOrder(fieldNames, advancedOrderOptions, allRecords, getDataRecord); break;
+                //        default: orderedRecords = null; break;
+                //    }
+                //    return orderedRecords;
+                //}
+                //private static IEnumerable<DataRecord> GetOrderedByAllFields(List<string> fieldNames, IEnumerable<DataRecord> allRecords, Func<Dictionary<string, Object>, string, Object> getDataRecord, bool descOrder)
+                //{
+                //    List<string> orderByFields = fieldNames;
+                //    if (orderByFields == null || orderByFields.Count == 0)
+                //        throw new NullReferenceException($"orderByFields '{orderByFields}'");
 
-        //    var firstField = orderByFields[0];
-        //    IOrderedEnumerable<DataRecord> orderedRecords;
-        //    Func<DataRecord, Object> firstOrderByFunction = record => getDataRecord(record.FieldValues, firstField);
-        //    orderedRecords = descOrder ? allRecords.OrderByDescending(firstOrderByFunction) : allRecords.OrderBy(firstOrderByFunction);
+                //    var firstField = orderByFields[0];
+                //    IOrderedEnumerable<DataRecord> orderedRecords;
+                //    Func<DataRecord, Object> firstOrderByFunction = record => getDataRecord(record.FieldValues, firstField);
+                //    orderedRecords = descOrder ? allRecords.OrderByDescending(firstOrderByFunction) : allRecords.OrderBy(firstOrderByFunction);
 
-        //    if (orderByFields.Count > 1)
-        //    {
-        //        for (int i = 1; i < orderByFields.Count; i++)
-        //        {
-        //            var field = orderByFields[i];
-        //            Func<DataRecord, Object> orderByFunction = record => getDataRecord(record.FieldValues, field);
-        //            orderedRecords = descOrder ? orderedRecords.ThenByDescending(orderByFunction) : orderedRecords.ThenBy(orderByFunction);
-        //        }
+                //    if (orderByFields.Count > 1)
+                //    {
+                //        for (int i = 1; i < orderByFields.Count; i++)
+                //        {
+                //            var field = orderByFields[i];
+                //            Func<DataRecord, Object> orderByFunction = record => getDataRecord(record.FieldValues, field);
+                //            orderedRecords = descOrder ? orderedRecords.ThenByDescending(orderByFunction) : orderedRecords.ThenBy(orderByFunction);
+                //        }
             }
             return orderedRecords;
         }
@@ -973,6 +973,7 @@ namespace Vanrise.GenericData.Business
         //    }
         //    return orderedRecords;
         //}
+
         private void PrepareDependentAndFormulaFields(List<string> fieldNames, Dictionary<string, DataRecordField> dataRecordFieldDict, out Dictionary<string, DataRecordField> formulaDataRecordFieldsDict)
         {
             var dependentDataRecordStorageFields = new HashSet<string>();
@@ -995,13 +996,21 @@ namespace Vanrise.GenericData.Business
 
             if (fieldNames != null && fieldNames.Count > 0)
             {
-
                 fieldNames.RemoveAll(itm => dataRecordFieldDict.GetRecord(itm).Formula != null);
 
                 if (dependentDataRecordStorageFields.Count > 0)
                 {
                     fieldNames.AddRange(dependentDataRecordStorageFields);
-                    fieldNames = fieldNames.Distinct().ToList();
+
+                    HashSet<string> existingColumnNames = new HashSet<string>();
+                    for (int i = fieldNames.Count - 1; i >= 0; i--)
+                    {
+                        string currentFieldName = fieldNames[i];
+                        if (existingColumnNames.Contains(fieldNames[i]))
+                            fieldNames.RemoveAt(i);
+
+                        existingColumnNames.Add(currentFieldName);
+                    }
                 }
             }
         }
@@ -1121,7 +1130,7 @@ namespace Vanrise.GenericData.Business
 
         }
 
-        private List<DataRecord> GetTopOrderedResults(List<DataRecord> records, OrderDirection direction , int? limitResult)
+        private List<DataRecord> GetTopOrderedResults(List<DataRecord> records, OrderDirection direction, int? limitResult)
         {
             if (records.Count > 0)
             {
@@ -1205,14 +1214,14 @@ namespace Vanrise.GenericData.Business
             return results;
         }
 
-        private IEnumerable<DataRecord> GetOrderedDataRecordResults(Guid dataRecordTypeId, OrderDirection direction,int? limitresult,List<string> fieldNames, List<DataRecord> records, Dictionary<string, DataRecordField> formulaDataRecordFieldsDict)
+        private IEnumerable<DataRecord> GetOrderedDataRecordResults(Guid dataRecordTypeId, OrderDirection direction, int? limitresult, List<string> fieldNames, List<DataRecord> records, Dictionary<string, DataRecordField> formulaDataRecordFieldsDict)
         {
             if (records == null || records.Count == 0)
                 return null;
             List<DataRecord> orderedDataRecordResults = GetTopOrderedResults(records, direction, limitresult);
 
             FillDataRecordsFormulaFields(dataRecordTypeId, formulaDataRecordFieldsDict, orderedDataRecordResults);
-          
+
             return orderedDataRecordResults;
         }
 
@@ -1380,7 +1389,7 @@ namespace Vanrise.GenericData.Business
                 throw new NotImplementedException();
             }
 
-        
+
             #endregion
 
             #region Private Methods
