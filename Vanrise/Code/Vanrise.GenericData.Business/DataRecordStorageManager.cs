@@ -187,7 +187,9 @@ namespace Vanrise.GenericData.Business
                         }, dataRecordStorageId);
                         input.ResultKey = resultKey;
                     }
-
+                    //var orderType = input.Query.OrderType;
+                    //if (orderType.HasValue)
+                    //    cachedAccountsWithSelectionHandling = GetOrderedDataRecords(orderType.Value, input.Query.Columns, input.Query.AdvancedOrderOptions, cachedAccountsWithSelectionHandling, (record, fieldName) => record[fieldName]);
                     return DataRetrievalManager.Instance.ProcessResult(input, AllRecordsToBigResult(input, cachedAccountsWithSelectionHandling, recordType), handler);
 
                 }
@@ -896,10 +898,81 @@ namespace Vanrise.GenericData.Business
                     case DataRecordFieldOrderType.ByFieldValue: orderedRecords = sortColumn.IsDescending ? orderedRecords.ThenByDescending(itm => itm.FieldValues[sortColumn.FieldName].Value) : orderedRecords.ThenBy(itm => itm.FieldValues[sortColumn.FieldName].Value); break;
                     default: break;
                 }
+        //    }
+        //    return orderedRecords;
+        //}
+
+        //private static IEnumerable<DataRecord> GetOrderedDataRecords(OrderType orderType, List<string> fieldNames, GenericBEAdvancedOrderOptionsBase advancedOrderOptions,
+        //    IEnumerable<DataRecord> allRecords, Func<Dictionary<string, Object>, string, Object> getDataRecord)
+        //{
+        //    IEnumerable<DataRecord> orderedRecords;
+        //    switch (orderType)
+        //    {
+        //        case OrderType.ByAllFields: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, getDataRecord, false); break;
+        //        case OrderType.ByAllFieldsDescending: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, getDataRecord, true); break;
+        //        case OrderType.AdvancedFieldOrder: orderedRecords = GetOrderedByAdvancedFieldOrder(fieldNames, advancedOrderOptions, allRecords, getDataRecord); break;
+        //        default: orderedRecords = null; break;
+        //    }
+        //    return orderedRecords;
+        //}
+        //private static IEnumerable<DataRecord> GetOrderedByAllFields(List<string> fieldNames, IEnumerable<DataRecord> allRecords, Func<Dictionary<string, Object>, string, Object> getDataRecord, bool descOrder)
+        //{
+        //    List<string> orderByFields = fieldNames;
+        //    if (orderByFields == null || orderByFields.Count == 0)
+        //        throw new NullReferenceException($"orderByFields '{orderByFields}'");
+
+        //    var firstField = orderByFields[0];
+        //    IOrderedEnumerable<DataRecord> orderedRecords;
+        //    Func<DataRecord, Object> firstOrderByFunction = record => getDataRecord(record.FieldValues, firstField);
+        //    orderedRecords = descOrder ? allRecords.OrderByDescending(firstOrderByFunction) : allRecords.OrderBy(firstOrderByFunction);
+
+        //    if (orderByFields.Count > 1)
+        //    {
+        //        for (int i = 1; i < orderByFields.Count; i++)
+        //        {
+        //            var field = orderByFields[i];
+        //            Func<DataRecord, Object> orderByFunction = record => getDataRecord(record.FieldValues, field);
+        //            orderedRecords = descOrder ? orderedRecords.ThenByDescending(orderByFunction) : orderedRecords.ThenBy(orderByFunction);
+        //        }
             }
             return orderedRecords;
         }
 
+        //private static IEnumerable<DataRecord> GetOrderedByAdvancedFieldOrder(List<string> fieldNames, GenericBEAdvancedOrderOptionsBase advancedOrderOptions, IEnumerable<DataRecord> allRecords, Func<Dictionary<string, Object>, string, Object> getDataRecord)
+        //{
+        //    if (fieldNames == null)
+        //        throw new NullReferenceException($"fieldNames '{fieldNames}'");
+
+        //    GenericBEAdvancedFieldOrderOptions advancedFieldOrderOptions = advancedOrderOptions.CastWithValidate<GenericBEAdvancedFieldOrderOptions>("advancedOrderOptions");
+
+        //    if (advancedFieldOrderOptions.Fields == null || advancedFieldOrderOptions.Fields.Count == 0)
+        //        throw new NullReferenceException($"fields '{advancedFieldOrderOptions.Fields}'");
+
+        //    var fieldOrders = advancedFieldOrderOptions.Fields;
+        //    var firstFieldOrder = fieldOrders[0];
+        //    if (!fieldNames.Contains(firstFieldOrder.FieldName))
+        //        throw new Exception(String.Format("Field Order '{0}' is not available in the query field names", firstFieldOrder.FieldName));
+        //    Func<DataRecord, Object> firstOrderByFunction = record => getDataRecord(record.FieldValues, firstFieldOrder.FieldName);
+
+        //    IOrderedEnumerable<DataRecord> orderedRecords = firstFieldOrder.OrderDirection == OrderDirection.Ascending ?
+        //        allRecords.OrderBy(firstOrderByFunction) :
+        //        allRecords.OrderByDescending(firstOrderByFunction);
+        //    if (fieldOrders.Count > 1)
+        //    {
+        //        for (int i = 1; i < fieldOrders.Count; i++)
+        //        {
+        //            var fieldOrder = fieldOrders[i];
+        //            if (!fieldNames.Contains(fieldOrder.FieldName))
+        //                throw new Exception(String.Format("Field Order '{0}' is not available in the query fields", fieldOrder.FieldName));
+        //            Func<DataRecord, Object> orderByFunction = record => getDataRecord(record.FieldValues, fieldOrder.FieldName);
+
+        //            orderedRecords = fieldOrder.OrderDirection == OrderDirection.Ascending ?
+        //                orderedRecords.ThenBy(orderByFunction) :
+        //                orderedRecords.ThenByDescending(orderByFunction);
+        //        }
+        //    }
+        //    return orderedRecords;
+        //}
         private void PrepareDependentAndFormulaFields(List<string> fieldNames, Dictionary<string, DataRecordField> dataRecordFieldDict, out Dictionary<string, DataRecordField> formulaDataRecordFieldsDict)
         {
             var dependentDataRecordStorageFields = new HashSet<string>();
@@ -1254,11 +1327,11 @@ namespace Vanrise.GenericData.Business
             public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
             {
                 DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
-                var dataRecordsFinalResult= dataRecordStorageManager.GetDataRecordsFinalResult(DataRecordType, input, (dataRecordStorageId, cloneInput) =>
+                var dataRecordsFinalResult = dataRecordStorageManager.GetDataRecordsFinalResult(DataRecordType, input, (dataRecordStorageId, cloneInput) =>
                 {
-                    return dataRecordStorageManager.GetDataRecords(cloneInput.Query.FromTime, cloneInput.Query.ToTime,cloneInput.Query.FilterGroup,cloneInput.Query.Columns,cloneInput.Query.LimitResult,cloneInput.Query.Direction, dataRecordStorageId);
+                    return dataRecordStorageManager.GetDataRecords(cloneInput.Query.FromTime, cloneInput.Query.ToTime, cloneInput.Query.FilterGroup, cloneInput.Query.Columns, cloneInput.Query.LimitResult, cloneInput.Query.Direction, dataRecordStorageId);
                 });
-                if (input.Query.BulkActionState != null) 
+                if (input.Query.BulkActionState != null)
                 {
                     VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
                     GenericBusinessEntityDefinitionManager _genericBEDefinitionManager = new GenericBusinessEntityDefinitionManager();
@@ -1282,6 +1355,9 @@ namespace Vanrise.GenericData.Business
 
                     });
                 }
+                //var orderType = input.Query.OrderType;
+                //if (orderType.HasValue)
+                //    dataRecordsFinalResult = GetOrderedDataRecords(orderType.Value, input.Query.Columns, input.Query.AdvancedOrderOptions, dataRecordsFinalResult, (record, fieldName) => record[fieldName]);
                 return dataRecordsFinalResult;
 
             }
@@ -1304,11 +1380,12 @@ namespace Vanrise.GenericData.Business
                 throw new NotImplementedException();
             }
 
+        
             #endregion
 
             #region Private Methods
 
-            
+
 
             #endregion
         }
