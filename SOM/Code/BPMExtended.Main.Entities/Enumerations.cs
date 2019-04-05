@@ -43,7 +43,7 @@ namespace BPMExtended.Main.Entities
 
         [LineOfBusiness(LineOfBusiness.LeasedLine)]
         [Description("Leased Line Subscription")]
-        [EntitySchemaName("StLeasedLineSubscription")]
+        [EntitySchemaName("StLeasedLine")]
         LeasedLineSubscription = 4,
 
         [LineOfBusiness(LineOfBusiness.ADSL)]

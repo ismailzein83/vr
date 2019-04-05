@@ -791,11 +791,69 @@ namespace BPMExtended.Main.Business
                     RequestTypeName = Utilities.GetEnumAttribute<OperationType, DescriptionAttribute>((OperationType)value).Description,
                     EntityName =  Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)value).schemaName
             });
-
+                  
             }
 
 
             return requests;
+        }
+
+        public string GetSchemaName(string requestId, string entityName)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            List<RequestHeaderDetail> requests = new List<RequestHeaderDetail>();
+            string editpage = null;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysModule");
+            esq.RowCount = 1;
+            esq.AddColumn("Id");
+            esq.AddColumn("Attribute");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Code", entityName);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                string stepColumnName = (string)entities[0].GetColumnValue("Attribute");
+
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
+                esq.RowCount = 1;
+                esq.AddColumn("Id");
+                esq.AddColumn(stepColumnName);
+
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+                esq.Filters.Add(esqFirstFilter);
+
+                entities = esq.GetEntityCollection(BPM_UserConnection);
+
+                if (entities.Count > 0)
+                {
+                    var typeColumnValue = entities[0].GetColumnValue("StStepId");
+
+                    esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysModuleEdit");
+                    esq.RowCount = 1;
+                    esq.AddColumn("Id");
+                    esq.AddColumn("ActionKindName");
+
+                    esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "TypeColumnValue", typeColumnValue);
+                    esq.Filters.Add(esqFirstFilter);
+
+                    entities = esq.GetEntityCollection(BPM_UserConnection);
+
+                    if (entities.Count > 0)
+                    {
+                         editpage = (string)entities[0].GetColumnValue("ActionKindName");
+
+                    }
+
+                }
+          }
+            return editpage;
+
         }
 
         public void CustomerCreationProcess(string contactId, string accountId)
@@ -952,5 +1010,6 @@ namespace BPMExtended.Main.Business
         public string rate { get; set; }
         public bool isApproval { get; set; }
     }
+
 
 }
