@@ -33,6 +33,7 @@ namespace Retail.Runtime.Tasks
       
         public void Execute()
         {
+            //TestJSONConvertor();
             //TestBulkInsertRDB();
             //CallGetAnalyticRecords();
             //GenerateVRWorkflow();
@@ -124,23 +125,23 @@ namespace Retail.Runtime.Tasks
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpService);
 
-            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(queueRegulatorService);
+            //QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(queueRegulatorService);
 
-            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(queueActivationService);
+            //QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(queueActivationService);
 
-            SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(summaryQueueActivationService);
+            //SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(summaryQueueActivationService);
 
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
             runtimeServices.Add(schedulerService);
@@ -148,8 +149,8 @@ namespace Retail.Runtime.Tasks
             //Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             //runtimeServices.Add(bigDataService);
 
-            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(dsRuntimeService);
+            //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(dsRuntimeService);
 
             BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpRegulatorRuntimeService);
@@ -188,8 +189,63 @@ namespace Retail.Runtime.Tasks
             Console.ReadKey();
         }
 
+        #region Test JSON Convertor
+
+        public class VRWorkflowExpressionJsonConverter : Newtonsoft.Json.JsonConverter
+        {
+            public override bool CanConvert(Type objectType)
+            {
+                return true;
+            }
+
+            public override bool CanWrite
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
+            {
+                Newtonsoft.Json.Linq.JToken token = Newtonsoft.Json.Linq.JToken.Load(reader);
+                
+                if (token.Type == Newtonsoft.Json.Linq.JTokenType.Integer)
+                    return new List<int> { token.ToObject<int>() };
+                else
+                    return token.ToObject<List<int>>();
+            }
+
+            public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+        public class TestJsonConvertor
+        {
+            [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
+            public List<int> Values { get; set; }
+
+            public int Value { get; set; }
+        }
+
+        private void TestJSONConvertor()
+        {
+            var obj = new TestJsonConvertor { Values = new List<int> { 2, 4 }, Value = 54 };
+
+            string serializedStringWithType = Serializer.Serialize(obj);
+            string serializedStringWithoutType = Serializer.Serialize(obj, true);
+
+            TestJsonConvertor deserializedObj = Serializer.Deserialize<TestJsonConvertor>(@"{""Values"":54}");
+            TestJsonConvertor deserializedObj2 = Serializer.Deserialize<TestJsonConvertor>(@"{""$type"":""Retail.Runtime.Tasks.IsmailTask+TestJsonConvertor, Retail.Runtime"",""Values"":54}");
+        }
+
+        #endregion
+
         #region Parse SQL Post Script to Objects
-        
+
         private static void ParseSQLPostScripts()
         {
             StringBuilder verifiedOutputBuilder = new StringBuilder();
@@ -638,306 +694,306 @@ $@"when not matched by target then
 
         private void GenerateVRWorkflow()
         {
-            var workflow = new VRWorkflow
-            {
-                VRWorkflowId = Guid.NewGuid(),
-                Settings = new VRWorkflowSettings
-                {
-                    Arguments = new VRWorkflowArgumentCollection
-                    {
-                        new VRWorkflowArgument { Name= "InputArg1", Direction = VRWorkflowArgumentDirection.In, Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}},
-                        new VRWorkflowArgument { Name= "InputArg2", Direction = VRWorkflowArgumentDirection.In, Type = new VRWorkflowGenericVariableType { FieldType = new FieldNumberType{ DataType = FieldNumberDataType.Int}}},
-                        new VRWorkflowArgument { Name= "OutputArg1", Direction = VRWorkflowArgumentDirection.Out, Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}},
-                        new VRWorkflowArgument { Name= "InOutArg1", Direction = VRWorkflowArgumentDirection.InOut, Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}}
-                    },
-                    RootActivity = new VRWorkflowActivity
-                    {
-                        Settings = new VRWorkflowSequenceActivity
-                        {
-                            Variables = new VRWorkflowVariableCollection
-                            {
-                                new VRWorkflowVariable
-                                {
-                                     Name = "Variable1",
-                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}
-                                },
-                                new VRWorkflowVariable
-                                {
-                                     Name = "Variable2",
-                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}
-                                },
-                                new VRWorkflowVariable
-                                {
-                                     Name = "IntVariable1",
-                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldNumberType{ DataType = FieldNumberDataType.Int }}
-                                },
-                                new VRWorkflowVariable
-                                {
-                                     Name = "ListVariable1",
-                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldArrayType { FieldType = new FieldTextType() }}
-                                }
-                            },
-                            Activities = new VRWorkflowActivityCollection
-                            {
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCallHttpServiceActivity
-                                    {
-                                        ConnectionId = new Guid("DA0609E8-6A15-4BB8-8DA6-66352CAA3A05"),
-                                         ActionPath = "\"api/MyTest/TestCall\"",
-                                         Method = VRWorkflowCallHttpServiceMethod.Get,
-                                         URLParameters = new List<VRWorkflowCallHttpServiceURLParameter>
-                                         {
-                                             new VRWorkflowCallHttpServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
-                                         },
-                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.TextXML,
-                                         ResponseLogic = "Console.WriteLine(\"responseContent: {0}\", response.StringResponse);",
-                                         ErrorLogic = "Console.WriteLine(\"error occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
-                                         ContinueWorkflowIfCallFailed = true,
-                                    }
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCallHttpServiceActivity
-                                    {
-                                         ActionPath = "\"api/MyTest/TestMethod\"",
-                                         Method = VRWorkflowCallHttpServiceMethod.Post,
-                                         //URLParameters = new List<VRWorkflowCallServiceURLParameter>
-                                         //{
-                                         //    new VRWorkflowCallServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
-                                         //},
-                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.ApplicationJSON,
-                                         BuildBodyLogic = "return @\"{'Text':'test input1 to Test Method'}\";",
-                                         ResponseLogic = "Console.WriteLine(\"responseContent2: {0}\", response.StringResponse);Console.WriteLine();Console.WriteLine();Console.WriteLine();Console.WriteLine(\"Deserialized: {0}\", response.DeserializeResponse<Retail.Runtime.Tasks.IsmailTask.MyTestMethodOutput>().ListOfObjects[2].Text1);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
-                                         ErrorLogic = "Console.WriteLine(\"error2 occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);this.Variable1 = error.ErrorMessage;Console.WriteLine();Console.WriteLine();Console.WriteLine();",
-                                         ContinueWorkflowIfCallFailed = true
-                                    }
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCallHttpServiceActivity
-                                    {
-                                         ActionPath = "\"WebService1.asmx\"",
-                                         Method = VRWorkflowCallHttpServiceMethod.Post,
-                                         //URLParameters = new List<VRWorkflowCallServiceURLParameter>
-                                         //{
-                                         //    new VRWorkflowCallServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
-                                         //},
-                                         Headers = new List<VRWorkflowCallHttpServiceHeader>
-                                         {
-                                             new VRWorkflowCallHttpServiceHeader { Key = "SOAPAction", Value = "\"http://tempuri.org/HelloWorld\""}
-                                         },                                         
-                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.TextXML,
-                                         BuildBodyLogic = "return @\"<?xml version='1.0' encoding='utf-8'?><soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'><soap:Body><HelloWorld xmlns='http://tempuri.org/' /></soap:Body></soap:Envelope>\";",
-                                         ResponseLogic = "Console.WriteLine(\"AA responseContent3: {0}\", response.StringResponse);",
-                                         ErrorLogic = "Console.WriteLine(\"error3 occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
-                                         ContinueWorkflowIfCallFailed = false
-                                    }
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCallHttpServiceActivity
-                                    {
-                                         ActionPath = "\"WebService1.asmx\"",
-                                         Method = VRWorkflowCallHttpServiceMethod.Post,
-                                         //URLParameters = new List<VRWorkflowCallServiceURLParameter>
-                                         //{
-                                         //    new VRWorkflowCallServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
-                                         //},
-                                         Headers = new List<VRWorkflowCallHttpServiceHeader>
-                                         {
-                                             new VRWorkflowCallHttpServiceHeader { Key = "SOAPAction", Value = "\"http://tempuri.org/TestMethod\""}
-                                         },                                         
-                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.TextXML,
-                                         BuildBodyLogic = "return @\"<?xml version='1.0' encoding='utf-8'?><soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'><soap:Body><TestMethod xmlns='http://tempuri.org/' ><input1><Text>Input 1 Text Value</Text></input1></TestMethod></soap:Body></soap:Envelope>\";",
-                                         ResponseLogic = "Console.WriteLine(\"AA responseContent4: {0}\", response.StringResponse);Console.WriteLine();Console.WriteLine();Console.WriteLine();Console.WriteLine(\"Deserialized4: {0}\", response.DeserializeResponse<Retail.Runtime.Tasks.IsmailTask.MyTestMethodOutput>().ListOfObjects[2].Text1);this.Variable2 = response.DeserializeResponse<Retail.Runtime.Tasks.IsmailTask.MyTestMethodOutput>().ListOfObjects[1].Text1;Console.WriteLine();Console.WriteLine();Console.WriteLine();",
-                                         ErrorLogic = "Console.WriteLine(\"error4 occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
-                                         ContinueWorkflowIfCallFailed = false
-                                    }
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value read from Http Service: {0}\", this.Variable2);"}
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Error read from Http Service: {0}\", this.Variable1);"}
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowAssignActivity 
-                                    {
-                                        Items = new List<VRWorkflowAssignActivityItem>
-                                        {
-                                            new VRWorkflowAssignActivityItem { To = "Variable1", Value = "\"New Activity: Variable 1 Value \" + DateTime.Now.ToString()"},
-                                            new VRWorkflowAssignActivityItem { To = "ListVariable1", Value = "new List<string> { \"Item 1\", \"Item 2\", \"Item 3\" }"},
-                                            new VRWorkflowAssignActivityItem { To = "IntVariable1", Value = "5"}
-                                        }
-                                    }
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"From Custom Activity\");Console.WriteLine(\"Value of Variable1: {0}\", Variable1);Variable2 = \"I changed the Value of the Variable2\";"}
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value of Variable2: {0}\", this.Variable2);"}
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value of IntVariable1: {0}\", IntVariable1);"}
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCustomLogicActivity { Code = @"foreach(var item in ListVariable1)
-{
-    Console.WriteLine(""List Item: {0}"", item);
-}"}
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowAssignActivity 
-                                    {
-                                        Items = new List<VRWorkflowAssignActivityItem>
-                                        {
-                                            new VRWorkflowAssignActivityItem { To = "ListVariable1[1]", Value = "\"new Value for second Item \" + DateTime.Now.ToString() "}
-                                        }
-                                    }
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCustomLogicActivity { Code = @"foreach(var item in ListVariable1)
-{
-    Console.WriteLine(""List Item: {0}"", item);
-}"}
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value of InputArg1: {0}\", InputArg1);"}
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowCustomLogicActivity { Code = "OutputArg1 = \"VAlue returned in Output Arguments. using Arguments\";"}
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowIfElseActivity{
-                                         Condition = "1 == 1",
-                                         TrueActivity = new VRWorkflowActivity
-                                                        {
-                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Condition is true\");"}
-                                                        }
-                                    }
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowIfElseActivity{
-                                         Condition = "InputArg2 >= 10",
-                                         TrueActivity = new VRWorkflowActivity
-                                                        {
-                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Input Argument '{0}' is greater than 10\", InputArg2);"}
-                                                        },
-                                         FalseActivity = new VRWorkflowActivity
-                                                        {
-                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Input Argument '{0}' is less than 10\", InputArg2);"}
-                                                        }
-                                    }
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowForEachActivity
-                                    {
-                                         List = "ListVariable1",
-                                          IterationVariableName = "Item",
-                                           IterationVariableType = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()},
-                                            Activity = new VRWorkflowActivity
-                                            {
-                                                Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Foreach Iteration: '{0}' \", Item);"}
-                                            }
-                                    }
-                                },
-                                new VRWorkflowActivity
-                                {
-                                    Settings = new VRWorkflowSequenceActivity
-                                    {
-                                         Variables = new VRWorkflowVariableCollection
-                                         {
-                                             new VRWorkflowVariable
-                                             {
-                                                 Name = "SubVariable1",
-                                                 Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}
-                                             }
-                                         },
-                                         Activities = new VRWorkflowActivityCollection
-                                         {
-                                             new VRWorkflowActivity
-                                            {
-                                                Settings = new VRWorkflowAssignActivity 
-                                                {
-                                                    Items = new List<VRWorkflowAssignActivityItem>
-                                                    {
-                                                        new VRWorkflowAssignActivityItem { To = "SubVariable1", Value = "\"Sub Variable 1 Value \" + DateTime.Now.ToString()"},
-                                                        new VRWorkflowAssignActivityItem { To = "IntVariable1", Value = "55"}
-                                                    }
-                                                }
-                                            },
-                                            new VRWorkflowActivity
-                                            {
-                                                Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"SubVariable1 in SUB: '{0}' \", SubVariable1);"}
-                                            },
-                                            new VRWorkflowActivity
-                                            {
-                                                Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"IntVariable1 in SUB: '{0}' \", IntVariable1);"}
-                                            },
-                                            new VRWorkflowActivity
-                                            {
-                                                 Settings = new VRWorkflowSequenceActivity
-                                                {
-                                                     Activities = new VRWorkflowActivityCollection
-                                                     {
-                                                        new VRWorkflowActivity
-                                                        {
-                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"IntVariable1 in SUB SUB: '{0}' \", IntVariable1);"}
-                                                        }
-                                                     }
-                                                }
-                                            }
-                                         }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            Activity wfWorkflow;
-            List<string> errorMessage; 
-            //if (new VRWorkflowManager().TryCompileWorkflow(workflow, out wfWorkflow, out errorMessage))
-            //{
-            //    Console.WriteLine("Compiled successfully");
-            //    do
-            //    {
-            //        Console.Clear();
-            //        Console.WriteLine(DateTime.Now);
-            //        try
-            //        {
-            //            var output = WorkflowInvoker.Invoke(wfWorkflow, new Dictionary<string, object> { { "InputArg1", "this is teh value send in INputArg1" }, { "InputArg2", 43 } });
-            //        }
-            //        catch
-            //        {
-            //            Console.WriteLine("Workflow Error");
-            //        }
-            //    }
-            //    while (Console.ReadKey().Key != ConsoleKey.Delete);
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Workflow not compiled");
-            //    foreach(var error in errorMessage)
-            //    {
-            //        Console.WriteLine(error);
-            //    }
-            //}
+//            var workflow = new VRWorkflow
+//            {
+//                VRWorkflowId = Guid.NewGuid(),
+//                Settings = new VRWorkflowSettings
+//                {
+//                    Arguments = new VRWorkflowArgumentCollection
+//                    {
+//                        new VRWorkflowArgument { Name= "InputArg1", Direction = VRWorkflowArgumentDirection.In, Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}},
+//                        new VRWorkflowArgument { Name= "InputArg2", Direction = VRWorkflowArgumentDirection.In, Type = new VRWorkflowGenericVariableType { FieldType = new FieldNumberType{ DataType = FieldNumberDataType.Int}}},
+//                        new VRWorkflowArgument { Name= "OutputArg1", Direction = VRWorkflowArgumentDirection.Out, Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}},
+//                        new VRWorkflowArgument { Name= "InOutArg1", Direction = VRWorkflowArgumentDirection.InOut, Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}}
+//                    },
+//                    RootActivity = new VRWorkflowActivity
+//                    {
+//                        Settings = new VRWorkflowSequenceActivity
+//                        {
+//                            Variables = new VRWorkflowVariableCollection
+//                            {
+//                                new VRWorkflowVariable
+//                                {
+//                                     Name = "Variable1",
+//                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}
+//                                },
+//                                new VRWorkflowVariable
+//                                {
+//                                     Name = "Variable2",
+//                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}
+//                                },
+//                                new VRWorkflowVariable
+//                                {
+//                                     Name = "IntVariable1",
+//                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldNumberType{ DataType = FieldNumberDataType.Int }}
+//                                },
+//                                new VRWorkflowVariable
+//                                {
+//                                     Name = "ListVariable1",
+//                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldArrayType { FieldType = new FieldTextType() }}
+//                                }
+//                            },
+//                            Activities = new VRWorkflowActivityCollection
+//                            {
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCallHttpServiceActivity
+//                                    {
+//                                        ConnectionId = new Guid("DA0609E8-6A15-4BB8-8DA6-66352CAA3A05"),
+//                                         ActionPath = "\"api/MyTest/TestCall\"",
+//                                         Method = VRWorkflowCallHttpServiceMethod.Get,
+//                                         URLParameters = new List<VRWorkflowCallHttpServiceURLParameter>
+//                                         {
+//                                             new VRWorkflowCallHttpServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
+//                                         },
+//                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.TextXML,
+//                                         ResponseLogic = "Console.WriteLine(\"responseContent: {0}\", response.StringResponse);",
+//                                         ErrorLogic = "Console.WriteLine(\"error occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+//                                         ContinueWorkflowIfCallFailed = true,
+//                                    }
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCallHttpServiceActivity
+//                                    {
+//                                         ActionPath = "\"api/MyTest/TestMethod\"",
+//                                         Method = VRWorkflowCallHttpServiceMethod.Post,
+//                                         //URLParameters = new List<VRWorkflowCallServiceURLParameter>
+//                                         //{
+//                                         //    new VRWorkflowCallServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
+//                                         //},
+//                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.ApplicationJSON,
+//                                         BuildBodyLogic = "return @\"{'Text':'test input1 to Test Method'}\";",
+//                                         ResponseLogic = "Console.WriteLine(\"responseContent2: {0}\", response.StringResponse);Console.WriteLine();Console.WriteLine();Console.WriteLine();Console.WriteLine(\"Deserialized: {0}\", response.DeserializeResponse<Retail.Runtime.Tasks.IsmailTask.MyTestMethodOutput>().ListOfObjects[2].Text1);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+//                                         ErrorLogic = "Console.WriteLine(\"error2 occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);this.Variable1 = error.ErrorMessage;Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+//                                         ContinueWorkflowIfCallFailed = true
+//                                    }
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCallHttpServiceActivity
+//                                    {
+//                                         ActionPath = "\"WebService1.asmx\"",
+//                                         Method = VRWorkflowCallHttpServiceMethod.Post,
+//                                         //URLParameters = new List<VRWorkflowCallServiceURLParameter>
+//                                         //{
+//                                         //    new VRWorkflowCallServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
+//                                         //},
+//                                         Headers = new List<VRWorkflowCallHttpServiceHeader>
+//                                         {
+//                                             new VRWorkflowCallHttpServiceHeader { Key = "SOAPAction", Value = "\"http://tempuri.org/HelloWorld\""}
+//                                         },                                         
+//                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.TextXML,
+//                                         BuildBodyLogic = "return @\"<?xml version='1.0' encoding='utf-8'?><soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'><soap:Body><HelloWorld xmlns='http://tempuri.org/' /></soap:Body></soap:Envelope>\";",
+//                                         ResponseLogic = "Console.WriteLine(\"AA responseContent3: {0}\", response.StringResponse);",
+//                                         ErrorLogic = "Console.WriteLine(\"error3 occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+//                                         ContinueWorkflowIfCallFailed = false
+//                                    }
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCallHttpServiceActivity
+//                                    {
+//                                         ActionPath = "\"WebService1.asmx\"",
+//                                         Method = VRWorkflowCallHttpServiceMethod.Post,
+//                                         //URLParameters = new List<VRWorkflowCallServiceURLParameter>
+//                                         //{
+//                                         //    new VRWorkflowCallServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
+//                                         //},
+//                                         Headers = new List<VRWorkflowCallHttpServiceHeader>
+//                                         {
+//                                             new VRWorkflowCallHttpServiceHeader { Key = "SOAPAction", Value = "\"http://tempuri.org/TestMethod\""}
+//                                         },                                         
+//                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.TextXML,
+//                                         BuildBodyLogic = "return @\"<?xml version='1.0' encoding='utf-8'?><soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'><soap:Body><TestMethod xmlns='http://tempuri.org/' ><input1><Text>Input 1 Text Value</Text></input1></TestMethod></soap:Body></soap:Envelope>\";",
+//                                         ResponseLogic = "Console.WriteLine(\"AA responseContent4: {0}\", response.StringResponse);Console.WriteLine();Console.WriteLine();Console.WriteLine();Console.WriteLine(\"Deserialized4: {0}\", response.DeserializeResponse<Retail.Runtime.Tasks.IsmailTask.MyTestMethodOutput>().ListOfObjects[2].Text1);this.Variable2 = response.DeserializeResponse<Retail.Runtime.Tasks.IsmailTask.MyTestMethodOutput>().ListOfObjects[1].Text1;Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+//                                         ErrorLogic = "Console.WriteLine(\"error4 occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+//                                         ContinueWorkflowIfCallFailed = false
+//                                    }
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value read from Http Service: {0}\", this.Variable2);"}
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Error read from Http Service: {0}\", this.Variable1);"}
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowAssignActivity 
+//                                    {
+//                                        Items = new List<VRWorkflowAssignActivityItem>
+//                                        {
+//                                            new VRWorkflowAssignActivityItem { To = "Variable1", Value = "\"New Activity: Variable 1 Value \" + DateTime.Now.ToString()"},
+//                                            new VRWorkflowAssignActivityItem { To = "ListVariable1", Value = "new List<string> { \"Item 1\", \"Item 2\", \"Item 3\" }"},
+//                                            new VRWorkflowAssignActivityItem { To = "IntVariable1", Value = "5"}
+//                                        }
+//                                    }
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"From Custom Activity\");Console.WriteLine(\"Value of Variable1: {0}\", Variable1);Variable2 = \"I changed the Value of the Variable2\";"}
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value of Variable2: {0}\", this.Variable2);"}
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value of IntVariable1: {0}\", IntVariable1);"}
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCustomLogicActivity { Code = @"foreach(var item in ListVariable1)
+//{
+//    Console.WriteLine(""List Item: {0}"", item);
+//}"}
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowAssignActivity 
+//                                    {
+//                                        Items = new List<VRWorkflowAssignActivityItem>
+//                                        {
+//                                            new VRWorkflowAssignActivityItem { To = "ListVariable1[1]", Value = "\"new Value for second Item \" + DateTime.Now.ToString() "}
+//                                        }
+//                                    }
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCustomLogicActivity { Code = @"foreach(var item in ListVariable1)
+//{
+//    Console.WriteLine(""List Item: {0}"", item);
+//}"}
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value of InputArg1: {0}\", InputArg1);"}
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowCustomLogicActivity { Code = "OutputArg1 = \"VAlue returned in Output Arguments. using Arguments\";"}
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowIfElseActivity{
+//                                         Condition = "1 == 1",
+//                                         TrueActivity = new VRWorkflowActivity
+//                                                        {
+//                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Condition is true\");"}
+//                                                        }
+//                                    }
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowIfElseActivity{
+//                                         Condition = "InputArg2 >= 10",
+//                                         TrueActivity = new VRWorkflowActivity
+//                                                        {
+//                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Input Argument '{0}' is greater than 10\", InputArg2);"}
+//                                                        },
+//                                         FalseActivity = new VRWorkflowActivity
+//                                                        {
+//                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Input Argument '{0}' is less than 10\", InputArg2);"}
+//                                                        }
+//                                    }
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowForEachActivity
+//                                    {
+//                                         List = "ListVariable1",
+//                                          IterationVariableName = "Item",
+//                                           IterationVariableType = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()},
+//                                            Activity = new VRWorkflowActivity
+//                                            {
+//                                                Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Foreach Iteration: '{0}' \", Item);"}
+//                                            }
+//                                    }
+//                                },
+//                                new VRWorkflowActivity
+//                                {
+//                                    Settings = new VRWorkflowSequenceActivity
+//                                    {
+//                                         Variables = new VRWorkflowVariableCollection
+//                                         {
+//                                             new VRWorkflowVariable
+//                                             {
+//                                                 Name = "SubVariable1",
+//                                                 Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}
+//                                             }
+//                                         },
+//                                         Activities = new VRWorkflowActivityCollection
+//                                         {
+//                                             new VRWorkflowActivity
+//                                            {
+//                                                Settings = new VRWorkflowAssignActivity 
+//                                                {
+//                                                    Items = new List<VRWorkflowAssignActivityItem>
+//                                                    {
+//                                                        new VRWorkflowAssignActivityItem { To = "SubVariable1", Value = "\"Sub Variable 1 Value \" + DateTime.Now.ToString()"},
+//                                                        new VRWorkflowAssignActivityItem { To = "IntVariable1", Value = "55"}
+//                                                    }
+//                                                }
+//                                            },
+//                                            new VRWorkflowActivity
+//                                            {
+//                                                Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"SubVariable1 in SUB: '{0}' \", SubVariable1);"}
+//                                            },
+//                                            new VRWorkflowActivity
+//                                            {
+//                                                Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"IntVariable1 in SUB: '{0}' \", IntVariable1);"}
+//                                            },
+//                                            new VRWorkflowActivity
+//                                            {
+//                                                 Settings = new VRWorkflowSequenceActivity
+//                                                {
+//                                                     Activities = new VRWorkflowActivityCollection
+//                                                     {
+//                                                        new VRWorkflowActivity
+//                                                        {
+//                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"IntVariable1 in SUB SUB: '{0}' \", IntVariable1);"}
+//                                                        }
+//                                                     }
+//                                                }
+//                                            }
+//                                         }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            };
+//            Activity wfWorkflow;
+//            List<string> errorMessage; 
+//            //if (new VRWorkflowManager().TryCompileWorkflow(workflow, out wfWorkflow, out errorMessage))
+//            //{
+//            //    Console.WriteLine("Compiled successfully");
+//            //    do
+//            //    {
+//            //        Console.Clear();
+//            //        Console.WriteLine(DateTime.Now);
+//            //        try
+//            //        {
+//            //            var output = WorkflowInvoker.Invoke(wfWorkflow, new Dictionary<string, object> { { "InputArg1", "this is teh value send in INputArg1" }, { "InputArg2", 43 } });
+//            //        }
+//            //        catch
+//            //        {
+//            //            Console.WriteLine("Workflow Error");
+//            //        }
+//            //    }
+//            //    while (Console.ReadKey().Key != ConsoleKey.Delete);
+//            //}
+//            //else
+//            //{
+//            //    Console.WriteLine("Workflow not compiled");
+//            //    foreach(var error in errorMessage)
+//            //    {
+//            //        Console.WriteLine(error);
+//            //    }
+//            //}
         }
 
         private void CreateWFProgrammatically()
