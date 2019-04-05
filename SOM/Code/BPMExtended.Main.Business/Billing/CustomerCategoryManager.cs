@@ -75,6 +75,44 @@ namespace BPMExtended.Main.Business
             return customerCategoryCatalogItems;
         }
 
+        public List<CustomerCategoryInfo> GetCustomerCategoryDetail(string catalogId)
+        {
+            List<string> customerCategoryids = new List<string>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesInCatalog");
+            var ccId = esq.AddColumn("StCustomerCategoryID");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryCatalog", catalogId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                foreach (var item in entities)
+                {
+                    customerCategoryids.Add(item.GetTypedColumnValue<string>(ccId.Name));
+                }
+            }
+
+
+            var customerCategoryInfoItems = new List<CustomerCategoryInfo>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<CustomerCategory> items = client.Get<List<CustomerCategory>>(String.Format("api/SOM.ST/Billing/GetCustomerCategories"));
+                foreach (var item in items)
+                {
+                    var customerCatergoryInfoItem = CustomerCategoryToInfoMapper(item);
+                    customerCategoryInfoItems.Add(customerCatergoryInfoItem);
+                }
+            }
+
+            var categories = new List<CustomerCategoryInfo>();
+            categories = customerCategoryInfoItems.Where(p => !customerCategoryids.Any(p2 => p2.ToString() == p.CategoryId.ToString())).ToList();
+            return categories;
+
+
+        }
+
         public CustomerCategoryInfo CustomerCategoryToInfoMapper(CustomerCategory item)
         {
             return new CustomerCategoryInfo
