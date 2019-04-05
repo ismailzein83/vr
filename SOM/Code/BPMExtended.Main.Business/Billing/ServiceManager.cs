@@ -94,7 +94,7 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, sourceSchemaName);
-            var POSId = esq.AddColumn("StServiceID");
+            var Id = esq.AddColumn("StServiceID");
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, catalogName, catalogId);
             esq.Filters.Add(esqFirstFilter);
 
@@ -103,7 +103,7 @@ namespace BPMExtended.Main.Business
             {
                 foreach (var item in entities)
                 {
-                    Servicesids.Add(item.GetTypedColumnValue<string>(POSId.Name));
+                    Servicesids.Add(item.GetTypedColumnValue<string>(Id.Name));
                 }
             }
 
@@ -119,9 +119,9 @@ namespace BPMExtended.Main.Business
                 }
             }
 
-            var posServices = new List<ServiceDetail>();
-            posServices = serviceDetailItems.Where(p => !serviceDetailItems.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
-            return posServices;
+            var services = new List<ServiceDetail>();
+            services = serviceDetailItems.Where(p => !serviceDetailItems.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
+            return services;
         }
 
 
