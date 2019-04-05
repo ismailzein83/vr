@@ -117,7 +117,7 @@ namespace NP.IVSwitch.Data.Postgres
                             OWNER to {1};", table, IvSwitchSync.OwnerName);
 			int tabl = ExecuteNonQueryText(cmdText, cmd => { });
 		}
-		public List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType, int routeTableId, int limit, string aNumber, string bNumber,string whitelist, List<int> routeIds)
+		public List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType, int routeTableId, int limit, string aNumber, string bNumber, string whitelist, List<int> routeIds)
 		{
 			string table = string.Format("rt{0}", routeTableId);
 			string cmdText = "";
@@ -135,7 +135,7 @@ namespace NP.IVSwitch.Data.Postgres
 					break;
 			}
 			cmdText = string.Format(@"WITH codesTable AS ( SELECT distinct destination FROM {0} where {2} limit {1})
-                     SELECT rt.destination,route_id,routing_mode,preference,huntstop,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,flag_1,tech_prefix from {0} rt Join codesTable ct on ct.destination = rt.destination order by rt.destination;", table, limit,search );
+                     SELECT rt.destination,route_id,routing_mode,preference,huntstop,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,flag_1,tech_prefix from {0} rt Join codesTable ct on ct.destination = rt.destination order by rt.destination;", table, limit, search);
 
 
 
@@ -175,7 +175,7 @@ namespace NP.IVSwitch.Data.Postgres
 						BKTCapacity = GetReaderValue<int>(reader, "bkt_capacity"),
 						BKTTokens = GetReaderValue<int>(reader, "bkt_tokens"),
 						Percentage = GetReaderValue<decimal?>(reader, "flag_1"),
-						Huntstop=GetReaderValue<Int16>(reader,"huntstop")
+						Huntstop = GetReaderValue<Int16>(reader, "huntstop")
 					});
 				}
 
@@ -413,7 +413,7 @@ namespace NP.IVSwitch.Data.Postgres
 								cmd.Parameters.AddWithValue("@preference", 0);
 								cmd.Parameters.AddWithValue("@description", "BLK");
 								cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? "" : routeTableRoute.TechPrefix);
-								cmd.Parameters.AddWithValue("@huntstop",1);
+								cmd.Parameters.AddWithValue("@huntstop", 1);
 								cmd.Parameters.AddWithValue("@stateId", 1);
 								cmd.Parameters.AddWithValue("@huntstop_rc", "");
 								cmd.Parameters.AddWithValue("@min_profit", 0);
@@ -467,68 +467,116 @@ namespace NP.IVSwitch.Data.Postgres
 			{
 				RouteOptionsToEdit = new List<RouteTableRouteOptionToEdit>()
 			};
-			RouteTableRouteOptionToEdit routeTableRouteOptionToEdit = null;
+			RouteTableRouteOptionToEdit routeTableRouteOptionToEdit = new RouteTableRouteOptionToEdit
+			{
+				RouteIds = new List<int>(),
+				BackupOptions = new List<BackupOption>(),
+				Percentage = 0
+			};
 			bool firstTechPrefixReaded = false;
-			decimal percentage = 0;
+			bool hasPercentage = false;
+			bool needToAddLastBackup = false;
 			ExecuteReaderText(cmdText, (reader) =>
 			{
 				while (reader.Read())
 				{
+					var routingMode = GetReaderValue<int>(reader, "routing_mode");
+					var huntstop = GetReaderValue<Int16>(reader, "huntstop");
+					var routeId = GetReaderValue<int>(reader, "route_id");
+					var percentage = GetReaderValue<decimal>(reader, "flag_1");
+
 					if (!firstTechPrefixReaded)
 					{
 						routeTableRoutesEditor.TechPrefix = GetReaderValue<string>(reader, "tech_prefix");
 						firstTechPrefixReaded = true;
-						percentage = GetReaderValue<decimal>(reader, "flag_1");
+						hasPercentage = percentage > 0;
 					}
 
-					var routingMode = GetReaderValue<int>(reader, "routing_mode");
-					var routeId = GetReaderValue<int>(reader, "route_id");
-					if (routingMode == 1 && routeId == blockedAccountId)
+					if (routeId == blockedAccountId)
 					{
-						routeTableRouteOptionToEdit = new RouteTableRouteOptionToEdit();
-						routeTableRouteOptionToEdit.RouteId = routeId;
-						routeTableRouteOptionToEdit.Preference = GetReaderValue<Int16>(reader, "preference");
-						routeTableRouteOptionToEdit.Percentage = GetReaderValue<decimal>(reader, "flag_1");
+						routeTableRouteOptionToEdit.RouteIds.Add(routeId);
 						routeTableRouteOptionToEdit.TechPrefix = GetReaderValue<string>(reader, "tech_prefix");
 						routeTableRoutesEditor.IsBlockedAccount = true;
 						routeTableRoutesEditor.RouteOptionsToEdit.Add(routeTableRouteOptionToEdit);
 						break;
 					}
-					if (percentage > 0)
+
+					if (hasPercentage)
 					{
 						if (routingMode == 8)
 						{
-							if (routeTableRouteOptionToEdit != null)
+							if (routeTableRouteOptionToEdit.RouteIds.Count == 0)
 							{
-								routeTableRoutesEditor.RouteOptionsToEdit.Add(routeTableRouteOptionToEdit);
+								routeTableRouteOptionToEdit.Preference = GetReaderValue<Int16>(reader, "preference");
 							}
-							routeTableRouteOptionToEdit = new RouteTableRouteOptionToEdit
+							if (huntstop == 0)
 							{
-								BackupOptions = new List<BackupOption>(),
-							};
-							routeTableRouteOptionToEdit.RouteId = routeId;
-							routeTableRouteOptionToEdit.Preference = GetReaderValue<Int16>(reader, "preference");
-							routeTableRouteOptionToEdit.Percentage = GetReaderValue<decimal>(reader, "flag_1");
-							routeTableRouteOptionToEdit.TechPrefix = GetReaderValue<string>(reader, "tech_prefix");
-							routeTableRouteOptionToEdit.BackupOptions = new List<BackupOption>();
+								needToAddLastBackup = true;
+								routeTableRouteOptionToEdit.Percentage += percentage;
+								routeTableRouteOptionToEdit.RouteIds.Add(routeId);
+							}
+							if (huntstop == 1)
+							{
+								routeTableRouteOptionToEdit.Percentage += percentage;
+								routeTableRouteOptionToEdit.RouteIds.Add(routeId);
+								routeTableRoutesEditor.RouteOptionsToEdit.Add(routeTableRouteOptionToEdit);
+								routeTableRouteOptionToEdit = new RouteTableRouteOptionToEdit
+								{
+									RouteIds = new List<int>(),
+									BackupOptions = new List<BackupOption>(),
+									Percentage = 0
+								};
+							}
+							continue;
 						}
-						else
+						else if (routingMode == 1)
 						{
-							routeTableRouteOptionToEdit.BackupOptions.Add(new BackupOption() { BackupOptionRouteId = routeId });
+							if (huntstop == 0)
+							{
+								needToAddLastBackup = true;
+								routeTableRouteOptionToEdit.BackupOptions.Add(new BackupOption { BackupOptionRouteId = routeId });
+							}
+							if (huntstop == 1)
+							{
+								if (needToAddLastBackup)
+								{
+									routeTableRouteOptionToEdit.BackupOptions.Add(new BackupOption { BackupOptionRouteId = routeId });
+									routeTableRoutesEditor.RouteOptionsToEdit.Add(routeTableRouteOptionToEdit);
+									routeTableRouteOptionToEdit = new RouteTableRouteOptionToEdit
+									{
+										RouteIds = new List<int>(),
+										BackupOptions = new List<BackupOption>(),
+										Percentage = 0
+									};
+									needToAddLastBackup = false;
+								}
+							}
 						}
+
+
 
 					}
 					else
 					{
-						routeTableRouteOptionToEdit = new RouteTableRouteOptionToEdit();
-						routeTableRouteOptionToEdit.RouteId = routeId;
-						routeTableRouteOptionToEdit.Preference = GetReaderValue<Int16>(reader, "preference");
-						routeTableRouteOptionToEdit.Percentage = GetReaderValue<decimal>(reader, "flag_1");
-						routeTableRouteOptionToEdit.TechPrefix = GetReaderValue<string>(reader, "tech_prefix");
-						routeTableRoutesEditor.RouteOptionsToEdit.Add(routeTableRouteOptionToEdit);
+						if (huntstop == 0)
+						{
+							routeTableRouteOptionToEdit.RouteIds.Add(routeId);
+						}
+						if (huntstop == 1)
+						{
+							routeTableRouteOptionToEdit.RouteIds.Add(routeId);
+							routeTableRouteOptionToEdit.Preference = GetReaderValue<Int16>(reader, "preference");
+							routeTableRoutesEditor.RouteOptionsToEdit.Add(routeTableRouteOptionToEdit);
+							routeTableRouteOptionToEdit = new RouteTableRouteOptionToEdit
+							{
+								RouteIds = new List<int>(),
+								BackupOptions = new List<BackupOption>(),
+								Percentage = 0
+							};
+						}
 					}
 				}
-				if (routeTableRouteOptionToEdit != null && percentage>0)
+				if (routeTableRouteOptionToEdit.RouteIds.Count > 0)
 					routeTableRoutesEditor.RouteOptionsToEdit.Add(routeTableRouteOptionToEdit);
 			}, (cmd) =>
 			{
@@ -550,37 +598,8 @@ namespace NP.IVSwitch.Data.Postgres
 		}
 
 		#endregion
+
 		#region mappers
-
-		private RouteTableRouteOptionToEdit RoutePreferenceMapper(IDataReader reader)
-		{
-			RouteTableRouteOptionToEdit routePreference = new RouteTableRouteOptionToEdit();
-
-			var routeId = reader["route_id"];
-			var preference = reader["preference"];
-			var percentage = reader["flag_1"];
-			var techPrefix = reader["tech_prefix"];
-
-			if (routeId != DBNull.Value)
-			{
-				routePreference.RouteId = (int)routeId;
-			}
-			if (preference != DBNull.Value)
-			{
-				routePreference.Preference = (Int16)preference;
-			}
-			if (percentage != DBNull.Value && (int)percentage != 0)
-			{
-				routePreference.Percentage = (decimal)percentage;
-			}
-			if (techPrefix != DBNull.Value)
-			{
-				routePreference.TechPrefix = (string)techPrefix;
-			}
-
-			return routePreference;
-		}
-
 		#endregion
 
 	}

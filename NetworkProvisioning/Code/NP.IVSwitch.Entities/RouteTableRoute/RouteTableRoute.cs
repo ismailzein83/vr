@@ -43,7 +43,7 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
     }
     public class RouteTableRouteOptionsToAdd
     {
-        public int RouteId { get; set; }
+        public List<int> RouteIds { get; set; }
         public List<BackupOption> BackupOptions { get; set; }
         public decimal? Percentage { get; set; }
     }
@@ -59,12 +59,10 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
         public string Destination{get;set;}
         public string TechPrefix { get; set; }
         public List<RouteTableRouteOptionToEdit> RouteOptionsToEdit { get; set; }
-
-
     }
     public class RouteTableRouteOptionToEdit
     {
-        public int RouteId { get; set; }
+        public List<int> RouteIds { get; set; }
         public List<BackupOption> BackupOptions { get; set; }
         public Int16 Preference { get; set; }
         public decimal? Percentage { get; set; }
@@ -83,8 +81,8 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
 
     public class RouteTableRouteOptionRuntimeEditor
     {
-        public int RouteId { get; set; }
-        public int? SupplierId { get; set; }
+        public List<int> RouteIds { get; set; }
+        public int SupplierId { get; set; }
         public List<BackupOption> BackupOptions { get; set; }
         public Int16 Preference { get; set; }
         public decimal? Percentage { get; set; }

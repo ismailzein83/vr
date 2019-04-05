@@ -227,7 +227,7 @@
 				for (var i = 0; i < supplierRouteGridData.length; i++) {
 					var item =supplierRouteGridData[i];
 					var routeOption = {
-						RouteId: item.RouteId,
+						RouteIds: item.RouteIds,
 						Percentage: item.Percentage
 					};
 					if (item.BackupRouteIds != undefined)
@@ -254,9 +254,8 @@
 			if (supplierRouteGridData != undefined)
 				for (var i = 0; i < supplierRouteGridData.length; i++) {
 					var item = supplierRouteGridData[i];
-
 					var routeOption = {
-						RouteId: item.RouteId,
+						RouteIds: item.RouteIds,
 						Percentage: item.Percentage
 					};
 					if (item.BackupRouteIds !=undefined)

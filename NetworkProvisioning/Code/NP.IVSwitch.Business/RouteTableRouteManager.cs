@@ -21,11 +21,8 @@ namespace NP.IVSwitch.Business
 		#region Public Methods
 		public IDataRetrievalResult<RouteTableRouteDetail> GetFilteredRouteTableRoutes(DataRetrievalInput<RouteTableRouteQuery> input)
 		{
-
 			return BigDataManager.Instance.RetrieveData(input, new RouteTableRouteRequestHandler());
-
 		}
-
 		public InsertOperationOutput<RouteTableRouteDetails> AddRouteTableRoutes(RouteTableRoutesToAdd routeTableRouteItem)
 		{
 			IRouteTableRouteDataManager routeTableRTDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableRouteDataManager>();
@@ -39,8 +36,16 @@ namespace NP.IVSwitch.Business
 			if (routeTableRouteItem != null && routeTableRouteItem.RouteOptionsToAdd != null)
 			{
 				foreach (var item in routeTableRouteItem.RouteOptionsToAdd)
-					if (item != null && item.BackupOptions != null)
-						preference += (Int16)item.BackupOptions.Count;
+				{
+					if (item != null)
+					{
+						if (item.RouteIds != null)
+							preference += (Int16)item.RouteIds.Count;
+
+						if (item.BackupOptions != null)
+							preference += (Int16)item.BackupOptions.Count;
+					}
+				}
 
 				preference += (Int16)routeTableRouteItem.RouteOptionsToAdd.Count;
 			}
@@ -91,21 +96,36 @@ namespace NP.IVSwitch.Business
 										var evaluatedPercentage = Convert.ToInt32(Math.Round(optionAdd.Percentage.Value / 10));
 										if (evaluatedPercentage < 1)
 											evaluatedPercentage = 1;
-										routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
-										{
-											RouteId = optionAdd.RouteId,
-											RoutingMode = 8,
-											Preference = codePreference--,
-											TotalBKTs = codeMainPreference,
-											BKTSerial = codeMainPreference - codePreference,
-											BKTCapacity = evaluatedPercentage,
-											BKTTokens = evaluatedPercentage,
-											Percentage = optionAdd.Percentage.Value,
-											Huntstop = (optionAdd.BackupOptions == null) ? (Int16)1 : (Int16)0,
-											StateId = 1,
-											Description = this.getDescription(optionAdd.RouteId)
 
-										});
+										//add the supplier Routes
+										if (optionAdd.RouteIds != null)
+										{
+											foreach (var routeId in optionAdd.RouteIds)
+											{
+												routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
+												{
+													RouteId = routeId,
+													RoutingMode = 8,
+													Preference = codePreference--,
+													TotalBKTs = codeMainPreference,
+													BKTSerial = codeMainPreference - codePreference,
+													BKTCapacity = evaluatedPercentage,
+													BKTTokens = evaluatedPercentage,
+													Percentage = (int)(optionAdd.Percentage.Value / optionAdd.RouteIds.Count),
+													Huntstop = 0,
+													StateId = 1,
+													Description = this.getDescription(routeId)
+
+												});
+											}
+											if (optionAdd.RouteIds.Count > 1)
+												routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Percentage += optionAdd.Percentage.Value % optionAdd.RouteIds.Count;
+
+											if (optionAdd.RouteIds.Count > 0 && (optionAdd.BackupOptions == null || optionAdd.BackupOptions.Count == 0))
+												routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
+										}
+
+										//add supplier backup routes
 										if (optionAdd.BackupOptions != null)
 										{
 											foreach (var bacupOption in optionAdd.BackupOptions)
@@ -123,31 +143,35 @@ namespace NP.IVSwitch.Business
 													Huntstop = 0,
 													StateId = 1,
 													Description = this.getDescription(bacupOption.BackupOptionRouteId)
-
 												});
 											}
-											routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
+											if (optionAdd.BackupOptions.Count > 0)
+												routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
 										}
-
-
-
 									}
 									else
 									{
-										routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
+										if (optionAdd.RouteIds != null)
 										{
-											RouteId = optionAdd.RouteId,
-											RoutingMode = 1,
-											Preference = codePreference--,
-											TotalBKTs = 1,
-											BKTSerial = 1,
-											BKTCapacity = 1,
-											BKTTokens = 1,
-											StateId = 1,
-											Huntstop = 1,
-											Description = this.getDescription(optionAdd.RouteId)
-
-										});
+											foreach (var routeId in optionAdd.RouteIds)
+											{
+												routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
+												{
+													RouteId = routeId,
+													RoutingMode = 1,
+													Preference = codePreference--,
+													TotalBKTs = 1,
+													BKTSerial = 1,
+													BKTCapacity = 1,
+													BKTTokens = 1,
+													StateId = 1,
+													Huntstop = (optionAdd.RouteIds.Count == 1) ? (Int16)1 : (Int16)0,
+													Description = this.getDescription(routeId)
+												});
+											}
+											if (optionAdd.RouteIds.Count > 0)
+												routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
+										}
 									}
 								}
 							routeTableRoutes.Add(routeTableRoute);
@@ -189,9 +213,16 @@ namespace NP.IVSwitch.Business
 			if (routeTableItem != null && routeTableItem.RouteOptionsToEdit != null)
 			{
 				foreach (var item in routeTableItem.RouteOptionsToEdit)
-					if (item != null && item.BackupOptions != null)
-						preference += (Int16)item.BackupOptions.Count;
+				{
+					if (item != null)
+					{
+						if (item.RouteIds != null)
+							preference += (Int16)item.RouteIds.Count;
 
+						if (item.BackupOptions != null)
+							preference += (Int16)item.BackupOptions.Count;
+					}
+				}
 				preference += (Int16)routeTableItem.RouteOptionsToEdit.Count;
 			}
 			mainPreference = preference;
@@ -215,23 +246,32 @@ namespace NP.IVSwitch.Business
 							var evaluatedPercentage = Convert.ToInt32(Math.Round(optionEdit.Percentage.Value / 10));
 							if (evaluatedPercentage < 1)
 								evaluatedPercentage = 1;
-							routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
+							if (optionEdit.RouteIds != null)
 							{
-								RouteId = optionEdit.RouteId,
-								RoutingMode = 8,
-								Preference = preference--,
-								TotalBKTs = mainPreference,
-								BKTSerial = mainPreference - preference,
-								BKTCapacity = evaluatedPercentage,
-								BKTTokens = evaluatedPercentage,
-								Percentage = optionEdit.Percentage.Value,
-								Huntstop = (optionEdit.BackupOptions == null) ? (Int16)1 : (Int16)0,
-								StateId = 1,
-								Description = this.getDescription(optionEdit.RouteId)
+								foreach (var routeId in optionEdit.RouteIds)
+								{
+									routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
+									{
+										RouteId = routeId,
+										RoutingMode = 8,
+										Preference = preference--,
+										TotalBKTs = mainPreference,
+										BKTSerial = mainPreference - preference,
+										BKTCapacity = evaluatedPercentage,
+										BKTTokens = evaluatedPercentage,
+										Percentage = (int)(optionEdit.Percentage.Value / optionEdit.RouteIds.Count),
+										Huntstop = 0,
+										StateId = 1,
+										Description = this.getDescription(routeId)
+									});
+								}
+								if (optionEdit.RouteIds.Count > 1)
+									routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Percentage += optionEdit.Percentage.Value % optionEdit.RouteIds.Count;
 
+								if (optionEdit.RouteIds.Count > 0 && (optionEdit.BackupOptions == null || optionEdit.BackupOptions.Count == 0))
+									routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
+							}
 
-
-							});
 							if (optionEdit.BackupOptions != null)
 							{
 								foreach (var bacupOption in optionEdit.BackupOptions)
@@ -249,31 +289,35 @@ namespace NP.IVSwitch.Business
 										Huntstop = 0,
 										StateId = 1,
 										Description = this.getDescription(bacupOption.BackupOptionRouteId)
-
 									});
 								}
-								routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
+								if (optionEdit.BackupOptions.Count > 0)
+									routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
 							}
 						}
 						else
 						{
-
-
-							routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
+							if (optionEdit.RouteIds != null)
 							{
-								RouteId = optionEdit.RouteId,
-								RoutingMode = 1,
-								Preference = preference--,
-								TotalBKTs = 1,
-								BKTSerial = 1,
-								BKTCapacity = 1,
-								BKTTokens = 1,
-								StateId = 1,
-								Huntstop = 1,
-								Description = this.getDescription(optionEdit.RouteId)
-
-							});
-
+								foreach (var routeId in optionEdit.RouteIds)
+								{
+									routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
+									{
+										RouteId = routeId,
+										RoutingMode = 1,
+										Preference = preference--,
+										TotalBKTs = 1,
+										BKTSerial = 1,
+										BKTCapacity = 1,
+										BKTTokens = 1,
+										StateId = 1,
+										Huntstop = (optionEdit.RouteIds.Count == 1) ? (Int16)1 : (Int16)0,
+										Description = this.getDescription(routeId)
+									});
+								}
+								if (optionEdit.RouteIds.Count > 0)
+									routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
+							}
 						}
 					}
 				routeTableRoute.Destination = routeTableItem.Destination;
@@ -315,6 +359,7 @@ namespace NP.IVSwitch.Business
 			ivSwitchSync.ThrowIfNull("ivSwitchSync");
 			ivSwitchSync.BlockedAccountMapping.ThrowIfNull("ivSwitchSync.BlockedAccountMapping");
 			int blockedAccount;
+			int? supplierId;
 			int.TryParse(Helper.GetIvSwitchSync().BlockedAccountMapping, out blockedAccount);
 
 			RouteTableRoutesToEdit RouteTableRoutesToEdit = new RouteTableRoutesToEdit();
@@ -326,15 +371,23 @@ namespace NP.IVSwitch.Business
 			if (!RouteTableRoutesToEdit.IsBlockedAccount && routeTableRoutesRuntimeEditor != null && routeTableRoutesRuntimeEditor.RouteOptionsToEdit != null)
 				foreach (var item in RouteTableRoutesToEdit.RouteOptionsToEdit)
 				{
-						routeTableRoutesRuntimeEditor.RouteOptionsToEdit.Add(new RouteTableRouteOptionRuntimeEditor
-						{
-							RouteId = item.RouteId,
-							SupplierId = routeManager.GetRouteCarrierAccountId(item.RouteId),
-							BackupOptions = (item.BackupOptions != null) ? item.BackupOptions.MapRecords(x => new BackupOption { BackupOptionRouteId = x.BackupOptionRouteId, BackupOptionSupplierId = routeManager.GetRouteCarrierAccountId(x.BackupOptionRouteId) }).ToList() : null,
-							Percentage = item.Percentage,
-							Preference = item.Preference,
-							TechPrefix = item.TechPrefix,
-						});
+
+					RouteTableRouteOptionRuntimeEditor routeTableRouteOptionRuntimeEditor = new RouteTableRouteOptionRuntimeEditor
+					{
+						RouteIds = new List<int>(),
+					};
+					routeTableRouteOptionRuntimeEditor.RouteIds = item.RouteIds;
+					if (item.RouteIds != null)
+					{
+						supplierId = routeManager.GetRouteCarrierAccountId(item.RouteIds[0]);
+						if(supplierId.HasValue)
+							routeTableRouteOptionRuntimeEditor.SupplierId=supplierId.Value;
+					}
+					routeTableRouteOptionRuntimeEditor.BackupOptions = (item.BackupOptions != null) ? item.BackupOptions.MapRecords(x => new BackupOption { BackupOptionRouteId = x.BackupOptionRouteId, BackupOptionSupplierId = routeManager.GetRouteCarrierAccountId(x.BackupOptionRouteId) }).ToList() : null;
+					routeTableRouteOptionRuntimeEditor.Percentage = item.Percentage;
+					routeTableRouteOptionRuntimeEditor.Preference = item.Preference;
+					routeTableRouteOptionRuntimeEditor.TechPrefix = item.TechPrefix;
+					routeTableRoutesRuntimeEditor.RouteOptionsToEdit.Add(routeTableRouteOptionRuntimeEditor);
 				};
 			if (routeTableRoutesRuntimeEditor.RouteOptionsToEdit != null)
 				routeTableRoutesRuntimeEditor.RouteOptionsToEdit = routeTableRoutesRuntimeEditor.RouteOptionsToEdit.OrderByDescending(item => item.Preference).ToList();
@@ -347,7 +400,6 @@ namespace NP.IVSwitch.Business
 			Helper.SetSwitchConfig(routeTableRouteDataManager);
 			routeTableRouteDataManager.CreateRouteTableRoute(routeTableId);
 		}
-
 		public bool DropRouteTableRoute(int routeTableId)
 		{
 			IRouteTableRouteDataManager routeTableRouteDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableRouteDataManager>();
@@ -388,11 +440,7 @@ namespace NP.IVSwitch.Business
 		}
 		#endregion
 
-
-
 		#region Private Methods
-
-
 		private string getDescription(int routeId)
 		{
 			CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
@@ -496,15 +544,14 @@ namespace NP.IVSwitch.Business
 			}
 			return true;
 		}
-
 		#endregion
+
 		#region Private Classes
 		private class CacheManager : Vanrise.Caching.BaseCacheManager
 		{
 			protected override bool IsTimeExpirable { get { return true; } }
 			protected override bool UseCentralizedCacheRefresher { get { return true; } }
 		}
-
 		private class RouteTableRouteRequestHandler : BigDataRequestHandler<RouteTableRouteQuery, RouteTableRoute, RouteTableRouteDetail>
 		{
 			public override RouteTableRouteDetail EntityDetailMapper(RouteTableRoute routeTableRoute)
@@ -555,7 +602,8 @@ namespace NP.IVSwitch.Business
 
 						if (routeOption.Huntstop == 1 && firstBackup)
 						{
-							routeTableRouteOptionDetails = new RouteTableRouteOptionDetails {
+							routeTableRouteOptionDetails = new RouteTableRouteOptionDetails
+							{
 
 								SupplierName = _manager.GetRouteCarrierAccountName(routeOption.RouteId),
 								RouteName = _manager.GetRouteDescription(routeOption.RouteId),
@@ -667,7 +715,7 @@ namespace NP.IVSwitch.Business
 									options.Append(option.SupplierName);
 									options.Append(' ', 5);
 									options.Append(option.RouteName);
-									if(option.BackupsOptionsDetails!=null && option.BackupsOptionsDetails.Count>0)
+									if (option.BackupsOptionsDetails != null && option.BackupsOptionsDetails.Count > 0)
 									{
 										options.Append("<");
 										var bacupDetail = new List<string>();
@@ -709,8 +757,8 @@ namespace NP.IVSwitch.Business
 			}
 
 		}
-
 		#endregion
+
 		#region Mappers
 		public RouteTableRouteDetails RouteTableRouteDetailToEditMapper(RouteTableRoutesToEdit routeTableItem)
 		{
@@ -719,11 +767,17 @@ namespace NP.IVSwitch.Business
 			if (routeTableItem != null && routeTableItem.RouteOptionsToEdit != null)
 				foreach (var item in routeTableItem.RouteOptionsToEdit)
 				{
-					RouteTableRouteOptionDetails option = new RouteTableRouteOptionDetails();
-					option.Percentage = item.Percentage;
-					option.RouteName = _manager.GetRouteDescription(item.RouteId);
-					option.SupplierName = _manager.GetRouteCarrierAccountName(item.RouteId);
-					options.Add(option);
+					if (item.RouteIds != null)
+					{
+						foreach (var routeId in item.RouteIds)
+						{
+							RouteTableRouteOptionDetails option = new RouteTableRouteOptionDetails();
+							option.Percentage = item.Percentage;
+							option.RouteName = _manager.GetRouteDescription(routeId);
+							option.SupplierName = _manager.GetRouteCarrierAccountName(routeId);
+							options.Add(option);
+						}
+					}
 
 				}
 
@@ -754,11 +808,14 @@ namespace NP.IVSwitch.Business
 				if (routeTableItem.RouteOptionsToAdd != null)
 					foreach (var routePreference in routeTableItem.RouteOptionsToAdd)
 					{
-						RouteTableRouteOptionDetails option = new RouteTableRouteOptionDetails();
-						option.Percentage = routePreference.Percentage;
-						option.RouteName = _manager.GetRouteDescription(routePreference.RouteId);
-						option.SupplierName = _manager.GetRouteCarrierAccountName(routePreference.RouteId);
-						options.Add(option);
+						foreach (var routeId in routePreference.RouteIds)
+						{
+							RouteTableRouteOptionDetails option = new RouteTableRouteOptionDetails();
+							option.Percentage = routePreference.Percentage;
+							option.RouteName = _manager.GetRouteDescription(routeId);
+							option.SupplierName = _manager.GetRouteCarrierAccountName(routeId);
+							options.Add(option);
+						}
 					}
 				routeTableRouteDetail.RouteOptionsDetails = options;
 				routeTableRouteDetailsToAdd.Routes.Add(routeTableRouteDetail);
@@ -766,7 +823,6 @@ namespace NP.IVSwitch.Business
 
 			return routeTableRouteDetailsToAdd;
 		}
-
 		#endregion
 	}
 }
