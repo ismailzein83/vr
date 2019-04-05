@@ -152,7 +152,7 @@
 .vr-top-nav-container {
     position: fixed;
     top: 60px;
-    z-index: 2;
+    z-index: 100;
     width: calc(100% - 200px);
     background-color: #fff;
 }
@@ -257,7 +257,13 @@ div.vr-module-tabs-view {
     font-size: 15px;
     color: #635F5F;
 }
-
+.vr-company-separator {
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 15px;
+    font-size: 15px;
+    color: #635F5F;
+}
 .vr-nav-custom .minilogo {
     position: absolute;
     top: 0px;
@@ -2331,6 +2337,13 @@ vr-fieldset[notopspace] > .fieldset-vr {
     left: -14px;
     top: -9px;
     display: inline-block;
+}
+.vr-grid-menu-box .collapsed-menu-option {      
+    top: -11px;
+}
+
+.vr-grid-menu-box .glyphicon-cog {
+    top: -11px;
 }
 
 .withChoices {
@@ -4447,7 +4460,9 @@ vr-overall-widget .list-group-item {
         border-color: #adadad;
         opacity: 0.8;
     }
-
+.base-modules-container{
+    padding-left:15px;
+}
 .menu-tile {
     background-color: #0177b5;
     height: 120px;

@@ -141,12 +141,15 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    setTimeout(function () {
 	                        var selfHeight = $(self).height();
 	                        var selfOffset = $(self).offset();
+	                        var left = selfOffset.left + 14;
+	                        if (VRLocalizationService.isLocalizationRTL())
+	                            left -= 174;
 	                        $(menu).css({
 	                            display: 'block'
 	                        });
 	                        $(menu).addClass("open-grid-menu");
 	                        $(menu).css({
-	                            position: 'fixed', top: selfOffset.top - $(window).scrollTop() + 5, left: 'auto'
+	                            position: 'fixed', top: selfOffset.top - $(window).scrollTop() + 5, left: left
 	                        });
 	                        ctrl.showgmenu = true;
 	                        $scope.$root.$digest();
@@ -660,6 +663,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    if (innerWidth - menuLeft < 160) {
 	                        ctrl.toLeftDirection = true;
 	                    }
+	                    if (VRLocalizationService.isLocalizationRTL()) {
+	                        ctrl.toLeftDirection = true;
+	                        if (menuLeft < 160)
+	                            ctrl.toLeftDirection = false;
+	                    }
 	                    ctrl.menuLeft = (VRLocalizationService.isLocalizationRTL()) ? evnt.clientX - 90 : evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
 	                    ctrl.menuTop = menuTop;
 	                    scope.$apply();
@@ -674,7 +682,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                ctrl.visibleActionCount = getVisibleMenuItemActionCount(action.childsactions);
 	                if (innerHeight - menuTop - 30 < (ctrl.visibleActionCount * 17)) {
 	                    ctrl.toTopDirection = true;
-	                }	                
+	                }
 	                action.showChilsMenu = true;
 	            };
 
@@ -687,7 +695,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            }
 
 	            ctrl.getGroupMenuActionItem = function (dataItem, action) {
-	                var actionsItemAttribute = action.childsactions; 
+	                var actionsItemAttribute = action.childsactions;
 	                return actionsItemAttribute;
 	            };
 
@@ -778,7 +786,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                if (colDef == undefined)
 	                    return;
 	                var cellValue = eval('dataItem.' + colDef.field);
-	                if(cellValue != undefined && cellValue != null) return cellValue;
+	                if (cellValue != undefined && cellValue != null) return cellValue;
 	                return ' ';
 	            };
 
@@ -1015,8 +1023,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	                    }
 	                    else {
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::(" +dataItemColumnPropertyPath + ".dataValue!=null && " +dataItemColumnPropertyPath + ".dataValue!= undefined ) ? "+dataItemColumnPropertyPath + ".dataValue : ' '");
-                            cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" +dataItemColumnPropertyPath + ".tooltip");
+	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::(" + dataItemColumnPropertyPath + ".dataValue!=null && " + dataItemColumnPropertyPath + ".dataValue!= undefined ) ? " + dataItemColumnPropertyPath + ".dataValue : ' '");
+	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" + dataItemColumnPropertyPath + ".tooltip");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "::" + dataItemColumnPropertyPath + ".cellClass");
 	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", dataItemColumnPropertyPath + ".isClickable");
 	                    }
@@ -1032,7 +1040,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             + '</div>'
                             + '</div>' :
                             '<div class="vr-datagrid-cell">'
-                            + '<div class="vr-datagrid-celltext ">'+ cellTemplate
+                            + '<div class="vr-datagrid-celltext ">' + cellTemplate
                             + '</div>'
                             + '</div>'
                             + '</div>';
@@ -1594,7 +1602,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                });
 	                return (haseEnabledActions);
 	            };
-                
+
 	            ctrl.hasDefinedMenuAction = function (dataItem) {
 	                return ctrl.getActionMenuArray(dataItem) != undefined && ctrl.getActionMenuArray(dataItem).length > 0;
 	            };
@@ -1654,7 +1662,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                                    invokeHasPermission(menuAction.childsactions[j], dataItem);
 	                                }
 	                            }
-                                return;
+	                            return;
 	                        }
 	                        menuAction.disable = true;
 	                        UtilsService.convertToPromiseIfUndefined(menuAction.haspermission(dataItem)).then(function (isAllowed) {

@@ -47,11 +47,14 @@
                     <div class="vr-page-header">
                         <div class="page-header-wrapper">
                             <div class="header-item info-container">
-                                <div class="company-name-container">
-                                    <span title="@ViewBag.CompanyName" class="vr-company-name">@ViewBag.CompanyName</span>
+                                <div class="company-name-container">                                    
+                                    <span title="@ViewBag.CompanyName" class="vr-company-name">
+                                    <label class="vr-company-separator" ng-show="$root.masterLayoutSettings.IsBreadcrumbVisible">|</label>
+                                    @ViewBag.CompanyName
+                                    </span>
                                 </div>
-                                <label class="vr-user-separator" ng-show="currentPage.Title">|</label>
-                                <span class="vr-page-title">{{currentPage.Title}}</span>
+                                <label class="vr-user-separator" ng-show="currentPage.Title && !$root.masterLayoutSettings.IsBreadcrumbVisible">|</label>
+                                <span class="vr-page-title" ng-show="!$root.masterLayoutSettings.IsBreadcrumbVisible">{{currentPage.Title}}</span>
                             </div>
                             <div class="header-item action-container">
                                 <div class="vr-user-menu-wrapper">
@@ -256,6 +259,8 @@
                                     <label ng-if="$root.selectedMenu.RenderedAsView== true ">{{$root.selectedMenu.Name}}</label>
                                     <a ng-if="$root.selectedMenu.RenderedAsView == false" href="" ng-click="$root.goToModulePage($root.selectedMenu)">{{$root.selectedMenu.Name}}</a>
                                 </span>
+                                <span class="glyphicon glyphicon-menu-right" ng-show="!$root.showModuleViewToggle && !showApplicationViewToggle && currentPage"></span>
+
                                 <span class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-show="$root.showModuleViewToggle">
                                     <span class="glyphicon glyphicon-menu-right"></span>
                                     <a href="" ng-click="$root.switchModuleDefaultView(false)">
@@ -278,7 +283,6 @@
                                     </a>
                                 </span>
                                 <span ng-if="currentPage">
-                                    <span class="glyphicon glyphicon-menu-right" ng-show="!$root.showModuleViewToggle && !showApplicationViewToggle"></span>
                                     <label ng-if="showCurrentPageTitle()">{{currentPage.Title}}</label>
                                     <span class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-if="$root.moduleRenderedAsView && currentPage.parent.RenderedAsView ==  true">
                                         <span id="dropdownTabsPrev" style="position:relative" ng-show="($root.viewsCountLimit >  $root.viewsPageSize && $root.moduleRenderedAsView.Childs.length > $root.viewsPageSize) ||  ( $root.moduleRenderedAsView.Childs.length  <  $root.limitRenderAsViewTo &&  $root.viewsCountStart > 0 )">
@@ -286,7 +290,7 @@
                                                 <span class="glyphicon glyphicon-backward hand-cursor list-view-icon"></span>
                                             </a>
                                             <ul class="dropdown-menu " aria-labelledby="dropdownTabsPrev">
-                                                <li ng-repeat="a in $root.getPreviousReversedViews()" >
+                                                <li ng-repeat="a in $root.getPreviousReversedViews()">
                                                     <a href="{{::a.Location}}" ng-click="$root.setViewSelectedIndex(a.orderedIndex)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
                                                         <label class="hand-cursor">
                                                             {{a.Name}}
@@ -433,4 +437,4 @@
 @VRWebScripts.Render("~/bundles/waves")
 
 
-</html>
+</html>s

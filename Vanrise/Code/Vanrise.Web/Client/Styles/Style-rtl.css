@@ -103,7 +103,24 @@
     margin-right: 200px;
     margin-left: unset !important;
 }
+.rtl .base-modules-container {
+    padding-left: unset;
+    padding-right: 15px;
+}
+.rtl .base-modules-container .module-wrapper{
+    float:right;
+}
 
+.rtl .menu-tile.module h3 {
+    text-align: right;
+    margin-left: unset;
+    margin-right: 50px;
+}
+
+.rtl .menu-tile.module span.glyphicon {
+    right: 25px;
+    left:unset !important;
+}
 .rtl .clock {
     right: 0px;
     left: 0px !important;
@@ -490,6 +507,19 @@
     padding-right: 2px;
 }
 
+.rtl .action-item .grouped.left .chevron-icon {
+    right: unset !important;
+    left: 0px;
+}
+
+.rtl .action-item .grouped .group-name {
+    padding-right: 10px;
+}
+
+.rtl .action-item .grouped.left .group-name {
+    padding-right: 0px;
+} 
+
 .rtl .vr-pagination-info {
     right: unset;
     left: 1px;
@@ -554,6 +584,11 @@
 
 .rtl .bootstrap-datetimepicker-widget .glyphicon-chevron-left , .rtl .bootstrap-datetimepicker-widget .glyphicon-chevron-right{
      transform:scaleX(-1);
+}
+
+.flat.rtl .datetime-icon-container {  
+    right: unset !important;
+    left: 20px;
 }
 /*end  vr-datetimepicker*/
 
@@ -735,3 +770,119 @@
 
 
 
+/*new flat master layout adaptation classes*/
+
+.rtl.flat #page-content-wrapper {
+    padding: 0px 5px 0px 0px;
+}
+.rtl.flat .toggel-icon {
+    right: 8px;
+    left:unset;
+}
+.rtl.flat .vr-page-title {
+    margin-left: unset;
+    margin-right: 15px;
+}
+.rtl.flat .index-logo {
+    left: unset;
+    right:10px
+}
+
+.rtl.flat .vr-dateclock-item {
+    padding-left:unset;
+    padding-right: 25px;
+    text-align: left;
+}
+
+.rtl.flat .version-container {   
+    right: unset;
+    left: -10px;   
+}
+
+.rtl.flat .version-container {
+    right: unset;
+    left: -10px;
+}
+
+.rtl.flat .version-label {
+    left: 22px;
+    right: unset
+}
+.rtl.flat .vr-breadcrumb {
+    padding-left: unset;
+    padding-right: 35px;
+}
+
+.rtl.flat .vr-breadcrumb span{
+  display:inline-block;
+}
+.rtl.flat .vr-breadcrumb .glyphicon-menu-right {
+    transform: rotate(180deg);
+    top:3px;
+}
+.rtl.flat .vr-module-name {
+   left:unset;
+   right: 5px;
+}
+
+.rtl.flat .chevron-direction {
+    left: unset;
+    right: -5px;
+}
+
+.rtl.flat .chevron-direction {
+    left: unset;
+    right: -5px;
+}
+.rtl.flat .chevron-direction.glyphicon-chevron-right {
+   transform:rotate(180deg);
+}
+.rtl.flat .vr-breadcrumb span.vr-module-tabs-view {
+    display: inline;
+}
+
+.rtl.flat .list-view-icon {
+    transform: rotate(180deg);
+}
+.rtl.flat div.vr-module-tabs-view {
+    margin-left: unset !important;
+    margin-right: 30px !important;
+}
+.rtl.flat .vr-module-tabs-view .dropdown-menu{
+    left:unset;
+    right:0px;
+}
+.rtl.flat .vr-grid-menu-h-circle {
+    right: unset;
+    left: 7px;
+}
+
+.rtl.flat .vr-grid-menu-h-dote {  
+    right: -2px;
+}
+
+.flat.rtl .vr-grid-menu-h-circle.collapsed {
+    right:unset;
+    left: -5px;
+}
+
+.flat.rtl .vr-grid-menu-box .collapsed-menu-option {
+    left: unset;
+    right: 4.5px;
+    transform: rotate(180deg);
+}
+.flat.rtl .vr-grid-menu-box .glyphicon-cog {
+    top: -11px;
+    font-size: 14px;
+    right: unset;
+    left: 3.5px;
+}
+
+.rtl.flat .action-bar.include-personalization {
+    border-radius: 0px;
+}
+
+.rtl.flat .action-bar .vr-half-circle {
+    border-top-right-radius: unset;
+    border-bottom-right-radius: unset;
+}

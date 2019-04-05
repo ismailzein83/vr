@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService', function (MobileService, VRModalService, UtilsService) {
+app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService', 'VRLocalizationService', function (MobileService, VRModalService, UtilsService, VRLocalizationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -18,6 +18,9 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService'
 
             return {
                 pre: function (scope, elem, attrs, tabsCtrl) {
+                    scope.$on("$destroy", function () {
+                        $(window).unbind('scroll', hideCurrentDropDownMenus);
+                    });
                     scope.ctrl = tabsCtrl;
                     scope.isMobile = MobileService.isMobile();
                     scope.isTabHeaderHidden = function (tab) {
@@ -43,8 +46,10 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService'
                         setTimeout(function () {
                             $("#" + scope.dropdownPreviousTabsId).hover(function (event) {
                                 var selfOffset = $(this).offset();
-                                var baseleft = selfOffset.left - $(window).scrollLeft() ;
-                                var basetop = selfOffset.top - $(window).scrollTop() + 20;
+                                var baseleft = selfOffset.left - $(window).scrollLeft();
+                                if (VRLocalizationService.isLocalizationRTL())
+                                    baseleft -=160;
+                                var basetop = selfOffset.top - $(window).scrollTop() + 15;
                                 $("#" + scope.dropdownPreviousTabsId).find(".dropdown-menu").css({ display: "block", position: "fixed", left: baseleft, top: basetop });
 
                             }, function () {
@@ -54,30 +59,36 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', 'UtilsService'
 
                                 var selfOffset = $(this).offset();
                                 var baseleft = selfOffset.left - $(window).scrollLeft();
-                                var basetop = selfOffset.top - $(window).scrollTop() + 20;
+                                 if (VRLocalizationService.isLocalizationRTL())
+                                    baseleft -= 150;
+                                var basetop = selfOffset.top - $(window).scrollTop() + 15;
                                 $("#" + scope.dropdownForwardTabsId).find(".dropdown-menu").css({ display: "block", position: "fixed", left: baseleft, top: basetop });
                             }, function () {
                                 $("#" + scope.dropdownForwardTabsId).find(".dropdown-menu").css({ display: "none" });
                             });
+                            $(window).on('scroll', hideCurrentDropDownMenus);
                         }, 100);
                     };
                   
-                   
+                    function hideCurrentDropDownMenus() {
+                        $("#" + scope.dropdownForwardTabsId).find(".dropdown-menu").css({ display: "none" });
+                        $("#" +scope.dropdownPreviousTabsId).find(".dropdown-menu").css({display: "none"});
+                    }
 
-                    scope.hasInvalidTab = function () {
-                        for (var i = 0 ; i < tabsCtrl.tabs.length ; i++) {
+                     scope.hasInvalidTab = function () {
+                        for (var i = 0; i < tabsCtrl.tabs.length ; i++) {
                             var tab = tabsCtrl.tabs[i];
                             if (tab.validationContext != null && tab.validationContext.validate() != null && tabsCtrl.selectedTabIndex != i)
                                 return true;
-                        }
-                        return false;
+                     }
+                         return false;
                     };
                     scope.openTabsSelectorPopup = function () {
                         var modalSettings = {
-                        };
+                    };
                         modalSettings.onScopeReady = function (modalScope) {
                             modalScope.ctrl = tabsCtrl;
-                        };
+                    };
                         VRModalService.showModal("/Client/Javascripts/Directives/Tabs/Templates/TabsSelectorModalPopup.html", null, modalSettings);
                     };
 

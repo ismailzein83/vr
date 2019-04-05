@@ -71,7 +71,7 @@
 
 .flat .index-logo {
     position: absolute;
-    top: 8px;
+    top: 5px;
     left: 10px;
 }
 
@@ -435,6 +435,19 @@
     right: 7px;
 }
 
+.flat .vr-grid-menu-h-circle.collapsed {
+    width: 8px;
+    right: -5px;
+}
+.flat .vr-grid-menu-box .collapsed-menu-option {
+    left: 4.5px;
+    top: -12px;
+}
+.flat .vr-grid-menu-box .glyphicon-cog {
+    top: -11px;
+    font-size: 14px;
+    left: -3.5px;
+}
 .flat .vr-grid-menu-h-dote {
     left: -3px;
     top: -14px;
@@ -544,15 +557,16 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 180px;
-    .flat .login-action-container .login-btn-container {
-        display: inline-block;
-        width: 100px
-    }
+}
+.flat .login-action-container .login-btn-container {
+    display: inline-block;
+    width: 100px
+}
 
-    .flat .login-action-container .forget-link-container {
-        display: inline-block;
-        padding-left: 10px;
-    }
+.flat .login-action-container .forget-link-container {
+    display: inline-block;
+    padding-left: 10px;
+}
 
 .flat .main-login .dropdown {
     min-height: 32px !important;
