@@ -35,7 +35,12 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 
         public bool IsApplicableToEvent(IPackageUsageVolumeIsApplicableToEventContext context)
         {
-            VolumePackageDefinitionSettings volumePackageDefinitionSettings = new VolumePackageDefinitionSettings();// get definition based on VolumePackageDefinitionId value in context
+            PackageDefinition packageDefinition = new PackageDefinitionManager().GetPackageDefinitionById(context.VolumePackageDefinitionId);
+            packageDefinition.ThrowIfNull("packageDefinition", context.VolumePackageDefinitionId);
+            packageDefinition.Settings.ThrowIfNull("packageDefinition.Settings", context.VolumePackageDefinitionId);
+
+            VolumePackageDefinitionSettings volumePackageDefinitionSettings = packageDefinition.Settings.ExtendedSettings as VolumePackageDefinitionSettings;
+            volumePackageDefinitionSettings.ThrowIfNull("volumePackageDefinitionSettings", context.VolumePackageDefinitionId);
 
             PackageItemToEvaluateData packageItemToEvaluateData = GetPackageItemToEvaluateData(context.VolumePackageDefinitionId, volumePackageDefinitionSettings);
             if (packageItemToEvaluateData == null)
@@ -66,10 +71,14 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
                         var recordConditionContext = new CompositeRecordConditionDefinitionSettingsGetFieldsContext();
                         item.Settings.GetFields(recordConditionContext);
 
+                        dynamic record = context.RecordsByName.GetRecord(item.Name);
+                        if (record == null)
+                            throw new NullReferenceException($"context.RecordsByName doesn't contain '{item.Name}'");
+
                         CompositeRecordConditionFields conditionFields = new CompositeRecordConditionFields()
                         {
                             DataRecordFields = recordConditionContext.Fields,
-                            FieldValues = context.RecordsByName.GetRecord(item.Name)
+                            FieldValues = record.GetDictionaryFromDataRecordType()
                         };
                         compositeConditionContext.CompositeRecordConditionFieldsByRecordName.Add(item.Name, conditionFields);
                     }
@@ -92,7 +101,12 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 
         public void GetPackageItemsInfo(IPackageUsageVolumeGetPackageItemsInfoContext context)
         {
-            VolumePackageDefinitionSettings volumePackageDefinitionSettings = new VolumePackageDefinitionSettings();// get definition based on VolumePackageDefinitionId value in context
+            PackageDefinition packageDefinition = new PackageDefinitionManager().GetPackageDefinitionById(context.VolumePackageDefinitionId);
+            packageDefinition.ThrowIfNull("packageDefinition", context.VolumePackageDefinitionId);
+            packageDefinition.Settings.ThrowIfNull("packageDefinition.Settings", context.VolumePackageDefinitionId);
+
+            VolumePackageDefinitionSettings volumePackageDefinitionSettings = packageDefinition.Settings.ExtendedSettings as VolumePackageDefinitionSettings;
+            volumePackageDefinitionSettings.ThrowIfNull("volumePackageDefinitionSettings", context.VolumePackageDefinitionId);
 
             PackageItemToEvaluateData packageItemToEvaluateData = GetPackageItemToEvaluateData(context.VolumePackageDefinitionId, volumePackageDefinitionSettings);
             if (packageItemToEvaluateData == null || packageItemToEvaluateData.ItemsByItemId == null)
@@ -293,7 +307,8 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         #region Private methods
         private PackageItemToEvaluateData GetPackageItemToEvaluateData(Guid volumePackageDefinitionId, VolumePackageDefinitionSettings volumePackageDefinitionSettings)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<PackageManager.CacheManager>().GetOrCreateObject(new GetPackageItemToEvaluateDataCacheName() { VolumePackageDefinitionId = volumePackageDefinitionId },
+            var cacheName = new GetPackageItemToEvaluateDataCacheName() { VolumePackageDefinitionId = volumePackageDefinitionId };
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<PackageManager.CacheManager>().GetOrCreateObject(cacheName,
                () =>
                {
                    if (this.Items == null || volumePackageDefinitionSettings.Items == null)

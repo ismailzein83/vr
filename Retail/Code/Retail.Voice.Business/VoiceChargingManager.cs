@@ -106,7 +106,7 @@ namespace Retail.Voice.Business
             return voiceEventPrice;
         }
 
-        public CDRPricingInfo PriceCDR(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, Guid recordTypeId, Dictionary<string, dynamic> recordsByName, dynamic billingCDR, decimal durationInSec, DateTime cdrTime, string cdrObjectName)
+        public CDRPricingInfo PriceCDR(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, Dictionary<string, dynamic> recordsByName, dynamic billingCDR, decimal durationInSec, DateTime cdrTime)
         {
             CDRPricingInfo pricingInfo = new CDRPricingInfo();
             Dictionary<int, List<Guid>> volumePackageItemIdsByPackageId = null;
@@ -296,49 +296,54 @@ namespace Retail.Voice.Business
             var cdrsInProcess = new List<VolumePricingCDRInProcess>();
             var volumeBalanceKeys_local = new HashSet<PackageUsageVolumeBalanceKey>();//to use inside anonymous method(s)
             volumeBalanceKeys = volumeBalanceKeys_local;
+
             foreach (var cdrInput in cdrInputs)
             {
                 var cdrInProcess = new VolumePricingCDRInProcess { CDRInput = cdrInput, VolumeItems = new List<PackageUsageVolumeItemInProcess>() };
                 cdrsInProcess.Add(cdrInProcess);
+
                 DateTime cdrTime = cdrInput.CDRTime;
                 long accountId = cdrInput.AccountId;
+
                 var packageUsageVolumeCombination = s_packageUsageVolumeCombinationManager.GetPackageUsageVolumeCombination(cdrInput.PackageUsageVolumeCombinationId);
                 packageUsageVolumeCombination.ThrowIfNull("packageUsageVolumeCombination", cdrInput.PackageUsageVolumeCombinationId);
                 packageUsageVolumeCombination.PackageItemsByPackageId.ThrowIfNull("packageUsageVolumeCombination.PackageItemsByPackageId", cdrInput.PackageUsageVolumeCombinationId);
+
                 _accountPackageManager.LoadAccountPackagesByPriority(accountBEDefinitionId, accountId, cdrTime, true,
                     (processedAccountPackage, handle) =>
                     {
                         var package = processedAccountPackage.Package;
                         List<Guid> packageItemsIds;
-                        if (packageUsageVolumeCombination.PackageItemsByPackageId.TryGetValue(package.PackageId, out packageItemsIds))
+                        if (!packageUsageVolumeCombination.PackageItemsByPackageId.TryGetValue(package.PackageId, out packageItemsIds))
+                            return;
+
+                        var packageVolumeCharging = package.Settings.ExtendedSettings as IPackageUsageVolume;
+                        if (packageVolumeCharging == null)
+                            return;
+
+                        var getPackageItemsInfoContext = new PackageUsageVolumeGetPackageItemsInfoContext(processedAccountPackage.AccountPackage, packageItemsIds, cdrTime, package.Settings.PackageDefinitionId);
+                        packageVolumeCharging.GetPackageItemsInfo(getPackageItemsInfoContext);
+
+                        if (getPackageItemsInfoContext.Items == null || getPackageItemsInfoContext.Items.Count == 0)
+                            return;
+
+                        foreach (var itm in getPackageItemsInfoContext.Items)
                         {
-                            var packageVolumeCharging = package.Settings.ExtendedSettings as IPackageUsageVolume;
-                            if (packageVolumeCharging != null)
+                            var balanceKey = new PackageUsageVolumeBalanceKey
                             {
-                                var getPackageItemsInfoContext = new PackageUsageVolumeGetPackageItemsInfoContext(processedAccountPackage.AccountPackage, packageItemsIds, cdrTime, package.Settings.PackageDefinitionId);
-                                packageVolumeCharging.GetPackageItemsInfo(getPackageItemsInfoContext);
-                                if (getPackageItemsInfoContext.Items != null && getPackageItemsInfoContext.Items.Count > 0)
-                                {
-                                    foreach (var itm in getPackageItemsInfoContext.Items)
-                                    {
-                                        var balanceKey = new PackageUsageVolumeBalanceKey
-                                        {
-                                            AccountPackageId = processedAccountPackage.AccountPackage.AccountPackageId,
-                                            PackageItemId = itm.ItemId,
-                                            ItemFromTime = getPackageItemsInfoContext.FromTime
-                                        };
-                                        cdrInProcess.VolumeItems.Add(new PackageUsageVolumeItemInProcess
-                                        {
-                                            VolumeItem = itm,
-                                            FromTime = getPackageItemsInfoContext.FromTime,
-                                            ToTime = getPackageItemsInfoContext.ToTime,
-                                            BalanceKey = balanceKey,
-                                            ProcessedAccountPackage = processedAccountPackage
-                                        });
-                                        volumeBalanceKeys_local.Add(balanceKey);
-                                    }
-                                }
-                            }
+                                AccountPackageId = processedAccountPackage.AccountPackage.AccountPackageId,
+                                PackageItemId = itm.ItemId,
+                                ItemFromTime = getPackageItemsInfoContext.FromTime
+                            };
+                            cdrInProcess.VolumeItems.Add(new PackageUsageVolumeItemInProcess
+                            {
+                                VolumeItem = itm,
+                                FromTime = getPackageItemsInfoContext.FromTime,
+                                ToTime = getPackageItemsInfoContext.ToTime,
+                                BalanceKey = balanceKey,
+                                ProcessedAccountPackage = processedAccountPackage
+                            });
+                            volumeBalanceKeys_local.Add(balanceKey);
                         }
                     });
             }
