@@ -38,14 +38,38 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Terrasoft.Core, Version=7.11.0.3122, Culture=neutral, PublicKeyToken=edaadfbc3b0bb879, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\BPM\Terrasoft.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -55,9 +79,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPMExtended.Main.Business\BPMExtended.Main.Business.csproj">
+      <Project>{fe90dd05-a1ee-4b46-b3c5-08c255064742}</Project>
+      <Name>BPMExtended.Main.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BPMExtended.Main.Common\BPMExtended.Main.Common.csproj">
       <Project>{3e3a051a-0843-4f74-b115-d3067c305c87}</Project>
       <Name>BPMExtended.Main.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BPMExtended.Main.SOM.Entities\BPMExtended.Main.SOM.csproj">
+      <Project>{25a7b453-cdc4-4c51-86cb-2483386f6bc6}</Project>
+      <Name>BPMExtended.Main.SOM</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
