@@ -831,6 +831,9 @@
     <Content Include="images\menu-icons\Sale Area-tile.png" />
     <Content Include="images\menu-icons\switch-tile.png" />
     <Content Include="images\menu-icons\switch.png" />
+    <Content Include="images\nTegra-flat-iconheader.ico" />
+    <Content Include="images\nTegra-flat-login.png" />
+    <Content Include="images\nTegra-flat-logoonheader.png" />
     <Content Include="images\Ogero-iconheader.ico" />
     <Content Include="images\Ogero-login.png" />
     <Content Include="images\Ogero-logoonheader.png" />
