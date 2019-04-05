@@ -99,6 +99,7 @@
     <Compile Include="BPTaskTypes\BPGenericTaskTypeSettingsFilter.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VRWorkflowActivities\BEActivities\VRWorkflowUpdateGenericBEActivity.cs" />
     <Compile Include="VRWorkflowActivities\BEActivities\VRWorkflowAddGenericBEActivity.cs" />
     <Compile Include="VRWorkflowActivities\CodeGenerationHelper.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowAddBEActivity.cs" />
