@@ -11,7 +11,7 @@ namespace TestCallAnalysis.BP.Arguments
     {
         public TimeSpan DateTimeMargin { get; set; }
 
-        public TimeSpan TimeoutMargin { get; set; }
+        public TimeSpan TimeOutMargin { get; set; }
 
         public override string GetTitle()
         {

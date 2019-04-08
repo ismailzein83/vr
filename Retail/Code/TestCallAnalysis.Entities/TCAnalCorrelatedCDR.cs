@@ -23,8 +23,5 @@ namespace TestCallAnalysis.Entities
         public long? ReceivedCallingNumberOperatorID { get; set; }
         public long? CaseId { get; set; }
         public DateTime CreatedTime { get; set; }
-        public DateTime LastModifiedTime { get; set; }
-        public int CreatedBy { get; set; }
-        public int LastModifiedBy { get; set; }
     }
 }

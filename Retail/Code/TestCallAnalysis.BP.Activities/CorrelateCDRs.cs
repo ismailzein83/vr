@@ -73,7 +73,7 @@ namespace TestCallAnalysis.BP.Activities
         protected override void DoWork(CorrelateCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             TimeSpan dateTimeMargin = inputArgument.DateTimeMargin;
-            inputArgument.TimeOutMargin = new TimeSpan(0, 15, 0);
+            TimeSpan timeOutMargin = inputArgument.TimeOutMargin;
             CalledNumberMappingManager calledNumberMappingManager = new CalledNumberMappingManager();
             MappedCDRManager mappedCDRManager = new MappedCDRManager();
             CorrelatedCDRManager correlatedCDRManager = new CorrelatedCDRManager();
@@ -147,7 +147,7 @@ namespace TestCallAnalysis.BP.Activities
                                                     }
                                                 }
 
-                                                if (!rvd.IsCorrelated && DateTime.Now.Subtract(rcvdcdr.CreatedTime) > inputArgument.TimeOutMargin)
+                                                if (!rvd.IsCorrelated && DateTime.Now.Subtract(rcvdcdr.CreatedTime) > timeOutMargin)
                                                 {
                                                     correlatedCDR.GeneratedCallingNumber = null;
                                                     rvd.IsCorrelated = true;
@@ -163,7 +163,7 @@ namespace TestCallAnalysis.BP.Activities
                                     }
                                 }
 
-                                // Transform correlation to runtime in order to insert 
+                                // Insert Correlations
                                 Entities.CDRCorrelationBatch correlationBatch = new Entities.CDRCorrelationBatch();
                                 var casesBatch = new CDRCaseBatch();
                                 if (correlatedCDRs != null && correlatedCDRs.Count > 0)

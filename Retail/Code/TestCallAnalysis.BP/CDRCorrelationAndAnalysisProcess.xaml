@@ -185,7 +185,7 @@
               </tba1:CorrelateCDRs.Status>
               <tba1:CorrelateCDRs.TimeOutMargin>
                 <InArgument x:TypeArguments="x:TimeSpan">
-                  <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.TimeoutMargin</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.TimeOutMargin</mca:CSharpValue>
                 </InArgument>
               </tba1:CorrelateCDRs.TimeOutMargin>
               <tba1:CorrelateCDRs.UpdatedCDRCorrelationBatchInput>

@@ -62,6 +62,7 @@ namespace TestCallAnalysis.Business
             else
                 return null;
         }
+
         public List<string> GetCasesCDRCallingNumbersList()
         {
             var allCasesCDRs = GetAllCases();
@@ -186,9 +187,9 @@ namespace TestCallAnalysis.Business
                 NumberOfCDRs = 1,
                 OperatorID = correlatedCDR.OperatorID,
                 CreatedTime = correlatedCDR.CreatedTime,
-                LastModifiedTime = correlatedCDR.LastModifiedTime,
-                CreatedBy = correlatedCDR.CreatedBy,
-                LastModifiedBy = correlatedCDR.LastModifiedBy,
+                LastModifiedTime = DateTime.Now,
+                CreatedBy = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(),
+                LastModifiedBy = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId()
             };
         }
         #endregion

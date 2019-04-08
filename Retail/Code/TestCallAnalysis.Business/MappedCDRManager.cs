@@ -28,9 +28,6 @@ namespace TestCallAnalysis.Business
             runtimeCDR.CallingNumberType = mappedCDR.CallingNumberType;
             runtimeCDR.CalledNumberType = mappedCDR.CalledNumberType;
             runtimeCDR.CreatedTime = mappedCDR.CreatedTime;
-            runtimeCDR.LastModifiedTime = mappedCDR.LastModifiedTime;
-            runtimeCDR.CreatedBy = mappedCDR.CreatedBy;
-            runtimeCDR.LastModifiedBy = mappedCDR.LastModifiedBy;
             return runtimeCDR;
         }
 
@@ -70,9 +67,6 @@ namespace TestCallAnalysis.Business
                 CallingNumberType = cdr.CallingNumberType,
                 CalledNumberType = cdr.CalledNumberType,
                 IsCorrelated = cdr.IsCorrelated,
-                LastModifiedTime = cdr.LastModifiedTime,
-                CreatedBy = cdr.CreatedBy,
-                LastModifiedBy = cdr.LastModifiedBy
             };
         }
     }

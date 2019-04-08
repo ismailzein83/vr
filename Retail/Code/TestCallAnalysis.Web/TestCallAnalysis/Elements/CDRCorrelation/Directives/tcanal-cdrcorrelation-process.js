@@ -40,7 +40,8 @@ app.directive("tcanalCdrcorrelationProcess", ['UtilsService', 'VRDateTimeService
                     return {
                         InputArguments: {
                             $type: "TestCallAnalysis.BP.Arguments.CDRCorrelationAndAnalysisProcessInput,TestCallAnalysis.BP.Arguments",
-                            DateTimeMargin: $scope.scopeModel.datetimeMargin
+                            DateTimeMargin: $scope.scopeModel.datetimeMargin,
+                            TimeOutMargin: $scope.scopeModel.timeOutMargin
                         }
                     };
                 };

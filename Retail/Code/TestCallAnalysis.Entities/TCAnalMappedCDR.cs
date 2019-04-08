@@ -26,8 +26,5 @@ namespace TestCallAnalysis.Entities
         public int? CallingNumberType { get; set; }
         public int CalledNumberType { get; set; }
         public DateTime CreatedTime { get; set; }
-        public DateTime LastModifiedTime { get; set; }
-        public int CreatedBy { get; set; }
-        public int LastModifiedBy { get; set; }
     }
 }

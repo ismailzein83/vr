@@ -29,9 +29,6 @@ namespace TestCallAnalysis.Business
             runtimeCDR.ReceivedCallingNumberOperatorID = correlatedCDR.ReceivedCallingNumberOperatorID;
             runtimeCDR.CaseId = correlatedCDR.CaseId;
             runtimeCDR.CreatedTime = correlatedCDR.CreatedTime;
-            runtimeCDR.LastModifiedTime = correlatedCDR.LastModifiedTime;
-            runtimeCDR.CreatedBy = correlatedCDR.CreatedBy;
-            runtimeCDR.LastModifiedBy = correlatedCDR.LastModifiedBy;
             return runtimeCDR;
         }
 
@@ -85,10 +82,7 @@ namespace TestCallAnalysis.Business
                 ReceivedCallingNumberOperatorID = mappedCDR.OperatorID,
                 ReceivedCallingNumberType = (ReceivedCallingNumberType?)mappedCDR.CallingNumberType,
                 CaseId = null,
-                CreatedTime = mappedCDR.CreatedTime,
-                LastModifiedTime = mappedCDR.LastModifiedTime,
-                CreatedBy = mappedCDR.CreatedBy,
-                LastModifiedBy = mappedCDR.LastModifiedBy,
+                CreatedTime = mappedCDR.CreatedTime
             };
         }
 
