@@ -127,6 +127,8 @@
     <Build Include="RouteSync\Stored Procedures\sp_SwitchCommandLog_Insert.sql" />
     <Build Include="RouteSync\Tables\SwitchCommandLog.sql" />
     <Build Include="Security\RouteSync.sql" />
+    <Build Include="bp\Tables\BPVisualEvent.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPVisualEvent_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
