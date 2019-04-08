@@ -1119,12 +1119,52 @@ add padding .left-addon input {
     font-style: italic;
 }
 
-.vr-select-disabled-item {
+.vr-select-disabled-item{
     color: #c1c1c1 !important;
     pointer-events: none;
 }
+div[disablel-select-item="true"] {
+    color: #c1c1c1 !important;
+}
 
-div[disabled-item="true"] {
+div[disablel-select-item="true"] .hand-cursor {
+    cursor: not-allowed !important;
+}
+
+div[disablel-select-item="true"] .select-item-container.selected .hand-cursor {
+    cursor: pointer !important;
+}
+
+div[disablel-select-item="true"] a.mark-select.select-item-container.selected,
+div[disablel-select-item="true"] a.mark-select.select-item-container.selected:hover,
+div[disablel-select-item="true"] a.mark-select.select-item-container.selected:active,
+div[disablel-select-item="true"] a.mark-select.select-item-container.selected:focus {
+    cursor: pointer !important;
+}
+div[disablel-select-item="true"] a.mark-select,
+div[disablel-select-item="true"] a.mark-select:hover,
+div[disablel-select-item="true"] a.mark-select:active,
+div[disablel-select-item="true"] a.mark-select:focus {
+    background-color: #fff !important;
+    border-color: unset !important;
+    color: #666 !important;
+    text-decoration: none;
+    cursor: not-allowed !important;
+}
+
+div[disablel-select-item="true"] .select-item-container.selected {
+    background-color: #f1e8e8 !important;
+    border: 0px !important;
+    pointer-events: all;
+    cursor:pointer;
+}
+
+div[disablel-select-item="true"] .select-item-container.selected:hover {
+    color: #666 !important;
+    background-color: #D0D0D0 !important;
+}
+
+div[disabled-item="true"], div[disablel-select-item="true"] {
     cursor: not-allowed;
 }
 /*.modal-body  .vr-select-add{

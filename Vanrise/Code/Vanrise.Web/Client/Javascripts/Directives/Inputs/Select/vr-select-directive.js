@@ -39,6 +39,7 @@
                 datavaluefield: '@',
                 datatextfield: '@',
                 datadisabledfield: '@',
+                datadisabledselectfield: '@',
                 datalockfield: '@',
                 datatooltipfield: '@',
                 datastylefield: '@',
@@ -352,6 +353,12 @@
                     if (controller.datadisabledfield) return getObjectProperty(item, controller.datadisabledfield);
                     return false;
                 };
+
+                function getObjectDisabledSelect(item) {
+                    if (controller.datadisabledselectfield) return getObjectProperty(item, controller.datadisabledselectfield);
+                    return false;
+                };
+
                 function itemLocked(item) {
                     if (controller.datalockfield) return getObjectProperty(item, controller.datalockfield);
                     return false;
@@ -459,6 +466,7 @@
                     getObjectText: getObjectText,
                     getObjectValue: getObjectValue,
                     getObjectDisabled: getObjectDisabled,
+                    getObjectDisabledSelect: getObjectDisabledSelect,
                     getObjectStyle: getObjectStyle,
                     getTooltipValue: getTooltipValue,
                     findExsite: findExsite,
@@ -1038,6 +1046,16 @@
                             }
                         }
 
+                        function getItemIndex(item) {
+                            var index = null;
+                            try {
+                                index = baseDirService.findExsite(ctrl.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
+                            }
+                            catch (ex) {
+
+                            }
+                            return index;
+                        }
                         ctrl.selectAll = function () {
                             if (ctrl.hideSelectAll)
                                 return;
@@ -1055,7 +1073,7 @@
                                     if (index >= 0)
                                         continue;
                                 }
-                                if (!ctrl.getObjectDisabled(item)) {
+                                if (!ctrl.getObjectDisabled(item) && !ctrl.getObjectDisabledSelect(item)) {
                                     ctrl.selectedvalues.push(item);
                                     if (ctrl.onselectitem && typeof (ctrl.onselectitem) == 'function') {
                                         ctrl.onselectitem(item);
@@ -1066,6 +1084,10 @@
 
                         ctrl.selectValue = function (e, item, removeselection) {
                             if (ctrl.getObjectDisabled(item) == true || ctrl.readOnly)
+                                return;
+                            if (ctrl.getObjectDisabledSelect(item) == true && getItemIndex(item) < 0 && ctrl.isMultiple() )
+                                return;
+                            if(ctrl.getObjectDisabledSelect(item) == true && !ctrl.isMultiple())
                                 return;
                             var onBeforeSelectionChanged = $scope.$parent.$eval(iAttrs.onbeforeselectionchanged);
                             if (onBeforeSelectionChanged != undefined && typeof (onBeforeSelectionChanged) == 'function') {
