@@ -134,7 +134,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     var customerInvoiceDetails = customerInvoice.Details as CustomerInvoiceDetails;
                     if (customerInvoiceDetails != null)
                     {
-
+                        bool multipleCurrencies = false;
                         var invoiceItems = customerInvoiceItems.FindAllRecords(x => x.InvoiceId == customerInvoice.InvoiceId);
                         if (invoiceItems != null)
                         {
@@ -142,6 +142,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             foreach (var invoiceItem in invoiceItems)
                             {
                                 var invoiceItemDetails = invoiceItem.Details as CustomerInvoiceBySaleCurrencyItemDetails;
+                                if (invoiceItemDetails != null && invoiceItemDetails.CurrencyId != customerInvoiceDetails.SaleCurrencyId)
+                                    multipleCurrencies = true;
+
                                 if (invoiceItemDetails != null && availableCustomerInvoices.Any(x => x.InvoiceId == customerInvoice.InvoiceId && x.CurrencyId == invoiceItemDetails.CurrencyId && x.IsSelected))
                                 {
                                     var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, invoiceItemDetails.Month), () =>
@@ -220,7 +223,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                 }
                             }
                         }
-                        bool multipleCurrencies = invoiceItems != null && invoiceItems.Count() > 1;
 
                         var sattlementInvoiceItemDetails = new SattlementInvoiceItemDetails
                         {
@@ -261,14 +263,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     if (supplierInvoiceDetails != null)
                     {
                         bool isOriginalAmountSetted = false;
+                        bool multipleCurrencies = false;
+
                         var invoiceItems = supplierInvoiceItems.FindAllRecords(x => x.InvoiceId == supplierInvoice.InvoiceId);
                         if (invoiceItems != null)
                         {
                             var settlementInvoiceCurrency = settlementInvoiceCurrencyByInvoice.GetOrCreateItem(supplierInvoice.InvoiceId);
-
                             foreach (var invoiceItem in invoiceItems)
                             {
                                 var invoiceItemDetails = invoiceItem.Details as SupplierInvoiceBySaleCurrencyItemDetails;
+
+                                if (invoiceItemDetails != null && invoiceItemDetails.CurrencyId != supplierInvoiceDetails.SupplierCurrencyId)
+                                    multipleCurrencies = true;
+
                                 if (invoiceItemDetails != null && availableSupplierInvoices.Any(x => x.InvoiceId == supplierInvoice.InvoiceId && x.CurrencyId == invoiceItemDetails.CurrencyId && x.IsSelected))
                                 {
                                     var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, invoiceItemDetails.Month), () =>
@@ -353,7 +360,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             }
                         }
 
-                        bool multipleCurrencies = invoiceItems != null && invoiceItems.Count() > 1;
+                       
 
 
                         var sattlementInvoiceItemDetails = new SattlementInvoiceItemDetails
