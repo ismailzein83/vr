@@ -58,13 +58,15 @@
     <Compile Include="DisputeSetting\DisputeSettingsData.cs" />
     <Compile Include="OnNetOperationDeclaration\OnNetOperatorDeclarationService.cs" />
     <Compile Include="OnNetOperationDeclaration\OnNetOperatorDirectionServicesMappedCellExtensionConfiguration.cs" />
-    <Compile Include="OperatorDeclaration\Enums.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="OperatorDeclaration\IcxOperatorDeclaration.cs" />
     <Compile Include="OperatorDeclaration\IcxOperatorDeclarationService.cs" />
     <Compile Include="OperatorDeclaration\IntlOperatorDeclaration.cs" />
     <Compile Include="OperatorDeclaration\IntlOperatorDeclarationService.cs" />
     <Compile Include="OperatorDeclaration\OperatorDirectionServicesMappedCellExtensionConfiguration.cs" />
+    <Compile Include="OperatorDefinition\OperatorDefinitionInfo.cs" />
     <Compile Include="Period Definition\PeriodDefinition.cs" />
+    <Compile Include="Period Definition\PeriodDefinitionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Special Numbers\SpecialNumberCustomObjectTypeSettings.cs" />
     <Compile Include="Special Numbers\SpecialNumberGroup.cs" />
