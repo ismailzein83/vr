@@ -5,6 +5,7 @@ using Vanrise.Analytic.Entities;
 using Vanrise.Analytic.Business;
 using System.Collections.Generic;
 using Vanrise.GenericData.Business;
+using Retail.RA.Entities;
 
 namespace Retail.RA.Business
 {
