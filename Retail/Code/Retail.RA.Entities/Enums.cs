@@ -33,4 +33,9 @@ namespace Retail.RA.Entities
         SMS = 1
     }
 
+    public enum SubscriberType
+    {
+        Postpaid = 1,
+        Prepaid = 2
+    }
 }
