@@ -120,7 +120,7 @@ namespace BPMExtended.Main.Business
             }
 
             var services = new List<ServiceDetail>();
-            services = serviceDetailItems.Where(p => !serviceDetailItems.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
+            services = serviceDetailItems.Where(p => !Servicesids.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
             return services;
         }
 
