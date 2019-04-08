@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Retail.RA.Business
+namespace Retail.RA.Entities
 {
     public enum TrafficType
     {
-        OnNet = 0,
-        OffNet = 1,
-        International = 2
+        International = 0,
+        Interconnect = 1,
     }
 
     public enum TrafficDirection
