@@ -121,7 +121,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     Settings = new BPIfElseVisualItemDefinition
                     {
                         ConditionDescription = !String.IsNullOrEmpty(this.ConditionDescription) ? this.ConditionDescription : this.Condition.GetCode(null),
+                        TrueBranchActivityId = trueBranchVisualItemDef != null ? this.TrueActivity.VRWorkflowActivityId : default(Guid?),
                         TrueBranchVisualItemDefinition = trueBranchVisualItemDef,
+                        FalseBranchActivityId= falseBranchVisualItemDef != null ? this.FalseActivity.VRWorkflowActivityId : default(Guid?),
                         FalseBranchVisualItemDefinition = falseBranchVisualItemDef
                     }
                 };
@@ -141,7 +143,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public string ConditionDescription { get; set; }
 
+        public Guid? TrueBranchActivityId { get; set; }
+
         public BPVisualItemDefinition TrueBranchVisualItemDefinition { get; set; }
+
+        public Guid? FalseBranchActivityId { get; set; }
 
         public BPVisualItemDefinition FalseBranchVisualItemDefinition { get; set; }
     }
