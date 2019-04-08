@@ -135,7 +135,9 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                                 if (result != null)
                                                     return result;
 
-                                                if (currentItem.To != undefined && currentItem.To >= VRDateTimeService.getTodayDate()) {
+                                                var currentItemTo = UtilsService.createDateFromString(currentItem.To);
+
+                                                if (currentItemTo != undefined && currentItemTo >= VRDateTimeService.getTodayDate()) {
                                                     return 'To should be less than today date';
                                                 }
                                                 return null;
