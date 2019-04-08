@@ -138,6 +138,7 @@
     <Compile Include="IBusinessRuleConditionValidateContext.cs" />
     <Compile Include="IExclude.cs" />
     <Compile Include="Tasks\BaseBPTaskTypeSettingsConfig.cs" />
+    <Compile Include="Tasks\BPGenericTaskTypeActionMappingFieldsOutput.cs" />
     <Compile Include="Tasks\BPTaskDefaultActionsState.cs" />
     <Compile Include="Tasks\BPTaskBeforeIdInput.cs" />
     <Compile Include="Tasks\BPTaskDefaultActionsStateInput.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="BusinessRules\IBusinessRuleActionExecutionContext.cs" />
     <Compile Include="BusinessRules\IRuleTarget.cs" />
     <Compile Include="BusinessRules\BPValidationMessage.cs" />
+    <Compile Include="Tasks\BPGenericTaskTypeActionMappingFieldsInput.cs" />
     <Compile Include="Tasks\BPTaskTypeFilter.cs" />
     <Compile Include="Tasks\BPTaskTypeInfo.cs" />
     <Compile Include="Tasks\BPTaskTypeSettings.cs" />
