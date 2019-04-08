@@ -68,7 +68,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
             codeBuilder.Replace("#NAMESPACE#", nmSpaceName);
             codeBuilder.Replace("#CLASSNAME#", className);
-            var activityContext = context.CreateChildContext();
+            var activityContext = context.CreateChildContext(null);
             activityContext.VRWorkflowActivityId = this.Activity.VRWorkflowActivityId;
             codeBuilder.Replace("#ACTIVITYCODE#", this.Activity.Settings.GenerateWFActivityCode(activityContext));
             return codeBuilder.ToString();

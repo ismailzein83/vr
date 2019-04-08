@@ -8,6 +8,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
     public class VRWorkflowCallHttpServiceActivity : VRWorkflowActivitySettings
     {
+        public VRWorkflowCallHttpServiceActivity()
+        {
+            this.EnableVisualization = true;
+        }
+
         public override Guid ConfigId { get { return new Guid("A9C74099-C36E-45E6-8318-44C7B9A2B381"); } }
 
         public override string Editor { get { return "businessprocess-vr-workflowactivity-callhttpservice"; } }
@@ -46,6 +51,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         public VRWorkflowCallHttpRetrySettings RetrySettings { get; set; }
 
         public string ClassMembersCode { get; set; }
+
+        public bool EnableVisualization { get; set; }
 
         protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
@@ -109,12 +116,12 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             bool throwIfError = (delays == null || delays.Count == retryCount) && #THROWIFERROR#;
 
                             WriteInformation(""'#SERVICENAME#' started"");
+                            #CALLSTARTEDVISUALEVENT#
 
                             #ASSIGNISSUCCEEDED#vrHttpConnection.TrySendRequest(#ACTIONPATH#, Vanrise.Entities.VRHttpMethod.#HTTPMETHOD#, Vanrise.Entities.VRHttpMessageFormat.#MESSAGEFORMAT#, #URLPARAMETERS#,
                             #HEADERS#, #BODY#, (response) => OnResponseReceived(new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceResponse(response)),
                             throwIfError, (error) => OnError(new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceFault(error), onDelayCompleted, retryCount));
-
-                            WriteInformation(""'#SERVICENAME#' completed"");
+                            
                         }
 
                         #BUILDURLPARAMETERSMETHOD#
@@ -152,6 +159,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                         void OnResponseReceived(Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceResponse response)
                         {
                             #RESPONSELOGIC#
+                            #CALLSUCCEEDEDVISUALEVENT#
+                            WriteInformation(""'#SERVICENAME#' completed"");
                         }
 
                         void OnError(Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceFault error, BookmarkCallback onDelayCompleted, int retryCount)
@@ -160,11 +169,19 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             
                             List<TimeSpan> delays = GetDelays();
                             if(delays == null || delays.Count <= retryCount)
+                            {
+                                #CALLERRORVISUALEVENT#
+                                WriteWarning(""'#SERVICENAME#' failed"");
                                 return;
+                            }
 
                             long processInstanceId = _activityContext.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
                             TimeSpan delay = delays[retryCount];
-                            
+
+                            #CALLRETRYINGVISUALEVENT#  
+                            WriteHandledException(error.Exception);
+                            WriteWarning($""'#SERVICENAME#' retrying in {delay}. {retryCount + 1} Retry Times"");
+
                             retryCount++;
                             string bookmarkName = Vanrise.BusinessProcess.Business.BPTimeSubscriptionManager.GetWFBookmark(processInstanceId);
                             var input = new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRHttpDelayInput(){ NoMoreRanges = delays.Count == retryCount, RetryCount = retryCount };
@@ -272,6 +289,61 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
             nmSpaceCodeBuilder.Replace("#THROWIFERROR#", this.ContinueWorkflowIfCallFailed ? "false" : "true");
 
+            if (this.EnableVisualization)
+            {
+                var callStartedVisualEventInput = new GenerateInsertVisualEventCodeInput
+                {
+                    ActivityContextVariableName = "_activityContext",
+                    ActivityId = context.VRWorkflowActivityId,
+                    EventTitle = $@"""Call Http Service '{this.ServiceName}' started""",
+                    EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_STARTED
+                };
+                nmSpaceCodeBuilder.Replace("#CALLSTARTEDVISUALEVENT#",
+                    context.GenerateInsertVisualEventCode(callStartedVisualEventInput));
+
+                var callCompletedVisualEventInput = new GenerateInsertVisualEventCodeInput
+                {
+                    ActivityContextVariableName = "_activityContext",
+                    ActivityId = context.VRWorkflowActivityId,
+                    EventTitle = $@"""Call Http Service '{this.ServiceName}' completed""",
+                    EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_COMPLETED
+                };
+                nmSpaceCodeBuilder.Replace("#CALLSUCCEEDEDVISUALEVENT#",
+                    context.GenerateInsertVisualEventCode(callCompletedVisualEventInput));
+
+                var callErrorVisualEventInput = new GenerateInsertVisualEventCodeInput
+                {
+                    ActivityContextVariableName = "_activityContext",
+                    ActivityId = context.VRWorkflowActivityId,
+                    EventTitle = $@"""Call Http Service '{this.ServiceName}' failed""",
+                    EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_ERROR
+                };
+                nmSpaceCodeBuilder.Replace("#CALLERRORVISUALEVENT#",
+                    context.GenerateInsertVisualEventCode(callErrorVisualEventInput));
+
+                var callRetryingVisualEventInput = new GenerateInsertVisualEventCodeInput
+                {
+                    ActivityContextVariableName = "_activityContext",
+                    ActivityId = context.VRWorkflowActivityId,
+                    EventTitle = $@"$""Call Http Service '{this.ServiceName}' retrying in {{delay}}. {{retryCount + 1}} Retry Times""",
+                    EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_RETRYING,
+                    EventPayloadCode = @"new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BPRetryingCallHttpServiceVisualEventPayload
+                                            {
+                                                RetryInterval = delay,
+                                                RetryCount = retryCount
+                                            }"
+                };
+                nmSpaceCodeBuilder.Replace("#CALLRETRYINGVISUALEVENT#",
+                    context.GenerateInsertVisualEventCode(callRetryingVisualEventInput));
+            }
+            else
+            {
+                nmSpaceCodeBuilder.Replace("#CALLSTARTEDVISUALEVENT#", "");
+                nmSpaceCodeBuilder.Replace("#CALLSUCCEEDEDVISUALEVENT#", "");
+                nmSpaceCodeBuilder.Replace("#CALLERRORVISUALEVENT#", "");
+                nmSpaceCodeBuilder.Replace("#CALLRETRYINGVISUALEVENT#", "");
+            }
+
             string baseExecutionContextClassName = "CallServiceActivity_BaseExecutionContext";
             string baseExecutionContextClassCode = CodeGenerationHelper.GenerateBaseExecutionClass(context, baseExecutionContextClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionContextClassCode);
@@ -285,6 +357,24 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             context.AddFullNamespaceCode(nmSpaceCodeBuilder.ToString());
 
             return string.Format("new {0}()", fullTypeName);
+        }
+
+        public override BPVisualItemDefinition GetVisualItemDefinition(IVRWorkflowActivityGetVisualItemDefinitionContext context)
+        {
+            if(this.EnableVisualization)
+            {
+                return new BPVisualItemDefinition
+                {
+                    Settings = new BPCallHttpServiceVisualItemDefinitionSettings
+                    {
+                        DisplayName = this.ServiceName
+                    }
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
@@ -401,6 +491,22 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
     public class VRHttpDelayInput : BPTimeSubscriptionPayload
     {
         public bool NoMoreRanges { get; set; }
+
+        public int RetryCount { get; set; }
+    }
+
+    public class BPCallHttpServiceVisualItemDefinitionSettings : BPVisualItemDefinitionSettings
+    {
+        public override Guid ConfigId => throw new NotImplementedException();
+
+        public override string Editor => throw new NotImplementedException();
+
+        public string DisplayName { get; set; }
+    }
+
+    public class BPRetryingCallHttpServiceVisualEventPayload : BPVisualEventPayload
+    {
+        public TimeSpan RetryInterval { get; set; }
 
         public int RetryCount { get; set; }
     }

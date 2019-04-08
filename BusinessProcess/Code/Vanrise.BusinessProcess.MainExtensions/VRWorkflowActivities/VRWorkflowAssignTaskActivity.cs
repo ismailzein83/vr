@@ -12,6 +12,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
     public class VRWorkflowAssignTaskActivity : VRWorkflowActivitySettings
     {
+        public VRWorkflowAssignTaskActivity()
+        {
+            this.EnableVisualization = true;
+        }
+
         public override Guid ConfigId { get { return new Guid("A9445F70-1188-4F39-8135-419954E88A8B"); } }
 
         public override string Editor { get { return "businessprocess-vr-workflowactivity-assigntask"; } }
@@ -30,6 +35,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         public List<VRWorkflowAssignTaskActivityInputItem> InputItems { get; set; }
 
         public List<VRWorkflowAssignTaskActivityOutputItem> OutputItems { get; set; }
+
+        public bool EnableVisualization { get; set; }
 
         protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
@@ -124,6 +131,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             {
                                 _activityContext.CreateBookmark(createTaskOutput.WFBookmarkName, OnTaskCompleted);
                                 WriteInformation(""'#TASKTITLE#' started"");
+                                #TASKSTARTEDVISUALEVENT#
                             }
                             else
                             {
@@ -155,6 +163,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                         {
                             #TASKCOMPLETEDCODE#
                             WriteInformation(""'#TASKTITLE#' completed"");
+                            #TASKCOMPLETEDVISUALEVENT#
                         }
                     }
                 }");
@@ -210,6 +219,39 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             string taskAssigneesCode = this.TaskAssignees.Settings.GetAssigneesCode();
             nmSpaceCodeBuilder.Replace("#TASKASSIGNEES#", taskAssigneesCode);
 
+            if(this.EnableVisualization)
+            {
+                var startedVisualEventInput = new GenerateInsertVisualEventCodeInput
+                {
+                    ActivityContextVariableName = "_activityContext",
+                    ActivityId = context.VRWorkflowActivityId,
+                    EventTitle = $@"""Task '{this.DisplayName}' started""",
+                    EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_STARTED,
+                    EventPayloadCode = @"
+                        new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BPHumanTaskStartedVisualEventPayload
+                        {
+                            TaskId = createTaskOutput.TaskId
+                        }"
+                };
+                nmSpaceCodeBuilder.Replace("#TASKSTARTEDVISUALEVENT#",
+                    context.GenerateInsertVisualEventCode(startedVisualEventInput));
+
+                var completedVisualEventInput = new GenerateInsertVisualEventCodeInput
+                {
+                    ActivityContextVariableName = "_activityContext",
+                    ActivityId = context.VRWorkflowActivityId,
+                    EventTitle = $@"""Task '{this.DisplayName}' completed""",
+                    EventTypeId = CodeGenerationHelper.VISUALEVENTTYPE_COMPLETED
+                };
+                nmSpaceCodeBuilder.Replace("#TASKCOMPLETEDVISUALEVENT#",
+                    context.GenerateInsertVisualEventCode(completedVisualEventInput));
+            }
+            else
+            {
+                nmSpaceCodeBuilder.Replace("#TASKSTARTEDVISUALEVENT#", "");
+                nmSpaceCodeBuilder.Replace("#TASKCOMPLETEDVISUALEVENT#", "");
+            }
+
             string baseExecutionContextClassName = "AssignTaskActivity_BaseExecutionContext";
             string baseExecutionContextClassCode = CodeGenerationHelper.GenerateBaseExecutionClass(context, baseExecutionContextClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionContextClassCode);
@@ -223,6 +265,21 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             context.AddFullNamespaceCode(nmSpaceCodeBuilder.ToString());
 
             return string.Format("new {0}()", fullTypeName);
+        }
+
+        public override BPVisualItemDefinition GetVisualItemDefinition(IVRWorkflowActivityGetVisualItemDefinitionContext context)
+        {
+            if(this.EnableVisualization)
+            {
+                return new BPVisualItemDefinition
+                {
+                    Settings = new BPHumanTaskVisualItemDefinitionSettings { TaskName = DisplayName }
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
@@ -240,5 +297,19 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         public VRWorkflowExpression To { get; set; }
 
         public string FieldName { get; set; }
+    }
+    
+    public class BPHumanTaskVisualItemDefinitionSettings : BPVisualItemDefinitionSettings
+    {
+        public override Guid ConfigId => throw new NotImplementedException();
+
+        public override string Editor => throw new NotImplementedException();
+
+        public string TaskName { get; set; }
+    }
+
+    public class BPHumanTaskStartedVisualEventPayload : BPVisualEventPayload
+    {
+        public long TaskId { get; set; }
     }
 }

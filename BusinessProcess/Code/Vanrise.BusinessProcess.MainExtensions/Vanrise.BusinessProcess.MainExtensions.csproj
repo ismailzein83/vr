@@ -105,6 +105,7 @@
     <Compile Include="VRWorkflowActivities\VRWorkflowAddBEActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowAssignTaskActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowDelayActivity.cs" />
+    <Compile Include="VRWorkflowActivities\VRWorkflowInsertVisualEventActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowSubProcessActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowAssignActivity.cs" />
     <Compile Include="VRWorkflowActivities\DeletedActivities\VRWorkflowAssignExpressionActivity.cs" />

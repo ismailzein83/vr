@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 
@@ -24,7 +25,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             //WF Sequence activity is needed only when more than 1 activity exist or Variables exists
             if ((this.Activities != null && this.Activities.Count > 1) || (this.Variables != null && this.Variables.Count > 0))
             {
-                var childContext = context.CreateChildContext();
+                var childContext = context.CreateChildContext(null);
 
                 codeBuilder.Append(@"
                     new Sequence
@@ -51,7 +52,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     bool isFirstActivity = true;
                     foreach (var vrActivity in this.Activities)
                     {
-                        var newContext = childContext.CreateChildContext();
+                        var newContext = childContext.CreateChildContext(context.GenerateInsertVisualEventCode);
                         newContext.VRWorkflowActivityId = vrActivity.VRWorkflowActivityId;
 
                         vrActivity.Settings.ThrowIfNull("vrActivity.Settings", vrActivity.VRWorkflowActivityId);
@@ -81,7 +82,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 {
                     var firstActivity = this.Activities[0];
                     firstActivity.Settings.ThrowIfNull("firstActivity.Settings");
-                    var newContext = context.CreateChildContext();
+                    var newContext = context.CreateChildContext(context.GenerateInsertVisualEventCode);
                     newContext.VRWorkflowActivityId = firstActivity.VRWorkflowActivityId;
 
                     codeBuilder.Append(firstActivity.Settings.GenerateWFActivityCode(newContext));
@@ -89,5 +90,63 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             }
             return codeBuilder.ToString();
         }
+
+        public override BPVisualItemDefinition GetVisualItemDefinition(IVRWorkflowActivityGetVisualItemDefinitionContext context)
+        {
+            List<VRWorkflowSequenceChildVisualItemDefinition> childVisualItemDefinitions = null;
+            if (this.Activities != null)
+            {
+                foreach(var vrActivity in this.Activities)
+                {
+                    vrActivity.Settings.ThrowIfNull("vrActivity.Settings", vrActivity.VRWorkflowActivityId);
+                    if (vrActivity.Settings.IsDisabled)
+                        continue;
+                    var childVisualItemDef = vrActivity.Settings.GetVisualItemDefinition(context);
+                    if(childVisualItemDef != null)
+                    {
+                        if(childVisualItemDefinitions == null)
+                        {
+                            childVisualItemDefinitions = new List<VRWorkflowSequenceChildVisualItemDefinition>();
+                        }
+                        childVisualItemDefinitions.Add(new VRWorkflowSequenceChildVisualItemDefinition
+                        {
+                            ChildActivityId = vrActivity.VRWorkflowActivityId,
+                            ChildItemDefinition = childVisualItemDef
+                        });
+                    }
+                }
+            }
+           
+            if(childVisualItemDefinitions != null)
+            {
+                return new BPVisualItemDefinition
+                {
+                    Settings = new BPSequenceVisualItemDefinition
+                    {
+                        ChildVisualItems = childVisualItemDefinitions
+                    }
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+    public class BPSequenceVisualItemDefinition : BPVisualItemDefinitionSettings
+    {
+        public override Guid ConfigId => throw new NotImplementedException();
+
+        public override string Editor => throw new NotImplementedException();
+
+        public List<VRWorkflowSequenceChildVisualItemDefinition> ChildVisualItems { get; set; }
+    }
+
+    public class VRWorkflowSequenceChildVisualItemDefinition
+    {
+        public Guid ChildActivityId { get; set; }
+
+        public BPVisualItemDefinition ChildItemDefinition { get; set; }
     }
 }

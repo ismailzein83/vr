@@ -367,7 +367,8 @@ namespace Vanrise.BusinessProcess.Business
             workflow.Settings.ThrowIfNull("workflow.Settings", workflow.VRWorkflowId);
             workflow.Settings.RootActivity.ThrowIfNull("workflow.Settings.RootActivity", workflow.VRWorkflowId);
             workflow.Settings.RootActivity.Settings.ThrowIfNull("workflow.Settings.RootActivity.Settings", workflow.VRWorkflowId);
-            var generateCodeContext = new VRWorkflowActivityGenerateWFActivityCodeContext(workflow.Settings.Arguments);
+            
+            var generateCodeContext = new VRWorkflowActivityGenerateWFActivityCodeContext(workflow.Settings.Arguments, GenerateInsertVisualEventCode);
             generateCodeContext.VRWorkflowActivityId = workflow.Settings.RootActivity.VRWorkflowActivityId;
             string rootActivityCode = workflow.Settings.RootActivity.Settings.GenerateWFActivityCode(generateCodeContext);
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.BusinessProcess.Business.VRWorkflowManager");
@@ -453,6 +454,15 @@ namespace Vanrise.BusinessProcess.Business
             }
         }
 
+        string GenerateInsertVisualEventCode(GenerateInsertVisualEventCodeInput input)
+        {
+            StringBuilder insertVisualEventCodeBuilder = new StringBuilder();
+            string visualEventManagerVariableName = $"bpVisualEventManager_{Guid.NewGuid().ToString().Replace("-", "")}";
+            insertVisualEventCodeBuilder.AppendLine($"var {visualEventManagerVariableName} = new Vanrise.BusinessProcess.Business.BPVisualEventManager();");
+            insertVisualEventCodeBuilder.AppendLine($@"{visualEventManagerVariableName}.InsertVisualEvent({input.ActivityContextVariableName}.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, new Guid(""{input.ActivityId}""), {input.EventTitle}, new Guid(""{input.EventTypeId}""), {(!string.IsNullOrEmpty(input.EventPayloadCode) ? input.EventPayloadCode : "null")});");
+            return insertVisualEventCodeBuilder.ToString();
+        }
+
         public bool TryCompileWorkflowClassMembers(VRWorkflow workflow, out List<string> classMembersErrors)
         {
             StringBuilder codeBuilder = new StringBuilder(@" 
@@ -472,7 +482,7 @@ namespace Vanrise.BusinessProcess.Business
 
             workflow.ThrowIfNull("workflow");
             workflow.Settings.ThrowIfNull("workflow.Settings", workflow.VRWorkflowId);
-            var generateCodeContext = new VRWorkflowActivityGenerateWFActivityCodeContext(workflow.Settings.Arguments);
+            var generateCodeContext = new VRWorkflowActivityGenerateWFActivityCodeContext(workflow.Settings.Arguments, GenerateInsertVisualEventCode);
             generateCodeContext.VRWorkflowActivityId = workflow.Settings.RootActivity.VRWorkflowActivityId;
             if (workflow.Settings.ClassMembers != null)
                 codeBuilder.Replace("#ClassMembers#", workflow.Settings.ClassMembers.ClassMembersCode);
@@ -676,8 +686,9 @@ namespace Vanrise.BusinessProcess.Business
             public List<string> AdditionalUsingStatements { get; private set; }
 
             Dictionary<string, VRWorkflowVariable> _allVariables = new Dictionary<string, VRWorkflowVariable>();
+            Func<GenerateInsertVisualEventCodeInput, string> _generateInsertVisualEventCodeAction;
 
-            public VRWorkflowActivityGenerateWFActivityCodeContext(VRWorkflowArgumentCollection workflowArguments)
+            public VRWorkflowActivityGenerateWFActivityCodeContext(VRWorkflowArgumentCollection workflowArguments, Func<GenerateInsertVisualEventCodeInput, string> generateInsertVisualEventCodeAction)
             {
                 if (workflowArguments != null)
                 {
@@ -686,11 +697,12 @@ namespace Vanrise.BusinessProcess.Business
                         _allArguments.Add(arg.Name, arg);
                     }
                 }
+                _generateInsertVisualEventCodeAction = generateInsertVisualEventCodeAction;
                 this.OtherNameSpaceCodes = new List<string>();
                 this.AdditionalUsingStatements = new List<string>();
             }
 
-            private VRWorkflowActivityGenerateWFActivityCodeContext(VRWorkflowActivityGenerateWFActivityCodeContext parentContext)
+            private VRWorkflowActivityGenerateWFActivityCodeContext(VRWorkflowActivityGenerateWFActivityCodeContext parentContext, Func<GenerateInsertVisualEventCodeInput, string> generateInsertVisualEventCodeAction)
             {
                 if (parentContext._allVariables != null)
                 {
@@ -699,11 +711,12 @@ namespace Vanrise.BusinessProcess.Business
                         AddVariable(parentVariable.Value);
                     }
                 }
+                _generateInsertVisualEventCodeAction = generateInsertVisualEventCodeAction;
                 this._allArguments = parentContext._allArguments;
                 this.OtherNameSpaceCodes = parentContext.OtherNameSpaceCodes;
                 this.AdditionalUsingStatements = parentContext.AdditionalUsingStatements;
             }
-
+            
             public void AddVariables(VRWorkflowVariableCollection variables)
             {
                 variables.ThrowIfNull("variables");
@@ -760,7 +773,6 @@ namespace Vanrise.BusinessProcess.Business
                 this.AdditionalUsingStatements.Add(strBuilder.ToString());
             }
 
-
             public IEnumerable<VRWorkflowVariable> GetAllVariables()
             {
                 return _allVariables.Values;
@@ -770,10 +782,16 @@ namespace Vanrise.BusinessProcess.Business
             {
                 return _allArguments.Values;
             }
-
-            public IVRWorkflowActivityGenerateWFActivityCodeContext CreateChildContext()
+            
+            public string GenerateInsertVisualEventCode(GenerateInsertVisualEventCodeInput input)
             {
-                return new VRWorkflowActivityGenerateWFActivityCodeContext(this);
+                _generateInsertVisualEventCodeAction.ThrowIfNull("_generateInsertVisualEventCodeAction");
+                return _generateInsertVisualEventCodeAction(input);
+            }
+
+            public IVRWorkflowActivityGenerateWFActivityCodeContext CreateChildContext(Func<GenerateInsertVisualEventCodeInput, string> generateInsertVisualEventCodeAction)
+            {
+                return new VRWorkflowActivityGenerateWFActivityCodeContext(this, generateInsertVisualEventCodeAction);
             }
         }
 

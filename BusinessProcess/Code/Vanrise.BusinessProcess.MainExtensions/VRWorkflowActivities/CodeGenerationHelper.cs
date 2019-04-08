@@ -10,6 +10,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
     public static class CodeGenerationHelper
     {
+        public static Guid VISUALEVENTTYPE_STARTED = new Guid("372F4B89-68FF-4C47-8CD5-E501A71C46F7");
+        public static Guid VISUALEVENTTYPE_COMPLETED = new Guid("DEAAE89F-E3C9-41ED-BC84-0BD8A58D0A32");
+        public static Guid VISUALEVENTTYPE_ERROR = new Guid("F3A80E84-87F1-4073-9D9F-78C394AA0495");
+        public static Guid VISUALEVENTTYPE_RETRYING = new Guid("AD5A31E5-2890-4EF5-9339-61F86B536CFE");
+
         public static string GenerateBaseExecutionClass(IVRWorkflowActivityGenerateWFActivityCodeContext context, string className)
         {
             StringBuilder codeBuilder = new StringBuilder(@"                 
@@ -42,6 +47,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                         public void WriteError(string message)
                         {
                             _activityContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Error, message);
+                        }
+
+                        public void WriteHandledException(Exception ex)
+                        {
+                            _activityContext.WriteHandledException(ex);
                         }
 
                         public long GetProcessInstanceId()

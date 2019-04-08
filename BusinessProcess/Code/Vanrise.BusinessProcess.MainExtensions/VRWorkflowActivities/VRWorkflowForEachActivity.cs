@@ -43,7 +43,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             this.Activity.ThrowIfNull("Activity");
             this.Activity.Settings.ThrowIfNull("Activity.Settings");
 
-            var childContext = context.CreateChildContext();
+            var childContext = context.CreateChildContext(null);
             childContext.AddVariable(new VRWorkflowVariable { VRWorkflowVariableId = Guid.NewGuid(), Name = this.IterationVariableName, Type = this.IterationVariableType });
 
             StringBuilder nmSpaceCodeBuilder = new StringBuilder(@"                 
@@ -103,7 +103,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             codeBuilder.Replace("#ITERATIONVARIABLERUNTIMETYPE#", iterationVariableRuntimeType);
             codeBuilder.Replace("#ITERATIONVARIABLENAME#", this.IterationVariableName);
 
-            var newContext = childContext.CreateChildContext();
+            var newContext = childContext.CreateChildContext(null);
             newContext.VRWorkflowActivityId = this.Activity.VRWorkflowActivityId;
 
             codeBuilder.Replace("#ACTIVITYCODE#", this.Activity.Settings.GenerateWFActivityCode(newContext));

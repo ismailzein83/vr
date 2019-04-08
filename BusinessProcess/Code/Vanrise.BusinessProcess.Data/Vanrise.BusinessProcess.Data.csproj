@@ -74,6 +74,7 @@
     <Compile Include="IDataManager.cs" />
     <Compile Include="IBPValidationMessageDataManager.cs" />
     <Compile Include="IVRWorkflowDataManager.cs" />
+    <Compile Include="IBPVisualEventDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

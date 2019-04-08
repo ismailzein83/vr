@@ -20,7 +20,7 @@ namespace Vanrise.BusinessProcess.Entities
         public abstract Guid ConfigId { get; }
 
         public abstract string Editor { get; }
-
+        
         public abstract string Title { get; }
 
         public bool IsDisabled { get; set; }
@@ -43,6 +43,11 @@ namespace Vanrise.BusinessProcess.Entities
         }
 
         protected abstract string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context);
+
+        public virtual BPVisualItemDefinition GetVisualItemDefinition(IVRWorkflowActivityGetVisualItemDefinitionContext context)
+        {
+            return null;
+        }
     }
 
     public interface IVRWorkflowActivityGenerateWFActivityCodeContext
@@ -64,6 +69,26 @@ namespace Vanrise.BusinessProcess.Entities
 
         void AddUsingStatement(string usingStatement);
 
-        IVRWorkflowActivityGenerateWFActivityCodeContext CreateChildContext();
+        string GenerateInsertVisualEventCode(GenerateInsertVisualEventCodeInput input);
+
+        IVRWorkflowActivityGenerateWFActivityCodeContext CreateChildContext(Func<GenerateInsertVisualEventCodeInput, string> generateInsertVisualEventCodeAction);
+    }
+
+    public class GenerateInsertVisualEventCodeInput
+    {
+        public string ActivityContextVariableName { get; set; }
+
+        public Guid ActivityId { get; set; }
+
+        public string EventTitle { get; set; }
+
+        public Guid EventTypeId { get; set; }
+
+        public string EventPayloadCode { get; set; }
+    }
+
+    public interface IVRWorkflowActivityGetVisualItemDefinitionContext
+    {
+
     }
 }

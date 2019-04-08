@@ -19,6 +19,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         [Newtonsoft.Json.JsonConverter(typeof(VRWorkflowExpressionJsonConverter))]
         public VRWorkflowExpression Condition { get; set; }
 
+        public string ConditionDescription { get; set; }
+
         public VRWorkflowActivity TrueActivity { get; set; }
 
         public VRWorkflowActivity FalseActivity { get; set; }
@@ -84,7 +86,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 this.FalseActivity.Settings.ThrowIfNull("this.FalseActivity.Settings");
                 codeBuilder.Append(@",
             Else = #FALSEACTIVITYCODE#");
-                var falseContext = context.CreateChildContext();
+                var falseContext = context.CreateChildContext(context.GenerateInsertVisualEventCode);
                 falseContext.VRWorkflowActivityId = this.FalseActivity.VRWorkflowActivityId;
                 codeBuilder.Replace("#FALSEACTIVITYCODE#", this.FalseActivity.Settings.GenerateWFActivityCode(falseContext));
             }
@@ -94,10 +96,53 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
             codeBuilder.Replace("#NAMESPACE#", nmSpaceName);
             codeBuilder.Replace("#CLASSNAME#", className);
-            var trueContext = context.CreateChildContext();
+            var trueContext = context.CreateChildContext(context.GenerateInsertVisualEventCode);
             trueContext.VRWorkflowActivityId = this.TrueActivity.VRWorkflowActivityId;
             codeBuilder.Replace("#TRUEACTIVITYCODE#", this.TrueActivity.Settings.GenerateWFActivityCode(trueContext));
             return codeBuilder.ToString();
         }
+
+        public override BPVisualItemDefinition GetVisualItemDefinition(IVRWorkflowActivityGetVisualItemDefinitionContext context)
+        {
+            this.Condition.ThrowIfNull("this.Condition");
+            this.TrueActivity.ThrowIfNull("this.TrueActivity");
+            this.TrueActivity.Settings.ThrowIfNull("this.TrueActivity.Settings");
+            var trueBranchVisualItemDef = this.TrueActivity.Settings.GetVisualItemDefinition(context);
+            BPVisualItemDefinition falseBranchVisualItemDef = null;
+            if (this.FalseActivity != null)
+            {
+                this.FalseActivity.Settings.ThrowIfNull("this.FalseActivity.Settings");
+                falseBranchVisualItemDef = this.FalseActivity.Settings.GetVisualItemDefinition(context);
+            }
+            if (trueBranchVisualItemDef != null || falseBranchVisualItemDef != null)
+            {
+                return new BPVisualItemDefinition
+                {
+                    Settings = new BPIfElseVisualItemDefinition
+                    {
+                        ConditionDescription = !String.IsNullOrEmpty(this.ConditionDescription) ? this.ConditionDescription : this.Condition.GetCode(null),
+                        TrueBranchVisualItemDefinition = trueBranchVisualItemDef,
+                        FalseBranchVisualItemDefinition = falseBranchVisualItemDef
+                    }
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+    public class BPIfElseVisualItemDefinition : BPVisualItemDefinitionSettings
+    {
+        public override Guid ConfigId => throw new NotImplementedException();
+
+        public override string Editor => throw new NotImplementedException();
+
+        public string ConditionDescription { get; set; }
+
+        public BPVisualItemDefinition TrueBranchVisualItemDefinition { get; set; }
+
+        public BPVisualItemDefinition FalseBranchVisualItemDefinition { get; set; }
     }
 }
