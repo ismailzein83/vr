@@ -190,7 +190,9 @@ namespace Vanrise.Data.RDB
 
         public string GetOverridenConnectionString(GetOverridenConnectionStringInput input)
         {
-            RDBDataProviderGetConnectionStringContext context = new RDBDataProviderGetConnectionStringContext(input.OverridingDatabaseName);
+            string overridingDatabaseName = input != null ? input.OverridingDatabaseName : null;
+
+            RDBDataProviderGetConnectionStringContext context = new RDBDataProviderGetConnectionStringContext(overridingDatabaseName);
             return this.DataProvider.GetConnectionString(context);
         }
 
