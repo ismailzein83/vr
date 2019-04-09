@@ -1,0 +1,42 @@
+﻿<!--<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivityUpdateBusinessEntityController" size="large">
+    <vr-modalbody>
+        <vr-form name="formEditActivity" vr-loader="scopeModel.isLoading">
+            <vr-row>
+                <vr-columns colnum="3">
+                    <vr-textbox value="scopeModel.displayName" label="Display Name" isrequired="!scopeModel.isVRWorkflowActivityDisabled"></vr-textbox>
+                </vr-columns>
+                <vr-columns colnum="6">
+                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
+                                                                            getworkflowarguments="scopeModel.context.getWorkflowArguments"
+                                                                            label="Entity ID"
+                                                                            value="scopeModel.entityId">
+                    </businessprocess-vr-workflow-activity-expressionbuilder>
+                </vr-columns>
+                <vr-columns colnum="3">
+                    <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
+                                                                      isrequired="true" customlabel="Business Entity Definition"
+                                                                      selectedvalues="scopeModel.selectedBusinessEntity">
+                    </vr-genericdata-businessentitydefinition-selector>
+
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+               <span ng-if="scopeModel.selectedBusinessEntity != undefined" vr-loader="scopeModel.isLoadingSettingsDirective">
+
+                    <vr-directivewrapper directive="scopeModel.selectedBusinessEntity.WorkFlowAddBEActivityEditor" on-ready="scopeModel.onSettingsDirectiveReady"  isrequired="true"></vr-directivewrapper>
+            </span>
+                   </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.saveActivity" formname="formEditActivity"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>-->
+
+
+ 
