@@ -187,9 +187,9 @@ namespace Vanrise.GenericData.Business
                         }, dataRecordStorageId);
                         input.ResultKey = resultKey;
                     }
-                    //var orderType = input.Query.OrderType;
-                    //if (orderType.HasValue)
-                    //    cachedAccountsWithSelectionHandling = GetOrderedDataRecords(orderType.Value, input.Query.Columns, input.Query.AdvancedOrderOptions, cachedAccountsWithSelectionHandling, (record, fieldName) => record[fieldName]);
+                    var orderType = input.Query.OrderType;
+                    if (orderType.HasValue)
+                        cachedAccountsWithSelectionHandling = GetOrderedDataRecords(orderType.Value, input.Query.Columns, input.Query.AdvancedOrderOptions, cachedAccountsWithSelectionHandling);
                     return DataRetrievalManager.Instance.ProcessResult(input, AllRecordsToBigResult(input, cachedAccountsWithSelectionHandling, recordType), handler);
 
                 }
@@ -898,81 +898,81 @@ namespace Vanrise.GenericData.Business
                     case DataRecordFieldOrderType.ByFieldValue: orderedRecords = sortColumn.IsDescending ? orderedRecords.ThenByDescending(itm => itm.FieldValues[sortColumn.FieldName].Value) : orderedRecords.ThenBy(itm => itm.FieldValues[sortColumn.FieldName].Value); break;
                     default: break;
                 }
-                //    }
-                //    return orderedRecords;
-                //}
-
-                //private static IEnumerable<DataRecord> GetOrderedDataRecords(OrderType orderType, List<string> fieldNames, GenericBEAdvancedOrderOptionsBase advancedOrderOptions,
-                //    IEnumerable<DataRecord> allRecords, Func<Dictionary<string, Object>, string, Object> getDataRecord)
-                //{
-                //    IEnumerable<DataRecord> orderedRecords;
-                //    switch (orderType)
-                //    {
-                //        case OrderType.ByAllFields: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, getDataRecord, false); break;
-                //        case OrderType.ByAllFieldsDescending: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, getDataRecord, true); break;
-                //        case OrderType.AdvancedFieldOrder: orderedRecords = GetOrderedByAdvancedFieldOrder(fieldNames, advancedOrderOptions, allRecords, getDataRecord); break;
-                //        default: orderedRecords = null; break;
-                //    }
-                //    return orderedRecords;
-                //}
-                //private static IEnumerable<DataRecord> GetOrderedByAllFields(List<string> fieldNames, IEnumerable<DataRecord> allRecords, Func<Dictionary<string, Object>, string, Object> getDataRecord, bool descOrder)
-                //{
-                //    List<string> orderByFields = fieldNames;
-                //    if (orderByFields == null || orderByFields.Count == 0)
-                //        throw new NullReferenceException($"orderByFields '{orderByFields}'");
-
-                //    var firstField = orderByFields[0];
-                //    IOrderedEnumerable<DataRecord> orderedRecords;
-                //    Func<DataRecord, Object> firstOrderByFunction = record => getDataRecord(record.FieldValues, firstField);
-                //    orderedRecords = descOrder ? allRecords.OrderByDescending(firstOrderByFunction) : allRecords.OrderBy(firstOrderByFunction);
-
-                //    if (orderByFields.Count > 1)
-                //    {
-                //        for (int i = 1; i < orderByFields.Count; i++)
-                //        {
-                //            var field = orderByFields[i];
-                //            Func<DataRecord, Object> orderByFunction = record => getDataRecord(record.FieldValues, field);
-                //            orderedRecords = descOrder ? orderedRecords.ThenByDescending(orderByFunction) : orderedRecords.ThenBy(orderByFunction);
-                //        }
             }
             return orderedRecords;
         }
 
-        //private static IEnumerable<DataRecord> GetOrderedByAdvancedFieldOrder(List<string> fieldNames, GenericBEAdvancedOrderOptionsBase advancedOrderOptions, IEnumerable<DataRecord> allRecords, Func<Dictionary<string, Object>, string, Object> getDataRecord)
-        //{
-        //    if (fieldNames == null)
-        //        throw new NullReferenceException($"fieldNames '{fieldNames}'");
+        private static IEnumerable<DataRecord> GetOrderedDataRecords(OrderType orderType, List<string> fieldNames, AdvancedOrderOptionsBase advancedOrderOptions,
+            IEnumerable<DataRecord> allRecords)
+        {
+            IEnumerable<DataRecord> orderedRecords;
+            switch (orderType)
+            {
+                case OrderType.ByAllFields: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, false); break;
+                case OrderType.ByAllFieldsDescending: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, true); break;
+                case OrderType.AdvancedFieldOrder: orderedRecords = GetOrderedByAdvancedFieldOrder(fieldNames, advancedOrderOptions, allRecords); break;
+                default: orderedRecords = null; break;
+            }
+            return orderedRecords;
+        }
+        private static IEnumerable<DataRecord> GetOrderedByAllFields(List<string> fieldNames, IEnumerable<DataRecord> allRecords, bool descOrder)
+        {
+            List<string> orderByFields = fieldNames;
+            if (orderByFields == null || orderByFields.Count == 0)
+                throw new NullReferenceException($"orderByFields '{orderByFields}'");
 
-        //    GenericBEAdvancedFieldOrderOptions advancedFieldOrderOptions = advancedOrderOptions.CastWithValidate<GenericBEAdvancedFieldOrderOptions>("advancedOrderOptions");
+            var firstField = orderByFields[0];
+            IOrderedEnumerable<DataRecord> orderedRecords;
+            Func<DataRecord, Object> firstOrderByFunction = record =>record.FieldValues[firstField];
+            orderedRecords = descOrder ? allRecords.OrderByDescending(firstOrderByFunction) : allRecords.OrderBy(firstOrderByFunction);
 
-        //    if (advancedFieldOrderOptions.Fields == null || advancedFieldOrderOptions.Fields.Count == 0)
-        //        throw new NullReferenceException($"fields '{advancedFieldOrderOptions.Fields}'");
+            if (orderByFields.Count > 1)
+            {
+                for (int i = 1; i < orderByFields.Count; i++)
+                {
+                    var field = orderByFields[i];
+                    Func<DataRecord, Object> orderByFunction = record => record.FieldValues[field];
+                    orderedRecords = descOrder ? orderedRecords.ThenByDescending(orderByFunction) : orderedRecords.ThenBy(orderByFunction);
+                }
+            }
+            return orderedRecords;
+        }
 
-        //    var fieldOrders = advancedFieldOrderOptions.Fields;
-        //    var firstFieldOrder = fieldOrders[0];
-        //    if (!fieldNames.Contains(firstFieldOrder.FieldName))
-        //        throw new Exception(String.Format("Field Order '{0}' is not available in the query field names", firstFieldOrder.FieldName));
-        //    Func<DataRecord, Object> firstOrderByFunction = record => getDataRecord(record.FieldValues, firstFieldOrder.FieldName);
+        private static IEnumerable<DataRecord> GetOrderedByAdvancedFieldOrder(List<string> fieldNames, AdvancedOrderOptionsBase advancedOrderOptions, IEnumerable<DataRecord> allRecords)
+        {
+            if (fieldNames == null)
+                throw new NullReferenceException($"fieldNames '{fieldNames}'");
 
-        //    IOrderedEnumerable<DataRecord> orderedRecords = firstFieldOrder.OrderDirection == OrderDirection.Ascending ?
-        //        allRecords.OrderBy(firstOrderByFunction) :
-        //        allRecords.OrderByDescending(firstOrderByFunction);
-        //    if (fieldOrders.Count > 1)
-        //    {
-        //        for (int i = 1; i < fieldOrders.Count; i++)
-        //        {
-        //            var fieldOrder = fieldOrders[i];
-        //            if (!fieldNames.Contains(fieldOrder.FieldName))
-        //                throw new Exception(String.Format("Field Order '{0}' is not available in the query fields", fieldOrder.FieldName));
-        //            Func<DataRecord, Object> orderByFunction = record => getDataRecord(record.FieldValues, fieldOrder.FieldName);
+            AdvancedFieldOrderOptions advancedFieldOrderOptions = advancedOrderOptions.CastWithValidate<AdvancedFieldOrderOptions>("advancedOrderOptions");
 
-        //            orderedRecords = fieldOrder.OrderDirection == OrderDirection.Ascending ?
-        //                orderedRecords.ThenBy(orderByFunction) :
-        //                orderedRecords.ThenByDescending(orderByFunction);
-        //        }
-        //    }
-        //    return orderedRecords;
-        //}
+            if (advancedFieldOrderOptions.Fields == null || advancedFieldOrderOptions.Fields.Count == 0)
+                throw new NullReferenceException($"fields '{advancedFieldOrderOptions.Fields}'");
+
+            var fieldOrders = advancedFieldOrderOptions.Fields;
+            var firstFieldOrder = fieldOrders[0];
+            if (!fieldNames.Contains(firstFieldOrder.FieldName))
+                throw new Exception(String.Format("Field Order '{0}' is not available in the query field names", firstFieldOrder.FieldName));
+            Func<DataRecord, Object> firstOrderByFunction = record =>record.FieldValues[firstFieldOrder.FieldName];
+
+            IOrderedEnumerable<DataRecord> orderedRecords = firstFieldOrder.OrderDirection == OrderDirection.Ascending ?
+                allRecords.OrderBy(firstOrderByFunction) :
+                allRecords.OrderByDescending(firstOrderByFunction);
+            if (fieldOrders.Count > 1)
+            {
+                for (int i = 1; i < fieldOrders.Count; i++)
+                {
+                    var fieldOrder = fieldOrders[i];
+                    if (!fieldNames.Contains(fieldOrder.FieldName))
+                        throw new Exception(String.Format("Field Order '{0}' is not available in the query fields", fieldOrder.FieldName));
+                    Func<DataRecord, Object> orderByFunction = record =>record.FieldValues[fieldOrder.FieldName];
+
+                    orderedRecords = fieldOrder.OrderDirection == OrderDirection.Ascending ?
+                        orderedRecords.ThenBy(orderByFunction) :
+                        orderedRecords.ThenByDescending(orderByFunction);
+                }
+            }
+            return orderedRecords;
+        }
 
         private void PrepareDependentAndFormulaFields(List<string> fieldNames, Dictionary<string, DataRecordField> dataRecordFieldDict, out Dictionary<string, DataRecordField> formulaDataRecordFieldsDict)
         {
@@ -1364,9 +1364,9 @@ namespace Vanrise.GenericData.Business
 
                     });
                 }
-                //var orderType = input.Query.OrderType;
-                //if (orderType.HasValue)
-                //    dataRecordsFinalResult = GetOrderedDataRecords(orderType.Value, input.Query.Columns, input.Query.AdvancedOrderOptions, dataRecordsFinalResult, (record, fieldName) => record[fieldName]);
+                var orderType = input.Query.OrderType;
+                if (orderType.HasValue)
+                    dataRecordsFinalResult = GetOrderedDataRecords(orderType.Value, input.Query.Columns, input.Query.AdvancedOrderOptions, dataRecordsFinalResult);
                 return dataRecordsFinalResult;
 
             }
