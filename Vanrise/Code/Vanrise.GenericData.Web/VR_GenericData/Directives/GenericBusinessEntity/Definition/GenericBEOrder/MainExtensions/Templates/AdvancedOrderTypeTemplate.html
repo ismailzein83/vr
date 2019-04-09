@@ -1,0 +1,27 @@
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-genericdata-datarecordtypefields-selector selectedvalues="scopeModel.selectedFields" label="Fields"
+                                                      onselectitem="scopeModel.onFieldSelected" ondeselectitem="scopeModel.onFieldDeselected" ondeselectallitems="scopeModel.deselectAllFields"
+                                                      hideselectedvaluessection="true" on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady" ismultipleselection isrequired="true"
+                                                      hide-select-all="true"></vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Fields">
+            <vr-datagrid datasource="ctrl.datasource"
+                         enabledraggablerow="true"
+                         hidegridmenu
+                         ondeleterow="scopeModel.onDeleteField">
+                <vr-datagridcolumn headertext="'Field Name'" type="'Text'">
+                    <vr-label>{{dataItem.FieldName}}</vr-label>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Order Direction'" type="'Text'">
+                    <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.orderDirectionList"
+                               selectedvalues="dataItem.OrderDirection" isrequired="true" hideremoveicon>
+                    </vr-select>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-section>
+    </vr-columns>
+</vr-row>

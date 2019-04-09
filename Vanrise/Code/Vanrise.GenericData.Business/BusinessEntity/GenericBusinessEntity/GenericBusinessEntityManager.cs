@@ -293,9 +293,11 @@ namespace Vanrise.GenericData.Business
                         ToTime = input.Query.ToTime.HasValue ? input.Query.ToTime.Value : DateTime.MaxValue,
                         ColumnTitles = columnTitles,
                         DataRecordStorageIds = new List<Guid> { genericBEDefinitionSetting.DataRecordStorageId.Value },
-                        Direction = OrderDirection.Descending,
+                        Direction = genericBEDefinitionSetting.Direction.HasValue ? genericBEDefinitionSetting.Direction.Value: OrderDirection.Descending,
                         LimitResult = input.Query.LimitResult,
-                        BulkActionState = input.Query.BulkActionState
+                        BulkActionState = input.Query.BulkActionState,
+                        OrderType= genericBEDefinitionSetting.OrderType,
+                        AdvancedOrderOptions = genericBEDefinitionSetting.AdvancedOrderOptions
                         //SortColumns=,
                         //ToTime
                     },

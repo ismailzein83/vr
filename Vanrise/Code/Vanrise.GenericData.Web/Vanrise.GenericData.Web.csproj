@@ -209,6 +209,8 @@
     <Content Include="VR_GenericData\Constants\GenericBEDefinitionBulkActionUpdateFieldStateEnum.js" />
     <Content Include="VR_GenericData\Constants\GenericBEDefinitionTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\MappingDataTypeEnum.js" />
+    <Content Include="VR_GenericData\Constants\OrderDirectionEnum.js" />
+    <Content Include="VR_GenericData\Constants\OrderTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\RecordFilterOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\DateTimeDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\IntervalTypeEnum.js" />
@@ -254,6 +256,10 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\vr-genericdata-genericbe-bulkactionsettings-selective.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\vr-genericdata-genericbe-bulkactions-management.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\Templates\GenericBEBulkActionsManagementTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\MainExtensions\Templates\AdvancedOrderTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\MainExtensions\vr-genericdata-ordertype-advancedorderoptions.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\vr-genericdata-genericbe-orderdirection-selective.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\vr-genericdata-genericbe-ordertype-selective.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericBERuntimeManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-runtime-management.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\Templates\DataRecordTypeCompositeRecordConditionDefinitionTemplate.html" />

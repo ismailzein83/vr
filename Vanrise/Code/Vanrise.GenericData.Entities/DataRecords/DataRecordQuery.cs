@@ -28,8 +28,8 @@ namespace Vanrise.GenericData.Entities
 
         public List<DataRecordFilter> Filters { get; set; }
         public BulkActionState BulkActionState { get; set; }
-
-
+        public OrderType? OrderType { get; set; }
+        public AdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
     }
 
     public class DataRecordFilter
