@@ -95,5 +95,10 @@
     <Build Include="NetworkRentalManager\Tables\DarkFiberRP.sql" />
     <Build Include="NetworkRentalManager\Tables\ContractType.sql" />
     <Build Include="NetworkRentalManager\Tables\Contract.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonyComplaintDamageType.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonyComplaintBrokenCategory.sql" />
+    <Build Include="NetworkRentalManager\Tables\TelephonyComplaint.sql" />
+    <Build Include="NetworkRentalManager\Tables\DarkFiberSubscriptionOrder.sql" />
+    <Build Include="NetworkRentalManager\Tables\DarkFiberContract.sql" />
   </ItemGroup>
 </Project>
