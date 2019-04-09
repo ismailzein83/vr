@@ -291,7 +291,13 @@ as (select * from (values
 ('a9497ef9-2074-4a1e-a999-08253b68f448','Ericsson Special Routing Settings Service Language','Service Language','WhS_RouteSync_EricssonSpecialRoutingServiceLanguageConfig','{"Editor":"whs-routesync-ericsson-specialrouting-servicelanguage"}'),
 
 ('DA50B323-DAB4-4E5D-807F-7BF9642215B4','TechnicalZone','Technical Zone','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor": "vr-whs-be-technicalzone-onbeforesavehandler"}'),
-('2CD52A5A-5C91-4D58-AB31-AF94D4CC8AF0','Supplier Bank Details','Supplier Bank Details','VR_Invoice_InvoiceType_RDLCDataSourceSettings','{"Editor":"whs-invoicetype-datasourcesettings-supplierbankdetails"}')
+('2CD52A5A-5C91-4D58-AB31-AF94D4CC8AF0','Supplier Bank Details','Supplier Bank Details','VR_Invoice_InvoiceType_RDLCDataSourceSettings','{"Editor":"whs-invoicetype-datasourcesettings-supplierbankdetails"}'),
+('96EA70AD-3F21-4B55-BC5E-70ACE0469710','WhS_Sales_SupplierTargetMatchMethod_LCR3','Option 3','WhS_Sales_SupplierTargetMatchMethod','{"Editor":"vr-whs-sales-suppliertargetmatchmethods-lcr3"}'),
+('E393CCB2-E929-4A50-9AE4-AB59565DD69D','WhS_Sales_SupplierTargetMatchMethod_LCR2','Option 2','WhS_Sales_SupplierTargetMatchMethod','{"Editor":"vr-whs-sales-suppliertargetmatchmethods-lcr2"}'),
+('745B15CA-4649-4780-AD5D-D24C4575D5EB','WhS_Sales_SupplierTargetMatchMethod_LCR1','Option 1','WhS_Sales_SupplierTargetMatchMethod','{"Editor":"vr-whs-sales-suppliertargetmatchmethods-lcr1"}'),
+('F8C397CD-1930-4E02-811F-DE2CB203EB85','WhS_Sales_SupplierTargetMatchMethod_WeightedAverage','Weighted Average','WhS_Sales_SupplierTargetMatchMethod','{"Editor":"vr-whs-sales-suppliertargetmatchmethods-weightedaverage"}'),
+('2CB834AD-16BE-46C7-8B26-E65927C2388B','WhS_Sales_SupplierTargetMatchMethod_Average','Average','WhS_Sales_SupplierTargetMatchMethod','{"Editor":"vr-whs-sales-suppliertargetmatchmethods-average"}')
+
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
@@ -529,7 +535,8 @@ as (select * from (values
 ('B389CCDD-8A5A-4B8A-BAB0-C19D326BE8B2','Recurring Charges Types','Recurring Charges Types',null																,'89254E36-5D91-4DB1-970F-9BFEF404679A',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"61885a4a-647d-45ea-810a-7028ae9a7f1f"},{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"7501c2b2-374b-432c-b423-59e772663eb8"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',130),
 
 ('C365F8F3-5906-451E-BB0E-1BB3B52FC2BD','Technical Zones','Technical Zones',null																				,'D7146EBA-A2B1-484C-A498-0DDE876A7580',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"48d84bf0-682c-4f6d-8eb5-7eb86a12bcd1"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',35),
-('627E7877-4D3A-4D07-9ED4-C22431ED0026','Technical Codes','Technical Codes',null																				,'D7146EBA-A2B1-484C-A498-0DDE876A7580',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"34469adb-c0cd-4085-816f-4eae48fc458d"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',40)
+('627E7877-4D3A-4D07-9ED4-C22431ED0026','Technical Codes','Technical Codes',null																				,'D7146EBA-A2B1-484C-A498-0DDE876A7580',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"34469adb-c0cd-4085-816f-4eae48fc458d"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',40),
+('1B1A9DB3-3467-4299-A348-59AA501BCD3D','Supplier Target Generation','Supplier Target Generation','#/view/WhS_Sales/Views/SupplierTargetMatch/SupplierTargetMatch','D66F9910-48EC-4FFD-8A09-C7960A6EE434','WhS_Sales/SupplierTargetMatch/GetFilteredSupplierTargetMatches',null,null,'{"$type":"Vanrise.Security.Entities.ViewSettings, Vanrise.Security.Entities"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -887,9 +894,10 @@ as (select * from (values
 ('WhS_BE/FinancialAccount/GetFilteredFinancialAccounts','FinancialAccount: View'),
 ('WhS_BE/FinancialAccount/AddFinancialAccount','FinancialAccount: Add'),
 ('WhS_BE/FinancialAccount/UpdateFinancialAccount','FinancialAccount: Edit'),
-
+('WhS_Sales/SupplierTargetMatch/GetFilteredSupplierTargetMatches','WhS_BE_SupplierTargetGeneration:View'),
 --TO BE removed when business rules set page is turned dynamic
 ('BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets','WhS_BE_SupplierPricelist: Start Process')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
