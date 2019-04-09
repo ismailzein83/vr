@@ -14,6 +14,8 @@ namespace TOne.WhS.Sales.Entities
         public decimal Volume { get; set; }
         public decimal TargetVolume { get; set; }
         public IEnumerable<RPRouteOptionDetail> Options { get; set; }
-        public List<SupplierTargetMatchAnalyticOption> TargetOptions { get; set; }
+		public decimal ASR { get; set; }
+		public decimal ACD { get; set; }
+		public List<decimal> TargetRates { get; set; }
     }
 }

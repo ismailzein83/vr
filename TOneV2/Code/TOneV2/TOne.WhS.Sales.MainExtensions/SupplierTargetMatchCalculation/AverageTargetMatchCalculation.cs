@@ -17,30 +17,12 @@ namespace TOne.WhS.Sales.MainExtensions.SupplierTargetMatchCalculation
           
         public override void Evaluate(ITargetMatchCalculationMethodContext context)
         {
-            var options = new List<SupplierTargetMatchAnalyticOption>();
-            decimal rate = context.RPRouteDetail.RouteOptionsDetails.Average(o => o.ConvertedSupplierRate);
-            decimal totalACD = 0;
-            decimal totalASR = 0;
-            decimal totalDuration = 0;
-            foreach (var routeOption in context.RPRouteDetail.RouteOptionsDetails)
-            {
-                var supplierAnalyticInfo = context.GetSupplierAnalyticInfo(routeOption.SupplierId);
-                if (supplierAnalyticInfo != null)
-                {
-                    totalACD += supplierAnalyticInfo.ACD;
-                    totalASR += supplierAnalyticInfo.ASR;
-                    totalDuration += supplierAnalyticInfo.Duration;
-                }
-            }
 
-            SupplierTargetMatchAnalyticOption option = new SupplierTargetMatchAnalyticOption {
-                Duration = totalDuration / context.RPRouteDetail.RouteOptionsDetails.Count(),
-                ACD = totalACD / context.RPRouteDetail.RouteOptionsDetails.Count(),
-                ASR = totalASR / context.RPRouteDetail.RouteOptionsDetails.Count(),
-                Rate = rate
-            };
-            context.ValidateAnalyticInfo(option);
-            options.Add(option);
-        }
+			if (context.RPRouteDetail!=null && context.RPRouteDetail.RouteOptionsDetails != null && context.RPRouteDetail.RouteOptionsDetails.Count() > 0)
+			{
+				decimal rate = context.RPRouteDetail.RouteOptionsDetails.Average((x) => x.ConvertedSupplierRate);
+				context.TargetRates.Add(context.EvaluateRate(rate));
+			}
+		}
     }
 }

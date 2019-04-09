@@ -1,0 +1,30 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_ExportSupplierTargetMatchEditorController" vr-loader="scopeModel.isLoading" width="small">
+	<vr-modalbody>
+		<vr-form name="formRouteTableEditor">
+			<vr-tabs>
+				<vr-row>
+					<vr-columns colnum="5">
+						<vr-textbox type="number" minvalue="0" label="Default Volume" value="scopeModel.defaultVolume" isrequired></vr-textbox>
+					</vr-columns>
+					<vr-columns colnum="5">
+						<vr-switch value="scopeModel.withACD_ASR" label="With ACD and ASR"></vr-switch>
+					</vr-columns>
+					<vr-columns colnum="5">
+						<vr-textbox type="number" minvalue="0"  label="Default ACD" value="scopeModel.defaultACD" vr-disabled="!scopeModel.withACD_ASR" isrequired></vr-textbox>
+					</vr-columns>
+					<vr-columns colnum="5">
+						<vr-textbox type="number" minvalue="0"  label="Default ASR" value="scopeModel.defaultASR" vr-disabled="!scopeModel.withACD_ASR" isrequired></vr-textbox>
+					</vr-columns>
+				</vr-row>
+			</vr-tabs>
+
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Ok" formname="formRouteTableEditor" data-onclick="scopeModel.exportSupplierTargetMatch"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
+	<!--</div>-->

@@ -8,9 +8,27 @@ namespace TOne.WhS.Sales.Entities
 {
     public class SupplierTargetMatchQuery
     {
-        //Add ActionParameters Class
-        public SupplierTargetMatchFilter Filter { get; set; }
-        public SupplierTargetSettings Settings { get; set; }
-
+		//Add ActionParameters Class
+		public int SellingNumberPlanId { get; set; }
+		public int RoutingProductId { get; set; }
+		public int RoutingDataBaseId { get; set; }
+		public IEnumerable<int> CountryIds { get; set; }
+		public Guid PolicyId { get; set; }
+		public int NumberOfOptions { get; set; }
+		public DateTime From { get; set; }
+		public DateTime? To { get; set; }
+		public TargetMatchCalculationMethod CalculationMethod { get; set; }
+		public MarginType MarginType { get; set; }
+		public decimal MarginValue { get; set; }
+		public decimal DefaultVolume { get; set; }
+		public decimal DefaultASR { get; set; }
+		public decimal DefaultACD { get; set; }
+		public bool IncludeACD_ASR { get; set; }
+		public decimal VolumeMultiplier { get; set; }
     }
+	public enum MarginType
+	{
+		Fixed,
+		Percentage
+	}
 }

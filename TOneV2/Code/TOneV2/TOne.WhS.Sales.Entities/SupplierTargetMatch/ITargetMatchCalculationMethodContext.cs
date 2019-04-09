@@ -7,14 +7,11 @@ using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public interface ITargetMatchCalculationMethodContext
-    {
-        RPRouteDetailByZone RPRouteDetail { get; }
-        List<SupplierTargetMatchAnalyticOption> Options { set; }
-        decimal MarginValue { get; }
-        MarginType MarginType { get; }
-        SupplierTargetMatchAnalyticOption GetSupplierAnalyticInfo(int supplierId);
-        decimal EvaluateRate(decimal originalRate);
-        void ValidateAnalyticInfo(SupplierTargetMatchAnalyticOption option);
-    }
+	public interface ITargetMatchCalculationMethodContext
+	{
+		RPRouteDetailByZone RPRouteDetail { get; }
+		List<decimal> TargetRates { get; }
+		decimal EvaluateRate(decimal originalRate);
+		SupplierAnalyticDetail SupplierAnalyticDetail { get; set; }
+	}
 }

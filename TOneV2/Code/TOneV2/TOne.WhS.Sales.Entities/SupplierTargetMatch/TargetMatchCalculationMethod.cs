@@ -24,13 +24,12 @@ namespace TOne.WhS.Sales.Entities
 
     public class ZoneAnalyticDetail : Dictionary<long, SupplierAnalyticDetail> { }
 
-    public class SupplierAnalyticDetail : Dictionary<int, SupplierTargetMatchAnalyticOption>
+    public class SupplierAnalyticDetail : Dictionary<int, SupplierTargetMatchAnalyticItem>
     {
 
     }
-    public class SupplierTargetMatchAnalyticOption
+    public class SupplierTargetMatchAnalyticItem
     {
-        public decimal Rate { get; set; }
         public decimal Duration { get; set; }
         public decimal ASR { get; set; }
         public decimal ACD { get; set; }

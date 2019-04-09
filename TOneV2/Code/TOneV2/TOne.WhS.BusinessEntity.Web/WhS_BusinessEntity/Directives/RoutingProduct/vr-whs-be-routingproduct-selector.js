@@ -146,7 +146,10 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
 
                 api.getSelectedValues = function () {
                     return ctrl.selectedvalues;
-                };
+				};
+				api.clearDataSource = function () {
+					selectorApi.clearDataSource();
+				};
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

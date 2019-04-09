@@ -1,20 +1,23 @@
-﻿
-<vr-datagrid datasource="scopeModel.targetMatches"
-             pagingtype="'Pager'"
-             on-ready="scopeModel.onGridReady"
-             dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             enableautoexport="true">
-    <vr-datagridcolumn headertext="'Zone'" field="'Entity.SaleZone'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Volume'" field="'Entity.Volume'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Route Options'" widthfactor="35" disablesorting="true">
-        <div vr-loader="dataItem.isLoadingRouteOptions">
-            <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
-        </div>
-    </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Target Volume'" field="'Entity.TargetVolume'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Target Route Options'" widthfactor="35" disablesorting="true">
-        <div vr-loader="dataItem.isLoadingTargetRouteOptions">
-            <vr-whs-routing-zonerouteoptions on-ready="dataItem.onTargetRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
-        </div>
-    </vr-datagridcolumn>
+﻿<vr-datagrid datasource="scopeModel.targetMatches"
+			 pagingtype="'Pager'"
+			 on-ready="scopeModel.onGridReady"
+			 dataretrievalfunction="scopeModel.dataRetrievalFunction">
+	<vr-datagridcolumn headertext="'Zone'" field="'SaleZone'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Route Options'" fixedwidth="200" disablesorting="true">
+		<div vr-loader="dataItem.isLoadingRouteOptions">
+			<vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
+		</div>
+	</vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Target Rates'" fixedwidth="200">
+		<div class="responsive-container" style="white-space: normal;">
+
+			<span ng-repeat="targetRate in dataItem.TargetRates track by $index" style="font-size: 11px; cursor: pointer; display: inline-block; padding: 0 10px 0 0; color: #616F77;" title="{{targetRate}} ">
+				{{targetRate | vrtextOrNumber : viewScope.longPrecision }}
+			</span>
+		</div>
+	</vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Volume'" field="'Volume'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Target Volume'" field="'TargetVolume'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'ACD'" field="'ACD'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'ASR'" field="'ASR'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
 </vr-datagrid>

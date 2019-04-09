@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Business;
@@ -14,337 +15,294 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class SupplierTargetMatchManager
-    {
-        public IDataRetrievalResult<SupplierTargetMatchDetail> GetFilteredSupplierTargetMatches(Vanrise.Entities.DataRetrievalInput<SupplierTargetMatchQuery> input)
-        {
-            return BigDataManager.Instance.RetrieveData(input, new SupplierTargetMatchRequestHandler());
-        }
+	public class SupplierTargetMatchManager
+	{
+		public IDataRetrievalResult<SupplierTargetMatchDetail> GetFilteredSupplierTargetMatches(Vanrise.Entities.DataRetrievalInput<SupplierTargetMatchQuery> input)
+		{
+			return BigDataManager.Instance.RetrieveData(input, new SupplierTargetMatchRequestHandler());
+		}
 
-        public IEnumerable<SupplierTargetMatchMethodConfig> GetTargetMatchMethodConfigs()
-        {
-            var extensionConfigManager = new ExtensionConfigurationManager();
-            return extensionConfigManager.GetExtensionConfigurations<SupplierTargetMatchMethodConfig>(SupplierTargetMatchMethodConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
-        }
+		public IEnumerable<SupplierTargetMatchMethodConfig> GetTargetMatchMethodConfigs()
+		{
+			var extensionConfigManager = new ExtensionConfigurationManager();
+			return extensionConfigManager.GetExtensionConfigurations<SupplierTargetMatchMethodConfig>(SupplierTargetMatchMethodConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
+		}
 
-        class SupplierTargetMatchRequestHandler : BigDataRequestHandler<SupplierTargetMatchQuery, SupplierTargetMatch, SupplierTargetMatchDetail>
-        {
-            public override SupplierTargetMatchDetail EntityDetailMapper(SupplierTargetMatch supplierTargetMatch)
-            {
-                return new SupplierTargetMatchDetail
-                {
-                    Entity = supplierTargetMatch
-                };
-            }
+		class SupplierTargetMatchRequestHandler : BigDataRequestHandler<SupplierTargetMatchQuery, SupplierTargetMatch, SupplierTargetMatchDetail>
+		{
+			public override SupplierTargetMatchDetail EntityDetailMapper(SupplierTargetMatch supplierTargetMatch)
+			{
+				return new SupplierTargetMatchDetail
+				{
+					ACD = supplierTargetMatch.ACD,
+					ASR = supplierTargetMatch.ASR,
+					Options = supplierTargetMatch.Options,
+					SaleZone = supplierTargetMatch.SaleZone,
+					TargetRates = supplierTargetMatch.TargetRates,
+					TargetVolume = supplierTargetMatch.TargetVolume,
+					SaleZoneId = supplierTargetMatch.SaleZoneId,
+					Volume = supplierTargetMatch.Volume
+				};
+			}
 
-            public override IEnumerable<SupplierTargetMatch> RetrieveAllData(DataRetrievalInput<SupplierTargetMatchQuery> input)
-            {
-                RPRouteManager rpRouteManager = new RPRouteManager();
-                List<RPZone> rpZones = GetRPZones(input);
-                var rpRouteDetails = rpRouteManager.GetRPRoutes(input.Query.Filter.RoutingDataBaseId, input.Query.Filter.PolicyId, input.Query.Filter.NumberOfOptions, rpZones, true); 
+			public override IEnumerable<SupplierTargetMatch> RetrieveAllData(DataRetrievalInput<SupplierTargetMatchQuery> input)
+			{
+				RPRouteManager rpRouteManager = new RPRouteManager();
+				List<RPZone> rpZones = GetRPZones(input);
+				var rpRouteDetails = rpRouteManager.GetRPRoutes(input.Query.RoutingDataBaseId, input.Query.PolicyId, input.Query.NumberOfOptions, rpZones, true);
 
-                List<SupplierTargetMatch> result = new List<SupplierTargetMatch>();
+				List<SupplierTargetMatch> result = new List<SupplierTargetMatch>();
 
-                ZoneAnalyticDetail zoneAnalyticDetails = GetAnalyticZoneDetails(input, rpZones);
+				ZoneAnalyticDetail zoneAnalyticDetails = GetAnalyticZoneDetails(input, rpZones);
+				if (rpRouteDetails != null)
+				{
+					foreach (var rpRouteDetail in rpRouteDetails)
+					{
+						SupplierAnalyticDetail supplierAnalyticDetail;
+						SupplierTargetMatch targetMatch = new SupplierTargetMatch
+						{
+							SaleZone = rpRouteDetail.SaleZoneName,
+							Options = rpRouteDetail.RouteOptionsDetails,
+							SaleZoneId = rpRouteDetail.SaleZoneId,
+						};
 
-                foreach (var rpRouteDetail in rpRouteDetails)
-                {
-                    SupplierAnalyticDetail supplierAnalyticDetail;
-                    SupplierTargetMatch targetMatch = new SupplierTargetMatch
-                    {
-                        SaleZone = rpRouteDetail.SaleZoneName,
-                        Options = rpRouteDetail.RouteOptionsDetails,
-                        SaleZoneId = rpRouteDetail.SaleZoneId
-                    };
+						if (rpRouteDetail.RouteOptionsDetails != null)
+						{
+							if (zoneAnalyticDetails.TryGetValue(rpRouteDetail.SaleZoneId, out supplierAnalyticDetail))
+							{
+								TargetMatchCalculationMethodContext context = new TargetMatchCalculationMethodContext(input.Query.MarginValue, input.Query.MarginType)
+								{
+									RPRouteDetail = rpRouteDetail,
+									SupplierAnalyticDetail=supplierAnalyticDetail
+								};
+								List<SupplierTargetMatchAnalyticItem> supplierTargetMatchAnalyticItems = new List<SupplierTargetMatchAnalyticItem>();
+								for (var i = 0; i < supplierAnalyticDetail.Count && i < input.Query.NumberOfOptions; i++)
+								{
+									supplierTargetMatchAnalyticItems.Add(supplierAnalyticDetail.ElementAt(i).Value);
+								}
+								if (supplierTargetMatchAnalyticItems.Count > 0)
+								{   targetMatch.Volume = supplierTargetMatchAnalyticItems.Max(x => x.Duration);
+									targetMatch.ACD = supplierTargetMatchAnalyticItems.Max(x => x.ACD);
+									targetMatch.ASR = supplierTargetMatchAnalyticItems.Max(x => x.ASR);
+								  	targetMatch.TargetVolume = supplierTargetMatchAnalyticItems.Max(x => x.Duration) * input.Query.VolumeMultiplier;
+								}
+								input.Query.CalculationMethod.Evaluate(context);
+								targetMatch.TargetRates = context.TargetRates;
+								result.Add(targetMatch);
+							}
+						}
+					}
+				}
+				return result;
+			}
 
-                    if (rpRouteDetail.RouteOptionsDetails != null)
-                    {
-                        if (zoneAnalyticDetails.TryGetValue(rpRouteDetail.SaleZoneId, out supplierAnalyticDetail))
-                        {
-                            TargetMatchCalculationMethodContext context = new TargetMatchCalculationMethodContext(supplierAnalyticDetail, input.Query.Settings.DefaultACD, input.Query.Settings.DefaultASR)
-                            {
-                                RPRouteDetail = rpRouteDetail,
-                                MarginType = input.Query.Settings.MarginType,
-                                MarginValue = input.Query.Settings.MarginValue
+			protected override ResultProcessingHandler<SupplierTargetMatchDetail> GetResultProcessingHandler(DataRetrievalInput<SupplierTargetMatchQuery> input, BigResult<SupplierTargetMatchDetail> bigResult)
+			{
+				return new ResultProcessingHandler<SupplierTargetMatchDetail>
+				{
+					ExportExcelHandler = new SupplierTargetMatchExportExcelHandler
+					{
+					}
+				};
+			}
+			ZoneAnalyticDetail GetAnalyticZoneDetails(DataRetrievalInput<SupplierTargetMatchQuery> input, List<RPZone> rpZones)
+			{
+				var analyticResult = GetFilteredRecords(rpZones, input.Query.From, input.Query.To);
+				ZoneAnalyticDetail zoneAnalyticDetails = new ZoneAnalyticDetail();
+				if (analyticResult != null)
+				{
+					foreach (var analyticRecord in analyticResult)
+					{
+						DimensionValue supplierDimension = analyticRecord.DimensionValues.ElementAt(0);
+						DimensionValue zoneDimension = analyticRecord.DimensionValues.ElementAt(1);
 
-                            };
+						long zoneId = (long)zoneDimension.Value;
+						int? supplierId = supplierDimension.Value != null ? (int?)supplierDimension.Value : null;
+						var supplierDetails = zoneAnalyticDetails.GetOrCreateItem(zoneId);
+						if (supplierId.HasValue)
+						{
+							supplierDetails.GetOrCreateItem(supplierId.Value, () => new SupplierTargetMatchAnalyticItem
+							{
+								Duration = GetDecimalMeasureValue(analyticRecord, "DurationInMinutes"),
+								ACD = GetDecimalMeasureValue(analyticRecord, "ACD"),
+								ASR = GetDecimalMeasureValue(analyticRecord, "ASR")
+							});
+						}
+					}
+				}
+				return zoneAnalyticDetails;
+			}
 
-                            input.Query.Settings.CalculationMethod.Evaluate(context);
+			decimal GetDecimalMeasureValue(AnalyticRecord analyticRecord, string measureName)
+			{
+				MeasureValue measureValue;
+				analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
+				return Convert.ToDecimal(measureValue.Value ?? 0.0);
+			}
 
-                            targetMatch.TargetOptions = context.Options;
+			List<AnalyticRecord> GetFilteredRecords(List<RPZone> rpZones, DateTime fromDate, DateTime? toDate)
+			{
+				List<string> listMeasures = new List<string> { "DurationInMinutes", "ASR", "ACD" };
+				List<string> listDimensions = new List<string> { "Supplier", "SaleZone" };
 
-                            foreach (var supplierOption in rpRouteDetail.RouteOptionsDetails)
-                            {
-                                SupplierTargetMatchAnalyticOption supplierAnalyticInfo;
+				AnalyticManager analyticManager = new AnalyticManager();
+				Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+				{
+					Query = new AnalyticQuery()
+					{
+						DimensionFields = listDimensions,
+						MeasureFields = listMeasures,
+						TableId = Guid.Parse("58DD0497-498D-40F2-8687-08F8356C63CC"),
+						FromTime = fromDate,
+						ToTime = toDate,
+						ParentDimensions = new List<string>(),
+						Filters = new List<DimensionFilter>()
+					},
+					SortByColumnName = "DimensionValues[0].Name"
+				};
 
-                                if (supplierAnalyticDetail.TryGetValue(supplierOption.SupplierId, out supplierAnalyticInfo))
-                                {
-                                    supplierOption.ASR = supplierAnalyticInfo.ASR;
-                                    supplierOption.ACD = supplierAnalyticInfo.ACD;
-                                    supplierOption.Duration = supplierAnalyticInfo.Duration;
+				DimensionFilter dimensionFilter = new DimensionFilter()
+				{
+					Dimension = "SaleZone",
+					FilterValues = rpZones.Select(z => z.SaleZoneId).Cast<object>().ToList()
 
-                                    targetMatch.Volume += supplierAnalyticInfo.Duration;
-                                }
-                            }
-                            targetMatch.TargetVolume = input.Query.Settings.VolumeMultiplier * targetMatch.Volume;
-                        }
-                    }
-                    if (targetMatch.TargetVolume < input.Query.Settings.DefaultVolume)
-                        targetMatch.TargetVolume = input.Query.Settings.DefaultVolume;
-                    result.Add(targetMatch);
-                }
+				};
 
-                return result;
-            }
+				analyticQuery.Query.Filters.Add(dimensionFilter);
+				return analyticManager.GetAllFilteredRecords(analyticQuery.Query);
+			}
 
-            protected override ResultProcessingHandler<SupplierTargetMatchDetail> GetResultProcessingHandler(DataRetrievalInput<SupplierTargetMatchQuery> input, BigResult<SupplierTargetMatchDetail> bigResult)
-            {
-                return new ResultProcessingHandler<SupplierTargetMatchDetail>
-                {
-                    ExportExcelHandler = new SupplierTargetMatchExportExcelHandler
-                    {
+			List<RPZone> GetRPZones(DataRetrievalInput<SupplierTargetMatchQuery> input)
+			{
+				List<RPZone> rpZones = new List<RPZone>();
+				SaleZoneManager saleZoneManager = new SaleZoneManager();
+				List<SaleZone> saleZones = new List<SaleZone>();
 
-                    }
-                };
-            }
-            ZoneAnalyticDetail GetAnalyticZoneDetails(DataRetrievalInput<SupplierTargetMatchQuery> input, List<RPZone> rpZones)
-            {
-                var analyticResult = GetFilteredRecords(rpZones, input.Query.Filter.From, input.Query.Filter.To);
-                ZoneAnalyticDetail zoneAnalyticDetails = new ZoneAnalyticDetail();
-                if (analyticResult != null)
-                {
+				if (input.Query.CountryIds == null)
+				{
+					saleZones.AddRange(saleZoneManager.GetSaleZonesEffectiveAfter(input.Query.SellingNumberPlanId, DateTime.Now));
+				}
+				else
+				{
+					foreach (var countryId in input.Query.CountryIds)
+					{
+						saleZones.AddRange(saleZoneManager.GetSaleZonesByCountryId(input.Query.SellingNumberPlanId, countryId, DateTime.Now));
+					}
+				}
+				if (saleZones != null)
+				{
+					foreach (var saleZone in saleZones)
+					{
+						RPZone rpZone = new RPZone
+						{
+							RoutingProductId = input.Query.RoutingProductId,
+							SaleZoneId = saleZone.SaleZoneId
+						};
+						rpZones.Add(rpZone);
+					}
+				}
+				return rpZones;
+			}
+		}
 
-                    foreach (var analyticRecord in analyticResult.Data)
-                    {
-                        DimensionValue supplierDimension = analyticRecord.DimensionValues.ElementAt(0);
-                        DimensionValue zoneDimension = analyticRecord.DimensionValues.ElementAt(1);
+		class SupplierTargetMatchExportExcelHandler : ExcelExportHandler<SupplierTargetMatchDetail>
+		{
+			public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierTargetMatchDetail> context)
+			{
+				DataRetrievalInput<SupplierTargetMatchQuery> input = context.Input as DataRetrievalInput<SupplierTargetMatchQuery>;
+				input.ThrowIfNull("input");
 
-                        long zoneId = (long)zoneDimension.Value;
-                        int? supplierId = supplierDimension.Value != null ? (int?)supplierDimension.Value : null;
-                        var supplierDetails = zoneAnalyticDetails.GetOrCreateItem(zoneId);
-                        if (supplierId.HasValue)
-                        {
-                            supplierDetails.GetOrCreateItem(supplierId.Value, () => new SupplierTargetMatchAnalyticOption
-                            {
-                                Duration = GetDecimalMeasureValue(analyticRecord, "DurationInMinutes"),
-                                ACD = GetDecimalMeasureValue(analyticRecord, "ACD"),
-                                ASR = GetDecimalMeasureValue(analyticRecord, "ASR")
-                            });
-                        }
-                    }
-                }
-                return zoneAnalyticDetails;
-            }
+				var sheet = new ExportExcelSheet()
+				{
+					SheetName = "Supplier Target Generation",
+					Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+				};
 
-            decimal GetDecimalMeasureValue(AnalyticRecord analyticRecord, string measureName)
-            {
-                MeasureValue measureValue;
-                analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
-                return Convert.ToDecimal(measureValue.Value ?? 0.0);
-            }
+				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Sale Zone",Width=40 });
+				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Route Option",Width=45 });
+				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Target Rates", Width = 45 });
+				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Volume" });
+				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Target Volume" });
+				if (input.Query.IncludeACD_ASR)
+				{
+					sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ASR" });
+					sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ACD" });
+				}
+				sheet.Rows = new List<ExportExcelRow>();
+				if (context.BigResult != null && context.BigResult.Data != null)
+				{
+					foreach (var record in context.BigResult.Data)
+					{
+						if (record != null)
+						{
+							var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+							row.Cells.Add(new ExportExcelCell() { Value = record.SaleZone });
+							StringBuilder routeOption = new StringBuilder();
+							StringBuilder targetRates = new StringBuilder();
 
-            AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<RPZone> rpZones, DateTime fromDate, DateTime? toDate)
-            {
-                List<string> listMeasures = new List<string> { "DurationInMinutes", "ASR", "ACD" };
-                List<string> listDimensions = new List<string> { "Supplier", "SaleZone" };
+							if (record.Options != null)
+							{
+								for (var f = 0; f < record.Options.Count(); f++)
+								{
+									routeOption.Append(string.Format("{0:0.00000000}",record.Options.ElementAt(f).SupplierRate) + " ");
+								}
+							}
+							if (record.TargetRates != null)
+							{
+								for (var f = 0; f < record.TargetRates.Count(); f++)
+								{
+									targetRates.Append(string.Format("{0:0.00000000}", record.TargetRates.ElementAt(f)) + " ");
+								}
+							}
+							row.Cells.Add(new ExportExcelCell() { Value = routeOption });
+							row.Cells.Add(new ExportExcelCell() { Value = targetRates });
+							row.Cells.Add(new ExportExcelCell() { Value = record.Volume });
+							row.Cells.Add(new ExportExcelCell() { Value = (record.TargetVolume > input.Query.DefaultVolume) ? record.TargetVolume : input.Query.DefaultVolume });
 
-                AnalyticManager analyticManager = new AnalyticManager();
-                Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
-                {
-                    Query = new AnalyticQuery()
-                    {
-                        DimensionFields = listDimensions,
-                        MeasureFields = listMeasures,
-                        TableId = Guid.Parse("58DD0497-498D-40F2-8687-08F8356C63CC"),
-                        FromTime = fromDate,
-                        ToTime = toDate,
-                        ParentDimensions = new List<string>(),
-                        Filters = new List<DimensionFilter>()
-                    },
-                    SortByColumnName = "DimensionValues[0].Name"
-                };
+							if (input.Query.IncludeACD_ASR)
+							{
+								row.Cells.Add(new ExportExcelCell() { Value = record.ACD > input.Query.DefaultACD ? record.ACD : input.Query.DefaultACD });
+								row.Cells.Add(new ExportExcelCell() { Value = record.ASR > input.Query.DefaultASR ? record.ASR : input.Query.DefaultASR });
+							}
+							sheet.Rows.Add(row);
+						}
+					}
+				}
+				context.MainSheet = sheet;
+			}
+		}
+	}
 
-                DimensionFilter dimensionFilter = new DimensionFilter()
-                {
-                    Dimension = "SaleZone",
-                    FilterValues = rpZones.Select(z => z.SaleZoneId).Cast<object>().ToList()
+	public class TargetMatchCalculationMethodContext : ITargetMatchCalculationMethodContext
+	{
+		decimal _MarginValue;
+		MarginType _MarginType;
+		public TargetMatchCalculationMethodContext(decimal marginValue, MarginType marginType)
+		{
+			_MarginValue = marginValue;
+			_MarginType = marginType;
+		}
+		public RPRouteDetailByZone RPRouteDetail { get; set; }
 
-                };
+		public List<decimal> _targetRates = new List<decimal>();
 
-                analyticQuery.Query.Filters.Add(dimensionFilter);
-                return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
-            }
+		public List<decimal> TargetRates { get { return this._targetRates; } }
 
-            List<RPZone> GetRPZones(DataRetrievalInput<SupplierTargetMatchQuery> input)
-            {
-                List<RPZone> rpZones = new List<RPZone>();
-                SaleZoneManager saleZoneManager = new SaleZoneManager();
-                List<SaleZone> saleZones = new List<SaleZone>();
+		public SupplierAnalyticDetail SupplierAnalyticDetail  { get; set; }
 
-                if (input.Query.Filter.CountryIds == null)
-                {
-                    saleZones.AddRange(saleZoneManager.GetSaleZonesEffectiveAfter(input.Query.Filter.SellingNumberPlanId, DateTime.Now));
-                }
-                else
-                {
-                    foreach (var countryId in input.Query.Filter.CountryIds)
-                    {
-                        saleZones.AddRange(saleZoneManager.GetSaleZonesByCountryId(input.Query.Filter.SellingNumberPlanId, countryId, DateTime.Now));
-                    }
-                }
-
-                foreach (var saleZone in saleZones)
-                {
-                    RPZone rpZone = new RPZone
-                    {
-                        RoutingProductId = input.Query.Filter.RoutingProductId,
-                        SaleZoneId = saleZone.SaleZoneId
-                    };
-                    rpZones.Add(rpZone);
-                }
-                return rpZones;
-            }
-        }
-
-        class SupplierTargetMatchExportExcelHandler : ExcelExportHandler<SupplierTargetMatchDetail>
-        {
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierTargetMatchDetail> context)
-            {
-                DataRetrievalInput<SupplierTargetMatchQuery> input = context.Input as DataRetrievalInput<SupplierTargetMatchQuery>;
-                input.ThrowIfNull("input", "");
-
-                var sheet = new ExportExcelSheet()
-                {
-                    SheetName = "Target Rates",
-                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
-                };
-
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Sale Zone" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Volume" });
-                //for (var i = 0; i < context.BigResult.Data.ElementAt(0).Entity.TargetOptions.Count(); i++)
-                for (var i = 0; i < 3; i++)
-                {
-                    var j = i + 1;
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "LCR " + j, Width = 30 });
-                }
-
-                if (input.Query.Settings.IncludeACD_ASR)
-                {
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ASR" });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ACD" });
-                }
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
-                {
-                    decimal maxACD = 0;
-                    decimal maxASR = 0;
-
-                    foreach (var record in context.BigResult.Data)
-                    {
-                        if (record != null)
-                        {
-                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.SaleZone });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.TargetVolume });
-                            if (record.Entity.TargetOptions != null)
-                            {
-                                for (var f = 0; f < record.Entity.TargetOptions.Count(); f++)
-                                {
-                                    var option = record.Entity.TargetOptions[f];
-                                    row.Cells.Add(new ExportExcelCell() { Value = option.Rate });
-                                    if (maxACD < option.ACD)
-                                        maxACD = option.ACD;
-                                    if (maxASR < option.ASR)
-                                        maxASR = option.ASR;
-                                }
-                            }
-                            if (input.Query.Settings.IncludeACD_ASR)
-                            {
-                                row.Cells.Add(new ExportExcelCell() { Value = maxASR });
-                                row.Cells.Add(new ExportExcelCell() { Value = maxACD });
-                            }
-                            sheet.Rows.Add(row);
-                        }
-                    }
-                }
-                context.MainSheet = sheet;
-            }
-        }
-
-        public object DownloadSupplierTargetMatches()
-        {
-            return new SupplierTargetMatchManager().GetFilteredSupplierTargetMatches(new DataRetrievalInput<SupplierTargetMatchQuery>
-            {
-                DataRetrievalResultType = DataRetrievalResultType.Excel
-            });
-        }
-    }
-
-    public class TargetMatchCalculationMethodContext : ITargetMatchCalculationMethodContext
-    {
-        Dictionary<int, SupplierTargetMatchAnalyticOption> _SupplierAnalyticOptions;
-        decimal _MinACD;
-        decimal _MinASR;
-        public TargetMatchCalculationMethodContext(Dictionary<int, SupplierTargetMatchAnalyticOption> supplierAnalyticOptions, decimal minACD, decimal minASR)
-        {
-            _SupplierAnalyticOptions = supplierAnalyticOptions;
-            _MinACD = minACD;
-            _MinASR = minASR;
-        }
-        public RPRouteDetailByZone RPRouteDetail
-        {
-            get;
-            set;
-        }
-
-        public decimal MarginValue
-        {
-            get;
-            set;
-        }
-
-        public MarginType MarginType
-        {
-            get;
-            set;
-        }
-
-        public List<SupplierTargetMatchAnalyticOption> Options
-        {
-            get;
-            set;
-        }
-
-        public SupplierTargetMatchAnalyticOption GetSupplierAnalyticInfo(int supplierId)
-        {
-            SupplierTargetMatchAnalyticOption supplierTargetMatchAnalyticOption;
-            _SupplierAnalyticOptions.TryGetValue(supplierId, out supplierTargetMatchAnalyticOption);
-            return supplierTargetMatchAnalyticOption;
-        }
-
-
-        public decimal EvaluateRate(decimal originalRate)
-        {
-            decimal value = 0;
-            switch (MarginType)
-            {
-                case MarginType.Percentage:
-                    value = originalRate * (100 - MarginValue) / 100;
-                    break;
-                case MarginType.Fixed:
-                    value = MarginValue;
-                    break;
-            }
-            return value;
-        }
-
-
-        public void ValidateAnalyticInfo(SupplierTargetMatchAnalyticOption option)
-        {
-            if (option.ACD < _MinACD)
-                option.ACD = _MinACD;
-            if (option.ASR < _MinASR)
-                option.ASR = _MinASR;
-        }
-    }
+		public decimal EvaluateRate(decimal originalRate)
+		{
+			decimal value = 0;
+			switch (_MarginType)
+			{
+				case MarginType.Percentage:
+					value = originalRate * (100 - _MarginValue) / 100;
+					break;
+				case MarginType.Fixed:
+					value = originalRate - _MarginValue;
+					break;
+			}
+			return value;
+		}
+	}
 }

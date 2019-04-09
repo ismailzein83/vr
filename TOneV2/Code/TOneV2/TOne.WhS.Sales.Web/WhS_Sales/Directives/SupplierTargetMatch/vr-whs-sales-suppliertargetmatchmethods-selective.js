@@ -7,7 +7,8 @@ function (WhS_Sales_SupplierTargetMatchAPIService, UtilsService, VRUIUtilsServic
         restrict: "E",
         scope: {
             onReady: "=",
-            onselectionchanged: '='
+			onselectionchanged: '=',
+			normalColNum: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var selectiveCtrl = this;
@@ -57,7 +58,7 @@ function (WhS_Sales_SupplierTargetMatchAPIService, UtilsService, VRUIUtilsServic
                     context = payload.context;
                 }
 
-                var loadMethodsPromise = loadMethods();
+				var loadMethodsPromise = loadMethods();
                 promises.push(loadMethodsPromise);
 
                 function loadMethods() {
@@ -74,7 +75,7 @@ function (WhS_Sales_SupplierTargetMatchAPIService, UtilsService, VRUIUtilsServic
             };
 
             api.getData = function () {
-                return directiveAPI.getData()
+				return directiveAPI.getData();
             };
 
             if (selectiveCtrl.onReady && typeof selectiveCtrl.onReady == "function")
