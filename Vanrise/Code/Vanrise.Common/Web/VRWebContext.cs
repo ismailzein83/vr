@@ -187,9 +187,9 @@ namespace Vanrise.Common
                 "~/Client/Styles/jquery-ui.css")
                 .IncludeDirectory("~/Client/Styles", "*.css", true));
 
-            VRWebContext.AddWebBundle(new VRStyleWebBundle("~/Content/Themes").Include(
-          "~/Client/Themes/theme.css").IncludeDirectory(
-           "~/Client/Themes", "*.css", true));
+            VRWebContext.AddWebBundle(new VRStyleWebBundle("~/Content/Themes")
+                .Include("~/Client/Themes/theme.css",
+                "~/Client/Themes/theme-extended.css"));
 
 
             //Style bootstrap

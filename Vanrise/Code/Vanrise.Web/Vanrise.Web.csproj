@@ -1230,6 +1230,8 @@
     <Content Include="Client\CSViews\Home\Index-default.cshtml" />
     <Content Include="Client\CSViews\Security\Login-default.cshtml" />
     <None Include="Client\Themes\theme-extended-blue.css.exclude" />
+    <Content Include="Client\Themes\flat-theme-blue\flat-theme-blue.css" />
+    <Content Include="Client\Themes\flat-theme-rainbow\flat-theme-rainbow.css" />
     <Content Include="Client\Themes\theme-extended-INSOFT.css.exclude" />
     <Content Include="Client\Themes\theme-extended-Zebra.css.exclude" />
     <Content Include="Client\Themes\theme-extended-flat-ntegrasms.css.exclude" />
@@ -1591,8 +1593,6 @@
   <ItemGroup>
     <Folder Include="Client\Libraries\Bower\codemirror\mode\rpm\changes\" />
     <Folder Include="Client\Modules\" />
-    <Folder Include="Client\Themes\flat-theme-blue\" />
-    <Folder Include="Client\Themes\flat-theme-rainbow\" />
     <Folder Include="Client\Views\Payment\" />
   </ItemGroup>
   <ItemGroup>

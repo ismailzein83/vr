@@ -1,0 +1,370 @@
+﻿body {
+    font-family: "Open Sans" !important;
+}
+
+.login-container {
+    background: url("/Images/login.png") center no-repeat;
+    background-size: cover;
+    width: 330px;
+    height: 310px;
+    min-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.vr-company-logo {
+    position: relative;
+    top: -185px;
+    left: 100px;
+}
+
+.vr-tone-version {
+    position: relative;
+    top: 35px;
+    text-align: center;
+    right: 10px;
+    font-size: 11px;
+    font-style: italic;
+    color: #5d5d5d;
+}
+
+.login-spacer {
+    padding-bottom: 3px;
+}
+
+.login-btn {
+    background-color: #e22337 !important;
+    color: #FFF;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.dll-menu-theme {
+    color: #FFF !important;
+    border-bottom: none !important;
+}
+
+.navbar-fixed-top.vr-nav-custom .navbar-header {
+    background-color: #a9a9a9;
+}
+
+.navbar-fixed-top.vr-nav-custom .vr-sidebar-header {
+    background-color: #a9a9a9;
+}
+/*"#e22337",
+"#20407d",
+"#01a082",
+"#f79624",
+"#9e1f63",
+"#01a4b5",   
+"#ef4136",
+"#3ab44b",
+"#7e3f98",
+"#00adef",
+"#c3162a",
+"#4f7ac8",
+"#8cc540",
+"#272264",
+"#0074d9"*/
+.selected-node {
+    background-color: #f0f0f0 !important;
+}
+
+.selected-inner-node {
+    background-color: #CDCDCD !important;
+}
+
+.selected-url {
+    color: #6A7470 !important;
+    font-weight: bold !important;
+}
+
+.bold-item {
+    font-weight: bold;
+}
+
+.bg-custom {
+    background-color: #08A282 !important;
+    color: #FFF !important;
+}
+
+.panel-heading-vr, .panel-heading-vr.selected-menu {
+    color: #fff !important;
+    font-weight: bold !important;
+}
+
+.panel-heading-vr, .panel-heading-vr.selected-menu .vr-module-name {
+    font-weight: bold !important;
+}
+
+.module-icon {
+    background-color: inherit !important;
+}
+
+.module-icon.home-icon-container {
+    background-color: #b7b7b7 !important;
+}
+
+.panel-heading-vr, .panel-heading-vr .vr-module-name.home-label {
+    color: #87888a !important;
+    font-weight: bold !important;
+}
+
+.vr-pager-container .vr-control-label,
+.vr-custom-pagination > li > a,
+.vr-custom-pagination > li.disabled > a:hover,
+.vr-custom-pagination > li.active > a:hover {
+    color: #fff !important;
+}
+
+.vr-custom-pagination > li > a:hover {
+    color: #23527c !important;
+}
+
+.panel-heading-vr, .panel-heading-vr .vr-module-name {
+    color: #fff !important;
+    font-weight: normal !important;
+}
+
+    .panel-heading-vr.bgcolor-0, .menu-tile.app-tile.bgcolor-0,
+    .dropdown-custom-serf.bgcolor-0 {
+        background: #20407B !important;
+    }
+
+    .panel-heading-vr.bgcolor-0.selected-menu, .menu-tile.app-tile.bgcolor-0:hover {
+        background: #5470A4 !important;
+    }
+
+    .panel-heading-vr.bgcolor-1, .menu-tile.app-tile.bgcolor-1,
+    .dropdown-custom-serf.bgcolor-1 {
+        background: #31558F !important;
+    }
+
+    .panel-heading-vr.bgcolor-1.selected-menu, .menu-tile.app-tile.bgcolor-1:hover {
+        background: #4A6CA1 !important;
+    }
+
+    .panel-heading-vr.bgcolor-2, .menu-tile.app-tile.bgcolor-2,
+    .dropdown-custom-serf.bgcolor-0 {
+        background: #20407B !important;
+    }
+
+    .panel-heading-vr.bgcolor-2.selected-menu, .menu-tile.app-tile.bgcolor-2:hover {
+        background: #5470A4 !important;
+    }
+
+    .panel-heading-vr.bgcolor-3, .menu-tile.app-tile.bgcolor-3,
+    .dropdown-custom-serf.bgcolor-1 {
+        background: #31558F !important;
+    }
+
+    .panel-heading-vr.bgcolor-3.selected-menu, .menu-tile.app-tile.bgcolor-3:hover {
+        background: #4A6CA1 !important;
+    }
+
+    .panel-heading-vr.bgcolor-4, .menu-tile.app-tile.bgcolor-4,
+    .dropdown-custom-serf.bgcolor-0 {
+        background: #20407B !important;
+    }
+
+    .panel-heading-vr.bgcolor-4.selected-menu, .menu-tile.app-tile.bgcolor-4:hover {
+        background: #5470A4 !important;
+    }
+
+    .panel-heading-vr.bgcolor-5, .menu-tile.app-tile.bgcolor-5,
+    .dropdown-custom-serf.bgcolor-1 {
+        background: #31558F !important;
+    }
+
+    .panel-heading-vr.bgcolor-5.selected-menu, .menu-tile.app-tile.bgcolor-5:hover {
+        background: #4A6CA1 !important;
+    }
+
+    .panel-heading-vr.bgcolor-6, .menu-tile.app-tile.bgcolor-6,
+    .dropdown-custom-serf.bgcolor-0 {
+        background: #20407B !important;
+    }
+
+    .panel-heading-vr.bgcolor-6.selected-menu, .menu-tile.app-tile.bgcolor-6:hover {
+        background: #5470A4 !important;
+    }
+
+    .panel-heading-vr.bgcolor-7, .menu-tile.app-tile.bgcolor-7,
+    .dropdown-custom-serf.bgcolor-1 {
+        background: #31558F !important;
+    }
+
+    .panel-heading-vr.bgcolor-7.selected-menu, .menu-tile.app-tile.bgcolor-7:hover {
+        background: #4A6CA1 !important;
+    }
+
+    .panel-heading-vr.bgcolor-8, .menu-tile.app-tile.bgcolor-8,
+    .dropdown-custom-serf.bgcolor-0 {
+        background: #20407B !important;
+    }
+
+    .panel-heading-vr.bgcolor-8.selected-menu, .menu-tile.app-tile.bgcolor-8:hover {
+        background: #5470A4 !important;
+    }
+
+    .panel-heading-vr.bgcolor-9, .menu-tile.app-tile.bgcolor-9,
+    .dropdown-custom-serf.bgcolor-1 {
+        background: #31558F !important;
+    }
+
+    .panel-heading-vr.bgcolor-9.selected-menu, .menu-tile.app-tile.bgcolor-9:hover {
+        background: #4A6CA1 !important;
+    }
+
+    .panel-heading-vr.bgcolor-10, .menu-tile.app-tile.bgcolor-10,
+    .dropdown-custom-serf.bgcolor-0 {
+        background: #20407B !important;
+    }
+
+    .panel-heading-vr.bgcolor-10.selected-menu, .menu-tile.app-tile.bgcolor-10:hover {
+        background: #5470A4 !important;
+    }
+
+    .panel-heading-vr.bgcolor-11, .menu-tile.app-tile.bgcolor-11,
+    .dropdown-custom-serf.bgcolor-1 {
+        background: #31558F !important;
+    }
+
+    .panel-heading-vr.bgcolor-11.selected-menu, .menu-tile.app-tile.bgcolor-11:hover {
+        background: #4A6CA1 !important;
+    }
+
+    .panel-heading-vr.bgcolor-12, .menu-tile.app-tile.bgcolor-12,
+    .dropdown-custom-serf.bgcolor-0 {
+        background: #20407B !important;
+    }
+
+    .panel-heading-vr.bgcolor-12.selected-menu, .menu-tile.app-tile.bgcolor-12:hover {
+        background: #5470A4 !important;
+    }
+
+    .panel-heading-vr.bgcolor-13, .menu-tile.app-tile.bgcolor-13,
+    .dropdown-custom-serf.bgcolor-1 {
+        background: #31558F !important;
+    }
+
+    .panel-heading-vr.bgcolor-13.selected-menu, .menu-tile.app-tile.bgcolor-13:hover {
+        background: #4A6CA1 !important;
+    }
+
+    .panel-heading-vr.bgcolor-14, .menu-tile.app-tile.bgcolor-14,
+    .dropdown-custom-serf.bgcolor-0 {
+        background: #20407B !important;
+    }
+
+    .panel-heading-vr.bgcolor-14.selected-menu, .menu-tile.app-tile.bgcolor-14:hover {
+        background: #5470A4 !important;
+    }
+
+    .panel-heading-vr.bgcolor-15, .menu-tile.app-tile.bgcolor-15,
+    .dropdown-custom-serf.bgcolor-1 {
+        background: #31558F !important;
+    }
+
+    .panel-heading-vr.bgcolor-15.selected-menu, .menu-tile.app-tile.bgcolor-15:hover {
+        background: #4A6CA1 !important;
+    }
+
+/*20407d
+c0213f
+f27043
+806dbb
+4f7ac8
+e22337
+01a082
+f79624
+9e1f63
+01a4b5*/
+.vr-modal-header {
+    background-color: #20407D !important;
+    color: #FFF;
+}
+
+.vr-modal-header-inback {
+    background-color: #6b7892 !important;
+    color: #FFF;
+}
+
+.vr-modal-readonly {
+    background-color: #969696 !important;
+}
+
+.action-bar {
+    background-color: #e22337;
+}
+
+    .action-bar .vr-half-circle {
+        background-color: #e22337;
+    }
+
+.btncustom {
+    border-radius: 0px;
+    border-color: transparent;
+    background-color: transparent;
+    color: #FFF;
+}
+
+    .btncustom:hover {
+        background-color: #EF4355 !important;
+    }
+
+    .btncustom:disabled {
+        background-color: #E22337 !important;
+    }
+
+.vr-datagrid-header-simple.vr-remote-footer {
+    color: #FFF !important;
+    border-bottom: 0px;
+}
+
+.vr-datagrid-header-simple.drill-down-level-0 {
+    background: transparent linear-gradient(to top, #00ADEF, #00ADEF ) repeat scroll 0% 0% !important;
+}
+
+.vr-datagrid-header-simple.drill-down-level-1 {
+    background: transparent linear-gradient(to top, #c0213f, #c0213f) repeat scroll 0% 0% !important;
+}
+
+.vr-datagrid-header-simple.drill-down-level-2 {
+    background: transparent linear-gradient(to top, #f27043, #f27043) repeat scroll 0% 0% !important;
+}
+
+.vr-datagrid-header-simple.drill-down-level-3 {
+    background: transparent linear-gradient(to top, #806dbb, #806dbb) repeat scroll 0% 0% !important;
+}
+
+.vr-datagrid-header-simple.drill-down-level-4 {
+    background: transparent linear-gradient(to top, #4f7ac8, #4f7ac8) repeat scroll 0% 0% !important;
+}
+
+.vr-datagrid-header-simple.drill-down-level-5 {
+    background: transparent linear-gradient(to top, #01a082, #01a082) repeat scroll 0% 0% !important;
+}
+
+.vr-datagrid-header-simple.drill-down-level-6 {
+    background: transparent linear-gradient(to top, #f79624, #f79624) repeat scroll 0% 0% !important;
+}
+
+.vr-datagrid-header-simple.drill-down-level-7 {
+    background: transparent linear-gradient(to top, #9e1f63, #9e1f63) repeat scroll 0% 0% !important;
+}
+
+.vr-datagrid-header-simple.drill-down-level-8 {
+    background: transparent linear-gradient(to top, #20407d, #20407d) repeat scroll 0% 0% !important;
+}
+
+.vr-datagrid-header-simple.drill-down-level-9 {
+    background: transparent linear-gradient(to top, #01a4b5, #01a4b5) repeat scroll 0% 0% !important;
+}
+
+.vr-toolbox .item {
+    background-color: #01a082 !important;
+}
+/* override style.css*/
+
+

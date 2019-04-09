@@ -7,11 +7,18 @@
         <vr-columns width="1/2row">
             <vr-textbox value="scopeModel.longPrecision" label="Rate Precision" localizedlabel="VRRes.RatePrecision.VREnd" type="number" minvalue="0" decimalprecision="0" isrequired="true"></vr-textbox>
         </vr-columns>
-        <vr-common-pagesize-selector normal-col-num="6" on-ready="scopeModel.onPageSelectorReady" isrequired="true" ></vr-common-pagesize-selector>
+        <vr-common-pagesize-selector normal-col-num="6" on-ready="scopeModel.onPageSelectorReady" isrequired="true"></vr-common-pagesize-selector>
         <vr-columns width="1/2row">
             <vr-textbox value="scopeModel.maxSearchRecordCount" label="Max Search Record Count" localizedlabel="VRRes.MaxSearchRecordCount.VREnd" type="number" minvalue="1" decimalprecision="0" isrequired="true"></vr-textbox>
         </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-common-themeextended-selector selectedvalues="scopeModel.theme" onselectionchanged="scopeModel.themeExtendedSelectionChanged" on-ready="scopeModel.onThemeExtendedSelectorReady"></vr-common-themeextended-selector>
+        </vr-columns>
         <vr-common-vrlocalizationlanguage-selector ng-if="scopeModel.isLocalizationEnabled" on-ready="scopeModel.onLanguageSelectorReady" normal-col-num="6" isrequired="true"></vr-common-vrlocalizationlanguage-selector>
+        <vr-columns width="fullrow">
+            <vr-common-themepreview on-ready="scopeModel.onThemePreviewReady">
+            </vr-common-themepreview>
+        </vr-columns>
     </vr-row>
     <vr-section header="Grid Layout">
         <vr-row>

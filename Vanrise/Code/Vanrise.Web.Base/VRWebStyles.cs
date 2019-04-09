@@ -27,6 +27,18 @@ namespace Vanrise.Web.Base
                     {
                         builder.AppendLine($@"<link href=""{filePath.TrimStart('~')}?v={version}"" rel=""stylesheet""/>");
                     }
+
+                    if (webBundleName == "~/Content/Themes")
+                    {
+                        Common.Business.ConfigManager cManager = new Common.Business.ConfigManager();
+
+                        var theme = cManager.GetExtendedTheme();
+
+                        if (!string.IsNullOrEmpty(theme))
+
+                            builder.AppendLine($@"<link href=""{theme.TrimStart('~')}?v={version}"" rel=""stylesheet""/>");
+
+                    }
                     return builder.ToString();
                 });
             return new HtmlString(bundleContent);

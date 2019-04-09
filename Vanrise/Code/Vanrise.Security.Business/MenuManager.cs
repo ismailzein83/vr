@@ -109,7 +109,7 @@ namespace Vanrise.Security.Business
         private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, bool withEmptyChilds)
         {
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
-            MenuItem menu = new MenuItem() { Id = module.ModuleId, Location = module.Url, Icon = module.Icon, Rank = module.Rank, MenuType = MenuType.Module, RenderedAsView = module.RenderedAsView };
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Location = null, Icon = module.Icon, Rank = module.Rank, MenuType = MenuType.Module, RenderedAsView = module.RenderedAsView };
             if (module.Settings != null && module.Settings.LocalizedName != null)
                 menu.Name = vrLocalizationManager.GetTranslatedTextResourceValue(module.Settings.LocalizedName, module.Name);
             if (menu.Name == null)
@@ -190,7 +190,7 @@ namespace Vanrise.Security.Business
         private MenuItem GetModuleMenu(Module module, List<Module> modules)
         {
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
-            MenuItem menu = new MenuItem() { Id = module.ModuleId, Location = module.Url, Icon = module.Icon, AllowDynamic = module.AllowDynamic, RenderedAsView = module.RenderedAsView };
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Location = null, Icon = module.Icon, AllowDynamic = module.AllowDynamic, RenderedAsView = module.RenderedAsView };
             if (module.Settings != null && module.Settings.LocalizedName != null)
                 menu.Name = vrLocalizationManager.GetTranslatedTextResourceValue(module.Settings.LocalizedName, module.Name);
             if (menu.Name == null)

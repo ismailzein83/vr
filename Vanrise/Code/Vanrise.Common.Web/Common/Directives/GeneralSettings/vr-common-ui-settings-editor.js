@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','VRLocalizationService',
-    function (UtilsService, VRUIUtilsService, VRLocalizationService) {
+app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -25,7 +25,14 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','V
             var pagesizeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var languageSelectorAPI;
             var languageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var themeExtendedSelectorAPI;
+            var themeExtendedSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var themePreviewAPI;
+            var themePreviewAPIReadyDeferred = UtilsService.createPromiseDeferred();
+
             var languageId;
+            var themeId;
             $scope.scopeModel = {};
             $scope.scopeModel.onViewSelectorReady = function (api) {
                 viewSelectorAPI = api;
@@ -39,7 +46,19 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','V
                 languageSelectorAPI = api;
                 languageSelectorReadyDeferred.resolve();
             };
-            $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
+            $scope.scopeModel.onThemeExtendedSelectorReady = function (api) {
+                themeExtendedSelectorAPI = api;
+                themeExtendedSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onThemePreviewReady = function (api) {
+                themePreviewAPI = api;
+                themePreviewAPIReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.themeExtendedSelectionChanged = function () {
+                themePreviewAPI.load({ theme: themeExtendedSelectorAPI.getSelectedIds() });
+            };
+
             function initializeController() {
                 defineAPI();
             }
@@ -54,6 +73,7 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','V
                         $scope.scopeModel.longPrecision = payload.data.LongPrecision;
                         $scope.scopeModel.maxSearchRecordCount = payload.data.MaxSearchRecordCount;
                         languageId = payload.data.DefaultLanguageId;
+                        themeId = payload.data.Theme;
 
                         $scope.scopeModel.horizontalLine = payload.data.HorizontalLine;
                         $scope.scopeModel.alternativeColor = payload.data.AlternativeColor;
@@ -68,7 +88,7 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','V
 
                     viewSelectorReadyDeferred.promise.then(function () {
                         var selectorPayload = {
-                            selectedIds:  payload != undefined && payload.data != undefined ? payload.data.DefaultViewId : undefined
+                            selectedIds: payload != undefined && payload.data != undefined ? payload.data.DefaultViewId : undefined
                         };
                         VRUIUtilsService.callDirectiveLoad(viewSelectorAPI, selectorPayload, viewSelectorLoadDeferred);
                     });
@@ -83,7 +103,7 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','V
                         VRUIUtilsService.callDirectiveLoad(pagesizeSelectorAPI, pageSizePayload, pagesizeSelectorLoadDeferred);
                     });
                     var languageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                 
+
 
                     languageSelectorReadyDeferred.promise.then(function () {
                         promises.push(languageSelectorLoadDeferred.promise);
@@ -92,9 +112,24 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','V
                         VRUIUtilsService.callDirectiveLoad(languageSelectorAPI, selectorPayload, languageSelectorLoadDeferred);
                     });
 
+                    var themeExtendedSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    themeExtendedSelectorReadyDeferred.promise.then(function () {
+                        promises.push(themeExtendedSelectorLoadDeferred.promise);
+                        var selectorPayload = {};
+                        selectorPayload.selectedIds = themeId;
+                        VRUIUtilsService.callDirectiveLoad(themeExtendedSelectorAPI, selectorPayload, themeExtendedSelectorLoadDeferred);
+                    });
+
+                    var themePreviewLoadDeferred = UtilsService.createPromiseDeferred();
+                    themePreviewAPIReadyDeferred.promise.then(function () {
+                        promises.push(themePreviewLoadDeferred.promise);
+                        var selectorPayload = {};
+                        selectorPayload.theme = themeId;
+                        VRUIUtilsService.callDirectiveLoad(themePreviewAPI, selectorPayload, themePreviewLoadDeferred);
+                    });
                     return UtilsService.waitMultiplePromises(promises);
                 };
-               
+
                 api.getData = function () {
                     return {
                         DefaultViewId: viewSelectorAPI.getSelectedIds(),
@@ -105,10 +140,11 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','V
                         DefaultLanguageId: languageSelectorAPI != undefined ? languageSelectorAPI.getSelectedIds() : undefined,
                         HorizontalLine: $scope.scopeModel.horizontalLine,
                         AlternativeColor: $scope.scopeModel.alternativeColor,
-                        VerticalLine: $scope.scopeModel.verticalLine
+                        VerticalLine: $scope.scopeModel.verticalLine,
+                        Theme: themeExtendedSelectorAPI.getSelectedIds()
                     };
                 };
-              
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
