@@ -55,27 +55,34 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistRuntimeeditor', ['UtilsSe
                     var fieldValue;
                     var fieldType;
                     var fieldTitle;
-
+                    var fieldViewSettings;
+                    var promises = [];
+                    var rootPromiseNode = {
+                        promises: promises
+                    };
                     if (payload != undefined) {
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
                         fieldTitle = payload.fieldTitle;
-                        $scope.scopeModel.runtimeEditor = fieldType.RuntimeViewType.RuntimeEditor;
-
+                        fieldViewSettings = payload.fieldViewSettings;
+                        $scope.scopeModel.runtimeEditor = fieldViewSettings != undefined ? fieldViewSettings.RuntimeEditor : undefined;
                         var runtimeEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(runtimeEditorLoadPromiseDeferred.promise);
+
                         runtimeEditorReadyPromiseDeferred.promise.then(function () {
                             VRUIUtilsService.callDirectiveLoad(runtimeEditorDirectiveAPI, {
                                 fieldTitle: fieldTitle,
                                 fieldValue: fieldValue,
-                                dataRecordTypeId: fieldType.DataRecordTypeId
+                                dataRecordTypeId: fieldType.DataRecordTypeId,
+                                definitionSettings: fieldViewSettings
                             }, runtimeEditorLoadPromiseDeferred);
                         });
-                        return runtimeEditorLoadPromiseDeferred.promise;
                     }
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
 
                 };
                 api.getData = function () {
-                    return runtimeEditorDirectiveAPI.getData();
+                    return runtimeEditorDirectiveAPI != undefined ? runtimeEditorDirectiveAPI.getData() : undefined;
                 };
 
                 if (ctrl.onReady != null)

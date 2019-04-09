@@ -83,7 +83,7 @@
                 });
         }
 
-        function addRow(onRowAdded, recordTypeFields) {
+        function addRow(onRowAdded,context, recordTypeFields) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
@@ -92,12 +92,13 @@
 
             var parameters = {
                 recordTypeFields: recordTypeFields,
+                context: context
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericRowEditor.html', parameters, modalSettings);
         }
 
-        function editRow(onRowUpdated, recordTypeFields, rowEntity) {
+        function editRow(onRowUpdated, recordTypeFields, context, rowEntity) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
@@ -106,7 +107,8 @@
 
             var parameters = {
                 recordTypeFields: recordTypeFields,
-                rowEntity: rowEntity
+                rowEntity: rowEntity,
+                context: context
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericRowEditor.html', parameters, modalSettings);

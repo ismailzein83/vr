@@ -67,6 +67,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionRow', ['UtilsService'
                             FieldPath: field.FieldPath,
                             IsRequired: field.IsRequired,
                             IsDisabled: field.IsDisabled,
+                            FieldViewSettings: field.FieldViewSettings
                         });
                     }
                     return { Fields: fields };

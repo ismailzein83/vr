@@ -1,147 +1,133 @@
-﻿//(appControllers); (function (appControllers) {
-//    "use strict";
-//    gridViewEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Devtools_GeneratedScriptService'];
+﻿(function (appControllers) {
+    "use strict";
+    gridViewEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-//    function gridViewEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Devtools_GeneratedScriptService) {
+    function gridViewEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
-//        var isEditMode;
-//        var columns;
-//        var dataRow;
+        var isEditMode;
+        var fieldValues;
+        var dataRow;
+        var runtimeEditorAPI;
+        var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
+        var title;
+        $scope.scopeModel = {};
 
-//        $scope.scopeModel = {};
-//        loadParameters();
-//        defineScope();
-//        load();
+        var dataRecordTypeId;
+        var definitionSettings;
+        var dataRow;
 
-//        function loadParameters() {
-//            var parameters = VRNavigationService.getParameters($scope);
-//            if (parameters != undefined && parameters != null) {
-//                dataRow = parameters.dataRow;
-//                columns = parameters.columns;
-//            }
-//            isEditMode = (variableEntity != undefined);
-//        }
+        loadParameters();
+        defineScope();
+        load();
 
-//        function defineScope() {
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope); 
+            if (parameters != undefined && parameters != null) {
+                dataRecordTypeId = parameters.dataRecordTypeId;
+                definitionSettings = parameters.definitionSettings;
+                dataRow = parameters.dataRow;
+                title = parameters.title;
+            }
+            if (dataRow != undefined) {
+                isEditMode = true;
+                fieldValues = dataRow.Entity;
+            }
+        }
 
-//            $scope.scopeModel.saveGeneratedScriptVariable = function () {
+        function defineScope() {
 
-//                if (isEditMode)
-//                    return updateGeneratedScriptVariable();
-//                else
-//                    return insertGeneratedScriptVariable();
-//            };
+            $scope.scopeModel.saveDataRow = function () {
 
-//            $scope.scopeModel.close = function () {
-//                $scope.modalContext.closeModal();
-//            };
+                if (isEditMode)
+                    return updateDataRow();
+                else
+                    return insertDataRow();
+            };
 
-//            $scope.scopeModel.onVariableTypeDirectiveReady = function (api) {
-//                variableTypeDirectiveApi = api;
-//                variableTypeReadyPromiseDeferred.resolve();
-//            };
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal();
+            };
 
-//            $scope.scopeModel.onVariableSettingsDirectiveReady = function (api) {
-//                variableSettingsDirectiveApi = api;
-//                variableSettingsReadyPromiseDeferred.resolve();
-//            };
+            $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
+                runtimeEditorAPI = api;
+                runtimeEditorReadyDeferred.resolve();
+            };
+        }
 
-//        }
+        function loadEditorRuntimeDirective() {
+            var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
+            runtimeEditorReadyDeferred.promise.then(function () {
+             
+                var runtimeEditorPayload = {
+                    selectedValues: fieldValues,
+                    dataRecordTypeId: dataRecordTypeId,
+                    definitionSettings: definitionSettings,
+                    parentFieldValues: fieldValues
+                };
+                VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
+            });
 
-//        function load() {
-//            $scope.scopeModel.isLoading = true;
+            return runtimeEditorLoadDeferred.promise;
+        }
 
-//            if (isEditMode) {
-//                loadAllControls().finally(function () {
-//                });
-//            }
-//            else
-//                loadAllControls();
-//        }
+        function load() {
+            $scope.scopeModel.isLoading = true;
 
-//        function loadAllControls() {
-//            function loadVariableTypeDirective() {
-//                var variableTypeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-//                variableTypeReadyPromiseDeferred.promise.then(function () {
-//                    var variableTypePayload;
-//                    if (isEditMode) {
-//                        variableTypePayload = { selectedIds: variableEntity.Type, size: variableEntity.Size, precision: variableEntity.Precision };
-//                    }
-//                    VRUIUtilsService.callDirectiveLoad(variableTypeDirectiveApi, variableTypePayload, variableTypeLoadPromiseDeferred);
-//                });
-//                return variableTypeLoadPromiseDeferred.promise;
-//            }
+            if (isEditMode) {
+                loadAllControls().finally(function () {
+                });
+            }
+            else
+                loadAllControls();
+        }
 
-//            function loadVariableSettingsDirective() {
-//                var variableSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        function loadAllControls() {
 
-//                variableSettingsReadyPromiseDeferred.promise.then(function () {
-//                    var variableSettingsPayload = {
-//                        settings: variableEntity != undefined ? variableEntity.Settings : undefined,
-//                        isEditMode: isEditMode,
-//                        connectionStringId: connectionStringId
-//                    };
+            function setTitle() {
+                if (isEditMode)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(title, "Row in");
+                else
+                    $scope.title = UtilsService.buildTitleForAddEditor(title);
+            }
 
-//                    VRUIUtilsService.callDirectiveLoad(variableSettingsDirectiveApi, variableSettingsPayload, variableSettingsLoadPromiseDeferred);
-//                });
+            return UtilsService.waitMultipleAsyncOperations([loadEditorRuntimeDirective, setTitle]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
 
-//                return variableSettingsLoadPromiseDeferred.promise;
-//            }
+        function buildDataRowFromScope() {
+            var genericBusinessEntity = {};
 
-//            function loadStaticData() {
-//                if (variableEntity != undefined) {
-//                    $scope.scopeModel.variableName = variableEntity.Name;
-//                }
-//            }
 
-//            function setTitle() {
-//                if (isEditMode && variableEntity != undefined)
-//                    $scope.title = UtilsService.buildTitleForUpdateEditor("", "Variable");
-//                else
-//                    $scope.title = UtilsService.buildTitleForAddEditor("Variable");
-//            }
+            var fieldValuesObj = fieldValues != undefined ? fieldValues : {};
+            runtimeEditorAPI.setData(fieldValuesObj);
+            genericBusinessEntity.Entity = fieldValuesObj;
 
-//            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVariableTypeDirective, loadVariableSettingsDirective]).catch(function (error) {
-//                VRNotificationService.notifyExceptionWithClose(error, $scope);
-//            })
-//                .finally(function () {
-//                    $scope.scopeModel.isLoading = false;
-//                });
-//        }
+            return genericBusinessEntity;
+        }
 
-//        function buildGeneratedScriptVariableObjectFromScope() {
-//            var typeInfo = variableTypeDirectiveApi.getSelectedIds();
-//            return {
-//                Entity: {
-//                    Id: UtilsService.guid(),
-//                    Name: $scope.scopeModel.variableName,
-//                    Type: typeInfo.Type,
-//                    Size: typeInfo.Size,
-//                    Precision: typeInfo.Precision,
-//                    Settings: variableSettingsDirectiveApi.getData()
-//                }
-//            };
-//        }
 
-//        function insertGeneratedScriptVariable() {
-//            $scope.scopeModel.isLoading = true;
-//            if ($scope.onGeneratedScriptVariableAdded != undefined) {
-//                $scope.onGeneratedScriptVariableAdded(buildGeneratedScriptVariableObjectFromScope());
-//            }
-//            $scope.modalContext.closeModal();
-//            $scope.scopeModel.isLoading = true;
-//        }
+        function insertDataRow() {
+            $scope.scopeModel.isLoading = true;
+            if ($scope.onRowAdded != undefined) {
+                $scope.onRowAdded(buildDataRowFromScope());
+            }
+            $scope.modalContext.closeModal();
+            $scope.scopeModel.isLoading = true;
+        }
 
-//        function updateGeneratedScriptVariable() {
-//            $scope.scopeModel.isLoading = true;
-//            if ($scope.onGeneratedScriptVariableUpdated != undefined) {
-//                $scope.onGeneratedScriptVariableUpdated(buildGeneratedScriptVariableObjectFromScope());
-//            }
-//            $scope.modalContext.closeModal();
-//            $scope.scopeModel.isLoading = true;
+        function updateDataRow() {
+            $scope.scopeModel.isLoading = true;
+            if ($scope.onRowUpdated != undefined) {
+                $scope.onRowUpdated(buildDataRowFromScope());
+            }
+            $scope.modalContext.closeModal();
+            $scope.scopeModel.isLoading = true;
 
-//        }
+        }
 
-//    }
-//    appControllers.controller('VR_GenericData_GridViewEditorController', gridViewEditorController);
-//})(appControllers);
+    }
+    appControllers.controller('VR_GenericData_GridViewEditorController', gridViewEditorController);
+})(appControllers);

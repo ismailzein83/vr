@@ -2,13 +2,14 @@
 
     "use strict";
 
-    GenericRowEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+    GenericRowEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService','VRUIUtilsService'];
 
-    function GenericRowEditorController($scope, UtilsService, VRNotificationService, VRNavigationService) {
+    function GenericRowEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var isEditMode;
         var recordTypeFields;
         var rowEntity;
+        var context;
         $scope.scopeModal = {};
         $scope.scopeModal.fields = [];
         var dataRecordTypeAPI;
@@ -20,17 +21,32 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 recordTypeFields = parameters.recordTypeFields;
+                context = parameters.context;
                 $scope.scopeModal.fields.length = 0;
-                for (var i = 0; i < recordTypeFields.length; i++)
-                {
+                for (var i = 0; i < recordTypeFields.length; i++) {
                     var field = recordTypeFields[i];
-                    $scope.scopeModal.fields.push({ fieldPath: field.FieldPath, fieldTitle: field.FieldPath });
+                    $scope.scopeModal.fields.push(prepareFieldData(field));
                 }
                 rowEntity = parameters.rowEntity;
             }
             isEditMode = (rowEntity != undefined);
         }
 
+        function prepareFieldData(field) {
+            var fieldType = context.getFieldType(field.FieldPath);
+            var fieldData = {
+                fieldPath: field.FieldPath,
+                fieldTitle: field.FieldPath,
+                runtimeViewSettingEditor: fieldType.RuntimeViewSettingEditor,
+                directiveAPI: undefined
+            };
+            fieldData.onRuntimeViewSettingsEditorDirectiveReady = function (api) {
+                fieldData.directiveAPI = api;
+                var setLoader = function (value) { $scope.scopeModal.isRuntimeViewSettingsEditorDirectiveLoading = value; };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, fieldData.directiveAPI, { context: context, dataRecordTypeId: fieldType.DataRecordTypeId }, setLoader);
+            };
+            return fieldData;
+        }
         function defineScope() {
             
             $scope.scopeModal.selectedFields = [];
@@ -76,7 +92,10 @@
                     $scope.title = UtilsService.buildTitleForAddEditor('Row');
             }
             function loadScopeDataFromObj() {
-                
+                var promises=[];
+                var rootPromiseNode = {
+                    promises: promises
+                };
                 if (rowEntity != undefined && recordTypeFields != undefined) {
                     
                     for (var i = 0; i < rowEntity.length; i++) {
@@ -86,22 +105,41 @@
                             var field = recordTypeFields[j];
                             if (field.FieldPath == selectedField.FieldPath)
                             {
-                                $scope.scopeModal.selectedFields.push({
-                                    fieldPath: field.FieldPath,
-                                    fieldTitle: selectedField.FieldTitle,
-                                    isRequired: selectedField.IsRequired,
-                                    isDisabled: selectedField.IsDisabled,
-                                    isDisabledOnEdit: selectedField.IsDisabledOnEdit
-
-                                });
+                                var fieldInfo = prepareFieldInfo(field, selectedField);
+                                if (fieldInfo.runtimeViewSettingEditor!=undefined)
+                                    promises.push(fieldInfo.fieldSettingsLoadPromiseDeferred.promise);
+                                $scope.scopeModal.selectedFields.push(fieldInfo);
                             }
                         }
                     }
 
                 }
+                return UtilsService.waitPromiseNode(rootPromiseNode);
             }
         }
-
+        function prepareFieldInfo(field, selectedField) {
+            var fieldType = context.getFieldType(field.FieldPath);
+            var fieldInfo = {
+                fieldPath: field.FieldPath,
+                fieldTitle: selectedField.FieldTitle,
+                runtimeViewSettingEditor: fieldType.RuntimeViewSettingEditor,
+                fieldSettingsLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                isRequired: selectedField.IsRequired,
+                isDisabled: selectedField.IsDisabled,
+                //isDisabledOnEdit: selectedField.IsDisabledOnEdit,
+                directiveAPI: undefined
+            };
+            fieldInfo.onRuntimeViewSettingsEditorDirectiveReady = function (api) {
+                fieldInfo.directiveAPI = api;
+                VRUIUtilsService.callDirectiveLoad(fieldInfo.directiveAPI, {
+                    configId: selectedField.FieldViewSettings != undefined ? selectedField.FieldViewSettings.ConfigId : undefined,
+                    context: context,
+                    settings: selectedField.FieldViewSettings,
+                    dataRecordTypeId: fieldType.DataRecordTypeId
+                }, fieldInfo.fieldSettingsLoadPromiseDeferred);
+            };
+            return fieldInfo;
+        }
         function buildRowObjectFromScope() {
             var rowObject = [];
             for (var i = 0; i < $scope.scopeModal.selectedFields.length; i++)
@@ -111,8 +149,9 @@
                     FieldTitle: $scope.scopeModal.selectedFields[i].fieldTitle,
                     IsRequired: $scope.scopeModal.selectedFields[i].isRequired,
                     IsDisabled: $scope.scopeModal.selectedFields[i].isDisabled,
-                    IsDisabledOnEdit: $scope.scopeModal.selectedFields[i].isDisabledOnEdit
-                });
+                    FieldViewSettings: $scope.scopeModal.selectedFields[i].directiveAPI != undefined ? $scope.scopeModal.selectedFields[i].directiveAPI.getData() : undefined ,                      
+                    //IsDisabledOnEdit: $scope.scopeModal.selectedFields[i].isDisabledOnEdit
+                }); 
             }
             return rowObject;
         }

@@ -11,7 +11,9 @@
             editDataRecordType: editDataRecordType,
             addDataRecordTypeFieldFilter: addDataRecordTypeFieldFilter,
             registerObjectTrackingDrillDownToDataRecordType: registerObjectTrackingDrillDownToDataRecordType,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            addListDataRecordTypeRow: addListDataRecordTypeRow,
+            editListDataRecordTypeRow: editListDataRecordTypeRow
         });
 
         function addDataRecordType(onDataRecordTypeAdded) {
@@ -37,7 +39,37 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericDataRecord/DataRecordTypeEditor.html', modalParameters, modalSettings);
         }
+        function addListDataRecordTypeRow(dataRecordTypeId,definitionSettings,onRowAdded,title) {
+            var modalParameters = {
+                dataRecordTypeId: dataRecordTypeId,
+                definitionSettings: definitionSettings,
+                title: title
+            };
 
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onRowAdded = onRowAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/DataRecoedTypeList/RuntimeViewTypeRuntime/Templates/GridViewEditorTemplate.html', modalParameters, modalSettings);
+        }
+        function editListDataRecordTypeRow(dataRow, dataRecordTypeId, definitionSettings, onRowUpdated, title) {
+            var modalParameters = {
+                dataRecordTypeId: dataRecordTypeId,
+                definitionSettings: definitionSettings,
+                dataRow: dataRow,
+                title: title
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onRowUpdated = onRowUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/DataRecoedTypeList/RuntimeViewTypeRuntime/Templates/GridViewEditorTemplate.html', modalParameters, modalSettings);
+        }
         function addDataRecordTypeFieldFilter(fields, filterObj, onDataRecordFieldTypeFilterAdded) {
             var modalParameters = {
                 Fields: fields,

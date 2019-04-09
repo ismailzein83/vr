@@ -94,6 +94,7 @@ namespace Vanrise.GenericData.Business
             var runtimeField = Activator.CreateInstance<T>();
             runtimeField.FieldTitle = field.FieldTitle;
             runtimeField.FieldPath = field.FieldPath;
+            runtimeField.FieldViewSettings = field.FieldViewSettings;
             runtimeField.FieldType = GetFieldType(field.FieldPath, dataRecordTypeFieldsByName, dataRecordTypeId);
             return runtimeField;
         }

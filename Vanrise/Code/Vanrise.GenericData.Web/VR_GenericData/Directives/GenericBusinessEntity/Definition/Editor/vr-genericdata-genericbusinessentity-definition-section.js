@@ -70,7 +70,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
                         row: row,
                         onRowDirectiveReady: function (api) {
                             rowObj.rowAPI = api;
-                            var payload = { fields: rowObj.row };
+                            var payload = { fields: rowObj.row};
                             var setLoader = function (value) { $scope.isLoading = value; };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, rowObj.rowAPI, payload, setLoader);
                         }
@@ -101,7 +101,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
                     row:  row.Fields,
                     onRowDirectiveReady: function (api) {
                         rowObj.rowAPI = api;
-                        var payload = { fields: rowObj.row };
+                        var payload = { fields: rowObj.row};
                         var setLoader = function (value) { $scope.isLoading = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, rowObj.rowAPI, payload, setLoader);
                     }
@@ -132,7 +132,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
                         rowObj.rowAPI.applyChanges(row);
                     }
                 };
-                VR_GenericData_ExtensibleBEItemService.editRow(onRowUpdated, context.getFilteredFields(dataItem.row), dataItem.row);
+                VR_GenericData_ExtensibleBEItemService.editRow(onRowUpdated, context.getFilteredFields(dataItem.row), context, dataItem.row);
             }
 
             function deleteRow(dataItem) {

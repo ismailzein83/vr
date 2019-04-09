@@ -138,6 +138,9 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                     },
                     getDataRecordTypeId: function () {
                         return context.getDataRecordTypeId();
+                    },
+                    getFieldType: function (fieldName) {
+                        return context.getFieldType(fieldName);
                     }
                 };
                 return currentContext;

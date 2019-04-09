@@ -25,7 +25,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewDefinition', ['VR
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/DataRecoedTypeList/RuntimeViewTypeDefinition/Templates/FieldViewTypeDefinitionTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/DataRecoedTypeList/RuntimeViewTypeDefinition/Templates/GridViewTypeDefinitionTemplate.html';
             }
         };
 

@@ -1,16 +1,18 @@
-﻿<!--<vr-row>
-    <vr-columns width="fullrow">
-        <vr-row>
-            <vr-section title={{scopeModel.fieldTitle}}>
-                <vr-button type="Add" data-onclick="scopeModel.addRecord" standalone></vr-button>
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GridViewEditorController" vr-loader="scopeModel.isLoading" width="'70%'">
+    <vr-modalbody>
+        <vr-form validationcontext="sectionEditorGroup">
+            <vr-row>
+                <vr-genericdata-genericeditorsetting-runtime on-ready="scopeModel.onEditorRuntimeDirectiveReady"></vr-genericdata-genericeditorsetting-runtime>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="sectionEditorGroup" data-onclick="scopeModel.saveDataRow"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
 
-                <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                             on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.onDeleteRow" hidegridmenu>
-                    <vr-datagridcolumn ng-repeat="column in scopeModel.columns" headertext="column" columnindex="$index">
-                        <vr-directivewrapper directive="dataItem.Entity[colDef.columnIndex].runtimeEditor" selectionmode=single isrequired="true" on-ready="dataItem.Entity[{{colDef.columnIndex}}].onRunTimeEditorDirectiveReady"></vr-directivewrapper>
-                    </vr-datagridcolumn>
-                </vr-datagrid>
-            </vr-section>
-        </vr-row>
-    </vr-columns>
-</vr-row>-->
+    </div>
+</div>

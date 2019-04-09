@@ -34,13 +34,8 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelist', ['VRUIUtilsService', '
             $scope.scopeModel = {};
             var dataRecordTypeSelectorAPI;
             var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-            var dataRecordTypeSelectedPromiseDeferred;
-
-            var listRecordRuntimeViewTypeSelectorAPI;
-            var listRecordRuntimeViewTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-               
 
                 $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                     dataRecordTypeSelectorAPI = api;
@@ -48,30 +43,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelist', ['VRUIUtilsService', '
 
                 };
 
-                $scope.scopeModel.onListRecordRuntimeViewTypeSelectorReady = function (api) {
-                    listRecordRuntimeViewTypeSelectorAPI = api;
-                    listRecordRuntimeViewTypeSelectorReadyDeferred.resolve();
-
-                };
-
-                $scope.scopeModel.onDataRecordTypeSelectionChanged = function (value) {
-
-                    if (dataRecordTypeSelectorAPI) {
-                        if (value) {
-                            if (dataRecordTypeSelectedPromiseDeferred != undefined) {
-                                dataRecordTypeSelectedPromiseDeferred = undefined;
-                            }
-                            else {
-                                listRecordRuntimeViewTypeSelectorAPI.load();
-                            }
-                        }
-                    }
-
-
-
-                };
                 defineAPI();
-
             }
 
             function loadDataRecordTypeSelector(payload) {
@@ -84,38 +56,27 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelist', ['VRUIUtilsService', '
                 return dataRecordTypeSelectorLoadDeferred.promise;
             }
 
-            function loadListRecordRuntimeViewTypeSelector(payload) {
-                var listRecordRuntimeViewTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                listRecordRuntimeViewTypeSelectorReadyDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(listRecordRuntimeViewTypeSelectorAPI, payload, listRecordRuntimeViewTypeSelectorLoadDeferred);
-                });
-
-                return listRecordRuntimeViewTypeSelectorLoadDeferred.promise;
-            }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     var dataRecordTypeId;
-                    var runtimeViewType;
-                    dataRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var promises = [];
+                    var rootPromiseNode = {
+                        promises: promises
+                    };
+                   
                     if (payload != undefined) {
                         dataRecordTypeId = payload.DataRecordTypeId;
-                        runtimeViewType = payload.RuntimeViewType; 
                     }
-
-                    loadDataRecordTypeSelector({ selectedIds: dataRecordTypeId });
-                    loadListRecordRuntimeViewTypeSelector({ configId: runtimeViewType != undefined ? runtimeViewType.ConfigId : undefined });
-
-                    
+                    promises.push(loadDataRecordTypeSelector({ selectedIds: dataRecordTypeId }));
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldListDataRecordType, Vanrise.GenericData.MainExtensions",
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
-                        RuntimeViewType: listRecordRuntimeViewTypeSelectorAPI.getData()
                     };
                 };
 

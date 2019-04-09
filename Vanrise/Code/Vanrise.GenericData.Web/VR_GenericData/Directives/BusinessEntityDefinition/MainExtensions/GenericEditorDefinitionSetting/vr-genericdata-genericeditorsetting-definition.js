@@ -45,7 +45,7 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                     var onRowAdded = function (rowObj) {
                         sectionDirectiveApi.onAddRow(rowObj);
                     };
-                    VR_GenericData_ExtensibleBEItemService.addRow(onRowAdded, getFilteredFields());
+                    VR_GenericData_ExtensibleBEItemService.addRow(onRowAdded,context, getFilteredFields());
                 };
 
                 ctrl.isValid = function () {
@@ -82,19 +82,19 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                 };
 
                 function getContext() {
-                    return {
-                        getFilteredFields: function () {
-                            var data = [];
-                            var filterData = context.getRecordTypeFields();
-                            for (var i = 0; i < filterData.length; i++) {
-                                data.push({ FieldPath: filterData[i].Name });
-                            }
-                            return data;
-                        },
-                        getDataRecordTypeId: function () {
-                            return context.getDataRecordTypeId();
+                    var currentContext = context;
+                    if (currentContext == undefined)
+                        currentContext = {};
+
+                    currentContext.getFilteredFields = function () {
+                        var data = [];
+                        var filterData = context.getRecordTypeFields();
+                        for (var i = 0; i < filterData.length; i++) {
+                            data.push({ FieldPath: filterData[i].Name });
                         }
+                        return data;
                     };
+                    return currentContext;
                 }
 
                 function getFilteredFields(exceptedFields) {
