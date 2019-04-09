@@ -106,11 +106,11 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                                [AccountManagerEmail]   ,[SMSPhoneNumber] ,[Website]  ,[BillingDisputeEmail]  , 
                                                                [TechnicalContact] ,[TechnicalEmail]   ,[CommercialContact]   ,[CommercialEmail] , 
                                                                [AccountManagerContact], [IsDeleted], [DuePeriod] FROM [dbo].[CarrierProfile]  WITH (NOLOCK)
-															   where profileid not in (
+															   where profileid  in (
                                                                    SELECT distinct cp.[ProfileID]
                                                                    FROM [CarrierProfile] cp with(nolock)
                                                                    join [dbo].carrieraccount ca with(nolock) on ca.profileid = cp.profileid
-                                                                   where ca.CarrierAccountID = 'SYS')";
+                                                                   where ca.CarrierAccountID <> 'SYS')";
 
         const string query_getSourceCarrierProfilesWithFinancialData = @"SELECT    [ProfileID]
                                                                                   ,[IsDeleted]
@@ -125,11 +125,11 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                                                   ,[SupplierDeactivateDate]
                                                                                   ,[InvoiceByProfile]
                                                                               FROM [dbo].[CarrierProfile] WITH (NOLOCK)
-                                                                              where IsDeleted = 'N' and profileid not in (
+                                                                              where IsDeleted = 'N' and profileid  in (
                                                                                    SELECT distinct cp.[ProfileID]
                                                                                    FROM [CarrierProfile] cp with(nolock)
                                                                                    join [dbo].carrieraccount ca with(nolock) on ca.profileid = cp.profileid
-                                                                                   where ca.CarrierAccountID = 'SYS')";
+                                                                                   where ca.CarrierAccountID <> 'SYS')";
 
 
         const string query_getProfileAccountsWithNoActiveCarriers = @";with InActive_Customr as (
