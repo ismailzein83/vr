@@ -24,7 +24,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[CreatedBy],[LastModifiedTime],[LastModifiedBy])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('6DD49F76-2CBA-4E9F-A297-A58A9979493F','SOM',1,'2018-12-14 10:52:56.010',-1)
+('6DD49F76-2CBA-4E9F-A297-A58A9979493F','SOM.ST',1,'2018-12-14 10:52:56.010',-1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[CreatedBy],[LastModifiedTime],[LastModifiedBy]))
 merge	[common].[VRDynamicAPIModule] as t
