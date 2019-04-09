@@ -35,7 +35,11 @@
         };
 
         function startNewInstance(bpDefinitionObj, onProcessInputCreated, onProcessInputsCreated) {
+            var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", bpDefinitionObj.Entity.Configuration.EditorSize);
+            var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
+
             var modalSettings = {
+                size: editorSize != undefined ? editorSize : "medium"
             };
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.title = 'Start New Instance';

@@ -32,8 +32,11 @@
         var bpInstanceInsertHandlerSettingsAPI;
         var bpInstanceInsertHandlerSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var editorDefinitionAPI;
-        var editorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var manualEditorDefinitionAPI;
+        var manualEditorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var scheduleEditorDefinitionAPI;
+        var scheduleEditorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var vrWorkflowFields;
 
@@ -84,9 +87,14 @@
                 bpInstanceInsertHandlerSettingsReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onGenericBEEditorDefinitionDirectiveReady = function (api) {
-                editorDefinitionAPI = api;
-                editorDefinitionReadyPromiseDeferred.resolve();
+            $scope.scopeModel.onManualEditorDefinitionDirectiveReady = function (api) {
+                manualEditorDefinitionAPI = api;
+                manualEditorDefinitionReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onScheduledEditorDefinitionDirectiveReady = function (api) {
+                scheduleEditorDefinitionAPI = api;
+                scheduleEditorDefinitionReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.onVRWorkflowSelectionChanged = function (selectedVRWorkflow) {
@@ -106,13 +114,13 @@
                             $scope.scopeModel.isLoadingArguments = false;
                         });
                         getVRWorkflowInputArgumentFields(selectedVRWorkflow.VRWorkflowId).then(function () {
-                            if (editorDefinitionAPI != undefined) {
-                                var setEditorLoader = function (value) { $scope.scopeModel.isLoadingEditor = value; };
-                                var editorPayload = {
-                                    context: getContext()
+                            modalWidthSelectorReadyPromiseDeferred.promise.then(function () {
+                                var setLoader = function (value) { $scope.scopeModel.isModalWidthSelectorLoading = value };
+                                var modalWidthSelectorPayload = {
+                                    selectedIds: businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.Configuration != undefined ? businessProcessDefinitionEntity.Configuration.EditorSize : undefined
                                 };
-                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, editorDefinitionAPI, editorPayload, setEditorLoader);
-                            }
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, modalWidthSelectorAPI, modalWidthSelectorPayload, setLoader);
+                            });
                         });
                     }
                 }
@@ -169,7 +177,52 @@
                     return errorMessage;
                 }
             };
+
+            $scope.scopeModel.onManualEditorSwitchValueChanged = function () {
+                if ($scope.scopeModel.manualEditorDefinition) {
+                    manualEditorDefinitionReadyPromiseDeferred.promise.then(function () {
+                        var setEditorLoader = function (value) { $scope.scopeModel.isManualEditorLoading = value; };
+                        var manualEditorPayload = {
+                            context: getContext()
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, manualEditorDefinitionAPI, manualEditorPayload, setEditorLoader);
+                    });
+                }
+                else {
+                    $scope.scopeModel.sameAsManualEditorDefinition = false;
+                    if ($scope.scopeModel.scheduleEditorDefinition) {
+                        loadScheduleEditorSelector();
+                    }
+                }
+            };
+
+            $scope.scopeModel.onScheduleEditorSwitchValueChanged = function () {
+                if ($scope.scopeModel.scheduleEditorDefinition) {
+                    loadScheduleEditorSelector();
+                }
+                else {
+                    $scope.scopeModel.sameAsManualEditorDefinition = false;
+                }
+            };
+
+            $scope.scopeModel.onSameAsManualSwitchValueChanged = function () {
+                if (!$scope.scopeModel.sameAsManualEditorDefinition) {
+                    if ($scope.scopeModel.scheduleEditorDefinition)
+                        loadScheduleEditorSelector();
+                }
+            };
         }
+
+        function loadScheduleEditorSelector() {
+            scheduleEditorDefinitionReadyPromiseDeferred.promise.then(function () {
+                var setEditorLoader = function (value) { $scope.scopeModel.isScheduleEditorLoading = value; };
+                var scheduleEditorPayload = {
+                    context: getContext()
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, scheduleEditorDefinitionAPI, scheduleEditorPayload, setEditorLoader);
+            });
+        }
+
         function load() {
             $scope.scopeModel.isLoading = true;
 
@@ -201,16 +254,38 @@
             });
         }
 
-        function loadEditorDefinitionDirective() {
-            var loadEditorDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-            editorDefinitionReadyPromiseDeferred.promise.then(function () {
+        function loadManualEditorDefinitionDirective() {
+            var loadManualEditorDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+            manualEditorDefinitionReadyPromiseDeferred.promise.then(function () {
+                var settingsEditor;
+                if (businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.Configuration != undefined) {
+                    if (businessProcessDefinitionEntity.Configuration.ManualEditorSettings)
+                        settingsEditor = businessProcessDefinitionEntity.Configuration.ManualEditorSettings;
+                }
                 var editorPayload = {
-                    settings: businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.Configuration != undefined ? businessProcessDefinitionEntity.Configuration.EditorSettings : undefined,
+                    settings: settingsEditor ? settingsEditor.EditorSettings : undefined,
                     context: getContext()
                 };
-                VRUIUtilsService.callDirectiveLoad(editorDefinitionAPI, editorPayload, loadEditorDefinitionDirectivePromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(manualEditorDefinitionAPI, editorPayload, loadManualEditorDefinitionDirectivePromiseDeferred);
             });
-            return loadEditorDefinitionDirectivePromiseDeferred.promise;
+            return loadManualEditorDefinitionDirectivePromiseDeferred.promise;
+        }
+
+        function loadScheduleEditorDefinitionDirective() {
+            var loadScheduleEditorDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+            scheduleEditorDefinitionReadyPromiseDeferred.promise.then(function () {
+                var settingsEditor;
+                if (businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.Configuration != undefined) {
+                    if (businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings)
+                        settingsEditor = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings;
+                }
+                var editorPayload = {
+                    settings: settingsEditor != undefined ? settingsEditor.EditorSettings : undefined,
+                    context: getContext()
+                };
+                VRUIUtilsService.callDirectiveLoad(scheduleEditorDefinitionAPI, editorPayload, loadScheduleEditorDefinitionDirectivePromiseDeferred);
+            });
+            return loadScheduleEditorDefinitionDirectivePromiseDeferred.promise;
         }
 
         function loadAllControls() {
@@ -231,6 +306,9 @@
                 $scope.scopeModel.MaxConcurrentWorkflows = businessProcessDefinitionEntity.Configuration.MaxConcurrentWorkflows;
                 $scope.scopeModel.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
                 $scope.scopeModel.processTitle = businessProcessDefinitionEntity.Configuration.ProcessTitle;
+                $scope.scopeModel.manualEditorDefinition = businessProcessDefinitionEntity.Configuration.ManualEditorSettings.Enable;
+                $scope.scopeModel.scheduleEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.Enable;
+                $scope.scopeModel.sameAsManualEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.SameAsManualEditor;
             }
             function loadVRWorkflowSelector() {
                 if (!$scope.scopeModel.loadVRWorklowSelector)
@@ -253,8 +331,12 @@
                 return vrWorkflowLoadDeferred.promise;
             }
             function loadModalWidthSelector() {
+                if (!isEditMode)
+                    return;
+
                 var loadModalWidthSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 modalWidthSelectorReadyPromiseDeferred.promise.then(function () {
+                    vrWorkflowSelectorSelectionChangedDeferred = undefined;
                     var selectorPayload = {
                         selectedIds: businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.Configuration != undefined ? businessProcessDefinitionEntity.Configuration.EditorSize : undefined
                     };
@@ -327,7 +409,7 @@
 
                 return bpInstanceInsertHandlerSettingsLoadPromiseDeferred.promise;
             }
-       
+
             function GetVRWorkflowArguments() {
                 if (!isEditMode || businessProcessDefinitionEntity.VRWorkflowId == undefined)
                     return;
@@ -340,7 +422,7 @@
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     getVRWorkflowArgumentsLoadDeferred.reject();
-                    });
+                });
 
                 vrWorkflowSelectorSelectionChangedDeferred.promise.then(function () {
                     vrWorkflowSelectorSelectionChangedDeferred = undefined;
@@ -352,14 +434,26 @@
                 loadScheduleTaskRequiredPermission, loadBPInstanceInsertHandlerSettings];
             if (businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.VRWorkflowId != undefined) {
                 operations.push(getVRWorkflowInputArgumentFields);
-                operations.push(loadEditorDefinitionDirective);
+
+                var config = businessProcessDefinitionEntity.Configuration;
+                if (config != undefined) {
+                    if (config.ManualEditorSettings != undefined) {
+                        if (config.ManualEditorSettings.Enable)
+                            operations.push(loadManualEditorDefinitionDirective);
+                    }
+                    if (config.ScheduleEditorSettings != undefined) {
+                        if (config.ScheduleEditorSettings.Enable && !config.ScheduleEditorSettings.SameAsManualEditor)
+                            operations.push(loadScheduleEditorDefinitionDirective);
+                    }
+                }
+
             }
             return UtilsService.waitMultipleAsyncOperations(operations).then(function () {
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                });
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
         function getVRWorkflowInputArgumentFields(vrWorkflowId) {
@@ -475,13 +569,31 @@
             obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModel.MaxConcurrentWorkflows;
             obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModel.NotVisibleInManagementScreen;
             obj.Configuration.BPInstanceInsertHandler = bpInstanceInsertHandlerSettingsAPI.getData();
-            obj.Configuration.ManualExecEditor = "bp-vr-workflow-manualexeceditor";
+            obj.Configuration.ManualExecEditor = $scope.scopeModel.manualEditorDefinition ? undefined :"bp-vr-workflow-manualexeceditor";
             obj.Configuration.Security = {
                 View: viewPermissionAPI.getData(),
                 StartNewInstance: startNewInstancePermissionAPI.getData(),
                 ScheduleTask: scheduleTaskPermissionAPI.getData()
             };
-            obj.Configuration.EditorSettings = editorDefinitionAPI != undefined ? editorDefinitionAPI.getData() : undefined;
+
+            var manualEditorSettings = $scope.scopeModel.manualEditorDefinition ? manualEditorDefinitionAPI.getData() : undefined;
+
+            obj.Configuration.ManualEditorSettings = {
+                Enable: $scope.scopeModel.manualEditorDefinition,
+                EditorSettings: manualEditorSettings
+            };
+
+            obj.Configuration.ScheduleEditorSettings = {
+                Enable: $scope.scopeModel.scheduleEditorDefinition,
+                SameAsManualEditor: $scope.scopeModel.sameAsManualEditorDefinition
+            };
+
+            if ($scope.scopeModel.sameAsManualEditorDefinition)
+                obj.Configuration.ScheduleEditorSettings.EditorSettings = manualEditorSettings;
+            else {
+                obj.Configuration.ScheduleEditorSettings.EditorSettings = $scope.scopeModel.scheduleEditorDefinition ? scheduleEditorDefinitionAPI.getData() : undefined;
+            }
+
             return obj;
         }
     }

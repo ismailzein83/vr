@@ -29,7 +29,8 @@ namespace Vanrise.BusinessProcess.Entities
         public VRWorkflowExpression ProcessTitle { get; set; }
         public int? MaxConcurrentWorkflows { get; set; }
         public ModalWidthEnum EditorSize { get; set; }
-        public VRGenericEditorDefinitionSetting EditorSettings { get; set; }
+        public ManualEditorDefinitionSettings ManualEditorSettings { get; set; }
+        public ScheduleEditorDefinitionSettings ScheduleEditorSettings { get; set; }
         public string Url { get; set; }
         public string ScheduleTemplateURL { get; set; }
         public string ManualExecEditor { get; set; }
@@ -44,6 +45,20 @@ namespace Vanrise.BusinessProcess.Entities
         public string CompletionViewLinkText { get; set; }
         public bool BusinessRuleSetSupported { get; set; }
         public BPInstanceInsertHandler BPInstanceInsertHandler { get; set; }
+    }
+
+
+    public class ManualEditorDefinitionSettings
+    {
+        public bool Enable { get; set; }
+        public VRGenericEditorDefinitionSetting EditorSettings { get; set; }
+    }
+
+    public class ScheduleEditorDefinitionSettings
+    {
+        public bool Enable { get; set; }
+        public bool SameAsManualEditor { get; set; }
+        public VRGenericEditorDefinitionSetting EditorSettings { get; set; }
     }
 
     public abstract class BPDefinitionExtendedSettings

@@ -19,8 +19,8 @@
                                                                   selectedvalues="scopeModel.selectedVRWorkflow"
                                                                   normal-col-num="4" isrequired="true" hideremoveicon></businessprocess-vr-workflow-selector>
                         </span>
-                        <vr-columns width="1/3row">
-                            <vr-common-modalwidth-selector on-ready="scopeModel.onModalWidthSelectorReady" ></vr-common-modalwidth-selector>
+                        <vr-columns ng-if="scopeModel.selectedVRWorkflow!=undefined" width="1/3row" vr-loader="scopeModel.isModalWidthSelectorLoading">
+                            <vr-common-modalwidth-selector on-ready="scopeModel.onModalWidthSelectorReady" isrequired="true"></vr-common-modalwidth-selector>
                         </vr-columns>
                         <span ng-if="scopeModel.loadVRWorklowSelector">
                             <vr-columns colnum="11">
@@ -37,8 +37,28 @@
                         </span>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Editor'" ng-if="scopeModel.selectedVRWorkflow!=undefined">
-                    <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="4" selectedvalues="scopeModel.selectedEditor" isnotrequired showremoveicon></vr-genericdata-genericbe-editordefinition-settings>
+                <vr-tab header="'Manual Editor'" ng-if="scopeModel.selectedVRWorkflow!=undefined">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.manualEditorDefinition" label="Enable Manual Editor" onvaluechanged="scopeModel.onManualEditorSwitchValueChanged"></vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                    <span ng-if="scopeModel.manualEditorDefinition" vr-loader="scopeModel.isManualEditorLoading">
+                        <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onManualEditorDefinitionDirectiveReady" normal-col-num="4" selectedvalues="scopeModel.selectedManualEditor" isnotrequired showremoveicon></vr-genericdata-genericbe-editordefinition-settings>
+                    </span>
+                </vr-tab>
+                <vr-tab header="'Schedule Editor'" ng-if="scopeModel.selectedVRWorkflow!=undefined">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.scheduleEditorDefinition" label="Enable Schedule Editor" onvaluechanged="scopeModel.onScheduleEditorSwitchValueChanged"></vr-switch>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.sameAsManualEditorDefinition" label="Same as Manual Editor" vr-disabled="!(scopeModel.manualEditorDefinition && scopeModel.scheduleEditorDefinition)" onvaluechanged="scopeModel.onSameAsManualSwitchValueChanged"></vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                    <span ng-if="scopeModel.scheduleEditorDefinition && !scopeModel.sameAsManualEditorDefinition" vr-loader="scopeModel.isScheduleEditorLoading">
+                        <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onScheduledEditorDefinitionDirectiveReady" normal-col-num="4" selectedvalues="scopeModel.selectedScheduleEditor" isnotrequired showremoveicon></vr-genericdata-genericbe-editordefinition-settings>
+                    </span>
                 </vr-tab>
                 <vr-tab header="'Security'">
                     <vr-row>
