@@ -10,7 +10,7 @@ using Vanrise.Voucher.Business;
 
 namespace Retail.Runtime.Tasks
 {
-    public class ElHaririTask : ITask
+    public class NaimTask : ITask
     {
         public void Execute()
         {
@@ -44,23 +44,28 @@ namespace Retail.Runtime.Tasks
 
             //Console.WriteLine("\nI'm glad that that's over...\n");
             //Console.ReadKey();
-            var decriptedPin = Cryptography.Decrypt("ovpsFZ7BpEgnu/3ykI22fw==", DataEncryptionKeyManager.GetLocalTokenDataDecryptionKey());
+            //var decriptedPin = Cryptography.Decrypt("ovpsFZ7BpEgnu/3ykI22fw==", DataEncryptionKeyManager.GetLocalTokenDataDecryptionKey());
 
-            TopupManager topupManager = new TopupManager();
-            var topup = topupManager.AddTopup(new AddTopupInput
-            {
-                PhoneNumber = "7453526",
-                PinCode = decriptedPin
-            });
+            //TopupManager topupManager = new TopupManager();
+            //var topup = topupManager.AddTopup(new AddTopupInput
+            //{
+            //    PhoneNumber = "7453526",
+            //    PinCode = decriptedPin
+            //});
 
 
-            var decriptedPin1 = Cryptography.Decrypt("NOqpvAjWxQ0vSrxvmvUTGQ==", DataEncryptionKeyManager.GetLocalTokenDataDecryptionKey());
+            //var decriptedPin1 = Cryptography.Decrypt("NOqpvAjWxQ0vSrxvmvUTGQ==", DataEncryptionKeyManager.GetLocalTokenDataDecryptionKey());
 
-            var topup1 = topupManager.AddTopup(new AddTopupInput
-            {
-                PhoneNumber = "7453526",
-                PinCode = decriptedPin1
-            });
+            //var topup1 = topupManager.AddTopup(new AddTopupInput
+            //{
+            //    PhoneNumber = "7453526",
+            //    PinCode = decriptedPin1
+            //});
+
+
+            //  var retailInvoiceSettings = new Retail.BusinessEntity.Business.ConfigManager().GetRetailTaxesDefinitions();
+            int a;
+
 
         }
 
