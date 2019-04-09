@@ -306,14 +306,14 @@
                 $scope.scopeModel.MaxConcurrentWorkflows = businessProcessDefinitionEntity.Configuration.MaxConcurrentWorkflows;
                 $scope.scopeModel.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
                 $scope.scopeModel.processTitle = businessProcessDefinitionEntity.Configuration.ProcessTitle;
-                $scope.scopeModel.manualEditorDefinition = businessProcessDefinitionEntity.Configuration.ManualEditorSettings.Enable;
-                $scope.scopeModel.scheduleEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.Enable;
-                $scope.scopeModel.sameAsManualEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.SameAsManualEditor;
+                $scope.scopeModel.manualEditorDefinition = businessProcessDefinitionEntity.Configuration.ManualEditorSettings &&  businessProcessDefinitionEntity.Configuration.ManualEditorSettings.Enable || false;
+                $scope.scopeModel.scheduleEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings &&  businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.Enable || false;
+                $scope.scopeModel.sameAsManualEditorDefinition = businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings && businessProcessDefinitionEntity.Configuration.ScheduleEditorSettings.SameAsManualEditor || false;
             }
             function loadVRWorkflowSelector() {
                 if (!$scope.scopeModel.loadVRWorklowSelector)
                     return;
-
+               
                 var vrWorkflowLoadDeferred = UtilsService.createPromiseDeferred();
 
                 vrWorkflowSelectorReadyDeferred.promise.then(function () {
@@ -331,7 +331,7 @@
                 return vrWorkflowLoadDeferred.promise;
             }
             function loadModalWidthSelector() {
-                if (!isEditMode)
+                if (!isEditMode || businessProcessDefinitionEntity.VRWorkflowId == undefined)
                     return;
 
                 var loadModalWidthSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -379,7 +379,7 @@
             }
             function loadScheduleTaskRequiredPermission() {
                 var scheduleTaskPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-
+               
                 scheduleTaskPermissionReadyDeferred.promise.then(function () {
                     var payload;
 
