@@ -21,7 +21,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             throw new NotImplementedException();
         }
-
+        public override string RuntimeViewSettingEditor => "vr-genericdata-fieldtype-datarecordtypelist-settings";
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
         {
             return new RDBDataRecordFieldAttribute
@@ -122,6 +122,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         public override Guid ConfigId => new Guid("03925E9D-6A0F-4D4F-A4A4-36F5757D71EB");
         public override string RuntimeEditor => "vr-genericdata-fieldtype-datarecordtypelist-grideditorview-runtime";
+        public VRGenericEditorDefinitionSetting Settings { get; set; }
     }
     public class FieldViewListRecordRuntimeViewType : ListRecordRuntimeViewType
     {

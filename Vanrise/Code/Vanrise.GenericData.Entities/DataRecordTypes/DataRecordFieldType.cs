@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.Entities
         public abstract Guid ConfigId { get; }
 
         public abstract string RuntimeEditor { get; }
-
+        public virtual string RuntimeViewSettingEditor { get; }
         public abstract Type GetRuntimeType();
         public abstract string GetRuntimeTypeDescription();
 

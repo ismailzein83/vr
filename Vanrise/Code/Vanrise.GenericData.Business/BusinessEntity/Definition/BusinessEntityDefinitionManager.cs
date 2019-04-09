@@ -342,7 +342,9 @@ namespace Vanrise.GenericData.Business
             {
                 BusinessEntityDefinitionId = beDefinition.BusinessEntityDefinitionId,
                 Name = beDefinition.Title,
-                SelectorFilterEditor = beDefinition.Settings.SelectorFilterEditor
+                SelectorFilterEditor = beDefinition.Settings.SelectorFilterEditor,
+                WorkFlowAddBEActivityEditor = beDefinition.Settings.WorkFlowAddBEActivityEditor,
+                WorkFlowUpdateBEActivityEditor=beDefinition.Settings.WorkFlowUpdateBEActivityEditor
             };
         }
 

@@ -18,6 +18,8 @@ namespace Vanrise.GenericData.Entities
         public virtual string IdType { get; set; }
         public virtual string SelectorFilterEditor { get; set; }
         public virtual string NullDisplayText { get; set; }
+        public virtual string WorkFlowAddBEActivityEditor { get; set; }
+        public virtual string WorkFlowUpdateBEActivityEditor { get; set; }
         public virtual Dictionary<string, DataRecordField> TryGetRecordTypeFields(IBEDefinitionSettingsTryGetRecordTypeFieldsContext context)
         {
             return null;

@@ -11,5 +11,7 @@ namespace Vanrise.GenericData.Entities
         public Guid BusinessEntityDefinitionId { get; set; }
         public string Name { get; set; }
         public string SelectorFilterEditor { get; set; }
+        public string WorkFlowAddBEActivityEditor { get; set; }
+        public string WorkFlowUpdateBEActivityEditor { get; set; }
     }
 }

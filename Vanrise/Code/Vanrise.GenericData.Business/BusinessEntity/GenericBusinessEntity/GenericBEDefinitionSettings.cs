@@ -38,6 +38,9 @@ namespace Vanrise.GenericData.Business
         {
             get { return "Vanrise.GenericData.Business.GenericBusinessEntityManager, Vanrise.GenericData.Business"; }
         }
+        public override string WorkFlowAddBEActivityEditor { get { return "businessprocess-vr-workflowactivity-addbusinessentity-settings"; } }
+        public override string WorkFlowUpdateBEActivityEditor { get { return "businessprocess-vr-workflowactivity-updatebusinessentity-settings"; } }
+
         public override Dictionary<string, DataRecordField> TryGetRecordTypeFields(IBEDefinitionSettingsTryGetRecordTypeFieldsContext context)
         {
             return new DataRecordTypeManager().GetDataRecordTypeFields(this.DataRecordTypeId);
@@ -90,11 +93,14 @@ namespace Vanrise.GenericData.Business
         public GenericBEOnBeforeGetFilteredHandler OnBeforeGetFilteredHandler { get; set; }
         public GenericBEExtendedSettings ExtendedSettings { get; set; }
         public List<GenericBEBulkAction> GenericBEBulkActions { get; set; }
-
+        public OrderType? OrderType { get; set; }
+        public AdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
+        public OrderDirection? Direction { get; set; }
         public bool ShowUpload { get; set; }
         public List<GenericBEUploadField> UploadFields { get; set; }
 
     }
+
 
     public class GenericBEUploadField
     {
