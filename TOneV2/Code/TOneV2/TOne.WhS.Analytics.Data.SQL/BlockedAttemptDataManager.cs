@@ -50,22 +50,25 @@ namespace TOne.WhS.Analytics.Data.SQL
             StringBuilder queryBuilder = new StringBuilder();
             StringBuilder whereBuilder = new StringBuilder();
             StringBuilder groupByBuilder = new StringBuilder();
+            StringBuilder orderByBuilder = new StringBuilder();
             StringBuilder selectColumnBuilder = new StringBuilder();
             AddSelectColumnToQuery(selectColumnBuilder);
             AddFilterToQuery(whereBuilder);
             AddGroupingToQuery(groupByBuilder);
+            AddOrderToQuery(orderByBuilder);
             queryBuilder.Append(String.Format(@"
                     SELECT TOP (@TopRecords)   #SELECTCOLUMNPART#
                     FROM [TOneWhS_CDR].[BillingCDR_Invalid]
                         WITH(NOLOCK ,INDEX(IX_BillingCDR_Invalid_AttemptDateTime)) WHERE SupplierID is NULL AND DurationInSeconds=0 AND  AttemptDateTime>= @FromDate 
                         #WHEREPART#  
                         #GROUPBYPART# 
+                        #ORDERBYPART# 
                         "));
 
             queryBuilder.Replace("#SELECTCOLUMNPART#", selectColumnBuilder.ToString());
             queryBuilder.Replace("#WHEREPART#", whereBuilder.ToString());
             queryBuilder.Replace("#GROUPBYPART#", groupByBuilder.ToString());
-
+            queryBuilder.Replace("#ORDERBYPART#", orderByBuilder.ToString());
             return queryBuilder.ToString();
 
         }
@@ -112,6 +115,10 @@ namespace TOne.WhS.Analytics.Data.SQL
                 groupBuilder.Append(",CDPN,CGPN");
         }
 
+        private void AddOrderToQuery(StringBuilder orderBuilder)
+        {
+            orderBuilder.Append(@" Order BY Count (*) desc ");            
+        }
 
         private void AddFilterToQuery(StringBuilder whereBuilder)
         {
