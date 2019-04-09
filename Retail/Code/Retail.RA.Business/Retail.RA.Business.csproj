@@ -117,6 +117,13 @@
     <Compile Include="TaxRules\SMS\SMSTaxRuleSettings.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxRuleSettingsConfig.cs" />
     <Compile Include="TaxRules\TaxRuleManager.cs" />
+    <Compile Include="TaxRules\Transaction\TransactionTaxRule.cs" />
+    <Compile Include="TaxRules\Transaction\TransactionTaxRuleContext.cs" />
+    <Compile Include="TaxRules\Transaction\TransactionTaxMappingStep.cs" />
+    <Compile Include="TaxRules\Transaction\TransactionTaxRuleDefinitionSettings.cs" />
+    <Compile Include="TaxRules\Transaction\TransactionTaxRuleManager.cs" />
+    <Compile Include="TaxRules\Transaction\TransactionTaxRuleSettings.cs" />
+    <Compile Include="TaxRules\Transaction\TransactionTaxRuleSettingsConfig.cs" />
     <Compile Include="TaxRules\Voice\VoiceTaxMappingStep.cs" />
     <Compile Include="TaxRules\Voice\VoiceTaxRule.cs" />
     <Compile Include="TaxRules\Voice\VoiceTaxRuleDefinitionSettings.cs" />
