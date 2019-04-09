@@ -13,6 +13,7 @@ namespace Vanrise.Common.Business
         #region Fields/Ctor
 
         static VRLocalizationLanguageManager s_languageManager = new VRLocalizationLanguageManager();
+        static VRLocalizationModuleManager s_moduleManager = new VRLocalizationModuleManager();
         static VRLocalizationTextResourceManager s_textResourceManager = new VRLocalizationTextResourceManager();
         static VRLocalizationTextResourceTranslationManager s_textResourceTranslationManager = new VRLocalizationTextResourceTranslationManager();
 
@@ -158,6 +159,7 @@ namespace Vanrise.Common.Business
                         TranslationsByLanguageId = translationsByLanguageId
                     };
                     resourcesWithTranslations.Add(resource.ResourceKey, resourceWithTranslation);
+                    resourcesWithTranslations.Add($"{s_moduleManager.GetVRModuleName(resource.ModuleId)}.{resource.ResourceKey}", resourceWithTranslation);
                 }
             }
             return resourcesWithTranslations;
