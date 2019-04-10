@@ -162,6 +162,7 @@ namespace TOne.WhS.Invoice.Web.WhS_Invoice.Reports
                         RDLCReportParameters.Add(new ReportParameter("ToCompany", (carrierProfile.Settings != null) ? carrierProfile.Settings.Company : String.Empty, true));
                         RDLCReportParameters.Add(new ReportParameter("ToContact", carrierProfile.Name, true));
 
+                        RDLCReportParameters.Add(new ReportParameter("NormalPrecisionValue", new GeneralSettingsManager().GetNormalPrecisionValue().ToString(), true));
 
                         ReportViewer1.LocalReport.DataSources.Clear();
                         ReportViewer1.LocalReport.SetParameters(RDLCReportParameters.ToArray());
