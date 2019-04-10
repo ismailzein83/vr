@@ -119,7 +119,7 @@
             function loadActionSettingsSelector() {
                 var actionSettingsSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 actionSettingsSelectorReadyPromiseDeferred.promise.then(function () {
-                    var actionSettingsSelectorPayload = {};
+                    var actionSettingsSelectorPayload = { context: getContext() };
                     if (taskTypeActionEntity != undefined) {
                         actionSettingsSelectorPayload.settings = taskTypeActionEntity.Settings;
                     }

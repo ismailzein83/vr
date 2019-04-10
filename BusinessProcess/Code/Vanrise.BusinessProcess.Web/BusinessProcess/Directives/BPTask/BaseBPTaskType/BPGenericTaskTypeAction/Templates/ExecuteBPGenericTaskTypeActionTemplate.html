@@ -1,1 +1,54 @@
-﻿
+﻿<vr-columns width="1/2row">
+    <vr-section header="Field Values">
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-select label="Data Record Field"
+                           datasource="scopeModel.dataRecordFields"
+                           datatextfield="FieldTitle"
+                           datavaluefield="FieldName"
+                           selectedvalues="scopeModel.selectedDefaultFieldValue">
+                </vr-select>
+            </vr-columns>
+            <vr-columns width="1/2row" simplecol withemptyline>
+                <vr-button type="Add" data-onclick="scopeModel.addDefaultFieldValue" standalone vr-disabled="scopeModel.selectedDefaultFieldValue==undefined || scopeModel.validateDefaultFieldValue()"></vr-button>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-validator validate="scopeModel.validateDefaultFieldValues()">
+                    <vr-datagrid on-ready="scopeModel.onGridReady"
+                                 datasource="scopeModel.defaultFieldValues"
+                                 ondeleterow="scopeModel.removeDefaultFieldValue"
+                                 hidegridmenu>
+                        <vr-datagridcolumn headertext="'Name'" field="'FieldName'" fixedwidth="50" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Value'" disablesorting>
+                            <vr-directivewrapper ng-if="dataItem.RuntimeEditor != undefined" directive="dataItem.RuntimeEditor" on-ready="dataItem.onEditorRuntimeDirectiveReady" vr-loader="dataItem.isLoadingDirective" selectionmode="single" isrequired="true"></vr-directivewrapper>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>
+    </vr-section>
+</vr-columns>
+<vr-columns width="1/2row">
+    <vr-section header="Mapping Fields">
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-select label="Decision Mapping Field"
+                           datasource="scopeModel.dataRecordFields"
+                           datatextfield="FieldTitle"
+                           datavaluefield="FieldName"
+                           selectedvalues="scopeModel.selectedDecisionMappingField">
+                </vr-select>
+            </vr-columns>
+            <vr-columns width="1/2row">
+                <vr-select label="Notes Mapping Field"
+                           datasource="scopeModel.dataRecordFields"
+                           datatextfield="FieldTitle"
+                           datavaluefield="FieldName"
+                           selectedvalues="scopeModel.selectedNotesMappingField">
+                </vr-select>
+            </vr-columns>
+        </vr-row>
+    </vr-section>
+</vr-columns>

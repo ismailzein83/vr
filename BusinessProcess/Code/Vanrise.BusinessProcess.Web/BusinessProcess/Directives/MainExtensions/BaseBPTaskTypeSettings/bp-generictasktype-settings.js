@@ -66,6 +66,7 @@
                             dataRecordTypeSelectedPromiseDeferred.resolve();
                         }
                         else {
+                            $scope.scopeModel.taskTypeActions.length = 0;
                             getDataRecordFieldsInfo(selectedRecordTypeId).then(function () {
                                 var editorDefinitionPayload = {
                                     context: getContext()
@@ -266,6 +267,16 @@
                             });
                         }
                         return data;
+                    },
+                    getFieldType: function (fieldName) {
+                        var fieldType = null;
+                        for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                            if (dataRecordTypeFields[i].Name == fieldName) {
+                                fieldType = dataRecordTypeFields[i].Type;
+                                break;
+                            }
+                        }
+                        return fieldType;
                     }
                 };
             }

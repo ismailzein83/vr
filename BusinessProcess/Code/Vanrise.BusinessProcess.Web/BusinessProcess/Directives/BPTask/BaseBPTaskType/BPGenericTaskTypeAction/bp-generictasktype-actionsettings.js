@@ -35,6 +35,7 @@ app.directive('bpGenerictasktypeActionsettings', ['UtilsService', 'VRUIUtilsServ
             var directiveAPI;
             var directiveReadyDeferred;
 
+            var context;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -49,6 +50,7 @@ app.directive('bpGenerictasktypeActionsettings', ['UtilsService', 'VRUIUtilsServ
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var payload = {
+                        context: getContext()
                     };
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
@@ -66,6 +68,7 @@ app.directive('bpGenerictasktypeActionsettings', ['UtilsService', 'VRUIUtilsServ
                     var initialPromises = [];
 
                     if (payload != undefined) {
+                        context = payload.context;
                         if (payload.settings != undefined) {
                             settings = payload.settings;
                         }
@@ -92,6 +95,8 @@ app.directive('bpGenerictasktypeActionsettings', ['UtilsService', 'VRUIUtilsServ
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
                             var payload = {
+                                context: getContext(),
+                                settings: settings
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
                         });
@@ -132,6 +137,13 @@ app.directive('bpGenerictasktypeActionsettings', ['UtilsService', 'VRUIUtilsServ
                     ctrl.onReady(api);
                 }
             }
+
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
+            }
         }
 
         function getTemplate(attrs) {
@@ -139,7 +151,7 @@ app.directive('bpGenerictasktypeActionsettings', ['UtilsService', 'VRUIUtilsServ
             if (attrs.hidelabel != undefined) {
                 label = "";
             }
-            var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
+            var template = '<vr-row><vr-columns colnum="{{ctrl.normalColNum}}">'
                 + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                 + ' datasource="scopeModel.templateConfigs"'
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
@@ -149,8 +161,10 @@ app.directive('bpGenerictasktypeActionsettings', ['UtilsService', 'VRUIUtilsServ
                 + ' isrequired="true"'
                 + 'hideremoveicon>'
                 + '</vr-select>'
-                + '</vr-columns>'
-                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
+                + '</vr-columns></vr-row>'
+                + '<vr-row>'
+                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>'
+                + '</vr-row>';
             return template;
 
         }

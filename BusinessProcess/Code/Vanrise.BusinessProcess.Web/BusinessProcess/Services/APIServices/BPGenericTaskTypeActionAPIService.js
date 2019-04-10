@@ -11,10 +11,13 @@
                 taskId: taskId
             });
         }
-
+        function GetMappingFieldsDescription(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controller, "GetMappingFieldsDescription"), input);
+        }
 
         return ({
-            GetTaskTypeActions: GetTaskTypeActions
+            GetTaskTypeActions: GetTaskTypeActions,
+            GetMappingFieldsDescription: GetMappingFieldsDescription
         });
     }
 

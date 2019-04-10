@@ -26,7 +26,9 @@ app.service('BusinessProcess_TaskTypeActionService', ['VRModalService', 'UtilsSe
                         TaskData: {
                             $type: "Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.BPGenericTaskData, Vanrise.BusinessProcess.MainExtensions",
                             FieldValues: payload.fieldValues
-                        }
+                        },
+                        Notes: payload.notes,
+                        Decision: payload.decision
                     };
                     return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function () {
                         payload.context.closeModal();

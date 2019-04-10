@@ -20,5 +20,12 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
             BPGenericTaskTypeActionManager manager = new BPGenericTaskTypeActionManager();
             return manager.GetTaskTypeActions(taskId);
         }
+        [HttpPost]
+        [Route("GetMappingFieldsDescription")]
+        public BPGenericTaskTypeActionMappingFieldsOutput GetMappingFieldsDescription(BPGenericTaskTypeActionMappingFieldsInput input)
+        {
+            BPGenericTaskTypeActionManager manager = new BPGenericTaskTypeActionManager();
+            return manager.GetMappingFieldsDescription(input);
+        }
     }
 }

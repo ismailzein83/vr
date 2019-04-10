@@ -14,6 +14,8 @@
         var runtimeEditorAPI;
         var runtimeEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var bpTaskTypeActions;
+
         loadParameters();
         defineScope();
         load();
@@ -36,7 +38,7 @@
 
             $scope.scopeModel.take = function () {
                 var takeTaskResponse;
-                
+
                 function takeTask() {
                     return BusinessProcess_BPTaskAPIService.TakeTask(bpTaskId).then(function (response) {
                         takeTaskResponse = response;
@@ -61,7 +63,7 @@
                     }
                 };
                 return UtilsService.waitPromiseNode(rootPromiseNode);
-             
+
             };
 
             $scope.scopeModel.release = function () {
@@ -71,11 +73,11 @@
                         releaseTaskResponse = response;
                     });
                 }
-           
+
                 var rootPromiseNode = {
                     promises: [releaseTask()],
                     getChildNode: function () {
-                     
+
                         return {
                             promises: [load(true)],
                             getChildNode: function () {
@@ -98,8 +100,8 @@
                 var userIdsResponse;
                 var assignTaskResponse;
                 function getAssignedUsers() {
-                   return  BusinessProcess_BPTaskAPIService.GetAssignedUsers(bpTaskId).then(function (userIds) {
-                       userIdsResponse = userIds;
+                    return  BusinessProcess_BPTaskAPIService.GetAssignedUsers(bpTaskId).then(function (userIds) {
+                        userIdsResponse = userIds;
                     });
 
                 }
@@ -121,10 +123,10 @@
                             promises: [BusinessProcess_BPTaskService.assignTask(onUserAssigned, userIdsResponse)],
                             getChildNode: function () {
                                 return {
-                                    promises: [assignTask(userIdResponse)],
+                                    promises: userIdResponse!=undefined ? [assignTask(userIdResponse)] : [],
                                     getChildNode: function () {
                                         return {
-                                            promises: [load(true)],
+                                            promises: userIdResponse!=undefined ? [load(true)] : [],
                                             getChildNode: function () {
                                                 if (assignTaskResponse != undefined) {
                                                     $scope.scopeModel.showTake = assignTaskResponse.ShowTake;
@@ -174,8 +176,35 @@
                 getChildNode: function () {
                     if (bpTask != undefined) {
                         fieldValues = bpTask.TaskData != undefined ? bpTask.TaskData.FieldValues : undefined;
+                        if (fieldValues != undefined) {
+                            var fieldValueObjects = {};
+                            for (var key in fieldValues) {
+                                if (key != "$type") {
+                                    fieldValueObjects[key] = {
+                                        value: fieldValues[key],
+                                        isHidden: false
+                                    };
+                                }
+                            }
+                            fieldValues = fieldValueObjects;
+                        }
                         if (!isReload)
                             setTitle();
+                          if (bpTaskTypeActions != undefined && bpTaskTypeActions.length > 0) {
+                                for (var i = 0; i < bpTaskTypeActions.length; i++) {
+                                    var action = bpTaskTypeActions[i];
+                                    if (action.Settings != undefined && action.Settings.DefaultFieldValues != undefined && action.Settings.DefaultFieldValues.length > 0) {
+                                        for (var j = 0; j < action.Settings.DefaultFieldValues.length; j++) {
+                                            var defaultValue = action.Settings.DefaultFieldValues[j];
+                                            if (fieldValues == undefined)
+                                                fieldValues = {};
+                                            if (fieldValues[defaultValue.FieldName] == undefined)
+                                                fieldValues[defaultValue.FieldName] = {};
+                                            fieldValues[defaultValue.FieldName].isHidden = true;
+                                        }
+                                    }
+                                }
+                        }
                         return {
                             promises: [getBPTaskType(bpTask.TypeId)],
                             getChildNode: function () {
@@ -203,16 +232,17 @@
                 runtimeEditorReadyPromiseDeferred = undefined;
                 var defaultValues = {};
                 if (fieldValues != undefined) {
-                    for (var prop in fieldValues) {
-                        if (prop != "$type")
-                            defaultValues[prop] = fieldValues[prop];
+                    for (var key in fieldValues) {
+                        if (key != "$type" && !fieldValues[key].isHidden)
+                            defaultValues[key] = fieldValues[key].value;
                     }
                 }
 
                 var runtimeEditorPayload = {
                     selectedValues: defaultValues,
                     dataRecordTypeId: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.RecordTypeId : undefined,
-                    definitionSettings: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.EditorSettings : undefined
+                    definitionSettings: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.EditorSettings : undefined,
+                    parentFieldValues: fieldValues
                 };
                 VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadPromiseDeferred);
             });
@@ -237,7 +267,18 @@
 
         function getActions() {
             return BusinessProcess_BPGenericTaskTypeActionAPIService.GetTaskTypeActions(bpTaskId).then(function (actions) {
+                var menuActions;
+                function addMenuActions(taskTypeAction) {
+                    menuActions.push({
+                        name: taskTypeAction.Name,
+                        clicked: function () {
+                            return callActionMethod(taskTypeAction);
+                        }
+                    });
+                }
                 if (actions != undefined && actions.length > 0) {
+                    menuActions = [];
+                    bpTaskTypeActions = actions;
                     var actionsDictionary = {};
                     for (var i = 0; i < actions.length; i++) {
                         var taskTypeAction = actions[i];
@@ -254,33 +295,31 @@
                     $scope.scopeModel.actions.length = 0;
                     for (var prop in actionsDictionary) {
                         if (actionsDictionary[prop].length > 1) {
-                            var menuActions = [];
                             for (var i = 0; i < actionsDictionary[prop].length; i++) {
                                 if (menuActions == undefined)
                                     menuActions = [];
                                 var object = actionsDictionary[prop][i];
-                                menuActions.push({
-                                    name: object.taskTypeAction.Name,
-                                    clicked: function () {
-                                        return callActionMethod(object.taskTypeAction);
-                                    }
-                                });
+                                addMenuActions(object.taskTypeAction);
                             }
                             addActionToList(object.buttonType, undefined, menuActions);
                         } else {
                             var object = actionsDictionary[prop][0];
-                            var clickFunc = function () {
-                                return callActionMethod(object.taskTypeAction);
-                            };
-                            addActionToList(object.buttonType, clickFunc, undefined);
+                            addActionToList(object.buttonType, getClickFunction(object.taskTypeAction), undefined);
                         }
                     }
                 }
             });
         }
-       
+        function getClickFunction(action) {
+            var clickFunc = function () {
+                return callActionMethod(action);
+            };
+            return clickFunc;
+        }
+
 
         function addActionToList(buttonType, clickEvent, menuActions) {
+
             var type = buttonType != undefined ? buttonType.type : undefined;
             $scope.scopeModel.actions.push({
                 type: type,
@@ -290,19 +329,72 @@
         }
 
         function callActionMethod(taskTypeAction) {
-            var payload = {
-                context: getContext(),
-                taskId: bpTaskId,
-                fieldValues: getFieldValues(),
-            };
-            var actionType = BusinessProcess_TaskTypeActionService.getActionTypeIfExist(taskTypeAction.Settings.ActionTypeName);
-            var promise = actionType.actionMethod(payload);
-            promise.then(function () {
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error);
-            });
+            var promises = [];
+            var runtimeValues = getFieldValues();
+            if (taskTypeAction.Settings != undefined && taskTypeAction.Settings.DefaultFieldValues != undefined && taskTypeAction.Settings.DefaultFieldValues.length > 0) {
+                if (runtimeValues == undefined)
+                    runtimeValues = {};
+                for (var i = 0; i < taskTypeAction.Settings.DefaultFieldValues.length; i++) {
+                    var defaultFieldValue = taskTypeAction.Settings.DefaultFieldValues[i];
+                    runtimeValues[defaultFieldValue.FieldName] = defaultFieldValue.FieldValue;
+                }
+            }
 
-            return promise;
+            var decisionMappingFieldDescription;
+            var notesMappingFieldDescription;
+            function getMappingFieldsDescription(input) {
+                return BusinessProcess_BPGenericTaskTypeActionAPIService.GetMappingFieldsDescription(input).then(function (response) {
+                    if (response != undefined) {
+                        decisionMappingFieldDescription = response.DecisionFieldDescription;
+                        notesMappingFieldDescription = response.NotesFieldDescription;
+                    }
+                });
+            }
+            if (taskTypeAction.Settings.DecisionMappingField != undefined || taskTypeAction.Settings.NotesMappingField != undefined) {
+                var decisionFieldValue;
+                var notesFieldValue;
+                if (taskTypeAction.Settings.DecisionMappingField != undefined) {
+                    decisionFieldValue = fieldValues != undefined ? fieldValues[taskTypeAction.Settings.DecisionMappingField] : undefined;
+                    if (decisionFieldValue == undefined) {
+                        decisionFieldValue = runtimeValues != undefined ? { value: runtimeValues[taskTypeAction.Settings.DecisionMappingField] } : undefined;
+                    }
+                }
+                if (taskTypeAction.Settings.NotesMappingField != undefined) {
+                    notesFieldValue = fieldValues != undefined ? fieldValues[taskTypeAction.Settings.NotesMappingField] : undefined;
+                    if (notesFieldValue == undefined) {
+                        notesFieldValue = runtimeValues != undefined ? { value: runtimeValues[taskTypeAction.Settings.NotesMappingField] } : undefined;
+                    }
+                }
+                
+                var input = {
+                    DecisionFieldName: taskTypeAction.Settings.DecisionMappingField,
+                    NotesFieldName: taskTypeAction.Settings.NotesMappingField,
+                    DecisionFieldValue: decisionFieldValue != undefined ? decisionFieldValue.value : undefined,
+                    NotesFieldValue: notesFieldValue != undefined ? notesFieldValue.value : undefined,
+                    DataRecordTypeId: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.RecordTypeId : undefined
+                };
+                promises.push(getMappingFieldsDescription(input));
+            }
+
+
+            var actionType = BusinessProcess_TaskTypeActionService.getActionTypeIfExist(taskTypeAction.Settings.ActionTypeName);
+          
+            var rootPromiseNode = {
+                promises: promises,
+                getChildNode: function () {
+                    var payload = {
+                        context: getContext(),
+                        taskId: bpTaskId,
+                        fieldValues: runtimeValues,
+                        notes: notesMappingFieldDescription,
+                        decision: decisionMappingFieldDescription
+                    };
+                    return {
+                        promises: [actionType.actionMethod(payload)]
+                    };
+                }
+            };
+            return UtilsService.waitPromiseNode(rootPromiseNode);
         }
 
         function getContext() {

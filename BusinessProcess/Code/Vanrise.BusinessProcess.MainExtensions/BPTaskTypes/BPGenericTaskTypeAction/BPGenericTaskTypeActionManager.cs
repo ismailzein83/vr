@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
 {
@@ -35,6 +36,34 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
                 }
             }
             return taskTypeActions;
+        }
+
+        public BPGenericTaskTypeActionMappingFieldsOutput GetMappingFieldsDescription(BPGenericTaskTypeActionMappingFieldsInput input)
+        {
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            string decisionFieldDescription = null;
+            string notesFieldDescription = null;
+            if (input.DecisionFieldName != null)
+            {
+                var decisionField = dataRecordTypeManager.GetDataRecordField(input.DataRecordTypeId, input.DecisionFieldName);
+                if (decisionField != null && decisionField.Type != null)
+                {
+                    decisionFieldDescription = decisionField.Type.GetDescription(input.DecisionFieldValue);
+                }
+            }
+            if (input.NotesFieldName != null)
+            {
+                var notesField = dataRecordTypeManager.GetDataRecordField(input.DataRecordTypeId, input.NotesFieldName);
+                if (notesField != null && notesField.Type != null)
+                {
+                    notesFieldDescription = notesField.Type.GetDescription(input.NotesFieldValue);
+                }
+            }
+            return new BPGenericTaskTypeActionMappingFieldsOutput()
+            {
+                DecisionFieldDescription = decisionFieldDescription,
+                NotesFieldDescription = notesFieldDescription
+            };
         }
     }
 }
