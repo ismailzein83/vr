@@ -56,7 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisputeSetting\DisputeSettingsData.cs" />
-    <Compile Include="MSISDNDefinition.cs" />
+    <Compile Include="MSISDNItem.cs" />
     <Compile Include="OnNetOperationDeclaration\OnNetOperatorDeclarationService.cs" />
     <Compile Include="OnNetOperationDeclaration\OnNetOperatorDirectionServicesMappedCellExtensionConfiguration.cs" />
     <Compile Include="Enums.cs" />
@@ -72,7 +72,7 @@
     <Compile Include="Special Numbers\SpecialNumberCustomObjectTypeSettings.cs" />
     <Compile Include="Special Numbers\SpecialNumberGroup.cs" />
     <Compile Include="Special Numbers\SpecialNumbersSetting.cs" />
-    <Compile Include="SubscriberDefinition.cs" />
+    <Compile Include="SubscriberItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

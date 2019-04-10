@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.RA.Entities
 {
-    class SubscriberDefinition
+    public class MSISDNItem
     {
+        public string MSISDN { get; set; }
     }
 }

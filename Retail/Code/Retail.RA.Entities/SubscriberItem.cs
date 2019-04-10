@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.RA.Entities
 {
-    class MSISDNDefinition
+    public class SubscriberItem
     {
+        public long SubscriberId { get; set; }
+
+        public SubscriberType Type { get; set; }
     }
 }
