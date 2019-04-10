@@ -197,6 +197,7 @@ namespace Retail.Interconnect.Web.Retail_Interconnect.Reports
                             RDLCReportParameters.Add(new ReportParameter("SMSThreshold", "0", true));
                         }
 
+                        RDLCReportParameters.Add(new ReportParameter("NormalPrecisionValue", new GeneralSettingsManager().GetNormalPrecisionValue().ToString(), true));
 
                         ReportViewer1.LocalReport.DataSources.Clear();
                         ReportViewer1.LocalReport.SetParameters(RDLCReportParameters.ToArray());

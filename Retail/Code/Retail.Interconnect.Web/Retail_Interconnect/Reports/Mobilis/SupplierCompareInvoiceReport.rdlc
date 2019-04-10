@@ -1087,7 +1087,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SystemDuration.Value,0)</Value>
+                              <Value>=FormatNumber(Fields!SystemDuration.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1118,7 +1118,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!ProviderDuration.Value,0)</Value>
+                              <Value>=FormatNumber(Fields!ProviderDuration.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1149,7 +1149,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!Difference.Value,0)</Value>
+                              <Value>=FormatNumber(Fields!Difference.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1180,7 +1180,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!DiffPercentage.Value,2).ToString + "%"</Value>
+                              <Value>=FormatNumber(Fields!DiffPercentage.Value,Parameters!NormalPrecisionValue.Value).ToString + "%"</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1211,7 +1211,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Average.Value</Value>
+                              <Value>=FormatNumber(Fields!Average.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1529,7 +1529,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SystemSMSs.Value,0)</Value>
+                              <Value>=FormatNumber(Fields!SystemSMSs.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1560,7 +1560,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!ProviderSMSs.Value,0)</Value>
+                              <Value>=FormatNumber(Fields!ProviderSMSs.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1591,7 +1591,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!Difference.Value,0)</Value>
+                              <Value>=FormatNumber(Fields!Difference.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1622,7 +1622,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!DiffPercentage.Value,2).ToString+ "%"</Value>
+                              <Value>=FormatNumber(Fields!DiffPercentage.Value,Parameters!NormalPrecisionValue.Value).ToString+ "%"</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1653,7 +1653,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Average.Value</Value>
+                              <Value>=FormatNumber(Fields!Average.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -2045,7 +2045,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="La reconciliation des données trafic sur la periode du  " + CDate(Parameters!FromDate.Value).ToString("dd MMM yyyy") + " au " + CDate(Parameters!ToDate.Value).ToString("dd MMM yyyy")+ "  fait ressortir un TDG de " + Round(First(Fields!DiffPercentage.Value,"ReportInvoiceComparisonVoiceResult"),2).ToString + "%"</Value>
+                              <Value>="La reconciliation des données trafic sur la periode du  " 
++ CDate(Parameters!FromDate.Value).ToString("dd MMM yyyy") 
++ " au " + CDate(Parameters!ToDate.Value).ToString("dd MMM yyyy")
++ "  fait ressortir un TDG de " 
++ FormatNumber(First(Fields!DiffPercentage.Value,"ReportInvoiceComparisonVoiceResult"),Parameters!NormalPrecisionValue.Value).ToString + "%"</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2084,12 +2088,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>
-                                =iif(First(Fields!DiffPercentage.Value,"ReportInvoiceComparisonVoiceResult")&gt;CDec(Parameters!VoiceThreshold.Value),
+                              <Value>=iif(First(Fields!DiffPercentage.Value,"ReportInvoiceComparisonVoiceResult")&gt;CDec(Parameters!VoiceThreshold.Value),
                                 "Conformément à la convention la montant de facture sera donc calculé sur la valeur la plus faible des deux chiffres déclarés,",
                                 "Conformément à la convention la montant de facture sera donc calculé sur la base de la moyenne arithmétique des deux chiffres déclarés,")
-                                +" " + Round(First(Fields!Average.Value,"ReportInvoiceComparisonVoiceResult"),2).ToString() + " minutes."
-                              </Value>
+                                +" " + FormatNumber(First(Fields!Average.Value,"ReportInvoiceComparisonVoiceResult"),Parameters!NormalPrecisionValue.Value).ToString() + " minutes."</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2349,7 +2351,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="La reconciliation des données trafic sur la periode du  " + CDate(Parameters!FromDate.Value).ToString("dd MMM yyyy") + " au " + CDate(Parameters!ToDate.Value).ToString("dd MMM yyyy") + "  fait ressortir un TDG de " + System.Math.Round(First(Fields!DiffPercentage.Value, "ReportInvoiceComparisonSMSResult"), 2).ToString() + "%"</Value>
+                              <Value>="La reconciliation des données trafic sur la periode du  " 
++ CDate(Parameters!FromDate.Value).ToString("dd MMM yyyy") 
++ " au " + CDate(Parameters!ToDate.Value).ToString("dd MMM yyyy") 
++ "  fait ressortir un TDG de " 
++ FormatNumber(First(Fields!DiffPercentage.Value, "ReportInvoiceComparisonSMSResult"), Parameters!NormalPrecisionValue.Value).ToString() + "%"</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2388,7 +2394,8 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=iif(First(Fields!DiffPercentage.Value, "ReportInvoiceComparisonSMSResult") &gt; CDec(Parameters!SMSThreshold.Value), "Conformément à la convention la montant de facture sera donc calculé sur la valeur la plus faible des deux chiffres déclarés,", "Conformément à la convention la montant de facture sera donc calculé sur la base de la moyenne arithmétique des deux chiffres déclarés,") + " " + System.Math.Round(First(Fields!Average.Value, "ReportInvoiceComparisonSMSResult"), 2).ToString() + " SMSs."</Value>
+                              <Value>=iif(First(Fields!DiffPercentage.Value, "ReportInvoiceComparisonSMSResult") &gt; CDec(Parameters!SMSThreshold.Value), "Conformément à la convention la montant de facture sera donc calculé sur la valeur la plus faible des deux chiffres déclarés,", "Conformément à la convention la montant de facture sera donc calculé sur la base de la moyenne arithmétique des deux chiffres déclarés,") + " " 
++ FormatNumber(First(Fields!Average.Value, "ReportInvoiceComparisonSMSResult"), Parameters!NormalPrecisionValue.Value).ToString() + " SMSs."</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2702,6 +2709,10 @@
     <ReportParameter Name="VoiceThreshold">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NormalPrecisionValue">
+      <DataType>Integer</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
