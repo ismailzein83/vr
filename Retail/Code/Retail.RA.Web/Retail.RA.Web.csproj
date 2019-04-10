@@ -109,21 +109,22 @@
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\Templates\IntlOperatorDeclarationServiceSMSTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\Templates\IntlOperatorDeclarationServiceVoiceTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-icx-operatordeclaration-beforesavehandler.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-icx-operatordeclaration.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-icxoperatordeclarationservice.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-icxoperatordeclarationservices-customobjectsettings.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intl-operatordeclaration-beforesavehandler.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intloperatordeclarationservices-customobjectsettings.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intloperatordeclarationservice.js" />
-    <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-operatordeclaration.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intl-operatordeclaration.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperationDirectionServicesTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperatorDeclarationOnBeforeSaveHandler.html" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperatorDeclarationTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperatorDirectionServicesCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperationDirectionServicesTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDeclarationOnBeforeSaveHandler.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDirectionServicesCustomObjectSettingsTemplate.html" />
-    <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\OperatorDeclarationTemplate.html" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDeclarationTemplate.html" />
     <Content Include="Retail_RA\Directives\Operator\retail-ra-operator-selector.js" />
-    <Content Include="Retail_RA\Directives\Operator\Template\OperatorSelectorTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnAfterSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnBeforeSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionSelectorTemplate.html" />
@@ -165,14 +166,18 @@
     <Content Include="Retail_RA\Directives\TimePeriod\Templates\LastPeriodTemplate.html" />
     <Content Include="Retail_RA\Directives\TimePeriod\Templates\LastYearPeriodTemplate.html" />
     <Content Include="Retail_RA\Services\APIServices\OnNetOperatorDirectionServicesAPIService.js" />
+    <Content Include="Retail_RA\Services\APIServices\OperatorDefinitionAPIService.js" />
     <Content Include="Retail_RA\Services\APIServices\OperatorDirectionServicesAPIService.js" />
+    <Content Include="Retail_RA\Services\APIServices\PeriodDefinitionAPIService.js" />
     <Content Include="Retail_RA\Services\APIServices\TaxRuleAPIService.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controller\RAOnNetOperatorDirectionServicesController.cs" />
+    <Compile Include="Controller\RAOperatorDefinitionController.cs" />
     <Compile Include="Controller\RAOperatorDirectionServicesController.cs" />
+    <Compile Include="Controller\RAPeriodDefinitionController.cs" />
     <Compile Include="Controller\RaRulesController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -197,7 +202,9 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Retail_RA\Directives\Operator\Template\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
