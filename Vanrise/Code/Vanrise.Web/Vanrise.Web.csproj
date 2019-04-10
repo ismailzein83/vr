@@ -220,6 +220,8 @@
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-toolbox-select.html" />
     <Content Include="Client\Javascripts\Directives\Inputs\TextBoxMultiple\TextBoxValuesPopup.html" />
     <Content Include="Client\Javascripts\Directives\Inputs\TextBoxMultiple\TextBoxValuesPopupController.js" />
+    <Content Include="Client\Javascripts\Directives\MobileHelpers\vr-desktop-element-directive.js" />
+    <Content Include="Client\Javascripts\Directives\MobileHelpers\vr-mobile-element-directive.js" />
     <Content Include="Client\Javascripts\Directives\Recompiler\vr-recompiler-ready.js" />
     <Content Include="Client\Javascripts\Directives\Tabs\TabsSelectorPopupController.js" />
     <Content Include="Client\Javascripts\Directives\Tabs\Templates\TabsSelectorModalPopup.html" />
