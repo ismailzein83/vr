@@ -36,12 +36,17 @@ namespace TOne.WhS.Routing.Business
 
         public override string GetSuppliersDescription()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
-        //public override bool ShouldCreateRoute()
-        //{
-        //    return false;
-        //}
+        public override bool ShouldCreateRoute()
+        {
+            return false;
+        }
+
+        public override bool SupportPartialRouteBuild()
+        {
+            return false;
+        }
     }
 }

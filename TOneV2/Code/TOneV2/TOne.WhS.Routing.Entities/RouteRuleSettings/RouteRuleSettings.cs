@@ -54,5 +54,15 @@ namespace TOne.WhS.Routing.Entities
             return routeRuleSettings;
         }
 
+        public virtual bool ShouldCreateRoute()
+        {
+            return true;
+        }
+
+        public virtual bool SupportPartialRouteBuild()
+        {
+            return true;
+        }
+
     }
 }

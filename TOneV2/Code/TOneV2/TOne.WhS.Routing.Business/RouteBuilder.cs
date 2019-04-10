@@ -97,7 +97,8 @@ namespace TOne.WhS.Routing.Business
                             var routeRule = GetRouteRule(routeRuleTarget);
                             if (routeRule != null)
                             {
-                                bool createCustomerRoute = true;
+                                routeRule.Settings.ThrowIfNull("routeRule.Settings", routeRule.RuleId);
+                                bool createCustomerRoute = routeRule.Settings.ShouldCreateRoute();
 
                                 if (createCustomerRoute)
                                 {
@@ -242,25 +243,29 @@ namespace TOne.WhS.Routing.Business
             var routeRule = GetRouteRule(routeRuleTarget);
             if (routeRule != null)
             {
-                if (context.SupplierCodeMatches != null && context.SupplierCodeMatches.Count > 0)
+                routeRule.Settings.ThrowIfNull("routeRule.Settings", routeRule.RuleId);
+                if (routeRule.Settings.ShouldCreateRoute())
                 {
-                    return ExecuteRule(routingProduct.RoutingProductId, saleZone.SaleZoneId, saleZone.SellingNumberPlanId, saleZoneServiceIds, context, routeRuleTarget, routeRule, context.RoutingDatabase);
-                }
-                else
-                {
-                    return new RPRoute()
+                    if (context.SupplierCodeMatches != null && context.SupplierCodeMatches.Count > 0)
                     {
-                        RoutingProductId = routingProduct.RoutingProductId,
-                        SellingNumberPlanID = saleZone.SellingNumberPlanId,
-                        SaleZoneId = saleZone.SaleZoneId,
-                        SaleZoneName = saleZone.Name,
-                        SaleZoneServiceIds = saleZoneServiceIds,
-                        IsBlocked = routeRule.CorrespondentType == CorrespondentType.Block,
-                        ExecutedRuleId = routeRule.RuleId,
-                        EffectiveRateValue = routeRuleTarget.SaleRate,
-                        OptionsDetailsBySupplier = null,
-                        RPOptionsByPolicy = null
-                    };
+                        return ExecuteRule(routingProduct.RoutingProductId, saleZone.SaleZoneId, saleZone.SellingNumberPlanId, saleZoneServiceIds, context, routeRuleTarget, routeRule, context.RoutingDatabase);
+                    }
+                    else
+                    {
+                        return new RPRoute()
+                        {
+                            RoutingProductId = routingProduct.RoutingProductId,
+                            SellingNumberPlanID = saleZone.SellingNumberPlanId,
+                            SaleZoneId = saleZone.SaleZoneId,
+                            SaleZoneName = saleZone.Name,
+                            SaleZoneServiceIds = saleZoneServiceIds,
+                            IsBlocked = routeRule.CorrespondentType == CorrespondentType.Block,
+                            ExecutedRuleId = routeRule.RuleId,
+                            EffectiveRateValue = routeRuleTarget.SaleRate,
+                            OptionsDetailsBySupplier = null,
+                            RPOptionsByPolicy = null
+                        };
+                    }
                 }
             }
             return null;

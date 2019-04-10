@@ -249,6 +249,7 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byquality.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byservice.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-excludefromroutes.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\Templates\RoutingExcludedCodesTemplate.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\Templates\RoutingExcludedRangesTemplate.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\vr-whs-routing-excludedranges.js" />
