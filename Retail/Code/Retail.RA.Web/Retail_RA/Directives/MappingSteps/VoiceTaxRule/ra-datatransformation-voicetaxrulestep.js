@@ -93,7 +93,6 @@ app.directive('raDatatransformationVoicetaxrulestep', ['UtilsService', 'VRUIUtil
                         VRUIUtilsService.callDirectiveLoad(ruleStepCommonDirectiveAPI, payloadRuleStep, loadRuleStepCommonDirectivePromiseDeferred);
                     });
                     promises.push(loadRuleStepCommonDirectivePromiseDeferred.promise);
-                    console.log(payload.stepDetails);
                     //loading DurationInSeconds directive
                     var loadDurationInSecondsDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     durationInSecondsDirectiveReadyPromiseDeferred.promise.then(function () {
@@ -150,7 +149,6 @@ app.directive('raDatatransformationVoicetaxrulestep', ['UtilsService', 'VRUIUtil
                         TotalTaxValue: totalTaxValueDirectiveAPI != undefined ? totalTaxValueDirectiveAPI.getData() : undefined
                     };
                     ruleStepCommonDirectiveAPI.setData(obj);
-                    console.log(obj);
                     return obj;
                 };
 

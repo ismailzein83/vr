@@ -21,6 +21,12 @@ namespace Retail.RA.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<SMSTaxRuleSettingsConfig>(SMSTaxRuleSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<TransactionTaxRuleSettingsConfig> GetTransactionTaxRuleTemplates()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<TransactionTaxRuleSettingsConfig>(TransactionTaxRuleSettingsConfig.EXTENSION_TYPE);
+        }
+
     }
 
     //public class INTLReconciliationMemoryAnalyticDataManager : MemoryAnalyticDataManager

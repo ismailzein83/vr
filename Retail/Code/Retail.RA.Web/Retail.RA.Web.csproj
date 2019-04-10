@@ -84,6 +84,14 @@
     <Content Include="Retail_RA\Directives\DisputeManagement\Templates\DisputeSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\Extensions\INTL\retail-ra-intl-businessobject-dataprovidersettings.js" />
     <Content Include="Retail_RA\Directives\Extensions\INTL\Templates\INTLBusinessObjectDataProviderSettingsTemplate.html" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Transaction\ra-genericruledefinitionsettings-transactiontax.js" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Transaction\ra-rules-transactiontaxrule-overall.js" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Transaction\Templates\TransactionTaxGenericRuleDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Transaction\Templates\TransactionTaxRuleOverallTemplate.html" />
+    <Content Include="Retail_RA\Directives\MappingSteps\TransactionTaxRule\ra-datatransformation-transactiontaxrulestep-preview.js" />
+    <Content Include="Retail_RA\Directives\MappingSteps\TransactionTaxRule\ra-datatransformation-transactiontaxrulestep.js" />
+    <Content Include="Retail_RA\Directives\MappingSteps\TransactionTaxRule\Templates\TransactionTaxRuleStepPreviewTemplate.html" />
+    <Content Include="Retail_RA\Directives\MappingSteps\TransactionTaxRule\Templates\TransactionTaxRuleStepTemplate.html" />
     <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\retail-ra-onnetoperatordeclarationservice-postpaidsms.js" />
     <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\retail-ra-onnetoperatordeclarationservice-postpaidtotal.js" />
     <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\retail-ra-onnetoperatordeclarationservice-postpaidvoice.js" />
@@ -136,6 +144,7 @@
     <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-selector.js" />
     <Content Include="Retail_RA\Directives\Settings\retail-ra-dispute-settings-editor.js" />
     <Content Include="Retail_RA\Directives\Settings\Templates\DisputeSettingsTemplate.html" />
+    <Content Include="Retail_RA\Directives\TaxRules\ra-rules-taxrulesettings-transaction.js" />
     <Content Include="Retail_RA\Directives\TaxRules\ra-rules-taxrulesettings-voice.js" />
     <Content Include="Retail_RA\Directives\MappingSteps\SMSTaxRule\ra-datatransformation-smstaxrulestep-preview.js" />
     <Content Include="Retail_RA\Directives\MappingSteps\SMSTaxRule\ra-datatransformation-smstaxrulestep.js" />
@@ -156,6 +165,7 @@
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\Templates\EmptyDefinitionSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\Templates\TaxRuleOverallTemplate.html" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\Templates\TaxRulePerMinuteTemplate.html" />
+    <Content Include="Retail_RA\Directives\TaxRules\Templates\TransactionTaxRuleSettings.html" />
     <Content Include="Retail_RA\Directives\TaxRules\Templates\VoiceTaxRuleSettings.html" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\retail-ra-specialnumbers-customobjectsettings.js" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\retail-ra-specialnumbers.js" />

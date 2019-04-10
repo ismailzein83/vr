@@ -23,5 +23,13 @@ namespace Retail.RA.Web.Controller
             TaxRuleManager manager = new TaxRuleManager();
             return manager.GetSMSTaxRuleTemplates();
         }
+
+        [HttpGet]
+        [Route("GetTransactionTaxRuleTemplates")]
+        public IEnumerable<TransactionTaxRuleSettingsConfig> GetTransactionTaxRuleTemplates()
+        {
+            TaxRuleManager manager = new TaxRuleManager();
+            return manager.GetTransactionTaxRuleTemplates();
+        }
     }
 }

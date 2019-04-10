@@ -15,9 +15,15 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_RA_ModuleConfig.moduleName, controllerName, "GetSMSTaxRuleTemplates"));
         }
 
+        function GetTransactionTaxRuleTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_RA_ModuleConfig.moduleName, controllerName, "GetTransactionTaxRuleTemplates"));
+        }
+
+
         return {
             GetVoiceTaxRuleTemplates: GetVoiceTaxRuleTemplates,
-            GetSMSTaxRuleTemplates: GetSMSTaxRuleTemplates
+            GetSMSTaxRuleTemplates: GetSMSTaxRuleTemplates,
+            GetTransactionTaxRuleTemplates: GetTransactionTaxRuleTemplates
         };
     }
 
