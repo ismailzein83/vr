@@ -101,6 +101,7 @@
     <Compile Include="AccountParts\AccountPartInterconnectSetting.cs" />
     <Compile Include="AssignedFinancialAccountToInvoiceSettingFilter.cs" />
     <Compile Include="Extensions\CompareInvoiceAction.cs" />
+    <Compile Include="Extensions\OriginalInvoiceDataAction.cs" />
     <Compile Include="Extensions\SMSInvoiceSubSectionFilter.cs" />
     <Compile Include="Extensions\SMSInvoiceUIGridColumnFilter.cs" />
     <Compile Include="Extensions\VoiceInvoiceSubSectionFilter.cs" />
@@ -108,7 +109,9 @@
     <Compile Include="InterconnectInvoiceGenerationManager.cs" />
     <Compile Include="InterconnectInvoiceGenerator.cs" />
     <Compile Include="InterconnectInvoiceManager.cs" />
+    <Compile Include="InterconnectInvoiceSettlementManager.cs" />
     <Compile Include="InterconnectSettlementGenerationCustomSection.cs" />
+    <Compile Include="InterconnectSettlementInvoiceGenerator.cs" />
     <Compile Include="InterconnectSettlementInvoiceSettings.cs" />
     <Compile Include="InterconnectInvoiceSettings.cs" />
     <Compile Include="InterconnectModuleManager.cs" />
