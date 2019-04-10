@@ -664,6 +664,39 @@ namespace BPMExtended.Main.Business
         }
 
 
+        public CSO GetCustomerCSO(string sysUserId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            CSO csoObject = null;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysUserInRole");
+            esq.AddColumn("SysUser");
+           // var cashierColumn = esq.AddColumn("SysUser.Contact.StCSO.StCashier");
+            var csoName = esq.AddColumn("SysUser.Contact.StUserCSO.StName");
+            var csoId = esq.AddColumn("SysUser.Contact.StUserCSO.Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "SysUser", sysUserId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                string id = entities[0].GetTypedColumnValue<string>(csoId.Name);
+                string name = entities[0].GetTypedColumnValue<string>(csoName.Name);
+
+                csoObject = new CSO()
+                    {
+                        Id = id,
+                        Name = name
+                };
+            }
+
+            return csoObject;
+        }
+
         public bool IsOperationNeedProvisioning(string opType)
         {
             EntitySchemaQuery esq;
@@ -893,6 +926,92 @@ namespace BPMExtended.Main.Business
                 //account
             }
         }
+
+        public void UpdateCustomerAddress(string city,string firstName,string lastName,string addressSeq,string customerId, string contactId, string accountId)
+        {
+
+            CustomerAddressInput somRequestInput = new CustomerAddressInput
+            {
+                City = city,
+                FirstName = firstName,
+                LastName = lastName,
+                AddressSeq = addressSeq,
+                CustomerId = customerId,
+                CommonInputArgument = new CommonInputArgument()
+                {
+                    ContactId = contactId
+                }
+            };
+
+            using (var client = new SOMClient())
+            {         
+                client.Post<CustomerAddressInput, CustomerAddressOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
+            }
+
+        }
+
+        public void UpdateCustomerPaymentProfile(Guid paymentMethodId, string bankCode, string customerId, string accountNumber, string contactId, string accountId)
+        {
+            //TODO:
+
+        }
+
+        public void UpdateCustomerCategory(Guid customerCategoryId)
+        {
+            //TODO:
+
+        }
+
+
+        public List<CustomerCategoryInfo> GetCustomerCategoriesInfoBySegmentId(string segmentId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            List<CustomerCategoryInfo> customerCategoryItems = new List<CustomerCategoryInfo>();
+            //Guid id = new Guid(segmentId.ToUpper());
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoryCatalog");
+            var IdCol = esq.AddColumn("Id");
+            esq.AddColumn("StName");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerSegments.Id", segmentId);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                Guid catalogId = entities[0].GetTypedColumnValue<Guid>(IdCol.Name);//GetColumnValue("Id");
+
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesInCatalog");
+                esq.AddColumn("Id");
+                esq.AddColumn("StCustomerCategoryName");
+                esq.AddColumn("StCustomerCategoryID");
+
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryCatalog.Id", catalogId);
+                esq.Filters.Add(esqFirstFilter);
+
+                entities = esq.GetEntityCollection(BPM_UserConnection);
+
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    var name = entities[i].GetColumnValue("StCustomerCategoryName");
+                    var customerCategoryId = entities[i].GetColumnValue("StCustomerCategoryID");
+
+                    var customerCategoryItem = new CustomerCategoryInfo()
+                    {
+                        CategoryId = customerCategoryId.ToString(),
+                        Name = name.ToString()
+                    };
+                    customerCategoryItems.Add(customerCategoryItem);
+                }
+            }
+            return customerCategoryItems;
+        }
+
+
+
+
         //public void convertFileToBinaryCode()
         //{
         //    byte[] file;
@@ -1010,6 +1129,5 @@ namespace BPMExtended.Main.Business
         public string rate { get; set; }
         public bool isApproval { get; set; }
     }
-
 
 }
