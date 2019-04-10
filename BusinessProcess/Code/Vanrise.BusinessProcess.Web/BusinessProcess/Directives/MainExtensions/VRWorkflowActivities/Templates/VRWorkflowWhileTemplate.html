@@ -1,0 +1,15 @@
+﻿<vr-columns colnum="12">
+    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
+                                                            getworkflowarguments="scopeModel.context.getWorkflowArguments"
+                                                            value="scopeModel.condition" label="Condition" isrequired="!scopeModel.isVRWorkflowActivityDisabled">
+    </businessprocess-vr-workflow-activity-expressionbuilder>
+</vr-columns>
+<vr-columns colnum="6" left-medium-spacing>
+    <vr-fieldset>
+        <businessprocess-vr-workflow-containerv2 on-ready="scopeModel.onWorkflowContainerReady"
+                                                 dragdropsetting="scopeModel.dragdropsetting"
+                                                 single-activity="true"
+                                                 accept-empty-container="true">
+        </businessprocess-vr-workflow-containerv2>
+    </vr-fieldset>
+</vr-columns>

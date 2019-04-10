@@ -256,6 +256,7 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\Templates\VRWorkflowSpecificUsersTaskAssigneesTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\AssignTask\bp-vr-workflow-taskassignees.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-addbusinessentity-settings.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-while.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-updatebusinessentity-settings.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-updatebusinessentity.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-addbusinessentity.js" />
@@ -266,6 +267,7 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivityAddBusinessEntityTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivityAddBusinessEntityEditor.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivityAssignTaskEditor.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowWhileTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityUpdateBusinessEntityController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityAddBusinessEntityController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityAssignTaskController.js" />
