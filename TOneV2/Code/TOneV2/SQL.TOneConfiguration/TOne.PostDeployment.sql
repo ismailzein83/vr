@@ -97,7 +97,9 @@ as (select * from (values
 ('31B3226E-A2B2-40D5-8C33-83C6601E8730','LCR','LCR','WhS_Routing_RouteRuleSettingsType'																				,'{"Editor":"vr-whs-routing-routerulesettings-lcr", "DisplayOrder":"1"}'),
 ('5A492AA2-9642-453C-8B18-967D745AD812','Advanced','Advanced','WhS_Routing_RouteRuleSettingsType'																	,'{"Editor":"vr-whs-routing-routerulesettings-regular", "DisplayOrder":"21"}'),
 ('12E2CAD6-ABD9-4D2B-B2F3-51C3DF501DE9','Fixed','Fixed','WhS_Routing_RouteRuleSettingsType'																			,'{"Editor":"vr-whs-routing-routerulesettings-fixed", "DisplayOrder":"11"}'),
-('BBB0CA31-0FCD-4035-A8ED-5D4BAD06C662','Block','Block','WhS_Routing_RouteRuleSettingsType'																			,'{"Editor":"vr-whs-routing-routerulesettings-block", "DisplayOrder":"31","Priority":1}'),
+('BBB0CA31-0FCD-4035-A8ED-5D4BAD06C662','Block','Block','WhS_Routing_RouteRuleSettingsType'																			,'{"Editor":"vr-whs-routing-routerulesettings-block", "DisplayOrder":"31","Priority":2}'),
+('F966A804-E906-4DBD-8A8F-748805B8FE2E','ExcludeFromRoutes','Exclude From Routes','WhS_Routing_RouteRuleSettingsType'												,'{"Editor":"vr-whs-routing-routerulesettings-excludefromroutes", "DisplayOrder":"41","Priority":1}'),
+
 ('DD2B8C20-C9D2-44BE-9EF5-0890B52FCB9C','By Service Match','By Service Match','WhS_Routing_RouteRuleOptionFilterSettings'											,'{"Editor":"vr-whs-routing-routerulesettings-filter-service"}'),
 ('A4CC3BEC-B983-4283-8C82-1C354BBE103C','By Quality','By Quality','WhS_Routing_RouteRuleOptionFilterSettings'														,'{"Editor":"vr-whs-routing-routerulesettings-filter-quality"}'),
 
