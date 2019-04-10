@@ -93,7 +93,7 @@ namespace Retail.BusinessEntity.Business
             List<AccountSynchronizerInsertHandler> handlersToExecute = GetHandlersToExecute(accountData.Account);
             if (!parentAccountId.HasValue)
             {
-                ApplyHandlersPreInsert(context, accountData.Account, handlersToExecute);
+                ApplyHandlersPreInsert(context, accountData.Account, handlersToExecute, accountData.CustomFields);
             }
             long accountId;
             Account accountInserted;
@@ -124,12 +124,12 @@ namespace Retail.BusinessEntity.Business
                 if (!parentAccountId.HasValue)
                 {
                     context.WriteBusinessTrackingMsg(LogEntryType.Information, "New Account '{0}' imported", accountData.Account.Name);
-                    ApplyHandlersPostInsert(context, accountData.Account, handlersToExecute);
+                    ApplyHandlersPostInsert(context, accountData.Account, handlersToExecute, accountData.CustomFields);
                 }
             }
         }
 
-        private void ApplyHandlersPreInsert(ITargetBESynchronizerInsertBEsContext context, Account account, List<AccountSynchronizerInsertHandler> handlersToExecute)
+        private void ApplyHandlersPreInsert(ITargetBESynchronizerInsertBEsContext context, Account account, List<AccountSynchronizerInsertHandler> handlersToExecute,Dictionary<string,Object> customFields)
         {
             if (handlersToExecute != null)
             {
@@ -139,14 +139,15 @@ namespace Retail.BusinessEntity.Business
                     {
                         SynchronizerInsertBEContext = context,
                         AccountBEDefinitionId = this.AccountBEDefinitionId,
-                        Account = account
+                        Account = account,
+                        CustomFields = customFields
                     };
                     handler.Settings.OnPreInsert(handlerContext);
                 }
             }
         }
 
-        private void ApplyHandlersPostInsert(ITargetBESynchronizerInsertBEsContext context, Account account, List<AccountSynchronizerInsertHandler> handlersToExecute)
+        private void ApplyHandlersPostInsert(ITargetBESynchronizerInsertBEsContext context, Account account, List<AccountSynchronizerInsertHandler> handlersToExecute, Dictionary<string, Object> customFields)
         {
             if (handlersToExecute != null)
             {
@@ -156,7 +157,8 @@ namespace Retail.BusinessEntity.Business
                     {
                         SynchronizerInsertBEContext = context,
                         AccountBEDefinitionId = this.AccountBEDefinitionId,
-                        Account = account
+                        Account = account,
+                        CustomFields= customFields
                     };
                     handler.Settings.OnPostInsert(handlerContext);
                 }
@@ -232,6 +234,7 @@ namespace Retail.BusinessEntity.Business
                 get;
                 set;
             }
+            public Dictionary<string, Object> CustomFields { get; set; }
         }
 
         private class AccountSynchronizerInsertHandlerPostInsertContext : IAccountSynchronizerInsertHandlerPostInsertContext
@@ -253,6 +256,8 @@ namespace Retail.BusinessEntity.Business
                 get;
                 set;
             }
+            public Dictionary<string, Object> CustomFields { get; set; }
+
         }
 
 

@@ -39,6 +39,7 @@ namespace Retail.BusinessEntity.Entities
         Guid AccountBEDefinitionId { get; }
 
         Account Account { get; }
+        Dictionary<string, Object> CustomFields { get; }
     }
 
     public interface IAccountSynchronizerInsertHandlerPostInsertContext
@@ -48,5 +49,6 @@ namespace Retail.BusinessEntity.Entities
         Guid AccountBEDefinitionId { get; }
 
         Account Account { get; }
+        Dictionary<string, Object> CustomFields { get; }
     }
 }

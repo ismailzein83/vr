@@ -22,5 +22,6 @@ namespace Retail.BusinessEntity.Entities
         }
         public List<MappingRule> IdentificationRulesToInsert { get; set; }
         public List<MappingRule> IdentificationRulesToUpdate { get; set; }
+        public Dictionary<string,Object> CustomFields { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using Vanrise.BEBridge.Entities;
@@ -33,6 +34,7 @@ namespace Retail.Zajil.MainExtensions
         public Guid CompanyProfilePartDefinitionId { get; set; }
         public Guid OrderDetailsPartDefinitionId { get; set; }
         public Guid CompanyExtendedInfoPartdefinitionId { get; set; }
+        public int DefaultProductId { get; set; }
         #endregion
 
         #region Public Methods
@@ -58,9 +60,10 @@ namespace Retail.Zajil.MainExtensions
                     }
                     SourceAccountData accountData = new SourceAccountData
                     {
-                        Account = new Account()
+                        Account = new Account(),
+                        CustomFields = new Dictionary<string, object>()
                     };
-
+                    accountData.CustomFields.Add("PackageName", row["PackageName"] as string);
                     accountData.Account.Name = accountName;
                     accountData.Account.CreatedTime = row["CreateDate"] != DBNull.Value ? (DateTime)row["CreateDate"] : default(DateTime);
                     accountData.Account.SourceId = sourceId;
@@ -122,12 +125,37 @@ namespace Retail.Zajil.MainExtensions
         void FillFinancialInfo(SourceAccountData accountData, DataRow row)
         {
 
+            var creditLimit = (decimal?)row["CreditLimit"];
+            int? productId = null;
+            if (creditLimit.HasValue)
+            {
+                var products = new ProductManager().GetAllProducts();
+                if (products != null)
+                {
+                    foreach (var product in products)
+                    {
+                        if (product.Settings != null)
+                        {
+                            var settings = product.Settings.ExtendedSettings as IPostpaidProductSettings;
+                            if (settings != null)
+                            {
+                                if (settings.CreditLimit.HasValue && settings.CreditLimit.Value == creditLimit)
+                                {
+                                    productId = product.ProductId;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+          
             accountData.Account.Settings.Parts.Add(this.FinancialPartDefinitionId, new AccountPart
             {
                 Settings = new AccountPartFinancial
                 {
                     CurrencyId = _mainCurrency.CurrencyId,
-                    ProductId = 5
+                    ProductId = productId.HasValue? productId.Value: DefaultProductId
                 }
             });
         }
