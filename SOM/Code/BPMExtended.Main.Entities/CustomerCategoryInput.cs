@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class CustomerAddressInput
+    public class CustomerCategoryInput
     {
-        public string City { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string AddressSeq { get; set; }
         public string CustomerId { get; set; }
+        public string CustomerCategoryId { get; set; }
         public CommonInputArgument CommonInputArgument { get; set; }
-
     }
-
 }

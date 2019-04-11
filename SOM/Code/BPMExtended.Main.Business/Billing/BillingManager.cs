@@ -760,6 +760,21 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public List<PaymentMethodInfo> ReadPaymentMethodsInfo()
+        {
+            var paymentMethodsInfoItems = new List<PaymentMethodInfo>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<PaymentMethodInfo> items = client.Get<List<PaymentMethodInfo>>(String.Format("api/SOM.ST/Billing/ReadPaymentMethods"));
+                foreach (var item in items)
+                {
+                    paymentMethodsInfoItems.Add(item);
+                }
+            }
+            return paymentMethodsInfoItems;
+
+        }
+
         public bool GetCollectionStatus(string invoiceId)
         {
             //TODO:Get collection status by invoice Id

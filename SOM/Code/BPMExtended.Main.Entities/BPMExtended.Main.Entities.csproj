@@ -84,6 +84,9 @@
     <Compile Include="CustomerCategoryDetail.cs" />
     <Compile Include="CustomerCategoryCatalog.cs" />
     <Compile Include="CustomerCategoryInfo.cs" />
+    <Compile Include="CustomerCategoryInput.cs" />
+    <Compile Include="CustomerCreationInput.cs" />
+    <Compile Include="CustomerPaymentProfileInput.cs" />
     <Compile Include="DeportedNumberReservation.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="CustomerRequest.cs" />
@@ -106,6 +109,7 @@
     <Compile Include="PabxContractDetail.cs" />
     <Compile Include="PaymentDetail.cs" />
     <Compile Include="PaymentMethod.cs" />
+    <Compile Include="PaymentMethodInfo.cs" />
     <Compile Include="PaymentPlan.cs" />
     <Compile Include="PaymentPlanDetail.cs" />
     <Compile Include="PaymentPlanTemplateInfo.cs" />
@@ -118,6 +122,7 @@
     <Compile Include="RequestHeaderDetail.cs" />
     <Compile Include="ServiceDetail.cs" />
     <Compile Include="TelephonyContractDetail.cs" />
+    <Compile Include="UpdateSOMRequestOutput.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
