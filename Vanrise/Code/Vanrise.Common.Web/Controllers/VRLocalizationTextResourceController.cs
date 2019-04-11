@@ -18,12 +18,12 @@ namespace Vanrise.Common.Web.Controllers
 
         #region public methods
 
-        [HttpPost]
-        [Route("GetFilteredVRLocalizationTextResources")]
-        public object GetFilteredVRLocalizationTextResources(Vanrise.Entities.DataRetrievalInput<VRLocalizationTextResourceQuery> input)
-        {
-            return GetWebResponse(input, _manager.GetFilteredVRLocalizationTextResources(input), "Localization Text Resources");
-        }
+        //[HttpPost]
+        //[Route("GetFilteredVRLocalizationTextResources")]
+        //public object GetFilteredVRLocalizationTextResources(Vanrise.Entities.DataRetrievalInput<VRLocalizationTextResourceQuery> input)
+        //{
+        //    return GetWebResponse(input, _manager.GetFilteredVRLocalizationTextResources(input), "Localization Text Resources");
+        //}
        [HttpGet]
         [Route("GetVRLocalizationTextResourceInfo")]
         public IEnumerable<VRLocalizationTextResourceInfo> GetVRLocalizationTextResourceInfo(string filter = null)
@@ -39,19 +39,19 @@ namespace Vanrise.Common.Web.Controllers
             return _manager.GetVRLocalizationTextResource(vrLocalizationTextResource);
         }
 
-        [HttpPost]
-        [Route("AddVRLocalizationTextResource")]
-        public Vanrise.Entities.InsertOperationOutput<VRLocalizationTextResourceDetail> AddVRLocalizationTextResource(VRLocalizationTextResource vrLocalizationTextResourceItem)
-        {
-            return _manager.AddVRLocalizationTextResource(vrLocalizationTextResourceItem);
-        }
+        //[HttpPost]
+        //[Route("AddVRLocalizationTextResource")]
+        //public Vanrise.Entities.InsertOperationOutput<VRLocalizationTextResourceDetail> AddVRLocalizationTextResource(VRLocalizationTextResource vrLocalizationTextResourceItem)
+        //{
+        //    return _manager.AddVRLocalizationTextResource(vrLocalizationTextResourceItem);
+        //}
 
-        [HttpPost]
-        [Route("UpdateVRLocalizationTextResource")]
-        public Vanrise.Entities.UpdateOperationOutput<VRLocalizationTextResourceDetail> UpdateVRLocalizationTextResource(VRLocalizationTextResource vrLocalizationTextResourceItem)
-        {
-            return _manager.UpdateVRLocalizationTextResource(vrLocalizationTextResourceItem);
-        }
+        //[HttpPost]
+        //[Route("UpdateVRLocalizationTextResource")]
+        //public Vanrise.Entities.UpdateOperationOutput<VRLocalizationTextResourceDetail> UpdateVRLocalizationTextResource(VRLocalizationTextResource vrLocalizationTextResourceItem)
+        //{
+        //    return _manager.UpdateVRLocalizationTextResource(vrLocalizationTextResourceItem);
+        //}
         #endregion
     }
 }

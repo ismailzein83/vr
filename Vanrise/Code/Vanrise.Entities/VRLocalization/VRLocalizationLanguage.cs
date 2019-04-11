@@ -15,7 +15,12 @@ namespace Vanrise.Entities
         public Guid? ParentLanguageId { get; set; }
 
         public VRLocalizationLanguageSettings Settings { get; set; }
-    }
+		public DateTime? CreatedTime { get; set; }
+		public DateTime? LastModifiedTime { get; set; }
+		public int? CreatedBy { get; set; }
+		public int? LastModifiedBy { get; set; }
+
+	}
 
     public class VRLocalizationLanguageSettings
     {

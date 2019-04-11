@@ -22,6 +22,6 @@ namespace Vanrise.Common.Data
         bool SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings);
         bool SetFileUsedAndUpdateSettings(Guid fileUniqueId, VRFileSettings fileSettings);
         void DeleteFile(long fileId);
-        Vanrise.Entities.BigResult<VRFileInfo> GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input);
+       List<VRFileInfo> GetFilteredRecentFiles(string moduleName,int userId);
     }
 }

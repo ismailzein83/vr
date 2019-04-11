@@ -5,22 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common.Data;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Common.Business
 {
     public class VRLocalizationLanguageManager
-    {
-        public IDataRetrievalResult<VRLocalizationLanguageDetail> GetFilteredVRLocalizationLanguages(DataRetrievalInput<VRLocalizationLanguageQuery> input)
-        {
-            var allVRLocalizationLanguages = GetCachedVRLocalizationLanguages();
-            Func<VRLocalizationLanguage, bool> filterExpression = (x) =>
-            {
-                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                    return false;
-                return true;
-            };
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRLocalizationLanguages.ToBigResult(input, filterExpression, VRLocalizationLanguageDetailMapper));
-        }
+	{
+		static Guid businessEntityDefinitionId = new Guid("b72a7d06-76c2-4462-9696-3c84375e04e4");
+
+		//public IDataRetrievalResult<VRLocalizationLanguageDetail> GetFilteredVRLocalizationLanguages(DataRetrievalInput<VRLocalizationLanguageQuery> input)
+  //      {
+  //          var allVRLocalizationLanguages = GetCachedVRLocalizationLanguages();
+  //          Func<VRLocalizationLanguage, bool> filterExpression = (x) =>
+  //          {
+  //              if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+  //                  return false;
+  //              return true;
+  //          };
+  //          return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRLocalizationLanguages.ToBigResult(input, filterExpression, VRLocalizationLanguageDetailMapper));
+  //      }
 
         public VRLocalizationLanguage GetVRLocalizationLanguage(Guid vrLocalizationLanguageId)
         {
@@ -47,69 +50,89 @@ namespace Vanrise.Common.Business
             }
             return false;
         }
-        public InsertOperationOutput<VRLocalizationLanguageDetail> AddVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguage)
+		//public InsertOperationOutput<VRLocalizationLanguageDetail> AddVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguage)
+		//{
+		//    var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRLocalizationLanguageDetail>();
+
+		//    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+		//    insertOperationOutput.InsertedObject = null;
+
+		//    IVRLocalizationLanguageDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRLocalizationLanguageDataManager>();
+
+		//    vrLocalizationLanguage.VRLanguageId = Guid.NewGuid();
+
+		//    if (dataManager.Insert(vrLocalizationLanguage))
+		//    {
+		//        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+		//        insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+		//        insertOperationOutput.InsertedObject = VRLocalizationLanguageDetailMapper(vrLocalizationLanguage);
+		//    }
+		//    else
+		//    {
+		//        insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+		//    }
+
+		//    return insertOperationOutput;
+		//}
+		public Dictionary<Guid, VRLocalizationLanguage> GetAllLanguages()
+		{
+			return GetCachedVRLocalizationLanguages();
+		}
+
+		//public UpdateOperationOutput<VRLocalizationLanguageDetail> UpdateVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguage)
+		//{
+		//    var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRLocalizationLanguageDetail>();
+
+		//    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+		//    updateOperationOutput.UpdatedObject = null;
+
+		//    IVRLocalizationLanguageDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRLocalizationLanguageDataManager>();
+
+		//    if (dataManager.Update(vrLocalizationLanguage))
+		//    {
+		//        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+		//        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+		//        updateOperationOutput.UpdatedObject = VRLocalizationLanguageDetailMapper(this.GetVRLocalizationLanguage(vrLocalizationLanguage.VRLanguageId));
+		//    }
+		//    else
+		//    {
+		//        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+		//    }
+
+		//    return updateOperationOutput;
+		//}
+
+
+		private Dictionary<Guid, VRLocalizationLanguage> GetCachedVRLocalizationLanguages()
         {
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRLocalizationLanguageDetail>();
-
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
-
-            IVRLocalizationLanguageDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRLocalizationLanguageDataManager>();
-
-            vrLocalizationLanguage.VRLanguageId = Guid.NewGuid();
-
-            if (dataManager.Insert(vrLocalizationLanguage))
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = VRLocalizationLanguageDetailMapper(vrLocalizationLanguage);
-            }
-            else
-            {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-            }
-
-            return insertOperationOutput;
-        }
-
-        public UpdateOperationOutput<VRLocalizationLanguageDetail> UpdateVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguage)
-        {
-            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRLocalizationLanguageDetail>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            IVRLocalizationLanguageDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRLocalizationLanguageDataManager>();
-
-            if (dataManager.Update(vrLocalizationLanguage))
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = VRLocalizationLanguageDetailMapper(this.GetVRLocalizationLanguage(vrLocalizationLanguage.VRLanguageId));
-            }
-            else
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-            }
-
-            return updateOperationOutput;
-        }
-
-        public Dictionary<Guid, VRLocalizationLanguage>  GetAllLanguages()
-        {
-            return GetCachedVRLocalizationLanguages();
-        }
-      
-        private Dictionary<Guid, VRLocalizationLanguage> GetCachedVRLocalizationLanguages()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedVRLocalizationLanguages",
-               () =>
-               {
-                   IVRLocalizationLanguageDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRLocalizationLanguageDataManager>();
-                   IEnumerable<VRLocalizationLanguage> vrLocalizationLanguages = dataManager.GetVRLocalizationLanguages();
-                   return vrLocalizationLanguages.ToDictionary(itm => itm.VRLanguageId, itm => itm);
-               });
-        }
+			IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+			return genericBusinessEntityManager.GetCachedOrCreate("GetCachedVRLocalizationLanguage", businessEntityDefinitionId, () =>
+			{
+				Dictionary<Guid, VRLocalizationLanguage> result = new Dictionary<Guid, VRLocalizationLanguage>();
+				IEnumerable<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(businessEntityDefinitionId);
+				if (genericBusinessEntities != null)
+				{
+					foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
+					{
+						VRLocalizationLanguageSettings vrLocalizationLanguageSettings = new VRLocalizationLanguageSettings();
+						vrLocalizationLanguageSettings.IsRTL = (bool)genericBusinessEntity.FieldValues.GetRecord("IsRTL");
+						VRLocalizationLanguage vrLocalizationLanguage = new VRLocalizationLanguage()
+						{
+							VRLanguageId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
+							Name = genericBusinessEntity.FieldValues.GetRecord("Name") as string,
+							ParentLanguageId = (Guid?)genericBusinessEntity.FieldValues.GetRecord("ParentLanguageID"),
+							Settings = vrLocalizationLanguageSettings,
+							CreatedTime = (DateTime?)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
+							LastModifiedTime = (DateTime?)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
+							CreatedBy = (int?)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
+							LastModifiedBy = (int?)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy"),
+						};
+						result.Add(vrLocalizationLanguage.VRLanguageId, vrLocalizationLanguage);
+					}
+				}
+				return result;
+			});
+		}
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -169,5 +192,5 @@ namespace Vanrise.Common.Business
                 return null;
             return GetAllLanguages().Values.MapRecords(x => x.VRLanguageId);
         }
-    }
+	}
 }

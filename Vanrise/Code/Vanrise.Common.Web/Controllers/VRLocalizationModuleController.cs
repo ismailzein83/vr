@@ -16,12 +16,12 @@ namespace Vanrise.Common.Web.Controllers
     {
         VRLocalizationModuleManager _manager = new VRLocalizationModuleManager();
 
-        [HttpPost]
-        [Route("GetFilteredVRLocalizationModules")]
-        public object GetFilteredVRLocalizationModules(Vanrise.Entities.DataRetrievalInput<VRLocalizationModuleQuery> input)
-        {
-            return GetWebResponse(input, _manager.GetFilteredVRLocalizationModules(input), "Localization Modules");
-        }
+        //[HttpPost]
+        //[Route("GetFilteredVRLocalizationModules")]
+        //public object GetFilteredVRLocalizationModules(Vanrise.Entities.DataRetrievalInput<VRLocalizationModuleQuery> input)
+        //{
+        //    return GetWebResponse(input, _manager.GetFilteredVRLocalizationModules(input), "Localization Modules");
+        //}
 
         [HttpGet]
         [Route("GetVRLocalizationModule")]
@@ -30,19 +30,19 @@ namespace Vanrise.Common.Web.Controllers
             return _manager.GetVRLocalizationModule(vrLocalizationModule);
         }
 
-        [HttpPost]
-        [Route("AddVRLocalizationModule")]
-        public Vanrise.Entities.InsertOperationOutput<VRLocalizationModuleDetail> AddVRLocalizationModule(VRLocalizationModule vrLocalizationModuleItem)
-        {
-            return _manager.AddVRLocalizationModule(vrLocalizationModuleItem);
-        }
+        //[HttpPost]
+        //[Route("AddVRLocalizationModule")]
+        //public Vanrise.Entities.InsertOperationOutput<VRLocalizationModuleDetail> AddVRLocalizationModule(VRLocalizationModule vrLocalizationModuleItem)
+        //{
+        //    return _manager.AddVRLocalizationModule(vrLocalizationModuleItem);
+        //}
 
-        [HttpPost]
-        [Route("UpdateVRLocalizationModule")]
-        public Vanrise.Entities.UpdateOperationOutput<VRLocalizationModuleDetail> UpdateVRLocalizationModule(VRLocalizationModule vrLocalizationModuleItem)
-        {
-            return _manager.UpdateVRLocalizationModule(vrLocalizationModuleItem);
-        }
+        //[HttpPost]
+        //[Route("UpdateVRLocalizationModule")]
+        //public Vanrise.Entities.UpdateOperationOutput<VRLocalizationModuleDetail> UpdateVRLocalizationModule(VRLocalizationModule vrLocalizationModuleItem)
+        //{
+        //    return _manager.UpdateVRLocalizationModule(vrLocalizationModuleItem);
+        //}
 
         [HttpGet]
         [Route("GetVRLocalizationModuleInfo")]

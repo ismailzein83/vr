@@ -16,12 +16,12 @@ namespace Vanrise.Common.Web.Controllers
     {
         VRLocalizationLanguageManager _manager = new VRLocalizationLanguageManager();
 
-        [HttpPost]
-        [Route("GetFilteredVRLocalizationLanguages")]
-        public object GetFilteredVRLocalizationLanguages(Vanrise.Entities.DataRetrievalInput<VRLocalizationLanguageQuery> input)
-        {
-            return GetWebResponse(input, _manager.GetFilteredVRLocalizationLanguages(input), "Localization Languages");
-        }
+        //[HttpPost]
+        //[Route("GetFilteredVRLocalizationLanguages")]
+        //public object GetFilteredVRLocalizationLanguages(Vanrise.Entities.DataRetrievalInput<VRLocalizationLanguageQuery> input)
+        //{
+        //    return GetWebResponse(input, _manager.GetFilteredVRLocalizationLanguages(input), "Localization Languages");
+        //}
 
         [HttpGet]
         [Route("GetVRLocalizationLanguage")]
@@ -30,19 +30,19 @@ namespace Vanrise.Common.Web.Controllers
             return _manager.GetVRLocalizationLanguage(vrLocalizationLanguage);
         }
 
-        [HttpPost]
-        [Route("AddVRLocalizationLanguage")]
-        public Vanrise.Entities.InsertOperationOutput<VRLocalizationLanguageDetail> AddVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguageItem)
-        {
-            return _manager.AddVRLocalizationLanguage(vrLocalizationLanguageItem);
-        }
+        //[HttpPost]
+        //[Route("AddVRLocalizationLanguage")]
+        //public Vanrise.Entities.InsertOperationOutput<VRLocalizationLanguageDetail> AddVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguageItem)
+        //{
+        //    return _manager.AddVRLocalizationLanguage(vrLocalizationLanguageItem);
+        //}
 
-        [HttpPost]
-        [Route("UpdateVRLocalizationLanguage")]
-        public Vanrise.Entities.UpdateOperationOutput<VRLocalizationLanguageDetail> UpdateVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguageItem)
-        {
-            return _manager.UpdateVRLocalizationLanguage(vrLocalizationLanguageItem);
-        }
+        //[HttpPost]
+        //[Route("UpdateVRLocalizationLanguage")]
+        //public Vanrise.Entities.UpdateOperationOutput<VRLocalizationLanguageDetail> UpdateVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguageItem)
+        //{
+        //    return _manager.UpdateVRLocalizationLanguage(vrLocalizationLanguageItem);
+        //}
 
         [HttpGet]
         [Route("GetVRLocalizationLanguageInfo")]
