@@ -100,7 +100,6 @@
                      function getGenericBusinessEntityRuntimeInfo() {
 
                             return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBusinessEntityRuntimeInfo(businessEntityDefinitionId).then(function (response) {
-                                
                                 if (response != undefined) {
 
                                     if(attrs.ismultipleselection != undefined){
@@ -111,7 +110,6 @@
                                    // titleFieldName = response.TitleFieldName;
                                     idFieldName = response.IdFieldName;
                                 }
-
                             });
 
                         }

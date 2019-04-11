@@ -17,7 +17,28 @@ namespace Retail.RA.Business
             cachedOperatorDeclarations.ThrowIfNull("cachedOperatorDeclarations");
             return cachedOperatorDeclarations;
         }
-
+        public Dictionary<int, List<IntlOperatorDeclaration>> GetOperatorDeclarationByPeriodId()
+        {
+            Dictionary<int, List<IntlOperatorDeclaration>> declarationsByPeriod = new Dictionary<int, List<IntlOperatorDeclaration>>();
+            var cachedOperatorDeclarations = GetAllOperatorDecalarations();
+            if (cachedOperatorDeclarations != null)
+            {
+                foreach (var operatorDeclaration in cachedOperatorDeclarations)
+                {
+                    operatorDeclaration.ThrowIfNull("operatorDeclaration");
+                    var declaration = declarationsByPeriod.GetRecord(operatorDeclaration.PeriodId);
+                    if (declaration == null)
+                    {
+                        var operatorDeclarations = new List<IntlOperatorDeclaration>();
+                        operatorDeclarations.Add(operatorDeclaration);
+                        declarationsByPeriod.Add(operatorDeclaration.PeriodId, operatorDeclarations);
+                    }
+                    else
+                        declaration.Add(operatorDeclaration);
+                }
+            }
+            return declarationsByPeriod;
+        }
         public IEnumerable<IntlVoiceDeclarationService> GetVoiceDeclarationServices(List<PeriodDefinition> periodDefinitions, IEnumerable<long> filteredOperatorIds)
         {
             List<IntlVoiceDeclarationService> operatorDeclarations = new List<IntlVoiceDeclarationService>();
