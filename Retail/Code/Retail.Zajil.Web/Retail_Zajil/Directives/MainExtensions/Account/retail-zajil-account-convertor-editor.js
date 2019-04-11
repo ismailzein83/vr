@@ -120,7 +120,6 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         filter: {
                             AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
                         },
-                        selectedIds: accountTypeId
                     };
                     var statusSelectorPayload = {
                         filter: {
@@ -129,7 +128,6 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                                 AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
                             }]
                         },
-                        selectedIds: statusDefinitionId
                     };
                     var productSelectorPayload = {
                         filter: {
