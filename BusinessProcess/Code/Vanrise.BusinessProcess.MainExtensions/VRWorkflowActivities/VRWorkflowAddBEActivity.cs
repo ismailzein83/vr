@@ -12,11 +12,13 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
     {
         public override Guid ConfigId => new Guid("14B247CE-109F-4493-8979-57CA3DD090C3");
 
-        public override string Editor => throw new NotImplementedException();
+        public override string Editor => "businessprocess-vr-workflowactivity-addbusinessentity";
 
         public override string Title => "Add Business Object";
 
         public Guid EntityDefinitionId { get; set; }
+
+        public string DisplayName { get; set; }
 
         public VRWorkflowAddBEActivitySettings Settings { get; set; }
 

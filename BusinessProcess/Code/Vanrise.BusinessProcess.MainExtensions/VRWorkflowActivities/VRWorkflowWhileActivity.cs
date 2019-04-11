@@ -12,7 +12,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
     {
         public override Guid ConfigId => new Guid("0DEFE6D7-D4C3-4E73-804A-EE6764CCE57D");
 
-        public override string Editor => throw new NotImplementedException();
+        public override string Editor { get { return "businessprocess-vr-workflowactivity-while"; }}
 
         public override string Title => "While";
 

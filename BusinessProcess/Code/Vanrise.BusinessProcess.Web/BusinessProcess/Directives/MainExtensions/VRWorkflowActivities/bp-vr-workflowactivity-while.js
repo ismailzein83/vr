@@ -123,8 +123,8 @@ app.directive('businessprocessVrWorkflowactivityWhile', ['UtilsService', 'VRUIUt
 	            api.getData = function () {
 	                return {
                         $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowWhileActivity, Vanrise.BusinessProcess.MainExtensions",
-	                    Condition: $scope.scopeModel.condition,
-	                    Activity: workflowContainerAPI != undefined ? workflowContainerAPI.getData() : null,
+                        Condition: $scope.scopeModel.condition,
+                        Activity: workflowContainerAPI != undefined ? workflowContainerAPI.getData() : undefined,
 	                };
 	            };
 

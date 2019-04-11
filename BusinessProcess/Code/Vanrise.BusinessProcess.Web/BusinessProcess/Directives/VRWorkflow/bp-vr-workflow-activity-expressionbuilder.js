@@ -41,10 +41,12 @@ app.directive('businessprocessVrWorkflowActivityExpressionbuilder', ['UtilsServi
                     ctrl.label = "Value";
                 setTimeout(function () {
                     if (ctrl.value != undefined) {
-                        $scope.scopeModel.codeExpression = ctrl.value.CodeExpression;
+                        $scope.scopeModel.codeExpression = ctrl.value.CodeExpression; 
                         $scope.$apply();
                     }
-
+                    $scope.$watch('ctrl.value', function (newValue) {
+                            $scope.scopeModel.codeExpression = newValue != undefined ? newValue.CodeExpression : undefined;
+                    });
                     $scope.$watch('scopeModel.codeExpression', function (newCodeExpression) {
                         if (newCodeExpression == undefined || newCodeExpression == '') {
                             ctrl.value = undefined;

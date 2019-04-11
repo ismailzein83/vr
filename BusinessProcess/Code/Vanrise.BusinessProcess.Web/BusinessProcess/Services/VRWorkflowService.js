@@ -245,6 +245,34 @@
             VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityAssignTaskEditor.html', parameter, modalSettings);
         }
 
+        function openAddBusinessEntityEditor(obj, context, onActivityUpdated, remove, isNew) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onActivityUpdated = onActivityUpdated;
+                modalScope.remove = remove;
+            };
+            var parameter = {
+                obj: obj,
+                context: context,
+                isNew: isNew
+            };
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityAddBusinessEntityEditor.html', parameter, modalSettings);
+        }
+        function openUpdateBusinessEntityEditor(obj, context, onActivityUpdated, remove, isNew) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onActivityUpdated = onActivityUpdated;
+                modalScope.remove = remove;
+            };
+            var parameter = {
+                obj: obj,
+                context: context,
+                isNew: isNew
+            };
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityUpdateBusinessEntityEditor.html', parameter, modalSettings);
+        }
 		return ({
 			addVRWorkflow: addVRWorkflow,
 			editVRWorkflow: editVRWorkflow,
@@ -262,6 +290,8 @@
 			openCallHttpServiceEditor: openCallHttpServiceEditor,
             openSubProcessEditor: openSubProcessEditor,
             openAssignTaskEditor: openAssignTaskEditor,
+            openAddBusinessEntityEditor: openAddBusinessEntityEditor,
+            openUpdateBusinessEntityEditor: openUpdateBusinessEntityEditor
 		});
 	}
 

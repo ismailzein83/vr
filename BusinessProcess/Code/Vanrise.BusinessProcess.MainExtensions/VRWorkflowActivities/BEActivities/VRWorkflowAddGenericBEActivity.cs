@@ -21,7 +21,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
             StringBuilder codeBuilder = new StringBuilder();
 
             codeBuilder.AppendLine("var genericBEManager = new Vanrise.GenericData.Business.GenericBusinessEntityManager();");
-            codeBuilder.AppendLine("var itemToAdd = new Vanrise.GenericData.Entities.GenericBusinessEntityToAdd()");
+            codeBuilder.AppendLine("var itemToAdd = new Vanrise.GenericData.Entities.GenericBusinessEntityToAdd();");
             codeBuilder.AppendLine($@"itemToAdd.BusinessEntityDefinitionId = new Guid(""{context.EntityDefinitionId}"");");
             codeBuilder.AppendLine("itemToAdd.FieldValues = new Dictionary<string, Object>();");
             if (this.InputItems != null)
