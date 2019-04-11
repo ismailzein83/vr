@@ -75,8 +75,8 @@ namespace TOne.WhS.Analytics.Data.SQL
         private BlockedAttempt BlockedAttemptMapper(IDataReader reader)
         {
             BlockedAttempt blockedAttempt = new BlockedAttempt();
-            blockedAttempt.CustomerID = GetReaderValue<int>(reader, "CustomerID");
-            blockedAttempt.SaleZoneID = GetReaderValue<long>(reader, "SaleZoneID");
+            blockedAttempt.CustomerID = GetReaderValue<int?>(reader, "CustomerID");
+            blockedAttempt.SaleZoneID = GetReaderValue<long?>(reader, "SaleZoneID");
             if (query.Filter.GroupByNumber)
             {
                 blockedAttempt.CDPN = reader["CDPN"] as string;

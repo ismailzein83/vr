@@ -8,8 +8,8 @@ namespace TOne.WhS.Analytics.Entities
 {
     public class BlockedAttempt
     {
-        public int CustomerID { get; set; }
-        public long SaleZoneID { get; set; }
+        public int? CustomerID { get; set; }
+        public long? SaleZoneID { get; set; }
         public int BlockedAttempts { get; set; }
         public String ReleaseCode { get; set; }
         public String ReleaseSource { get; set; }

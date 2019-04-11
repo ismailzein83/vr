@@ -34,8 +34,8 @@ namespace TOne.WhS.Analytics.Business
             BlockedAttemptDetail blockedAttemptDetail = new BlockedAttemptDetail
             {
                 Entity = blockedAttempt,
-                CustomerName = _carrierAccountManager.GetCarrierAccountName(blockedAttempt.CustomerID),
-                SaleZoneName = _saleZoneManager.GetSaleZoneName(blockedAttempt.SaleZoneID),
+                CustomerName = blockedAttempt.CustomerID.HasValue ? _carrierAccountManager.GetCarrierAccountName(blockedAttempt.CustomerID.Value) : null,
+                SaleZoneName = blockedAttempt.SaleZoneID.HasValue ? _saleZoneManager.GetSaleZoneName(blockedAttempt.SaleZoneID.Value) : null,
                 ReleaseCodeDescription = _switchReleaseCauseManager.GetReleaseCodeDescription(blockedAttempt.ReleaseCode, switchId)
 
             };

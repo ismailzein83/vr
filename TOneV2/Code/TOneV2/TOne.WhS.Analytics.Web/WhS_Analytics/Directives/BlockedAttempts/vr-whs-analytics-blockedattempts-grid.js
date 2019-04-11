@@ -118,10 +118,9 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
                 FieldName: "CustomerId",
                 FilterValues: dataItem.Entity.CustomerID != null ? [dataItem.Entity.CustomerID] : []
             });
-            var salezoneId = dataItem.Entity.SaleZoneID == 0 ? undefined : dataItem.Entity.SaleZoneID;
             fieldFilters.push({
                 FieldName: "SaleZoneId",
-                FilterValues: [salezoneId]
+                FilterValues: dataItem.Entity.SaleZoneID != null ? [dataItem.Entity.SaleZoneID] : []
             });
             fieldFilters.push({
                 FieldName: "SupplierId",
@@ -138,7 +137,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
             fieldFilters.push({
                 FieldName: "ReleaseSource",
                 FilterValues: [dataItem.Entity.ReleaseSource]
-            });           
+            });
             return VR_Analytic_AnalyticItemActionService.openRecordSearch(reportId, title, sourceName, fromDate, toDate, period, fieldFilters);
         }
     }
