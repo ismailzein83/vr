@@ -94,7 +94,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 $rootScope.version = version;
             };
 
-            $rootScope.onValidationMessageShown = function (e) {
+            $rootScope.onValidationMessageShown = function (e, toBottom) {
                 var self = angular.element(e.currentTarget);
                 var selfHeight = $(self).height();
                 var TophasLable = $(self).parent().attr('label') != undefined ? 0 : (($(self).parents('.dropdown-container2').length > 0)) ? -10 : -15;
@@ -122,6 +122,13 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                         $(tooltip).addClass('tooltip-error-right');
                         $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
                     }
+                }
+                if (toBottom==true) {
+                    $(tooltip).removeClass('tooltip-error-right');
+                    $(tooltip).addClass('tooltip-error-bottom');
+                    var initialTop = (selfOffset.top - $(window).scrollTop());
+                    var left = selfOffset.left - $(window).scrollLeft() + (selfWidth / 2) - 150;
+                    $(tooltip).css({ position: 'fixed', top: initialTop + selfHeight, left: left, width: 300 });
                 }
 
                 e.stopPropagation();
@@ -491,7 +498,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                     });
                 }
 
-            }        
+            }
             function buildTileIconPath(icon) {
                 if (icon == null) return "";
                 var iconpath = icon.substring(0, icon.lastIndexOf("."));
@@ -649,7 +656,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             };
 
 
-           
+
             $rootScope.getPreviousReversedViews = function () {
                 var items = [];
                 var pagesRenderdAsView = $rootScope.moduleRenderedAsView.Childs;
@@ -697,7 +704,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 if ($('#navbar').attr("aria-expanded") == 'true') {
                     $('.navbar-toggle').click();
                 }
-             
+
             }
             $rootScope.setSelectedMenuTile = function () {
                 if ($rootScope.seledtedModuleId != undefined) {
@@ -718,7 +725,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                     }
                 }
                 $rootScope.evalModuleViewToggle();
-            };           
+            };
             $scope.currentPage = null;
             function setMenuItemSelectedFlag(menuItem, isSelected) {
                 $scope.menusubItemsCurrent = null;

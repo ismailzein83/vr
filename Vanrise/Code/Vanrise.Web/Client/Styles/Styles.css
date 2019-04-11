@@ -1447,6 +1447,19 @@ loader .outer-loader {
     pointer-events: none;
 }
 
+.tooltip-error-bottom .message-container {
+    white-space: pre-line;
+    max-width: 300px;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+.tooltip-error-bottom:before, .tooltip-error-bottom:after {
+    border-color: rgba(136, 183, 213, 0) rgba(136, 183, 213, 0) #D5AB88 rgba(136, 183, 213, 0) !important;
+    right: unset !important;
+    left: 50%;
+    margin-left: 0px !important;
+    top: -10px;
+}
 .tooltip-error-right:before, .tooltip-error-right:after {
     right: auto !important;
     left: 100%;
