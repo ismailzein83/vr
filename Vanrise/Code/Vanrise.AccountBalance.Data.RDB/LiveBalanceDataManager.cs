@@ -13,22 +13,23 @@ namespace Vanrise.AccountBalance.Data.RDB
 {
     public class LiveBalanceDataManager : ILiveBalanceDataManager
     {
-        static string TABLE_NAME = "VR_AccountBalance_LiveBalance";
-        const string COL_ID = "ID";
-        const string COL_AccountTypeID = "AccountTypeID";
-        const string COL_AccountID = "AccountID";
-        const string COL_CurrencyID = "CurrencyID";
-        const string COL_InitialBalance = "InitialBalance";
-        const string COL_CurrentBalance = "CurrentBalance";
-        const string COL_NextAlertThreshold = "NextAlertThreshold";
-        const string COL_LastExecutedActionThreshold = "LastExecutedActionThreshold";
-        const string COL_AlertRuleID = "AlertRuleID";
-        const string COL_ActiveAlertsInfo = "ActiveAlertsInfo";
-        const string COL_BED = "BED";
-        const string COL_EED = "EED";
-        const string COL_Status = "Status";
-        const string COL_IsDeleted = "IsDeleted";
-        const string COL_CreatedTime = "CreatedTime";
+        public static string TABLE_NAME = "VR_AccountBalance_LiveBalance";
+        public const string COL_ID = "ID";
+        public const string COL_AccountTypeID = "AccountTypeID";
+        public const string COL_AccountID = "AccountID";
+        public const string COL_CurrencyID = "CurrencyID";
+        public const string COL_InitialBalance = "InitialBalance";
+        public const string COL_CurrentBalance = "CurrentBalance";
+        public const string COL_NextAlertThreshold = "NextAlertThreshold";
+        public const string COL_LastExecutedActionThreshold = "LastExecutedActionThreshold";
+        public const string COL_AlertRuleID = "AlertRuleID";
+        public const string COL_ActiveAlertsInfo = "ActiveAlertsInfo";
+        public const string COL_RecreateAlertAfter = "RecreateAlertAfter";
+        public const string COL_BED = "BED";
+        public const string COL_EED = "EED";
+        public const string COL_Status = "Status";
+        public const string COL_IsDeleted = "IsDeleted";
+        public const string COL_CreatedTime = "CreatedTime";
 
 
         static LiveBalanceDataManager()
@@ -44,6 +45,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             columns.Add(COL_LastExecutedActionThreshold, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
             columns.Add(COL_AlertRuleID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_ActiveAlertsInfo, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_RecreateAlertAfter, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_Status, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
@@ -308,11 +310,14 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
+            string clearRecreateAlertAfterColumnName = "ClearRecreateAlertAfter";
+
             var tempTableQuery = queryContext.CreateTempTable();
             tempTableQuery.AddColumn(COL_AccountTypeID, RDBDataType.UniqueIdentifier, true);
             tempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
             tempTableQuery.AddColumn(COL_NextAlertThreshold, RDBDataType.Decimal, 20, 6);
             tempTableQuery.AddColumn(COL_AlertRuleID, RDBDataType.Int);
+            tempTableQuery.AddColumn(clearRecreateAlertAfterColumnName, RDBDataType.Boolean);
 
             if (updateEntities != null)
             {
@@ -327,6 +332,7 @@ namespace Vanrise.AccountBalance.Data.RDB
                         rowContext.Column(COL_NextAlertThreshold).Value(updateEntity.NextAlertThreshold.Value);
                     if (updateEntity.AlertRuleId.HasValue)
                         rowContext.Column(COL_AlertRuleID).Value(updateEntity.AlertRuleId.Value);
+                    rowContext.Column(clearRecreateAlertAfterColumnName).Value(updateEntity.ClearRecreateAlertAfter);
                 }
             }
 
@@ -341,6 +347,14 @@ namespace Vanrise.AccountBalance.Data.RDB
             updateQuery.Column(COL_NextAlertThreshold).Column("updateEntities", COL_NextAlertThreshold);
             updateQuery.Column(COL_AlertRuleID).Column("updateEntities", COL_AlertRuleID);
 
+            var recreateAlertAfterCaseExp = updateQuery.Column(COL_RecreateAlertAfter).CaseExpression();
+
+            var recreateAlertAfterCase1 = recreateAlertAfterCaseExp.AddCase();
+            recreateAlertAfterCase1.When().EqualsCondition("updateEntities", clearRecreateAlertAfterColumnName).Value(true);
+            recreateAlertAfterCase1.Then().Null();
+
+            recreateAlertAfterCaseExp.Else().Column(COL_RecreateAlertAfter);
+
             queryContext.ExecuteNonQuery();
         }
 
@@ -353,6 +367,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             tempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
             tempTableQuery.AddColumn(COL_LastExecutedActionThreshold, RDBDataType.Decimal, 20, 6);
             tempTableQuery.AddColumn(COL_ActiveAlertsInfo, RDBDataType.NVarchar);
+            tempTableQuery.AddColumn(COL_RecreateAlertAfter, RDBDataType.DateTime);
 
             if (updateEntities != null)
             {
@@ -367,6 +382,12 @@ namespace Vanrise.AccountBalance.Data.RDB
                         rowContext.Column(COL_LastExecutedActionThreshold).Value(updateEntity.LastExecutedActionThreshold.Value);
                     if (updateEntity.ActiveAlertsInfo != null)
                         rowContext.Column(COL_ActiveAlertsInfo).Value(Serializer.Serialize(updateEntity.ActiveAlertsInfo, true));
+                    if (updateEntity.RecreateAlertAfter.HasValue)
+                    {
+                        var dateExp = rowContext.Column(COL_RecreateAlertAfter).DateTimeAdd(RDBDateTimeAddInterval.Seconds);
+                        dateExp.DateTime().DateNow();
+                        dateExp.ValueToAdd().Value((int)updateEntity.RecreateAlertAfter.Value.TotalSeconds);
+                    }
                 }
             }
 
@@ -380,6 +401,47 @@ namespace Vanrise.AccountBalance.Data.RDB
 
             updateQuery.Column(COL_LastExecutedActionThreshold).Column("updateEntities", COL_LastExecutedActionThreshold);
             updateQuery.Column(COL_ActiveAlertsInfo).Column("updateEntities", COL_ActiveAlertsInfo);
+            updateQuery.Column(COL_RecreateAlertAfter).Column("updateEntities", COL_RecreateAlertAfter);
+
+            queryContext.ExecuteNonQuery();
+        }
+
+        public void UpdateBalanceRecreateAlertIntervals(List<LiveBalanceRecreateAlertAfterUpdateEntity> updateEntities)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var tempTableQuery = queryContext.CreateTempTable();
+            tempTableQuery.AddColumn(COL_AccountTypeID, RDBDataType.UniqueIdentifier, true);
+            tempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
+            tempTableQuery.AddColumn(COL_RecreateAlertAfter, RDBDataType.DateTime);
+
+            if (updateEntities != null)
+            {
+                var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+                insertMultipleRowsQuery.IntoTable(tempTableQuery);
+                foreach (var updateEntity in updateEntities)
+                {
+                    var rowContext = insertMultipleRowsQuery.AddRow();
+                    rowContext.Column(COL_AccountTypeID).Value(updateEntity.AccountTypeId);
+                    rowContext.Column(COL_AccountID).Value(updateEntity.AccountId);                   
+                    if (updateEntity.RecreateAlertAfter.HasValue)
+                    {
+                        var dateExp = rowContext.Column(COL_RecreateAlertAfter).DateTimeAdd(RDBDateTimeAddInterval.Seconds);
+                        dateExp.DateTime().DateNow();
+                        dateExp.ValueToAdd().Value((int)updateEntity.RecreateAlertAfter.Value.TotalSeconds);
+                    }
+                }
+            }
+
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+
+            var joinContext = updateQuery.Join("lb");
+            var joinCondition = joinContext.Join(tempTableQuery, "updateEntities").On();
+            joinCondition.EqualsCondition("lb", COL_AccountTypeID, "updateEntities", COL_AccountTypeID);
+            joinCondition.EqualsCondition("lb", COL_AccountID, "updateEntities", COL_AccountID);
+
+            updateQuery.Column(COL_RecreateAlertAfter).Column("updateEntities", COL_RecreateAlertAfter);
 
             queryContext.ExecuteNonQuery();
         }
@@ -426,6 +488,27 @@ namespace Vanrise.AccountBalance.Data.RDB
             });
         }
 
+        public void GetLiveBalancesToRecreateAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "lb", null, true);
+            selectQuery.SelectColumns().AllTableColumns("lb");
+
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            AddLiveBalanceToRecreateAlertCondition(where, "lb");
+            where.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
+
+            queryContext.ExecuteReader(reader =>
+            {
+                while (reader.Read())
+                {
+                    onLiveBalanceReady(LiveBalanceMapper(reader));
+                }
+            });
+        }
+
         public bool HasLiveBalancesUpdateData(Guid accountTypeId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -439,6 +522,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             var orCondition = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
             AddLiveBalanceToAlertCondition(orCondition, "lb");
             AddLiveBalanceToClearAlertCondition(orCondition, "lb");
+            AddLiveBalanceToRecreateAlertCondition(orCondition, "lb");
 
             return queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
@@ -565,6 +649,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             var andCondition = conditionContext.ChildConditionGroup();
             andCondition.GreaterThanCondition(liveBalanceAlias, COL_CurrentBalance).Column(liveBalanceAlias, COL_LastExecutedActionThreshold);
         }
-
+        private void AddLiveBalanceToRecreateAlertCondition(RDBConditionContext conditionContext, string liveBalanceAlias)
+        {
+            var andCondition = conditionContext.ChildConditionGroup();
+            andCondition.NotNullCondition(liveBalanceAlias, COL_LastExecutedActionThreshold);
+            andCondition.NotNullCondition(liveBalanceAlias, COL_RecreateAlertAfter);
+            andCondition.LessOrEqualCondition(liveBalanceAlias, COL_RecreateAlertAfter).DateNow();
+        }
     }
 }

@@ -15,6 +15,15 @@ namespace Vanrise.Notification.Entities
         {
             return false;
         }
+
+        public virtual bool CanReexecute
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public Guid DefinitionId { get; set; }
     }
 

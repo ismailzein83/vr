@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -103,6 +104,7 @@
     <Compile Include="LiveBalance\LiveBalanceAccountInfo.cs" />
     <Compile Include="LiveBalance\LiveBalanceLastThresholdUpdateEntity.cs" />
     <Compile Include="LiveBalance\LiveBalanceNextThresholdUpdateEntity.cs" />
+    <Compile Include="LiveBalance\LiveBalanceRecreateAlertAfterUpdateEntity.cs" />
     <Compile Include="LiveBalance\LiveBalanceToUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UpdateAccountBalance\UpdateAccountBalanceSettings.cs" />

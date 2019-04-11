@@ -6,6 +6,8 @@ namespace Vanrise.Notification.Entities
     public class VRBalanceAlertRuleSettings : VRGenericAlertRuleExtendedSettings
     {
         public List<VRBalanceAlertThresholdAction> ThresholdActions { get; set; }
+
+        public TimeSpan? RepeatEvery { get; set; }
     }
 
     public class VRBalanceAlertThresholdAction

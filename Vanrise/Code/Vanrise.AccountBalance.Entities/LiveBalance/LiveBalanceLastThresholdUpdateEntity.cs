@@ -13,5 +13,7 @@ namespace Vanrise.AccountBalance.Entities
         public String AccountId { get; set; }
         public decimal? LastExecutedActionThreshold { get; set; }
         public VRBalanceActiveAlertInfo ActiveAlertsInfo { get; set; }
+        
+        public TimeSpan? RecreateAlertAfter { get; set; }
     }
 }

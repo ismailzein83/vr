@@ -17,7 +17,11 @@ namespace Vanrise.Notification.Entities
 
         public abstract void UpdateBalanceLastAlertInfos(IVRBalanceAlertRuleUpdateBalanceLastAlertInfosContext context);
 
+        public abstract void UpdateBalanceRecreateAlertInterval(IVRBalanceAlertRuleUpdateBalanceRecreateAlertIntervalContext context);
+
         public abstract void LoadEntitiesToAlert(IVRBalanceAlertRuleLoadEntitiesToAlertContext context);
+
+        public abstract void LoadEntitiesToRecreateAlerts(IVRBalanceAlertRuleLoadEntitiesToRecreateAlertContext context);
 
         public abstract void LoadEntitiesToClearAlerts(IVRBalanceAlertRuleLoadEntitiesToClearAlertsContext context);
 
@@ -51,7 +55,17 @@ namespace Vanrise.Notification.Entities
         List<VRBalanceUpdateLastAlertInfoPayload> BalanceLastAlertInfosToUpdate { get; }
     }
 
+    public interface IVRBalanceAlertRuleUpdateBalanceRecreateAlertIntervalContext : IVRBalanceAlertRuleBehaviorContext
+    {
+        List<VRBalanceUpdateRecreateAlertIntervalPayload> BalanceRecreateAlertIntervalsToUpdate { get; }
+    }
+
     public interface IVRBalanceAlertRuleLoadEntitiesToAlertContext : IVRBalanceAlertRuleBehaviorContext
+    {
+        void OnBalanceInfoLoaded(IVREntityBalanceInfo balanceInfo);
+    }
+
+    public interface IVRBalanceAlertRuleLoadEntitiesToRecreateAlertContext : IVRBalanceAlertRuleBehaviorContext
     {
         void OnBalanceInfoLoaded(IVREntityBalanceInfo balanceInfo);
     }

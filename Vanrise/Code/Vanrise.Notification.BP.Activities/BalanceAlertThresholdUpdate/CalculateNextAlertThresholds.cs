@@ -113,7 +113,8 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                                     {
                                         EntityBalanceInfo = entityBalanceInfo,
                                         AlertRuleId = finalAlertRuleId,
-                                        NextAlertThreshold = finalNextThreshold
+                                        NextAlertThreshold = finalNextThreshold,
+                                        ClearRecreateAlertAfter = (finalAlertRuleId != currentAlertRuleId)
                                     };
                                     updateRuleInfoPayloadBatch.Items.Add(updateRuleInfoPayload);
                                 }

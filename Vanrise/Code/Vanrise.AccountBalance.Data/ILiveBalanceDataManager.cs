@@ -19,8 +19,10 @@ namespace Vanrise.AccountBalance.Data
         bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId);
         void UpdateBalanceRuleInfos(List<LiveBalanceNextThresholdUpdateEntity> updateEntities);
         void UpdateBalanceLastAlertInfos(List<LiveBalanceLastThresholdUpdateEntity> updateEntities);
+        void UpdateBalanceRecreateAlertIntervals(List<LiveBalanceRecreateAlertAfterUpdateEntity> updateEntities);
         void GetLiveBalancesToAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady);
         void GetLiveBalancesToClearAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady);
+        void GetLiveBalancesToRecreateAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady);
         bool HasLiveBalancesUpdateData(Guid accountTypeId);
         bool CheckIfAccountHasTransactions(Guid accountTypeId, String accountId);
         bool TryUpdateLiveBalanceStatus(String accountId, Guid accountTypeId, VRAccountStatus status, bool isDeleted);

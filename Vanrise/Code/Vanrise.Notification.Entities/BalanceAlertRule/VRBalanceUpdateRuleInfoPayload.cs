@@ -13,6 +13,8 @@ namespace Vanrise.Notification.Entities
         public long? AlertRuleId { get; set; }
 
         public Decimal? NextAlertThreshold { get; set; }
+
+        public bool ClearRecreateAlertAfter { get; set; }
     }
 
     public class VRBalanceUpdateRuleInfoPayloadBatch

@@ -49,7 +49,8 @@ namespace Vanrise.AccountBalance.Business.Extensions
                     AccountId = entityBalanceInfo.AccountId,
                     AccountTypeId = entityBalanceInfo.AccountTypeId,
                     AlertRuleId = balanceRuleInfo.AlertRuleId,
-                    NextAlertThreshold = balanceRuleInfo.NextAlertThreshold
+                    NextAlertThreshold = balanceRuleInfo.NextAlertThreshold,
+                    ClearRecreateAlertAfter = balanceRuleInfo.ClearRecreateAlertAfter
                 };
                 lstLiveBalanceNextThresholdUpdateEntity.Add(balanceEntity);
             }
@@ -69,11 +70,30 @@ namespace Vanrise.AccountBalance.Business.Extensions
                     AccountId = entityBalanceInfo.AccountId,
                     AccountTypeId = entityBalanceInfo.AccountTypeId,
                     LastExecutedActionThreshold = infoToUpdate.LastExecutedAlertThreshold,
-                    ActiveAlertsInfo = infoToUpdate.ActiveAlertsInfo
+                    ActiveAlertsInfo = infoToUpdate.ActiveAlertsInfo,
+                    RecreateAlertAfter = infoToUpdate.RecreateAlertAfter
                 };
                 lstLiveBalanceNextThresholdUpdateEntity.Add(balanceEntity);
             }
             dataManager.UpdateBalanceLastAlertInfos(lstLiveBalanceNextThresholdUpdateEntity);
+        }
+
+        public override void UpdateBalanceRecreateAlertInterval(IVRBalanceAlertRuleUpdateBalanceRecreateAlertIntervalContext context)
+        {
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            List<LiveBalanceRecreateAlertAfterUpdateEntity> lstLiveBalanceRecreateAlertAfterUpdateEntity = new List<LiveBalanceRecreateAlertAfterUpdateEntity>();
+            foreach (var infoToUpdate in context.BalanceRecreateAlertIntervalsToUpdate)
+            {
+                LiveBalance entityBalanceInfo = (infoToUpdate.EntityBalanceInfo as AlertRuleEntityBalanceInfo).LiveBalance;
+                LiveBalanceRecreateAlertAfterUpdateEntity balanceEntity = new LiveBalanceRecreateAlertAfterUpdateEntity
+                {
+                    AccountId = entityBalanceInfo.AccountId,
+                    AccountTypeId = entityBalanceInfo.AccountTypeId,
+                    RecreateAlertAfter = infoToUpdate.RecreateAlertAfter
+                };
+                lstLiveBalanceRecreateAlertAfterUpdateEntity.Add(balanceEntity);
+            }
+            dataManager.UpdateBalanceRecreateAlertIntervals(lstLiveBalanceRecreateAlertAfterUpdateEntity);
         }
 
         public override void LoadEntitiesToAlert(IVRBalanceAlertRuleLoadEntitiesToAlertContext context)
@@ -90,6 +110,14 @@ namespace Vanrise.AccountBalance.Business.Extensions
 
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
             dataManager.GetLiveBalancesToClearAlert(ruleTypeSettings.AccountTypeId, (liveBalance) => context.OnBalanceInfoLoaded(new AlertRuleEntityBalanceInfo(liveBalance)));
+        }
+
+        public override void LoadEntitiesToRecreateAlerts(IVRBalanceAlertRuleLoadEntitiesToRecreateAlertContext context)
+        {
+            AccountBalanceAlertRuleTypeSettings ruleTypeSettings = GetRuleTypeSettings(context);
+
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            dataManager.GetLiveBalancesToRecreateAlert(ruleTypeSettings.AccountTypeId, (liveBalance) => context.OnBalanceInfoLoaded(new AlertRuleEntityBalanceInfo(liveBalance)));
         }
 
         public override bool HasLiveBalancesUpdateData(IVRBalanceAlertRuleHasLiveBalancesUpdateDataContext context)

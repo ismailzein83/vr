@@ -7,6 +7,7 @@ using Vanrise.Notification.Entities;
 using Vanrise.Queueing;
 using System.Linq;
 using Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate;
+using Vanrise.Common;
 
 namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 {
@@ -56,7 +57,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 
                                 var alertRule = alertRuleManager.GetVRAlertRule(entityBalanceInfo.AlertRuleId.Value);
 
-                                VRBalanceAlertRuleSettings balanceAlertRuleSettings = alertRule.Settings.ExtendedSettings as VRBalanceAlertRuleSettings;
+                                VRBalanceAlertRuleSettings balanceAlertRuleSettings = alertRule.Settings.ExtendedSettings.CastWithValidate<VRBalanceAlertRuleSettings>("alertRule.Settings.ExtendedSettings", alertRule.VRAlertRuleId);
 
                                 VRBalanceActiveAlertInfo activeAlertsInfo = new VRBalanceActiveAlertInfo();
                                 if (entityBalanceInfo.ActiveAlertsInfo != null && entityBalanceInfo.ActiveAlertsInfo.ActiveAlertsThersholds != null)
@@ -118,7 +119,8 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                 {
                                     EntityBalanceInfo = entityBalanceInfo,
                                     LastExecutedAlertThreshold = activeAlertsInfo.ActiveAlertsThersholds.Count > 0 ? activeAlertsInfo.ActiveAlertsThersholds.Min(a => a.Threshold) : null,
-                                    ActiveAlertsInfo = activeAlertsInfo
+                                    ActiveAlertsInfo = activeAlertsInfo,
+                                    RecreateAlertAfter = balanceAlertRuleSettings.RepeatEvery
                                 });
                             }
                             inputArgument.OutputQueue.Enqueue(balanceUpdateLastAlertInfoPayloadBatch);
@@ -152,5 +154,5 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 
             public VRBalanceAlertThresholdAction ThresholdAction { get; set; }
         }
-    }
+    }    
 }

@@ -17,7 +17,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
     <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -66,6 +67,9 @@
     <Compile Include="BalanceAlertChecker\CreateAlerts.cs" />
     <Compile Include="BalanceAlertChecker\LoadEntitiesToAlert.cs" />
     <Compile Include="BalanceAlertChecker\LoadEntitiesToClearAlerts.cs" />
+    <Compile Include="BalanceAlertChecker\LoadEntitiesToRecreateAlerts.cs" />
+    <Compile Include="BalanceAlertChecker\RecreateAlerts.cs" />
+    <Compile Include="BalanceAlertChecker\UpdateBalanceRecreateAlertIntervals.cs" />
     <Compile Include="LoadNotifications.cs" />
     <Compile Include="BalanceAlertChecker\UpdateBalanceLastAlertInfos.cs" />
     <Compile Include="BalanceAlertThresholdUpdate\CalculateNextAlertThresholds.cs" />

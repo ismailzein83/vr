@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public class LiveBalanceNextThresholdUpdateEntity
+    public class LiveBalanceRecreateAlertAfterUpdateEntity
     {
         public Guid AccountTypeId { get; set; }
+
         public String AccountId { get; set; }
-        public decimal? NextAlertThreshold { get; set; }
-        public long? AlertRuleId { get; set; }
-        public bool ClearRecreateAlertAfter { get; set; }
+
+        public TimeSpan? RecreateAlertAfter { get; set; }
     }
 }

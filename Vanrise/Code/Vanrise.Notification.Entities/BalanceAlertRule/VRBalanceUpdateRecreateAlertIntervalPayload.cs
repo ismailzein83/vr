@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
-    public class VRBalanceUpdateLastAlertInfoPayload
+    public class VRBalanceUpdateRecreateAlertIntervalPayload
     {
         public IVREntityBalanceInfo EntityBalanceInfo { get; set; }
-        public Decimal? LastExecutedAlertThreshold { get; set; }
-        public VRBalanceActiveAlertInfo ActiveAlertsInfo { get; set; }
 
         public TimeSpan? RecreateAlertAfter { get; set; }
     }
 
-    public class VRBalanceUpdateLastAlertInfoPayloadBatch
+    public class VRBalanceUpdateRecreateAlertIntervalPayloadBatch
     {
-        public List<VRBalanceUpdateLastAlertInfoPayload> Items { get; set; }
+        public List<VRBalanceUpdateRecreateAlertIntervalPayload> Items { get; set; }
     }
 }

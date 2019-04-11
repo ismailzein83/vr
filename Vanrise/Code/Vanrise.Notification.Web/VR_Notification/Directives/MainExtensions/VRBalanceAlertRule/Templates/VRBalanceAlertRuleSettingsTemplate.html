@@ -7,4 +7,10 @@
 </vr-tab>
 <vr-tab header="'Settings'">
     <vr-notification-alertrulesettings on-ready="scopeModel.onVRAlertRuleSettingsDirectiveReady"></vr-notification-alertrulesettings>
+
+    <vr-row>
+        <vr-columns width="normal">
+            <vr-timespan label="Repeat Every" value="scopeModel.repeatEvery"></vr-timespan>
+        </vr-columns>
+    </vr-row>
 </vr-tab>

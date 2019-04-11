@@ -202,6 +202,39 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_TryUpdateEffectiveDate]", accountId, accountTypeId, bed, eed) > 0);
         }
+
+        public void UpdateBalanceRecreateAlertIntervals(List<LiveBalanceRecreateAlertAfterUpdateEntity> updateEntities)
+        {
+            DataTable recreateAlertAftersToUpdate = GetRecreateAlertAfterUpdateTable();
+            foreach (var updateEntity in updateEntities)
+            {
+                DataRow dr = recreateAlertAftersToUpdate.NewRow();
+                FillRecreateAlertAfterUpdateRow(dr, updateEntity);
+                recreateAlertAftersToUpdate.Rows.Add(dr);
+            }
+            recreateAlertAftersToUpdate.EndLoadData();
+            if (recreateAlertAftersToUpdate.Rows.Count > 0)
+                ExecuteNonQuerySPCmd("[VR_AccountBalance].[sp_LiveBalance_UpdateBalanceRecreateAlertAfter]",
+                       (cmd) =>
+                       {
+                           var dtPrm = new System.Data.SqlClient.SqlParameter("@LiveBalanceRecreateAlertAfterUpdateTable", SqlDbType.Structured);
+                           dtPrm.Value = recreateAlertAftersToUpdate;
+                           cmd.Parameters.Add(dtPrm);
+                       });
+        }
+
+        public void GetLiveBalancesToRecreateAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady)
+        {
+            ExecuteReaderSP("[VR_AccountBalance].[sp_LiveBalance_GetBalancesForRecreateAlert]",
+               (reader) =>
+               {
+                   while (reader.Read())
+                   {
+                       onLiveBalanceReady(LiveBalanceMapper(reader));
+                   }
+               }, accountTypeId);
+        }
+
         #endregion
 
         #region Mappers
@@ -314,6 +347,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 dr["NextAlertThreshold"] = updateEntity.NextAlertThreshold;
             if (updateEntity.AlertRuleId.HasValue)
                 dr["AlertRuleId"] = updateEntity.AlertRuleId;
+            dr["ClearRecreateAlertAfter"] = updateEntity.ClearRecreateAlertAfter;
         }
         private DataTable GetNextThresholdUpdateTable()
         {
@@ -322,6 +356,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("AccountID", typeof(String));
             dt.Columns.Add("NextAlertThreshold", typeof(decimal));
             dt.Columns.Add("AlertRuleId", typeof(int));
+            dt.Columns.Add("ClearRecreateAlertAfter", typeof(bool));
             return dt;
         }
         private void FillLastThresholdUpdateRow(DataRow dr, LiveBalanceLastThresholdUpdateEntity updateEntity)
@@ -332,6 +367,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                 dr["LastExecutedActionThreshold"] = updateEntity.LastExecutedActionThreshold;
             if (updateEntity.ActiveAlertsInfo != null)
                 dr["ActiveAlertsInfo"] = Serializer.Serialize(updateEntity.ActiveAlertsInfo, true);
+            if (updateEntity.RecreateAlertAfter.HasValue)
+                dr["RecreateAlertAfter"] = DateTime.Now.Add(updateEntity.RecreateAlertAfter.Value);
         }
         private DataTable GetLastThresholdUpdateTable()
         {
@@ -340,6 +377,22 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("AccountID", typeof(String));
             dt.Columns.Add("LastExecutedActionThreshold", typeof(decimal));
             dt.Columns.Add("ActiveAlertsInfo", typeof(string));
+            dt.Columns.Add("RecreateAlertAfter", typeof(DateTime));
+            return dt;
+        }
+        private void FillRecreateAlertAfterUpdateRow(DataRow dr, LiveBalanceRecreateAlertAfterUpdateEntity updateEntity)
+        {
+            dr["AccountTypeID"] = updateEntity.AccountTypeId;
+            dr["AccountID"] = updateEntity.AccountId;
+            if (updateEntity.RecreateAlertAfter.HasValue)
+                dr["RecreateAlertAfter"] = DateTime.Now.Add(updateEntity.RecreateAlertAfter.Value);
+        }
+        private DataTable GetRecreateAlertAfterUpdateTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("AccountTypeID", typeof(Guid));
+            dt.Columns.Add("AccountID", typeof(String));
+            dt.Columns.Add("RecreateAlertAfter", typeof(DateTime));
             return dt;
         }
         private string GetAccountBalanceQuery(AccountBalanceQuery query)

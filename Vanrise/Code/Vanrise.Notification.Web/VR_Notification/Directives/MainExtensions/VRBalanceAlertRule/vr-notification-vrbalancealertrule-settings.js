@@ -69,6 +69,9 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                         alertExtendedSettings = payload.alertExtendedSettings;
                         alertTypeSettings = payload.alertTypeSettings;
                         vrAlertRuleTypeId = payload.vrAlertRuleTypeId;
+                        
+                        if(alertExtendedSettings != undefined)
+                            $scope.scopeModel.repeatEvery = alertExtendedSettings.RepeatEvery;
                     }
 
                     if (alertExtendedSettings != undefined && alertExtendedSettings.Criteria != undefined) {
@@ -111,6 +114,7 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                         $type: "Vanrise.Notification.Entities.VRBalanceAlertRuleSettings,Vanrise.Notification.Entities",
                         Criteria: criteriaDirectiveAPI.getData(),
                         ThresholdActions: vrAlertRuleSettingsDirectiveAPI.getData(),
+                        RepeatEvery: $scope.scopeModel.repeatEvery
                     };
                 };
 

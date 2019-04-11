@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,6 +62,7 @@
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleTypeSettings.cs" />
     <Compile Include="BalanceAlertRule\IVREntityBalanceInfo.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceUpdateLastAlertInfoPayload.cs" />
+    <Compile Include="BalanceAlertRule\VRBalanceUpdateRecreateAlertIntervalPayload.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceUpdateRuleInfoPayload.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
