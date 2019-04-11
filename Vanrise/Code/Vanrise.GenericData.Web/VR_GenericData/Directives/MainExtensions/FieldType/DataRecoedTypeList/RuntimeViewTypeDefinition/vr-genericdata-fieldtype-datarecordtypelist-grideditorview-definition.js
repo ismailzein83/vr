@@ -34,8 +34,9 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
             $scope.scopeModel = {};
             var editorDefinitionAPI;
             var editorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            var context = {};
+            var context;
             var settings;
+            var dataRecordTypeId;
             var dataRecordTypeFields = [];
 
             function initializeController() {
@@ -47,12 +48,13 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                 defineAPI();
 
             }
+
             function loadEditorDefinitionDirective() {
                 var loadEditorDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                 editorDefinitionReadyPromiseDeferred.promise.then(function () {
                     var editorPayload = {
                         settings: settings,
-                        context: context
+                        context: getContext()
                     };
                     VRUIUtilsService.callDirectiveLoad(editorDefinitionAPI, editorPayload, loadEditorDefinitionDirectivePromiseDeferred);
                 });
@@ -69,6 +71,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                         }
                 });
             }
+
             function defineAPI() {
                 var api = {};
 
@@ -76,29 +79,13 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                     settings = payload.settings;
                     if (settings != undefined)
                         settings = settings.Settings;
-                    var dataRecordTypeId = payload.dataRecordTypeId; 
+                        dataRecordTypeId = payload.dataRecordTypeId; 
                     var rootPromiseNode = {
                         promises: [getDataRecordFieldsInfo(dataRecordTypeId)]
                     };
                    
                     rootPromiseNode.getChildNode = function () {
-                        context.getRecordTypeFields = function () {
-                            var data = [];
-                            for (var i = 0; i < dataRecordTypeFields.length; i++) {
-                                data.push(dataRecordTypeFields[i]);
-                            }
-                            return data;
-                        };
-                        context.getDataRecordTypeId = function () {
-                            return dataRecordTypeId;
-                        };
-                        context.getFieldType = function (fieldName) {
-                            for (var i = 0; i < dataRecordTypeFields.length; i++) {
-                                var field = dataRecordTypeFields[i];
-                                if (field.Name == fieldName)
-                                    return field.Type;
-                            }
-                        };
+             
                         return { promises: [loadEditorDefinitionDirective()] };
                     };
 
@@ -112,9 +99,43 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewDefinition'
                     };
                 };
 
+     
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
+            }
+
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined) {
+                    currentContext = {};
+                    currentContext.getRecordTypeFields = function () {
+                        var data = [];
+                        for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                            data.push(dataRecordTypeFields[i]);
+                        }
+                        return data;
+                    };
+                    currentContext.getDataRecordTypeId = function () {
+                        return dataRecordTypeId;
+                    };
+                    currentContext.getFieldType = function (fieldName) {
+                        for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                            var field = dataRecordTypeFields[i];
+                            if (field.Name == fieldName)
+                                return field.Type;
+                        }
+                    };
+                    currentContext.getFilteredFields = function () {
+                        var data = [];
+                        var filterData = currentContext.getRecordTypeFields();
+                        for (var i = 0; i < filterData.length; i++) {
+                            var fieldData = filterData[i];
+                            data.push({ FieldPath: fieldData.Name, FieldTitle: fieldData.Title });
+                        }
+                        return data;
+                    }
+                } return currentContext;
             }
 
             this.initializeController = initializeController;

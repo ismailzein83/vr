@@ -34,6 +34,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
             $scope.scopeModel = {};
             ctrl.datasource = [];
             $scope.scopeModel.columns = [];
+            var columns = {};
             var dataRecordTypeId;
             var definitionSettings;
             var gridAPI;
@@ -51,7 +52,17 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                 defineMenuActions();
             }
 
-
+            function getDataRecordTypeGridColumnsLoadPromise() {
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordAttributes(dataRecordTypeId).then(function (response) {
+                    var gridColumnAttributes = response;
+                    if (gridColumnAttributes != undefined) {
+                        for (var index = 0; index < gridColumnAttributes.length; index++) {
+                            var gridColumnAttribute = gridColumnAttributes[index];
+                            columns[gridColumnAttribute.Name] = gridColumnAttribute.Attribute;
+                        }
+                    }
+                });
+            }
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
@@ -61,33 +72,41 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                     var fieldsValues = payload.fieldValue;
                     $scope.scopeModel.fieldTitle = payload.fieldTitle;
                     var rootPromiseNode = {
-                        promises: []
-                    };
+                        promises: [getDataRecordTypeGridColumnsLoadPromise()],
+                        getChildNode: function () {
 
-                    if (definitionSettings != undefined && definitionSettings.Rows != undefined) {
-                        var rows = definitionSettings.Rows;
-                        for (var k = 0; k < rows.length; k++) {
-                            var row = rows[k];
-                            if (row.Fields != undefined) {
-                                var fields = row.Fields;
-                                for (var l = 0; l < fields.length; l++) {
-                                    $scope.scopeModel.columns.push(fields[l].FieldPath);
+                            if (definitionSettings != undefined && definitionSettings.Rows != undefined) {
+                                var rows = definitionSettings.Rows;
+                                for (var k = 0; k < rows.length; k++) {
+                                    var row = rows[k];
+                                    if (row.Fields != undefined) {
+                                        var fields = row.Fields;
+                                        for (var l = 0; l < fields.length; l++) {
+                                            var field = fields[l];
+                                            var column = columns[field.FieldPath];
+                                            column.Field = "Entity." + field.FieldPath;
+                                            column.HeaderText = field.FieldTitle;
+                                            column.Name = field.FieldPath;
+                                            $scope.scopeModel.columns.push(column);
+                                        } 
+                                    }
                                 }
                             }
-                        }
-                    }
 
-                    if (fieldsValues != undefined) {
-                        for (var i = 0; i < fieldsValues.length; i++) {
-                            var values = fieldsValues[i];
-                            var dataRow = {};
-                            for (var j = 0; j < $scope.scopeModel.columns.length; j++) {
-                                var columnName = $scope.scopeModel.columns[j];
-                                dataRow[columnName] = values[columnName];
+                            if (fieldsValues != undefined) {
+                                for (var i = 0; i < fieldsValues.length; i++) {
+                                    var values = fieldsValues[i];
+                                    var dataRow = {};
+                                    for (var j = 0; j < $scope.scopeModel.columns.length; j++) {
+                                        var columnName = $scope.scopeModel.columns[j].Name;
+                                        dataRow[columnName] = values[columnName];
+                                    }
+                                    ctrl.datasource.push({ Entity: dataRow });
+                                }
                             }
-                            ctrl.datasource.push({ Entity: dataRow });
+                            return {promises:[]}
                         }
-                    }
+                    };
                     return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 

@@ -90,7 +90,7 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                         var data = [];
                         var filterData = context.getRecordTypeFields();
                         for (var i = 0; i < filterData.length; i++) {
-                            data.push({ FieldPath: filterData[i].Name });
+                            data.push({ FieldPath: filterData[i].Name, FieldTitle: filterData[i].Title });
                         }
                         return data;
                     };
@@ -102,7 +102,8 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                     if (context != undefined) {
                         var allFields = context.getRecordTypeFields();
                         for (var i = 0; i < allFields.length; i++) {
-                            filteredFields.push({ FieldPath: allFields[i].Name });
+                            var field = allFields[i];
+                            filteredFields.push({ FieldPath: field.Name, FieldTitle: field.Title });
                         }
                     }
                     return filteredFields;

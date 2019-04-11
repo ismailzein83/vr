@@ -99,7 +99,7 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGridviewRuntime', ['VRUIU
                                 for (var i = 0; i < dataRecordFields.length; i++) {
                                     var entity = dataRecordFields[i].Entity;
                                     var name = entity.Name;
-                                    $scope.scopeModel.columns.push(name);
+                                    $scope.scopeModel.columns.push({ name: name, title: entity.Title });
                                     recordTypeFields[name] = {
                                         fieldTitle: entity.Title,
                                         fieldType: entity.Type,

@@ -61,14 +61,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionRow', ['UtilsService'
                 api.getData = function () {
                     var fields = [];
                     for (var i = 0; i < ctrl.fields.length; i++) {
-                        var field = ctrl.fields[i];
-                        fields.push({
-                            FieldTitle: field.FieldTitle,
-                            FieldPath: field.FieldPath,
-                            IsRequired: field.IsRequired,
-                            IsDisabled: field.IsDisabled,
-                            FieldViewSettings: field.FieldViewSettings
-                        });
+                        fields.push(ctrl.fields[i]);
                     }
                     return { Fields: fields };
                 };

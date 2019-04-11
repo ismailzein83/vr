@@ -36,10 +36,11 @@
             var fieldType = context.getFieldType(field.FieldPath);
             var fieldData = {
                 fieldPath: field.FieldPath,
-                fieldTitle: field.FieldPath,
+                fieldTitle: field.FieldTitle,
                 runtimeViewSettingEditor: fieldType.RuntimeViewSettingEditor,
                 directiveAPI: undefined
             };
+            if (fieldType.RuntimeViewSettingEditor)
             fieldData.onRuntimeViewSettingsEditorDirectiveReady = function (api) {
                 fieldData.directiveAPI = api;
                 var setLoader = function (value) { $scope.scopeModal.isRuntimeViewSettingsEditorDirectiveLoading = value; };
@@ -121,7 +122,7 @@
             var fieldType = context.getFieldType(field.FieldPath);
             var fieldInfo = {
                 fieldPath: field.FieldPath,
-                fieldTitle: selectedField.FieldTitle,
+                fieldTitle: field.FieldTitle,
                 runtimeViewSettingEditor: fieldType.RuntimeViewSettingEditor,
                 fieldSettingsLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
                 isRequired: selectedField.IsRequired,
@@ -129,6 +130,7 @@
                 //isDisabledOnEdit: selectedField.IsDisabledOnEdit,
                 directiveAPI: undefined
             };
+            if (fieldType.RuntimeViewSettingEditor)
             fieldInfo.onRuntimeViewSettingsEditorDirectiveReady = function (api) {
                 fieldInfo.directiveAPI = api;
                 VRUIUtilsService.callDirectiveLoad(fieldInfo.directiveAPI, {
@@ -144,12 +146,13 @@
             var rowObject = [];
             for (var i = 0; i < $scope.scopeModal.selectedFields.length; i++)
             {
+                var selectedField = $scope.scopeModal.selectedFields[i];
                 rowObject.push({
-                    FieldPath: $scope.scopeModal.selectedFields[i].fieldPath,
-                    FieldTitle: $scope.scopeModal.selectedFields[i].fieldTitle,
-                    IsRequired: $scope.scopeModal.selectedFields[i].isRequired,
-                    IsDisabled: $scope.scopeModal.selectedFields[i].isDisabled,
-                    FieldViewSettings: $scope.scopeModal.selectedFields[i].directiveAPI != undefined ? $scope.scopeModal.selectedFields[i].directiveAPI.getData() : undefined ,                      
+                    FieldPath: selectedField.fieldPath,
+                    FieldTitle: selectedField.fieldTitle,
+                    IsRequired: selectedField.isRequired,
+                    IsDisabled: selectedField.isDisabled,
+                    FieldViewSettings: selectedField.directiveAPI != undefined ? selectedField.directiveAPI.getData() : undefined ,                      
                     //IsDisabledOnEdit: $scope.scopeModal.selectedFields[i].isDisabledOnEdit
                 }); 
             }
