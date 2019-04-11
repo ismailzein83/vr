@@ -156,6 +156,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                                 DistributedDataGrouper dataGrouper = dataAnalysisInfo.Value.DistributedDataGrouper;
                                 dataGrouper.DistributeGroupingItems(profilingDGItems.Values.Select(itm => itm as IDataGroupingItem).ToList());
                                 profilingDGItems = new Dictionary<string, ProfilingDGItem>();
+                                dataAnalysisInfo.Value.ProfilingDGItems = new Dictionary<string, ProfilingDGItem>();
                             }
                         }
                     });
