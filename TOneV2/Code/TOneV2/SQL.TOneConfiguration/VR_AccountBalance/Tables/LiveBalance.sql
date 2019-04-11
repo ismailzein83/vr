@@ -9,6 +9,7 @@
     [LastExecutedActionThreshold] DECIMAL (20, 6)  NULL,
     [AlertRuleID]                 INT              NULL,
     [ActiveAlertsInfo]            NVARCHAR (MAX)   NULL,
+    [RecreateAlertAfter]          DATETIME         NULL,
     [BED]                         DATETIME         NULL,
     [EED]                         DATETIME         NULL,
     [Status]                      INT              NULL,
@@ -18,6 +19,8 @@
     CONSTRAINT [PK_LiveBalance] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_LiveBalance_TypeAndID] UNIQUE NONCLUSTERED ([AccountTypeID] ASC, [AccountID] ASC)
 );
+
+
 
 
 

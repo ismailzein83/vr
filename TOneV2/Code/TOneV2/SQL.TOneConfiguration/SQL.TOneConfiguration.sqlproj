@@ -842,6 +842,9 @@
     <Build Include="VR_MobNet\User Defined Types\NumberPrefixType.sql" />
     <Build Include="VR_MobNet\User Defined Types\MobileNetworkType.sql" />
     <Build Include="VR_MobNet\User Defined Types\MobileCountryType.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalanceRecreateAlertAfter.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetBalancesForRecreateAlert.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceRecreateAlertAfterUpdateTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
