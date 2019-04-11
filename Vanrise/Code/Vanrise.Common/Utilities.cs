@@ -276,16 +276,19 @@ namespace Vanrise.Common
                             errorsBuilder.AppendLine(errorMessage);
                         }
                     }
-                    throw new Exception(String.Format("Compile Error when building executor type for PropValueReader. Errors: {0}",
-                        errorsBuilder));
+                    LoggerFactory.GetExceptionLogger().WriteException(new Exception(String.Format("Compile Error when building executor type for PropValueReader. Errors: {0}",
+                        errorsBuilder)));
                 }
-                foreach (var propEntry in classNamesByProperties)
+                else
                 {
-                    var runtimeType = compilationOutput.OutputAssembly.GetType(String.Format("{0}.{1}", classNamespace, propEntry.Value));
-                    if (runtimeType == null)
-                        throw new NullReferenceException(String.Format("runtimeType '{0}'", propEntry.Key));
-                    var propValueReader = Activator.CreateInstance(runtimeType) as IPropValueReader;
-                    s_cachedProbValueReaders.TryAdd(propEntry.Key, propValueReader);
+                    foreach (var propEntry in classNamesByProperties)
+                    {
+                        var runtimeType = compilationOutput.OutputAssembly.GetType(String.Format("{0}.{1}", classNamespace, propEntry.Value));
+                        if (runtimeType == null)
+                            throw new NullReferenceException(String.Format("runtimeType '{0}'", propEntry.Key));
+                        var propValueReader = Activator.CreateInstance(runtimeType) as IPropValueReader;
+                        s_cachedProbValueReaders.TryAdd(propEntry.Key, propValueReader);
+                    }
                 }
             }
         }
