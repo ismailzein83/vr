@@ -76,7 +76,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public List<RatePlanInfo> GetRatePlansInfo()
+        public List<RatePlanInfo> GetRatePlansBSCSInfo()
         {
             var ratePlanInfoItems = new List<RatePlanInfo>();
             using (SOMClient client = new SOMClient())
@@ -326,6 +326,65 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetAllADSLSpeedInfo();
 
         }
+        #region New Methods
+        public List<RatePlanInfo> GetRatePlansInfo(string subTypeId, string customerCategoryId)
+        {
+            var ratePlans = new List<RatePlanInfo>();
+
+            var catalogId = GetRatePlanCatalogId(subTypeId, customerCategoryId);
+
+            Guid StRatePlanCatalogId = new Guid(catalogId.ToUpper());
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRatePlansInCatalog");
+
+            var IdCol = esq.AddColumn("Id");
+            esq.AddColumn("StRatePlanCatalog");
+            esq.AddColumn("StRatePlanName");
+
+            var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRatePlanCatalog", StRatePlanCatalogId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            for (int i = 0; i < entities.Count; i++)
+            {
+                var id = entities[i].GetTypedColumnValue<Guid>(IdCol.Name); ;
+                var name = entities[i].GetColumnValue("StRatePlanName");
+
+                var ratPlanItem = new RatePlanInfo()
+                {
+                    RatePlanId = id.ToString(),
+                    Name = name.ToString()
+                };
+                ratePlans.Add(ratPlanItem);
+            }
+            return ratePlans;
+        }
+
+        #region Private
+        private string GetRatePlanCatalogId(string subTypeId, string customerCategoryId)
+        {
+            Guid ratePlanCatalogId = new Guid() ;
+
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            IEntitySchemaQueryFilterItem esqSecondFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRatePlanCatalog");
+            var IdCol = esq.AddColumn("Id");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StLineofBusinessSubType", subTypeId);
+            esq.Filters.Add(esqFirstFilter);
+            esqSecondFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryId", customerCategoryId);
+            esq.Filters.Add(esqSecondFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+                ratePlanCatalogId = entities[0].GetTypedColumnValue<Guid>(IdCol.Name);
+
+            return ratePlanCatalogId.ToString();
+        }
+
+        #endregion
+        #endregion
+
 
         #region Mappers
 

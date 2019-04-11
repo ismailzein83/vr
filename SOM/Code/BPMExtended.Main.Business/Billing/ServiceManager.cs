@@ -23,6 +23,8 @@ namespace BPMExtended.Main.Business
         }
         #endregion
 
+        #region Public
+
         public List<ServiceInfo> GetServicesInfo()
         {
             var servicesInfoItems = new List<ServiceInfo>();
@@ -123,7 +125,7 @@ namespace BPMExtended.Main.Business
             services = serviceDetailItems.Where(p => !Servicesids.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
             return services;
         }
-
+        #endregion
 
         #region Mappers
         public ServiceInfo ServiceDefinitionToInfoMapper(ServiceDefinition item)

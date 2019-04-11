@@ -12,4 +12,11 @@ namespace BPMExtended.Main.Entities
 
         public string Name { get; set; }
     }
+
+    public class RatePlanBSCSInfo
+    {
+        public string RatePlanId { get; set; }
+
+        public string Name { get; set; }
+    }
 }
