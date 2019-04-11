@@ -108,6 +108,11 @@
 
                 beDefinitionSelectorPromiseDeferred.promise.then(function () {
                     var payloadSelector = {
+                        filter: {
+                            Filters: [{
+                                $type: "Vanrise.GenericData.Business.WorkflowAddBEActivityFilter, Vanrise.GenericData.Business"
+                            }]
+                        },
                         selectedIds: businessEntityDefinitionId
                     };
                     VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, payloadSelector, businessEntityDefinitionSelectorLoadDeferred);
