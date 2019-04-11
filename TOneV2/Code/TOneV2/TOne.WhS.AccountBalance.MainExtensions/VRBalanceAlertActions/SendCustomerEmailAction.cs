@@ -16,6 +16,8 @@ namespace TOne.WhS.AccountBalance.MainExtensions
 {
     public class SendCustomerEmailAction : VRAction
     {
+        public override bool CanReexecute => true;
+
         public Guid AccountMailTemplateId { get; set; }
 
         public Guid ProfileMailTemplateId { get; set; }

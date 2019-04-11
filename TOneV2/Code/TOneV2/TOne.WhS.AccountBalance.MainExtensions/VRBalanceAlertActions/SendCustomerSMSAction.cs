@@ -18,6 +18,8 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 {
     public class SendCustomerSMSAction : VRAction
     {
+        public override bool CanReexecute => true;
+
         public Guid AccountSMSTemplateId { get; set; }
 
         public Guid ProfileSMSTemplateId { get; set; }
