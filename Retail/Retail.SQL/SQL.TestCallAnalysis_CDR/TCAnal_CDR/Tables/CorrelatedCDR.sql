@@ -12,9 +12,8 @@
     [ReceivedCallingNumberType]       INT             NULL,
     [ReceivedCallingNumberOperatorID] BIGINT          NULL,
     [CreatedTime]                     DATETIME        NULL,
-    [LastModifiedTime]                DATETIME        NULL,
-    [CreatedBy]                       INT             NULL,
-    [LastModifiedBy]                  INT             NULL,
     [timestamp]                       ROWVERSION      NULL
 );
+
+
 
