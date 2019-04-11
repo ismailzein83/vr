@@ -53,6 +53,12 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             var companyExtendedInfoSelectorAPI;
             var companyExtendedInfoReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var productSelectorAPI;
+            var productSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+               
+
             $scope.scopeModel = {};
 
             $scope.scopeModel.onAccountDefinitionSelectorReady = function (api) {
@@ -95,12 +101,19 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                 companyExtendedInfoReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onProductSelectorReady = function (api) {
+                productSelectorAPI = api;
+                productSelectorReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onAccountDefinitionSelectionChanged = function (selectedItem) {
                 if (selectedItem != undefined && businessEntityDefinitionSelectionChangedDeferred == undefined) {
                     businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
                     businessEntityDefinitionSelectionChangedDeferred.resolve();
 
                     $scope.scopeModel.isAccountTypeSelectorLoading = true;
+                    $scope.scopeModel.isStatuseSelectorLoading = true;
+                    $scope.scopeModel.isProductSelectorLoading = true;
+
                     var promises = [];
 
                     var accountTypeSelectorPayload = {
@@ -114,20 +127,29 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                             Filters: [{
                                 $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter, Retail.BusinessEntity.Business",
                                 AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
-
                             }]
                         },
                         selectedIds: statusDefinitionId
                     };
+                    var productSelectorPayload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Retail.BusinessEntity.Business.AccountDefinitionProductFilter, Retail.BusinessEntity.Business",
+                                AccountBEDefinitionId: selectedItem.BusinessEntityDefinitionId
+                            }]
+                        },
+                    };
                     promises.push(loadAccountTypeSelector(accountTypeSelectorPayload));
                     promises.push(loadStatusDefinitionSelector(statusSelectorPayload));
-
+                    promises.push(loadProductSelector(productSelectorPayload));
                     UtilsService.waitMultiplePromises(promises).then(function () {
                         businessEntityDefinitionSelectionChangedDeferred = undefined;
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     }).finally(function () {
                         $scope.scopeModel.isAccountTypeSelectorLoading = false;
+                        $scope.scopeModel.isStatuseSelectorLoading = false;
+                        $scope.scopeModel.isProductSelectorLoading = false;
                     });
                 } else if (businessEntityDefinitionSelectionChangedDeferred != undefined) {
                     businessEntityDefinitionSelectionChangedDeferred.resolve();
@@ -145,7 +167,6 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                     var promises = [];
                     var accountTypeSelectorPayload;
                     var statusDefinitionSelectorPayload;
-
                     promises.push(loadAccountDefinitionSelectorLoad());
                     //promises.push(loadStatusDefinitionSelector());
 
@@ -171,8 +192,18 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                             },
                             selectedIds: payload.InitialStatusId
                         };
+                        var productSelectorPayload = {
+                            filter: {
+                                Filters: [{
+                                    $type: "Retail.BusinessEntity.Business.AccountDefinitionProductFilter, Retail.BusinessEntity.Business",
+                                    AccountBEDefinitionId: accountBEDefinitionId
+                                }]
+                            },
+                            selectedIds: payload.DefaultProductId
+                        };
 
                         businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadProductSelector(productSelectorPayload));
                         promises.push(loadAccountTypeSelector(accountTypeSelectorPayload));
                         promises.push(loadStatusDefinitionSelector(statusDefinitionSelectorPayload));
                     }
@@ -257,6 +288,7 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         });
                         return extendedInfoSelectorLoadDeferred.promise;
                     };
+                
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         businessEntityDefinitionSelectionChangedDeferred = undefined;
                     });
@@ -273,7 +305,8 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         CompanyProfilePartDefinitionId: companyProfileDefinitionSelectorAPI.getSelectedIds(),
                         FinancialPartDefinitionId: financialDefinitionSelectorAPI.getSelectedIds(),
                         OrderDetailsPartDefinitionId: orderDetailsDefinitionSelectorAPI.getSelectedIds(),
-                        CompanyExtendedInfoPartdefinitionId: companyExtendedInfoSelectorAPI.getSelectedIds()
+                        CompanyExtendedInfoPartdefinitionId: companyExtendedInfoSelectorAPI.getSelectedIds(),
+                        DefaultProductId: productSelectorAPI.getSelectedIds()
                     };
                     return data;
                 };
@@ -282,6 +315,13 @@ app.directive('retailZajilAccountConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                     ctrl.onReady(api);
             }
 
+            function loadProductSelector(productPayload) {
+                var productSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                productSelectorReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(productSelectorAPI, productPayload, productSelectorLoadPromiseDeferred);
+                });
+                return productSelectorLoadPromiseDeferred.promise;
+            }
             function loadSiteAccountTypeSelector(accountTypeSelectorPayload) {
                 var siteAccountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 

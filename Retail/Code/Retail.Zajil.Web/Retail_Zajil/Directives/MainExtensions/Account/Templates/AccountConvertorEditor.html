@@ -15,8 +15,12 @@
     <vr-common-statusdefinition-selector on-ready="scopeModel.onInitialStatusDefinitionSelectorReady"
                                          customlabel="Initial Status"
                                          normal-col-num="4"
-                                         isrequired="true">
+                                         isrequired="true" vr-loader="scopeModel.isStatuseSelectorLoading">
     </vr-common-statusdefinition-selector>
+    <retail-be-product-selector on-ready="scopeModel.onProductSelectorReady"
+                                normal-col-num="4"
+                                isrequired="true" vr-loader="scopeModel.isProductSelectorLoading">
+    </retail-be-product-selector>
 </vr-section>
 <vr-section title="Account Parts">
     <retail-be-accountpartdefinition-selector on-ready="scopeModel.onCompanyProfileDefinitionSelectorReady"
