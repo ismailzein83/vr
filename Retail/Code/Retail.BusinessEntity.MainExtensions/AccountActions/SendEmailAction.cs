@@ -12,6 +12,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountActions
 {
     public class SendEmailAction : BaseAccountBalanceAlertVRAction
     {
+        public override bool CanReexecute => true;
+
         public Guid MailMessageTemplateId { get; set; }
 
         public override void Execute(IVRActionExecutionContext context)
