@@ -239,6 +239,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountPartRequiredOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountCreditLimitFieldEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\CustomFieldTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\FaultTicketSourceEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\RecurringChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\RootSelectorTypeEnum.js" />
@@ -487,7 +488,10 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountBalanceFieldSource\retail-accountbalance-accounttype-source-financialaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountBalanceFieldSource\Templates\FinancialAccountSourceSetting.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-assignproductandpackages.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-assignpackage.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-portalaccount.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-customfieldtype-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\AssignPackageAccountInsertHandlerTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\AssignProductAndPackagesAccountInsertHandlerTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\PortalAccountInsertHandlerTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-operator.js" />
