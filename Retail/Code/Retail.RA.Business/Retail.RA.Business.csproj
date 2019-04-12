@@ -134,6 +134,7 @@
     <Compile Include="TaxRules\Voice\VoiceTaxRuleSettingsConfig.cs" />
     <Compile Include="TimePeriod\LastPeriodTimePeriod.cs" />
     <Compile Include="TimePeriod\LastYeasrPeriodTimePeriod.cs" />
+    <Compile Include="TopUpDefinitionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
