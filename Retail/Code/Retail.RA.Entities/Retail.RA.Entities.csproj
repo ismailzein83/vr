@@ -73,6 +73,7 @@
     <Compile Include="Special Numbers\SpecialNumberGroup.cs" />
     <Compile Include="Special Numbers\SpecialNumbersSetting.cs" />
     <Compile Include="SubscriberItem.cs" />
+    <Compile Include="TopUpDefinition.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
