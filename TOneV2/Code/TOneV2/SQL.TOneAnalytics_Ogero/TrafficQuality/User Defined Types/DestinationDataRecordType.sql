@@ -1,5 +1,6 @@
 ﻿CREATE TYPE [TrafficQuality].[DestinationDataRecordType] AS TABLE (
     [Id]               BIGINT         NULL,
+    [SwitchId]         INT            NULL,
     [RecordType]       INT            NULL,
     [ExchangeIdentity] VARCHAR (12)   NULL,
     [RecordingDate]    DATETIME       NULL,
@@ -17,6 +18,8 @@
     [T3]               INT            NULL,
     [ExtraFields]      NVARCHAR (MAX) NULL,
     [FileName]         VARCHAR (255)  NULL);
+
+
 
 
 

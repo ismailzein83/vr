@@ -1,5 +1,6 @@
 ﻿CREATE TYPE [TrafficQuality].[ProcessedDestinationDataRecordType] AS TABLE (
     [DDRId]         BIGINT      NULL,
+    [SwitchId]      INT         NULL,
     [RecordType]    INT         NULL,
     [ExchangeId]    VARCHAR (4) NULL,
     [RecordingDate] DATETIME    NULL,
@@ -15,6 +16,8 @@
     [T1]            INT         NULL,
     [T2]            INT         NULL,
     [T3]            INT         NULL);
+
+
 
 
 

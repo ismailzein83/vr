@@ -12,5 +12,9 @@
     [NumberOfRejections]    BIGINT      NULL,
     [NumberOfBAnswers]      BIGINT      NULL,
     [AccTrafficLevel]       BIGINT      NULL,
-    [AccNbOfBlockedDevices] BIGINT      NULL);
+    [AccNbOfBlockedDevices] BIGINT      NULL,
+    [SwitchId]              INT         NULL,
+    [CarrierAccountId]      INT         NULL);
+
+
 

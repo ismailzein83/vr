@@ -1,5 +1,7 @@
 ﻿CREATE TABLE [TrafficQuality].[AccumulatedRouteDataRecord] (
     [Id]                       BIGINT      NULL,
+    [SwitchId]                 INT         NULL,
+    [CarrierAccountId]         INT         NULL,
     [SwitchName]               VARCHAR (4) NULL,
     [RecordingDate]            DATETIME    NULL,
     [RouteName]                VARCHAR (7) NULL,
@@ -24,4 +26,11 @@
     [AccTrafficLevelOut]       BIGINT      NULL,
     [AccNbOfBlockedDevicesOut] BIGINT      NULL
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_TrafficQuality_AccumulatedRouteDataRecord_RecordingDate]
+    ON [TrafficQuality].[AccumulatedRouteDataRecord]([RecordingDate] ASC);
 

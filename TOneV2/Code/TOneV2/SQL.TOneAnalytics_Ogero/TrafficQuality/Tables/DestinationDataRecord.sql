@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [TrafficQuality].[DestinationDataRecord] (
     [Id]               BIGINT         NULL,
+    [SwitchId]         INT            NULL,
     [RecordType]       INT            NULL,
     [ExchangeIdentity] VARCHAR (12)   NULL,
     [RecordingDate]    DATETIME       NULL,
@@ -20,4 +21,11 @@
 );
 
 
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_TrafficQuality_DestinationDataRecord_RecordingDate]
+    ON [TrafficQuality].[DestinationDataRecord]([RecordingDate] ASC);
 

@@ -14,5 +14,8 @@
     [AccTrafficLevel]       BIGINT         NULL,
     [AccNbOfBlockedDevices] BIGINT         NULL,
     [ExtraFields]           NVARCHAR (MAX) NULL,
-    [FileName]              VARCHAR (255)  NULL);
+    [FileName]              VARCHAR (255)  NULL,
+    [SwitchId]              INT            NULL);
+
+
 
