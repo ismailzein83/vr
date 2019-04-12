@@ -65,8 +65,8 @@ namespace BPMExtended.Main.Business
             bool isForeigner = false;
             PaymentInfo payment = new PaymentInfo();
 
-            RatePlanManager ratePlanManager = new RatePlanManager();
-            var coreServices = ratePlanManager.GetCoreServices(ratePlanId);
+            ServiceManager serviceManager = new ServiceManager();
+            var coreServices = serviceManager.GetCoreServices(ratePlanId);
 
             decimal amountToPay = 0;
 
@@ -145,8 +145,8 @@ namespace BPMExtended.Main.Business
 
             PaymentInfo payment = new PaymentInfo();
 
-            RatePlanManager ratePlanManager = new RatePlanManager();
-            var coreServices = ratePlanManager.GetCoreServices(ratePlanId);
+            ServiceManager serviceManager = new ServiceManager();
+            var coreServices = serviceManager.GetCoreServices(ratePlanId);
 
             decimal amountToPay = 0;
 

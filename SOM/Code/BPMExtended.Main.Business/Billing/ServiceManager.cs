@@ -39,6 +39,80 @@ namespace BPMExtended.Main.Business
             }
             return servicesInfoItems;
         }
+        public List<ServiceDetail> GetCoreServices(string ratePlanId)
+        {
+            //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
+            //return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
+            var businessEntityManager = new BusinessEntityManager();
+            Packages packages = businessEntityManager.GetServicePackagesEntity();
+            var corePackageName = packages.Core;
+
+           var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, corePackageName);
+            return coreServices;
+        }
+        public List<ServiceDetail> GetServicesDetailByRateplanAndPackage(string rateplanId, string package)
+        {
+
+            var serviceInput = new ServiceInput()
+            {
+                RatePlanId = rateplanId,
+                Package = package
+            };
+            var servicesDetailItems = new List<ServiceDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<ServiceDefinition> items = client.Post<ServiceInput, List<ServiceDefinition>>("api/SOM.ST/Billing/GetServicesByRateplanAndPackage", serviceInput);
+               // List<ServiceDefinition> items = client.Get<List<ServiceDefinition>>(String.Format("api/SOM.ST/Billing/GetServicesByRateplanAndPackage?ratePlanId=TM006&packageId=SP005"));
+                foreach (var item in items)
+                {
+                    var serviceDetailItem = ServiceDefinitionToDetailMapper(item);
+                    servicesDetailItems.Add(serviceDetailItem);
+                }
+            }
+            return servicesDetailItems;
+        }
+
+        public List<ServiceDetail> GetServicesDetailByRateplanAndPackages(string rateplanId, List<string> packages)
+        {
+
+            var multiplePackagesServiceInput = new MultiplePackagesServiceInput()
+            {
+                RatePlanId = rateplanId,
+                Packages = packages
+            };
+
+            var servicesDetailItems = new List<ServiceDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<ServiceDefinition> items = client.Post<MultiplePackagesServiceInput,List<ServiceDefinition>>("api/SOM.ST/Billing/GetServicesByRateplanAndPackages",multiplePackagesServiceInput);
+                foreach (var item in items)
+                {
+                    var serviceDetailItem = ServiceDefinitionToDetailMapper(item);
+                    servicesDetailItems.Add(serviceDetailItem);
+                }
+            }
+            return servicesDetailItems;
+        }
+        public List<ServiceDetail> GetRatePlanServicesDetail(string rateplanId, List<string> excludedPackages)
+        {
+            var excludePackagesServiceInput = new ExcludePackagesServiceInput()
+            {
+                RatePlanId = rateplanId,
+                ExcludePackages = excludedPackages
+            };
+
+            var servicesDetailItems = new List<ServiceDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<ServiceDefinition> items = client.Post< ExcludePackagesServiceInput,List<ServiceDefinition>>("api/SOM.ST/Billing/GetRatePlanServices", excludePackagesServiceInput);
+                foreach (var item in items)
+                {
+                    var serviceDetailItem = ServiceDefinitionToDetailMapper(item);
+                    servicesDetailItems.Add(serviceDetailItem);
+                }
+            }
+            return servicesDetailItems;
+        }
         public List<POSServiceInfo> GetPOSServicesInfo()
         {
             var servicesInfoItems = new List<POSServiceInfo>();
@@ -125,7 +199,12 @@ namespace BPMExtended.Main.Business
             services = serviceDetailItems.Where(p => !Servicesids.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
             return services;
         }
+
+
+
         #endregion
+
+
 
         #region Mappers
         public ServiceInfo ServiceDefinitionToInfoMapper(ServiceDefinition item)

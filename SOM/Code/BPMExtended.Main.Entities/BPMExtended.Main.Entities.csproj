@@ -69,6 +69,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExcludePackagesServiceInput.cs" />
+    <Compile Include="MultiplePackagesServiceInput.cs" />
+    <Compile Include="ServiceInput.cs" />
+    <Compile Include="Packages.cs" />
     <Compile Include="Address.cs" />
     <Compile Include="ADSLSpeedInfo.cs" />
     <Compile Include="CommonInputArgument.cs" />

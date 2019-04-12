@@ -180,12 +180,6 @@ namespace BPMExtended.Main.Business
             
         }
 
-        public List<ServiceDetail> GetCoreServices(string ratePlanId)
-        {
-            var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
-            return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
-        }
-
         public List<ServiceDetail> GetOptionalServices(string ratePlanId)
         {
             var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
