@@ -103,8 +103,8 @@ namespace Vanrise.Invoice.Business
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<InvoiceDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-
-
+            var fromDate = reGenerateInvoiceInput.FromDate;
+            reGenerateInvoiceInput.FromDate = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
             string datesValidationmessage;
             if (!AreInvoiceDatesValid(reGenerateInvoiceInput.FromDate, reGenerateInvoiceInput.ToDate, reGenerateInvoiceInput.IssueDate, out datesValidationmessage))
             {
