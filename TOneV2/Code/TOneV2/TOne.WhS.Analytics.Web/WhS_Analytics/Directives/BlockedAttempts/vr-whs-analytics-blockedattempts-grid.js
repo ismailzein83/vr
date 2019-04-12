@@ -116,11 +116,11 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
             }
             fieldFilters.push({
                 FieldName: "CustomerId",
-                FilterValues: dataItem.Entity.CustomerID != null ? [dataItem.Entity.CustomerID] : []
+                FilterValues: dataItem.Entity.CustomerID != null ? [dataItem.Entity.CustomerID] : null
             });
             fieldFilters.push({
                 FieldName: "SaleZoneId",
-                FilterValues: dataItem.Entity.SaleZoneID != null ? [dataItem.Entity.SaleZoneID] : []
+                FilterValues: dataItem.Entity.SaleZoneID != null ? [dataItem.Entity.SaleZoneID] : null
             });
             fieldFilters.push({
                 FieldName: "SupplierId",
