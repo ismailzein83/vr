@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OnNetOperatorDeclarationServicePostpaidSMS.$inject = ['UtilsService', 'VRUIUtilsService'];
+    OnNetOperatorDeclarationServicePostpaidSMS.$inject = ['UtilsService', 'VRUIUtilsService', 'Retail_RA_ScopeEnum'];
 
-    function OnNetOperatorDeclarationServicePostpaidSMS(UtilsService, VRUIUtilsService) {
+    function OnNetOperatorDeclarationServicePostpaidSMS(UtilsService, VRUIUtilsService, Retail_RA_ScopeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -28,6 +28,9 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.scopes = UtilsService.getArrayEnum(Retail_RA_ScopeEnum);
+
                 defineAPI();
             }
 
@@ -40,16 +43,28 @@
 
                     if (payload != undefined) {
                         postpaidSMSEntity = payload.settings;
-                        $scope.scopeModel.revenue = postpaidSMSEntity.Revenue;
-                        $scope.scopeModel.sms = postpaidSMSEntity.SMS;
+                        if (postpaidSMSEntity != undefined) {
+                            $scope.scopeModel.revenue = postpaidSMSEntity.Revenue;
+                            $scope.scopeModel.sms = postpaidSMSEntity.SMS;
+                            $scope.scopeModel.revenueExcludingBundles = postpaidSMSEntity.RevenueExcludingBundles;
+                            $scope.scopeModel.smsExcludingBundles = postpaidSMSEntity.SMSExcludingBundles;
+                            $scope.scopeModel.selectedScope = UtilsService.getItemByVal($scope.scopeModel.scopes, postpaidSMSEntity.Scope, 'value');
+                        }
                     }
+                    var rootPromiseNode = {
+                        promises: promises
+                    };
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Retail.RA.Business.OnNetPostpaidSMSOperationDeclarationService,Retail.RA.Business",
                         Revenue: $scope.scopeModel.revenue,
-                        SMS: $scope.scopeModel.sms
+                        SMS: $scope.scopeModel.sms,
+                        RevenueExcludingBundles: $scope.scopeModel.revenueExcludingBundles,
+                        SMSExcludingBundles: $scope.scopeModel.smsExcludingBundles,
+                        Scope: $scope.scopeModel.selectedScope.value
                     };
                 };
 
