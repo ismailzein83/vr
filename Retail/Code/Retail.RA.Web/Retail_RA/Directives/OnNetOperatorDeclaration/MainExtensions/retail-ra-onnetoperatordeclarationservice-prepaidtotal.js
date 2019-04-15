@@ -40,10 +40,16 @@
 
                     if (payload != undefined) {
                         prepaidTotalEntity = payload.settings;
-                        $scope.scopeModel.numberOfSubscribers = prepaidTotalEntity.NumberOfSubscribers;
-                        $scope.scopeModel.amountFromTopups = prepaidTotalEntity.AmountFromTopups;
-                        $scope.scopeModel.residualAmountFromTopups = prepaidTotalEntity.ResidualAmountFromTopups;
+                        if (prepaidTotalEntity != undefined) {
+                            $scope.scopeModel.numberOfSubscribers = prepaidTotalEntity.NumberOfSubscribers;
+                            $scope.scopeModel.amountFromTopups = prepaidTotalEntity.AmountFromTopups;
+                            $scope.scopeModel.residualAmountFromTopups = prepaidTotalEntity.ResidualAmountFromTopups;
+                        }
                     }
+                    var rootPromiseNode = {
+                        promises: promises
+                    };
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
