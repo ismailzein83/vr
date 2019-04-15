@@ -1478,44 +1478,44 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Analytics\CarrierProfile.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlCarrierDailyTrafficByDay.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlCarrierDetailedSummary.rdlc">
+    <None Include="Reports\Analytics\CarrierProfile.rdlc" />
+    <None Include="Reports\Analytics\rdlCarrierDailyTrafficByDay.rdlc" />
+    <None Include="Reports\Analytics\rdlCarrierDetailedSummary.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Analytics\rdlCarrierDailyTraffic.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlCarrierExchangeSummary.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlCarrierLostSummary.rdlc">
+    </None>
+    <None Include="Reports\Analytics\rdlCarrierDailyTraffic.rdlc" />
+    <None Include="Reports\Analytics\rdlCarrierExchangeSummary.rdlc" />
+    <None Include="Reports\Analytics\rdlCarrierLostSummary.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Analytics\rdlCarrierProfitSummary.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlCustomerRoutingReport.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlCustomerSummary.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlDailySummary.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlDailySummaryForcasting.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlOutCustomerCostDetails.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlRateLoss.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlSaleCostSummary.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlSaleCostSummaryByService.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlSaleCostSummaryBySupplier.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\rdlZoneProfits.rdlc">
+    </None>
+    <None Include="Reports\Analytics\rdlCarrierProfitSummary.rdlc" />
+    <None Include="Reports\Analytics\rdlCustomerRoutingReport.rdlc" />
+    <None Include="Reports\Analytics\rdlCustomerSummary.rdlc" />
+    <None Include="Reports\Analytics\rdlDailySummary.rdlc" />
+    <None Include="Reports\Analytics\rdlDailySummaryForcasting.rdlc" />
+    <None Include="Reports\Analytics\rdlOutCustomerCostDetails.rdlc" />
+    <None Include="Reports\Analytics\rdlRateLoss.rdlc" />
+    <None Include="Reports\Analytics\rdlSaleCostSummary.rdlc" />
+    <None Include="Reports\Analytics\rdlSaleCostSummaryByService.rdlc" />
+    <None Include="Reports\Analytics\rdlSaleCostSummaryBySupplier.rdlc" />
+    <None Include="Reports\Analytics\rdlZoneProfits.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Analytics\rdlZoneSummary.rdlc">
+    </None>
+    <None Include="Reports\Analytics\rdlZoneSummary.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Analytics\rdlZoneSummaryDetailed.rdlc">
+    </None>
+    <None Include="Reports\Analytics\rdlZoneSummaryDetailed.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Analytics\rdlZoneSupplierSummary.rdlc" />
-    <EmbeddedResource Include="Reports\Analytics\ZoneProfit.rdlc">
+    </None>
+    <None Include="Reports\Analytics\rdlZoneSupplierSummary.rdlc" />
+    <None Include="Reports\Analytics\ZoneProfit.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\ReportChart.rdlc" />
-    <EmbeddedResource Include="Reports\TestReport.rdlc">
+    </None>
+    <None Include="Reports\ReportChart.rdlc" />
+    <None Include="Reports\TestReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\TestSubReport.rdlc" />
+    </None>
+    <None Include="Reports\TestSubReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

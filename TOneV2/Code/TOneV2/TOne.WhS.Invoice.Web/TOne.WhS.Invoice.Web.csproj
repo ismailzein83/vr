@@ -273,205 +273,205 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\ITPC\CustomerInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="Reports\ITPC\CustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="Reports\ITPC\InvoiceItemsReportByCurrency.rdlc" />
-    <EmbeddedResource Include="Reports\ITPC\InvoiceReportByCurrency.rdlc" />
-    <EmbeddedResource Include="Reports\ITPC\ProfileInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="Reports\ITPC\ProfileInvoiceReport.rdlc" />
-    <EmbeddedResource Include="Reports\Ringo\CustomerInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="Reports\Ringo\CustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="Reports\Ringo\InvoiceItemsReportByCurrency.rdlc" />
-    <EmbeddedResource Include="Reports\Ringo\InvoiceReportByCurrency.rdlc" />
-    <EmbeddedResource Include="Reports\Ringo\ProfileInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="Reports\Ringo\ProfileInvoiceReport.rdlc" />
-    <EmbeddedResource Include="Reports\Zajil\CustomerInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="Reports\Zajil\CustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="Reports\Zajil\InvoiceItemsReportByCurrency.rdlc" />
-    <EmbeddedResource Include="Reports\Zajil\InvoiceReportByCurrency.rdlc" />
-    <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\AT\DefaultCustomerInvoiceItemsReport.rdlc">
+    <None Include="Reports\ITPC\CustomerInvoiceItemsReport.rdlc" />
+    <None Include="Reports\ITPC\CustomerInvoiceReport.rdlc" />
+    <None Include="Reports\ITPC\InvoiceItemsReportByCurrency.rdlc" />
+    <None Include="Reports\ITPC\InvoiceReportByCurrency.rdlc" />
+    <None Include="Reports\ITPC\ProfileInvoiceItemsReport.rdlc" />
+    <None Include="Reports\ITPC\ProfileInvoiceReport.rdlc" />
+    <None Include="Reports\Ringo\CustomerInvoiceItemsReport.rdlc" />
+    <None Include="Reports\Ringo\CustomerInvoiceReport.rdlc" />
+    <None Include="Reports\Ringo\InvoiceItemsReportByCurrency.rdlc" />
+    <None Include="Reports\Ringo\InvoiceReportByCurrency.rdlc" />
+    <None Include="Reports\Ringo\ProfileInvoiceItemsReport.rdlc" />
+    <None Include="Reports\Ringo\ProfileInvoiceReport.rdlc" />
+    <None Include="Reports\Zajil\CustomerInvoiceItemsReport.rdlc" />
+    <None Include="Reports\Zajil\CustomerInvoiceReport.rdlc" />
+    <None Include="Reports\Zajil\InvoiceItemsReportByCurrency.rdlc" />
+    <None Include="Reports\Zajil\InvoiceReportByCurrency.rdlc" />
+    <None Include="Reports\Zajil\ProfileInvoiceItemsReport.rdlc" />
+    <None Include="Reports\Zajil\ProfileInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\AT\DefaultCustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\AT\DefaultCustomerInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\AT\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\AT\DefaultSupplierInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\AT\DefaultSupplierInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\AT\DefaultSupplierInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\AT\DefaultSupplierInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\AT\SettlementInvoiceDetail.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\AT\SettlementInvoiceDetail.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\AT\SettlementInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\AT\SettlementInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultCustomerInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultCustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Demo\DefaultCustomerInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Demo\DefaultCustomerInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Demo\DefaultSupplierInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultSupplierInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Mobilis\DefaultSupplierInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultSupplierInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Mobilis\DefaultSupplierInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+    </None>
     <!--<EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>-->
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SettlementInvoiceDetail.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SettlementInvoiceReport.rdlc">
+    <None Include="WhS_Invoice\Reports\Mobilis\SettlementInvoiceDetail.rdlc" />
+    <None Include="WhS_Invoice\Reports\Mobilis\SettlementInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SettlementPaymentDemand.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Mobilis\SettlementPaymentDemand.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SupplierPaymentDemand.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Mobilis\SupplierPaymentDemand.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultCustomerInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultCustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultSupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Namibia\DefaultSupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\SupplierCompareInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Namibia\DefaultCustomerInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Namibia\DefaultCustomerInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Namibia\DefaultSupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Namibia\DefaultSupplierInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Mobilis\SupplierCompareInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Mobilis\CustomerCompareInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Mobilis\CustomerCompareInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\Old\CustomerJazzInvoiceItemsReport1.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Jazz\Old\CustomerJazzInvoiceItemsReport1.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\Old\CustomerInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Jazz\Old\CustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\Old\CustomerJazzInvoiceReport1.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\Old\CustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceItemsReport1.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Jazz\Old\CustomerJazzInvoiceReport1.rdlc" />
+    <None Include="WhS_Invoice\Reports\Jazz\Old\CustomerInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceItemsReport1.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceReport1.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceReport1.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\DefaultSupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\DefaultSupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\Old\SupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\Old\SupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\SettlementInvoiceDetail.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\CustomerInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Jazz\DefaultCustomerInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Jazz\DefaultSupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Jazz\DefaultSupplierInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Jazz\Old\SupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Jazz\Old\SupplierInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\SettlementInvoiceDetail.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Old\CustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\CustomerInvoiceItemsReportByCurrency.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\CustomerInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\Old\CustomerInvoiceItemsReportByCurrency.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Old\CustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\CustomerInvoiceReportByCurrency.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\CustomerRecurringChargeInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\Old\CustomerInvoiceReportByCurrency.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Old\CustomerRecurringChargeInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\SettlementInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\Old\SettlementInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\SupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\SupplierInvoiceItemsReportByCurrency.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\SupplierInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\Old\SupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Old\SupplierInvoiceItemsReportByCurrency.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Old\SupplierInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\SupplierInvoiceReportByCurrency.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\SupplierRecurringChargeInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\Old\SupplierInvoiceReportByCurrency.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Old\SupplierRecurringChargeInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\DefaultSupplierInvoiceItemsByCurrencyReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\DefaultSupplierInvoiceItemsByCurrencyReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\DefaultSupplierInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\DefaultSupplierInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\CustomerRecurringChargeInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\CustomerRecurringChargeInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\DefaultCustomerInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\DefaultCustomerInvoiceItemsByCurrencyReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\DefaultCustomerInvoiceItemsByCurrencyReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerRecurringChargeInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerRecurringChargeInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SettlementInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SupplierRecurringChargeInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\SettlementInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SettlementInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SupplierInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SupplierRecurringChargeInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Ogero\SettlementInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\SupplierRecurringChargeInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Ogero\SupplierRecurringChargeInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\DefaultCustomerInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Sama\DefaultCustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\DefaultCustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\Old\CustomerInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Sama\DefaultCustomerInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Sama\Old\CustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\Old\CustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\Old\SupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\Old\SupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\DefaultSupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\DefaultSupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Sama\Old\CustomerInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Sama\Old\SupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Sama\Old\SupplierInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Sama\DefaultSupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Sama\DefaultSupplierInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\ProfileInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\ProfileInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vtel\DefaultCustomerInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Vtel\DefaultCustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vtel\DefaultCustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vtel\DefaultSupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vtel\DefaultSupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultCustomerInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultCustomerInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Vtel\DefaultCustomerInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Vtel\DefaultSupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Vtel\DefaultSupplierInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Vuetel\DefaultCustomerInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Vuetel\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\DefaultCustomerInvoiceItemsReport1.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Vuetel\Old\DefaultCustomerInvoiceItemsReport1.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\DefaultCustomerInvoiceReport1.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Vuetel\Old\DefaultCustomerInvoiceReport1.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\CustomerInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Vuetel\Old\CustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\CustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\SupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\SupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\DefaultSupplierInvoiceItemsReport1.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\DefaultSupplierInvoiceReport1.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Vuetel\Old\CustomerInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Vuetel\Old\SupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Vuetel\Old\SupplierInvoiceReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Vuetel\Old\DefaultSupplierInvoiceItemsReport1.rdlc" />
+    <None Include="WhS_Invoice\Reports\Vuetel\Old\DefaultSupplierInvoiceReport1.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultSupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultSupplierInvoiceReport.rdlc">
+    </None>
+    <None Include="WhS_Invoice\Reports\Vuetel\DefaultSupplierInvoiceItemsReport.rdlc" />
+    <None Include="WhS_Invoice\Reports\Vuetel\DefaultSupplierInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="JSLintNet.json" />

@@ -28,7 +28,7 @@
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -150,37 +150,37 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlLossesByCarrierListView.rdlc">
+    <None Include="WhS_Analytics\Reports\Analytics\rdlLossesByCarrierListView.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlProfitByCarrier.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCostBySaleZone.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlCostBySaleZoneSupplier.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlSalesAndProfitsByCustomer.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlRoutingByCustomer.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlLossesByCarrier.rdlc">
+    </None>
+    <None Include="WhS_Analytics\Reports\Analytics\rdlProfitByCarrier.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlCostBySaleZone.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlCostBySaleZoneSupplier.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlSalesAndProfitsByCustomer.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlRoutingByCustomer.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlLossesByCarrier.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlSummaryByCarrierByDay.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDetailedBillingByCarrier.rdlc">
+    </None>
+    <None Include="WhS_Analytics\Reports\Analytics\rdlSummaryByCarrierByDay.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlDetailedBillingByCarrier.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlProfitByCustomer.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlSummaryByCarrier.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDailySummary.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDailySummaryForcasting.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlOutCustomerCostDetails.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlLossesByZones.rdlc" />
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlProfitByZone.rdlc">
+    </None>
+    <None Include="WhS_Analytics\Reports\Analytics\rdlProfitByCustomer.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlSummaryByCarrier.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlDailySummary.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlDailySummaryForcasting.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlOutCustomerCostDetails.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlLossesByZones.rdlc" />
+    <None Include="WhS_Analytics\Reports\Analytics\rdlProfitByZone.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlSummaryByZone.rdlc">
+    </None>
+    <None Include="WhS_Analytics\Reports\Analytics\rdlSummaryByZone.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlDetailedBillingByZone.rdlc">
+    </None>
+    <None Include="WhS_Analytics\Reports\Analytics\rdlDetailedBillingByZone.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Analytics\Reports\Analytics\rdlRoutingAnalysis.rdlc" />
+    </None>
+    <None Include="WhS_Analytics\Reports\Analytics\rdlRoutingAnalysis.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
