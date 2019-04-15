@@ -113,7 +113,7 @@ namespace Vanrise.Common
                     output = new CSharpCompilationOutput() { Errors = new List<CSharpCompilationError>(), ErrorMessages = new List<string>() };
                     foreach (Diagnostic diagnostic in failures)
                     {
-                        CSharpCompilationError error = BuildCSharpCompilationError(diagnostic);
+                        CSharpCompilationError error = BuildCSharpCompilationError(diagnostic, outputFileName);
                         output.ErrorMessages.Add(diagnostic.ToString());
                         output.Errors.Add(error);
                     }
@@ -145,9 +145,12 @@ namespace Vanrise.Common
             return outputResult;
         }
 
-        private static CSharpCompilationError BuildCSharpCompilationError(Diagnostic diagnostic)
+        private static CSharpCompilationError BuildCSharpCompilationError(Diagnostic diagnostic, string outputFileName)
         {
             string diagnosticAsString = diagnostic.ToString();
+            if (!string.IsNullOrEmpty(outputFileName) && diagnosticAsString.StartsWith(outputFileName))
+                diagnosticAsString = diagnosticAsString.Remove(0, outputFileName.Length);
+
             string[] parts = diagnosticAsString.Split(':');
 
             int lineNumber = int.Parse(parts[0].Split(',')[0].Replace("(", ""));
