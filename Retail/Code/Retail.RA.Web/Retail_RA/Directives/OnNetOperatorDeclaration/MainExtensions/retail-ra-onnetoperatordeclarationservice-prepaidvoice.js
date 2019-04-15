@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OnNetOperatorDeclarationServicePrepaidVoice.$inject = ['UtilsService', 'VRUIUtilsService'];
+    OnNetOperatorDeclarationServicePrepaidVoice.$inject = ['UtilsService', 'VRUIUtilsService', 'Retail_RA_ScopeEnum'];
 
-    function OnNetOperatorDeclarationServicePrepaidVoice(UtilsService, VRUIUtilsService) {
+    function OnNetOperatorDeclarationServicePrepaidVoice(UtilsService, VRUIUtilsService, Retail_RA_ScopeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -28,6 +28,9 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.scopes = UtilsService.getArrayEnum(Retail_RA_ScopeEnum);
+
                 defineAPI();
             }
 
@@ -40,10 +43,20 @@
 
                     if (payload != undefined) {
                         prepaidVoiceEntity = payload.settings;
-                        $scope.scopeModel.calls = prepaidVoiceEntity.Calls;
-                        $scope.scopeModel.revenue = prepaidVoiceEntity.Revenue;
-                        $scope.scopeModel.duration = prepaidVoiceEntity.Duration;
+                        if (prepaidVoiceEntity != undefined) {
+                            $scope.scopeModel.calls = prepaidVoiceEntity.Calls;
+                            $scope.scopeModel.revenue = prepaidVoiceEntity.Revenue;
+                            $scope.scopeModel.duration = prepaidVoiceEntity.Duration;
+                            $scope.scopeModel.durationExcludingBundles = prepaidVoiceEntity.DurationExcludingBundles;
+                            $scope.scopeModel.revenueExcludingBundles = prepaidVoiceEntity.RevenueExcludingBundles;
+                            $scope.scopeModel.selectedScope = UtilsService.getItemByVal($scope.scopeModel.scopes, prepaidVoiceEntity.Scope, 'value');
+                        }
                     }
+
+                    var rootPromiseNode = {
+                        promises: promises
+                    };
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
@@ -51,7 +64,10 @@
                         $type: "Retail.RA.Business.OnNetPrepaidVoiceOperationDeclarationService,Retail.RA.Business",
                         Calls: $scope.scopeModel.calls,
                         Revenue: $scope.scopeModel.revenue,
-                        Duration: $scope.scopeModel.duration
+                        Duration: $scope.scopeModel.duration,
+                        DurationExcludingBundles: $scope.scopeModel.durationExcludingBundles,
+                        RevenueExcludingBundles: $scope.scopeModel.revenueExcludingBundles,
+                        Scope: $scope.scopeModel.selectedScope.value
                     };
                 };
 

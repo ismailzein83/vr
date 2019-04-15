@@ -1,11 +1,25 @@
 ﻿<vr-columns width="fullrow" haschildcolumns>
-    <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.calls" label="Number Of Calls" type="number" isrequired></vr-textbox>
+    <vr-columns colnum="2">
+        <vr-select datasource="scopeModel.scopes"
+                   selectedvalues="scopeModel.selectedScope"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   isrequired
+                   label="Scope"></vr-select>
     </vr-columns>
-    <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.revenue" label="Revenue" type="number" isrequired></vr-textbox>
+    <vr-columns colnum="1">
+        <vr-textbox value="scopeModel.calls" label="# of Calls" type="number" isrequired="scopeModel.revenue==undefined && scopeModel.duration==undefined && scopeModel.durationExcludingBundles==undefined && scopeModel.revenueExcludingBundles==undefined" minvalue="0"></vr-textbox>
     </vr-columns>
-    <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.duration" label="Duration (min)" type="number" isrequired></vr-textbox>
+    <vr-columns colnum="1">
+        <vr-textbox value="scopeModel.revenue" label="Revenue" type="number" isrequired="scopeModel.calls==undefined && scopeModel.duration==undefined && scopeModel.durationExcludingBundles==undefined && scopeModel.revenueExcludingBundles==undefined" minvalue="0"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="2">
+        <vr-textbox value="scopeModel.duration" label="Duration (min)" type="number" isrequired="scopeModel.revenue==undefined && scopeModel.calls==undefined && scopeModel.durationExcludingBundles==undefined && scopeModel.revenueExcludingBundles==undefined" minvalue="0"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="3">
+        <vr-textbox value="scopeModel.revenueExcludingBundles" label="Revenue Excluding Bundles" type="number" isrequired="scopeModel.revenue==undefined && scopeModel.duration==undefined && scopeModel.durationExcludingBundles==undefined && scopeModel.calls==undefined" minvalue="0"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="3">
+        <vr-textbox value="scopeModel.durationExcludingBundles" label="Duration Excluding Bundles (min)" type="number" isrequired="scopeModel.revenue==undefined && scopeModel.duration==undefined && scopeModel.calls==undefined && scopeModel.revenueExcludingBundles==undefined" minvalue="0"></vr-textbox>
     </vr-columns>
 </vr-columns>
