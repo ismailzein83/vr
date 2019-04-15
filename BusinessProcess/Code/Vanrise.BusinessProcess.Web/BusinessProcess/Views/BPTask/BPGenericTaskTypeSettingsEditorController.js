@@ -276,6 +276,7 @@
                         }
                     });
                 }
+                $scope.scopeModel.actions.length = 0;
                 if (actions != undefined && actions.length > 0) {
                     menuActions = [];
                     bpTaskTypeActions = actions;
@@ -292,7 +293,6 @@
                             taskTypeAction: taskTypeAction,
                         });
                     }
-                    $scope.scopeModel.actions.length = 0;
                     for (var prop in actionsDictionary) {
                         if (actionsDictionary[prop].length > 1) {
                             for (var i = 0; i < actionsDictionary[prop].length; i++) {
