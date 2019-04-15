@@ -24,4 +24,5 @@ namespace Retail.Interconnect.Entities
         public int CurrencyId { get; set; }
         public string Month { get; set; }
     }
+    public class InterconnectInvoiceByCurrencyItemDetailsByCurrency : Dictionary<int, List<InterconnectInvoiceByCurrencyItemDetails>> { }
 }

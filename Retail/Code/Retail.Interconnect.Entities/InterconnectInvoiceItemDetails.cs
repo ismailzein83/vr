@@ -34,6 +34,7 @@ namespace Retail.Interconnect.Entities
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public decimal OriginalAmount { get; set; }
+        public decimal TotalFullAmount { get; set; }
         public InterconnectInvoiceItemDetails() { }
         public IEnumerable<InterconnectInvoiceItemDetails> GetCustomerInvoiceItemDetailsRDLCSchema()
         {

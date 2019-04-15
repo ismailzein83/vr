@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\InvoiceSettlementController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\InvoiceCompareTemplateController.cs" />
     <Compile Include="Controllers\InvoiceCompareController.cs" />
@@ -132,7 +133,11 @@
       <DependentUpon>Reporting.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Retail_Interconnect\Reports\Mobilis\SettlementPaymentDemand.rdlc">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{C527C7B2-A481-4D1D-B25A-4A540E812153}</Project>
@@ -167,6 +172,10 @@
     <Content Include="Retail_Interconnect\Constant\InterconnectInvoiceType.js" />
     <Content Include="Retail_Interconnect\Constant\ModuleConfig.js" />
     <Content Include="Retail_Interconnect\Constant\ModuleTypeEnum.js" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\GenerationCustomSection\IncludedInvoicesInSettlementEditorController.js" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\GenerationCustomSection\Templates\IncludedInvoicesInSettlementEditor.html" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\GenerationCustomSection\Templates\SettlementGenerationCustomSectionTemplate.html" />
+    <Content Include="Retail_Interconnect\Directives\Extensions\GenerationCustomSection\retail-invoicetype-generationcustomsection-settlement.js" />
     <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceAction\Templates\CompareInvoiceActionTemplate.html" />
     <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceAction\retail-interconnect-invoicetype-gridactionsettings-compare.js" />
     <Content Include="Retail_Interconnect\Directives\Extensions\InvoiceGridActionFilterCondition\retail-invoicetype-invoicefiltercondition-moduletype.js" />
@@ -184,61 +193,87 @@
     <Content Include="Retail_Interconnect\Directives\MainExtensions\AccountPart\Runtime\retail-interconnect-account-part-runtime-setting.js" />
     <Content Include="Retail_Interconnect\Directives\MainExtensions\AccountPart\Runtime\Templates\AccountTypeSettingPartRuntimeTemplate.html" />
     <Content Include="Retail_Interconnect\Directives\retail-interconnect-account-invoice-selector.js" />
+    <Content Include="Retail_Interconnect\Directives\retail-invoice-invoicetype-interconnectsettlementinvoicesettings.js" />
     <Content Include="Retail_Interconnect\Directives\retail-invoice-invoicetype-interconnectinvoicesettings.js" />
     <Content Include="Retail_Interconnect\Directives\SMSServiceTypes\Templates\SMSServiceTypesSelectorTemplate.html" />
     <Content Include="Retail_Interconnect\Directives\SMSServiceTypes\retail-interconnect-smsservicetypes-selector.js" />
+    <Content Include="Retail_Interconnect\Directives\Templates\InterconnectSettlementInvoiceSettingsTemplate.html" />
     <Content Include="Retail_Interconnect\Directives\Templates\InterconnectInvoiceSettingsTemplate.html" />
     <Content Include="Retail_Interconnect\ModuleInitialization.js" />
     <Content Include="Retail_Interconnect\Reports\CompareInvoiceReport.aspx" />
     <Content Include="Retail_Interconnect\Reports\Reporting.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\CustomerCompareInvoiceReport.rdlc">
+    <None Include="Retail_Interconnect\Reports\AT\CustomerInterconnectInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Demo\CustomerInterconnectInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\AT\CustomerInterconnectInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Demo\CustomerInterconnectInvoiceReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\AT\SupplierInterconnectInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Demo\SupplierInterconnectInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\AT\SupplierInterconnectInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Demo\SupplierInterconnectInvoiceReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\Mobilis\CustomerCompareInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\CustomerInterconnectInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\Demo\CustomerInterconnectInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\SupplierInterconnectInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\Demo\CustomerInterconnectInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\SupplierInterconnectInvoiceReport.rdlc" />
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\CustomerInterconnectInvoiceReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\Demo\SupplierInterconnectInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\SupplierCompareInvoiceReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\Demo\SupplierInterconnectInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\Mobilis\SupplierPaymentDemand.rdlc" />
-    <EmbeddedResource Include="Retail_Interconnect\Reports\SupplierInterconnectInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\Mobilis\CustomerInterconnectInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\CustomerInterconnectInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\Mobilis\SettlementInvoiceDetail.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\SupplierInterconnectInvoiceReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\Mobilis\SettlementInvoiceReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\CustomerInterconnectInvoiceReport.rdlc">
+    </None>
+    <None Include="Retail_Interconnect\Reports\Mobilis\SupplierInterconnectInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+    </None>
+    <None Include="Retail_Interconnect\Reports\Mobilis\SupplierInterconnectInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Retail_Interconnect\Reports\Mobilis\CustomerInterconnectInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Retail_Interconnect\Reports\Mobilis\SupplierCompareInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Retail_Interconnect\Reports\Mobilis\SupplierPaymentDemand.rdlc">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Retail_Interconnect\Reports\SupplierInterconnectInvoiceItemsReport.rdlc">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Retail_Interconnect\Reports\CustomerInterconnectInvoiceItemsReport.rdlc">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Retail_Interconnect\Reports\SupplierInterconnectInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Retail_Interconnect\Reports\CustomerInterconnectInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_Interconnect\Services\APIServices\IncludedInvoicesInSettlementAPIService.js" />
     <Content Include="Retail_Interconnect\Services\APIServices\InvoiceAPIService.js" />
     <Content Include="Retail_Interconnect\Services\APIServices\InvoiceCompareService.js" />
     <Content Include="Retail_Interconnect\Services\APIServices\InvoiceCompareTemplateAPIService.js" />
+    <Content Include="Retail_Interconnect\Services\IncludedInvoicesInSettlementService.js" />
     <Content Include="Retail_Interconnect\Services\InvoiceService.js" />
     <Content Include="Retail_Interconnect\Services\RetailModuleService.js" />
     <Content Include="Retail_Interconnect\Views\InvoiceCompareTemplate.html" />

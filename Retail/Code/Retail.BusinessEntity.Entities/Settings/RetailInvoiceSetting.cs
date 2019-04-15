@@ -7,9 +7,10 @@ using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class RetailInvoiceSettings: SettingData
+    public class RetailInvoiceSettings : SettingData
     {
         public const string SETTING_TYPE = "Retail_BE_RetailInvoiceSettings";
         public VRTaxesDefinition VRTaxesDefinition { get; set; }
+        public bool RequireGroupByMonth { get; set; }
     }
 }

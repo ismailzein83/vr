@@ -27,6 +27,15 @@ namespace Retail.Interconnect.Entities
 		public bool NoSMS { get; set; }
 		public bool NoVoice { get; set; }
 		public bool NoRecurringCharges { get; set; }
+
+        public int OriginalCurrencyId { get; set; }
+        public decimal OriginalAmount { get; set; }
+        public decimal OriginalAmountWithTaxes { get; set; }
+        public Dictionary<int, OriginalDataCurrrency> OriginalAmountByCurrency { get; set; }
+        public List<AttachementFile> AttachementFiles { get; set; }
+        public string Reference { get; set; }
+        public bool IsOriginalAmountSetted { get; set; }
+
         public InterconnectInvoiceDetails() { }
         public IEnumerable<InterconnectInvoiceDetails> GetInterconnectInvoiceDetailsRDLCSchema()
         {

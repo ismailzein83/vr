@@ -161,15 +161,15 @@
     <Content Include="Retail_Demo\Elements\SMS\Reports\Reporting.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Retail_Demo\Elements\NetworkRental\Reports\NetworkRentalInvoice.rdlc">
+    <None Include="Retail_Demo\Elements\NetworkRental\Reports\NetworkRentalInvoice.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Demo\Elements\SMS\Reports\CustomerSMSInvoiceItemsReport.rdlc">
+    </None>
+    <None Include="Retail_Demo\Elements\SMS\Reports\CustomerSMSInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Demo\Elements\SMS\Reports\CustomerSMSInvoice.rdlc">
+    </None>
+    <None Include="Retail_Demo\Elements\SMS\Reports\CustomerSMSInvoice.rdlc">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.Demo.Business\Retail.Demo.Business.csproj">

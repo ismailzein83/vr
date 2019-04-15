@@ -165,7 +165,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Retail_Zajil\Reports\SubscriberInvoiceReport.rdlc" />
+    <None Include="Retail_Zajil\Reports\SubscriberInvoiceReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="web.config" />

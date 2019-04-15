@@ -7,10 +7,19 @@
 
         var controllerName = "InvoiceController";
 
-        function GetInvoiceDetails(invoiceId, invoiceCarrierType) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_Interconnect_ModuleConfig.moduleName, controllerName, 'GetInvoiceDetails'), {
+        function UpdateOriginalInvoiceData(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_Interconnect_ModuleConfig.moduleName, controllerName, "UpdateOriginalInvoiceData"), input);
+        }
+        function GetOriginalInvoiceDataRuntime(invoiceId, invoiceCarrierType) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_Interconnect_ModuleConfig.moduleName, controllerName, "GetOriginalInvoiceDataRuntime"), {
                 invoiceId: invoiceId,
                 invoiceCarrierType: invoiceCarrierType
+            });
+        }
+    
+        function GetInvoiceDetails(invoiceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_Interconnect_ModuleConfig.moduleName, controllerName, 'GetInvoiceDetails'), {
+                invoiceId: invoiceId
             });
         }
 
@@ -20,6 +29,8 @@
             });
         }
         return ({
+            UpdateOriginalInvoiceData: UpdateOriginalInvoiceData,
+            GetOriginalInvoiceDataRuntime: GetOriginalInvoiceDataRuntime,
             GetInvoiceDetails: GetInvoiceDetails,
             DoesInvoiceReportExist: DoesInvoiceReportExist
         });

@@ -23,26 +23,26 @@ namespace Retail.Interconnect.Business
         }
         public override dynamic GetInfo(Vanrise.Invoice.Entities.IInvoiceTypeExtendedSettingsInfoContext context)
         {
-            //AccountBEManager accountBEManager = new AccountBEManager();
-            //FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            //var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
+            AccountBEManager accountBEManager = new AccountBEManager();
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
 
-            //switch (context.InfoType)
-            //{
-            //    case "MailTemplate":
-            //        long accountId = Convert.ToInt32(financialAccountData.Account.AccountId);
-            //        var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
-            //        Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-            //        objects.Add("Operator", account);
-            //        objects.Add("Invoice", context.Invoice);
-            //        return objects;
-            //    case "BankDetails":
-            //        {
-            //            #region BankDetails
-            //            return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId, financialAccountData.Account.AccountId);
-            //            #endregion
-            //        }
-            //}
+            switch (context.InfoType)
+            {
+                case "MailTemplate":
+                    long accountId = Convert.ToInt32(financialAccountData.Account.AccountId);
+                    var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
+                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                    objects.Add("Operator", account);
+                    objects.Add("Invoice", context.Invoice);
+                    return objects;
+                case "BankDetails":
+                    {
+                        #region BankDetails
+                        return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId, financialAccountData.Account.AccountId);
+                        #endregion
+                    }
+            }
             return null;
         }
 
@@ -56,8 +56,7 @@ namespace Retail.Interconnect.Business
 
         public override Vanrise.Invoice.Entities.InvoiceGenerator GetInvoiceGenerator()
         {
-            return null;
-            // return new InterconnectSettlementInvoiceGenerator(this.AccountBEDefinitionId, this.CustomerInvoiceTypeId, this.SupplierInvoiceTypeId);
+            return new InterconnectSettlementInvoiceGenerator(this.AccountBEDefinitionId, this.CustomerInvoiceTypeId, this.SupplierInvoiceTypeId);
         }
 
         public override IEnumerable<string> GetPartnerIds(Vanrise.Invoice.Entities.IExtendedSettingsPartnerIdsContext context)

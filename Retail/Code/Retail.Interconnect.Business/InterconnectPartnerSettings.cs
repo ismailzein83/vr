@@ -35,7 +35,9 @@ namespace Retail.Interconnect.Business
         AssignedNumber = 16,
         BillingCompanyEmail = 17,
         BillingCompanyPhone = 18,
-        SMSServiceTypes = 19
+        SMSServiceTypes = 19,
+        BillingCompanyContact = 20,
+        AccountBillingContact = 21
     }
 
     public class InterconnectPartnerSettings : InvoicePartnerManager
@@ -141,6 +143,7 @@ namespace Retail.Interconnect.Business
                                 if (companyProfile.Contacts.TryGetValue("Billing", out billingCompanyContact))
                                 {
                                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, billingCompanyContact.Email, true);
+                                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountBillingContact, billingCompanyContact.ContactName, true);
                                     if (billingCompanyContact.PhoneNumbers != null && billingCompanyContact.PhoneNumbers.Count > 0)
                                     {
                                         string accountNumbers = string.Join(",", billingCompanyContact.PhoneNumbers);
@@ -173,6 +176,7 @@ namespace Retail.Interconnect.Business
                         if (companySetting.Contacts.TryGetValue("Billing", out companyContact))
                         {
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyPhone, companyContact.Phone, true);
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyContact, $"{companyContact.Title} {companyContact.ContactName}", true);
                         }
                         VRFileManager fileManager = new VRFileManager();
                         var logo = fileManager.GetFile(companySetting.CompanyLogo);

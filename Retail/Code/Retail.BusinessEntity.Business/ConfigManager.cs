@@ -66,6 +66,10 @@ namespace Retail.BusinessEntity.Business
             faultTicketsSettingsData.FaultTicketSetting.ThrowIfNull("faultTicketsSettingsData.FaultTicketSetting");
             return faultTicketsSettingsData.FaultTicketSetting.BackOfficeMailTemplateId;
         }
+        public RetailInvoiceSettings GetRetailInvoiceSettings()
+        {
+            return new SettingManager().GetSetting<RetailInvoiceSettings>(RetailInvoiceSettings.SETTING_TYPE);
+        }
         #endregion
 
         #region Private Methods
@@ -79,10 +83,6 @@ namespace Retail.BusinessEntity.Business
             return didTechnicalSettings;
         }
 
-        private RetailInvoiceSettings GetRetailInvoiceSettings()
-        {
-           return new SettingManager().GetSetting<RetailInvoiceSettings>(RetailInvoiceSettings.SETTING_TYPE);
-        }
         private FaultTicketsSettingsData GetFaultTicketsSettingsData()
         {
             SettingManager manager = new SettingManager();

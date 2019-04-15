@@ -184,11 +184,11 @@
     <Content Include="Retail_MultiNet\Reports\Reporting.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Retail_MultiNet\Reports\CDRSubscriberInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="Retail_MultiNet\Reports\CompanyBranchReport.rdlc" />
-    <EmbeddedResource Include="Retail_MultiNet\Reports\SubscriberInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="Retail_MultiNet\Reports\CompanySubscriberInvoiceReport.rdlc" />
-    <EmbeddedResource Include="Retail_MultiNet\Reports\BranchSubscriberInvoiceReport.rdlc" />
+    <None Include="Retail_MultiNet\Reports\CDRSubscriberInvoiceItemsReport.rdlc" />
+    <None Include="Retail_MultiNet\Reports\CompanyBranchReport.rdlc" />
+    <None Include="Retail_MultiNet\Reports\SubscriberInvoiceItemsReport.rdlc" />
+    <None Include="Retail_MultiNet\Reports\CompanySubscriberInvoiceReport.rdlc" />
+    <None Include="Retail_MultiNet\Reports\BranchSubscriberInvoiceReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

@@ -150,7 +150,7 @@
     <Folder Include="Retail_Invoice\Views\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Retail_Invoice\Reports\SubscriberInvoiceReport.rdlc" />
+    <None Include="Retail_Invoice\Reports\SubscriberInvoiceReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.Invoice.Entities\Retail.Invoice.Entities.csproj">

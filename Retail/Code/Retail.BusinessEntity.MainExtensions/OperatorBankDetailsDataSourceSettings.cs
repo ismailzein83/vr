@@ -3,6 +3,7 @@ using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -48,6 +49,14 @@ namespace Retail.BusinessEntity.MainExtensions
                 CurrencyManager currencyManager = new CurrencyManager();
                 foreach (var bankDetail in bankDetails)
                 {
+                    StringBuilder secondaryAccounts = new StringBuilder();
+                    var mainAccountCurrency = currencyManager.GetCurrencySymbol(bankDetail.CurrencyId);
+                    secondaryAccounts.AppendLine($"{mainAccountCurrency} N° {bankDetail.AccountNumber} ");
+
+                    if (bankDetail.SecondaryAccounts != null && bankDetail.SecondaryAccounts.Count > 0)
+                        foreach (var secondaryAccount in bankDetail.SecondaryAccounts)
+                            secondaryAccounts.AppendLine($"{currencyManager.GetCurrencySymbol(secondaryAccount.CurrencyId)} N° {secondaryAccount.AccountNumber} ");
+
                     bankDetailsList.Add(new BankDetailsDetail
                     {
                         AccountCode = bankDetail.AccountCode,
@@ -64,7 +73,9 @@ namespace Retail.BusinessEntity.MainExtensions
                         CorrespondentBank = bankDetail.CorrespondentBank,
                         CorrespondentBankSwiftCode = bankDetail.CorrespondentBankSwiftCode,
                         ACH = bankDetail.ACH,
-                        ABARoutingNumber = bankDetail.ABARoutingNumber
+                        ABARoutingNumber = bankDetail.ABARoutingNumber,
+                        SecondaryAccounts = secondaryAccounts.ToString(),
+                        MoreInfo = bankDetail.MoreInfo
                     });
                 }
             }

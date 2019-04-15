@@ -40,10 +40,12 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    
+
                     var promises = [];
 
                     promises.push(loadTaxDefinitionDirective());
+                    if (payload != undefined && payload.data != undefined)
+                        $scope.scopeModel.requireGroupByMonth = payload.data.RequireGroupByMonth;
 
                     function loadTaxDefinitionDirective() {
                         var taxDefinitionDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -66,7 +68,8 @@
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.Entities.RetailInvoiceSettings,Retail.BusinessEntity.Entities",
-                        VRTaxesDefinition: taxDefinitionDirectiveAPI.getData()
+                        VRTaxesDefinition: taxDefinitionDirectiveAPI.getData(),
+                        RequireGroupByMonth: $scope.scopeModel.requireGroupByMonth
                     };
                 };
 
