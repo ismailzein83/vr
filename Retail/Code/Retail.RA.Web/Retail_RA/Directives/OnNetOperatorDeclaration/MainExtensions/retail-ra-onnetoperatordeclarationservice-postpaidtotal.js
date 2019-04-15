@@ -40,10 +40,16 @@
 
                     if (payload != undefined) {
                         postpaidTotalEntity = payload.settings;
-                        $scope.scopeModel.numberOfSubscribers = postpaidTotalEntity.NumberOfSubscribers;
-                        $scope.scopeModel.monthlyCharges = postpaidTotalEntity.MonthlyCharges;
-                        $scope.scopeModel.revenue = postpaidTotalEntity.Revenue;
+                        if (postpaidTotalEntity != undefined) {
+                            $scope.scopeModel.numberOfSubscribers = postpaidTotalEntity.NumberOfSubscribers;
+                            $scope.scopeModel.monthlyCharges = postpaidTotalEntity.MonthlyCharges;
+                            $scope.scopeModel.revenue = postpaidTotalEntity.Revenue;
+                        }
                     }
+                    var rootPromiseNode = {
+                        promises: promises
+                    };
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
