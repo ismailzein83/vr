@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OnNetOperatorDeclarationServicePostpaidvoice.$inject = ['UtilsService', 'VRUIUtilsService'];
+    OnNetOperatorDeclarationServicePostpaidvoice.$inject = ['UtilsService', 'VRUIUtilsService','Retail_RA_ScopeEnum'];
 
-    function OnNetOperatorDeclarationServicePostpaidvoice(UtilsService, VRUIUtilsService) {
+    function OnNetOperatorDeclarationServicePostpaidvoice(UtilsService, VRUIUtilsService, Retail_RA_ScopeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -25,9 +25,12 @@
 
         function OnNetOperatorDeclarationServicePostpaidvoiceCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+           
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.scopes = UtilsService.getArrayEnum(Retail_RA_ScopeEnum);
+
                 defineAPI();
             }
 
@@ -40,10 +43,19 @@
 
                     if (payload != undefined) {
                         postpaidVoiceEntity = payload.settings;
-                        $scope.scopeModel.calls = postpaidVoiceEntity.Calls;
-                        $scope.scopeModel.revenue = postpaidVoiceEntity.Revenue;
-                        $scope.scopeModel.duration = postpaidVoiceEntity.Duration;
+                        if (postpaidVoiceEntity != undefined) {
+                            $scope.scopeModel.calls = postpaidVoiceEntity.Calls;
+                            $scope.scopeModel.revenue = postpaidVoiceEntity.Revenue;
+                            $scope.scopeModel.duration = postpaidVoiceEntity.Duration;
+                            $scope.scopeModel.durationExcludingBundles = postpaidVoiceEntity.DurationExcludingBundles;
+                            $scope.scopeModel.revenueExcludingBundles = postpaidVoiceEntity.RevenueExcludingBundles;
+                            $scope.scopeModel.selectedScope = UtilsService.getItemByVal($scope.scopeModel.scopes, postpaidVoiceEntity.Scope, 'value');
+                        }
                     }
+                    var rootPromiseNode = {
+                        promises: promises
+                    };
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
@@ -51,7 +63,10 @@
                         $type: "Retail.RA.Business.OnNetPostpaidVoiceOperationDeclarationService,Retail.RA.Business",
                         Calls: $scope.scopeModel.calls,
                         Revenue: $scope.scopeModel.revenue,
-                        Duration: $scope.scopeModel.duration
+                        Duration: $scope.scopeModel.duration,
+                        DurationExcludingBundles: $scope.scopeModel.durationExcludingBundles,
+                        RevenueExcludingBundles: $scope.scopeModel.revenueExcludingBundles,
+                        Scope: $scope.scopeModel.selectedScope.value
                     };
                 };
 
