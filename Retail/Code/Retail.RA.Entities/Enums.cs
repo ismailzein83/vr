@@ -38,4 +38,11 @@ namespace Retail.RA.Entities
         Postpaid = 1,
         Prepaid = 2
     }
+    public enum Scope
+    {
+        Total = 0,
+        OnNet = 1,
+        OffNet = 2,
+        International = 3
+    }
 }
