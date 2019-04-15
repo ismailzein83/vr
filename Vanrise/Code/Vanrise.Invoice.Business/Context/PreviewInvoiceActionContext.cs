@@ -28,6 +28,7 @@ namespace Vanrise.Invoice.Business
           
             PartnerManager _partnerManager = new PartnerManager();
 
+            var fromDate = new DateTime(this.FromDate.Year, this.FromDate.Month, this.FromDate.Day, 0, 0, 0, 0);
             var toDate = new DateTime(this.ToDate.Year, this.ToDate.Month, this.ToDate.Day, 23, 59, 59, 998);
 
             var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, this.PartnerId);
@@ -47,9 +48,9 @@ namespace Vanrise.Invoice.Business
             {
                 InvoiceTypeId = this.InvoiceTypeId,
                 CustomSectionPayload = CustomSectionPayload,
-                FromDate = this.FromDate,
                 PartnerId = this.PartnerId,
                 IssueDate = this.IssueDate,
+                FromDate = fromDate,
                 ToDate = toDate,
                 DuePeriod = duePeriod
             };
@@ -77,9 +78,9 @@ namespace Vanrise.Invoice.Business
             this._Invoice = new Entities.Invoice
             {
                 Details = GeneratedInvoice.InvoiceDetails,
-                ToDate = this.ToDate,
+                ToDate = toDate,
                 PartnerId = this.PartnerId,
-                FromDate = this.FromDate,
+                FromDate = fromDate,
                 InvoiceTypeId = this.InvoiceTypeId,
                 IssueDate = this.IssueDate,
                 DueDate = this.IssueDate.AddDays(duePeriod),
