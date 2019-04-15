@@ -20,6 +20,7 @@ namespace BPMExtended.Main.Business
         string subscriptionAddressStep = "74FA6D04-804D-45D7-B3E3-887A98450F13";
 
         string servicesStep = "EEC0CF10-F7E2-45AD-953F-A35C1DAA4B27";
+        string contractOnHoldStep = "3B1E25EA-6751-4BDC-99F8-0CFAC2B9A25E";
         string paymentStep = "6FD4F52A-310D-4E91-999D-F2D6FEC19AB0";
         string printContractStep = "1B93BB41-AA73-4430-9DB0-424243E1EE11";
 
@@ -56,7 +57,9 @@ namespace BPMExtended.Main.Business
                 //Address
                 case "74fa6d04-804d-45d7-b3e3-887a98450f13": nextStepId = servicesStep; break;
                 //services
-                case "eec0cf10-f7e2-45ad-953f-a35c1daa4b27": nextStepId = paymentStep; break;
+                case "eec0cf10-f7e2-45ad-953f-a35c1daa4b27": nextStepId = contractOnHoldStep; break;
+                //create contract on hold step
+                case "3b1e25ea-6751-4bdc-99f8-0cfac2b9a25e": nextStepId = paymentStep; break;
                 //payment
                 case "6fd4f52a-310d-4e91-999d-f2d6fec19ab0": nextStepId = printContractStep; break;
                 //print contract

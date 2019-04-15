@@ -125,6 +125,7 @@
     <Compile Include="RatePlanInfo.cs" />
     <Compile Include="RequestHeaderDetail.cs" />
     <Compile Include="ServiceDetail.cs" />
+    <Compile Include="SOMRequestOutput.cs" />
     <Compile Include="TelephonyContractDetail.cs" />
     <Compile Include="UpdateSOMRequestOutput.cs" />
   </ItemGroup>

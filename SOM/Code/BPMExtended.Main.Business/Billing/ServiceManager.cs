@@ -50,6 +50,21 @@ namespace BPMExtended.Main.Business
            var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, corePackageName);
             return coreServices;
         }
+
+        public List<ServiceDetail> GetOptionalServices(string ratePlanId)
+        {
+            //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
+            //return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
+            var businessEntityManager = new BusinessEntityManager();
+            Packages packages = businessEntityManager.GetServicePackagesEntity();
+            var corePackageName = packages.Core;
+
+            var excludedPackages = new List<string>();
+            excludedPackages.Add(corePackageName);
+
+            var services = GetServicesDetailByRateplanAndPackages(ratePlanId, excludedPackages);
+            return services;
+        }
         public List<ServiceDetail> GetServicesDetailByRateplanAndPackage(string rateplanId, string package)
         {
 

@@ -223,10 +223,49 @@ namespace BPMExtended.Main.Business
 
         public void PostLineSubscriptionToOM(Guid requestId)
         {
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
+            esq.AddColumn("StCoreServices");
+            esq.AddColumn("StServices");
+            esq.AddColumn("StRatePlanID");
+            esq.AddColumn("StLineType");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StCity");
+            esq.AddColumn("StCity.Id");
+            
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var ratePlanId = entities[0].GetColumnValue("StRatePlanID");
+                var lineType = entities[0].GetColumnValue("StLineType");
+                var city = entities[0].GetColumnValue("StCityName");
+                var coreServices = entities[0].GetColumnValue("StCoreServices");
+                var optionalServices = entities[0].GetColumnValue("StServices");
+                CRMCustomerInfo info =  GetCRMCustomerInfo(contactId.ToString(), accountId.ToString());
+
+                //call api
+
+            }
+
+            
+
+
+            //UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            //var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
+            //    .Where("StRequestId").IsEqual(Column.Parameter(requestId));
+            //update.Execute();
 
         }
 
@@ -576,16 +615,19 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             CRMCustomerInfo customerInfo = null;
-
             //Get infos from contact table in CRM database 
 
             if (contactId != null)
             {
+                //PostLineSubscriptionToOM(new Guid("CAA17BBE-5D7B-4127-92B9-021417B0AC50"));
                 esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
                 esq.AddColumn("Name");
                 esq.AddColumn("StDocumentID");
+                esq.AddColumn("StCSO");
+                esq.AddColumn("StCSO.Id");
                 esq.AddColumn("StCustomerId");
                 esq.AddColumn("StCustomerCategoryID");
+                esq.AddColumn("StCustomerCategoryName");
                 esq.AddColumn("StCustomerCategoryName");
 
                 esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
@@ -594,6 +636,7 @@ namespace BPMExtended.Main.Business
                 var entities = esq.GetEntityCollection(BPM_UserConnection);
                 if (entities.Count > 0)
                 {
+                    var csoId = entities[0].GetColumnValue("StCSOId");
                     var name = entities[0].GetColumnValue("Name");
                     var documentId = entities[0].GetColumnValue("StDocumentID");
                     var customerId = entities[0].GetColumnValue("StCustomerId");
@@ -606,7 +649,8 @@ namespace BPMExtended.Main.Business
                         CustomerName = name.ToString(),
                         DocumentID = documentId.ToString(),
                         CustomerCategoryID = customerCategoryId.ToString(),
-                        CustomerCategoryName = customerCategoryName.ToString()
+                        CustomerCategoryName = customerCategoryName.ToString(),
+                        csoId = csoId.ToString()
 
 
                     };
@@ -944,7 +988,7 @@ namespace BPMExtended.Main.Business
             };
 
             using (var client = new SOMClient())
-            {         
+            {
                 client.Post<CustomerAddressInput, UpdateSOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
             }
 
@@ -1012,7 +1056,7 @@ namespace BPMExtended.Main.Business
 
             using (var client = new SOMClient())
             {
-                client.Post<CustomerCreationInput, UpdateSOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateCustomer/StartProcess", somRequestInput);
+                client.Post<CustomerCreationInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateCustomer/StartProcess", somRequestInput);
             }
 
         }
@@ -1063,6 +1107,92 @@ namespace BPMExtended.Main.Business
             return customerCategoryItems;
         }
 
+
+        public SOMRequestOutput CreateTelephonyContractOnHold(Guid requestId)
+        {
+
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
+            esq.AddColumn("StCoreServices");
+            esq.AddColumn("StServices");
+            esq.AddColumn("StNumberToReserve");
+            esq.AddColumn("StLinePathID");
+            esq.AddColumn("StRatePlanID");
+            esq.AddColumn("StLineType");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+            esq.AddColumn("StCity");
+            esq.AddColumn("StCity.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var ratePlanId = entities[0].GetColumnValue("StRatePlanID");
+                var phoneNumber = entities[0].GetColumnValue("StNumberToReserve");
+                var pathId = entities[0].GetColumnValue("StLinePathID");
+                var lineType = entities[0].GetColumnValue("StLineType");
+                var city = entities[0].GetColumnValue("StCityName");
+                var coreServices = entities[0].GetColumnValue("StCoreServices");
+                var optionalServices = entities[0].GetColumnValue("StServices");
+                CRMCustomerInfo info = GetCRMCustomerInfo(contactId.ToString(), accountId.ToString());
+
+                //call api
+
+            }
+
+            return  new SOMRequestOutput()
+                {
+                    ProcessId = "11111"
+                };
+
+            //call api
+
+            //TelephonyContractOnHoldInput somRequestInput = new TelephonyContractOnHoldInput
+            //{
+            //    CustomerId = CustomerId,
+            //    AccountNumber = AccountNumber,
+            //    BankCode = BankCode,
+            //    City = City,
+            //    CSO = CSO,
+            //    CustomerCategoryId = CustomerCategoryId,
+            //    FirstName = FirstName,
+            //    LastName = LastName,
+            //    PaymentMethodId = PaymentMethodId,
+            //    RatePlanId = null,
+            //    CommonInputArgument = new CommonInputArgument()
+            //    {
+            //        ContactId = contactId
+            //    }
+            //};
+
+            //using (var client = new SOMClient())
+            //{
+            //    client.Post<TelephonyContractOnHoldInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateCustomer/StartProcess", somRequestInput);
+            //}
+
+        }
+
+
+        public int CheckTelephonyContractOnHoldStatus(string processId)
+        {
+
+            Array values = Enum.GetValues(typeof(ContacrtOnHoldStatus));
+            Random random = new Random();
+            int randomBar = (int)values.GetValue(random.Next(values.Length));
+            return randomBar;
+
+        }
 
 
 

@@ -456,7 +456,8 @@ namespace BPMExtended.Main.Common
                      ContractBalance = 100,
                      UnbilledAmount = 2002,
                      Promotions = "promo1",
-                     FreeUnit = "unit1"
+                     FreeUnit = "unit1",
+                     PathId= "184"
 
                  },
                  new TelephonyContractDetail
@@ -476,7 +477,8 @@ namespace BPMExtended.Main.Common
                       ContractBalance = 200,
                      UnbilledAmount = 4002,
                      Promotions = "promo2",
-                     FreeUnit = "unit2"
+                     FreeUnit = "unit2",
+                     PathId= "184"
                  },
                  new TelephonyContractDetail
                  {
@@ -495,7 +497,9 @@ namespace BPMExtended.Main.Common
                       ContractBalance = 10,
                      UnbilledAmount = 200,
                      Promotions = "promo3",
-                     FreeUnit = "unit3"
+                     FreeUnit = "unit3",
+                     PathId= "184",
+
                  },
                   new TelephonyContractDetail
                  {
@@ -514,7 +518,8 @@ namespace BPMExtended.Main.Common
                       ContractBalance = 500,
                      UnbilledAmount = 1002,
                      Promotions = "promo4",
-                     FreeUnit = "unit4"
+                     FreeUnit = "unit4",
+                     PathId= "184"
                  },
                   new TelephonyContractDetail
                  {
@@ -533,7 +538,8 @@ namespace BPMExtended.Main.Common
                       ContractBalance = 150,
                      UnbilledAmount = 202,
                      Promotions = "promo5",
-                     FreeUnit = "unit5"
+                     FreeUnit = "unit5",
+                     PathId= "184"
                  },
                  new TelephonyContractDetail
                  {
@@ -552,7 +558,8 @@ namespace BPMExtended.Main.Common
                      ContractBalance = 1700,
                      UnbilledAmount = 27002,
                      Promotions = "promo6",
-                     FreeUnit = "unit6"
+                     FreeUnit = "unit6",
+                     PathId= "184"
                  },
                  new TelephonyContractDetail
                  {
@@ -571,7 +578,8 @@ namespace BPMExtended.Main.Common
                       ContractBalance = 110,
                       UnbilledAmount = 2092,
                       Promotions = "promo7",
-                      FreeUnit = "unit7"
+                      FreeUnit = "unit7",
+                      PathId= "184"
                  },
                   new TelephonyContractDetail
                  {
@@ -590,7 +598,8 @@ namespace BPMExtended.Main.Common
                      ContractBalance = 1700,
                      UnbilledAmount = 27002,
                      Promotions = "promo6",
-                     FreeUnit = "unit6"
+                     FreeUnit = "unit6",
+                     PathId= "184"
                  },
                  new TelephonyContractDetail
                  {
@@ -609,7 +618,8 @@ namespace BPMExtended.Main.Common
                       ContractBalance = 110,
                       UnbilledAmount = 2092,
                       Promotions = "promo7",
-                      FreeUnit = "unit7"
+                      FreeUnit = "unit7",
+                      PathId= "184"
                  }
 
             };

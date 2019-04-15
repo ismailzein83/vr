@@ -44,6 +44,8 @@ namespace BPMExtended.Main.Entities
 
         public string FreeUnit { get; set; }
 
+        public string PathId { get; set; }
+
         public DateTime CreatedTime { get; set; }
 
         public DateTime LastModifiedTime { get; set; }
