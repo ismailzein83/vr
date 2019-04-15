@@ -1,8 +1,22 @@
 ﻿<vr-columns width="fullrow" haschildcolumns>
-    <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.revenue" label="Revenue" type="number" isrequired></vr-textbox>
+    <vr-columns colnum="2">
+        <vr-select datasource="scopeModel.scopes"
+                   selectedvalues="scopeModel.selectedScope"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   isrequired
+                   label="Scope"></vr-select>
     </vr-columns>
-    <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.sms" label="Number Of SMS" type="number" isrequired></vr-textbox>
+    <vr-columns colnum="2">
+        <vr-textbox value="scopeModel.revenue" label="Revenue" type="number" isrequired="scopeModel.sms==undefined && scopeModel.revenueExcludingBundles==undefined && scopeModel.smsExcludingBundles==undefined"  minvalue="0"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="2">
+        <vr-textbox value="scopeModel.sms" label="Number of SMS" type="number" isrequired="scopeModel.revenue==undefined && scopeModel.revenueExcludingBundles==undefined && scopeModel.smsExcludingBundles == undefined" minvalue="0"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="3">
+        <vr-textbox value="scopeModel.revenueExcludingBundles" label="Revenue Excluding Bundles" type="number" isrequired="scopeModel.revenue==undefined && scopeModel.sms==undefined && scopeModel.smsExcludingBundles == undefined" minvalue="0"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="3">
+        <vr-textbox value="scopeModel.smsExcludingBundles" label="Number of SMS Excluding Bundles" type="number" isrequired="scopeModel.revenue==undefined && scopeModel.sms==undefined && scopeModel.revenueExcludingBundles == undefined" minvalue="0"></vr-textbox>
     </vr-columns>
 </vr-columns>

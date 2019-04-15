@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OnNetOperatorDeclarationServicePrepaidSMS.$inject = ['UtilsService', 'VRUIUtilsService'];
+    OnNetOperatorDeclarationServicePrepaidSMS.$inject = ['UtilsService', 'VRUIUtilsService','Retail_RA_ScopeEnum'];
 
-    function OnNetOperatorDeclarationServicePrepaidSMS(UtilsService, VRUIUtilsService) {
+    function OnNetOperatorDeclarationServicePrepaidSMS(UtilsService, VRUIUtilsService, Retail_RA_ScopeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -28,6 +28,9 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.scopes = UtilsService.getArrayEnum(Retail_RA_ScopeEnum);
+
                 defineAPI();
             }
 
@@ -40,16 +43,28 @@
 
                     if (payload != undefined) {
                         prepaidSMSEntity = payload.settings;
-                        $scope.scopeModel.revenue = prepaidSMSEntity.Revenue;
-                        $scope.scopeModel.sms = prepaidSMSEntity.SMS;
+                        if (prepaidSMSEntity != undefined) {
+                            $scope.scopeModel.revenue = prepaidSMSEntity.Revenue;
+                            $scope.scopeModel.sms = prepaidSMSEntity.SMS;
+                            $scope.scopeModel.revenueExcludingBundles = prepaidSMSEntity.RevenueExcludingBundles;
+                            $scope.scopeModel.smsExcludingBundles = prepaidSMSEntity.SMSExcludingBundles;
+                            $scope.scopeModel.selectedScope = UtilsService.getItemByVal($scope.scopeModel.scopes, prepaidSMSEntity.Scope, 'value');
+                        }
                     }
+                    var rootPromiseNode = {
+                        promises: promises
+                    };
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Retail.RA.Business.OnNetPrepaidSMSOperationDeclarationService,Retail.RA.Business",
                         Revenue: $scope.scopeModel.revenue,
-                        SMS: $scope.scopeModel.sms
+                        SMS: $scope.scopeModel.sms,
+                        RevenueExcludingBundles: $scope.scopeModel.revenueExcludingBundles,
+                        SMSExcludingBundles: $scope.scopeModel.smsExcludingBundles,
+                        Scope: $scope.scopeModel.selectedScope.value
                     };
                 };
 
