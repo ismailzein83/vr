@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrAnalyticDataanalysisextrafields', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataDatarecordtypeextrafieldsParentrecordtype', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -63,7 +63,7 @@ app.directive('vrAnalyticDataanalysisextrafields', ['UtilsService', 'VRUIUtilsSe
                             var dataRecordTypeSelectorPayload;
 
                             if (selectedDataRecordType != undefined)
-                                dataRecordTypeSelectorPayload.selectedIds = selectedDataRecordType;
+                                dataRecordTypeSelectorPayload = { selectedIds: selectedDataRecordType };
 
                             VRUIUtilsService.callDirectiveLoad(datarecordTypeSelectorDirectiveApi, dataRecordTypeSelectorPayload, dataRecordTypeSelectorLoadedPromiseDeferred);
                         });
