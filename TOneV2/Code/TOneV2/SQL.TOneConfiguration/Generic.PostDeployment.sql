@@ -125,7 +125,9 @@ as (select * from (values
 ('661E02F1-7A44-4D56-A73F-7912EF3017B1','Grid_View','Grid View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-gridview-definition"}'),
 ('03925E9D-6A0F-4D4F-A4A4-36F5757D71EB','Grid_Editor_View','Grid Editor View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-grideditorview-definition"}'),
 ('6A8E0D5E-318C-4C6E-A99B-991EAE562B7C','Field_View','Field View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-fieldview-definition"}'),
-('F0FCE857-0119-4895-9459-648E14EFA60A','Comment View','Comment','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-common-comment-genericbeview-definition"}')
+('F0FCE857-0119-4895-9459-648E14EFA60A','Comment View','Comment','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-common-comment-genericbeview-definition"}'),
+
+('043E058A-0E0E-40E2-82AB-FE04C896E615','VR_GenericData_ParentDataRecordType','Parent Data Record Type','VR_GenericData_DataRecordTypeExtraField','{"Editor":"vr-genericdata-datarecordtypeextrafields-parentrecordtype"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
