@@ -300,7 +300,7 @@ namespace Vanrise.GenericData.Business
             IEnumerable<DataRecordFieldInfo> dataRecordFields = dataRecordFieldManager.GetDataRecordFieldsInfo(dataRecordTypeId, null);
             List<DataRecordFieldTransaltedToRDB> dataRecordFieldTransaltedToRDBs = new List<DataRecordFieldTransaltedToRDB>();
 
-            if(dataRecordFields != null)
+            if (dataRecordFields != null)
             {
                 foreach (var dataRecordField in dataRecordFields)
                 {
@@ -323,7 +323,7 @@ namespace Vanrise.GenericData.Business
                     });
                 }
             }
-            
+
             return dataRecordFieldTransaltedToRDBs;
         }
 
@@ -352,23 +352,10 @@ namespace Vanrise.GenericData.Business
                    StringBuilder strBuilder = new StringBuilder();
                    foreach (var dataRecordTypeDefinition in dataRecordTypeDefinitions)
                    {
-                       List<DataRecordField> dataRecordFields = new List<DataRecordField>();
                        DataRecordType dataRecordType = Vanrise.Common.Serializer.Deserialize<DataRecordType>(Vanrise.Common.Serializer.Serialize(dataRecordTypeDefinition.Value));
 
-                       if (dataRecordType.Fields != null)
-                           dataRecordFields.AddRange(dataRecordType.Fields);
-
-                       if (dataRecordType.ExtraFieldsEvaluator != null)
-                       {
-                           var extraFields = dataRecordType.ExtraFieldsEvaluator.GetFields(null);
-                           if (extraFields != null)
-                           {
-                               extraFields = extraFields.VRDeepCopy();
-                               extraFields.ForEach((fld) => fld.IsInheritedFromExtraField = true);
-                               dataRecordFields.AddRange(extraFields);
-                           }
-                       }
-                       if (dataRecordFields.Count == 0)
+                       List<DataRecordField> dataRecordFields = GetDataRecordTypeFields(dataRecordType);
+                       if (dataRecordFields == null || dataRecordFields.Count == 0)
                            throw new Exception(String.Format("dataRecordType '{0}' doesn't have any Field", dataRecordType.DataRecordTypeId));
 
                        dataRecordType.Fields = dataRecordFields;
@@ -376,6 +363,27 @@ namespace Vanrise.GenericData.Business
                    }
                    return dataRecordTypes;
                });
+        }
+
+        public static List<DataRecordField> GetDataRecordTypeFields(DataRecordType dataRecordType)
+        {
+            List<DataRecordField> dataRecordFields = new List<DataRecordField>();
+
+            if (dataRecordType.Fields != null)
+                dataRecordFields.AddRange(dataRecordType.Fields);
+
+            if (dataRecordType.ExtraFieldsEvaluator != null)
+            {
+                var extraFields = dataRecordType.ExtraFieldsEvaluator.GetFields(null);
+                if (extraFields != null)
+                {
+                    extraFields = extraFields.VRDeepCopy();
+                    extraFields.ForEach((fld) => fld.IsInheritedFromExtraField = true);
+                    dataRecordFields.AddRange(extraFields);
+                }
+            }
+
+            return dataRecordFields.Count > 0 ? dataRecordFields : null;
         }
 
         private Dictionary<string, DataRecordType> GetCachedDataRecordTypesByName()

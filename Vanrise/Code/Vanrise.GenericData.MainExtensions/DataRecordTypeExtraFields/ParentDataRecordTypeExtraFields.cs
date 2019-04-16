@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.MainExtensions
 {
@@ -15,7 +17,9 @@ namespace Vanrise.GenericData.MainExtensions
 
         public override List<DataRecordField> GetFields(IDataRecordExtraFieldContext context)
         {
-            return null;
+            var dataRecordTypeDefinitions = new DataRecordTypeManager().GetCachedDataRecordTypeDefinitions();
+            var recordType = dataRecordTypeDefinitions.GetRecord(this.DataRecordTypeId);
+            return DataRecordTypeManager.GetDataRecordTypeFields(recordType);
         }
     }
 }
