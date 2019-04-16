@@ -28,8 +28,17 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public enum IncludeClosedEntitiesEnum
     {
-        Never=0,
-        OnlyFirstTime=1,
-        UntilClosureDate=2
+        Never = 0,
+        OnlyFirstTime = 1,
+        UntilClosureDate = 2
+    }
+
+    public enum AccountDefinitionType
+    {
+        CustomerPrepaid = 0,
+        SupplierPrepaid = 1,
+        CustomerPostpaid = 2,
+        SupplierPostpaid = 3,
+        Netting = 4
     }
 }
