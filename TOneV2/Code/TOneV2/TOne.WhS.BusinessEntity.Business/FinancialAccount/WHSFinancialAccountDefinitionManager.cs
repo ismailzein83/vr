@@ -79,6 +79,25 @@ namespace TOne.WhS.BusinessEntity.Business
             return financialAccountDefinitionSettings.FinancialAccountInvoiceTypes;
         }
 
+        public AccountDefinitionType? GetAccountDefinitionType(Guid financialAccountDefinitionId)
+        {
+            if (new Guid("CA290901-8259-4A2D-82AF-1B5FEFB5E40D") == financialAccountDefinitionId)
+                return AccountDefinitionType.CustomerPrepaid;
+
+            if (new Guid("1EF3BA16-149E-49EB-95CB-908F0D8A26CA") == financialAccountDefinitionId)
+                return AccountDefinitionType.SupplierPrepaid;
+
+            if (new Guid("89BC46EF-28F0-43AC-9F4A-D3F9C2EA2EF1") == financialAccountDefinitionId)
+                return AccountDefinitionType.CustomerPostpaid;
+
+            if (new Guid("B3D286B2-C5A3-4A57-898D-1C1F95A30A25") == financialAccountDefinitionId)
+                return AccountDefinitionType.SupplierPostpaid;
+
+            if (new Guid("16661E6B-F227-4A8A-A5F5-50CCC52CC15B") == financialAccountDefinitionId)
+                return AccountDefinitionType.Netting;
+            return null;
+        }
+
         private WHSFinancialAccountDefinitionInfo FinancialAccountDefinitionInfoMapper(BusinessEntityDefinition businessEntityDefinition)
         {
             var settings = businessEntityDefinition.Settings.CastWithValidate<WHSFinancialAccountDefinitionSettings>("beDefinition.Settings");
