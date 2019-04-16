@@ -10,6 +10,8 @@ namespace Vanrise.GenericData.RDBDataStorage
 {
     public class RDBDataRecordStorageSettings : DataRecordStorageSettings
     {
+        public Guid? ParentRecordStorageId { get; set; }
+
         public string TableName { get; set; }
 
         public string TableSchema { get; set; }

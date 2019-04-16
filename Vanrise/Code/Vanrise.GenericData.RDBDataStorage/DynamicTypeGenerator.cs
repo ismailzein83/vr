@@ -11,6 +11,7 @@ namespace Vanrise.GenericData.RDBDataStorage
 {
     internal class DynamicTypeGenerator
     {
+        DataRecordStorageManager s_dataRecordStorageManager = new DataRecordStorageManager();
         public IDynamicManager GetDynamicManager(DataRecordStorage dataRecordStorage, RDBDataRecordStorageSettings dataRecordStorageSettings)
         {
             String cacheName = String.Format("RDBDataStorage_DynamicTypeGenerator_GetBulkInsertWriter_{0}", dataRecordStorage.DataRecordStorageId);
@@ -192,7 +193,23 @@ namespace Vanrise.GenericData.RDBDataStorage
             
             StringBuilder dynamicRecordMapperBuilder = new StringBuilder();
             StringBuilder dataRecordMapperBuilder = new StringBuilder();
-            foreach (var column in dataRecordStorageSettings.Columns)
+            List<RDBDataRecordStorageColumn> allColumns = new List<RDBDataRecordStorageColumn>(dataRecordStorageSettings.Columns);
+            if(dataRecordStorageSettings.ParentRecordStorageId.HasValue)
+            {
+                var parentRecordStorage = s_dataRecordStorageManager.GetDataRecordStorage(dataRecordStorageSettings.ParentRecordStorageId.Value);
+                parentRecordStorage.ThrowIfNull("parentRecordStorage", dataRecordStorageSettings.ParentRecordStorageId.Value);
+                parentRecordStorage.Settings.ThrowIfNull("parentRecordStorage.Settings", dataRecordStorageSettings.ParentRecordStorageId.Value);
+                var parentRecordStorageRDBSettings = parentRecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("parentRecordStorage.Settings", dataRecordStorageSettings.ParentRecordStorageId.Value);
+                if(parentRecordStorageRDBSettings.Columns != null)
+                {
+                    foreach(var parentColumn in parentRecordStorageRDBSettings.Columns)
+                    {
+                        if (!allColumns.Any(col => col.FieldName == parentColumn.FieldName))
+                            allColumns.Add(parentColumn);
+                    }
+                }
+            }
+            foreach (var column in allColumns)
             {
                 var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == column.FieldName);
                 if (matchField == null)

@@ -16,11 +16,14 @@ namespace Vanrise.GenericData.RDBDataStorage
     {
         #region ctor/Fields
 
+        const string PARENTRECORDSTORAGE_RDBTABLEALIAS = "parentStorage";
+
         RDBDataStoreSettings _dataStoreSettings;
         RDBDataRecordStorageSettings _dataRecordStorageSettings;
         DataRecordStorage _dataRecordStorage;
         SummaryTransformationDefinition _summaryTransformationDefinition;
         RDBTempStorageInformation _rdbTempStorageInformation;
+        DataRecordStorageManager s_dataRecordStorageManager = new DataRecordStorageManager();
 
         DataRecordType _dataRecordType;
         DataRecordType DataRecordType
@@ -299,7 +302,38 @@ namespace Vanrise.GenericData.RDBDataStorage
             if (fieldValues == null || fieldValues.Count == 0)
                 throw new Exception("fieldValues should not be null or empty.");
 
+            string idFieldName = GetIdFieldNameWithValidate();
             var rdbRegistrationInfo = GetRDBRegistrationInfo();
+
+            Dictionary<string, object> currentStorageFieldValues;
+            Dictionary<string, object> parentStorageFieldValues;
+
+            insertedId = null;
+            if(_dataRecordStorageSettings.ParentRecordStorageId.HasValue)
+            {
+                SplitFieldValuesForCurrentAndParentStorages(fieldValues, rdbRegistrationInfo, out currentStorageFieldValues, out parentStorageFieldValues);
+                var parentStorageDataManager = GetParentStorageDataManagerWithValidate();
+                if (parentStorageDataManager.Insert(parentStorageFieldValues, createdUserId, modifiedUserId, out insertedId))
+                {
+                    if (insertedId != null)
+                    {
+                        if (currentStorageFieldValues.ContainsKey(idFieldName))
+                            currentStorageFieldValues[idFieldName] = insertedId;
+                        else
+                            currentStorageFieldValues.Add(idFieldName, insertedId);
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                currentStorageFieldValues = fieldValues;
+                parentStorageFieldValues = null;
+            }
+
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(rdbRegistrationInfo.RDBTableQuerySource);
@@ -307,7 +341,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             if (rdbRegistrationInfo.IsIdIdentity)
                 insertQuery.AddSelectGeneratedId();
 
-            SetRDBWriteQueryColumnsFromDict(insertQuery, false, null, fieldValues, createdUserId, modifiedUserId, rdbRegistrationInfo);
+            SetRDBWriteQueryColumnsFromDict(insertQuery, false, null, currentStorageFieldValues, createdUserId, modifiedUserId, rdbRegistrationInfo);
 
             if(rdbRegistrationInfo.IsIdIdentity)
             {
@@ -345,7 +379,8 @@ namespace Vanrise.GenericData.RDBDataStorage
             {
                 if(queryContext.ExecuteNonQuery() > 0)
                 {
-                    fieldValues.TryGetValue(GetIdFieldNameWithValidate(), out insertedId);
+                    if (!_dataRecordStorageSettings.ParentRecordStorageId.HasValue)//insertedId should be set if inserted to parent record storage
+                        fieldValues.TryGetValue(idFieldName, out insertedId);
                     return true;
                 }
                 else
@@ -366,22 +401,42 @@ namespace Vanrise.GenericData.RDBDataStorage
             var readyStream = this.FinishDBApplyStream(dbApplyStream);
             this.ApplyStreamToDB(readyStream);
         }
-
+        
         public bool Update(Dictionary<string, object> fieldValues, int? modifiedUserId, RecordFilterGroup filterGroup)
         {
             if (fieldValues == null || fieldValues.Count == 0)
                 throw new Exception("fieldValues should not be null or empty.");
+
+            string idFieldName = GetIdFieldNameWithValidate();
+
             var rdbRegistrationInfo = GetRDBRegistrationInfo();
+
+
+            Dictionary<string, object> currentStorageFieldValues;
+            Dictionary<string, object> parentStorageFieldValues;
+
+            if (_dataRecordStorageSettings.ParentRecordStorageId.HasValue)
+            {
+                SplitFieldValuesForCurrentAndParentStorages(fieldValues, rdbRegistrationInfo, out currentStorageFieldValues, out parentStorageFieldValues);                
+            }
+            else
+            {
+                currentStorageFieldValues = fieldValues;
+                parentStorageFieldValues = null;
+            }
+
             var queryContext = new RDBQueryContext(GetDataProvider());
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(rdbRegistrationInfo.RDBTableQuerySource);
+
+            if (_dataRecordStorageSettings.ParentRecordStorageId.HasValue)
+                AddJoinParentRecordStorage(updateQuery.Join("rec"), "rec");
             
-            string idFieldName = GetIdFieldNameWithValidate();
             object idValue;
             if (!fieldValues.TryGetValue(idFieldName, out idValue) || idValue == null)
                 throw new NullReferenceException("idValue");
 
-            SetRDBWriteQueryColumnsFromDict(updateQuery, true, idValue, fieldValues, null, modifiedUserId, rdbRegistrationInfo);
+            SetRDBWriteQueryColumnsFromDict(updateQuery, true, idValue, currentStorageFieldValues, null, modifiedUserId, rdbRegistrationInfo);
 
             var where = updateQuery.Where();
             where.EqualsCondition(idFieldName).ObjectValue(idValue);
@@ -389,7 +444,19 @@ namespace Vanrise.GenericData.RDBDataStorage
             if (filterGroup != null)
                 AddFilterGroupCondition(filterGroup, where);
 
-            return queryContext.ExecuteNonQuery() > 0;
+            if(queryContext.ExecuteNonQuery() > 0)
+            {
+                if (parentStorageFieldValues != null)
+                {
+                    var parentStorageDataManager = GetParentStorageDataManagerWithValidate();
+                    parentStorageDataManager.Update(parentStorageFieldValues, modifiedUserId, null);//no need to pass the FilterGroup because it is already matched on the child entity
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
@@ -681,7 +748,8 @@ namespace Vanrise.GenericData.RDBDataStorage
                             IsIdIdentity = mainStorageRegistrationInfo.IsIdIdentity,
                             IdentityColumnType = mainStorageRegistrationInfo.IdentityColumnType,
                             UniqueFieldNames = mainStorageRegistrationInfo.UniqueFieldNames,
-                            NullableFieldNames = mainStorageRegistrationInfo.NullableFieldNames
+                            NullableFieldNames = mainStorageRegistrationInfo.NullableFieldNames,
+                            ParentRDBRegistrationInfo = mainStorageRegistrationInfo.ParentRDBRegistrationInfo
                         };
                     });
             }
@@ -705,7 +773,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                                     };
                                     List<string> fieldNamesForBulkInsert = new List<string>();
                                     Dictionary<string, RDBStorageFieldInfo> fieldInfosByFieldName = new Dictionary<string, RDBStorageFieldInfo>();
-                                      string idFieldName = this.DataRecordType.Settings.IdField;
+                                    string idFieldName = this.DataRecordType.Settings.IdField;
                                     string createdTimeFieldName = _dataRecordStorageSettings.CreatedTimeField;
                                     string lastModifiedTimeFieldName = _dataRecordStorageSettings.LastModifiedTimeField;
                                     bool isIdIdentity = false;
@@ -774,6 +842,17 @@ namespace Vanrise.GenericData.RDBDataStorage
                                         fieldNamesForBulkInsert.Add(fieldName);
                                     }
 
+                                    RDBRegistrationInfo parentRDBRegistrationInfo;
+                                    if (_dataRecordStorageSettings.ParentRecordStorageId.HasValue)
+                                    {
+                                        var parentRDBDataManager = GetParentStorageDataManagerWithValidate();
+                                        parentRDBRegistrationInfo = parentRDBDataManager.GetRDBRegistrationInfo();
+                                    }
+                                    else
+                                    {
+                                        parentRDBRegistrationInfo = null;
+                                    }
+                                    
                                     HashSet<string> nullableFieldNames = _dataRecordStorageSettings.NullableFields != null ? new HashSet<string>(_dataRecordStorageSettings.NullableFields.Select(itm => itm.Name)) : new HashSet<string>();
 
                                     RDBSchemaManager.Current.RegisterDefaultTableDefinition(rdbTableName, rdbTableDefinition);
@@ -787,7 +866,8 @@ namespace Vanrise.GenericData.RDBDataStorage
                                         IsIdIdentity = isIdIdentity,
                                         IdentityColumnType = identityColumnType,
                                         UniqueFieldNames = uniqueFieldNames,
-                                        NullableFieldNames = nullableFieldNames
+                                        NullableFieldNames = nullableFieldNames,
+                                        ParentRDBRegistrationInfo = parentRDBRegistrationInfo
                                     };
                                     return registrationInfo;
                                 });
@@ -802,18 +882,36 @@ namespace Vanrise.GenericData.RDBDataStorage
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(rdbRegistrationInfo.RDBTableQuerySource, "rec", numberOfRecords, true);
+
+            if (_dataRecordStorageSettings.ParentRecordStorageId.HasValue)
+                AddJoinParentRecordStorage(selectQuery.Join(), "rec");
+
             var selectColumns = selectQuery.SelectColumns();
             if (fieldNames != null)
             {
                 foreach (var fieldName in fieldNames)
                 {
-                    if (!rdbRegistrationInfo.NullableFieldNames.Contains(fieldName))
+                    if(rdbRegistrationInfo.FieldInfosByFieldName.ContainsKey(fieldName))
+                    {
                         selectColumns.Column(fieldName);
+                    }
+                    else if(rdbRegistrationInfo.ParentRDBRegistrationInfo != null && rdbRegistrationInfo.ParentRDBRegistrationInfo.FieldInfosByFieldName.ContainsKey(fieldName))
+                    {
+                        selectColumns.Column(PARENTRECORDSTORAGE_RDBTABLEALIAS, fieldName, fieldName);
+                    }                        
                 }
             }
             else
             {
                 selectColumns.AllTableColumns("rec");
+                if (rdbRegistrationInfo.ParentRDBRegistrationInfo != null)
+                {
+                    foreach(var parentFieldName in rdbRegistrationInfo.ParentRDBRegistrationInfo.FieldInfosByFieldName.Keys)
+                    {
+                        if (!rdbRegistrationInfo.FieldInfosByFieldName.ContainsKey(parentFieldName))
+                            selectColumns.Column(PARENTRECORDSTORAGE_RDBTABLEALIAS, parentFieldName, parentFieldName);
+                    }
+                }
             }
 
             var where = selectQuery.Where();
@@ -857,10 +955,16 @@ namespace Vanrise.GenericData.RDBDataStorage
             var recordFilterRDBBuilder = new RecordFilterRDBBuilder(
                 (fieldName, expressionContext) =>
                 {
-                    if (rdbRegistrationInfo.NullableFieldNames.Contains(fieldName))
+                    if(rdbRegistrationInfo.FieldInfosByFieldName.ContainsKey(fieldName))
+                        expressionContext.Column(fieldName);
+                    else if (rdbRegistrationInfo.ParentRDBRegistrationInfo != null && rdbRegistrationInfo.ParentRDBRegistrationInfo.FieldInfosByFieldName.ContainsKey(fieldName))
+                        expressionContext.Column(PARENTRECORDSTORAGE_RDBTABLEALIAS, fieldName);
+                    else if (rdbRegistrationInfo.NullableFieldNames.Contains(fieldName))
+                        expressionContext.Null();
+                    else if (rdbRegistrationInfo.ParentRDBRegistrationInfo != null && rdbRegistrationInfo.ParentRDBRegistrationInfo.NullableFieldNames.Contains(fieldName))
                         expressionContext.Null();
                     else
-                        expressionContext.Column(fieldName);
+                        throw new Exception($"Unsupported Field Name '{fieldName}");
                 });
             recordFilterRDBBuilder.RecordFilterGroupCondition(conditionContext, filterGroup);
         }
@@ -979,7 +1083,40 @@ namespace Vanrise.GenericData.RDBDataStorage
             }
         }
 
+        void AddJoinParentRecordStorage(RDBJoinContext joinContext, string tableAlias)
+        {
+            var rdbRegistrationInfo = GetRDBRegistrationInfo();
+            rdbRegistrationInfo.ParentRDBRegistrationInfo.ThrowIfNull("rdbRegistrationInfo.ParentRDBRegistrationInfo", _dataRecordStorage.DataRecordStorageId);
 
+            var joinStatement = joinContext.Join(rdbRegistrationInfo.ParentRDBRegistrationInfo.RDBTableQuerySource, PARENTRECORDSTORAGE_RDBTABLEALIAS);
+            joinStatement.On().EqualsCondition(tableAlias, GetIdFieldNameWithValidate()).Column(PARENTRECORDSTORAGE_RDBTABLEALIAS, GetParentStorageDataManagerWithValidate().GetIdFieldNameWithValidate());
+        }
+
+        private RDBRecordStorageDataManager GetParentStorageDataManagerWithValidate()
+        {
+            return GetStorageDataManagerWithValidate(_dataRecordStorageSettings.ParentRecordStorageId.Value);
+        }
+
+        private RDBRecordStorageDataManager GetStorageDataManagerWithValidate(Guid recordStorageId)
+        {
+            var recordStorageDataManager = s_dataRecordStorageManager.GetStorageDataManager(recordStorageId);
+            recordStorageDataManager.ThrowIfNull("recordStorageDataManager", recordStorageId);
+            return recordStorageDataManager.CastWithValidate<RDBRecordStorageDataManager>("recordStorageDataManager", recordStorageId);
+        }
+
+        private void SplitFieldValuesForCurrentAndParentStorages(Dictionary<string, object> fieldValues, RDBRegistrationInfo rdbRegistrationInfo, out Dictionary<string, object> currentStorageFieldValues, out Dictionary<string, object> parentStorageFieldValues)
+        {
+            rdbRegistrationInfo.ParentRDBRegistrationInfo.ThrowIfNull("rdbRegistrationInfo.ParentRDBRegistrationInfo", _dataRecordStorage.DataRecordStorageId);
+            currentStorageFieldValues = new Dictionary<string, object>();
+            parentStorageFieldValues = new Dictionary<string, object>();
+            foreach(var fieldValueEntry in fieldValues)
+            {
+                if (rdbRegistrationInfo.FieldInfosByFieldName.ContainsKey(fieldValueEntry.Key))
+                    currentStorageFieldValues.Add(fieldValueEntry.Key, fieldValueEntry.Value);
+                if (rdbRegistrationInfo.ParentRDBRegistrationInfo.FieldInfosByFieldName.ContainsKey(fieldValueEntry.Key))
+                    parentStorageFieldValues.Add(fieldValueEntry.Key, fieldValueEntry.Value);
+            }
+        }
 
         #endregion
 
@@ -1012,6 +1149,8 @@ namespace Vanrise.GenericData.RDBDataStorage
             public List<string> UniqueFieldNames { get; set; }
 
             public HashSet<string> NullableFieldNames { get; set; }
+            
+            public RDBRegistrationInfo ParentRDBRegistrationInfo { get; set; }
         }
 
         private class RDBStorageFieldInfo
