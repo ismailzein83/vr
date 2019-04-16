@@ -122,8 +122,10 @@ as (select * from (values
 ('77EEF180-EED0-46A8-BBAB-F19BFDB43F60','GenericBE_Grid_View','GenericBE Grid View','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-genericdata-genericbe-genericbegridview-definition"}'),
 ('34FB0901-6270-4EE2-901E-78F6A2C40E4F','FilterGroupGenericBEGridCondition','Filter Group','VR_GenericData_GenericBEGridCondition','{"Editor":"vr-genericdata-genericbe-gridviewcondition-filtergroup"}'),
 ('8C0574CD-8862-4F29-828A-CE398635F2F7','Data Record Type List','Data Record Type List','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist","RuntimeEditor":"vr-genericdata-fieldtype-datarecordtypelist-runtimeeditor","FilterEditor":"","RuleFilterEditor":""}'),
-('661E02F1-7A44-4D56-A73F-7912EF3017B1','Grid_View','Grid View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-gridview-definition"}')
-
+('661E02F1-7A44-4D56-A73F-7912EF3017B1','Grid_View','Grid View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-gridview-definition"}'),
+('03925E9D-6A0F-4D4F-A4A4-36F5757D71EB','Grid_Editor_View','Grid Editor View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-grideditorview-definition"}'),
+('6A8E0D5E-318C-4C6E-A99B-991EAE562B7C','Field_View','Field View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-fieldview-definition"}'),
+('F0FCE857-0119-4895-9459-648E14EFA60A','Comment View','Comment','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-common-comment-genericbeview-definition"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
