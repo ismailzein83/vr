@@ -51,7 +51,7 @@ namespace BPMExtended.Main.Business
             return coreServices;
         }
 
-        public List<ServiceDetail> GetOptionalServices(string ratePlanId)
+        public List<ServiceDetail> GetOptionalServices(string ratePlanId , string switchId)
         {
             //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
             //return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
@@ -92,14 +92,14 @@ namespace BPMExtended.Main.Business
 
             var multiplePackagesServiceInput = new MultiplePackagesServiceInput()
             {
-                RatePlanId = rateplanId,
-                Packages = packages
+                RatePlanId = "TM006",
+                ExcludedPackages = packages
             };
 
             var servicesDetailItems = new List<ServiceDetail>();
             using (SOMClient client = new SOMClient())
             {
-                List<ServiceDefinition> items = client.Post<MultiplePackagesServiceInput,List<ServiceDefinition>>("api/SOM.ST/Billing/GetServicesByRateplanAndPackages",multiplePackagesServiceInput);
+                List<ServiceDefinition> items = client.Post<MultiplePackagesServiceInput, List<ServiceDefinition>>("api/SOM.ST/Billing/GetRatePlanServices", multiplePackagesServiceInput);
                 foreach (var item in items)
                 {
                     var serviceDetailItem = ServiceDefinitionToDetailMapper(item);
@@ -235,8 +235,12 @@ namespace BPMExtended.Main.Business
         {
             return new ServiceDetail
             {
-                Name = item.Title,
-                ServiceId = item.PublicId
+                Title = item.Title,
+                PublicId = item.PublicId,
+                Description= item.Description,
+                PackageId = item.PackageId,
+                ServiceResource=item.ServiceResource
+                
 
             };
         }

@@ -226,19 +226,11 @@ namespace BPMExtended.Main.Business
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
-            esq.AddColumn("StCoreServices");
-            esq.AddColumn("StServices");
-            esq.AddColumn("StRatePlanID");
-            esq.AddColumn("StLineType");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
-            esq.AddColumn("StCity");
-            esq.AddColumn("StCity.Id");
-            
+            esq.AddColumn("StContractIdOnHold");
+          
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -246,26 +238,26 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var ratePlanId = entities[0].GetColumnValue("StRatePlanID");
-                var lineType = entities[0].GetColumnValue("StLineType");
-                var city = entities[0].GetColumnValue("StCityName");
-                var coreServices = entities[0].GetColumnValue("StCoreServices");
-                var optionalServices = entities[0].GetColumnValue("StServices");
-                CRMCustomerInfo info =  GetCRMCustomerInfo(contactId.ToString(), accountId.ToString());
+                var contractId = entities[0].GetColumnValue("StContractIdOnHold");
 
-                //call api
+                ActivateTelephonyContractInput somRequestInput = new ActivateTelephonyContractInput
+                {
+                    CommonInputArgument = new CommonInputArgument()
+                    {
+                        ContractId = contractId.ToString(),
+                        RequestId = requestId.ToString()
+                    }
+                };
+
+            //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<ActivateTelephonyContractInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
+                }
+
 
             }
 
-            
-
-
-            //UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            //var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-            //    .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            //update.Execute();
 
         }
 
@@ -1108,12 +1100,16 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public SOMRequestOutput CreateTelephonyContractOnHold(Guid requestId)
+        public SOMRequestOutput CreateTelephonyContractOnHold(Guid requestId, string coreServices, string optionalServices)
         {
 
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output  =new SOMRequestOutput();
+            List<ContractService> contractServices = new List<ContractService>();
+            List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
+            List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
             esq.AddColumn("StCoreServices");
@@ -1143,59 +1139,86 @@ namespace BPMExtended.Main.Business
                 var pathId = entities[0].GetColumnValue("StLinePathID");
                 var lineType = entities[0].GetColumnValue("StLineType");
                 var city = entities[0].GetColumnValue("StCityName");
-                var coreServices = entities[0].GetColumnValue("StCoreServices");
-                var optionalServices = entities[0].GetColumnValue("StServices");
-                CRMCustomerInfo info = GetCRMCustomerInfo(contactId.ToString(), accountId.ToString());
+                CRMCustomerInfo info = GetCRMCustomerInfo(contactId.ToString(), null);
+
+                if(coreServices != "\"\"") listOfCoreServices= JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
+                if (optionalServices != "\"\"")  JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
+
+                var items = listOfCoreServices.Concat(listOfOptionalServices);
+
+                foreach (var item in items)
+                {
+                    var contractServiceItem = ServiceDetailToContractServiceMapper(item);
+                    contractServices.Add(contractServiceItem);
+                }
 
                 //call api
+                SOMRequestInput<TelephonyContractOnHoldInput> somRequestInput = new SOMRequestInput<TelephonyContractOnHoldInput>
+                {
+                    InputArguments = new TelephonyContractOnHoldInput
+                    {
+                        LinePathId = "11112222",//pathId.ToString(),
+                        PhoneNumber = phoneNumber.ToString(),
+                        SubType = lineType.ToString(),
+                        ServiceResource = null,
+                        City = city.ToString(),
+                        CSO = info.csoId,
+                        RatePlanId = "TM006",//ratePlanId.ToString(),
+                        ContractServices = contractServices,
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContactId = contactId.ToString(),
+                            CustomerId = info.CustomerId
+                        }
+                    }
+
+                };
+
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<TelephonyContractOnHoldInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateTelephonyContract/StartProcess", somRequestInput);
+                }
+
 
             }
 
-            return  new SOMRequestOutput()
-                {
-                    ProcessId = "11111"
-                };
+            return output;
 
-            //call api
-
-            //TelephonyContractOnHoldInput somRequestInput = new TelephonyContractOnHoldInput
+            //return new SOMRequestOutput()
             //{
-            //    CustomerId = CustomerId,
-            //    AccountNumber = AccountNumber,
-            //    BankCode = BankCode,
-            //    City = City,
-            //    CSO = CSO,
-            //    CustomerCategoryId = CustomerCategoryId,
-            //    FirstName = FirstName,
-            //    LastName = LastName,
-            //    PaymentMethodId = PaymentMethodId,
-            //    RatePlanId = null,
-            //    CommonInputArgument = new CommonInputArgument()
-            //    {
-            //        ContactId = contactId
-            //    }
+            //    ProcessId = "10178"
             //};
-
-            //using (var client = new SOMClient())
-            //{
-            //    client.Post<TelephonyContractOnHoldInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateCustomer/StartProcess", somRequestInput);
-            //}
 
         }
 
 
         public int CheckTelephonyContractOnHoldStatus(string processId)
         {
+            int status;
 
-            Array values = Enum.GetValues(typeof(ContacrtOnHoldStatus));
-            Random random = new Random();
-            int randomBar = (int)values.GetValue(random.Next(values.Length));
-            return randomBar;
+            using (SOMClient client = new SOMClient())
+            {
+                status = client.Get<int>(String.Format("api/SOM.ST/Common/CheckWorkflowStatus?processInstanceId={0}", processId));
+            }
+
+            return status;
+
+            //Array values = Enum.GetValues(typeof(ContacrtOnHoldStatus));
+            //Random random = new Random();
+            //int randomBar = (int)values.GetValue(random.Next(values.Length));
+            //return randomBar;
 
         }
 
 
-
+        public ContractService ServiceDetailToContractServiceMapper(ServiceDetail item)
+        {
+            return new ContractService
+            {
+                sncode = item.PublicId,
+                spcode = item.PackageId
+            };
+        }
 
         //public void convertFileToBinaryCode()
         //{
