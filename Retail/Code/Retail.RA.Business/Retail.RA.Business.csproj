@@ -79,6 +79,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Dispute\DisputeSettings.cs" />
     <Compile Include="Extensions\INTLReconcilationObjectDataProviderSettings.cs" />
+    <Compile Include="OnNetOperationDeclaration\OnNetOperatorDeclarationManager.cs" />
     <Compile Include="OnNetOperationDeclaration\OnNetOperatorDeclarationServicesManager.cs" />
     <Compile Include="OnNetOperationDeclaration\OnNetPostpaidTotalOperationDeclarationService.cs" />
     <Compile Include="OperatorDeclarationServices\IcxSMS.cs" />
