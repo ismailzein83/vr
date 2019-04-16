@@ -19,7 +19,9 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 
         public List<VolumePackageItem> Items { get; set; }
 
+
         #region Public Methods
+
         public override void ValidatePackageAssignment(IPackageSettingAssignementValidateContext context)
         {
             context.IsValid = true;
@@ -193,9 +195,70 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
             context.ChargeValue = this.Price;
             context.PeriodType = this.RecurringPeriod.GetDescription();
         }
+
+        #endregion
+
+        #region Private methods
+
+        private PackageItemToEvaluateData GetPackageItemToEvaluateData(Guid volumePackageDefinitionId, VolumePackageDefinitionSettings volumePackageDefinitionSettings)
+        {
+            var cacheName = new GetPackageItemToEvaluateDataCacheName() { VolumePackageDefinitionId = volumePackageDefinitionId };
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<PackageManager.CacheManager>().GetOrCreateObject(cacheName,
+               () =>
+               {
+                   if (this.Items == null || volumePackageDefinitionSettings.Items == null)
+                       return null;
+
+                   var itemsByItemId = new Dictionary<Guid, PackageItemToEvaluate>();
+                   var itemsByServiceId = new Dictionary<Guid, List<PackageItemToEvaluate>>();
+                   var itemsForAllServices = new List<PackageItemToEvaluate>();
+
+                   foreach (VolumePackageItem packageItem in this.Items)
+                   {
+                       VolumePackageDefinitionItem volumePackageDefinitionItem = volumePackageDefinitionSettings.Items.FindRecord(itm => itm.VolumePackageDefinitionItemId == packageItem.VolumePackageDefinitionItemId);
+                       PackageItemToEvaluate packageItemToEvaluate = new PackageItemToEvaluate()
+                       {
+                           Item = packageItem,
+                           CompositeRecordConditionDefinitionGroup = volumePackageDefinitionItem.CompositeRecordConditionDefinitionGroup
+                       };
+
+                       itemsByItemId.Add(packageItem.VolumePackageItemId, packageItemToEvaluate);
+
+                       if (volumePackageDefinitionItem.ServiceTypeIds != null)
+                       {
+                           foreach (Guid serviceTypeId in volumePackageDefinitionItem.ServiceTypeIds)
+                           {
+                               List<PackageItemToEvaluate> packageItemToEvaluateList = itemsByServiceId.GetOrCreateItem(serviceTypeId, () => { return itemsForAllServices != null ? new List<PackageItemToEvaluate>(itemsForAllServices) : new List<PackageItemToEvaluate>(); });
+                               packageItemToEvaluateList.Add(packageItemToEvaluate);
+                           }
+                       }
+                       else
+                       {
+                           itemsForAllServices.Add(packageItemToEvaluate);
+
+                           if (itemsByServiceId.Count > 0)
+                           {
+                               foreach (var itemKvp in itemsByServiceId)
+                               {
+                                   itemKvp.Value.Add(packageItemToEvaluate);
+                               }
+                           }
+                       }
+                   }
+
+                   return new PackageItemToEvaluateData()
+                   {
+                       ItemsByItemId = itemsByItemId,
+                       ItemsByServiceId = itemsByServiceId.Count > 0 ? itemsByServiceId : null,
+                       ItemsForAllServices = itemsForAllServices.Count > 0 ? itemsForAllServices : null
+                   };
+               });
+        }
+
         #endregion
 
         #region Private Classes
+
         private struct GetPackageItemToEvaluateDataCacheName
         {
             public Guid VolumePackageDefinitionId { get; set; }
@@ -302,63 +365,6 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
             }
         }
 
-        #endregion
-
-        #region Private methods
-        private PackageItemToEvaluateData GetPackageItemToEvaluateData(Guid volumePackageDefinitionId, VolumePackageDefinitionSettings volumePackageDefinitionSettings)
-        {
-            var cacheName = new GetPackageItemToEvaluateDataCacheName() { VolumePackageDefinitionId = volumePackageDefinitionId };
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<PackageManager.CacheManager>().GetOrCreateObject(cacheName,
-               () =>
-               {
-                   if (this.Items == null || volumePackageDefinitionSettings.Items == null)
-                       return null;
-
-                   var itemsByItemId = new Dictionary<Guid, PackageItemToEvaluate>();
-                   var itemsByServiceId = new Dictionary<Guid, List<PackageItemToEvaluate>>();
-                   var itemsForAllServices = new List<PackageItemToEvaluate>();
-
-                   foreach (VolumePackageItem packageItem in this.Items)
-                   {
-                       VolumePackageDefinitionItem volumePackageDefinitionItem = volumePackageDefinitionSettings.Items.FindRecord(itm => itm.VolumePackageDefinitionItemId == packageItem.VolumePackageDefinitionItemId);
-                       PackageItemToEvaluate packageItemToEvaluate = new PackageItemToEvaluate()
-                       {
-                           Item = packageItem,
-                           CompositeRecordConditionDefinitionGroup = volumePackageDefinitionItem.CompositeRecordConditionDefinitionGroup
-                       };
-
-                       itemsByItemId.Add(packageItem.VolumePackageItemId, packageItemToEvaluate);
-
-                       if (volumePackageDefinitionItem.ServiceTypeIds != null)
-                       {
-                           foreach (Guid serviceTypeId in volumePackageDefinitionItem.ServiceTypeIds)
-                           {
-                               List<PackageItemToEvaluate> packageItemToEvaluateList = itemsByServiceId.GetOrCreateItem(serviceTypeId, () => { return itemsForAllServices != null ? new List<PackageItemToEvaluate>(itemsForAllServices) : new List<PackageItemToEvaluate>(); });
-                               packageItemToEvaluateList.Add(packageItemToEvaluate);
-                           }
-                       }
-                       else
-                       {
-                           itemsForAllServices.Add(packageItemToEvaluate);
-
-                           if (itemsByServiceId.Count > 0)
-                           {
-                               foreach (var itemKvp in itemsByServiceId)
-                               {
-                                   itemKvp.Value.Add(packageItemToEvaluate);
-                               }
-                           }
-                       }
-                   }
-
-                   return new PackageItemToEvaluateData()
-                   {
-                       ItemsByItemId = itemsByItemId,
-                       ItemsByServiceId = itemsByServiceId.Count > 0 ? itemsByServiceId : null,
-                       ItemsForAllServices = itemsForAllServices.Count > 0 ? itemsForAllServices : null
-                   };
-               });
-        }
         #endregion
     }
 
