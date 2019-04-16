@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
+using Vanrise.Common;
 using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Web.Base;
@@ -21,6 +23,22 @@ namespace Vanrise.Notification.Web.Controllers
             if (!_typeManager.DoesUserHaveViewAccess(input.NotificationTypeId))
                 return GetUnauthorizedResponse();
             return _manager.GetFirstPageVRNotifications(input);
+        }
+
+        [HttpPost]
+        [Route("ExportVRNotifications")]
+        public object ExportVRNotifications(VRNotificationExportInput input)
+        {
+            input.ThrowIfNull("input");
+            Guid notificationTypeId = input.NotificationTypeId;
+
+            if (!_typeManager.DoesUserHaveViewAccess(notificationTypeId))
+                return GetUnauthorizedResponse();
+
+            string fileName;
+            var excelResult = _manager.ExportVRNotifications(input, out fileName);
+
+            return GetExcelResponse(excelResult, fileName);
         }
 
         [HttpPost]

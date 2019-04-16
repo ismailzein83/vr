@@ -13,6 +13,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'GetFirstPageVRNotifications'), input);
         }
 
+        function ExportVRNotifications(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'ExportVRNotifications'), input, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
+
         function GetUpdatedVRNotifications(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'GetUpdatedVRNotifications'), input);
         }
@@ -23,6 +30,7 @@
 
         return ({
             GetFirstPageVRNotifications: GetFirstPageVRNotifications,
+            ExportVRNotifications: ExportVRNotifications,
             GetUpdatedVRNotifications: GetUpdatedVRNotifications,
             GetBeforeIdVRNotifications: GetBeforeIdVRNotifications
         });

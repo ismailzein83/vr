@@ -3,6 +3,7 @@ using Vanrise.AccountBalance.Business.Extensions;
 using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
+using System.Collections.Generic;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -19,7 +20,6 @@ namespace Vanrise.AccountBalance.Business
         public bool ShowAccountTypeColumn { get; set; }
 
         public AccountBalanceNotificationTypeExtendedSettings AccountBalanceNotificationTypeExtendedSettings { get; set; }
-
 
         public override bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context)
         {
@@ -54,8 +54,8 @@ namespace Vanrise.AccountBalance.Business
         public override VRNotificationDetailEventPayload GetNotificationDetailEventPayload(IVRNotificationTypeGetNotificationEventPayloadContext context)
         {
             var vrBalanceAlertEventPayload = new VRNotificationManager().GetVRNotificationEventPayload<VRBalanceAlertEventPayload>(context.VRNotification);
-            VRBalanceAlertRollbackEventPayload rollbackEventPayload =   null;
-            if(context.VRNotification.RollbackEventPayload != null)
+            VRBalanceAlertRollbackEventPayload rollbackEventPayload = null;
+            if (context.VRNotification.RollbackEventPayload != null)
                 rollbackEventPayload = context.VRNotification.RollbackEventPayload.CastWithValidate<VRBalanceAlertRollbackEventPayload>("context.VRNotification.RollbackEventPayload");
             var accountBalanceAlertRuleTypeSettings = new VRAlertRuleTypeManager().GetVRAlertRuleTypeSettings<AccountBalanceAlertRuleTypeSettings>(vrBalanceAlertEventPayload.AlertRuleTypeId);
 
@@ -77,6 +77,19 @@ namespace Vanrise.AccountBalance.Business
                 Currency = new Vanrise.Common.Business.CurrencyManager().GetCurrencySymbol(vrBalanceAlertEventPayload.CurrencyId)
             };
         }
+
+        public override Dictionary<string, string> GetNotificationFieldTitlesByName()
+        {
+            return new Dictionary<string, string>()
+           {
+               {"AccountType", "Account Type"},
+               {"BusinessEntityDescription", AccountColumnHeader},
+               {"CurrentBalance", "Current Balance"},
+               {"RollbackBalance", "Rollback Balance"},
+               {"Threshold", "Threshold"},
+               {"Currency", "Currency"}
+           };
+        }
     }
 
     public class AccountBalanceNotificationDetailEventPayload : VRNotificationDetailEventPayload
@@ -92,5 +105,18 @@ namespace Vanrise.AccountBalance.Business
         public Decimal Threshold { get; set; }
 
         public String Currency { get; set; }
+
+        public override Dictionary<string, object> GetNotificationFieldValuesByName()
+        {
+            return new Dictionary<string, object>()
+           {
+               {"AccountType", AccountType},
+               {"BusinessEntityDescription", BusinessEntityDescription},
+               {"CurrentBalance", CurrentBalance},
+               {"RollbackBalance", RollbackBalance},
+               {"Threshold", Threshold},
+               {"Currency", Currency}
+           };
+        }
     }
 }

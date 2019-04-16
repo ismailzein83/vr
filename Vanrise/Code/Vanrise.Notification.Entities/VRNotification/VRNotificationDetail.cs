@@ -1,6 +1,8 @@
 ﻿using Vanrise.Common;
 using Vanrise.Entities;
 using System.Linq;
+using System.Collections.Generic;
+using System;
 
 namespace Vanrise.Notification.Entities
 {
@@ -41,5 +43,6 @@ namespace Vanrise.Notification.Entities
 
     public abstract class VRNotificationDetailEventPayload
     {
+        public abstract Dictionary<string, object> GetNotificationFieldValuesByName();
     }
 }

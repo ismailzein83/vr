@@ -77,6 +77,14 @@ namespace Vanrise.GenericData.Notification
 
             return new DataRecordNotificationDetailEventPayload() { FieldValues = fieldValues };
         }
+
+        public override Dictionary<string, string> GetNotificationFieldTitlesByName()
+        {
+            if (GridColumnDefinitions == null || GridColumnDefinitions.Count == 0)
+                return null;
+
+            return GridColumnDefinitions.ToDictionary(item => item.FieldName, item => item.Header);
+        }
     }
 
     public class NotificationGridColumnDefinition
@@ -89,5 +97,13 @@ namespace Vanrise.GenericData.Notification
     public class DataRecordNotificationDetailEventPayload : VRNotificationDetailEventPayload
     {
         public Dictionary<string, DataRecordFieldValue> FieldValues { get; set; }
+
+        public override Dictionary<string, object> GetNotificationFieldValuesByName()
+        {
+            if (FieldValues == null || FieldValues.Count == 0)
+                return null;
+            
+            return FieldValues.ToDictionary(item => item.Key, item => item.Value.Description as object);
+        }
     }
 }

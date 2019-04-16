@@ -109,6 +109,26 @@ namespace Vanrise.Notification.Data.SQL
             return dt;
         }
 
+        public List<VRNotification> GetFilteredVRNotifications(VRNotificationExportInput vrNotificationInput)
+        {
+            string description = null;
+            if (vrNotificationInput.Query != null && !string.IsNullOrEmpty(vrNotificationInput.Query.Description))
+                description = vrNotificationInput.Query.Description;
+
+            string statusIds = null;
+            if (vrNotificationInput.Query != null && vrNotificationInput.Query.StatusIds != null && vrNotificationInput.Query.StatusIds.Count > 0)
+                statusIds = string.Join<int>(",", vrNotificationInput.Query.StatusIds);
+
+            string alerttLevelIds = null;
+            if (vrNotificationInput.Query != null && vrNotificationInput.Query.AlertLevelIds != null && vrNotificationInput.Query.AlertLevelIds.Count > 0)
+                alerttLevelIds = string.Join<Guid>(",", vrNotificationInput.Query.AlertLevelIds);
+
+            DateTime from = vrNotificationInput.Query != null ? vrNotificationInput.Query.From : default(DateTime);
+            DateTime to = vrNotificationInput.Query != null && vrNotificationInput.Query.To.HasValue ? vrNotificationInput.Query.To.Value : default(DateTime);
+
+            return GetItemsSP("[VRNotification].[sp_VRNotifications_GetFiltered]", VRNotificationMapper, vrNotificationInput.NotificationTypeId, description, statusIds, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
+        }
+
         public void GetFirstPageVRNotifications(IVRNotificationFirstPageContext context)
         {
             bool isFinalRow = false;

@@ -41,9 +41,10 @@
 		</div>
 		<vr-row removeline>
 			<vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-				<div transclude-to="buttons">
-					<vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
-				</div>
+                <div transclude-to="buttons">
+                    <vr-button type="Export" formname="formFilter" data-onclick="scopeModel.exportClicked"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+                </div>
 			</vr-actionbar>
 		</vr-row>
 		<vr-row>

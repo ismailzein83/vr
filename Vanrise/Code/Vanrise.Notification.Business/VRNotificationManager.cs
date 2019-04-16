@@ -130,23 +130,39 @@ namespace Vanrise.Notification.Business
             return vrNotification.EventPayload.CastWithValidate<T>("vrNotification.EventPayload", vrNotification.VRNotificationId);
         }
 
+        public ExcelResult ExportVRNotifications(VRNotificationExportInput input, out string fileName)
+        {
+            Guid notificationTypeId = input.NotificationTypeId;
+
+            VRNotificationType vrNotificationType = new VRNotificationTypeManager().GetNotificationType(notificationTypeId);
+            vrNotificationType.ThrowIfNull("vrNotificationType", notificationTypeId);
+
+            fileName = vrNotificationType.Name;
+
+            var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings(notificationTypeId);
+            var headersByName = vrNotificationTypeExtendedSettings.GetNotificationFieldTitlesByName();
+
+            if (headersByName == null || headersByName.Count == 0)
+                return null;
+
+            IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
+            ExcelManager excelManager = new ExcelManager();
+
+            var vrNotifications = dataManager.GetFilteredVRNotifications(input);
+            return excelManager.ExportExcel<VRNotificationDetail>(GenerateExcelSheet(headersByName, vrNotifications, input.ExtendedQuery, vrNotificationTypeExtendedSettings));
+        }
+
         public VRNotificationUpdateOutput GetFirstPageVRNotifications(VRNotificationFirstPageInput input)
         {
             List<VRNotification> vrNotifications = new List<VRNotification>();
 
             var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings(input.NotificationTypeId);
 
-            Func<VRNotification, bool> isNotificationMatched = (vrNotification) =>
-            {
-                var vrNotificationTypeIsMatchedContext = new VRNotificationTypeIsMatchedContext() { VRNotification = vrNotification, ExtendedQuery = input.ExtendedQuery };
-                return vrNotificationTypeExtendedSettings.IsVRNotificationMatched(vrNotificationTypeIsMatchedContext);
-            };
-
             Func<VRNotification, bool> onItemReady = (vrNotification) =>
             {
                 bool isFinalRow = false;
 
-                if (isNotificationMatched(vrNotification))
+                if (IsNotificationMatched(vrNotification, input.ExtendedQuery, vrNotificationTypeExtendedSettings))
                 {
                     vrNotifications.Add(vrNotification);
 
@@ -178,12 +194,6 @@ namespace Vanrise.Notification.Business
         {
             var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings(input.NotificationTypeId);
 
-            Func<VRNotification, bool> isNotificationMatched = (vrNotification) =>
-            {
-                var context = new VRNotificationTypeIsMatchedContext() { VRNotification = vrNotification, ExtendedQuery = input.ExtendedQuery };
-                return vrNotificationTypeExtendedSettings.IsVRNotificationMatched(context);
-            };
-
             VRNotificationUpdateContext vrNotificationUpdateContext = new VRNotificationUpdateContext()
             {
                 NotificationTypeId = input.NotificationTypeId,
@@ -194,7 +204,7 @@ namespace Vanrise.Notification.Business
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
             List<VRNotification> getUpdatedNotifications = dataManager.GetUpdateVRNotifications(vrNotificationUpdateContext);
 
-            IEnumerable<VRNotification> matchedVRNotification = getUpdatedNotifications.FindAllRecords(isNotificationMatched);
+            IEnumerable<VRNotification> matchedVRNotification = getUpdatedNotifications.FindAllRecords(item => IsNotificationMatched(item, input.ExtendedQuery, vrNotificationTypeExtendedSettings));
 
             VRNotificationUpdateOutput vrNotificationUpdateOutput = new VRNotificationUpdateOutput();
             vrNotificationUpdateOutput.VRNotificationDetails = matchedVRNotification != null ? matchedVRNotification.Select(VRNotificationDetailMapper).ToList() : null;
@@ -209,17 +219,11 @@ namespace Vanrise.Notification.Business
 
             var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings(input.NotificationTypeId);
 
-            Func<VRNotification, bool> isNotificationMatched = (vrNotification) =>
-            {
-                var context = new VRNotificationTypeIsMatchedContext() { VRNotification = vrNotification, ExtendedQuery = input.ExtendedQuery };
-                return vrNotificationTypeExtendedSettings.IsVRNotificationMatched(context);
-            };
-
             Func<VRNotification, bool> onItemReady = (vrNotification) =>
             {
                 bool isFinalRow = false;
 
-                if (isNotificationMatched(vrNotification))
+                if (IsNotificationMatched(vrNotification, input.ExtendedQuery, vrNotificationTypeExtendedSettings))
                 {
                     vrNotifications.Add(vrNotification);
 
@@ -267,6 +271,73 @@ namespace Vanrise.Notification.Business
             vrNotificationDetail.VRNotificationEventPayload = vrNotificationTypeExtendedSettings.GetNotificationDetailEventPayload(new VRNotificationTypeGetNotificationEventPayloadContext { VRNotification = vrNotification });
 
             return vrNotificationDetail;
+        }
+
+        #endregion
+
+        #region Private Methods 
+
+        private ExportExcelSheet GenerateExcelSheet(Dictionary<string, string> fieldTitlesByName, List<VRNotification> vrNotifications, VRNotificationExtendedQuery vrNotificationExtendedQuery, VRNotificationTypeExtendedSettings vrNotificationTypeExtendedSettings)
+        {
+            ExportExcelSheet sheet = new ExportExcelSheet()
+            {
+                Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() },
+                Rows = new List<ExportExcelRow>()
+            };
+
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Alert Level" });
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Creation Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Status" });
+            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
+
+            if (fieldTitlesByName == null || fieldTitlesByName.Count == 0)
+                return sheet;
+
+            List<string> headerNames = new List<string>();
+
+            foreach (var fieldTitleKpv in fieldTitlesByName)
+            {
+                headerNames.Add(fieldTitleKpv.Key);
+
+                var fieldTitle = fieldTitleKpv.Value;
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = fieldTitle });
+            }
+
+            if (vrNotifications == null || vrNotifications.Count == 0)
+                return sheet;
+
+            foreach (var notification in vrNotifications)
+            {
+                if (!IsNotificationMatched(notification, vrNotificationExtendedQuery, vrNotificationTypeExtendedSettings))
+                    continue;
+
+                var notificationDetail = VRNotificationDetailMapper(notification);
+
+                var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                sheet.Rows.Add(row);
+
+                row.Cells.Add(new ExportExcelCell { Value = notificationDetail.AlertLevelDescription });
+                row.Cells.Add(new ExportExcelCell { Value = notificationDetail.Entity.CreationTime });
+                row.Cells.Add(new ExportExcelCell { Value = notificationDetail.StatusDescription });
+                row.Cells.Add(new ExportExcelCell { Value = notificationDetail.Entity.Description });
+
+                Dictionary<string, object> fieldValuesByName = notificationDetail.VRNotificationEventPayload.GetNotificationFieldValuesByName();
+                if (fieldValuesByName != null || fieldValuesByName.Count == 0)
+                {
+                    foreach (var header in headerNames)
+                    {
+                        object fieldValue = fieldValuesByName.GetRecord(header);
+                        row.Cells.Add(new ExportExcelCell { Value = fieldValue });
+                    }
+                }
+            }
+            return sheet;
+        }
+
+        private bool IsNotificationMatched(VRNotification vrNotification, VRNotificationExtendedQuery vrNotificationExtendedQuery, VRNotificationTypeExtendedSettings vrNotificationTypeExtendedSettings)
+        {
+            var vrNotificationTypeIsMatchedContext = new VRNotificationTypeIsMatchedContext() { VRNotification = vrNotification, ExtendedQuery = vrNotificationExtendedQuery };
+            return vrNotificationTypeExtendedSettings.IsVRNotificationMatched(vrNotificationTypeIsMatchedContext);
         }
 
         #endregion

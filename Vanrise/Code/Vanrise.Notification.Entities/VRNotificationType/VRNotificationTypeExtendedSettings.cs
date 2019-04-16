@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Vanrise.Notification.Entities
 {
@@ -13,5 +14,7 @@ namespace Vanrise.Notification.Entities
         public abstract bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context);
 
         public abstract VRNotificationDetailEventPayload GetNotificationDetailEventPayload(IVRNotificationTypeGetNotificationEventPayloadContext context);
+
+        public abstract Dictionary<string, string> GetNotificationFieldTitlesByName();
     }
 }

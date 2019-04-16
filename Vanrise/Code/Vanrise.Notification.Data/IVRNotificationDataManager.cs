@@ -10,6 +10,7 @@ namespace Vanrise.Notification.Data
         VRNotification GetVRNotificationById(long notificationId);
         List<VRNotification> GetVRNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, string eventKey, List<VRNotificationStatus> statusesToLoad);
         void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus, IVRActionRollbackEventPayload rollbackEventPayload, long? executeBPInstanceId, long? clearBPInstanceId);
+        List<VRNotification> GetFilteredVRNotifications(VRNotificationExportInput vrNotificationInput);
         void GetFirstPageVRNotifications(IVRNotificationFirstPageContext context);
         List<VRNotification> GetUpdateVRNotifications(IVRNotificationUpdateContext context);
         void GetBeforeIdVRNotifications(IVRNotificationBeforeIdContext context);
