@@ -162,6 +162,26 @@
                 }
             };
 
+            $scope.scopeModel.validateBED = function () {
+                if ($scope.scopeModel.beginEffectiveDate != undefined && $scope.scopeModel.endEffectiveDate != undefined) {
+                    var validationResult = UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
+                    if (validationResult != null)
+                        return validationResult;
+                }
+
+                return null;
+            };
+
+            $scope.scopeModel.validateEED = function () {
+                if ($scope.scopeModel.beginEffectiveDate != undefined && $scope.scopeModel.endEffectiveDate != undefined) {
+                    var validationResult = UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
+                    if (validationResult != null)
+                        return validationResult;
+                }
+
+                return null;
+            };
+
             $scope.scopeModel.SaveRouteOptionRule = function () {
                 if (isEditMode) {
                     return updateRouteOptionRule();
