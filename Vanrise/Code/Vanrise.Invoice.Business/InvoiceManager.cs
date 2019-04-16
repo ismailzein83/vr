@@ -1089,6 +1089,8 @@ namespace Vanrise.Invoice.Business
                                         break;
                                     case InvoiceField.IsSent: value = item.IsSent;
                                         break;
+                                    case InvoiceField.ApprovedBy:value = item.ApprovedByName;
+                                        break;
                                     case InvoiceField.CustomField:
                                         foreach (var field in dataRecordType.Fields)
                                         {
