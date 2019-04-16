@@ -504,11 +504,13 @@ namespace Vanrise.GenericData.Business
                 GenericBusinessEntity newGenericBE = new GenericBusinessEntity();
                 newGenericBE.FieldValues = new Dictionary<string, Object>(oldGenericBE.FieldValues);
 
-
-                foreach (var field in genericBusinessEntityToUpdate.NullFields)
+                if (genericBusinessEntityToUpdate.NullFields != null && genericBusinessEntityToUpdate.NullFields.Count > 0)
                 {
-                    if(!genericBusinessEntityToUpdate.FieldValues.Keys.Contains(field))
-                    genericBusinessEntityToUpdate.FieldValues.Add(field, null);
+                    foreach (var field in genericBusinessEntityToUpdate.NullFields)
+                    {
+                        if (!genericBusinessEntityToUpdate.FieldValues.Keys.Contains(field))
+                            genericBusinessEntityToUpdate.FieldValues.Add(field, null);
+                    }
                 }
 
                 foreach (var oldfield in oldGenericBE.FieldValues)
