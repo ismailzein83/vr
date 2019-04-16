@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.GenericData.Entities;
-using Vanrise.Common;
-using Vanrise.Entities;
+
 namespace Vanrise.GenericData.Data.RDB
 {
     public class RecordFilterRDBBuilder
@@ -136,6 +133,8 @@ namespace Vanrise.GenericData.Data.RDB
                 case StringRecordFilterOperator.NotStartsWith: compareOperator = RDBCompareConditionOperator.NotStartWith; break;
                 case StringRecordFilterOperator.EndsWith: compareOperator = RDBCompareConditionOperator.EndWith; break;
                 case StringRecordFilterOperator.NotEndsWith: compareOperator = RDBCompareConditionOperator.NotEndWith; break;
+                case StringRecordFilterOperator.GreaterThanOrEqual: compareOperator = RDBCompareConditionOperator.GEq; break;
+                case StringRecordFilterOperator.LessThanOrEqual: compareOperator = RDBCompareConditionOperator.LEq; break;
                 default: throw new NotSupportedException(string.Format("stringFilter.CompareOperator '{0}'", filter.CompareOperator.ToString()));
             }
             var compareConditionContext = conditionContext.CompareCondition(compareOperator);
@@ -188,7 +187,7 @@ namespace Vanrise.GenericData.Data.RDB
 
         private void RecordFilterCondition(RDBConditionContext conditionContext, DateTimeRecordFilter dateTimeFilter)
         {
-            
+
             BaseRDBExpression fieldDateExpression = null;
             _setExpressionFromField(dateTimeFilter.FieldName, conditionContext.CreateExpressionContext((expression) => fieldDateExpression = expression));
 
@@ -532,8 +531,6 @@ namespace Vanrise.GenericData.Data.RDB
             return false;
         }
 
-
-
         private void RecordFilterCondition(RDBConditionContext conditionContext, BooleanRecordFilter booleanFilter)
         {
             var compareConditionContext = conditionContext.CompareCondition(RDBCompareConditionOperator.Eq);
@@ -567,7 +564,7 @@ namespace Vanrise.GenericData.Data.RDB
             var listConditionExpressionContext = conditionContext.ListCondition(objectListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? RDBListConditionOperator.IN : RDBListConditionOperator.NotIN, valueExpressions);
             _setExpressionFromField(objectListRecordFilter.FieldName, listConditionExpressionContext);
         }
-        
+
         private void RecordFilterCondition(RDBConditionContext conditionContext, AlwaysFalseRecordFilter alwaysFalseFilter)
         {
             conditionContext.FalseCondition();

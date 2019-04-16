@@ -143,6 +143,29 @@ namespace Vanrise.GenericData.Business
             return recordFilterGroup;
         }
 
+        public bool IsFieldValueMatched(string fieldValue, StringRecordFilter stringRecordFilter)
+        {
+            string filterValue = stringRecordFilter.Value;
+            if (filterValue == null)
+                throw new NullReferenceException("filterValue");
+
+            switch (stringRecordFilter.CompareOperator)
+            {
+                case StringRecordFilterOperator.Equals: return String.Compare(fieldValue, filterValue, true) == 0;
+                case StringRecordFilterOperator.NotEquals: return String.Compare(fieldValue, filterValue, true) != 0;
+                case StringRecordFilterOperator.Contains: return fieldValue.IndexOf(filterValue, StringComparison.OrdinalIgnoreCase) >= 0;
+                case StringRecordFilterOperator.NotContains: return fieldValue.IndexOf(filterValue, StringComparison.OrdinalIgnoreCase) < 0;
+                case StringRecordFilterOperator.StartsWith: return fieldValue.StartsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+                case StringRecordFilterOperator.NotStartsWith: return !fieldValue.StartsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+                case StringRecordFilterOperator.EndsWith: return fieldValue.EndsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+                case StringRecordFilterOperator.NotEndsWith: return !fieldValue.EndsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+                case StringRecordFilterOperator.GreaterThanOrEqual: return String.Compare(fieldValue, filterValue, true) >= 0;
+                case StringRecordFilterOperator.LessThanOrEqual: return String.Compare(fieldValue, filterValue, true) <= 0;
+            }
+
+            return false;
+        }
+
         #region Private Classes
 
         private class SingleFieldRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
@@ -220,18 +243,18 @@ namespace Vanrise.GenericData.Business
                 Filters = new List<RecordFilter>(),
                 LogicalOperator = recordFilter.LogicalOperator
             };
-            if(recordFilter.Filters != null)
+            if (recordFilter.Filters != null)
             {
-                foreach(var childFilter in recordFilter.Filters)
+                foreach (var childFilter in recordFilter.Filters)
                 {
                     RecordFilterGroup childFilterGroup = childFilter as RecordFilterGroup;
-                    if(childFilterGroup != null)
+                    if (childFilterGroup != null)
                     {
                         newFilterGroup.Filters.Add(ReBuildRecordFilterGroupWithExcludedFields(childFilterGroup, fieldsToExclude));
                     }
                     else
                     {
-                        if(childFilter.FieldName != null && fieldsToExclude.Contains(childFilter.FieldName))
+                        if (childFilter.FieldName != null && fieldsToExclude.Contains(childFilter.FieldName))
                         {
                             newFilterGroup.Filters.Add(new AlwaysTrueRecordFilter());
                         }
@@ -255,7 +278,7 @@ namespace Vanrise.GenericData.Business
     {
         Dictionary<string, DataRecordField> _recordTypeFieldsByName;
         DataRecordObject _dataRecordObject;
-       
+
 
         public DataRecordFilterGenericFieldMatchContext(DataRecordObject dataRecordObject)
         {

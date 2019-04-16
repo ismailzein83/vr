@@ -6,7 +6,9 @@
     EndsWith: { value: 4, description: 'Ends With' },
     NotEndsWith: { value: 5, description: 'Not Ends With' },
     Contains: { value: 6, description: 'Contains' },
-    NotContains: { value: 7, description: 'Not Contains' }
+    NotContains: { value: 7, description: 'Not Contains' },
+    GreaterThanOrEqual: { value: 8, description: '>=' },
+    LessThanOrEqual: { value: 9, description: '<=' }
 });
 
 app.constant('VR_GenericData_NumberRecordFilterOperatorEnum', {

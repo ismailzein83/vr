@@ -1,29 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldGuidType : DataRecordFieldType
     {
+        RecordFilterManager _recordFilterManager = new RecordFilterManager();
+
         public override Guid ConfigId { get { return new Guid("EBD22F77-6275-4194-8710-7BF3063DCB68"); } }
 
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-guid-runtimeeditor"; } }
 
-        public override DataRecordFieldOrderType OrderType
-        {
-            get
-            {
-                return DataRecordFieldOrderType.ByFieldDescription;
-            }
-        }
+        public override DataRecordFieldOrderType OrderType { get { return DataRecordFieldOrderType.ByFieldDescription; } }
+
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-guid-viewereditor"; } }
+
+        public bool IsNullable { get; set; }
 
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
         {
@@ -33,12 +30,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             };
         }
 
-        public bool IsNullable { get; set; }
         public override bool TryGenerateUniqueIdentifier(out Guid? uniqueIdentifier)
         {
             uniqueIdentifier = Guid.NewGuid();
             return true;
         }
+
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (newValue == null && oldValue == null)
@@ -47,11 +44,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (newValue == null || oldValue == null)
                 return false;
 
-
             Guid newGuidValue = Guid.Parse(newValue.ToString());
-            
             Guid oldGuidValue = Guid.Parse(oldValue.ToString());
-
             return newGuidValue.Equals(oldGuidValue);
         }
 
@@ -78,18 +72,20 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(Object value)
         {
-
             if (value == null)
                 return null;
 
             IEnumerable<string> textValues = FieldTypeHelper.ConvertFieldValueToList<string>(value);
-
             if (textValues == null)
                 return value.ToString();
 
             var descriptions = new List<string>();
+
             foreach (var textValue in textValues)
+            {
                 descriptions.Add(textValue.ToString());
+            }
+
             return String.Join(",", descriptions);
         }
 
@@ -108,8 +104,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     if (fieldValueStringItem.Contains(filterValueString))
                         return true;
                 }
+
                 return false;
             }
+
             return true;
 
             //IEnumerable<Guid> guidValues = FieldTypeHelper.ConvertFieldValueToList<Guid>(fieldValue);
@@ -127,27 +125,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             if (fieldValue == null)
                 return false;
+
             StringRecordFilter stringRecordFilter = recordFilter as StringRecordFilter;
             if (stringRecordFilter == null)
                 throw new NullReferenceException("stringRecordFilter");
-            string valueAsString = fieldValue != null?fieldValue.ToString():null;
+
+            string valueAsString = fieldValue as string;
             if (valueAsString == null)
                 throw new NullReferenceException("valueAsString");
-            string filterValue = stringRecordFilter.Value;
-            if (filterValue == null)
-                throw new NullReferenceException("filterValue");
-            switch (stringRecordFilter.CompareOperator)
-            {
-                case StringRecordFilterOperator.Equals: return String.Compare(valueAsString, filterValue, true) == 0;
-                case StringRecordFilterOperator.NotEquals: return String.Compare(valueAsString, filterValue, true) != 0;
-                case StringRecordFilterOperator.Contains: return valueAsString.IndexOf(filterValue, StringComparison.OrdinalIgnoreCase) >= 0;
-                case StringRecordFilterOperator.NotContains: return valueAsString.IndexOf(filterValue, StringComparison.OrdinalIgnoreCase) < 0;
-                case StringRecordFilterOperator.StartsWith: return valueAsString.StartsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
-                case StringRecordFilterOperator.NotStartsWith: return !valueAsString.StartsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
-                case StringRecordFilterOperator.EndsWith: return valueAsString.EndsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
-                case StringRecordFilterOperator.NotEndsWith: return !valueAsString.EndsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
-            }
-            return false;
+
+            return _recordFilterManager.IsFieldValueMatched(valueAsString, stringRecordFilter);
 
             //if (fieldValue == null)
             //    return false;
@@ -161,8 +148,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (context.FilterValues == null || context.FilterValues.Count == 0)
                 return null;
 
-            var values = context.FilterValues.Select(value => value.ToString()).ToList();
             List<RecordFilter> recordFilters = new List<RecordFilter>();
+
+            var values = context.FilterValues.Select(value => value.ToString()).ToList();
             foreach (var value in values)
             {
                 recordFilters.Add(new StringRecordFilter
@@ -172,9 +160,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     FieldName = context.FieldName
                 });
             }
+
             return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();
         }
-
 
         protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
@@ -191,7 +179,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override void GetValueByDescription(IGetValueByDescriptionContext context)
         {
-
             if (context.FieldDescription == null)
                 return;
 
@@ -205,7 +192,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 if (Guid.TryParse(context.FieldDescription.ToString(), out result))
                     context.FieldValue = result;
                 else
-                    context.ErrorMessage = "Error while parsing field of Guid type:"+context.FieldDescription.ToString();
+                    context.ErrorMessage = "Error while parsing field of Guid type:" + context.FieldDescription.ToString();
             }
         }
 

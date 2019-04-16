@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Data.SQL
@@ -113,7 +111,7 @@ namespace Vanrise.GenericData.Data.SQL
                 }
             }
 
-            return filterGroup.Filters.Count == 1 ? builder.ToString () : String.Format("({0})", builder);
+            return filterGroup.Filters.Count == 1 ? builder.ToString() : String.Format("({0})", builder);
         }
 
         private string BuildRecordFilter(EmptyRecordFilter emptyFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
@@ -130,7 +128,9 @@ namespace Vanrise.GenericData.Data.SQL
         {
             string compareOperator = null;
             string compareValue = null;
-            if(stringFilter.CompareOperator == StringRecordFilterOperator.Equals || stringFilter.CompareOperator == StringRecordFilterOperator.NotEquals)
+
+            if (stringFilter.CompareOperator == StringRecordFilterOperator.Equals || stringFilter.CompareOperator == StringRecordFilterOperator.NotEquals
+                 || stringFilter.CompareOperator == StringRecordFilterOperator.GreaterThanOrEqual || stringFilter.CompareOperator == StringRecordFilterOperator.LessThanOrEqual)
             {
                 string parameterName = GenerateParameterName(ref parameterIndex);
                 compareValue = parameterName;
@@ -140,6 +140,8 @@ namespace Vanrise.GenericData.Data.SQL
                 {
                     case StringRecordFilterOperator.Equals: compareOperator = "="; break;
                     case StringRecordFilterOperator.NotEquals: compareOperator = "<>"; break;
+                    case StringRecordFilterOperator.GreaterThanOrEqual: compareOperator = ">="; break;
+                    case StringRecordFilterOperator.LessThanOrEqual: compareOperator = "<="; break;
                 }
             }
             else
@@ -172,6 +174,7 @@ namespace Vanrise.GenericData.Data.SQL
                         break;
                 }
             }
+
             return string.Format("{0} {1} {2}", GetSQLExpression(stringFilter), compareOperator, compareValue);
         }
 
@@ -192,7 +195,6 @@ namespace Vanrise.GenericData.Data.SQL
             parameterValues.Add(parameterName, numberFilter.Value);
             return string.Format("{0} {1} {2}", GetSQLExpression(numberFilter), compareOperator, parameterName);
         }
-
 
         private string BuildRecordFilter(DateTimeRecordFilter dateTimeFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
@@ -533,7 +535,6 @@ namespace Vanrise.GenericData.Data.SQL
             return false;
         }
 
-
         private string BuildRecordFilter(BooleanRecordFilter booleanFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
             return string.Format("{0} = {1}", GetSQLExpression(booleanFilter), booleanFilter.IsTrue ? "1" : "0");
@@ -564,7 +565,7 @@ namespace Vanrise.GenericData.Data.SQL
             return "1 = 1";
         }
 
-        string BuildRecordFilter<T>(ListRecordFilter<T> listFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        private string BuildRecordFilter<T>(ListRecordFilter<T> listFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
             StringBuilder valuesBuilder = new StringBuilder();
             foreach (var value in listFilter.Values)
@@ -579,12 +580,12 @@ namespace Vanrise.GenericData.Data.SQL
             return string.Format("{0} {1} ({2})", GetSQLExpression(listFilter), compareOperator, valuesBuilder);
         }
 
-        string GenerateParameterName(ref int parameterIndex)
+        private string GenerateParameterName(ref int parameterIndex)
         {
             return String.Format("@Prm_{0}", parameterIndex++);
         }
 
-        string GetSQLExpression(RecordFilter recordFilter)
+        private string GetSQLExpression(RecordFilter recordFilter)
         {
             return _getSQLExpressionFromFieldName(recordFilter.FieldName);
         }

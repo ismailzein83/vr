@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Entities;
 
@@ -42,7 +40,11 @@ namespace Vanrise.GenericData.Entities
         [Description(" Contains ")]
         Contains = 6,
         [Description(" Not Contains ")]
-        NotContains = 7
+        NotContains = 7,
+        [Description(" >= ")]
+        GreaterThanOrEqual = 8,
+        [Description(" <= ")]
+        LessThanOrEqual = 9
     }
     public class StringRecordFilter : RecordFilter
     {
@@ -322,7 +324,7 @@ namespace Vanrise.GenericData.Entities
             throw new NotImplementedException();
         }
     }
-    
+
     public class AlwaysTrueRecordFilter : RecordFilter
     {
         public override string GetDescription(IRecordFilterGetDescriptionContext context)

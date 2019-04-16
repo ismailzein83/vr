@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldTextType : DataRecordFieldType
     {
+
+        RecordFilterManager _recordFilterManager = new RecordFilterManager();
+
         public override Guid ConfigId { get { return new Guid("3f29315e-b542-43b8-9618-7de216cd9653"); } }
 
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-text-runtimeeditor"; } }
+
+        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-text-viewereditor"; } }
+
+        public override DataRecordFieldOrderType OrderType { get { return DataRecordFieldOrderType.ByFieldDescription; } }
+
+        public override Type GetRuntimeType() { return GetNonNullableRuntimeType(); }
+
         public string Hint { get; set; }
-        public override DataRecordFieldOrderType OrderType
-        {
-            get
-            {
-                return DataRecordFieldOrderType.ByFieldDescription;
-            }
-        }
-        public override Type GetRuntimeType()
-        {
-            return GetNonNullableRuntimeType();
-        }
+
 
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
         {
@@ -47,17 +45,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             string newLongValue = (string)newValue;
             string oldLongValue = (string)oldValue;
-
             return newLongValue.Equals(oldLongValue);
         }
-        
+
         Type _nonNullableRuntimeType = typeof(string);
         public override Type GetNonNullableRuntimeType()
         {
             return _nonNullableRuntimeType;
         }
-        
-        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-text-viewereditor"; } }
+
         public override string GetDescription(Object value)
         {
             if (value == null)
@@ -69,8 +65,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return value.ToString();
 
             var descriptions = new List<string>();
+
             foreach (var textValue in textValues)
+            {
                 descriptions.Add(textValue.ToString());
+            }
+
             return String.Join(",", descriptions);
         }
 
@@ -89,8 +89,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     if (fieldValueStringItem.Contains(filterValueString))
                         return true;
                 }
+
                 return false;
             }
+
             return true;
         }
 
@@ -98,27 +100,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             if (fieldValue == null)
                 return false;
+
             StringRecordFilter stringRecordFilter = recordFilter as StringRecordFilter;
             if (stringRecordFilter == null)
                 throw new NullReferenceException("stringRecordFilter");
+
             string valueAsString = fieldValue as string;
             if (valueAsString == null)
                 throw new NullReferenceException("valueAsString");
-            string filterValue = stringRecordFilter.Value;
-            if (filterValue == null)
-                throw new NullReferenceException("filterValue");
-            switch (stringRecordFilter.CompareOperator)
-            {
-                case StringRecordFilterOperator.Equals: return String.Compare(valueAsString, filterValue, true) == 0;
-                case StringRecordFilterOperator.NotEquals: return String.Compare(valueAsString, filterValue, true) != 0;
-                case StringRecordFilterOperator.Contains: return valueAsString.IndexOf(filterValue, StringComparison.OrdinalIgnoreCase) >= 0;
-                case StringRecordFilterOperator.NotContains: return valueAsString.IndexOf(filterValue, StringComparison.OrdinalIgnoreCase) < 0;
-                case StringRecordFilterOperator.StartsWith: return valueAsString.StartsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
-                case StringRecordFilterOperator.NotStartsWith: return !valueAsString.StartsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
-                case StringRecordFilterOperator.EndsWith: return valueAsString.EndsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
-                case StringRecordFilterOperator.NotEndsWith: return !valueAsString.EndsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
-            }
-            return false;
+
+            return _recordFilterManager.IsFieldValueMatched(valueAsString, stringRecordFilter);
         }
 
         public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
@@ -138,7 +129,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             {
                 recordFilters.Add(new StringRecordFilter
                 {
-                    CompareOperator = context.StrictEqual?StringRecordFilterOperator.Equals: StringRecordFilterOperator.Contains,
+                    CompareOperator = context.StrictEqual ? StringRecordFilterOperator.Equals : StringRecordFilterOperator.Contains,
                     Value = value,
                     FieldName = context.FieldName
                 });
@@ -155,6 +146,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             if (context.FieldDescription == null)
                 return;
+
             context.FieldValue = context.FieldDescription.ToString().Trim();
         }
 
