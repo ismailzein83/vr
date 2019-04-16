@@ -238,6 +238,12 @@
     display: block;
 }
 
+@media (max-width: 1440px) {
+    .flat .menu-tile {
+        margin-top: 15px;
+    }
+}
+
 .flat .vr-view-switch-container {
     position: absolute;
     right: 0px;
