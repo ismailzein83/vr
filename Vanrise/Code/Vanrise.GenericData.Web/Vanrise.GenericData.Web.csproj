@@ -768,8 +768,10 @@
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeExtraFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\Templates\ParentDataRecordTypeExtraFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\vr-genericdata-datarecordtypefield-groupfilter.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypeextrafields-parentrecordtype.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-remoteselector.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypeextrafields-template.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypefields-formula.js" />
