@@ -95,6 +95,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                     genericBusinessEntity.BusinessEntityDefinitionId = businessEntityDefinitionId;
 
                     var fieldValuesObj = {};
+                    var nullFields = [];
                     if (fieldValues != undefined) {
                         for (var prop in fieldValues) {
                             var fieldValue = fieldValues[prop];
@@ -104,9 +105,13 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                     }
 
                     runtimeEditorAPI.setData(fieldValuesObj);
-
+                    if (fieldValuesObj != undefined)
+                    for (var field in fieldValuesObj) {
+                        if (fieldValuesObj[field] == undefined)
+                            nullFields.push(field);
+                    }
                     genericBusinessEntity.FieldValues = fieldValuesObj;
-
+                    genericBusinessEntity.NullFields = nullFields; 
                     return genericBusinessEntity;
                 };
 
