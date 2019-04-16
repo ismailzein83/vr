@@ -332,6 +332,7 @@ namespace BPMExtended.Main.Business
 
             var IdCol = esq.AddColumn("Id");
             esq.AddColumn("StRatePlanCatalog");
+            esq.AddColumn("StRatePlanID");
             esq.AddColumn("StRatePlanName");
 
             var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRatePlanCatalog", StRatePlanCatalogId);
@@ -340,7 +341,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             for (int i = 0; i < entities.Count; i++)
             {
-                var id = entities[i].GetTypedColumnValue<Guid>(IdCol.Name); ;
+                var id = entities[i].GetColumnValue("StRatePlanID"); ;
                 var name = entities[i].GetColumnValue("StRatePlanName");
 
                 var ratPlanItem = new RatePlanInfo()
