@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class MultiplePackagesServiceInput
+    public class ActivateTelephonyContractInput
     {
-        public string RatePlanId { get; set; }
-        public List<string> ExcludedPackages { get; set; }
+        public CommonInputArgument CommonInputArgument { get; set; }
 
     }
-
 }

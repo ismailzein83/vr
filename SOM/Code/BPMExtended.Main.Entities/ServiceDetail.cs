@@ -8,7 +8,13 @@ namespace BPMExtended.Main.Entities
 {
     public class ServiceDetail
     {
+        public string PublicId { get; set; }
+        public string Title { get; set; }
+        public string PackageId { get; set; }
+        public string ServiceResource { get; set; }
+
         public string ServiceId { get; set; }
+
 
         public string Name { get; set; }
 

@@ -69,6 +69,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivateTelephonyContractInput.cs" />
+    <Compile Include="ContractService.cs" />
     <Compile Include="ExcludePackagesServiceInput.cs" />
     <Compile Include="MultiplePackagesServiceInput.cs" />
     <Compile Include="ServiceInput.cs" />
@@ -125,8 +127,10 @@
     <Compile Include="RatePlanInfo.cs" />
     <Compile Include="RequestHeaderDetail.cs" />
     <Compile Include="ServiceDetail.cs" />
+    <Compile Include="SOMRequestInput.cs" />
     <Compile Include="SOMRequestOutput.cs" />
     <Compile Include="TelephonyContractDetail.cs" />
+    <Compile Include="TelephonyContractOnHoldInput.cs" />
     <Compile Include="UpdateSOMRequestOutput.cs" />
   </ItemGroup>
   <ItemGroup>

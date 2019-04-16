@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class MultiplePackagesServiceInput
+    public class SOMRequestInput<T>
     {
-        public string RatePlanId { get; set; }
-        public List<string> ExcludedPackages { get; set; }
-
+        public T InputArguments { get; set; }
     }
-
 }
