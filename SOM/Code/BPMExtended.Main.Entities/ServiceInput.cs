@@ -9,7 +9,7 @@ namespace BPMExtended.Main.Entities
     public class ServiceInput
     {
         public string RatePlanId { get; set; }
-        public string Package { get; set; }
+        public List<string> Packages { get; set; }
 
     }
 

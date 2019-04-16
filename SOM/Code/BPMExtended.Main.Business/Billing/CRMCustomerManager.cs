@@ -240,19 +240,25 @@ namespace BPMExtended.Main.Business
             {
                 var contractId = entities[0].GetColumnValue("StContractIdOnHold");
 
-                ActivateTelephonyContractInput somRequestInput = new ActivateTelephonyContractInput
+                SOMRequestInput<ActivateTelephonyContractInput> somRequestInput = new SOMRequestInput<ActivateTelephonyContractInput>
                 {
-                    CommonInputArgument = new CommonInputArgument()
+
+                    InputArguments = new ActivateTelephonyContractInput
                     {
-                        ContractId = contractId.ToString(),
-                        RequestId = requestId.ToString()
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString()
+                        }
                     }
+
                 };
+
 
             //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<ActivateTelephonyContractInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ActivateTelephonyContractInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ActivateContract/StartProcess", somRequestInput);
                 }
 
 
@@ -988,67 +994,80 @@ namespace BPMExtended.Main.Business
 
         public void UpdateCustomerPaymentProfile(Guid paymentMethodId, string bankCode, string customerId, string accountNumber, string contactId, string accountId)
         {
-            CustomerPaymentProfileInput somRequestInput = new CustomerPaymentProfileInput
+
+            SOMRequestInput<CustomerPaymentProfileInput> somRequestInput = new SOMRequestInput<CustomerPaymentProfileInput>
             {
-                AccountNumber = accountNumber,
-                PaymentMethodId = paymentMethodId.ToString(),
-                BankCode = bankCode,
-                CustomerId = customerId,
-                CommonInputArgument = new CommonInputArgument()
+                InputArguments = new CustomerPaymentProfileInput
                 {
-                    ContactId = contactId
+                    AccountNumber = accountNumber,
+                    PaymentMethodId = paymentMethodId.ToString(),
+                    BankCode = bankCode,
+                    CustomerId = customerId,
+                    CommonInputArgument = new CommonInputArgument()
+                    {
+                        ContactId = contactId
+                    }
                 }
+
             };
 
             using (var client = new SOMClient())
             {
-                client.Post<CustomerPaymentProfileInput, UpdateSOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerPaymentProfile/StartProcess", somRequestInput);
+                client.Post<SOMRequestInput<CustomerPaymentProfileInput>, UpdateSOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerPaymentProfile/StartProcess", somRequestInput);
             }
 
         }
 
         public void UpdateCustomerCategory(string customerCategoryId, string customerId,string contactId, string accountId)
         {
-            CustomerCategoryInput somRequestInput = new CustomerCategoryInput
-            {
-                CustomerId = customerId,
-                CustomerCategoryId = customerCategoryId,
-                CommonInputArgument = new CommonInputArgument()
+                SOMRequestInput<CustomerCategoryInput> somRequestInput = new SOMRequestInput<CustomerCategoryInput>
                 {
-                    ContactId = contactId
-                }
-            };
-
+                    InputArguments = new CustomerCategoryInput
+                    {
+                        CustomerId = customerId,
+                        CustomerCategoryId = customerCategoryId,
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContactId = contactId
+                        }
+                    }
+                };
+           
             using (var client = new SOMClient())
             {
-                client.Post<CustomerCategoryInput, UpdateSOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomer/StartProcess", somRequestInput);
+                client.Post<SOMRequestInput<CustomerCategoryInput>, UpdateSOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomer/StartProcess", somRequestInput);
             }
 
         }
 
         public void CustomerCreation(string CustomerCategoryId, string PaymentMethodId, string City, string FirstName, string LastName, string CustomerId, string CSO, string BankCode, string AccountNumber, string contactId, string accountId)
         {
-            CustomerCreationInput somRequestInput = new CustomerCreationInput
-            {
-                CustomerId = CustomerId,
-                AccountNumber = AccountNumber,
-                BankCode=BankCode,
-                City=City,
-                CSO=CSO,
-                CustomerCategoryId= CustomerCategoryId,
-                FirstName=FirstName,
-                LastName=LastName,
-                PaymentMethodId=PaymentMethodId,
-                RatePlanId=null,
-                CommonInputArgument = new CommonInputArgument()
-                {
-                    ContactId = contactId
-                }
-            };
 
+            SOMRequestInput<CustomerCreationInput> somRequestInput = new SOMRequestInput<CustomerCreationInput>
+            {
+                InputArguments = new CustomerCreationInput
+                {
+                    AccountNumber = AccountNumber,
+                    BankCode = BankCode,
+                    City = City,
+                    CSO = CSO,
+                    CustomerCategoryId = CustomerCategoryId,
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    PaymentMethodId = PaymentMethodId,
+                    RatePlanId = null,
+                    CommonInputArgument = new CommonInputArgument()
+                    {
+                        ContactId = contactId,
+                        CustomerId = CustomerId
+                    }
+                }
+
+            };
+           
             using (var client = new SOMClient())
             {
-                client.Post<CustomerCreationInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateCustomer/StartProcess", somRequestInput);
+                client.Post<SOMRequestInput<CustomerCreationInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/CreateCustomer/StartProcess", somRequestInput);
             }
 
         }
@@ -1100,7 +1119,7 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public SOMRequestOutput CreateTelephonyContractOnHold(Guid requestId, string coreServices, string optionalServices)
+        public SOMRequestOutput CreateTelephonyContractOnHold(Guid requestId, string coreServices, string optionalServices , string ratePlanId)
         {
 
             //Get Data from StLineSubscriptionRequest table
@@ -1116,7 +1135,6 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StServices");
             esq.AddColumn("StNumberToReserve");
             esq.AddColumn("StLinePathID");
-            esq.AddColumn("StRatePlanID");
             esq.AddColumn("StLineType");
             esq.AddColumn("StContact");
             esq.AddColumn("StContact.Id");
@@ -1134,7 +1152,6 @@ namespace BPMExtended.Main.Business
             {
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
-                var ratePlanId = entities[0].GetColumnValue("StRatePlanID");
                 var phoneNumber = entities[0].GetColumnValue("StNumberToReserve");
                 var pathId = entities[0].GetColumnValue("StLinePathID");
                 var lineType = entities[0].GetColumnValue("StLineType");
@@ -1160,15 +1177,16 @@ namespace BPMExtended.Main.Business
                         LinePathId = "11112222",//pathId.ToString(),
                         PhoneNumber = phoneNumber.ToString(),
                         SubType = lineType.ToString(),
-                        ServiceResource = null,
+                        ServiceResource = "N0047",
                         City = city.ToString(),
                         CSO = info.csoId,
-                        RatePlanId = "TM006",//ratePlanId.ToString(),
+                        RatePlanId = ratePlanId,//ratePlanId.ToString(),
                         ContractServices = contractServices,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId.ToString(),
-                            CustomerId = info.CustomerId
+                            RequestId = requestId.ToString(),
+                            CustomerId = "CusId00026"//info.CustomerId
                         }
                     }
 

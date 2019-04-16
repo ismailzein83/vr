@@ -43,11 +43,16 @@ namespace BPMExtended.Main.Business
         {
             //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
             //return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
+            List<string> packagesIds = new List<string>();
+
             var businessEntityManager = new BusinessEntityManager();
             Packages packages = businessEntityManager.GetServicePackagesEntity();
-            var corePackageName = packages.Core;
+            packagesIds.Add(packages.Core);
+            packagesIds.Add(packages.Telephony);
 
-           var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, corePackageName);
+            //var corePackageName = packages.Core;
+
+           var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, packagesIds);
             return coreServices;
         }
 
@@ -57,26 +62,26 @@ namespace BPMExtended.Main.Business
             //return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
             var businessEntityManager = new BusinessEntityManager();
             Packages packages = businessEntityManager.GetServicePackagesEntity();
-            var corePackageName = packages.Core;
 
             var excludedPackages = new List<string>();
-            excludedPackages.Add(corePackageName);
+            excludedPackages.Add(packages.Core);
+            excludedPackages.Add(packages.Telephony);
 
             var services = GetServicesDetailByRateplanAndPackages(ratePlanId, excludedPackages);
             return services;
         }
-        public List<ServiceDetail> GetServicesDetailByRateplanAndPackage(string rateplanId, string package)
+        public List<ServiceDetail> GetServicesDetailByRateplanAndPackage(string rateplanId, List<string> packagesIds)
         {
 
             var serviceInput = new ServiceInput()
             {
                 RatePlanId = rateplanId,
-                Package = package
+                Packages = packagesIds
             };
             var servicesDetailItems = new List<ServiceDetail>();
             using (SOMClient client = new SOMClient())
             {
-                List<ServiceDefinition> items = client.Post<ServiceInput, List<ServiceDefinition>>("api/SOM.ST/Billing/GetServicesByRateplanAndPackage", serviceInput);
+                List<ServiceDefinition> items = client.Post<ServiceInput, List<ServiceDefinition>>("api/SOM.ST/Billing/GetServicesByRateplanAndPackages", serviceInput);
                // List<ServiceDefinition> items = client.Get<List<ServiceDefinition>>(String.Format("api/SOM.ST/Billing/GetServicesByRateplanAndPackage?ratePlanId=TM006&packageId=SP005"));
                 foreach (var item in items)
                 {
@@ -92,7 +97,7 @@ namespace BPMExtended.Main.Business
 
             var multiplePackagesServiceInput = new MultiplePackagesServiceInput()
             {
-                RatePlanId = "TM006",
+                RatePlanId = rateplanId,
                 ExcludedPackages = packages
             };
 
