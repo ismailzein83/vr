@@ -252,6 +252,7 @@
     <Build Include="common\Tables\ProcessState.sql" />
     <Build Include="common\Stored Procedures\sp_ProcessState_InsertOrUpdate.sql" />
     <Build Include="common\Stored Procedures\sp_ProcessState_GetAll.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessProcess.PostDeployment.sql" />
