@@ -112,7 +112,10 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
                     break;
             }
 
-            context.Record.SetFieldValue(this.FieldName, value);
+            if (value != default(DateTime))
+                context.Record.SetFieldValue(this.FieldName, value);
+            else
+                context.Record.SetFieldValue(this.FieldName, null);
 
             if (!string.IsNullOrEmpty(this.TimeShiftFieldName))
             {
