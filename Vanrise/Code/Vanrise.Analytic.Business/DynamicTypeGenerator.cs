@@ -15,7 +15,7 @@ namespace Vanrise.Analytic.Business
             Dictionary<Guid, string> measureFullTypeById = new Dictionary<Guid, string>();
             StringBuilder codeBuilder = new StringBuilder(@"using System;
                                                             using System.Linq;");
-            foreach(var measureConfig in measureConfigs)
+            foreach (var measureConfig in measureConfigs)
             {
                 if (String.IsNullOrEmpty(measureConfig.Config.GetValueMethod))
                     throw new NullReferenceException(String.Format("measureConfig.Config.GetValueMethod. '{0}'", measureConfig.AnalyticMeasureConfigId));
@@ -36,7 +36,7 @@ namespace Vanrise.Analytic.Business
                 //classDefinitionBuilder.Replace("#EXECUTIONCODE#", _instanceExecutionBlockBuilder.ToString());
 
                 string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Analytic.Business");
-                string className = "MeasureEvaluator";
+                string className = string.Concat("MeasureEvaluator_", measureConfig.Name.Replace(" ", ""), "_", measureConfig.AnalyticMeasureConfigId.ToString().Replace("-", ""));
                 classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
                 classDefinitionBuilder.Replace("#CLASSNAME#", className);
                 string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
@@ -46,7 +46,7 @@ namespace Vanrise.Analytic.Business
                 measureFullTypeById.Add(measureConfig.AnalyticMeasureConfigId, fullTypeName);
             }
 
-            AnalyticTableManager analyticTableManager = new AnalyticTableManager();           
+            AnalyticTableManager analyticTableManager = new AnalyticTableManager();
             CSharpCompilationOutput compilationOutput;
             if (!CSharpCompiler.TryCompileClass(String.Format("AnalyticTableMeasures_{0}", analyticTableManager.GetAnalyticTableName(analyticTableId)), codeBuilder.ToString(), out compilationOutput))
             {
@@ -61,15 +61,15 @@ namespace Vanrise.Analytic.Business
                 throw new Exception(String.Format("Compile Error when building Measure Evaluator for Analytic Table Id '{0}'. Errors: {1}",
                     analyticTableId, errorsBuilder));
             }
-                 
-            foreach(var measureConfig in measureConfigs)
+
+            foreach (var measureConfig in measureConfigs)
             {
                 var measureFullType = measureFullTypeById[measureConfig.AnalyticMeasureConfigId];
                 var runtimeType = compilationOutput.OutputAssembly.GetType(measureFullType);
                 if (runtimeType == null)
                     throw new NullReferenceException("runtimeType");
                 measureConfig.Evaluator = Activator.CreateInstance(runtimeType) as IMeasureEvaluator;
-                if(measureConfig.Evaluator == null)
+                if (measureConfig.Evaluator == null)
                     throw new NullReferenceException(String.Format("measureConfig.Evaluator '{0}'", measureConfig.AnalyticMeasureConfigId));
             }
         }
@@ -100,7 +100,8 @@ namespace Vanrise.Analytic.Business
 
 
                 string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Analytic.Business");
-                string className = "DimensionEvaluator";
+                string className = string.Concat("DimensionEvaluator_", dimensionConfig.Name.Replace(" ", ""), "_", dimensionConfig.AnalyticDimensionConfigId.ToString().Replace("-", ""));
+
                 classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
                 classDefinitionBuilder.Replace("#CLASSNAME#", className);
                 string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
