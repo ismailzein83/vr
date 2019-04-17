@@ -82,7 +82,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             if (input.GreaterThanID == 0)
             {
-                selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.DESC);
+                selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.ASC);
             }
             else
             {
