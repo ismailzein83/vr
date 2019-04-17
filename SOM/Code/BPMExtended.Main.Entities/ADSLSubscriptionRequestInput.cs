@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class UpdateSOMRequestOutput
+    public class ADSLSubscriptionRequestInput
     {
-        public string ProcessId { get; set; }
+        public CommonInputArgument CommonInputArgument { get; set; }
+
     }
 }

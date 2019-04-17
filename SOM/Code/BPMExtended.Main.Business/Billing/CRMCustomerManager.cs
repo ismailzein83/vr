@@ -212,13 +212,56 @@ namespace BPMExtended.Main.Business
 
         public void PostDeportedNumberToOM(Guid requestId)
         {
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
 
-            //TODO : Get taxes
-            //TODO: If the contract has active VPN service, CRM should add another OCC/fees
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeportedNumber");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<DeportedNumberRequestInput> somRequestInput = new SOMRequestInput<DeportedNumberRequestInput>
+                {
+
+                    InputArguments = new DeportedNumberRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                           // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<DeportedNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_DeportNumber/StartProcess", somRequestInput);
+                }
+
+            }
         }
 
         public void PostLineSubscriptionToOM(Guid requestId)
@@ -247,7 +290,7 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            ContractId = contractId.ToString(),
+                            //ContractId = contractId.ToString(),
                             RequestId = requestId.ToString()
                         }
                     }
@@ -269,10 +312,56 @@ namespace BPMExtended.Main.Business
 
         public void PostADSLSubscriptionToOM(Guid requestId)
         {
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSL");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ADSLSubscriptionRequestInput> somRequestInput = new SOMRequestInput<ADSLSubscriptionRequestInput>
+                {
+
+                    InputArguments = new ADSLSubscriptionRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ADSLSubscriptionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_CreateContract/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
@@ -309,10 +398,58 @@ namespace BPMExtended.Main.Business
 
         public void PostChangeLeasedLineSpeedToOM(Guid requestId)
         {
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangeLeasedLineSpeed");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ChangeLeasedLineSpeedRequestInput> somRequestInput = new SOMRequestInput<ChangeLeasedLineSpeedRequestInput>
+                {
+
+                    InputArguments = new ChangeLeasedLineSpeedRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ChangeLeasedLineSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_AlterSpeed/StartProcess", somRequestInput);
+                }
+
+            }
+
 
             //TODO:OM should deactivate the unavailable services in the new rateplan(if any based on the catalog).
             //TODO:OM should add the new core services in the new ratplan, if they were not activated before(this case is not exist based on the posted catalog).
@@ -321,174 +458,1144 @@ namespace BPMExtended.Main.Business
 
         public void PostADSLLineMovingToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLLineMoving");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ADSLLineMovingRequestInput> somRequestInput = new SOMRequestInput<ADSLLineMovingRequestInput>
+                {
+
+                    InputArguments = new ADSLLineMovingRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ADSLLineMovingRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_LineMove/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostADSLPrintConfigurationToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            //SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLPrintConfiguration");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ADSLPrintConfigurationRequestInput> somRequestInput = new SOMRequestInput<ADSLPrintConfigurationRequestInput>
+                {
+
+                    InputArguments = new ADSLPrintConfigurationRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    //output = client.Post<SOMRequestInput<ADSLPrintConfigurationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_AlterSpeed/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostADSLChangePasswordToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLChangePassword");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ADSLChangePasswordRequestInput> somRequestInput = new SOMRequestInput<ADSLChangePasswordRequestInput>
+                {
+
+                    InputArguments = new ADSLChangePasswordRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ADSLChangePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_ResetPassword/StartProcess", somRequestInput);
+                }
+
+            }
+        }
+
+        public void PostChangeRatePlanToOM(Guid requestId)
+        {
+            
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangeRatePlan");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+        
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ChangeRatePlanRequestInput> somRequestInput = new SOMRequestInput<ChangeRatePlanRequestInput>
+                {
+
+                    InputArguments = new ChangeRatePlanRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                           // ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                           // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ChangeRatePlanRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ChangeRatePlan/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
-
         public void PostADSLAlterSpeedToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLAlterSpeed");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ADSLAlterSpeedRequestInput> somRequestInput = new SOMRequestInput<ADSLAlterSpeedRequestInput>
+                {
+
+                    InputArguments = new ADSLAlterSpeedRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ADSLAlterSpeedRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ADSL_AlterSpeed/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostLineMovingNewSwitchToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineMovingNewSwitch");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<LineMovingNewSwitchInput> somRequestInput = new SOMRequestInput<LineMovingNewSwitchInput>
+                {
+
+                    InputArguments = new LineMovingNewSwitchInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                           // ContractId = contractId.ToString(),
+                           // ContactId = contactId.ToString(),
+                           // AccountId = null,
+                            RequestId = requestId.ToString(),
+                           // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LineMovingNewSwitchInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_LineMoveSameSwitch/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostLineMovingSameSwitchToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
 
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineMovingSameSwitchRequest");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<LineMovingSameSwitchInput> somRequestInput = new SOMRequestInput<LineMovingSameSwitchInput>
+                {
+
+                    InputArguments = new LineMovingSameSwitchInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                           // ContactId = contactId.ToString(),
+                           // AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LineMovingSameSwitchInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_LineMoveSameSwitch/StartProcess", somRequestInput);
+                }
+
+            }
         }
-
 
         public void PostLineTerminationRequestToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineTerminationRequest");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<LineTerminationRequestInput> somRequestInput = new SOMRequestInput<LineTerminationRequestInput>
+                {
+
+                    InputArguments = new LineTerminationRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                           // ContractId = contractId.ToString(),
+                           // ContactId = contactId.ToString(),
+                           // AccountId = null,
+                            RequestId = requestId.ToString(),
+                           // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_TerminateContract/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostContractTakeOverToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyContractTakeOver");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ContractTakeOverRequestInput> somRequestInput = new SOMRequestInput<ContractTakeOverRequestInput>
+                {
+
+                    InputArguments = new ContractTakeOverRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                           // ContractId = contractId.ToString(),
+                           // ContactId = contactId.ToString(),
+                           // AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ContractTakeOverRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ContractTakeOver/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostChangePhoneNumberToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangePhoneNumberRequest");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ChangePhoneNumberRequestInput> somRequestInput = new SOMRequestInput<ChangePhoneNumberRequestInput>
+                {
+
+                    InputArguments = new ChangePhoneNumberRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                           // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ChangePhoneNumber/StartProcess", somRequestInput);
+                }
+
+            }
+
+        }
+
+        public void PostFAFManagementToOM(Guid requestId)
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StFriendAndFamily");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<FAFManagementRequestInput> somRequestInput = new SOMRequestInput<FAFManagementRequestInput>
+                {
+
+                    InputArguments = new FAFManagementRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                           // ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<FAFManagementRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_FAFManagement/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostCreatePABXToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StPabx");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<CreatePABXRequestInput> somRequestInput = new SOMRequestInput<CreatePABXRequestInput>
+                {
+
+                    InputArguments = new CreatePABXRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                           // ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                           // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<CreatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivatePABX/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostEditPABXToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StManagePabx");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerID");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerID");
+
+                SOMRequestInput<EditPABXRequestInput> somRequestInput = new SOMRequestInput<EditPABXRequestInput>
+                {
+
+                    InputArguments = new EditPABXRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                           // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<EditPABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_AlterPABX/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostDeactivatePABXToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeactivatePabx");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerID");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerID");
+
+                SOMRequestInput<DeactivatePABXRequestInput> somRequestInput = new SOMRequestInput<DeactivatePABXRequestInput>
+                {
+
+                    InputArguments = new DeactivatePABXRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                           // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<DeactivatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_DeactivatePABX/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
-
         public void PostActivateCptToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCpt");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerID");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerID");
+
+                SOMRequestInput<ActivateCptRequestInput> somRequestInput = new SOMRequestInput<ActivateCptRequestInput>
+                {
+
+                    InputArguments = new ActivateCptRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                           // ContractId = contractId.ToString(),
+                           // ContactId = contactId.ToString(),
+                           // AccountId = null,
+                            RequestId = requestId.ToString(),
+                           // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ActivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateCPT/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostDeactivateCptToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StDeactivateCpt");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerID");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerID");
+
+                SOMRequestInput<DeactivateCptRequestInput> somRequestInput = new SOMRequestInput<DeactivateCptRequestInput>
+                {
+
+                    InputArguments = new DeactivateCptRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                           // ContactId = contactId.ToString(),
+                           // AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<DeactivateCptRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_DeactivateCPT/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostADSLForISPToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StISPADSL");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ADSLForISPRequestInput> somRequestInput = new SOMRequestInput<ADSLForISPRequestInput>
+                {
+
+                    InputArguments = new ADSLForISPRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ADSLForISPRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateADSLForISP/StartProcess", somRequestInput);
+                }
+
+            }
+
+        }
+
+        public void AddOtherCharges(Guid requestId)
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+            esq.AddColumn("StServiceCode");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StServiceCode");
+
+                SOMRequestInput<AddOtherChargesRequestInput> somRequestInput = new SOMRequestInput<AddOtherChargesRequestInput>
+                {
+
+                    InputArguments = new AddOtherChargesRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<AddOtherChargesRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_AddOtherCharges/StartProcess", somRequestInput);
+                }
+
+            }
+
+        }
+
+        public void PostAddAdditionalServicesRequestToOM(Guid requestId)
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceAdditionRequest");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ServiceAdditionRequestInput> somRequestInput = new SOMRequestInput<ServiceAdditionRequestInput>
+                {
+
+                    InputArguments = new ServiceAdditionRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                           // ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                           // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ServiceAdditionRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_AddAdditionalServices/StartProcess", somRequestInput);
+                }
+
+            }
+
+
+        }
+
+        public void PostNetworkServiceResetPasswordRequestToOM(Guid requestId)
+        {
+            //SOMRequestOutput output;
+
+            //SOMRequestInput<ServiceAdditionRequestInput> somRequestInput = new SOMRequestInput<ServiceAdditionRequestInput>
+            //{           
+            //    InputArguments = new ServiceAdditionRequestInput
+            //    {
+            //        CommonInputArgument = new CommonInputArgument()
+            //        {
+            //            // ContractId = contractId.ToString(),
+            //            RequestId = requestId.ToString(),
+            //            // CustomerId = customerId.ToString()
+            //        }
+            //    }
+
+            //};
+
+            
+            //using (var client = new SOMClient())
+            //{
+            //    output = client.Post<SOMRequestInput<NetworkServiceResetPasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_NetworkServiceResetPassword/StartProcess", somRequestInput);
+            //}
+            
+        }
+
+        public void PostUpdateContractAddressToOM(Guid requestId)
+        {
+
+        }
+
+        public void PostBlockContractToOM(Guid requestId)
+        {
 
         }
 
         public void PostLeasedLineRequestToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLine");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<LeasedLineRequestInput> somRequestInput = new SOMRequestInput<LeasedLineRequestInput>
+                {
+
+                    InputArguments = new LeasedLineRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                           // AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LeasedLineRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_CreateContract/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
         public void PostLeasedLineTerminationToOM(Guid requestId)
         {
-            //TODO: update status in 'request header' table
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
-                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
-            update.Execute();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLineTermination");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<LeasedLineTerminationRequestInput> somRequestInput = new SOMRequestInput<LeasedLineTerminationRequestInput>
+                {
+
+                    InputArguments = new LeasedLineTerminationRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            // ContractId = contractId.ToString(),
+                            // ContactId = contactId.ToString(),
+                            // AccountId = null,
+                            RequestId = requestId.ToString(),
+                            // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LeasedLineTerminationRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_LL_TerminateContract/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
@@ -987,7 +2094,7 @@ namespace BPMExtended.Main.Business
 
             using (var client = new SOMClient())
             {
-                client.Post<CustomerAddressInput, UpdateSOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
+                client.Post<CustomerAddressInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
             }
 
         }
@@ -1013,7 +2120,7 @@ namespace BPMExtended.Main.Business
 
             using (var client = new SOMClient())
             {
-                client.Post<SOMRequestInput<CustomerPaymentProfileInput>, UpdateSOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerPaymentProfile/StartProcess", somRequestInput);
+                client.Post<SOMRequestInput<CustomerPaymentProfileInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerPaymentProfile/StartProcess", somRequestInput);
             }
 
         }
@@ -1035,7 +2142,7 @@ namespace BPMExtended.Main.Business
            
             using (var client = new SOMClient())
             {
-                client.Post<SOMRequestInput<CustomerCategoryInput>, UpdateSOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomer/StartProcess", somRequestInput);
+                client.Post<SOMRequestInput<CustomerCategoryInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomer/StartProcess", somRequestInput);
             }
 
         }

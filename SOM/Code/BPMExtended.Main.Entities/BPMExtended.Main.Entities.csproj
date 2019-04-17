@@ -69,13 +69,38 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivateCptRequestInput.cs" />
     <Compile Include="ActivateTelephonyContractInput.cs" />
+    <Compile Include="AddOtherChargesRequestInput.cs" />
+    <Compile Include="ADSLAlterSpeedRequestInput.cs" />
+    <Compile Include="ADSLChangePasswordRequestInput.cs" />
+    <Compile Include="ADSLForISPRequestInput.cs" />
+    <Compile Include="ADSLLineMovingRequestInput.cs" />
+    <Compile Include="ADSLPrintConfigurationRequestInput.cs" />
+    <Compile Include="ADSLSubscriptionRequestInput.cs" />
     <Compile Include="BillOnDemandOutput.cs" />
     <Compile Include="BillOnDemandInputArguments.cs" />
     <Compile Include="BillOnDemandInput.cs" />
+    <Compile Include="ChangeLeasedLineSpeedRequestInput.cs" />
+    <Compile Include="ChangePhoneNumberRequestInput.cs" />
+    <Compile Include="ChangeRatePlanRequestInput.cs" />
     <Compile Include="ContractService.cs" />
+    <Compile Include="ContractTakeOverRequestInput.cs" />
+    <Compile Include="CreatePABXRequestInput.cs" />
+    <Compile Include="DeactivateCptRequestInput.cs" />
+    <Compile Include="DeactivatePABXRequestInput.cs" />
+    <Compile Include="DeportedNumberRequestInput.cs" />
+    <Compile Include="EditPABXRequestInput.cs" />
     <Compile Include="ExcludePackagesServiceInput.cs" />
+    <Compile Include="FAFManagementRequestInput.cs" />
+    <Compile Include="LeasedLineRequestInput.cs" />
+    <Compile Include="LeasedLineTerminationRequestInput.cs" />
+    <Compile Include="LineMovingNewSwitchInput.cs" />
+    <Compile Include="LineMovingSameSwitchInput.cs" />
+    <Compile Include="LineTerminationRequestInput.cs" />
     <Compile Include="MultiplePackagesServiceInput.cs" />
+    <Compile Include="NetworkServiceResetPasswordRequestInput.cs" />
+    <Compile Include="ServiceAdditionRequestInput.cs" />
     <Compile Include="ServiceInput.cs" />
     <Compile Include="Packages.cs" />
     <Compile Include="Address.cs" />
@@ -134,7 +159,6 @@
     <Compile Include="SOMRequestOutput.cs" />
     <Compile Include="TelephonyContractDetail.cs" />
     <Compile Include="TelephonyContractOnHoldInput.cs" />
-    <Compile Include="UpdateSOMRequestOutput.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
