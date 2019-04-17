@@ -614,6 +614,53 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public void PostLineUnBlockingToOM(Guid requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineUnblocking");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<LineUnBlockingRequestInput> somRequestInput = new SOMRequestInput<LineUnBlockingRequestInput>
+                {
+
+                    InputArguments = new LineUnBlockingRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LineUnBlockingRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_UnblockContract/StartProcess", somRequestInput);
+                }
+
+            }
+
+        }
+
         public void PostADSLChangePasswordToOM(Guid requestId)
         {
             EntitySchemaQuery esq;
@@ -1503,34 +1550,29 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void PostNetworkServiceResetPasswordRequestToOM(Guid requestId)
+        public void PostUpdateContractAddressToOM()
         {
-            //SOMRequestOutput output;
+            SOMRequestOutput output;
 
-            //SOMRequestInput<ServiceAdditionRequestInput> somRequestInput = new SOMRequestInput<ServiceAdditionRequestInput>
-            //{           
-            //    InputArguments = new ServiceAdditionRequestInput
-            //    {
-            //        CommonInputArgument = new CommonInputArgument()
-            //        {
-            //            // ContractId = contractId.ToString(),
-            //            RequestId = requestId.ToString(),
-            //            // CustomerId = customerId.ToString()
-            //        }
-            //    }
+                SOMRequestInput<UpdateContractAddressRequestInput> somRequestInput = new SOMRequestInput<UpdateContractAddressRequestInput>
+                {
 
-            //};
+                    InputArguments = new UpdateContractAddressRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            // ContractId = contractId.ToString(),
+                            // CustomerId = customerId.ToString()
+                        }
+                    }
 
-            
-            //using (var client = new SOMClient())
-            //{
-            //    output = client.Post<SOMRequestInput<NetworkServiceResetPasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_NetworkServiceResetPassword/StartProcess", somRequestInput);
-            //}
-            
-        }
+                };
 
-        public void PostUpdateContractAddressToOM(Guid requestId)
-        {
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<UpdateContractAddressRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_UpdateContractAddress/StartProcess", somRequestInput);
+                }
 
         }
 

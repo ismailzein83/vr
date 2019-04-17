@@ -99,8 +99,10 @@
     <Compile Include="LineMovingNewSwitchInput.cs" />
     <Compile Include="LineMovingSameSwitchInput.cs" />
     <Compile Include="LineTerminationRequestInput.cs" />
+    <Compile Include="LineUnBlockingRequestInput.cs" />
     <Compile Include="MultiplePackagesServiceInput.cs" />
     <Compile Include="NetworkServiceResetPasswordRequestInput.cs" />
+    <Compile Include="ResetNetworkServicePasswordRequestInput.cs" />
     <Compile Include="ServiceAdditionRequestInput.cs" />
     <Compile Include="ServiceInput.cs" />
     <Compile Include="Packages.cs" />
@@ -161,6 +163,7 @@
     <Compile Include="CustomerContractService.cs" />
     <Compile Include="TelephonyContractDetail.cs" />
     <Compile Include="TelephonyContractOnHoldInput.cs" />
+    <Compile Include="UpdateContractAddressRequestInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
