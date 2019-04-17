@@ -51,6 +51,8 @@ namespace BPMExtended.Main.Entities
         public DateTime LastModifiedTime { get; set; }
 
         public string CustomerCode {get;set;}
+        public string PackageId { get; set; }
+        public string Name { get; set; }
     }
 
     public class ContractInfo

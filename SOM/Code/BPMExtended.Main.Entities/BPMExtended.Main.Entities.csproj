@@ -158,6 +158,7 @@
     <Compile Include="ServiceDetail.cs" />
     <Compile Include="SOMRequestInput.cs" />
     <Compile Include="SOMRequestOutput.cs" />
+    <Compile Include="CustomerContractService.cs" />
     <Compile Include="TelephonyContractDetail.cs" />
     <Compile Include="TelephonyContractOnHoldInput.cs" />
   </ItemGroup>
