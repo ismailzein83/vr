@@ -129,6 +129,7 @@
     <Build Include="Security\RouteSync.sql" />
     <Build Include="bp\Tables\BPVisualEvent.sql" />
     <Build Include="bp\Stored Procedures\sp_BPVisualEvent_Insert.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPVisualEvent_GetAfterId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
