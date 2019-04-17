@@ -126,9 +126,15 @@
     <Content Include="Common\Constant\VRIPAddressType.js" />
     <Content Include="Common\Directives\AdditionalErrors\AdditionalErrorsTemplate.html" />
     <Content Include="Common\Directives\AdditionalErrors\vr-common-additionalerrors.js" />
+    <Content Include="Common\Directives\ProgressBar\Templates\ProgressBarTemplate.html" />
+    <Content Include="Common\Directives\ProgressBar\vr-common-progress-bar.js" />
     <Content Include="Common\Directives\ConnectionString\Templates\ConnectionStringTemplate.html" />
     <Content Include="Common\Directives\ConnectionString\vr-common-connectionstring.js" />
+    <Content Include="Common\Directives\Country\Templates\CountryGridTemplate.html" />
+    <Content Include="Common\Directives\City\Templates\CitySubviewTemplate.html" />
     <Content Include="Common\Directives\Country\vr-common-country-remoteselector.js" />
+    <Content Include="Common\Directives\City\vr-common-city-subview.js" />
+    <Content Include="Common\Directives\Region\vr-common-region-subview.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\GeneralSettings\Templates\TemplateTheme.html" />
     <Content Include="Common\Directives\GeneralSettings\vr-common-themepreview.js" />
@@ -609,7 +615,7 @@
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\vr-common-sourcecountryreader-tonev1.js" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\vr-common-sourcecountryreader-tonev2.js" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\SourceCountryReaderTOneV2.html" />
-    <Content Include="Common\Directives\Country\Templates\CountryGridTemplate.html" />
+    <Content Include="Common\Directives\Region\Templates\RegionSubviewTemplate.html" />
     <Content Include="Common\Directives\Country\vr-common-country-grid.js" />
     <Content Include="Common\Directives\Country\vr-common-country-selector.js" />
     <Content Include="Common\Directives\CurrencyExchangeRate\MainExtensions\Templates\ExchangeRateXigniteTemplate.html" />
