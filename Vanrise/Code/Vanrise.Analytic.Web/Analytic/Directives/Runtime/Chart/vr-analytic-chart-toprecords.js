@@ -315,7 +315,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     OrderBy: [payLoad.Settings.TopMeasure],
                     OrderType: payLoad.Settings.OrderType,
                     AdvancedOrderOptions: payLoad.Settings.AdvancedOrderOptions,
-                    CurrencyId: currencyId,
+                    CurrencyId: payLoad.CurrencyId,
                     TimePeriod: payLoad.TimePeriod
                 };
                 return queryFinalized;

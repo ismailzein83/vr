@@ -174,7 +174,7 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                     FilterGroup: payLoad.FilterGroup,
                     TopRecords: payLoad.Settings.TopRecords,
                     OrderType: VR_Analytic_OrderTypeEnum.ByAllMeasures.value,
-                    CurrencyId: currencyId
+                    CurrencyId: payLoad.CurrencyId
                 };
                 return queryFinalized;
             }
