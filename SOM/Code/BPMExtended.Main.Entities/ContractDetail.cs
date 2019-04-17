@@ -49,6 +49,8 @@ namespace BPMExtended.Main.Entities
         public DateTime CreatedTime { get; set; }
 
         public DateTime LastModifiedTime { get; set; }
+
+        public string CustomerCode {get;set;}
     }
 
     public class ContractInfo

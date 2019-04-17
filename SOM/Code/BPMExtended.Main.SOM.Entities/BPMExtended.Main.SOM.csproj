@@ -50,6 +50,7 @@
     <Compile Include="BillingCommonInputArgument.cs" />
     <Compile Include="Billing\ServiceResponse\Installment.cs" />
     <Compile Include="Billing\ServiceResponse\PaymentPlanTemplate.cs" />
+    <Compile Include="Billing\ServiceResponse\CustomerContact.cs" />
     <Compile Include="Billing\ServiceResponse\ServiceDefinition.cs" />
     <Compile Include="Billing\ServiceResponse\CustomerCategory.cs" />
     <Compile Include="Billing\ServiceResponse\RatePlan.cs" />

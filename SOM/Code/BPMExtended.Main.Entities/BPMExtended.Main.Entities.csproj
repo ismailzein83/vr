@@ -70,6 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivateTelephonyContractInput.cs" />
+    <Compile Include="BillOnDemandOutput.cs" />
+    <Compile Include="BillOnDemandInputArguments.cs" />
+    <Compile Include="BillOnDemandInput.cs" />
     <Compile Include="ContractService.cs" />
     <Compile Include="ExcludePackagesServiceInput.cs" />
     <Compile Include="MultiplePackagesServiceInput.cs" />

@@ -11,9 +11,7 @@ namespace BPMExtended.Main.Entities
         public string ContactId { get; set; }
         public string AccountId { get; set; }
         public string ContractId { get; set; }
-
         public string CustomerId { get; set; }
-
         public string RequestId { get; set; }
     }
 }
