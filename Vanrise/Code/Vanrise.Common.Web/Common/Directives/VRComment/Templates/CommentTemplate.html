@@ -3,7 +3,7 @@
         <vr-row>
             <vr-columns colnum="12">
                 <div class="comment-editor">
-                    <vr-textarea value="scopeModel.newComment" rows="2" on-ready="scopeModel.onCommentReady" isrequired="true"></vr-textarea>
+                    <vr-textarea value="scopeModel.newComment" rows="2" on-ready="scopeModel.onCommentReady" ></vr-textarea>
                 </div>
                 <div class="add-comment-container">
                     <a href="" ng-click="scopeModel.newComment ? scopeModel.addcomment() : '' " class="vr-custombutton">
@@ -33,7 +33,8 @@
                             <div class="vr-comment-body" ng-class="dataItem.fullView ? 'full-content' : ''">
                                 <div class="expandable-content-wrapper">
                                     <vr-expandablecontent>
-                                        <p class="expandable-content-container" ng-bind="dataItem.Content"></p>
+                                        <vr-label>{{dataItem.Content}}</vr-label>
+                                        <!--<p class="expandable-content-container" ng-bind="dataItem.Content"></p>-->
                                     </vr-expandablecontent>
                                 </div>
 
