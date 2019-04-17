@@ -12,6 +12,7 @@ namespace Retail.Interconnect.Entities
         public long InvoiceId { get; set; }
         public Decimal? Amount { get; set; }
         public int TotalNumberOfCalls { get; set; }
+        public int TotalNumberOfSMSs { get; set; }
         public int? CurrencyId { get; set; }
         public Decimal DurationInSeconds { get; set; }
         public string SerialNumber { get; set; }

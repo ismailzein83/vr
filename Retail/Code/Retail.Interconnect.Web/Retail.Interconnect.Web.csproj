@@ -288,6 +288,14 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Retail_Interconnect\Reports\AT\SettlementInvoiceDetail.rdlc">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Retail_Interconnect\Reports\AT\SettlementInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

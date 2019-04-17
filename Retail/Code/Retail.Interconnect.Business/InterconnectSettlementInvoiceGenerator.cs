@@ -131,17 +131,21 @@ namespace Retail.Interconnect.Business
                     if (customerInvoiceDetails == null)
                         continue;
                     bool multipleCurrencies = false;
-                    var invoiceItems = customerInvoiceByCurrencyItemDetailsByInvoice.GetRecord(customerInvoice.InvoiceId);
+                    var invoiceItemsByCurrency = customerInvoiceByCurrencyItemDetailsByInvoice.GetRecord(customerInvoice.InvoiceId);
 
-                    if (invoiceItems != null)
+                    if (invoiceItemsByCurrency != null)
                     {
                         var settlementInvoiceCurrency = settlementInvoiceCurrencyByInvoice.GetOrCreateItem(customerInvoice.InvoiceId);
 
-                        foreach (var keyValuePair in invoiceItems)
+                        foreach (var currency in invoiceItemsByCurrency.Currencies)
                         {
-                            foreach (var invoiceItem in keyValuePair.Value)
+                            var months = invoiceItemsByCurrency.MonthsByCurrency.GetRecord(currency);
+                            if (months == null)
+                                continue;
+
+                            foreach (var month in months)
                             {
-                                var invoiceItemDetails = invoiceItem as InterconnectInvoiceByCurrencyItemDetails;
+                                var invoiceItemDetails = month as InterconnectInvoiceByCurrencyItemDetails;
 
                                 if (invoiceItemDetails != null && invoiceItemDetails.CurrencyId != customerInvoiceDetails.InterconnectCurrencyId)
                                     multipleCurrencies = true;
@@ -226,6 +230,7 @@ namespace Retail.Interconnect.Business
                         CurrencyId = multipleCurrencies ? default(int?) : customerInvoiceDetails.InterconnectCurrencyId,
                         InvoiceId = customerInvoice.InvoiceId,
                         InvoiceTypeId = customerInvoice.InvoiceTypeId,
+                        TotalNumberOfSMSs = customerInvoiceDetails.TotalNumberOfSMS,
                         TotalNumberOfCalls = customerInvoiceDetails.TotalNumberOfCalls,
                         IssueDate = customerInvoice.IssueDate,
                         SerialNumber = customerInvoice.SerialNumber,
@@ -252,15 +257,20 @@ namespace Retail.Interconnect.Business
                     bool isOriginalAmountSetted = supplierInvoiceDetails.IsOriginalAmountSetted;
                     bool multipleCurrencies = false;
 
-                    var invoiceItems = supplierInvoiceByCurrencyItemDetailsByInvoice.GetRecord(supplierInvoice.InvoiceId);
-                    if (invoiceItems != null)
+                    var invoiceItemsByCurrency = supplierInvoiceByCurrencyItemDetailsByInvoice.GetRecord(supplierInvoice.InvoiceId);
+                    if (invoiceItemsByCurrency != null)
                     {
                         var settlementInvoiceCurrency = settlementInvoiceCurrencyByInvoice.GetOrCreateItem(supplierInvoice.InvoiceId);
-                        foreach (var keyValuePair in invoiceItems)
+
+                        foreach (var currency in invoiceItemsByCurrency.Currencies)
                         {
-                            foreach (var invoiceItem in keyValuePair.Value)
+                            var months = invoiceItemsByCurrency.MonthsByCurrency.GetRecord(currency);
+                            if (months == null)
+                                continue;
+
+                            foreach (var month in months)
                             {
-                                var invoiceItemDetails = invoiceItem as InterconnectInvoiceByCurrencyItemDetails;
+                                var invoiceItemDetails = month as InterconnectInvoiceByCurrencyItemDetails;
 
                                 if (invoiceItemDetails != null && invoiceItemDetails.CurrencyId != supplierInvoiceDetails.InterconnectCurrencyId)
                                     multipleCurrencies = true;
@@ -351,6 +361,7 @@ namespace Retail.Interconnect.Business
                         CurrencyId = multipleCurrencies ? default(int?) : supplierInvoiceDetails.InterconnectCurrencyId,
                         InvoiceId = supplierInvoice.InvoiceId,
                         InvoiceTypeId = supplierInvoice.InvoiceTypeId,
+                        TotalNumberOfSMSs = supplierInvoiceDetails.TotalNumberOfSMS,
                         TotalNumberOfCalls = supplierInvoiceDetails.TotalNumberOfCalls,
                         SerialNumber = supplierInvoice.SerialNumber,
                         IssueDate = supplierInvoice.IssueDate,
@@ -635,6 +646,8 @@ namespace Retail.Interconnect.Business
                 {
                     settlementInvoiceDetails.CustomerDuration += customerInvoice.DurationInSeconds;
                     settlementInvoiceDetails.CustomerTotalNumberOfCalls += customerInvoice.TotalNumberOfCalls;
+                    settlementInvoiceDetails.CustomerTotalNumberOfSMSs += customerInvoice.TotalNumberOfSMSs;
+
                     customerItemSet.Items.Add(new GeneratedInvoiceItem
                     {
                         Details = customerInvoice,
@@ -659,6 +672,7 @@ namespace Retail.Interconnect.Business
                 {
                     settlementInvoiceDetails.SupplierDuration += supplierInvoice.DurationInSeconds;
                     settlementInvoiceDetails.SupplierTotalNumberOfCalls += supplierInvoice.TotalNumberOfCalls;
+                    settlementInvoiceDetails.SupplierTotalNumberOfSMSs += supplierInvoice.TotalNumberOfSMSs;
 
                     supplierItemSet.Items.Add(new GeneratedInvoiceItem
                     {
@@ -857,7 +871,7 @@ namespace Retail.Interconnect.Business
 
         private Dictionary<long, InterconnectInvoiceByCurrencyItemDetailsByCurrency> GenerateInterconnectInvoiceByCurrencyItemDetailsByCurrencyDic(IEnumerable<Vanrise.Invoice.Entities.Invoice> invoices, IEnumerable<InvoiceItem> invoiceItems)
         {
-            var interconnectInvoiceByCurrencyItemDetailsByCurrencyDic = new Dictionary<long, InterconnectInvoiceByCurrencyItemDetailsByCurrency>();
+            var interconnectInvoiceByCurrencyItemDetailsByInvoiceIdDic = new Dictionary<long, InterconnectInvoiceByCurrencyItemDetailsByCurrency>();
 
             if (invoices == null)
                 return null;
@@ -869,24 +883,36 @@ namespace Retail.Interconnect.Business
                 if (invoiceDetails == null)
                     continue;
 
+                invoiceItems.ThrowIfNull("Invoice Items", invoice.InvoiceId);
+
                 var items = invoiceItems.FindAllRecords(x => x.InvoiceId == invoice.InvoiceId);
 
                 if (items == null)
                     continue;
 
-                var interconnectInvoiceByCurrencyItemDetailsByCurrency = interconnectInvoiceByCurrencyItemDetailsByCurrencyDic.GetOrCreateItem(invoice.InvoiceId);
+                var interconnectInvoiceByCurrencyItemDetailsByCurrency = interconnectInvoiceByCurrencyItemDetailsByInvoiceIdDic.GetOrCreateItem(invoice.InvoiceId);
+
+                if (interconnectInvoiceByCurrencyItemDetailsByCurrency.Currencies == null)
+                {
+                    interconnectInvoiceByCurrencyItemDetailsByCurrency.Currencies = new HashSet<int>();
+                    interconnectInvoiceByCurrencyItemDetailsByCurrency.MonthsByCurrency = new Dictionary<int, List<InterconnectInvoiceByCurrencyItemDetails>>();
+                }
+
                 foreach (var item in items)
                 {
                     var invoiceItemDetails = item.Details as InterconnectInvoiceByCurrencyItemDetails;
 
                     if (invoiceItemDetails == null)
                         continue;
-                    var interconnectInvoiceByCurrencyItemDetails = interconnectInvoiceByCurrencyItemDetailsByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
+
+                    interconnectInvoiceByCurrencyItemDetailsByCurrency.Currencies.Add(invoiceItemDetails.CurrencyId);
+
+                    var interconnectInvoiceByCurrencyItemDetails = interconnectInvoiceByCurrencyItemDetailsByCurrency.MonthsByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
 
                     interconnectInvoiceByCurrencyItemDetails.Add(invoiceItemDetails);
                 }
             }
-            return interconnectInvoiceByCurrencyItemDetailsByCurrencyDic;
+            return interconnectInvoiceByCurrencyItemDetailsByInvoiceIdDic;
         }
     }
 }

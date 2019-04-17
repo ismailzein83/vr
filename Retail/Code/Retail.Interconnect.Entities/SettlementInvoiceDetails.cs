@@ -10,8 +10,10 @@ namespace Retail.Interconnect.Entities
     {
         public Decimal CustomerDuration { get; set; }
         public int CustomerTotalNumberOfCalls { get; set; }
+        public int CustomerTotalNumberOfSMSs { get; set; }
         public Decimal SupplierDuration { get; set; }
         public int SupplierTotalNumberOfCalls { get; set; }
+        public int SupplierTotalNumberOfSMSs { get; set; }
         public bool IsApplicableToSupplier { get; set; }
         public bool IsApplicableToCustomer { get; set; }
         public decimal DueToSystemAmount { get; set; }
