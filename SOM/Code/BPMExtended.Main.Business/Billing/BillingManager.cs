@@ -760,6 +760,34 @@ namespace BPMExtended.Main.Business
 
         }
 
+
+        public string GenerateBillOnDemand(string customerId, string contractId, bool simulate)
+        {
+            string processInstanceId = string.Empty;
+            var commonInputArgument = new CommonInputArgument()
+            {
+                CustomerId = customerId,
+                ContractId = contractId
+            };
+            var billOnDemandInputArguments = new BillOnDemandInputArguments()
+            {
+                CommonInputArgument = commonInputArgument,
+                Simulate = simulate
+            };
+
+            var billOnDemandInput = new BillOnDemandInput()
+            {
+                InputArguments = billOnDemandInputArguments
+            };
+
+            var ProcessInstanceId =new SOMRequestOutput();
+            using (SOMClient client = new SOMClient())
+            {
+                ProcessInstanceId = client.Post<BillOnDemandInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/BillOnDemand/StartProcess", billOnDemandInput);
+            }
+            return ProcessInstanceId.ProcessId;
+        }
+
         public List<PaymentMethodInfo> ReadPaymentMethodsInfo()
         {
             var paymentMethodsInfoItems = new List<PaymentMethodInfo>();
