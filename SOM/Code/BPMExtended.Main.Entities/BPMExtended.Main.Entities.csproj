@@ -95,6 +95,7 @@
     <Compile Include="FAFManagementRequestInput.cs" />
     <Compile Include="LeasedLineRequestInput.cs" />
     <Compile Include="LeasedLineTerminationRequestInput.cs" />
+    <Compile Include="LineBlockingRequestInput.cs" />
     <Compile Include="LineMovingNewSwitchInput.cs" />
     <Compile Include="LineMovingSameSwitchInput.cs" />
     <Compile Include="LineTerminationRequestInput.cs" />

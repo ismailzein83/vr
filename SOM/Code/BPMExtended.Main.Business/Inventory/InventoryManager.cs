@@ -343,7 +343,7 @@ namespace BPMExtended.Main.Business
 
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<string>(String.Format("api/SOM.ST/Inventory/GetDeviceID?phoneNumbers={0}", phoneNumberID));
+                apiResult = client.Get<string>(String.Format("api/SOM.ST/Inventory/GetDeviceID?phoneNumberID={0}", phoneNumberID));
             }
 
             return apiResult;
@@ -799,13 +799,14 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
-        public string ReserveTelephonyNumber(string phoneNumber, string pathType, string phoneNumberID, string deviceID, string mDFPortID, string dPPortID, string primaryPort, string secondaryPort)
+        public string ReserveTelephonyNumber(string phoneNumber, string pathType, string phoneNumberID, string mDFPortID, string dPPortID, string primaryPort, string secondaryPort)
         {
             //string objectlist = phoneNumberID + "," + deviceID + "," + mDFPortID + "," + primaryPort + "," + secondaryPort + "," + dPPortID;
             //string pathname = pathType + "_" + phoneNumber;
             //string connectors = deviceID + "," + mDFPortID + ",COPPER_LINK|" + primaryPort + "," + secondaryPort + ",COPPER_LINK";
-
+            string deviceID = GetDeviceID(phoneNumberID);
             string  item = "";
+
             using (SOMClient client = new SOMClient())
             {
                 item = client.Get<string>(String.Format("api/SOM.ST/Inventory/ReserveNumber?phoneNumber=" + phoneNumber + "&pathType=" + pathType + "&phoneNumberID=" + phoneNumberID + "&deviceID=" + deviceID + "&mDFPortID=" + mDFPortID + "&dPPortID=" + dPPortID + "&primaryPort=" + primaryPort + "&secondaryPort=" + secondaryPort));

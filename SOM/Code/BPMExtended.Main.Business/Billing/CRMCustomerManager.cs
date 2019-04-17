@@ -566,6 +566,54 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public void PostLineBlockingToOM(Guid requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineBlocking");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<LineBlockingRequestInput> somRequestInput = new SOMRequestInput<LineBlockingRequestInput>
+                {
+
+                    InputArguments = new LineBlockingRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            //ContractId = contractId.ToString(),
+                            //ContactId = contactId.ToString(),
+                            //AccountId = null,
+                            RequestId = requestId.ToString(),
+                            //CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LineBlockingRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_BlockContract/StartProcess", somRequestInput);
+                }
+
+            }
+
+        }
+
         public void PostADSLChangePasswordToOM(Guid requestId)
         {
             EntitySchemaQuery esq;
@@ -894,10 +942,10 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyContractTakeOver");
             esq.AddColumn("StContractId");
             esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
+           // esq.AddColumn("StContactId");
+            //esq.AddColumn("StContact.Id");
+           // esq.AddColumn("StAccount");
+           // esq.AddColumn("StAccount.Id");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -906,9 +954,9 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
+                //var contractId = entities[0].GetColumnValue("StContractId");
+               // var contactId = entities[0].GetColumnValue("StContactId");
+               // var accountId = entities[0].GetColumnValue("StAccountId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
 
                 SOMRequestInput<ContractTakeOverRequestInput> somRequestInput = new SOMRequestInput<ContractTakeOverRequestInput>
