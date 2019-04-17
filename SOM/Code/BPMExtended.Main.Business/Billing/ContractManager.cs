@@ -28,7 +28,19 @@ namespace BPMExtended.Main.Business
 
         public List<TelephonyContractDetail> GetTelephonyContracts(string customerId)
         {
-            return RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
+            // return RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
+            var telephonyContractDetails = new List<TelephonyContractDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                var items = client.Get<List<CustomerContract>>(String.Format("api/SOM.ST/Billing/GetCustomerTelephonyContracts?CustomerId={0}", customerId));
+                foreach (var item in items)
+                {
+                    var telephonyContractDetailItem = CustomerContractToDetail(item);
+                    telephonyContractDetails.Add(telephonyContractDetailItem);
+                }
+            }
+            return telephonyContractDetails;
+
         }
         public List<TelephonyContractDetail> GetTelephonyContractsByNumber(string phoneNumber)
         {
@@ -565,8 +577,30 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        #endregion
+        private TelephonyContractDetail CustomerContractToDetail(CustomerContract contract)
+        {
 
+            var contractAddress = new Address()
+            {
+                Street = contract.Street,
+                City = contract.City
+            };
+            return new TelephonyContractDetail
+            {
+                ContractId = contract.Id,
+                CustomerId = contract.CustomerId,
+                RatePlanId = contract.RateplanId!=0?contract.RateplanId.ToString():null,
+                Status = (ContractDetailStatus)contract.Status, //Check if API and Our conventions are the same
+                CustomerCode = contract.CustomerCode,
+                PhoneNumber= contract.PhoneNumber,
+                ActivationDate = contract.ActivationDate,
+                LastModifiedTime = contract.LastStatusChangeDate,
+                ContractAddress = contractAddress
+
+            };
+        }
+
+        #endregion
 
     }
 }

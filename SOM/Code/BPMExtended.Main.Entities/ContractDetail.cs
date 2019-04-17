@@ -32,7 +32,7 @@ namespace BPMExtended.Main.Entities
 
         public ContractDetailStatus Status { get; set; }
 
-        public DateTime ActivationDate { get; set; }
+        public DateTime? ActivationDate { get; set; }
 
         public DateTime StatusDate { get; set; }
 
@@ -48,7 +48,7 @@ namespace BPMExtended.Main.Entities
 
         public DateTime CreatedTime { get; set; }
 
-        public DateTime LastModifiedTime { get; set; }
+        public DateTime? LastModifiedTime { get; set; }
 
         public string CustomerCode {get;set;}
     }
