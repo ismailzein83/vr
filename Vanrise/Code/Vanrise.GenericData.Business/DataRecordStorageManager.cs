@@ -208,7 +208,7 @@ namespace Vanrise.GenericData.Business
             storageDataManager.GetDataRecords(from, to, recordFilterGroup, shouldStop, onItemReady, orderColumnName, isOrderAscending);
         }
 
-        public IEnumerable<DataRecord> GetAllDataRecords(Guid dataRecordStorageId, List<string> columnsNeeded = null, RecordFilterGroup filterGroup = null)
+        public IEnumerable<DataRecord> GetAllDataRecords(Guid dataRecordStorageId, List<string> columnsNeeded = null, RecordFilterGroup filterGroup = null, List<DataRecordFilter> filters = null)
         {
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
             dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
@@ -216,13 +216,14 @@ namespace Vanrise.GenericData.Business
             DataRecordType recordType = new DataRecordTypeManager().GetDataRecordType(dataRecordStorage.DataRecordTypeId);
             recordType.ThrowIfNull("recordType", dataRecordStorage.DataRecordTypeId);
             recordType.Fields.ThrowIfNull("recordType.Fields", dataRecordStorage.DataRecordTypeId);
-
-            RecordFilterGroup filterGroupObj = null;
-            if (filterGroup != null)
-            {
-                filterGroupObj = ConvertFilterGroup(filterGroup, recordType);
-            }
             RecordFilterManager recordFilterManager = new RecordFilterManager();
+            
+            RecordFilterGroup filterGroupObj = null;
+            if (filterGroup != null || filters != null)
+            {
+                var mergedFilterGroup = recordFilterManager.BuildRecordFilterGroup(recordType.DataRecordTypeId, filters, filterGroup);
+                filterGroupObj = ConvertFilterGroup(mergedFilterGroup, recordType);
+            }
             Func<DataRecord, bool> filterExpression = (dataRecord) =>
             {
                 if (filterGroupObj != null)

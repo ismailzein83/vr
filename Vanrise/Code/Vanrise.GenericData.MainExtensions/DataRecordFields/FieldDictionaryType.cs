@@ -140,5 +140,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return "Dictionary";
         }
+
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldDictionaryType fieldTypeAsDictionaryType = fieldType as FieldDictionaryType;
+            return fieldTypeAsDictionaryType != null;
+        }
     }
 }

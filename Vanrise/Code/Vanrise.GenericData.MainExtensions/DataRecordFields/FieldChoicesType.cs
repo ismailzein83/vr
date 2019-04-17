@@ -214,6 +214,18 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     return choices;
                 });
         }
+        
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldChoicesType fieldTypeAsChoicesType = fieldType as FieldChoicesType;
+            if (fieldTypeAsChoicesType == null)
+                return false;
+
+            if (fieldTypeAsChoicesType.ChoiceDefinitionId.HasValue)
+                return fieldTypeAsChoicesType.ChoiceDefinitionId == this.ChoiceDefinitionId;
+
+            return Vanrise.Common.Serializer.Serialize(fieldTypeAsChoicesType.Choices) == Vanrise.Common.Serializer.Serialize(this.Choices);
+        }
     }
 
     public class Choice

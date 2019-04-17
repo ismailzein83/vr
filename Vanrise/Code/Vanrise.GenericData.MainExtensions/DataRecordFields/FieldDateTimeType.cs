@@ -656,6 +656,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
         }
 
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldDateTimeType fieldTypeAsDateType = fieldType as FieldDateTimeType;
+            if (fieldTypeAsDateType == null)
+                return false;
+
+            return fieldTypeAsDateType.DataType == this.DataType;
+        }
+
         #endregion
     }
 

@@ -105,6 +105,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return null;
             return Vanrise.Common.Serializer.Deserialize(context.Value, GetRuntimeType());
         }
+
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldListDataRecordType fieldTypeAsListDataRecordType = fieldType as FieldListDataRecordType;
+            if (fieldTypeAsListDataRecordType == null)
+                return false;
+            return fieldTypeAsListDataRecordType.DataRecordTypeId == this.DataRecordTypeId;
+        }
+
     }
 
     public abstract class ListRecordRuntimeViewType

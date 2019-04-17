@@ -33,5 +33,17 @@ namespace Vanrise.GenericData.Entities
         {
             return true;
         }
+
+        public virtual List<BusinessEntityCompatibleFieldInfo> GetCompatibleFields(IBusinessEntityGetCompatibleFieldsContext context)
+        {
+            return null;
+        }
+    }
+
+    public class BusinessEntityCompatibleFieldInfo
+    {
+        public string FieldName { get; set; }
+
+        public string FieldTitle { get; set; }
     }
 }

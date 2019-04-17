@@ -220,6 +220,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return originalValue;
         }
+
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldAttachmentType fieldTypeAsAttachmentType = fieldType as FieldAttachmentType;
+            return fieldTypeAsAttachmentType != null;
+        }
     }
 
     public class BusinessEntityFileSettings : VRFileExtendedSettings

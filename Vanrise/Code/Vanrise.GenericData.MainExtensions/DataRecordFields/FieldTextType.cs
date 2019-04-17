@@ -154,5 +154,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return "Text";
         }
+
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldTextType fieldTypeAsTextType = fieldType as FieldTextType;
+            return fieldTypeAsTextType != null;
+        }
     }
 }

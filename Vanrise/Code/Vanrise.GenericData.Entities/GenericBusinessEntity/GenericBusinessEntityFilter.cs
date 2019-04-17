@@ -9,6 +9,8 @@ namespace Vanrise.GenericData.Entities
     public class GenericBusinessEntityInfoFilter
     {
         public IEnumerable<IGenericBusinessEntityFilter> Filters { get; set; }
+
+        public List<GenericBusinessEntityFilter> FieldFilters { get; set; }
     }
 
     public interface IGenericBusinessEntityFilter

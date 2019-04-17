@@ -200,5 +200,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return "Guid";
         }
+
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldGuidType fieldTypeAsGuidType = fieldType as FieldGuidType;
+            return fieldTypeAsGuidType != null;
+        }
     }
 }

@@ -137,5 +137,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
            return "Boolean";
         }
+
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldBooleanType fieldTypeAsBooleanType = fieldType as FieldBooleanType;
+            return fieldTypeAsBooleanType != null;
+        }
     }
 }

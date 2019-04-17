@@ -43,6 +43,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return rDBDataRecordFieldAttribute;
         }
 
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldNumberType fieldTypeAsNumberType = fieldType as FieldNumberType;
+            if (fieldTypeAsNumberType == null)
+                return false;
+
+            return fieldTypeAsNumberType.DataType == this.DataType;
+        }
+
         #region Public Methods
 
         Type _runtimeType;

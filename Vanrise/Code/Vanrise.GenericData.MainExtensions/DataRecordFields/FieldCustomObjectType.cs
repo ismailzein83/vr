@@ -133,6 +133,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return Settings.GetRuntimeTypeDescription();
         }
+
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldCustomObjectType fieldTypeAsCustomObjectType = fieldType as FieldCustomObjectType;
+            if (fieldTypeAsCustomObjectType == null)
+                return false;
+
+            return Serializer.Serialize(fieldTypeAsCustomObjectType.Settings) == Serializer.Serialize(this.Settings);
+        }
     }
 
 }

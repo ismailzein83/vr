@@ -104,5 +104,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             return Vanrise.Common.Serializer.Deserialize(context.Value, GetRuntimeType());
         }
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldArrayType fieldArrayType = fieldType as FieldArrayType;
+            if (fieldArrayType == null)
+                return false;
+            return fieldArrayType.FieldType.IsCompatibleWithFieldType(this.FieldType);
+        }
+
     }
 }

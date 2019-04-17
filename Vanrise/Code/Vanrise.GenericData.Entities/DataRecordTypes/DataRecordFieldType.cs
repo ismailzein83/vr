@@ -140,6 +140,11 @@ namespace Vanrise.GenericData.Entities
         {
             return true;
         }
+
+        public virtual bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            return false;
+        }
     }
     public interface IDataRecordFieldTypeDefaultRDBFieldAttributeContext
     {

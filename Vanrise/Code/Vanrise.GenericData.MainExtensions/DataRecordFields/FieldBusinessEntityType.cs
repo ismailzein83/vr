@@ -41,6 +41,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
         public Guid BusinessEntityDefinitionId { get; set; }
 
+        public List<FieldBusinessEntityTypeDependantField> DependantFields { get; set; }
+
         public bool IsNullable { get; set; }
 
         public BERuntimeSelectorFilter BERuntimeSelectorFilter { get; set; }
@@ -280,6 +282,22 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return baseBusinessEntityManager.IsStillAvailable(new BusinessEntityIsStillAvailableContext() { EntityId = context.EntityId });
         }
 
+        public override bool IsCompatibleWithFieldType(DataRecordFieldType fieldType)
+        {
+            FieldBusinessEntityType fieldTypeAsBusinessEntityType = fieldType as FieldBusinessEntityType;
+            if (fieldTypeAsBusinessEntityType == null)
+                return false;
+            if (fieldTypeAsBusinessEntityType.BusinessEntityDefinitionId != this.BusinessEntityDefinitionId)
+                return false;
+
+            if (fieldTypeAsBusinessEntityType.BERuntimeSelectorFilter == null && this.BERuntimeSelectorFilter == null)
+                return true;
+            else if (Vanrise.Common.Serializer.Serialize(fieldTypeAsBusinessEntityType.BERuntimeSelectorFilter) == Vanrise.Common.Serializer.Serialize(this.BERuntimeSelectorFilter))
+                return true;
+            else
+                return false;
+        }
+
         #endregion
 
         #region Private Methods
@@ -307,5 +325,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
 
         #endregion
+    }
+
+    public class FieldBusinessEntityTypeDependantField
+    {
+        public string FieldName { get; set; }
+
+        public string MappedFieldName { get; set; }
+
+        public bool IsRequired { get; set; }
     }
 }

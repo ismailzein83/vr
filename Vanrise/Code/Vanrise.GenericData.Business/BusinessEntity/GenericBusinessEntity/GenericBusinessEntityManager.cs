@@ -79,7 +79,22 @@ namespace Vanrise.GenericData.Business
 					columnTitles.Add(field.Value.Title);
 				}
 				var idDataRecordField = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(businessEntityDefinitionId);
-				var storageRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId.Value, columns, null);
+
+                List<DataRecordFilter> mappedDataRecordFilters = null;
+
+                if (filter.FieldFilters != null && filter.FieldFilters.Count > 0)
+                {
+                    foreach (var fieldFilter in filter.FieldFilters)
+                    {
+                        mappedDataRecordFilters.Add(new DataRecordFilter
+                        {
+                            FieldName = fieldFilter.FieldName,
+                            FilterValues = fieldFilter.FilterValues
+                        });
+                    }
+                }
+
+                var storageRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId.Value, columns, null, mappedDataRecordFilters);
 
 
 				List<GenericBusinessEntity> genericBusinessEntities = new List<GenericBusinessEntity>();
@@ -205,7 +220,6 @@ namespace Vanrise.GenericData.Business
 			genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", businessEntityDefinitionId);
 			if (!genericBEDefinitionSetting.DataRecordStorageId.HasValue)
 			{
-
 				throw new NullReferenceException("genericBEDefinitionSetting.DataRecordStorageId");
 			}
 			var dataRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId.Value, columnsNeeded, filterGroup);
@@ -1401,10 +1415,30 @@ namespace Vanrise.GenericData.Business
 			}
 		}
 
-		#endregion
+        public override List<BusinessEntityCompatibleFieldInfo> GetCompatibleFields(IBusinessEntityGetCompatibleFieldsContext context)
+        {
+            var dataRecordType = _genericBEDefinitionManager.GetGenericBEDataRecordType(context.EntityDefinitionId);
+            dataRecordType.ThrowIfNull("dataRecordType", context.EntityDefinitionId);
+            List<BusinessEntityCompatibleFieldInfo> compatibleFields = new List<BusinessEntityCompatibleFieldInfo>();
+            if (dataRecordType.Fields != null)
+            {
+                foreach (var field in dataRecordType.Fields)
+                {
+                    if (field.Type.IsCompatibleWithFieldType(context.CompatibleWithFieldType))
+                        compatibleFields.Add(new BusinessEntityCompatibleFieldInfo
+                        {
+                            FieldName = field.Name,
+                            FieldTitle = field.Title
+                        });
+                }
+            }
+            return base.GetCompatibleFields(context);
+        }
 
-		#region security
-		public bool DoesUserHaveActionAccess(string actionKind, Guid BusinessEntityDefinitionId, Guid businessEntityActionTypeId)
+        #endregion
+
+        #region security
+        public bool DoesUserHaveActionAccess(string actionKind, Guid BusinessEntityDefinitionId, Guid businessEntityActionTypeId)
 		{
 			int userId = SecurityContext.Current.GetLoggedInUserId();
 			return DoesUserHaveActionAccess(actionKind, userId, BusinessEntityDefinitionId, businessEntityActionTypeId);

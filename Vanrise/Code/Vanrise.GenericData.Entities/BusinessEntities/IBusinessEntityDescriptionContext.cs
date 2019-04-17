@@ -107,4 +107,13 @@ namespace Vanrise.GenericData.Entities
     {
         public dynamic EntityId { get; set; }
     }
+
+
+
+    public interface IBusinessEntityGetCompatibleFieldsContext
+    {
+        Guid EntityDefinitionId { get; }
+
+        DataRecordFieldType CompatibleWithFieldType { get; }
+    }
 }
