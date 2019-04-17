@@ -126,5 +126,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             VRWorkflowFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRWorkflowFilter>(filter) : null;
             return _manager.GetVRWorkflowsInfo(deserializedFilter);
         }
+
+        [HttpGet]
+        [Route("GetVisualItemDefinition")]
+        public BPVisualItemDefinition GetVisualItemDefinition(Guid vrWorkflowId)
+        {
+            return _manager.GetVisualItemDefinition(vrWorkflowId);
+        }
     }
 }

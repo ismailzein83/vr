@@ -97,6 +97,9 @@
     <Compile Include="BPPendingInstanceInfo.cs" />
     <Compile Include="BPVisualization\BPVisualEvent.cs" />
     <Compile Include="BPVisualization\BPVisualItemDefinition.cs" />
+    <Compile Include="BPVisualization\BPVisualEventDetail.cs" />
+    <Compile Include="BPVisualization\BPVisualEventDetailUpdateInput.cs" />
+    <Compile Include="BPVisualization\BPVisuaIEventDetailUpdateOutput.cs" />
     <Compile Include="ProcessSynchronisation\StructuredProcessSynchronisation.cs" />
     <Compile Include="ProcessSynchronisation\ProcessSynchronisationQuery.cs" />
     <Compile Include="ProcessSynchronisation\ProcessSynchronisationDetail.cs" />

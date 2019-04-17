@@ -1,122 +1,169 @@
-﻿//(function (app) {
+﻿(function (app) {
 
-//    'use strict';
+    'use strict';
 
-//    VisualItemDefinitonIfElse.$inject = ['UtilsService', 'VRUIUtilsService'];
+    VisualItemDefinitonIfElse.$inject = ['UtilsService', 'VRUIUtilsService', 'VisualEventTypeEnum'];
 
-//    function VisualItemDefinitonIfElse(UtilsService, VRUIUtilsService) {
-//        return {
-//            restrict: "E",
-//            scope: {
-//                onReady: "=",
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var visualItemDefinitonIfElse = new VisualItemDefinitonIfElseController($scope, ctrl, $attrs);
-//                visualItemDefinitonIfElse.initializeController();
-//            },
-//            controllerAs: "ctrl",
-//            bindToController: true,
-//            templateUrl: "/Client/Modules/BusinessProcess/Directives/BPVisualItemDefinition/Templates/VisualItemDefintionIfElseWorkflowTemplate.html"
-//        };
+    function VisualItemDefinitonIfElse(UtilsService, VRUIUtilsService, VisualEventTypeEnum) {
+        return {
+            restrict: "E",
+            scope: {
+                onReady: "=",
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var visualItemDefinitonIfElse = new VisualItemDefinitonIfElseController($scope, ctrl, $attrs);
+                visualItemDefinitonIfElse.initializeController();
+            },
+            controllerAs: "ctrl",
+            bindToController: true,
+            templateUrl: "/Client/Modules/BusinessProcess/Directives/BPVisualItemDefinition/Templates/VisualItemDefintionIfElseWorkflowTemplate.html"
+        };
 
-//        function VisualItemDefinitonIfElseController($scope, ctrl, $attrs) {
-//            this.initializeController = initializeController;
+        function VisualItemDefinitonIfElseController($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-//            var visualItemDefinition;
+            var visualItemDefinition;
 
-//            var trueBranchDirectiveAPI;
-//            var trueBranchDirectivePromiseReadyDeferred = UtilsService.createPromiseDeferred();
+            var trueBranchDirectiveAPI;
+            var trueBranchDirectivePromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
-//            var falseBranchDirectiveAPI;
-//            var falseBranchDirectivePromiseReadyDeferred = UtilsService.createPromiseDeferred();
-            
-//            function initializeController() {
-//                $scope.scopeModel = {};
+            var falseBranchDirectiveAPI;
+            var falseBranchDirectivePromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
-//                $scope.scopeModel.onTrueBranchDirectiveReady = function (api) {
-//                    trueBranchDirectiveAPI = api;
-//                    trueBranchDirectivePromiseReadyDeferred.resolve();
-//                };
+            function initializeController() {
+                $scope.scopeModel = {};
 
-//                $scope.scopeModel.onFalseBranchDirectiveReady = function (api) {
-//                    falseBranchDirectiveAPI = api;
-//                    falseBranchDirectivePromiseReadyDeferred.resolve();
-//                };
+                $scope.scopeModel.onTrueBranchDirectiveReady = function (api) {
+                    trueBranchDirectiveAPI = api;
+                    trueBranchDirectivePromiseReadyDeferred.resolve();
+                };
 
-//                defineAPI();
-//            }
+                $scope.scopeModel.onFalseBranchDirectiveReady = function (api) {
+                    falseBranchDirectiveAPI = api;
+                    falseBranchDirectivePromiseReadyDeferred.resolve();
+                };
 
-//            function defineAPI() {
-//                var api = {};
+                defineAPI();
+            }
 
-//                api.load = function (payload) {
-//                    var initialPromises = [];
+            function defineAPI() {
+                var api = {};
 
-//                    if (payload != undefined) {
-//                        visualItemDefinition = payload.visualItemDefinition;
-//                        $scope.scopeModel.conditionDescription = visualItemDefinition.Settings.ConditionDescription;
-//                        $scope.scopeModel.trueBranch = visualItemDefinition.Settings.TrueBranchVisualItemDefinition;
-//                        $scope.scopeModel.falseBranch = visualItemDefinition.Settings.FalseBranchVisualItemDefinition;
-//                    }
+                api.load = function (payload) {
+                    var initialPromises = [];
 
-//                    var rootPromiseNode = {
-//                        promises: initialPromises,
-//                        getChildNode: function () {
-//                            var directivePromises = [];
-//                            directivePromises.push(loadTrueBranchDirective());
-//                            directivePromises.push(loadFalseBranchDirective());
+                    if (payload != undefined) {
+                        visualItemDefinition = payload.visualItemDefinition;
+                        $scope.scopeModel.conditionDescription = visualItemDefinition.Settings.ConditionDescription;
+                        $scope.scopeModel.trueBranch = visualItemDefinition.Settings.TrueBranchVisualItemDefinition;
+                        $scope.scopeModel.falseBranch = visualItemDefinition.Settings.FalseBranchVisualItemDefinition;
+                    }
 
-//                            return {
-//                                promises: directivePromises
-//                            };
-//                        }
-//                    };
+                    var rootPromiseNode = {
+                        promises: initialPromises,
+                        getChildNode: function () {
+                            var directivePromises = [];
+                            if ($scope.scopeModel.trueBranch != undefined && $scope.scopeModel.trueBranch.Settings != undefined && $scope.scopeModel.trueBranch.Settings.Editor != undefined)
+                                directivePromises.push(loadTrueBranchDirective());
+                            if ($scope.scopeModel.falseBranch != undefined && $scope.scopeModel.falseBranch.Settings != undefined && $scope.scopeModel.falseBranch.Settings.Editor != undefined)
+                                directivePromises.push(loadFalseBranchDirective());
 
-//                    return UtilsService.waitPromiseNode(rootPromiseNode);
-//                };
+                            return {
+                                promises: directivePromises
+                            };
+                        }
+                    };
 
-//                api.getData = function () {
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
+                };
 
-//                };
 
-//                if (ctrl.onReady != null) {
-//                    ctrl.onReady(api);
-//                }
-//            }
+                api.tryApplyVisualEventToChilds = function (visualEvents) {
+                    var status = false;
+                    if (visualEvents != undefined && visualEvents.length >= 0) {
+                        
+                        var unsucceededVisualEvents = [];
+                        for (var i = 0; i < visualEvents.length; i++) {
+                            var visualEvent = visualEvents[i];
 
-//            function loadTrueBranchDirective(){
-//                var loadTrueBranchDirectiveDeferred = UtilsService.createPromiseDeferred();
+                            if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
+                                if (trueBranchDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
+                                    $scope.scopeModel.trueConditionCompleted = true;
+                                    status = true;
+                                    continue;
+                                }
+                            }
 
-//                trueBranchDirectivePromiseReadyDeferred.promise.then(function () {
-//                    var setLoader = function (value) {
-//                        $scope.scopeModel.isLoadingDirective = value;
-//                    };
-//                    var payload = {
-//                        visualItemDefinition: $scope.scopeModel.trueBranch
-//                    };
-//                    VRUIUtilsService.callDirectiveLoad(trueBranchDirectiveAPI, payload, loadTrueBranchDirectiveDeferred);
-//                });
-//                return loadTrueBranchDirectiveDeferred.promise;
-//            }
+                            if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
+                                if (falseBranchDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
+                                    $scope.scopeModel.falseConditionCompleted = true;
+                                    status = true;
+                                    continue;
+                                }
+                            }
 
-//            function loadFalseBranchDirective() {
-//                var loadFalseBranchDirectiveDeferred = UtilsService.createPromiseDeferred();
+                            unsucceededVisualEvents.push(visualEvent);
+                        }
 
-//                falseBranchDirectivePromiseReadyDeferred.promise.then(function () {
-//                    var setLoader = function (value) {
-//                        $scope.scopeModel.isLoadingDirective = value;
-//                    };
-//                    var payload = {
-//                        visualItemDefinition: $scope.scopeModel.falseBranch
-//                    };
-//                    VRUIUtilsService.callDirectiveLoad(falseBranchDirectiveAPI, payload, loadFalseBranchDirectiveDeferred);
-//                });
-//                return loadFalseBranchDirectiveDeferred.promise;
-//            }
-//        }
-//    }
+                        if (unsucceededVisualEvents.length > 0) {
+                            if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
+                                if (trueBranchDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents)) {
+                                    $scope.scopeModel.trueConditionCompleted = true;
+                                    status = true;
+                                }
+                            }
 
-//    app.directive('bpWorkflowActivitysettingsVisualitemdefinitonIfelse', VisualItemDefinitonIfElse);
+                            if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEventToChilds != undefined) {
+                                if (falseBranchDirectiveAPI.tryApplyVisualEventToChilds(unsucceededVisualEvents)) {
+                                    $scope.scopeModel.falseConditionCompleted = true;
+                                    status = true;
+                                }
+                            }
 
-//})(app);
+                        }
+                    }
+                    return status;
+                };
+
+
+                if (ctrl.onReady != null) {
+                    ctrl.onReady(api);
+                }
+            }
+
+            function loadTrueBranchDirective() {
+                var loadTrueBranchDirectiveDeferred = UtilsService.createPromiseDeferred();
+
+                trueBranchDirectivePromiseReadyDeferred.promise.then(function () {
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
+                    };
+                    var payload = {
+                        visualItemDefinition: $scope.scopeModel.trueBranch
+                    };
+                    VRUIUtilsService.callDirectiveLoad(trueBranchDirectiveAPI, payload, loadTrueBranchDirectiveDeferred);
+                });
+                return loadTrueBranchDirectiveDeferred.promise;
+            }
+
+            function loadFalseBranchDirective() {
+                var loadFalseBranchDirectiveDeferred = UtilsService.createPromiseDeferred();
+
+                falseBranchDirectivePromiseReadyDeferred.promise.then(function () {
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
+                    };
+                    var payload = {
+                        visualItemDefinition: $scope.scopeModel.falseBranch
+                    };
+                    VRUIUtilsService.callDirectiveLoad(falseBranchDirectiveAPI, payload, loadFalseBranchDirectiveDeferred);
+                });
+                return loadFalseBranchDirectiveDeferred.promise;
+            }
+        }
+    }
+
+    app.directive('bpWorkflowActivitysettingsVisualitemdefinitonIfelse', VisualItemDefinitonIfElse);
+
+})(app);

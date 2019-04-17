@@ -91,9 +91,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
     
     public class BPInsertVisualItemVisualItemDefinitionSettings : BPVisualItemDefinitionSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId { get { return new Guid("269E1AB2-3236-4EA4-90EA-FE9B1E27BF78"); } }
 
-        public override string Editor => throw new NotImplementedException();
+        public override string Editor { get { return "bp-workflow-activitysettings-visualitemdefiniton-insertvisualitem"; } }
 
         public string DisplayName { get; set; }
     }

@@ -535,6 +535,16 @@ namespace Vanrise.BusinessProcess.Business
                 return false;
             }
         }
+
+        public  BPVisualItemDefinition GetVisualItemDefinition(Guid vrWorkflowId)
+        {
+           var allVisualItemDefintions =  GetCachedVisualItemDefintions();
+            if (allVisualItemDefintions == null)
+                return null;
+
+            return allVisualItemDefintions.GetRecord(vrWorkflowId);
+        }
+
         #endregion
 
         #region Private Methods
@@ -612,6 +622,39 @@ namespace Vanrise.BusinessProcess.Business
             }
 
             return activitiesErrors;
+        }
+
+        private Dictionary<Guid, BPVisualItemDefinition> GetCachedVisualItemDefintions()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedVisualItemDefintions",
+               () =>
+               {
+                   IVRWorkflowDataManager dataManager = BPDataManagerFactory.GetDataManager<IVRWorkflowDataManager>();
+                   IEnumerable<VRWorkflow> vrWorkflows = dataManager.GetVRWorkflows();
+
+                   List<VRWorkflowActivityGetVisualItemDefinition> allVisualItems = new List<VRWorkflowActivityGetVisualItemDefinition>();
+                   foreach (VRWorkflow workflow in vrWorkflows)
+                   {
+                       workflow.ThrowIfNull("workflow");
+                       workflow.Settings.ThrowIfNull("workflow.Settings", workflow.VRWorkflowId);
+                       workflow.Settings.RootActivity.ThrowIfNull("workflow.Settings.RootActivity", workflow.VRWorkflowId);
+                       workflow.Settings.RootActivity.Settings.ThrowIfNull("workflow.Settings.RootActivity.Settings", workflow.VRWorkflowId);
+
+                       VRWorkflowActivityGetVisualItemDefinitionContext context = new VRWorkflowActivityGetVisualItemDefinitionContext();
+                       var rootActivitySettings  = workflow.Settings.RootActivity.Settings;
+                       var visualIem = rootActivitySettings.GetVisualItemDefinition(context);
+                       if(visualIem != null)
+                       {
+                           VRWorkflowActivityGetVisualItemDefinition vrWorkflowActivityGetVisualItemDefinition = new VRWorkflowActivityGetVisualItemDefinition()
+                           {
+                               VRWorkflowId = workflow.VRWorkflowId,
+                               VisualItemDefinition = visualIem
+                           };
+                           allVisualItems.Add(vrWorkflowActivityGetVisualItemDefinition);
+                       }
+                   }
+                  return allVisualItems.ToDictionary(workflow => workflow.VRWorkflowId, record => record.VisualItemDefinition);
+               });
         }
 
         #endregion
@@ -793,6 +836,17 @@ namespace Vanrise.BusinessProcess.Business
             {
                 return new VRWorkflowActivityGenerateWFActivityCodeContext(this, generateInsertVisualEventCodeAction);
             }
+        }
+
+        private class VRWorkflowActivityGetVisualItemDefinitionContext: IVRWorkflowActivityGetVisualItemDefinitionContext
+        {
+        }
+
+        private class VRWorkflowActivityGetVisualItemDefinition
+        {
+            public Guid VRWorkflowId { get; set; }
+
+            public BPVisualItemDefinition VisualItemDefinition { get; set; }
         }
 
         #endregion

@@ -1,0 +1,16 @@
+﻿<div vr-modalcontent ng-controller="BusinessProcess_BP_CallHttpIconVisualItemDefintionController" resclass="resClass">
+    <vr-modalbody vr-loader="isLoading" maxheight="'700px'">
+       <vr-tabs>
+           <vr-tab header="'Events'">
+               <bp-workflow-visualitemdefintion-trackingevents-common on-ready ="scopeModel.onTrackingEventsDirectiveReady"></bp-workflow-visualitemdefintion-trackingevents-common>
+           </vr-tab>
+       </vr-tabs>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

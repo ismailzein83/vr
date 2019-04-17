@@ -1,9 +1,9 @@
-﻿<!--<link rel="stylesheet"
+﻿<link rel="stylesheet"
       type="text/css"
       href="/Client/Modules/BusinessProcess/Directives/BPVisualItemDefinition/Styles/VisualItemsStyle.css" />
 
-<div class="wrapper">
-    <span style="display: inline-block;">
-        <vr-directivewrapper ng-if="scopeModel.visualItemDefinitions != undefined" directive="scopeModel.visualItemDefinition.Settings.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>
+<div vr-loader="isLoading">
+    <span >
+        <vr-directivewrapper ng-if="scopeModel.visualItemDefinition != undefined" directive="scopeModel.visualItemDefinition.Settings.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>
     </span>
-</div>--> 
+</div>  

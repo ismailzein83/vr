@@ -1,29 +1,182 @@
-﻿/*body {
+﻿body {
 }
 
+@-webkit-keyframes vr-visualitem-blinker {
+    from {
+        opacity: 1.0;
+        background-color: #d7e9f1;
+    }
 
-.wrapper {
-    text-align: center;
+    to {
+        opacity: 1.0;
+        background-color: yellow;
+    }
+}
+.vr-visualitem-event-started {
+    background-color: #fbff00 !important;
+    text-decoration: blink;
+    -webkit-animation-name: vr-visualitem-blinker;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in;
+    -webkit-animation-direction: alternate;
 }
 
-.oval {
-    height: 100px;
-    width: 150px;
-    background-color: #FF1493;
-    border-radius: 50%;
-    text-align: center;
-    position: relative;
+    .vr-visualitem-event-started:hover {
+        opacity: 0.8 !important;
+        transition: 0.3s;
+    }
+
+.vr-visualitem-event-completed {
+    background-color: #0acc19 !important;
+}
+    .vr-visualitem-event-completed:hover {
+        opacity: 0.8 !important;
+        transition: 0.3s;
+    }
+.vr-visualitem-event-error {
+    background-color: red !important;
+}
+    .vr-visualitem-event-error:hover {
+        opacity: 0.8 !important;
+        transition: 0.3s;
+    }
+.vr-visualitem-event-retrying {
+    background-color: orange !important;
+}
+    .vr-visualitem-event-retrying:hover {
+        opacity: 0.8 !important;
+        transition: 0.3s;
+    }
+.vr-visualitem-event-condition {
+    margin: 0 auto;
+}
+
+.vr-visualitem-conditionlabel {
+    height: 50px;
+    width: 50px;
+    background-color: #7FDBFF;
+    transform: rotate(45deg);
+    margin: 0 auto;
+}
+
+.vr-visualitem-aftercondition {
     display: inline-block;
+    border-top: 2px solid black;
+    border-right: 2px solid;
+    float: right;
+    width: calc(25% - 30px);
+    margin-right: calc(25% - 5px);
+    margin-top: -25px !important;
 }
 
-.rectangle {
+.vr-visualitem-beforecondition {
+    text-align: right;
+    width: calc(25% - 30px);
+    margin-left: calc(25% - 5px);
+    display: inline-block;
+    border-top: 2px solid black;
+    float: left;
+    margin-top: -25px !important;
+    border-left: 2px solid;
+}
+
+.vr-visualitem-downleft {
+    float: left;
+    margin-left: calc(25% - 8px);
+    margin-top: -12px !important;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.vr-visualitem-downright {
+    float: right;
+    margin-right: calc(25% - 8px);
+    margin-top: -12px !important;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.vr-visualitem-activityblock {
+    border-radius: 10px;
     height: 75px;
     width: 125px;
-    background-color: #6495ED;
     text-align: center;
-    border: 1px solid #32CD32;
     margin: 0 auto;
+    background-color: #d7e9f1;
+    align-items: center;
+    justify-content: center;
+    display: flex;
     position: relative;
-    display: inline-block;
-}*/
+    cursor: pointer;
+}
+
+    .vr-visualitem-activityblock .hint {
+        position: absolute;
+        top: -1px;
+        right: 0px;
+        padding: 32px;
+        border: 1px solid transparent;
+        border-radius: 5px 5px 0 0;
+        cursor: default;
+        transition: all 500ms;
+        height: 75px;
+        width: 125px;
+    }
+
+    .vr-visualitem-activityblock .hintstarted {
+        cursor: pointer !important;
+      
+    }
+   
+
+.vr-visualitem-separatordesign {
+    margin-right: calc(50% - 15px);
+    margin-top: 10px;
+}
+
+.vr-visualitem-separatordesignline {
+    border-color: #89afbf !important;
+    height: 20px;
+    width: 20px;
+    border-left: 2px solid;
+    display: block;
+    float: right;
+}
+
+.vr-visualitem-separatordesigndown {
+    float: right;
+    display: block;
+    border: solid #89afbf;
+    border-width: 0 2px 2px 0;
+    padding: 4px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    margin-top: 11px;
+    margin-right: -6px !important;
+}
+
+.vr-visualitem-separatorcompleted {
+    border-color: #0acc19 !important;
+    font-weight: bold;
+}
+
+.vr-visualitem-rightimg {
+    width: 20px;
+    margin: 3px;
+    position: absolute;
+    top: 5px;
+    left: 100px;
+    font-size: 17px;
+    cursor: default;
+}
+
 

@@ -301,9 +301,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
     
     public class BPHumanTaskVisualItemDefinitionSettings : BPVisualItemDefinitionSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId { get { return new Guid("BA33DC7B-1357-47B5-A256-0044ED93EEAE"); } }
 
-        public override string Editor => throw new NotImplementedException();
+        public override string Editor { get { return "bp-workflow-activitysettings-visualitemdefiniton-humantask"; } }
 
         public string TaskName { get; set; }
     }

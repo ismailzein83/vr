@@ -88,6 +88,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowInputArgumentFields"), { vrWorkflowId: vrWorkflowId});
         }
 
+        function GetVisualItemDefinition(vrWorkflowId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVisualItemDefinition"), { vrWorkflowId: vrWorkflowId });
+        }
+
         return ({
             GetFilteredVRWorkflows: GetFilteredVRWorkflows,
             GetVRWorkflowEditorRuntime: GetVRWorkflowEditorRuntime,
@@ -107,7 +111,8 @@
             GetVRWorkflowsInfo: GetVRWorkflowsInfo,
             GetSuggestions: GetSuggestions,
             TryCompileWorkflowClassMembers: TryCompileWorkflowClassMembers,
-            GetVRWorkflowInputArgumentFields: GetVRWorkflowInputArgumentFields
+            GetVRWorkflowInputArgumentFields: GetVRWorkflowInputArgumentFields,
+            GetVisualItemDefinition: GetVisualItemDefinition
         });
     }
 

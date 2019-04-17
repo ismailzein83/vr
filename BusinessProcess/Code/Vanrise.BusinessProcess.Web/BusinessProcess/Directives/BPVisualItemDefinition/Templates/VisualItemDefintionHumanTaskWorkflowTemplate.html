@@ -1,3 +1,12 @@
-﻿<!--<div class="rectangle">
-    <p style="position: relative; top: 35%; vertical-align: middle;">{{scopeModel.displayName}}</p>
-</div>-->
+﻿<div class="vr-visualitem-activityblock" ng-click="scopeModel.onHumanTasksClick()" ng-class="{'vr-visualitem-event-started': scopeModel.classEventStarted,
+                                                                     'vr-visualitem-event-completed': scopeModel.classEventCompleted,
+                                                                     'vr-visualitem-event-error': scopeModel.classEventError,
+                                                                     'vr-visualitem-event-retrying': scopeModel.classEventRetrying}">
+
+    <a title={{scopeModel.hint}} class="hint" ng-class="{'hintstarted': scopeModel.isHintStarted}"></a>
+    <span class="vr-visualitem-rightimg glyphicon glyphicon glyphicon-user" ng-class="{'hintstarted': scopeModel.isHintStarted}"></span>
+    <span style="display:inline-block;width: 115px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+        <vr-label style="text-align:center;">{{scopeModel.displayName}}</vr-label>
+    </span>
+</div>
+

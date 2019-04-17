@@ -1,4 +1,9 @@
-﻿
-<!--<div ng-repeat="childVisualItem in scopeModel.childVisualItems" style="margin: 20px 0">
+﻿<vr-row ng-repeat="childVisualItem in scopeModel.childVisualItems" style="margin: 20px 0">
+
     <vr-directivewrapper directive="childVisualItem.ChildItemDefinition.Settings.Editor" on-ready="childVisualItem.onDirectiveReady"></vr-directivewrapper>
-</div>-->
+
+    <div class="vr-visualitem-separatordesign" ng-if="childVisualItem.ChildItemDefinition.Settings.Editor!=undefined && childVisualItem.Id != scopeModel.childVisualItems.length -1">
+        <div class="vr-visualitem-separatordesignline" ng-class="{'vr-visualitem-separatorcompleted': childVisualItem.classEventCompleted}"></div>
+        <i class="vr-visualitem-separatordesigndown" ng-class="{'vr-visualitem-separatorcompleted': childVisualItem.classEventCompleted}"></i>
+    </div>
+</vr-row>

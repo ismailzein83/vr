@@ -137,9 +137,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
     public class BPIfElseVisualItemDefinition : BPVisualItemDefinitionSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId { get { return new Guid("F875C2EF-5568-4F4A-A531-41A4AD812B2C"); } }
 
-        public override string Editor => throw new NotImplementedException();
+        public override string Editor { get { return "bp-workflow-activitysettings-visualitemdefiniton-ifelse"; } }
 
         public string ConditionDescription { get; set; }
 

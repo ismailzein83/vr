@@ -158,6 +158,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BPBusinessRuleSetEffectiveActionController.cs" />
     <Compile Include="Controllers\BPDefinitionArgumentStateController.cs" />
+    <Compile Include="Controllers\BPVisualEventController.cs" />
     <Compile Include="Controllers\CustomCodeTaskController.cs" />
     <Compile Include="Controllers\BPBusinessRuleDefinitionController.cs" />
     <Compile Include="Controllers\BPBusinessRuleSetController.cs" />
@@ -184,6 +185,7 @@
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
     <Content Include="BusinessProcess\Constants\GridMaxSize.js" />
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
+    <Content Include="BusinessProcess\Constants\VisualEventTypeEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpRetrySettingsEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpServiceMessageFormatEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpServiceMethodEnum.js" />
@@ -238,6 +240,12 @@
     <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\bp-workflow-activitysettings-visualitemdefiniton-insertvisualitem.js" />
     <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\bp-workflow-activitysettings-visualitemdefiniton-sequence.js" />
     <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\bp-workflow-activitysettings-visualitemdefiniton.js" />
+    <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\IconsEditors\bp-workflow-visualitemdefintion-trackingevents-common.js" />
+    <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\IconsEditors\CallHttpIconVisualItemDefintionController.js" />
+    <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\IconsEditors\HumanTaskIconVisualItemDefintionController.js" />
+    <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\IconsEditors\Templates\EventsTrackingVisualItemIconsCommon.html" />
+    <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\IconsEditors\Templates\WorkflowVisualItemDefinitionCallHttpIconTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\IconsEditors\Templates\WorkflowVisualItemDefintionHumanTaskIconTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\Styles\VisualItemsStyle.css" />
     <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\Templates\VisualItemDefintionCallHttpServiceWorkflowTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPVisualItemDefinition\Templates\VisualItemDefintionDirectiveTemplate.html" />
@@ -274,9 +282,11 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-manualexeceditor.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowManualExecEditorTemplate.html" />
     <Content Include="BusinessProcess\Services\APIServices\BPGenericTaskTypeActionAPIService.js" />
+    <Content Include="BusinessProcess\Services\APIServices\BPVisualEventAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\DynamicBusinessProcessAPIService.js" />
     <Content Include="BusinessProcess\Services\BPTaskTypeActionService.js" />
     <Content Include="BusinessProcess\Services\BPTaskTypeService.js" />
+    <Content Include="BusinessProcess\Services\BPVisualItemDefintionService.js" />
     <Content Include="BusinessProcess\Views\BPGenericTaskType\BPGenericTaskTypeActionEditorController.js" />
     <Content Include="BusinessProcess\Views\BPGenericTaskType\Templates\BPGenericTaskTypeActionEditorTemplate.html" />
     <Content Include="BusinessProcess\Views\BPProcess\StartBPProcessEditorController.js" />

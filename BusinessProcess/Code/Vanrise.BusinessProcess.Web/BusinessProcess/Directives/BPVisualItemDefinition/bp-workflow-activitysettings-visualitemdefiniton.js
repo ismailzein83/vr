@@ -1,107 +1,163 @@
-﻿//(function (app) {
+﻿(function (app) {
 
-//    'use strict';
+    'use strict';
 
-//    WorkflowActivitySettingsVisualItemSelective.$inject = ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_BPDefinitionAPIService'];
+    WorkflowActivitySettingsVisualItemSelective.$inject = ['UtilsService', 'VRUIUtilsService', 'VRTimerService' ,'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_BPVisualEventAPIService'];
 
-//    function WorkflowActivitySettingsVisualItemSelective(UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_BPDefinitionAPIService) {
-//        return {
-//            restrict: "E",
-//            scope: {
-//                onReady: "=",
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var workflowActivitySettingsVisualItemSelective = new VisualItemSelectiveController($scope, ctrl, $attrs);
-//                workflowActivitySettingsVisualItemSelective.initializeController();
-//            },
-//            controllerAs: "ctrl",
-//            bindToController: true,
-//            templateUrl: "/Client/Modules/BusinessProcess/Directives/BPVisualItemDefinition/Templates/VisualItemDefintionDirectiveTemplate.html"
-//        };
+    function WorkflowActivitySettingsVisualItemSelective(UtilsService, VRUIUtilsService, VRTimerService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPVisualEventAPIService) {
+        return {
+            restrict: "E",
+            scope: {
+                onReady: "=",
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var workflowActivitySettingsVisualItemSelective = new VisualItemSelectiveController($scope, ctrl, $attrs);
+                workflowActivitySettingsVisualItemSelective.initializeController();
+            },
+            controllerAs: "ctrl",
+            bindToController: true,
+            templateUrl: "/Client/Modules/BusinessProcess/Directives/BPVisualItemDefinition/Templates/VisualItemDefintionDirectiveTemplate.html"
+        };
 
-//        function VisualItemSelectiveController($scope, ctrl, $attrs) {
-//            this.initializeController = initializeController;
+        function VisualItemSelectiveController($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-//            var bpDefinitionEntity; 
+            var input = {};
+            var bpInstanceID;
+            var bpDefinitionEntity;
 
-//            var directiveAPI;
-//            var directiveReadyDeferred;
-//            var directivePayload;
+            var directiveAPI;
+            var directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
-//                $scope.scopeModel.visualItemDefinitions = [];
-//                $scope.scopeModel.selectedTemplateConfig;
+            function initializeController() {
+                $scope.bpVisualItemsDetails = [];
+                $scope.scopeModel = {};
 
-//                $scope.scopeModel.onDirectiveReady = function (api) {
-//                    directiveAPI = api;
-//                    var setLoader = function (value) {
-//                        $scope.scopeModel.isLoadingDirective = value;
-//                    };
-//                    var payload = {
-//                        visualItemDefinition:  $scope.scopeModel.visualItemDefinition
-//                    };
-//                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
-//                };
+                $scope.scopeModel.onDirectiveReady = function (api) {
+                    directiveAPI = api;
+                    directiveReadyDeferred.resolve();
+                };
 
-//                defineAPI();
-//            }
+                defineAPI();
+            }
+            function loadDirective() {
+                var loadDirectiveDeferred = UtilsService.createPromiseDeferred();
+                directiveReadyDeferred.promise.then(function () {
+                    var payload = {
+                        visualItemDefinition: $scope.scopeModel.visualItemDefinition,
+                    };
 
-//            function defineAPI() {
-//                var api = {};
+                    VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, loadDirectiveDeferred);
+                });
+                return loadDirectiveDeferred.promise;
+            }
+            function defineAPI() {
+                var api = {};
 
-//                api.load = function (payload) {
-//                    var initialPromises = [];
+                api.load = function (payload) {
+                    var initialPromises = [];
 
-//                    if (payload != undefined) {
-//                        initialPromises.push(getBPDefintion(payload.bpDefinitionID));
-//                    }
+                    if (payload != undefined) {
+                        initialPromises.push(getBPDefintion(payload.BPDefinitionID));
+                        bpInstanceID = payload.BPInstanceID;
+                    }
 
-//                    var rootPromiseNode = {
-//                        promises: initialPromises,
-//                        getChildNode: function () {
-//                            var directivePromises = [];
+                    var rootPromiseNode = {
+                        promises: initialPromises,
+                        getChildNode: function () {
+                            var directivePromises = [];
+                            
+                            if (bpDefinitionEntity != undefined && bpDefinitionEntity.VRWorkflowId != undefined)
+                                directivePromises.push(getVRWorkflowVisualItemDefinition(bpDefinitionEntity.VRWorkflowId));
+                            return {
+                                promises: directivePromises,
+                                getChildNode: function () {
+                                    return {
+                                        promises: [loadDirective()]
+                                    }
+                                }
+                            }
+                        }
+                    };
 
-//                            if (bpDefinitionEntity != undefined && bpDefinitionEntity.VRWorkflowId != undefined)
-//                                directivePromises.push(getVRWorkflowVisualItemDefinition(bpDefinitionEntity.VRWorkflowId));
+                    return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
+                        onInit();
+                        bpDefinitionEntity = undefined;
+                    });
 
-//                            return {
-//                                promises: directivePromises
-//                            };
-//                        }
-//                    };
+                };
 
-//                    return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
-//                        bpDefinitionEntity = undefined;
-//                    });
+                api.clearTimer = function () {
+                    if ($scope.jobIds) {
+                        VRTimerService.unregisterJobByIds($scope.jobIds);
+                        $scope.jobIds.length = 0;
+                    }
+                };
 
-//                };
+                if (ctrl.onReady != null) {
+                    ctrl.onReady(api);
+                }
+            }
 
-//                api.getData = function () {
-                    
-//                };
+            function getBPDefintion(bpDefinitionId) {
+                return BusinessProcess_BPDefinitionAPIService.GetBPDefintion(bpDefinitionId).then(function (response) {
+                    bpDefinitionEntity = response;
+                });
+            }
 
-//                if (ctrl.onReady != null) {
-//                    ctrl.onReady(api);
-//                }
-//            }
+            function getVRWorkflowVisualItemDefinition(vrWorkflowId) {
+                return BusinessProcess_VRWorkflowAPIService.GetVisualItemDefinition(vrWorkflowId).then(function (response) {
+                    if (response != undefined) {
+                        $scope.scopeModel.visualItemDefinition = response;
+                    }
+                });
+            }
 
-//            function getBPDefintion(bpDefinitionId) {
-//                return BusinessProcess_BPDefinitionAPIService.GetBPDefintion(bpDefinitionId).then(function (response) {
-//                    bpDefinitionEntity = response;
-//                });
-//            }
+            function onInit() {
+                $scope.isLoading = true;
+                input.GreaterThanID = undefined;
+                input.BPInstanceID = bpInstanceID;
+                createTimer();
+            }
 
-//            function getVRWorkflowVisualItemDefinition(vrWorkflowId) {
-//                return BusinessProcess_VRWorkflowAPIService.GetVisualItemDefinition(vrWorkflowId).then(function (response) {
-//                    $scope.scopeModel.visualItemDefinition = response;
-//                    console.log($scope.scopeModel.visualItemDefinition);
-//                });
-//            }
-//        }
-//    }
+            function createTimer() {
+                if ($scope.jobIds) {
+                    VRTimerService.unregisterJobByIds($scope.jobIds);
+                    $scope.jobIds.length = 0;
+                }
+                VRTimerService.registerJob(onTimerElapsed, $scope, 2);
+            }
 
-//    app.directive('bpWorkflowActivitysettingsVisualitemdefiniton', WorkflowActivitySettingsVisualItemSelective);
+            function onTimerElapsed() {
+                return BusinessProcess_BPVisualEventAPIService.GetAfterId(input).then(function (response) {
+                    manipulateDataToBeExecuted(response);
+                    $scope.isLoading = false;
+                },
+                    function (excpetion) {
+                        $scope.isLoading = false;
+                    });
+            }
 
-//})(app);
+            function manipulateDataToBeExecuted(response) {
+                if (response != undefined && response.ListBPVisualEventDetails != undefined && response.ListBPVisualEventDetails.length > 0) {
+                    if (directiveAPI != undefined) {
+                        var firstItem = response.ListBPVisualEventDetails[0];
+                        if (directiveAPI.tryApplyVisualEventToChilds != undefined) {
+                            directiveAPI.tryApplyVisualEventToChilds(response.ListBPVisualEventDetails);
+                        } else {
+                            if (response.ListBPVisualEventDetails.length == 1) {
+                                directiveAPI.tryApplyVisualEvent(firstItem);
+                            }
+                        }
+                        var lastItem = response.ListBPVisualEventDetails[response.ListBPVisualEventDetails.length -1 ];
+                        input.GreaterThanID = lastItem.BPVisualEventId;
+                    }
+                }
+            }
+        }
+    }
+
+    app.directive('bpWorkflowActivitysettingsVisualitemdefiniton', WorkflowActivitySettingsVisualItemSelective);
+
+})(app);

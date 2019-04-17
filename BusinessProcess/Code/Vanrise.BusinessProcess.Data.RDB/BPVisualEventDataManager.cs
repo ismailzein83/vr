@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
 
@@ -11,6 +13,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
     public class BPVisualEventDataManager : IBPVisualEventDataManager
     {
         public static string TABLE_NAME = "bp_BPVisualEvent";
+        static string TABLE_ALIAS = "bpVisualEvent";
         public const string COL_ID = "ID";
         public const string COL_ProcessInstanceID = "ProcessInstanceID";
         public const string COL_ActivityID = "ActivityID";
@@ -64,6 +67,44 @@ namespace Vanrise.BusinessProcess.Data.RDB
             insertQuery.Column(COL_EventPayload).Value(eventPayload);
 
             queryContext.ExecuteNonQuery();
+        }
+
+        public List<BPVisualEvent> GetAfterId(BPVisualEventDetailUpdateInput input)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_ProcessInstanceID).Value(input.BPInstanceID);
+
+            if (input.GreaterThanID == 0)
+            {
+                selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.DESC);
+            }
+            else
+            {
+                where.GreaterThanCondition(COL_ID).Value(input.GreaterThanID);
+                selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.ASC);
+            }
+
+            return queryContext.GetItems(BPVisualItemMapper);
+        }
+
+        BPVisualEvent BPVisualItemMapper(IRDBDataReader reader)
+        {
+            return new BPVisualEvent
+            {
+                BPVisualEventId = reader.GetLong(COL_ID),
+                ProcessInstanceId = reader.GetLong(COL_ProcessInstanceID),
+                ActivityId = reader.GetGuid(COL_ActivityID),
+                Title = reader.GetString(COL_Title),
+                EventTypeId = reader.GetGuid(COL_EventTypeID),
+                EventPayload = Serializer.Deserialize<BPVisualEventPayload>(reader.GetString(COL_EventPayload)),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime)
+            };
         }
     }
 }

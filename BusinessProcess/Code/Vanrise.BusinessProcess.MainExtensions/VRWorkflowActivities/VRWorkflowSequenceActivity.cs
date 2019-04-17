@@ -136,9 +136,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
     public class BPSequenceVisualItemDefinition : BPVisualItemDefinitionSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId { get { return new Guid("B128968B-FAF8-4077-B5EA-AAF085C3765F"); } }
 
-        public override string Editor => throw new NotImplementedException();
+        public override string Editor { get { return "bp-workflow-activitysettings-visualitemdefiniton-sequence"; } }
 
         public List<VRWorkflowSequenceChildVisualItemDefinition> ChildVisualItems { get; set; }
     }

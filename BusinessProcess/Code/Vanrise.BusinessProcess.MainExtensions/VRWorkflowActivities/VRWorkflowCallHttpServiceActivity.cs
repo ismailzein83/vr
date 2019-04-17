@@ -497,9 +497,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
     public class BPCallHttpServiceVisualItemDefinitionSettings : BPVisualItemDefinitionSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId { get { return new Guid("03007660-115F-45F0-A6AA-B696DD481B8B"); } }
 
-        public override string Editor => throw new NotImplementedException();
+        public override string Editor { get { return "bp-workflow-activitysettings-visualitemdefiniton-callhttpservice"; } }
 
         public string DisplayName { get; set; }
     }

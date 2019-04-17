@@ -30,6 +30,9 @@
         var validationMessageMonitorGridAPI;
         var validationMessageMonitorGridReadyDeferrred = UtilsService.createPromiseDeferred();
 
+        var visualItemDefinitonDirectiveAPI;
+        var visualItemDefinitionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -65,6 +68,11 @@
             $scope.scopeModel.onValidationMessageMonitorGridReady = function (api) {
                 validationMessageMonitorGridAPI = api;
                 validationMessageMonitorGridReadyDeferrred.resolve();
+            };
+
+            $scope.scopeModel.onVisualItemDefinitionReady = function (api) {
+                visualItemDefinitonDirectiveAPI = api;
+                visualItemDefinitionDirectiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.getStatusColor = function () {
@@ -134,8 +142,14 @@
             var loadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             getBPInstance().then(function () {
+            
                 getBPInstanceDefinitionDetail().then(function () {
                     var promises = [];
+
+                    if ($scope.scopeModel.workflowId != undefined) {
+                        var visualItemDefintionLoadPromise = loadVisualItemDefinitionDirective();
+                        promises.push(visualItemDefintionLoadPromise);
+                    }
 
                     var instanceTrackingMonitorGridLoadPromise = getInstanceTrackingMonitorGridLoadPromise();
                     promises.push(instanceTrackingMonitorGridLoadPromise);
@@ -152,7 +166,7 @@
                         var validationMessageMonitorGridLoadPromise = getValidationMessageMonitorGridLoadPromise();
                         promises.push(validationMessageMonitorGridLoadPromise);
                     }
-
+                   
                     UtilsService.waitMultiplePromises(promises).then(function () {
                         loadPromiseDeferred.resolve();
                     }).catch(function (error) {
@@ -196,6 +210,7 @@
                 $scope.scopeModel.allowCancel = response.AllowCancel;
                 $scope.scopeModel.process.HasChildProcesses = configuration.HasChildProcesses;
                 $scope.scopeModel.process.HasBusinessRules = configuration.HasBusinessRules;
+                $scope.scopeModel.workflowId = response.Entity.VRWorkflowId;
 
                 completionViewURL = configuration.CompletionViewURL;
                 $scope.scopeModel.completionViewLinkText = (configuration.CompletionViewLinkText != null) ? configuration.CompletionViewLinkText : defaultCompletionViewLinkText;
@@ -258,6 +273,19 @@
             });
 
             return loadPromiseDeferred.promise;
+        }
+
+        function loadVisualItemDefinitionDirective() {
+            var loadVisualItemDefintionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            visualItemDefinitionDirectiveReadyDeferred.promise.then(function () {
+                var visualItemDefinitionPayload = {
+                    BPDefinitionID: bpDefinitionID,
+                    BPInstanceID: bpInstanceID
+                };
+                VRUIUtilsService.callDirectiveLoad(visualItemDefinitonDirectiveAPI, visualItemDefinitionPayload, loadVisualItemDefintionPromiseDeferred);
+            });
+            return loadVisualItemDefintionPromiseDeferred.promise;
         }
 
         function getFilterObject() {
