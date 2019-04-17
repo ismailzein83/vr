@@ -20,7 +20,7 @@
             <Top>0.04167in</Top>
             <Left>0.04383in</Left>
             <Height>0.08124in</Height>
-            <Width>7.73416in</Width>
+            <Width>7.55148in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -35,7 +35,7 @@
         <Top>17.69904cm</Top>
         <Left>0.23962cm</Left>
         <Height>0.3122cm</Height>
-        <Width>19.75609cm</Width>
+        <Width>19.29209cm</Width>
         <Visibility>
           <Hidden>=IIf((CountRows("InvoiceMonths") &gt; 0),False,True)</Hidden>
         </Visibility>
@@ -239,10 +239,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>3.69383in</Width>
+              <Width>5.22508in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.86346in</Width>
+              <Width>2.34202in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -506,7 +506,7 @@
         <Top>1.155in</Top>
         <Left>0.13236in</Left>
         <Height>0.75in</Height>
-        <Width>7.55729in</Width>
+        <Width>7.5671in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -806,7 +806,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>7.55728in</Width>
+              <Width>7.56709in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -867,7 +867,7 @@
         <Top>3.46264in</Top>
         <Left>0.13237in</Left>
         <Height>0.25in</Height>
-        <Width>7.55728in</Width>
+        <Width>7.56709in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -879,7 +879,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>7.60021in</Width>
+              <Width>7.61002in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -940,7 +940,7 @@
         <Top>5.47792in</Top>
         <Left>0.08944in</Left>
         <Height>0.25in</Height>
-        <Width>7.60021in</Width>
+        <Width>7.61002in</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -1241,7 +1241,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=iif(RowNumber("CarrierSummary") = 1,"Solde en faveur de" +Parameters!CarrierCompanyName.Value + " :","")</Value>
+                              <Value>=iif(RowNumber("CarrierSummary") = 1,"Solde en faveur de " +Parameters!CarrierCompanyName.Value + " :","")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1355,7 +1355,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= iif( RowNumber("SystemSummary") = 1 ,"Solde en faveur de" +Parameters!Name.Value + " :","")</Value>
+                              <Value>= iif( RowNumber("SystemSummary") = 1 ,"Solde en faveur de " +Parameters!Name.Value + " :","")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1968,7 +1968,7 @@
     <Height>18.21721cm</Height>
     <Style />
   </Body>
-  <Width>19.99571cm</Width>
+  <Width>19.61109cm</Width>
   <Page>
     <PageHeader>
       <Height>2.30188cm</Height>
