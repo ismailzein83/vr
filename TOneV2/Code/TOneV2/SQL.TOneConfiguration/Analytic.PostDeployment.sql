@@ -411,6 +411,10 @@ when not matched by target then
 
 	--[common].[StatusDefinition]------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
+DELETE FROM[common].[StatusDefinition] WHERE ID IN('0C43E0B1-C9D7-45B2-9567-58FAC15AD724',--'Blue'						
+											       'C9C8495A-C20E-43EE-827D-6717112EEF06',--'Green Text'							
+											       '14256EBF-FCF4-49FB-9516-C7405550AD8D')--'Red Text'--						
+-----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[Name],[BusinessEntityDefinitionID],[Settings])
 as (select * from (values
@@ -433,3 +437,6 @@ when not matched by target then
 	insert([ID],[Name],[BusinessEntityDefinitionID],[Settings])
 	values(s.[ID],s.[Name],s.[BusinessEntityDefinitionID],s.[Settings]);
 
+
+
+	
