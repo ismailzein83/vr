@@ -68,12 +68,14 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     {
                         protected override void Execute(NativeActivityContext context)
                         {
+                            Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(context.GetSharedInstanceData().InstanceInfo.InitiatorUserId);
                             var executionContext = new #CLASSNAME#ExecutionContext(context);
                             executionContext.Execute(OnDelayCompleted, 0);
                         }
 
                         private void OnDelayCompleted(NativeActivityContext context, Bookmark bookmark, object value)
                         {
+                            Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(context.GetSharedInstanceData().InstanceInfo.InitiatorUserId);
                             var httpDelayInput = value as Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRHttpDelayInput;
                             if (httpDelayInput == null)
                                 throw new ArgumentNullException(""httpDelayInput"");
