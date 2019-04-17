@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="DisputeSetting\DisputeSettingsData.cs" />
     <Compile Include="MSISDNItem.cs" />
+    <Compile Include="OnNetOperationDeclaration\OnNetOperatorDeclaration.cs" />
     <Compile Include="OnNetOperationDeclaration\OnNetOperatorDeclarationService.cs" />
     <Compile Include="OnNetOperationDeclaration\OnNetOperatorDirectionServicesMappedCellExtensionConfiguration.cs" />
     <Compile Include="Enums.cs" />
