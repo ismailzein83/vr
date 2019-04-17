@@ -1,99 +1,97 @@
 ﻿'use strict';
+
 app.directive('vrWhsBeSwitchconnectivitySelector', ['WhS_BE_SwitchConnectivityAPIService', 'UtilsService', 'VRUIUtilsService',
-function (WhS_BE_SwitchConnectivityAPIService, UtilsService, VRUIUtilsService) {
+    function (WhS_BE_SwitchConnectivityAPIService, UtilsService, VRUIUtilsService) {
 
-    var directiveDefinitionObject = {
-        restrict: 'E',
-        scope: {
-            onReady: '=',
-            ismultipleselection: "@",
-            isdisabled: "=",
-            onselectionchanged: '=',
-            isrequired: "@",
-            selectedvalues: '=',
-            normalColNum: '@'
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+                ismultipleselection: "@",
+                isdisabled: "=",
+                onselectionchanged: '=',
+                isrequired: '=',
+                selectedvalues: '=',
+                normalColNum: '@'
+            },
+            controller: function ($scope, $element, $attrs) {
 
-        },
-        controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                ctrl.datasource = [];
 
-            var ctrl = this;
+                ctrl.selectedvalues;
+                if ($attrs.ismultipleselection != undefined)
+                    ctrl.selectedvalues = [];
 
-            ctrl.selectedvalues;
-            if ($attrs.ismultipleselection != undefined)
-                ctrl.selectedvalues = [];
-
-            ctrl.datasource = [];
-            var ctor = new switchCtor(ctrl, $scope, $attrs);
-            ctor.initializeController();
-        },
-        controllerAs: 'ctrl',
-        bindToController: true,
-        compile: function (element, attrs) {
-            return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
-
+                ctrl.label = "Switch Connectivity";
+                if ($attrs.ismultipleselection != undefined) {
+                    ctrl.label = "Switch Connectivities";
                 }
+
+                var ctor = new switchCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            template: function (element, attrs) {
+                return getTemplate(attrs);
             }
-        },
-        template: function (element, attrs) {
-            return getTemplate(attrs);
+        };
+
+        function getTemplate(attrs) {
+
+            var multipleselection = "";
+            if (attrs.ismultipleselection != undefined) {
+                multipleselection = "ismultipleselection";
+            }
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SwitchConnectivityId" isrequired="ctrl.isrequired" '
+                + ' label="{{ctrl.label}}" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+                + '</vr-columns>';
         }
 
-    };
+        function switchCtor(ctrl, $scope, $attrs) {
+            this.initializeController = initializeController;
 
+            function initializeController() {
+                defineAPI();
+            }
 
-    function getTemplate(attrs) {
+            function defineAPI() {
+                var api = {};
 
-        var multipleselection = "";
-        var label = "Switch Connectivity";
-        if (attrs.ismultipleselection != undefined) {
-            label = "Switch Connectivities";
-            multipleselection = "ismultipleselection";
-        }
+                api.load = function (payload) {
 
-        var required = "";
-        if (attrs.isrequired != undefined)
-            required = "isrequired";
+                    var selectedIds;
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SwitchConnectivityId" '
-        + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
-           + '</vr-columns>';
-    }
+                    if (payload != undefined) {
+                        selectedIds = payload.selectedIds;
 
-    function switchCtor(ctrl, $scope, $attrs) {
+                        if (payload.fieldTitle != undefined) {
+                            ctrl.label = payload.fieldTitle;
+                        }
+                    }
 
-        function initializeController() {
+                    return WhS_BE_SwitchConnectivityAPIService.GetSwitcheConnectivitiesInfo().then(function (response) {
+                        angular.forEach(response, function (item) {
+                            ctrl.datasource.push(item);
+                        });
 
-            defineAPI();
-        }
-
-        function defineAPI() {
-            var api = {};
-            api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('SwitchConnectivityId', $attrs, ctrl);
-            };
-            api.load = function (payload) {
-
-                var selectedIds;
-                if (payload != undefined) {
-                    selectedIds = payload.selectedIds;
-                }
-
-                return WhS_BE_SwitchConnectivityAPIService.GetSwitcheConnectivitiesInfo().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        ctrl.datasource.push(item);
+                        if (selectedIds != undefined) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'SwitchConnectivityId', $attrs, ctrl);
+                        }
                     });
-                    if (selectedIds != undefined)
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'SwitchConnectivityId', $attrs, ctrl);
+                };
 
-                });
-            };
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('SwitchConnectivityId', $attrs, ctrl);
+                };
 
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
         }
-        this.initializeController = initializeController;
-    }
-    return directiveDefinitionObject;
-}]);
+
+        return directiveDefinitionObject;
+    }]);
