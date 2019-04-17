@@ -38,7 +38,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetGenericBEDefinitionSettings")]
         public GenericBEDefinitionSettings GetGenericBEDefinitionSettings(Guid businessEntityDefinitionId)
         {
-            return _manager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+           return _manager.GetGenericBEDefinitionSettings(businessEntityDefinitionId,true);
         }
         [HttpGet]
         [Route("GetIdFieldTypeForGenericBE")]
