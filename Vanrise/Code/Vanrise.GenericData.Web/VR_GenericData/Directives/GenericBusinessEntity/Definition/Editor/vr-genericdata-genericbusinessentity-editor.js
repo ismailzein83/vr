@@ -355,8 +355,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 							$scope.scopeModel.selectorPluralTitle = businessEntityDefinitionSettings.SelectorPluralTitle;
 							$scope.scopeModel.hideAddButton = businessEntityDefinitionSettings.HideAddButton;
 							$scope.scopeModel.selectedGenericBEDefinitionType = UtilsService.getItemByVal($scope.scopeModel.genericBEDefinitionTypes, businessEntityDefinitionSettings.GenericBEType, "value");
-							$scope.scopeModel.showUploadButton = businessEntityDefinitionSettings.ShowUpload;
-
+                            $scope.scopeModel.showUploadButton = businessEntityDefinitionSettings.ShowUpload;
 						}
 
 					}
@@ -831,7 +830,13 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, orderTypeSelectorAPI, { context: getContext() }, setOrderTypeLoader, recordTypeSelectedPromiseDeferred);
-			}
+
+                var setBulkActionsLoader = function (value) {
+                    $scope.scopeModel.isLoadingBulkActionsDirective = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bulkActionsDirectiveAPI, { context: getContext() }, setBulkActionsLoader, recordTypeSelectedPromiseDeferred);
+
+            }
 
 			function resetReleatedDirectives() {
 				if (dataRecordTypeTitleFieldsSelectorAPI != undefined)
@@ -848,6 +853,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     beforeInsertHandlerAPI.load();
                 if (orderTypeSelectorAPI != undefined)
                     orderTypeSelectorAPI.load();
+                if (bulkActionsDirectiveAPI != undefined)
+                    bulkActionsDirectiveAPI.load();
 			}
 
 

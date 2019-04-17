@@ -51,6 +51,7 @@ app.directive("vrGenericdataGenericbeBulkactionsManagement", ["UtilsService", "V
                 var api = {};
 
                 api.load = function (payload) {
+                    ctrl.datasource.length = 0;
                     var promises = [];
                     if (payload != undefined) {
                         context = payload.context;
@@ -77,7 +78,7 @@ app.directive("vrGenericdataGenericbeBulkactionsManagement", ["UtilsService", "V
                     }
                     return genericBEBulkActions;
                 };
-
+           
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

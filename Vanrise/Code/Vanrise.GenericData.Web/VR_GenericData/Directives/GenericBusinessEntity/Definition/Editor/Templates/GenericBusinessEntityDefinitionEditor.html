@@ -58,7 +58,6 @@
         </vr-columns>
     </vr-row>
     <vr-genericdata-genericbe-extendedsettings on-ready="scopeModel.onGenericBEEditorExtendedSettingsReady" normal-col-num="4"></vr-genericdata-genericbe-extendedsettings>
-
 </vr-tab>
 
 <vr-tab header="'Action Definition'">
@@ -111,7 +110,7 @@
 </vr-tab>
 
 <vr-tab header="'Bulk Actions'">
-    <vr-genericdata-genericbe-bulkactions-management on-ready="scopeModel.onGenericBEBulkActionsDirectiveReady"></vr-genericdata-genericbe-bulkactions-management>
+    <vr-genericdata-genericbe-bulkactions-management vr-loader="scopeModel.isLoadingBulkActionsDirective" on-ready="scopeModel.onGenericBEBulkActionsDirectiveReady" ></vr-genericdata-genericbe-bulkactions-management>
 </vr-tab>
 <vr-tab header="'Order Type'">
     <vr-row>

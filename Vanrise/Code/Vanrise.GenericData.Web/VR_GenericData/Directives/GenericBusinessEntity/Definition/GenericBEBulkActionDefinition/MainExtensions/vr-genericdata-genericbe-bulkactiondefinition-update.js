@@ -25,8 +25,6 @@ app.directive("vrGenericdataGenericbeBulkactiondefinitionUpdate", ["UtilsService
 
         function GenericBEBulkActionUpdate($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            var genericBEDefinitionId;
-            var gridAPI;
             var fieldSelectedPromiseDeferred;
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -95,40 +93,41 @@ app.directive("vrGenericdataGenericbeBulkactiondefinitionUpdate", ["UtilsService
                     var promises = [];
                     var selectedIds;
                     context = payload.context;
-                    if (payload != undefined && payload.bulkActionSettings && payload.bulkActionSettings.GenericBEFields != undefined) {
-                        fieldSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-                        selectedIds = [];
-                        for (var i = 0; i < payload.bulkActionSettings.GenericBEFields.length; i++) {
-                            var field = payload.bulkActionSettings.GenericBEFields[i];
-                            selectedIds.push(field.FieldName);
+                    var dataRecordTypeId = context.getDataRecordTypeId();
+                    if (dataRecordTypeId != undefined) {
+                        if (payload != undefined && payload.bulkActionSettings && payload.bulkActionSettings.GenericBEFields != undefined) {
+                            fieldSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                            selectedIds = [];
+                            for (var i = 0; i < payload.bulkActionSettings.GenericBEFields.length; i++) {
+                                var field = payload.bulkActionSettings.GenericBEFields[i];
+                                selectedIds.push(field.FieldName);
+                            }
                         }
-                    }
-                    dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise.then(function () {
-                        var fieldsPayload = {
-                            dataRecordTypeId: context.getDataRecordTypeId(),
-                            selectedIds: selectedIds
-                        }; 
-                        VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, fieldsPayload, loadDataRecordTypeFieldsSelectorPromiseDeferred);
-                    });
-
-                    promises.push(loadDataRecordTypeFieldsSelectorPromiseDeferred.promise);
-                    if (payload != undefined && payload.bulkActionSettings && payload.bulkActionSettings.GenericBEFields != undefined) {
-                        for (var i = 0; i < payload.bulkActionSettings.GenericBEFields.length; i++) {
-                            var genericBEField = payload.bulkActionSettings.GenericBEFields[i];
-                            var genericBEFieldObject = {
-                                payload: genericBEField,
-                                fieldStateReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                fieldStateLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                runtimeFieldReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                runtimeFieldLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                        dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise.then(function () {
+                            var fieldsPayload = {
+                                dataRecordTypeId: dataRecordTypeId,
+                                selectedIds: selectedIds
                             };
-                            promises.push(genericBEFieldObject.fieldStateLoadPromiseDeferred.promise);
-                            promises.push(genericBEFieldObject.runtimeFieldLoadPromiseDeferred.promise);
-                            prepareDataItem(genericBEFieldObject);
+                            VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, fieldsPayload, loadDataRecordTypeFieldsSelectorPromiseDeferred);
+                        });
+
+                        promises.push(loadDataRecordTypeFieldsSelectorPromiseDeferred.promise);
+                        if (payload != undefined && payload.bulkActionSettings && payload.bulkActionSettings.GenericBEFields != undefined) {
+                            for (var i = 0; i < payload.bulkActionSettings.GenericBEFields.length; i++) {
+                                var genericBEField = payload.bulkActionSettings.GenericBEFields[i];
+                                var genericBEFieldObject = {
+                                    payload: genericBEField,
+                                    fieldStateReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    fieldStateLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    runtimeFieldReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    runtimeFieldLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                };
+                                promises.push(genericBEFieldObject.fieldStateLoadPromiseDeferred.promise);
+                                promises.push(genericBEFieldObject.runtimeFieldLoadPromiseDeferred.promise);
+                                prepareDataItem(genericBEFieldObject);
+                            }
                         }
                     }
-
-
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
