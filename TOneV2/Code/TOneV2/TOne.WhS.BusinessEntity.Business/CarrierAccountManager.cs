@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var supplier = GetCarrierAccount(carrierAccountId);
             supplier.ThrowIfNull("supplier", carrierAccountId);
             supplier.SupplierSettings.ThrowIfNull("supplier.SupplierSettings", carrierAccountId);
-            if (supplier.SupplierSettings.SupplierBankDetails != null)
+            if (supplier.SupplierSettings.SupplierBankDetails != null && supplier.SupplierSettings.SupplierBankDetails.Count > 0)
                 return supplier.SupplierSettings.SupplierBankDetails;
             return _carrierProfileManager.GetSupplierBankDetails(supplier.CarrierProfileId);
         }
