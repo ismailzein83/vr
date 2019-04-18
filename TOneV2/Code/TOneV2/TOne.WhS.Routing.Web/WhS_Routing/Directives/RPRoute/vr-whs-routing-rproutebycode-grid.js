@@ -156,7 +156,7 @@ app.directive('vrWhsRoutingRproutebycodeGrid', ['VRNotificationService', 'UISett
                 //if (rpRouteOption.ConvertedSupplierRate == 0) {
                 //    rpRouteOption.ConvertedSupplierRate = 'N/A';
                 //}
-                rpRouteOption.SupplierStatusDescription = UtilsService.getEnumDescription(WhS_Routing_SupplierStatusEnum, rpRouteOption.SupplierStatus);
+                rpRouteOption.SupplierStatus = UtilsService.getEnumDescription(WhS_Routing_SupplierStatusEnum, rpRouteOption.SupplierStatus);
                 rpRouteOption.IsBlocked = rpRouteOption.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value;
 
                 var evaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, rpRouteOption.EvaluatedStatus, "value");
