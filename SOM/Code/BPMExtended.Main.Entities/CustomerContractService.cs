@@ -11,7 +11,7 @@ namespace BPMExtended.Main.Entities
         public string Id { get; set; }
         public string PackageId { get; set; }
         public string Name { get; set; }
-        public string Status { get; set; }
+        public int Status { get; set; }
         public DateTime? StatusDate { get; set; }
         public DateTime? ActivateDate { get; set; }
     }

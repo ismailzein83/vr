@@ -84,6 +84,7 @@
     <Compile Include="ChangeLeasedLineSpeedRequestInput.cs" />
     <Compile Include="ChangePhoneNumberRequestInput.cs" />
     <Compile Include="ChangeRatePlanRequestInput.cs" />
+    <Compile Include="Customer.cs" />
     <Compile Include="ContractService.cs" />
     <Compile Include="ContractTakeOverRequestInput.cs" />
     <Compile Include="CreatePABXRequestInput.cs" />

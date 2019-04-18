@@ -23,12 +23,18 @@ namespace BPMExtended.Main.Business
 
         public TelephonyContractDetail GetTelephonyContract(string contractId)
         {
-            return RatePlanMockDataGenerator.GetTelephonyContract(contractId);
+
+            var telephonyContractDetailItem = new TelephonyContractDetail();
+            using (SOMClient client = new SOMClient())
+            {
+                var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetContractDetails?ContractId={0}", contractId));
+                telephonyContractDetailItem = CustomerContractToDetail(item);
+            }
+            return telephonyContractDetailItem;
         }
 
         public List<TelephonyContractDetail> GetTelephonyContracts(string customerId)
         {
-            // return RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
             var telephonyContractDetails = new List<TelephonyContractDetail>();
             using (SOMClient client = new SOMClient())
             {

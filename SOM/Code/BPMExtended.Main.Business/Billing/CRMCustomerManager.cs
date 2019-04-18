@@ -199,6 +199,16 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        public Customer GetCustomerInfo(string customerId)
+        {
+            var item = new Customer();
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<Customer>(String.Format("api/SOM.ST/Billing/ReadCustomer?CustomerId={0}", customerId));
+            }
+            return item;
+        }
+
         public void PostADSLLineTerminationToOM(Guid requestId)
         {
             UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];

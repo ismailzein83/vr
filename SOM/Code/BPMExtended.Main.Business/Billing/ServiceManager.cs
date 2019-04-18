@@ -39,6 +39,15 @@ namespace BPMExtended.Main.Business
             }
             return servicesInfoItems;
         }
+        public CustomerContractService GetServiceHistory(string contractId)
+        {
+            var item = new CustomerContractService();
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<CustomerContractService>(String.Format("api/SOM.ST/Billing/GetContractServices?ContractId={0}", contractId));
+            }
+            return item;
+        }
         public List<ServiceDetail> GetCoreServices(string ratePlanId)
         {
             //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);

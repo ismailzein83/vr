@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public enum ContractDetailStatus { Active, Inactive };
+    public enum ContractDetailStatus { Undefined, OnHold,Active, Suspended, Inactive, Invisible };
 
     public class ContractDetail
     {
@@ -32,9 +32,9 @@ namespace BPMExtended.Main.Entities
 
         public ContractDetailStatus Status { get; set; }
 
-        public DateTime ActivationDate { get; set; }
+        public DateTime? ActivationDate { get; set; }
 
-        public DateTime StatusDate { get; set; }
+        public DateTime? StatusDate { get; set; }
 
         public decimal ContractBalance { get; set; }
 
@@ -51,8 +51,7 @@ namespace BPMExtended.Main.Entities
         public DateTime LastModifiedTime { get; set; }
 
         public string CustomerCode {get;set;}
-        public string PackageId { get; set; }
-        public string Name { get; set; }
+
     }
 
     public class ContractInfo
