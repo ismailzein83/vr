@@ -1,0 +1,6 @@
+coIdPub = ContractId
+startFromDate = FromDateTime
+startToDate = ToDateTime
+billInd = 2
+searchLimit = 50
+callType = 1

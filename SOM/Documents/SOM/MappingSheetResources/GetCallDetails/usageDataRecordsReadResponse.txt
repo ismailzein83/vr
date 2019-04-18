@@ -1,0 +1,5 @@
+CallDate = entryDate
+CallDuration = duration
+Destination = destination
+CalledParty = calledparty
+Amount = effDiscountedAmount.amount

@@ -1,0 +1,5 @@
+{
+  "ContractId": "CONTR0000000331",
+  "FromDateTime": "4/18/2019 00:00:00",
+  "ToDateTime": "4/19/2019 00:00:00"
+}
