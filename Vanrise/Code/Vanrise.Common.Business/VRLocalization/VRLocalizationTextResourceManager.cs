@@ -89,6 +89,8 @@ namespace Vanrise.Common.Business
 
 		//	return updateOperationOutput;
 		//}
+
+
 		public IEnumerable<VRLocalizationTextResourceInfo> GetVRLocalizationTextResourceInfo(VRLocalizationTextResourceInfoFilter filter)
 		{
 			Func<VRLocalizationTextResource, bool> filterExpression = (x) =>
@@ -122,8 +124,6 @@ namespace Vanrise.Common.Business
 				{
 					foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
 					{
-						VRLocalizationTextResourceSettings VRLocalizationTextResourceSettings = new VRLocalizationTextResourceSettings();
-						VRLocalizationTextResourceSettings.DefaultValue = genericBusinessEntity.FieldValues.GetRecord("DefaultValue") as string;
 						VRLocalizationTextResource vrLocalizationTextResource = new VRLocalizationTextResource()
 						{
 							VRLocalizationTextResourceId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
@@ -133,22 +133,14 @@ namespace Vanrise.Common.Business
 							LastModifiedTime = (DateTime?)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
 							CreatedBy = (int?)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
 							LastModifiedBy = (int?)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy"),
+							DefaultValue = genericBusinessEntity.FieldValues.GetRecord("DefaultValue") as string
 						};
 						result.Add(vrLocalizationTextResource.VRLocalizationTextResourceId, vrLocalizationTextResource);
 					}
 				}
 				return result;
 			});
-
-
-			//return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedVRLocalizationTextResources",
-			//   () =>
-			//   {
-			//       IVRLocalizationTextResourceDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRLocalizationTextResourceDataManager>();
-			//       IEnumerable<VRLocalizationTextResource> vrLocalizationTextResources = dataManager.GetVRLocalizationTextResources();
-			//       return vrLocalizationTextResources.ToDictionary(itm => itm.VRLocalizationTextResourceId, itm => itm);
-			//   });
-	}
+		}
 
 
 		private class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -165,26 +157,13 @@ namespace Vanrise.Common.Business
 		#endregion
 
 		#region Mapper
-		VRLocalizationTextResourceDetail VRLocalizationTextResourceDetailMapper(VRLocalizationTextResource localizationTextResource)
-		{
-
-			VRLocalizationTextResourceDetail vrLocalizationTextResourceDetail = new Entities.VRLocalizationTextResourceDetail
-			{
-				VRLocalizationTextResourceId = localizationTextResource.VRLocalizationTextResourceId,
-				ResourceKey = localizationTextResource.ResourceKey,
-				ModuleId = localizationTextResource.ModuleId,
-				Settings = localizationTextResource.Settings
-			};
-			VRLocalizationModuleManager vrLocalizationModuleManager = new VRLocalizationModuleManager();
-			vrLocalizationTextResourceDetail.ModuleName = vrLocalizationModuleManager.GetVRModuleName(localizationTextResource.ModuleId);
-			return vrLocalizationTextResourceDetail;
-		}
 		public VRLocalizationTextResourceInfo VRLocalizationTextResourceInfoMapper(VRLocalizationTextResource vrTextResourceLanguage)
 		{
+			VRLocalizationModuleManager vrLocalizationModuleManager = new VRLocalizationModuleManager();
 			VRLocalizationTextResourceInfo vrLocalizationTextResourceInfo = new VRLocalizationTextResourceInfo()
 			{
 				VRLocalizationTextResourceId = vrTextResourceLanguage.VRLocalizationTextResourceId,
-				ResourceKey = vrTextResourceLanguage.ResourceKey
+				ResourceKey = vrLocalizationModuleManager.GetVRModuleName(vrTextResourceLanguage.ModuleId) + "." + vrTextResourceLanguage.ResourceKey
 			};
 			return vrLocalizationTextResourceInfo;
 		}

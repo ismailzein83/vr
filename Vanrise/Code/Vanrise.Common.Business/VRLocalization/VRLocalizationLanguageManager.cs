@@ -12,20 +12,21 @@ namespace Vanrise.Common.Business
     public class VRLocalizationLanguageManager
 	{
 		static Guid businessEntityDefinitionId = new Guid("b72a7d06-76c2-4462-9696-3c84375e04e4");
+		static IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
 
 		//public IDataRetrievalResult<VRLocalizationLanguageDetail> GetFilteredVRLocalizationLanguages(DataRetrievalInput<VRLocalizationLanguageQuery> input)
-  //      {
-  //          var allVRLocalizationLanguages = GetCachedVRLocalizationLanguages();
-  //          Func<VRLocalizationLanguage, bool> filterExpression = (x) =>
-  //          {
-  //              if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
-  //                  return false;
-  //              return true;
-  //          };
-  //          return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRLocalizationLanguages.ToBigResult(input, filterExpression, VRLocalizationLanguageDetailMapper));
-  //      }
+		//      {
+		//          var allVRLocalizationLanguages = GetCachedVRLocalizationLanguages();
+		//          Func<VRLocalizationLanguage, bool> filterExpression = (x) =>
+		//          {
+		//              if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+		//                  return false;
+		//              return true;
+		//          };
+		//          return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRLocalizationLanguages.ToBigResult(input, filterExpression, VRLocalizationLanguageDetailMapper));
+		//      }
 
-        public VRLocalizationLanguage GetVRLocalizationLanguage(Guid vrLocalizationLanguageId)
+		public VRLocalizationLanguage GetVRLocalizationLanguage(Guid vrLocalizationLanguageId)
         {
             var vrLocalizationLanguages = GetCachedVRLocalizationLanguages();
             if (vrLocalizationLanguages == null)
@@ -45,8 +46,7 @@ namespace Vanrise.Common.Business
             if (vrLocalizationLanguage != null)
             {
                 vrLocalizationLanguage.ThrowIfNull("vrLocalizationLanguage", languageId);
-                vrLocalizationLanguage.Settings.ThrowIfNull("rLocalizationLanguage.Settings", languageId);
-                return vrLocalizationLanguage.Settings.IsRTL;
+                return vrLocalizationLanguage.IsRTL;
             }
             return false;
         }
@@ -105,7 +105,6 @@ namespace Vanrise.Common.Business
 
 		private Dictionary<Guid, VRLocalizationLanguage> GetCachedVRLocalizationLanguages()
         {
-			IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
 			return genericBusinessEntityManager.GetCachedOrCreate("GetCachedVRLocalizationLanguage", businessEntityDefinitionId, () =>
 			{
 				Dictionary<Guid, VRLocalizationLanguage> result = new Dictionary<Guid, VRLocalizationLanguage>();
@@ -114,14 +113,12 @@ namespace Vanrise.Common.Business
 				{
 					foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
 					{
-						VRLocalizationLanguageSettings vrLocalizationLanguageSettings = new VRLocalizationLanguageSettings();
-						vrLocalizationLanguageSettings.IsRTL = (bool)genericBusinessEntity.FieldValues.GetRecord("IsRTL");
 						VRLocalizationLanguage vrLocalizationLanguage = new VRLocalizationLanguage()
 						{
 							VRLanguageId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
 							Name = genericBusinessEntity.FieldValues.GetRecord("Name") as string,
 							ParentLanguageId = (Guid?)genericBusinessEntity.FieldValues.GetRecord("ParentLanguageID"),
-							Settings = vrLocalizationLanguageSettings,
+							IsRTL= (bool)genericBusinessEntity.FieldValues.GetRecord("IsRTL"),
 							CreatedTime = (DateTime?)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
 							LastModifiedTime = (DateTime?)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
 							CreatedBy = (int?)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),

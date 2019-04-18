@@ -9,21 +9,12 @@ namespace Vanrise.Entities
     public class VRLocalizationLanguage
     {
         public Guid VRLanguageId { get; set; }
-
         public string Name { get; set; }
-
         public Guid? ParentLanguageId { get; set; }
-
-        public VRLocalizationLanguageSettings Settings { get; set; }
 		public DateTime? CreatedTime { get; set; }
 		public DateTime? LastModifiedTime { get; set; }
 		public int? CreatedBy { get; set; }
 		public int? LastModifiedBy { get; set; }
-
+		public bool IsRTL { get; set; }
 	}
-
-    public class VRLocalizationLanguageSettings
-    {
-        public bool IsRTL { get; set; }
-    }
 }

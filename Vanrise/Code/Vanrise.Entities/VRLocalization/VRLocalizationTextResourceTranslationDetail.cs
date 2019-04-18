@@ -13,8 +13,6 @@ namespace Vanrise.Entities.VRLocalization
         public Guid ResourceId { get; set; }
 
         public Guid LanguageId { get; set; }
-
-        public VRLocalizationTextResourceTranslationSettings Settings { get; set; }
         public string ResourceKey { get; set; }
         public string languageName { get; set; }
     }

@@ -15,7 +15,9 @@ app.directive('vrCommonVrlocalizationtextresourceSelector', ['UtilsService', 'VR
                 isdisabled: "=",
                 hideremoveicon: '@',
                 normalColNum: '@',
-                label:'@'
+				label: '@',
+				hidelabel: '@',
+
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -48,7 +50,7 @@ app.directive('vrCommonVrlocalizationtextresourceSelector', ['UtilsService', 'VR
 
         function getTextResourceSelectorTemplate(attrs) {
 
-            var multipleselection = "";
+			var multipleselection = "";
             var label = "Text Resource";
             if (attrs.ismultipleselection != undefined) {
                 label = "Text Resources";
@@ -56,12 +58,15 @@ app.directive('vrCommonVrlocalizationtextresourceSelector', ['UtilsService', 'VR
             }
             if (attrs.customlabel != undefined) {
                 label = attrs.customlabel;
-            }
+			}
+			var hidelabel = "";
+			if (attrs.hidelabel != undefined)
+				hidelabel = " hidelabel ";
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="ResourceKey" datavaluefield="VRLocalizationTextResourceId" label="' + label + '" ' + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="TextResource" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="ResourceKey" datavaluefield="VRLocalizationTextResourceId"'+hidelabel+' label="' + label + '" ' + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="TextResource" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
         }
 
-        function textResourceSelectorCtor(ctrl, $scope, attrs) {
+		function textResourceSelectorCtor(ctrl, $scope, attrs) {
 
             var selectorAPI;
 
@@ -78,7 +83,7 @@ app.directive('vrCommonVrlocalizationtextresourceSelector', ['UtilsService', 'VR
                 var api = {};
 
                 api.load = function (payload) {
-                    var selectedIds;
+					var selectedIds;
                     var filter;
                     var selectedValue;
 
@@ -86,27 +91,25 @@ app.directive('vrCommonVrlocalizationtextresourceSelector', ['UtilsService', 'VR
                     if (payload != undefined) {
                         if (payload.selectedIds != undefined)
                             selectedIds = payload.selectedIds;
-                        if (payload.selectedValue != undefined)
-                            selectedValue = payload.selectedValue;
+						if (payload.selectedValue != undefined)
+							selectedValue = payload.selectedValue;
 
                         filter = payload.filter;
 
                     }
 
-                    VRCommon_VRLocalizationTextResourceAPIService.GetVRLocalizationTextResourceInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VRCommon_VRLocalizationTextResourceAPIService.GetVRLocalizationTextResourceInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++)
                                 ctrl.datasource.push(response[i]);
                             if (selectedIds != undefined)
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'VRLocalizationTextResourceId', attrs, ctrl);
+								VRUIUtilsService.setSelectedValues(selectedIds, 'VRLocalizationTextResourceId', attrs, ctrl);
 
                             if (selectedValue != undefined) {
                                 //var item = UtilsService.getItemByVal(ctrl.datasource, selectedValue, "ResourceKey")
                                 //var resourceId = item.VRLocalizationTextResourceId;
                                 VRUIUtilsService.setSelectedValues(selectedValue, 'ResourceKey', attrs, ctrl);
                             }
-
-
                         }
                     });
                 };
@@ -115,6 +118,9 @@ app.directive('vrCommonVrlocalizationtextresourceSelector', ['UtilsService', 'VR
                     return VRUIUtilsService.getIdSelectedIds('VRLocalizationTextResourceId', attrs, ctrl);
                 };
 
+				api.getSelectedValues = function () {
+					return VRUIUtilsService.getIdSelectedIds('ResourceKey', attrs, ctrl);
+				};
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
