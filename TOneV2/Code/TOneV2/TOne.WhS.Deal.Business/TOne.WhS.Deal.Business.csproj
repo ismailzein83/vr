@@ -100,6 +100,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DaysToReprocessManager.cs" />
@@ -118,10 +122,10 @@
     <Compile Include="Extensions\DealOverallProgressDataProviderSettings.cs" />
     <Compile Include="Extensions\SwapDealMemoryAnalyticDataManager.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="RouteRules\StructureRulesBehaviors\RuleBehaviorByDeal.cs" />
     <Compile Include="SaleZoneFilter.cs" />
     <Compile Include="SupplierZoneFilter.cs" />
     <Compile Include="RouteRules\DealBuyRouteRuleManager.cs" />
-    <Compile Include="SwapDeals\SwapDealRouteBuildInterceptor.cs" />
     <Compile Include="SwapDeals\SwapDealSettings.cs" />
     <Compile Include="SwapDeals\ValidateBeforeSaveContext.cs" />
     <Compile Include="VolCommitmentDealManager.cs" />
@@ -149,10 +153,6 @@
     <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">
       <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>
       <Name>TOne.WhS.Deal.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
-      <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
-      <Name>TOne.WhS.Routing.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

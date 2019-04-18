@@ -22,7 +22,7 @@ namespace TOne.WhS.Routing.Business
         static readonly Dictionary<Guid, Vanrise.Rules.BaseRuleStructureBehavior> s_baseRuleStructureBehaviorDict = new Dictionary<Guid, Vanrise.Rules.BaseRuleStructureBehavior>()
         {
             { BaseRuleCriteriaPriority.s_CodeRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCode()},
-            //{ BaseRuleCriteriaPriority.s_DealRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByDeal()},
+            { BaseRuleCriteriaPriority.s_DealRuleBehavior, new TOne.WhS.Deal.Business.RouteRules.StructureRuleBehaviors.RuleBehaviorByDeal()},
             { BaseRuleCriteriaPriority.s_ZoneRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone()},
             { BaseRuleCriteriaPriority.s_CountryRuleBehavior, new Vanrise.Common.MainExtensions.Country.Rules.StructureRulesBehaviors.RuleBehaviorByCountry()},
             { BaseRuleCriteriaPriority.s_CustomerRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCustomer()},

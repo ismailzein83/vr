@@ -14,7 +14,8 @@ namespace TOne.WhS.Routing.BP.Activities
     public class GetCustomerZoneDetailsInput
     {
         public IEnumerable<CodePrefixSaleCodes> SaleCodes { get; set; }
-
+        public long? FromZoneId { get; set; }
+        public long? ToZoneId { get; set; }
         public int RoutingDatabase { get; set; }
     }
 
@@ -26,6 +27,8 @@ namespace TOne.WhS.Routing.BP.Activities
     public sealed class GetCustomerZoneDetails : BaseAsyncActivity<GetCustomerZoneDetailsInput, GetCustomerZoneDetailsOutput>
     {
         public InArgument<IEnumerable<CodePrefixSaleCodes>> SaleCodes { get; set; }
+        public InArgument<long?> FromZoneId { get; set; }
+        public InArgument<long?> ToZoneId { get; set; }
 
         [RequiredArgument]
         public InArgument<int> RoutingDatabase { get; set; }
@@ -43,6 +46,10 @@ namespace TOne.WhS.Routing.BP.Activities
             IEnumerable<CustomerZoneDetail> customerZoneDetails;
             if (inputArgument.SaleCodes != null)
                 customerZoneDetails = dataManager.GetFilteredCustomerZoneDetailsByZone(inputArgument.SaleCodes.SelectMany(itm => itm.SaleCodes).Select(itm => itm.ZoneId).Distinct());
+
+            else if (inputArgument.FromZoneId.HasValue && inputArgument.ToZoneId.HasValue)
+                customerZoneDetails = dataManager.GetCustomerZoneDetailsByZoneRange(inputArgument.FromZoneId.Value, inputArgument.ToZoneId.Value);
+
             else
                 customerZoneDetails = dataManager.GetCustomerZoneDetails();
 
@@ -72,6 +79,8 @@ namespace TOne.WhS.Routing.BP.Activities
             return new GetCustomerZoneDetailsInput
             {
                 SaleCodes = this.SaleCodes.Get(context),
+                FromZoneId = this.FromZoneId.Get(context),
+                ToZoneId = this.ToZoneId.Get(context),
                 RoutingDatabase = this.RoutingDatabase.Get(context)
             };
         }

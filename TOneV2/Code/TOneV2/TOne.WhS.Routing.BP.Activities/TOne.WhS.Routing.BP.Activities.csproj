@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -195,6 +195,14 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.MainExtensions\TOne.WhS.BusinessEntity.MainExtensions.csproj">
       <Project>{31d4e637-c2d3-49b2-ae0a-0658aeddd9dd}</Project>
       <Name>TOne.WhS.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Business\TOne.WhS.Deal.Business.csproj">
+      <Project>{FCC59D3D-6E58-4558-BC27-8C6A01223CB7}</Project>
+      <Name>TOne.WhS.Deal.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">
+      <Project>{564D6923-6B08-4721-B9C2-BD6C3D22C3DF}</Project>
+      <Name>TOne.WhS.Deal.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.BP.Activities\TOne.WhS.RouteSync.BP.Activities.csproj">
       <Project>{6af7a0ad-f82d-4b4c-9085-0fe891b78863}</Project>

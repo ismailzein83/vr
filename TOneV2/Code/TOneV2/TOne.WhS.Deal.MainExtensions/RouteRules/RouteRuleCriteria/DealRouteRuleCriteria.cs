@@ -15,12 +15,17 @@ namespace TOne.WhS.Deal.MainExtensions.RouteRule.RouteRuleCriteria
         public int DealId { get; set; }
         public List<long> ZoneIds { get; set; }
 
+        public override int? GetDealId() { return this.DealId; }
+
         public override BusinessEntity.Entities.SaleZoneGroupSettings GetSaleZoneGroupSettings()
         {
+            if (this.ZoneIds == null || this.ZoneIds.Count == 0)
+                return null;
+
             DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
-            DealDefinition dealDefinition = dealDefinitionManager.GetDeal(DealId);
-            dealDefinition.ThrowIfNull("dealDefinition", DealId);
-            dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings", DealId);
+            DealDefinition dealDefinition = dealDefinitionManager.GetDeal(this.DealId);
+            dealDefinition.ThrowIfNull("dealDefinition", this.DealId);
+            dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings", this.DealId);
 
             int carrierAccountId = dealDefinition.Settings.GetCarrierAccountId();
             CarrierAccount carrierAccount = new CarrierAccountManager().GetCarrierAccount(carrierAccountId);
@@ -30,7 +35,7 @@ namespace TOne.WhS.Deal.MainExtensions.RouteRule.RouteRuleCriteria
             if (!sellingNumberPlan.HasValue)
                 throw new NullReferenceException(string.Format("sellingNumberPlan. CarrierAccountId: '{0}'", carrierAccountId));
 
-            return new TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup() { ZoneIds = ZoneIds, SellingNumberPlanId = sellingNumberPlan.Value };
+            return new TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup() { ZoneIds = this.ZoneIds, SellingNumberPlanId = sellingNumberPlan.Value };
         }
 
         public override bool IsVisibleInManagementView()

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings, IRuleCountryCriteria
+    public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings, IRuleCountryCriteria, IRuleDealCriteria
     {
         public string Name { get; set; }
 
@@ -184,6 +185,21 @@ namespace TOne.WhS.Routing.Entities
                     return null;
 
                 return this.GetCustomerGroupContext().GetGroupCustomerIds(customerGroupSettings);
+            }
+        }
+
+        IEnumerable<int> IRuleDealCriteria.DealIds
+        {
+            get
+            {
+                if (this.Criteria == null)
+                    return null;
+
+                int? dealId = this.Criteria.GetDealId();
+                if (!dealId.HasValue)
+                    return null;
+
+                return new List<int> { dealId.Value };
             }
         }
 

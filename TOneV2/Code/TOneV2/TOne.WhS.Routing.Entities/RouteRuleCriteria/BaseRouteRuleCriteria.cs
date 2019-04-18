@@ -14,6 +14,7 @@ namespace TOne.WhS.Routing.Entities
         public virtual RoutingExcludedDestinations GetExcludedDestinations() { return null; }
         public virtual int? GetRoutingProductId() { return null; }
         public virtual CodeCriteriaGroupSettings GetCodeCriteriaGroupSettings() { return null; }
+        public virtual int? GetDealId() { return null; }
         public virtual SaleZoneGroupSettings GetSaleZoneGroupSettings() { return null; }
         public virtual CustomerGroupSettings GetCustomerGroupSettings() { return null; }
         public virtual CountryCriteriaGroupSettings GetCountryCriteriaGroupSettings() { return null; }

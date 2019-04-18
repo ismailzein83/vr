@@ -10,7 +10,7 @@ namespace TOne.WhS.Routing.Entities
         static readonly List<RouteRuleCriteriaPriority> defaultRouteRuleCriteriasPriority = new List<RouteRuleCriteriaPriority>()
         {
             new RouteRuleCriteriaPriority() { Id = BaseRuleCriteriaPriority.s_CodeRuleBehavior, Name = "Code" },
-            //new RouteRuleCriteriaPriority() { Id = BaseRuleCriteriaPriority.s_DealRuleBehavior, Name = "Deal" },
+            new RouteRuleCriteriaPriority() { Id = BaseRuleCriteriaPriority.s_DealRuleBehavior, Name = "Deal" },
             new RouteRuleCriteriaPriority() { Id = BaseRuleCriteriaPriority.s_ZoneRuleBehavior, Name = "Zone" },
             new RouteRuleCriteriaPriority() { Id = BaseRuleCriteriaPriority.s_CountryRuleBehavior, Name = "Country" },
             new RouteRuleCriteriaPriority() { Id = BaseRuleCriteriaPriority.s_CustomerRuleBehavior, Name = "Customer" },

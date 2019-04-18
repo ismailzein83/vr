@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Deal.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
@@ -102,7 +103,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     UpdateAffectedRouteList(affectedRouteOptionsList, supplierZoneDetails);
                 }
 
-                if(beRouteInfo.QualityRouteInfo.LatestVersionNumber > partialRouteInfo.LatestQualityConfigurationVersionNumber)
+                if (beRouteInfo.QualityRouteInfo.LatestVersionNumber > partialRouteInfo.LatestQualityConfigurationVersionNumber)
                 {
                     ICustomerQualityConfigurationDataManager customerQualityConfigurationDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerQualityConfigurationDataManager>();
                     customerQualityConfigurationDataManager.RoutingDatabase = routingDatabase;
@@ -231,14 +232,7 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 foreach (RouteRule routeRule in routeRules)
                 {
-                    routeRule.Settings.ThrowIfNull("routeRule.Settings", routeRule.RuleId);
-                    if (!routeRule.Settings.SupportPartialRouteBuild())
-                    {
-                        shouldTriggerFullRouteProcess = true;
-                        return;
-                    }
-
-                    RouteRuleCriteria criteria = routeRule.Criteria as RouteRuleCriteria;
+                    var criteria = routeRule.Criteria;
                     bool isCustomerGeneric;
                     IEnumerable<int> affectedCustomers = GetAffectedCustomers(criteria, out isCustomerGeneric);
 
@@ -254,7 +248,8 @@ namespace TOne.WhS.Routing.BP.Activities
                         return;
                     }
 
-                    var routingExcludedDestinationData = (criteria != null && criteria.ExcludedDestinations != null) ? criteria.ExcludedDestinations.GetRoutingExcludedDestinationData() : null;
+                    var excludedDestinations = criteria != null ? criteria.GetExcludedDestinations() : null;
+                    var routingExcludedDestinationData = (excludedDestinations != null) ? excludedDestinations.GetRoutingExcludedDestinationData() : null;
 
                     affectedRoutesList.Add(new Entities.AffectedRoutes()
                     {
@@ -307,9 +302,18 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-        private IEnumerable<int> GetAffectedCustomers(RouteRuleCriteria criteria, out bool isCustomerGeneric)
+        private IEnumerable<int> GetAffectedCustomers(BaseRouteRuleCriteria criteria, out bool isCustomerGeneric)
         {
             isCustomerGeneric = false;
+
+            var dealId = criteria.GetDealId();
+            if (dealId.HasValue)
+            {
+                var dealSettings = new SwapDealManager().GetDealSettings<SwapDealSettings>(dealId.Value);
+
+                if (dealSettings != null)
+                    return new List<int> { dealSettings.GetCarrierAccountId() };
+            }
 
             CustomerGroupSettings customerGroupSettings = criteria.GetCustomerGroupSettings();
             if (customerGroupSettings == null)
@@ -321,7 +325,7 @@ namespace TOne.WhS.Routing.BP.Activities
             return customerGroupSettings.GetCustomerIds(GetCustomerGroupContext());
         }
 
-        private void GetAffectedCodesAndZones(RouteRuleCriteria criteria, DateTime effectiveDate, out IEnumerable<CodeCriteria> affectedCodes, out IEnumerable<long> affectedZones, out bool areCodesAndZonesGeneric)
+        private void GetAffectedCodesAndZones(BaseRouteRuleCriteria criteria, DateTime effectiveDate, out IEnumerable<CodeCriteria> affectedCodes, out IEnumerable<long> affectedZones, out bool areCodesAndZonesGeneric)
         {
             affectedCodes = null;
             affectedZones = null;

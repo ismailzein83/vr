@@ -210,6 +210,10 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">
+      <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>
+      <Name>TOne.WhS.Deal.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>

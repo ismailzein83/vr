@@ -91,7 +91,8 @@ namespace TOne.WhS.Routing.Business
                                 RoutingProductId = customerZoneDetail.RoutingProductId,
                                 SaleRate = customerZoneDetail.EffectiveRateValue,
                                 EffectiveOn = context.EntitiesEffectiveOn,
-                                IsEffectiveInFuture = context.EntitiesEffectiveInFuture
+                                IsEffectiveInFuture = context.EntitiesEffectiveInFuture,
+                                DealId = customerZoneDetail.DealId
                             };
 
                             var routeRule = GetRouteRule(routeRuleTarget);
@@ -183,7 +184,7 @@ namespace TOne.WhS.Routing.Business
                     HashSet<int> saleZoneServiceIds = routingProduct.Settings.GetZoneServices(saleZoneId);
                     zoneServicesByRoutingProductId.Add(routingProduct.RoutingProductId, saleZoneServiceIds);
 
-                    RPRoute route = GenerateRPRoute(context, saleZone, routingProduct, saleZoneServiceIds, null);
+                    RPRoute route = GenerateRPRoute(context, saleZone, routingProduct, saleZoneServiceIds, null, null);
                     if (route != null)
                         routes.Add(route);
                 }
@@ -197,8 +198,16 @@ namespace TOne.WhS.Routing.Business
 
                 if (generateCostAnalysisByCustomer && context.RoutingCustomerInfos != null)
                 {
+                    Dictionary<int, CustomerZoneDetail> customerZoneDetailByCustomerId = null;
+                    List<CustomerZoneDetail> customerZoneDetails = context.CustomerZoneDetails.GetRecord(saleZoneId);
+
+                    if (customerZoneDetails != null)
+                        customerZoneDetailByCustomerId = customerZoneDetails.ToDictionary(itm => itm.CustomerId, itm => itm);
+
                     foreach (var customer in context.RoutingCustomerInfos)
                     {
+                        var customerZoneDetail = customerZoneDetailByCustomerId.GetRecord(customer.CustomerId);
+
                         if (saleZone.SellingNumberPlanId != customer.SellingNumberPlanId)
                             continue;
 
@@ -206,7 +215,7 @@ namespace TOne.WhS.Routing.Business
                         foreach (var routingProduct in context.RoutingProducts)
                         {
                             HashSet<int> saleZoneServiceIds = zoneServicesByRoutingProductId.GetRecord(routingProduct.RoutingProductId);
-                            RPRoute customerRoute = GenerateRPRoute(context, saleZone, routingProduct, saleZoneServiceIds, customer.CustomerId);
+                            RPRoute customerRoute = GenerateRPRoute(context, saleZone, routingProduct, saleZoneServiceIds, customer.CustomerId, customerZoneDetail);
                             if (customerRoute != null)
                                 customerRoutes.Add(customerRoute);
                         }
@@ -225,7 +234,7 @@ namespace TOne.WhS.Routing.Business
             return routesByCutomer;
         }
 
-        private RPRoute GenerateRPRoute(IBuildRoutingProductRoutesContext context, SaleZone saleZone, RoutingProduct routingProduct, HashSet<int> saleZoneServiceIds, int? customerId)
+        private RPRoute GenerateRPRoute(IBuildRoutingProductRoutesContext context, SaleZone saleZone, RoutingProduct routingProduct, HashSet<int> saleZoneServiceIds, int? customerId, CustomerZoneDetail customerZoneDetail)
         {
             RouteRuleTarget routeRuleTarget = new RouteRuleTarget
             {
@@ -234,7 +243,8 @@ namespace TOne.WhS.Routing.Business
                 CountryId = saleZone.CountryId,
                 EffectiveOn = context.EntitiesEffectiveOn,
                 IsEffectiveInFuture = context.EntitiesEffectiveInFuture,
-                CustomerId = customerId
+                CustomerId = customerId,
+                DealId = customerZoneDetail != null ? customerZoneDetail.DealId : null
             };
 
             if (routingProduct.Settings == null)

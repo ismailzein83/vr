@@ -24,5 +24,8 @@ namespace TOne.WhS.Routing.Entities
         RoutingDatabase RoutingDatabase { get; }
 
         IEnumerable<RoutingCustomerInfo> RoutingCustomerInfos { get; }
+
+        CustomerZoneDetailByZone CustomerZoneDetails { get; }
+
     }
 }

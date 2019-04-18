@@ -73,6 +73,11 @@ namespace TOne.WhS.Routing.Data.SQL
             string query = query_GetCustomerZoneDetails.Replace("#FILTER#", string.Format("WHERE VersionNumber > {0}", versionNumber));
             return GetItemsText(query, CustomerZoneDetailMapper, null);
         }
+        public List<CustomerZoneDetail> GetCustomerZoneDetailsByZoneRange(long fromZoneId, long toZoneId)
+        {
+            string query = query_GetCustomerZoneDetails.Replace("#FILTER#", $"WHERE SaleZoneId >= {fromZoneId} AND SaleZoneId <= {toZoneId}");
+            return GetItemsText(query, CustomerZoneDetailMapper, null);
+        }
 
         public List<CustomerZoneDetail> GetCustomerZoneDetailsByZoneIdsAndCustomerIds(List<long> saleZoneIds, List<int> customerIds)
         {
