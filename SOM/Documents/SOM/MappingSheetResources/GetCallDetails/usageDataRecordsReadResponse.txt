@@ -1,4 +1,4 @@
-CallDate = entryDate
+CallDatetime = entryDate
 CallDuration = duration
 Destination = destination
 CalledParty = calledparty

@@ -1,14 +1,14 @@
 {
  [
 	{
-		CallDate: "4/18/2019",
+		CallDatetime: "4/18/2019 00:00:00",
 		CallDuration: 12,
 		Destination: "NP",
 		CalledParty: "1119630010",
 		Amount: 1000
 	},
 	{
-		CallDate: "4/19/2019",
+		CallDatetime: "4/19/2019 00:00:00",
 		CallDuration: 2,
 		Destination: "NP",
 		CalledParty: "1119630010",
