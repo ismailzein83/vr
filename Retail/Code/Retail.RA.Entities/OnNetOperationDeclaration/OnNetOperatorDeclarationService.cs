@@ -22,4 +22,11 @@ namespace Retail.RA.Entities
     public class OnNetOperatorDeclarationServicesCollection : List<OnNetOperatorDeclarationService>
     {
     }
+    public class OnNetDeclarationService
+    {
+        public long ID { get; set; }
+        public PeriodDefinition PeriodDefinition { get; set; }
+        public long OperatorId { get; set; }
+        public OnNetOperatorDeclarationServiceSettings Settings { get; set; }
+    }
 }

@@ -45,4 +45,9 @@ namespace Retail.RA.Entities
         OffNet = 2,
         International = 3
     }
+    public enum SourceType
+    {
+        Usage = 0,
+        NonUsage = 1
+    }
 }
