@@ -8,11 +8,10 @@ using Vanrise.Invoice.Entities;
 
 namespace Retail.Interconnect.Business
 {
-    public enum InterconnectInvoiceType { Customer = 0, Supplier = 1 }
     public class InterconnectInvoiceSettings : BaseRetailInvoiceTypeSettings
     {
-        public Guid InvoiceTransactionTypeId { get ;set; }
-        public List<Guid> UsageTransactionTypeIds { get;set; }
+        public Guid InvoiceTransactionTypeId { get; set; }
+        public List<Guid> UsageTransactionTypeIds { get; set; }
         public InterconnectInvoiceType Type { get; set; }
         public override Guid ConfigId
         {
@@ -37,7 +36,7 @@ namespace Retail.Interconnect.Business
                 case "BankDetails":
                     {
                         #region BankDetails
-                        return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId,financialAccountData.Account.AccountId);
+                        return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId, financialAccountData.Account.AccountId);
                         #endregion
                     }
             }
@@ -72,7 +71,7 @@ namespace Retail.Interconnect.Business
 
         public override Vanrise.Invoice.Entities.InvoicePartnerManager GetPartnerManager()
         {
-            return new InterconnectPartnerSettings(this.AccountBEDefinitionId);
+            return new InterconnectPartnerSettings(this.AccountBEDefinitionId, this.Type);
         }
     }
 }

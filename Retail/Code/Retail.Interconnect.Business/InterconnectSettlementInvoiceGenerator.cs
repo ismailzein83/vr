@@ -225,7 +225,7 @@ namespace Retail.Interconnect.Business
                     var settlementInvoiceItemDetails = new SettlementInvoiceItemDetails
                     {
 
-                        Amount = multipleCurrencies ? default(decimal) : customerInvoiceDetails.TotalInvoiceAmount,
+                        Amount = multipleCurrencies ? default(decimal?) : customerInvoiceDetails.TotalInvoiceAmount,
                         DurationInSeconds = customerInvoiceDetails.Duration,
                         CurrencyId = multipleCurrencies ? default(int?) : customerInvoiceDetails.InterconnectCurrencyId,
                         InvoiceId = customerInvoice.InvoiceId,

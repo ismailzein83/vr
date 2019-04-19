@@ -180,7 +180,7 @@ namespace Retail.Interconnect.Business
                             var interconnectInvoiceDetail = interconnectInvoiceDetails.FindRecord(x => x.InvoiceId == invoiceDetail.Entity.InvoiceId && x.CurrencyId == currentInvoiceItemDetail.CurrencyId);
                             if (interconnectInvoiceDetail != null)
                             {
-                                interconnectInvoiceDetail.TotalAmount += currentInvoiceItemDetail.AmountWithTaxes;
+                                interconnectInvoiceDetail.TotalAmount += currentInvoiceItemDetail.TotalFullAmount;
                                 interconnectInvoiceDetail.TotalNumberOfCalls += currentInvoiceItemDetail.NumberOfCalls;
                                 interconnectInvoiceDetail.Duration += currentInvoiceItemDetail.Duration;
                                 interconnectInvoiceDetail.OriginalAmount = originalAmount;
@@ -195,7 +195,7 @@ namespace Retail.Interconnect.Business
                                     TotalNumberOfCalls = currentInvoiceItemDetail.NumberOfCalls,
                                     CurrencyId = currentInvoiceItemDetail.CurrencyId,
                                     InterconnectCurrency = _currencyManager.GetCurrencySymbol(currentInvoiceItemDetail.CurrencyId),
-                                    TotalAmount = currentInvoiceItemDetail.AmountWithTaxes,
+                                    TotalAmount = currentInvoiceItemDetail.TotalFullAmount,
                                     DueDate = invoiceDetail.Entity.DueDate,
                                     FromDate = invoiceDetail.Entity.FromDate,
                                     IssueDate = invoiceDetail.Entity.IssueDate,

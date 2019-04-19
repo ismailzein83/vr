@@ -11,6 +11,7 @@ using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using Vanrise.Analytic.Business;
+using Retail.Interconnect.Entities;
 
 namespace Retail.Interconnect.Business
 {
@@ -37,15 +38,21 @@ namespace Retail.Interconnect.Business
         BillingCompanyPhone = 18,
         SMSServiceTypes = 19,
         BillingCompanyContact = 20,
-        AccountBillingContact = 21
+        AccountBillingContact = 21,
+        OriginalAmount = 22
     }
+
+    public enum InterconnectInvoiceType { Customer = 0, Supplier = 1, Settlement = 2 }
 
     public class InterconnectPartnerSettings : InvoicePartnerManager
     {
         Guid _acountBEDefinitionId;
-        public InterconnectPartnerSettings(Guid acountBEDefinitionId)
+        InterconnectInvoiceType _interconnectInvoiceType;
+
+        public InterconnectPartnerSettings(Guid acountBEDefinitionId, InterconnectInvoiceType interconnectInvoiceType)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
+            this._interconnectInvoiceType = interconnectInvoiceType;
         }
 
         public override string PartnerFilterSelector
@@ -200,6 +207,26 @@ namespace Retail.Interconnect.Business
                         {
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.SMSServiceTypes, new SMSServiceTypeManager().GetSMSServiceTypesConcatenatedSymbolsByIds(accountPartSettings.SMSServiceTypes.MapRecords(sMSServiceType => sMSServiceType.SMSServiceTypeId)), true);
                         }
+                    }
+
+                    switch (_interconnectInvoiceType)
+                    {
+                        case InterconnectInvoiceType.Customer:
+                            break;
+
+                        case InterconnectInvoiceType.Supplier:
+                            var supplierInvoiceDetails = context.Invoice.Details as InterconnectInvoiceDetails;
+                            decimal? originalAmount;
+                            var originalDataCurrency = supplierInvoiceDetails.OriginalAmountByCurrency != null ? supplierInvoiceDetails.OriginalAmountByCurrency.GetRecord(supplierInvoiceDetails.InterconnectCurrencyId) : null;
+                            originalAmount = originalDataCurrency != null ? originalDataCurrency.OriginalAmount : null;
+
+                            if (originalAmount.HasValue)
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.OriginalAmount, originalAmount.Value.ToString(), true);
+
+                            break;
+
+                        case InterconnectInvoiceType.Settlement:
+                            break;
                     }
 
                     return rdlcReportParameters;
