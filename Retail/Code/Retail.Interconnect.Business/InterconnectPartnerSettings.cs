@@ -42,17 +42,17 @@ namespace Retail.Interconnect.Business
         OriginalAmount = 22
     }
 
-    public enum InterconnectInvoiceType { Customer = 0, Supplier = 1, Settlement = 2 }
+    public enum InterconnectPartnerType { Customer = 0, Supplier = 1, Settlement = 2 }
 
     public class InterconnectPartnerSettings : InvoicePartnerManager
     {
         Guid _acountBEDefinitionId;
-        InterconnectInvoiceType _interconnectInvoiceType;
+        InterconnectPartnerType _interconnectPartnerType;
 
-        public InterconnectPartnerSettings(Guid acountBEDefinitionId, InterconnectInvoiceType interconnectInvoiceType)
+        public InterconnectPartnerSettings(Guid acountBEDefinitionId, InterconnectPartnerType interconnectPartnerType)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
-            this._interconnectInvoiceType = interconnectInvoiceType;
+            this._interconnectPartnerType = interconnectPartnerType;
         }
 
         public override string PartnerFilterSelector
@@ -209,12 +209,12 @@ namespace Retail.Interconnect.Business
                         }
                     }
 
-                    switch (_interconnectInvoiceType)
+                    switch (_interconnectPartnerType)
                     {
-                        case InterconnectInvoiceType.Customer:
+                        case InterconnectPartnerType.Customer:
                             break;
 
-                        case InterconnectInvoiceType.Supplier:
+                        case InterconnectPartnerType.Supplier:
                             var supplierInvoiceDetails = context.Invoice.Details as InterconnectInvoiceDetails;
                             decimal? originalAmount;
                             var originalDataCurrency = supplierInvoiceDetails.OriginalAmountByCurrency != null ? supplierInvoiceDetails.OriginalAmountByCurrency.GetRecord(supplierInvoiceDetails.InterconnectCurrencyId) : null;
@@ -225,7 +225,7 @@ namespace Retail.Interconnect.Business
 
                             break;
 
-                        case InterconnectInvoiceType.Settlement:
+                        case InterconnectPartnerType.Settlement:
                             break;
                     }
 

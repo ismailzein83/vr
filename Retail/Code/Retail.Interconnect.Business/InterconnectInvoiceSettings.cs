@@ -8,6 +8,8 @@ using Vanrise.Invoice.Entities;
 
 namespace Retail.Interconnect.Business
 {
+    public enum InterconnectInvoiceType { Customer = 0, Supplier = 1 }
+
     public class InterconnectInvoiceSettings : BaseRetailInvoiceTypeSettings
     {
         public Guid InvoiceTransactionTypeId { get; set; }
@@ -71,7 +73,11 @@ namespace Retail.Interconnect.Business
 
         public override Vanrise.Invoice.Entities.InvoicePartnerManager GetPartnerManager()
         {
-            return new InterconnectPartnerSettings(this.AccountBEDefinitionId, this.Type);
+            if (this.Type == InterconnectInvoiceType.Customer)
+                return new InterconnectPartnerSettings(this.AccountBEDefinitionId, InterconnectPartnerType.Customer);
+
+            else
+                return new InterconnectPartnerSettings(this.AccountBEDefinitionId, InterconnectPartnerType.Supplier);
         }
     }
 }

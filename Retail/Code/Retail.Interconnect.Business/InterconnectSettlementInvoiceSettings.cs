@@ -74,7 +74,7 @@ namespace Retail.Interconnect.Business
 
         public override Vanrise.Invoice.Entities.InvoicePartnerManager GetPartnerManager()
         {
-            return new InterconnectPartnerSettings(this.AccountBEDefinitionId, InterconnectInvoiceType.Settlement);
+            return new InterconnectPartnerSettings(this.AccountBEDefinitionId, InterconnectPartnerType.Settlement);
         }
     }
 }
