@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region RDB
 
         static string TABLE_ALIAS = "spcustc";
-        static string TABLE_NAME = "TOneWhS_BE_SalePricelistCustomerChange";
+        public static string TABLE_NAME = "TOneWhS_BE_SalePricelistCustomerChange";
         const string COL_CustomerID = "CustomerID";
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
@@ -54,10 +54,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             joinCondition.EqualsCondition(originalTableAlias, originalTableBatchIdCol, customerChangeTableAlias, COL_BatchID);
         }
 
-        public void BuildInsertQuery(RDBInsertQuery insertQuery)
-        {
-            insertQuery.IntoTable(TABLE_NAME);
-        }
         #endregion
     }
 }

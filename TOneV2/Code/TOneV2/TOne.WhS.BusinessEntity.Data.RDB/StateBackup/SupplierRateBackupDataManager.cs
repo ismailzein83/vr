@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region RDB
 
         static string TABLE_ALIAS = "suprbkup";
-        static string TABLE_NAME = "TOneWhS_BE_Bkup_SupplierRate";
+        public static string TABLE_NAME = "TOneWhS_BE_Bkup_SupplierRate";
         const string COL_ID = "ID";
         const string COL_PriceListID = "PriceListID";
         const string COL_ZoneID = "ZoneID";
@@ -47,39 +47,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 ModifiedTimeColumnName = COL_LastModifiedTime
 
             });
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        public RDBInsertQuery GetInsertQuery(RDBQueryContext queryContext, string backupDatabaseName)
-        {
-            var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, TABLE_NAME));
-            return insertQuery;
-        }
-
-        public void AddSelectQuery(RDBInsertQuery insertQuery, string backupDatabaseName, long stateBackupId)
-        {
-            var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, TABLE_NAME), TABLE_ALIAS, null, true);
-            var selectColumns = selectQuery.SelectColumns();
-
-            selectColumns.Column(COL_ID, COL_ID);
-            selectColumns.Column(COL_PriceListID, COL_PriceListID);
-            selectColumns.Column(COL_ZoneID, COL_ZoneID);
-            selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
-            selectColumns.Column(COL_Rate, COL_Rate);
-            selectColumns.Column(COL_BED, COL_BED);
-            selectColumns.Column(COL_EED, COL_EED);
-            selectColumns.Column(COL_SourceID, COL_SourceID);
-            selectColumns.Column(COL_Change, COL_Change);
-            selectColumns.Column(COL_RateTypeID, COL_RateTypeID);
-            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
-
-            var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition(COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
     }

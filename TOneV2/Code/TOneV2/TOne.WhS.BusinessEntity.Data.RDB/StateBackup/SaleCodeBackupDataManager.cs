@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region RDB
 
         static string TABLE_ALIAS = "szbkup";
-        static string TABLE_NAME = "TOneWhS_BE_Bkup_SaleCode";
+        public static string TABLE_NAME = "TOneWhS_BE_Bkup_SaleCode";
         const string COL_ID = "ID";
         const string COL_Code = "Code";
         const string COL_ZoneID = "ZoneID";
@@ -43,34 +43,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 Columns = columns,
                 ModifiedTimeColumnName = COL_LastModifiedTime
             });
-        }
-        #endregion
-
-        #region Public Methods
-        public RDBInsertQuery GetInsertQuery(RDBQueryContext queryContext, string backupDatabaseName)
-        {
-            var insertCustomerQuery = queryContext.AddInsertQuery();
-            insertCustomerQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, TABLE_NAME));
-            return insertCustomerQuery;
-        }
-        public void AddSelectQuery(RDBInsertQuery insertQuery, string backupDatabaseName, long stateBackupId)
-        {
-            var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, TABLE_NAME), TABLE_ALIAS, null, true);
-            var selectColumns = selectQuery.SelectColumns();
-
-            selectColumns.Column(COL_ID, COL_ID);
-            selectColumns.Column(COL_Code, COL_Code);
-            selectColumns.Column(COL_ZoneID, COL_ZoneID);
-            selectColumns.Column(COL_CodeGroupID, COL_CodeGroupID);
-            selectColumns.Column(COL_BED, COL_BED);
-            selectColumns.Column(COL_EED, COL_EED);
-            selectColumns.Column(COL_SourceID, COL_SourceID);
-            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
-            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
-
-            var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition(COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
     }

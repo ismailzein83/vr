@@ -19,8 +19,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
 
-        const string COL_StateBackupID = "StateBackupID";
-
         static CustomerCountryDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -73,11 +71,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void BackupBySNPId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int sellingNumberPlanId)
         {
-            var customerCountryBackupDataManager = new CustomerCountryBackupDataManager();
-            var insertQuery = customerCountryBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, CustomerCountryBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
-
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
@@ -100,8 +97,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void BackupByOwner(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, IEnumerable<int> customerIds)
         {
-            var customerCountryBackupDataManager = new CustomerCountryBackupDataManager();
-            var insertQuery = customerCountryBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, CustomerCountryBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
@@ -145,8 +142,21 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
 
-            var customerCountryBackupDataManager = new CustomerCountryBackupDataManager();
-            customerCountryBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, CustomerCountryBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+
+            var selectColumns = selectQuery.SelectColumns();
+
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_CustomerID, COL_CustomerID);
+            selectColumns.Column(COL_CountryID, COL_CountryID);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(CustomerCountryBackupDataManager.COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
 

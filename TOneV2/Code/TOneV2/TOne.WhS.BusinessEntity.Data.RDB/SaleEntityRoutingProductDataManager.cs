@@ -23,7 +23,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
 
-        const string COL_StateBackupID = "StateBackupID";
         static SaleEntityRoutingProductDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -489,11 +488,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void BackupBySNPId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int sellingNumberPlanId)
         {
-            var saleEntityRoutingProductBackupDataManager = new SaleEntityRoutingProductBackupDataManager();
-            var insertQuery = saleEntityRoutingProductBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SaleEntityRoutingProductBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
-
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
@@ -516,12 +514,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
         public void BackupByOwner(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int ownerId, int ownerType)
         {
-            var saleEntityRoutingProductBackupDataManager = new SaleEntityRoutingProductBackupDataManager();
-            var insertQuery = saleEntityRoutingProductBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SaleEntityRoutingProductBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
             selectColumns.Column(COL_OwnerType, COL_OwnerType);
@@ -561,15 +558,47 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
         public void SetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDataBaseName)
         {
-            var saleEntityRoutingProductBackupDataManager = new SaleEntityRoutingProductBackupDataManager();
-
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
-            saleEntityRoutingProductBackupDataManager.AddSelectQuery(insertQuery, backupDataBaseName, stateBackupId);
+
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, SaleEntityRoutingProductBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_OwnerType, COL_OwnerType);
+            selectColumns.Column(COL_OwnerID, COL_OwnerID);
+            selectColumns.Column(COL_ZoneID, COL_ZoneID);
+            selectColumns.Column(COL_RoutingProductID, COL_RoutingProductID);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var joinContext = selectQuery.Join();
+            var saleZoneDataManager = new SaleZoneDataManager();
+            saleZoneDataManager.JoinSaleZone(joinContext, "sz", TABLE_ALIAS, COL_ZoneID, true);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(SaleEntityRoutingProductBackupDataManager.COL_StateBackupID).Value(stateBackupId);
 
             var insertDefaultQuery = queryContext.AddInsertQuery();
             insertDefaultQuery.IntoTable(TABLE_NAME);
-            saleEntityRoutingProductBackupDataManager.AddDefaultSelectQuery(insertDefaultQuery, backupDataBaseName, stateBackupId);
+          
+            var defaultSelectQuery = insertQuery.FromSelect();
+            defaultSelectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, SaleEntityRoutingProductBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            var selectDefaultColumns = selectQuery.SelectColumns();
+
+            selectDefaultColumns.Column(COL_ID, COL_ID);
+            selectDefaultColumns.Column(COL_OwnerType, COL_OwnerType);
+            selectDefaultColumns.Column(COL_OwnerID, COL_OwnerID);
+            selectDefaultColumns.Column(COL_ZoneID, COL_ZoneID);
+            selectDefaultColumns.Column(COL_RoutingProductID, COL_RoutingProductID);
+            selectDefaultColumns.Column(COL_BED, COL_BED);
+            selectDefaultColumns.Column(COL_EED, COL_EED);
+            selectDefaultColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereDefaultContext = selectQuery.Where();
+            whereDefaultContext.NullCondition(COL_ZoneID);
+            whereDefaultContext.EqualsCondition(SaleEntityRoutingProductBackupDataManager.COL_StateBackupID).Value(stateBackupId);
 
         }
         #endregion

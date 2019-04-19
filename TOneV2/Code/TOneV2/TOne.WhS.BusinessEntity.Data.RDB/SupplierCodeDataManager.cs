@@ -106,6 +106,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.GetItems(SupplierCodeMapper);
         }
 
+        public IEnumerable<SupplierCode> GetSupplierCodesByZoneIds(IEnumerable<long> zoneIds, DateTime effectiveDate)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             SupplierZoneDataManager supplierZoneDataManager = new SupplierZoneDataManager();
@@ -292,8 +297,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region StateBackup
         public void BackupBySupplierId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int supplierId)
         {
-            var supplierCodeBackupDataManager = new SupplierCodeBackupDataManager();
-            var insertQuery = supplierCodeBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierCodeBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
@@ -334,8 +339,21 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_ALIAS);
-            var supplierCodeBackupDataManager = new SupplierCodeBackupDataManager();
-            supplierCodeBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierCodeBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_Code, COL_Code);
+            selectColumns.Column(COL_ZoneID, COL_ZoneID);
+            selectColumns.Column(COL_CodeGroupID, COL_CodeGroupID);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(SupplierCodeBackupDataManager.COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
 

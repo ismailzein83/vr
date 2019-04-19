@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region RDB
 
         static string TABLE_ALIAS = "rpbkup";
-        static string TABLE_NAME = "TOneWhS_BE_Bkup_SaleEntityRoutingProduct";
+        public static string TABLE_NAME = "TOneWhS_BE_Bkup_SaleEntityRoutingProduct";
         const string COL_ID = "ID";
         const string COL_OwnerType = "OwnerType";
         const string COL_OwnerID = "OwnerID";
@@ -42,60 +42,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             });
         }
-        #endregion
-
-        #region Public Methods
-
-        public RDBInsertQuery GetInsertQuery(RDBQueryContext queryContext, string backupDatabaseName)
-        {
-            var insertCustomerQuery = queryContext.AddInsertQuery();
-            insertCustomerQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, TABLE_NAME));
-            return insertCustomerQuery;
-        }
-
-        public void AddDefaultSelectQuery(RDBInsertQuery insertQuery, string backupDataBaseName, long stateBackupId)
-        {
-            var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, TABLE_NAME), TABLE_ALIAS, null, true);
-
-            var selectColumns = selectQuery.SelectColumns();
-
-            selectColumns.Column(COL_ID, COL_ID);
-            selectColumns.Column(COL_OwnerType, COL_OwnerType);
-            selectColumns.Column(COL_OwnerID, COL_OwnerID);
-            selectColumns.Column(COL_ZoneID, COL_ZoneID);
-            selectColumns.Column(COL_RoutingProductID, COL_RoutingProductID);
-            selectColumns.Column(COL_BED, COL_BED);
-            selectColumns.Column(COL_EED, COL_EED);
-            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
-
-            var whereContext = selectQuery.Where();
-            whereContext.NullCondition(COL_ZoneID);
-            whereContext.EqualsCondition(COL_StateBackupID).Value(stateBackupId);
-        }
-        public void AddSelectQuery(RDBInsertQuery insertQuery, string backupDataBaseName, long stateBackupId)
-        {
-            var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, TABLE_NAME), TABLE_ALIAS, null, true);
-
-            var selectColumns = selectQuery.SelectColumns();
-
-            selectColumns.Column(COL_ID, COL_ID);
-            selectColumns.Column(COL_OwnerType, COL_OwnerType);
-            selectColumns.Column(COL_OwnerID, COL_OwnerID);
-            selectColumns.Column(COL_ZoneID, COL_ZoneID);
-            selectColumns.Column(COL_RoutingProductID, COL_RoutingProductID);
-            selectColumns.Column(COL_BED, COL_BED);
-            selectColumns.Column(COL_EED, COL_EED);
-            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
-
-            var joinContext = selectQuery.Join();
-            var saleZoneDataManager = new SaleZoneDataManager();
-            saleZoneDataManager.JoinSaleZone(joinContext, "sz", TABLE_ALIAS, COL_ZoneID, true);
-
-            var whereContext = selectQuery.Where();
-            whereContext.EqualsCondition(COL_StateBackupID).Value(stateBackupId);
-    }
         #endregion
     }
 }

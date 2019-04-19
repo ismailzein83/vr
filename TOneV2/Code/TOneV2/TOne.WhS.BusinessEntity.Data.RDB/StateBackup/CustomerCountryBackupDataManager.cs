@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region RDB
 
         static string TABLE_ALIAS = "ccbkup";
-        static string TABLE_NAME = "TOneWhS_BE_Bkup_CustomerCountry";
+        public static string TABLE_NAME = "TOneWhS_BE_Bkup_CustomerCountry";
         const string COL_ID = "ID";
         const string COL_CustomerID = "CustomerID";
         const string COL_CountryID = "CountryID";
@@ -39,36 +39,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 ModifiedTimeColumnName = COL_LastModifiedTime
 
             });
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        public RDBInsertQuery GetInsertQuery(RDBQueryContext queryContext, string backupDatabaseName)
-        {
-            var insertCustomerQuery = queryContext.AddInsertQuery();
-            insertCustomerQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, TABLE_NAME));
-            return insertCustomerQuery;
-        }
-
-        public void AddSelectQuery(RDBInsertQuery insertQuery, string backupDataBaseName, long stateBackupId)
-        {
-            var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, TABLE_NAME), TABLE_ALIAS, null, true);
-
-            var selectColumns = selectQuery.SelectColumns();
-
-            selectColumns.Column(COL_ID, COL_ID);
-            selectColumns.Column(COL_CustomerID, COL_CustomerID);
-            selectColumns.Column(COL_CountryID, COL_CountryID);
-            selectColumns.Column(COL_BED, COL_BED);
-            selectColumns.Column(COL_EED, COL_EED);
-            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
-            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
-
-            var whereContext = selectQuery.Where();
-            whereContext.EqualsCondition(COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
     }

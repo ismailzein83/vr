@@ -195,7 +195,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 BackupDate = reader.GetDateTime(COL_BackupDate),
                 RestoreDate = reader.GetNullableDateTime(COL_RestoreDate),
                 BackupByUserId = reader.GetInt(COL_BackupByUserID),
-                RestoredByByUserId = reader.GetNullableInt(COL_BackupByUserID)
+                RestoredByByUserId = reader.GetNullableInt(COL_RestoredByUserID)
             };
         }
 

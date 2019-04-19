@@ -161,19 +161,18 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void BackupBySNPId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int sellingNumberPlanId)
         {
-            var salePriceListBackupDataManager = new SalePriceListBackupDataManager();
-            var insertCustomerQuery = salePriceListBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertCustomerQuery = queryContext.AddInsertQuery();
+            insertCustomerQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SalePriceListBackupDataManager.TABLE_NAME));
             var selectCustomerQuery = insertCustomerQuery.FromSelect();
+            SetCustomerPriceListQuery(selectCustomerQuery, stateBackupId, sellingNumberPlanId);
 
-            SetSelectPriceListQuery(selectCustomerQuery, stateBackupId, sellingNumberPlanId, (int)SalePriceListOwnerType.Customer);
-
-            var insertSPQuery = salePriceListBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertSPQuery = queryContext.AddInsertQuery();
+            insertSPQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SalePriceListBackupDataManager.TABLE_NAME));
             var selectSPQuery = insertSPQuery.FromSelect();
-
-            SetSelectPriceListQuery(selectSPQuery, stateBackupId, sellingNumberPlanId, (int)SalePriceListOwnerType.Customer);
+            SetSellingProductPriceListQuery(selectSPQuery, stateBackupId, sellingNumberPlanId);
         }
 
-        private void SetSelectPriceListQuery(RDBSelectQuery selectQuery, long stateBackupId, int sellingNumberPlanId, int ownerType)
+        private void SetCustomerPriceListQuery(RDBSelectQuery selectQuery, long stateBackupId, int sellingNumberPlanId)
         {
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
@@ -207,14 +206,53 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(carrierAccountTableAlias, CarrierAccountDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
-            whereContext.EqualsCondition(COL_OwnerType).Value(ownerType);
+            whereContext.EqualsCondition(COL_OwnerType).Value((int)SalePriceListOwnerType.Customer);
+
+        }
+        private void SetSellingProductPriceListQuery(RDBSelectQuery selectQuery, long stateBackupId, int sellingNumberPlanId)
+        {
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_OwnerType, COL_OwnerType);
+            selectColumns.Column(COL_OwnerID, COL_OwnerID);
+            selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
+            selectColumns.Column(COL_EffectiveOn, COL_EffectiveOn);
+            selectColumns.Column(COL_PriceListType, COL_PriceListType);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
+            selectColumns.Column(COL_FileID, COL_FileID);
+            selectColumns.Column(COL_IsSent, COL_IsSent);
+            selectColumns.Column(COL_UserID, COL_UserID);
+            selectColumns.Column(COL_CreatedTime, COL_CreatedTime);
+            selectColumns.Column(COL_Description, COL_Description);
+            selectColumns.Column(COL_PricelistStateBackupID, COL_PricelistStateBackupID);
+            selectColumns.Column(COL_PricelistSource, COL_PricelistSource);
+            selectColumns.Expression(SalePriceListBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var joinContext = selectQuery.Join();
+
+            string sellingProductTableAlias = "sellingp";
+            var joinStatement = joinContext.Join(SellingProductDataManager.TABLE_NAME, sellingProductTableAlias);
+            joinStatement.WithNoLock();
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(TABLE_ALIAS, COL_OwnerID, sellingProductTableAlias, SellingProductDataManager.COL_ID);
+
+            var sellingNumberPlanDataManager = new SellingNumberPlanDataManager();
+            string sellingNumberTableAlias = "snp";
+            sellingNumberPlanDataManager.JoinSellingNumberPlan(joinContext, sellingNumberTableAlias, sellingProductTableAlias, SellingProductDataManager.COL_SellingNumberPlanID, true);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(sellingProductTableAlias, SellingProductDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+            whereContext.EqualsCondition(COL_OwnerType).Value((int)SalePriceListOwnerType.SellingProduct);
 
         }
 
         public void BackupByOwner(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, IEnumerable<int> ownerIds, int ownerType)
         {
-            var salePriceListBackupDataManager = new SalePriceListBackupDataManager();
-            var insertQuery = salePriceListBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SalePriceListBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
@@ -296,8 +334,29 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
 
-            var salePriceListBackupDataManager = new SalePriceListBackupDataManager();
-            salePriceListBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SalePriceListBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            var selectColumns = selectQuery.SelectColumns();
+
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_OwnerType, COL_OwnerType);
+            selectColumns.Column(COL_OwnerID, COL_OwnerID);
+            selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
+            selectColumns.Column(COL_EffectiveOn, COL_EffectiveOn);
+            selectColumns.Column(COL_PriceListType, COL_PriceListType);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
+            selectColumns.Column(COL_FileID, COL_FileID);
+            selectColumns.Column(COL_CreatedTime, COL_CreatedTime);
+            selectColumns.Column(COL_IsSent, COL_IsSent);
+            selectColumns.Column(COL_UserID, COL_UserID);
+            selectColumns.Column(COL_Description, COL_Description);
+            selectColumns.Column(COL_PricelistStateBackupID, COL_PricelistStateBackupID);
+            selectColumns.Column(COL_PricelistSource, COL_PricelistSource);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(SalePriceListBackupDataManager.COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
 

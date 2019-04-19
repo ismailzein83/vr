@@ -21,7 +21,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 saleCodeDataManager.BackupBySNPId(queryContext, stateBackupId, this.BackupDatabaseName, sellingNumberPlanId);
 
                 var saleRateDataManager = new SaleRateDataManager();
-                //  saleRateDataManager.BackupBySNPId(queryContext, stateBackupId, this.BackupDatabaseName, sellingNumberPlanId);
+                saleRateDataManager.BackupBySNPId(queryContext, stateBackupId, this.BackupDatabaseName, sellingNumberPlanId);
 
                 var saleEntityServiceDataManager = new SaleEntityServiceDataManager();
                 saleEntityServiceDataManager.BackupBySNPId(queryContext, stateBackupId, this.BackupDatabaseName, sellingNumberPlanId);
@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 var saleEntityServiceDataManager = new SaleEntityServiceDataManager();
                 var saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
 
-                // saleRateDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
+                saleRateDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
                 saleCodeDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
                 saleEntityServiceDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
                 saleEntityRoutingProductDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
@@ -56,12 +56,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 salePriceListDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
                 customerCountryDataManager.SetDeleteQueryBySNPId(queryContext, sellingNumberPlanId);
 
-
-
                 salePriceListDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 saleZoneDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 saleCodeDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
-                //  saleRateDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
+                saleRateDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 saleEntityServiceDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 saleEntityRoutingProductDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 customerCountryDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);

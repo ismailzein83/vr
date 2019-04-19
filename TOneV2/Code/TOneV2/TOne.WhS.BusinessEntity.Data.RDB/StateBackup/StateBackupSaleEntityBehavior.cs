@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 salePriceListDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, ownerIds, ownerType);
 
                 var saleRateDataManager = new SaleRateDataManager();
-                // saleRateDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, ownerIds, ownerType);
+                saleRateDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, ownerIds, ownerType);
 
                 var saleEntityServiceDataManager = new SaleEntityServiceDataManager();
                 saleEntityServiceDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, ownerId, ownerType);
@@ -37,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                     var customerIds = backupSaleEntityData.SellingProductCustomerIds;
                     customerCountryDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, customerIds);
                     salePriceListDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, customerIds, (int)SalePriceListOwnerType.Customer);
-                    //  saleRateDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, customerIds, (int)SalePriceListOwnerType.Customer);
+                    saleRateDataManager.BackupByOwner(queryContext, stateBackupId, this.BackupDatabaseName, customerIds, (int)SalePriceListOwnerType.Customer);
                 }
             }
         }
@@ -48,7 +48,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 int ownerId = backupSaleEntityData.OwnerId;
                 int ownerType = (int)backupSaleEntityData.OwnerType;
-
                 var ownerIds = new List<int> { ownerId };
 
                 var saleRateDataManager = new SaleRateDataManager();
@@ -57,7 +56,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 var saleEntityServiceDataManager = new SaleEntityServiceDataManager();
                 var saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
 
-                //  saleRateDataManager.SetDeleteQueryByOwner(queryContext, ownerIds, ownerType);
+                saleRateDataManager.SetDeleteQueryByOwner(queryContext, ownerIds, ownerType);
                 saleEntityServiceDataManager.SetDeleteQueryByOwner(queryContext, ownerId, ownerType);
                 saleEntityRoutingProductDataManager.SetDeleteQueryByOwner(queryContext, ownerId, ownerType);
                 salePriceListDataManager.SetDeleteQueryByOwner(queryContext, ownerIds, ownerType);
@@ -66,14 +65,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 {
                     var customerIds = backupSaleEntityData.SellingProductCustomerIds;
                     customerCountryDataManager.SetDeleteQueryByOwner(queryContext, customerIds);
-                    //     saleRateDataManager.SetDeleteQueryByOwner(queryContext, customerIds, (int)SalePriceListOwnerType.Customer);
+                    saleRateDataManager.SetDeleteQueryByOwner(queryContext, customerIds, (int)SalePriceListOwnerType.Customer);
                     salePriceListDataManager.SetDeleteQueryByOwner(queryContext, customerIds, (int)SalePriceListOwnerType.Customer);
                 }
                 else
                     customerCountryDataManager.SetDeleteQueryByOwner(queryContext, ownerIds);
 
                 salePriceListDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
-                //  saleRateDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
+                saleRateDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 saleEntityServiceDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 saleEntityRoutingProductDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);
                 customerCountryDataManager.SetRestoreQuery(queryContext, stateBackupId, this.BackupDatabaseName);

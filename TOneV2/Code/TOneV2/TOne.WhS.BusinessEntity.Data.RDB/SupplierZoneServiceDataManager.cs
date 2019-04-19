@@ -10,11 +10,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SupplierZoneServiceDataManager : ISupplierZoneServiceDataManager
     {
-
         #region RDB
 
         static string TABLE_ALIAS = "spzs";
-        static string TABLE_NAME = "TOneWhS_BE_SupplierZoneService";
+        public static string TABLE_NAME = "TOneWhS_BE_SupplierZoneService";
         const string COL_ID = "ID";
         const string COL_ZoneID = "ZoneID";
         const string COL_PriceListID = "PriceListID";
@@ -26,9 +25,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_SourceID = "SourceID";
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
-
-        const string COL_StateBackupID = "StateBackupID";
-
+        
         static SupplierZoneServiceDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -309,12 +306,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void BackupBySupplierId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int supplierId)
         {
-            var supplierZoneServiceBackupDataManager = new SupplierZoneServiceBackupDataManager();
-            var insertQuery = supplierZoneServiceBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierZoneServiceBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
             selectColumns.Column(COL_ZoneID, COL_ZoneID);
@@ -349,8 +345,24 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_ALIAS);
-            var supplierZoneServiceBackupDataManager = new SupplierZoneServiceBackupDataManager();
-            supplierZoneServiceBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierZoneServiceBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            var selectColumns = selectQuery.SelectColumns();
+
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_ZoneID, COL_ZoneID);
+            selectColumns.Column(COL_ReceivedServicesFlag, COL_ReceivedServicesFlag);
+            selectColumns.Column(COL_EffectiveServiceFlag, COL_EffectiveServiceFlag);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Column(COL_PriceListID, COL_PriceListID);
+            selectColumns.Column(COL_SupplierID, COL_SupplierID);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(SupplierZoneServiceBackupDataManager.COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
 

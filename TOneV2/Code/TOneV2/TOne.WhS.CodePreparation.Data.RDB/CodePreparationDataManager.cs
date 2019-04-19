@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TOne.WhS.CodePreparation.Entities;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
@@ -96,23 +92,21 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             var insertSalePricelistCodeChange = queryContext.AddInsertQuery();
             salePricelistCodeChangeDataManager.BuildInsertQuery(insertSalePricelistCodeChange);
             salePricelistCodeChangeNewDataManager.BuildSelectQuery(insertSalePricelistCodeChange.FromSelect(), processInstanceID);
-
-            var salePricelistCustomerChangeDataManager = new SalePricelistCustomerChangeDataManager();
+            
             var salePricelistCustomerChangeNewDataManager = new SalePricelistCustomerChangeNewDataManager();
             var insertSalePricelistCustomerChange = queryContext.AddInsertQuery();
-            salePricelistCustomerChangeDataManager.BuildInsertQuery(insertSalePricelistCustomerChange);
+            insertSalePricelistCustomerChange.IntoTable(SalePricelistCustomerChangeDataManager.TABLE_NAME);
             salePricelistCustomerChangeNewDataManager.BuildSelectQuery(insertSalePricelistCustomerChange.FromSelect(), processInstanceID);
-
-            var salePricelistRateChangeDataManager = new SalePricelistRateChangeDataManager();
+            
             var salePriceListRateChangeNewDataManager = new SalePricelistRateChangeNewDataManager();
             var insertSalePricelistRateChange = queryContext.AddInsertQuery();
-            salePricelistRateChangeDataManager.BuildInsertQuery(insertSalePricelistRateChange);
+            insertSalePricelistRateChange.IntoTable(SalePricelistRateChangeDataManager.TABLE_NAME);
             salePriceListRateChangeNewDataManager.BuildSelectQuery(insertSalePricelistRateChange.FromSelect(), processInstanceID);
 
-            var salePricelistRPChangeDataManager = new SalePricelistRPChangeDataManager();
             var salePricelistRPChangeNewDataManager = new SalePricelistRPChangeNewDataManager();
             var insertSalePricelistRPChange = queryContext.AddInsertQuery();
-            salePricelistRPChangeDataManager.BuildInsertQuery(insertSalePricelistRPChange);
+            insertSalePricelistRPChange.IntoTable(SalePricelistRPChangeDataManager.TABLE_NAME);
+
             salePricelistRPChangeNewDataManager.BuildSelectQuery(insertSalePricelistRPChange.FromSelect(), processInstanceID);
 
             string saleZoneChangedAlias = "szchanged";
@@ -127,7 +121,7 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             var updateSaleCode = queryContext.AddUpdateQuery();
             saleCodeDataManager.BuildUpdateQuery(updateSaleCode, processInstanceID, saleCodeChangedAlias, ChangedSaleCodeDataManager.COL_ProcessInstanceID);
             var changedSaleCodeDataManager = new ChangedSaleCodeDataManager();
-            changedSaleCodeDataManager.SetJoinContext(updateSaleCode.Join(saleCodeAlias), saleCodeChangedAlias, saleCodeAlias ,SaleCodeDataManager.COL_ID);
+            changedSaleCodeDataManager.SetJoinContext(updateSaleCode.Join(saleCodeAlias), saleCodeChangedAlias, saleCodeAlias, SaleCodeDataManager.COL_ID);
 
             string customerCountryChangedAlias = "ccchanged";
             string customerCountryAlias = "cc";
@@ -157,7 +151,7 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             var updateSaleEntityRP = queryContext.AddUpdateQuery();
             saleEntityRoutingProductDataManager.BuildUpdateQuery(updateSaleEntityRP, processInstanceID, saleEntityRPChangedAlias, ChangedSaleZoneRoutingProductsDataManager.COL_ProcessInstanceID);
             var changedSaleZoneRoutingProductsDataManager = new ChangedSaleZoneRoutingProductsDataManager();
-            changedSaleZoneRoutingProductsDataManager.SetJoinContext(updateSaleEntityRP.Join(saleEntityRPAlias), saleEntityRPChangedAlias,saleEntityRPAlias, SaleEntityRoutingProductDataManager.COL_ID);
+            changedSaleZoneRoutingProductsDataManager.SetJoinContext(updateSaleEntityRP.Join(saleEntityRPAlias), saleEntityRPChangedAlias, saleEntityRPAlias, SaleEntityRoutingProductDataManager.COL_ID);
 
             return queryContext.ExecuteNonQuery(true) > 0;
         }
@@ -232,8 +226,9 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             var salePricelistRateChangeNewDataManager = new SalePricelistRateChangeNewDataManager();
             salePricelistRateChangeNewDataManager.DeleteRecords(queryContext.AddDeleteQuery(), processInstanceId);
 
-            var salePricelistRPChangeNewDataManager = new SalePricelistRPChangeNewDataManager();
-            salePricelistRPChangeNewDataManager.DeleteRecords(queryContext.AddDeleteQuery(), processInstanceId);
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(SalePricelistRPChangeNewDataManager.TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(SalePricelistRPChangeNewDataManager.COL_ProcessInstanceID).Value(processInstanceId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -273,7 +268,7 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             where.EqualsCondition(COL_SellingNumberPlanId).Value(sellingNumberPlanId);
             where.EqualsCondition(COL_Status).Value((int)status);
             return queryContext1.ExecuteNonQuery() > 0;
-        
+
         }
 
         public bool UpdateCodePreparationStatus(int sellingNumberPlanId, CodePreparationStatus status)

@@ -10,11 +10,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region RDB
 
         static string TABLE_ALIAS = "sp";
-        static string TABLE_NAME = "TOneWhS_BE_SellingProduct";
-        const string COL_ID = "ID";
+        public static string TABLE_NAME = "TOneWhS_BE_SellingProduct";
+        public const string COL_ID = "ID";
         const string COL_Name = "Name";
         const string COL_DefaultRoutingProductID = "DefaultRoutingProductID";
-        const string COL_SellingNumberPlanID = "SellingNumberPlanID";
+        public const string COL_SellingNumberPlanID = "SellingNumberPlanID";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
         const string COL_CreatedBy = "CreatedBy";

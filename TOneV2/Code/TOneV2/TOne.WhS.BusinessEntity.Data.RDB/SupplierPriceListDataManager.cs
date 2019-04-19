@@ -98,8 +98,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void BackupBySupplierId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int supplierId)
         {
-            var supplierPriceListBackupDataManager = new SupplierPriceListBackupDataManager();
-            var insertQuery = supplierPriceListBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierPriceListBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
@@ -132,8 +132,25 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_ALIAS);
-            var supplierPriceListBackupDataManager = new SupplierPriceListBackupDataManager();
-            supplierPriceListBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierPriceListBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_SupplierID, COL_SupplierID);
+            selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
+            selectColumns.Column(COL_FileID, COL_FileID);
+            selectColumns.Column(COL_EffectiveOn, COL_EffectiveOn);
+            selectColumns.Column(COL_PricelistType, COL_PricelistType);
+            selectColumns.Column(COL_CreatedTime, COL_CreatedTime);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
+            selectColumns.Column(COL_SPLStateBackupID, COL_SPLStateBackupID);
+            selectColumns.Column(COL_UserID, COL_UserID);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(SupplierPriceListBackupDataManager.COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
 

@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB.StateBackup
         #region RDB
 
         static string TABLE_ALIAS = "supcbkup";
-        static string TABLE_NAME = "TOneWhS_BE_Bkup_SupplierCode";
+        public static string TABLE_NAME = "TOneWhS_BE_Bkup_SupplierCode";
         const string COL_ID = "ID";
         const string COL_Code = "Code";
         const string COL_ZoneID = "ZoneID";
@@ -42,35 +42,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB.StateBackup
                 ModifiedTimeColumnName = COL_LastModifiedTime
 
             });
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        public RDBInsertQuery GetInsertQuery(RDBQueryContext queryContext, string backupDatabaseName)
-        {
-            var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, TABLE_NAME));
-            return insertQuery;
-        }
-        public void AddSelectQuery(RDBInsertQuery insertQuery, string backupDatabaseName, long stateBackupId)
-        {
-            var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, TABLE_NAME), TABLE_ALIAS, null, true);
-            var selectColumns = selectQuery.SelectColumns();
-
-            selectColumns.Column(COL_ID, COL_ID);
-            selectColumns.Column(COL_Code, COL_Code);
-            selectColumns.Column(COL_ZoneID, COL_ZoneID);
-            selectColumns.Column(COL_CodeGroupID, COL_CodeGroupID);
-            selectColumns.Column(COL_BED, COL_BED);
-            selectColumns.Column(COL_EED, COL_EED);
-            selectColumns.Column(COL_SourceID, COL_SourceID);
-            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
-
-            var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition(COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
     }

@@ -22,9 +22,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_SourceID = "SourceID";
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
-
-        const string COL_StateBackupID = "StateBackupID";
-
+        
         static SaleEntityServiceDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -284,11 +282,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void BackupBySNPId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int sellingNumberPlanId)
         {
-            var saleEntityServiceBackupDataManager = new SaleEntityServiceBackupDataManager();
-            var insertQuery = saleEntityServiceBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SaleEntityServiceBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
-
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
@@ -308,12 +305,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
-
         }
         public void BackupByOwner(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int ownerId, int ownerType)
         {
-            var saleEntityServiceBackupDataManager = new SaleEntityServiceBackupDataManager();
-            var insertQuery = saleEntityServiceBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SaleEntityServiceBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
@@ -370,8 +366,21 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
 
-            var saleEntityServiceBackupDataManager = new SaleEntityServiceBackupDataManager();
-            saleEntityServiceBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SaleEntityServiceBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            var selectColumns = selectQuery.SelectColumns();
+
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_PriceListID, COL_PriceListID);
+            selectColumns.Column(COL_ZoneID, COL_ZoneID);
+            selectColumns.Column(COL_Services, COL_Services);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(SaleEntityServiceBackupDataManager.COL_StateBackupID).Value(stateBackupId);
         }
 
         #endregion

@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region RDB
 
         static string TABLE_ALIAS = "sprc";
-        static string TABLE_NAME = "TOneWhS_BE_SalePricelistRateChange";
+        public static string TABLE_NAME = "TOneWhS_BE_SalePricelistRateChange";
         const string COL_PricelistId = "PricelistId";
         const string COL_Rate = "Rate";
         const string COL_RateTypeId = "RateTypeId";
@@ -87,10 +87,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 whereQuery.ListCondition(COL_CountryID, RDBListConditionOperator.IN, countryIds);
 
             return queryContext.GetItems(SalePricelistRateChangeMapper);
-        }
-        public void BuildInsertQuery(RDBInsertQuery insertQuery)
-        {
-            insertQuery.IntoTable(TABLE_NAME);
         }
 
         public void SetUpdateContext(RDBQueryContext queryContext, string zoneName, long zoneId)

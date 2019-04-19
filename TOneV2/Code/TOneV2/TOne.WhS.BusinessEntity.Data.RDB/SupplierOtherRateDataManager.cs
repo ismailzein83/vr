@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SupplierOtherRateDataManager : ISupplierOtherRateDataManager
@@ -13,7 +13,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             SupplierRateDataManager supplierRateDataManager = new SupplierRateDataManager();
             return supplierRateDataManager.GetFilteredSupplierOtherRates(input.ZoneId, input.EffectiveOn);
         }
-
+        public IEnumerable<SupplierOtherRate> GetSupplierOtherRates(IEnumerable<long> zoneIds, DateTime effectiveOn)
+        {
+            SupplierRateDataManager supplierRateDataManager = new SupplierRateDataManager();
+            return supplierRateDataManager.GetSupplierOtherRates(zoneIds, effectiveOn);
+        }
         #endregion
 
     }

@@ -7,9 +7,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
     public class SupplierPriceListBackupDataManager
     {
         #region RDB
-        
+
         static string TABLE_ALIAS = "supplbkup";
-        static string TABLE_NAME = "TOneWhS_BE_Bkup_SupplierPriceList";
+        public static string TABLE_NAME = "TOneWhS_BE_Bkup_SupplierPriceList";
         const string COL_ID = "ID";
         const string COL_SupplierID = "SupplierID";
         const string COL_CurrencyID = "CurrencyID";
@@ -50,39 +50,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 ModifiedTimeColumnName = COL_LastModifiedTime
 
             });
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        public RDBInsertQuery GetInsertQuery(RDBQueryContext queryContext, string backupDatabaseName)
-        {
-            var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, TABLE_NAME));
-            return insertQuery;
-        }
-        public void AddSelectQuery(RDBInsertQuery insertQuery, string backupDatabaseName, long stateBackupId)
-        {
-            var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, TABLE_NAME), TABLE_ALIAS, null, true);
-            var selectColumns = selectQuery.SelectColumns();
-
-            selectColumns.Column(COL_ID, COL_ID);
-            selectColumns.Column(COL_SupplierID, COL_SupplierID);
-            selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
-            selectColumns.Column(COL_FileID, COL_FileID);
-            selectColumns.Column(COL_EffectiveOn, COL_EffectiveOn);
-            selectColumns.Column(COL_PricelistType, COL_PricelistType);
-            selectColumns.Column(COL_CreatedTime, COL_CreatedTime);
-            selectColumns.Column(COL_SourceID, COL_SourceID);
-            selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
-            selectColumns.Column(COL_SPLStateBackupID, COL_SPLStateBackupID);
-            selectColumns.Column(COL_UserID, COL_UserID);
-            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
-
-            var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition(COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
     }

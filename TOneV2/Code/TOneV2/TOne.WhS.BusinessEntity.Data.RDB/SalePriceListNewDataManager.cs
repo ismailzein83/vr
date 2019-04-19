@@ -58,7 +58,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return RDBDataProviderFactory.CreateProvider("TOneWhS_BE", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
-        
+
         #endregion
 
         #region Public Methods
@@ -101,8 +101,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public void BuildSelectQuery(RDBSelectQuery selectQuery, long processInstanceId)
         {
             selectQuery.From(TABLE_NAME, TABLE_ALIAS);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_OwnerType, COL_OwnerID, COL_CurrencyID, COL_EffectiveOn,
-                COL_FileID, COL_PriceListType, COL_Description);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_OwnerType, COL_OwnerID, COL_CurrencyID, COL_EffectiveOn, COL_FileID, COL_PriceListType, COL_Description);
             selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
         }
         public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)

@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region RDB
 
         static string TABLE_ALIAS = "sprdc";
-        static string TABLE_NAME = "TOneWhS_BE_SalePricelistRPChange_New";
+        public static string TABLE_NAME = "TOneWhS_BE_SalePricelistRPChange_New";
         const string COL_ZoneName = "ZoneName";
         const string COL_ZoneID = "ZoneID";
         const string COL_RoutingProductId = "RoutingProductId";
@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_EED = "EED";
         const string COL_PriceListId = "PriceListId";
         const string COL_CountryId = "CountryId";
-        const string COL_ProcessInstanceID = "ProcessInstanceID";
+        public const string COL_ProcessInstanceID = "ProcessInstanceID";
         const string COL_CustomerId = "CustomerId";
 
 
@@ -95,17 +95,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             });
             return lstAffectedCustomerIds;
         }
-        public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)
-        {
-            deleteQuery.FromTable(TABLE_NAME);
-            deleteQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
-        }
 
         public void BuildSelectQuery(RDBSelectQuery selectQuery, long processInstanceId)
         {
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ZoneName, COL_ZoneID, COL_RoutingProductId, COL_RecentRoutingProductId, COL_BED, COL_EED,
-                COL_PriceListId, COL_CountryId, COL_CustomerId);
+            selectQuery.SelectColumns().Columns(COL_ZoneName, COL_ZoneID, COL_RoutingProductId, COL_RecentRoutingProductId, COL_BED, COL_EED, COL_PriceListId, COL_CountryId, COL_CustomerId);
             selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
         }
         public void Bulk(IEnumerable<SalePricelistRPChange> routingProductChanges, long processInstanceId)
@@ -122,6 +116,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
 
         #endregion
+
         #region Bulk Methods
         private object InitialiazeStreamForDBApply()
         {
@@ -175,6 +170,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
 
         #endregion
+
         #region Mapper
         RoutingProductPreview RoutingProductPreviewMapper(IRDBDataReader reader)
         {

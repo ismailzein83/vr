@@ -150,8 +150,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void BackupBySupplierId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int supplierId)
         {
-            var supplierZoneBackupDataManager = new SupplierZoneBackupDataManager();
-            var insertQuery = supplierZoneBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierZoneBackupDataManager.TABLE_NAME));
 
             var selectQuery = insertQuery.FromSelect();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
@@ -180,8 +180,21 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_ALIAS);
-            var supplierZoneBackupDataManager = new SupplierZoneBackupDataManager();
-            supplierZoneBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
+
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierZoneBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_CountryID, COL_CountryID);
+            selectColumns.Column(COL_Name, COL_Name);
+            selectColumns.Column(COL_SupplierID, COL_SupplierID);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(SupplierZoneBackupDataManager.COL_StateBackupID).Value(stateBackupId);
         }
         #endregion
     }

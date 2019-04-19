@@ -26,8 +26,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
 
-        const string COL_StateBackupID = "StateBackupID";
-
         static SupplierRateDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -348,62 +346,97 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             return queryContext.GetItems(SupplierOtherRateMapper);
         }
+        public IEnumerable<SupplierOtherRate> GetSupplierOtherRates(IEnumerable<long> zoneIds, DateTime effectiveOn)
+        {
+            var supplierPriceListDataManager = new SupplierPriceListDataManager();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
+            var join = selectQuery.Join();
+            supplierPriceListDataManager.JoinSupplierPriceList(join, "spl", TABLE_ALIAS, COL_PriceListID, RDBJoinType.Inner, true);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.ListCondition(RDBListConditionOperator.IN, zoneIds);
+            whereQuery.NotNullCondition(COL_RateTypeID);
+
+            BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
+
+            return queryContext.GetItems(SupplierOtherRateMapper);
+        }
         #endregion
 
         #region StateBackup
 
-        //public void BackupBySupplierId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int supplierId)
-        //{
-        //    var supplierRateBackupDataManager = new SupplierRateBackupDataManager();
-        //    var insertQuery = supplierRateBackupDataManager.GetInsertQuery(queryContext, backupDatabaseName);
+        public void BackupBySupplierId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int supplierId)
+        {
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierRateBackupDataManager.TABLE_NAME));
 
-        //    var selectQuery = insertQuery.FromSelect();
-        //    selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
 
-        //    var selectColumns = selectQuery.SelectColumns();
-        //    selectColumns.Column(COL_ID, COL_ID);
-        //    selectColumns.Column(COL_PriceListID, COL_PriceListID);
-        //    selectColumns.Column(COL_ZoneID, COL_ZoneID);
-        //    selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
-        //    selectColumns.Column(COL_Rate, COL_Rate);
-        //    selectColumns.Column(COL_RateTypeID, COL_RateTypeID);
-        //    selectColumns.Column(COL_Change, COL_Change);
-        //    selectColumns.Column(COL_BED, COL_BED);
-        //    selectColumns.Column(COL_EED, COL_EED);
-        //    selectColumns.Column(COL_SourceID, COL_SourceID);
-        //    selectColumns.Expression(SupplierRateBackupDataManager.COL_StateBackupID).Value(stateBackupId);
-        //    selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_PriceListID, COL_PriceListID);
+            selectColumns.Column(COL_ZoneID, COL_ZoneID);
+            selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
+            selectColumns.Column(COL_Rate, COL_Rate);
+            selectColumns.Column(COL_RateTypeID, COL_RateTypeID);
+            selectColumns.Column(COL_Change, COL_Change);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Expression(SupplierRateBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
 
-        //    var joinContext = selectQuery.Join();
-        //    string supplierPriceListTableAlias = "spl";
-        //    var supplierPriceListDataManager = new SupplierPriceListDataManager();
-        //    supplierPriceListDataManager.JoinSupplierPriceList(joinContext, supplierPriceListTableAlias, TABLE_ALIAS, COL_PriceListID, RDBJoinType.Inner, true);
+            var joinContext = selectQuery.Join();
+            string supplierZoneTableAlias = "splz";
+            var supplierZoneDataManager = new SupplierZoneDataManager();
+            supplierZoneDataManager.JoinSupplierZone(joinContext, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
-        //    var whereContext = selectQuery.Where();
-        //    whereContext.EqualsCondition(supplierPriceListTableAlias, SupplierPriceListDataManager.COL_SupplierID).Value(supplierId);
-        //}
-        //public void SetDeleteQueryBySupplierId(RDBQueryContext queryContext, int supplierId)
-        //{
-        //    var deleteQuery = queryContext.AddDeleteQuery();
-        //    deleteQuery.FromTable(TABLE_NAME);
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
+        }
+        public void SetDeleteQueryBySupplierId(RDBQueryContext queryContext, int supplierId)
+        {
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
 
-        //    var joinContext = deleteQuery.Join(TABLE_ALIAS);
-        //    string supplierZoneTableAlias = "spz";
-        //    var supplierZoneDataManager = new SupplierZoneDataManager();
-        //    supplierZoneDataManager.JoinSupplierZone(joinContext, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
+            var joinContext = deleteQuery.Join(TABLE_ALIAS);
+            string supplierZoneTableAlias = "spz";
+            var supplierZoneDataManager = new SupplierZoneDataManager();
+            supplierZoneDataManager.JoinSupplierZone(joinContext, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
-        //    var wherContext = deleteQuery.Where();
-        //    wherContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
-        //}
+            var wherContext = deleteQuery.Where();
+            wherContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
+        }
 
-        //public void GetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
-        //{
-        //    var insertQuery = queryContext.AddInsertQuery();
-        //    insertQuery.IntoTable(TABLE_ALIAS);
-        //    var supplierRateBackupDataManager = new SupplierRateBackupDataManager();
-        //    supplierRateBackupDataManager.AddSelectQuery(insertQuery, backupDatabaseName, stateBackupId);
-        //}
+        public void GetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
+        {
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_ALIAS);
+
+            var selectQuery = insertQuery.FromSelect();
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierRateBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            var selectColumns = selectQuery.SelectColumns();
+
+            selectColumns.Column(COL_ID, COL_ID);
+            selectColumns.Column(COL_PriceListID, COL_PriceListID);
+            selectColumns.Column(COL_ZoneID, COL_ZoneID);
+            selectColumns.Column(COL_CurrencyID, COL_CurrencyID);
+            selectColumns.Column(COL_Rate, COL_Rate);
+            selectColumns.Column(COL_BED, COL_BED);
+            selectColumns.Column(COL_EED, COL_EED);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
+            selectColumns.Column(COL_Change, COL_Change);
+            selectColumns.Column(COL_RateTypeID, COL_RateTypeID);
+            selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(SupplierRateBackupDataManager.COL_StateBackupID).Value(stateBackupId);
+        }
 
 
         #endregion
