@@ -233,7 +233,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.asr = selectedValues.ASR;
                             $scope.scopeModel.acd = selectedValues.ACD;
                             $scope.scopeModel.carrierReference = selectedValues.CarrierReference;
-                            $scope.scopeModel.description = selectedValues.Description;
+                           // $scope.scopeModel.description = selectedValues.Description;
                             $scope.scopeModel.name = selectedValues.Name;
 
                             $scope.scopeModel.notes = selectedValues.Notes;
@@ -286,7 +286,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     }
                     var attachments = attachmentGridAPI.getData();
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
-                    caseManagementObject.Description = $scope.scopeModel.description;
+                    //caseManagementObject.Description = $scope.scopeModel.description;
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
                     caseManagementObject.Attachments = attachments == undefined ? null : attachments;
                     caseManagementObject.ContactName = $scope.scopeModel.contactName;

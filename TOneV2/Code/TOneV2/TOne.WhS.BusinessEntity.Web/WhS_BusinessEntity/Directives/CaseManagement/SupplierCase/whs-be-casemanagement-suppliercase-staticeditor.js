@@ -235,7 +235,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
                             $scope.scopeModel.asr = selectedValues.ASR;
                             $scope.scopeModel.acd = selectedValues.ACD;
                             $scope.scopeModel.carrierReference = selectedValues.CarrierReference;
-                            $scope.scopeModel.description = selectedValues.Description;
+                           /// $scope.scopeModel.description = selectedValues.Description;
                             $scope.scopeModel.notes = selectedValues.Notes;
                             $scope.scopeModel.zoneName = selectedValues.SupplierZoneName;
                             $scope.scopeModel.notes = selectedValues.Notes;
@@ -296,7 +296,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
 
                     caseManagementObject.Attachments = attachments == undefined ? null : attachments;
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
-                    caseManagementObject.Description = $scope.scopeModel.description;
+                   // caseManagementObject.Description = $scope.scopeModel.description;
                     caseManagementObject.Notes = $scope.scopeModel.notes;
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
