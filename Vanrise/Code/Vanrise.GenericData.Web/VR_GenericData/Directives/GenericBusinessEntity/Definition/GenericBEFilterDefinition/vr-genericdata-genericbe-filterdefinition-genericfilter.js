@@ -27,8 +27,8 @@
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-			var localizationTextResourceSelectorAPI;
-			var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+			//var localizationTextResourceSelectorAPI;
+			//var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             this.initializeController = initializeController;
             function initializeController() {
@@ -50,10 +50,10 @@
 
 				};
 
-				$scope.scopeModel.onLocalizationTextResourceDirectiveReady = function (api) {
-					localizationTextResourceSelectorAPI = api;
-					localizationTextResourceSelectorReadyPromiseDeferred.resolve();
-				};
+				//$scope.scopeModel.onLocalizationTextResourceDirectiveReady = function (api) {
+				//	localizationTextResourceSelectorAPI = api;
+				//	localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+				//};
 
                 defineAPI();
             }
@@ -66,7 +66,7 @@
                         FieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
                         FieldTitle: $scope.scopeModel.fieldTitle,
 						IsRequired: $scope.scopeModel.isRequired,
-						TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues()
+						//TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues()
                     };
                 };
 
@@ -108,7 +108,7 @@
 					}
 
 
-					return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadDataRecordTitleFieldsSelector,loadLocalizationTextResourceSelector]).then(function () {
+					return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadDataRecordTitleFieldsSelector]).then(function () {
                     }).finally(function () {
                         setTimeout(function () {
                             firstLoad = false;
