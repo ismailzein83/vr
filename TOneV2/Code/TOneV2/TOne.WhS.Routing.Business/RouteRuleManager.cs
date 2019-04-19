@@ -558,7 +558,7 @@ namespace TOne.WhS.Routing.Business
                             row.Cells.Add(new ExportExcelCell { Value = record.Suppliers });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastModifiedBy });
+                            row.Cells.Add(new ExportExcelCell { Value = record.LastModifiedByUserName });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastModifiedTime });
                         }
                     }
