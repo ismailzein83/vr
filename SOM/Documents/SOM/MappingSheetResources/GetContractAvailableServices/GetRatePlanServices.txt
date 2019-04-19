@@ -1,0 +1,2 @@
+ratePlanId = ratePlanId
+switchId = switchId (Got from Technicallinedetailsbypathid)

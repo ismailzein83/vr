@@ -1,0 +1,8 @@
+{
+	ServiceCode: "LLPTH",
+	ServiceName: "LL Linepath"
+	ServicePackage: "PKGFL",
+	SubscriptionFee: NOT_FOUND
+	AccessFee: NOT_FOUND
+	NeedsProvisioning: true
+} 
