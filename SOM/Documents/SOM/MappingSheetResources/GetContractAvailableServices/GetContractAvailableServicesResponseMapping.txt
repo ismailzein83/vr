@@ -1,4 +1,4 @@
 ServiceCode = servicesReadResponse.sncodePub
-ServiceName = servicesReadResponse.svShdes
+ServiceName = servicesReadResponse.svDes
 ServicePackage = allowedServicesReadResponse.listSpCode.spcodePub
 NeedsProvisioning = servicesReadResponse.svNetProvReq
