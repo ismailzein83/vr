@@ -66,7 +66,8 @@ app.directive("vrGenericdataGenericbeViewdefinitionGrid", ["UtilsService", "VRNo
                                 GenericBEViewDefinitionId: currentItem.GenericBEViewDefinitionId,
                                 Name: currentItem.Name,
                                 Settings: currentItem.Settings,
-                                Condition: currentItem.Condition
+								Condition: currentItem.Condition,
+								TextResourceKey: currentItem.TextResourceKey
                             });
                         }
                     }

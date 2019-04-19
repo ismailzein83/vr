@@ -17,6 +17,8 @@
         var columnSettingsDirectiveAPI;
         var columnSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+		var localizationTextResourceSelectorAPI;
+		var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -63,6 +65,10 @@
                 }
             };
 
+			$scope.scopeModel.onLocalizationTextResourceDirectiveReady = function (api) {
+				localizationTextResourceSelectorAPI = api;
+				localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+			};
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -106,13 +112,23 @@
                         var payload = {
                             data: columnDefinition != undefined && columnDefinition.GridColumnSettings != undefined ? columnDefinition.GridColumnSettings : undefined
                         };
-
                         VRUIUtilsService.callDirectiveLoad(columnSettingsDirectiveAPI, payload, loadColumnSettingsPromiseDeferred);
                     });
                     return loadColumnSettingsPromiseDeferred.promise;
-                }
+				}
+				
+				function loadLocalizationTextResourceSelector() {
+					var loadSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+					localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+						var payload = {
+							selectedValue: columnDefinition != undefined ? columnDefinition.TextResourceKey : undefined
+						};
+						VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, payload, loadSelectorPromiseDeferred);
+					});
+					return loadSelectorPromiseDeferred.promise;
+				}
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadDataRecordTypeFieldsSelector, loadSettingDirectiveSection]).then(function () {
+				return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadDataRecordTypeFieldsSelector, loadSettingDirectiveSection, loadLocalizationTextResourceSelector]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                     setTimeout(function () {
@@ -129,7 +145,8 @@
         function buildColumnDefinitionFromScope() {
             return {
                 FieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
-                FieldTitle: $scope.scopeModel.fieldTitle,
+				FieldTitle: $scope.scopeModel.fieldTitle,
+				TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues(),
                 GridColumnSettings: columnSettingsDirectiveAPI.getData()
             };
         }

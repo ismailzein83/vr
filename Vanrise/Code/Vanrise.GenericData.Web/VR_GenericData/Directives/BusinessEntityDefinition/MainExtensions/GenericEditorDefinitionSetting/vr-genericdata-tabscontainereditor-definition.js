@@ -72,7 +72,8 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                             tabs.push({
                                 TabTitle: currentItem.TabTitle,
                                 ShowTab: currentItem.ShowTab,
-                                TabSettings: currentItem.TabSettings
+								TabSettings: currentItem.TabSettings,
+								TextResourceKey: currentItem.TextResourceKey
                             });
                         }
                     }

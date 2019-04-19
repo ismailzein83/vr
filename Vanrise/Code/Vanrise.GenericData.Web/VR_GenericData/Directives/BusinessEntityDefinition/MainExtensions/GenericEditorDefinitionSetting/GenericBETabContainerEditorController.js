@@ -13,6 +13,9 @@
         var editorDefinitionAPI;
         var editorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+		var localizationTextResourceSelectorAPI;
+		var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -34,6 +37,11 @@
                 editorDefinitionAPI = api;
                 editorDefinitionReadyPromiseDeferred.resolve();
             };
+
+			$scope.scopeModel.onLocalizationTextResourceDirectiveReady = function (api) {
+				localizationTextResourceSelectorAPI = api;
+				localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+			};
 
             $scope.scopeModel.saveTabDefinition = function () {
                 if (isEditMode) {
@@ -81,9 +89,20 @@
                         VRUIUtilsService.callDirectiveLoad(editorDefinitionAPI, payload, loadEditorDefinitionDirectivePromiseDeferred);
                     });
                     return loadEditorDefinitionDirectivePromiseDeferred.promise;
-                }
+				}
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadEditorDefinitionDirective]).then(function () {
+				function loadLocalizationTextResourceSelector() {
+					var loadSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+					localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+						var payload = {
+							selectedValue: tabDefinition != undefined ? tabDefinition.TextResourceKey : undefined
+						};
+						VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, payload, loadSelectorPromiseDeferred);
+					});
+					return loadSelectorPromiseDeferred.promise;
+				}
+
+				return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadEditorDefinitionDirective,loadLocalizationTextResourceSelector]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -97,7 +116,8 @@
             return {
                 TabTitle: $scope.scopeModel.tabTitle,
                 ShowTab: $scope.scopeModel.showTab,
-                TabSettings: editorDefinitionAPI.getData()
+				TabSettings: editorDefinitionAPI.getData(),
+				TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues(),
             };
         }
 

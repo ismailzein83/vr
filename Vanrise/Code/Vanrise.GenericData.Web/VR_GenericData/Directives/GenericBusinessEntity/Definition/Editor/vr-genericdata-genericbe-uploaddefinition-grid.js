@@ -51,9 +51,18 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 
 							Name: option.Name,
 							TitleField: option.Title,
-							IsRequired: false
+							IsRequired: false,
+							localizationTextResourceSelectorReadyPromiseDeferred: UtilsService.createPromiseDeferred()
 						};
-
+						item.onLocalizationTextResourceDirectiveReady = function (api) {
+							item.localizationTextResourceSelectorAPI = api;
+							item.localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+						};
+						item.localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+							var payload = {};
+							var setLoader = function (value) { $scope.scopeModel.isLocalizationTextResourceSelectorLoading = value; };
+							VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, item.localizationTextResourceSelectorAPI, payload, setLoader);
+						});
 						$scope.scopeModel.uploadedFields.push(item);
 					}
 				};
@@ -82,20 +91,43 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 
 					if (payload != undefined) {
 						promises.push(loadSelector(payload));
-						if (payload.UploadFields != undefined && payload.UploadFields.length > 0)
-							loadGrid(payload);
+						if (payload.UploadFields != undefined && payload.UploadFields.length > 0) {
+							var uploadFields = payload.UploadFields;
+							var genericBEAddedValues = payload.genericBEAddedValues;
+							if (uploadFields != undefined) {
+								for (var x = 0; x < uploadFields.length; x++) {
+									var uploadField = uploadFields[x];
+									var genericBEAddedValue = genericBEAddedValues[x];
+									var loadedItem = {
+										TitleField: genericBEAddedValue.FieldTitle,
+										IsRequired: uploadField.IsRequired,
+										Name: uploadField.FieldName,
+										TextResourceKey: uploadField.TextResourceKey,
+										localizationTextResourceSelectorLoadDeferred: UtilsService.createPromiseDeferred(),
+										localizationTextResourceSelectorReadyPromiseDeferred: UtilsService.createPromiseDeferred()
+									};
+									promises.push(loadedItem.localizationTextResourceSelectorLoadDeferred.promise);
+									addColumnOnEdit(loadedItem);
+								}
+							}
+						}
 					}
-
 					return UtilsService.waitMultiplePromises(promises);
-
 				};
 
 				api.getData = function () {
 					var uploadFields = [];
 					var dataFromScope = $scope.scopeModel.uploadedFields;
 					if (dataFromScope != undefined && dataFromScope.length > 0)
-						for (var x = 0; x < dataFromScope.length; x++)
-							uploadFields.push({ FieldName: dataFromScope[x].Name, IsRequired: dataFromScope[x].IsRequired });
+						for (var x = 0; x < dataFromScope.length; x++) {
+							var item = dataFromScope[x];
+							var uploadField = {
+								FieldName: item.Name,
+								IsRequired: item.IsRequired,
+								TextResourceKey: item.localizationTextResourceSelectorAPI != undefined ? item.localizationTextResourceSelectorAPI.getSelectedValues() : undefined
+							};
+							uploadFields.push(uploadField);
+						}
 					return uploadFields;
 				};
 
@@ -122,18 +154,16 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 					return defferedSelector.promise;
 				}
 
-				function loadGrid(payload) {
-
-					var uploadFields = payload.genericBEAddedValues;
-
-					if (uploadFields != undefined)
-					{
-						for (var x = 0; x < uploadFields.length; x++)
-						{
-							$scope.scopeModel.uploadedFields.push({ TitleField: uploadFields[x].FieldTitle, IsRequired: uploadFields[x].IsRequired, Name: uploadFields[x].FieldName });
-						}
-					}
-
+				function addColumnOnEdit(loadedItem) {
+					loadedItem.onLocalizationTextResourceDirectiveReady = function (api) {
+						loadedItem.localizationTextResourceSelectorAPI = api;
+						loadedItem.localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+					};
+					loadedItem.localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+						var payload = { selectedValue: loadedItem.TextResourceKey };
+						VRUIUtilsService.callDirectiveLoad(loadedItem.localizationTextResourceSelectorAPI, payload, loadedItem.localizationTextResourceSelectorLoadDeferred);
+					});
+					$scope.scopeModel.uploadedFields.push(loadedItem);
 				}
 
 				api.clearDataSource = function () {

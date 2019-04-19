@@ -9,6 +9,8 @@
         var isEditMode;
         var gridActionGroupDefinition;
         var context;
+		var localizationTextResourceSelectorAPI;
+		var localizationTextResourceSlectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -35,7 +37,10 @@
                     return insert();
                 }
             };
-
+			$scope.scopeModel.onLocalizationTextResourceDirectiveReady = function (api) {
+				localizationTextResourceSelectorAPI = api;
+				localizationTextResourceSlectorReadyPromiseDeferred.resolve();
+			};
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -63,14 +68,24 @@
                         return;
 
                     $scope.scopeModel.title = gridActionGroupDefinition.Title;
-                }
+				}
+				function loadLocalizationTextResourceSelecor() {
+					var loadLocalizationTextResourceSelectorDeferred = UtilsService.createPromiseDeferred();
+					localizationTextResourceSlectorReadyPromiseDeferred.promise.then(function () {
+						var payload = {
+							selectedValue: gridActionGroupDefinition != undefined ? gridActionGroupDefinition.TextResourceKey : undefined
+						};
+						VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, payload, loadLocalizationTextResourceSelectorDeferred);
+					});
+					return loadLocalizationTextResourceSelectorDeferred.promise;
+				}
 
 
                 var rootPromiseNode = {
                     promises: initialPromises,
                     getChildNode: function () {
                         var directivePromises = [];
-                        directivePromises.push(UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]));
+						directivePromises.push(UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadLocalizationTextResourceSelecor]));
 
                         return {
                             promises: directivePromises
@@ -92,7 +107,8 @@
         function buildGridActionDefinitionFromScope() {
             return {
                 GenericBEGridActionGroupId: gridActionGroupDefinition != undefined ? gridActionGroupDefinition.GenericBEGridActionGroupId : UtilsService.guid(),
-                Title: $scope.scopeModel.title,
+				Title: $scope.scopeModel.title,
+				TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues()
             };
         }
 

@@ -16,6 +16,8 @@
         var filterConditionAPI;
         var filterConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+		var localizationTextResourceSelectorAPI;
+		var localizationTextResourceSlectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -52,7 +54,10 @@
                     return insert();
                 }
             };
-
+			$scope.scopeModel.onLocalizationTextResourceDirectiveReady = function (api) {
+				localizationTextResourceSelectorAPI = api;
+				localizationTextResourceSlectorReadyPromiseDeferred.resolve();
+			};
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -105,9 +110,20 @@
                         VRUIUtilsService.callDirectiveLoad(filterConditionAPI, settingPayload, loadFilterConditionEditorPromiseDeferred);
                     });
                     return loadFilterConditionEditorPromiseDeferred.promise;
-                }
+				}
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadActionGroupSelector, loadFilterConditionEditor]).then(function () {
+				function loadLocalizationTextResourceSelecor() {
+					var loadLocalizationTextResourceSelectorDeferred = UtilsService.createPromiseDeferred();
+					localizationTextResourceSlectorReadyPromiseDeferred.promise.then(function () {
+						var payload = {
+							selectedValue: gridActionDefinition != undefined ? gridActionDefinition.TextResourceKey : undefined
+						};
+						VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, payload, loadLocalizationTextResourceSelectorDeferred);
+					});
+					return loadLocalizationTextResourceSelectorDeferred.promise;
+				}
+
+				return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadActionGroupSelector, loadFilterConditionEditor, loadLocalizationTextResourceSelecor]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -125,7 +141,9 @@
                 Title: $scope.scopeModel.title,
                 ReloadGridItem: $scope.scopeModel.reloadGridItem,
                 GenericBEGridActionGroupId: actionGroupSelectorAPI.getSelectedIds(),
-                FilterCondition: filterConditionAPI.getData()
+				FilterCondition: filterConditionAPI.getData(),
+				TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues()
+
             };
         }
 

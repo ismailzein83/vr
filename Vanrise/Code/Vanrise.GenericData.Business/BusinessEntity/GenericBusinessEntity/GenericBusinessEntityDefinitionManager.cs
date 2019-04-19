@@ -58,8 +58,8 @@ namespace Vanrise.GenericData.Business
 			var genericBEDefinition = GetGenericBEDefinition(businessEntityDefinitionId);
 			genericBEDefinition.Settings.ThrowIfNull("genericBEDefinition.Settings");
 			var genericBESettings = genericBEDefinition.Settings.CastWithValidate<GenericBEDefinitionSettings>("genericBEDefinition.Settings");
-			//if (getTranslated)
-			//	return TranslateGenericBEDefinitionSettings(genericBESettings);
+			if (getTranslated)
+				return TranslateGenericBEDefinitionSettings(genericBESettings);
 			return genericBESettings;
 		}
 		public Guid GetGenericBEDataRecordStorageId(Guid businessEntityDefinitionId)
@@ -320,65 +320,88 @@ namespace Vanrise.GenericData.Business
 
 		#endregion
 		#region Private Methods
-		//private GenericBEDefinitionSettings TranslateGenericBEDefinitionSettings(GenericBEDefinitionSettings genericBEDefinitionSettings)
-		//{
-		//	var genericBEDefinitionSettingsCopy = genericBEDefinitionSettings.VRDeepCopy();
+		private GenericBEDefinitionSettings TranslateGenericBEDefinitionSettings(GenericBEDefinitionSettings genericBEDefinitionSettings)
+		{
+			var genericBEDefinitionSettingsCopy = genericBEDefinitionSettings.VRDeepCopy();
 
-		//	if (vrLocalizationManager.IsLocalizationEnabled())
-		//	{
-		//		if (genericBEDefinitionSettingsCopy != null)
-		//		{
+			if (vrLocalizationManager.IsLocalizationEnabled())
+			{
+				if (genericBEDefinitionSettingsCopy != null)
+				{
 
-		//			if (genericBEDefinitionSettingsCopy.GridDefinition != null)
-		//			{
-		//				if (genericBEDefinitionSettingsCopy.GridDefinition.ColumnDefinitions != null)
-		//				{
-		//					foreach (var columnDefinition in genericBEDefinitionSettingsCopy.GridDefinition.ColumnDefinitions)
-		//					{
-		//						if (!String.IsNullOrEmpty(columnDefinition.TextResourceKey))
-		//						{
-		//							columnDefinition.FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(columnDefinition.TextResourceKey, columnDefinition.FieldTitle);
-		//						}
-		//					}
+					if (genericBEDefinitionSettingsCopy.GridDefinition != null)
+					{
+						if (genericBEDefinitionSettingsCopy.GridDefinition.ColumnDefinitions != null)
+						{
+							foreach (var columnDefinition in genericBEDefinitionSettingsCopy.GridDefinition.ColumnDefinitions)
+							{
+								if (!String.IsNullOrEmpty(columnDefinition.TextResourceKey))
+								{
+									columnDefinition.FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(columnDefinition.TextResourceKey, columnDefinition.FieldTitle);
+								}
+							}
 
-		//					if (genericBEDefinitionSettingsCopy.GridDefinition.GenericBEGridActions != null)
-		//					{
-		//						foreach (var gridAction in genericBEDefinitionSettingsCopy.GridDefinition.GenericBEGridActions)
-		//						{
-		//							if (!String.IsNullOrEmpty(gridAction.TextResourceKey))
-		//							{
-		//								gridAction.Title = vrLocalizationManager.GetTranslatedTextResourceValue(gridAction.TextResourceKey, gridAction.Title);
-		//							}
+							if (genericBEDefinitionSettingsCopy.GridDefinition.GenericBEGridActions != null)
+							{
+								foreach (var gridAction in genericBEDefinitionSettingsCopy.GridDefinition.GenericBEGridActions)
+								{
+									if (!String.IsNullOrEmpty(gridAction.TextResourceKey))
+									{
+										gridAction.Title = vrLocalizationManager.GetTranslatedTextResourceValue(gridAction.TextResourceKey, gridAction.Title);
+									}
 
-		//						}
-		//					}
+								}
+							}
 
-		//					if (genericBEDefinitionSettingsCopy.GridDefinition.GenericBEGridActionGroups != null)
-		//					{
-		//						foreach (var gridActionGroup in genericBEDefinitionSettingsCopy.GridDefinition.GenericBEGridActionGroups)
-		//						{
-		//							if (!String.IsNullOrEmpty(gridActionGroup.TextResourceKey))
-		//							{
-		//								gridActionGroup.Title = vrLocalizationManager.GetTranslatedTextResourceValue(gridActionGroup.TextResourceKey, gridActionGroup.Title);
-		//							}
+							if (genericBEDefinitionSettingsCopy.GridDefinition.GenericBEGridActionGroups != null)
+							{
+								foreach (var gridActionGroup in genericBEDefinitionSettingsCopy.GridDefinition.GenericBEGridActionGroups)
+								{
+									if (!String.IsNullOrEmpty(gridActionGroup.TextResourceKey))
+									{
+										gridActionGroup.Title = vrLocalizationManager.GetTranslatedTextResourceValue(gridActionGroup.TextResourceKey, gridActionGroup.Title);
+									}
 
-		//						}
-		//					}
-		//				}
-		//			}
-		//			if (genericBEDefinitionSettingsCopy.EditorDefinition != null && genericBEDefinitionSettingsCopy.EditorDefinition.Settings != null)
-		//			{
-		//				genericBEDefinitionSettingsCopy.EditorDefinition.Settings.Translate();
-		//			}
+								}
+							}
+							if (genericBEDefinitionSettingsCopy.GridDefinition.GenericBEGridViews != null)
+							{
+								foreach (var gridView in genericBEDefinitionSettingsCopy.GridDefinition.GenericBEGridViews)
+								{
+									if (!String.IsNullOrEmpty(gridView.TextResourceKey))
+									{
+										gridView.Name = vrLocalizationManager.GetTranslatedTextResourceValue(gridView.TextResourceKey, gridView.Name);
+									}
 
-		//			if (genericBEDefinitionSettingsCopy.FilterDefinition != null && genericBEDefinitionSettingsCopy.FilterDefinition.Settings != null)
-		//			{
-		//				genericBEDefinitionSettingsCopy.FilterDefinition.Settings.Translate();
-		//			}
-		//		}
-		//	}
-		//	return genericBEDefinitionSettingsCopy;
-		//}
+								}
+							}
+						}
+					}
+
+					if (genericBEDefinitionSettingsCopy.EditorDefinition != null && genericBEDefinitionSettingsCopy.EditorDefinition.Settings != null)
+					{
+						genericBEDefinitionSettingsCopy.EditorDefinition.Settings.TryTranslate();
+					}
+
+					if (genericBEDefinitionSettingsCopy.FilterDefinition != null && genericBEDefinitionSettingsCopy.FilterDefinition.Settings != null)
+					{
+						genericBEDefinitionSettingsCopy.FilterDefinition.Settings.TryTranslate();
+					}
+
+					if (genericBEDefinitionSettingsCopy.GenericBEBulkActions != null)
+					{
+						foreach (var bulkAction in genericBEDefinitionSettingsCopy.GenericBEBulkActions)
+						{
+							if (!String.IsNullOrEmpty(bulkAction.TextResourceKey))
+							{
+								bulkAction.Title = vrLocalizationManager.GetTranslatedTextResourceValue(bulkAction.TextResourceKey, bulkAction.Title);
+							}
+						}
+					}
+				}
+			}
+			return genericBEDefinitionSettingsCopy;
+		}
 		#endregion
 	}
 }

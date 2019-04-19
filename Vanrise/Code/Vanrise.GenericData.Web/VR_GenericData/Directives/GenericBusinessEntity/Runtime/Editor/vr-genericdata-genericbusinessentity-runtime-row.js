@@ -82,7 +82,8 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                     fieldTitle: field.FieldTitle,
                     fieldType: field.FieldType,
                     fieldValue: currentContext != undefined ? currentContext.getFieldPathValue(field.FieldPath) : undefined,
-                    fieldViewSettings: field.FieldViewSettings
+					fieldViewSettings: field.FieldViewSettings,
+					TextResourceKey: field.TextResourceKey
                 };
                 if (field.readyPromiseDeferred != undefined) {
                     field.readyPromiseDeferred.promise.then(function () {

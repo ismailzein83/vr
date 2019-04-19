@@ -75,7 +75,8 @@ app.directive("vrGenericdataGenericbeGridactiondefinitionGrid", ["UtilsService",
                                 Title: currentItem.Title,
                                 ReloadGridItem: currentItem.ReloadGridItem,
                                 GenericBEGridActionGroupId: currentItem.GenericBEGridActionGroupId,
-                                FilterCondition: currentItem.FilterCondition
+								FilterCondition: currentItem.FilterCondition,
+								TextResourceKey: currentItem.TextResourceKey
                             });
                         }
                     } 

@@ -10,5 +10,7 @@ namespace Vanrise.GenericData.Entities
     {
         public abstract Guid ConfigId { get; }
         public virtual string RuntimeEditor { get; set; }
+		public virtual void TryTranslate() { }
+	
     }
 }

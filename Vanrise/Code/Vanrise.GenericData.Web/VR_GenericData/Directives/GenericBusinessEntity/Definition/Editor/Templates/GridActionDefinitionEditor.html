@@ -1,34 +1,35 @@
 ﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEGridActionDefintionController" vr-loader="scopeModel.isLoading" width="'40%'">
-    <vr-modalbody>
-        <vr-form validationcontext="gridActionEditor">
-            <vr-tabs>
-                <vr-tab header="'Definition'">
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModel.title" label="Title" isrequired></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-switch value="scopeModel.reloadGridItem" label="Reload Grid Item"></vr-switch>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-select datasource="scopeModel.bEActionsDefinitionInfos" selectedvalues="scopeModel.selectedActionDefnition" datavaluefield="GenericBEActionId" datatextfield="Name" label="Generic BE Action" text="None" isrequired="true" hideremoveicon>
-                            </vr-select>
-                        </vr-columns>
-                        <vr-genericdata-genericbe-gridactiongroupdefinition-selector on-ready="scopeModel.onGenericBEGridActionGroupSelectorReady" normal-col-num="6"></vr-genericdata-genericbe-gridactiongroupdefinition-selector>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Filter'">
-                    <vr-genericdata-genericbe-gridactiondefinition-filter on-ready="scopeModel.onGenericBEGridactiondefinitionFilterReady" normal-col-num="6"></vr-genericdata-genericbe-gridactiondefinition-filter>
-                </vr-tab>
-            </vr-tabs>
-        </vr-form>
-    </vr-modalbody>
-    <div>
-        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-            <div transclude-to="buttons">
-                <vr-button type="Save" validationcontext="gridActionEditor" data-onclick="scopeModel.saveGridActionDefinition"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-            </div>
-        </vr-actionbar>
-    </div>
+	<vr-modalbody>
+		<vr-form validationcontext="gridActionEditor">
+			<vr-tabs>
+				<vr-tab header="'Definition'">
+					<vr-row>
+						<vr-columns width="1/2row">
+							<vr-textbox value="scopeModel.title" label="Title" isrequired></vr-textbox>
+						</vr-columns>
+						<vr-columns width="1/2row">
+							<vr-switch value="scopeModel.reloadGridItem" label="Reload Grid Item"></vr-switch>
+						</vr-columns>
+						<vr-columns width="1/2row">
+							<vr-select datasource="scopeModel.bEActionsDefinitionInfos" selectedvalues="scopeModel.selectedActionDefnition" datavaluefield="GenericBEActionId" datatextfield="Name" label="Generic BE Action" text="None" isrequired="true" hideremoveicon>
+							</vr-select>
+						</vr-columns>
+						<vr-genericdata-genericbe-gridactiongroupdefinition-selector on-ready="scopeModel.onGenericBEGridActionGroupSelectorReady" normal-col-num="6"></vr-genericdata-genericbe-gridactiongroupdefinition-selector>
+						<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="6"></vr-common-vrlocalizationtextresource-selector>
+					</vr-row>
+				</vr-tab>
+				<vr-tab header="'Filter'">
+					<vr-genericdata-genericbe-gridactiondefinition-filter on-ready="scopeModel.onGenericBEGridactiondefinitionFilterReady" normal-col-num="6"></vr-genericdata-genericbe-gridactiondefinition-filter>
+				</vr-tab>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" validationcontext="gridActionEditor" data-onclick="scopeModel.saveGridActionDefinition"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
 </div>

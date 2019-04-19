@@ -20,7 +20,18 @@ namespace Vanrise.GenericData.MainExtensions
             get { return "vr-genericdata-genericbe-filterruntime-basicadvanced"; }
         }
         public List<BasicAdvancedFilterItem> Filters { get; set; }
-    }
+
+		public override void TryTranslate()
+		{
+			if (Filters != null)
+			{
+				foreach (var filter in Filters)
+				{
+					filter.FilterSettings.TryTranslate();
+				}
+			}
+		}
+	}
     public class BasicAdvancedFilterItem
     {
         public Guid BasicAdvancedFilterItemId { get; set; }

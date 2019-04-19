@@ -14,6 +14,9 @@
         var genericBEBulkActionSettingsSelectiveAPI;
         var genericBEBulkActionSettingsSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+		var localizationTextResourceSelectorAPI;
+		var localizationTextResourceSlectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -34,7 +37,12 @@
             $scope.scopeModel.onGenericBEBulkActionSettingsSelectiveReady = function (api) {
                 genericBEBulkActionSettingsSelectiveAPI = api;
                 genericBEBulkActionSettingsSelectiveReadyDeferred.resolve();
-            };
+			};
+
+			$scope.scopeModel.onLocalizationTextResourceDirectiveReady = function (api) {
+				localizationTextResourceSelectorAPI = api;
+				localizationTextResourceSlectorReadyPromiseDeferred.resolve();
+			};
 
             $scope.scopeModel.save = function () {
                 if (isEditMode)
@@ -76,9 +84,20 @@
                 });
 
                 return genericBEBulkActionSettingsSelectiveLoadDeferred.promise;
-            }
+			}
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGenericBEBulkActionSettingsSelective]).catch(function (error) {
+			function loadLocalizationTextResourceSelecor() {
+				var loadLocalizationTextResourceSelectorDeferred = UtilsService.createPromiseDeferred();
+				localizationTextResourceSlectorReadyPromiseDeferred.promise.then(function () {
+					var payload = {
+						selectedValue: genericBEBulkActionEntity != undefined ? genericBEBulkActionEntity.TextResourceKey : undefined
+					};
+					VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, payload, loadLocalizationTextResourceSelectorDeferred);
+				});
+				return loadLocalizationTextResourceSelectorDeferred.promise;
+			}
+
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGenericBEBulkActionSettingsSelective, loadLocalizationTextResourceSelecor]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -106,7 +125,8 @@
             return {
                 GenericBEBulkActionId: genericBEBulkActionEntity != undefined ? genericBEBulkActionEntity.GenericBEBulkActionId : UtilsService.guid(),
                 Title: $scope.scopeModel.title,
-                Settings: genericBEBulkActionSettingsSelectiveAPI.getData()
+				Settings: genericBEBulkActionSettingsSelectiveAPI.getData(),
+				TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues()
             };
         }
     }

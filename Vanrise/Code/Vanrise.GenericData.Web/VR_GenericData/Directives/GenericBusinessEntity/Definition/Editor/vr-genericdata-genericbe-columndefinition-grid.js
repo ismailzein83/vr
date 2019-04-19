@@ -76,7 +76,8 @@ app.directive("vrGenericdataGenericbeColumndefinitionGrid", ["UtilsService", "VR
                             columns.push({
                                 FieldName: currentItem.FieldName,
                                 FieldTitle: currentItem.FieldTitle,
-                                GridColumnSettings: currentItem.GridColumnSettings
+								GridColumnSettings: currentItem.GridColumnSettings,
+								TextResourceKey: currentItem.TextResourceKey
                             });
                         }
                     }

@@ -27,6 +27,9 @@
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+			var localizationTextResourceSelectorAPI;
+			var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -45,7 +48,12 @@
                         $scope.scopeModel.fieldTitle = undefined;
                     }
 
-                };
+				};
+
+				$scope.scopeModel.onLocalizationTextResourceDirectiveReady = function (api) {
+					localizationTextResourceSelectorAPI = api;
+					localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+				};
 
                 defineAPI();
             }
@@ -57,7 +65,8 @@
                         $type: "Vanrise.GenericData.MainExtensions.GenericFilterDefinitionSettings, Vanrise.GenericData.MainExtensions",
                         FieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
                         FieldTitle: $scope.scopeModel.fieldTitle,
-                        IsRequired: $scope.scopeModel.isRequired
+						IsRequired: $scope.scopeModel.isRequired,
+						TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues()
                     };
                 };
 
@@ -85,9 +94,21 @@
                             $scope.scopeModel.isRequired = payload.settings.IsRequired;
                         }
 
-                    }
+					}
+					function loadLocalizationTextResourceSelector() {
+						var loadSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+						localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+							var directivePayload = {
+								selectedValue: (payload!=undefined && payload.settings != undefined) ? payload.settings.TextResourceKey : undefined
 
-                    return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadDataRecordTitleFieldsSelector]).then(function () {
+							};
+							VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, directivePayload, loadSelectorPromiseDeferred);
+						});
+						return loadSelectorPromiseDeferred.promise;
+					}
+
+
+					return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadDataRecordTitleFieldsSelector,loadLocalizationTextResourceSelector]).then(function () {
                     }).finally(function () {
                         setTimeout(function () {
                             firstLoad = false;

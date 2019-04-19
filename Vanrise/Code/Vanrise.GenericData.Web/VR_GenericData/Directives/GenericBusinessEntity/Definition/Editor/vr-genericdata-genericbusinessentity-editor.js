@@ -727,7 +727,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             var actionGroupDefinition = actionGroupDefinitions[i];
                             data.push({
                                 GenericBEGridActionGroupId: actionGroupDefinition.GenericBEGridActionGroupId,
-                                Title: actionGroupDefinition.Title,
+								Title: actionGroupDefinition.Title,
+								TextResourceKey: actionGroupDefinition.TextResourceKey
                             });
                         }
                         return data;

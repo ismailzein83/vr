@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -22,6 +23,15 @@ namespace Vanrise.GenericData.MainExtensions
         public string FieldName { get; set; }
         public string FieldTitle { get; set; }
         public bool IsRequired { get; set; }
+		public string TextResourceKey { get; set; }
 
-    }
+		public override void TryTranslate()
+		{
+			VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+			if (!String.IsNullOrEmpty(TextResourceKey))
+			{
+				FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(TextResourceKey,FieldTitle);
+			}
+		}
+	}
 }

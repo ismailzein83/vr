@@ -106,14 +106,15 @@ namespace Vanrise.GenericData.Business
     {
         public string FieldName { get; set; }
         public bool IsRequired { get; set; }
+		public string TextResourceKey { get; set; }
+	}
 
-    }
-
-    public class GenericBEBulkAction
+	public class GenericBEBulkAction
     {
         public Guid GenericBEBulkActionId { get; set; }
         public string Title { get; set; }
-        public GenericBEBulkActionSettings Settings { get; set; }
+		public string TextResourceKey { get; set; }
+		public GenericBEBulkActionSettings Settings { get; set; }
     }
     public abstract class GenericBEBulkActionSettings
     {
@@ -263,7 +264,8 @@ namespace Vanrise.GenericData.Business
     {
         public Guid GenericBEViewDefinitionId { get; set; }
         public string Name { get; set; }
-        public GenericBEViewDefinitionSettings Settings { get; set; }
+		public string TextResourceKey { get; set; }
+		public GenericBEViewDefinitionSettings Settings { get; set; }
         public GenericBEGridCondition Condition { get; set; }
     }
     public abstract class GenericBEViewDefinitionSettings
@@ -304,9 +306,10 @@ namespace Vanrise.GenericData.Business
     {
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeEditor { get; }
-    }
+		public virtual void TryTranslate() { }
+	}
 
-    public class GenericBEEditorDefinition
+	public class GenericBEEditorDefinition
     {
         public VRGenericEditorDefinitionSetting Settings { get; set; }
     }
@@ -323,6 +326,7 @@ namespace Vanrise.GenericData.Business
     {
         public string FieldName { get; set; }
         public string FieldTitle { get; set; }
+		public string TextResourceKey { get; set; }
         public GridColumnSettings GridColumnSettings { get; set; }
     }
     public class GenericBEGridAction
@@ -331,7 +335,8 @@ namespace Vanrise.GenericData.Business
         public Guid GenericBEActionId { get; set; }
         public string Title { get; set; }
         public bool ReloadGridItem { get; set; }
-        public Guid? GenericBEGridActionGroupId { get; set; }
+		public string TextResourceKey { get; set; }
+		public Guid? GenericBEGridActionGroupId { get; set; }
         public GenericBEActionFilterCondition FilterCondition { get; set; }
     }
 
@@ -339,9 +344,10 @@ namespace Vanrise.GenericData.Business
     {
         public Guid GenericBEGridActionGroupId { get; set; }
         public string Title { get; set; }
-    }
+		public string TextResourceKey { get; set; }
+	}
 
-    public abstract class GenericBEActionFilterCondition
+	public abstract class GenericBEActionFilterCondition
     {
         public abstract Guid ConfigId { get; }
         public abstract bool IsFilterMatch(IGenericBEActionFilterConditionContext context);

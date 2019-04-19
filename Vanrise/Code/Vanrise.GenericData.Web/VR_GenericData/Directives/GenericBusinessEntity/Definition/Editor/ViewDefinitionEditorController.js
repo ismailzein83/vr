@@ -17,7 +17,10 @@
         var viewSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var viewConditionDirectiveAPI;
-        var viewConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+		var viewConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+		var localizationTextResourceSelectorAPI;
+		var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -45,6 +48,10 @@
                 viewConditionReadyPromiseDeferred.resolve();
             };
 
+			$scope.scopeModel.onLocalizationTextResourceDirectiveReady = function (api) {
+				localizationTextResourceSelectorAPI = api;
+				localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+			};
 
             $scope.scopeModel.saveViewDefinition = function () {
                 if (isEditMode) {
@@ -91,7 +98,19 @@
                         VRUIUtilsService.callDirectiveLoad(viewSettingsDirectiveAPI, payload, loadViewSettingsPromiseDeferred);
                     });
                     return loadViewSettingsPromiseDeferred.promise;
-                }
+				}
+
+				function loadLocalizationTextResourceSelector() {
+					var loadSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+					localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+						var payload = {
+							selectedValue: viewDefinition != undefined ? viewDefinition.TextResourceKey : undefined
+						};
+						VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, payload, loadSelectorPromiseDeferred);
+					});
+					return loadSelectorPromiseDeferred.promise;
+				}
+
 
                 function loadConditionDirectiveSection() {
                     var loadViewConditionPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -105,7 +124,7 @@
                     return loadViewConditionPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadSettingDirectiveSection, loadConditionDirectiveSection]).then(function () {
+				return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadSettingDirectiveSection, loadConditionDirectiveSection, loadLocalizationTextResourceSelector]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -121,7 +140,8 @@
                 GenericBEViewDefinitionId: viewDefinition != undefined ? viewDefinition.GenericBEViewDefinitionId : UtilsService.guid(),
                 Name: $scope.scopeModel.name,
                 Settings: viewSettingsDirectiveAPI.getData(),
-                Condition: viewConditionDirectiveAPI.getData()
+				Condition: viewConditionDirectiveAPI.getData(),
+				TextResourceKey: localizationTextResourceSelectorAPI.getSelectedValues()
             };
         }
 
