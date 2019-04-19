@@ -38,7 +38,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         SupplierSMSServiceTypes = 20,
         BillingCompanyContact = 21,
         CarrierCompanyBillingContact = 22,
-        OriginalAmount = 23
+        OriginalAmount = 23,
+		CompanyFax=24
     }
 
     public enum CarrierInvoiceType { Customer = 1, Supplier = 2, Settlement = 3 }
@@ -224,8 +225,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.Name, companySetting.CompanyName, true);
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyEmail, companySetting.BillingEmails, true);
-                        }
-                        return rdlcReportParameters;
+							AddRDLCParameter(rdlcReportParameters, RDLCParameter.CompanyFax, string.Join(",",companySetting.Faxes), true);
+						}
+						return rdlcReportParameters;
                         #endregion
                     }
 
