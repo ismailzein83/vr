@@ -100,7 +100,7 @@ namespace TOne.WhS.Routing.Business
 
             foreach (var option in Options)
             {
-                string optionDescription = carrierAccountManager.GetCarrierAccountName(option.SupplierId);
+                string optionDescription = $"{carrierAccountManager.GetCarrierAccountName(option.SupplierId)} ({option.Percentage}%) ";
                 if (option.Backups != null && option.Backups.Count > 0)
                 {
                     IEnumerable<string> backupsNames = option.Backups.Select(item => carrierAccountManager.GetCarrierAccountName(item.SupplierId));

@@ -147,56 +147,56 @@ namespace TOne.WhS.Routing.Business
             };
 
             Func<RouteRule, bool> filterExpression = (routeRule) =>
+            {
+                if (input.Query.IsManagementScreen && !routeRule.Criteria.IsVisibleInManagementView())
+                    return false;
+
+                int? routingProductId = routeRule.Criteria.GetRoutingProductId();
+                if (!input.Query.RoutingProductId.HasValue && routingProductId.HasValue)
+                    return false;
+
+                if (input.Query.RoutingProductId.HasValue && (!routingProductId.HasValue || routingProductId.Value != input.Query.RoutingProductId.Value))
+                    return false;
+
+                if (!string.IsNullOrEmpty(ruleNameLower) && (string.IsNullOrEmpty(routeRule.Name) || !routeRule.Name.ToLower().Contains(ruleNameLower)))
+                    return false;
+
+                if (!string.IsNullOrEmpty(input.Query.Code) && !CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
+                    return false;
+
+                if (input.Query.CustomerIds != null && !CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
+                    return false;
+
+                if (input.Query.SaleZoneIds != null && !CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
+                    return false;
+
+                if (input.Query.CountryIds != null && !CheckIfCountrySettingsContains(routeRule, input.Query.CountryIds))
+                    return false;
+
+                if (input.Query.RouteRuleSettingsConfigIds != null && !CheckIfSameRouteRuleSettingsConfigId(routeRule, input.Query.RouteRuleSettingsConfigIds))
+                    return false;
+
+                if (input.Query.EffectiveOn.HasValue && (routeRule.BeginEffectiveTime > input.Query.EffectiveOn || (routeRule.EndEffectiveTime.HasValue && routeRule.EndEffectiveTime <= input.Query.EffectiveOn)))
+                    return false;
+
+                if (input.Query.LinkedRouteRuleIds != null && !input.Query.LinkedRouteRuleIds.Contains(routeRule.RuleId))
+                    return false;
+
+                if (input.Query.SupplierIds != null && !routeRule.Settings.AreSuppliersIncluded(routeRuleIsSupplierIncludedContext))
+                    return false;
+
+                if (input.Query.Filters != null)
                 {
-                    if (input.Query.IsManagementScreen && !routeRule.Criteria.IsVisibleInManagementView())
-                        return false;
-
-                    int? routingProductId = routeRule.Criteria.GetRoutingProductId();
-                    if (!input.Query.RoutingProductId.HasValue && routingProductId.HasValue)
-                        return false;
-
-                    if (input.Query.RoutingProductId.HasValue && (!routingProductId.HasValue || routingProductId.Value != input.Query.RoutingProductId.Value))
-                        return false;
-
-                    if (!string.IsNullOrEmpty(ruleNameLower) && (string.IsNullOrEmpty(routeRule.Name) || !routeRule.Name.ToLower().Contains(ruleNameLower)))
-                        return false;
-
-                    if (!string.IsNullOrEmpty(input.Query.Code) && !CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
-                        return false;
-
-                    if (input.Query.CustomerIds != null && !CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
-                        return false;
-
-                    if (input.Query.SaleZoneIds != null && !CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
-                        return false;
-
-                    if (input.Query.CountryIds != null && !CheckIfCountrySettingsContains(routeRule, input.Query.CountryIds))
-                        return false;
-
-                    if (input.Query.RouteRuleSettingsConfigIds != null && !CheckIfSameRouteRuleSettingsConfigId(routeRule, input.Query.RouteRuleSettingsConfigIds))
-                        return false;
-
-                    if (input.Query.EffectiveOn.HasValue && (routeRule.BeginEffectiveTime > input.Query.EffectiveOn || (routeRule.EndEffectiveTime.HasValue && routeRule.EndEffectiveTime <= input.Query.EffectiveOn)))
-                        return false;
-
-                    if (input.Query.LinkedRouteRuleIds != null && !input.Query.LinkedRouteRuleIds.Contains(routeRule.RuleId))
-                        return false;
-
-                    if (input.Query.SupplierIds != null && !routeRule.Settings.AreSuppliersIncluded(routeRuleIsSupplierIncludedContext))
-                        return false;
-
-                    if (input.Query.Filters != null)
+                    RouteRuleFilterContext context = new RouteRuleFilterContext() { RouteRule = routeRule };
+                    foreach (IRouteRuleFilter filter in input.Query.Filters)
                     {
-                        RouteRuleFilterContext context = new RouteRuleFilterContext() { RouteRule = routeRule };
-                        foreach (IRouteRuleFilter filter in input.Query.Filters)
-                        {
-                            if (!filter.IsMatched(context))
-                                return false;
-                        }
+                        if (!filter.IsMatched(context))
+                            return false;
                     }
+                }
 
-                    return true;
-                };
+                return true;
+            };
 
 
             ResultProcessingHandler<RouteRuleDetail> handler = new ResultProcessingHandler<RouteRuleDetail>()
@@ -535,8 +535,11 @@ namespace TOne.WhS.Routing.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Destinations" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Excluded Codes" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Suppliers", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ModifiedBy" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ModifiedTime", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -552,8 +555,11 @@ namespace TOne.WhS.Routing.Business
                             row.Cells.Add(new ExportExcelCell { Value = record.Destinations });
                             row.Cells.Add(new ExportExcelCell { Value = record.Customers });
                             row.Cells.Add(new ExportExcelCell { Value = record.Excluded });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Suppliers });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastModifiedBy });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastModifiedTime });
                         }
                     }
                 }
