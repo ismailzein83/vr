@@ -14,17 +14,14 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         #region Public Methods
 
-        public Dictionary<RoutingProductOwnerKey, Dictionary<long, List<SaleZoneRoutingProduct>>>
-            GetAllCachedSaleZoneRoutingProducts()
+        public Dictionary<RoutingProductOwnerKey, Dictionary<long, List<SaleZoneRoutingProduct>>> GetAllCachedSaleZoneRoutingProducts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>()
                 .GetOrCreateObject("GetAllCachedSaleZoneRoutingProducts", () =>
                 {
-                    ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager =
-                        BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+                    ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
                     var allSaleZoneRoutingProducts = saleEntityRoutingProductDataManager.GetAllZoneRoutingProducts();
-                    Dictionary<RoutingProductOwnerKey, Dictionary<long, List<SaleZoneRoutingProduct>>> rslt =
-                        new Dictionary<RoutingProductOwnerKey, Dictionary<long, List<SaleZoneRoutingProduct>>>();
+                    Dictionary<RoutingProductOwnerKey, Dictionary<long, List<SaleZoneRoutingProduct>>> rslt = new Dictionary<RoutingProductOwnerKey, Dictionary<long, List<SaleZoneRoutingProduct>>>();
                     var carrierAccountManager = new CarrierAccountManager();
 
                     if (allSaleZoneRoutingProducts != null)
@@ -45,14 +42,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Dictionary<RoutingProductOwnerKey, List<DefaultRoutingProduct>> GetAllCachedDefaultRoutingProducts()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>()
-                .GetOrCreateObject("GetAllCachedDefaultRoutingProducts", () =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().GetOrCreateObject("GetAllCachedDefaultRoutingProducts", () =>
                 {
-                    ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager =
-                        BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+                    ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
                     var allSaleZoneRoutingProducts = saleEntityRoutingProductDataManager.GetAllDefaultRoutingProducts();
-                    Dictionary<RoutingProductOwnerKey, List<DefaultRoutingProduct>> rslt =
-                        new Dictionary<RoutingProductOwnerKey, List<DefaultRoutingProduct>>();
+                    Dictionary<RoutingProductOwnerKey, List<DefaultRoutingProduct>> rslt = new Dictionary<RoutingProductOwnerKey, List<DefaultRoutingProduct>>();
                     var carrierAccountManager = new CarrierAccountManager();
 
                     if (allSaleZoneRoutingProducts != null)
@@ -73,8 +67,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
 
-        public Vanrise.Entities.IDataRetrievalResult<RoutingProductDetail> GetFilteredRoutingProducts(
-            Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<RoutingProductDetail> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
         {
             var allRoutingProducts = GetAllRoutingProducts();
 
@@ -89,8 +82,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 ExportExcelHandler = new RoutingProductExcelExportHandler()
             };
             VRActionLogger.Current.LogGetFilteredAction(RoutingProductLoggableEntity.Instance, input);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input,
-                allRoutingProducts.ToBigResult(input, filterExpression, RoutingProductDetailMapper), handler);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterExpression, RoutingProductDetailMapper), handler);
         }
 
         public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySellingNumberPlan(int sellingNumberPlanId)
@@ -150,13 +142,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         case SalePriceListOwnerType.SellingProduct:
                             SellingProductManager sellingProductManager = new SellingProductManager();
-                            sellingNumberPlanId =
-                                sellingProductManager.GetSellingNumberPlanId(filter.AssignableToOwnerId.Value);
+                            sellingNumberPlanId = sellingProductManager.GetSellingNumberPlanId(filter.AssignableToOwnerId.Value);
                             break;
                         case SalePriceListOwnerType.Customer:
                             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                            sellingNumberPlanId =
-                                carrierAccountManager.GetCustomerSellingNumberPlanId(filter.AssignableToOwnerId.Value);
+                            sellingNumberPlanId = carrierAccountManager.GetCustomerSellingNumberPlanId(filter.AssignableToOwnerId.Value);
                             break;
                     }
 
@@ -180,8 +170,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             ValidateRoutingProductToAdd(routingProduct);
 
-            InsertOperationOutput<RoutingProductDetail> insertOperationOutput =
-                new InsertOperationOutput<RoutingProductDetail>();
+            InsertOperationOutput<RoutingProductDetail> insertOperationOutput = new InsertOperationOutput<RoutingProductDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -233,11 +222,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                VRActionLogger.Current.TrackAndLogObjectUpdated(RoutingProductLoggableEntity.Instance,
-                    GetRoutingProduct(routingProduct.RoutingProductId));
+                VRActionLogger.Current.TrackAndLogObjectUpdated(RoutingProductLoggableEntity.Instance, GetRoutingProduct(routingProduct.RoutingProductId));
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject =
-                    RoutingProductDetailMapper(this.GetRoutingProduct(routingProduct.RoutingProductId));
+                updateOperationOutput.UpdatedObject = RoutingProductDetailMapper(this.GetRoutingProduct(routingProduct.RoutingProductId));
             }
             else
             {
@@ -357,8 +344,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Dictionary<string, RoutingProduct> GetAllRoutingProductsByName()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(
-                "GetRoutingProductsByName",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProductsByName",
                 () =>
                 {
                     var allRoutingProducts = GetAllRoutingProducts().Values;
@@ -368,8 +354,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Dictionary<int, RoutingProduct> GetAllRoutingProducts()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(
-                "GetRoutingProducts",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProducts",
                 () =>
                 {
                     IRoutingProductDataManager dataManager =
@@ -406,8 +391,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             SaleZone saleZone = saleZoneManager.GetSaleZone(saleZoneId);
             RoutingProductZoneFinder finder = new RoutingProductZoneFinder();
-            Dictionary<int, RoutingProducts> routingProductsByNumberPlan =
-                finder.GetAllRoutingProductsBySellingNumberPlanId();
+            Dictionary<int, RoutingProducts> routingProductsByNumberPlan = finder.GetAllRoutingProductsBySellingNumberPlanId();
             RoutingProducts routingProducts;
             if (routingProductsByNumberPlan.TryGetValue(saleZone.SellingNumberPlanId, out routingProducts))
                 routingProductIds = routingProducts.GetRoutingProductsByZoneId(saleZoneId);
@@ -457,8 +441,7 @@ namespace TOne.WhS.BusinessEntity.Business
         void ValidateRoutingProductToAdd(RoutingProduct routingProduct)
         {
             var sellingNumberPlanManager = new SellingNumberPlanManager();
-            SellingNumberPlan sellingNumberPlan =
-                sellingNumberPlanManager.GetSellingNumberPlan(routingProduct.SellingNumberPlanId);
+            SellingNumberPlan sellingNumberPlan = sellingNumberPlanManager.GetSellingNumberPlan(routingProduct.SellingNumberPlanId);
             if (sellingNumberPlan == null)
                 throw new MissingArgumentValidationException(String.Format(
                     "SellingNumberPlan '{0}' of RoutingProduct does not exist", routingProduct.SellingNumberPlanId));
@@ -470,8 +453,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             RoutingProduct routingProductEntity = this.GetRoutingProduct(routingProduct.RoutingProductId);
             if (routingProductEntity == null)
-                throw new DataIntegrityValidationException(String.Format("RoutingProduct '{0}' does not exit",
-                    routingProduct.RoutingProductId));
+                throw new DataIntegrityValidationException(String.Format("RoutingProduct '{0}' does not exit", routingProduct.RoutingProductId));
 
             ValidateRoutingProduct(routingProduct.Name, routingProduct.Settings,
                 routingProductEntity.SellingNumberPlanId);
@@ -488,8 +470,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (rpSettings.ZoneRelationType == RoutingProductZoneRelationType.AllZones)
             {
                 if (rpSettings.Zones != null)
-                    throw new DataIntegrityValidationException(String.Format(
-                        "RoutingProduct.Settings.Zones must be null when RoutingProduct.Settings.ZoneRelationType = AllZones"));
+                    throw new DataIntegrityValidationException(String.Format("RoutingProduct.Settings.Zones must be null when RoutingProduct.Settings.ZoneRelationType = AllZones"));
             }
             else if (rpSettings.ZoneRelationType == RoutingProductZoneRelationType.SpecificZones)
             {
@@ -503,12 +484,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     SaleZone saleZone = saleZoneManager.GetSaleZone(rpZone.ZoneId);
 
                     if (saleZone == null)
-                        throw new DataIntegrityValidationException(String.Format("SaleZone '{0}' does not exist",
-                            rpZone.ZoneId));
+                        throw new DataIntegrityValidationException(String.Format("SaleZone '{0}' does not exist", rpZone.ZoneId));
 
                     if (saleZone.SellingNumberPlanId != sellingNumberPlanId)
-                        throw new DataIntegrityValidationException(String.Format(
-                            "The SellingNumberPlanId '{0}' of SaleZone '{1}' does not match the SellingNumberPlanId '{2}' of the RoutingProduct",
+                        throw new DataIntegrityValidationException(String.Format("The SellingNumberPlanId '{0}' of SaleZone '{1}' does not match the SellingNumberPlanId '{2}' of the RoutingProduct",
                             saleZone.SellingNumberPlanId, saleZone.Name, sellingNumberPlanId));
                 }
             }
@@ -516,8 +495,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (rpSettings.SupplierRelationType == RoutingProductSupplierRelationType.AllSuppliers)
             {
                 if (rpSettings.Suppliers != null)
-                    throw new DataIntegrityValidationException(String.Format(
-                        "RoutingProduct.Settings.Suppliers must be null when RoutingProduct.Settings.SupplierRelationType = AllSuppliers"));
+                    throw new DataIntegrityValidationException(String.Format("RoutingProduct.Settings.Suppliers must be null when RoutingProduct.Settings.SupplierRelationType = AllSuppliers"));
             }
             else if (rpSettings.SupplierRelationType == RoutingProductSupplierRelationType.SpecificSuppliers)
             {
@@ -530,10 +508,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(rpSupplier.SupplierId);
 
-                    if (supplier == null || (supplier.AccountType != CarrierAccountType.Supplier &&
-                                             supplier.AccountType != CarrierAccountType.Exchange))
-                        throw new DataIntegrityValidationException(String.Format("Supplier '{0}' does not exit",
-                            rpSupplier.SupplierId));
+                    if (supplier == null || (supplier.AccountType != CarrierAccountType.Supplier && supplier.AccountType != CarrierAccountType.Exchange))
+                        throw new DataIntegrityValidationException(String.Format("Supplier '{0}' does not exit", rpSupplier.SupplierId));
                 }
             }
         }
@@ -551,10 +527,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 SellingNumberPlanId = routingProduct.SellingNumberPlanId
             };
             if (routingProduct.Settings == null)
-                throw new Vanrise.Entities.DataIntegrityValidationException(
-                    string.Format("Settings of RoutingProduct '{0}' were not found", routingProduct.RoutingProductId));
-            routingProductInfo.IsDefinedForAllZones =
-                (routingProduct.Settings.ZoneRelationType == RoutingProductZoneRelationType.AllZones);
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Settings of RoutingProduct '{0}' were not found", routingProduct.RoutingProductId));
+            routingProductInfo.IsDefinedForAllZones = (routingProduct.Settings.ZoneRelationType == RoutingProductZoneRelationType.AllZones);
             return routingProductInfo;
         }
 
@@ -564,8 +538,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
 
             SellingNumberPlanManager sellingNumberPlanManager = new SellingNumberPlanManager();
-            SellingNumberPlan sellingNumberPlan =
-                sellingNumberPlanManager.GetSellingNumberPlan(routingProduct.SellingNumberPlanId);
+            SellingNumberPlan sellingNumberPlan = sellingNumberPlanManager.GetSellingNumberPlan(routingProduct.SellingNumberPlanId);
 
             return new RoutingProductDetail()
             {
@@ -627,8 +600,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public Dictionary<int, RoutingProducts> GetAllRoutingProductsBySellingNumberPlanId()
             {
                 RoutingProductManager manager = new RoutingProductManager();
-                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(
-                    "GetRoutingProductsBySellingNumberPlan", () =>
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProductsBySellingNumberPlan", () =>
                     {
                         var routingProducts = manager.GetAllRoutingProducts().Values;
                         Dictionary<int, RoutingProducts> routingProductsByNumberPlan =
@@ -673,8 +645,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             foreach (var saleZone in routingProduct.Settings.Zones)
                             {
                                 List<int> routingProductsWithSpecificZones;
-                                if (!RoutingProductIdsWithSpecificZones.TryGetValue(saleZone.ZoneId,
-                                    out routingProductsWithSpecificZones))
+                                if (!RoutingProductIdsWithSpecificZones.TryGetValue(saleZone.ZoneId, out routingProductsWithSpecificZones))
                                 {
                                     routingProductsWithSpecificZones = new List<int>();
                                     RoutingProductIdsWithSpecificZones.Add(saleZone.ZoneId,
@@ -782,7 +753,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+            throw new NotImplementedException();
         }
 
         public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
@@ -794,9 +765,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
 
-            #endregion
         }
 
+        #endregion
         public struct RoutingProductOwnerKey
         {
             public SalePriceListOwnerType OwnerType { get; set; }
