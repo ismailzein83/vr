@@ -176,6 +176,8 @@
     <Content Include="Retail_RA\Directives\TimePeriod\ra-timeperiod-lastyearperiod.js" />
     <Content Include="Retail_RA\Directives\TimePeriod\Templates\LastPeriodTemplate.html" />
     <Content Include="Retail_RA\Directives\TimePeriod\Templates\LastYearPeriodTemplate.html" />
+    <Content Include="Retail_RA\Directives\TransactionType\ra-retail-lookupbeextendedsettings-transactiontype.js" />
+    <Content Include="Retail_RA\Directives\TransactionType\Templates\TransactionTypeLKUpBEExtendedSettingsTemplate.html" />
     <Content Include="Retail_RA\Services\APIServices\OnNetOperatorDirectionServicesAPIService.js" />
     <Content Include="Retail_RA\Services\APIServices\OperatorDefinitionAPIService.js" />
     <Content Include="Retail_RA\Services\APIServices\OperatorDirectionServicesAPIService.js" />
