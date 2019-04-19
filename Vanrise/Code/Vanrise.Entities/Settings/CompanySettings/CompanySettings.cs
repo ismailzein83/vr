@@ -32,7 +32,9 @@ namespace Vanrise.Entities
         public Dictionary<string, CompanyContact> Contacts { get; set; }
         public Dictionary<Guid, BaseCompanyExtendedSettings> ExtendedSettings { get; set; }
         public Dictionary<Guid, InvoiceReportFile> InvoiceReportFiles { get; set; }
-    }
+		public List<string> Faxes { get; set; }
+
+	}
 
     public class InvoiceReportFile
     {

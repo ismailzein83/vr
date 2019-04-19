@@ -49,7 +49,7 @@
             $scope.scopeModel.contactTabObject = { showTab: false };
             $scope.scopeModel.contacts = [];
             $scope.scopeModel.companyDefinitions = [];
-
+			$scope.scopeModel.faxes = [];
             $scope.scopeModel.saveCompanySetting = function () {
                 if (isEditMode)
                     return updateCompanySettings();
@@ -64,7 +64,21 @@
             $scope.onBankDirectiveReady = function (api) {
                 bankDirectiveApi = api;
                 bankReadyPromiseDeferred.resolve();
-            };
+			};
+
+			$scope.scopeModel.disabledfax = true;
+			$scope.scopeModel.onFaxValueChange = function (value) {
+				$scope.scopeModel.disabledfax = (value == undefined);
+			};
+
+			$scope.addFaxOption = function () {
+				var fax = $scope.scopeModel.faxvalue;
+				$scope.scopeModel.faxes.push({
+					fax: fax
+				});
+				$scope.scopeModel.faxvalue = undefined;
+				$scope.scopeModel.disabledfax = true;
+			};
           
 
         }
@@ -258,7 +272,15 @@
 
             if (companySettingEntity.BillingEmails != undefined) {
                 $scope.scopeModel.toMail = companySettingEntity.BillingEmails.split(";");
-            }
+			}
+			if (companySettingEntity.Faxes != undefined) {
+				for (var x = 0; x < companySettingEntity.Faxes.length; x++) {
+					var fax = companySettingEntity.Faxes[x];
+					$scope.scopeModel.faxes.push({
+						fax: fax
+					});
+				}
+			}
         }
 
         function buildCompanySettingsObjFromScope() {
@@ -276,7 +298,8 @@
                 BankDetails: bankDirectiveApi.getSelectedIds(),
                 Contacts: getContactsData(),
                 ExtendedSettings: getCompanyExtendedSettings(),
-                InvoiceReportFiles: getInvoiceSettings()
+				InvoiceReportFiles: getInvoiceSettings(),
+				Faxes: UtilsService.getPropValuesFromArray($scope.scopeModel.faxes, "fax")
             };
             return obj;
         }
