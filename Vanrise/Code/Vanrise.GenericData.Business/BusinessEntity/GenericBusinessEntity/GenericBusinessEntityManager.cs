@@ -54,14 +54,20 @@ namespace Vanrise.GenericData.Business
 			return GetCacheManager().GetOrCreateObject(cacheName, dataRecordStorageId, createObject);
 		}
 
-		//public void SetCacheExpired(Guid businessEntityDefinitionId)
-		//{
-		//    var dataRecordStorageId = _genericBEDefinitionManager.GetGenericBEDataRecordStorageId(businessEntityDefinitionId);
-		//    GetCacheManager().SetCacheExpired(dataRecordStorageId);
-		//}
+        public bool IsCacheExpired(Guid businessEntityDefinitionId, ref DateTime? lastCheckTime)
+        {
+            var dataRecordStorageId = _genericBEDefinitionManager.GetGenericBEDataRecordStorageId(businessEntityDefinitionId);
+            return GetCacheManager().IsCacheExpired(dataRecordStorageId, ref lastCheckTime);
+        }
+
+        //public void SetCacheExpired(Guid businessEntityDefinitionId)
+        //{
+        //    var dataRecordStorageId = _genericBEDefinitionManager.GetGenericBEDataRecordStorageId(businessEntityDefinitionId);
+        //    GetCacheManager().SetCacheExpired(dataRecordStorageId);
+        //}
 
 
-		public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityInfoFilter filter)
+        public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityInfoFilter filter)
 		{
 			var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, false);
 			if (genericBEDefinitionSetting.DataRecordStorageId.HasValue)
