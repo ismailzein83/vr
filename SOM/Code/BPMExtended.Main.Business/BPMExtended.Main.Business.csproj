@@ -97,6 +97,12 @@
     <Compile Include="Request Flow Management\CreatePaymentPlanFlowManagement.cs" />
     <Compile Include="Request Flow Management\CancelPaymentPlanFlowManagement.cs" />
     <Compile Include="Request Flow Management\LeasedLineComplaintFlowManagement.cs" />
+    <Compile Include="Request Flow Management\LineBlockingFlowManagement.cs" />
+    <Compile Include="Request Flow Management\LineUnBlockingFlowManagement.cs" />
+    <Compile Include="Request Flow Management\NetworkResetPasswordFlowManagement.cs" />
+    <Compile Include="Request Flow Management\OtherChargesFlowManagement.cs" />
+    <Compile Include="Request Flow Management\UpdateContractAddressFlowManagement.cs" />
+    <Compile Include="Request Flow Management\UpdateRatePlanFlowManagement.cs" />
     <Compile Include="TelephonyTechnicalComplaintManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />
     <Compile Include="Helper.cs" />

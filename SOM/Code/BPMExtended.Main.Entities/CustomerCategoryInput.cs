@@ -8,7 +8,6 @@ namespace BPMExtended.Main.Entities
 {
     public class CustomerCategoryInput
     {
-        public string CustomerId { get; set; }
         public string CustomerCategoryId { get; set; }
         public CommonInputArgument CommonInputArgument { get; set; }
     }

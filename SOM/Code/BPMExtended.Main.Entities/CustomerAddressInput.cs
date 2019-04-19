@@ -12,7 +12,6 @@ namespace BPMExtended.Main.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string AddressSeq { get; set; }
-        public string CustomerId { get; set; }
         public CommonInputArgument CommonInputArgument { get; set; }
 
     }

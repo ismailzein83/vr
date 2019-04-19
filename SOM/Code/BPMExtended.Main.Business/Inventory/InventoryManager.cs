@@ -807,6 +807,12 @@ namespace BPMExtended.Main.Business
             string deviceID = GetDeviceID(phoneNumberID);
             string  item = "";
 
+            //int phID = (int)float.Parse(phoneNumberID);
+            //int mDFPortId = int.Parse(mDFPortID);
+            //int dPPortId = int.Parse(dPPortID);
+            //int primaryPort1 = int.Parse(primaryPort);
+            //string secondaryPort1 = int.Parse(secondaryPort).ToString();
+
             using (SOMClient client = new SOMClient())
             {
                 item = client.Get<string>(String.Format("api/SOM.ST/Inventory/ReserveNumber?phoneNumber=" + phoneNumber + "&pathType=" + pathType + "&phoneNumberID=" + phoneNumberID + "&deviceID=" + deviceID + "&mDFPortID=" + mDFPortID + "&dPPortID=" + dPPortID + "&primaryPort=" + primaryPort + "&secondaryPort=" + secondaryPort));

@@ -11,7 +11,6 @@ namespace BPMExtended.Main.Entities
         public string AccountNumber { get; set; }
         public string BankCode { get; set; }
         public string PaymentMethodId { get; set; }
-        public string CustomerId { get; set; }
         public CommonInputArgument CommonInputArgument { get; set; }
     }
 

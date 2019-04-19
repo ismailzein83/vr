@@ -46,17 +46,17 @@ namespace BPMExtended.Main.Business
             }
 
             // check categories catalog
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoryCatalog");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesInCatalog");
             esq.AddColumn("Id");
-            esq.AddColumn("StIsSkipPayment");
+            esq.AddColumn("StSkipBalanceCheck");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", info.CustomerCategoryID);
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryID", info.CustomerCategoryID);
             esq.Filters.Add(esqFirstFilter);
 
             entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                isSkip = (bool)entities[0].GetColumnValue("StIsSkipPayment");
+                isSkip = (bool)entities[0].GetColumnValue("StSkipBalanceCheck");
             }
 
             if (isSkip)
@@ -96,17 +96,17 @@ namespace BPMExtended.Main.Business
             bool isNormal = false;
 
             //Call Categories catalog and check the 'IsNormal' field if true => no need for attachments (optional), if false => attachment is required 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoryCatalog");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesInCatalog");
             esq.AddColumn("Id");
-            esq.AddColumn("StIsNormal");
+            esq.AddColumn("StDefault");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", customerCategoryId);
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryID", customerCategoryId);
             esq.Filters.Add(esqFirstFilter);
 
             entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                isNormal = (bool)entities[0].GetColumnValue("StIsNormal");
+                isNormal = (bool)entities[0].GetColumnValue("StDefault");
 
             }
 
@@ -1469,14 +1469,14 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void AddOtherCharges(Guid requestId)
+        public void PostAddOtherChargesToOM(Guid requestId)
         {
             //Get Data from StLineSubscriptionRequest table
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOtherCharges");
             esq.AddColumn("StServiceCode");
 
 
@@ -1560,9 +1560,26 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void PostUpdateContractAddressToOM()
+        public void PostUpdateContractAddressToOM(Guid requestId)
         {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StUpdateContractAddress");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
 
                 SOMRequestInput<UpdateContractAddressRequestInput> somRequestInput = new SOMRequestInput<UpdateContractAddressRequestInput>
                 {
@@ -1572,6 +1589,7 @@ namespace BPMExtended.Main.Business
                         CommonInputArgument = new CommonInputArgument()
                         {
                             // ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
                             // CustomerId = customerId.ToString()
                         }
                     }
@@ -1583,6 +1601,54 @@ namespace BPMExtended.Main.Business
                 {
                     output = client.Post<SOMRequestInput<UpdateContractAddressRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_UpdateContractAddress/StartProcess", somRequestInput);
                 }
+
+            }
+
+        }
+
+        public void PostNetworkResetPasswordToOM(Guid requestId)
+        {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StNetworkResetPassword");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+
+                SOMRequestInput<ResetNetworkServicePasswordRequestInput> somRequestInput = new SOMRequestInput<ResetNetworkServicePasswordRequestInput>
+                {
+                    InputArguments = new ResetNetworkServicePasswordRequestInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            // ContractId = contractId.ToString(),
+                             RequestId = requestId.ToString(),
+                            // CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ResetNetworkServicePasswordRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_NetworkServiceResetPassword/StartProcess", somRequestInput);
+                }
+
+            }
 
         }
 
@@ -1765,7 +1831,7 @@ namespace BPMExtended.Main.Business
         {
             return true;
         }
-
+        
         public bool AddDepositForWaitingList(string customerId, string contractId)
         {
             return true;
@@ -2184,11 +2250,11 @@ namespace BPMExtended.Main.Business
                 City = city,
                 FirstName = firstName,
                 LastName = lastName,
-                AddressSeq = addressSeq,
-                CustomerId = customerId,
+                AddressSeq = addressSeq,             
                 CommonInputArgument = new CommonInputArgument()
                 {
-                    ContactId = contactId
+                    ContactId = contactId,
+                    CustomerId = customerId
                 }
             };
 
@@ -2209,10 +2275,10 @@ namespace BPMExtended.Main.Business
                     AccountNumber = accountNumber,
                     PaymentMethodId = paymentMethodId.ToString(),
                     BankCode = bankCode,
-                    CustomerId = customerId,
                     CommonInputArgument = new CommonInputArgument()
                     {
-                        ContactId = contactId
+                        ContactId = contactId,
+                        CustomerId = customerId
                     }
                 }
 
@@ -2231,11 +2297,11 @@ namespace BPMExtended.Main.Business
                 {
                     InputArguments = new CustomerCategoryInput
                     {
-                        CustomerId = customerId,
                         CustomerCategoryId = customerCategoryId,
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            ContactId = contactId
+                            ContactId = contactId,
+                            CustomerId = customerId
                         }
                     }
                 };

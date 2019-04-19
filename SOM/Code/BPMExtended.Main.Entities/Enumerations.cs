@@ -179,5 +179,38 @@ namespace BPMExtended.Main.Entities
         [EntitySchemaName("StCreatePaymentPlan")]
         CreatePaymentPlan = 30,
 
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        [Description("Change Rate Plan")]
+        [EntitySchemaName("StChangeRatePlan")]
+        ChangeRatePlan = 31,
+
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        [Description("Update Contract Address")]
+        [EntitySchemaName("StUpdateContractAddress")]
+        UpdateContractAddress = 32,
+
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        [Description("Network Reset Password")]
+        [EntitySchemaName("StNetworkResetPassword")]
+        NetworkResetPassword = 33,
+
+
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        [Description("Other Charges")]
+        [EntitySchemaName("StOtherCharges")]
+        OtherCharges = 34,
+
+
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        [Description("Line Blocking")]
+        [EntitySchemaName("StLineBlocking")]
+        LineBlocking = 35,
+
+
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        [Description("Line Unblocking")]
+        [EntitySchemaName("StLineUnblocking")]
+        LineUnblocking = 36,
+
     }
 }
