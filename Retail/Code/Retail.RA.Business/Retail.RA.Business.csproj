@@ -137,6 +137,7 @@
     <Compile Include="TimePeriod\LastPeriodTimePeriod.cs" />
     <Compile Include="TimePeriod\LastYeasrPeriodTimePeriod.cs" />
     <Compile Include="TopUpDefinitionManager.cs" />
+    <Compile Include="TransactionTypeDefinitionSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
