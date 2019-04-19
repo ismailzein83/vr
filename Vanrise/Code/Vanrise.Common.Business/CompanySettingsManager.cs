@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Security.Entities;
+using System.Collections.Generic;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class CompanySettingsManager : ICompanySettingsManager
+    public class CompanySettingsManager : BaseBusinessEntityManager, ICompanySettingsManager
     {
         public bool SetFilesUsedAndUpdateSettings(ISettingOnBeforeSaveContext context)
         {
@@ -31,6 +30,58 @@ namespace Vanrise.Common.Business
             }
             return true;
         }
+
+        #region IBusinessEntityManager
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            ConfigManager configManager = new ConfigManager();
+            var companySettingsInfo = configManager.GetCompanySettingsInfo();
+            return companySettingsInfo?.Select(itm => itm as dynamic).ToList();
+        }
+
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            Guid companySettingId = (Guid)context.EntityId;
+            ConfigManager configManager = new ConfigManager();
+            var companySettingsInfo = configManager.GetCompanySettingsInfo();
+            return companySettingsInfo.FirstOrDefault(item => item.CompanySettingId == companySettingId);
+        }
+
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var companySettings = context.Entity as CompanySettingsInfo;
+            return companySettings.CompanySettingId;
+        }
+
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            Guid companySettingId = (Guid)context.EntityId;
+            var configManager = new ConfigManager();
+            var companySettingsInfo = configManager.GetCompanySettingsInfo();
+            var companySettingInfo = companySettingsInfo.FirstOrDefault(item => item.CompanySettingId == companySettingId);
+            return companySettingInfo?.CompanyName;
+        }
+
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 
     public class CompanySettingsFileSettings : VRFileExtendedSettings
