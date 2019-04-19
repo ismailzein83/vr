@@ -1,4 +1,7 @@
 ServiceCode = servicesReadResponse.sncodePub
 ServiceName = servicesReadResponse.svDes
 ServicePackage = allowedServicesReadResponse.listSpCode.spcodePub
+ServiceType = NOT_FOUND
+SubscriptionFee = NOT_FOUND
+AccessFee = NOT_FOUND
 NeedsProvisioning = servicesReadResponse.svNetProvReq

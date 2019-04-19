@@ -2,7 +2,8 @@
 	Code: "LLPTH",
 	Name: "LL Linepath"
 	Package: "PKGFL",
-	SubscriptionFee: NOT_FOUND
-	AccessFee: NOT_FOUND
+	ServiceType: NOT_FOUND,
+	SubscriptionFee: NOT_FOUND,
+	AccessFee: NOT_FOUND,
 	NeedsProvisioning: true
 } 
