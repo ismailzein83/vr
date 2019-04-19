@@ -152,14 +152,14 @@
     <EmbeddedResource Include="ReportService.resx">
       <DependentUpon>ReportService.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptDefaultToOperator.rdlc" />
-    <EmbeddedResource Include="Reports\rptToEtisalatOperator.rdlc" />
-    <EmbeddedResource Include="Reports\rptToMadarOperator.rdlc" />
-    <EmbeddedResource Include="Reports\rptToOperator.rdlc" />
-    <EmbeddedResource Include="Reports\rptToOperatorIraqNationalSec.rdlc" />
-    <EmbeddedResource Include="Reports\rptToSyrianOperator.rdlc" />
-    <EmbeddedResource Include="Reports\rptToZainOperator.rdlc" />
-    <EmbeddedResource Include="Reports\rptToZainOperatorExcel.rdlc" />
+    <None Include="Reports\rptDefaultToOperator.rdlc" />
+    <None Include="Reports\rptToEtisalatOperator.rdlc" />
+    <None Include="Reports\rptToMadarOperator.rdlc" />
+    <None Include="Reports\rptToOperator.rdlc" />
+    <None Include="Reports\rptToOperatorIraqNationalSec.rdlc" />
+    <None Include="Reports\rptToSyrianOperator.rdlc" />
+    <None Include="Reports\rptToZainOperator.rdlc" />
+    <None Include="Reports\rptToZainOperatorExcel.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
