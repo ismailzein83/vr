@@ -17,6 +17,13 @@ namespace BPMExtended.Main.Business
 {
     public class CustomerRequestManager
     {
+        public UserConnection BPM_UserConnection
+        {
+            get
+            {
+                return (UserConnection)HttpContext.Current.Session["UserConnection"];
+            }
+        }
         #region Fields
 
         //ICustomerRequestDataManager s_dataManager = BPMExtendedDataManagerFactory.GetDataManager<ICustomerRequestDataManager>();
@@ -144,6 +151,96 @@ namespace BPMExtended.Main.Business
         //    s_dataManager.UpdateRequestStatus(requestId, status);
         //}
 
+
+        public string CreateWorkOrder(string requestId, string WorkOrderType)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            string EntityName = "";
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("StRequestId");
+            var requestTypeId = esq.AddColumn("StRequestType");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                int reqcode = 0;
+                int.TryParse(entities[0].GetTypedColumnValue<int>(requestTypeId.Name).ToString(), out reqcode);
+                EntityName = Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)reqcode).schemaName;
+                string requestsTypeId = GetRequestType(EntityName);
+                string recordName = GetEntityName(EntityName, requestId);
+                initiateWorkOrder(requestId,requestsTypeId,WorkOrderType,recordName);
+            }
+
+
+
+            return "";
+        }
+
+        private string GetEntityName(string entityName, string requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            string recordName= "";
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
+            esq.AddColumn("StName");
+            var Id = esq.AddColumn("Id");
+            var name = esq.AddColumn("StName");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                recordName = entities[0].GetTypedColumnValue<string>(name.Name);
+            }
+            return recordName;
+        }
+
+        private string GetRequestType(string EntityName)
+        {
+            string requestTypeId = "";
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            //string EntityName = "";
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestsTypes");
+            esq.AddColumn("StEntityName");
+            var Id = esq.AddColumn("Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StEntityName", EntityName);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                requestTypeId = entities[0].GetTypedColumnValue<Guid>(Id.Name).ToString();
+            }
+            return requestTypeId;
+        }
+        private void initiateWorkOrder(string requestId, string requestTypeId,string workOrderType, string recordName)
+        {
+            EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StWorkOrder");
+            Entity workorder = schema.CreateEntity(BPM_UserConnection);
+
+            workorder.SetColumnValue("Id", Guid.NewGuid());
+            workorder.SetColumnValue("StName", "Switch Step for: " + recordName);
+            workorder.SetColumnValue("StDescription", "Switch Step for: " + recordName);
+            workorder.SetColumnValue("StRequestID", requestId);
+            workorder.SetColumnValue("StStatusId", "7470FB2F-4701-488D-99B2-F7A71400CB9E");
+            workorder.SetColumnValue("StRequestTypeId", requestTypeId);
+            workorder.SetColumnValue("StTypeId", workOrderType); //"2A6D299E-A312-479A-962F-C711221DBDC2");
+
+            workorder.Save();
+        }
         #endregion
 
         #region Private Methods
