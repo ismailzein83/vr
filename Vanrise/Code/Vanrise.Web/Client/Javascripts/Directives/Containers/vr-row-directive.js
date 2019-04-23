@@ -17,3 +17,23 @@ app.directive('vrRow', ['$compile', function ($compile) {
     return directiveDefinitionObject;
 
 }]);
+
+
+app.directive('vrScrollableContainer', ['$compile', 'MobileService', function ($compile, MobileService) {
+
+    var directiveDefinitionObject = {
+        restrict: 'E',
+        scope: false,
+        compile: function (tElement, tAttrs) {
+            var margin = parseInt(tAttrs.margin);
+            var containerHeightTrim = MobileService.isMobile() ? 63 : 122;
+            var maxHeigth = window.innerHeight - (containerHeightTrim + margin);
+            var finalMaxHeigth = maxHeigth > 200 && maxHeigth || 200;
+            var newElement = '<div style="max-height:' + finalMaxHeigth + 'px;overflow-y:auto;overflow-x:hidden;">' + tElement.html() + '</div>';
+            tElement.html(newElement);
+        }
+    };
+
+    return directiveDefinitionObject;
+
+}]);
