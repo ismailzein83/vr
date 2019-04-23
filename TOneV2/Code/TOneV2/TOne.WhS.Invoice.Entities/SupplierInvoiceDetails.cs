@@ -21,6 +21,7 @@ namespace TOne.WhS.Invoice.Entities
         public Decimal TotalAmount { get; set; }
         public decimal TotalSMSAmount { get; set; }
         public decimal TotalDealAmount { get; set; }
+        public decimal TotalDealAmountAfterTax { get; set; }
         public int? TimeZoneId { get; set; }
         public decimal AmountAfterCommission { get; set; }
         public decimal SMSAmountAfterCommission { get; set; }

@@ -126,6 +126,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 supplierInvoiceDetails.TotalVoiceAmountBeforeTax = supplierInvoiceDetails.TotalAmountAfterCommission;
                 supplierInvoiceDetails.TotalSMSAmountBeforeTax = supplierInvoiceDetails.TotalSMSAmountAfterCommission;
                 supplierInvoiceDetails.TotalInvoiceAmountBeforeTax = supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalDealAmount;
+                supplierInvoiceDetails.TotalDealAmountAfterTax = supplierInvoiceDetails.TotalDealAmount;
 
                 if (taxItemDetails != null)
 				{
@@ -137,7 +138,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
 						supplierInvoiceDetails.TotalSMSOriginalAmountAfterCommission += ((supplierInvoiceDetails.SMSOriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
 						supplierInvoiceDetails.TotalAmount += ((supplierInvoiceDetails.CostAmount * Convert.ToDecimal(tax.Value)) / 100);
 						supplierInvoiceDetails.TotalSMSAmount += ((supplierInvoiceDetails.TotalSMSAmount * Convert.ToDecimal(tax.Value)) / 100);
-						if (evaluatedSupplierRecurringCharges != null)
+                        supplierInvoiceDetails.TotalDealAmountAfterTax += ((supplierInvoiceDetails.TotalDealAmount * Convert.ToDecimal(tax.Value)) / 100);
+
+                        if (evaluatedSupplierRecurringCharges != null)
 						{
 							foreach (var item in evaluatedSupplierRecurringCharges)
 							{
@@ -237,7 +240,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     supplierInvoiceDetails.NoRecurringCharges = supplierInvoiceDetails.TotalReccurringChargesAfterTax == 0;
 
 
-                    supplierInvoiceDetails.TotalInvoiceAmount = supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalReccurringChargesAfterTax + supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalDealAmount;
+                    supplierInvoiceDetails.TotalInvoiceAmount = supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalReccurringChargesAfterTax + supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalDealAmountAfterTax;
 					supplierInvoiceDetails.TotalInvoiceAmountBeforeTax += supplierInvoiceDetails.TotalReccurringCharges;
 
                     if (!financialAccountInvoiceType.IgnoreFromBalance)

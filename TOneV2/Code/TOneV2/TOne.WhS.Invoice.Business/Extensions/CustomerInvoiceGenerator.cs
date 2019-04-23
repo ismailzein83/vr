@@ -135,9 +135,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                 customerInvoiceDetails.TotalVoiceAmountBeforeTax = customerInvoiceDetails.TotalAmountAfterCommission;
                 customerInvoiceDetails.TotalSMSAmountBeforeTax = customerInvoiceDetails.TotalSMSAmountAfterCommission;
-                customerInvoiceDetails.TotalInvoiceAmountBeforeTax = customerInvoiceDetails.TotalSMSAmountAfterCommission + customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalDealAmount;
+                customerInvoiceDetails.TotalDealAmountAfterTax = customerInvoiceDetails.TotalDealAmount;
 
-				if (taxItemDetails != null)
+                if (taxItemDetails != null)
 				{
 					foreach (var tax in taxItemDetails)
 					{
@@ -147,8 +147,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
 						customerInvoiceDetails.TotalSMSOriginalAmountAfterCommission += ((customerInvoiceDetails.SMSOriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
 						customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
 						customerInvoiceDetails.TotalSMSAmount += ((customerInvoiceDetails.TotalSMSAmount * Convert.ToDecimal(tax.Value)) / 100);
+                        customerInvoiceDetails.TotalDealAmountAfterTax += ((customerInvoiceDetails.TotalDealAmount * Convert.ToDecimal(tax.Value)) / 100);
 
-						if (evaluatedCustomerRecurringCharges != null)
+                        if (evaluatedCustomerRecurringCharges != null)
 						{
 							foreach (var item in evaluatedCustomerRecurringCharges)
 							{
@@ -244,7 +245,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     customerInvoiceDetails.NoVoice = customerInvoiceDetails.TotalAmountAfterCommission == 0;
                     customerInvoiceDetails.NoRecurringCharges = customerInvoiceDetails.TotalReccurringChargesAfterTax == 0;
 
-                    customerInvoiceDetails.TotalInvoiceAmount = customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalReccurringChargesAfterTax + customerInvoiceDetails.TotalSMSAmountAfterCommission + customerInvoiceDetails.TotalDealAmount;
+                    customerInvoiceDetails.TotalInvoiceAmount = customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalReccurringChargesAfterTax + customerInvoiceDetails.TotalSMSAmountAfterCommission + customerInvoiceDetails.TotalDealAmountAfterTax;
 					//if (customerInvoiceDetails.Adjustment.HasValue)
 					//	customerInvoiceDetails.TotalInvoiceAmount += customerInvoiceDetails.Adjustment.Value;
 
