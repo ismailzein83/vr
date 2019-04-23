@@ -20,8 +20,13 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         public List<RDBNullableField> NullableFields { get; set; }
 
+        public List<RDBDataRecordStorageExpressionField> ExpressionFields { get; set; }
+
         public bool IncludeQueueItemId { get; set; }
 
+        public List<RDBDataRecordStorageJoin> Joins { get; set; }
+
+        public RecordFilterGroup Filter { get; set; }
     }
 
     public class RDBDataRecordStorageColumn
@@ -41,6 +46,56 @@ namespace Vanrise.GenericData.RDBDataStorage
         public bool IsIdentity { get; set; }
     }
 
+    public class RDBDataRecordStorageJoin
+    {
+        public string RDBRecordStorageJoinName { get; set; }
+
+        public RDBDataRecordStorageJoinSettings Settings { get; set; }
+    }
+
+    public abstract class RDBDataRecordStorageJoinSettings
+    {
+        public abstract Guid ConfigId { get; }
+
+        public abstract string GetCode(IRDBDataRecordStorageJoinExpressionGetCodeContext context);
+
+        public abstract List<string> GetDependentJoins(IRDBDataRecordStorageJoinExpressionGetDependentJoinsContext context);
+    }
+
+    public interface IRDBDataRecordStorageJoinExpressionGetCodeContext
+    {
+    }
+
+    public interface IRDBDataRecordStorageJoinExpressionGetDependentJoinsContext
+    {
+    }
+    
+    public class RDBDataRecordStorageExpressionField
+    {
+        public string FieldName { get; set; }
+
+        public RDBDataRecordStorageExpressionFieldSettings Settings { get; set; }
+    }
+
+    public abstract class RDBDataRecordStorageExpressionFieldSettings
+    {
+        public abstract Guid ConfigId { get; }
+
+        public abstract string GetCode(IRDBDataRecordStorageExpressionFieldGetCodeContext context);
+
+        public abstract List<string> GetDependentJoins(IRDBDataRecordStorageExpressionFieldGetDependentJoinsContext context);
+    }
+
+    public interface IRDBDataRecordStorageExpressionFieldGetCodeContext
+    {
+
+    }
+
+    public interface IRDBDataRecordStorageExpressionFieldGetDependentJoinsContext
+    {
+
+    }
+    
     public class RDBNullableField
     {
         public string Name { get; set; }
