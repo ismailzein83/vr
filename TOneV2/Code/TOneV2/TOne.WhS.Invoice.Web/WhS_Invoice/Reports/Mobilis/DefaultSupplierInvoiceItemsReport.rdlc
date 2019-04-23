@@ -3050,7 +3050,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Round(Fields!AmountAfterTaxes.Value, Parameters!NormalPrecisionValue.Value))</Value>
+                              <Value>=FormatNumber(Round(Fields!Amount.Value, Parameters!NormalPrecisionValue.Value))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
