@@ -107,6 +107,7 @@
     <Compile Include="CDRCorrelationDefinitionManager.cs" />
     <Compile Include="DataRecordFieldFormulaCalculateValueContext.cs" />
     <Compile Include="DataRecordFieldFormulaGetDependentFieldsContext.cs" />
+    <Compile Include="DataRecordFieldTypeConvertFlatFileValueContext.cs" />
     <Compile Include="DataRecordFieldTypeOnBeforeSaveContext.cs" />
     <Compile Include="DataRecordFieldTypeParseValueToFieldTypeContext.cs" />
     <Compile Include="DataRecordFieldTypeTryResolveDifferencesContext.cs" />

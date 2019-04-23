@@ -41,6 +41,11 @@ namespace Vanrise.GenericData.Entities
 
         }
 
+        public virtual string ConvertFlatFileValue(IDataRecordFieldTypeConvertFlatFileValueContext context)
+        {
+            return GetDescription(context.FieldValue);
+        }
+
         public abstract RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context);
         public virtual string DifferenceEditor { get; set; }
         public virtual string ViewerEditor { get; set; }
@@ -249,5 +254,9 @@ namespace Vanrise.GenericData.Entities
     public interface IDataRecordFieldTypeIsStillAvailableContext
     {
         dynamic EntityId { get; }
+    }
+    public interface IDataRecordFieldTypeConvertFlatFileValueContext
+    {
+        object FieldValue { get; }
     }
 }

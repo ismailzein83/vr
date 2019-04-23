@@ -39,6 +39,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return _nonNullableRuntimeType;
         }
+        public override string ConvertFlatFileValue(IDataRecordFieldTypeConvertFlatFileValueContext context)
+        {
+            return (bool)context.FieldValue ? "1" : "0";
+        }
         public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
         {
             return new RDBDataRecordFieldAttribute

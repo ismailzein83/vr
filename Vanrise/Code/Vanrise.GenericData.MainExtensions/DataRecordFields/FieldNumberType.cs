@@ -89,6 +89,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return _nonNullableRuntimeType;
         }
 
+        public override string ConvertFlatFileValue(IDataRecordFieldTypeConvertFlatFileValueContext context)
+        {
+            return GetRoundedValue(context.FieldValue).ToString();
+        }
         public override string GetDescription(Object value)
         {
             if (value == null)

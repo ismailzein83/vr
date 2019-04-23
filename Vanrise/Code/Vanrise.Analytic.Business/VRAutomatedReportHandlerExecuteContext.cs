@@ -5,14 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 
-namespace Vanrise.Analytic.Entities
+namespace Vanrise.Analytic.Business
 {
     public class VRAutomatedReportHandlerExecuteContext : IVRAutomatedReportHandlerExecuteContext
     {
         private List<VRAutomatedReportQuery> Queries { get; set; }
 
-        public Guid? TaskId{get; set;}
+        public Guid? TaskId { get; set; }
         public IAutomatedReportEvaluatorContext EvaluatorContext { get; set; }
         public VRReportGenerationFilter FilterDefinition { get; set; }
         public VRReportGenerationRuntimeFilter FilterRuntime { get; set; }
@@ -27,12 +28,12 @@ namespace Vanrise.Analytic.Entities
             this.FilterRuntime = filterRuntime;
         }
 
-        public VRAutomatedReportResolvedDataList GetDataList(Guid vrAutomatedReportQueryId, string listName)
+        public VRAutomatedReportResolvedDataList GetDataList(Guid vrAutomatedReportQueryId, string listName, bool isFlatFile = false)
         {
             if (this.Queries != null && this.Queries.Count > 0)
             {
                 var matchingQuery = this.Queries.FindRecord(x => x.VRAutomatedReportQueryId == vrAutomatedReportQueryId);
-                return GetDataList(matchingQuery, listName);
+                return GetDataList(matchingQuery, listName, isFlatFile);
             }
             return null;
         }
@@ -42,11 +43,11 @@ namespace Vanrise.Analytic.Entities
             if (this.Queries != null && this.Queries.Count > 0)
             {
                 var matchingQuery = this.Queries.FindRecord(x => x.QueryTitle == queryTitle);
-                return GetDataList(matchingQuery, listName);
+                return GetDataList(matchingQuery, listName, false);
             }
             return null;
         }
-        private VRAutomatedReportResolvedDataList GetDataList(VRAutomatedReportQuery matchingQuery, string listName)
+        private VRAutomatedReportResolvedDataList GetDataList(VRAutomatedReportQuery matchingQuery, string listName, bool isFlatFile)
         {
             VRAutomatedReportResolvedDataList resolvedDataList = new VRAutomatedReportResolvedDataList()
             {
@@ -98,7 +99,7 @@ namespace Vanrise.Analytic.Entities
                                             {
                                                 VRAutomatedReportResolvedDataFieldValue resolvedFieldValue = new VRAutomatedReportResolvedDataFieldValue()
                                                 {
-                                                    Description = fieldInfo.Field.Type.GetDescription(field.Value.Value),
+                                                    Description = !isFlatFile ? fieldInfo.Field.Type.GetDescription(field.Value.Value) : fieldInfo.Field.Type.ConvertFlatFileValue(new DataRecordFieldTypeConvertFlatFileValueContext() { FieldValue = field.Value.Value }),
                                                     Value = field.Value.Value
                                                 };
 
@@ -338,7 +339,7 @@ namespace Vanrise.Analytic.Entities
                                     {
                                         _subTableIdsByFieldsTitle = new Dictionary<string, Guid>();
                                     }
-                                    if(_subTableIdsByFieldsTitle.ContainsKey(subTableQuery.Value.SubTableTitle))
+                                    if (_subTableIdsByFieldsTitle.ContainsKey(subTableQuery.Value.SubTableTitle))
                                         _subTableIdsByFieldsTitle.Add(subTableQuery.Value.SubTableTitle, subTableQuery.Key);
                                     return subTableQuery.Key;
                                 }

@@ -9,6 +9,7 @@ using Vanrise.Analytic.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Analytic.Business;
 
 namespace Vanrise.Analytic.BP.Activities
 {

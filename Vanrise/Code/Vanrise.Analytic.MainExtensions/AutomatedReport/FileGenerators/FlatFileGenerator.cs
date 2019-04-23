@@ -26,7 +26,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         {
             if (Fields != null && Fields.Count > 0)
             {  
-                var dataList = context.HandlerContext.GetDataList(VRAutomatedReportQueryId, ListName);
+                var dataList = context.HandlerContext.GetDataList(VRAutomatedReportQueryId, ListName, true);
                 string dataListIdentifier = string.Format("{0}_{1}", VRAutomatedReportQueryId, ListName);
                 dataList.ThrowIfNull("dataList", dataListIdentifier);
                 dataList.Items.ThrowIfNull("dataList.Items", dataListIdentifier);

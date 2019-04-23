@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Analytic.Business;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 {

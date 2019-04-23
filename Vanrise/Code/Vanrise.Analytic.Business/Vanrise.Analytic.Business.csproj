@@ -96,6 +96,7 @@
     <Compile Include="ReportGenerationCustomCodeSettings.cs" />
     <Compile Include="ReportGenerationCustomCodeManager.cs" />
     <Compile Include="StyleRuleConditionContext.cs" />
+    <Compile Include="VRAutomatedReportHandlerExecuteContext.cs" />
     <Compile Include="VRAutomatedReportHandlerManager.cs" />
     <Compile Include="VRAutomatedReportFileGeneratorManager.cs" />
     <Compile Include="VRAutomatedReportQueryDefinitionExtendedSettingsContext.cs" />
