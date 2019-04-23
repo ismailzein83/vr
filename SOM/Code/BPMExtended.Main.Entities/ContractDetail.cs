@@ -30,7 +30,8 @@ namespace BPMExtended.Main.Entities
 
         public string ReservedLinePath { get; set; }
 
-        public ContractDetailStatus Status { get; set; }
+        public string ContractStatusId { get; set; }
+        public string Status { get; set; }
 
         public DateTime? ActivationDate { get; set; }
 

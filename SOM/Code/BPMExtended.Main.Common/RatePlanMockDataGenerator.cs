@@ -439,188 +439,188 @@ namespace BPMExtended.Main.Common
         {
             return new List<TelephonyContractDetail>
             {
-                 new TelephonyContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_TL1,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_2,
-                     RatePlanId = RP_TL_PSTN_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     Address = "Haret hreik",
-                     ContractAddress = new Address () {Province ="prov1" , Building = "b1" , City="beirut" , Floor = "2", Region="R1", HouseNumber="2", Street="st1" , SubRegion="sub1"},
-                     Status =  ContractDetailStatus.Active,
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3),
-                     ContractBalance = 100,
-                     UnbilledAmount = 2002,
-                     Promotions = "promo1",
-                     FreeUnit = "unit1",
-                     PathId= "184"
+                 //new TelephonyContractDetail
+                 //{
+                 //    ContractId = CONTRACT_CUST1_TL1,
+                 //    CustomerId = CUSTOMER_ID_1,
+                 //    PhoneNumber= PHONE_NUMBER_2,
+                 //    RatePlanId = RP_TL_PSTN_RES_NORMAL,
+                 //    RatePlanName = "Normal Plan",
+                 //    Address = "Haret hreik",
+                 //    ContractAddress = new Address () {Province ="prov1" , Building = "b1" , City="beirut" , Floor = "2", Region="R1", HouseNumber="2", Street="st1" , SubRegion="sub1"},
+                 //    Status =  ContractDetailStatus.Active,
+                 //    ActivationDate = DateTime.Today.AddDays(-10),
+                 //    StatusDate = DateTime.Today.AddDays(-9),
+                 //    CreatedTime = DateTime.Today.AddDays(-5),
+                 //    LastModifiedTime = DateTime.Today.AddDays(-3),
+                 //    ContractBalance = 100,
+                 //    UnbilledAmount = 2002,
+                 //    Promotions = "promo1",
+                 //    FreeUnit = "unit1",
+                 //    PathId= "184"
 
-                 },
-                 new TelephonyContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_TL2,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_1,
-                     RatePlanId = RP_TL_PSTN_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     Address = "Beirut",
-                     ContractAddress = new Address () {Province ="prov2" , Building = "b2" , City="beirut" , Floor = "2", Region="R2", HouseNumber="4", Street="st2" , SubRegion="sub2"},
-                     Status = ContractDetailStatus.Inactive,
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     CreatedTime = DateTime.Today.AddDays(-4),
-                     LastModifiedTime = DateTime.Today,
-                      ContractBalance = 200,
-                     UnbilledAmount = 4002,
-                     Promotions = "promo2",
-                     FreeUnit = "unit2",
-                     PathId= "184"
-                 },
-                 new TelephonyContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_TL3,
-                     CustomerId = CUSTOMER_ID_1,
-                     Status = ContractDetailStatus.Active,
-                     PhoneNumber= PHONE_NUMBER_3,
-                     RatePlanId = RP_TL_ISDN_RES_NORMAL,
-                     Address = "Beirut",
-                     ContractAddress = new Address () {Province ="prov3" , Building = "b3" , City="beirut" , Floor = "5", Region="R3", HouseNumber="6", Street="st3" , SubRegion="sub3"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     RatePlanName = "Normal Plan (ISDN)",
-                     CreatedTime = DateTime.Today,
-                     LastModifiedTime = DateTime.Today,
-                      ContractBalance = 10,
-                     UnbilledAmount = 200,
-                     Promotions = "promo3",
-                     FreeUnit = "unit3",
-                     PathId= "184",
+                 //},
+                 //new TelephonyContractDetail
+                 //{
+                 //    ContractId = CONTRACT_CUST1_TL2,
+                 //    CustomerId = CUSTOMER_ID_1,
+                 //    PhoneNumber= PHONE_NUMBER_1,
+                 //    RatePlanId = RP_TL_PSTN_RES_NORMAL,
+                 //    RatePlanName = "Normal Plan",
+                 //    Address = "Beirut",
+                 //    ContractAddress = new Address () {Province ="prov2" , Building = "b2" , City="beirut" , Floor = "2", Region="R2", HouseNumber="4", Street="st2" , SubRegion="sub2"},
+                 //    Status = ContractDetailStatus.Inactive,
+                 //    ActivationDate = DateTime.Today.AddDays(-10),
+                 //    StatusDate = DateTime.Today.AddDays(-9),
+                 //    CreatedTime = DateTime.Today.AddDays(-4),
+                 //    LastModifiedTime = DateTime.Today,
+                 //     ContractBalance = 200,
+                 //    UnbilledAmount = 4002,
+                 //    Promotions = "promo2",
+                 //    FreeUnit = "unit2",
+                 //    PathId= "184"
+                 //},
+                 //new TelephonyContractDetail
+                 //{
+                 //    ContractId = CONTRACT_CUST1_TL3,
+                 //    CustomerId = CUSTOMER_ID_1,
+                 //    Status = ContractDetailStatus.Active,
+                 //    PhoneNumber= PHONE_NUMBER_3,
+                 //    RatePlanId = RP_TL_ISDN_RES_NORMAL,
+                 //    Address = "Beirut",
+                 //    ContractAddress = new Address () {Province ="prov3" , Building = "b3" , City="beirut" , Floor = "5", Region="R3", HouseNumber="6", Street="st3" , SubRegion="sub3"},
+                 //    ActivationDate = DateTime.Today.AddDays(-10),
+                 //    StatusDate = DateTime.Today.AddDays(-9),
+                 //    RatePlanName = "Normal Plan (ISDN)",
+                 //    CreatedTime = DateTime.Today,
+                 //    LastModifiedTime = DateTime.Today,
+                 //     ContractBalance = 10,
+                 //    UnbilledAmount = 200,
+                 //    Promotions = "promo3",
+                 //    FreeUnit = "unit3",
+                 //    PathId= "184",
 
-                 },
-                  new TelephonyContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_TL4,
-                     CustomerId = CUSTOMER_ID_1,
-                     Status = ContractDetailStatus.Active,
-                     PhoneNumber= PHONE_NUMBER_4,
-                     RatePlanId = RP_TL_ISDN_RES_NORMAL,
-                     Address = "Hamra",
-                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     RatePlanName = "Normal Plan (ISDN)",
-                     CreatedTime = DateTime.Today,
-                     LastModifiedTime = DateTime.Today,
-                      ContractBalance = 500,
-                     UnbilledAmount = 1002,
-                     Promotions = "promo4",
-                     FreeUnit = "unit4",
-                     PathId= "184"
-                 },
-                  new TelephonyContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_TL5,
-                     CustomerId = CUSTOMER_ID_1,
-                     Status = ContractDetailStatus.Active,
-                     PhoneNumber= PHONE_NUMBER_5,
-                     RatePlanId = RP_TL_PSTN_RES_NORMAL,
-                     Address = "Tyr",
-                     ContractAddress = new Address () {Province ="prov5" , Building = "b5" , City="beirut" , Floor = "1", Region="R5", HouseNumber="2", Street="st5" , SubRegion="sub5"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     RatePlanName = "Normal Plan (ISDN)",
-                     CreatedTime = DateTime.Today,
-                     LastModifiedTime = DateTime.Today,
-                      ContractBalance = 150,
-                     UnbilledAmount = 202,
-                     Promotions = "promo5",
-                     FreeUnit = "unit5",
-                     PathId= "184"
-                 },
-                 new TelephonyContractDetail
-                 {
-                     ContractId = CONTRACT_CUST3_TL1,
-                     CustomerId = CUSTOMER_ID_3,
-                     PhoneNumber= PHONE_NUMBER_6,
-                     RatePlanId = RP_TL_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     Address = "Tyr",
-                     ContractAddress = new Address () {Province ="prov6" , Building = "b6" , City="beirut" , Floor = "9", Region="R6", HouseNumber="8", Street="st6" , SubRegion="sub6"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     Status = ContractDetailStatus.Active,
-                     CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3),
-                     ContractBalance = 1700,
-                     UnbilledAmount = 27002,
-                     Promotions = "promo6",
-                     FreeUnit = "unit6",
-                     PathId= "184"
-                 },
-                 new TelephonyContractDetail
-                 {
-                      ContractId = CONTRACT_CUST3_TL2,
-                      CustomerId = CUSTOMER_ID_3,
-                      PhoneNumber= PHONE_NUMBER_7,
-                      RatePlanId = RP_TL_PSTN_RES_NORMAL,
-                      RatePlanName = "Normal Plan",
-                      Address = "saida",
-                      ContractAddress = new Address () {Province ="prov7" , Building = "b7" , City="beirut" , Floor = "9", Region="R7", HouseNumber="6", Street="st7" , SubRegion="sub7"},
-                      ActivationDate = DateTime.Today.AddDays(-10),
-                      StatusDate = DateTime.Today.AddDays(-9),
-                      Status = ContractDetailStatus.Inactive,
-                      CreatedTime = DateTime.Today.AddDays(-4),
-                      LastModifiedTime = DateTime.Today,
-                      ContractBalance = 110,
-                      UnbilledAmount = 2092,
-                      Promotions = "promo7",
-                      FreeUnit = "unit7",
-                      PathId= "184"
-                 },
-                  new TelephonyContractDetail
-                 {
-                     ContractId = CONTRACT_CUST2_TL1,
-                     CustomerId = CUSTOMER_ID_2,
-                     PhoneNumber= PHONE_NUMBER_8,
-                     RatePlanId = RP_TL_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     Address = "Tyr",
-                     ContractAddress = new Address () {Province ="prov6" , Building = "b6" , City="beirut" , Floor = "9", Region="R6", HouseNumber="8", Street="st6" , SubRegion="sub6"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     Status = ContractDetailStatus.Active,
-                     CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3),
-                     ContractBalance = 1700,
-                     UnbilledAmount = 27002,
-                     Promotions = "promo6",
-                     FreeUnit = "unit6",
-                     PathId= "184"
-                 },
-                 new TelephonyContractDetail
-                 {
-                      ContractId = CONTRACT_CUST2_TL2,
-                      CustomerId = CUSTOMER_ID_2,
-                      PhoneNumber= PHONE_NUMBER_9,
-                      RatePlanId = RP_TL_PSTN_RES_NORMAL,
-                      RatePlanName = "Normal Plan",
-                      Address = "saida",
-                      ContractAddress = new Address () {Province ="prov7" , Building = "b7" , City="beirut" , Floor = "9", Region="R7", HouseNumber="6", Street="st7" , SubRegion="sub7"},
-                      ActivationDate = DateTime.Today.AddDays(-10),
-                      StatusDate = DateTime.Today.AddDays(-9),
-                      Status = ContractDetailStatus.Inactive,
-                      CreatedTime = DateTime.Today.AddDays(-4),
-                      LastModifiedTime = DateTime.Today,
-                      ContractBalance = 110,
-                      UnbilledAmount = 2092,
-                      Promotions = "promo7",
-                      FreeUnit = "unit7",
-                      PathId= "184"
-                 }
+                 //},
+                 // new TelephonyContractDetail
+                 //{
+                 //    ContractId = CONTRACT_CUST1_TL4,
+                 //    CustomerId = CUSTOMER_ID_1,
+                 //    Status = ContractDetailStatus.Active,
+                 //    PhoneNumber= PHONE_NUMBER_4,
+                 //    RatePlanId = RP_TL_ISDN_RES_NORMAL,
+                 //    Address = "Hamra",
+                 //    ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+                 //    ActivationDate = DateTime.Today.AddDays(-10),
+                 //    StatusDate = DateTime.Today.AddDays(-9),
+                 //    RatePlanName = "Normal Plan (ISDN)",
+                 //    CreatedTime = DateTime.Today,
+                 //    LastModifiedTime = DateTime.Today,
+                 //     ContractBalance = 500,
+                 //    UnbilledAmount = 1002,
+                 //    Promotions = "promo4",
+                 //    FreeUnit = "unit4",
+                 //    PathId= "184"
+                 //},
+                 // new TelephonyContractDetail
+                 //{
+                 //    ContractId = CONTRACT_CUST1_TL5,
+                 //    CustomerId = CUSTOMER_ID_1,
+                 //    Status = ContractDetailStatus.Active,
+                 //    PhoneNumber= PHONE_NUMBER_5,
+                 //    RatePlanId = RP_TL_PSTN_RES_NORMAL,
+                 //    Address = "Tyr",
+                 //    ContractAddress = new Address () {Province ="prov5" , Building = "b5" , City="beirut" , Floor = "1", Region="R5", HouseNumber="2", Street="st5" , SubRegion="sub5"},
+                 //    ActivationDate = DateTime.Today.AddDays(-10),
+                 //    StatusDate = DateTime.Today.AddDays(-9),
+                 //    RatePlanName = "Normal Plan (ISDN)",
+                 //    CreatedTime = DateTime.Today,
+                 //    LastModifiedTime = DateTime.Today,
+                 //     ContractBalance = 150,
+                 //    UnbilledAmount = 202,
+                 //    Promotions = "promo5",
+                 //    FreeUnit = "unit5",
+                 //    PathId= "184"
+                 //},
+                 //new TelephonyContractDetail
+                 //{
+                 //    ContractId = CONTRACT_CUST3_TL1,
+                 //    CustomerId = CUSTOMER_ID_3,
+                 //    PhoneNumber= PHONE_NUMBER_6,
+                 //    RatePlanId = RP_TL_RES_NORMAL,
+                 //    RatePlanName = "Normal Plan",
+                 //    Address = "Tyr",
+                 //    ContractAddress = new Address () {Province ="prov6" , Building = "b6" , City="beirut" , Floor = "9", Region="R6", HouseNumber="8", Street="st6" , SubRegion="sub6"},
+                 //    ActivationDate = DateTime.Today.AddDays(-10),
+                 //    StatusDate = DateTime.Today.AddDays(-9),
+                 //    Status = ContractDetailStatus.Active,
+                 //    CreatedTime = DateTime.Today.AddDays(-5),
+                 //    LastModifiedTime = DateTime.Today.AddDays(-3),
+                 //    ContractBalance = 1700,
+                 //    UnbilledAmount = 27002,
+                 //    Promotions = "promo6",
+                 //    FreeUnit = "unit6",
+                 //    PathId= "184"
+                 //},
+                 //new TelephonyContractDetail
+                 //{
+                 //     ContractId = CONTRACT_CUST3_TL2,
+                 //     CustomerId = CUSTOMER_ID_3,
+                 //     PhoneNumber= PHONE_NUMBER_7,
+                 //     RatePlanId = RP_TL_PSTN_RES_NORMAL,
+                 //     RatePlanName = "Normal Plan",
+                 //     Address = "saida",
+                 //     ContractAddress = new Address () {Province ="prov7" , Building = "b7" , City="beirut" , Floor = "9", Region="R7", HouseNumber="6", Street="st7" , SubRegion="sub7"},
+                 //     ActivationDate = DateTime.Today.AddDays(-10),
+                 //     StatusDate = DateTime.Today.AddDays(-9),
+                 //     Status = ContractDetailStatus.Inactive,
+                 //     CreatedTime = DateTime.Today.AddDays(-4),
+                 //     LastModifiedTime = DateTime.Today,
+                 //     ContractBalance = 110,
+                 //     UnbilledAmount = 2092,
+                 //     Promotions = "promo7",
+                 //     FreeUnit = "unit7",
+                 //     PathId= "184"
+                 //},
+                 // new TelephonyContractDetail
+                 //{
+                 //    ContractId = CONTRACT_CUST2_TL1,
+                 //    CustomerId = CUSTOMER_ID_2,
+                 //    PhoneNumber= PHONE_NUMBER_8,
+                 //    RatePlanId = RP_TL_RES_NORMAL,
+                 //    RatePlanName = "Normal Plan",
+                 //    Address = "Tyr",
+                 //    ContractAddress = new Address () {Province ="prov6" , Building = "b6" , City="beirut" , Floor = "9", Region="R6", HouseNumber="8", Street="st6" , SubRegion="sub6"},
+                 //    ActivationDate = DateTime.Today.AddDays(-10),
+                 //    StatusDate = DateTime.Today.AddDays(-9),
+                 //    Status = ContractDetailStatus.Active,
+                 //    CreatedTime = DateTime.Today.AddDays(-5),
+                 //    LastModifiedTime = DateTime.Today.AddDays(-3),
+                 //    ContractBalance = 1700,
+                 //    UnbilledAmount = 27002,
+                 //    Promotions = "promo6",
+                 //    FreeUnit = "unit6",
+                 //    PathId= "184"
+                 //},
+                 //new TelephonyContractDetail
+                 //{
+                 //     ContractId = CONTRACT_CUST2_TL2,
+                 //     CustomerId = CUSTOMER_ID_2,
+                 //     PhoneNumber= PHONE_NUMBER_9,
+                 //     RatePlanId = RP_TL_PSTN_RES_NORMAL,
+                 //     RatePlanName = "Normal Plan",
+                 //     Address = "saida",
+                 //     ContractAddress = new Address () {Province ="prov7" , Building = "b7" , City="beirut" , Floor = "9", Region="R7", HouseNumber="6", Street="st7" , SubRegion="sub7"},
+                 //     ActivationDate = DateTime.Today.AddDays(-10),
+                 //     StatusDate = DateTime.Today.AddDays(-9),
+                 //     Status = ContractDetailStatus.Inactive,
+                 //     CreatedTime = DateTime.Today.AddDays(-4),
+                 //     LastModifiedTime = DateTime.Today,
+                 //     ContractBalance = 110,
+                 //     UnbilledAmount = 2092,
+                 //     Promotions = "promo7",
+                 //     FreeUnit = "unit7",
+                 //     PathId= "184"
+                 //}
 
             };
         }
@@ -696,7 +696,7 @@ namespace BPMExtended.Main.Common
                      RatePlanId = RP_GSHDSL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
                      CSO = "None",
-                     Status = ContractDetailStatus.Active,
+                    // Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3),
                      ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
@@ -715,7 +715,7 @@ namespace BPMExtended.Main.Common
                      RatePlanId = RP_GSHDSL_RES_STUDENT,
                      RatePlanName = "Student Plan",
                      CSO = "None",
-                     Status = ContractDetailStatus.Active,
+                   //  Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3),
                      ContractAddress = new Address () {Province ="prov9" , Building = "b9" , City="beirut" , Floor = "9", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
@@ -923,7 +923,7 @@ namespace BPMExtended.Main.Common
                      ProviderOfDSLAMPort="Huawei",
                      SubscriptionDate ="2018/02/02",
                      ReservedLinePath = "path1",
-                     Status = ContractDetailStatus.Active,
+                   //  Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3),
                      ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
@@ -945,7 +945,7 @@ namespace BPMExtended.Main.Common
                      UserName = "Test2",
                      Password = "pass2",
                      Speed = ADSL_SPEED_2,
-                     Status = ContractDetailStatus.Inactive,
+                    // Status = ContractDetailStatus.Inactive,
                      CreatedTime = DateTime.Today.AddDays(-4),
                      LastModifiedTime = DateTime.Today,
                      ContractAddress = new Address () {Province ="prov44" , Building = "b44" , City="beirut" , Floor = "1", Region="R4", HouseNumber="2", Street="st4" , SubRegion="sub4"},
@@ -961,7 +961,7 @@ namespace BPMExtended.Main.Common
                      ContractId = CONTRACT_CUST1_ADSL3,
                      TelephonyContractId = CONTRACT_CUST1_TL3,
                      CustomerId = CUSTOMER_ID_1,
-                     Status = ContractDetailStatus.Active,
+                    // Status = ContractDetailStatus.Active,
                      PhoneNumber= PHONE_NUMBER_3,
                      UserName = "Test3",
                      Password = "pass3",
@@ -989,7 +989,7 @@ namespace BPMExtended.Main.Common
                      UserName = "Test4",
                      Password = "pass4",
                      Speed = ADSL_SPEED_4,
-                     Status = ContractDetailStatus.Active,
+                    // Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3),
                      ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
@@ -1011,7 +1011,7 @@ namespace BPMExtended.Main.Common
                       UserName = "Test5",
                       Password = "pass5",
                       Speed = ADSL_SPEED_5,
-                      Status = ContractDetailStatus.Inactive,
+                     // Status = ContractDetailStatus.Inactive,
                       CreatedTime = DateTime.Today.AddDays(-4),
                       LastModifiedTime = DateTime.Today,
                       ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "7", Region="R4", HouseNumber="8", Street="st4" , SubRegion="sub4"},
@@ -1033,7 +1033,7 @@ namespace BPMExtended.Main.Common
                      UserName = "Test4",
                      Password = "pass4",
                      Speed = ADSL_SPEED_4,
-                     Status = ContractDetailStatus.Active,
+                    // Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3),
                      ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
@@ -1055,7 +1055,7 @@ namespace BPMExtended.Main.Common
                       UserName = "Test5",
                       Password = "pass5",
                       Speed = ADSL_SPEED_5,
-                      Status = ContractDetailStatus.Inactive,
+                      //Status = ContractDetailStatus.Inactive,
                       CreatedTime = DateTime.Today.AddDays(-4),
                       LastModifiedTime = DateTime.Today,
                       ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "7", Region="R4", HouseNumber="8", Street="st4" , SubRegion="sub4"},
@@ -1185,7 +1185,7 @@ namespace BPMExtended.Main.Common
                      ContractId = CONTRACT_CUST1_LL1,
                      CustomerId = CUSTOMER_ID_1,
                      PhoneNumber= PHONE_NUMBER_1,
-                     Status = ContractDetailStatus.Active,
+                    // Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3),
                      RatePlanId = RP_LL_RES_ENG,
@@ -1203,7 +1203,7 @@ namespace BPMExtended.Main.Common
                      ContractId = CONTRACT_CUST1_LL2,
                      CustomerId = CUSTOMER_ID_1,
                      PhoneNumber= PHONE_NUMBER_1,
-                     Status = ContractDetailStatus.Inactive,
+                    // Status = ContractDetailStatus.Inactive,
                      CreatedTime = DateTime.Today.AddDays(-4),
                      LastModifiedTime = DateTime.Today,
                      RatePlanId = RP_LL_RES_NORMAL,
@@ -1220,7 +1220,7 @@ namespace BPMExtended.Main.Common
                  {
                      ContractId = CONTRACT_CUST1_LL3,
                      CustomerId = CUSTOMER_ID_1,
-                     Status = ContractDetailStatus.Active,
+                   //  Status = ContractDetailStatus.Active,
                      PhoneNumber= PHONE_NUMBER_1,
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today,
@@ -1239,7 +1239,7 @@ namespace BPMExtended.Main.Common
                      ContractId = CONTRACT_CUST2_LL1,
                      CustomerId = CUSTOMER_ID_2,
                      PhoneNumber= PHONE_NUMBER_1,
-                     Status = ContractDetailStatus.Active,
+                    // Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3),
                      RatePlanId = RP_LL_RES_MAR,
@@ -1257,7 +1257,7 @@ namespace BPMExtended.Main.Common
                      ContractId = CONTRACT_CUST2_LL2,
                      CustomerId = CUSTOMER_ID_2,
                      PhoneNumber= PHONE_NUMBER_1,
-                     Status = ContractDetailStatus.Inactive,
+                    // Status = ContractDetailStatus.Inactive,
                      CreatedTime = DateTime.Today.AddDays(-4),
                      LastModifiedTime = DateTime.Today,
                      RatePlanId = RP_LL_RES_NORMAL,
@@ -1388,6 +1388,16 @@ namespace BPMExtended.Main.Common
                 new SOM.Main.Entities.RatePlan
                 {
                     RatePlanId = RP_TL_PSTN_RES_NORMAL,
+                    Name = "Normal Plan",
+                    LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
+                    SubType = "PSTN",
+                    Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
+                    CorePackage = GetServicePackage(PCKG_CORE_TL),
+                    OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_TL_1 })
+                },
+                new SOM.Main.Entities.RatePlan
+                {
+                    RatePlanId = "5",
                     Name = "Normal Plan",
                     LOB = SOM.Main.Entities.LineOfBusiness.Telephony,
                     SubType = "PSTN",
@@ -1910,150 +1920,164 @@ namespace BPMExtended.Main.Common
     
         #region Invoices
 
-        public static List<InvoiceDetail> GetInvoices(string customerId)
-        {
-            return GetAllInvoices().FindAll(x => x.CustomerID.ToLower() == customerId.ToLower());
-        }
-        public static InvoiceDetail GetInvoiceById(string invoiceId)
-        {
-            return GetAllInvoices().Find(x => x.InvoiceId.ToLower() == invoiceId.ToLower());
-        }
+        //public static List<InvoiceDetail> GetInvoices(string customerId)
+        //{
+        //    return GetAllInvoices().FindAll(x => x.CustomerID.ToLower() == customerId.ToLower());
+        //}
+        //public static InvoiceDetail GetInvoiceById(string invoiceId)
+        //{
+        //    return GetAllInvoices().Find(x => x.InvoiceId.ToLower() == invoiceId.ToLower());
+        //}
 
-        private static List<InvoiceDetail> GetAllInvoices()
-        {
+        //private static List<InvoiceDetail> GetAllInvoices()
+        //{
+            
+        //    return new List<InvoiceDetail>
+        //    {
+        //         new InvoiceDetail
+        //         {
+        //             BillCycle = "4/2018",
+        //             CustomerID = CUSTOMER_ID_1,
+        //             InvoiceAccount = "711-1",
+        //             InvoiceCode="INV_1",
+        //             InvoiceId="INV_ID_1",
+        //             InvoiceNumber="INV_N_1",
+        //             DueDate="01/01/2019",
+        //             OpenAmount = "1000",
+        //             Resource = "1111",
+        //             URL="www.google.com"
 
-            return new List<InvoiceDetail>
-            {
-                 new InvoiceDetail
-                 {
-                     BillCycle = "4/2018",
-                     CustomerID = CUSTOMER_ID_1,
-                     InvoiceAccount = "711-1",
-                     InvoiceCode="INV_1",
-                     InvoiceId="INV_ID_1",
-                     InvoiceNumber="INV_N_1",
-                     DueDate="01/01/2019",
-                     OpenAmount = "1000",
-                     Resource = "1111",
-                     URL="www.google.com"
+        //         },
+        //          new InvoiceDetail
+        //         {
+        //             BillCycle = "4/2018",
+        //             CustomerID = "CusId00026",
+        //             InvoiceAccount = "711-1",
+        //             InvoiceCode="INV_1",
+        //             InvoiceId="INV_ID_1",
+        //             InvoiceNumber="INV_N_1",
+        //             DueDate="01/01/2019",
+        //             OpenAmount = "1000",
+        //             Resource = "1111",
+        //             URL="www.google.com"
 
-                 },
-                 new InvoiceDetail
-                 {
-                     BillCycle = "5/2018",
-                     CustomerID = CUSTOMER_ID_1,
-                     InvoiceAccount = "711-1",
-                     InvoiceCode="INV_2",
-                     InvoiceNumber="INV_N_2",
-                     DueDate="01/01/2019",
-                     InvoiceId="INV_ID_2",
-                     OpenAmount = "3000",
-                     Resource = "500501",
-                     URL="www.url.com"
+        //         },
+        //         new InvoiceDetail
+        //         {
+        //             BillCycle = "5/2018",
+        //             CustomerID = CUSTOMER_ID_1,
+        //             InvoiceAccount = "711-1",
+        //             InvoiceCode="INV_2",
+        //             InvoiceNumber="INV_N_2",
+        //             DueDate="01/01/2019",
+        //             InvoiceId="INV_ID_2",
+        //             OpenAmount = "3000",
+        //             Resource = "500501",
+        //             URL="www.url.com"
 
-                 },
-                 new InvoiceDetail
-                 {
-                     BillCycle = "7/2018",
-                     CustomerID = CUSTOMER_ID_1,
-                     InvoiceAccount = "711-1",
-                     InvoiceCode="INV_3",
-                     InvoiceNumber="INV_N_3",
-                     DueDate="01/01/2019",
-                     InvoiceId="INV_ID_3",
-                     OpenAmount = "2000",
-                     Resource = "500500",
-                     URL="www.url.com"
+        //         },
+        //         new InvoiceDetail
+        //         {
+        //             BillCycle = "7/2018",
+        //             CustomerID = CUSTOMER_ID_1,
+        //             InvoiceAccount = "711-1",
+        //             InvoiceCode="INV_3",
+        //             InvoiceNumber="INV_N_3",
+        //             DueDate="01/01/2019",
+        //             InvoiceId="INV_ID_3",
+        //             OpenAmount = "2000",
+        //             Resource = "500500",
+        //             URL="www.url.com"
 
-                 },
-                 new InvoiceDetail
-                 {
-                     BillCycle = "3/2018",
-                     CustomerID = CUSTOMER_ID_1,
-                     InvoiceAccount = "711-1",
-                     InvoiceCode="INV_4",
-                     InvoiceId="INV_ID_4",
-                     InvoiceNumber="INV_N_4",
-                     DueDate="01/01/2019",
-                     OpenAmount = "4000",
-                     Resource = "Test1",
-                     URL="www.url.com"
+        //         },
+        //         new InvoiceDetail
+        //         {
+        //             BillCycle = "3/2018",
+        //             CustomerID = CUSTOMER_ID_1,
+        //             InvoiceAccount = "711-1",
+        //             InvoiceCode="INV_4",
+        //             InvoiceId="INV_ID_4",
+        //             InvoiceNumber="INV_N_4",
+        //             DueDate="01/01/2019",
+        //             OpenAmount = "4000",
+        //             Resource = "Test1",
+        //             URL="www.url.com"
 
-                 },
-                 new InvoiceDetail
-                 {
-                     BillCycle = "4/2018",
-                     CustomerID = CUSTOMER_ID_2,
-                     InvoiceAccount = "711-1",
-                     InvoiceCode="INV_5",
-                     InvoiceId="INV_ID_5",
-                     InvoiceNumber="INV_N_5",
-                     DueDate="02/01/2019",
-                     OpenAmount = "1000",
-                     Resource = "1111",
-                     URL="www.url.com"
+        //         },
+        //         new InvoiceDetail
+        //         {
+        //             BillCycle = "4/2018",
+        //             CustomerID = CUSTOMER_ID_2,
+        //             InvoiceAccount = "711-1",
+        //             InvoiceCode="INV_5",
+        //             InvoiceId="INV_ID_5",
+        //             InvoiceNumber="INV_N_5",
+        //             DueDate="02/01/2019",
+        //             OpenAmount = "1000",
+        //             Resource = "1111",
+        //             URL="www.url.com"
 
-                 },
-                 new InvoiceDetail
-                 {
-                     BillCycle = "1/2018",
-                     CustomerID = CUSTOMER_ID_2,
-                     InvoiceAccount = "711-1",
-                     InvoiceCode="INV_6",
-                     InvoiceId="INV_ID_6",
-                     InvoiceNumber="INV_N_6",
-                     DueDate="01/01/2019",
-                     OpenAmount = "3000",
-                     Resource = "500500",
-                     URL="www.url.com"
+        //         },
+        //         new InvoiceDetail
+        //         {
+        //             BillCycle = "1/2018",
+        //             CustomerID = CUSTOMER_ID_2,
+        //             InvoiceAccount = "711-1",
+        //             InvoiceCode="INV_6",
+        //             InvoiceId="INV_ID_6",
+        //             InvoiceNumber="INV_N_6",
+        //             DueDate="01/01/2019",
+        //             OpenAmount = "3000",
+        //             Resource = "500500",
+        //             URL="www.url.com"
 
-                 },
-                 new InvoiceDetail
-                 {
-                     BillCycle = "12/2018",
-                     CustomerID = CUSTOMER_ID_2,
-                     InvoiceAccount = "711-1",
-                     InvoiceCode="INV_7",
-                     InvoiceId="INV_ID_7",
-                     InvoiceNumber="INV_N_7",
-                     DueDate="01/01/2019",
-                     OpenAmount = "1000",
-                     Resource = "500504",
-                     URL="www.url.com"
+        //         },
+        //         new InvoiceDetail
+        //         {
+        //             BillCycle = "12/2018",
+        //             CustomerID = CUSTOMER_ID_2,
+        //             InvoiceAccount = "711-1",
+        //             InvoiceCode="INV_7",
+        //             InvoiceId="INV_ID_7",
+        //             InvoiceNumber="INV_N_7",
+        //             DueDate="01/01/2019",
+        //             OpenAmount = "1000",
+        //             Resource = "500504",
+        //             URL="www.url.com"
 
-                 },
-                 new InvoiceDetail
-                 {
-                     BillCycle = "4/2018",
-                     CustomerID = CUSTOMER_ID_3,
-                     InvoiceAccount = "711-1",
-                     InvoiceCode="INV_8",
-                     InvoiceId="INV_ID_8",
-                     InvoiceNumber="INV_N_8",
-                     DueDate="01/01/2019",
-                     OpenAmount = "1000",
-                     Resource = "1111",
-                     URL="www.url.com"
+        //         },
+        //         new InvoiceDetail
+        //         {
+        //             BillCycle = "4/2018",
+        //             CustomerID = CUSTOMER_ID_3,
+        //             InvoiceAccount = "711-1",
+        //             InvoiceCode="INV_8",
+        //             InvoiceId="INV_ID_8",
+        //             InvoiceNumber="INV_N_8",
+        //             DueDate="01/01/2019",
+        //             OpenAmount = "1000",
+        //             Resource = "1111",
+        //             URL="www.url.com"
 
-                 },
-                 new InvoiceDetail
-                 {
-                     BillCycle = "4/2018",
-                     CustomerID = CUSTOMER_ID_3,
-                     InvoiceAccount = "711-1",
-                     InvoiceCode="INV_9",
-                     InvoiceId="INV_ID_9",
-                     InvoiceNumber="INV_N_9",
-                     DueDate="01/01/2019",
-                     OpenAmount = "1000",
-                     Resource = "500500",
-                     URL="www.url.com"
+        //         },
+        //         new InvoiceDetail
+        //         {
+        //             BillCycle = "4/2018",
+        //             CustomerID = CUSTOMER_ID_3,
+        //             InvoiceAccount = "711-1",
+        //             InvoiceCode="INV_9",
+        //             InvoiceId="INV_ID_9",
+        //             InvoiceNumber="INV_N_9",
+        //             DueDate="01/01/2019",
+        //             OpenAmount = "1000",
+        //             Resource = "500500",
+        //             URL="www.url.com"
 
-                 }
+        //         }
 
-            };
+        //    };
 
-        }
+        //}
 
         #endregion
 

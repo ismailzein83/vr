@@ -585,6 +585,8 @@ namespace BPMExtended.Main.Business
 
         private TelephonyContractDetail CustomerContractToDetail(CustomerContract contract)
         {
+            int stat = 0;
+            int.TryParse(contract.Status.ToString(), out stat);
 
             var contractAddress = new Address()
             {
@@ -596,14 +598,15 @@ namespace BPMExtended.Main.Business
                 ContractId = contract.Id,
                 CustomerId = contract.CustomerId,
                 RatePlanId = contract.RateplanId!=0?contract.RateplanId.ToString():null,
-                Status = (ContractDetailStatus)contract.Status, //Check if API and Our conventions are the same
+                Status = stat.ToString(), //Check if API and Our conventions are the same
                 CustomerCode = contract.CustomerCode,
                 PhoneNumber= contract.PhoneNumber,
                 ActivationDate = contract.ActivationDate,
                 LastModifiedTime = contract.LastStatusChangeDate,
-                ContractAddress = contractAddress
+                ContractAddress = contractAddress,
+                ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
 
-            };
+        };
         }
 
         #endregion
