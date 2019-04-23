@@ -8,7 +8,6 @@
 
         var filter;
         var instanceTrackingFilter;
-
         var bpInstanceID;
         var bpInstance;
         var bpDefinitionID;
@@ -17,6 +16,8 @@
 
         var completionViewURL;
         var defaultCompletionViewLinkText = 'View Result';
+
+        var bpTabsApi;
 
         var instanceTrackingMonitorGridAPI;
         var instanceTrackingMonitorGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -50,6 +51,12 @@
             $scope.scopeModel.cancelActionClicked = false;
             $scope.scopeModel.allowCancel = false;
             $scope.scopeModel.showCloseMessage = false;
+            $scope.scopeModel.visualProgressTab = { showTab: false };
+
+            $scope.scopeModel.onBPTabsReady = function (api) {
+                bpTabsApi = api;
+            };
+
             $scope.scopeModel.onInstanceTrackingMonitorGridReady = function (api) {
                 instanceTrackingMonitorGridAPI = api;
                 instanceTrackingMonitorGridReadyDeferred.resolve();
@@ -212,6 +219,10 @@
                 $scope.scopeModel.process.HasBusinessRules = configuration.HasBusinessRules;
                 $scope.scopeModel.workflowId = response.Entity.VRWorkflowId;
 
+                if ($scope.scopeModel.workflowId) {
+                    $scope.scopeModel.visualProgressTab.showTab = true;
+                    bpTabsApi.setTabSelected(0);
+                }
                 completionViewURL = configuration.CompletionViewURL;
                 $scope.scopeModel.completionViewLinkText = (configuration.CompletionViewLinkText != null) ? configuration.CompletionViewLinkText : defaultCompletionViewLinkText;
             });

@@ -31,8 +31,8 @@
                 </span>
 
             </vr-row>
-            <vr-tabs>
-                <vr-tab header="'Visual Progress'" ng-if="scopeModel.workflowId != undefined">
+            <vr-tabs on-ready="scopeModel.onBPTabsReady">
+                <vr-tab header="'Visual Progress'" tabobject="scopeModel.visualProgressTab" >
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <bp-workflow-activitysettings-visualitemdefiniton on-ready="scopeModel.onVisualItemDefinitionReady"></bp-workflow-activitysettings-visualitemdefiniton>
