@@ -24,7 +24,7 @@
 <vr-row>
     <vr-columns width="fullrow">
         <vr-section title="Order Type">
-            <vr-analytic-ordertype-selective on-ready="scopeModel.onOrderTypeSelectorReady" normal-col-num="6" isrequired="false"></vr-analytic-ordertype-selective>
+            <vr-analytic-ordertype-selective on-ready="scopeModel.onOrderTypeSelectorReady" normal-col-num="6" isrequired="scopeModel.topRecords!=undefined"></vr-analytic-ordertype-selective>
         </vr-section>
     </vr-columns>
 </vr-row>
