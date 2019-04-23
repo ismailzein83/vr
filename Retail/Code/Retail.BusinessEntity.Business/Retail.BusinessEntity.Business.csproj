@@ -165,6 +165,7 @@
     <Compile Include="AccountGenericFields\AccountIdGenericField.cs" />
     <Compile Include="AccountHandlers\BaseAccountEventPayload.cs" />
     <Compile Include="AccountPackageRecurChargeManager.cs" />
+    <Compile Include="AccountPackage\RetailAccountPackageProvider.cs" />
     <Compile Include="AccountPartTaxesRuntimeManager.cs" />
     <Compile Include="BEConfigurationManager.cs" />
     <Compile Include="Context\AccountBulkActionSettingsContext.cs" />

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Security.Entities;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountBEDefinitionSettings : Vanrise.GenericData.Entities.BusinessEntityDefinitionSettings
+    public class AccountBEDefinitionSettings : Vanrise.GenericData.Entities.BusinessEntityDefinitionSettings, IAccountPackageHandler
     {
         public static Guid s_configId = new Guid("70D4A6AD-10CC-4F0B-8364-7D8EF3C044C4");
         public override Guid ConfigId { get { return s_configId; } }
@@ -44,10 +45,19 @@ namespace Retail.BusinessEntity.Entities
         public AccountCondition PackageAssignmentCondition { get; set; }
 
         public bool UseFinancialAccountModule { get; set; }
+
         public bool UseRecurringChargeModule { get; set; }
+
         public AccountBEDefinitionSecurity Security { get; set; }
 
         public List<AccountBEClassification> Classifications { get; set; }
+
+        public AccountPackageProvider GetAccountPackageProvider(IGetAccountPackageProviderContext context)
+        {
+            var accountPackageProvider = AccountPackageProviderFactory.GetManager<IAccountPackageProvider>();
+            return accountPackageProvider.CastWithValidate<AccountPackageProvider>("accountPackageProvider");
+        }
+
         public override Vanrise.Entities.VRLoggableEntityBase GetLoggableEntity(Vanrise.GenericData.Entities.IBusinessEntityDefinitionSettingsGetLoggableEntityContext context)
         {
             return BEManagerFactory.GetManager<IAccountBEManager>().GetAccountLoggableEntity(context.BEDefinition.BusinessEntityDefinitionId);
@@ -115,7 +125,7 @@ namespace Retail.BusinessEntity.Entities
     public abstract class AccountBulkActionRuntimeSettings
     {
         public abstract void Execute(IAccountBulkActionSettingsContext context);
-      
+
     }
     public class AccountExtraFieldDefinition
     {

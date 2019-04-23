@@ -102,6 +102,11 @@
     <Compile Include="AccountManager\AccountManagerAssignmentRuntimeEditor.cs" />
     <Compile Include="AccountManager\AccountManagerAssignmentRuntimeInput.cs" />
     <Compile Include="AccountManager\AccountManagerDefInfo.cs" />
+    <Compile Include="AccountPackage\AccountPackageProvider.cs" />
+    <Compile Include="AccountPackage\AccountPackageProviderFactory.cs" />
+    <Compile Include="AccountPackage\IAccountPackageHandler.cs" />
+    <Compile Include="AccountPackage\IAccountPackageProvider.cs" />
+    <Compile Include="AccountPackage\RetailAccountPackage.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionFilter.cs" />
     <Compile Include="AccountPart\InvoiceTypesTaxesRuntime.cs" />
     <Compile Include="AccountProvisioner\AccountProvisioner.cs" />

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -21,7 +18,7 @@ namespace Retail.BusinessEntity.Entities
 
         long AccountId { get; }
 
-        AccountPackage AccountPackage { get; }
+        RetailAccountPackage RetailAccountPackage { get; }
 
         Package Package { get; }
 

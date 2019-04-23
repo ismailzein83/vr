@@ -6,12 +6,12 @@ namespace Retail.BusinessEntity.Business
 {
     public class PackageVolumeChargingIsApplicableToEventContext : IPackageUsageVolumeIsApplicableToEventContext
     {
-        public PackageVolumeChargingIsApplicableToEventContext(Guid accountBEDefinitionId, long accountId, AccountPackage accountPackage, Package package, Guid serviceTypeId,
+        public PackageVolumeChargingIsApplicableToEventContext(Guid accountBEDefinitionId, long accountId, RetailAccountPackage retailAccountPackage, Package package, Guid serviceTypeId,
             DateTime eventTime, Guid volumePackageDefinitionId, Dictionary<string, dynamic> recordsByName)
         {
             this.AccountBEDefinitionId = accountBEDefinitionId;
             this.AccountId = accountId;
-            this.AccountPackage = accountPackage;
+            this.RetailAccountPackage = retailAccountPackage;
             this.Package = package;
             this.ServiceTypeId = serviceTypeId;
             this.EventTime = eventTime;
@@ -23,7 +23,7 @@ namespace Retail.BusinessEntity.Business
 
         public long AccountId { get; private set; }
 
-        public AccountPackage AccountPackage { get; private set; }
+        public RetailAccountPackage RetailAccountPackage { get; private set; }
 
         public Package Package { get; private set; }
 
