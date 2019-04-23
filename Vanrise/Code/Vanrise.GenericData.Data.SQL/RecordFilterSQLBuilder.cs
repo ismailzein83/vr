@@ -180,8 +180,15 @@ namespace Vanrise.GenericData.Data.SQL
 
         private string BuildRecordFilter(NumberRecordFilter numberFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
-            string parameterName = GenerateParameterName(ref parameterIndex);
+            string columnName = GetSQLExpression(numberFilter);
+
             string compareOperator = null;
+
+            string firstParameterName = GenerateParameterName(ref parameterIndex);
+            parameterValues.Add(firstParameterName, numberFilter.Value);
+
+            string secondParameterName;
+            string secondQuery = string.Empty;
 
             switch (numberFilter.CompareOperator)
             {
@@ -191,9 +198,20 @@ namespace Vanrise.GenericData.Data.SQL
                 case NumberRecordFilterOperator.GreaterOrEquals: compareOperator = ">="; break;
                 case NumberRecordFilterOperator.Less: compareOperator = "<"; break;
                 case NumberRecordFilterOperator.LessOrEquals: compareOperator = "<="; break;
+                case NumberRecordFilterOperator.Between:
+                    compareOperator = numberFilter.IncludeValues ? ">=" : ">";
+                    secondParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(secondParameterName, numberFilter.Value2);
+                    secondQuery = string.Format("and {0} <{1} {2}", columnName, numberFilter.IncludeValues ? "=" : "", secondParameterName);
+                    break;
+                case NumberRecordFilterOperator.NotBetween:
+                    compareOperator = "<";
+                    secondParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(secondParameterName, numberFilter.Value2);
+                    secondQuery = string.Format("or {0} > {1}", columnName, secondParameterName);
+                    break;
             }
-            parameterValues.Add(parameterName, numberFilter.Value);
-            return string.Format("{0} {1} {2}", GetSQLExpression(numberFilter), compareOperator, parameterName);
+            return string.Format("{0} {1} {2} {3}", columnName, compareOperator, firstParameterName, secondQuery);
         }
 
         private string BuildRecordFilter(DateTimeRecordFilter dateTimeFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)

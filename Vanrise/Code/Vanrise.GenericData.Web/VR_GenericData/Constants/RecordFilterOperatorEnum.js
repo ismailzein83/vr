@@ -17,7 +17,9 @@ app.constant('VR_GenericData_NumberRecordFilterOperatorEnum', {
     Greater: { value: 2, description: '>' },
     GreaterOrEquals: { value: 3, description: '≥' },
     Less: { value: 4, description: '<' },
-    LessOrEquals: { value: 5, description: '≤' }
+    LessOrEquals: { value: 5, description: '≤' },
+    Between: { value: 6, description: 'Between', showSecondNumberField: true, showIncludeValues: true  },
+    NotBetween: { value: 7, description: 'Not Between', showSecondNumberField: true }
 });
 
 app.constant('VR_GenericData_DateTimeRecordFilterOperatorEnum', {

@@ -144,7 +144,8 @@ namespace Vanrise.GenericData.Data.RDB
 
         private void RecordFilterCondition(RDBConditionContext conditionContext, NumberRecordFilter filter)
         {
-            RDBCompareConditionOperator compareOperator;
+            RDBCompareConditionOperator? compareOperator = null;
+
             switch (filter.CompareOperator)
             {
                 case NumberRecordFilterOperator.Equals: compareOperator = RDBCompareConditionOperator.Eq; break;
@@ -153,11 +154,50 @@ namespace Vanrise.GenericData.Data.RDB
                 case NumberRecordFilterOperator.GreaterOrEquals: compareOperator = RDBCompareConditionOperator.GEq; break;
                 case NumberRecordFilterOperator.Less: compareOperator = RDBCompareConditionOperator.L; break;
                 case NumberRecordFilterOperator.LessOrEquals: compareOperator = RDBCompareConditionOperator.LEq; break;
-                default: throw new NotSupportedException(string.Format("numberFilter.CompareOperator '{0}'", filter.CompareOperator.ToString()));
             }
-            var compareConditionContext = conditionContext.CompareCondition(compareOperator);
-            _setExpressionFromField(filter.FieldName, compareConditionContext.Expression1());
-            compareConditionContext.Expression2().Value(filter.Value);
+
+            if (compareOperator.HasValue)
+            {
+                var compareConditionContext = conditionContext.CompareCondition(compareOperator.Value);
+                _setExpressionFromField(filter.FieldName, compareConditionContext.Expression1());
+                compareConditionContext.Expression2().Value(filter.Value);
+                return;
+            }
+
+            if (filter.CompareOperator == NumberRecordFilterOperator.Between)
+            {
+                var compareOperator1 = filter.IncludeValues ? RDBCompareConditionOperator.GEq : RDBCompareConditionOperator.G;
+                var compareOperator2 = filter.IncludeValues ? RDBCompareConditionOperator.LEq : RDBCompareConditionOperator.L;
+
+                var andCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.AND);
+
+                var andCompareConditionContext1 = andCondition.CompareCondition(compareOperator1);
+                _setExpressionFromField(filter.FieldName, andCompareConditionContext1.Expression1());
+                andCompareConditionContext1.Expression2().Value(filter.Value);
+
+                var andCompareConditionContext2 = andCondition.CompareCondition(compareOperator2);
+                _setExpressionFromField(filter.FieldName, andCompareConditionContext2.Expression1());
+                andCompareConditionContext2.Expression2().Value(filter.Value2.Value);
+
+                return;
+            }
+
+            if (filter.CompareOperator == NumberRecordFilterOperator.NotBetween)
+            {
+                var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+
+                var orCompareConditionContext1 = orCondition.CompareCondition(RDBCompareConditionOperator.L);
+                _setExpressionFromField(filter.FieldName, orCompareConditionContext1.Expression1());
+                orCompareConditionContext1.Expression2().Value(filter.Value);
+
+                var orCompareConditionContext2 = orCondition.CompareCondition(RDBCompareConditionOperator.G);
+                _setExpressionFromField(filter.FieldName, orCompareConditionContext2.Expression1());
+                orCompareConditionContext2.Expression2().Value(filter.Value2.Value);
+
+                return;
+            }
+
+            throw new NotSupportedException(string.Format("numberFilter.CompareOperator '{0}'", filter.CompareOperator.ToString()));
         }
 
         private void RecordFilterCondition2(RDBConditionContext conditionContext, DateTimeRecordFilter dateTimeFilter)

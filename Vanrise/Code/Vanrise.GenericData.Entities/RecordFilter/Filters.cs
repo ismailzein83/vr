@@ -72,30 +72,54 @@ namespace Vanrise.GenericData.Entities
 
     public enum NumberRecordFilterOperator
     {
-        [Description(" = ")]
+        [Description(" = "), NumberRecordFilterOperatorAttribute(false)]
         Equals = 0,
-        [Description(" <> ")]
+        [Description(" <> "), NumberRecordFilterOperatorAttribute(false)]
         NotEquals = 1,
-        [Description(" > ")]
+        [Description(" > "), NumberRecordFilterOperatorAttribute(false)]
         Greater = 2,
-        [Description(" >= ")]
+        [Description(" >= "), NumberRecordFilterOperatorAttribute(false)]
         GreaterOrEquals = 3,
-        [Description(" < ")]
+        [Description(" < "), NumberRecordFilterOperatorAttribute(false)]
         Less = 4,
-        [Description(" <= ")]
-        LessOrEquals = 5
+        [Description(" <= "), NumberRecordFilterOperatorAttribute(false)]
+        LessOrEquals = 5,
+        [Description(" Between "), NumberRecordFilterOperatorAttribute(true)]
+        Between = 6,
+        [Description(" Not Between "), NumberRecordFilterOperatorAttribute(true)]
+        NotBetween = 7
     }
+
+    public class NumberRecordFilterOperatorAttribute : Attribute
+    {
+        public bool HasSecondValue { get; set; }
+
+        public NumberRecordFilterOperatorAttribute(bool hasSecondValue)
+        {
+            this.HasSecondValue = hasSecondValue;
+        }
+    }
+
     public class NumberRecordFilter : RecordFilter
     {
         public NumberRecordFilterOperator CompareOperator { get; set; }
 
         public Decimal Value { get; set; }
 
+        public Decimal? Value2 { get; set; }
+
+        public bool IncludeValues { get; set; }
+
         public Guid? ValueParameterId { get; set; }
 
         public override string GetDescription(IRecordFilterGetDescriptionContext context)
         {
-            return string.Format(" {0} {1} {2} ", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Value));
+            bool hasSecondValue = Vanrise.Common.Utilities.GetEnumAttribute<NumberRecordFilterOperator, NumberRecordFilterOperatorAttribute>(this.CompareOperator).HasSecondValue;
+
+            if (hasSecondValue)
+                return string.Format(" {0} {1} {2} and {3}", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Value), context.GetFieldValueDescription(FieldName, Value2));
+            else
+                return string.Format(" {0} {1} {2} ", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Value));          
         }
 
         public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)

@@ -1,6 +1,7 @@
 ﻿<vr-columns width="normal">
-    <vr-select label="Condition" datatextfield="description" datavaluefield="value" hideremoveicon
-               datasource="filters" selectedvalues="selectedFilter" isrequired="true"></vr-select>
+    <vr-select datasource="filters" selectedvalues="selectedFilter" onselectionchanged="onFilterSelectionChanged"
+               datatextfield="description" datavaluefield="value" label="Condition" isrequired="true" hideremoveicon>
+    </vr-select>
 </vr-columns>
 
 <vr-genericdata-fieldtype-number-runtimeeditor on-ready="onNumberFilterEditorReady" isrequired="true" selectionmode="single" normal-col-num="4"></vr-genericdata-fieldtype-number-runtimeeditor>

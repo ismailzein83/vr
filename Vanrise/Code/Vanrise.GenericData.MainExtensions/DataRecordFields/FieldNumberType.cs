@@ -148,11 +148,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             if (fieldValue == null)
                 return false;
+
             NumberRecordFilter numberRecordFilter = recordFilter as NumberRecordFilter;
             if (numberRecordFilter == null)
                 throw new NullReferenceException("numberRecordFilter");
+
             Decimal valueAsDecimal = Convert.ToDecimal(fieldValue);
             Decimal filterValue = numberRecordFilter.Value;
+            Decimal? filterValue2 = numberRecordFilter.Value2;
+
             switch (numberRecordFilter.CompareOperator)
             {
                 case NumberRecordFilterOperator.Equals: return valueAsDecimal == filterValue;
@@ -161,6 +165,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case NumberRecordFilterOperator.GreaterOrEquals: return valueAsDecimal >= filterValue;
                 case NumberRecordFilterOperator.Less: return valueAsDecimal < filterValue;
                 case NumberRecordFilterOperator.LessOrEquals: return valueAsDecimal <= filterValue;
+                case NumberRecordFilterOperator.Between:
+                    if (numberRecordFilter.IncludeValues)
+                        return valueAsDecimal >= filterValue && valueAsDecimal <= filterValue2.Value;
+                    else
+                        return valueAsDecimal > filterValue && valueAsDecimal < filterValue2.Value;
+                case NumberRecordFilterOperator.NotBetween:
+                    return valueAsDecimal < filterValue || valueAsDecimal > filterValue2.Value;
             }
             return false;
         }
