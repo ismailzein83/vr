@@ -298,7 +298,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Parameters!Name.Value</Value>
+                              <Value>=Parameters!Carrier.Value</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -2776,6 +2776,12 @@
     </ReportParameter>
     <ReportParameter Name="NoCarrierVoice">
       <DataType>Boolean</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Carrier">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
