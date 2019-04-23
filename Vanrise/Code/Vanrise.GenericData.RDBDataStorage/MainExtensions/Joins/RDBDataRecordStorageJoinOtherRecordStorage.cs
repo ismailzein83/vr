@@ -30,11 +30,11 @@ namespace Vanrise.GenericData.RDBDataStorage.MainExtensions.Joins
             codeBuilder.AppendLine("var onCondition = joinStatement.On();");
             foreach (var condition in this.JoinConditions)
             {
-                if (!String.IsNullOrEmpty(condition.StorageToCompareJoinName))
-                    codeBuilder.AppendLine($@"string storageToCompareTableAlias = context.GetJoinTableAlias(""{condition.StorageToCompareJoinName}"");");
+                if (!String.IsNullOrEmpty(condition.SourceStorageJoinName))
+                    codeBuilder.AppendLine($@"string storageToCompareTableAlias = context.GetJoinTableAlias(""{condition.SourceStorageJoinName}"");");
                 else
                     codeBuilder.AppendLine($"string storageToCompareTableAlias = mainTableAlias;");
-                codeBuilder.AppendLine($@"onCondition.EqualsCondition(tableToJoinTableAlias, ""{condition.StorageFieldName}"").Column(storageToCompareTableAlias, ""{condition.StorageToCompareFieldName}"");");
+                codeBuilder.AppendLine($@"onCondition.EqualsCondition(tableToJoinTableAlias, ""{condition.StorageToJoinFieldName}"").Column(storageToCompareTableAlias, ""{condition.SourceStorageFieldName}"");");
             }
 
             return codeBuilder.ToString();
@@ -42,16 +42,20 @@ namespace Vanrise.GenericData.RDBDataStorage.MainExtensions.Joins
 
         public override List<string> GetDependentJoins(IRDBDataRecordStorageJoinExpressionGetDependentJoinsContext context)
         {
-            return this.JoinConditions.Where(itm => !string.IsNullOrEmpty(itm.StorageToCompareJoinName)).Select(itm => itm.StorageToCompareJoinName).Distinct().ToList();
+            return this.JoinConditions.Where(itm => !string.IsNullOrEmpty(itm.SourceStorageJoinName)).Select(itm => itm.SourceStorageJoinName).Distinct().ToList();
         }
     }
 
     public class RDBDataRecordStorageJoinOtherRecordStorageCondition
     {
-        public string StorageFieldName { get; set; }
+        
+        /// <summary>
+        /// this is optional, it will be the current storage in case it is null
+        /// </summary>
+        public string SourceStorageJoinName { get; set; }
 
-        public string StorageToCompareJoinName { get; set; }
+        public string SourceStorageFieldName { get; set; }
 
-        public string StorageToCompareFieldName { get; set; }
+        public string StorageToJoinFieldName { get; set; }
     }
 }

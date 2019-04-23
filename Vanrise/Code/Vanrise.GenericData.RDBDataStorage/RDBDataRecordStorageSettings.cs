@@ -57,6 +57,8 @@ namespace Vanrise.GenericData.RDBDataStorage
     {
         public abstract Guid ConfigId { get; }
 
+        public virtual string StorageFieldEditor { get; set; }
+
         public abstract string GetCode(IRDBDataRecordStorageJoinExpressionGetCodeContext context);
 
         public abstract List<string> GetDependentJoins(IRDBDataRecordStorageJoinExpressionGetDependentJoinsContext context);
