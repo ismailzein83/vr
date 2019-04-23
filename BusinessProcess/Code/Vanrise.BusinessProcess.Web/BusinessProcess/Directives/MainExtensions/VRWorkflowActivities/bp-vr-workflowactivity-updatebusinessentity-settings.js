@@ -85,7 +85,7 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                                                 inputGridAPI.clearDataSource();
                                                 var fields = dataRecordType.Fields;
                                                 for (var i = 0; i < fields.length; i++) {
-                                                    var fieldName = fields[i].Name
+                                                    var fieldName = fields[i].Name;
                                                     $scope.scopeModel.inputItems.push({
                                                         fieldName: fieldName,
                                                         inputValue: inputItems[fieldName]
