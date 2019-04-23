@@ -71,29 +71,32 @@ namespace Retail.Interconnect.Business
 
             BusinessEntity.Business.ConfigManager configManager = new ConfigManager();
             var invoiceSettings = configManager.GetRetailInvoiceSettings();
-            if (invoiceSettings.RequireGroupByMonth)
+            if(invoiceSettings != null)
             {
-                if (customerInvoices != null && customerInvoices.Count() > 0)
+                if (invoiceSettings.RequireGroupByMonth)
                 {
-                    foreach (var customerInvoice in customerInvoices)
+                    if (customerInvoices != null && customerInvoices.Count() > 0)
                     {
-                        if (customerInvoice.FromDate.Year != customerInvoice.ToDate.Year || customerInvoice.FromDate.Month != customerInvoice.ToDate.Month)
+                        foreach (var customerInvoice in customerInvoices)
                         {
-                            context.ErrorMessage = "Settlement invoice not supported. Reason: Specified customer invoices must be less than or equal to a month.";
-                            context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
-                            return;
+                            if (customerInvoice.FromDate.Year != customerInvoice.ToDate.Year || customerInvoice.FromDate.Month != customerInvoice.ToDate.Month)
+                            {
+                                context.ErrorMessage = "Settlement invoice not supported. Reason: Specified customer invoices must be less than or equal to a month.";
+                                context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                                return;
+                            }
                         }
                     }
-                }
-                if (supplierInvoices != null && supplierInvoices.Count() > 0)
-                {
-                    foreach (var supplierInvoice in supplierInvoices)
+                    if (supplierInvoices != null && supplierInvoices.Count() > 0)
                     {
-                        if (supplierInvoice.FromDate.Year != supplierInvoice.ToDate.Year || supplierInvoice.FromDate.Month != supplierInvoice.ToDate.Month)
+                        foreach (var supplierInvoice in supplierInvoices)
                         {
-                            context.ErrorMessage = "Settlement invoice not supported. Reason: Specified supplier invoices must be less than or equal to a month.";
-                            context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
-                            return;
+                            if (supplierInvoice.FromDate.Year != supplierInvoice.ToDate.Year || supplierInvoice.FromDate.Month != supplierInvoice.ToDate.Month)
+                            {
+                                context.ErrorMessage = "Settlement invoice not supported. Reason: Specified supplier invoices must be less than or equal to a month.";
+                                context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                                return;
+                            }
                         }
                     }
                 }
