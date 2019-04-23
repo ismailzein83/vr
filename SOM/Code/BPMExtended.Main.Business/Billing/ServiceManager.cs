@@ -45,8 +45,24 @@ namespace BPMExtended.Main.Business
             using (SOMClient client = new SOMClient())
             {
                 item = client.Get<CustomerContractService>(String.Format("api/SOM.ST/Billing/GetContractServices?ContractId={0}", contractId));
+                
             }
             return item;
+        }
+
+        public List<CustomerContractServiceDetail> GetContractServicesDetail(string contractId)
+        {
+            var customerContractServiceList = new List<CustomerContractServiceDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                var items = client.Get<List<CustomerContractService>>(String.Format("api/SOM.ST/Billing/GetContractServices?ContractId={0}", contractId));
+                foreach (var item in items)
+                {
+                    var customerContractServiceDetailItem = CustomerContractServiceToDetailMapper(item);
+                    customerContractServiceList.Add(customerContractServiceDetailItem);
+                }
+            }
+            return customerContractServiceList;
         }
         public List<ServiceDetail> GetCoreServices(string ratePlanId)
         {
@@ -276,6 +292,17 @@ namespace BPMExtended.Main.Business
                 Name = item.Title,
                 Id = item.PublicId
 
+            };
+        }
+
+        public CustomerContractServiceDetail CustomerContractServiceToDetailMapper(CustomerContractService customerContractService)
+        {
+            return new CustomerContractServiceDetail
+            {
+                Id = customerContractService.Id,
+                Name = customerContractService.Name,
+                Status = customerContractService.Status,
+                ActivateDate = customerContractService.ActivateDate,
             };
         }
         #endregion

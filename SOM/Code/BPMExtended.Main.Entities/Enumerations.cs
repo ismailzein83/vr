@@ -213,4 +213,26 @@ namespace BPMExtended.Main.Entities
         LineUnblocking = 36,
 
     }
+    public enum ContractStatus
+    {
+       
+        [LookupIdAttribute("EE96CD5C-0792-47BE-A4C1-04A24430BED7")]
+        OnHold = 1,
+        [LookupIdAttribute("86262707-1F22-4DD4-AD06-48714DBEC34C")]
+        Active = 2,
+        [LookupIdAttribute("C2F6C676-29E2-44F0-A12F-9B4C62C94A40")]
+        Suspended = 3,
+        [LookupIdAttribute("00F5E2B9-B84E-497A-A0C7-E15CBD75009B")]
+        Inactive = 4,
+
+    }
+    public class LookupIdAttribute : Attribute
+    {
+        public string LookupId { get; private set; }
+
+        public LookupIdAttribute(string lookupId)
+        {
+            this.LookupId = lookupId;
+        }
+    }
 }

@@ -88,6 +88,7 @@
     <Compile Include="ContractService.cs" />
     <Compile Include="ContractTakeOverRequestInput.cs" />
     <Compile Include="CreatePABXRequestInput.cs" />
+    <Compile Include="CustomerContractServiceDetail.cs" />
     <Compile Include="DeactivateCptRequestInput.cs" />
     <Compile Include="DeactivatePABXRequestInput.cs" />
     <Compile Include="DeportedNumberRequestInput.cs" />

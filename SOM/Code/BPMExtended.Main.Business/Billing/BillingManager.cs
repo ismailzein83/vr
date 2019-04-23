@@ -658,26 +658,49 @@ namespace BPMExtended.Main.Business
         public List<InvoiceDetail> GetInvoices(string customerId)
         {
             //TODO:Get invoices
-            List<InvoiceDetail> invoices =  RatePlanMockDataGenerator.GetInvoices(customerId);
+            // List<InvoiceDetail> invoices =  RatePlanMockDataGenerator.GetInvoices(customerId);
 
-            foreach (InvoiceDetail invoice in invoices)
+            //foreach (InvoiceDetail invoice in invoices)
+            //{
+            //    invoice.CollectionStatus = GetCollectionStatus(invoice.InvoiceCode);
+            //    invoice.InvoiceInstallmentFlag = GetInvoiceInstallmentFlag(invoice.InvoiceId);
+            //    invoice.FinancialDisputes = GetFinancialDisputes(invoice.InvoiceId);
+            //}
+            //            return invoices;
+
+            var invoicesDetailItems = new List<InvoiceDetail>();
+            using (SOMClient client = new SOMClient())
             {
-                invoice.CollectionStatus = GetCollectionStatus(invoice.InvoiceId);
-                invoice.InvoiceInstallmentFlag = GetInvoiceInstallmentFlag(invoice.InvoiceId);
-                invoice.FinancialDisputes = GetFinancialDisputes(invoice.InvoiceId);
+                List<Invoice> items = client.Get<List<Invoice>>(String.Format("api/SOM.ST/Billing/GetCustomerInvoices?CustomerId={0}", customerId));
+                foreach (var item in items)
+                {
+                    var detailItem = InvoiceToDetailMapper(item);
+                    invoicesDetailItems.Add(detailItem);
+                }
             }
-
-            return invoices;
+            return invoicesDetailItems;
         }
 
         public InvoiceDetail GetInvoiceById(string invoiceId)
         {
-            return RatePlanMockDataGenerator.GetInvoiceById(invoiceId);
+            return null;
+           // return RatePlanMockDataGenerator.GetInvoiceById(invoiceId);
         }
 
         public List<PaymentDetail> GetPayments(string customerId)
         {
-            return RatePlanMockDataGenerator.GetPayments(customerId);
+            // return RatePlanMockDataGenerator.GetPayments(customerId);
+            var paymentDetailItems = new List<PaymentDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<Payment> items = client.Get<List<Payment>>(String.Format("api/SOM.ST/Billing/GetCustomerPayments?CustomerId={0}", customerId));
+                foreach (var item in items)
+                {
+                    var detailItem = PaymentToDetailMapper(item);
+                    paymentDetailItems.Add(detailItem);
+                }
+            }
+            return paymentDetailItems;
         }
 
         public List<PaymentPlanDetail> GetPaymentPlansByInvoiceId(string invoiceId)
@@ -834,6 +857,33 @@ namespace BPMExtended.Main.Business
 
             };
         }
+
+        public PaymentDetail PaymentToDetailMapper(Payment item)
+        {
+            string paymentDate= null;
+            if (item.EntryDate != null)
+            {
+                paymentDate = item.EntryDate.ToString();
+            }
+            return new PaymentDetail
+            {
+                PaymentCode = item.Code,
+                PaymentDate = paymentDate,
+                CashierUserName = item.GLAccount,
+            };
+        }
+
+        public InvoiceDetail InvoiceToDetailMapper(Invoice item)
+        {//Invoice Code, Bill Cycle, phone Number , invoice_amount, open amount, Invoice URL
+            return new InvoiceDetail
+            {
+                InvoiceCode = item.Id,
+                InvoiceAccount = item.InvoiceAmount.ToString(),
+                OpenAmount = item.OpenAmount.ToString(),
+            };
+        }
+
+
 
         public InstallmentDetail InstallmentToDetailMapper(Installment item)
         {
