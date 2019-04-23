@@ -236,7 +236,7 @@ namespace BPMExtended.Main.Business
         public List<ServiceDetail> GetOptionalServicesByContractId(string telephonycontractid)
         {
             ContractManager contractManager = new ContractManager();
-            string ratePlanId = contractManager.GetTelephonyContract(telephonycontractid).RatePlanId;
+            string ratePlanId = contractManager.GetContractInfo(telephonycontractid).RatePlanId;
             List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
             if (allOptionalServices.Count > 0)
                 return allOptionalServices.Take(2).ToList();
@@ -246,22 +246,22 @@ namespace BPMExtended.Main.Business
 
         public List<ServiceDetail> GetLeasedLineOptionalServicesByContractId(string contractid)
         {
-            ContractManager contractManager = new ContractManager();
-            string ratePlanId = contractManager.GetLeasedLineContract(contractid).RatePlanId;
-            List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
-            if (allOptionalServices.Count > 0)
-                return allOptionalServices.Take(2).ToList();
+            //ContractManager contractManager = new ContractManager();
+            //string ratePlanId = contractManager.GetLeasedLineContract(contractid).RatePlanId;
+            //List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
+            //if (allOptionalServices.Count > 0)
+            //    return allOptionalServices.Take(2).ToList();
 
             return new List<ServiceDetail>();
         }
 
         public List<ServiceDetail> GetGSHDSLOptionalServicesByContractId(string contractid)
         {
-            ContractManager contractManager = new ContractManager();
-            string ratePlanId = contractManager.GetGSHDSLContract(contractid).RatePlanId;
-            List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
-            if (allOptionalServices.Count > 0)
-                return allOptionalServices.Take(2).ToList();
+            //ContractManager contractManager = new ContractManager();
+            //string ratePlanId = contractManager.GetGSHDSLContract(contractid).RatePlanId;
+            //List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
+            //if (allOptionalServices.Count > 0)
+            //    return allOptionalServices.Take(2).ToList();
 
             return new List<ServiceDetail>();
         }
@@ -270,11 +270,11 @@ namespace BPMExtended.Main.Business
 
         public List<ServiceDetail> GetADSLOptionalServicesByContractId(string telephonycontractid)//adsl contractId
         {
-            ContractManager contractManager = new ContractManager();
-            string ratePlanId = contractManager.GetADSLContract(telephonycontractid).RatePlanId;
-            List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
-            if (allOptionalServices.Count > 0)
-                return allOptionalServices.Take(2).ToList();
+            //ContractManager contractManager = new ContractManager();
+            //string ratePlanId = contractManager.GetADSLContract(telephonycontractid).RatePlanId;
+            //List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
+            //if (allOptionalServices.Count > 0)
+            //    return allOptionalServices.Take(2).ToList();
 
             return new List<ServiceDetail>();
         }

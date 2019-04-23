@@ -84,12 +84,12 @@ namespace BPMExtended.Main.Business
                 
                 var contractId = entities[0].GetColumnValue("StContractId");
                 ContractManager contractManager = new ContractManager();
-                TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId.ToString());
+                //TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId.ToString());
 
                 SOM.Main.Entities.LinePath item = new SOM.Main.Entities.LinePath();
                 using (SOMClient client = new SOMClient())
                 {
-                    item = client.Get<SOM.Main.Entities.LinePath>(String.Format("api/SOM_Main/Inventory/CheckADSL?phoneNumber={0}", contract.PhoneNumber));
+                    item = client.Get<SOM.Main.Entities.LinePath>(String.Format("api/SOM_Main/Inventory/CheckADSL?phoneNumber={0}", "1111"));
                 }
                 string[] path = item.Path.Split(',');
                 return path[6] == "1";

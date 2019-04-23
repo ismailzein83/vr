@@ -429,7 +429,8 @@ namespace BPMExtended.Main.Common
 
         public static List<TelephonyContractDetail> GetTelephonyContracts(string customerId)
         {
-            return GetAllTelephonyContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+            //return GetAllTelephonyContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+            return null;
         }
         public static List<TelephonyContractDetail> GetTelephonyContractsByNumber(string phoneNumber)
         {
@@ -627,45 +628,47 @@ namespace BPMExtended.Main.Common
 
         public static List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId)
         {
-            return GetAllTelephonyContractsInfo().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+            //return GetAllTelephonyContractsInfo().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+            return null;
         }
 
         private static List<TelephonyContractInfo> GetAllTelephonyContractsInfo()
         {
-            return new List<TelephonyContractInfo>
-            {
-                 new TelephonyContractInfo
-                 {
-                     ContractId = CONTRACT_CUST1_TL1,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_2
-                 },
-                 new TelephonyContractInfo
-                 {
-                     ContractId = CONTRACT_CUST1_TL2,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_1
-                 },
-                 new TelephonyContractInfo
-                 {
-                     ContractId = CONTRACT_CUST1_TL3,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_3
-                 },
-                 new TelephonyContractInfo
-                 {
-                     ContractId = CONTRACT_CUST3_TL1,
-                     CustomerId = CUSTOMER_ID_3,
-                     PhoneNumber= PHONE_NUMBER_6
-                 },
-                 new TelephonyContractInfo
-                 {
-                      ContractId = CONTRACT_CUST2_TL1,
-                      CustomerId = CUSTOMER_ID_2,
-                      PhoneNumber= PHONE_NUMBER_8
-                 }
+            return null;
+            //return new List<TelephonyContractInfo>
+            //{
+            //     new TelephonyContractInfo
+            //     {
+            //         ContractId = CONTRACT_CUST1_TL1,
+            //         CustomerId = CUSTOMER_ID_1,
+            //         PhoneNumber= PHONE_NUMBER_2
+            //     },
+            //     new TelephonyContractInfo
+            //     {
+            //         ContractId = CONTRACT_CUST1_TL2,
+            //         CustomerId = CUSTOMER_ID_1,
+            //         PhoneNumber= PHONE_NUMBER_1
+            //     },
+            //     new TelephonyContractInfo
+            //     {
+            //         ContractId = CONTRACT_CUST1_TL3,
+            //         CustomerId = CUSTOMER_ID_1,
+            //         PhoneNumber= PHONE_NUMBER_3
+            //     },
+            //     new TelephonyContractInfo
+            //     {
+            //         ContractId = CONTRACT_CUST3_TL1,
+            //         CustomerId = CUSTOMER_ID_3,
+            //         PhoneNumber= PHONE_NUMBER_6
+            //     },
+            //     new TelephonyContractInfo
+            //     {
+            //          ContractId = CONTRACT_CUST2_TL1,
+            //          CustomerId = CUSTOMER_ID_2,
+            //          PhoneNumber= PHONE_NUMBER_8
+            //     }
 
-            };
+            //};
         }
 
         #endregion
@@ -680,54 +683,57 @@ namespace BPMExtended.Main.Common
 
         public static List<GSHDSLContractDetail> GetGSHDSLContracts(string customerId)
         {
-            return GetAllGSHDSLContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+            //return GetAllGSHDSLContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+            return null;
         }
 
 
         private static List<GSHDSLContractDetail> GetAllGSHDSLContracts()
         {
-            return new List<GSHDSLContractDetail>
-            {
-                 new GSHDSLContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_GSHDSL1,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_1,
-                     RatePlanId = RP_GSHDSL_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     CSO = "None",
-                    // Status = ContractDetailStatus.Active,
-                     CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3),
-                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 110,
-                     UnbilledAmount = 2092,
-                     Promotions = "promo1",
-                     FreeUnit = "unit1"
-                 },
-                  new GSHDSLContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_GSHDSL2,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_1,
-                     RatePlanId = RP_GSHDSL_RES_STUDENT,
-                     RatePlanName = "Student Plan",
-                     CSO = "None",
-                   //  Status = ContractDetailStatus.Active,
-                     CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3),
-                     ContractAddress = new Address () {Province ="prov9" , Building = "b9" , City="beirut" , Floor = "9", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                      ContractBalance = 21,
-                     UnbilledAmount = 44,
-                     Promotions = "promo2",
-                     FreeUnit = "unit2"
-                 }
+            return null;
 
-            };
+            //return new List<GSHDSLContractDetail>
+            //{
+            //     new GSHDSLContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST1_GSHDSL1,
+            //         CustomerId = CUSTOMER_ID_1,
+            //         PhoneNumber= PHONE_NUMBER_1,
+            //         RatePlanId = RP_GSHDSL_RES_NORMAL,
+            //         RatePlanName = "Normal Plan",
+            //         CSO = "None",
+            //        // Status = ContractDetailStatus.Active,
+            //         CreatedTime = DateTime.Today.AddDays(-5),
+            //         LastModifiedTime = DateTime.Today.AddDays(-3),
+            //         ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 110,
+            //         UnbilledAmount = 2092,
+            //         Promotions = "promo1",
+            //         FreeUnit = "unit1"
+            //     },
+            //      new GSHDSLContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST1_GSHDSL2,
+            //         CustomerId = CUSTOMER_ID_1,
+            //         PhoneNumber= PHONE_NUMBER_1,
+            //         RatePlanId = RP_GSHDSL_RES_STUDENT,
+            //         RatePlanName = "Student Plan",
+            //         CSO = "None",
+            //       //  Status = ContractDetailStatus.Active,
+            //         CreatedTime = DateTime.Today.AddDays(-5),
+            //         LastModifiedTime = DateTime.Today.AddDays(-3),
+            //         ContractAddress = new Address () {Province ="prov9" , Building = "b9" , City="beirut" , Floor = "9", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //          ContractBalance = 21,
+            //         UnbilledAmount = 44,
+            //         Promotions = "promo2",
+            //         FreeUnit = "unit2"
+            //     }
+
+            //};
 
 
         }
@@ -847,7 +853,8 @@ namespace BPMExtended.Main.Common
 
         public static List<ADSLContractDetail> GetADSLContracts(string customerId)
         {
-            return GetAllADSLContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+            //return GetAllADSLContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+            return null;
         }
         public static List<ADSLContractDetail> GetADSLContractsByUsername(string userName)
         {
@@ -905,169 +912,171 @@ namespace BPMExtended.Main.Common
 
         private static List<ADSLContractDetail> GetAllADSLContracts()
         {
-            return new List<ADSLContractDetail>
-            {
-                 new ADSLContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_ADSL1,
-                     TelephonyContractId = CONTRACT_CUST1_TL2,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_1,
-                     RatePlanId = RP_ADSL_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     UserName = "Test1",
-                     Password = "pass1",
-                     Speed = ADSL_SPEED_1,
-                     CSO = "None",
-                     DSLAMPort="2",
-                     ProviderOfDSLAMPort="Huawei",
-                     SubscriptionDate ="2018/02/02",
-                     ReservedLinePath = "path1",
-                   //  Status = ContractDetailStatus.Active,
-                     CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3),
-                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 500,
-                     UnbilledAmount = 1002,
-                     Promotions = "promo41",
-                     FreeUnit = "unit41"
-                 },
-                 new ADSLContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_ADSL2,
-                     TelephonyContractId = CONTRACT_CUST1_TL1,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_2,
-                     RatePlanId = RP_ADSL_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     UserName = "Test2",
-                     Password = "pass2",
-                     Speed = ADSL_SPEED_2,
-                    // Status = ContractDetailStatus.Inactive,
-                     CreatedTime = DateTime.Today.AddDays(-4),
-                     LastModifiedTime = DateTime.Today,
-                     ContractAddress = new Address () {Province ="prov44" , Building = "b44" , City="beirut" , Floor = "1", Region="R4", HouseNumber="2", Street="st4" , SubRegion="sub4"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 500,
-                     UnbilledAmount = 1002,
-                     Promotions = "promo45",
-                     FreeUnit = "unit45"
-                 },
-                 new ADSLContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_ADSL3,
-                     TelephonyContractId = CONTRACT_CUST1_TL3,
-                     CustomerId = CUSTOMER_ID_1,
-                    // Status = ContractDetailStatus.Active,
-                     PhoneNumber= PHONE_NUMBER_3,
-                     UserName = "Test3",
-                     Password = "pass3",
-                     Speed = ADSL_SPEED_3,
-                     RatePlanId = RP_ADSL_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     CreatedTime = DateTime.Today,
-                     LastModifiedTime = DateTime.Today,
-                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "2", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 500,
-                     UnbilledAmount = 1002,
-                     Promotions = "promo74",
-                     FreeUnit = "unit74"
-                 },
-                 new ADSLContractDetail
-                 {
-                     ContractId = CONTRACT_CUST2_ADSL1,
-                     TelephonyContractId = CONTRACT_CUST2_TL1,
-                     CustomerId = CUSTOMER_ID_2,
-                     PhoneNumber= PHONE_NUMBER_8,
-                     RatePlanId = RP_ADSL_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     UserName = "Test4",
-                     Password = "pass4",
-                     Speed = ADSL_SPEED_4,
-                    // Status = ContractDetailStatus.Active,
-                     CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3),
-                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 500,
-                     UnbilledAmount = 1002,
-                     Promotions = "promo9",
-                     FreeUnit = "unit9"
-                 },
-                 new ADSLContractDetail
-                 {
-                      ContractId = CONTRACT_CUST2_ADSL2,
-                      TelephonyContractId = CONTRACT_CUST2_TL2,
-                      CustomerId = CUSTOMER_ID_2,
-                      PhoneNumber= PHONE_NUMBER_7,
-                      RatePlanId = RP_ADSL_RES_STUDENT,
-                      RatePlanName = "Student Plan",
-                      UserName = "Test5",
-                      Password = "pass5",
-                      Speed = ADSL_SPEED_5,
-                     // Status = ContractDetailStatus.Inactive,
-                      CreatedTime = DateTime.Today.AddDays(-4),
-                      LastModifiedTime = DateTime.Today,
-                      ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "7", Region="R4", HouseNumber="8", Street="st4" , SubRegion="sub4"},
-                      ActivationDate = DateTime.Today.AddDays(-10),
-                      StatusDate = DateTime.Today.AddDays(-9),
-                      ContractBalance = 500,
-                      UnbilledAmount = 1002,
-                      Promotions = "promo87",
-                      FreeUnit = "unit87"
-                 },
-                   new ADSLContractDetail
-                 {
-                     ContractId = CONTRACT_CUST3_ADSL1,
-                     TelephonyContractId = CONTRACT_CUST3_TL1,
-                     CustomerId = CUSTOMER_ID_3,
-                     PhoneNumber= PHONE_NUMBER_6,
-                     RatePlanId = RP_ADSL_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     UserName = "Test4",
-                     Password = "pass4",
-                     Speed = ADSL_SPEED_4,
-                    // Status = ContractDetailStatus.Active,
-                     CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3),
-                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 500,
-                     UnbilledAmount = 1002,
-                     Promotions = "promo9",
-                     FreeUnit = "unit9"
-                 },
-                 new ADSLContractDetail
-                 {
-                      ContractId = CONTRACT_CUST3_ADSL2,
-                      TelephonyContractId = CONTRACT_CUST3_TL2,
-                      CustomerId = CUSTOMER_ID_3,
-                      PhoneNumber= PHONE_NUMBER_7,
-                      RatePlanId = RP_ADSL_RES_STUDENT,
-                      RatePlanName = "Student Plan",
-                      UserName = "Test5",
-                      Password = "pass5",
-                      Speed = ADSL_SPEED_5,
-                      //Status = ContractDetailStatus.Inactive,
-                      CreatedTime = DateTime.Today.AddDays(-4),
-                      LastModifiedTime = DateTime.Today,
-                      ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "7", Region="R4", HouseNumber="8", Street="st4" , SubRegion="sub4"},
-                      ActivationDate = DateTime.Today.AddDays(-10),
-                      StatusDate = DateTime.Today.AddDays(-9),
-                      ContractBalance = 500,
-                      UnbilledAmount = 1002,
-                      Promotions = "promo87",
-                      FreeUnit = "unit87"
-                 }
+            return null;
 
-            };
+            //return new List<ADSLContractDetail>
+            //{
+            //     new ADSLContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST1_ADSL1,
+            //         TelephonyContractId = CONTRACT_CUST1_TL2,
+            //         CustomerId = CUSTOMER_ID_1,
+            //         PhoneNumber= PHONE_NUMBER_1,
+            //         RatePlanId = RP_ADSL_RES_NORMAL,
+            //         RatePlanName = "Normal Plan",
+            //         UserName = "Test1",
+            //         Password = "pass1",
+            //         Speed = ADSL_SPEED_1,
+            //         CSO = "None",
+            //         DSLAMPort="2",
+            //         ProviderOfDSLAMPort="Huawei",
+            //         SubscriptionDate ="2018/02/02",
+            //         ReservedLinePath = "path1",
+            //       //  Status = ContractDetailStatus.Active,
+            //         CreatedTime = DateTime.Today.AddDays(-5),
+            //         LastModifiedTime = DateTime.Today.AddDays(-3),
+            //         ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 500,
+            //         UnbilledAmount = 1002,
+            //         Promotions = "promo41",
+            //         FreeUnit = "unit41"
+            //     },
+            //     new ADSLContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST1_ADSL2,
+            //         TelephonyContractId = CONTRACT_CUST1_TL1,
+            //         CustomerId = CUSTOMER_ID_1,
+            //         PhoneNumber= PHONE_NUMBER_2,
+            //         RatePlanId = RP_ADSL_RES_NORMAL,
+            //         RatePlanName = "Normal Plan",
+            //         UserName = "Test2",
+            //         Password = "pass2",
+            //         Speed = ADSL_SPEED_2,
+            //        // Status = ContractDetailStatus.Inactive,
+            //         CreatedTime = DateTime.Today.AddDays(-4),
+            //         LastModifiedTime = DateTime.Today,
+            //         ContractAddress = new Address () {Province ="prov44" , Building = "b44" , City="beirut" , Floor = "1", Region="R4", HouseNumber="2", Street="st4" , SubRegion="sub4"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 500,
+            //         UnbilledAmount = 1002,
+            //         Promotions = "promo45",
+            //         FreeUnit = "unit45"
+            //     },
+            //     new ADSLContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST1_ADSL3,
+            //         TelephonyContractId = CONTRACT_CUST1_TL3,
+            //         CustomerId = CUSTOMER_ID_1,
+            //        // Status = ContractDetailStatus.Active,
+            //         PhoneNumber= PHONE_NUMBER_3,
+            //         UserName = "Test3",
+            //         Password = "pass3",
+            //         Speed = ADSL_SPEED_3,
+            //         RatePlanId = RP_ADSL_RES_NORMAL,
+            //         RatePlanName = "Normal Plan",
+            //         CreatedTime = DateTime.Today,
+            //         LastModifiedTime = DateTime.Today,
+            //         ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "2", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 500,
+            //         UnbilledAmount = 1002,
+            //         Promotions = "promo74",
+            //         FreeUnit = "unit74"
+            //     },
+            //     new ADSLContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST2_ADSL1,
+            //         TelephonyContractId = CONTRACT_CUST2_TL1,
+            //         CustomerId = CUSTOMER_ID_2,
+            //         PhoneNumber= PHONE_NUMBER_8,
+            //         RatePlanId = RP_ADSL_RES_NORMAL,
+            //         RatePlanName = "Normal Plan",
+            //         UserName = "Test4",
+            //         Password = "pass4",
+            //         Speed = ADSL_SPEED_4,
+            //        // Status = ContractDetailStatus.Active,
+            //         CreatedTime = DateTime.Today.AddDays(-5),
+            //         LastModifiedTime = DateTime.Today.AddDays(-3),
+            //         ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 500,
+            //         UnbilledAmount = 1002,
+            //         Promotions = "promo9",
+            //         FreeUnit = "unit9"
+            //     },
+            //     new ADSLContractDetail
+            //     {
+            //          ContractId = CONTRACT_CUST2_ADSL2,
+            //          TelephonyContractId = CONTRACT_CUST2_TL2,
+            //          CustomerId = CUSTOMER_ID_2,
+            //          PhoneNumber= PHONE_NUMBER_7,
+            //          RatePlanId = RP_ADSL_RES_STUDENT,
+            //          RatePlanName = "Student Plan",
+            //          UserName = "Test5",
+            //          Password = "pass5",
+            //          Speed = ADSL_SPEED_5,
+            //         // Status = ContractDetailStatus.Inactive,
+            //          CreatedTime = DateTime.Today.AddDays(-4),
+            //          LastModifiedTime = DateTime.Today,
+            //          ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "7", Region="R4", HouseNumber="8", Street="st4" , SubRegion="sub4"},
+            //          ActivationDate = DateTime.Today.AddDays(-10),
+            //          StatusDate = DateTime.Today.AddDays(-9),
+            //          ContractBalance = 500,
+            //          UnbilledAmount = 1002,
+            //          Promotions = "promo87",
+            //          FreeUnit = "unit87"
+            //     },
+            //       new ADSLContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST3_ADSL1,
+            //         TelephonyContractId = CONTRACT_CUST3_TL1,
+            //         CustomerId = CUSTOMER_ID_3,
+            //         PhoneNumber= PHONE_NUMBER_6,
+            //         RatePlanId = RP_ADSL_RES_NORMAL,
+            //         RatePlanName = "Normal Plan",
+            //         UserName = "Test4",
+            //         Password = "pass4",
+            //         Speed = ADSL_SPEED_4,
+            //        // Status = ContractDetailStatus.Active,
+            //         CreatedTime = DateTime.Today.AddDays(-5),
+            //         LastModifiedTime = DateTime.Today.AddDays(-3),
+            //         ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 500,
+            //         UnbilledAmount = 1002,
+            //         Promotions = "promo9",
+            //         FreeUnit = "unit9"
+            //     },
+            //     new ADSLContractDetail
+            //     {
+            //          ContractId = CONTRACT_CUST3_ADSL2,
+            //          TelephonyContractId = CONTRACT_CUST3_TL2,
+            //          CustomerId = CUSTOMER_ID_3,
+            //          PhoneNumber= PHONE_NUMBER_7,
+            //          RatePlanId = RP_ADSL_RES_STUDENT,
+            //          RatePlanName = "Student Plan",
+            //          UserName = "Test5",
+            //          Password = "pass5",
+            //          Speed = ADSL_SPEED_5,
+            //          //Status = ContractDetailStatus.Inactive,
+            //          CreatedTime = DateTime.Today.AddDays(-4),
+            //          LastModifiedTime = DateTime.Today,
+            //          ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "7", Region="R4", HouseNumber="8", Street="st4" , SubRegion="sub4"},
+            //          ActivationDate = DateTime.Today.AddDays(-10),
+            //          StatusDate = DateTime.Today.AddDays(-9),
+            //          ContractBalance = 500,
+            //          UnbilledAmount = 1002,
+            //          Promotions = "promo87",
+            //          FreeUnit = "unit87"
+            //     }
+
+            //};
         }
 
         #endregion
@@ -1170,107 +1179,110 @@ namespace BPMExtended.Main.Common
 
         public static List<LeasedLineContractDetail> GetLeasedLineContracts(string customerId)
         {
-            return GetAllLeasedLineContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+            return null;
+            //return GetAllLeasedLineContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
         }
         public static List<LeasedLineContractDetail> GetLeasedLineContractsByNumber(string phoneNumber)
         {
-            return GetAllLeasedLineContracts().FindAll(x => x.PhoneNumber.ToLower() == phoneNumber.ToLower());
+            return null;
+            //return GetAllLeasedLineContracts().FindAll(x => x.PhoneNumber.ToLower() == phoneNumber.ToLower());
         }
         private static List<LeasedLineContractDetail> GetAllLeasedLineContracts()
         {
-            return new List<LeasedLineContractDetail>
-            {
-                 new LeasedLineContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_LL1,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_1,
-                    // Status = ContractDetailStatus.Active,
-                     CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3),
-                     RatePlanId = RP_LL_RES_ENG,
-                     RatePlanName = "Engineers Plan",
-                     ContractAddress = new Address () {Province ="prov1" , Building = "b1" , City="beirut" , Floor = "9", Region="R1", HouseNumber="6", Street="st1" , SubRegion="su1"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 110,
-                     UnbilledAmount = 2092,
-                     Promotions = "promo1",
-                     FreeUnit = "unit1"
-                 },
-                 new LeasedLineContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_LL2,
-                     CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_1,
-                    // Status = ContractDetailStatus.Inactive,
-                     CreatedTime = DateTime.Today.AddDays(-4),
-                     LastModifiedTime = DateTime.Today,
-                     RatePlanId = RP_LL_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     ContractAddress = new Address () {Province ="prov2" , Building = "b2" , City="beirut" , Floor = "9", Region="R2", HouseNumber="6", Street="st2" , SubRegion="sub2"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 22,
-                     UnbilledAmount = 1111,
-                     Promotions = "promo2",
-                     FreeUnit = "unit2"
-                 },
-                 new LeasedLineContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_LL3,
-                     CustomerId = CUSTOMER_ID_1,
-                   //  Status = ContractDetailStatus.Active,
-                     PhoneNumber= PHONE_NUMBER_1,
-                     CreatedTime = DateTime.Today,
-                     LastModifiedTime = DateTime.Today,
-                     RatePlanId = RP_LL_RES_MAR,
-                     RatePlanName = "Family of Martyr Plan (ISDN)",
-                     ContractAddress = new Address () {Province ="prov21" , Building = "b21" , City="beirut" , Floor = "9", Region="R21", HouseNumber="6", Street="st21" , SubRegion="sub21"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 90,
-                     UnbilledAmount = 99,
-                     Promotions = "promo21",
-                     FreeUnit = "unit21"
-                 },
-                 new LeasedLineContractDetail
-                 {
-                     ContractId = CONTRACT_CUST2_LL1,
-                     CustomerId = CUSTOMER_ID_2,
-                     PhoneNumber= PHONE_NUMBER_1,
-                    // Status = ContractDetailStatus.Active,
-                     CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3),
-                     RatePlanId = RP_LL_RES_MAR,
-                     RatePlanName = "Family of Martyr Plan (ISDN)",
-                     ContractAddress = new Address () {Province ="prov211" , Building = "b211" , City="beirut" , Floor = "9", Region="R211", HouseNumber="6", Street="st211" , SubRegion="sub211"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 90,
-                     UnbilledAmount = 99,
-                     Promotions = "promo211",
-                     FreeUnit = "unit211"
-                 },
-                 new LeasedLineContractDetail
-                 {
-                     ContractId = CONTRACT_CUST2_LL2,
-                     CustomerId = CUSTOMER_ID_2,
-                     PhoneNumber= PHONE_NUMBER_1,
-                    // Status = ContractDetailStatus.Inactive,
-                     CreatedTime = DateTime.Today.AddDays(-4),
-                     LastModifiedTime = DateTime.Today,
-                     RatePlanId = RP_LL_RES_NORMAL,
-                     RatePlanName = "Normal Plan",
-                     ContractAddress = new Address () {Province ="prov9" , Building = "b9" , City="beirut" , Floor = "9", Region="R9", HouseNumber="6", Street="st9" , SubRegion="sub9"},
-                     ActivationDate = DateTime.Today.AddDays(-10),
-                     StatusDate = DateTime.Today.AddDays(-9),
-                     ContractBalance = 2290,
-                     UnbilledAmount = 2222,
-                     Promotions = "promo9",
-                     FreeUnit = "unit9"
-                 }
-            };
+            return null;
+            //return new List<LeasedLineContractDetail>
+            //{
+            //     new LeasedLineContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST1_LL1,
+            //         CustomerId = CUSTOMER_ID_1,
+            //         PhoneNumber= PHONE_NUMBER_1,
+            //        // Status = ContractDetailStatus.Active,
+            //         CreatedTime = DateTime.Today.AddDays(-5),
+            //         LastModifiedTime = DateTime.Today.AddDays(-3),
+            //         RatePlanId = RP_LL_RES_ENG,
+            //         RatePlanName = "Engineers Plan",
+            //         ContractAddress = new Address () {Province ="prov1" , Building = "b1" , City="beirut" , Floor = "9", Region="R1", HouseNumber="6", Street="st1" , SubRegion="su1"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 110,
+            //         UnbilledAmount = 2092,
+            //         Promotions = "promo1",
+            //         FreeUnit = "unit1"
+            //     },
+            //     new LeasedLineContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST1_LL2,
+            //         CustomerId = CUSTOMER_ID_1,
+            //         PhoneNumber= PHONE_NUMBER_1,
+            //        // Status = ContractDetailStatus.Inactive,
+            //         CreatedTime = DateTime.Today.AddDays(-4),
+            //         LastModifiedTime = DateTime.Today,
+            //         RatePlanId = RP_LL_RES_NORMAL,
+            //         RatePlanName = "Normal Plan",
+            //         ContractAddress = new Address () {Province ="prov2" , Building = "b2" , City="beirut" , Floor = "9", Region="R2", HouseNumber="6", Street="st2" , SubRegion="sub2"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 22,
+            //         UnbilledAmount = 1111,
+            //         Promotions = "promo2",
+            //         FreeUnit = "unit2"
+            //     },
+            //     new LeasedLineContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST1_LL3,
+            //         CustomerId = CUSTOMER_ID_1,
+            //       //  Status = ContractDetailStatus.Active,
+            //         PhoneNumber= PHONE_NUMBER_1,
+            //         CreatedTime = DateTime.Today,
+            //         LastModifiedTime = DateTime.Today,
+            //         RatePlanId = RP_LL_RES_MAR,
+            //         RatePlanName = "Family of Martyr Plan (ISDN)",
+            //         ContractAddress = new Address () {Province ="prov21" , Building = "b21" , City="beirut" , Floor = "9", Region="R21", HouseNumber="6", Street="st21" , SubRegion="sub21"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 90,
+            //         UnbilledAmount = 99,
+            //         Promotions = "promo21",
+            //         FreeUnit = "unit21"
+            //     },
+            //     new LeasedLineContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST2_LL1,
+            //         CustomerId = CUSTOMER_ID_2,
+            //         PhoneNumber= PHONE_NUMBER_1,
+            //        // Status = ContractDetailStatus.Active,
+            //         CreatedTime = DateTime.Today.AddDays(-5),
+            //         LastModifiedTime = DateTime.Today.AddDays(-3),
+            //         RatePlanId = RP_LL_RES_MAR,
+            //         RatePlanName = "Family of Martyr Plan (ISDN)",
+            //         ContractAddress = new Address () {Province ="prov211" , Building = "b211" , City="beirut" , Floor = "9", Region="R211", HouseNumber="6", Street="st211" , SubRegion="sub211"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 90,
+            //         UnbilledAmount = 99,
+            //         Promotions = "promo211",
+            //         FreeUnit = "unit211"
+            //     },
+            //     new LeasedLineContractDetail
+            //     {
+            //         ContractId = CONTRACT_CUST2_LL2,
+            //         CustomerId = CUSTOMER_ID_2,
+            //         PhoneNumber= PHONE_NUMBER_1,
+            //        // Status = ContractDetailStatus.Inactive,
+            //         CreatedTime = DateTime.Today.AddDays(-4),
+            //         LastModifiedTime = DateTime.Today,
+            //         RatePlanId = RP_LL_RES_NORMAL,
+            //         RatePlanName = "Normal Plan",
+            //         ContractAddress = new Address () {Province ="prov9" , Building = "b9" , City="beirut" , Floor = "9", Region="R9", HouseNumber="6", Street="st9" , SubRegion="sub9"},
+            //         ActivationDate = DateTime.Today.AddDays(-10),
+            //         StatusDate = DateTime.Today.AddDays(-9),
+            //         ContractBalance = 2290,
+            //         UnbilledAmount = 2222,
+            //         Promotions = "promo9",
+            //         FreeUnit = "unit9"
+            //     }
+            //};
         }
 
         #endregion

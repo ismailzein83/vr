@@ -215,12 +215,12 @@ namespace BPMExtended.Main.Business
         {
 
             ContractManager contractManager = new ContractManager();
-            TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
+            //TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
 
             bool item = false;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<bool>(String.Format("api/SOM.ST/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
+                item = client.Get<bool>(String.Format("api/SOM.ST/Inventory/IsManualSwitch?phoneNumber={0}", "1111"));
             }
             return item;
         }
@@ -240,12 +240,12 @@ namespace BPMExtended.Main.Business
         {
 
             ContractManager contractManager = new ContractManager();
-            ADSLContractDetail contract = contractManager.GetADSLContract(contractId);
+            //ADSLContractDetail contract = contractManager.GetADSLContract(contractId);
 
             bool item = false;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<bool>(String.Format("api/SOM.ST/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
+                item = client.Get<bool>(String.Format("api/SOM.ST/Inventory/IsManualSwitch?phoneNumber={0}", "1111"));
             }
             return item;
         }
@@ -739,8 +739,8 @@ namespace BPMExtended.Main.Business
         public bool IsNumbersOnSameSwitch(string contractId, string pilotContractId)
         {
             ContractManager contractManager = new ContractManager();
-            TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
-            TelephonyContractDetail pilotContract = contractManager.GetTelephonyContract(pilotContractId);
+            BPMExtended.Main.Entities.TelephonyContractInfo contract = contractManager.GetTelephonyContractInfo(contractId);
+            BPMExtended.Main.Entities.TelephonyContractInfo pilotContract = contractManager.GetTelephonyContractInfo(pilotContractId);
 
             TechnicalDetails phoneitem = GetTechnicalDetails(contract.PhoneNumber);
             TechnicalDetails pilotPhoneItem = GetTechnicalDetails(pilotContract.PhoneNumber);

@@ -6,7 +6,7 @@ namespace BPMExtended.Main.SOMAPI
     {
         public string Id { get; set; }
         public string CustomerId { get; set; }
-        public long RateplanId { get; set; }
+        public string RateplanId { get; set; }
         public int Status { get; set; }
         public string CustomerCode { get; set; }
         public string PhoneNumber { get; set; }

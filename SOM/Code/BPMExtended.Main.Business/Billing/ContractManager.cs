@@ -21,16 +21,42 @@ namespace BPMExtended.Main.Business
             }
         }
 
-        public TelephonyContractDetail GetTelephonyContract(string contractId)
+        public TelephonyContractEntity GetTelephonyContract(string contractId)
         {
 
-            var telephonyContractDetailItem = new TelephonyContractDetail();
+            var telephonyContractEntity = new TelephonyContractEntity();
             using (SOMClient client = new SOMClient())
             {
                 var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetContractDetails?ContractId={0}", contractId));
-                telephonyContractDetailItem = CustomerContractToDetail(item);
+                telephonyContractEntity = CustomerContractToEntity(item);
             }
-            return telephonyContractDetailItem;
+            return telephonyContractEntity;
+        }
+
+        public ContractInfo GetContractInfo(string contractId)
+        {
+
+            var contractInfo = new ContractInfo();
+            using (SOMClient client = new SOMClient())
+            {
+                //TODO: ask rodi to return the minimal information in the below call
+                var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetContractDetails?ContractId={0}", contractId));
+                contractInfo = CustomerContractToContractInfo(item);
+            }
+            return contractInfo;
+        }
+
+        public TelephonyContractInfo GetTelephonyContractInfo(string contractId)
+        {
+
+            var contractInfo = new TelephonyContractInfo();
+            using (SOMClient client = new SOMClient())
+            {
+                //TODO: ask rodi to return the minimal information in the below call
+                var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetContractDetails?ContractId={0}", contractId));
+                contractInfo = CustomerContractToTelephonyContractInfo(item);
+            }
+            return contractInfo;
         }
 
         public List<TelephonyContractDetail> GetTelephonyContracts(string customerId)
@@ -102,12 +128,12 @@ namespace BPMExtended.Main.Business
 
             //return random boolean value
             ContractManager contractManager = new ContractManager();
-            TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
+            //TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
 
             ADSLLinePath item = new ADSLLinePath();
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<ADSLLinePath>(String.Format("api/SOM/Inventory/CheckADSL?phoneNumber={0}", contract.PhoneNumber));
+                item = client.Get<ADSLLinePath>(String.Format("api/SOM/Inventory/CheckADSL?phoneNumber={0}", "1111"));
             }
             string[] path = item.Path.Split(',');
             return path[6] == "1";
@@ -572,14 +598,35 @@ namespace BPMExtended.Main.Business
 
         #region mappers
 
+        //TODO: to be remove later
         private TelephonyContractInfo TelephonyContractDetailToInfo(TelephonyContractDetail detail)
         {
-            return new TelephonyContractInfo
+            return null;
+            //return new TelephonyContractInfo
+            //{
+            //    ContractId = detail.ContractId,
+            //    CustomerId = detail.CustomerId,
+            //    Address = detail.Address,
+            //    PhoneNumber = detail.PhoneNumber
+            //};
+        }
+
+        private TelephonyContractEntity CustomerContractToEntity(CustomerContract contract)
+        {
+            int stat = 0;
+            int.TryParse(contract.Status.ToString(), out stat);
+
+            var contractAddress = new Address()
             {
-                ContractId = detail.ContractId,
-                CustomerId = detail.CustomerId,
-                Address = detail.Address,
-                PhoneNumber = detail.PhoneNumber
+                Street = contract.Street,
+                City = contract.City
+            };
+            return new TelephonyContractEntity
+            {
+                ContractId = contract.Id,
+                ContractAddress = contractAddress,
+                PhoneNumber = contract.PhoneNumber,
+                ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
             };
         }
 
@@ -596,17 +643,30 @@ namespace BPMExtended.Main.Business
             return new TelephonyContractDetail
             {
                 ContractId = contract.Id,
-                CustomerId = contract.CustomerId,
-                RatePlanId = contract.RateplanId!=0?contract.RateplanId.ToString():null,
                 Status = stat.ToString(), //Check if API and Our conventions are the same
-                CustomerCode = contract.CustomerCode,
-                PhoneNumber= contract.PhoneNumber,
+                PhoneNumber = contract.PhoneNumber,
                 ActivationDate = contract.ActivationDate,
-                LastModifiedTime = contract.LastStatusChangeDate,
-                ContractAddress = contractAddress,
                 ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
+            };
+        }
 
-        };
+        private ContractInfo CustomerContractToContractInfo(CustomerContract contract)
+        {
+            return new ContractInfo()
+            {
+                ContractId = contract.Id,
+                RatePlanId = contract.RateplanId
+            };
+        }
+
+        private TelephonyContractInfo CustomerContractToTelephonyContractInfo(CustomerContract contract)
+        {
+            return new TelephonyContractInfo()
+            {
+                ContractId = contract.Id,
+                RatePlanId = contract.RateplanId,
+                PhoneNumber = contract.PhoneNumber
+            };
         }
 
         #endregion

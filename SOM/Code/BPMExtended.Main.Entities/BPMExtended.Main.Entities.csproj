@@ -84,6 +84,12 @@
     <Compile Include="ChangeLeasedLineSpeedRequestInput.cs" />
     <Compile Include="ChangePhoneNumberRequestInput.cs" />
     <Compile Include="ChangeRatePlanRequestInput.cs" />
+    <Compile Include="Contracts\ADSLContractDetail.cs" />
+    <Compile Include="Contracts\ContractEntity.cs" />
+    <Compile Include="Contracts\ContractInfo.cs" />
+    <Compile Include="Contracts\GSHDSLContractDetail.cs" />
+    <Compile Include="Contracts\TelephonyContractEntity.cs" />
+    <Compile Include="Contracts\TelephonyContractInfo.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="ContractService.cs" />
     <Compile Include="ContractTakeOverRequestInput.cs" />
@@ -112,7 +118,7 @@
     <Compile Include="ADSLSpeedInfo.cs" />
     <Compile Include="CommonInputArgument.cs" />
     <Compile Include="CompanyDI.cs" />
-    <Compile Include="ContractDetail.cs" />
+    <Compile Include="Contracts\ContractDetail.cs" />
     <Compile Include="CPTNumberDetail.cs" />
     <Compile Include="CreateCustomerRequestOutput.cs" />
     <Compile Include="CRMCustomerInfo.cs" />
@@ -163,7 +169,7 @@
     <Compile Include="SOMRequestInput.cs" />
     <Compile Include="SOMRequestOutput.cs" />
     <Compile Include="CustomerContractService.cs" />
-    <Compile Include="TelephonyContractDetail.cs" />
+    <Compile Include="Contracts\TelephonyContractDetail.cs" />
     <Compile Include="TelephonyContractOnHoldInput.cs" />
     <Compile Include="UpdateContractAddressRequestInput.cs" />
   </ItemGroup>

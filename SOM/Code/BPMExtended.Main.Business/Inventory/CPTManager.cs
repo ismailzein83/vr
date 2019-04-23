@@ -15,7 +15,7 @@ namespace BPMExtended.Main.Business
 
         public List<CPTNumberDetail> GetFreeNumbers(string contractId)
         {
-            TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
+            //TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
             //TODO: pass the phone number to inventory
             return InventoryMockDataGenerator.GetAllCPTNumbers();
         }
@@ -37,10 +37,10 @@ namespace BPMExtended.Main.Business
             //return output;
 
             string result = null;
-            TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
+            //TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<string>(String.Format("api/SOM_Main/Inventory/ReserveCPT?PhoneNumber={0}&CPTID={1}", contract.PhoneNumber, cptId));
+                result = client.Get<string>(String.Format("api/SOM_Main/Inventory/ReserveCPT?PhoneNumber={0}&CPTID={1}", "1111", cptId));
             }
             ReserveCPTRequestOutput output = null;
             output.Message = result.ToString();
@@ -50,10 +50,10 @@ namespace BPMExtended.Main.Business
         public bool UnRegisterCPTNumber(string contractId)
         {
             string result = null;
-            TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
+            //TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<string>(String.Format("api/SOM_Main/Inventory/DeleteCPTReservation?phoneNumber={0}", contract.PhoneNumber));
+                result = client.Get<string>(String.Format("api/SOM_Main/Inventory/DeleteCPTReservation?phoneNumber={0}", "1111"));
             }
             
             return result==null || result== ""  ? false:true;

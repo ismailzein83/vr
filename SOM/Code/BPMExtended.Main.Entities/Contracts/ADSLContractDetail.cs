@@ -6,15 +6,6 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class TelephonyContractDetail : ContractDetail
-    {
-    }
-
-    public class GSHDSLContractDetail : ContractDetail
-    {
-
-    }
-
     public class ADSLContractDetail : ContractDetail
     {
         public string TelephonyContractId { get; set; }
@@ -29,11 +20,5 @@ namespace BPMExtended.Main.Entities
 
         public string ProviderOfDSLAMPort { get; set; }
 
-
-
-    }
-
-    public class TelephonyContractInfo : ContractInfo
-    {
     }
 }
