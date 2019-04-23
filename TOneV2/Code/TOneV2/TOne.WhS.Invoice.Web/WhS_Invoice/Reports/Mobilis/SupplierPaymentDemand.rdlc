@@ -213,7 +213,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Code.convertNumberToFrenchLetters(Parameters!TotalInvoiceAmount.Value.ToString().Replace(",", string.Empty))&amp;" "&amp; Parameters!Currency.Value &amp; " Seulement"</Value>
+                              <Value>=Code.convertNumberToFrenchLetters(Parameters!OriginalAmount.Value.ToString().Replace(",", string.Empty))&amp;" "&amp; Parameters!Currency.Value &amp; " Seulement"</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
