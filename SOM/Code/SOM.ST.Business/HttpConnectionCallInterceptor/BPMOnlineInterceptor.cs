@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using Vanrise.Common;
@@ -19,6 +20,34 @@ namespace SOM.ST.Business
 
         public override void InterceptRequest(IVRHttpConnectionInterceptRequestContext context)
         {
+            var userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+
+            var userManager = new Vanrise.Security.Business.UserManager();
+            var user = userManager.GetUserbyId(userId);
+            user.ThrowIfNull("LoggedInUser");
+            var userEmail = user.Email;
+            var somDevMode_BPMConfiguration = ConfigurationManager.AppSettings["SOMDevMode_BPMConfiguration"];
+
+            if (String.IsNullOrEmpty(somDevMode_BPMConfiguration))
+                throw new NullReferenceException("SOMDevMode_BPMConfiguration");
+
+            var bpmConfigurations = somDevMode_BPMConfiguration.Split('|');
+            foreach (var item in bpmConfigurations)
+            {
+                var items = item.Split(';');
+                if (item.Length > 0)
+                {
+                    if (items[0] == userEmail)
+                    {
+                        if (string.IsNullOrEmpty(items[1]))
+                            throw new NullReferenceException(string.Format("User '{0}' does not have email in AppSettings", user.Name));
+                        context.Connection.BaseURL = items[1];
+                        context.Client.BaseAddress = new Uri(items[1]);
+                        break;
+                    }
+                }
+            }
+
             var fullAuthenticationServiceURI = string.Concat(context.Connection.BaseURL, AuthenticationServiceURI);
             var cookiesContainer = TryLogin(UserName, Password, fullAuthenticationServiceURI);
             cookiesContainer.ThrowIfNull("cookiesContainer");
