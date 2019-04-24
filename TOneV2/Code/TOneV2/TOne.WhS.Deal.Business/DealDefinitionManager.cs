@@ -257,7 +257,7 @@ namespace TOne.WhS.Deal.Business
                     var saleZone = new SaleZoneManager().GetSaleZone(zoneId);
                     if (saleZone == null)
                         throw new NullReferenceException("saleZone");
-                    
+
                     if (dealBED < saleZone.BED && saleZone.EED.VRGreaterThan(dealEED) || saleZone.EED.HasValue && dealBED > saleZone.BED && saleZone.EED.VRLessThan(dealEED))
                         return true;
                 }
@@ -464,13 +464,13 @@ namespace TOne.WhS.Deal.Business
         public List<DealDefinition> GetRecurredDeals(DealDefinition deal, int recurringNumber, RecurringType recurringType)
         {
             var recurredDeals = new List<DealDefinition>();
-            if (!deal.Settings.EEDToStore.HasValue)
+            if (!deal.Settings.RealEED.HasValue)
             {
                 return recurredDeals;
                 //we cannot reccur a deal without EED
             }
 
-            DateTime endDealDate = deal.Settings.EEDToStore.Value;
+            DateTime endDealDate = deal.Settings.RealEED.Value;
             DateTime beginDealDate = deal.Settings.BeginDate;
 
             var dealLifeSpan = endDealDate.Subtract(beginDealDate);
