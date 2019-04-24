@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
@@ -20,5 +16,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string InvoiceTypeDescription { get; set; }
         public string InvoiceSettingName { get; set; }
         public string CompanySettingName { get; set; }
+        public int? ServicesWeight { get; set; }
     }
 }

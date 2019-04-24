@@ -1844,6 +1844,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 carrierAccountDetail.Services = carrierAccount.SupplierSettings.DefaultServices.Select(x => x.ServiceId).ToList();
                 carrierAccountDetail.ServicesNames = ZoneServiceConfigManager.GetZoneServicesNames(carrierAccountDetail.Services);
+                carrierAccountDetail.ServicesWeight = ZoneServiceConfigManager.GetZoneServicesWeight(carrierAccountDetail.Services);
             }
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             WHSCarrierFinancialAccountData financialAccountData;

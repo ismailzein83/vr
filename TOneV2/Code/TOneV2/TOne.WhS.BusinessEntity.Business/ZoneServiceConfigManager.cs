@@ -110,6 +110,12 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<ZoneServiceConfig, bool> filterExpression = (itm) => serviceIds.Contains(itm.ZoneServiceConfigId);
             return allZoneServiceConfigs.FindAllRecords(filterExpression);
         }
+        public int? GetZoneServicesWeight(IEnumerable<int> serviceIds)
+        {
+            var servicesHashSet = Vanrise.Common.ExtensionMethods.ToHashSet(serviceIds);
+            var zoneServices = GetAllZoneServicesByIds(servicesHashSet);
+            return zoneServices?.Sum(item => item.Settings.Weight);
+        }
 
         public string GetZoneServicesNames(IEnumerable<int> services)
         {
