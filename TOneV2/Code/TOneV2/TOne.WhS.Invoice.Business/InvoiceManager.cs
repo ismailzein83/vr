@@ -103,12 +103,27 @@ namespace TOne.WhS.Invoice.Business
                     customerInvoiceDetails.ThrowIfNull("customerInvoiceDetails");
                     customerInvoiceDetails.AttachementFiles = input.AttachementFiles;
                     customerInvoiceDetails.Reference = input.Reference;
-                    customerInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
-                    if(input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0 && input.OriginalDataCurrency.All(x=>x.Value.OriginalAmount.HasValue))
-                       customerInvoiceDetails.IsOriginalAmountSetted = true;
-                    else
-                        customerInvoiceDetails.IsOriginalAmountSetted = false;
 
+
+
+                    customerInvoiceDetails.IsOriginalAmountSetted = false;
+                    if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0)
+                    {
+                        if (input.OriginalDataCurrency.Any(x => x.Value.OriginalAmount.HasValue))
+                        {
+                            customerInvoiceDetails.OriginalAmountByCurrency = new Dictionary<int, OriginalDataCurrrency>();
+
+                            foreach (var item in input.OriginalDataCurrency)
+                            {
+                                if (item.Value.OriginalAmount.HasValue)
+                                    customerInvoiceDetails.OriginalAmountByCurrency.Add(item.Key, item.Value);
+                            }
+                        }
+                        if (input.OriginalDataCurrency.All(x => x.Value.OriginalAmount.HasValue))
+                        {
+                            customerInvoiceDetails.IsOriginalAmountSetted = true;
+                        }
+                    }
                     invoice.Details = customerInvoiceDetails;
                     break;
                 case InvoiceCarrierType.Supplier:
@@ -116,12 +131,24 @@ namespace TOne.WhS.Invoice.Business
                     supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
                     supplierInvoiceDetails.AttachementFiles = input.AttachementFiles;
                     supplierInvoiceDetails.Reference = input.Reference;
-                    supplierInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
-                    if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0 && input.OriginalDataCurrency.All(x => x.Value.OriginalAmount.HasValue))
-                        supplierInvoiceDetails.IsOriginalAmountSetted = true;
-                    else
-                        supplierInvoiceDetails.IsOriginalAmountSetted = false;
-                    invoice.Details = supplierInvoiceDetails;
+                    supplierInvoiceDetails.IsOriginalAmountSetted = false;
+                    if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0)
+                    {
+                        if (input.OriginalDataCurrency.Any(x => x.Value.OriginalAmount.HasValue))
+                        {
+                            supplierInvoiceDetails.OriginalAmountByCurrency = new Dictionary<int, OriginalDataCurrrency>();
+
+                            foreach (var item in input.OriginalDataCurrency)
+                            {
+                                if (item.Value.OriginalAmount.HasValue)
+                                    supplierInvoiceDetails.OriginalAmountByCurrency.Add(item.Key, item.Value);
+                            }
+                        }
+                        if (input.OriginalDataCurrency.All(x => x.Value.OriginalAmount.HasValue))
+                        {
+                            supplierInvoiceDetails.IsOriginalAmountSetted = true;
+                        }
+                    }
                     break;
             }
 
