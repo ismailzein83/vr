@@ -85,13 +85,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Billing\BillingManager.cs" />
+    <Compile Include="Billing\CatalogManager.cs" />
     <Compile Include="Billing\ContractManager.cs" />
     <Compile Include="Billing\CRMCustomerManager.cs" />
     <Compile Include="Billing\IDManager.cs" />
+    <Compile Include="Billing\POSManager.cs" />
     <Compile Include="Billing\ServiceManager.cs" />
     <Compile Include="Billing\CustomerCategoryManager.cs" />
     <Compile Include="Billing\CustomerRequestManager.cs" />
     <Compile Include="Billing\PabxManager.cs" />
+    <Compile Include="Billing\SubmissionManager.cs" />
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="Request Flow Management\AdministrativeComplaintFlowManagement.cs" />
     <Compile Include="Request Flow Management\CreatePaymentPlanFlowManagement.cs" />

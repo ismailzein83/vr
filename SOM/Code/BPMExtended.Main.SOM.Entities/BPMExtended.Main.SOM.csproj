@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BillingCommonInputArgument.cs" />
     <Compile Include="Billing\ServiceResponse\Invoices.cs" />
     <Compile Include="Billing\ServiceResponse\Payment.cs" />
     <Compile Include="Billing\ServiceResponse\CustomerContact.cs" />
@@ -68,6 +67,15 @@
     <Compile Include="Inventory\ServiceResponse\TechnicalDetails.cs" />
     <Compile Include="Billing\WorkflowInput\CreateCustomerInput.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ServiceResponse\" />
+    <Folder Include="WorkflowInput\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BPMExtended.Main.Entities\BPMExtended.Main.Entities.csproj">
+      <Project>{69B59125-BEF7-4864-A609-85DB39F0F177}</Project>
+      <Name>BPMExtended.Main.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

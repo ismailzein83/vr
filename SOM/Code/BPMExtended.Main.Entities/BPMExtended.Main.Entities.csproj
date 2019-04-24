@@ -84,6 +84,7 @@
     <Compile Include="ChangeLeasedLineSpeedRequestInput.cs" />
     <Compile Include="ChangePhoneNumberRequestInput.cs" />
     <Compile Include="ChangeRatePlanRequestInput.cs" />
+    <Compile Include="CommonInputArgument.cs" />
     <Compile Include="Contracts\ADSLContractDetail.cs" />
     <Compile Include="Contracts\ContractEntity.cs" />
     <Compile Include="Contracts\ContractInfo.cs" />
@@ -110,13 +111,13 @@
     <Compile Include="LineUnBlockingRequestInput.cs" />
     <Compile Include="MultiplePackagesServiceInput.cs" />
     <Compile Include="NetworkServiceResetPasswordRequestInput.cs" />
+    <Compile Include="PaymentData.cs" />
     <Compile Include="ResetNetworkServicePasswordRequestInput.cs" />
     <Compile Include="ServiceAdditionRequestInput.cs" />
     <Compile Include="ServiceInput.cs" />
     <Compile Include="Packages.cs" />
     <Compile Include="Address.cs" />
     <Compile Include="ADSLSpeedInfo.cs" />
-    <Compile Include="CommonInputArgument.cs" />
     <Compile Include="CompanyDI.cs" />
     <Compile Include="Contracts\ContractDetail.cs" />
     <Compile Include="CPTNumberDetail.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="RatePlanInfo.cs" />
     <Compile Include="RequestHeaderDetail.cs" />
     <Compile Include="ServiceDetail.cs" />
+    <Compile Include="ServicePayment.cs" />
     <Compile Include="SOMRequestInput.cs" />
     <Compile Include="SOMRequestOutput.cs" />
     <Compile Include="CustomerContractService.cs" />

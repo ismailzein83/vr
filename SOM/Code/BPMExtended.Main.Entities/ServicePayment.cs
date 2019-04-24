@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BPMExtended.Main;
 
 namespace BPMExtended.Main.Entities
 {
-    public class ResetNetworkServicePasswordRequestInput
+    public class ServicePayment
     {
-        public CommonInputArgument CommonInputArgument { get; set; }
 
+        public string Id { get; set; }
+        public string PackageID { get; set; }
+        public bool UpFront { get; set; }
     }
 }

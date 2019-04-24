@@ -53,6 +53,8 @@ namespace BPMExtended.Main.Business
         }
 
 
+     
+
 
         //old one
         public PaymentInfo SubmitToPOS(string customerId, string requestId, string ratePlanId, Guid contactId, BPMExtended.Main.Entities.OperationType operationType)
@@ -162,6 +164,7 @@ namespace BPMExtended.Main.Business
             return payment;
         }
 
+    
 
         public bool CheckIfUserPayForWaitingList(string customerId)
         {
@@ -616,6 +619,8 @@ namespace BPMExtended.Main.Business
             //TODO: check if user has paid
             return true;
         }
+
+       
 
         public bool ValidatePaymentWithoutDeposit(string requestId)
         {
