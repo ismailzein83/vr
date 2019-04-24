@@ -233,6 +233,9 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\ListEditorRuntimeSettingTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-listeditor-definition.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-listeditor-runtime.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\BEDependantFieldGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-compatiblefields-selector.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-dependantfield-grid.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\Templates\CDRCorrelationDefinitionSettings.html" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-settings.js" />
@@ -262,6 +265,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\vr-genericdata-genericbe-ordertype-selective.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericBERuntimeManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-runtime-management.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityRootEditor.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericeditor-rootcontainer.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\Templates\DataRecordTypeCompositeRecordConditionDefinitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinitiongroup.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinition-settings.js" />
