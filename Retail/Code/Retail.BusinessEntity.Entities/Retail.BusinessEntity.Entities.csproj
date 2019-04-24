@@ -157,6 +157,7 @@
     <Compile Include="FinancialRecurringCharge\FinancialRecurringCharge.cs" />
     <Compile Include="FinancialRecurringCharge\FinancialRecurringChargeItem.cs" />
     <Compile Include="FinancialRecurringCharge\FinancialRecurringChargeType.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="OperatorDirectionServicesMappedCellExtensionConfiguration.cs" />
     <Compile Include="Package\Definition\PackageDefinitionFilter.cs" />
     <Compile Include="Package\IPackageFilter.cs" />

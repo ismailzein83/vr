@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountPackageUsageVolumeManager
+    public class AccountPackageUsageVolumeBalanceManager
     {
         public Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> GetVolumeBalances(HashSet<PackageUsageVolumeBalanceKey> volumeBalanceKeys)
         {

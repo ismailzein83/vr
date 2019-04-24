@@ -16,7 +16,7 @@ namespace Retail.Voice.Business
 
         AccountPackageManager _accountPackageManager = new AccountPackageManager();
         static PackageUsageVolumeCombinationManager s_packageUsageVolumeCombinationManager = new PackageUsageVolumeCombinationManager();
-        static AccountPackageUsageVolumeManager s_accountPackageUsageVolumeManager = new AccountPackageUsageVolumeManager();
+        static AccountPackageUsageVolumeBalanceManager s_accountPackageUsageVolumeBalanceManager = new AccountPackageUsageVolumeBalanceManager();
 
         #endregion
 
@@ -107,90 +107,25 @@ namespace Retail.Voice.Business
         }
 
         /// <summary>
-        /// Should Call PriceCDRs Replacing PriceVoiceEvent
+        /// Should Be Replacing PriceVoiceEvent
         /// </summary>
         public CDRPricingInfo PriceCDR(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, Dictionary<string, dynamic> recordsByName, dynamic billingCDR, decimal durationInSec, DateTime eventTime)
         {
-            CDRPricingInfo pricingInfo = new CDRPricingInfo();
-            PackageManager packageManager = new PackageManager();
-            Dictionary<int, List<Guid>> volumePackageItemIdsByPackageId = null;
-
-            var beDefinitionManager = new BusinessEntityDefinitionManager();
-            var beDefinition = beDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);
-            IAccountPackageHandler accountPackageHandler = beDefinition.Settings as IAccountPackageHandler;
-            if (accountPackageHandler == null)
-                throw new VRBusinessException("beDefinition.Settings should be of type IAccountPackageHandler");
-
-            var getAccountPackageProviderContext = new GetAccountPackageProviderContext();
-            AccountPackageProvider accountPackageProvider = accountPackageHandler.GetAccountPackageProvider(getAccountPackageProviderContext);
-            if (accountPackageProvider == null)
-                return null;
-
-            List<AccountEventTime> accountEventTimeList = new List<AccountEventTime>() { new AccountEventTime() { AccountId = accountId, EventTime = eventTime } };
-
-            var getRetailAccountPackagesContext = new AccountPackageProviderGetRetailAccountPackagesContext() { AccountBEDefinitionId = accountBEDefinitionId, AccountEventTimeList = accountEventTimeList };
-            Dictionary<AccountEventTime, List<RetailAccountPackage>> retailAccountPackagesByAccountEventTime = accountPackageProvider.GetRetailAccountPackages(getRetailAccountPackagesContext);
-            if (retailAccountPackagesByAccountEventTime == null || retailAccountPackagesByAccountEventTime.Count == 0)
-                return null;
-
-            List<RetailAccountPackage> retailAccountPackageList = new List<RetailAccountPackage>();
-
-            foreach (var retailAccountPackage in retailAccountPackageList)
+            PriceCDRInput priceCDRInput = new PriceCDRInput()
             {
-                var package = packageManager.GetPackage(retailAccountPackage.PackageId);
+                AccountId = accountId,
+                ServiceTypeId = serviceTypeId,
+                RecordsByName = recordsByName,
+                BillingCDR = billingCDR,
+                DurationInSec = durationInSec,
+                EventTime = eventTime
+            };
+            List<PriceCDROutput> priceCDROutputList = this.PriceCDRs(accountBEDefinitionId, new List<PriceCDRInput> { priceCDRInput });
+            if (priceCDROutputList == null || priceCDROutputList.Count == 0)
+                return null;
 
-                IPackageUsageVolume packageVolumeCharging = package.Settings.ExtendedSettings as IPackageUsageVolume;
-                if (packageVolumeCharging != null)
-                {
-                    var volumeChargingIsApplicableToEventContext = new PackageVolumeChargingIsApplicableToEventContext(accountBEDefinitionId, accountId, retailAccountPackage,
-                        package, serviceTypeId, eventTime, package.Settings.PackageDefinitionId, recordsByName);
-
-                    if (packageVolumeCharging.IsApplicableToEvent(volumeChargingIsApplicableToEventContext))
-                    {
-                        if (volumePackageItemIdsByPackageId == null)
-                            volumePackageItemIdsByPackageId = new Dictionary<int, List<Guid>>();
-
-                        List<Guid> volumePackageItemIds = volumePackageItemIdsByPackageId.GetOrCreateItem(package.PackageId);
-
-                        foreach (var itemId in volumeChargingIsApplicableToEventContext.ApplicableItemIds)
-                        {
-                            if (!volumePackageItemIds.Contains(itemId))
-                                volumePackageItemIds.Add(itemId);
-                        }
-                    }
-                }
-
-                IPackageUsageChargingPolicy packageServiceUsageChargingPolicy = package.Settings.ExtendedSettings as IPackageUsageChargingPolicy;
-                if (packageServiceUsageChargingPolicy != null)
-                {
-                    var context = new PackageServiceUsageChargingPolicyContext { ServiceTypeId = serviceTypeId };
-                    if (packageServiceUsageChargingPolicy.TryGetServiceUsageChargingPolicyId(context))
-                    {
-                        VoiceEventPricingInfo pricingInfoFromChargingPolicy = ApplyChargingPolicyToVoiceEvent(context.ChargingPolicyId, serviceTypeId, billingCDR, durationInSec, eventTime,
-                            accountBEDefinitionId, retailAccountPackage.AccountId);
-
-                        if (pricingInfoFromChargingPolicy != null && pricingInfoFromChargingPolicy.SaleAmount.HasValue)
-                        {
-                            pricingInfo.PackageId = package.PackageId;
-                            pricingInfo.UsageChargingPolicyId = pricingInfoFromChargingPolicy.ChargingPolicyId;
-                            pricingInfo.SaleAmount = pricingInfoFromChargingPolicy.SaleAmount;
-                            pricingInfo.SaleCurrencyId = pricingInfoFromChargingPolicy.SaleCurrencyId;
-                            pricingInfo.SaleDurationInSeconds = pricingInfoFromChargingPolicy.SaleDurationInSeconds;
-                            pricingInfo.SaleRate = pricingInfoFromChargingPolicy.SaleRate;
-                            pricingInfo.SaleRateTypeId = pricingInfoFromChargingPolicy.SaleRateTypeId;
-                            pricingInfo.SaleTariffRuleId = pricingInfoFromChargingPolicy.SaleTariffRuleId;
-                            pricingInfo.SaleRateTypeRuleId = pricingInfoFromChargingPolicy.SaleRateTypeRuleId;
-                            pricingInfo.SaleRateValueRuleId = pricingInfoFromChargingPolicy.SaleRateValueRuleId;
-                            pricingInfo.SaleExtraChargeRuleId = pricingInfoFromChargingPolicy.SaleExtraChargeRuleId;
-                        }
-                    }
-                }
-            }
-
-            if (volumePackageItemIdsByPackageId != null)
-                pricingInfo.PackageUsageVolumeCombinationId = s_packageUsageVolumeCombinationManager.GetCombinationId(volumePackageItemIdsByPackageId);
-
-            return pricingInfo;
+            PriceCDROutput priceCDROutput = priceCDROutputList.First();
+            return priceCDROutput.PricingInfo;
         }
 
         public List<PriceCDROutput> PriceCDRs(Guid accountBEDefinitionId, List<PriceCDRInput> priceCDRInputs)
@@ -219,6 +154,9 @@ namespace Retail.Voice.Business
             PackageManager packageManager = new PackageManager();
             List<PriceCDROutput> priceCDROutputList = new List<PriceCDROutput>();
 
+            var packageCombinationsList = new HashSet<string>();
+            var cdrPricingInfoByPackageCombinations = new Dictionary<string, List<CDRPricingInfo>>();
+
             foreach (var priceCDRInput in priceCDRInputs)
             {
                 AccountEventTime accountEventTime = new AccountEventTime() { AccountId = priceCDRInput.AccountId, EventTime = priceCDRInput.EventTime };
@@ -227,8 +165,9 @@ namespace Retail.Voice.Business
                 if (!retailAccountPackagesByAccountEventTime.TryGetValue(accountEventTime, out retailAccountPackages))
                     continue;
 
-                CDRPricingInfo pricingInfo = new CDRPricingInfo(); //Should be initialized ???
-                priceCDROutputList.Add(new PriceCDROutput() { PriceCDRInput = priceCDRInput, PricingInfo = pricingInfo });
+                CDRPricingInfo pricingInfo = new CDRPricingInfo();
+                PriceCDROutput priceCDROutput = new PriceCDROutput() { PriceCDRInput = priceCDRInput, PricingInfo = pricingInfo };
+                priceCDROutputList.Add(priceCDROutput);
 
                 Dictionary<int, List<Guid>> volumePackageItemIdsByPackageId = null;
 
@@ -282,9 +221,33 @@ namespace Retail.Voice.Business
                             }
                         }
                     }
+                }
 
-                    if (volumePackageItemIdsByPackageId != null)
-                        pricingInfo.PackageUsageVolumeCombinationId = s_packageUsageVolumeCombinationManager.GetCombinationId(volumePackageItemIdsByPackageId);
+                if (volumePackageItemIdsByPackageId != null)
+                {
+                    string packageCombinations = Retail.BusinessEntity.Entities.Helper.SerializePackageCombinations(volumePackageItemIdsByPackageId);
+                    packageCombinationsList.Add(packageCombinations);
+
+                    List<CDRPricingInfo> currentCDRPricingInfoList = cdrPricingInfoByPackageCombinations.GetOrCreateItem(packageCombinations);
+                    currentCDRPricingInfoList.Add(pricingInfo);
+                }
+            }
+
+            if (packageCombinationsList.Count > 0)
+            {
+                Dictionary<string, int> combinationIdByPackageCombinations = s_packageUsageVolumeCombinationManager.GetCombinationIds(packageCombinationsList);
+
+                foreach (var itm in cdrPricingInfoByPackageCombinations)
+                {
+                    string packageCombinations = itm.Key;
+                    List<CDRPricingInfo> cdrPricingInfos = itm.Value;
+
+                    int packageUsageVolumeCombinationId;
+                    if (!combinationIdByPackageCombinations.TryGetValue(packageCombinations, out packageUsageVolumeCombinationId))
+                        throw new Exception($"combinationIdByPackageCombinations does not contain packageUsageVolumeCombination {packageCombinations}");
+
+                    foreach (var cdrPricingInfo in cdrPricingInfos)
+                        cdrPricingInfo.PackageUsageVolumeCombinationId = packageUsageVolumeCombinationId;
                 }
             }
 
@@ -296,11 +259,11 @@ namespace Retail.Voice.Business
             HashSet<PackageUsageVolumeBalanceKey> volumeBalanceKeys;
             List<VolumePricingCDRInProcess> cdrsInProcess = GenerateVolumePricingCDRsInProcess(accountBEDefinitionId, cdrs, out volumeBalanceKeys);
 
-            Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey = s_accountPackageUsageVolumeManager.GetVolumeBalances(volumeBalanceKeys);
+            Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey = s_accountPackageUsageVolumeBalanceManager.GetVolumeBalances(volumeBalanceKeys);
 
             List<CDRVolumePricingOutput> cdrPricingInfos = GenerateFinalCDRVolumePricingOutputs(cdrsInProcess, volumeBalancesByKey);
 
-            s_accountPackageUsageVolumeManager.UpdateVolumeBalancesInDB(volumeBalancesByKey.Values);
+            s_accountPackageUsageVolumeBalanceManager.UpdateVolumeBalancesInDB(volumeBalancesByKey.Values);
 
             return cdrPricingInfos;
         }
@@ -507,11 +470,11 @@ namespace Retail.Voice.Business
         private List<CDRVolumePricingOutput> GenerateFinalCDRVolumePricingOutputs(List<VolumePricingCDRInProcess> cdrsInProcess, Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey)
         {
             List<CDRVolumePricingOutput> cdrPricingInfos = new List<CDRVolumePricingOutput>();
+
             foreach (var cdrInProcess in cdrsInProcess)
             {
                 CDRVolumePricingOutput pricingInfo = new CDRVolumePricingOutput { CDRInput = cdrInProcess.CDRInput, Items = new List<CDRVolumePricingOutputItem>() };
-                Decimal pricingDurationInSec = cdrInProcess.CDRInput.PricingDurationInSec;
-                Decimal remainingDurationInSec = pricingDurationInSec;
+                Decimal remainingDurationInSec = cdrInProcess.CDRInput.PricingDurationInSec;
 
                 foreach (var volumeItem in cdrInProcess.VolumeItems)
                 {
@@ -543,6 +506,7 @@ namespace Retail.Voice.Business
                             PackageId = volumeItem.ProcessedAccountPackage.Package.PackageId,
                             PricedDurationInSec = Math.Min(pricedDurationInSec, remainingDurationInSec)
                         };
+
                         pricingInfo.Items.Add(pricingInfoItem);
                         if (!matchBalanceInProcess.ShouldAdd)
                             matchBalanceInProcess.ShouldUpdate = true;
@@ -552,9 +516,11 @@ namespace Retail.Voice.Business
                             break;
                     }
                 }
+
                 pricingInfo.RemainingDurationInSec = remainingDurationInSec;
                 cdrPricingInfos.Add(pricingInfo);
             }
+
             return cdrPricingInfos;
         }
 
@@ -610,7 +576,7 @@ namespace Retail.Voice.Business
             public DateTime ToTime { get; set; }
 
             public PackageUsageVolumeBalanceKey BalanceKey { get; set; }
-           
+
             public ProcessedAccountPackage ProcessedAccountPackage { get; set; }
         }
 
@@ -714,11 +680,13 @@ namespace Retail.Voice.Business
 
     public class CDRVolumePricingOutputItem
     {
-        public decimal PricedDurationInSec { get; set; }
-
         public long AccountPackageId { get; set; }
 
         public int PackageId { get; set; }
+
+        public int PackageItemId { get; set; }
+
+        public decimal PricedDurationInSec { get; set; }
     }
 
     public class VoiceUsageChargerContext : IVoiceUsageChargerContext

@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class PackageUsageVolumeCombinationManager
     {
-        public int GetCombinationId(Dictionary<int, List<Guid>> packageItemsByPackageId)
+        public Dictionary<string, int> GetCombinationIds(HashSet<string> packageCombinationsList)  
         {
             throw new NotImplementedException();
         }
