@@ -44,8 +44,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 	public enum CarrierInvoiceType { Customer = 1, Supplier = 2, Settlement = 3 }
 	public class CarrierPartnerSettings : InvoicePartnerManager
-	{
-		public override string PartnerFilterSelector
+    {
+        CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
+
+        public override string PartnerFilterSelector
 		{
 			get
 			{
@@ -90,7 +92,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 						string currencySymbol = null;
 						string carrierCompanyName = null;
 						CompanySetting companySetting = null;
-
+                        int currencyId;
 						string pricingContact = null;
 						string pricingEmail = null;
 						string billingEmail = null;
@@ -119,7 +121,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 								billingContactPerson = billingContactPersonObject.Description;
 
 							carrierCompanyName = carrierProfile.Settings.Company;
-							currencySymbol = currencyManager.GetCurrencySymbol(carrierProfile.Settings.CurrencyId);
+                            currencyId = carrierProfile.Settings.CurrencyId;
 						}
 						else
 						{
@@ -146,9 +148,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
 							if (billingContactPersonObject != null)
 								billingContactPerson = billingContactPersonObject.Description;
 
-							currencySymbol = currencyManager.GetCurrencySymbol(carrierAccount.CarrierAccountSettings.CurrencyId);
+                            currencyId =carrierAccount.CarrierAccountSettings.CurrencyId;
 						}
-						List<SMSServiceType> customerSMSServiceTypes = new List<SMSServiceType>();
+                        currencySymbol = currencyManager.GetCurrencySymbol(currencyId);
+                        List<SMSServiceType> customerSMSServiceTypes = new List<SMSServiceType>();
 						List<SMSServiceType> supplierSMSServiceTypes = new List<SMSServiceType>();
 						switch (_accountType)
 						{
@@ -162,10 +165,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 								var supplierInvoiceDetails = context.Invoice.Details as SupplierInvoiceDetails;
 
-								decimal? originalAmount;
-								var originalDataCurrency = supplierInvoiceDetails.OriginalAmountByCurrency != null ? supplierInvoiceDetails.OriginalAmountByCurrency.GetRecord(supplierInvoiceDetails.SupplierCurrencyId) : null;
-								originalAmount = originalDataCurrency != null ? originalDataCurrency.OriginalAmount : null;
-
+								decimal? originalAmount = null;
+                                if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.Count > 0)
+                                {
+                                    foreach (var originalAmountByCurrency in supplierInvoiceDetails.OriginalAmountByCurrency)
+                                    {
+                                        if (originalAmountByCurrency.Value.OriginalAmount.HasValue)
+                                        {
+                                            if (!originalAmount.HasValue)
+                                                originalAmount = 0;
+                                            originalAmount += _currencyExchangeRateManager.ConvertValueToCurrency(originalAmountByCurrency.Value.OriginalAmount.Value, originalAmountByCurrency.Key, currencyId, context.Invoice.IssueDate);
+                                        }
+                                    }
+                                }
 								if (originalAmount.HasValue)
 									AddRDLCParameter(rdlcReportParameters, RDLCParameter.OriginalAmount, originalAmount.Value.ToString(), true);
 

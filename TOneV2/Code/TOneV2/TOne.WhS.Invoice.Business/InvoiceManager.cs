@@ -104,7 +104,7 @@ namespace TOne.WhS.Invoice.Business
                     customerInvoiceDetails.AttachementFiles = input.AttachementFiles;
                     customerInvoiceDetails.Reference = input.Reference;
                     customerInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
-                    if(input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0 && input.OriginalDataCurrency.All(x=>x.Value.OriginalAmount > 0))
+                    if(input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0 && input.OriginalDataCurrency.All(x=>x.Value.OriginalAmount.HasValue))
                        customerInvoiceDetails.IsOriginalAmountSetted = true;
                     else
                         customerInvoiceDetails.IsOriginalAmountSetted = false;
@@ -117,13 +117,12 @@ namespace TOne.WhS.Invoice.Business
                     supplierInvoiceDetails.AttachementFiles = input.AttachementFiles;
                     supplierInvoiceDetails.Reference = input.Reference;
                     supplierInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
-                    if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0 && input.OriginalDataCurrency.All(x => x.Value.OriginalAmount > 0))
+                    if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0 && input.OriginalDataCurrency.All(x => x.Value.OriginalAmount.HasValue))
                         supplierInvoiceDetails.IsOriginalAmountSetted = true;
                     else
                         supplierInvoiceDetails.IsOriginalAmountSetted = false;
                     invoice.Details = supplierInvoiceDetails;
                     break;
-
             }
 
 
