@@ -89,7 +89,7 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
                     fieldValue = payload.fieldValue;
 
                     $scope.scopeModel.filterType = payload.filterType;
-                    if ($scope.scopeModel.filterType.showSecondNumberField)
+                    if ($scope.scopeModel.filterType != undefined && $scope.scopeModel.filterType.showSecondNumberField)
                         $scope.scopeModel.label = "From Number";
                 }
 
