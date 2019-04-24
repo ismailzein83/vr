@@ -141,7 +141,7 @@ namespace TOne.WhS.Deal.Business
                     validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following countries {0} are not sold at {1}", string.Join(",", invalidCountryNames), RealBED));
                 }
             }
-            if(Items != null && Items.Count() > 0)
+            if (Items != null && Items.Count() > 0)
             {
                 foreach (var item in Items)
                 {
@@ -155,13 +155,13 @@ namespace TOne.WhS.Deal.Business
                         bool tierWithDiscountEvaluaterExists = false;
                         foreach (var tier in item.Tiers)
                         {
-                            if(tier.EvaluatedRate.ConfigId == new Guid("434BB6E0-A725-422E-A66A-BE839192AE5C") || tier.EvaluatedRate.ConfigId == new Guid("49AF4D76-C067-47DA-A600-A1EA0E1AAD99"))
+                            if (tier.EvaluatedRate.ConfigId == new Guid("434BB6E0-A725-422E-A66A-BE839192AE5C") || tier.EvaluatedRate.ConfigId == new Guid("49AF4D76-C067-47DA-A600-A1EA0E1AAD99"))
                             {
                                 tierWithDiscountEvaluaterExists = true;
                                 break;
                             }
                         }
-                        if(tierWithDiscountEvaluaterExists)
+                        if (tierWithDiscountEvaluaterExists)
                         {
                             validationResult = false;
                             validateBeforeSaveContext.ValidateMessages.Add("Cannot add tier(s) with discount rate evaluater when billing type is 'Estimated Volume'");
@@ -412,8 +412,6 @@ namespace TOne.WhS.Deal.Business
                 if (volCommitmentDealItemTier.ExceptionZoneRates != null && volCommitmentDealItemTier.ExceptionZoneRates.Any())
                 {
                     exceptionDealRates = GetExceptionSaleDealRate(volCommitmentDealItemTier.ExceptionZoneRates, dealBED, dealEED);
-                    var zoneIds = saleZoneIds.Except(exceptionDealRates.Keys);
-                    context.SaleZoneGroupItem = Helper.BuildSaleZones(zoneIds, dealBED, dealEED);
                 }
 
                 Dictionary<long, List<DealRate>> dealRatesByZoneId = null;
@@ -548,8 +546,6 @@ namespace TOne.WhS.Deal.Business
                 if (volCommitmentDealItemTier.ExceptionZoneRates != null)
                 {
                     exceptionDealRates = GetExceptionSupplierDealRate(volCommitmentDealItemTier.ExceptionZoneRates, supplierRatesByZoneId, dealBED, dealEED);
-                    var zoneIds = supplierZoneIds.Except(exceptionDealRates.Keys);
-                    context.SupplierZoneItem = Helper.BuildSupplierZones(zoneIds, dealBED, dealEED);
                 }
 
                 Dictionary<long, List<DealRate>> supplierRateByZoneId = null;
@@ -610,7 +606,18 @@ namespace TOne.WhS.Deal.Business
             if (dealRatesByZoneId == null)
                 return exceptionDealRates;
 
-            return exceptionDealRates.Union(dealRatesByZoneId).ToDictionary(k => k.Key, v => v.Value);
+            var ratesByZoneId = new Dictionary<long, List<DealRate>>();
+            foreach (var dealRate in dealRatesByZoneId)
+            {
+                long zoneId = dealRate.Key;
+                if (exceptionDealRates.TryGetValue(zoneId, out var exceptionRate))
+                {
+                    ratesByZoneId.Add(zoneId, exceptionRate);
+                }
+                else ratesByZoneId.Add(zoneId, dealRate.Value);
+            }
+
+            return ratesByZoneId;
         }
 
         private Dictionary<long, List<DealRate>> GetExceptionSupplierDealRate(IEnumerable<VolCommitmentDealItemTierZoneRate> exceptionZoneRates, Dictionary<long, SupplierRate> supplierRatesByZoneId, DateTime dealBED, DateTime? dealEED)
