@@ -1,4 +1,5 @@
-﻿using BPMExtended.Main.Common;
+﻿using BPMExtended.Main.Business;
+using BPMExtended.Main.Common;
 using System;
 using System.Collections.Generic;
 using System.Web;
@@ -11,8 +12,50 @@ namespace BPMExtended.Main.ConsoleApp
     {
         static void Main(string[] args)
         {
-
+            new Runtime().CallFunc();
+            Console.ReadLine();
         }
+
+        public class Runtime
+        {
+            public void CallAction()
+            {
+                MainProxy manager = new MainProxy();
+
+                int x = 3;
+                int y = 0;
+
+                Action action = delegate ()
+                {
+                    manager.Divide(x, y);
+                };
+                
+                manager.InvokeMethod(action);
+            }
+
+            public int CallFunc()
+            {
+                MainProxy manager = new MainProxy();
+
+                Func<int> getTemprature = delegate ()
+                {
+                    return manager.GetTemprature("3");
+                };
+
+                return manager.InvokeMehtod(getTemprature);
+                //Console.WriteLine("Temprature is {0}", temprature);
+            }
+        }
+
+        public class Person
+        {
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+
+            public int Age { get; set; }
+        }
+        
     //    #region testX
     //    [System.Xml.Serialization.XmlRoot("Envelope", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
     //    public class BSCSRequest<T> where T : IBSCSRequestBody
