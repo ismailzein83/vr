@@ -16,6 +16,8 @@ VR_Notification.PostDeployment.sql
 User_Guides.PostDeployment.sql
 DataAnalysis.PostDeployment.sql
 VR_MobileNetwork.PostDeployment.sql
+VR_NumberingPlan.PostDeployment.sql
+VR_BEBridge.PostDeployment.sql
 Enumerations.sql
 
 TOne
@@ -49,8 +51,6 @@ TOneDefaultData
 TOne.DefaultData.PostDeployment.sql
 
 Retail
-VR_NumberingPlan.PostDeployment.sql
-VR_BEBridge.PostDeployment.sql
 Retail.PostDeployment.sql
 Retail.SwitchReleaseCause.PostDeployment.sql
 
