@@ -108,7 +108,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Parameters!OriginalAmount.Value</Value>
+                              <Value>=FormatNumber(Round(Parameters!OriginalAmount.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -213,7 +213,7 @@
                               </Style>
                             </TextRun>
                             <TextRun>
-                              <Value>=Code.convertNumberToFrenchLetters(Parameters!OriginalAmount.Value.ToString().Replace(",", string.Empty))&amp;" "&amp; Parameters!Currency.Value &amp; " Seulement"</Value>
+                              <Value>=Code.convertNumberToFrenchLetters(FormatNumber(Round(Parameters!OriginalAmount.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value).ToString().Replace(",", string.Empty))&amp;" "&amp; Parameters!Currency.Value &amp; " Seulement"</Value>
                               <Style>
                                 <FontStyle>Normal</FontStyle>
                                 <FontFamily>Times New Roman</FontFamily>
@@ -2782,9 +2782,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="OriginalAmount">
-      <DataType>String</DataType>
+      <DataType>Float</DataType>
       <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NormalPrecisionValue">
+      <DataType>Integer</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

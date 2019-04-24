@@ -64,13 +64,25 @@ namespace Retail.Interconnect.Business
             interconnectInvoiceDetails.ThrowIfNull("interconnectInvoiceDetails");
             interconnectInvoiceDetails.AttachementFiles = input.AttachementFiles;
             interconnectInvoiceDetails.Reference = input.Reference;
-            interconnectInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
 
-            if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0 && input.OriginalDataCurrency.All(x => x.Value.OriginalAmount > 0))
-                interconnectInvoiceDetails.IsOriginalAmountSetted = true;
-            else
-                interconnectInvoiceDetails.IsOriginalAmountSetted = false;
+            interconnectInvoiceDetails.IsOriginalAmountSetted = false;
+            if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0)
+            {
+                if (input.OriginalDataCurrency.Any(x => x.Value.OriginalAmount.HasValue))
+                {
+                    interconnectInvoiceDetails.OriginalAmountByCurrency = new Dictionary<int, OriginalDataCurrrency>();
 
+                    foreach (var item in input.OriginalDataCurrency)
+                    {
+                        if (item.Value.OriginalAmount.HasValue)
+                            interconnectInvoiceDetails.OriginalAmountByCurrency.Add(item.Key, item.Value);
+                    }
+                }
+                if (input.OriginalDataCurrency.All(x => x.Value.OriginalAmount.HasValue))
+                {
+                    interconnectInvoiceDetails.IsOriginalAmountSetted = true;
+                }
+            }
             invoice.Details = interconnectInvoiceDetails;
 
             if (invoiceManager.TryUpdateInvoice(invoice))

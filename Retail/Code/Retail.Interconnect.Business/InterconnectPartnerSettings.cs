@@ -48,6 +48,7 @@ namespace Retail.Interconnect.Business
     {
         Guid _acountBEDefinitionId;
         InterconnectPartnerType _interconnectPartnerType;
+        CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
 
         public InterconnectPartnerSettings(Guid acountBEDefinitionId, InterconnectPartnerType interconnectPartnerType)
         {
@@ -216,10 +217,19 @@ namespace Retail.Interconnect.Business
 
                         case InterconnectPartnerType.Supplier:
                             var supplierInvoiceDetails = context.Invoice.Details as InterconnectInvoiceDetails;
-                            decimal? originalAmount;
-                            var originalDataCurrency = supplierInvoiceDetails.OriginalAmountByCurrency != null ? supplierInvoiceDetails.OriginalAmountByCurrency.GetRecord(supplierInvoiceDetails.InterconnectCurrencyId) : null;
-                            originalAmount = originalDataCurrency != null ? originalDataCurrency.OriginalAmount : null;
-
+                            decimal? originalAmount = null;
+                            if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.Count > 0)
+                            {
+                                foreach (var originalAmountByCurrency in supplierInvoiceDetails.OriginalAmountByCurrency)
+                                {
+                                    if (originalAmountByCurrency.Value.OriginalAmount.HasValue)
+                                    {
+                                        if (!originalAmount.HasValue)
+                                            originalAmount = 0;
+                                        originalAmount += _currencyExchangeRateManager.ConvertValueToCurrency(originalAmountByCurrency.Value.OriginalAmount.Value, originalAmountByCurrency.Key, currencyId, context.Invoice.IssueDate);
+                                    }
+                                }
+                            }
                             if (originalAmount.HasValue)
                                 AddRDLCParameter(rdlcReportParameters, RDLCParameter.OriginalAmount, originalAmount.Value.ToString(), true);
 

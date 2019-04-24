@@ -278,6 +278,8 @@
     <Content Include="Retail_Interconnect\Services\RetailModuleService.js" />
     <Content Include="Retail_Interconnect\Views\InvoiceCompareTemplate.html" />
     <Content Include="Retail_Interconnect\Views\InvoiceCompareTemplateController.js" />
+    <Content Include="Retail_Interconnect\Views\OriginalInvoiceDataTemplate.html" />
+    <Content Include="Retail_Interconnect\Views\OriginalInvoiceDataTemplateController.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

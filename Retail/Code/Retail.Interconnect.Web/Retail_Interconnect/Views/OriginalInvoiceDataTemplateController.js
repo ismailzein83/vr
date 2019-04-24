@@ -154,14 +154,11 @@
                 originalDataCurrencyDic = {};
                 for (var i = 0; i < $scope.scopeModel.originalDataCurrency.length; i++) {
                     var originalDataCurrency = $scope.scopeModel.originalDataCurrency[i];
-                    if (originalDataCurrency.Entity.OriginalAmount != undefined)
-                    {
-                        originalDataCurrencyDic[originalDataCurrency.Entity.CurrencyId] = {
-                            CurrencySymbol: originalDataCurrency.Entity.CurrencySymbol,
-                            OriginalAmount: originalDataCurrency.Entity.OriginalAmount,
-                            IncludeOriginalAmountInSettlement: originalDataCurrency.Entity.IncludeOriginalAmountInSettlement
-                        };
-                    }
+                    originalDataCurrencyDic[originalDataCurrency.Entity.CurrencyId] = {
+                        CurrencySymbol: originalDataCurrency.Entity.CurrencySymbol,
+                        OriginalAmount: originalDataCurrency.Entity.OriginalAmount,
+                        IncludeOriginalAmountInSettlement: originalDataCurrency.Entity.IncludeOriginalAmountInSettlement
+                    };
                 }
             }
 
