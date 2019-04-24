@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments;
 using Vanrise.Integration.Business;
 using Vanrise.Integration.Entities;
@@ -15,6 +18,10 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
         {
             FileAdapterArgument fileAdapterArgument = context.AdapterArgument as FileAdapterArgument;
 
+            if (fileAdapterArgument.ActionAfterImport == (int)FileAdapterArgument.Actions.NoAction
+                && fileAdapterArgument.FileCheckCriteria == FileAdapterArgument.FileCheckCriteriaEnum.None)
+                throw new VRBusinessException(string.Format("'None' Check file criteria is not allowed in case of no action after import"));
+
             FileAdapterState fileAdapterState = SaveOrGetAdapterState(context, fileAdapterArgument);
 
             string mask = string.IsNullOrEmpty(fileAdapterArgument.Mask) ? "" : fileAdapterArgument.Mask;
@@ -25,11 +32,13 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             {
                 try
                 {
-                    DirectoryInfo d = new DirectoryInfo(fileAdapterArgument.Directory);//Assuming Test is your Folder
+                    DirectoryInfo directoryInfo = new DirectoryInfo(fileAdapterArgument.Directory);//Assuming Test is your Folder
                     base.LogVerbose("Getting all files with extenstion {0}", fileAdapterArgument.Extension);
-                    FileInfo[] fileInfos = d.GetFiles("*" + fileAdapterArgument.Extension); //Getting Text files
+                    FileInfo[] fileInfos = directoryInfo.GetFiles("*" + fileAdapterArgument.Extension); //Getting Text files
 
-                    if (fileInfos == null || fileInfos.Length == 0)
+                    List<FileInfo> fileInfosToProcess = CheckAndGetFinalFileCollection(fileAdapterArgument, directoryInfo, fileInfos.ToList());
+
+                    if (fileInfosToProcess == null || fileInfosToProcess.Count == 0)
                         return;
 
                     Dictionary<string, List<DataSourceImportedBatch>> dataSourceImportedBatchByFileNames = null;
@@ -41,25 +50,55 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                     short numberOfFilesRead = 0;
                     bool newFilesStarted = false;
 
-                    foreach (FileInfo file in fileInfos.OrderBy(c => c.LastWriteTime).ThenBy(c => c.Name))
+                    IEnumerable<FileInfo> fileInfosOrderedToProcess = null;
+                    switch (fileAdapterArgument.FileCheckCriteria)
+                    {
+                        case Arguments.FileAdapterArgument.FileCheckCriteriaEnum.NameCheck:
+                            fileInfosOrderedToProcess = fileInfosToProcess.OrderBy(c => c.Name); break;
+                        case Arguments.FileAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck:
+                            fileInfosOrderedToProcess = fileInfosToProcess.OrderBy(c => c.LastWriteTime).ThenBy(c => c.Name); break;
+                        default: fileInfosOrderedToProcess = fileInfosToProcess; break;
+                    }
+
+                    foreach (FileInfo file in fileInfosOrderedToProcess)
                     {
                         if (context.ShouldStopImport())
                             break;
 
                         if (regEx.IsMatch(file.Name))
                         {
-                            if (!newFilesStarted)
+                            switch (fileAdapterArgument.FileCheckCriteria)
                             {
-                                if (DateTime.Compare(fileAdapterState.LastRetrievedFileTime, file.LastWriteTime) > 0)
-                                {
-                                    continue;
-                                }
-                                else if (DateTime.Compare(fileAdapterState.LastRetrievedFileTime, file.LastWriteTime) == 0)
-                                {
-                                    if (!string.IsNullOrEmpty(fileAdapterState.LastRetrievedFileName) && fileAdapterState.LastRetrievedFileName.CompareTo(file.Name) >= 0)
-                                        continue;
-                                }
-                                newFilesStarted = true;
+                                case FileAdapterArgument.FileCheckCriteriaEnum.NameCheck:
+                                    {
+                                        if (!newFilesStarted)
+                                        {
+                                            if (!string.IsNullOrEmpty(fileAdapterState.LastRetrievedFileName) && fileAdapterState.LastRetrievedFileName.CompareTo(file.Name) >= 0)
+                                                continue;
+                                            newFilesStarted = true;
+                                        }
+
+                                        break;
+                                    }
+
+                                case FileAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck:
+                                    {
+                                        if (!newFilesStarted)
+                                        {
+                                            if (DateTime.Compare(fileAdapterState.LastRetrievedFileTime, file.LastWriteTime) > 0)
+                                            {
+                                                continue;
+                                            }
+                                            else if (DateTime.Compare(fileAdapterState.LastRetrievedFileTime, file.LastWriteTime) == 0)
+                                            {
+                                                if (!string.IsNullOrEmpty(fileAdapterState.LastRetrievedFileName) && fileAdapterState.LastRetrievedFileName.CompareTo(file.Name) >= 0)
+                                                    continue;
+                                            }
+                                            newFilesStarted = true;
+                                        }
+                                        break;
+                                    }
+                                default: break;
                             }
 
                             bool? isDuplicateSameSize = null;
@@ -144,6 +183,35 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             });
 
             return adapterState;
+        }
+
+        private List<FileInfo> CheckAndGetFinalFileCollection(FileAdapterArgument fileAdapterArgument, DirectoryInfo directoryInfo, List<FileInfo> fileList)
+        {
+            if (fileList == null || fileList.Count() == 0)
+                return null;
+
+            List<FileInfo> fileListToProccess = new List<FileInfo>();
+            if (fileAdapterArgument.FileCompletenessCheckInterval.HasValue)
+            {
+                Dictionary<string, FileInfo> firstReadFilesByName = fileList.ToDictionary(itm => itm.Name, itm => itm);
+                Thread.Sleep(fileAdapterArgument.FileCompletenessCheckInterval.Value * 1000);
+                FileInfo[] currentItems = directoryInfo.GetFiles("*" + fileAdapterArgument.Extension);
+
+                foreach (var file in currentItems.OrderBy(c => c.LastWriteTime))
+                {
+                    FileInfo fileReadFirstTime = firstReadFilesByName.GetRecord(file.Name);
+                    if (fileReadFirstTime == null || fileReadFirstTime.Length != file.Length)
+                        break;
+
+                    fileListToProccess.Add(file);
+                }
+            }
+            else
+            {
+                fileListToProccess = fileList;
+            }
+
+            return fileListToProccess.Count > 0 ? fileListToProccess : null;
         }
 
         private ImportedBatchProcessingOutput CreateStreamReader(Func<IImportedData, ImportedBatchProcessingOutput> onDataReceived, FileInfo file, FileAdapterArgument argument, BatchState fileState)

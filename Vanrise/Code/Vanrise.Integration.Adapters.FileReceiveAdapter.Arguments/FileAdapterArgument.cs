@@ -23,6 +23,24 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments
         {
             return this.FileDataSourceDefinitionId.HasValue && this.FileDataSourceDefinitionId.Value == fileDataSourceDefinitionId;
         }
+
+        public short? FileCompletenessCheckInterval { get; set; }
+
+        FileCheckCriteriaEnum _fileCheckCriteria = FileCheckCriteriaEnum.DateAndNameCheck;
+        public FileCheckCriteriaEnum FileCheckCriteria
+        {
+            get
+            {
+                return _fileCheckCriteria;
+            }
+            set
+            {
+                _fileCheckCriteria = value;
+            }
+        }
+
+        public enum FileCheckCriteriaEnum { DateAndNameCheck = 0, NameCheck = 1, None = 2 }
+        public enum Actions { NoAction = -1, Rename = 0, Delete = 1, Move = 2, Copy = 3 }
     }
 
     public class FileAdapterState : BaseAdapterState

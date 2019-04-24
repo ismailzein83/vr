@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService',
-    function (UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'FileCheckCriteriaEnum',
+    function (UtilsService, VRUIUtilsService, VRNotificationService, FileCheckCriteriaEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -27,6 +27,8 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', '
             function initializeController() {
                 $scope.scopeModel = {};
 
+                $scope.scopeModel.fileCheckCriterias = UtilsService.getArrayEnum(FileCheckCriteriaEnum);
+
                 $scope.scopeModel.actionsAfterImport = [{ value: -1, name: 'No Action' }, { value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
 
                 $scope.scopeModel.onFileDataSourceDefinitionsSelectorReady = function (api) {
@@ -40,6 +42,16 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', '
                         true : false;
                     if (beforeSelection && !$scope.scopeModel.selectedFileDataSourceDefinition)
                         $scope.scopeModel.duplicatedFilesDirectory = undefined;
+                };
+
+                $scope.scopeModel.checkActionsWithCriteria = function () {
+                    if ($scope.scopeModel.selectedFileCheckCriteria == undefined || $scope.scopeModel.selectedAction == undefined)
+                        return null;
+
+                    if ($scope.scopeModel.selectedFileCheckCriteria.value == FileCheckCriteriaEnum.None.value && $scope.scopeModel.selectedAction.value == -1)
+                        return "This combination isn't allowed !";
+
+                    return null;
                 };
 
                 defineAPI();
@@ -62,6 +74,8 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', '
                             $scope.scopeModel.directory = argumentData.Directory;
                             $scope.scopeModel.directorytoMoveFile = argumentData.DirectorytoMoveFile;
                             $scope.scopeModel.selectedAction = UtilsService.getItemByVal($scope.scopeModel.actionsAfterImport, argumentData.ActionAfterImport, "value");
+                            $scope.scopeModel.selectedFileCheckCriteria = UtilsService.getItemByVal($scope.scopeModel.fileCheckCriterias, argumentData.FileCheckCriteria, "value");
+                            $scope.scopeModel.fileCompletenessCheckInterval = argumentData.FileCompletenessCheckInterval;
                             $scope.scopeModel.duplicatedFilesDirectory = argumentData.DuplicatedFilesDirectory;
                         }
                     }
@@ -109,7 +123,9 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', '
                         Directory: $scope.scopeModel.directory,
                         DirectorytoMoveFile: $scope.scopeModel.directorytoMoveFile,
                         ActionAfterImport: $scope.scopeModel.selectedAction.value,
+                        FileCheckCriteria: $scope.scopeModel.selectedFileCheckCriteria.value,
                         FileDataSourceDefinitionId: fileDataSourceDefinitionsSelectorAPI != undefined ? fileDataSourceDefinitionsSelectorAPI.getSelectedIds() : undefined,
+                        FileCompletenessCheckInterval: $scope.scopeModel.fileCompletenessCheckInterval,
                         DuplicatedFilesDirectory: fileDataSourceDefinitionsSelectorAPI != undefined ? $scope.scopeModel.duplicatedFilesDirectory : undefined
                     };
                 };

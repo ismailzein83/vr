@@ -11,6 +11,10 @@
         </vr-columns>
     </vr-row>
     <vr-row>
+        <vr-columns width="1/3row">
+            <vr-textbox value="scopeModel.fileCompletenessCheckInterval" label="File Completeness Check Interval (s)" type="number" minvalue="2" maxvalue="300" decimalprecision="0" />
+        </vr-columns>
+
         <vr-integration-filedatasourcedefinition-selector on-ready="scopeModel.onFileDataSourceDefinitionsSelectorReady"
                                                           onselectionchanged="scopeModel.onFileDataSourceDefinitionSelectionChanged"
                                                           customlabel="Import Exception Setting" normal-col-num="4" includeviewhandler showaddbutton>
@@ -22,11 +26,19 @@
 </vr-section>
 <vr-section header="After Import">
     <vr-row>
-        <vr-columns width="1/3row">
-            <vr-select datasource="scopeModel.actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action" selectedvalues="scopeModel.selectedAction" isrequired hideremoveicon></vr-select>
-        </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-textbox ng-show="scopeModel.selectedAction.value == 2" value="scopeModel.directorytoMoveFile" label="Directory to Move File" />
-        </vr-columns>
+        <vr-validator validate="scopeModel.checkActionsWithCriteria()">
+            <vr-columns width="1/3row">
+                <vr-select datasource="scopeModel.actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action" selectedvalues="scopeModel.selectedAction" isrequired hideremoveicon></vr-select>
+            </vr-columns>
+            <vr-columns width="1/3row" ng-show="scopeModel.selectedAction.value == 2">
+                <vr-textbox value="scopeModel.directorytoMoveFile" label="Directory to Move File" />
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-select datasource="scopeModel.fileCheckCriterias" datatextfield="description" datavaluefield="value"
+                           label="Import File Check Criteria" selectedvalues="scopeModel.selectedFileCheckCriteria"
+                           isrequired="true" hideremoveicon>
+                </vr-select>
+            </vr-columns>
+        </vr-validator>
     </vr-row>
 </vr-section>
