@@ -96,6 +96,7 @@
     <Compile Include="Billing\PabxManager.cs" />
     <Compile Include="Billing\SubmissionManager.cs" />
     <Compile Include="BusinessEntityManager.cs" />
+    <Compile Include="MainProxy.cs" />
     <Compile Include="Request Flow Management\AdministrativeComplaintFlowManagement.cs" />
     <Compile Include="Request Flow Management\CreatePaymentPlanFlowManagement.cs" />
     <Compile Include="Request Flow Management\CancelPaymentPlanFlowManagement.cs" />
