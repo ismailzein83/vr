@@ -165,11 +165,10 @@ namespace Retail.Voice.Business
                 if (!retailAccountPackagesByAccountEventTime.TryGetValue(accountEventTime, out retailAccountPackages))
                     continue;
 
-                CDRPricingInfo pricingInfo = new CDRPricingInfo();
-                PriceCDROutput priceCDROutput = new PriceCDROutput() { PriceCDRInput = priceCDRInput, PricingInfo = pricingInfo };
-                priceCDROutputList.Add(priceCDROutput);
+                CDRPricingInfo cdrPricingInfo = new CDRPricingInfo();
+                priceCDROutputList.Add(new PriceCDROutput() { PriceCDRInput = priceCDRInput, PricingInfo = cdrPricingInfo });
 
-                Dictionary<int, List<Guid>> volumePackageItemIdsByPackageId = null;
+                Dictionary<int, List<Guid>> volumePackageItemsByPackageId = null;
 
                 foreach (var retailAccountPackage in retailAccountPackages)
                 {
@@ -183,10 +182,10 @@ namespace Retail.Voice.Business
 
                         if (packageVolumeCharging.IsApplicableToEvent(volumeChargingIsApplicableToEventContext))
                         {
-                            if (volumePackageItemIdsByPackageId == null)
-                                volumePackageItemIdsByPackageId = new Dictionary<int, List<Guid>>();
+                            if (volumePackageItemsByPackageId == null)
+                                volumePackageItemsByPackageId = new Dictionary<int, List<Guid>>();
 
-                            List<Guid> volumePackageItemIds = volumePackageItemIdsByPackageId.GetOrCreateItem(package.PackageId);
+                            List<Guid> volumePackageItemIds = volumePackageItemsByPackageId.GetOrCreateItem(package.PackageId);
 
                             foreach (var itemId in volumeChargingIsApplicableToEventContext.ApplicableItemIds)
                             {
@@ -207,35 +206,35 @@ namespace Retail.Voice.Business
 
                             if (pricingInfoFromChargingPolicy != null && pricingInfoFromChargingPolicy.SaleAmount.HasValue)
                             {
-                                pricingInfo.PackageId = package.PackageId;
-                                pricingInfo.UsageChargingPolicyId = pricingInfoFromChargingPolicy.ChargingPolicyId;
-                                pricingInfo.SaleAmount = pricingInfoFromChargingPolicy.SaleAmount;
-                                pricingInfo.SaleCurrencyId = pricingInfoFromChargingPolicy.SaleCurrencyId;
-                                pricingInfo.SaleDurationInSeconds = pricingInfoFromChargingPolicy.SaleDurationInSeconds;
-                                pricingInfo.SaleRate = pricingInfoFromChargingPolicy.SaleRate;
-                                pricingInfo.SaleRateTypeId = pricingInfoFromChargingPolicy.SaleRateTypeId;
-                                pricingInfo.SaleTariffRuleId = pricingInfoFromChargingPolicy.SaleTariffRuleId;
-                                pricingInfo.SaleRateTypeRuleId = pricingInfoFromChargingPolicy.SaleRateTypeRuleId;
-                                pricingInfo.SaleRateValueRuleId = pricingInfoFromChargingPolicy.SaleRateValueRuleId;
-                                pricingInfo.SaleExtraChargeRuleId = pricingInfoFromChargingPolicy.SaleExtraChargeRuleId;
+                                cdrPricingInfo.PackageId = package.PackageId;
+                                cdrPricingInfo.UsageChargingPolicyId = pricingInfoFromChargingPolicy.ChargingPolicyId;
+                                cdrPricingInfo.SaleAmount = pricingInfoFromChargingPolicy.SaleAmount;
+                                cdrPricingInfo.SaleCurrencyId = pricingInfoFromChargingPolicy.SaleCurrencyId;
+                                cdrPricingInfo.SaleDurationInSeconds = pricingInfoFromChargingPolicy.SaleDurationInSeconds;
+                                cdrPricingInfo.SaleRate = pricingInfoFromChargingPolicy.SaleRate;
+                                cdrPricingInfo.SaleRateTypeId = pricingInfoFromChargingPolicy.SaleRateTypeId;
+                                cdrPricingInfo.SaleTariffRuleId = pricingInfoFromChargingPolicy.SaleTariffRuleId;
+                                cdrPricingInfo.SaleRateTypeRuleId = pricingInfoFromChargingPolicy.SaleRateTypeRuleId;
+                                cdrPricingInfo.SaleRateValueRuleId = pricingInfoFromChargingPolicy.SaleRateValueRuleId;
+                                cdrPricingInfo.SaleExtraChargeRuleId = pricingInfoFromChargingPolicy.SaleExtraChargeRuleId;
                             }
                         }
                     }
                 }
 
-                if (volumePackageItemIdsByPackageId != null)
+                if (volumePackageItemsByPackageId != null)
                 {
-                    string packageCombinations = Retail.BusinessEntity.Entities.Helper.SerializePackageCombinations(volumePackageItemIdsByPackageId);
+                    string packageCombinations = Retail.BusinessEntity.Entities.Helper.SerializePackageCombinations(volumePackageItemsByPackageId);
                     packageCombinationsList.Add(packageCombinations);
 
                     List<CDRPricingInfo> currentCDRPricingInfoList = cdrPricingInfoByPackageCombinations.GetOrCreateItem(packageCombinations);
-                    currentCDRPricingInfoList.Add(pricingInfo);
+                    currentCDRPricingInfoList.Add(cdrPricingInfo);
                 }
             }
 
             if (packageCombinationsList.Count > 0)
             {
-                Dictionary<string, int> combinationIdByPackageCombinations = s_packageUsageVolumeCombinationManager.GetCombinationIds(packageCombinationsList);
+                Dictionary<string, int> combinationIdByPackageCombinations = s_packageUsageVolumeCombinationManager.InsertAndGetCombinationIds(packageCombinationsList);
 
                 foreach (var itm in cdrPricingInfoByPackageCombinations)
                 {
@@ -246,8 +245,8 @@ namespace Retail.Voice.Business
                     if (!combinationIdByPackageCombinations.TryGetValue(packageCombinations, out packageUsageVolumeCombinationId))
                         throw new Exception($"combinationIdByPackageCombinations does not contain packageUsageVolumeCombination {packageCombinations}");
 
-                    foreach (var cdrPricingInfo in cdrPricingInfos)
-                        cdrPricingInfo.PackageUsageVolumeCombinationId = packageUsageVolumeCombinationId;
+                    foreach (var currentCDRPricingInfo in cdrPricingInfos)
+                        currentCDRPricingInfo.PackageUsageVolumeCombinationId = packageUsageVolumeCombinationId;
                 }
             }
 
@@ -464,6 +463,7 @@ namespace Retail.Voice.Business
                         }
                     });
             }
+
             return cdrsInProcess;
         }
 
