@@ -16,4 +16,29 @@ namespace BPMExtended.Main.SOMAPI
         public DateTime ActivationDate { get; set; }
         public DateTime LastStatusChangeDate { get; set; }
     }
+
+    public class TelephonyContract
+    {
+        public string Id { get; set; }
+        public string CustomerId { get; set; }
+        public long RateplanId { get; set; }
+        public string PhoneNumber { get; set; }
+        public int Status { get; set; }
+        public DateTime? ActivationDate { get; set; }
+        public DateTime? LastStatusChangeDate { get; set; }
+    }
+
+    public class TelephonyContractData
+    {
+        public string Id { get; set; }
+        public string CustomerId { get; set; }
+        public long RateplanId { get; set; }
+        public string PhoneNumber { get; set; }
+        public string LinePathId { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public int Status { get; set; }
+        public DateTime? ActivationDate { get; set; }
+        public DateTime? LastStatusChangeDate { get; set; }
+    }
 }
