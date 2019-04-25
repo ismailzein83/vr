@@ -136,6 +136,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 customerInvoiceDetails.TotalVoiceAmountBeforeTax = customerInvoiceDetails.TotalAmountAfterCommission;
                 customerInvoiceDetails.TotalSMSAmountBeforeTax = customerInvoiceDetails.TotalSMSAmountAfterCommission;
                 customerInvoiceDetails.TotalDealAmountAfterTax = customerInvoiceDetails.TotalDealAmount;
+                customerInvoiceDetails.TotalInvoiceAmountBeforeTax = customerInvoiceDetails.TotalSMSAmountAfterCommission + customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalDealAmount;
 
                 if (taxItemDetails != null)
 				{
