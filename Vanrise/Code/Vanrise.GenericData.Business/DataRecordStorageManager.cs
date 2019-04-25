@@ -217,7 +217,7 @@ namespace Vanrise.GenericData.Business
             recordType.ThrowIfNull("recordType", dataRecordStorage.DataRecordTypeId);
             recordType.Fields.ThrowIfNull("recordType.Fields", dataRecordStorage.DataRecordTypeId);
             RecordFilterManager recordFilterManager = new RecordFilterManager();
-            
+
             RecordFilterGroup filterGroupObj = null;
             if (filterGroup != null || filters != null)
             {
@@ -443,22 +443,21 @@ namespace Vanrise.GenericData.Business
                 if (recordFilter.FieldName != null)
                 {
                     var record = recordType.Fields.FindRecord(x => x.Name == recordFilter.FieldName);
-                    if (record != null)
-                    {
-                        if (record.Formula != null)
-                        {
-                            var context = new DataRecordFieldFormulaConvertFilterContext(recordType.DataRecordTypeId, recordFilter.FieldName);
-                            context.InitialFilter = recordFilter;
+                    record.ThrowIfNull("record", recordFilter.FieldName);
 
-                            var recordFilterObj = record.Formula.ConvertFilter(context);
-                            if (recordFilterObj != null)
-                                ConvertChildFilterGroup(recordFilterObj, recordType, convertedFilters);
-                        }
-                        else
-                        {
-                            //recordFilter.FieldName = record.Name; 
-                            convertedFilters.Add(recordFilter);
-                        }
+                    if (record.Formula != null)
+                    {
+                        var context = new DataRecordFieldFormulaConvertFilterContext(recordType.DataRecordTypeId, recordFilter.FieldName);
+                        context.InitialFilter = recordFilter;
+
+                        var recordFilterObj = record.Formula.ConvertFilter(context);
+                        if (recordFilterObj != null)
+                            ConvertChildFilterGroup(recordFilterObj, recordType, convertedFilters);
+                    }
+                    else
+                    {
+                        //recordFilter.FieldName = record.Name; 
+                        convertedFilters.Add(recordFilter);
                     }
                 }
                 else //used in case of filter without FieldName like AlwaysFalseRecordFilter
@@ -924,7 +923,7 @@ namespace Vanrise.GenericData.Business
 
             var firstField = orderByFields[0];
             IOrderedEnumerable<DataRecord> orderedRecords;
-            Func<DataRecord, Object> firstOrderByFunction = record =>record.FieldValues[firstField];
+            Func<DataRecord, Object> firstOrderByFunction = record => record.FieldValues[firstField];
             orderedRecords = descOrder ? allRecords.OrderByDescending(firstOrderByFunction) : allRecords.OrderBy(firstOrderByFunction);
 
             if (orderByFields.Count > 1)
@@ -953,7 +952,7 @@ namespace Vanrise.GenericData.Business
             var firstFieldOrder = fieldOrders[0];
             if (!fieldNames.Contains(firstFieldOrder.FieldName))
                 throw new Exception(String.Format("Field Order '{0}' is not available in the query field names", firstFieldOrder.FieldName));
-            Func<DataRecord, Object> firstOrderByFunction = record =>record.FieldValues[firstFieldOrder.FieldName];
+            Func<DataRecord, Object> firstOrderByFunction = record => record.FieldValues[firstFieldOrder.FieldName];
 
             IOrderedEnumerable<DataRecord> orderedRecords = firstFieldOrder.OrderDirection == OrderDirection.Ascending ?
                 allRecords.OrderBy(firstOrderByFunction) :
@@ -965,7 +964,7 @@ namespace Vanrise.GenericData.Business
                     var fieldOrder = fieldOrders[i];
                     if (!fieldNames.Contains(fieldOrder.FieldName))
                         throw new Exception(String.Format("Field Order '{0}' is not available in the query fields", fieldOrder.FieldName));
-                    Func<DataRecord, Object> orderByFunction = record =>record.FieldValues[fieldOrder.FieldName];
+                    Func<DataRecord, Object> orderByFunction = record => record.FieldValues[fieldOrder.FieldName];
 
                     orderedRecords = fieldOrder.OrderDirection == OrderDirection.Ascending ?
                         orderedRecords.ThenBy(orderByFunction) :
