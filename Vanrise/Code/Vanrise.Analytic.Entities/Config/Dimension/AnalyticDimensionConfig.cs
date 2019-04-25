@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -27,17 +24,21 @@ namespace Vanrise.Analytic.Entities
 
         public string RequiredParentDimension { get; set; }
 
-      //  public bool IsRequiredFromParent { get; set; }
+        //public bool IsRequiredFromParent { get; set; }
+
         public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
+
         public List<DimensionFieldMapping> DimensionFieldMappings { get; set; }
 
         public string CurrencySQLColumnName { get; set; }
+
+        public bool IsTechnical { get; set; }
     }
 
     public class DimensionFieldMapping
     {
         public Guid DataRecordTypeId { get; set; }
+
         public string FieldName { get; set; }
     }
-
 }

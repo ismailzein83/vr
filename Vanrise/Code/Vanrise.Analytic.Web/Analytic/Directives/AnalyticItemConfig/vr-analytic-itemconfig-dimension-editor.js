@@ -8,7 +8,7 @@
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -17,14 +17,6 @@
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
-
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/Analytic/Directives/AnalyticItemConfig/Templates/DimensionEditorTemplate.html';
             }
@@ -32,8 +24,10 @@
 
         function ItemconfigDimensionEditor(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
+
             var joinSelectorAPI;
             var joinReadyDeferred = UtilsService.createPromiseDeferred();
+
             var parentDimensionSelectorAPI;
             var parentDimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -53,16 +47,6 @@
                 $scope.scopeModel.showSQLExpression = true;
                 $scope.scopeModel.showSQLExpressionMethod = false;
                 $scope.scopeModel.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
-                $scope.scopeModel.onExpressionTypeSelectionChanged = function () {
-                    if ($scope.scopeModel.selectedExpressionType != undefined) {
-
-                        switch ($scope.scopeModel.selectedExpressionType.value) {
-                            case VR_Analytic_ExpressionTypeEnum.SQLExpression.value: $scope.scopeModel.showSQLExpression = true; $scope.scopeModel.showSQLExpressionMethod = false; break;
-                            case VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod.value: $scope.scopeModel.showSQLExpressionMethod = true; $scope.scopeModel.showSQLExpression = false; break;
-                        }
-
-                    }
-                };
 
                 $scope.scopeModel.onParentDimensionSelectorDirectiveReady = function (api) {
                     parentDimensionSelectorAPI = api;
@@ -85,35 +69,46 @@
                     fieldTypeReadyDeferred.resolve();
                 };
 
-                defineAPI();
+                $scope.scopeModel.onExpressionTypeSelectionChanged = function () {
+                    if ($scope.scopeModel.selectedExpressionType != undefined) {
 
-                
+                        switch ($scope.scopeModel.selectedExpressionType.value) {
+                            case VR_Analytic_ExpressionTypeEnum.SQLExpression.value: $scope.scopeModel.showSQLExpression = true; $scope.scopeModel.showSQLExpressionMethod = false; break;
+                            case VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod.value: $scope.scopeModel.showSQLExpressionMethod = true; $scope.scopeModel.showSQLExpression = false; break;
+                        }
+
+                    }
+                };
+
+                defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    var tableId;
+
                     var promises = [];
+
+                    var tableId;
                     var configEntity;
+
                     if (payload != undefined) {
                         tableId = payload.tableId;
                         configEntity = payload.ConfigEntity;
-                        if (configEntity != undefined) {
 
+                        if (configEntity != undefined) {
                             $scope.scopeModel.sqlExpression = configEntity.SQLExpression;
                             $scope.scopeModel.sqlExpressionMethod = configEntity.GetValueMethod;
                             $scope.scopeModel.currencySQLColumnName = configEntity.CurrencySQLColumnName;
+                            $scope.scopeModel.isTechnical = configEntity.IsTechnical;
 
                             if ($scope.scopeModel.sqlExpression != undefined) {
                                 $scope.scopeModel.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
                             } else if ($scope.scopeModel.sqlExpressionMethod != undefined) {
                                 $scope.scopeModel.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod;
                             }
-
                         }
-
 
                         getAnalyticDimensionEditorRuntime(tableId).then(function (response) {
                             $scope.scopeModel.dimensionFieldMappings.length = 0;
@@ -128,35 +123,7 @@
                                     addFilterItemToGrid(filterItem);
                                 }
                             }
-
                         });
-
-                        function addFilterItemToGrid(filterItem) {
-
-                            var dataItem = {
-                                Name: filterItem.payload.Name,
-                                DataRecordTypeId: filterItem.payload.DataRecordTypeId
-                            };
-                            var dataItemPayload = { dataRecordTypeId: filterItem.payload.DataRecordTypeId };
-
-                            if (configEntity != undefined && configEntity.DimensionFieldMappings != undefined) {
-                                var selectedRecordField = UtilsService.getItemByVal(configEntity.DimensionFieldMappings, filterItem.payload.DataRecordTypeId, "DataRecordTypeId");
-                                if (selectedRecordField != undefined)
-                                    dataItemPayload.selectedIds = selectedRecordField.FieldName;
-                            }
-                            dataItem.onDataRecordTypeFieldsSelectorReady = function (api) {
-                                dataItem.directiveAPI = api;
-                                filterItem.readyPromiseDeferred.resolve();
-                            };
-
-                            filterItem.readyPromiseDeferred.promise
-                                .then(function () {
-                                    VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
-                                });
-
-                            $scope.scopeModel.dimensionFieldMappings.push(dataItem);
-                        }
-
 
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         joinReadyDeferred.promise.then(function () {
@@ -203,7 +170,6 @@
                         });
                         promises.push(loadRequiredParentDirectivePromiseDeferred.promise);
 
-
                         var loadFieldTypePromiseDeferred = UtilsService.createPromiseDeferred();
                         fieldTypeReadyDeferred.promise.then(function () {
                             var payloadFieldTypeDirective = configEntity != undefined ? configEntity.FieldType : undefined;
@@ -211,10 +177,34 @@
                             VRUIUtilsService.callDirectiveLoad(fieldTypeAPI, payloadFieldTypeDirective, loadFieldTypePromiseDeferred);
                         });
                         promises.push(loadFieldTypePromiseDeferred.promise);
-                        return UtilsService.waitMultiplePromises(promises);
                     }
 
+                    function addFilterItemToGrid(filterItem) {
 
+                        var dataItem = {
+                            Name: filterItem.payload.Name,
+                            DataRecordTypeId: filterItem.payload.DataRecordTypeId
+                        };
+                        var dataItemPayload = { dataRecordTypeId: filterItem.payload.DataRecordTypeId };
+
+                        if (configEntity != undefined && configEntity.DimensionFieldMappings != undefined) {
+                            var selectedRecordField = UtilsService.getItemByVal(configEntity.DimensionFieldMappings, filterItem.payload.DataRecordTypeId, "DataRecordTypeId");
+                            if (selectedRecordField != undefined)
+                                dataItemPayload.selectedIds = selectedRecordField.FieldName;
+                        }
+                        dataItem.onDataRecordTypeFieldsSelectorReady = function (api) {
+                            dataItem.directiveAPI = api;
+                            filterItem.readyPromiseDeferred.resolve();
+                        };
+
+                        filterItem.readyPromiseDeferred.promise.then(function () {
+                            VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, filterItem.loadPromiseDeferred);
+                        });
+
+                        $scope.scopeModel.dimensionFieldMappings.push(dataItem);
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -245,9 +235,10 @@
                         RequiredParentDimension: requiredParentDimension,
                         FieldType: fieldType,
                         DimensionFieldMappings: dimensionFieldMappings,
-                        CurrencySQLColumnName: $scope.scopeModel.currencySQLColumnName
-
+                        CurrencySQLColumnName: $scope.scopeModel.currencySQLColumnName,
+                        IsTechnical: $scope.scopeModel.isTechnical
                     };
+
                     return dimension;
                 };
 
@@ -255,13 +246,12 @@
                     ctrl.onReady(api);
                 }
             }
-            function getAnalyticDimensionEditorRuntime(tableId)
-            {
+
+            function getAnalyticDimensionEditorRuntime(tableId) {
                 return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticDimensionEditorRuntime({ TableId: tableId });
             }
         }
     }
 
     app.directive('vrAnalyticItemconfigDimensionEditor', ItemconfigDimensionEditorDirective);
-
 })(app);

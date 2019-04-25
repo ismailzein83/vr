@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
@@ -22,6 +20,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticDimensionConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticDimensionConfigInfoFilter>(filter) : null;
             return manager.GetDimensionsInfo(serializedFilter);
         }
+
         [HttpGet]
         [Route("GetDimensions")]
         public IEnumerable<AnalyticDimension> GetDimensions(Guid analyticTableId)
@@ -38,6 +37,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticMeasureConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticMeasureConfigInfoFilter>(filter) : null;
             return manager.GetMeasuresInfo(serializedFilter);
         }
+
         [HttpGet]
         [Route("GetRemoteMeasuresInfo")]
         public IEnumerable<RemoteAnalyticMeasureConfigInfo> GetRemoteMeasuresInfo(string filter)
@@ -46,6 +46,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticMeasureConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticMeasureConfigInfoFilter>(filter) : null;
             return manager.GetRemoteMeasuresInfo(serializedFilter);
         }
+
         [HttpGet]
         [Route("GetRemoteMeasuresInfo")]
         public IEnumerable<RemoteAnalyticMeasureConfigInfo> GetRemoteMeasuresInfo(Guid connectionId, string filter)
@@ -53,6 +54,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
             return manager.GetRemoteMeasuresInfo(connectionId, filter);
         }
+
         [HttpGet]
         [Route("GetJoinsInfo")]
         public IEnumerable<AnalyticJoinConfigInfo> GetJoinsInfo(string filter)
@@ -61,6 +63,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticJoinConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticJoinConfigInfoFilter>(filter) : null;
             return manager.GetJoinsInfo(serializedFilter);
         }
+
         [HttpGet]
         [Route("GetAggregatesInfo")]
         public IEnumerable<AnalyticAggregateConfigInfo> GetAggregatesInfo(string filter)
@@ -69,6 +72,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticAggregateConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticAggregateConfigInfoFilter>(filter) : null;
             return manager.GetAggregatesInfo(serializedFilter);
         }
+
         [HttpPost]
         [Route("GetFilteredAnalyticItemConfigs")]
         public object GetFilteredAnalyticItemConfigs(Vanrise.Entities.DataRetrievalInput<AnalyticItemConfigQuery> input)
@@ -76,6 +80,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
             return GetWebResponse(input, manager.GetFilteredAnalyticItemConfigs(input));
         }
+
         [HttpGet]
         [Route("GetAnalyticItemConfigsById")]
         public Object GetAnalyticItemConfigsById(Guid tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
@@ -83,6 +88,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
             return manager.GetAnalyticItemConfigsById(tableId, itemType, analyticItemConfigId);
         }
+
         [HttpPost]
         [Route("GetMeasuresNames")]
         public IEnumerable<string> GetMeasuresNames(MeasureNamesInput measureNameInput)
@@ -98,6 +104,7 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
             return manager.GetDimensionName(dimensionNameInput.AnalyticTableId, dimensionNameInput.DimensionId);
         }
+
         [HttpPost]
         [Route("AddAnalyticItemConfig")]
         public Object AddAnalyticItemConfig(AnalyticItemConfigInput analyticItemConfig)
@@ -120,11 +127,12 @@ namespace Vanrise.Analytic.Web.Controllers
                 case AnalyticItemType.MeasureExternalSource:
                     var measureExternalSourceAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticMeasureExternalSourceConfig>>(analyticItemConfig.AnalyticItemConfig);
                     return manager.AddAnalyticItemConfig(measureExternalSourceAnalyticItemConfigObj);
-                
+
 
             }
             return null;
         }
+
         [HttpPost]
         [Route("UpdateAnalyticItemConfig")]
         public Object UpdateAnalyticItemConfig(AnalyticItemConfigInput analyticItemConfig)
@@ -156,8 +164,9 @@ namespace Vanrise.Analytic.Web.Controllers
         public IEnumerable<Object> GetAnalyticItemConfigs(AnalyticItemConfigFilterInput input)
         {
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
-            return manager.GetAnalyticItemConfigs(input.TableIds, input.ItemType);
+            return manager.GetAnalyticItemConfigs(input.TableIds, input.ItemType, input.IncludeTechnicalItem);
         }
+
         [HttpPost]
         [Route("GetAnalyticDimensionEditorRuntime")]
         public AnalyticDimensionEditorRuntime GetAnalyticDimensionEditorRuntime(AnalyticDimensionEditorInput input)
@@ -165,18 +174,21 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
             return manager.GetAnalyticDimensionEditorRuntime(input);
         }
-
     }
+
     public class AnalyticItemConfigFilterInput
     {
         public List<Guid> TableIds { get; set; }
         public AnalyticItemType ItemType { get; set; }
+        public bool IncludeTechnicalItem { get; set; }
     }
+
     public class MeasureNamesInput
     {
         public Guid AnalyticTableId { get; set; }
         public List<Guid> MeasureIds { get; set; }
     }
+
     public class DimensionNameInput
     {
         public Guid AnalyticTableId { get; set; }
