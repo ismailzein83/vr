@@ -35,4 +35,25 @@ namespace Vanrise.BusinessProcess.Entities
 
         string EntityIdCode { get; }
     }
+
+    public abstract class VRWorkflowGetBEActivitySettings
+    {
+        public abstract string GenerateCode(IVRWorkflowGetBEActivitySettingsGenerateCodeContext context);
+    }
+
+    public interface IVRWorkflowGetBEActivitySettingsGenerateCodeContext
+    {
+        Guid EntityDefinitionId { get; }
+
+        string EntityIdCode { get; }
+    }
+    public abstract class VRWorkflowGetEntitiesBEActivitySettings
+    {
+        public abstract string GenerateCode(IVRWorkflowGetEntitiesBEActivitySettingsGenerateCodeContext context);
+    }
+
+    public interface IVRWorkflowGetEntitiesBEActivitySettingsGenerateCodeContext
+    {
+        Guid EntityDefinitionId { get; }
+    }
 }
