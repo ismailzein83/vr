@@ -86,9 +86,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             insertQuery.AddSelectGeneratedId();
 
             var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
-            notExistsCondition.EqualsCondition(COL_NameSuffix).Value(carrierAccount.NameSuffix);
             notExistsCondition.EqualsCondition(COL_CarrierProfileID).Value(carrierAccount.CarrierProfileId);
             notExistsCondition.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
+
+            if (!string.IsNullOrEmpty(carrierAccount.NameSuffix))
+                notExistsCondition.EqualsCondition(COL_NameSuffix).Value(carrierAccount.NameSuffix);
+
+            else
+                notExistsCondition.ConditionIfColumnNotNull(COL_NameSuffix).EqualsCondition(COL_NameSuffix).EmptyString();
 
             insertQuery.Column(COL_NameSuffix).Value(carrierAccount.NameSuffix);
             insertQuery.Column(COL_CarrierProfileID).Value(carrierAccount.CarrierProfileId);
@@ -133,9 +138,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.NotEqualsCondition(COL_ID).Value(carrierAccount.CarrierAccountId);
-            notExistsCondition.EqualsCondition(COL_NameSuffix).Value(carrierAccount.NameSuffix);
+          
             notExistsCondition.EqualsCondition(COL_CarrierProfileID).Value(carrierProfileId);
             notExistsCondition.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
+
+            if (!string.IsNullOrEmpty(carrierAccount.NameSuffix))
+                notExistsCondition.EqualsCondition(COL_NameSuffix).Value(carrierAccount.NameSuffix);
+
+            else
+                notExistsCondition.ConditionIfColumnNotNull(COL_NameSuffix).EqualsCondition(COL_NameSuffix).EmptyString();
 
             updateQuery.Column(COL_NameSuffix).Value(carrierAccount.NameSuffix);
 
