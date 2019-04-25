@@ -270,7 +270,7 @@
             };
 
             $scope.scopeModel.onCurrencyChanged = function (selectedCurrency) {
-                if (selectedCurrency != undefined && isCustomer) {
+                if (selectedCurrency != undefined && isCustomer()) {
                     if (currencySelectedDeferred != undefined)
                         currencySelectedDeferred.resolve();
                     else {
