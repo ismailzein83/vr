@@ -22,9 +22,12 @@
             DownloadBusinessEntityLog: DownloadBusinessEntityLog,
             ExecuteGenericBEBulkActions: ExecuteGenericBEBulkActions,
             GetGenericBETitleFieldValue: GetGenericBETitleFieldValue,
-            DoesUserHaveViewAccess: DoesUserHaveViewAccess
+            DoesUserHaveViewAccess: DoesUserHaveViewAccess,
+            //GetGenericEditorColumnsInfo: GetGenericEditorColumnsInfo
         };
-
+        //function GetGenericEditorColumnsInfo(input) {
+        //    return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericEditorColumnsInfo'), input);
+        //}
 
         function GetGenericBETitleFieldValue(businessEntityDefinitionId, genericBusinessEntityId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericBETitleFieldValue'), {
