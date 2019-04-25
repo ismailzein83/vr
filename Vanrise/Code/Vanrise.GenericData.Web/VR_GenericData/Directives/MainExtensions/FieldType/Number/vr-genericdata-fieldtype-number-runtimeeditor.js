@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_GenericData_FieldNumberDataTypeEnum', function (UtilsService, VR_GenericData_FieldNumberDataTypeEnum) {
 
     var directiveDefinitionObject = {
@@ -31,20 +32,12 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
 
     function numberCtor(ctrl, $scope, $attrs) {
         var fieldType;
-
         function initializeController() {
             $scope.scopeModel.value;
 
             if (ctrl.selectionmode != 'single') {
                 defineScopeForMultiModes();
             }
-
-            $scope.scopeModel.validateNumbers = function () {
-                if ($scope.scopeModel.value2 == undefined || $scope.scopeModel.value == undefined)
-                    return null;
-                if ($scope.scopeModel.value2 < $scope.scopeModel.value)
-                    return 'To Number must be greater than From Number';
-            };
 
             defineAPI();
         }
@@ -78,8 +71,6 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
             api.load = function (payload) {
                 $scope.scopeModel.values = [];
                 $scope.scopeModel.value = undefined;
-                $scope.scopeModel.value2 = undefined;
-                $scope.scopeModel.includeValues = true;
 
                 var fieldValue;
 
@@ -87,10 +78,6 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
                     $scope.scopeModel.label = payload.fieldTitle;
                     fieldType = payload.fieldType;
                     fieldValue = payload.fieldValue;
-
-                    $scope.scopeModel.filterType = payload.filterType;
-                    if ($scope.scopeModel.filterType != undefined && $scope.scopeModel.filterType.showSecondNumberField)
-                        $scope.scopeModel.label = "From Number";
                 }
 
                 if (fieldValue != undefined) {
@@ -105,9 +92,7 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
                         }
                     }
                     else {
-                        $scope.scopeModel.value = payload.fieldValue;
-                        $scope.scopeModel.value2 = payload.fieldValue2;
-                        $scope.scopeModel.includeValues = payload.includeValues;
+                        $scope.scopeModel.value = fieldValue;
                     }
                 }
             };
@@ -129,11 +114,7 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
                     }
                 }
                 else {
-                    retVal = {
-                        value: getValueAsNumber($scope.scopeModel.value),
-                        value2: getValueAsNumber($scope.scopeModel.value2),
-                        includeValues: $scope.scopeModel.includeValues
-                    };
+                    retVal = getValueAsNumber($scope.scopeModel.value);
                 }
 
                 return retVal;
@@ -187,21 +168,9 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_
         }
 
         function getSingleSelectionModeTemplate() {
-            var template = '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 2}}" haschildcolumns>'
-                + '<vr-validator validate="scopeModel.validateNumbers()">'
-                + '<vr-columns colnum="6">'
+            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
                 + '<vr-textbox type="number" label="{{scopeModel.label}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
-                + '</vr-columns>'
-                + '<vr-columns colnum="6">'
-                + '<vr-textbox ng-if="scopeModel.filterType.showSecondNumberField" type="number" label="To Number" value="scopeModel.value2" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
-                + '</vr-columns>'
-                + '</vr-validator>'
-                + '</vr-columns>'
-                + '<vr-columns colnum="2">'
-                + '<vr-switch ng-if="scopeModel.filterType.showIncludeValues" label="Inclusive" value="scopeModel.includeValues"></vr-switch>'
                 + '</vr-columns>';
-
-            return template;
         }
     }
 
