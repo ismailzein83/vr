@@ -18,7 +18,7 @@ namespace TestCallAnalysis.BP.Activities
     }
     #endregion
 
-    public class UpdateCorrelatedCDRs : DependentAsyncActivity<UpdateCorrelatedCDRsInput, UpdateCorrelatedCDRsOutput>
+    public class UpdateCorrelatedCDRs : DependentAsyncActivity<UpdateCorrelatedCDRsInput>
     {
         [RequiredArgument]
         public InOutArgument<MemoryQueue<CDRCorrelationBatch>> InsertedCorrelatedCDRs { get; set; }
@@ -31,7 +31,7 @@ namespace TestCallAnalysis.BP.Activities
             };
         }
 
-        protected override UpdateCorrelatedCDRsOutput DoWorkWithResult(UpdateCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(UpdateCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             CaseCDRManager caseCDRManager = new CaseCDRManager();
             CorrelatedCDRManager correlatedCDRManager = new CorrelatedCDRManager();
@@ -59,14 +59,13 @@ namespace TestCallAnalysis.BP.Activities
                             });
                         }
                     }
+                    else
+                    {
+                        hasItems = false;
+                    }
                 } while (!ShouldStop(handle) && hasItems);
             });
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Update 'CaseId' field in CorrelatedCDRs Table is done.");
-            return new UpdateCorrelatedCDRsOutput();
-        }
-
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, UpdateCorrelatedCDRsOutput result)
-        {
         }
     }
 }

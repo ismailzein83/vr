@@ -186,6 +186,10 @@ namespace TestCallAnalysis.BP.Activities
                             }
                         });
                     }
+                    else
+                    {
+                        hasItems = false;
+                    }
                 } while (!ShouldStop(handle) && hasItems);
             });
 

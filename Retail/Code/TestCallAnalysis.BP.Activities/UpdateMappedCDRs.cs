@@ -12,13 +12,9 @@ namespace TestCallAnalysis.BP.Activities
     {
         public MemoryQueue<Entities.UpdatedMappedCDRs> InputQueue { get; set; }
     }
-
-    public class UpdateMappedCDRsOutput
-    {
-    }
     #endregion
 
-    public class UpdateMappedCDRs : DependentAsyncActivity<UpdateMappedCDRsInput, UpdateMappedCDRsOutput>
+    public class UpdateMappedCDRs : DependentAsyncActivity<UpdateMappedCDRsInput>
     {
         [RequiredArgument]
         public InArgument<MemoryQueue<Entities.UpdatedMappedCDRs>> InputQueueIds { get; set; }
@@ -31,7 +27,7 @@ namespace TestCallAnalysis.BP.Activities
             };
         }
 
-        protected override UpdateMappedCDRsOutput DoWorkWithResult(UpdateMappedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(UpdateMappedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             MappedCDRManager mappedCDRManager = new MappedCDRManager();
 
@@ -53,16 +49,15 @@ namespace TestCallAnalysis.BP.Activities
                                     updatedMappedCDRs.UpdatedIds.Count, elapsedTime.ToString());
                             }
                         });
-                    };
+                    }
+                    else
+                    {
+                        hasItems = false;
+                    }
                 } while (!ShouldStop(handle) && hasItems);
             });
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Update 'IsCorrolated' field in MappedCDRs Table is done.");
-            return new UpdateMappedCDRsOutput();
         }
 
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, UpdateMappedCDRsOutput result)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

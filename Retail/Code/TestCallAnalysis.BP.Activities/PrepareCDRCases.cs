@@ -99,6 +99,10 @@ namespace TestCallAnalysis.BP.Activities
 
                         });
                     }
+                    else
+                    {
+                        hasItem = false;
+                    }
                 } while (!ShouldStop(handle) && hasItem);
             });
         }

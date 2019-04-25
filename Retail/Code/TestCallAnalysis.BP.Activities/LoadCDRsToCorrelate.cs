@@ -20,13 +20,10 @@ namespace TestCallAnalysis.BP.Activities
         public List<Entities.CDRCorrelationFilterGroup> CDRCorrelationFilterGroups { get; set; }
 
     }
-    public class LoadCDRsToCorrelateOutput
-    {
-    }
 
     #endregion
 
-    public sealed class LoadCDRsToCorrelate : BaseAsyncActivity<LoadCDRsToCorrelateInput, LoadCDRsToCorrelateOutput>
+    public sealed class LoadCDRsToCorrelate : BaseAsyncActivity<LoadCDRsToCorrelateInput>
     {
 
         [RequiredArgument]
@@ -51,7 +48,7 @@ namespace TestCallAnalysis.BP.Activities
             };
         }
 
-        protected override LoadCDRsToCorrelateOutput DoWorkWithResult(LoadCDRsToCorrelateInput inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(LoadCDRsToCorrelateInput inputArgument, AsyncActivityHandle handle)
         {
             int maximumOutputQueueSize = 20;
             long totalRecordsCount = 0;
@@ -93,11 +90,6 @@ namespace TestCallAnalysis.BP.Activities
             }
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", totalRecordsCount);
-            return new LoadCDRsToCorrelateOutput();
-        }
-
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadCDRsToCorrelateOutput result)
-        {
         }
     }
 }

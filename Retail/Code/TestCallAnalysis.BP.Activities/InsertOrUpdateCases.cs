@@ -14,13 +14,9 @@ namespace TestCallAnalysis.BP.Activities
     {
         public MemoryQueue<PrepareCDRCasesToInsert> InputQueue { get; set; }
     }
-
-    public class InsertCaseCDRsOutput
-    {
-    }
     #endregion
 
-    public class InsertOrUpdateCases : DependentAsyncActivity<InsertCaseCDRsInput, InsertCaseCDRsOutput>
+    public class InsertOrUpdateCases : DependentAsyncActivity<InsertCaseCDRsInput>
     {
         [RequiredArgument]
         public InOutArgument<MemoryQueue<PrepareCDRCasesToInsert>> InputQueueToInsert { get; set; }
@@ -40,7 +36,7 @@ namespace TestCallAnalysis.BP.Activities
             };
         }
 
-        protected override InsertCaseCDRsOutput DoWorkWithResult(InsertCaseCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(InsertCaseCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             CaseCDRManager caseCDRManager = new CaseCDRManager();
 
@@ -105,14 +101,13 @@ namespace TestCallAnalysis.BP.Activities
                             }
                         });
                     }
+                    else
+                    {
+                        hasItem = false;
+                    }
                 } while (!ShouldStop(handle) && hasItem);
             });
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert case CDRs is done.");
-            return new InsertCaseCDRsOutput();
-        }
-
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, InsertCaseCDRsOutput result)
-        {
         }
     }
 }

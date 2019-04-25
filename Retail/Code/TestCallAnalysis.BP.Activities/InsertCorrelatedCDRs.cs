@@ -14,13 +14,9 @@ namespace TestCallAnalysis.BP.Activities
     {
         public MemoryQueue<CDRCorrelationBatch> InputQueueToInsert { get; set; }
     }
-    public class InsertCorrelatedCDRsOutput
-    {
-    }
-
     #endregion
 
-    public class InsertCorrelatedCDRs : DependentAsyncActivity<InsertCorrelatedCDRsInput, InsertCorrelatedCDRsOutput>
+    public class InsertCorrelatedCDRs : DependentAsyncActivity<InsertCorrelatedCDRsInput>
     {
         [RequiredArgument]
         public InOutArgument<MemoryQueue<CDRCorrelationBatch>> InputQueueToInsert { get; set; }
@@ -33,7 +29,7 @@ namespace TestCallAnalysis.BP.Activities
             };
         }
    
-        protected override InsertCorrelatedCDRsOutput DoWorkWithResult(InsertCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(InsertCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             CorrelatedCDRManager correlatedCDRManager = new CorrelatedCDRManager();
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -52,15 +48,14 @@ namespace TestCallAnalysis.BP.Activities
                                 recordBatch.OutputRecordsToInsert.Count, elapsedTime.ToString());
                         });
                     }
+                    else
+                    {
+                        hasItem = false;
+                    }
 
                 } while (!ShouldStop(handle) && hasItem);
             });
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs is done.");
-            return new InsertCorrelatedCDRsOutput();
-        }
-
-        protected override void OnWorkComplete(AsyncCodeActivityContext context, InsertCorrelatedCDRsOutput result)
-        {
         }
     }
 }
