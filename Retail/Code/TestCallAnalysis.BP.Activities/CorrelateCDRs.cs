@@ -119,11 +119,10 @@ namespace TestCallAnalysis.BP.Activities
                                             {
                                                 TCAnalCorrelatedCDR correlatedCDR = new TCAnalCorrelatedCDR();
                                                 var rvd = updateMappedCDRs.MappedCDRsToUpdate.Find(x => x.MappedCDRId == rcvdcdr.MappedCDRId);
-
+                                                correlatedCDR = correlatedCDRManager.CorrelatedCDRMapper(rcvdcdr);
                                                 var generatedCDR = generatedCDRs.GetRecord(recievedCDR.Key);
                                                 if (generatedCDR != null && generatedCDR.Count > 0)
                                                 {
-                                                    correlatedCDR = correlatedCDRManager.CorrelatedCDRMapper(rcvdcdr);
                                                     foreach (var gnrtdCDR in generatedCDR)
                                                     {
                                                         var gntd = updateMappedCDRs.MappedCDRsToUpdate.Find(y => y.MappedCDRId == gnrtdCDR.MappedCDRId);
