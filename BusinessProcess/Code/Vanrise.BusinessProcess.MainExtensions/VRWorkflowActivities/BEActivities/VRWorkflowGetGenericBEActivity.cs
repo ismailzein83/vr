@@ -15,14 +15,16 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
             StringBuilder codeBuilder = new StringBuilder();
             codeBuilder.AppendLine("var genericBEManager = new Vanrise.GenericData.Business.GenericBusinessEntityManager();");
             codeBuilder.AppendLine($@"var genericBusinessEntity = genericBEManager.GetGenericBusinessEntity({context.EntityIdCode}, new Guid(""{context.EntityDefinitionId}""));");
+            codeBuilder.AppendLine("genericBusinessEntity.ThrowIfNull(\"genericBusinessEntity\");");
+            codeBuilder.AppendLine("genericBusinessEntity.FieldValues.ThrowIfNull(\"genericBusinessEntity.FieldValues\");");
+
             if (OutputItems != null && OutputItems.Count > 0)
             {
                 foreach (var outputItem in OutputItems)
                 {
                     if (outputItem.Value != null)
                     {
-                        codeBuilder.AppendLine($@"{outputItem.Value.GetCode(null)} = genericBusinessEntity.GetRecord({outputItem.FieldName});");
-
+                        codeBuilder.AppendLine($@"{outputItem.Value.GetCode(null)} = genericBusinessEntity.FieldValues.GetRecord({outputItem.FieldName});");
                     }
                 }
             }
