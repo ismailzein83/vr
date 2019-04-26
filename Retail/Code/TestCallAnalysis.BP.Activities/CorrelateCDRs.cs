@@ -134,21 +134,30 @@ namespace TestCallAnalysis.BP.Activities
                                                             updateMappedCDRs.UpdatedIds.Add(gnrtdCDR.MappedCDRId);
                                                             rvd.IsCorrelated = true;
                                                             gntd.IsCorrelated = true;
+                                                            correlatedCDR.GeneratedCalledNumber = gnrtdCDR.CalledNumber;
                                                             correlatedCDR.GeneratedCallingNumber = gnrtdCDR.CallingNumber;
+                                                            correlatedCDR.OrigGeneratedCalledNumber = gnrtdCDR.OrigCalledNumber;
+                                                            correlatedCDR.OrigGeneratedCallingNumber = gnrtdCDR.OrigCallingNumber;
                                                         }
                                                         else if (mappingNumberList != null && mappingNumberList.Count() >0 && mappingNumberList.Contains(rcvdcdr.CalledNumber))
                                                         {
                                                             updateMappedCDRs.UpdatedIds.Add(gnrtdCDR.MappedCDRId);
                                                             rvd.IsCorrelated = true;
                                                             gntd.IsCorrelated = true;
+                                                            correlatedCDR.GeneratedCalledNumber = gnrtdCDR.CalledNumber;
                                                             correlatedCDR.GeneratedCallingNumber = gnrtdCDR.CallingNumber;
+                                                            correlatedCDR.OrigGeneratedCalledNumber = gnrtdCDR.OrigCalledNumber;
+                                                            correlatedCDR.OrigGeneratedCallingNumber = gnrtdCDR.OrigCallingNumber;
                                                         }
                                                     }
                                                 }
 
                                                 if (!rvd.IsCorrelated && DateTime.Now.Subtract(rcvdcdr.CreatedTime) > timeOutMargin)
                                                 {
+                                                    correlatedCDR.GeneratedCalledNumber = null;
                                                     correlatedCDR.GeneratedCallingNumber = null;
+                                                    correlatedCDR.OrigGeneratedCalledNumber = null;
+                                                    correlatedCDR.OrigGeneratedCallingNumber = null;
                                                     rvd.IsCorrelated = true;
                                                 }
 
@@ -172,7 +181,7 @@ namespace TestCallAnalysis.BP.Activities
                                     // prepare cases
                                     foreach (var correlatedCDR in correlatedCDRs)
                                     {
-                                        if (correlatedCDR.ReceivedCallingNumberType != ReceivedCallingNumberType.International || String.IsNullOrEmpty(correlatedCDR.CalledNumber) || String.IsNullOrEmpty(correlatedCDR.GeneratedCallingNumber))
+                                        if (correlatedCDR.ReceivedCallingNumberType != ReceivedCallingNumberType.International || String.IsNullOrEmpty(correlatedCDR.ReceivedCalledNumber) || String.IsNullOrEmpty(correlatedCDR.GeneratedCallingNumber))
                                         {
                                             casesBatch.OutputRecordsToInsert.Add(correlatedCDR);
                                         }

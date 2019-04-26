@@ -13,12 +13,15 @@ namespace TestCallAnalysis.Entities
         public long CorrelatedCDRId { get; set; }
         public DateTime AttemptDateTime { get; set; }
         public decimal DurationInSeconds { get; set; }
-        public string CalledNumber { get; set; }
+        public string GeneratedCalledNumber { get; set; }
+        public string ReceivedCalledNumber { get; set; }
         public string GeneratedCallingNumber { get; set; }
         public string ReceivedCallingNumber { get; set; }
         public long OperatorID { get; set; }
-        public string OrigCallingNumber { get; set; }
-        public string OrigCalledNumber { get; set; }
+        public string OrigGeneratedCallingNumber { get; set; }
+        public string OrigGeneratedCalledNumber { get; set; }
+        public string OrigReceivedCallingNumber { get; set; }
+        public string OrigReceivedCalledNumber { get; set; }
         public ReceivedCallingNumberType? ReceivedCallingNumberType { get; set; }
         public long? ReceivedCallingNumberOperatorID { get; set; }
         public long? CaseId { get; set; }

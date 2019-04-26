@@ -181,7 +181,7 @@ namespace TestCallAnalysis.Business
             {
                 CaseId = correlatedCDR.CorrelatedCDRId,
                 CallingNumber = correlatedCDR.ReceivedCallingNumber,
-                CalledNumber = correlatedCDR.CalledNumber,
+                CalledNumber = correlatedCDR.ReceivedCalledNumber,
                 FirstAttempt = correlatedCDR.AttemptDateTime,
                 LastAttempt = correlatedCDR.AttemptDateTime,
                 NumberOfCDRs = 1,

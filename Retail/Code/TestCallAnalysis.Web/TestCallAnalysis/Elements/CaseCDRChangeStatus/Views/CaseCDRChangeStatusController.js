@@ -36,7 +36,7 @@
 
             $scope.scopeModel.saveStatus = function () {
                 $scope.scopeModel.isLoading = true;
-              
+
                 return VR_TestCallAnalysis_CaseCDRAPIService.UpdateCaseCDRStatus(buildCaseCDRToUpdate()).then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated('Case CDR Table', response, 'Name')) {
                         if ($scope.onGenericBEUpdated != undefined)
@@ -78,10 +78,7 @@
             }
 
             function setTitle() {
-                if (caseCDREntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(caseCDREntity.CallingNumber, 'Change Status Editor');
-                else
-                    $scope.title = UtilsService.buildTitleForAddEditor('Change Status Editor');
+                $scope.title ='Change Status';
             }
 
         }
@@ -103,7 +100,7 @@
                 UtilsService.waitMultiplePromises([statusDefinitionReadyDeferred.promise]).then(function () {
                     var statusDefinitionPayload = {
                         filter: {
-                            BusinessEntityDefinitionId: '36D87065-A854-4A56-AD28-CCADB74B31EF',  
+                            BusinessEntityDefinitionId: '36D87065-A854-4A56-AD28-CCADB74B31EF',
                             Filters: [{
                                 $type: "TestCallAnalysis.Business.CaseCDRChangeStatusFilter ,TestCallAnalysis.Business",
                                 StatusDefinitionId: caseCDREntity.StatusId
