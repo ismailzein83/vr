@@ -24,29 +24,64 @@ app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_N
             var filterObj;
             var dataRecordTypeField;
 
+            var onFilterSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+
             var numberFilterEditorAPI;
             var numberFilterReadyDeferred = UtilsService.createPromiseDeferred();
-            var onNumberFilterConditionChangedDeferred;
+
+            var number2FilterEditorAPI;
+            var number2FilterReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+                $scope.scopeModel = {};
+                $scope.filters = UtilsService.getArrayEnum(VR_GenericData_NumberRecordFilterOperatorEnum);
 
                 $scope.onNumberFilterEditorReady = function (api) {
                     numberFilterEditorAPI = api;
                     numberFilterReadyDeferred.resolve();
                 };
 
+                $scope.onNumber2FilterEditorReady = function (api) {
+                    number2FilterEditorAPI = api;
+                    number2FilterReadyDeferred.resolve();
+                };
+
                 $scope.onFilterSelectionChanged = function (selectedValue) {
                     if (selectedValue == undefined)
                         return;
 
-                    var payload = {
-                        filterType: selectedValue
-                    };
+                    if (onFilterSelectionChangedDeferred != undefined) {
+                        onFilterSelectionChangedDeferred.resolve();
+                    }
+                    else if ($scope.selectedFilter.showSecondNumberField) {
+                        numberFilterEditorAPI.setLabel("From Number");
 
-                    var setLoader = function (value) {
-                        $scope.isLoadingDirective = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, numberFilterEditorAPI, payload, setLoader, onNumberFilterConditionChangedDeferred);
+                        var payload = {
+                            fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Type : null,
+                            fieldTitle: 'To Number'
+                        };
+                        var setLoader = function (value) {
+                            setTimeout(function () {
+                                $scope.isNumber2FilterEditorLoading = value;
+                            }, 0);
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, number2FilterEditorAPI, payload, setLoader);
+                    }
+                    else {
+                        numberFilterEditorAPI.setLabel("");
+                    }
+                };
+
+                $scope.validateNumbers = function () {
+
+                    if (numberFilterEditorAPI == undefined || number2FilterEditorAPI == undefined)
+                        return null;
+
+                    if ($scope.selectedFilter == undefined || !$scope.selectedFilter.showSecondNumberField)
+                        return null;
+
+                    if (numberFilterEditorAPI.getData() > number2FilterEditorAPI.getData())
+                        return 'To Number must be greater than From Number';
                 };
 
                 defineAPI();
@@ -56,56 +91,65 @@ app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_N
                 var api = {};
 
                 api.load = function (payload) {
-                    $scope.filters = UtilsService.getArrayEnum(VR_GenericData_NumberRecordFilterOperatorEnum);
+                    $scope.scopeModel.includeValues = true;
                     $scope.selectedFilter = $scope.filters[0];
 
-                    if (payload && payload.filterObj) {
+                    if (payload) {
                         filterObj = payload.filterObj;
                         dataRecordTypeField = payload.dataRecordTypeField;
-                        $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
-                        onNumberFilterConditionChangedDeferred = UtilsService.createPromiseDeferred();
 
-                        var promises = [];
+                        if (filterObj) {
+                            $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, filterObj.CompareOperator, 'value');
+                            $scope.scopeModel.includeValues = filterObj.IncludeValues;
+                        }
 
                         var numberFilterLoadDeferred = UtilsService.createPromiseDeferred();
+                        var number2FilterLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        UtilsService.waitMultiplePromises([numberFilterReadyDeferred.promise, onNumberFilterConditionChangedDeferred.promise]).then(function () {
-                            onNumberFilterConditionChangedDeferred = undefined;
+                        UtilsService.waitMultiplePromises([numberFilterReadyDeferred.promise, number2FilterReadyDeferred.promise, onFilterSelectionChangedDeferred.promise]).then(function () {
+                            onFilterSelectionChangedDeferred = undefined;
 
-                            var numberFilterDirectivePayload = { filterType: $scope.selectedFilter };
-                            if (payload && payload.filterObj) {
-                                numberFilterDirectivePayload.fieldType = dataRecordTypeField != undefined ? dataRecordTypeField.Type : null;
-                                numberFilterDirectivePayload.fieldValue = filterObj != undefined ? filterObj.Value : null;
-                                numberFilterDirectivePayload.fieldValue2 = filterObj != undefined ? filterObj.Value2 : null;
-                                numberFilterDirectivePayload.includeValues = filterObj != undefined ? filterObj.IncludeValues : null;
-                            }
-                            VRUIUtilsService.callDirectiveLoad(numberFilterEditorAPI, numberFilterDirectivePayload, numberFilterLoadDeferred);
+                            numberFilterReadyDeferred.promise.then(function () {
+
+                                var numberFilterPayload = {
+                                    fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Type : null,
+                                    fieldValue: filterObj != undefined ? filterObj.Value : undefined,
+                                    fieldTitle: $scope.selectedFilter.showSecondNumberField ? 'From Number' : ''
+                                };
+                                VRUIUtilsService.callDirectiveLoad(numberFilterEditorAPI, numberFilterPayload, numberFilterLoadDeferred);
+                            });
+
+                            number2FilterReadyDeferred.promise.then(function () {
+
+                                var number2FilterPayload = {
+                                    fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Type : null,
+                                    fieldValue: filterObj != undefined ? filterObj.Value2 : undefined,
+                                    fieldTitle: 'To Number'
+                                };
+                                VRUIUtilsService.callDirectiveLoad(number2FilterEditorAPI, number2FilterPayload, number2FilterLoadDeferred);
+                            });
                         });
 
-                        promises.push(numberFilterLoadDeferred.promise);
-
-                        return UtilsService.waitMultiplePromises(promises);
+                        return UtilsService.waitMultiplePromises([numberFilterLoadDeferred.promise, number2FilterLoadDeferred.promise]);
                     }
                 };
 
                 api.getData = function () {
                     var data = {
                         $type: "Vanrise.GenericData.Entities.NumberRecordFilter, Vanrise.GenericData.Entities",
-                        CompareOperator: $scope.selectedFilter.value
+                        CompareOperator: $scope.selectedFilter.value,
+                        Value: numberFilterEditorAPI.getData(),
+                        Value2: $scope.selectedFilter.showSecondNumberField ? number2FilterEditorAPI.getData() : undefined,
+                        IncludeValues: $scope.scopeModel.includeValues
                     };
-
-                    var numberFilterValues = numberFilterEditorAPI.getData();
-                    if (numberFilterValues != undefined) {
-                        data.Value = numberFilterValues.value;
-                        data.Value2 = numberFilterValues.value2;
-                        data.IncludeValues = numberFilterValues.includeValues;
-                    }
-
                     return data;
                 };
 
                 api.getExpression = function () {
-                    return $scope.selectedFilter.description + ' ' + numberFilterEditorA.getData();
+                    if ($scope.selectedFilter.showSecondNumberField)
+                        return $scope.selectedFilter.description + ' ' + numberFilterEditorAPI.getData() + ' and ' + number2FilterEditorAPI.getData();
+                    else
+                        return $scope.selectedFilter.description + ' ' + numberFilterEditorAPI.getData();
                 };
 
                 if (ctrl.onReady != null)

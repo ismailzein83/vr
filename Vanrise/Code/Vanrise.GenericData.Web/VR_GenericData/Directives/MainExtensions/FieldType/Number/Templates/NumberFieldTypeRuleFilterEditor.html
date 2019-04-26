@@ -1,7 +1,25 @@
 ﻿<vr-columns width="normal">
-    <vr-select datasource="filters" selectedvalues="selectedFilter" onselectionchanged="onFilterSelectionChanged"
-               datatextfield="description" datavaluefield="value" label="Condition" isrequired="true" hideremoveicon>
+    <vr-select datasource="filters"
+               onselectionchanged="onFilterSelectionChanged"
+               selectedvalues="selectedFilter"
+               datatextfield="description"
+               datavaluefield="value"
+               label="Condition" isrequired="true" hideremoveicon>
     </vr-select>
 </vr-columns>
 
-<vr-genericdata-fieldtype-number-runtimeeditor on-ready="onNumberFilterEditorReady" isrequired="true" selectionmode="single" normal-col-num="4"></vr-genericdata-fieldtype-number-runtimeeditor>
+<span vr-loader="isNumberFilterEditorLoading">
+    <vr-genericdata-fieldtype-number-runtimeeditor on-ready="onNumberFilterEditorReady" selectionmode="single"
+                                                   isrequired="true" normal-col-num="4" customvalidate="validateNumbers">
+    </vr-genericdata-fieldtype-number-runtimeeditor>
+</span>
+
+<span ng-show="selectedFilter.showSecondNumberField" vr-loader="isNumber2FilterEditorLoading">
+    <vr-genericdata-fieldtype-number-runtimeeditor on-ready="onNumber2FilterEditorReady" selectionmode="single"
+                                                   isrequired="selectedFilter.showSecondNumberField" normal-col-num="4" customvalidate="validateNumbers">
+    </vr-genericdata-fieldtype-number-runtimeeditor>
+</span>
+
+<vr-columns colnum="2" ng-if="selectedFilter.showIncludeValues">
+    <vr-switch label="Inclusive" value="scopeModel.includeValues"></vr-switch>
+</vr-columns>
