@@ -257,8 +257,12 @@
     <Content Include="Retail_BusinessEntity\Constant\NetworkTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\TrafficTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\WebServiceRequestTypeEnum.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\retail-be-accountbalancefinancialaccountpartnotificationtype-searcheditor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\retail-be-accountbalancefinancialaccountpartnotificationtype-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\retail-be-accountbalancenotificationtype-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\retail-be-accountbalancenotificationtype-searcheditor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\Templates\AccountBalanceFinancialAccountPartNotificationTypeSearchEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\Templates\AccountBalanceFinancialAccountPartNotificationTypeSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationTypeSearchEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationTypeSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\AccountConditionItemEditorController.js" />
