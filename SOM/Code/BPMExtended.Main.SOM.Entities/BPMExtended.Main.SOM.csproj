@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Billing\ServiceResponse\ContractAvailableServiceOutput.cs" />
     <Compile Include="Billing\ServiceResponse\Invoices.cs" />
     <Compile Include="Billing\ServiceResponse\Payment.cs" />
     <Compile Include="Billing\ServiceResponse\CustomerContact.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Billing\ServiceResponse\ServiceDefinition.cs" />
     <Compile Include="Billing\ServiceResponse\CustomerCategory.cs" />
     <Compile Include="Billing\ServiceResponse\RatePlan.cs" />
+    <Compile Include="Billing\WorkflowInput\ContractAvailableServicesInput.cs" />
     <Compile Include="Inventory\ServiceResponse\Device.cs" />
     <Compile Include="Inventory\ServiceResponse\DeviceInfo.cs" />
     <Compile Include="Inventory\ServiceResponse\DPPortInfo.cs" />

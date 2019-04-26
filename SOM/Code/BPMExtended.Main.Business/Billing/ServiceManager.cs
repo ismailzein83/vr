@@ -92,7 +92,7 @@ namespace BPMExtended.Main.Business
             excludedPackages.Add(packages.Core);
             excludedPackages.Add(packages.Telephony);
 
-            var services = GetServicesDetailByRateplanAndPackages(ratePlanId, excludedPackages);
+            var services = GetServicesDetailByRateplanAndPackages(ratePlanId, switchId, excludedPackages);
             return services;
         }
         public List<ServiceDetail> GetServicesDetailByRateplanAndPackage(string rateplanId, List<string> packagesIds)
@@ -117,12 +117,13 @@ namespace BPMExtended.Main.Business
             return servicesDetailItems;
         }
 
-        public List<ServiceDetail> GetServicesDetailByRateplanAndPackages(string rateplanId, List<string> packages)
+        public List<ServiceDetail> GetServicesDetailByRateplanAndPackages(string rateplanId,string switchId, List<string> packages)
         {
 
             var multiplePackagesServiceInput = new MultiplePackagesServiceInput()
             {
                 RatePlanId = rateplanId,
+                SwitchId = switchId,
                 ExcludedPackages = packages
             };
 
@@ -246,6 +247,62 @@ namespace BPMExtended.Main.Business
         }
 
 
+        public List<ContractAvailableServiceOutput> GetContractAvailableServices(Guid requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            List<ContractAvailableServiceOutput> items = new List<ContractAvailableServiceOutput>();
+            List<string> packagesIds = new List<string>();
+
+
+            var businessEntityManager = new BusinessEntityManager();
+            Packages packages = businessEntityManager.GetServicePackagesEntity();
+            packagesIds.Add(packages.Core);
+            packagesIds.Add(packages.Telephony);
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceAdditionRequest");
+            esq.AddColumn("StPathId");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StRatePlanId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var pathId = entities[0].GetColumnValue("StPathId");
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var ratePlanId = entities[0].GetColumnValue("StRatePlanId");
+
+                var somRequestInput = new ContractAvailableServicesInput()
+                {
+                    ContractId = contractId.ToString(),
+                    RatePlanId = "TM005",//ratePlanId.ToString(),
+                    LinePathId = "184",//pathId.ToString(),
+                    ExcludedPackages = packagesIds
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    items = client.Post<ContractAvailableServicesInput, List<ContractAvailableServiceOutput>>("api/SOM.ST/Billing/GetContractAvailableServices", somRequestInput);
+                }
+
+            }
+
+            //Get special services from service definition catalog 
+
+
+
+            //filter the ContractAvailableServices (ContractAvailableServices - special services)
+
+            return items;
+
+        }
 
         #endregion
 

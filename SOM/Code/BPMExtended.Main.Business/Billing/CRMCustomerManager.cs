@@ -2110,7 +2110,6 @@ namespace BPMExtended.Main.Business
             string sequenceNumber=null;
 
 
-            //Call Categories catalog and check the 'IsNormal' field if true => no need for attachments (optional), if false => attachment is required 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
             esq.AddColumn("Id");
             esq.AddColumn("StSequenceNumber");

@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BPMExtended.Main.Entities
+namespace BPMExtended.Main.SOMAPI
 {
-    public class MultiplePackagesServiceInput
+    public class ContractAvailableServicesInput
     {
         public string RatePlanId { get; set; }
-        public string SwitchId { get; set; }
+        public string ContractId { get; set; }
+        public string LinePathId { get; set; }
         public List<string> ExcludedPackages { get; set; }
-
     }
-
 }
