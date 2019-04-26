@@ -9,7 +9,10 @@ namespace TOne.WhS.Invoice.Entities
     public class CustomerInvoiceDealItemDetails
     {
         public long? SaleDealZoneGroupNb { get; set; }
-        public int? SaleDealTierNb { get; set; }
+		public string SaleDealZoneGroupNbDescription { get; set; }
+		public string SaleDealZoneGroupName { get; set; }
+		public string SaleDealZoneGroupNameDescription { get; set; }
+		public int? SaleDealTierNb { get; set; }
         public int? SaleDeal { get; set; }
 		public string SaleDealDescription { get; set; }
 		public decimal? SaleDealRateTierNb { get; set; }

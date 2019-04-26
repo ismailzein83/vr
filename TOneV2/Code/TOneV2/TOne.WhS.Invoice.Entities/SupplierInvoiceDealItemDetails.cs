@@ -9,7 +9,10 @@ namespace TOne.WhS.Invoice.Entities
     public class SupplierInvoiceDealItemDetails
     {
         public long? CostDealZoneGroupNb { get; set; }
-        public int? CostDealTierNb { get; set; }
+		public string CostDealZoneGroupNbDescription { get; set; }
+		public string CostDealZoneGroupName { get; set; }
+		public string CostDealZoneGroupNameDescription { get; set; }
+		public int? CostDealTierNb { get; set; }
         public int? CostDeal { get; set; }
 		public string  CostDealDescription { get; set; }
 		public decimal? CostDealRateTierNb { get; set; }

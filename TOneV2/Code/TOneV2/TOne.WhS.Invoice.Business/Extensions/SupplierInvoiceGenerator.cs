@@ -121,6 +121,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 				supplierInvoiceDetails.TotalSMSOriginalAmountAfterCommission = supplierInvoiceDetails.SMSOriginalAmountAfterCommission;
 
 				supplierInvoiceDetails.Commission = resolvedPayload.Commission;
+				//supplierInvoiceDetails.Adjustment = resolvedPayload.Adjustment;
 				supplierInvoiceDetails.CommissionType = resolvedPayload.CommissionType;
 				supplierInvoiceDetails.Offset = resolvedPayload.Offset;
                 supplierInvoiceDetails.TotalVoiceAmountBeforeTax = supplierInvoiceDetails.TotalAmountAfterCommission;
@@ -241,6 +242,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 
                     supplierInvoiceDetails.TotalInvoiceAmount = supplierInvoiceDetails.TotalAmountAfterCommission + supplierInvoiceDetails.TotalReccurringChargesAfterTax + supplierInvoiceDetails.TotalSMSAmountAfterCommission + supplierInvoiceDetails.TotalDealAmountAfterTax;
+					//if (supplierInvoiceDetails.Adjustment.HasValue)
+					//	supplierInvoiceDetails.TotalInvoiceAmount += supplierInvoiceDetails.Adjustment.Value;
 					supplierInvoiceDetails.TotalInvoiceAmountBeforeTax += supplierInvoiceDetails.TotalReccurringCharges;
 
                     if (!financialAccountInvoiceType.IgnoreFromBalance)
@@ -822,7 +825,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                                     originalAmountAfterTax += ((originalAmount * Convert.ToDecimal(taxItemDetail.Value)) / 100);
                                                 }
                                             }
-                                            dealItemSetNames.Add(new SupplierInvoiceDealItemDetails()
+											dealItemSetNames.Add(new SupplierInvoiceDealItemDetails()
 											{
 												OriginalAmount = originalAmount,
 												Duration = tier.UpToVolume.Value - (dealItemSet.Duration / 60),
@@ -830,6 +833,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 												CostDeal = dealItemSet.CostDeal,
 												CostDealRateTierNb = dealItemSet.CostDealRateTierNb,
 												CostDealTierNb = dealItemSet.CostDealTierNb,
+												CostDealZoneGroupName = dealGroup.Name,
 												CostDealZoneGroupNb = dealItemSet.CostDealZoneGroupNb,
 												CurrencyId = dealItemSet.CurrencyId,
 												Amount = _currencyExchangeRateManager.ConvertValueToCurrency(originalAmount, dealItemSet.CurrencyId, currencyId, issueDate),
@@ -858,6 +862,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 											CostDealRateTierNb = 1,
 											CostDealTierNb = 1,
 											CostDealZoneGroupNb = dealGroup.ZoneGroupNumber,
+											CostDealZoneGroupName = dealGroup.Name,
 											CurrencyId = effectiveDealSettings.CurrencyId,
 											Amount = _currencyExchangeRateManager.ConvertValueToCurrency(expectedAmount, effectiveDealSettings.CurrencyId, currencyId, issueDate),
 											ToDate = effectiveDealSettings.EEDToStore.Value,

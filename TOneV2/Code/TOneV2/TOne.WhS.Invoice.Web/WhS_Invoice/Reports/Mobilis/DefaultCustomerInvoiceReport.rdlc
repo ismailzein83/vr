@@ -1131,6 +1131,9 @@ La facture doit être payée avant </Value>
         <Height>1.69653cm</Height>
         <Width>19.52544cm</Width>
         <ZIndex>9</ZIndex>
+        <Visibility>
+          <Hidden>=Parameters!NoVoice.Value and Parameters!NoSMS.Value and Parameters!NoRecurringCharges.Value and Parameters!NoDeals.Value</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
