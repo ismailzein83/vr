@@ -40,6 +40,7 @@ namespace Vanrise.GenericData.Business
         }
         public override string WorkFlowAddBEActivityEditor { get { return "businessprocess-vr-workflowactivity-addbusinessentity-settings"; } }
         public override string WorkFlowUpdateBEActivityEditor { get { return "businessprocess-vr-workflowactivity-updatebusinessentity-settings"; } }
+        public override string WorkFlowGetBEActivityEditor { get { return "businessprocess-vr-workflowactivity-getbusinessentity-settings"; } }
 
         public override Dictionary<string, DataRecordField> TryGetRecordTypeFields(IBEDefinitionSettingsTryGetRecordTypeFieldsContext context)
         {
