@@ -160,6 +160,7 @@
   <ItemGroup>
     <Compile Include="AccountActionManager.cs" />
     <Compile Include="AccountBalanceManager.cs" />
+    <Compile Include="AccountBalanceNotification\RetailAccountBalanceFinancialAccountPartNotificationTypeSettings.cs" />
     <Compile Include="AccountBalanceNotification\RetailAccountBalanceNotificationExtendedQuery.cs" />
     <Compile Include="AccountBalanceNotification\RetailAccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="AccountGenericFields\AccountIdGenericField.cs" />
