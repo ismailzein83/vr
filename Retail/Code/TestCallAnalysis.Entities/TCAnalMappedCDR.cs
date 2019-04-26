@@ -24,7 +24,7 @@ namespace TestCallAnalysis.Entities
         public string OrigCalledNumber { get; set; }
         public bool IsCorrelated { get; set; }
         public int? CallingNumberType { get; set; }
-        public int CalledNumberType { get; set; }
+        public int? CalledNumberType { get; set; }
         public DateTime CreatedTime { get; set; }
     }
 }
