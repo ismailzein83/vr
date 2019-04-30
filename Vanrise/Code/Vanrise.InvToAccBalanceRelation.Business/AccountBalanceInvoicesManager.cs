@@ -17,10 +17,7 @@ namespace Vanrise.InvToAccBalanceRelation.Business
     {
         public Vanrise.Entities.IDataRetrievalResult<AccountInvoiceDetail> GetFilteredAccountInvoices(Vanrise.Entities.DataRetrievalInput<AccountInvoicesQuery> input)
         {
-            Vanrise.Entities.BigResult<AccountInvoiceDetail> finalResults = new Vanrise.Entities.BigResult<AccountInvoiceDetail>
-            {
-                ResultKey = input.ResultKey,
-            };
+            List<AccountInvoiceDetail> accountInvoiceDetails = new List<AccountInvoiceDetail>();
             AccountTypeManager accountTypeManager = new AccountTypeManager();
             var accountTypeSettings = accountTypeManager.GetAccountTypeSettings(input.Query.AccountTypeId);
             if (accountTypeSettings != null && accountTypeSettings.InvToAccBalanceRelationId.HasValue)
@@ -45,7 +42,6 @@ namespace Vanrise.InvToAccBalanceRelation.Business
                             PartnerId = balanceInvoiceAccount.PartnerId
                         });
                     }
-                    List<AccountInvoiceDetail> accountInvoiceDetails = new List<AccountInvoiceDetail>();
 
                     var unpaidInvoices = invoiceManager.GetUnPaidPartnerInvoices(partnerInvoiceTypes);
                     if (unpaidInvoices != null)
@@ -72,14 +68,9 @@ namespace Vanrise.InvToAccBalanceRelation.Business
                                 }));
                         }
                     }
-                   
-                    finalResults.Data = accountInvoiceDetails;
-                    finalResults.TotalCount = accountInvoiceDetails.Count;
                 }
             }
-
-
-            return finalResults;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, accountInvoiceDetails.ToBigResult(input, (item)=> { return true; }));
         }
         private AccountInvoiceDetail AccountInvoiceDetailMapper(AccountInvoice accountInvoice)
         {
