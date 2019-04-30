@@ -460,6 +460,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountSubViewDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountSubViewRuntimeSearchTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AssignAccountManagerAccountActionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountPackageProvider\retail-be-genericbe-accountpackageprovider.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountPackageProvider\Templates\AccountPackageProviderTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\ICX\retail-be-icx-operatorwithlocal-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\InvoiceDataSourceSettings\retail-be-account-datasourcesettings-operatorbankdetails.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\InvoiceDataSourceSettings\Templates\OperatorBankDetailsTemplate.html" />
