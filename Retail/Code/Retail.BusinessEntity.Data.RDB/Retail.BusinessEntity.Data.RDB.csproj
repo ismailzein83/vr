@@ -57,7 +57,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountPackageDataManager.cs" />
+    <Compile Include="ChargingPolicyDataManager.cs" />
+    <Compile Include="PackageDataManager.cs" />
+    <Compile Include="ProductDataManager.cs" />
+    <Compile Include="ProductFamilyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecurringChargeDefinitionDataManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Data\Retail.BusinessEntity.Data.csproj">
+      <Project>{45bee1a0-30fd-405d-b476-c3b2d0b2a21f}</Project>
+      <Name>Retail.BusinessEntity.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Web\Retail.BusinessEntity.Web.csproj">
+      <Project>{47686853-e160-48ec-99bc-b81088ad84e3}</Project>
+      <Name>Retail.BusinessEntity.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
