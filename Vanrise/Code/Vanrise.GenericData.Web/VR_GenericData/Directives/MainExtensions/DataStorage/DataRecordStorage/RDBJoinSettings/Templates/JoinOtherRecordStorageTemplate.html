@@ -1,0 +1,59 @@
+﻿
+<!--<vr-columns colnum="4">
+    <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorReady" 
+                                               isrequired="true" 
+                                               selectedvalues="scopeModel.selectedDataRecordStorages"
+                                               onselectionchanged ="scopeModel.onDataRecordStorageSelectionChanged">
+    </vr-genericdata-datarecordstorage-selector>
+</vr-columns>
+
+<vr-columns colnum="4">
+    <vr-select on-ready="scopeModel.onJoinTypeSelectorReady"
+               datatextfield="description"
+               datavaluefield="value"
+               isrequired="true"
+               label="Join Type"
+               datasource="scopeModel.joinTypes"
+               selectedvalues="scopeModel.selectedJoinType">
+    </vr-select>
+</vr-columns>
+
+<span vr-loader="scopeModel.isGridLoading">
+    <vr-columns width="fullrow">
+        <vr-button type="Add" data-onclick="scopeModel.addJoinCondition" standalone></vr-button>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-datagrid on-ready="scopeModel.onJoinConditionsGridReady"
+                     datasource="scopeModel.joinConditions"
+                     ondeleterow="scopeModel.removeJoinConditions"
+                     hidegridmenu>
+            <vr-datagridcolumn headertext="'Source Join Name'" widthfactor="4" disablesorting>
+                <vr-select on-ready="dataItem.onSourceStorageJoinNameSelectorReady"
+                           datasource="dataItem.sourceStorageJoinNames"
+                           datatextfield="RDBRecordStorageJoinName"
+                           datavaluefield="RDBRecordStorageJoinName"
+                           selectedvalues="dataItem.selectedDependentJoins"
+                           isrequired="true"
+                           onselectionchanged ="dataItem.onSourceStorageJoinNameSelectionChanged">
+                </vr-select>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Source Field Name'" widthfactor="4" disablesorting>
+                <vr-genericdata-datarecordtypefields-selector ng-if="dataItem.selectedDependentJoins == undefined"
+                                                              on-ready="dataItem.onSourceMainFieldSelectorDirectiveReady"
+                                                              isrequired="true" 
+                                                              hidelabel
+                                                              hideremoveicon>
+                </vr-genericdata-datarecordtypefields-selector>
+                <vr-directivewrapper ng-if="dataItem.selectedDependentJoins != undefined"
+                                     directive="dataItem.storageFieldEditor"
+                                     on-ready="dataItem.onSourceStorageFieldNameDirectiveReady"
+                                     isrequired="true">
+                </vr-directivewrapper>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Destination Field Name'" widthfactor="4" disablesorting>
+
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</span>-->
+

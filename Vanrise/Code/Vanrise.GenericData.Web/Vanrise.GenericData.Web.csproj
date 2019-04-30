@@ -211,6 +211,7 @@
     <Content Include="VR_GenericData\Constants\MappingDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\OrderDirectionEnum.js" />
     <Content Include="VR_GenericData\Constants\OrderTypeEnum.js" />
+    <Content Include="VR_GenericData\Constants\RDBJoinTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\RecordFilterOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\DateTimeDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\IntervalTypeEnum.js" />
@@ -242,6 +243,11 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionGroupTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageRDBJoinsTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\RDBDataRecordStorageJoinSettingsSelectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-expressionfields.js" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-joins.js" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdbjoinsettings-selective.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\GridActionGroupDefintionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionGridTemplate.html" />
@@ -494,6 +500,14 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionDefinition\vr-genericdata-datarecord-vractiondefinition-extendedsettings-sendemail.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionRuntime\Templates\SendEmail.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionRuntime\vr-genericdata-datarecord-vraction-sendemail.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\Templates\CustomCodeJoinStorageFieldEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\Templates\CustomCodeJoinTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\Templates\JoinOtherRecordStorageFieldEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\Templates\JoinOtherRecordStorageTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\vr-genericadata-rdbdatarecordstoragesettings-customcodejoin-storagefieldeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\vr-genericadata-rdbdatarecordstoragesettings-customcodejoin.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\vr-genericadata-rdbdatarecordstoragesettings-joinotherrecordstorage-storagefieldeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\vr-genericadata-rdbdatarecordstoragesettings-joinotherrecordstorage.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageRDBSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageSettingsBusinessObjectTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageSettingsRestAPITemplate.html" />
@@ -890,6 +904,8 @@
     <Content Include="VR_GenericData\Views\DataRecordFieldChoice\DataRecordFieldChoiceManagementController.js" />
     <Content Include="VR_GenericData\Views\DataRecordSource\DataRecordSourceEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordSource\DataRecordSourceEditorController.js" />
+    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageRDBJoinsEditor.html" />
+    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageRDBJoinsManagementController.js" />
     <Content Include="VR_GenericData\Views\DataRecordTypeField\DataRecordTypeFieldFilterEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordTypeField\DataRecordTypeFieldFilterEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageManagementController.js" />
