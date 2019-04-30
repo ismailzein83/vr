@@ -27,7 +27,7 @@ namespace BPMExtended.Main.Business
             var telephonyContractEntity = new TelephonyContractEntity();
             using (SOMClient client = new SOMClient())
             {
-                var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetContractDetails?ContractId={0}", contractId));
+                var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetTelephonyContract?ContractId={0}", contractId));
                 telephonyContractEntity = CustomerContractToEntity(item);
             }
             return telephonyContractEntity;
@@ -40,7 +40,7 @@ namespace BPMExtended.Main.Business
             using (SOMClient client = new SOMClient())
             {
                 //TODO: ask rodi to return the minimal information in the below call
-                var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetContractDetails?ContractId={0}", contractId));
+                var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetTelephonyContract?ContractId={0}", contractId));
                 contractInfo = CustomerContractToContractInfo(item);
             }
             return contractInfo;
@@ -53,20 +53,22 @@ namespace BPMExtended.Main.Business
             using (SOMClient client = new SOMClient())
             {
                 //TODO: ask rodi to return the minimal information in the below call
-                var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetContractDetails?ContractId={0}", contractId));
+                var item = client.Get<CustomerContract>(String.Format("api/SOM.ST/Billing/GetTelephonyContract?ContractId={0}", contractId));
                 contractInfo = CustomerContractToTelephonyContractInfo(item);
             }
             return contractInfo;
         }
 
-        public List<TelephonyContractDetail> GetTelephonyContracts(string customerId)
+        public List<TelephonyContractDetail> GetTelephonyContracts(string customerId) // MYA: Uncomment and handle object client side
         {
             var telephonyContractDetails = new List<TelephonyContractDetail>();
             using (SOMClient client = new SOMClient())
             {
-                var items = client.Get<List<CustomerContract>>(String.Format("api/SOM.ST/Billing/GetCustomerTelephonyContracts?CustomerId={0}", customerId));
+               // var items = client.Get<List<TelephonyContract>>(String.Format("api/SOM.ST/Billing/GetCustomerTelephonyContracts?CustomerId={0}", customerId));
+               var items = client.Get<List<CustomerContract>>(String.Format("api/SOM.ST/Billing/GetCustomerTelephonyContracts?CustomerId={0}", customerId));
                 foreach (var item in items)
                 {
+                   // var telephonyContractDetailItem = TelephonyContractToDetail(item);
                     var telephonyContractDetailItem = CustomerContractToDetail(item);
                     telephonyContractDetails.Add(telephonyContractDetailItem);
                 }
@@ -650,6 +652,18 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        private TelephonyContractDetail TelephonyContractToDetail(TelephonyContract telephonyContract)
+        {
+            return new TelephonyContractDetail()
+            {
+                ContractId = telephonyContract.Id,
+                RatePlanName = telephonyContract.RateplanName,
+                PhoneNumber = telephonyContract.PhoneNumber,
+                ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)telephonyContract.Status).LookupId,
+                ActivationDate = telephonyContract.ActivationDate,
+                StatusDate = telephonyContract.LastStatusChangeDate
+            };
+        } 
         private ContractInfo CustomerContractToContractInfo(CustomerContract contract)
         {
             return new ContractInfo()
