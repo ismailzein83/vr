@@ -249,8 +249,10 @@
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-joins.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdbjoinsettings-selective.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\GridActionGroupDefintionEditorController.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\AdditionalSettingsGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-additionalsettings-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiongroupdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiongroupdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition.js" />
