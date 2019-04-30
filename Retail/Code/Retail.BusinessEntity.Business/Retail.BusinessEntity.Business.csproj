@@ -148,6 +148,11 @@
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
