@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="AccountBEDataManager.cs" />
     <Compile Include="AccountPackageDataManager.cs" />
+    <Compile Include="PackageUsageVolumeCombinationDataManager.cs" />
     <Compile Include="RecurChargeBalanceUpdateSummaryDataManager.cs" />
     <Compile Include="AccountPackageRecurChargeDataManager.cs" />
     <Compile Include="AccountPartDefinitionDataManager.cs" />

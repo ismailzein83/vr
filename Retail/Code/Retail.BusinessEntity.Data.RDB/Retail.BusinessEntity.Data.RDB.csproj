@@ -60,6 +60,7 @@
     <Compile Include="AccountPackageDataManager.cs" />
     <Compile Include="ChargingPolicyDataManager.cs" />
     <Compile Include="PackageDataManager.cs" />
+    <Compile Include="PackageUsageVolumeCombinationDataManager.cs" />
     <Compile Include="ProductDataManager.cs" />
     <Compile Include="ProductFamilyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
