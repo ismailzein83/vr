@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Business
 {
-    public class CallDetailsRequestFlowMnagement
+    public class CallDetailsRequestFlowManagement
     {
         string welcomeStep = "63B482FA-23AC-4ACE-8B8B-14192FE17CBB";
         string selectOptionsStep = "B2EF53AA-FCE2-4F78-804D-16433A3B6F1C";
