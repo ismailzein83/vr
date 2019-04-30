@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class RetailGenericBEPackageProvider
+    public class RetailGenericBEAccountPackageProvider
     {
     }
 }

@@ -185,7 +185,7 @@
     <Compile Include="Extensions\FaultTicketsSettingsData.cs" />
     <Compile Include="Extensions\OperatorsWithLocalDefinitionSettings.cs" />
     <Compile Include="Extensions\OperatorsWithLocalManager.cs" />
-    <Compile Include="Extensions\RetailGenericBEPackageProvider.cs" />
+    <Compile Include="Extensions\RetailGenericBEAccountPackageProvider.cs" />
     <Compile Include="FaultTickets\FaultTicketCustomObjectTypeSettings.cs" />
     <Compile Include="FaultTickets\FaultTicketSettingsDetails.cs" />
     <Compile Include="FaultTickets\FaultTicketsSettings.cs" />
