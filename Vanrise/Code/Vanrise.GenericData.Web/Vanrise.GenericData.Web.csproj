@@ -248,7 +248,9 @@
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-expressionfields.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-joins.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdbjoinsettings-selective.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\AdditionalSettingEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\GridActionGroupDefintionEditorController.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\AdditionalSettingEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\AdditionalSettingsGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionGridTemplate.html" />
