@@ -21,6 +21,54 @@ namespace BPMExtended.Main.Business
             }
         }
 
+        public ServiceInfo GetDepositServiceByPagesNumber(int pagesNumber) // MYA: To Be Tested 
+        {
+            string serviceId = null;
+            string serviceName = null;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+
+            esq.AddColumn("StZeroToFivePagesId");
+            esq.AddColumn("StFiveToTenPagesId");
+            esq.AddColumn("StAboveTenPagesId");
+            esq.AddColumn("StZeroToFivePagesDisplayValue");
+            esq.AddColumn("StFiveToTenPagesDisplayValue");
+            esq.AddColumn("StAboveTenPagesDisplayValue");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "72DC4A9B-BA58-4445-B866-F2E7CD942191");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                if (pagesNumber < 6)
+                {
+                    serviceId = entities[0].GetColumnValue("StZeroToFivePagesId").ToString();
+                    serviceName = entities[0].GetColumnValue("StZeroToFivePagesDisplayValue").ToString();
+                }
+                else if (pagesNumber < 11)
+                {
+                    serviceId = entities[0].GetColumnValue("StFiveToTenPagesId").ToString();
+                    serviceName = entities[0].GetColumnValue("StFiveToTenPagesDisplayValue").ToString();
+                }
+                else if (pagesNumber >= 11)
+                {
+                    serviceId = entities[0].GetColumnValue("StAboveTenPagesId").ToString();
+                    serviceName = entities[0].GetColumnValue("StAboveTenPagesDisplayValue").ToString();
+                }
+            }
+
+            return new ServiceInfo()
+            {
+                ServiceId = serviceId,
+                Name = serviceName
+            };
+
+        }
+
         public OperationServices GetOperationServices(Guid requestId)
         {
             EntitySchemaQuery esq;
