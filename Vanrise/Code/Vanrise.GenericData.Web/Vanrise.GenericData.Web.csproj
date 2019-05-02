@@ -243,6 +243,7 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionGroupTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageRDBExpressionFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageRDBJoinsTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\RDBDataRecordStorageJoinSettingsSelectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-expressionfields.js" />
@@ -504,6 +505,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionDefinition\vr-genericdata-datarecord-vractiondefinition-extendedsettings-sendemail.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionRuntime\Templates\SendEmail.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionRuntime\vr-genericdata-datarecord-vraction-sendemail.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBExpressionFields\Templates\CustomCodeExpressionFieldTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBExpressionFields\Templates\FromJoinExpressionFieldTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBExpressionFields\vr-genericdata-rdbrecordstoragesettings-expressionfield-customcode.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBExpressionFields\vr-genericdata-rdbrecordstoragesettings-expressionfield-fromjoin.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\Templates\CustomCodeJoinStorageFieldEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\Templates\CustomCodeJoinTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\RDBJoinSettings\Templates\JoinOtherRecordStorageFieldEditorTemplate.html" />
