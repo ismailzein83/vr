@@ -160,6 +160,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectColumns.Column(COL_ID, COL_ID);
             selectColumns.Column(COL_CountryID, COL_CountryID);
             selectColumns.Column(COL_Name, COL_Name);
+            selectColumns.Column(COL_SupplierID, COL_SupplierID);
             selectColumns.Column(COL_BED, COL_BED);
             selectColumns.Column(COL_EED, COL_EED);
             selectColumns.Expression(COL_SourceID).Value(stateBackupId);
