@@ -2,9 +2,10 @@
 
     "use strict";
 
-    HumanTaskIconVisualItemDefintionController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VisualEventTypeEnum', 'BusinessProcess_BPTaskAPIService', 'BPTaskStatusEnum', 'BusinessProcess_BPTaskService'];
+    HumanTaskIconVisualItemDefintionController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VisualEventTypeEnum', 'BusinessProcess_BPTaskAPIService', 'BPTaskStatusEnum', 'BusinessProcess_BPTaskService', 'BPInstanceStatusEnum', 'DateTimeFormatEnum'];
 
-    function HumanTaskIconVisualItemDefintionController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VisualEventTypeEnum, BusinessProcess_BPTaskAPIService, BPTaskStatusEnum, BusinessProcess_BPTaskService) {
+    function HumanTaskIconVisualItemDefintionController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VisualEventTypeEnum,
+            BusinessProcess_BPTaskAPIService, BPTaskStatusEnum, BusinessProcess_BPTaskService, BPInstanceStatusEnum, DateTimeFormatEnum) {
 
         var events = [];
         var taskId;
@@ -38,6 +39,11 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+
+            $scope.scopeModel.isNew = false;
+            $scope.scopeModel.isStarted = false;
+            $scope.scopeModel.isCompleted = false;
+            $scope.scopeModel.isCanceled = false;
         }
 
 
@@ -54,7 +60,7 @@
 
 
         function loadTaskEntity() {
-            
+
             for (var i = 0; i < events.length; i++) {
                 var event = events[i];
                 if (event.EventPayload != undefined) {
@@ -67,6 +73,9 @@
                     if (response != undefined) {
                         $scope.scopeModel.taskEntity = response;
                         $scope.scopeModel.taskEntity.StatusDescription = UtilsService.getEnumDescription(BPTaskStatusEnum, response.Status);
+                        $scope.scopeModel.taskEntity.CreatedTime = UtilsService.getDateTimeFormat(response.CreatedTime, DateTimeFormatEnum.DateTime);
+                        $scope.scopeModel.taskEntity.LastUpdatedTime = UtilsService.getDateTimeFormat(response.LastUpdatedTime, DateTimeFormatEnum.DateTime);
+                        loadStatus();
                     }
                 });
             }
@@ -82,6 +91,40 @@
                 VRUIUtilsService.callDirectiveLoad(trakingEventsDirectiveAPI, payload, loadTrackingEventsPromiseDeffered);
             });
             return loadTrackingEventsPromiseDeffered.promise;
+        }
+
+        function loadStatus() {
+
+            var statusItems = [];
+            var status = $scope.scopeModel.taskEntity.Status;
+
+            switch (status) {
+                case BPInstanceStatusEnum.New.value:
+                    $scope.scopeModel.isNew = true;
+                    $scope.scopeModel.isStarted = false;
+                    $scope.scopeModel.isCompleted = false;
+                    $scope.scopeModel.isCanceled = false;
+                    break;
+                case BPInstanceStatusEnum.Running.value:
+                    $scope.scopeModel.isNew = false;
+                    $scope.scopeModel.isStarted = true;
+                    $scope.scopeModel.isCompleted = false;
+                    $scope.scopeModel.isCanceled = false;
+                    break;
+                case BPInstanceStatusEnum.Completed.value:
+                    $scope.scopeModel.isNew = false;
+                    $scope.scopeModel.isStarted = false;
+                    $scope.scopeModel.isCompleted = true;
+                    $scope.scopeModel.isCanceled = false;
+                    break;
+                case BPInstanceStatusEnum.Aborted.value:
+                    $scope.scopeModel.isNew = false;
+                    $scope.scopeModel.isStarted = false;
+                    $scope.scopeModel.isCompleted = false;
+                    $scope.scopeModel.isCanceled = true;
+                    break;
+            }
+            return statusItems;
         }
 
     }

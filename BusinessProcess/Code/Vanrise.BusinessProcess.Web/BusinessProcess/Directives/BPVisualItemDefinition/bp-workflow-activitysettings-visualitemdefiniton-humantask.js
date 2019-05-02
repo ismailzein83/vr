@@ -26,6 +26,11 @@
             var visualItemDefinition;
             var events = [];
             function initializeController() {
+
+                $(document).ready(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                }); 
+
                 $scope.scopeModel = {};
                 $scope.scopeModel.classEventStarted = false;
                 $scope.scopeModel.classEventCompleted = false;
@@ -88,6 +93,7 @@
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Error.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = false;
+                            $scope.scopeModel.classEventRetrying = false;
                             $scope.scopeModel.classEventError = true;
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Error";

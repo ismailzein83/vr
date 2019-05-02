@@ -4,7 +4,7 @@
             <vr-directivewrapper ng-if="scopeModel.runtimeEditor != undefined" directive="scopeModel.runtimeEditor" on-ready="scopeModel.onEditorRuntimeDirectiveReady" vr-disabled="!scopeModel.showRelease && scopeModel.includeTaskLock" ></vr-directivewrapper>
         </vr-form>
     </vr-modalbody>
-    <div>
+    <div ng-if="scopeModel.showActionBar">
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <span ng-if="scopeModel.includeTaskLock">

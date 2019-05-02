@@ -77,7 +77,6 @@
                             var childVisualItem = childVisualItems[i];
                             if (childVisualItem.directiveAPI.tryApplyVisualEventToChilds != undefined) {
                                 childVisualItemsWithSubChilds.push({
-
                                     childVisualItem: childVisualItem,
                                     index:i
                                 });
@@ -92,7 +91,9 @@
                                         }
                                     }
                                     else {
-                                        unsucceededVisualEvents.push(visualEvent);
+                                        
+                                        if (UtilsService.getItemIndexByVal(unsucceededVisualEvents, visualEvent.BPVisualEventId,"BPVisualEventId")< 0)
+                                          unsucceededVisualEvents.push(visualEvent);
                                     }
                                 }
                             }

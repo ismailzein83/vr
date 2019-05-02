@@ -18,6 +18,7 @@
         var isSucceeded;
         var continueWorkflowIfCallFailed;
         var classMembersCode;
+        var enableVisualization;
         var headers;
         var urlParameters;
         var context;
@@ -54,6 +55,7 @@
                 isSucceeded = parameters.obj.IsSucceeded;
                 continueWorkflowIfCallFailed = parameters.obj.ContinueWorkflowIfCallFailed;
                 classMembersCode = parameters.obj.ClassMembersCode;
+                enableVisualization = parameters.obj.EnableVisualization;
                 headers = parameters.obj.Headers;
                 urlParameters = parameters.obj.URLParameters;
                 context = parameters.context;
@@ -63,6 +65,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.enableVisualization = true;
 
             $scope.modalContext.onModalHide = function () {
                 if ($scope.remove != undefined && isNew == true) {
@@ -120,6 +123,7 @@
                 $scope.scopeModel.continueWorkflowIfCallFailed = continueWorkflowIfCallFailed;
                 $scope.scopeModel.context = context;
                 $scope.scopeModel.classMembersCode = classMembersCode;
+                $scope.scopeModel.enableVisualization = enableVisualization;
             }
 
             function loadCallHttpServiceMethodSelector() {
@@ -215,7 +219,8 @@
                 serviceName: $scope.scopeModel.serviceName,
                 headers: (headersGridAPI != undefined) ? headersGridAPI.getData() : undefined,
                 urlParameters: (urlParametersGridAPI != undefined) ? urlParametersGridAPI.getData() : undefined,
-                classMembersCode: $scope.scopeModel.classMembersCode
+                classMembersCode: $scope.scopeModel.classMembersCode,
+                enableVisualization: $scope.scopeModel.enableVisualization
             };
             if ($scope.onActivityUpdated != undefined) {
                 $scope.onActivityUpdated(updatedObject);

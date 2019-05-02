@@ -12,6 +12,7 @@
         var taskAssignees;
         var inputItems = [];
         var outputItems = [];
+        var enableVisualization;
         var context;
         var isNew;
         var recordTypeId;
@@ -55,6 +56,7 @@
                         outputItems.push(inputItem);
                     }
                 }
+                enableVisualization = parameters.obj.EnableVisualization;
                 isNew = parameters.isNew;
                 context = parameters.context;
             }
@@ -67,6 +69,7 @@
             $scope.scopeModel.outputItems = [];
             $scope.scopeModel.isVRWorkflowActivityDisabled = false;
             $scope.scopeModel.isBPTaskTypeLoading = true;
+            $scope.scopeModel.enableVisualization = true;
 
             $scope.scopeModel.context = context;
 
@@ -134,6 +137,7 @@
             function loadStaticData() {
                 $scope.scopeModel.taskTitle = taskTitle;
                 $scope.scopeModel.displayName = displayName;
+                $scope.scopeModel.enableVisualization = enableVisualization;
             }
 
             function loadBPTaskTypeSelector() {
@@ -294,6 +298,7 @@
                 taskAssignees: { Settings: taskAssigneeSettings},
                 inputItems: $scope.scopeModel.inputItems.length > 0 ? getInputColumns() : null,
                 outputItems: $scope.scopeModel.outputItems.length > 0 ? getOutputColumns() : null,
+                enableVisualization: $scope.scopeModel.enableVisualization
             };
 
             if ($scope.onActivityUpdated != undefined) {

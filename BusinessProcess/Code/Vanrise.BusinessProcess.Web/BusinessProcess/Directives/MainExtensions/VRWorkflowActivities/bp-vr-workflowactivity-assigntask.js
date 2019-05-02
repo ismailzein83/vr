@@ -30,6 +30,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
             var displayName;
             var inputItems = [];
             var outputItems = [];
+            var enableVisualization;
             var context;
             var isNew;
 
@@ -60,6 +61,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                             taskAssignees = payload.Settings.TaskAssignees;
                             inputItems = payload.Settings.InputItems;
                             outputItems = payload.Settings.OutputItems;
+                            enableVisualization = payload.Settings.EnableVisualization;
                         }
 
                         if (payload.Context != null)
@@ -82,6 +84,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                             displayName = updatedObject.displayName;
                             inputItems = updatedObject.inputItems;
                             outputItems = updatedObject.outputItems;
+                            enableVisualization = updatedObject.enableVisualization;
                             isNew = false;
                         };
 
@@ -107,6 +110,7 @@ app.directive('businessprocessVrWorkflowactivityAssigntask', ['UtilsService', 'V
                     DisplayName: displayName,
                     InputItems: inputItems,
                     OutputItems: outputItems,
+                    EnableVisualization: enableVisualization
                 };
             }
         }

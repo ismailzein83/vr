@@ -1,7 +1,7 @@
 ﻿body {
 }
 
-@-webkit-keyframes vr-visualitem-blinker {
+@-webkit-keyframes vr-visualitem-block-blinker {
     from {
         opacity: 1.0;
         background-color: #d7e9f1;
@@ -15,7 +15,7 @@
 .vr-visualitem-event-started {
     background-color: #fbff00 !important;
     text-decoration: blink;
-    -webkit-animation-name: vr-visualitem-blinker;
+    -webkit-animation-name: vr-visualitem-block-blinker;
     -webkit-animation-duration: 1s;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: ease-in;
@@ -25,6 +25,7 @@
     .vr-visualitem-event-started:hover {
         opacity: 0.8 !important;
         transition: 0.3s;
+        cursor: pointer !important;
     }
 
 .vr-visualitem-event-completed {
@@ -33,6 +34,7 @@
     .vr-visualitem-event-completed:hover {
         opacity: 0.8 !important;
         transition: 0.3s;
+        cursor: pointer !important;
     }
 .vr-visualitem-event-error {
     background-color: red !important;
@@ -40,6 +42,7 @@
     .vr-visualitem-event-error:hover {
         opacity: 0.8 !important;
         transition: 0.3s;
+        cursor: pointer !important;
     }
 .vr-visualitem-event-retrying {
     background-color: orange !important;
@@ -47,6 +50,7 @@
     .vr-visualitem-event-retrying:hover {
         opacity: 0.8 !important;
         transition: 0.3s;
+        cursor: pointer !important;
     }
 .vr-visualitem-event-condition {
     margin: 0 auto;
@@ -62,8 +66,8 @@
 
 .vr-visualitem-aftercondition {
     display: inline-block;
-    border-top: 2px solid black;
-    border-right: 2px solid;
+    border-top: 2px solid #d7e9f1;
+    border-right: 2px solid #d7e9f1;
     float: right;
     width: calc(25% - 30px);
     margin-right: calc(25% - 5px);
@@ -75,17 +79,17 @@
     width: calc(25% - 30px);
     margin-left: calc(25% - 5px);
     display: inline-block;
-    border-top: 2px solid black;
+    border-top: 2px solid #d7e9f1;
     float: left;
     margin-top: -25px !important;
-    border-left: 2px solid;
+    border-left: 2px solid #d7e9f1;
 }
 
 .vr-visualitem-downleft {
     float: left;
     margin-left: calc(25% - 8px);
     margin-top: -12px !important;
-    border: solid black;
+    border: solid #d7e9f1;
     border-width: 0 2px 2px 0;
     display: inline-block;
     padding: 3px;
@@ -97,7 +101,7 @@
     float: right;
     margin-right: calc(25% - 8px);
     margin-top: -12px !important;
-    border: solid black;
+    border: solid #d7e9f1;
     border-width: 0 2px 2px 0;
     display: inline-block;
     padding: 3px;
@@ -116,27 +120,7 @@
     justify-content: center;
     display: flex;
     position: relative;
-    cursor: pointer;
 }
-
-    .vr-visualitem-activityblock .hint {
-        position: absolute;
-        top: -1px;
-        right: 0px;
-        padding: 32px;
-        border: 1px solid transparent;
-        border-radius: 5px 5px 0 0;
-        cursor: default;
-        transition: all 500ms;
-        height: 75px;
-        width: 125px;
-    }
-
-    .vr-visualitem-activityblock .hintstarted {
-        cursor: pointer !important;
-      
-    }
-   
 
 .vr-visualitem-separatordesign {
     margin-right: calc(50% - 15px);
@@ -144,7 +128,7 @@
 }
 
 .vr-visualitem-separatordesignline {
-    border-color: #89afbf !important;
+    border-color: #d7e9f1 !important;
     height: 20px;
     width: 20px;
     border-left: 2px solid;
@@ -155,7 +139,7 @@
 .vr-visualitem-separatordesigndown {
     float: right;
     display: block;
-    border: solid #89afbf;
+    border: solid #d7e9f1;
     border-width: 0 2px 2px 0;
     padding: 4px;
     transform: rotate(45deg);
@@ -180,3 +164,195 @@
 }
 
 
+.vr-visualitem-lefticon {
+    top: -20px;
+    right: 30px;
+}
+
+.vr-visualitem-hintstarted {
+    cursor: pointer;
+}
+
+
+.vr-visualitem-retrycontainer {
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    width: 25px;
+    height: 20px;
+}
+
+.progress {
+    width: 20px;
+    height: 20px;
+    line-height: 150px;
+    background: none;
+    margin: 0 auto;
+    box-shadow: none;
+    position: relative;
+  
+}
+
+    .progress:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .progress > span {
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        z-index: 1;
+    }
+
+    .progress .progress-left {
+        left: 0;
+    }
+
+    .progress .progress-bar {
+        width: 100%;
+        height: 100%;
+        background: none;
+        border-width: 2px;
+        border-style: solid;
+        position: absolute;
+        top: 0;
+    }
+
+    .progress .progress-left .progress-bar {
+        left: 100%;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        border-left: 0;
+        -webkit-transform-origin: center left;
+        transform-origin: center left;
+    }
+
+    .progress .progress-right {
+        right: 0;
+    }
+
+        .progress .progress-right .progress-bar {
+            left: -100%;
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+            border-right: 0;
+            -webkit-transform-origin: center right;
+            transform-origin: center right;
+            animation: loading-1 1.8s linear forwards;
+        }
+
+    .progress .progress-value {
+        width: 90%;
+        height: 90%;
+        border-radius: 50%;
+        background: transparent;
+        font-size: 11px;
+        color: black;
+        line-height: 16px;
+        text-align: center;
+        position: absolute;
+        top: 5%;
+        left: 5%;
+    }
+
+    .progress.black .progress-bar {
+        border-color: black;
+    }
+
+    .progress.black .progress-left .progress-bar {
+        animation: loading-2 1.5s linear forwards 1.8s;
+    }
+
+    .progress.final .progress-bar {
+        border-color: black;
+    }
+
+    .progress.final .progress-left .progress-bar {
+        animation: loading-3 1.5s linear forwards 1.8s;
+    }
+
+
+.vr-visualitem-retrycontainer .retryarrow {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: -1px;
+    height: 0;
+    width: 0;
+    border-left: 5px solid black;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    transform: rotate(220deg);
+    animation: 0s linear 3.6s forwards showRetrayArrow;
+    visibility: hidden;
+}
+
+@keyframes hideprograssbar {
+    to {
+        visibility: hidden;
+    }
+}
+
+@keyframes showRetrayArrow {
+   to {
+    visibility: visible;
+   }
+
+}
+@keyframes showRetrayArrow {
+    to {
+        visibility: visible;
+    }
+}
+
+@keyframes loading-1 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+}
+
+@keyframes loading-2 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+}
+
+
+@keyframes loading-3 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(75deg);
+        transform: rotate(75deg);
+    }
+}
+
+@media only screen and (max-width: 990px) {
+    .progress {
+        margin-bottom: 20px;
+    }
+}

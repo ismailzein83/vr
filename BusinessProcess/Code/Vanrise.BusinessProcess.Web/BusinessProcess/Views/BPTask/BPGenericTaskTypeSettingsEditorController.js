@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BPGenericTaskTypeSettingsEditorController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRButtonTypeEnum', 'BusinessProcess_TaskTypeActionService', 'BusinessProcess_BPTaskService', 'BusinessProcess_BPGenericTaskTypeActionAPIService'];
+    BPGenericTaskTypeSettingsEditorController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRButtonTypeEnum', 'BusinessProcess_TaskTypeActionService', 'BusinessProcess_BPTaskService', 'BusinessProcess_BPGenericTaskTypeActionAPIService', 'BPTaskStatusEnum'];
 
-    function BPGenericTaskTypeSettingsEditorController($scope, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VRButtonTypeEnum, BusinessProcess_TaskTypeActionService, BusinessProcess_BPTaskService, BusinessProcess_BPGenericTaskTypeActionAPIService) {
+    function BPGenericTaskTypeSettingsEditorController($scope, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VRButtonTypeEnum, BusinessProcess_TaskTypeActionService, BusinessProcess_BPTaskService, BusinessProcess_BPGenericTaskTypeActionAPIService, BPTaskStatusEnum) {
 
         var bpTaskId;
         var bpTaskType;
@@ -175,6 +175,14 @@
                 promises: [getBPTask(), getActions()],
                 getChildNode: function () {
                     if (bpTask != undefined) {
+
+                        if (bpTask.Status == BPTaskStatusEnum.New.value || bpTask.Status == BPTaskStatusEnum.Started.value) {
+                            $scope.scopeModel.showActionBar = true;
+                        }
+                        else {
+                            $scope.scopeModel.showActionBar = false;
+                        }
+
                         fieldValues = bpTask.TaskData != undefined ? bpTask.TaskData.FieldValues : undefined;
                         if (fieldValues != undefined) {
                             var fieldValueObjects = {};

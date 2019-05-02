@@ -27,6 +27,11 @@
             var events = [];
 
             function initializeController() {
+
+                $(document).ready(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+
                 $scope.scopeModel = {};
                 $scope.scopeModel.classEventStarted = false;
                 $scope.scopeModel.classEventCompleted = false;
@@ -34,10 +39,11 @@
                 $scope.scopeModel.classEventRetrying = false;
                 $scope.scopeModel.isHintStarted = false;
                 $scope.scopeModel.hint = "Not Started";
+                $scope.scopeModel.retryCount = 0;
 
                 $scope.scopeModel.onCallHttpClick = function () {
                     if ($scope.scopeModel.isHintStarted) {
-                        BusinessProcess_BPVisualItemDefintionService.openEventsTracking(events);
+                        BusinessProcess_BPVisualItemDefintionService.openEventsTracking(events, "Call Http Service Tracking Progress");
                     }
                 };
 
@@ -71,6 +77,7 @@
 
                 api.tryApplyVisualEvent = function (visualItemEvent) {
                     if (visualItemEvent != undefined) {
+
                         events.push(visualItemEvent);
                         var eventTypeId = visualItemEvent.EventTypeId;
 
@@ -88,7 +95,9 @@
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Error.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = false;
+                            $scope.scopeModel.classEventRetrying = false;
                             $scope.scopeModel.classEventError = true;
+                           
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Error";
                         }
@@ -98,6 +107,13 @@
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Retrying";
                         }
+
+                        if (visualItemEvent.EventPayload != undefined) {
+                            $scope.scopeModel.retryCount = visualItemEvent.EventPayload.RetryCount + 1;
+                            $scope.scopeModel.showRetryIcon = true;
+                        }
+
+                        
                         return true;
                     }
                     return false;

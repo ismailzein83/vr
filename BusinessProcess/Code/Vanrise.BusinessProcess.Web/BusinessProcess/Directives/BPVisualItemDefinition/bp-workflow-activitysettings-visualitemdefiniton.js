@@ -139,18 +139,17 @@
                     });
             }
 
-            function manipulateDataToBeExecuted(response) {
-                if (response != undefined && response.ListBPVisualEventDetails != undefined && response.ListBPVisualEventDetails.length > 0) {
+            function manipulateDataToBeExecuted(visualEntity) {
+                if (visualEntity != undefined && visualEntity.ListBPVisualEventDetails != undefined && visualEntity.ListBPVisualEventDetails.length > 0) {
                     if (directiveAPI != undefined) {
-                        var firstItem = response.ListBPVisualEventDetails[0];
                         if (directiveAPI.tryApplyVisualEventToChilds != undefined) {
-                            directiveAPI.tryApplyVisualEventToChilds(response.ListBPVisualEventDetails);
+                            directiveAPI.tryApplyVisualEventToChilds(visualEntity.ListBPVisualEventDetails);
                         } else {
-                            if (response.ListBPVisualEventDetails.length == 1) {
-                                directiveAPI.tryApplyVisualEvent(firstItem);
+                            if (visualEntity.ListBPVisualEventDetails.length == 1) {
+                                directiveAPI.tryApplyVisualEvent(visualEntity.ListBPVisualEventDetails[0]);
                             }
                         }
-                        var lastItem = response.ListBPVisualEventDetails[response.ListBPVisualEventDetails.length -1 ];
+                        var lastItem = visualEntity.ListBPVisualEventDetails[visualEntity.ListBPVisualEventDetails.length -1 ];
                         input.GreaterThanID = lastItem.BPVisualEventId;
                     }
                 }

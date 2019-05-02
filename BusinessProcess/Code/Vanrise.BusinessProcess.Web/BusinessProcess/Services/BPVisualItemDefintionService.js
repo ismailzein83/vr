@@ -20,7 +20,7 @@
             VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/BPVisualItemDefinition/IconsEditors/Templates/WorkflowVisualItemDefintionHumanTaskIconTemplate.html', modalParameters, modalSettings);
         }   
 
-        function openEventsTracking(events) {
+        function openEventsTracking(events, title) {
             var modalParameters = {
                 events: events
             };
@@ -30,7 +30,7 @@
             };
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.title = "Call Http Service Tracking Progress";
+                modalScope.title = title;
             };
             VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/BPVisualItemDefinition/IconsEditors/Templates/WorkflowVisualItemDefinitionCallHttpIconTemplate.html', modalParameters, modalSettings);
         }

@@ -11,7 +11,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
     {
         public override Guid ConfigId { get { return new Guid("6651A08C-F337-49FE-A844-F30F052D4F1E"); } }
 
-        public override string Editor { get { throw new NotImplementedException(); } }
+        public override string Editor { get { return "businessprocess-vr-workflowactivity-insertvisualevent"; } }
 
         public override string Title { get { return "Insert Visual Event"; } }
 

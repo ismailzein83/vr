@@ -1,12 +1,14 @@
-﻿<div class="vr-visualitem-activityblock" ng-click="scopeModel.onHumanTasksClick()" ng-class="{'vr-visualitem-event-started': scopeModel.classEventStarted,
-                                                                     'vr-visualitem-event-completed': scopeModel.classEventCompleted,
-                                                                     'vr-visualitem-event-error': scopeModel.classEventError,
-                                                                     'vr-visualitem-event-retrying': scopeModel.classEventRetrying}">
+﻿
+<div class="vr-visualitem-activityblock" data-toggle="tooltip" data-placement="right" data-original-title={{scopeModel.hint}} 
+     ng-click="scopeModel.onHumanTasksClick()" ng-class="{'vr-visualitem-event-started': scopeModel.classEventStarted,
+                                                          'vr-visualitem-event-completed': scopeModel.classEventCompleted,
+                                                          'vr-visualitem-event-error': scopeModel.classEventError,
+                                                          'vr-visualitem-event-retrying': scopeModel.classEventRetrying}">
 
-    <a title={{scopeModel.hint}} class="hint" ng-class="{'hintstarted': scopeModel.isHintStarted}"></a>
-    <span class="vr-visualitem-rightimg glyphicon glyphicon glyphicon-user" ng-class="{'hintstarted': scopeModel.isHintStarted}"></span>
-    <span style="display:inline-block;width: 115px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-        <vr-label style="text-align:center;">{{scopeModel.displayName}}</vr-label>
+    <span class="vr-visualitem-rightimg glyphicon glyphicon glyphicon-user" ng-class="{'vr-visualitem-hintstarted': scopeModel.isHintStarted}"></span>
+    <span style="display:inline-block;width: 115px;">
+        <vr-label ng-if="!scopeModel.isHintStarted" style="text-align:center;" breakline>{{scopeModel.displayName}}</vr-label>
+        <vr-label ng-if="scopeModel.isHintStarted" style="text-align:center;" breakline isclickable>{{scopeModel.displayName}}</vr-label>
     </span>
 </div>
 

@@ -36,6 +36,7 @@ app.directive('businessprocessVrWorkflowactivityCallhttpservice', ['UtilsService
             var isSucceeded;
             var continueWorkflowIfCallFailed;
             var classMembersCode;
+            var enableVisualization;
             var headers;
             var urlParameters;
             var isNew;
@@ -76,6 +77,7 @@ app.directive('businessprocessVrWorkflowactivityCallhttpservice', ['UtilsService
                             headers = payload.Settings.Headers;
                             urlParameters = payload.Settings.URLParameters;
                             classMembersCode = payload.Settings.ClassMembersCode;
+                            enableVisualization = payload.Settings.EnableVisualization;
                         }
 
                         if (payload.Context != null)
@@ -104,6 +106,7 @@ app.directive('businessprocessVrWorkflowactivityCallhttpservice', ['UtilsService
                             isSucceeded = updatedObject.isSucceeded;
                             continueWorkflowIfCallFailed = updatedObject.continueWorkflowIfCallFailed;
                             classMembersCode = updatedObject.classMembersCode;
+                            enableVisualization = updatedObject.enableVisualization;
                             headers = updatedObject.headers;
                             urlParameters = updatedObject.urlParameters;
                             isNew = false;
@@ -139,7 +142,8 @@ app.directive('businessprocessVrWorkflowactivityCallhttpservice', ['UtilsService
                     ContinueWorkflowIfCallFailed: continueWorkflowIfCallFailed,
                     Headers: headers,
                     URLParameters: urlParameters,
-                    ClassMembersCode: classMembersCode
+                    ClassMembersCode: classMembersCode,
+                    EnableVisualization: enableVisualization
                 };
             }
         }

@@ -1,1 +1,14 @@
-﻿
+﻿<link rel="stylesheet" type="text/css"  href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+
+<div class="vr-visualitem-activityblock" data-toggle="tooltip" data-placement="right" data-original-title={{scopeModel.hint}}
+     ng-click="scopeModel.onInsertVisualEventActivityClick()" ng-class="{'vr-visualitem-event-started': scopeModel.classEventStarted,
+                                                          'vr-visualitem-event-completed': scopeModel.classEventCompleted,
+                                                          'vr-visualitem-event-error': scopeModel.classEventError,
+                                                          'vr-visualitem-event-retrying': scopeModel.classEventRetrying}">
+
+    <span class="vr-visualitem-rightimg fas fa-box-open" ng-class="{'vr-visualitem-hintstarted': scopeModel.isHintStarted}"></span>
+    <span style="display:inline-block;width: 115px;">
+        <vr-label ng-if="!scopeModel.isHintStarted" style="text-align:center;" breakline>{{scopeModel.displayName}} </vr-label>
+        <vr-label ng-if="scopeModel.isHintStarted" style="text-align:center; " breakline isclickable>{{scopeModel.displayName}}</vr-label>
+    </span>
+</div>

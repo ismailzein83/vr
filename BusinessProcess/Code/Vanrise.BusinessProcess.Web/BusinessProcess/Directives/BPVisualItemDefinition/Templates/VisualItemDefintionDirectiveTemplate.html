@@ -2,8 +2,11 @@
       type="text/css"
       href="/Client/Modules/BusinessProcess/Directives/BPVisualItemDefinition/Styles/VisualItemsStyle.css" />
 
-<div vr-loader="isLoading">
-    <span >
-        <vr-directivewrapper ng-if="scopeModel.visualItemDefinition != undefined" directive="scopeModel.visualItemDefinition.Settings.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>
-    </span>
-</div>  
+
+<vr-scrollable-container margin="200">
+    <div vr-loader="isLoading">
+        <span>
+            <vr-directivewrapper ng-if="scopeModel.visualItemDefinition != undefined" directive="scopeModel.visualItemDefinition.Settings.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>
+        </span>
+    </div>
+</vr-scrollable-container>
