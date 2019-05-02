@@ -19,11 +19,12 @@
 //            compile: function (element, attrs) {
 
 //            },
-//            templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Templates/GenericBusinessEntityRootEditor.html"
+//            templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Templates/GenericBusinessEntityRootContainerEditor.html"
 //        };
 //        function GenericBusinessEntityRootEditorCtor($scope, ctrl, $attrs) {
 //            this.initializeController = initializeController;
 
+//            var selectedValues;
 //            var runtimeEditorAPI;
 //            var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -44,7 +45,6 @@
 //                api.load = function (payload) {
 //                    var promises = [];
 
-//                    var selectedValues;
 //                    var dataRecordTypeId;
 //                    var definitionSettings;
 //                    var historyId;
@@ -75,14 +75,40 @@
 
 //                            var context = {
 //                                notifyFieldChanged: function (changedField) { // changedField = {fieldName : 'name', fieldValue : 'value' }
-//                                    if (runtimeEditorAPI.onFieldValueChanged != undefined && typeof (runtimeEditorAPI.onFieldValueChanged) == "function")
-//                                        return runtimeEditorAPI.onFieldValueChanged(changedField);
+//                                    var _promises = [];
+//                                    if (runtimeEditorAPI.onFieldValueChanged != undefined && typeof (runtimeEditorAPI.onFieldValueChanged) == "function") {
+//                                        var promise = runtimeEditorAPI.onFieldValueChanged(changedField);
+//                                        if (promise != undefined)
+//                                            _promises.push(promise);
+//                                    }
 
-//                                    return null;
+//                                    return UtilsService.waitMultiplePromises(_promises);
 //                                },
-//                                getFieldValues: function (dicFieldValueByName) {
-//                                    runtimeEditorAPI.setData(dicFieldValueByName);
-//                                    return dicFieldValueByName;
+//                                getFieldValues: function (dicFieldValuesByNames) {
+//                                    runtimeEditorAPI.setData(dicFieldValuesByNames);
+//                                    return dicFieldValuesByNames;
+//                                },
+//                                setFieldValues: function (dicFieldValuesByNames) {
+//                                    var _promises = [];
+//                                    var handledDicFieldValuesByNames = {};
+//                                    if (selectedValues != undefined) {
+//                                        for (var prop in dicFieldValuesByNames) {
+//                                            if (selectedValues[prop] == undefined)
+//                                                handledDicFieldValuesByNames[prop] = dicFieldValuesByNames[prop];
+//                                        }
+//                                    }
+//                                    else {
+//                                        handledDicFieldValuesByNames = dicFieldValuesByNames;
+//                                    }
+
+//                                    if (Object.keys(handledDicFieldValuesByNames).length > 0) {
+//                                        var onFieldValueSettedPromise = runtimeEditorAPI.setFieldValues(dicFieldValuesByNames);
+//                                        selectedValues = undefined;
+//                                        if (onFieldValueSettedPromise != undefined)
+//                                            _promises.push(onFieldValueSettedPromise);
+//                                    }
+
+//                                    return UtilsService.waitMultiplePromises(_promises);
 //                                }
 //                            };
 
