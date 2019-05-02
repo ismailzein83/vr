@@ -62,7 +62,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
 
         public enum FileCheckCriteriaEnum { DateAndNameCheck = 0, NameCheck = 1, None = 2 }
 
-        public enum CompressionTypes { GZip, Zip }
+        public enum CompressionTypes { GZip, Zip, LZW }
 
         public enum Actions
         {

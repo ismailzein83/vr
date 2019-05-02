@@ -76,7 +76,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
             return this.FileDataSourceDefinitionId.HasValue && this.FileDataSourceDefinitionId.Value == fileDataSourceDefinitionId;
         }
 
-        public enum CompressionTypes { GZip, Zip }
+        public enum CompressionTypes { GZip, Zip, LZW }
 
         public enum FileCheckCriteriaEnum { DateAndNameCheck = 0, NameCheck = 1, None = 2 }
 

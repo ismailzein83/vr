@@ -122,6 +122,7 @@
     <Compile Include="ErlangBCalculator.cs" />
     <Compile Include="LabelColorManager.cs" />
     <Compile Include="LicenceManagerControl.cs" />
+    <Compile Include="ZFilesUtility\LzwInputStream.cs" />
     <Compile Include="PathResolver.cs" />
     <Compile Include="ServiceClientFactory.cs" />
     <Compile Include="ServiceHostManager.cs" />

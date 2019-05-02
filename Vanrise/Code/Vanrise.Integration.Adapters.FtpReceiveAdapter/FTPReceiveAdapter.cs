@@ -235,6 +235,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                         return new MemoryStream(ZipUtility.DecompressGZ(stream));
                     case Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.CompressionTypes.Zip:
                         return new MemoryStream(ZipUtility.UnZip(stream.ToArray()));
+                    case Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.CompressionTypes.LZW:
+                        return LzwInputStreamHelper.ConvertToMemoryStream(new LzwInputStream(stream));
                 }
             }
 

@@ -233,6 +233,8 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                         return new MemoryStream(ZipUtility.DecompressGZ(stream));
                     case Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments.SFTPAdapterArgument.CompressionTypes.Zip:
                         return new MemoryStream(ZipUtility.UnZip(stream.ToArray()));
+                    case Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments.SFTPAdapterArgument.CompressionTypes.LZW:
+                        return LzwInputStreamHelper.ConvertToMemoryStream(new LzwInputStream(stream));
                 }
             }
 
