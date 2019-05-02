@@ -256,6 +256,7 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-additionalsettings-grid.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-additionalsettings-selective.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiongroupdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiongroupdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition.js" />
