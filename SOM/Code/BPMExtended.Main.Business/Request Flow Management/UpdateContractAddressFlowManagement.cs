@@ -20,6 +20,7 @@ namespace BPMExtended.Main.Business
 
         const string welcomeStep = "CF55D771-7B81-4BEE-8A38-7AF50D390A6F";
         const string changeAddressStep = "6CCE155B-172B-4E10-83DE-D07B113DA1A9";
+        const string paymentStep = "B904469E-5B4C-4699-BFBF-729691E1A26C";
         const string completedStep = "4AFB7452-F5FF-4CB7-8AE3-79801A6DEB7F";
         public string GetNextStep(string id, string currentStepId)
         {
@@ -28,7 +29,8 @@ namespace BPMExtended.Main.Business
             switch (currentStepId)
             {
                 case welcomeStep: nextStepId = changeAddressStep; break;
-                case changeAddressStep: nextStepId = completedStep; break;
+                case changeAddressStep: nextStepId = paymentStep; break;
+                case paymentStep: nextStepId = completedStep; break;
             }
             return nextStepId;
         }

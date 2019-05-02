@@ -252,6 +252,7 @@ namespace BPMExtended.Main.Business
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
             List<ContractAvailableServiceOutput> items = new List<ContractAvailableServiceOutput>();
+            List<ContractAvailableServiceOutput> filteredServices = new List<ContractAvailableServiceOutput>();
             List<string> packagesIds = new List<string>();
 
 
@@ -295,12 +296,16 @@ namespace BPMExtended.Main.Business
             }
 
             //Get special services from service definition catalog 
-
-
+            List<string> specialServicesIds = new CatalogManager().GetSpecialServicesIds();
 
             //filter the ContractAvailableServices (ContractAvailableServices - special services)
+            filteredServices = (from item in items
+                                where !specialServicesIds.Contains(item.ServiceCode)
+                                select item).ToList();
 
-            return items;
+
+
+            return filteredServices;
 
         }
 

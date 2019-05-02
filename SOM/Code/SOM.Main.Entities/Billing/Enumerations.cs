@@ -8,6 +8,7 @@ namespace SOM.Main.Entities
 {
     public enum CustomerType { Residential = 0, Enterprise = 1, Offical = 2 }
 
+
     public enum LineOfBusiness
     {
         Telephony = 0,

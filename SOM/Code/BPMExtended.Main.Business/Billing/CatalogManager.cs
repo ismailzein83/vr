@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -19,6 +20,38 @@ namespace BPMExtended.Main.Business
             {
                 return (UserConnection)HttpContext.Current.Session["UserConnection"];
             }
+        }
+
+        public List<string> GetSpecialServicesIds()
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            List<string> specialServicesIds = new List<string>();
+            string publicId;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSpecialServiceCatalog");
+            esq.AddColumn("Id");
+            esq.AddColumn("StServiceId");
+            esq.AddColumn("StIsSpecial");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StIsSpecial", true);
+
+
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                publicId = (string)entity.GetColumnValue("StServiceId");
+                specialServicesIds.Add(publicId);
+
+            }
+
+            return specialServicesIds;
+
         }
 
         public ServiceInfo GetDepositServiceByPagesNumber(int pagesNumber) // MYA: To Be Tested 

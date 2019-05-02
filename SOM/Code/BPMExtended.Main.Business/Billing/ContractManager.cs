@@ -144,6 +144,23 @@ namespace BPMExtended.Main.Business
             //return prob <= 50;
         }
 
+        public GetContractAddressOutput GetContractAddressAndDirectoryInfo(string contractId)
+        {
+            GetContractAddressOutput item = new GetContractAddressOutput();
+            var businessEntityManager = new BusinessEntityManager();
+            Packages packages = businessEntityManager.GetServicePackagesEntity();
+            string serviceId = packages.SNPCode;
+
+            using (var client = new SOMClient())
+            {
+                item = client.Get<GetContractAddressOutput>(String.Format("api/SOM.ST/Billing/GetContractAddressAndDirectoryInfo?ContractId={0}&ServiceId={1}", contractId, serviceId));
+
+            }
+
+            return item;
+
+        }
+
         public List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId)
         {
 
@@ -627,6 +644,8 @@ namespace BPMExtended.Main.Business
             {
                 ContractId = contract.Id,
                 ContractAddress = contractAddress,
+                RatePlanId = contract.RateplanId,
+                PathId = contract.LinePathId,
                 PhoneNumber = contract.PhoneNumber,
                 ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
             };

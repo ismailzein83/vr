@@ -85,6 +85,7 @@
     <Compile Include="ChangePhoneNumberRequestInput.cs" />
     <Compile Include="ChangeRatePlanRequestInput.cs" />
     <Compile Include="CommonInputArgument.cs" />
+    <Compile Include="ContractAdditionalServicesInput.cs" />
     <Compile Include="Contracts\ADSLContractDetail.cs" />
     <Compile Include="Contracts\ContractEntity.cs" />
     <Compile Include="Contracts\ContractInfo.cs" />

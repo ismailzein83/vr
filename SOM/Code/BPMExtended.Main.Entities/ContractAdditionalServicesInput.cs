@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BPMExtended.Main.SOMAPI
+namespace BPMExtended.Main.Entities
 {
-    public class ContractAvailableServiceOutput
+    public class ContractAdditionalServicesInput
     {
         public string ServiceCode { get; set; }
         public string ServiceName { get; set; }
