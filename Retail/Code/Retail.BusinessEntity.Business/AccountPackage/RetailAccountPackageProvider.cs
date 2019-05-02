@@ -1,4 +1,5 @@
 ﻿using Retail.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using Vanrise.Common;
 
@@ -6,6 +7,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class RetailAccountPackageProvider : AccountPackageProvider, IAccountPackageProvider
     {
+        public override Guid ConfigId { get { return new Guid("C8E34E16-B5F9-41B6-BC84-BA5E7F637E95"); } }
         public override Dictionary<AccountEventTime, List<RetailAccountPackage>> GetRetailAccountPackages(IAccountPackageProviderGetRetailAccountPackagesContext context)
         {
             AccountPackageManager accountPackageManager = new AccountPackageManager();

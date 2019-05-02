@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class AccountPackageProvider
+    public abstract class AccountPackageProvider : GenericBEAdditionalSettings
     {
         public abstract Dictionary<AccountEventTime, List<RetailAccountPackage>> GetRetailAccountPackages(IAccountPackageProviderGetRetailAccountPackagesContext context);
     }
