@@ -28,7 +28,7 @@
     <TargetFrameworkProfile />
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -325,6 +325,7 @@
     <Content Include="WhS_Sales\Services\APIServices\ZoneWithDefaultRateAPIService.js" />
     <Content Include="WhS_Sales\Services\BulkActionUtilsService.js" />
     <Content Include="WhS_Sales\Services\CodeCompareService.js" />
+    <Content Include="WhS_Sales\Services\ExcludedItemsService.js" />
     <Content Include="WhS_Sales\Services\PricingTemplateService.js" />
     <Content Include="WhS_Sales\Services\RatePlanUtilsService.js" />
     <Content Include="WhS_Sales\Services\RatePlanService.js" />
