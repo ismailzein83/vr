@@ -175,7 +175,7 @@ namespace TOne.WhS.Deal.Business
             detail.TypeDescription = Utilities.GetEnumAttribute<DealType, DescriptionAttribute>(settings.DealType).Description;
             detail.StatusDescription = Utilities.GetEnumAttribute<DealStatus, DescriptionAttribute>(settings.Status).Description;
             detail.ContractDescription = Utilities.GetEnumAttribute<DealContract, DescriptionAttribute>(settings.DealContract).Description;
-            detail.IsEffective = settings.RealBED <= DateTime.Now.Date && settings.RealEED >= DateTime.Now.Date;
+            detail.IsEffective = settings.RealBED <= DateTime.Now && settings.RealEED >= DateTime.Now;
             detail.BuyingAmount = settings.Outbounds.Sum(x => x.Volume * x.Rate);
             detail.BuyingVolume = settings.Outbounds.Sum(x => x.Volume);
             detail.SellingAmount = settings.Inbounds.Sum(x => x.Volume * x.Rate);

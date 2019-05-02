@@ -245,7 +245,7 @@ namespace TOne.WhS.Deal.Business
                 {
                     foreach (var zoneInfo in zoneInfos)
                     {
-                        if ((!dealId.HasValue || dealId.Value != zoneInfo.Value.DealId) && IsOverlapped(dealBED, dealEED, zoneInfo.Value.BED, zoneInfo.Value.EED))
+                        if ((!dealId.HasValue || dealId.Value != zoneInfo.Value.DealId) && Utilities.AreTimePeriodsOverlapped(dealBED, dealEED, zoneInfo.Value.BED, zoneInfo.Value.EED))
                             return true;
                     }
                 }
@@ -464,17 +464,22 @@ namespace TOne.WhS.Deal.Business
         public List<DealDefinition> GetRecurredDeals(DealDefinition deal, int recurringNumber, RecurringType recurringType)
         {
             var recurredDeals = new List<DealDefinition>();
-            if (!deal.Settings.RealEED.HasValue)
+            if (!deal.Settings.EEDToStore.HasValue)
             {
                 return recurredDeals;
                 //we cannot reccur a deal without EED
             }
 
-            DateTime endDealDate = deal.Settings.RealEED.Value;
+            DateTime EEDToStore = deal.Settings.EEDToStore.Value;
             DateTime beginDealDate = deal.Settings.BeginDate;
 
-            var dealLifeSpan = endDealDate.Subtract(beginDealDate);
+            var dealLifeSpan = EEDToStore.Subtract(beginDealDate);
+
+            TimeSpan offSet = deal.Settings.OffSet ?? new TimeSpan();
+
+            DateTime endDealDate = deal.Settings.RealEED.Value.Add(offSet);
             var monthsDifference = (endDealDate.Year - beginDealDate.Year) * 12 + (endDealDate.Month - beginDealDate.Month);
+
             for (int i = 0; i < recurringNumber; i++)
             {
                 DealDefinition recurredDeal = new DealDefinition();
@@ -482,9 +487,9 @@ namespace TOne.WhS.Deal.Business
                 switch (recurringType)
                 {
                     case RecurringType.Daily:
-                        recurredDeal.Settings.BeginDate = endDealDate.AddDays(1);
+                        recurredDeal.Settings.BeginDate = endDealDate;
                         recurredDeal.Settings.EEDToStore = recurredDeal.Settings.BeginDate.Add(dealLifeSpan);
-                        endDealDate = recurredDeal.Settings.EEDToStore.Value;
+                        endDealDate = recurredDeal.Settings.RealEED.Value.Add(offSet);
                         break;
 
                     case RecurringType.Monthly:
@@ -638,13 +643,6 @@ namespace TOne.WhS.Deal.Business
             }
 
             return tierNb;
-        }
-
-        private bool IsOverlapped(DateTime firstBeginEffectiveDate, DateTime? firstEndEffectiveDate, DateTime secondBeginEffectiveDate, DateTime? secondEndEffectiveDate)
-        {
-            return secondEndEffectiveDate.VRGreaterThan(firstBeginEffectiveDate)
-                    && firstEndEffectiveDate.VRGreaterThan(secondBeginEffectiveDate)
-                    && (!secondEndEffectiveDate.HasValue || secondBeginEffectiveDate != secondEndEffectiveDate.Value);
         }
 
         private bool CheckDealStatus(DealStatus dealStatus, DateTime? deActivationDate, DateTime effectiveDate)

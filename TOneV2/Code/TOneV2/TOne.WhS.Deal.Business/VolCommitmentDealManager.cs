@@ -16,7 +16,7 @@ namespace TOne.WhS.Deal.Business
     public class VolCommitmentDealManager : BaseDealManager
     {
         #region Public Methods
-        public Dictionary<int, VolCommitmentDealSettings> GetEffectiveVolCommitmentDeals(VolCommitmentDealType dealType ,List<int> carrierAccountIds, DateTime fromDate, DateTime toDate, out DateTime? minBED, out DateTime? maxEED)
+        public Dictionary<int, VolCommitmentDealSettings> GetEffectiveVolCommitmentDeals(VolCommitmentDealType dealType, List<int> carrierAccountIds, DateTime fromDate, DateTime toDate, out DateTime? minBED, out DateTime? maxEED)
         {
             var cachedVolCommitmentDeals = GetCachedVolCommitmentDeals();
             minBED = null;
@@ -53,7 +53,7 @@ namespace TOne.WhS.Deal.Business
                 }
             }
             return effectiveVolCommitmentDeals;
-        } 
+        }
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredVolCommitmentDeals(Vanrise.Entities.DataRetrievalInput<VolCommitmentDealQuery> input)
         {
             var cachedEntities = this.GetCachedVolCommitmentDeals();
@@ -160,7 +160,7 @@ namespace TOne.WhS.Deal.Business
             detail.CarrierAccountName = new CarrierAccountManager().GetCarrierAccountName(carrierAccountId);
             detail.TypeDescription = Utilities.GetEnumAttribute<VolCommitmentDealType, DescriptionAttribute>(settings.DealType).Description;
             detail.StatusDescription = Utilities.GetEnumAttribute<DealStatus, DescriptionAttribute>(settings.Status).Description;
-            detail.IsEffective = settings.RealBED <= DateTime.Now.Date && settings.RealEED >= DateTime.Now.Date;
+            detail.IsEffective = settings.RealBED <= DateTime.Now && settings.RealEED >= DateTime.Now;
             detail.CurrencySymbole = new CurrencyManager().GetCurrencySymbol(settings.CurrencyId);
 
             return detail;
