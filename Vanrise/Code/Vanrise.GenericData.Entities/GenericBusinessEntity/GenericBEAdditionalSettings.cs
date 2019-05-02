@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericBEAdditionalSettings
+    public abstract class GenericBEAdditionalSettings
     {
+        public abstract Guid ConfigId { get; }
     }
 }
