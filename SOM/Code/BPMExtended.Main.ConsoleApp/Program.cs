@@ -12,39 +12,39 @@ namespace BPMExtended.Main.ConsoleApp
     {
         static void Main(string[] args)
         {
-            new Runtime().CallFunc();
+            //new Runtime().CallFunc();
             Console.ReadLine();
         }
 
         public class Runtime
         {
-            public void CallAction()
-            {
-                MainProxy manager = new MainProxy();
+            //public void CallAction()
+            //{
+            //    MainProxy manager = new MainProxy();
 
-                int x = 3;
-                int y = 0;
+            //    int x = 3;
+            //    int y = 0;
 
-                Action action = delegate ()
-                {
-                    manager.Divide(x, y);
-                };
+            //    Action action = delegate ()
+            //    {
+            //        manager.Divide(x, y);
+            //    };
                 
-                manager.InvokeMethod(action);
-            }
+            //    manager.InvokeMethod(action);
+            //}
 
-            public int CallFunc()
-            {
-                MainProxy manager = new MainProxy();
+            //public int CallFunc()
+            //{
+            //    MainProxy manager = new MainProxy();
 
-                Func<int> getTemprature = delegate ()
-                {
-                    return manager.GetTemprature("3");
-                };
+            //    Func<int> getTemprature = delegate ()
+            //    {
+            //        return manager.GetTemprature("3");
+            //    };
 
-                return manager.InvokeMehtod(getTemprature);
-                //Console.WriteLine("Temprature is {0}", temprature);
-            }
+            //    return manager.InvokeMehtod(getTemprature);
+            //    //Console.WriteLine("Temprature is {0}", temprature);
+            //}
         }
 
         public class Person

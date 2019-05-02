@@ -26,7 +26,7 @@ namespace BPMExtended.Main.Business
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error has occurred. Exception details {0}", ex.Message);
+                SaveErrorLog(ex);
                 throw ex;
             }
         }
@@ -39,29 +39,22 @@ namespace BPMExtended.Main.Business
             }
             catch (Exception ex)
             {
-                EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StErrorLog");
-                Entity errorLog = schema.CreateEntity(BPM_UserConnection);
-
-                errorLog.SetColumnValue("Id", Guid.NewGuid());
-                errorLog.SetColumnValue("StIP", BPM_UserConnection.CurrentUser.ClientIP);
-                errorLog.SetColumnValue("StUserId", BPM_UserConnection.CurrentUser.ContactId);
-                errorLog.SetColumnValue("StMessage", ex.Message);
-                errorLog.SetColumnValue("StDetails", ex.ToString());
-                errorLog.Save();
-                Console.WriteLine("An error has occurred. Exception details {0}", ex.Message);
+                SaveErrorLog(ex);
                 throw ex;
             }
         }
 
-        public void Divide(int x, int y)
+        private void SaveErrorLog(Exception ex)
         {
-            int z = x / y;
-        }
+            EntitySchema schema = BPM_UserConnection.EntitySchemaManager.GetInstanceByName("StErrorLog");
+            Entity errorLog = schema.CreateEntity(BPM_UserConnection);
 
-        public int GetTemprature(string date)
-        {
-            DateTime.Parse(date);
-            return 30;
+            errorLog.SetColumnValue("Id", Guid.NewGuid());
+            errorLog.SetColumnValue("StIP", BPM_UserConnection.CurrentUser.ClientIP);
+            errorLog.SetColumnValue("StUserId", BPM_UserConnection.CurrentUser.ContactId);
+            errorLog.SetColumnValue("StMessage", ex.Message);
+            errorLog.SetColumnValue("StDetails", ex.ToString());
+            errorLog.Save();
         }
     }
 }
