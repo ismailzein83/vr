@@ -46,6 +46,10 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
@@ -54,6 +58,7 @@
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="IAccountBEDataManager.cs" />
     <Compile Include="IAccountPackageDataManager.cs" />
+    <Compile Include="IAccountPackageUsageVolumeBalanceDataManager.cs" />
     <Compile Include="IPackageUsageVolumeCombinationDataManager.cs" />
     <Compile Include="IRecurChargeBalanceUpdateSummaryDataManager.cs" />
     <Compile Include="IAccountPackageRecurChargeDataManager.cs" />

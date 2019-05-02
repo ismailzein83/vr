@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountPackageDataManager.cs" />
+    <Compile Include="AccountPackageUsageVolumeBalanceDataManager.cs" />
     <Compile Include="ChargingPolicyDataManager.cs" />
     <Compile Include="PackageDataManager.cs" />
     <Compile Include="PackageUsageVolumeCombinationDataManager.cs" />
