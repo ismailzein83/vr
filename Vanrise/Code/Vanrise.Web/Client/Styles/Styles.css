@@ -5293,11 +5293,13 @@ span.option-marketprice {
     -webkit-animation-timing-function: ease-in;
     -webkit-animation-direction: alternate;
 }
+    .vr-status-progress.initial-algin {
+        text-align: initial;
+    }
 
-
-.vr-status-progress.inline {
-    height: 28px;
-}
+    .vr-status-progress.inline {
+        height: 28px;
+    }
 
 
 .vr-status-progress .status-description {
