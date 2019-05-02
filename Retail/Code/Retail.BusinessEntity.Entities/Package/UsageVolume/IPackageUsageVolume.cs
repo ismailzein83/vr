@@ -35,7 +35,7 @@ namespace Retail.BusinessEntity.Entities
 
     public interface IPackageUsageVolumeGetPackageItemsInfoContext
     {
-        AccountPackage AccountPackage { get; }
+        RetailAccountPackage RetailAccountPackage { get; }
 
         List<Guid> ItemIds { get; }
 

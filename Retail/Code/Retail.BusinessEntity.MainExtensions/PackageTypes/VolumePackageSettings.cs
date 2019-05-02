@@ -130,19 +130,19 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
             context.Items = items;
             if (this.RecurringPeriod == null)
             {
-                context.FromTime = context.AccountPackage.BED;
-                if (!context.AccountPackage.EED.HasValue)
-                    throw new NullReferenceException(string.Format("context.AccountPackage.EED. AccountPackageId '{0}'", context.AccountPackage.AccountPackageId));
-                context.ToTime = context.AccountPackage.EED.Value;
+                context.FromTime = context.RetailAccountPackage.BED;
+                if (!context.RetailAccountPackage.EED.HasValue)
+                    throw new NullReferenceException(string.Format("context.AccountPackage.EED. AccountPackageId '{0}'", context.RetailAccountPackage.AccountPackageId));
+                context.ToTime = context.RetailAccountPackage.EED.Value;
             }
             else
             {
-                var recurringPeriodContext = new PackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext(context.EventTime, context.AccountPackage.BED, context.AccountPackage.EED);
+                var recurringPeriodContext = new PackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext(context.EventTime, context.RetailAccountPackage.BED, context.RetailAccountPackage.EED);
                 this.RecurringPeriod.GetEventApplicablePeriod(recurringPeriodContext);
                 context.FromTime = recurringPeriodContext.PeriodStart;
                 var applicablePeriodToTime = recurringPeriodContext.PeriodEnd;
-                if (context.AccountPackage.EED.HasValue && context.AccountPackage.EED.Value < applicablePeriodToTime)
-                    applicablePeriodToTime = context.AccountPackage.EED.Value;
+                if (context.RetailAccountPackage.EED.HasValue && context.RetailAccountPackage.EED.Value < applicablePeriodToTime)
+                    applicablePeriodToTime = context.RetailAccountPackage.EED.Value;
                 context.ToTime = applicablePeriodToTime;
             }
         }
@@ -292,35 +292,15 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
                 this.PackageAssignmentEndTime = packageAssignmentEndTime;
             }
 
-            public DateTime EventTime
-            {
-                get;
-                private set;
-            }
+            public DateTime EventTime { get; private set; }
 
-            public DateTime PackageAssignmentStartTime
-            {
-                get;
-                private set;
-            }
+            public DateTime PackageAssignmentStartTime { get; private set; }
 
-            public DateTime? PackageAssignmentEndTime
-            {
-                get;
-                private set;
-            }
+            public DateTime? PackageAssignmentEndTime { get; private set; }
 
-            public DateTime PeriodStart
-            {
-                get;
-                set;
-            }
+            public DateTime PeriodStart { get; set; }
 
-            public DateTime PeriodEnd
-            {
-                get;
-                set;
-            }
+            public DateTime PeriodEnd { get; set; }
         }
 
         private class PackageUsageVolumeRecurringPeriodGetChargingDatesContext : IPackageUsageVolumeRecurringPeriodGetChargingDatesContext
@@ -334,35 +314,15 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
                 this.PackageAssignmentEndTime = packageAssignmentEndTime;
             }
 
-            public DateTime FromDate
-            {
-                get;
-                private set;
-            }
+            public DateTime FromDate { get; private set; }
 
-            public DateTime ToDate
-            {
-                get;
-                private set;
-            }
+            public DateTime ToDate { get; private set; }
 
-            public DateTime PackageAssignmentStartTime
-            {
-                get;
-                private set;
-            }
+            public DateTime PackageAssignmentStartTime { get; private set; }
 
-            public DateTime? PackageAssignmentEndTime
-            {
-                get;
-                private set;
-            }
+            public DateTime? PackageAssignmentEndTime { get; private set; }
 
-            public List<PackageUsageVolumeRecurringPeriodChargingDate> ChargingDates
-            {
-                get;
-                set;
-            }
+            public List<PackageUsageVolumeRecurringPeriodChargingDate> ChargingDates { get; set; }
         }
 
         #endregion

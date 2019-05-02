@@ -22,6 +22,24 @@ namespace Retail.BusinessEntity.Entities
         public List<AccountEventTime> AccountEventTimeList { get; set; }
     }
 
+    public interface IAccountPackageProviderGetRetailAccountPackageContext
+    {
+        long AccountId { get; }
+
+        long PackageId { get; }
+
+        DateTime EventTime { get; }
+    }
+
+    public class AccountPackageProviderGetRetailAccountPackageContext : IAccountPackageProviderGetRetailAccountPackageContext
+    {
+        public long AccountId { get; set; }
+
+        public long PackageId { get; set; }
+
+        public DateTime EventTime { get; set; }
+    }
+
     public struct AccountEventTime
     {
         public long AccountId { get; set; }

@@ -14,7 +14,8 @@ namespace Retail.Voice.Business
     {
         #region Variables/Ctor
 
-        AccountPackageManager _accountPackageManager = new AccountPackageManager();
+        static AccountPackageManager s_accountPackageManager = new AccountPackageManager();
+        static ServiceTypeManager s_serviceTypeManager = new ServiceTypeManager();
         static PackageUsageVolumeCombinationManager s_packageUsageVolumeCombinationManager = new PackageUsageVolumeCombinationManager();
         static AccountPackageUsageVolumeBalanceManager s_accountPackageUsageVolumeBalanceManager = new AccountPackageUsageVolumeBalanceManager();
 
@@ -133,14 +134,7 @@ namespace Retail.Voice.Business
             if (priceCDRInputs == null || priceCDRInputs.Count == 0)
                 return null;
 
-            var beDefinitionManager = new BusinessEntityDefinitionManager();
-            var beDefinition = beDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);
-            IAccountPackageHandler accountPackageHandler = beDefinition.Settings as IAccountPackageHandler;
-            if (accountPackageHandler == null)
-                throw new VRBusinessException("beDefinition.Settings should be of type IAccountPackageHandler");
-
-            var getAccountPackageProviderContext = new GetAccountPackageProviderContext();
-            AccountPackageProvider accountPackageProvider = accountPackageHandler.GetAccountPackageProvider(getAccountPackageProviderContext);
+            AccountPackageProvider accountPackageProvider = this.GetAccountPackageProvider(accountBEDefinitionId);
             if (accountPackageProvider == null)
                 return new List<PriceCDROutput>(priceCDRInputs.Select(itm => new PriceCDROutput() { PriceCDRInput = itm }));
 
@@ -253,18 +247,71 @@ namespace Retail.Voice.Business
             return priceCDROutputList;
         }
 
-        public List<CDRVolumePricingOutput> ApplyVolumePricingToCDRs(Guid accountBEDefinitionId, List<CDRVolumePricingInput> cdrs)
+        public void Centrex_ApplyVolumePricingToCDRs(Guid accountBEDefinitionId, List<dynamic> cdrs)
+        {
+            if (cdrs == null || cdrs.Count == 0)
+                return;
+
+            var cdrVolumePricingInputList = cdrs.Select(cdr => new CDRVolumePricingInput(cdr, cdr.SubscriberAccountId, cdr.AttemptDateTime, cdr.SaleDurationInSeconds, cdr.PackageUsageVolumeCombinationId)).ToList();
+            List<CDRVolumePricingOutput> cdrVolumePricingOutputList = this.ApplyVolumePricingToCDRs(accountBEDefinitionId, cdrVolumePricingInputList);
+
+            foreach (var cdrVolumePricingOutput in cdrVolumePricingOutputList)
+            {
+                dynamic cdr = cdrVolumePricingOutput.CDRInput.CDR;
+
+                FillOrigValues(cdr);
+
+                if (cdrVolumePricingOutput.CDRPricingOutputItem == null)
+                {
+                    var firstCDRVolumePricingOutputItem = cdrVolumePricingOutput.CDRVolumePricingOutputItems.First();
+                    cdr.PackageId = firstCDRVolumePricingOutputItem.PackageId;
+                    cdr.ChargingPolicyId = null;
+                    cdr.SaleRate = null;
+                    cdr.SaleAmount = null;
+                    cdr.SaleRateTypeId = null;
+                    cdr.SaleCurrencyId = null;
+                    cdr.SaleRateValueRuleId = null;
+                    cdr.SaleRateTypeRuleId = null;
+                    cdr.SaleTariffRuleId = null;
+                    cdr.SaleExtraChargeRuleId = null;
+                    cdr.ChargedDurationInSeconds = 0;
+                }
+                else
+                {
+                    cdr.ChargedDurationInSeconds = cdrVolumePricingOutput.CDRPricingOutputItem.PricedDurationInSec;
+                    cdr.SaleAmount = cdrVolumePricingOutput.CDRPricingOutputItem.SaleAmount;
+                }
+
+                cdr.PricingDetails = cdrVolumePricingOutput.CDRPricingDetails;
+            }
+        }
+
+        public void FillOrigValues(dynamic record)
+        {
+            record.OrigPackageId = record.PackageId;
+            record.OrigChargingPolicyId = record.ChargingPolicyId;
+            record.OrigSaleRate = record.SaleRate;
+            record.OrigSaleAmount = record.SaleAmount;
+            record.OrigSaleRateTypeId = record.SaleRateTypeId;
+            record.OrigSaleCurrencyId = record.SaleCurrencyId;
+            record.OrigSaleRateValueRuleId = record.SaleRateValueRuleId;
+            record.OrigSaleRateTypeRuleId = record.SaleRateTypeRuleId;
+            record.OrigSaleTariffRuleId = record.SaleTariffRuleId;
+            record.OrigSaleExtraChargeRuleId = record.SaleExtraChargeRuleId;
+        }
+
+        public List<CDRVolumePricingOutput> ApplyVolumePricingToCDRs(Guid accountBEDefinitionId, List<CDRVolumePricingInput> cdrs, Guid? cdrPricingDetailRecordTypeId = null)
         {
             HashSet<PackageUsageVolumeBalanceKey> volumeBalanceKeys;
             List<VolumePricingCDRInProcess> cdrsInProcess = GenerateVolumePricingCDRsInProcess(accountBEDefinitionId, cdrs, out volumeBalanceKeys);
 
             Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey = s_accountPackageUsageVolumeBalanceManager.GetVolumeBalances(volumeBalanceKeys);
 
-            List<CDRVolumePricingOutput> cdrPricingInfos = GenerateFinalCDRVolumePricingOutputs(cdrsInProcess, volumeBalancesByKey);
+            List<CDRVolumePricingOutput> cdrVolumePricingOutputList = GenerateFinalCDRVolumePricingOutputs(cdrsInProcess, volumeBalancesByKey, cdrPricingDetailRecordTypeId);
 
             s_accountPackageUsageVolumeBalanceManager.UpdateVolumeBalancesInDB(volumeBalancesByKey.Values);
 
-            return cdrPricingInfos;
+            return cdrVolumePricingOutputList;
         }
 
         public VoiceEventPricingInfo ApplyChargingPolicyToVoiceEvent(int chargingPolicyId, Guid serviceTypeId, dynamic mappedCDR, decimal duration, DateTime eventTime, Guid accountBEDefinitionId, long packageAccountId)
@@ -288,18 +335,6 @@ namespace Retail.Voice.Business
 
         #region Private Methods
 
-        static ServiceTypeManager s_serviceTypeManager = new ServiceTypeManager();
-
-        private struct GetVoiceUsageChargersByPriorityCacheName
-        {
-            public Guid AccountDefinitionId { get; set; }
-
-            public long AccountId { get; set; }
-
-            public Guid ServiceTypeId { get; set; }
-
-            public DateTime EventDate { get; set; }
-        }
         private List<VoiceUsageChargerWithParentPackage> GetVoiceUsageChargersByPriority(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, DateTime eventTime)
         {
             var cacheName = new GetVoiceUsageChargersByPriorityCacheName { AccountDefinitionId = accountBEDefinitionId, AccountId = accountId, ServiceTypeId = serviceTypeId, EventDate = eventTime.Date };
@@ -369,16 +404,7 @@ namespace Retail.Voice.Business
 
         private List<ProcessedRetailAccountPackage> GetProcessedAccountPackagesByPriority(Guid accountBEDefinitionId, long accountId, DateTime effectiveTime, bool withInheritence)
         {
-            PackageManager packageManager = new PackageManager();
-
-            var beDefinitionManager = new BusinessEntityDefinitionManager();
-            var beDefinition = beDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);
-            IAccountPackageHandler accountPackageHandler = beDefinition.Settings as IAccountPackageHandler;
-            if (accountPackageHandler == null)
-                throw new VRBusinessException("beDefinition.Settings should be of type IAccountPackageHandler");
-
-            var getAccountPackageProviderContext = new GetAccountPackageProviderContext();
-            AccountPackageProvider accountPackageProvider = accountPackageHandler.GetAccountPackageProvider(getAccountPackageProviderContext);
+            AccountPackageProvider accountPackageProvider = this.GetAccountPackageProvider(accountBEDefinitionId);
             if (accountPackageProvider == null)
                 return null;
 
@@ -389,6 +415,7 @@ namespace Retail.Voice.Business
             if (retailAccountPackagesByAccountEventTime == null || retailAccountPackagesByAccountEventTime.Count == 0)
                 return null;
 
+            PackageManager packageManager = new PackageManager();
             List<ProcessedRetailAccountPackage> processedRetailAccountPackages = new List<ProcessedRetailAccountPackage>();
 
             foreach (var retailAccountPackages in retailAccountPackagesByAccountEventTime.Values)
@@ -409,9 +436,14 @@ namespace Retail.Voice.Business
 
         private List<VolumePricingCDRInProcess> GenerateVolumePricingCDRsInProcess(Guid accountBEDefinitionId, List<CDRVolumePricingInput> cdrInputs, out HashSet<PackageUsageVolumeBalanceKey> volumeBalanceKeys)
         {
+            PackageManager packageManager = new PackageManager();
             var cdrsInProcess = new List<VolumePricingCDRInProcess>();
-            var volumeBalanceKeys_local = new HashSet<PackageUsageVolumeBalanceKey>();//to use inside anonymous method(s)
-            volumeBalanceKeys = volumeBalanceKeys_local;
+            var _volumeBalanceKeys = new HashSet<PackageUsageVolumeBalanceKey>(); //to use inside anonymous method(s)
+            volumeBalanceKeys = _volumeBalanceKeys;
+
+            AccountPackageProvider accountPackageProvider = this.GetAccountPackageProvider(accountBEDefinitionId);
+            if (accountPackageProvider == null)
+                return new List<VolumePricingCDRInProcess>(cdrInputs.Select(cdrInput => new VolumePricingCDRInProcess { CDRInput = cdrInput }));
 
             foreach (var cdrInput in cdrInputs)
             {
@@ -425,56 +457,73 @@ namespace Retail.Voice.Business
                 packageUsageVolumeCombination.ThrowIfNull("packageUsageVolumeCombination", cdrInput.PackageUsageVolumeCombinationId);
                 packageUsageVolumeCombination.PackageItemsByPackageId.ThrowIfNull("packageUsageVolumeCombination.PackageItemsByPackageId", cdrInput.PackageUsageVolumeCombinationId);
 
-                _accountPackageManager.LoadAccountPackagesByPriority(accountBEDefinitionId, accountId, cdrTime, true,
-                    (processedAccountPackage, handle) =>
+                List<AccountEventTime> accountEventTimeList = new List<AccountEventTime>() { new AccountEventTime() { AccountId = accountId, EventTime = cdrTime } };
+
+                var getRetailAccountPackagesContext = new AccountPackageProviderGetRetailAccountPackagesContext() { AccountBEDefinitionId = accountBEDefinitionId, AccountEventTimeList = accountEventTimeList };
+                Dictionary<AccountEventTime, List<RetailAccountPackage>> retailAccountPackagesByAccountEventTime = accountPackageProvider.GetRetailAccountPackages(getRetailAccountPackagesContext);
+                if (retailAccountPackagesByAccountEventTime == null || retailAccountPackagesByAccountEventTime.Count == 0)
+                    return null;
+
+                foreach (var retailAccountPackages in retailAccountPackagesByAccountEventTime.Values)
+                {
+                    foreach (var retailAccountPackage in retailAccountPackages)
                     {
-                        var package = processedAccountPackage.Package;
                         List<Guid> packageItemsIds;
-                        if (!packageUsageVolumeCombination.PackageItemsByPackageId.TryGetValue(package.PackageId, out packageItemsIds))
-                            return;
+                        if (!packageUsageVolumeCombination.PackageItemsByPackageId.TryGetValue(retailAccountPackage.PackageId, out packageItemsIds))
+                            continue;
+
+                        var package = packageManager.GetPackage(retailAccountPackage.PackageId);
+                        package.ThrowIfNull("package", retailAccountPackage.PackageId);
+                        package.Settings.ThrowIfNull("package.Settings", retailAccountPackage.PackageId);
+                        package.Settings.ExtendedSettings.ThrowIfNull("package.Settings.ExtendedSettings", retailAccountPackage.PackageId);
 
                         var packageVolumeCharging = package.Settings.ExtendedSettings as IPackageUsageVolume;
                         if (packageVolumeCharging == null)
-                            return;
+                            continue;
 
-                        var getPackageItemsInfoContext = new PackageUsageVolumeGetPackageItemsInfoContext(processedAccountPackage.AccountPackage, packageItemsIds, cdrTime, package.Settings.PackageDefinitionId);
+                        var getPackageItemsInfoContext = new PackageUsageVolumeGetPackageItemsInfoContext(retailAccountPackage, packageItemsIds, cdrTime, package.Settings.PackageDefinitionId);
                         packageVolumeCharging.GetPackageItemsInfo(getPackageItemsInfoContext);
 
                         if (getPackageItemsInfoContext.Items == null || getPackageItemsInfoContext.Items.Count == 0)
-                            return;
+                            continue;
 
                         foreach (var itm in getPackageItemsInfoContext.Items)
                         {
                             var balanceKey = new PackageUsageVolumeBalanceKey
                             {
-                                AccountPackageId = processedAccountPackage.AccountPackage.AccountPackageId,
+                                AccountPackageId = retailAccountPackage.AccountPackageId,
                                 PackageItemId = itm.ItemId,
                                 ItemFromTime = getPackageItemsInfoContext.FromTime
                             };
+                            _volumeBalanceKeys.Add(balanceKey);
+
                             cdrInProcess.VolumeItems.Add(new PackageUsageVolumeItemInProcess
                             {
                                 VolumeItem = itm,
                                 FromTime = getPackageItemsInfoContext.FromTime,
                                 ToTime = getPackageItemsInfoContext.ToTime,
                                 BalanceKey = balanceKey,
-                                ProcessedAccountPackage = processedAccountPackage
+                                ProcessedRetailAccountPackage = new ProcessedRetailAccountPackage() { RetailAccountPackage = retailAccountPackage, Package = package }
                             });
-                            volumeBalanceKeys_local.Add(balanceKey);
                         }
-                    });
+                    }
+                }
             }
 
             return cdrsInProcess;
         }
 
-        private List<CDRVolumePricingOutput> GenerateFinalCDRVolumePricingOutputs(List<VolumePricingCDRInProcess> cdrsInProcess, Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey)
+        private List<CDRVolumePricingOutput> GenerateFinalCDRVolumePricingOutputs(List<VolumePricingCDRInProcess> cdrsInProcess,
+            Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey, Guid? cdrPricingDetailRecordTypeId)
         {
-            List<CDRVolumePricingOutput> cdrPricingInfos = new List<CDRVolumePricingOutput>();
+            List<CDRVolumePricingOutput> cdrVolumePricingOutputList = new List<CDRVolumePricingOutput>();
 
             foreach (var cdrInProcess in cdrsInProcess)
             {
-                CDRVolumePricingOutput pricingInfo = new CDRVolumePricingOutput { CDRInput = cdrInProcess.CDRInput, Items = new List<CDRVolumePricingOutputItem>() };
-                Decimal remainingDurationInSec = cdrInProcess.CDRInput.PricingDurationInSec;
+                CDRVolumePricingInput cdrInput = cdrInProcess.CDRInput;
+                CDRVolumePricingOutput cdrOutput = new CDRVolumePricingOutput { CDRInput = cdrInput, CDRVolumePricingOutputItems = new List<CDRVolumePricingOutputItem>() };
+
+                Decimal remainingDurationInSec = cdrInput.PricingDurationInSec;
 
                 foreach (var volumeItem in cdrInProcess.VolumeItems)
                 {
@@ -485,7 +534,7 @@ namespace Retail.Voice.Business
                         {
                             Balance = new AccountPackageUsageVolumeBalance
                             {
-                                AccountPackageId = volumeItem.ProcessedAccountPackage.AccountPackage.AccountPackageId,
+                                AccountPackageId = volumeItem.ProcessedRetailAccountPackage.RetailAccountPackage.AccountPackageId,
                                 PackageItemId = volumeItem.VolumeItem.ItemId,
                                 FromTime = volumeItem.FromTime,
                                 ToTime = volumeItem.ToTime,
@@ -497,31 +546,57 @@ namespace Retail.Voice.Business
                     }
 
                     var matchBalance = matchBalanceInProcess.Balance;
-                    if (matchBalance.UsedVolume < matchBalance.ItemVolume)
+                    decimal matchBalanceRemaniningVolume = matchBalance.ItemVolume - matchBalance.UsedVolume;
+                    if (matchBalanceRemaniningVolume > 0)
                     {
-                        var pricedDurationInSec = Math.Min(volumeItem.VolumeItem.Volume, remainingDurationInSec);
-                        var pricingInfoItem = new CDRVolumePricingOutputItem
-                        {
-                            AccountPackageId = volumeItem.ProcessedAccountPackage.AccountPackage.AccountPackageId,
-                            PackageId = volumeItem.ProcessedAccountPackage.Package.PackageId,
-                            PricedDurationInSec = Math.Min(pricedDurationInSec, remainingDurationInSec)
-                        };
+                        var pricedDurationInSec = Math.Min(matchBalanceRemaniningVolume, remainingDurationInSec);
+                        matchBalance.UsedVolume += pricedDurationInSec;
 
-                        pricingInfo.Items.Add(pricingInfoItem);
+                        var cdrVolumePricingOutputItem = new CDRVolumePricingOutputItem
+                        {
+                            AccountPackageId = volumeItem.ProcessedRetailAccountPackage.RetailAccountPackage.AccountPackageId,
+                            PackageId = volumeItem.ProcessedRetailAccountPackage.Package.PackageId,
+                            PackageItemId = volumeItem.VolumeItem.ItemId,
+                            PricedDurationInSec = pricedDurationInSec
+                        };
+                        cdrOutput.CDRVolumePricingOutputItems.Add(cdrVolumePricingOutputItem);
+
                         if (!matchBalanceInProcess.ShouldAdd)
                             matchBalanceInProcess.ShouldUpdate = true;
 
-                        remainingDurationInSec -= pricingInfoItem.PricedDurationInSec;
+                        remainingDurationInSec -= pricedDurationInSec;
                         if (remainingDurationInSec == 0)
                             break;
                     }
                 }
 
-                pricingInfo.RemainingDurationInSec = remainingDurationInSec;
-                cdrPricingInfos.Add(pricingInfo);
+                if (remainingDurationInSec > 0)
+                {
+                    cdrOutput.CDRPricingOutputItem = new CDRPricingOutputItem()
+                    {
+                        PackageId = cdrInput.PackageId,
+                        PricedDurationInSec = remainingDurationInSec,
+                        SaleAmount = (remainingDurationInSec / cdrInput.PricingDurationInSec) * cdrInput.SaleAmount
+                    };
+                }
+
+                //cdrVolumePricingOutput.RemainingDurationInSec = remainingDurationInSec;
+                cdrVolumePricingOutputList.Add(cdrOutput);
             }
 
-            return cdrPricingInfos;
+            return cdrVolumePricingOutputList;
+        }
+
+        private AccountPackageProvider GetAccountPackageProvider(Guid accountBEDefinitionId)
+        {
+            var beDefinitionManager = new BusinessEntityDefinitionManager();
+            var beDefinition = beDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);
+            IAccountPackageHandler accountPackageHandler = beDefinition.Settings as IAccountPackageHandler;
+            if (accountPackageHandler == null)
+                throw new VRBusinessException("beDefinition.Settings should be of type IAccountPackageHandler");
+
+            var getAccountPackageProviderContext = new GetAccountPackageProviderContext();
+            return accountPackageHandler.GetAccountPackageProvider(getAccountPackageProviderContext);
         }
 
         //private List<Package> GetAccountPackagesByPriority(long accountId, DateTime effectiveTime)
@@ -567,6 +642,17 @@ namespace Retail.Voice.Business
 
         #region Private Classes
 
+        private struct GetVoiceUsageChargersByPriorityCacheName
+        {
+            public Guid AccountDefinitionId { get; set; }
+
+            public long AccountId { get; set; }
+
+            public Guid ServiceTypeId { get; set; }
+
+            public DateTime EventDate { get; set; }
+        }
+
         private class PackageUsageVolumeItemInProcess
         {
             public PackageUsageVolumeItem VolumeItem { get; set; }
@@ -577,7 +663,7 @@ namespace Retail.Voice.Business
 
             public PackageUsageVolumeBalanceKey BalanceKey { get; set; }
 
-            public ProcessedAccountPackage ProcessedAccountPackage { get; set; }
+            public ProcessedRetailAccountPackage ProcessedRetailAccountPackage { get; set; }
         }
 
         private class VolumePricingCDRInProcess
@@ -667,15 +753,23 @@ namespace Retail.Voice.Business
         public Decimal PricingDurationInSec { get; private set; }
 
         public int PackageUsageVolumeCombinationId { get; private set; }
+
+        public Decimal SaleAmount { get; private set; }
+
+        public int PackageId { get; private set; }
     }
 
     public class CDRVolumePricingOutput
     {
         public CDRVolumePricingInput CDRInput { get; set; }
 
-        public List<CDRVolumePricingOutputItem> Items { get; set; }
+        public List<CDRVolumePricingOutputItem> CDRVolumePricingOutputItems { get; set; }
 
-        public decimal RemainingDurationInSec { get; set; }
+        public CDRPricingOutputItem CDRPricingOutputItem { get; set; }
+
+        public List<dynamic> CDRPricingDetails { get; set; }
+
+        //public decimal RemainingDurationInSec { get; set; }
     }
 
     public class CDRVolumePricingOutputItem
@@ -684,9 +778,18 @@ namespace Retail.Voice.Business
 
         public int PackageId { get; set; }
 
-        public int PackageItemId { get; set; }
+        public Guid PackageItemId { get; set; }
 
         public decimal PricedDurationInSec { get; set; }
+    }
+
+    public class CDRPricingOutputItem
+    {
+        public int PackageId { get; set; }
+
+        public decimal PricedDurationInSec { get; set; }
+
+        public decimal SaleAmount { get; set; }
     }
 
     public class VoiceUsageChargerContext : IVoiceUsageChargerContext

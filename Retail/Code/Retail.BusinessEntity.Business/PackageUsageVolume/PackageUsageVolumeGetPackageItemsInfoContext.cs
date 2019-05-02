@@ -6,15 +6,15 @@ namespace Retail.BusinessEntity.Business
 {
     public class PackageUsageVolumeGetPackageItemsInfoContext : IPackageUsageVolumeGetPackageItemsInfoContext
     {
-        public PackageUsageVolumeGetPackageItemsInfoContext(AccountPackage accountPackage, List<Guid> itemIds, DateTime eventTime, Guid volumePackageDefinitionId)
+        public PackageUsageVolumeGetPackageItemsInfoContext(RetailAccountPackage retailAccountPackage, List<Guid> itemIds, DateTime eventTime, Guid volumePackageDefinitionId)
         {
-            this.AccountPackage = accountPackage;
+            this.RetailAccountPackage = retailAccountPackage;
             this.ItemIds = itemIds;
             this.EventTime = eventTime;
             this.VolumePackageDefinitionId = volumePackageDefinitionId;
         }
 
-        public AccountPackage AccountPackage { get; private set; }
+        public RetailAccountPackage RetailAccountPackage { get; private set; }
 
         public List<Guid> ItemIds { get; private set; }
 
