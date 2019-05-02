@@ -293,7 +293,9 @@ namespace Retail.MultiNet.Business
                 if (!excludeWHTaxes)
                 {
                     decimal whAmountSaleTaxPercentage = 0;
-                    whAmount += GetSaleTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whAmountSaleTaxPercentage);
+                   
+                     if (!excludeSaleTaxes)
+                        whAmount += GetSaleTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whAmountSaleTaxPercentage);
 
                     decimal whTaxPercentage = 0;
                     branchSummary.WHTaxAmount = GetWHTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whTaxPercentage);
