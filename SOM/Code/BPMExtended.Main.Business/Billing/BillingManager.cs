@@ -304,31 +304,47 @@ namespace BPMExtended.Main.Business
             }
             return billCycles;
         }
-        public CallDetailRequest GetCallDetails(string billCycle, string customerId, string contractId)
+
+
+        public CallDetailRequest GetCallDetails(string contractId, string beginDate, string endDate, string callType)
         {
-            List<CallDetailItem> items = new List<CallDetailItem>();
+
+            //var callDetailsEntityList = new List<CallDetailsEntity>();
+            //using (SOMClient client = new SOMClient())
+            //{
+            //    var items = client.Get<List<CallDetails>>(String.Format("api/SOM.ST/Billing/GetCallDetails?ContractId={0}&BeginDate={1}&EndDate={2}&CallType={3}", contractId, beginDate, endDate, callType));
+            //    foreach (var item in items)
+            //    {
+            //        var CallDetailEntity = CallDetailsToEntityMapper(item);
+            //        callDetailsEntityList.Add(CallDetailEntity);
+            //    }
+            //}
+
+
+
+            List<CallDetailsEntity> callDetailsEntityList = new List<CallDetailsEntity>();
             for (int i = 0; i < 100; i++)
             {
-                CallDetailItem item = new CallDetailItem()
+                CallDetailsEntity item = new CallDetailsEntity()
                 {
-                    Amount = "2",
-                    Date = DateTime.Now.AddDays(-i).ToString(),
-                    Duration = "2",
+                    Amount = 2, //"2", 
+                    Date = DateTime.Now.AddDays(-i),//.ToString(),
+                    Duration = 2, //"2", 
                     Number = "0123456",
                     Place = "Mazzeh"
                 };
-                items.Add(item);
-            }
-            CallDetailRequest request = new CallDetailRequest()
-                {
-                    BillCycle = billCycle,
-                    CSO = "CSO",
-                    Date = DateTime.Today.ToString(),
-                    Name = customerId,
-                    UserName = "username",
-                    Items = items,
-                    PhoneNumber = contractId
-                };
+                callDetailsEntityList.Add(item);
+             }
+                CallDetailRequest request = new CallDetailRequest()
+            {
+               // BillCycle = billCycle,
+                CSO = "CSO",
+                Date = DateTime.Today.ToString(),
+                Name = contractId,
+                UserName = "username",
+                Items = callDetailsEntityList,
+                PhoneNumber = contractId
+            };
             return request;
         }
 
@@ -349,7 +365,7 @@ namespace BPMExtended.Main.Business
             }
         }
 
-        public PDFDocument CreateDocument(string billCycle, string customerId, string contractId)
+        public PDFDocument CreateDocument(string contractId, string beginDate, string endDate, string callType)
         {
             PDFDocument documnt = new PDFDocument();
             // Create a new MigraDoc document
@@ -358,7 +374,7 @@ namespace BPMExtended.Main.Business
             this.document.Info.Subject = "Call Details Request";
             this.document.Info.Author = "ST";
 
-            CallDetailRequest request = GetCallDetails(billCycle,customerId,contractId);
+            CallDetailRequest request = GetCallDetails(contractId, beginDate, endDate, callType);
 
             DefineStyles();
 
@@ -372,6 +388,7 @@ namespace BPMExtended.Main.Business
             pdfRenderer.Document = doc;
             pdfRenderer.DocumentRenderer = renderer;
             pdfRenderer.RenderDocument();
+
             using (MemoryStream ms = new MemoryStream())
             {
                 pdfRenderer.Save(ms, false);
@@ -414,10 +431,35 @@ namespace BPMExtended.Main.Business
                 {
                     var filedat = entities[0].GetColumnValue("StFileData");//.GetTypedColumnValue<byte[]>("StFileData");
                     //ByteArrayToFile(@"C:\BPM\test.pdf", (byte[])filedat);
-                     documnt = new PDFDocument() { Id = Id.ToString(), FileData = (byte[])filedat };
+                     documnt = new PDFDocument() { Id = Id.ToString(), FileData = (byte[])filedat, pageCount = pdfRenderer.PageCount };
                 }
             }
             return documnt;
+        }
+
+        public byte[] GetFileDataByFileId(string fileId)
+        {
+
+            Guid idd = new Guid(fileId.ToUpper());
+            // Creation of query instance with "City" root schema. 
+            var esqCities = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCDRDocuments");
+            esqCities.AddColumn("Id");
+            esqCities.AddColumn("StFileData");
+
+            // Creation of the first filter instance.
+            var esqFirstFilter = esqCities.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
+
+            // Adding created filters to query collection. 
+            esqCities.Filters.Add(esqFirstFilter);
+
+            // Objects, i.e. query results, filtered by two filters, will be included into this collection.
+            var entities = esqCities.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count == 0)
+            {
+                return null;
+            }
+            var fileData = (byte[])entities[0].GetColumnValue("StFileData");
+            return fileData;
         }
         void DefineStyles()
         {
@@ -551,13 +593,9 @@ namespace BPMExtended.Main.Business
             paragraph.AddLineBreak();
             paragraph.AddText(request.CSO);
             paragraph.AddLineBreak();
-            paragraph.AddText(request.BillCycle);
-            paragraph.AddLineBreak();
             paragraph.AddText(request.Date);
 
-
-
-            foreach (CallDetailItem item in request.Items)
+            foreach (CallDetailsEntity item in request.Items)
             {
 
                 Row row1 = this.table.AddRow();
@@ -902,6 +940,18 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        public CallDetailsEntity CallDetailsToEntityMapper(CallDetails callDetails)
+        {
+            return new CallDetailsEntity()
+            {
+                Amount = callDetails.Amount,
+                Date = callDetails.CallDate,
+                Duration = callDetails.Duration,
+                Number = callDetails.CalledNumber,
+                Place = callDetails.CallingNumber //To check Place
+            };
+        }
+
         #endregion
 
     }
@@ -913,7 +963,7 @@ namespace BPMExtended.Main.Business
 
         public string Id { get; set; }
         public byte[] FileData { get; set; }
-
+        public int pageCount { get; set; }
 
     }
     public class PaymentInfo
@@ -949,15 +999,25 @@ namespace BPMExtended.Main.Business
         public string BillCycle { get; set; }
         public string Date { get; set; }
         public string PhoneNumber { get; set; }
-        public List<CallDetailItem> Items { get; set; }
+        public List<CallDetailsEntity> Items { get; set; }
     }
-    public class CallDetailItem
+    public class CallDetailsEntity
     {
-        public string Date { get; set; }
-        public string Duration { get; set; }
+        public DateTime Date { get; set; }
+        public Decimal Duration { get; set; }
         public string Place { get; set; }
         public string Number { get; set; }
-        public string Amount { get; set; }
+        public Decimal Amount { get; set; }
 
+    }
+    public class CallDetails
+    {
+        public string Id { get; set; }
+        public string CallingNumber { get; set; }
+        public string CalledNumber { get; set; }
+        public string DurationUnit { get; set; }
+        public Decimal Duration { get; set; }
+        public Decimal Amount { get; set; }
+        public DateTime CallDate { get; set; }
     }
 }

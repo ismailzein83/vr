@@ -71,7 +71,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAboveTenPagesDisplayValue");
 
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "72DC4A9B-BA58-4445-B866-F2E7CD942191");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "61FB364E-BA71-437F-9BD1-D9BF9F1AB07C");
             esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
