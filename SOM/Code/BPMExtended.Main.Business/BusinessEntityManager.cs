@@ -42,7 +42,6 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StTelephonyServices");
             esq.AddColumn("StXDSLServices");
             esq.AddColumn("StLeasedLineServices");
-            esq.AddColumn("StSNPCode");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "08CBBB9F-043C-47D9-8AC4-97D25081681E");
@@ -56,7 +55,6 @@ namespace BPMExtended.Main.Business
                 packages.Telephony = entities[0].GetColumnValue("StTelephonyServices").ToString();
                 packages.XDSL = entities[0].GetColumnValue("StXDSLServices").ToString();
                 packages.LeasedLine = entities[0].GetColumnValue("StLeasedLineServices").ToString();
-                packages.SNPCode = entities[0].GetColumnValue("StSNPCode").ToString();
             }
 
             return packages;
