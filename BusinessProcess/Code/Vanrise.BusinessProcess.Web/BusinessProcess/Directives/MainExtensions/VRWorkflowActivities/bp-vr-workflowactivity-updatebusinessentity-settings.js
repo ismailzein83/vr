@@ -37,8 +37,8 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                 $scope.scopeModel.onInputGridReady = function (api) {
                     inputGridAPI = api;
                     inputGridPromiseReadyDefferd.resolve();
+                    defineAPI();
                 };
-                defineAPI();
             }
 
             function defineAPI() {
@@ -48,6 +48,7 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                     var rootPromiseNode = {};
                     inputItems = {};
                     $scope.scopeModel.isSucceeded = undefined;
+                    $scope.scopeModel.userId = undefined
                     var genericBEDefinitionSettings;
                     var dataRecordType;
                     if (payload != undefined) {
@@ -56,6 +57,7 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
 
                         if (settings != undefined) {
                             $scope.scopeModel.isSucceeded = settings.IsSucceeded;
+                            $scope.scopeModel.userId = settings.UserId;
 
                             if (settings.InputItems != undefined) {
                                 var items = settings.InputItems;
@@ -109,6 +111,7 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                     return {
                         $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActivities.VRWorkflowUpdateGenericBEActivity, Vanrise.BusinessProcess.MainExtensions",
                         IsSucceeded: $scope.scopeModel.isSucceeded,
+                        UserId: $scope.scopeModel.userId,
                         InputItems: $scope.scopeModel.inputItems.length > 0 ? getInputFields() : undefined,
                     };
                 };

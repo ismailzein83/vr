@@ -13,6 +13,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
         public List<VRWorkflowUpdateGenericBEActivityInputItem> InputItems { get; set; }
 
         public VRWorkflowExpression IsSucceeded { get; set; }
+        public VRWorkflowExpression UserId { get; set; }
         public override string GenerateCode(IVRWorkflowUpdateBEActivitySettingsGenerateCodeContext context)
         {
             StringBuilder codeBuilder = new StringBuilder();
@@ -30,8 +31,13 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
                     codeBuilder.AppendLine($@"itemToUpdate.FieldValues.Add(""{inputItem.FieldName}"", {inputItem.Value.GetCode(null)});");
                 }
             }
-
-            codeBuilder.AppendLine("var updateOutput = genericBEManager.UpdateGenericBusinessEntity(itemToUpdate);");
+            codeBuilder.AppendLine($@"var updateOutput = genericBEManager.UpdateGenericBusinessEntity(itemToUpdate");
+            if (UserId != null)
+            {
+                string lastModifiedBy = UserId != null ? UserId.GetCode(null) : "null";
+                codeBuilder.AppendLine($@",{lastModifiedBy}");
+            }
+            codeBuilder.Append($@");");
 
             if (this.IsSucceeded != null)
             {

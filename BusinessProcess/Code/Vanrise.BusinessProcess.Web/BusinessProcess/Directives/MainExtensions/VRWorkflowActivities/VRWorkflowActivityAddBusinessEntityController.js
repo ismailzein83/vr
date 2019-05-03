@@ -17,7 +17,7 @@
         var businessEntityDefinitionSelectedPromise;
         var settingsDirectiveAPI;
         var settingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        var settingsDirective;
         loadParameters();
         defineScope();
         load();
@@ -58,8 +58,12 @@
                 settingsReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (value) {
+                if (value != undefined && settingsDirective != undefined && settingsDirective != value.WorkFlowAddBEActivityEditor)
+                    settingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                 $scope.scopeModel.selectedBusinessEntity = value;
                 if (value) {
+                    settingsDirective = value.WorkFlowAddBEActivityEditor;
+
                     if (businessEntityDefinitionSelectedPromise != undefined)
                         businessEntityDefinitionSelectedPromise.resolve();
                     else {

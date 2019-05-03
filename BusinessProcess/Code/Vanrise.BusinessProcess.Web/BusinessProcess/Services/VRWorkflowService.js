@@ -273,6 +273,20 @@
             };
             VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityUpdateBusinessEntityEditor.html', parameter, modalSettings);
         }
+        function openGetBusinessEntityEditor(obj, context, onActivityUpdated, remove, isNew) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onActivityUpdated = onActivityUpdated;
+                modalScope.remove = remove;
+            };
+            var parameter = {
+                obj: obj,
+                context: context,
+                isNew: isNew
+            };
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityGetBusinessEntityEditor.html', parameter, modalSettings);
+        }
 		return ({
 			addVRWorkflow: addVRWorkflow,
 			editVRWorkflow: editVRWorkflow,
@@ -291,7 +305,8 @@
             openSubProcessEditor: openSubProcessEditor,
             openAssignTaskEditor: openAssignTaskEditor,
             openAddBusinessEntityEditor: openAddBusinessEntityEditor,
-            openUpdateBusinessEntityEditor: openUpdateBusinessEntityEditor
+            openUpdateBusinessEntityEditor: openUpdateBusinessEntityEditor,
+            openGetBusinessEntityEditor: openGetBusinessEntityEditor
 		});
 	}
 

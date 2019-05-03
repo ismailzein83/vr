@@ -22,17 +22,17 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
             codeBuilder.AppendLine($@"vrComment.DefinitionId = new Guid(""{context.EntityDefinitionId}"");");
             if (this.ObjectId != null)
             {
-                codeBuilder.AppendLine($@"vrComment.ObjectId = {ObjectId.GetCode(null)});");
+                codeBuilder.AppendLine($@"vrComment.ObjectId = {ObjectId.GetCode(null)};");
             }
             if (this.Content != null)
             {
-                codeBuilder.AppendLine($@"vrComment.Content = {Content.GetCode(null)});");
+                codeBuilder.AppendLine($@"vrComment.Content = {Content.GetCode(null)};");
             }
-            codeBuilder.AppendLine("var insertOutput = vrCommentManager.AddVRComment(vrComment");
+            codeBuilder.Append("var insertOutput = vrCommentManager.AddVRComment(vrComment");
             if (UserId != null)
             {
                 string userId = UserId.GetCode(null);
-                codeBuilder.AppendLine($@",{userId}");
+                codeBuilder.Append($@",{userId}");
             }
             codeBuilder.AppendLine(");");
 

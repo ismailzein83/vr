@@ -13,8 +13,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
         public List<VRWorkflowAddGenericBEActivityInputItem> InputItems { get; set; }
 
         public VRWorkflowExpression EntityID { get; set; }
-
         public VRWorkflowExpression IsSucceeded { get; set; }
+        public VRWorkflowExpression UserId { get; set; }
 
         public override string GenerateCode(IVRWorkflowAddBEActivitySettingsGenerateCodeContext context)
         {
@@ -31,8 +31,13 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
                     codeBuilder.AppendLine($@"itemToAdd.FieldValues.Add(""{inputItem.FieldName}"", {inputItem.Value.GetCode(null)});");
                 }
             }
-
-            codeBuilder.AppendLine("var insertOutput = genericBEManager.AddGenericBusinessEntity(itemToAdd);");
+            codeBuilder.AppendLine($@"var insertOutput = genericBEManager.AddGenericBusinessEntity(itemToAdd");
+            if (UserId != null )
+            {
+                string userId = UserId != null ? UserId.GetCode(null) : "null";
+                codeBuilder.Append($@",{userId}");
+            }
+            codeBuilder.Append($@");");
 
             if (this.IsSucceeded != null)
             {
