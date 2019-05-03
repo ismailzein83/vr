@@ -57,116 +57,115 @@ namespace BPMExtended.Main.Business
 
 
         //old one
-        public PaymentInfo SubmitToPOS(string customerId, string requestId, string ratePlanId, Guid contactId, BPMExtended.Main.Entities.OperationType operationType)
-        {
-            //After creating a contract with status on hold for this customer
-            //Send to POS the list of services to pay with the contract id
+        //public PaymentInfo SubmitToPOS(string customerId, string requestId, string ratePlanId, Guid contactId, BPMExtended.Main.Entities.OperationType operationType)
+        //{
+        //    //After creating a contract with status on hold for this customer
+        //    //Send to POS the list of services to pay with the contract id
 
-            decimal depositAmount = 0;
-            bool hasCallBaring = false;
-            bool isForeigner = false;
-            PaymentInfo payment = new PaymentInfo();
+        //    decimal depositAmount = 0;
+        //    bool hasCallBaring = false;
+        //    bool isForeigner = false;
+        //    PaymentInfo payment = new PaymentInfo();
 
-            ServiceManager serviceManager = new ServiceManager();
-            var coreServices = serviceManager.GetCoreServices(ratePlanId);
+        //    ServiceManager serviceManager = new ServiceManager();
+        //    var coreServices = serviceManager.GetCoreServices(ratePlanId);
 
-            decimal amountToPay = 0;
+        //    decimal amountToPay = 0;
 
-            foreach (var service in coreServices)
-            {
-                amountToPay += service.SubscriptionFee;
-            }
+        //    foreach (var service in coreServices)
+        //    {
+        //        amountToPay += service.SubscriptionFee;
+        //    }
 
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var esqResult = new EntitySchemaQuery(connection.EntitySchemaManager, "Contact");
-            esqResult.AddColumn("Name");
-            esqResult.AddColumn("StCustomerDocumentType");
-            esqResult.AddColumn("StSponsorDocumentIDNumber");
+        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+        //    var esqResult = new EntitySchemaQuery(connection.EntitySchemaManager, "Contact");
+        //    esqResult.AddColumn("Name");
+        //    esqResult.AddColumn("StCustomerDocumentType");
+        //    esqResult.AddColumn("StSponsorDocumentIDNumber");
 
-            // Execution of query to database and getting object with set identifier.
-            var entity = esqResult.GetEntity(connection, contactId);
-            object customerTypeId = entity.GetColumnValue("StCustomerDocumentTypeId");
-            object sponsorNumber = entity.GetColumnValue("StSponsorDocumentIDNumber");
+        //    // Execution of query to database and getting object with set identifier.
+        //    var entity = esqResult.GetEntity(connection, contactId);
+        //    object customerTypeId = entity.GetColumnValue("StCustomerDocumentTypeId");
+        //    object sponsorNumber = entity.GetColumnValue("StSponsorDocumentIDNumber");
 
-            //get customer type
-            var esqResult2 = new EntitySchemaQuery(connection.EntitySchemaManager, "StCustomerDocumentType");
-            esqResult2.AddColumn("Name");
-            var entity2 = esqResult2.GetEntity(connection, customerTypeId);
-            object customerType = entity2.GetColumnValue("Name");
-
-
-            if (operationType == BPMExtended.Main.Entities.OperationType.TelephonyLineSubscription)
-            {
-
-                //get services
-                var esqResult3 = new EntitySchemaQuery(connection.EntitySchemaManager, "StLineSubscriptionRequest");
-                esqResult3.AddColumn("StServices");
-                var entity3 = esqResult3.GetEntity(connection, requestId);
-                object servicesJson = entity3.GetColumnValue("StServices");
-
-                if (servicesJson.ToString() != "" && servicesJson != null && servicesJson.ToString() != "\"\"")
-                {
-
-                    List<Service> services = JsonConvert.DeserializeObject<List<Service>>(servicesJson.ToString());
-
-                    foreach (Service service in services)
-                    {
-                        if (service.Id == "EE85D0BC-CE96-441A-A0FD-3179026423F5")
-                        {
-                            hasCallBaring = true;
-                            break;
-                        }
-                    }
-
-                }
-
-            }
+        //    //get customer type
+        //    var esqResult2 = new EntitySchemaQuery(connection.EntitySchemaManager, "StCustomerDocumentType");
+        //    esqResult2.AddColumn("Name");
+        //    var entity2 = esqResult2.GetEntity(connection, customerTypeId);
+        //    object customerType = entity2.GetColumnValue("Name");
 
 
-            if (customerType.Equals("أجنبي") && sponsorNumber.ToString().Equals(""))
-            {
-                if (hasCallBaring) depositAmount = 15000;
-                else depositAmount = 20000;
+        //    if (operationType == BPMExtended.Main.Entities.OperationType.TelephonyLineSubscription)
+        //    {
 
-                depositAmount = 15000;
-                isForeigner = true;
-            }
+        //        //get services
+        //        var esqResult3 = new EntitySchemaQuery(connection.EntitySchemaManager, "StLineSubscriptionRequest");
+        //        esqResult3.AddColumn("StServices");
+        //        var entity3 = esqResult3.GetEntity(connection, requestId);
+        //        object servicesJson = entity3.GetColumnValue("StServices");
 
+        //        if (servicesJson.ToString() != "" && servicesJson != null && servicesJson.ToString() != "\"\"")
+        //        {
 
-            //
-            payment.amountToPay = amountToPay;
-            payment.isForeigner = isForeigner;
-            payment.depositAmount = depositAmount;
+        //            List<Service> services = JsonConvert.DeserializeObject<List<Service>>(servicesJson.ToString());
 
-            return payment;
-        }
+        //            foreach (Service service in services)
+        //            {
+        //                if (service.Id == "EE85D0BC-CE96-441A-A0FD-3179026423F5")
+        //                {
+        //                    hasCallBaring = true;
+        //                    break;
+        //                }
+        //            }
 
-        public PaymentInfo SubmitToPOS(string ratePlanId)
-        {
-            //Send to POS the list of services to pay with the contract id
+        //        }
 
-            PaymentInfo payment = new PaymentInfo();
-
-            ServiceManager serviceManager = new ServiceManager();
-            var coreServices = serviceManager.GetCoreServices(ratePlanId);
-
-            decimal amountToPay = 0;
-
-            foreach (var service in coreServices)
-            {
-                amountToPay += service.SubscriptionFee;
-            }
+        //    }
 
 
-            //
-            payment.amountToPay = amountToPay;
+        //    if (customerType.Equals("أجنبي") && sponsorNumber.ToString().Equals(""))
+        //    {
+        //        if (hasCallBaring) depositAmount = 15000;
+        //        else depositAmount = 20000;
 
-            return payment;
-        }
+        //        depositAmount = 15000;
+        //        isForeigner = true;
+        //    }
+
+
+        //    //
+        //    payment.amountToPay = amountToPay;
+        //    payment.isForeigner = isForeigner;
+        //    payment.depositAmount = depositAmount;
+
+        //    return payment;
+        //}
+
+        //public PaymentInfo SubmitToPOS(string ratePlanId)
+        //{
+        //    //Send to POS the list of services to pay with the contract id
+
+        //    PaymentInfo payment = new PaymentInfo();
+
+        //    ServiceManager serviceManager = new ServiceManager();
+        //    var coreServices = serviceManager.GetCoreServices(ratePlanId);
+
+        //    decimal amountToPay = 0;
+
+        //    foreach (var service in coreServices)
+        //    {
+        //        amountToPay += service.SubscriptionFee;
+        //    }
+
+
+        //    //
+        //    payment.amountToPay = amountToPay;
+
+        //    return payment;
+        //}
 
     
-
-        public bool CheckIfUserPayForWaitingList(string customerId)
+        public bool CheckIfUserPayForWaitingList(string sequenceNumber)
         {
             //TODO: check if user pay
             return true;
@@ -306,15 +305,16 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public CallDetailRequest GetCallDetails(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM)
+        //public CallDetailRequest GetCallDetails(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM)
+        public CallDetailRequest GetCallDetails(string contractId, string beginDate, string endDate, string callType)
         {
 
             var businessEntityManager = new BusinessEntityManager();
-            int monthVal = businessEntityManager.getMonthNumberByMonthName(month);
-            int yearVal = Int32.Parse(year);
+           // int monthVal = businessEntityManager.getMonthNumberByMonthName(month);
+            //int yearVal = Int32.Parse(year);
 
-            DateTime fromDate = new DateTime(yearVal, monthVal,0);
-            DateTime toDate = new DateTime(yearVal, monthVal + 1, 0);
+           // DateTime fromDate = new DateTime(yearVal, monthVal,0);
+           //DateTime toDate = new DateTime(yearVal, monthVal + 1, 0);
 
 
 
@@ -374,7 +374,8 @@ namespace BPMExtended.Main.Business
             }
         }
 
-        public PDFDocument CreateDocument(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM)
+        // public PDFDocument CreateDocument(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM)
+        public PDFDocument CreateDocument(string contractId, string beginDate, string endDate, string callType)
         {
             PDFDocument documnt = new PDFDocument();
             // Create a new MigraDoc document
@@ -383,8 +384,8 @@ namespace BPMExtended.Main.Business
             this.document.Info.Subject = "Call Details Request";
             this.document.Info.Author = "ST";
 
-            CallDetailRequest request = GetCallDetails(contractId, year, month, isNational, isInternational, isGSM);
-
+            // CallDetailRequest request = GetCallDetails(contractId, year, month, isNational, isInternational, isGSM);
+            CallDetailRequest request = GetCallDetails(contractId, beginDate, endDate, callType);
             DefineStyles();
 
             CreatePage();
