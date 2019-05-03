@@ -41,12 +41,12 @@ namespace TestCallAnalysis.BP.Activities
                         hasItems = inputArgument.InputQueue.TryDequeue((updatedMappedCDRs) =>
                         {
                             DateTime batchStartTime = DateTime.Now;
-                            if (updatedMappedCDRs.UpdatedIds != null && updatedMappedCDRs.UpdatedIds.Count > 0)
+                            if (updatedMappedCDRs.MappedCDRsToUpdate != null && updatedMappedCDRs.MappedCDRsToUpdate.Count > 0)
                             {
                                 mappedCDRManager.UpdateMappedCDRs(updatedMappedCDRs);
                                 double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
                                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Update 'IsCorrolated' field in MappedCDRs Table is done. Events Count: {0}.  ElapsedTime: {1} (s)",
-                                    updatedMappedCDRs.UpdatedIds.Count, elapsedTime.ToString());
+                                    updatedMappedCDRs.MappedCDRsToUpdate.Count, elapsedTime.ToString());
                             }
                         });
                     }

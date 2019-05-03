@@ -91,8 +91,8 @@ namespace TestCallAnalysis.BP.Activities
 
                             if (recordBatch.Records != null && recordBatch.Records.Count > 0)
                             {
-                                Dictionary<long, List<TCAnalMappedCDR>> receivedCDRs = new Dictionary<long, List<TCAnalMappedCDR>>();
-                                Dictionary<long, List<TCAnalMappedCDR>> generatedCDRs = new Dictionary<long, List<TCAnalMappedCDR>>();
+                                Dictionary<long, List<TCAnalMappedCDR>> receivedCDRsByOperatorId = new Dictionary<long, List<TCAnalMappedCDR>>();
+                                Dictionary<long, List<TCAnalMappedCDR>> generatedCDRsByOperatorId = new Dictionary<long, List<TCAnalMappedCDR>>();
                                 Entities.UpdatedMappedCDRs updateMappedCDRs = new Entities.UpdatedMappedCDRs();
 
                                 // Divide all CDRs between generated and received
@@ -100,73 +100,57 @@ namespace TestCallAnalysis.BP.Activities
                                 {
                                     TCAnalMappedCDR mappedCDR = mappedCDRManager.MappedCDRMapper(cdr);
                                     if (mappedCDR.CDRType.Equals(CDRType.Generated))
-                                        generatedCDRs.GetOrCreateItem(mappedCDR.OperatorID).Add(mappedCDR);
+                                        generatedCDRsByOperatorId.GetOrCreateItem(mappedCDR.OperatorID).Add(mappedCDR);
                                     else
-                                        receivedCDRs.GetOrCreateItem(mappedCDR.OperatorID).Add(mappedCDR);
-
-                                    updateMappedCDRs.MappedCDRsToUpdate.Add(mappedCDR); // List of all mapped cdrs to update the "IsCorrelated" field
+                                        receivedCDRsByOperatorId.GetOrCreateItem(mappedCDR.OperatorID).Add(mappedCDR);
                                 }
 
                                 // Create the correlatedCDRs list
                                 List<TCAnalCorrelatedCDR> correlatedCDRs = new List<TCAnalCorrelatedCDR>();
-                                if (receivedCDRs != null && receivedCDRs.Count > 0 && generatedCDRs != null && generatedCDRs.Count > 0)
+                                if (receivedCDRsByOperatorId != null && receivedCDRsByOperatorId.Count > 0 && generatedCDRsByOperatorId != null && generatedCDRsByOperatorId.Count > 0)
                                 {
-                                    foreach (var recievedCDR in receivedCDRs)
+                                    foreach (var recievedOperator in receivedCDRsByOperatorId)
                                     {
-                                        if (recievedCDR.Value != null && recievedCDR.Value.Count > 0)
+                                        if (recievedOperator.Value != null && recievedOperator.Value.Count > 0)
                                         {
-                                            foreach (var rcvdcdr in recievedCDR.Value)
+                                            foreach (var rcvdcdr in recievedOperator.Value)
                                             {
-                                                if (rcvdcdr.CalledNumberType != null)
+                                                if (rcvdcdr.CalledNumberType.HasValue)
                                                 {
                                                     TCAnalCorrelatedCDR correlatedCDR = new TCAnalCorrelatedCDR();
-                                                    var rvd = updateMappedCDRs.MappedCDRsToUpdate.Find(x => x.MappedCDRId == rcvdcdr.MappedCDRId);
                                                     correlatedCDR = correlatedCDRManager.CorrelatedCDRMapper(rcvdcdr);
-                                                    var generatedCDR = generatedCDRs.GetRecord(recievedCDR.Key);
+                                                    var generatedCDR = generatedCDRsByOperatorId.GetRecord(recievedOperator.Key);
                                                     if (generatedCDR != null && generatedCDR.Count > 0)
                                                     {
                                                         foreach (var gnrtdCDR in generatedCDR)
                                                         {
-                                                            var gntd = updateMappedCDRs.MappedCDRsToUpdate.Find(y => y.MappedCDRId == gnrtdCDR.MappedCDRId);
-
-                                                            IEnumerable<string> mappingNumberList = calledNumberMappingManager.GetMappingNumber(rcvdcdr.OperatorID, gnrtdCDR.CalledNumber);
-
-                                                            if (rcvdcdr.CalledNumber == gnrtdCDR.CalledNumber && rcvdcdr.AttemptDateTime.Subtract(gnrtdCDR.AttemptDateTime) <= dateTimeMargin)
+                                                            if (rcvdcdr.AttemptDateTime.Subtract(gnrtdCDR.AttemptDateTime) <= dateTimeMargin)
                                                             {
-                                                                updateMappedCDRs.UpdatedIds.Add(gnrtdCDR.MappedCDRId);
-                                                                rvd.IsCorrelated = true;
-                                                                gntd.IsCorrelated = true;
-                                                                correlatedCDR.GeneratedCalledNumber = gnrtdCDR.CalledNumber;
-                                                                correlatedCDR.GeneratedCallingNumber = gnrtdCDR.CallingNumber;
-                                                                correlatedCDR.OrigGeneratedCalledNumber = gnrtdCDR.OrigCalledNumber;
-                                                                correlatedCDR.OrigGeneratedCallingNumber = gnrtdCDR.OrigCallingNumber;
-                                                            }
-                                                            else if (mappingNumberList != null && mappingNumberList.Count() > 0 && mappingNumberList.Contains(rcvdcdr.CalledNumber))
-                                                            {
-                                                                updateMappedCDRs.UpdatedIds.Add(gnrtdCDR.MappedCDRId);
-                                                                rvd.IsCorrelated = true;
-                                                                gntd.IsCorrelated = true;
-                                                                correlatedCDR.GeneratedCalledNumber = gnrtdCDR.CalledNumber;
-                                                                correlatedCDR.GeneratedCallingNumber = gnrtdCDR.CallingNumber;
-                                                                correlatedCDR.OrigGeneratedCalledNumber = gnrtdCDR.OrigCalledNumber;
-                                                                correlatedCDR.OrigGeneratedCallingNumber = gnrtdCDR.OrigCallingNumber;
+                                                                IEnumerable<string> mappingNumberList = calledNumberMappingManager.GetMappingNumber(rcvdcdr.OperatorID, rcvdcdr.CalledNumber);
+                                                                if (rcvdcdr.CalledNumber == gnrtdCDR.CalledNumber || (mappingNumberList != null && mappingNumberList.Count() > 0 && mappingNumberList.Contains(gnrtdCDR.CalledNumber)))
+                                                                {
+                                                                    rcvdcdr.IsCorrelated = true;
+                                                                    gnrtdCDR.IsCorrelated = true;
+                                                                    updateMappedCDRs.MappedCDRsToUpdate.Add(rcvdcdr);
+                                                                    updateMappedCDRs.MappedCDRsToUpdate.Add(gnrtdCDR);
+                                                                    correlatedCDR.GeneratedCalledNumber = gnrtdCDR.CalledNumber;
+                                                                    correlatedCDR.GeneratedCallingNumber = gnrtdCDR.CallingNumber;
+                                                                    correlatedCDR.OrigGeneratedCalledNumber = gnrtdCDR.OrigCalledNumber;
+                                                                    correlatedCDR.OrigGeneratedCallingNumber = gnrtdCDR.OrigCallingNumber;
+                                                                    correlatedCDRs.Add(correlatedCDR);
+                                                                }
                                                             }
                                                         }
                                                     }
-
-                                                    if (!rvd.IsCorrelated && DateTime.Now.Subtract(rcvdcdr.CreatedTime) > timeOutMargin)
+                                                    if (!rcvdcdr.IsCorrelated && DateTime.Now.Subtract(rcvdcdr.CreatedTime) > timeOutMargin)
                                                     {
                                                         correlatedCDR.GeneratedCalledNumber = null;
                                                         correlatedCDR.GeneratedCallingNumber = null;
                                                         correlatedCDR.OrigGeneratedCalledNumber = null;
                                                         correlatedCDR.OrigGeneratedCallingNumber = null;
-                                                        rvd.IsCorrelated = true;
-                                                    }
-
-                                                    if (rvd.IsCorrelated)
-                                                    {
+                                                        rcvdcdr.IsCorrelated = true;
+                                                        updateMappedCDRs.MappedCDRsToUpdate.Add(rcvdcdr);
                                                         correlatedCDRs.Add(correlatedCDR);
-                                                        updateMappedCDRs.UpdatedIds.Add(rcvdcdr.MappedCDRId);
                                                     }
                                                 }
                                             }
@@ -180,14 +164,11 @@ namespace TestCallAnalysis.BP.Activities
                                 if (correlatedCDRs != null && correlatedCDRs.Count > 0)
                                 {
                                     correlationBatch.OutputRecordsToInsert = correlatedCDRManager.CorrelatedCDRsToRuntime(correlatedCDRs);
-
                                     // prepare cases
                                     foreach (var correlatedCDR in correlatedCDRs)
                                     {
-                                        if (correlatedCDR.ReceivedCallingNumberType != ReceivedCallingNumberType.International || String.IsNullOrEmpty(correlatedCDR.ReceivedCalledNumber) || String.IsNullOrEmpty(correlatedCDR.GeneratedCallingNumber))
-                                        {
-                                            casesBatch.OutputRecordsToInsert.Add(correlatedCDR);
-                                        }
+                                        casesBatch.OutputRecordsToInsert.Add(correlatedCDR);
+                                       
                                     }
                                 }
                                 inputArgument.OutputCorrelationBatchQueue.Enqueue(correlationBatch);

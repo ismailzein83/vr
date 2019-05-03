@@ -79,13 +79,18 @@ namespace TestCallAnalysis.BP.Activities
                                     TCAnalCaseCDR tcanalCaseCDR = new TCAnalCaseCDR();
                                     tcanalCaseCDR = caseCDRManager.CaseCDRMapper(record);
 
-                                    if (record.ReceivedCallingNumber != null && record.GeneratedCallingNumber != null)
+                                    if (record.ReceivedCallingNumberType.HasValue && record.ReceivedCallingNumberType != ReceivedCallingNumberType.International)
+                                    {
                                         tcanalCaseCDR.StatusId = new Guid("4ea323c2-56ba-46db-a84d-5792009924a3"); // Fraud
-
-                                    else
+                                        tCAnalCaseCDRs.Add(tcanalCaseCDR);
+                                        continue;
+                                    }
+                                    else if(!record.ReceivedCallingNumberType.HasValue)
+                                    {
                                         tcanalCaseCDR.StatusId = new Guid("43f65fbf-ba78-4211-a0bb-88edc91b26ff"); // Suspect
-
-                                    tCAnalCaseCDRs.Add(tcanalCaseCDR);
+                                        tCAnalCaseCDRs.Add(tcanalCaseCDR);
+                                        continue;
+                                    }
                                 }
 
                                 PrepareCDRCasesToInsert caseCDRsList = new PrepareCDRCasesToInsert();

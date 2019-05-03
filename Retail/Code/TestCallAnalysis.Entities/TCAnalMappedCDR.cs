@@ -10,6 +10,10 @@ namespace TestCallAnalysis.Entities
     {
         Generated = 1, Recieved = 2
     }
+    public enum CDRNumberType
+    {
+        International = 1, Onnet = 2, Offnet=3
+    }
     public class TCAnalMappedCDR
     {
         public long MappedCDRId { get; set; }
@@ -23,8 +27,8 @@ namespace TestCallAnalysis.Entities
         public string OrigCallingNumber { get; set; }
         public string OrigCalledNumber { get; set; }
         public bool IsCorrelated { get; set; }
-        public int? CallingNumberType { get; set; }
-        public int? CalledNumberType { get; set; }
+        public CDRNumberType? CallingNumberType { get; set; }
+        public CDRNumberType? CalledNumberType { get; set; }
         public DateTime CreatedTime { get; set; }
     }
 }

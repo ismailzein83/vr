@@ -12,10 +12,10 @@ namespace TestCallAnalysis.Business
         static Guid businessEntityDefinitionId = new Guid("0FEB4453-6951-457A-8BAA-4CB257E906C5");
 
         #region Public Methods
-        public IEnumerable<string> GetMappingNumber(long operatorID, string number)
+        public IEnumerable<string> GetMappingNumber(long operatorID, string mappedNumber)
         {
             var calledNumbersMapping = GetCachedCalledNumberMapping();
-            Func<CalledNumberMapping, bool> filterExpression = (item) => (item.OperatorID == operatorID && item.Number == number );
+            Func<CalledNumberMapping, bool> filterExpression = (item) => (item.OperatorID == operatorID && item.MappedNumber == mappedNumber);
             return calledNumbersMapping.MapRecords(MappingNumberMapper,filterExpression);
         }
         #endregion

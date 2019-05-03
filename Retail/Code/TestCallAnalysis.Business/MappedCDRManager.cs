@@ -25,8 +25,8 @@ namespace TestCallAnalysis.Business
             runtimeCDR.CallingNumber = mappedCDR.CallingNumber;
             runtimeCDR.CDRType = (int)mappedCDR.CDRType;
             runtimeCDR.IsCorrelated = mappedCDR.IsCorrelated;
-            runtimeCDR.CallingNumberType = mappedCDR.CallingNumberType;
-            runtimeCDR.CalledNumberType = mappedCDR.CalledNumberType;
+            runtimeCDR.CallingNumberType = (int?)mappedCDR.CallingNumberType;
+            runtimeCDR.CalledNumberType = (int?)mappedCDR.CalledNumberType;
             runtimeCDR.CreatedTime = mappedCDR.CreatedTime;
             return runtimeCDR;
         }
@@ -41,10 +41,7 @@ namespace TestCallAnalysis.Business
             Entities.CDRCorrelationBatch correlationBatch = new Entities.CDRCorrelationBatch();
             foreach (var mappedCDR in updatedMappedCDRs.MappedCDRsToUpdate)
             {
-                if (updatedMappedCDRs.UpdatedIds.IndexOf(mappedCDR.MappedCDRId) != -1)
-                {
-                    correlationBatch.OutputRecordsToInsert.Add(MappedCDRToRuntime(mappedCDR));
-                }
+                correlationBatch.OutputRecordsToInsert.Add(MappedCDRToRuntime(mappedCDR));
             }
             recordStorageDataManager.UpdateRecords(correlationBatch.OutputRecordsToInsert, fieldsToJoin, fieldsToUpdate);
         }
@@ -64,8 +61,8 @@ namespace TestCallAnalysis.Business
                 OrigCallingNumber = cdr.OrigCallingNumber,
                 OrigCalledNumber = cdr.OrigCalledNumber,
                 CreatedTime = cdr.CreatedTime,
-                CallingNumberType = cdr.CallingNumberType,
-                CalledNumberType = cdr.CalledNumberType,
+                CallingNumberType = (CDRNumberType?)cdr.CallingNumberType,
+                CalledNumberType = (CDRNumberType?)cdr.CalledNumberType,
                 IsCorrelated = cdr.IsCorrelated,
             };
         }

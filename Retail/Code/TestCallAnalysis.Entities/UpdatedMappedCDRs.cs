@@ -8,13 +8,10 @@ namespace TestCallAnalysis.Entities
 {
     public class UpdatedMappedCDRs
     {
-        public List<long> UpdatedIds { get; set; }
-
         public List<TCAnalMappedCDR> MappedCDRsToUpdate { get; set; }
 
         public UpdatedMappedCDRs()
         {
-            UpdatedIds = new List<long>();
             MappedCDRsToUpdate = new List<TCAnalMappedCDR>();
         }
     }
