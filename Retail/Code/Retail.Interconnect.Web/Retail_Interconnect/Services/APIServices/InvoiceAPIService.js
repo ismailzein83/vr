@@ -10,16 +10,16 @@
         function UpdateOriginalInvoiceData(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_Interconnect_ModuleConfig.moduleName, controllerName, "UpdateOriginalInvoiceData"), input);
         }
-        function GetOriginalInvoiceDataRuntime(invoiceId, invoiceCarrierType) {
+        function GetOriginalInvoiceDataRuntime(invoiceId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_Interconnect_ModuleConfig.moduleName, controllerName, "GetOriginalInvoiceDataRuntime"), {
-                invoiceId: invoiceId,
-                invoiceCarrierType: invoiceCarrierType
+                invoiceId: invoiceId
             });
         }
-    
-        function GetInvoiceDetails(invoiceId) {
+
+        function GetInvoiceDetails(invoiceId, invoiceCarrierType) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_Interconnect_ModuleConfig.moduleName, controllerName, 'GetInvoiceDetails'), {
-                invoiceId: invoiceId
+                invoiceId: invoiceId,
+                invoiceCarrierType: invoiceCarrierType
             });
         }
 
