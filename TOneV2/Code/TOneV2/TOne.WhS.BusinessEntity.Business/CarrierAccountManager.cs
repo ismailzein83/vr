@@ -765,48 +765,47 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
         {
-            InsertCarrierAccountOperationOutput<CarrierAccountDetail> insertOperationOutput = new InsertCarrierAccountOperationOutput<CarrierAccountDetail>();
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
-            List<string> validationMessages = new List<string>();
-            if (ValidateCarrierAccountToAdd(carrierAccount, validationMessages))
+            var insertOperationOutput = new InsertCarrierAccountOperationOutput<CarrierAccountDetail>
             {
-                int carrierAccountId = -1;
-
-                int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
-                carrierAccount.CreatedBy = loggedInUserId;
-                carrierAccount.LastModifiedBy = loggedInUserId;
-
-                ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-                bool insertActionSucc = dataManager.Insert(carrierAccount, out carrierAccountId);
-                bool isDefaultServiceInsertedSuccessfully = true;
-
-                if (CarrierAccountManager.IsSupplier(carrierAccount.AccountType))
-                {
-                    SupplierZoneServiceManager zoneServiceManager = new SupplierZoneServiceManager();
-                    isDefaultServiceInsertedSuccessfully = zoneServiceManager.Insert(carrierAccountId, carrierAccount.SupplierSettings.DefaultServices);
-                }
-
-                if (insertActionSucc)
-                    new CarrierAccountStatusHistoryManager().AddAccountStatusHistory(carrierAccountId, carrierAccount.CarrierAccountSettings.ActivationStatus, null);
-
-                if (insertActionSucc && isDefaultServiceInsertedSuccessfully)
-                {
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                    carrierAccount.CarrierAccountId = carrierAccountId;
-                    VRActionLogger.Current.TrackAndLogObjectAdded(CarrierAccountLoggableEntity.Instance, carrierAccount);
-
-                    VREventManager vrEventManager = new VREventManager();
-                    vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountId });
-                    CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
-                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    insertOperationOutput.InsertedObject = carrierAccountDetail;
-
-                }
-                else
-                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                Result = InsertOperationResult.Failed,
+                InsertedObject = null
+            };
+            var validationMessages = new List<string>();
+            if (!ValidateCarrierAccountToAdd(carrierAccount, validationMessages))
+            {
+                insertOperationOutput.ValidationMessages = validationMessages;
+                return insertOperationOutput;
             }
-            else insertOperationOutput.ValidationMessages = validationMessages;
+
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            carrierAccount.CreatedBy = loggedInUserId;
+            carrierAccount.LastModifiedBy = loggedInUserId;
+
+            var dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+
+            if (!dataManager.Insert(carrierAccount, out var carrierAccountId))
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+                return insertOperationOutput;
+            }
+
+            if (IsSupplier(carrierAccount.AccountType))
+            {
+                var zoneServiceManager = new SupplierZoneServiceManager();
+                zoneServiceManager.Insert(carrierAccountId, carrierAccount.SupplierSettings.DefaultServices);
+            }
+
+            new CarrierAccountStatusHistoryManager().AddAccountStatusHistory(carrierAccountId, carrierAccount.CarrierAccountSettings.ActivationStatus, null);
+
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            carrierAccount.CarrierAccountId = carrierAccountId;
+            VRActionLogger.Current.TrackAndLogObjectAdded(CarrierAccountLoggableEntity.Instance, carrierAccount);
+
+            VREventManager vrEventManager = new VREventManager();
+            vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountId });
+            CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
+            insertOperationOutput.Result = InsertOperationResult.Succeeded;
+            insertOperationOutput.InsertedObject = carrierAccountDetail;
 
             return insertOperationOutput;
         }
