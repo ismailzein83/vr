@@ -277,7 +277,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>0.405in</Top>
+        <Top>0.1175in</Top>
         <Left>0.13236in</Left>
         <Height>0.75in</Height>
         <Width>7.55729in</Width>
@@ -455,7 +455,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>1.26333in</Top>
+        <Top>0.97583in</Top>
         <Left>0.13236in</Left>
         <Height>0.49479in</Height>
         <Width>3.69383in</Width>
@@ -564,7 +564,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>2.12583in</Top>
+        <Top>1.67583in</Top>
         <Left>0.13236in</Left>
         <Height>0.48622in</Height>
         <Width>3.69383in</Width>
@@ -637,7 +637,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>2.71264in</Top>
+        <Top>2.27514in</Top>
         <Left>0.13237in</Left>
         <Height>0.25in</Height>
         <Width>7.55728in</Width>
@@ -962,7 +962,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Montant HT</Value>
+                              <Value>Trafic Voix</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -999,7 +999,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!TotalAmountBeforeTaxes.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Parameters!Amount.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1016,6 +1016,258 @@
                         <Border>
                           <Style>Solid</Style>
                         </Border>
+                        <BottomBorder>
+                          <Style>None</Style>
+                        </BottomBorder>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+            <TablixRow>
+              <Height>0.23622in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox1">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox1</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Style>None</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>None</Style>
+                        </LeftBorder>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox2">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Frais Récurrents</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox2</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Style>None</Style>
+                        </BottomBorder>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox4">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=FormatNumber(Parameters!TotalRecurringCharges.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox4</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Style>None</Style>
+                        </BottomBorder>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+            <TablixRow>
+              <Height>0.23622in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox6">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox6</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Style>None</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>None</Style>
+                        </LeftBorder>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox7">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Montant HT</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox7</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Style>None</Style>
+                        </BottomBorder>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox8">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=FormatNumber(Parameters!TotalAmountBeforeTaxes.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox8</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <TopBorder>
+                          <Style>None</Style>
+                        </TopBorder>
                         <BottomBorder>
                           <Style>None</Style>
                         </BottomBorder>
@@ -1296,6 +1548,12 @@
               <KeepWithGroup>After</KeepWithGroup>
             </TablixMember>
             <TablixMember>
+              <KeepWithGroup>After</KeepWithGroup>
+            </TablixMember>
+            <TablixMember>
+              <KeepWithGroup>After</KeepWithGroup>
+            </TablixMember>
+            <TablixMember>
               <Group Name="Details1" />
             </TablixMember>
             <TablixMember>
@@ -1304,9 +1562,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>3.12028in</Top>
+        <Top>2.68278in</Top>
         <Left>0.13237in</Left>
-        <Height>1.46875in</Height>
+        <Height>1.94119in</Height>
         <Width>7.55729in</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -1411,7 +1669,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>4.65848in</Top>
+        <Top>4.69598in</Top>
         <Left>1.34192in</Left>
         <Height>0.25in</Height>
         <Width>6.34774in</Width>
@@ -1519,7 +1777,7 @@
     <Height>14.27492cm</Height>
     <Style />
   </Body>
-  <Width>20.03631cm</Width>
+  <Width>19.80913cm</Width>
   <Page>
     <PageHeader>
       <Height>2.51355cm</Height>
