@@ -546,10 +546,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="appSettings.config" />
-    <Content Include="ConnectionStrings.config">
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="Web.config.exclud" />
   </ItemGroup>
   <PropertyGroup>
