@@ -84,5 +84,13 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordTypeManager manager = new DataRecordTypeManager();
             return manager.GetDataRecordFieldsTranslatedToRDB(dataRecordTypeId);
         }
+
+        [HttpPost]
+        [Route("GetDataRecordExtraFields")]
+        public IEnumerable<DataRecordField> GetDataRecordExtraFields(DataRecordTypeExtraField extraFieldsEvaluator)
+        {
+            DataRecordTypeManager manager = new DataRecordTypeManager();
+            return manager.GetDataRecordExtraFields(extraFieldsEvaluator);
+        }
     }
 }

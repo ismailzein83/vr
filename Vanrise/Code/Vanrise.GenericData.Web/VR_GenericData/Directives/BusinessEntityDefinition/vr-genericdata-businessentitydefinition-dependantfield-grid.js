@@ -1,220 +1,217 @@
-﻿//'use strict';
+﻿'use strict';
 
-//app.directive('vrGenericdataBusinessentitydefinitionDependantfieldGrid', ['UtilsService', 'VRUIUtilsService',
-//    function (UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataBusinessentitydefinitionDependantfieldGrid', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
-//        var directiveDefinitionObject = {
-//            restrict: 'E',
-//            scope: {
-//                onReady: '='
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onReady: '='
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new DependantFieldGridCtor(ctrl, $scope);
+                ctor.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: function (element, attrs) {
+                return '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/Templates/BEDependantFieldGridTemplate.html';
+            }
+        };
 
-//                var ctor = new DependantFieldGridCtor(ctrl, $scope);
-//                ctor.initializeController();
-//            },
-//            controllerAs: 'ctrl',
-//            bindToController: true,
-//            templateUrl: function (element, attrs) {
-//                return '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/Templates/BEDependantFieldGridTemplate.html';
-//            }
-//        };
+        function DependantFieldGridCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
 
-//        function DependantFieldGridCtor(ctrl, $scope) {
-//            this.initializeController = initializeController;
+            var beDependantFields;
+            var beDefinitionId;
+            var context;
 
-//            var beDependantFields;
-//            var beDefinitionId;
-//            var context;
+            var gridAPI;
+            var gridPromiseDeferred = UtilsService.createPromiseDeferred();
 
-//            var gridAPI;
-//            var gridPromiseDeferred = UtilsService.createPromiseDeferred();
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.dependantFields = [];
+                $scope.scopeModel.allDataRecordTypeFields = [];
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
-//                $scope.scopeModel.dependantFields = [];
-//                $scope.scopeModel.allDataRecordTypeFields = [];
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                    gridPromiseDeferred.resolve();
+                };
 
-//                $scope.scopeModel.onGridReady = function (api) {
-//                    gridAPI = api;
-//                    gridPromiseDeferred.resolve();
-//                };
+                $scope.scopeModel.onAddDependantFieldClicked = function () {
+                    extendAndAddDependantFieldToGrid();
+                };
 
-//                $scope.scopeModel.onAddDependantFieldClicked = function () {
-//                    extendAndAddDependantFieldToGrid();
-//                };
+                $scope.scopeModel.onDeleteRow = function (deletedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.dependantFields, deletedItem.tempId, 'tempId');
+                    $scope.scopeModel.dependantFields.splice(index, 1);
+                };
 
-//                $scope.scopeModel.onDeleteRow = function (deletedItem) {
-//                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.dependantFields, deletedItem.tempId, 'tempId');
-//                    $scope.scopeModel.dependantFields.splice(index, 1);
-//                };
+                $scope.scopeModel.isValid = function () {
+                    var dependantFields = $scope.scopeModel.dependantFields;
 
-//                $scope.scopeModel.isValid = function () {
-//                    var dependantFields = $scope.scopeModel.dependantFields;
+                    for (var i = 0; i < dependantFields.length; i++) {
+                        var currentDependentField = dependantFields[i];
+                        if (currentDependentField.selectedField == undefined)
+                            continue;
 
-//                    for (var i = 0; i < dependantFields.length; i++) {
-//                        var currentDependentField = dependantFields[i];
-//                        if (currentDependentField.selectedField == undefined)
-//                            continue;
+                        for (var j = 0; j < dependantFields.length; j++) {
+                            var dependantField = dependantFields[j];
+                            if (dependantField.selectedField == undefined || i == j)
+                                continue;
 
-//                        for (var j = 0; j < dependantFields.length; j++) {
-//                            var dependantField = dependantFields[j];
-//                            if (dependantField.selectedField == undefined || i==j)
-//                                continue;
+                            if (currentDependentField.selectedField.fieldName == dependantField.selectedField.fieldName)
+                                return "Same Field Exist!";
+                        }
+                    }
 
-//                            if (currentDependentField.selectedField.fieldName == dependantField.selectedField.fieldName)
-//                                return "Same Field Exist!";
-//                        }
-//                    }
+                    return null;
+                };
 
-//                    return null;
-//                };
+                defineAPI();
+            }
 
-//                defineAPI();
-//            }
-//            function defineAPI() {
-//                var api = {};
+            function defineAPI() {
+                var api = {};
 
-//                api.load = function (payload) {
-//                    $scope.scopeModel.dependantFields.length = 0;
-//                    $scope.scopeModel.allDataRecordTypeFields.length = 0;
+                api.load = function (payload) {
+                    $scope.scopeModel.dependantFields.length = 0;
+                    $scope.scopeModel.allDataRecordTypeFields.length = 0;
 
-//                    var promises = [];
+                    var promises = [];
 
-//                    if (payload != undefined) {
-//                        beDependantFields = payload.beDependantFields;
-//                        beDefinitionId = payload.beDefinitionId;
-//                        context = payload.context;
-//                    }
+                    if (payload != undefined) {
+                        beDependantFields = payload.beDependantFields;
+                        beDefinitionId = payload.beDefinitionId;
+                        context = payload.context;
+                    }
 
-//                    if (context != undefined)
-//                        $scope.scopeModel.allDataRecordTypeFields = context.getFields();
+                    if (context != undefined) {
+                        $scope.scopeModel.allDataRecordTypeFields = context.getFields();
+                    }
 
-//                    if (beDependantFields != undefined && beDependantFields.length > 0) {
-//                        var loadDependantFieldGridPromise = getDependantFieldsLoadPromise();
-//                        promises.push(loadDependantFieldGridPromise);
-//                    }
+                    if (beDependantFields != undefined && beDependantFields.length > 0) {
+                        var loadDependantFieldGridPromise = getDependantFieldsLoadPromise();
+                        promises.push(loadDependantFieldGridPromise);
+                    }
 
-//                    function getDependantFieldsLoadPromise() {
-//                        var loadDependantFieldsPromiseDeferred = UtilsService.createPromiseDeferred();
-//                        gridPromiseDeferred.promise.then(function () {
-//                            var _promises = [];
-//                            for (var i = 0; i < beDependantFields.length; i++) {
-//                                var currentDependantField = beDependantFields[i];
-//                                _promises.push(extendAndAddDependantFieldToGrid(currentDependantField));
-//                            }
+                    function getDependantFieldsLoadPromise() {
+                        var loadDependantFieldsPromiseDeferred = UtilsService.createPromiseDeferred();
 
-//                            UtilsService.waitMultiplePromises(_promises).then(function () {
-//                                loadDependantFieldsPromiseDeferred.resolve();
-//                            });
-//                        });
+                        gridPromiseDeferred.promise.then(function () {
+                            var _promises = [];
+                            for (var i = 0; i < beDependantFields.length; i++) {
+                                var currentDependantField = beDependantFields[i];
+                                _promises.push(extendAndAddDependantFieldToGrid(currentDependantField));
+                            }
 
-//                        return loadDependantFieldsPromiseDeferred.promise;
-//                    }
+                            UtilsService.waitMultiplePromises(_promises).then(function () {
+                                loadDependantFieldsPromiseDeferred.resolve();
+                            });
+                        });
 
-//                    return UtilsService.waitMultiplePromises(promises);
-//                };
+                        return loadDependantFieldsPromiseDeferred.promise;
+                    }
 
-//                api.getData = function () {
-//                    var fieldBusinessEntityTypeDependantFields = [];
+                    return UtilsService.waitMultiplePromises(promises);
+                };
 
-//                    for (var i = 0; i < $scope.scopeModel.dependantFields.length; i++)
-//                        fieldBusinessEntityTypeDependantFields.push(buildFieldBusinessEntityTypeDependantField($scope.scopeModel.dependantFields[i]));
+                api.getData = function () {
+                    var fieldBusinessEntityTypeDependantFields = [];
 
-//                    return fieldBusinessEntityTypeDependantFields;
-//                };
+                    for (var i = 0; i < $scope.scopeModel.dependantFields.length; i++)
+                        fieldBusinessEntityTypeDependantFields.push(buildFieldBusinessEntityTypeDependantField($scope.scopeModel.dependantFields[i]));
 
-//                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
-//                    ctrl.onReady(api);
-//            }
+                    return fieldBusinessEntityTypeDependantFields;
+                };
 
-//            function extendAndAddDependantFieldToGrid(dependantField) {
-//                var dependantFieldDataItem = { tempId: UtilsService.guid() };
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
+                    ctrl.onReady(api);
+            }
 
-//                if (dependantField != undefined) {
-//                    dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
-//                    dependantFieldDataItem.FieldName = dependantField.FieldName;
-//                    dependantFieldDataItem.MappedFieldName = dependantField.MappedFieldName;
-//                    dependantFieldDataItem.IsRequired = dependantField.IsRequired;
-//                }
+            function extendAndAddDependantFieldToGrid(dependantField) {
 
-//                var extendOptionPromises = [];
+                var extendOptionPromises = [];
 
-//                //Loading DependantFieldsSelector
-//                dependantFieldDataItem.dependantFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-//                dependantFieldDataItem.onDependantFieldsSelectorReady = function (api) {
-//                    dependantFieldDataItem.dependantFieldsSelectorAPI = api;
-//                    dependantFieldDataItem.dependantFieldsSelectorReadyPromiseDeferred.resolve();
+                var dependantFieldDataItem = { tempId: UtilsService.guid() };
 
-//                    if (dependantFieldDataItem.FieldName != undefined) {
-//                        var selectedValue = UtilsService.getItemByVal($scope.scopeModel.allDataRecordTypeFields, dependantFieldDataItem.FieldName, "fieldName");
-//                        if (selectedValue != null)
-//                            dependantFieldDataItem.selectedField = selectedValue;
-//                    }
-//                };
+                if (dependantField != undefined) {
+                    dependantFieldDataItem.IsRequired = dependantField.IsRequired;
+                    dependantFieldDataItem.compatibleFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
 
-//                dependantFieldDataItem.onDataRecordFieldChanged = function (selectedDataRecordField) {
-//                    if (dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred != undefined) {
-//                        dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred.resolve();
-//                        return;
-//                    }
-
-//                    if (selectedDataRecordField == undefined)
-//                        return;
-
-//                    var comaptibleFieldsSelectorPayload = {
-//                        filter: {
-//                            entityDefinitionId: beDefinitionId,
-//                            dataRecordFieldType: selectedDataRecordField.fieldType
-//                        }
-//                    };
-//                    var setLoader = function (value) {
-//                        dependantFieldDataItem.isLoadingCompatibleFieldsSelector = value;
-//                    };
-//                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dependantFieldDataItem.comaptibleFieldsSelectorAPI, comaptibleFieldsSelectorPayload, setLoader);
-//                };
-
-//                //Loading CompatibleFieldsSelector
-//                dependantFieldDataItem.comaptibleFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-//                dependantFieldDataItem.onCompatibleFieldsSelectorReady = function (api) {
-//                    dependantFieldDataItem.comaptibleFieldsSelectorAPI = api;
-//                    var _promises = [dependantFieldDataItem.dependantFieldsSelectorReadyPromiseDeferred.promise];
-//                    if (dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred != undefined)
-//                        _promises.push(dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred.promise);
-
-//                    UtilsService.waitMultiplePromises(_promises).then(function () {
-//                        dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred = undefined;
-//                        var comaptibleFieldsSelectorPayload = {};
-
-//                        if (dependantFieldDataItem.MappedFieldName != undefined)
-//                            comaptibleFieldsSelectorPayload.selectedIds = dependantFieldDataItem.MappedFieldName;
-
-//                        if (dependantFieldDataItem.selectedField != undefined)
-//                            comaptibleFieldsSelectorPayload.filter = {
-//                                entityDefinitionId: beDefinitionId,
-//                                dataRecordFieldType: dependantFieldDataItem.selectedField.fieldType
-//                            };
-
-//                        VRUIUtilsService.callDirectiveLoad(dependantFieldDataItem.comaptibleFieldsSelectorAPI, comaptibleFieldsSelectorPayload, dependantFieldDataItem.comaptibleFieldsSelectorLoadDeferred);
-//                    });
-//                };
-//                extendOptionPromises.push(dependantFieldDataItem.comaptibleFieldsSelectorLoadDeferred.promise);
+                    extendOptionPromises.push(dependantFieldDataItem.compatibleFieldsSelectorLoadDeferred.promise);
+                }
 
 
-//                $scope.scopeModel.dependantFields.push(dependantFieldDataItem);
+                //Loading DependantFieldsSelector
+                dependantFieldDataItem.dependantFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                dependantFieldDataItem.onDependantFieldsSelectorReady = function (api) {
+                    dependantFieldDataItem.dependantFieldsSelectorAPI = api;
+                    dependantFieldDataItem.dependantFieldsSelectorReadyPromiseDeferred.resolve();
 
-//                return UtilsService.waitMultiplePromises(extendOptionPromises);
-//            }
+                    if (dependantField != undefined && dependantField.FieldName != undefined) {
+                        var selectedValue = UtilsService.getItemByVal($scope.scopeModel.allDataRecordTypeFields, dependantField.FieldName, "fieldName");
+                        if (selectedValue != null)
+                            dependantFieldDataItem.selectedField = selectedValue;
+                    }
+                };
 
-//            function buildFieldBusinessEntityTypeDependantField(dependantFieldDataItem) {
-//                return {
-//                    FieldName: dependantFieldDataItem.selectedField != undefined ? dependantFieldDataItem.selectedField.fieldName : null,
-//                    MappedFieldName: dependantFieldDataItem.comaptibleFieldsSelectorAPI.getSelectedIds(),
-//                    IsRequired: dependantFieldDataItem.IsRequired
-//                };
-//            }
-//        }
+                dependantFieldDataItem.onDataRecordFieldChanged = function (selectedDataRecordField) {
+                    if (selectedDataRecordField == undefined)
+                        return;
 
-//        return directiveDefinitionObject;
-//    }]);
+                    if (dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred != undefined) {
+                        dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred.resolve();
+                        return;
+                    }
+
+                    var compatibleFieldsSelectorPayload = {
+                        entityDefinitionId: beDefinitionId,
+                        dataRecordFieldType: selectedDataRecordField.fieldType
+                    };
+                    var setLoader = function (value) {
+                        dependantFieldDataItem.isLoadingCompatibleFieldsSelector = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dependantFieldDataItem.compatibleFieldsSelectorAPI, compatibleFieldsSelectorPayload, setLoader);
+                };
+
+                //Loading CompatibleFieldsSelector
+                dependantFieldDataItem.onCompatibleFieldsSelectorReady = function (api) {
+                    dependantFieldDataItem.compatibleFieldsSelectorAPI = api;
+
+                    if (dependantField == undefined)
+                        return;
+
+                    dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred.promise.then(function () {
+                        dependantFieldDataItem.dependantFieldSelectionChangedPromiseDeferred = undefined;
+
+                        var compatibleFieldsSelectorPayload = {
+                            entityDefinitionId: beDefinitionId,
+                            dataRecordFieldType: dependantFieldDataItem.selectedField.fieldType
+                        };
+                        if (dependantField.MappedFieldName != undefined) {
+                            compatibleFieldsSelectorPayload.selectedIds = dependantField.MappedFieldName;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(dependantFieldDataItem.compatibleFieldsSelectorAPI, compatibleFieldsSelectorPayload, dependantFieldDataItem.compatibleFieldsSelectorLoadDeferred);
+                    });
+                };
+
+                $scope.scopeModel.dependantFields.push(dependantFieldDataItem);
+
+                return UtilsService.waitMultiplePromises(extendOptionPromises);
+            }
+
+            function buildFieldBusinessEntityTypeDependantField(dependantFieldDataItem) {
+                return {
+                    FieldName: dependantFieldDataItem.selectedField != undefined ? dependantFieldDataItem.selectedField.fieldName : null,
+                    MappedFieldName: dependantFieldDataItem.compatibleFieldsSelectorAPI.getSelectedIds(),
+                    IsRequired: dependantFieldDataItem.IsRequired
+                };
+            }
+        }
+
+        return directiveDefinitionObject;
+    }]);

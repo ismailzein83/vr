@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
@@ -91,5 +92,20 @@ namespace Vanrise.GenericData.Web.Controllers
 		{
 			return _manager.GetBusinessEntityDefinitionRuntimeEditor(businessEntityDefinitionId);
 		}
-	}
+
+        [HttpPost]
+        [Route("GetCompatibleFields")]
+        public List<BusinessEntityCompatibleFieldInfo> GetCompatibleFields(GetCompatibleFieldsInput input)
+        {
+            input.ThrowIfNull("input");
+            return _manager.GetCompatibleFields(input.EntityDefinitionId, input.CompatibleWithFieldType);
+        }
+
+        public class GetCompatibleFieldsInput
+        {
+            public Guid EntityDefinitionId { get; set; }
+
+            public DataRecordFieldType CompatibleWithFieldType { get; set; }
+        }
+    }
 }

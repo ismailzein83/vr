@@ -9,6 +9,7 @@
         var isEditMode;
         var dataRecordFieldEntity;
         var existingFields;
+        var showDependantFieldsGrid;
 
         var directiveReadyAPI;
         var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -16,18 +17,21 @@
         var dataRecordTypeFieldsFormulaAPI;
         var dataRecordTypeFieldsFormulaReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
         var dataRecordFieldAPI;
+
         loadParameters();
         defineScope();
         load();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+
             if (parameters != undefined && parameters != null) {
                 dataRecordFieldEntity = parameters.DataRecordField;
                 existingFields = parameters.ExistingFields;
+                showDependantFieldsGrid = parameters.showDependantFieldsGrid;
             }
+
             isEditMode = (dataRecordFieldEntity != undefined);
         }
 
@@ -71,13 +75,20 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadDataRecordFieldTypeDirective, setTitle, loadDataRecordTypeFieldsFormulaDirective])
-                .catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadFilterBySection, loadDataRecordFieldTypeDirective, loadDataRecordTypeFieldsFormulaDirective])
+                    .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
-                .finally(function () {
+                    .finally(function () {
                     $scope.scopeModal.isLoading = false;
                 });
+        }
+
+        function setTitle() {
+            if (isEditMode && dataRecordFieldEntity != undefined)
+                $scope.title = UtilsService.buildTitleForUpdateEditor(dataRecordFieldEntity.Name, 'Data Record Field');
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor('Data Record Field');
         }
 
         function loadFilterBySection() {
@@ -86,21 +97,16 @@
                 $scope.scopeModal.title = dataRecordFieldEntity.Title;
             }
         }
-        function setTitle() {
-            if (isEditMode && dataRecordFieldEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(dataRecordFieldEntity.Name, 'Data Record Field');
-            else
-                $scope.title = UtilsService.buildTitleForAddEditor('Data Record Field');
-        }
 
         function loadDataRecordFieldTypeDirective() {
             var dataRecordFieldTypeDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             directiveReadyPromiseDeferred.promise.then(function () {
-                var dataRecordFieldTypePayload = dataRecordFieldEntity != undefined ? dataRecordFieldEntity.Type : undefined;
-
+                var dataRecordFieldTypePayload = dataRecordFieldEntity != undefined ? dataRecordFieldEntity.Type : {};
+                dataRecordFieldTypePayload.additionalParameters = { context: getContext(), showDependantFieldsGrid: showDependantFieldsGrid };
                 VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, dataRecordFieldTypePayload, dataRecordFieldTypeDirectiveLoadPromiseDeferred);
             });
+
             return dataRecordFieldTypeDirectiveLoadPromiseDeferred.promise;
         }
 
@@ -115,14 +121,11 @@
             return dataRecordTypeFieldsFormulaDirectiveLoadPromiseDeferred.promise;
         }
 
-        function getContext()
-        {
+        function getContext() {
             var context = {
-                getFields :function()
-                {
+                getFields: function () {
                     var fields = [];
-                    if (existingFields != undefined)
-                    {
+                    if (existingFields != undefined) {
                         for (var i = 0; i < existingFields.length; i++) {
                             var existingField = existingFields[i];
                             fields.push({ fieldName: existingField.Name, fieldTitle: existingField.Title, fieldType: existingField.Type });
@@ -155,7 +158,7 @@
             dataRecordField.Name = $scope.scopeModal.name;
             dataRecordField.Title = $scope.scopeModal.title;
             dataRecordField.Type = directiveReadyAPI.getData();
-            dataRecordField.Formula = dataRecordTypeFieldsFormulaAPI !=undefined ? dataRecordTypeFieldsFormulaAPI.getData():undefined;
+            dataRecordField.Formula = dataRecordTypeFieldsFormulaAPI != undefined ? dataRecordTypeFieldsFormulaAPI.getData() : undefined;
             return dataRecordField;
         }
 

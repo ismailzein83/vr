@@ -103,6 +103,7 @@ namespace Vanrise.GenericData.Business
                    return dataRecordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
                });
         }
+
         public Dictionary<string, Object> ParseDicValuesToFieldType(Guid dataRecordTypeId, Dictionary<string, Object> fieldValues)
         {
             Dictionary<string, Object> parsedDicValues = null;
@@ -293,6 +294,14 @@ namespace Vanrise.GenericData.Business
             return manager.GetExtensionConfigurations<DataRecordTypeExtraFieldTemplate>(DataRecordTypeExtraFieldTemplate.EXTENSION_TYPE);
         }
 
+        public IEnumerable<DataRecordField> GetDataRecordExtraFields(DataRecordTypeExtraField extraFieldsEvaluator)
+        {
+            if (extraFieldsEvaluator == null)
+                return null;
+
+            return extraFieldsEvaluator.GetFields(null);
+        }
+
         public List<DataRecordFieldTransaltedToRDB> GetDataRecordFieldsTranslatedToRDB(Guid dataRecordTypeId)
         {
             DataRecordType dataRecordType = GetDataRecordType(dataRecordTypeId);
@@ -377,9 +386,16 @@ namespace Vanrise.GenericData.Business
                 var extraFields = dataRecordType.ExtraFieldsEvaluator.GetFields(null);
                 if (extraFields != null)
                 {
+                    List<string> fieldNames = dataRecordFields.Select(item => item.Name).ToList();
                     extraFields = extraFields.VRDeepCopy();
-                    extraFields.ForEach((fld) => fld.IsInheritedFromExtraField = true);
-                    dataRecordFields.AddRange(extraFields);
+                    foreach (var extraField in extraFields)
+                    {
+                        if (fieldNames.Contains(extraField.Name))
+                            continue;
+
+                        extraField.IsInheritedFromExtraField = true;
+                        dataRecordFields.Add(extraField);
+                    }
                 }
             }
 

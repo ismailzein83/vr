@@ -1,4 +1,4 @@
-﻿<!--<vr-row>
+﻿<vr-row>
     <vr-button type="Add" data-onclick="scopeModel.onAddDependantFieldClicked" standalone></vr-button>
     <vr-validator validate="scopeModel.isValid()">
         <vr-datagrid on-ready="scopeModel.onGridReady"
@@ -6,22 +6,20 @@
                      ondeleterow="scopeModel.onDeleteRow"
                      disablesorting="true"
                      disabledraggablecolumns hidegridmenu>
-            <vr-datagridcolumn headertext="'Dependent Field'">
+            <vr-datagridcolumn headertext="'Dependant Field'">
                 <vr-select on-ready="dataItem.onDependantFieldsSelectorReady"
                            datasource="viewScope.scopeModel.allDataRecordTypeFields"
                            selectedvalues="dataItem.selectedField"
                            datatextfield="fieldTitle"
                            datavaluefield="fieldName"
                            onselectionchanged="dataItem.onDataRecordFieldChanged"
-                           entityName="Dependent Field"
-                           isrequired="true"
-                           hidelabel hideremoveicon>
+                           entityName="Dependant Field" isrequired="true" hidelabel hideremoveicon>
                 </vr-select>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Mapped Field'">
                 <vr-genericdata-businessentitydefinition-compatiblefields-selector on-ready="dataItem.onCompatibleFieldsSelectorReady"
                                                                                    vr-loader="dataItem.isLoadingCompatibleFieldsSelector"
-                                                                                   hideremoveicon normal-col-num="12" hidelabel usefullcolumn isrequired="true">
+                                                                                   normal-col-num="12" isrequired="true" hideremoveicon hidelabel usefullcolumn>
                 </vr-genericdata-businessentitydefinition-compatiblefields-selector>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Required'" fixedwidth="80" isfielddynamic="true">
@@ -29,4 +27,4 @@
             </vr-datagridcolumn>
         </vr-datagrid>
     </vr-validator>
-</vr-row>-->
+</vr-row>

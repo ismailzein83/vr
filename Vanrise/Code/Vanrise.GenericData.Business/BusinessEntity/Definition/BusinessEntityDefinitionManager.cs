@@ -42,22 +42,25 @@ namespace Vanrise.GenericData.Business
                 throw new NullReferenceException(String.Format("businessEntityDefinition. businessEntityDefinitionName '{0}'", businessEntityDefinitionName));
             return businessEntityDefinition.BusinessEntityDefinitionId;
         }
+
         public BusinessEntityDefinition GetBusinessEntityDefinition(Guid businessEntityDefinitionId)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
             return cachedBEDefinitions.GetRecord(businessEntityDefinitionId);
         }
-		public BusinessEntityDefinitionRuntimeEditor GetBusinessEntityDefinitionRuntimeEditor(Guid businessEntityDefinitionId)
-		{
-			var beDefinition = this.GetBusinessEntityDefinition(businessEntityDefinitionId);
-			BusinessEntityDefinitionRuntimeEditor businessEntityDefinitionRuntimeEditor = new BusinessEntityDefinitionRuntimeEditor {
-				BusinessEntityDefinition = beDefinition,
-				AdditionalData = beDefinition.Settings.GetEditorRuntimeAdditionalData(new BEDefinitionSettingsGetEditorRuntimeAdditionalDataContext { BEDefinition = beDefinition })
-			};
-			return businessEntityDefinitionRuntimeEditor;
-		}
 
-		public string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId)
+        public BusinessEntityDefinitionRuntimeEditor GetBusinessEntityDefinitionRuntimeEditor(Guid businessEntityDefinitionId)
+        {
+            var beDefinition = this.GetBusinessEntityDefinition(businessEntityDefinitionId);
+            BusinessEntityDefinitionRuntimeEditor businessEntityDefinitionRuntimeEditor = new BusinessEntityDefinitionRuntimeEditor
+            {
+                BusinessEntityDefinition = beDefinition,
+                AdditionalData = beDefinition.Settings.GetEditorRuntimeAdditionalData(new BEDefinitionSettingsGetEditorRuntimeAdditionalDataContext { BEDefinition = beDefinition })
+            };
+            return businessEntityDefinitionRuntimeEditor;
+        }
+
+        public string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
             return beDefinition != null ? beDefinition.Title : null;
@@ -79,11 +82,12 @@ namespace Vanrise.GenericData.Business
                         return false;
 
                     return true;
-                }; 
+                };
             }
 
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
+
         public IEnumerable<BusinessEntityDefinitionInfo> GetRemoteBusinessEntityDefinitionsInfo(Guid connectionId, string serializedFilter)
         {
             VRConnectionManager connectionManager = new VRConnectionManager();
@@ -93,10 +97,14 @@ namespace Vanrise.GenericData.Business
             return connectionSettings.Get<IEnumerable<BusinessEntityDefinitionInfo>>(string.Format("/api/VR_GenericData/BusinessEntityDefinition/GetBusinessEntityDefinitionsInfo?filter={0}", serializedFilter));
         }
 
-        private struct GetBusinessEntityManagerCacheName
+        public List<BusinessEntityCompatibleFieldInfo> GetCompatibleFields(Guid entityDefinitionId, DataRecordFieldType compatibleWithFieldType)
         {
-            public Guid BusinessEntityDefinitionId { get; set; }
+            compatibleWithFieldType.ThrowIfNull("compatibleWithFieldType");
+            BaseBusinessEntityManager baseBusinessEntityManager = GetBusinessEntityManager(entityDefinitionId);
+            baseBusinessEntityManager.ThrowIfNull("baseBusinessEntityManager", entityDefinitionId);
+            return baseBusinessEntityManager.GetCompatibleFields(new BusinessEntityGetCompatibleFieldsContext() { EntityDefinitionId = entityDefinitionId, CompatibleWithFieldType = compatibleWithFieldType });
         }
+
         public BaseBusinessEntityManager GetBusinessEntityManager(Guid businessEntityDefinitionId)
         {
             var cacheName = new GetBusinessEntityManagerCacheName { BusinessEntityDefinitionId = businessEntityDefinitionId };// String.Format("GetBusinessEntityManager_{0}", businessEntityDefinitionId);
@@ -147,6 +155,7 @@ namespace Vanrise.GenericData.Business
             }
             return updateOperationOutput;
         }
+
         public Vanrise.Entities.InsertOperationOutput<BusinessEntityDefinitionDetail> AddBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
         {
             InsertOperationOutput<BusinessEntityDefinitionDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BusinessEntityDefinitionDetail>();
@@ -174,7 +183,6 @@ namespace Vanrise.GenericData.Business
             return insertOperationOutput;
         }
 
-
         public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
         {
             var extensionConfigurationManager = new ExtensionConfigurationManager();
@@ -192,6 +200,7 @@ namespace Vanrise.GenericData.Business
             }
             return null;
         }
+
         public string GetBusinessEntityNullDisplayText(Guid businessEntityDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
@@ -209,21 +218,19 @@ namespace Vanrise.GenericData.Business
 
             return businessEntityDefinition.Settings.IdType;
         }
+
         public string GetBusinessEntityDefinitionViewEditor(Guid businessEntityDefinitionId)
         {
             var businessEntityDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
             businessEntityDefinition.ThrowIfNull("businessEntityDefinition", businessEntityDefinitionId);
-            businessEntityDefinition.Settings.ThrowIfNull("businessEntityDefinition.Settings",businessEntityDefinitionId);
+            businessEntityDefinition.Settings.ThrowIfNull("businessEntityDefinition.Settings", businessEntityDefinitionId);
             return businessEntityDefinition.Settings.ViewerEditor;
         }
+
         public Dictionary<Guid, BusinessEntityDefinition> GetBusinessEntityDefinitionsByConfigId(Guid beConfigId)
         {
             return GetCachedBusinessEntityDefinitionsByConfigId().GetRecord(beConfigId);
         }
-
-        #endregion
-
-        #region Private Methods
 
         public Dictionary<Guid, BusinessEntityDefinition> GetCachedBusinessEntityDefinitions()
         {
@@ -236,6 +243,15 @@ namespace Vanrise.GenericData.Business
                 });
         }
 
+        #endregion
+
+        #region Private Methods
+
+        private struct GetBusinessEntityManagerCacheName
+        {
+            public Guid BusinessEntityDefinitionId { get; set; }
+        }
+
         private Dictionary<Guid, Dictionary<Guid, BusinessEntityDefinition>> GetCachedBusinessEntityDefinitionsByConfigId()
         {
             return s_cacheManager.GetOrCreateObject("GetCachedBusinessEntityDefinitionsByConfigId",
@@ -243,9 +259,9 @@ namespace Vanrise.GenericData.Business
                 {
                     Dictionary<Guid, Dictionary<Guid, BusinessEntityDefinition>> rslt = new Dictionary<Guid, Dictionary<Guid, BusinessEntityDefinition>>();
                     var allBEDefinitions = GetCachedBusinessEntityDefinitions();
-                    if(allBEDefinitions != null)
+                    if (allBEDefinitions != null)
                     {
-                        foreach(var beDefinition in allBEDefinitions.Values)
+                        foreach (var beDefinition in allBEDefinitions.Values)
                         {
                             beDefinition.Settings.ThrowIfNull("beDefinition.Settings", beDefinition.BusinessEntityDefinitionId);
                             rslt.GetOrCreateItem(beDefinition.Settings.ConfigId).Add(beDefinition.BusinessEntityDefinitionId, beDefinition);
@@ -344,7 +360,7 @@ namespace Vanrise.GenericData.Business
                 Name = beDefinition.Title,
                 SelectorFilterEditor = beDefinition.Settings.SelectorFilterEditor,
                 WorkFlowAddBEActivityEditor = beDefinition.Settings.WorkFlowAddBEActivityEditor,
-                WorkFlowUpdateBEActivityEditor=beDefinition.Settings.WorkFlowUpdateBEActivityEditor
+                WorkFlowUpdateBEActivityEditor = beDefinition.Settings.WorkFlowUpdateBEActivityEditor
             };
         }
 
@@ -366,5 +382,5 @@ namespace Vanrise.GenericData.Business
 
 public class BEDefinitionSettingsGetEditorRuntimeAdditionalDataContext : IBEDefinitionSettingsGetEditorRuntimeAdditionalDataContext
 {
-	public BusinessEntityDefinition BEDefinition { get; set; }
+    public BusinessEntityDefinition BEDefinition { get; set; }
 }

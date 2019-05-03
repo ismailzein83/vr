@@ -11,3 +11,8 @@
                      ng-if="scopeModel.selectedBusinessEntityDefinition != undefined && scopeModel.selectedBusinessEntityDefinition.SelectorFilterEditor != undefined"
                      normal-col-num="{{ctrlRuntimeSelectorSettings.normalColNum}}">
 </vr-directivewrapper>
+<vr-columns colnum="12">
+    <span ng-show="scopeModel.selectedBusinessEntityDefinition != undefined && scopeModel.showDependantFieldsGrid" vr-loader="scopeModel.isLoadingDependantFieldsGrid">
+        <vr-genericdata-businessentitydefinition-dependantfield-grid on-ready="scopeModel.onDependantFieldsGridReady"></vr-genericdata-businessentitydefinition-dependantfield-grid>
+    </span>
+</vr-columns>

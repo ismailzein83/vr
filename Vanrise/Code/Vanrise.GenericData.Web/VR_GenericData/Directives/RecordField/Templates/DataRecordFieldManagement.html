@@ -2,7 +2,7 @@
     <vr-row>
         <vr-columns width="1/4row">
             <vr-textbox label="Date Time Field" value="ctrl.dateTimeField"></vr-textbox>
-          
+
         </vr-columns>
         <vr-columns width="1/4row">
             <vr-textbox label="Id Field" value="ctrl.idField"></vr-textbox>
@@ -22,9 +22,8 @@
         </span>
     </vr-row>
 </vr-section>
-
 <vr-section header="Static Fields">
-    <vr-button type="Add" data-onclick="ctrl.addDataRecordField" standalone></vr-button>
+    <vr-button type="Add" data-onclick="ctrl.addDataRecordField" vr-disabled="ctrl.disableAddButton()" standalone></vr-button>
 
     <vr-validator validate="ctrl.isValid()">
         <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"

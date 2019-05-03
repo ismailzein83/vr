@@ -1,166 +1,171 @@
-﻿//(function (app) {
+﻿(function (app) {
 
-//    'use strict';
+    'use strict';
 
-//    BECompatibleFieldsSelectorDirective.$inject = ['VR_GenericData_BusinessEntityDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    BECompatibleFieldsSelectorDirective.$inject = ['VR_GenericData_BusinessEntityDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-//    function BECompatibleFieldsSelectorDirective(VR_GenericData_BusinessEntityDefinitionAPIService, UtilsService, VRUIUtilsService) {
-//        return {
-//            restrict: 'E',
-//            scope: {
-//                onReady: '=',
-//                selectedvalues: '=',
-//                onselectitem: "=",
-//                ondeselectitem: "=",
-//                onselectionchanged: '=',
-//                ismultipleselection: "@",
-//                isrequired: "=",
-//                customlabel: "@",
-//                hideselectedvaluessection: "@",
-//                normalColNum: "@",
-//                hidelabel: "@",
-//                usefullcolumn: "@"
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                ctrl.datasource = [];
-//                ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
+    function BECompatibleFieldsSelectorDirective(VR_GenericData_BusinessEntityDefinitionAPIService, UtilsService, VRUIUtilsService) {
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+                selectedvalues: '=',
+                onselectitem: "=",
+                ondeselectitem: "=",
+                onselectionchanged: '=',
+                ismultipleselection: "@",
+                isrequired: "=",
+                customlabel: "@",
+                hideselectedvaluessection: "@",
+                normalColNum: "@",
+                hidelabel: "@",
+                usefullcolumn: "@"
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                ctrl.datasource = [];
+                ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
 
-//                $scope.label = ctrl.customlabel;
-//                if (ctrl.customlabel == "") {
-//                    $scope.label = "Compatible Field";
+                $scope.label = ctrl.customlabel;
+                if (ctrl.customlabel == "") {
+                    $scope.label = "Compatible Field";
 
-//                    if ($attrs.ismultipleselection != undefined) {
-//                        $scope.label = "Compatible Fields";
-//                    }
-//                }
+                    if ($attrs.ismultipleselection != undefined) {
+                        $scope.label = "Compatible Fields";
+                    }
+                }
 
-//                var beCompatibleFieldSelector = new BECompatibleFieldSelector(ctrl, $scope, $attrs);
-//                beCompatibleFieldSelector.initializeController();
-//            },
-//            controllerAs: 'ctrl',
-//            bindToController: true,
-//            template: function (element, attrs) {
-//                return getDirectiveTemplate(attrs);
-//            }
-//        };
+                var beCompatibleFieldSelector = new BECompatibleFieldSelector(ctrl, $scope, $attrs);
+                beCompatibleFieldSelector.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            template: function (element, attrs) {
+                return getDirectiveTemplate(attrs);
+            }
+        };
 
-//        function BECompatibleFieldSelector(ctrl, $scope, attrs) {
-//            this.initializeController = initializeController;
+        function BECompatibleFieldSelector(ctrl, $scope, attrs) {
+            this.initializeController = initializeController;
 
-//            var selectorAPI;
+            var selectorAPI;
 
-//            function initializeController() {
-//                ctrl.onSelectorReady = function (api) {
-//                    selectorAPI = api;
-//                    defineAPI();
-//                };
-//            }
+            function initializeController() {
+                ctrl.onSelectorReady = function (api) {
+                    selectorAPI = api;
+                    defineAPI();
+                };
+            }
 
-//            function defineAPI() {
-//                var api = {};
+            function defineAPI() {
+                var api = {};
 
-//                api.load = function (payload) {
-//                    var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                api.load = function (payload) {
+                    var promises = [];
 
-//                    var filter;
-//                    var selectedIds;
+                    var filter;
+                    var selectedIds;
+                    var entityDefinitionId;
+                    var dataRecordFieldType;
 
-//                    if (payload != undefined) {
-//                        filter = payload.filter;
-//                        selectedIds = payload.selectedIds;
-//                    }
+                    if (payload != undefined) {
+                        filter = payload.filter;
+                        selectedIds = payload.selectedIds;
+                        entityDefinitionId = payload.entityDefinitionId;
+                        dataRecordFieldType = payload.dataRecordFieldType;
+                    }
 
-//                    if (filter != undefined && filter.entityDefinitionId != undefined && filter.dataRecordFieldType != undefined) {
-//                        var beGetCompatibleFieldsContext = {
-//                            EntityDefinitionId: filter.entityDefinitionId,
-//                            CompatibleWithFieldType: filter.dataRecordFieldType
-//                        };
+                    if (entityDefinitionId != undefined && dataRecordFieldType != undefined) {
+                        var input = {
+                            EntityDefinitionId: entityDefinitionId,
+                            CompatibleWithFieldType: dataRecordFieldType
+                        };
 
-//                        return VR_GenericData_BusinessEntityDefinitionAPIService.GetCompatibleFields(beGetCompatibleFieldsContext).then(function (response) {
-//                            loadDirectivePromiseDeferred.resolve();
+                        var getCompatibleFieldsPromise = VR_GenericData_BusinessEntityDefinitionAPIService.GetCompatibleFields(input);
+                        promises.push(getCompatibleFieldsPromise);
 
-//                            selectorAPI.clearDataSource();
+                        getCompatibleFieldsPromise.then(function (response) {
+                            selectorAPI.clearDataSource();
 
-//                            if (response) {
-//                                for (var i = 0; i < response.length; i++) {
-//                                    ctrl.datasource.push(response[i]);
-//                                }
-//                            }
+                            if (response) {
+                                for (var i = 0; i < response.length; i++) {
+                                    ctrl.datasource.push(response[i]);
+                                }
+                            }
 
-//                            if (selectedIds != undefined) {
-//                                VRUIUtilsService.setSelectedValues(selectedIds, 'FieldName', attrs, ctrl);
-//                            }
-//                        });
-//                    }
-//                    else {
-//                        loadDirectivePromiseDeferred.resolve();
-//                    }
+                            if (selectedIds != undefined) {
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'FieldName', attrs, ctrl);
+                            }
+                        });
+                    }
 
-//                    return loadDirectivePromiseDeferred.promise;
-//                };
+                    return UtilsService.waitMultiplePromises(promises);
+                };
 
-//                api.getSelectedIds = function () {
-//                    return VRUIUtilsService.getIdSelectedIds('FieldName', attrs, ctrl);
-//                };
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('FieldName', attrs, ctrl);
+                };
 
-//                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-//                    ctrl.onReady(api);
-//                }
-//            }
-//        }
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
+                }
+            }
+        }
 
-//        function getDirectiveTemplate(attrs) {
-//            var entityName = 'Compatible Field';
-//            var multipleselection = '';
-//            var label = '';
+        function getDirectiveTemplate(attrs) {
 
-//            if (attrs.hidelabel == undefined) {
-//                if (ctrl.customlabel == "") {
-//                    label = "label ='Compatible Field'";
-//                    if ($attrs.ismultipleselection != undefined) {
-//                        label = "label ='Compatible Fields'";
-//                    }
-//                }
-//                else {
-//                    label = "label ='" + ctrl.customlabel + "'";
-//                }
-//            }
+            var label = '';
+            if (attrs.hidelabel == undefined) {
+                if (ctrl.customlabel == "") {
+                    label = "label ='Compatible Field'";
+                    if ($attrs.ismultipleselection != undefined) {
+                        label = "label ='Compatible Fields'";
+                    }
+                }
+                else {
+                    label = "label ='" + ctrl.customlabel + "'";
+                }
+            }
 
-//            if (attrs.ismultipleselection != undefined) {
-//                entityName = 'Compatible Fields';
-//                multipleselection = 'ismultipleselection';
-//            }
+            var entityName = 'Compatible Field';
+            var multipleselection = '';
+            if (attrs.ismultipleselection != undefined) {
+                entityName = 'Compatible Fields';
+                multipleselection = 'ismultipleselection';
+            }
 
-//            var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : '';
+            var hideselectedvaluessection = '';
+            if (attrs.hideselectedvaluessection != undefined)
+                hideselectedvaluessection = 'hideselectedvaluessection';
 
-//            var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : '';
+            var hideremoveicon = '';
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = 'hideremoveicon';
 
-//            var haschildcolumns = '';
+            var haschildcolumns = '';
+            if (attrs.usefullcolumn != undefined)
+                haschildcolumns = "haschildcolumns";
 
-//            if (attrs.usefullcolumn != undefined)
-//                haschildcolumns = "haschildcolumns";
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + ' >'
+                + '<vr-select on-ready="ctrl.onSelectorReady"'
+                + ' datasource="ctrl.datasource"'
+                + ' selectedvalues="ctrl.selectedvalues"'
+                + ' onselectionchanged="ctrl.onselectionchanged"'
+                + ' onselectitem="ctrl.onselectitem"'
+                + ' ondeselectitem="ctrl.ondeselectitem"'
+                + ' datavaluefield="FieldName"'
+                + ' datatextfield="FieldTitle"'
+                + ' ' + label + ' '
+                + ' ' + multipleselection
+                + ' ' + hideselectedvaluessection
+                + ' isrequired="ctrl.isrequired"'
+                + ' ' + hideremoveicon
+                + ' entityName="' + entityName + '">'
+                + '</vr-select>'
+                + '</vr-columns>';
+        }
+    }
 
-//            return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + ' >'
-//                + '<vr-select on-ready="ctrl.onSelectorReady"'
-//                + ' datasource="ctrl.datasource"'
-//                + ' selectedvalues="ctrl.selectedvalues"'
-//                + ' onselectionchanged="ctrl.onselectionchanged"'
-//                + ' onselectitem="ctrl.onselectitem"'
-//                + ' ondeselectitem="ctrl.ondeselectitem"'
-//                + ' datavaluefield="FieldName"'
-//                + ' datatextfield="FieldTitle"'
-//                + ' ' + label + ' '
-//                + ' ' + multipleselection
-//                + ' ' + hideselectedvaluessection
-//                + ' isrequired="ctrl.isrequired"'
-//                + ' ' + hideremoveicon
-//                + ' entityName="' + entityName + '">'
-//                + '</vr-select>'
-//                + '</vr-columns>';
-//        }
-//    }
+    app.directive('vrGenericdataBusinessentitydefinitionCompatiblefieldsSelector', BECompatibleFieldsSelectorDirective);
 
-//    app.directive('vrGenericdataBusinessentitydefinitionCompatiblefieldsSelector', BECompatibleFieldsSelectorDirective);
-
-//})(app);
+})(app);

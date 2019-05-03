@@ -69,6 +69,10 @@
             });
         }
 
+        function GetCompatibleFields(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetCompatibleFields'), input);
+        }
+
         return {
             GetFilteredBusinessEntityDefinitions: GetFilteredBusinessEntityDefinitions,
 			GetBusinessEntityDefinition: GetBusinessEntityDefinition,
@@ -81,7 +85,8 @@
             HasUpdateBusinessEntityDefinition: HasUpdateBusinessEntityDefinition,
             GetBEDefinitionSettingConfigs: GetBEDefinitionSettingConfigs,
             GetBEDataRecordTypeIdIfGeneric: GetBEDataRecordTypeIdIfGeneric,
-            GetBusinessEntityDefinitionViewEditor: GetBusinessEntityDefinitionViewEditor
+            GetBusinessEntityDefinitionViewEditor: GetBusinessEntityDefinitionViewEditor,
+            GetCompatibleFields: GetCompatibleFields
         };
     }
 

@@ -56,11 +56,15 @@
                     var isNullable;
                     var beDefinitionId;
                     var beRuntimeSelectorFilter;
+                    var beDependantFields;
+                    var additionalParameters;
 
                     if (payload != undefined) {
                         isNullable = payload.IsNullable;
                         beDefinitionId = payload.BusinessEntityDefinitionId;
                         beRuntimeSelectorFilter = payload.BERuntimeSelectorFilter;
+                        beDependantFields = payload.DependantFields;
+                        additionalParameters = payload.additionalParameters;
                     }
 
                     $scope.scopeModel.isNullable = isNullable;
@@ -75,7 +79,9 @@
                         beDefinitionRuntimeSelectorSettingsSelectorReadyPromiseDeferred.promise.then(function () {
                             var beDefinitionRuntimeSeletorSettingsPayload = {
                                 beDefinitionId: beDefinitionId,
-                                beRuntimeSelectorFilter: beRuntimeSelectorFilter
+                                beRuntimeSelectorFilter: beRuntimeSelectorFilter,
+                                beDependantFields: beDependantFields,
+                                additionalParameters: additionalParameters
                             };
                             VRUIUtilsService.callDirectiveLoad(beDefinitionRuntimeSelectorSettingsSelectorAPI, beDefinitionRuntimeSeletorSettingsPayload, beDefinitionRuntimeSeletorSettingsLoadDeferred);
                         });
@@ -88,18 +94,20 @@
 
                 api.getData = function () {
 
-                    var beDefinitionId, beRuntimeSelectorFilter;
+                    var beDefinitionId, beRuntimeSelectorFilter, dependantFields;
                     var beDefinitionRuntimeSelectorSettings = beDefinitionRuntimeSelectorSettingsSelectorAPI.getData();
                     if (beDefinitionRuntimeSelectorSettings != undefined) {
                         beDefinitionId = beDefinitionRuntimeSelectorSettings.beDefinitionId;
                         beRuntimeSelectorFilter = beDefinitionRuntimeSelectorSettings.beRuntimeSelectorFilter;
+                        dependantFields = beDefinitionRuntimeSelectorSettings.beDependantFields;
                     }
 
                     return {
                         $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions',
                         IsNullable: $scope.scopeModel.isNullable,
                         BusinessEntityDefinitionId: beDefinitionId,
-                        BERuntimeSelectorFilter: beRuntimeSelectorFilter
+                        BERuntimeSelectorFilter: beRuntimeSelectorFilter,
+                        DependantFields: dependantFields
                     };
                 };
 
