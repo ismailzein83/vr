@@ -19,6 +19,7 @@
         var completionViewURL;
         var defaultCompletionViewLinkText = 'View Result';
 
+        var bpTabsApi;
         $scope.isNew = false;
         $scope.isPostponed = false;
         $scope.isRunning = false;
@@ -29,7 +30,6 @@
         $scope.isAborted = false;
         $scope.isTerminated = false;
         $scope.isCancelled = false;
-
 
         var instanceTrackingMonitorGridAPI;
         var instanceTrackingMonitorGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -42,6 +42,9 @@
 
         var validationMessageMonitorGridAPI;
         var validationMessageMonitorGridReadyDeferrred = UtilsService.createPromiseDeferred();
+
+        var visualItemDefinitonDirectiveAPI;
+        var visualItemDefinitionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -57,10 +60,15 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-
             $scope.scopeModel.cancelActionClicked = false;
             $scope.scopeModel.allowCancel = false;
             $scope.scopeModel.showCloseMessage = false;
+            $scope.scopeModel.visualProgressTab = { showTab: false };
+
+            $scope.scopeModel.onBPTabsReady = function (api) {
+                bpTabsApi = api;
+            };
+
             $scope.scopeModel.onInstanceTrackingMonitorGridReady = function (api) {
                 instanceTrackingMonitorGridAPI = api;
                 instanceTrackingMonitorGridReadyDeferred.resolve();
@@ -79,6 +87,11 @@
             $scope.scopeModel.onValidationMessageMonitorGridReady = function (api) {
                 validationMessageMonitorGridAPI = api;
                 validationMessageMonitorGridReadyDeferrred.resolve();
+            };
+
+            $scope.scopeModel.onVisualItemDefinitionReady = function (api) {
+                visualItemDefinitonDirectiveAPI = api;
+                visualItemDefinitionDirectiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.getStatusColor = function () {
@@ -141,7 +154,6 @@
                     context.onClose(bpInstanceClosureContext);
                 }
             };
-
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -149,8 +161,15 @@
             var loadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             getBPInstance().then(function () {
+
                 getBPInstanceDefinitionDetail().then(function () {
                     var promises = [];
+
+                    if ($scope.scopeModel.workflowId != undefined) {
+                        var visualItemDefintionLoadPromise = loadVisualItemDefinitionDirective();
+                        promises.push(visualItemDefintionLoadPromise);
+                    }
+
                     EvaluateStatus();
                     var instanceTrackingMonitorGridLoadPromise = getInstanceTrackingMonitorGridLoadPromise();
                     promises.push(instanceTrackingMonitorGridLoadPromise);
@@ -167,6 +186,7 @@
                         var validationMessageMonitorGridLoadPromise = getValidationMessageMonitorGridLoadPromise();
                         promises.push(validationMessageMonitorGridLoadPromise);
                     }
+
                     UtilsService.waitMultiplePromises(promises).then(function () {
                         loadPromiseDeferred.resolve();
                     }).catch(function (error) {
@@ -186,6 +206,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function setStatusVariables(isNew, isPostponed, isRunning, isWaiting, isCancelling, isCompleted, isAborted, isSuspended, isTerminated, isCancelled) {
             $scope.scopeModel.isNew = isNew;
             $scope.scopeModel.isPostponed = isPostponed;
@@ -236,6 +257,7 @@
             return BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
                 bpInstance = response;
                 bpDefinitionID = response.DefinitionID;
+
                 bpInstanceStatusValue = response.Status;
                 serviceInstanceId = response.ServiceInstanceId;
                 $scope.scopeModel.process = {
@@ -256,7 +278,12 @@
                 $scope.scopeModel.allowCancel = response.AllowCancel;
                 $scope.scopeModel.process.HasChildProcesses = configuration.HasChildProcesses;
                 $scope.scopeModel.process.HasBusinessRules = configuration.HasBusinessRules;
+                $scope.scopeModel.workflowId = response.Entity.VRWorkflowId;
 
+                if ($scope.scopeModel.workflowId) {
+                    $scope.scopeModel.visualProgressTab.showTab = true;
+                    bpTabsApi.setTabSelected(0);
+                }
                 completionViewURL = configuration.CompletionViewURL;
                 $scope.scopeModel.completionViewLinkText = (configuration.CompletionViewLinkText != null) ? configuration.CompletionViewLinkText : defaultCompletionViewLinkText;
             });
@@ -320,6 +347,19 @@
             return loadPromiseDeferred.promise;
         }
 
+        function loadVisualItemDefinitionDirective() {
+            var loadVisualItemDefintionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            visualItemDefinitionDirectiveReadyDeferred.promise.then(function () {
+                var visualItemDefinitionPayload = {
+                    BPDefinitionID: bpDefinitionID,
+                    BPInstanceID: bpInstanceID
+                };
+                VRUIUtilsService.callDirectiveLoad(visualItemDefinitonDirectiveAPI, visualItemDefinitionPayload, loadVisualItemDefintionPromiseDeferred);
+            });
+            return loadVisualItemDefintionPromiseDeferred.promise;
+        }
+
         function getFilterObject() {
             filter = {
                 BPInstanceID: bpInstanceID,
@@ -349,13 +389,10 @@
             }
             VRTimerService.registerJob(onTimerElapsed, $scope);
         }
-
         function onTimerElapsed() {
-
             return BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
                 $scope.scopeModel.process.Status = response.StatusDescription;
                 bpInstanceStatusValue = response.Status;
-
                 if (bpInstanceStatusValue == BPInstanceStatusEnum.Cancelling.value)
                     $scope.scopeModel.allowCancel = false;
                 if (bpInstanceStatusValue == BPInstanceStatusEnum.Completed.value)
@@ -363,6 +400,7 @@
                 if (context != undefined && context.automaticCloseWhenCompleted && response.Status == BPInstanceStatusEnum.Completed.value) {
                     $scope.modalContext.closeModal();
                 }
+
                 EvaluateStatus();
                 if (response.Status == BPInstanceStatusEnum.Completed.value && completionViewURL != undefined)
                     $scope.scopeModel.showCompletionViewLink = true;
@@ -378,4 +416,3 @@
     appControllers.controller("BusinessProcess_BP_TrackingModalController", bpTrackingModalController);
 
 })(appControllers);
-

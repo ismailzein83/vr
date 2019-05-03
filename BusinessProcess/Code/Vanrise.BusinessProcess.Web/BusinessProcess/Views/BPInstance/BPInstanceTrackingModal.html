@@ -1,9 +1,4 @@
-﻿
-
-
-
-
-<div vr-modalcontent size="large" ng-controller="BusinessProcess_BP_TrackingModalController" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent size="large" ng-controller="BusinessProcess_BP_TrackingModalController" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formBPTrackingModal">
             <vr-row>
@@ -48,9 +43,16 @@
                    
                 </vr-columns>
             </vr-row>
+            <vr-tabs on-ready="scopeModel.onBPTabsReady">
+                <vr-tab header="'Visual Progress'" tabobject="scopeModel.visualProgressTab" >
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <bp-workflow-activitysettings-visualitemdefiniton on-ready="scopeModel.onVisualItemDefinitionReady"></bp-workflow-activitysettings-visualitemdefiniton>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
 
-            <vr-tabs>
-                <vr-tab header="'Live Progress'">
+                <vr-tab header="'Progress Details'">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <businessprocess-bp-instance-tracking-monitor on-ready="scopeModel.onInstanceTrackingMonitorGridReady"></businessprocess-bp-instance-tracking-monitor>
@@ -82,4 +84,3 @@
         </vr-form>
     </vr-modalbody>
 </div>
-
