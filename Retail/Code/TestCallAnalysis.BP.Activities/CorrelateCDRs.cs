@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
+using System;
 using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +45,9 @@ namespace TestCallAnalysis.BP.Activities
         [RequiredArgument]
         public InOutArgument<MemoryQueue<Entities.CDRCorrelationBatch>> UpdatedCDRCorrelationBatchInput { get; set; }
 
+        public static Guid countryCodesAccountPartDefinition = new Guid("22144C7D-42B7-4503-A665-FD547856BB43");
+        public static Guid operatorsAccountBEdefiniton = new Guid("d4028716-97aa-4664-8eaa-35b99603b2e7");
+
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputCorrelationBatchQueue.Get(context) == null)
@@ -77,6 +82,10 @@ namespace TestCallAnalysis.BP.Activities
             CalledNumberMappingManager calledNumberMappingManager = new CalledNumberMappingManager();
             MappedCDRManager mappedCDRManager = new MappedCDRManager();
             CorrelatedCDRManager correlatedCDRManager = new CorrelatedCDRManager();
+            AccountBEManager accountBEManager = new AccountBEManager();
+            List<CountryCode> receivedOperatorContryCodes = new List<CountryCode>();
+
+         
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -104,7 +113,7 @@ namespace TestCallAnalysis.BP.Activities
                                     else
                                         receivedCDRsByOperatorId.GetOrCreateItem(mappedCDR.OperatorID).Add(mappedCDR);
                                 }
-
+                              
                                 // Create the correlatedCDRs list
                                 List<TCAnalCorrelatedCDR> correlatedCDRs = new List<TCAnalCorrelatedCDR>();
                                 if (receivedCDRsByOperatorId != null && receivedCDRsByOperatorId.Count > 0 && generatedCDRsByOperatorId != null && generatedCDRsByOperatorId.Count > 0)
@@ -113,12 +122,21 @@ namespace TestCallAnalysis.BP.Activities
                                     {
                                         if (recievedOperator.Value != null && recievedOperator.Value.Count > 0)
                                         {
+                                            CountryCodesPartSettings countryCodesPartSettings = new CountryCodesPartSettings();
+                                            
                                             foreach (var rcvdcdr in recievedOperator.Value)
                                             {
-                                                if (rcvdcdr.CalledNumberType.HasValue)
+                                                if (rcvdcdr.CalledNumberType.HasValue && rcvdcdr.OperatorID != 0)
                                                 {
                                                     TCAnalCorrelatedCDR correlatedCDR = new TCAnalCorrelatedCDR();
                                                     correlatedCDR = correlatedCDRManager.CorrelatedCDRMapper(rcvdcdr);
+
+                                                    if (accountBEManager.TryGetAccountPart(operatorsAccountBEdefiniton, rcvdcdr.OperatorID, countryCodesAccountPartDefinition, false, out AccountPart accountCountryCodePart))
+                                                    {
+                                                        var contryCodeSettings = accountCountryCodePart.Settings as CountryCodesPartSettings;
+                                                        receivedOperatorContryCodes = contryCodeSettings.CountryCodes;
+                                                    }
+                                                   
                                                     var generatedCDR = generatedCDRsByOperatorId.GetRecord(recievedOperator.Key);
                                                     if (generatedCDR != null && generatedCDR.Count > 0)
                                                     {
@@ -126,18 +144,28 @@ namespace TestCallAnalysis.BP.Activities
                                                         {
                                                             if (rcvdcdr.AttemptDateTime.Subtract(gnrtdCDR.AttemptDateTime) <= dateTimeMargin)
                                                             {
+                                                                var generatedCalledNumber = gnrtdCDR.CalledNumber;
                                                                 IEnumerable<string> mappingNumberList = calledNumberMappingManager.GetMappingNumber(rcvdcdr.OperatorID, rcvdcdr.CalledNumber);
-                                                                if (rcvdcdr.CalledNumber == gnrtdCDR.CalledNumber || (mappingNumberList != null && mappingNumberList.Count() > 0 && mappingNumberList.Contains(gnrtdCDR.CalledNumber)))
+                                                                if (receivedOperatorContryCodes.Count > 0)
                                                                 {
-                                                                    rcvdcdr.IsCorrelated = true;
-                                                                    gnrtdCDR.IsCorrelated = true;
-                                                                    updateMappedCDRs.MappedCDRsToUpdate.Add(rcvdcdr);
-                                                                    updateMappedCDRs.MappedCDRsToUpdate.Add(gnrtdCDR);
-                                                                    correlatedCDR.GeneratedCalledNumber = gnrtdCDR.CalledNumber;
-                                                                    correlatedCDR.GeneratedCallingNumber = gnrtdCDR.CallingNumber;
-                                                                    correlatedCDR.OrigGeneratedCalledNumber = gnrtdCDR.OrigCalledNumber;
-                                                                    correlatedCDR.OrigGeneratedCallingNumber = gnrtdCDR.OrigCallingNumber;
-                                                                    correlatedCDRs.Add(correlatedCDR);
+                                                                    foreach (CountryCode contryCode in receivedOperatorContryCodes)
+                                                                    {
+                                                                        if (generatedCalledNumber.StartsWith(contryCode.Code))
+                                                                            generatedCalledNumber = generatedCalledNumber.Substring(contryCode.Code.Length - 1);
+
+                                                                        if (rcvdcdr.CalledNumber == generatedCalledNumber || (mappingNumberList != null && mappingNumberList.Count() > 0 && mappingNumberList.Contains(gnrtdCDR.CalledNumber)))
+                                                                        {
+                                                                            rcvdcdr.IsCorrelated = true;
+                                                                            gnrtdCDR.IsCorrelated = true;
+                                                                            updateMappedCDRs.MappedCDRsToUpdate.Add(rcvdcdr);
+                                                                            updateMappedCDRs.MappedCDRsToUpdate.Add(gnrtdCDR);
+                                                                            correlatedCDR.GeneratedCalledNumber = gnrtdCDR.CalledNumber;
+                                                                            correlatedCDR.GeneratedCallingNumber = gnrtdCDR.CallingNumber;
+                                                                            correlatedCDR.OrigGeneratedCalledNumber = gnrtdCDR.OrigCalledNumber;
+                                                                            correlatedCDR.OrigGeneratedCallingNumber = gnrtdCDR.OrigCallingNumber;
+                                                                            correlatedCDRs.Add(correlatedCDR);
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
