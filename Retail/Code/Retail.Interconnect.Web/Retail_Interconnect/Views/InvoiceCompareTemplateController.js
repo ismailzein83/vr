@@ -588,15 +588,15 @@
             $scope.scopeModel.showVoiceGrid = false;
             $scope.scopeModel.showSMSGrid = false;
             var loadPromiseDeferred = UtilsService.createPromiseDeferred();
-            //$scope.scopeModel.isCompare = false;
+
             setTimeout(function () {
                 var promises = [];
 
-                $scope.scopeModel.showVoiceGrid = true;
-                $scope.scopeModel.showSMSGrid = true;
 
 
                 if ($scope.scopeModel.voiceEnabled) {
+                    $scope.scopeModel.showVoiceGrid = true;
+
                     var loadVoicePromiseDeferred = UtilsService.createPromiseDeferred();
                     voiceGridPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(voiceGridPromiseDeferred.promise);
@@ -614,6 +614,7 @@
 
                 if ($scope.scopeModel.smsEnabled) {
 
+                    $scope.scopeModel.showSMSGrid = true;
                     var loadSMSPromiseDeferred = UtilsService.createPromiseDeferred();
                     smsGridPromiseDeferred = UtilsService.createPromiseDeferred();
 
