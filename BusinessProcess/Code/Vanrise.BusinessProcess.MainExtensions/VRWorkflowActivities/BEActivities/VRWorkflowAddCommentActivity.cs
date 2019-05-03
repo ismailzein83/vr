@@ -11,9 +11,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
     {
         public VRWorkflowExpression ObjectId { get; set; }
         public VRWorkflowExpression Content { get; set; }
-        public VRWorkflowExpression CreatedBy { get; set; }
-        public VRWorkflowExpression LastModifiedBy { get; set; }
-        public VRWorkflowExpression EntityID { get; set; }
+        public VRWorkflowExpression UserId { get; set; }
         public VRWorkflowExpression IsSucceeded { get; set; }
         public override string GenerateCode(IVRWorkflowAddBEActivitySettingsGenerateCodeContext context)
         {
@@ -31,12 +29,10 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
                 codeBuilder.AppendLine($@"vrComment.Content = {Content.GetCode(null)});");
             }
             codeBuilder.AppendLine("var insertOutput = vrCommentManager.AddVRComment(vrComment");
-
-            if (CreatedBy != null || LastModifiedBy != null)
+            if (UserId != null)
             {
-                string createdBy = CreatedBy != null ? CreatedBy.GetCode(null) : "null";
-                string lastModifiedBy = LastModifiedBy != null ? LastModifiedBy.GetCode(null) : "null";
-                codeBuilder.AppendLine($@",{createdBy},{lastModifiedBy}");
+                string userId = UserId.GetCode(null);
+                codeBuilder.AppendLine($@",{userId}");
             }
             codeBuilder.AppendLine(");");
 
@@ -44,14 +40,6 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.BEActiviti
             {
                 codeBuilder.AppendLine($"{this.IsSucceeded.GetCode(null)} = (insertOutput.Result == Vanrise.Entities.InsertOperationResult.Succeeded);");
             }
-
-            if (this.EntityID != null)
-            {
-                codeBuilder.AppendLine(@"if(insertOutput.Result == Vanrise.Entities.InsertOperationResult.Succeeded) {");
-                codeBuilder.AppendLine($@"{this.EntityID.GetCode(null)} = insertOutput.InsertedObject.VRCommentId;");
-                codeBuilder.AppendLine(@"}");
-            }
-
             return codeBuilder.ToString();
         }
 
