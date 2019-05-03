@@ -999,7 +999,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!TotalInvoiceAmountBeforeTax.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Parameters!TotalAmountBeforeTaxes.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1507,7 +1507,7 @@
         <Width>19.80913cm</Width>
         <ZIndex>6</ZIndex>
         <Visibility>
-          <Hidden>=IIf(Parameters!NoVoice.Value,True,False)</Hidden>
+          <Hidden>=Parameters!NoVoice.Value and Parameters!NoRecurringCharges.Value</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -2118,12 +2118,6 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="BillingCompanyPhone">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="TotalInvoiceAmountBeforeTax">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
