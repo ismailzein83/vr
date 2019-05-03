@@ -306,8 +306,17 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public CallDetailRequest GetCallDetails(string contractId, string beginDate, string endDate, string callType)
+        public CallDetailRequest GetCallDetails(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM)
         {
+
+            var businessEntityManager = new BusinessEntityManager();
+            int monthVal = businessEntityManager.getMonthNumberByMonthName(month);
+            int yearVal = Int32.Parse(year);
+
+            DateTime fromDate = new DateTime(yearVal, monthVal,0);
+            DateTime toDate = new DateTime(yearVal, monthVal + 1, 0);
+
+
 
             //var callDetailsEntityList = new List<CallDetailsEntity>();
             //using (SOMClient client = new SOMClient())
@@ -365,7 +374,7 @@ namespace BPMExtended.Main.Business
             }
         }
 
-        public PDFDocument CreateDocument(string contractId, string beginDate, string endDate, string callType)
+        public PDFDocument CreateDocument(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM)
         {
             PDFDocument documnt = new PDFDocument();
             // Create a new MigraDoc document
@@ -374,7 +383,7 @@ namespace BPMExtended.Main.Business
             this.document.Info.Subject = "Call Details Request";
             this.document.Info.Author = "ST";
 
-            CallDetailRequest request = GetCallDetails(contractId, beginDate, endDate, callType);
+            CallDetailRequest request = GetCallDetails(contractId, year, month, isNational, isInternational, isGSM);
 
             DefineStyles();
 
