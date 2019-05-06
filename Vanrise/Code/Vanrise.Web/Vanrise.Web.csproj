@@ -198,6 +198,7 @@
     <Content Include="Client\Images\Ogero-02.png" />
     <Content Include="Client\Images\Zebra-01.png" />
     <Content Include="Client\Images\Zebra-02.png" />
+    <Content Include="Client\Javascripts\Constants\ExcelConversionResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\MasterLayoutMenuOptionEnum.js" />
     <Content Include="Client\Javascripts\Directives\ActionBar\AllActionsModalPopup.html" />
     <Content Include="Client\Javascripts\Directives\ActionBar\AllActionsModalPopupController.js" />

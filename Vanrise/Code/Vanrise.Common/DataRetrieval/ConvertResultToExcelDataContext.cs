@@ -27,5 +27,11 @@ namespace Vanrise.Common
             get;
             set;
         }
+
+        public bool ThrowIfContentLengthExceeded
+        {
+            get;
+            set;
+        }
     }
 }

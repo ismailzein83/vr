@@ -164,6 +164,8 @@ namespace Vanrise.Common
             VRWebContext.AddWebBundle(new VRScriptWebBundle("~/bundles/AngularExtensions").Include(
                 "~/Client/Libraries/AngularExtensions/jQueryFileUpload/js/jquery.ui.widget.js",
                 "~/Client/Libraries/AngularExtensions/BsDateTimePicker/moment-with-locales.js",
+                "~/Client/Libraries/AngularExtensions/BsDateTimePicker/moment-timezone-with-data.js",
+                "~/Client/Libraries/AngularExtensions/BsDateTimePicker/vr-date-object.js",
                 "~/Client/Libraries/AngularExtensions/BsDateTimePicker/bootstrap-datetimepicker.js").IncludeDirectory(
                 "~/Client/Libraries/AngularExtensions", "*.js", true));
 

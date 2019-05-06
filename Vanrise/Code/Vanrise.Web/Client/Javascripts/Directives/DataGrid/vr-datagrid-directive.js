@@ -1838,7 +1838,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	            var onResponseReady = function (response) {
 	                if (isExport) {
-	                    UtilsService.downloadFile(response.data, response.headers);
+	                    if (response != null) {
+	                       UtilsService.downloadFile(response.data, response.headers);
+	                    }
 	                }
 	                else {
 	                    if (clearBeforeRetrieve)

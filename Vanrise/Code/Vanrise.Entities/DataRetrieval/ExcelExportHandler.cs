@@ -17,6 +17,7 @@ namespace Vanrise.Entities
 
         ExportExcelSheet MainSheet { set; }
         DataRetrievalInput Input { get; }
+        bool ThrowIfContentLengthExceeded { set; }
     }
 
     public class ExportExcelSheet
@@ -71,4 +72,6 @@ namespace Vanrise.Entities
     public enum DateTimeType { Date, DateTime, LongDateTime }
 
     public enum NumberType { Int, BigInt, NormalDecimal, LongDecimal }
+
+    
 }

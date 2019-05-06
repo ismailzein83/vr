@@ -27,18 +27,20 @@ namespace Vanrise.Common
         internal IDataRetrievalResult<T> ExportExcel<T>(BigResult<T> result, ExcelExportHandler<T> exportExcelHandler, DataRetrievalInput input)
         {
             ExportExcelSheet excelSheet;
+            bool throwIfContentLengthExceeded = false;
             if (exportExcelHandler != null)
             {
                 ConvertResultToExcelDataContext<T> convertResultToExcelContext = new ConvertResultToExcelDataContext<T> { BigResult = result, Input = input };
                 exportExcelHandler.ConvertResultToExcelData(convertResultToExcelContext);
                 if (convertResultToExcelContext.MainSheet == null)
                     throw new NullReferenceException("convertResultToExcelContext.MainSheet");
+                throwIfContentLengthExceeded = convertResultToExcelContext.ThrowIfContentLengthExceeded;                
                 excelSheet = convertResultToExcelContext.MainSheet;
             }
             else
                 excelSheet = ConvertResultToDefaultExcelFormat(result);
 
-            return ExportExcel<T>(excelSheet);
+            return ExportExcel<T>(excelSheet, throwIfContentLengthExceeded);
 
             ExcelResult<T> excelResult = new ExcelResult<T>();
 
@@ -129,7 +131,7 @@ namespace Vanrise.Common
             return excelResult;
         }
 
-        public ExcelResult<T> ExportExcel<T>(ExportExcelSheet excelSheet)
+        public ExcelResult<T> ExportExcel<T>(ExportExcelSheet excelSheet,bool throwIfContentLengthExceeded = false)
         {
             if (excelSheet == null)
                 throw new ArgumentNullException("excelSheet");
@@ -210,6 +212,12 @@ namespace Vanrise.Common
                     string cellValueAsString = cell.Value != null ? cell.Value.ToString() : string.Empty;
                     if (cellValueAsString.Length > 32767)
                     {
+                        if (throwIfContentLengthExceeded)
+                        {
+                            excelResult.ConversionResultType = ExcelConversionResultType.InvalidContentLenght;
+                            LoggerFactory.GetLogger().WriteError(Vanrise.Common.Utilities.GetEnumDescription(excelResult.ConversionResultType.Value));
+                            return excelResult;
+                        }
                         string truncatedString = cellValueAsString.Substring(0, 32762);
                         truncatedString += "...";
                         excelCell.PutValue(truncatedString);

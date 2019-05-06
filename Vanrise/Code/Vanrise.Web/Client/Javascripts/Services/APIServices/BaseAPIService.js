@@ -106,6 +106,12 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
                 $rootScope.clock = UtilsService.dateToServerFormat(headersTab.serverdate);
                 var returnedResponse;
                 if (isExport || (options != undefined && options.returnAllResponseParameters)) {
+                   var contentValidtionType = UtilsService.getExcelContentValidtionType(response);
+                    if (contentValidtionType != null) {
+                        showErrorMessage(contentValidtionType.description);
+                        deferred.reject();
+                        return;
+                    }
                     returnedResponse = {
                         data: response,
                         status: status,
@@ -164,7 +170,7 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
             if (HttpStatusCodeEnum.PaymentRequired.value === status) {
                 redirectToPaymentPage();
             }
-            else {
+            else {                           
                 console.log('');
                 if (data != undefined)
                     console.log('Error Occured: ' + data.ExceptionMessage);

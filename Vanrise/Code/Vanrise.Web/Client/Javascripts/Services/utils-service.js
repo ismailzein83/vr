@@ -1,9 +1,9 @@
 ﻿'use strict';
 (function (app) {
 
-    UtilsService.$inject = ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'DateTimeFormatEnum'];
+    UtilsService.$inject = ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'DateTimeFormatEnum', 'ExcelConversionResultEnum'];
 
-    function UtilsService($q, LogEntryTypeEnum, LabelColorsEnum, DateTimeFormatEnum) {
+    function UtilsService($q, LogEntryTypeEnum, LabelColorsEnum, DateTimeFormatEnum, ExcelConversionResultEnum) {
 
         "use strict";
 
@@ -491,6 +491,7 @@
         }
 
         function downloadFile(data, headers) {
+            if (data == null || headers == null) return;
             var octetStreamMime = 'application/octet-stream';
             var success = false;
             var headersTab = headers();
@@ -553,6 +554,25 @@
             if (!success) {
                 window.open(httpPath, '_blank', '');
             }
+        }
+
+
+        function getExcelContentValidtionType(data) {
+            var conversionResultType = null;
+            var decoder = new TextDecoder();
+            var domString = decoder.decode(data);
+
+            try {
+                var jsonError = JSON.parse(domString);
+                var dataAsJson = jsonError;
+                if (dataAsJson.ConversionResultType != null) {
+                    conversionResultType = getEnum(ExcelConversionResultEnum, 'value', dataAsJson.ConversionResultType);
+                }
+                return conversionResultType;
+            } catch (e) {
+                return conversionResultType;
+            }
+           
         }
 
         function getDateTimeFormat(date, dateTimeFormatEnumObject) {
@@ -673,7 +693,7 @@
                 obj = convertDatePropertiesToString(obj);
             return angular.toJson(obj);
         }
-
+        
         function convertDatePropertiesToString(obj) {
             if (obj == null || typeof obj != "object")
                 return obj;
@@ -972,6 +992,7 @@
             getPropValuesFromArray: getPropValuesFromArray,
             getPropMaxValueFromArray: getPropMaxValueFromArray,
             downloadFile: downloadFile,
+            getExcelContentValidtionType: getExcelContentValidtionType,
             getLogEntryTypeDescription: getLogEntryTypeDescription,
             getLogEntryTypeColor: getLogEntryTypeColor,
             getLogEntryType: getLogEntryType,

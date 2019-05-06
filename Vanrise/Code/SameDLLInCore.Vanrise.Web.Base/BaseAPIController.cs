@@ -40,6 +40,8 @@ namespace Vanrise.Web.Base
         protected object GetExcelResponse(ExcelResult excelResult, string resultFileName)
         {
             var fileName = string.Format("{0}.xlsx", resultFileName);
+            if (excelResult.ConversionResultType != null)
+                return excelResult;
             if (excelResult.ExcelFileContent != null)
                 return GetExcelResponse(excelResult.ExcelFileContent, fileName);
             else
