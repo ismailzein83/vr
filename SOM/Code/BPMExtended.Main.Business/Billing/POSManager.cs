@@ -10,6 +10,8 @@ namespace BPMExtended.Main.Business
     {
         public string SubmitToPOS(string sequenceNumber, string contractId, string fees, string services, string deposit)
         {
+            //filter the fees by upfront (just send the fees that have the UpFront == true)
+
             //Send to POS the list of services to pay with the contract id
 
             return "1000";

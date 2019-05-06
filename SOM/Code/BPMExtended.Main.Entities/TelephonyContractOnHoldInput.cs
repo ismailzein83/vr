@@ -19,6 +19,7 @@ namespace BPMExtended.Main.Entities
 
         public string LinePathId { get; set; }
         public List<ContractService> ContractServices { get; set; }
+        public List<DepositDocument> DepositServices { get; set; }
 
     }
 }

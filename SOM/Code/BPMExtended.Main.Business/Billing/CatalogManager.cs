@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Web;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using Newtonsoft.Json;
+using SOM.Main.Entities;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -99,6 +101,65 @@ namespace BPMExtended.Main.Business
                 ServiceId = serviceId,
                 Name = serviceName
             };
+
+        }
+
+        public List<DepositDocument> GetForeignerDeposits(string selectedServices)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            string fIGAValue=null;
+            string fGAValue = null;
+            List<string> servicesIds = new List<string>();
+            List<DepositDocument> deposits = new List<DepositDocument>();
+
+            //Deserialize
+            List<string> optionalSelectedServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(selectedServices).Select(p=>p.Id).ToList();
+
+            //Get FGA and FIGA values
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("StFIGAValue");
+            esq.AddColumn("StFGAValue");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "D4A736AB-9C48-4F68-97D8-6285E3E1CAA8");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                 fIGAValue = entities[0].GetColumnValue("StFIGAValue").ToString();
+                 fGAValue = entities[0].GetColumnValue("StFGAValue").ToString();
+
+            }
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceInGeneralSettings");
+            esq.AddColumn("StServiceID");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGeneralSettings", "D4A736AB-9C48-4F68-97D8-6285E3E1CAA8");
+            esq.Filters.Add(esqFirstFilter);
+
+            var servicesEntities = esq.GetEntityCollection(BPM_UserConnection);
+            if (servicesEntities.Count > 0)
+            {
+                string serviceId = servicesEntities[0].GetColumnValue("StServiceID").ToString();
+                servicesIds.Add(serviceId);
+
+            }
+
+            bool NotAllItemsExist = optionalSelectedServices.Any(p => !servicesIds.Contains(p));
+
+            if(NotAllItemsExist)
+            {
+                deposits.Add(new DepositDocument() { Id = fIGAValue });
+                deposits.Add(new DepositDocument() { Id = fGAValue });
+                
+            }
+            else
+            {
+                deposits.Add(new DepositDocument(){Id = fIGAValue });
+            }
+
+            return deposits;
 
         }
 

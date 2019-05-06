@@ -10,6 +10,7 @@ namespace BPMExtended.Main.Entities
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public string PackageId { get; set; }
         public bool IsNetwork { get; set; }
         public bool NeedProvisioning { get; set; }
     }

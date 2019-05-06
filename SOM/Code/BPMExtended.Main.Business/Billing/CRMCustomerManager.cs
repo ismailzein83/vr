@@ -2206,7 +2206,6 @@ namespace BPMExtended.Main.Business
             EntityCollection entities;
             List<RequestHeaderDetail> requests = new List<RequestHeaderDetail>();
 
-            //Call Categories catalog and check the 'IsNormal' field if true => no need for attachments (optional), if false => attachment is required 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
             esq.AddColumn("Id");
             esq.AddColumn("StStep");
@@ -2250,6 +2249,35 @@ namespace BPMExtended.Main.Business
 
             return requests;
         }
+
+
+        public string GetEntityNameByRequestId(string requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string entityName="";
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("Id");
+            esq.AddColumn("StRequestId");
+            esq.AddColumn("StRequestType");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                int value = int.Parse((string)entity.GetColumnValue("StRequestType"));
+                entityName = Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)value).schemaName;
+
+            }
+
+            return entityName;
+
+        }
+
 
         public string GetSchemaName(string requestId, string entityName)
         {
@@ -2552,7 +2580,7 @@ namespace BPMExtended.Main.Business
                 {
                     InputArguments = new TelephonyContractOnHoldInput
                     {
-                        LinePathId = "11112222",//pathId.ToString(),
+                        LinePathId = pathId.ToString(),//"11112222",
                         PhoneNumber = phoneNumber.ToString(),
                         SubType = lineType.ToString(),
                         ServiceResource = "N0047",
@@ -2560,6 +2588,7 @@ namespace BPMExtended.Main.Business
                         CSO = info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),
                         ContractServices = contractServices,
+                        DepositServices = new CatalogManager().GetForeignerDeposits(optionalServices),
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId.ToString(),
