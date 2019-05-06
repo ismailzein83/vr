@@ -17,7 +17,7 @@ namespace Vanrise.Analytic.Entities
     }
     public class FilterGroupAnalyticTablePermanentFilter: PermanentFilterSettings
     {
-        public override Guid ConfigId => new Guid("3DC90928C-8854-4973-9A4F-EC2F2EA4CADE");
+        public override Guid ConfigId => new Guid("5E32BB46-462E-44A0-B1F0-1F6DA3BD9053");
         public override void ConvertToRecordFilter()
         {
             throw new NotImplementedException();
