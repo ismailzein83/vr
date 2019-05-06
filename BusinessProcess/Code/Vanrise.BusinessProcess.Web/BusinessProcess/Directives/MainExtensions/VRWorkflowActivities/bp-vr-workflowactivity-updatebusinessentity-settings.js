@@ -98,7 +98,7 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                                         }
                                     };
                                 }
-                            }
+                            };
                         }
                         else {
                             rootPromiseNode.promises = [];
