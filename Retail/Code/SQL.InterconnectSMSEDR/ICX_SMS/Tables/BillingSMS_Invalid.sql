@@ -34,8 +34,14 @@
     [BillingAccountID]               VARCHAR (50)     NULL,
     [RecordType]                     INT              NULL,
     [GatewayID]                      INT              NULL,
+    [OriginationMCC]                 VARCHAR (20)     NULL,
+    [OriginationMNC]                 VARCHAR (20)     NULL,
+    [DestinationMCC]                 VARCHAR (20)     NULL,
+    [DestinationMNC]                 VARCHAR (20)     NULL,
     CONSTRAINT [IX_BillingSMS_Invalid_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 
