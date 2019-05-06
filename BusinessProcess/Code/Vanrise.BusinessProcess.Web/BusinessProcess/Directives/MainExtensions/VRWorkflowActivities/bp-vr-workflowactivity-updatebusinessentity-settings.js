@@ -48,7 +48,7 @@ app.directive('businessprocessVrWorkflowactivityUpdatebusinessentitySettings', [
                     var rootPromiseNode = {};
                     inputItems = {};
                     $scope.scopeModel.isSucceeded = undefined;
-                    $scope.scopeModel.userId = undefined
+                    $scope.scopeModel.userId = undefined;
                     var genericBEDefinitionSettings;
                     var dataRecordType;
                     if (payload != undefined) {
