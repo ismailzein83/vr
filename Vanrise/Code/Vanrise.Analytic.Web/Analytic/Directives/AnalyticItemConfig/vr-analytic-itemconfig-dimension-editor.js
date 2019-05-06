@@ -139,7 +139,7 @@
                         var loadDependentDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         dependentDimensionReadyDeferred.promise.then(function () {
                             var payloadParentDirective = {
-                                filter: { TableIds: [tableId] },
+                                filter: { TableIds: [tableId], IncludeTechnicalDimension: true },
                                 selectedIds: configEntity != undefined ? configEntity.DependentDimensions : undefined
                             };
 
@@ -150,7 +150,7 @@
                         var loadParentDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         parentDimensionReadyDeferred.promise.then(function () {
                             var payloadParentDirective = {
-                                filter: { TableIds: [tableId] },
+                                filter: { TableIds: [tableId], IncludeTechnicalDimension: true},
                                 selectedIds: configEntity != undefined ? configEntity.Parents : undefined
                             };
 
@@ -162,7 +162,7 @@
                         var loadRequiredParentDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         requiredParentDimensionReadyDeferred.promise.then(function () {
                             var payloadRequiredParentDirective = {
-                                filter: { TableIds: [tableId] },
+                                filter: { TableIds: [tableId], IncludeTechnicalDimension: true},
                                 selectedIds: configEntity != undefined ? configEntity.RequiredParentDimension : undefined
                             };
 
