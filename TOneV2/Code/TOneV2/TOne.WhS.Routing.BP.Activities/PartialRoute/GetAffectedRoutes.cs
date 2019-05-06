@@ -232,6 +232,13 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 foreach (RouteRule routeRule in routeRules)
                 {
+                    routeRule.Settings.ThrowIfNull("routeRule.Settings", routeRule.RuleId);
+                    if (!routeRule.Settings.SupportPartialRouteBuild())
+                    {
+                        shouldTriggerFullRouteProcess = true;
+                        return;
+                    }
+
                     var criteria = routeRule.Criteria;
                     bool isCustomerGeneric;
                     IEnumerable<int> affectedCustomers = GetAffectedCustomers(criteria, out isCustomerGeneric);
