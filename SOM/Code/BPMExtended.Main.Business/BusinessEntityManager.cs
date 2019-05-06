@@ -77,7 +77,49 @@ namespace BPMExtended.Main.Business
             return operationTypeDescriptiveObjectList;
         }
 
+        public List<Year> GetYearsInfo()
+        {
+            var yearsList = new List<Year>();
+            var currentYear = DateTime.Today.Year;
+
+            for (int i = 0; i < 21; i++)
+            {
+                var yearObj = new Year()
+                {
+                    Id = i,
+                    Description = (currentYear - i).ToString()
+                };
+                yearsList.Add(yearObj);
+            }
+            return yearsList;
+        }
+
+        public int getMonthNumberByMonthName (string monthName)
+        {
+            int monthNumber = 0;
+
+            var esqCities = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Month");
+            esqCities.AddColumn("Name");
+            esqCities.AddColumn("Number");
+
+            var esqFirstFilter = esqCities.CreateFilterWithParameters(FilterComparisonType.Equal, "Name", monthName);
+
+            esqCities.Filters.Add(esqFirstFilter);
+
+            var entities = esqCities.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count != 0)
+            {
+              monthNumber = (int)entities[0].GetColumnValue("Number");
+            }
+            return monthNumber;
+        }
+
         public class OperationTypeDescriptiveObject
+        {
+            public int Id { get; set; }
+            public string Description { get; set; }
+        }
+        public class Year
         {
             public int Id { get; set; }
             public string Description { get; set; }

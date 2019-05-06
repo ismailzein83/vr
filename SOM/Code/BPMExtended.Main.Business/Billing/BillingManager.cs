@@ -305,29 +305,28 @@ namespace BPMExtended.Main.Business
         }
 
 
-        //public CallDetailRequest GetCallDetails(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM)
-        public CallDetailRequest GetCallDetails(string contractId, string beginDate, string endDate, string callType)
+        public CallDetailRequest GetCallDetails(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM)
         {
 
-            var businessEntityManager = new BusinessEntityManager();
-           // int monthVal = businessEntityManager.getMonthNumberByMonthName(month);
-            //int yearVal = Int32.Parse(year);
+           var businessEntityManager = new BusinessEntityManager();
+           int monthVal = businessEntityManager.getMonthNumberByMonthName(month);
+           int yearVal = Int32.Parse(year);
 
-           // DateTime fromDate = new DateTime(yearVal, monthVal,0);
-           //DateTime toDate = new DateTime(yearVal, monthVal + 1, 0);
+           DateTime beginDate = new DateTime(yearVal, monthVal,1);
+           DateTime endDate = new DateTime(yearVal, monthVal + 1, 1);
 
 
 
-            //var callDetailsEntityList = new List<CallDetailsEntity>();
-            //using (SOMClient client = new SOMClient())
-            //{
-            //    var items = client.Get<List<CallDetails>>(String.Format("api/SOM.ST/Billing/GetCallDetails?ContractId={0}&BeginDate={1}&EndDate={2}&CallType={3}", contractId, beginDate, endDate, callType));
-            //    foreach (var item in items)
-            //    {
-            //        var CallDetailEntity = CallDetailsToEntityMapper(item);
-            //        callDetailsEntityList.Add(CallDetailEntity);
-            //    }
-            //}
+            var callDetailsEntityListTest = new List<CallDetailsEntity>();
+            using (SOMClient client = new SOMClient())
+            {
+               var items = client.Get<List<CallDetails>>(String.Format("api/SOM.ST/Billing/GetCallDetails?ContractId={0}&BeginDate={1}&EndDate={2}&IsNational={3}&IsInternational={4}&isGSM={5} ", contractId, beginDate, endDate, isNational, isInternational, isGSM));
+                foreach (var item in items)
+                {
+                    var CallDetailEntity = CallDetailsToEntityMapper(item);
+                    callDetailsEntityListTest.Add(CallDetailEntity);
+                }
+            }
 
 
 
@@ -374,8 +373,7 @@ namespace BPMExtended.Main.Business
             }
         }
 
-        // public PDFDocument CreateDocument(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM)
-        public PDFDocument CreateDocument(string contractId, string beginDate, string endDate, string callType)
+        public PDFDocument CreateDocument(string contractId, string year, string month, bool isNational, bool isInternational, bool isGSM)
         {
             PDFDocument documnt = new PDFDocument();
             // Create a new MigraDoc document
@@ -384,10 +382,9 @@ namespace BPMExtended.Main.Business
             this.document.Info.Subject = "Call Details Request";
             this.document.Info.Author = "ST";
 
-            // CallDetailRequest request = GetCallDetails(contractId, year, month, isNational, isInternational, isGSM);
-            CallDetailRequest request = GetCallDetails(contractId, beginDate, endDate, callType);
-            DefineStyles();
 
+            CallDetailRequest request = GetCallDetails(contractId, year, month, isNational, isInternational, isGSM);
+            DefineStyles();
             CreatePage();
 
             FillContent(request);
