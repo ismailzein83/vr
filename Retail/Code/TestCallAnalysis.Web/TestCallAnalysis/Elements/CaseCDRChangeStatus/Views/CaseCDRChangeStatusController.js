@@ -63,16 +63,13 @@
                 loadAllControls();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
 
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadCaseCDRStatusSelector]).then(function () {
-
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                }).catch(function (error) {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadCaseCDRStatusSelector]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             }

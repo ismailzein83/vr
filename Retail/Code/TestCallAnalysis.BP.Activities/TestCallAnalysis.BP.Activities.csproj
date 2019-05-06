@@ -94,7 +94,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssignCasesProcess.cs" />
     <Compile Include="BuildCDRCorrelationFilterGroup.cs" />
     <Compile Include="InsertCorrelatedCDRs.cs" />
     <Compile Include="InsertOrUpdateCases.cs" />

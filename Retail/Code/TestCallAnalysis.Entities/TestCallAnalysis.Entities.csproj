@@ -69,7 +69,6 @@
     <Compile Include="TCAnalCaseCDR.cs" />
     <Compile Include="TCAnalCorrelatedCDR.cs" />
     <Compile Include="TCAnalMappedCDR.cs" />
-    <Compile Include="UpdateCorrelatedCDRsBatch.cs" />
     <Compile Include="UpdatedMappedCDRs.cs" />
     <Compile Include="WhiteList.cs" />
   </ItemGroup>

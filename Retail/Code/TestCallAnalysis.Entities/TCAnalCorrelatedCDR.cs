@@ -17,13 +17,12 @@ namespace TestCallAnalysis.Entities
         public string ReceivedCalledNumber { get; set; }
         public string GeneratedCallingNumber { get; set; }
         public string ReceivedCallingNumber { get; set; }
-        public long OperatorID { get; set; }
+        public long? OperatorID { get; set; }
         public string OrigGeneratedCallingNumber { get; set; }
         public string OrigGeneratedCalledNumber { get; set; }
         public string OrigReceivedCallingNumber { get; set; }
         public string OrigReceivedCalledNumber { get; set; }
         public ReceivedCallingNumberType? ReceivedCallingNumberType { get; set; }
-        public long? ReceivedCallingNumberOperatorID { get; set; }
         public long? CaseId { get; set; }
         public DateTime CreatedTime { get; set; }
     }

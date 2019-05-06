@@ -9,14 +9,6 @@ namespace TestCallAnalysis.Entities
 {
     public class CDRCaseBatch
     {
-        public List<TCAnalCorrelatedCDR> OutputRecordsToInsert { get; set; }
-
-        public DateTimeRange DateTimeRange { get; set; }
-
-        public CDRCaseBatch()
-        {
-            OutputRecordsToInsert = new List<TCAnalCorrelatedCDR>();
-            DateTimeRange = new DateTimeRange();
-        }
+        public List<TCAnalCorrelatedCDR> CaseCDRsToInsert { get; set; }
     }
 }

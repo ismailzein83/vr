@@ -26,10 +26,14 @@ app.directive("tcanalCdrcorrelationProcess", ['UtilsService', 'VRDateTimeService
         };
 
         function DirectiveConstructor($scope, ctrl) {
-
             this.initializeController = initializeController;
-            $scope.scopeModel = {};
+            
             function initializeController() {
+                $scope.scopeModel = {};
+
+                $scope.scopeModel.datetimeMargin = "00:00:00";
+                $scope.scopeModel.timeOutMargin = "00:00:00";
+
                 defineAPI();
             }
 

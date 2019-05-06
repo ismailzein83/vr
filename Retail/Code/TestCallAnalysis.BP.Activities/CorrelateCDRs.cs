@@ -103,15 +103,16 @@ namespace TestCallAnalysis.BP.Activities
                                 Dictionary<long, List<TCAnalMappedCDR>> receivedCDRsByOperatorId = new Dictionary<long, List<TCAnalMappedCDR>>();
                                 Dictionary<long, List<TCAnalMappedCDR>> generatedCDRsByOperatorId = new Dictionary<long, List<TCAnalMappedCDR>>();
                                 Entities.UpdatedMappedCDRs updateMappedCDRs = new Entities.UpdatedMappedCDRs();
+                                updateMappedCDRs.MappedCDRsToUpdate = new List<TCAnalMappedCDR>();
 
                                 // Divide all CDRs between generated and received
                                 foreach (var cdr in recordBatch.Records)
                                 {
                                     TCAnalMappedCDR mappedCDR = mappedCDRManager.MappedCDRMapper(cdr);
                                     if (mappedCDR.CDRType.Equals(CDRType.Generated))
-                                        generatedCDRsByOperatorId.GetOrCreateItem(mappedCDR.OperatorID).Add(mappedCDR);
+                                        generatedCDRsByOperatorId.GetOrCreateItem(mappedCDR.OperatorID.Value).Add(mappedCDR);
                                     else
-                                        receivedCDRsByOperatorId.GetOrCreateItem(mappedCDR.OperatorID).Add(mappedCDR);
+                                        receivedCDRsByOperatorId.GetOrCreateItem(mappedCDR.OperatorID.Value).Add(mappedCDR);
                                 }
                               
                                 // Create the correlatedCDRs list
@@ -126,17 +127,17 @@ namespace TestCallAnalysis.BP.Activities
                                             
                                             foreach (var rcvdcdr in recievedOperator.Value)
                                             {
-                                                if (rcvdcdr.CalledNumberType.HasValue && rcvdcdr.OperatorID != 0)
+                                                if (rcvdcdr.CalledNumberType.HasValue && rcvdcdr.OperatorID.HasValue)
                                                 {
                                                     TCAnalCorrelatedCDR correlatedCDR = new TCAnalCorrelatedCDR();
                                                     correlatedCDR = correlatedCDRManager.CorrelatedCDRMapper(rcvdcdr);
 
-                                                    if (accountBEManager.TryGetAccountPart(operatorsAccountBEdefiniton, rcvdcdr.OperatorID, countryCodesAccountPartDefinition, false, out AccountPart accountCountryCodePart))
+                                                    if (accountBEManager.TryGetAccountPart(operatorsAccountBEdefiniton, rcvdcdr.OperatorID.Value, countryCodesAccountPartDefinition, false, out AccountPart accountCountryCodePart))
                                                     {
                                                         var contryCodeSettings = accountCountryCodePart.Settings as CountryCodesPartSettings;
                                                         receivedOperatorContryCodes = contryCodeSettings.CountryCodes;
                                                     }
-                                                    IEnumerable<string> mappingNumberList = calledNumberMappingManager.GetMappingNumber(rcvdcdr.OperatorID, rcvdcdr.CalledNumber);
+                                                    IEnumerable<string> mappingNumberList = calledNumberMappingManager.GetMappingNumber(rcvdcdr.OperatorID.Value, rcvdcdr.CalledNumber);
 
                                                     var generatedCDRs = generatedCDRsByOperatorId.GetRecord(recievedOperator.Key);
                                                     if (generatedCDRs != null && generatedCDRs.Count > 0)
@@ -193,14 +194,14 @@ namespace TestCallAnalysis.BP.Activities
                                 // Insert Correlations
                                 Entities.CDRCorrelationBatch correlationBatch = new Entities.CDRCorrelationBatch();
                                 var casesBatch = new CDRCaseBatch();
+                                casesBatch.CaseCDRsToInsert = new List<TCAnalCorrelatedCDR>();
                                 if (correlatedCDRs != null && correlatedCDRs.Count > 0)
                                 {
                                     correlationBatch.OutputRecordsToInsert = correlatedCDRManager.CorrelatedCDRsToRuntime(correlatedCDRs);
                                     // prepare cases
                                     foreach (var correlatedCDR in correlatedCDRs)
                                     {
-                                        casesBatch.OutputRecordsToInsert.Add(correlatedCDR);
-                                       
+                                        casesBatch.CaseCDRsToInsert.Add(correlatedCDR);
                                     }
                                 }
                                 inputArgument.OutputCorrelationBatchQueue.Enqueue(correlationBatch);

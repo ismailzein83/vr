@@ -66,13 +66,13 @@ namespace TestCallAnalysis.BP.Activities
                     {
                         hasItem = inputArgument.InputQueue.TryDequeue((recordBatch) =>
                         {
-                            if (recordBatch.OutputRecordsToInsert != null && recordBatch.OutputRecordsToInsert.Count > 0)
+                            if (recordBatch.CaseCDRsToInsert != null && recordBatch.CaseCDRsToInsert.Count > 0)
                             {
                                 List<TCAnalCaseCDR> tCAnalCaseCDRs = new List<TCAnalCaseCDR>();
 
-                                foreach (var record in recordBatch.OutputRecordsToInsert)
+                                foreach (var record in recordBatch.CaseCDRsToInsert)
                                 {
-                                    List<string> whiteList = whiteListManager.GetWhiteListByOperatorId(record.OperatorID);
+                                    List<string> whiteList = whiteListManager.GetWhiteListByOperatorId(record.OperatorID.Value);
                                     if (whiteList != null && whiteList.Count > 0 && whiteList.Contains(record.ReceivedCallingNumber))
                                         continue;
 

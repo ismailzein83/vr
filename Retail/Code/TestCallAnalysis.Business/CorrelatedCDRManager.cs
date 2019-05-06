@@ -29,7 +29,6 @@ namespace TestCallAnalysis.Business
             runtimeCDR.OrigReceivedCallingNumber = correlatedCDR.OrigReceivedCallingNumber;
             runtimeCDR.OrigReceivedCalledNumber = correlatedCDR.OrigReceivedCalledNumber;
             runtimeCDR.ReceivedCallingNumberType = (int?)correlatedCDR.ReceivedCallingNumberType;
-            runtimeCDR.ReceivedCallingNumberOperatorID = correlatedCDR.ReceivedCallingNumberOperatorID;
             runtimeCDR.CaseId = correlatedCDR.CaseId;
             runtimeCDR.CreatedTime = correlatedCDR.CreatedTime;
             return runtimeCDR;
@@ -82,7 +81,6 @@ namespace TestCallAnalysis.Business
                 OperatorID = mappedCDR.OperatorID,
                 OrigReceivedCallingNumber = mappedCDR.OrigCallingNumber,
                 OrigReceivedCalledNumber = mappedCDR.OrigCalledNumber,
-                ReceivedCallingNumberOperatorID = mappedCDR.OperatorID,
                 ReceivedCallingNumberType = (ReceivedCallingNumberType?)mappedCDR.CallingNumberType,
                 CaseId = null,
                 CreatedTime = mappedCDR.CreatedTime

@@ -206,7 +206,7 @@ namespace TestCallAnalysis.Business
             caseCDR.LastAttempt = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastAttempt");
             caseCDR.NumberOfCDRs = (int)genericBusinessEntity.FieldValues.GetRecord("NumberOfCDRs");
             caseCDR.StatusId = (Guid)genericBusinessEntity.FieldValues.GetRecord("StatusId");
-            caseCDR.OperatorID = (long)genericBusinessEntity.FieldValues.GetRecord("OperatorID");
+            caseCDR.OperatorID = (long?)genericBusinessEntity.FieldValues.GetRecord("OperatorID");
             caseCDR.CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime");
             caseCDR.LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime");
             caseCDR.CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy");
