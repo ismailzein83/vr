@@ -344,10 +344,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public void GetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
         {
             var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(TABLE_ALIAS);
+            insertQuery.IntoTable(TABLE_NAME);
 
             var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierZoneServiceBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierZoneServiceBackupDataManager.TABLE_NAME), SupplierZoneServiceBackupDataManager.TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
 
             selectColumns.Column(COL_ID, COL_ID);
