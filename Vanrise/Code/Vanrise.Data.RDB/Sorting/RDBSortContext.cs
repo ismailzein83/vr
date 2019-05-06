@@ -37,7 +37,7 @@ namespace Vanrise.Data.RDB
 
         public void ByColumn(string tableAlias, string columnName, RDBSortDirection direction)
         {
-            ByExpression(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, direction);
+            ByExpression(new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName), direction);
         }
 
         public void ByColumn(string columnName, RDBSortDirection direction)

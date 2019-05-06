@@ -50,7 +50,7 @@ namespace Vanrise.Data.RDB
             {
                 var conditionGroup = new RDBConditionGroup(conditionGroupOperator);
                 _groupBy.HavingCondition = conditionGroup;
-                _havingContext = new RDBGroupByHavingContext(conditionGroup, _table, _tableAlias);
+                _havingContext = new RDBGroupByHavingContext(_queryBuilderContext, conditionGroup, _table, _tableAlias);
             }
             return _havingContext;
         }

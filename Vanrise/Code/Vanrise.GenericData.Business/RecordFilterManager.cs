@@ -166,6 +166,18 @@ namespace Vanrise.GenericData.Business
             return false;
         }
 
+        public void AddFieldNamesFromFilterGroup(RecordFilterGroup filterGroup, HashSet<string> fieldNames)
+        {
+            foreach (var filter in filterGroup.Filters)
+            {
+                RecordFilterGroup childFilterGroup = filter as RecordFilterGroup;
+                if (childFilterGroup != null)
+                    AddFieldNamesFromFilterGroup(childFilterGroup, fieldNames);
+                else
+                    fieldNames.Add(filter.FieldName);
+            }
+        }
+
         #region Private Classes
 
         private class SingleFieldRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext

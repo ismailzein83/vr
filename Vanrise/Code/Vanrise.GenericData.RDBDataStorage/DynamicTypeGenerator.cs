@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.RDBDataStorage
     internal class DynamicTypeGenerator
     {
         DataRecordStorageManager s_dataRecordStorageManager = new DataRecordStorageManager();
-        public IDynamicManager GetDynamicManager(DataRecordStorage dataRecordStorage, RDBDataRecordStorageSettings dataRecordStorageSettings)
+        public IDynamicManager GetDynamicManager(DataRecordStorage dataRecordStorage, RDBDataRecordStorageSettings dataRecordStorageSettings, RDBRecordStorageDataManager recordStorageDataManager)
         {
             String cacheName = String.Format("RDBDataStorage_DynamicTypeGenerator_GetBulkInsertWriter_{0}", dataRecordStorage.DataRecordStorageId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordStorageManager.CacheManager>().GetOrCreateObject(cacheName,
@@ -74,6 +74,20 @@ namespace Vanrise.GenericData.RDBDataStorage
                             #DataRecordMapperImplementation#
                             return dataRecord;
                         }
+
+                        public void AddJoin(Vanrise.GenericData.RDBDataStorage.RDBDataStorageAddJoinRDBExpressionContext context)
+                        {
+                            #ADDJOINSwitchCases#
+                        }
+
+                        public void SetRDBExpressionFromExpressionField(Vanrise.GenericData.RDBDataStorage.RDBDataStorageSetRDBExpressionFromExpressionFieldRDBExpressionContext context)
+                        {
+                            #SetRDBExpressionFromExpressionFieldsCases#
+                        }
+
+                        #ADDJOINMETHODS#
+
+                        #SetRDBExpressionFromExpressionFieldsMethods#
                     }
                 }");
 
@@ -121,9 +135,13 @@ namespace Vanrise.GenericData.RDBDataStorage
 
                     string dynamicRecordMapper;
                     string dataRecordMapper;
-                    BuildMapperImplementations(dataRecordStorageSettings, recordType, out dynamicRecordMapper, out dataRecordMapper);
+                    BuildMapperImplementations(dataRecordStorageSettings, recordType, recordStorageDataManager, out dynamicRecordMapper, out dataRecordMapper);
                     classDefinitionBuilder.Replace("#DynamicRecordMapperImplementation#", dynamicRecordMapper);
                     classDefinitionBuilder.Replace("#DataRecordMapperImplementation#", dataRecordMapper);
+                    
+                    AddJoinsImplementations(classDefinitionBuilder, dataRecordStorageSettings);
+
+                    AddExpressionFieldsImplementations(classDefinitionBuilder, dataRecordStorageSettings);
 
                     string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.RDBDataStorage");
                     string className = "DynamicManager";
@@ -150,6 +168,93 @@ namespace Vanrise.GenericData.RDBDataStorage
                         return Activator.CreateInstance(compilationOutput.OutputAssembly.GetType(fullTypeName)).CastWithValidate<IDynamicManager>("dynamicManager");
                     }
                 });
+        }
+
+        private void AddJoinsImplementations(StringBuilder classDefinitionBuilder, RDBDataRecordStorageSettings dataRecordStorageSettings)
+        {
+            if(dataRecordStorageSettings.Joins != null && dataRecordStorageSettings.Joins.Count > 0)
+            {
+                StringBuilder joinMethodsBuilder = new StringBuilder();
+                StringBuilder joinSwitchCasesBuilder = new StringBuilder();
+
+                joinSwitchCasesBuilder.AppendLine(@"
+                                switch(context.JoinName)
+                                {
+                                ");
+
+                foreach (var join in dataRecordStorageSettings.Joins)
+                {
+                    joinMethodsBuilder.AppendLine();
+
+                    string joinMethodName = $"AddJoin{join.RDBRecordStorageJoinName.Replace(" ", "")}";
+                    joinMethodsBuilder.AppendLine($"void {joinMethodName}(Vanrise.GenericData.RDBDataStorage.RDBDataStorageAddJoinRDBExpressionContext context)");
+                    joinMethodsBuilder.AppendLine("{");
+                    joinMethodsBuilder.AppendLine(join.Settings.GetCode(null));
+                    joinMethodsBuilder.AppendLine("}");
+
+                    joinMethodsBuilder.AppendLine();
+
+                    joinSwitchCasesBuilder.AppendLine($@"case ""{join.RDBRecordStorageJoinName}"": {joinMethodName}(context);break;");
+                    
+
+                }
+
+                joinSwitchCasesBuilder.AppendLine(@"
+                                    }");
+                
+
+                classDefinitionBuilder.Replace("#ADDJOINSwitchCases#", joinSwitchCasesBuilder.ToString());
+                classDefinitionBuilder.Replace("#ADDJOINMETHODS#", joinMethodsBuilder.ToString());
+            }
+            else
+            {
+                classDefinitionBuilder.Replace("#ADDJOINSwitchCases#", "");
+                classDefinitionBuilder.Replace("#ADDJOINMETHODS#", "");
+            }
+        }
+
+        private void AddExpressionFieldsImplementations(StringBuilder classDefinitionBuilder, RDBDataRecordStorageSettings dataRecordStorageSettings)
+        {
+            if (dataRecordStorageSettings.ExpressionFields != null && dataRecordStorageSettings.ExpressionFields.Count > 0)
+            {
+                StringBuilder setRDBExpressionMethodsBuilder = new StringBuilder();
+                StringBuilder setRDBExpressionCasesBuilder = new StringBuilder();
+
+                setRDBExpressionCasesBuilder.AppendLine(@"
+                                switch(context.FieldName)
+                                {
+                                ");
+
+                
+                        foreach (var expressionField in dataRecordStorageSettings.ExpressionFields)
+                        {
+                            setRDBExpressionMethodsBuilder.AppendLine();
+
+                            string setRDBExpMethodName = $"SetRDBExpressionFromExpressionField{expressionField.FieldName}";
+                            setRDBExpressionMethodsBuilder.AppendLine($"void {setRDBExpMethodName}(Vanrise.GenericData.RDBDataStorage.RDBDataStorageSetRDBExpressionFromExpressionFieldRDBExpressionContext context)");
+                            setRDBExpressionMethodsBuilder.AppendLine("{");
+                            setRDBExpressionMethodsBuilder.AppendLine(expressionField.Settings.GetCode(null));
+                            setRDBExpressionMethodsBuilder.AppendLine("}");
+
+                            setRDBExpressionMethodsBuilder.AppendLine();
+
+                            setRDBExpressionCasesBuilder.AppendLine($@"case ""{expressionField.FieldName}"": {setRDBExpMethodName}(context);break;");
+                        }                   
+
+               
+
+                setRDBExpressionCasesBuilder.AppendLine(@"
+                                }
+                                ");
+
+                classDefinitionBuilder.Replace("#SetRDBExpressionFromExpressionFieldsCases#", setRDBExpressionCasesBuilder.ToString());
+                classDefinitionBuilder.Replace("#SetRDBExpressionFromExpressionFieldsMethods#", setRDBExpressionMethodsBuilder.ToString());
+            }
+            else
+            {
+                classDefinitionBuilder.Replace("#SetRDBExpressionFromExpressionFieldsCases#", "");
+                classDefinitionBuilder.Replace("#SetRDBExpressionFromExpressionFieldsMethods#", "");
+            }
         }
 
         private static void AppendSetRDBValueFromRecordField(StringBuilder rdbColumnsValuesBuilder, DataRecordField matchField, string rdbContextName)
@@ -188,33 +293,18 @@ namespace Vanrise.GenericData.RDBDataStorage
         }
 
         private void BuildMapperImplementations(RDBDataRecordStorageSettings dataRecordStorageSettings, 
-            DataRecordType recordType, out string dynamicRecordMapper, out string dataRecordMapper)
+            DataRecordType recordType, RDBRecordStorageDataManager recordStorageDataManager, out string dynamicRecordMapper, out string dataRecordMapper)
         {
             
             StringBuilder dynamicRecordMapperBuilder = new StringBuilder();
             StringBuilder dataRecordMapperBuilder = new StringBuilder();
-            List<RDBDataRecordStorageColumn> allColumns = new List<RDBDataRecordStorageColumn>(dataRecordStorageSettings.Columns);
-            if(dataRecordStorageSettings.ParentRecordStorageId.HasValue)
+            
+            foreach (var fieldName in recordStorageDataManager.ResolveAllSupportedFieldNames())
             {
-                var parentRecordStorage = s_dataRecordStorageManager.GetDataRecordStorage(dataRecordStorageSettings.ParentRecordStorageId.Value);
-                parentRecordStorage.ThrowIfNull("parentRecordStorage", dataRecordStorageSettings.ParentRecordStorageId.Value);
-                parentRecordStorage.Settings.ThrowIfNull("parentRecordStorage.Settings", dataRecordStorageSettings.ParentRecordStorageId.Value);
-                var parentRecordStorageRDBSettings = parentRecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("parentRecordStorage.Settings", dataRecordStorageSettings.ParentRecordStorageId.Value);
-                if(parentRecordStorageRDBSettings.Columns != null)
-                {
-                    foreach(var parentColumn in parentRecordStorageRDBSettings.Columns)
-                    {
-                        if (!allColumns.Any(col => col.FieldName == parentColumn.FieldName))
-                            allColumns.Add(parentColumn);
-                    }
-                }
-            }
-            foreach (var column in allColumns)
-            {
-                var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == column.FieldName);
-                if (matchField == null)
-                    throw new NullReferenceException("matchField");
-                dataRecordMapperBuilder.AppendLine($@"if(fieldNames == null || fieldNames.Contains(""{column.FieldName}""))");
+                var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == fieldName);
+                matchField.ThrowIfNull("matchField", fieldName);
+
+                dataRecordMapperBuilder.AppendLine($@"if(fieldNames == null || fieldNames.Contains(""{fieldName}""))");
                 dataRecordMapperBuilder.AppendLine("{");
                 string valueExpression;
                 bool isNullableField = false;
@@ -223,12 +313,12 @@ namespace Vanrise.GenericData.RDBDataStorage
                     var runtimeType = matchField.Type.GetRuntimeType();
                     isNullableField = runtimeType.IsValueType && Nullable.GetUnderlyingType(runtimeType) != null;
                     string getReaderValueMethodName = RDBUtilities.GetGetReaderValueMethodNameWithValidate(runtimeType);
-                    valueExpression = string.Format(@"reader.{0}(""{1}"")", getReaderValueMethodName, column.FieldName);
+                    valueExpression = string.Format(@"reader.{0}(""{1}"")", getReaderValueMethodName, fieldName);
                 }
                 else
                 {
                     StringBuilder readDeserializedValueBuilder = new StringBuilder();
-                    readDeserializedValueBuilder.AppendLine(String.Format(@"var {0}Context = new Vanrise.GenericData.Entities.DeserializeDataRecordFieldValueContext() {{ Value = reader.GetString(""{0}"")}}; ", column.FieldName));
+                    readDeserializedValueBuilder.AppendLine(String.Format(@"var {0}Context = new Vanrise.GenericData.Entities.DeserializeDataRecordFieldValueContext() {{ Value = reader.GetString(""{0}"")}}; ", fieldName));
                     readDeserializedValueBuilder.AppendLine(String.Format(@"var {0}DeserializedValue = s_{0}FieldType.DeserializeValue({0}Context);", matchField.Name));
                     dynamicRecordMapperBuilder.AppendLine(readDeserializedValueBuilder.ToString());
                     dataRecordMapperBuilder.AppendLine(readDeserializedValueBuilder.ToString());
@@ -239,7 +329,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                 dynamicRecordMapperBuilder.AppendLine($@"dataRecord.{matchField.Name} = {fieldValueVariableName};");
                 dataRecordMapperBuilder.AppendLine($"var {fieldValueVariableName} = {valueExpression};");
                 dataRecordMapperBuilder.AppendLine($@"fieldValues.Add(""{matchField.Name}"", {fieldValueVariableName});");
-                if(column.FieldName == dataRecordStorageSettings.DateTimeField)
+                if(fieldName == dataRecordStorageSettings.DateTimeField)
                 {
                     dataRecordMapperBuilder.AppendLine($"if({fieldValueVariableName} != null)");
                     dataRecordMapperBuilder.AppendLine($@"dataRecord.RecordTime = {fieldValueVariableName}{(isNullableField ? ".Value" : "")};");

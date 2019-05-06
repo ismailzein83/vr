@@ -479,6 +479,9 @@ namespace Vanrise.Data.RDB
         IRDBTableQuerySource _mainQueryTable;
         bool _dontGenerateParameters;
 
+        //this is used for tables not directly in the query like subqueries added for NotExists condition for InsertQuery and UpdateQuery
+        Dictionary<string, IRDBTableQuerySource> _indirectTableAliases = new Dictionary<string, IRDBTableQuerySource>();
+
         public RDBQueryBuilderContext(BaseRDBDataProvider dataProvider, bool dontGenerateParameters)
         {
             this.DataProvider = dataProvider;
@@ -492,10 +495,17 @@ namespace Vanrise.Data.RDB
             _tableAliases.Add(tableAlias, table);
         }
 
+        public void AddIndirectTableAlias(IRDBTableQuerySource table, string tableAlias)
+        {
+            if (_indirectTableAliases.ContainsKey(tableAlias))
+                throw new Exception(String.Format("Table Alias '{0}' already exists", tableAlias));
+            _indirectTableAliases.Add(tableAlias, table);
+        }
+
         public IRDBTableQuerySource GetTableFromAlias(string tableAlias)
         {
             IRDBTableQuerySource table;
-            if (!_tableAliases.TryGetValue(tableAlias, out table))
+            if (!_tableAliases.TryGetValue(tableAlias, out table) && !_indirectTableAliases.TryGetValue(tableAlias, out table))
                 throw new Exception(String.Format("Table Alias '{0}' not exists", tableAlias));
             return table;
         }
@@ -510,6 +520,21 @@ namespace Vanrise.Data.RDB
             if (_mainQueryTable != null)
                 throw new Exception("MainQueryTable");
             _mainQueryTable = mainQueryTable;
+        }
+
+        Func<RDBJoinContext> _getQueryJoinContext;
+
+        public void SetGetQueryJoinContext(Func<RDBJoinContext> getQueryJoinContext)
+        {
+            if (_getQueryJoinContext != null)
+                throw new Exception("_getQueryJoinContext already set");
+            _getQueryJoinContext = getQueryJoinContext;
+        }
+
+        public RDBJoinContext GetQueryJoinContext()
+        {
+            _getQueryJoinContext.ThrowIfNull("_getQueryJoinContext");
+            return _getQueryJoinContext();
         }
 
         public RDBQueryBuilderContext CreateChildContext()

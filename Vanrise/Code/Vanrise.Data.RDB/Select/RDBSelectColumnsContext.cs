@@ -51,11 +51,7 @@ namespace Vanrise.Data.RDB
 
         public void Column(string tableAlias, string columnName, string alias)
         {
-            Column(new RDBColumnExpression
-           {
-               TableAlias = tableAlias,
-               ColumnName = columnName
-           },
+            Column(new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName),
                     alias);
         }
 
@@ -87,7 +83,7 @@ namespace Vanrise.Data.RDB
         
         public void Aggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName, string alias)
         {
-            Aggregate(aggregateType, new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, alias);
+            Aggregate(aggregateType, new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName), alias);
         }
 
         public void Aggregate(RDBNonCountAggregateType aggregateType, string columnName, string alias)

@@ -22,6 +22,91 @@ namespace Vanrise.Data.RDB
         public string CachePartitionColumnName { get; set; }
 
         public Dictionary<string, RDBTableColumnDefinition> Columns { get; set; }
+
+        public Dictionary<string, RDBTableExpressionColumn> ExpressionColumns { get; set; }
+
+        public Dictionary<string, RDBTableJoinDefinition> Joins { get; set; }
+
+        public RDBTableFilterDefinition FilterDefinition { get; set; }
+    }
+    
+    public abstract class RDBTableExpressionColumn
+    {
+        public List<string> DependantJoinNames { get; set; }
+
+        public abstract void SetExpression(IRDBTableExpressionColumnSetExpressionContext context);
+    }
+
+    public interface IRDBTableExpressionColumnSetExpressionContext
+    {
+        string TableAlias { get; }
+
+        RDBExpressionContext ExpressionContext { get; }
+    }
+
+    public class RDBTableExpressionColumnSetExpressionContext : IRDBTableExpressionColumnSetExpressionContext
+    {
+        public RDBTableExpressionColumnSetExpressionContext(string tableAlias, RDBExpressionContext expressionContext)
+        {
+            this.TableAlias = tableAlias;
+            this.ExpressionContext = expressionContext;
+        }
+
+        public string TableAlias { get; private set; }
+
+        public RDBExpressionContext ExpressionContext { get; private set; }
+    }
+
+    public abstract class RDBTableJoinDefinition
+    {
+        public List<string> DependantJoinNames { get; set; }
+
+        public abstract void SetJoinExpression(IRDBTableJoinSetJoinExpressionContext context);
+    }
+
+    public interface IRDBTableJoinSetJoinExpressionContext
+    {
+        string TableAlias { get; }
+
+        RDBJoinContext JoinContext { get; }
+    }
+
+    public class RDBTableJoinSetJoinExpressionContext : IRDBTableJoinSetJoinExpressionContext
+    {
+        public RDBTableJoinSetJoinExpressionContext(string tableAlias, RDBJoinContext joinContext)
+        {
+            this.TableAlias = tableAlias;
+            this.JoinContext = joinContext;
+        }
+
+        public string TableAlias { get; private set; }
+
+        public RDBJoinContext JoinContext { get; private set; }
+    }
+
+    public abstract class RDBTableFilterDefinition
+    {
+        public abstract void SetFilterExpression(IRDBTableFilterDefinitionSetFilterExpressionContext context);
+    }
+
+    public interface IRDBTableFilterDefinitionSetFilterExpressionContext
+    {
+        string TableAlias { get; }
+
+        RDBConditionContext QueryWhereContext { get; }
+    }
+
+    public class RDBTableFilterDefinitionSetFilterExpressionContext : IRDBTableFilterDefinitionSetFilterExpressionContext
+    {
+        public RDBTableFilterDefinitionSetFilterExpressionContext(string tableAlias, RDBConditionContext queryWhereContext)
+        {
+            this.TableAlias = tableAlias;
+            this.QueryWhereContext = queryWhereContext;
+        }
+
+        public string TableAlias { get; private set; }
+
+        public RDBConditionContext QueryWhereContext { get; private set; }
     }
 
     public class RDBTableDefinitionQuerySource : IRDBTableQuerySource
@@ -104,6 +189,61 @@ namespace Vanrise.Data.RDB
         public void GetColumnDefinition(IRDBTableQuerySourceGetColumnDefinitionContext context)
         {
             context.ColumnDefinition = _schemaManager.GetColumnDefinitionWithValidate(context.DataProvider, this.TableName, context.ColumnName);
+        }
+        
+        public bool TryGetExpressionColumn(IRDBTableQuerySourceTryGetExpressionColumnContext context)
+        {
+            RDBTableExpressionColumn expressionColumn;
+            if(_schemaManager.TryGetExpressionColumn(context.QueryBuilderContext.DataProvider, this.TableName, context.ColumnName, out expressionColumn))
+            {
+                context.ExpressionColumn = expressionColumn;
+                if(expressionColumn.DependantJoinNames != null)
+                {
+                    foreach (var dependantJoinName in expressionColumn.DependantJoinNames)
+                    {
+                        AddJoinIfNotAdded(dependantJoinName, context.QueryBuilderContext, context.TableAlias);
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void AddJoinIfNotAdded(string joinName, RDBQueryBuilderContext queryBuilderContext, string tableAlias)
+        {
+            if (_addedJoins.Contains(joinName))
+                return;
+
+            var tableDefinition = _schemaManager.GetTableDefinitionWithValidate(queryBuilderContext.DataProvider, this.TableName);
+
+            RDBTableJoinDefinition joinDefinition;
+            if (!tableDefinition.Joins.TryGetValue(joinName, out joinDefinition))
+                throw new NullReferenceException($"joinDefinition '{joinName}");
+
+            if(joinDefinition.DependantJoinNames != null && joinDefinition.DependantJoinNames.Count > 0)
+            {
+                foreach(var dependantJoinName in joinDefinition.DependantJoinNames)
+                {
+                    AddJoinIfNotAdded(dependantJoinName, queryBuilderContext, tableAlias);
+                }
+            }
+
+            joinDefinition.SetJoinExpression(new RDBTableJoinSetJoinExpressionContext(tableAlias, queryBuilderContext.GetQueryJoinContext()));
+
+            _addedJoins.Add(joinName);
+        }
+
+        HashSet<string> _addedJoins = new HashSet<string>();
+
+        public void FinalizeBeforeResolveQuery(IRDBTableQuerySourceFinalizeBeforeResolveQueryContext context)
+        {
+            var tableDefinition = _schemaManager.GetTableDefinitionWithValidate(context.DataProvider, this.TableName);
+
+            if (tableDefinition.FilterDefinition != null)
+                tableDefinition.FilterDefinition.SetFilterExpression(new RDBTableFilterDefinitionSetFilterExpressionContext(context.TableAlias, context.QueryWhere));            
         }
     }
 

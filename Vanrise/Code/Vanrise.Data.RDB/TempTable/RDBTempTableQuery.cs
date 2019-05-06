@@ -124,6 +124,16 @@ namespace Vanrise.Data.RDB
                 throw new Exception(String.Format("Column '{0}' not found", context.ColumnName));
             context.ColumnDefinition = columnDef.ColumnDefinition;
         }
+
+        public bool TryGetExpressionColumn(IRDBTableQuerySourceTryGetExpressionColumnContext context)
+        {
+            return false;
+        }
+
+        public void FinalizeBeforeResolveQuery(IRDBTableQuerySourceFinalizeBeforeResolveQueryContext context)
+        {
+            
+        }
     }
 
     public class RDBTempTableColumnDefinition

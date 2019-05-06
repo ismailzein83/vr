@@ -14,6 +14,12 @@ namespace Vanrise.Data.RDB
         internal RDBDeleteQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
+            queryBuilderContext.SetGetQueryJoinContext(() =>
+            {
+                if (_tableAlias == null)
+                    _tableAlias = $"tab_{Guid.NewGuid().ToString().Replace("-", "")}";
+                return Join(_tableAlias);
+            });
         }
 
         IRDBTableQuerySource _table;
@@ -68,6 +74,10 @@ namespace Vanrise.Data.RDB
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
+            this._table.FinalizeBeforeResolveQuery(new RDBTableQuerySourceFinalizeBeforeResolveQueryContext(context.DataProvider, this._tableAlias, () => this.Where()));
+            if (_joinContext != null)
+                _joinContext.FinalizeBeforeResolveQuery(context.DataProvider, () => this.Where());
+
             var resolveDeleteQueryContext = new RDBDataProviderResolveDeleteQueryContext(this._table, this._tableAlias, this._conditionGroup, 
                 this._joins, this._withNoLock, context, _queryBuilderContext);
             return context.DataProvider.ResolveDeleteQuery(resolveDeleteQueryContext);

@@ -141,6 +141,20 @@ namespace Vanrise.Data.RDB
             return GetColumnDefinitionWithValidate(tableDefinition, tableName, columnName);
         }
 
+        internal bool TryGetExpressionColumn(BaseRDBDataProvider provider, string tableName, string columnName, out RDBTableExpressionColumn expressionColumn)
+        {
+            RDBTableDefinition tableDefinition = GetTableDefinitionWithValidate(provider, tableName);
+            if (tableDefinition.ExpressionColumns != null && tableDefinition.ExpressionColumns.TryGetValue(columnName, out expressionColumn))
+            {
+                return true;
+            }
+            else
+            {
+                expressionColumn = null;
+                return false;
+            }
+        }
+
         internal RDBTableColumnDefinition GetColumnDefinitionWithValidate(RDBTableDefinition tableDefinition, string tableName, string columnName)
         {
             if (string.Compare(columnName, "timestamp", true) == 0)

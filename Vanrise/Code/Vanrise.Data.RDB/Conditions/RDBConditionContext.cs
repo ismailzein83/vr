@@ -109,11 +109,7 @@ namespace Vanrise.Data.RDB
         private void CompareCondition(string tableAlias, string columnName, RDBCompareConditionOperator oper, BaseRDBExpression expression2)
         {
             CompareCondition(
-                new RDBColumnExpression
-                {
-                    TableAlias = tableAlias,
-                    ColumnName = columnName
-                },
+                new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName),
                 oper,
                 expression2);
         }
@@ -146,11 +142,7 @@ namespace Vanrise.Data.RDB
         public void EqualsCondition(string tableAlias, string columnName, BaseRDBExpression valueExpression)
         {
             CompareCondition(
-                   new RDBColumnExpression
-                   {
-                       TableAlias = tableAlias,
-                       ColumnName = columnName
-                   },
+                   new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName),
                    RDBCompareConditionOperator.Eq,
                   valueExpression);
         }
@@ -160,11 +152,7 @@ namespace Vanrise.Data.RDB
             EqualsCondition(
                    table1Alias,
                    column1Name,
-                  new RDBColumnExpression
-                  {
-                      TableAlias = table2Alias,
-                      ColumnName = column2Name
-                  });
+                  new RDBColumnExpression(_queryBuilderContext, table2Alias, column2Name));
         }
 
         public void ContainsCondition(string tableAlias, string columnName, string value)
@@ -313,11 +301,7 @@ namespace Vanrise.Data.RDB
         public void ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<BaseRDBExpression> values)
         {
             ListCondition(
-               new RDBColumnExpression
-               {
-                   TableAlias = tableAlias,
-                   ColumnName = columnName
-               },
+               new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName),
                oper,
                values);
         }
@@ -415,7 +399,7 @@ namespace Vanrise.Data.RDB
         {
             var childOfChildConditionGroup = new RDBConditionGroup(childGroupOperator);
             var childConditionGroup = new RDBConditionGroup(RDBConditionGroupOperator.OR);
-            childConditionGroup.Conditions.Add(new RDBNullCondition { Expression = new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName } });
+            childConditionGroup.Conditions.Add(new RDBNullCondition { Expression = new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName) });
             childConditionGroup.Conditions.Add(childOfChildConditionGroup);
             Condition(childConditionGroup);
             return new RDBConditionContext(_queryBuilderContext, childOfChildConditionGroup, _tableAlias);
@@ -438,7 +422,7 @@ namespace Vanrise.Data.RDB
 
         public void NullCondition(string tableAlias, string columnName)
         {
-            NullCondition(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName });
+            NullCondition(new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName));
         }
 
         public void NullCondition(string columnName)
@@ -458,7 +442,7 @@ namespace Vanrise.Data.RDB
 
         public void NotNullCondition(string tableAlias, string columnName)
         {
-            NotNullCondition(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName });
+            NotNullCondition(new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName));
         }
 
         public void NotNullCondition(string columnName)

@@ -71,7 +71,7 @@ namespace Vanrise.Data.RDB
 
         public void Column(string tableAlias, string columnName)
         {
-            Expression(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName });
+            Expression(new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName));
         }
 
         public RDBTextConcatenationExpressionContext TextConcatenation()
@@ -236,7 +236,7 @@ namespace Vanrise.Data.RDB
 
         public void Aggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName)
         {
-            Aggregate(aggregateType, new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName });
+            Aggregate(aggregateType, new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName));
         }
 
         public void Aggregate(RDBNonCountAggregateType aggregateType, string columnName)
@@ -321,6 +321,7 @@ namespace Vanrise.Data.RDB
         internal RDBCaseExpressionWhenContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, List<RDBCaseWhenExpression> whens)
         {
             _queryBuilderContext = queryBuilderContext;
+            
             _tableAlias = tableAlias;
             _when = new RDBCaseWhenExpression();
             whens.Add(_when);

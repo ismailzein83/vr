@@ -60,7 +60,8 @@ namespace Vanrise.Data.RDB
         public override RDBConditionContext IfNotExists(string tableAlias, RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
         {
             this._notExistConditionTableAlias = tableAlias;
-            if(_notExistsConditionContext == null)
+            _queryBuilderContext.AddIndirectTableAlias(_table, tableAlias);
+            if (_notExistsConditionContext == null)
             {
                 _notExistConditionGroup = new RDBConditionGroup(groupOperator);
                 _notExistsConditionContext = new RDBConditionContext(_queryBuilderContext, _notExistConditionGroup, this._notExistConditionTableAlias);

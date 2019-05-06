@@ -49,17 +49,9 @@ namespace Vanrise.Data.RDB
 
             join.Condition = new RDBCompareCondition
             {
-                Expression1 = new RDBColumnExpression
-                {
-                    TableAlias = tableAlias,
-                    ColumnName = columnName
-                },
+                Expression1 = new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName),
                 Operator = RDBCompareConditionOperator.Eq,
-                Expression2 = new RDBColumnExpression
-                {
-                    TableAlias = otherTableAlias,
-                    ColumnName = otherTableColumnName
-                }
+                Expression2 = new RDBColumnExpression(_queryBuilderContext, otherTableAlias, otherTableColumnName)
             };
         }
 
@@ -88,6 +80,17 @@ namespace Vanrise.Data.RDB
             RDBJoin join = new RDBJoin { Table = table, TableAlias = tableAlias };
             _joins.Add(join);
             return join;
+        }
+
+        internal void FinalizeBeforeResolveQuery(BaseRDBDataProvider dataProvider, Func<RDBConditionContext> getWhere)
+        {
+            if (this._joins != null && this._joins.Count > 0)
+            {
+                foreach (var join in new List<RDBJoin>(_joins))
+                {
+                    join.Table.FinalizeBeforeResolveQuery(new RDBTableQuerySourceFinalizeBeforeResolveQueryContext(dataProvider, join.TableAlias, getWhere));
+                }
+            }
         }
     }
 }

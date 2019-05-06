@@ -23,6 +23,10 @@ namespace Vanrise.Data.RDB
         List<string> GetColumnNames(IRDBTableQuerySourceGetColumnNamesContext context);
 
         void GetCreatedAndModifiedTime(IRDBTableQuerySourceGetCreatedAndModifiedTimeContext context);
+
+        bool TryGetExpressionColumn(IRDBTableQuerySourceTryGetExpressionColumnContext context);
+
+        void FinalizeBeforeResolveQuery(IRDBTableQuerySourceFinalizeBeforeResolveQueryContext context);
     }
 
     public interface IRDBTableQuerySourceToDBQueryContext : IBaseRDBResolveQueryContext
@@ -147,6 +151,91 @@ namespace Vanrise.Data.RDB
         {
             get;
             set;
+        }
+    }
+
+    public interface IRDBTableQuerySourceTryGetExpressionColumnContext
+    {
+        RDBQueryBuilderContext QueryBuilderContext { get; }
+
+        string TableAlias { get; }
+
+        string ColumnName { get; }
+
+        RDBTableExpressionColumn ExpressionColumn { set; }
+    }
+
+    public class RDBTableQuerySourceTryGetExpressionColumnContext : IRDBTableQuerySourceTryGetExpressionColumnContext
+    {
+        public RDBTableQuerySourceTryGetExpressionColumnContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, string columnName)
+        {
+            this.QueryBuilderContext = queryBuilderContext;
+            this.TableAlias = tableAlias;
+            this.ColumnName = columnName;
+        }
+
+        public RDBQueryBuilderContext QueryBuilderContext
+        {
+            get;
+            private set;
+        }
+
+        public string ColumnName
+        {
+            get;
+            private set;
+        }
+
+        public RDBTableExpressionColumn ExpressionColumn
+        {
+            get;
+            set;
+        }
+
+        public string TableAlias
+        {
+            get;
+            private set;
+        }
+    }
+
+    public interface IRDBTableQuerySourceFinalizeBeforeResolveQueryContext
+    {
+        BaseRDBDataProvider DataProvider { get; }
+
+        string TableAlias { get; }
+        
+        RDBConditionContext QueryWhere { get; }
+    }
+
+    public class RDBTableQuerySourceFinalizeBeforeResolveQueryContext : IRDBTableQuerySourceFinalizeBeforeResolveQueryContext
+    {
+        Func<RDBConditionContext> _getQueryWhere;
+        public RDBTableQuerySourceFinalizeBeforeResolveQueryContext(BaseRDBDataProvider dataProvider,string tableAlias, Func<RDBConditionContext> getQueryWhere)
+        {
+            this.DataProvider = dataProvider;
+            this.TableAlias = tableAlias;
+            this._getQueryWhere = getQueryWhere;
+        }
+
+        public BaseRDBDataProvider DataProvider
+        {
+            get;
+            private set;
+        }
+
+        public string TableAlias
+        {
+            get;
+            private set;
+        }
+        
+        public RDBConditionContext QueryWhere
+        {
+            get
+            {
+                return _getQueryWhere();
+            }
         }
     }
 }

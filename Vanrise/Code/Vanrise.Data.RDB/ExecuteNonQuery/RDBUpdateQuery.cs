@@ -15,6 +15,12 @@ namespace Vanrise.Data.RDB
         internal RDBUpdateQuery(RDBQueryBuilderContext queryBuilderContext)
             : base(queryBuilderContext)
         {
+            queryBuilderContext.SetGetQueryJoinContext(() =>
+            {
+                if (_tableAlias == null)
+                    _tableAlias = $"tab_{Guid.NewGuid().ToString().Replace("-", "")}";
+                return Join(_tableAlias);
+            });
         }
 
         IRDBTableQuerySource _table;
@@ -46,6 +52,7 @@ namespace Vanrise.Data.RDB
         public override RDBConditionContext IfNotExists(string tableAlias, RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
         {
             this._notExistConditionTableAlias = tableAlias;
+            _queryBuilderContext.AddIndirectTableAlias(_table, tableAlias);
             if(_notExistsConditionContext == null)
             {
                 _notExistConditionGroup = new RDBConditionGroup(groupOperator);
@@ -115,6 +122,10 @@ namespace Vanrise.Data.RDB
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
+            this._table.FinalizeBeforeResolveQuery(new RDBTableQuerySourceFinalizeBeforeResolveQueryContext(context.DataProvider, this._tableAlias, () => this.Where()));
+            if (_joinContext != null)
+                _joinContext.FinalizeBeforeResolveQuery(context.DataProvider, () => this.Where());
+
             AddModifiedTimeIfNeeded(context);
             if (this._notExistConditionGroup != null)
             {

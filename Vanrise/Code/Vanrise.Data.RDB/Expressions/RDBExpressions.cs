@@ -9,20 +9,47 @@ namespace Vanrise.Data.RDB
 {
     internal class RDBColumnExpression : BaseRDBExpression
     {
+        public RDBColumnExpression(RDBQueryBuilderContext queryBuilderContext, string tableAlias, string columnName)
+        {
+            this.TableAlias = tableAlias;
+            this.ColumnName = columnName;
+            if(tableAlias != null)
+            {
+                var tableQuerySource = queryBuilderContext.GetTableFromAlias(tableAlias);
+                var getExpressionColumnContext = new RDBTableQuerySourceTryGetExpressionColumnContext(queryBuilderContext, tableAlias, columnName);
+                if (tableQuerySource.TryGetExpressionColumn(getExpressionColumnContext))
+                {
+                    var expressionColumn = getExpressionColumnContext.ExpressionColumn;
+                    var rdbExpressionContext = new RDBExpressionContext(queryBuilderContext, (exp) => _expression = exp, tableAlias);
+                    expressionColumn.SetExpression(new RDBTableExpressionColumnSetExpressionContext(tableAlias, rdbExpressionContext));
+                    _expression.ThrowIfNull("expression", this.ColumnName);
+                }
+            }
+        }
+        
+        BaseRDBExpression _expression;
+
         public string TableAlias { get; set; }
 
         public string ColumnName { get; set; }
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            IRDBTableQuerySource table = this.TableAlias != null ? context.QueryBuilderContext.GetTableFromAlias(this.TableAlias) : context.QueryBuilderContext.GetMainQueryTable();
-            table.ThrowIfNull("table");
-            var getColumnDBNameContext = new RDBTableQuerySourceGetDBColumnNameContext(this.ColumnName, context);
-            string dbColumnName = table.GetDBColumnName(getColumnDBNameContext);
-            if (this.TableAlias != null)
-                return String.Concat(context.DataProvider.GetDBAlias(this.TableAlias), ".", dbColumnName);
+            if(_expression != null)
+            {
+                return _expression.ToDBQuery(context);
+            }
             else
-                return dbColumnName;
+            {
+                IRDBTableQuerySource table = this.TableAlias != null ? context.QueryBuilderContext.GetTableFromAlias(this.TableAlias) : context.QueryBuilderContext.GetMainQueryTable();
+                table.ThrowIfNull("table");
+                var getColumnDBNameContext = new RDBTableQuerySourceGetDBColumnNameContext(this.ColumnName, context);
+                string dbColumnName = table.GetDBColumnName(getColumnDBNameContext);
+                if (this.TableAlias != null)
+                    return String.Concat(context.DataProvider.GetDBAlias(this.TableAlias), ".", dbColumnName);
+                else
+                    return dbColumnName;
+            }
         }
     }
 

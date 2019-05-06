@@ -14,6 +14,7 @@ namespace Vanrise.Data.RDB
         internal RDBSelectQuery(RDBQueryBuilderContext queryBuilderContext, bool isMainStatement)
         {
             _queryBuilderContext = queryBuilderContext;
+            _queryBuilderContext.SetGetQueryJoinContext(() => this.Join());
             _isMainStatement = isMainStatement;
         }
 
@@ -213,6 +214,13 @@ namespace Vanrise.Data.RDB
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
+            if (this._table != null)
+            {
+                this._table.FinalizeBeforeResolveQuery(new RDBTableQuerySourceFinalizeBeforeResolveQueryContext(context.DataProvider, this._tableAlias, () => this.Where()));
+                if (_joinContext != null)
+                    _joinContext.FinalizeBeforeResolveQuery(context.DataProvider, () => this.Where());
+            }
+
             var resolveSelectQueryContext = new RDBDataProviderResolveSelectQueryContext(this._isMainStatement, this._table, this._tableAlias, this._nbOfRecords, this._columns, this._joins,
              this._conditionGroup, this._groupBy, this._sortColumns, this._withNoLock, context, _queryBuilderContext);
             return context.DataProvider.ResolveSelectQuery(resolveSelectQueryContext);
@@ -240,6 +248,16 @@ namespace Vanrise.Data.RDB
         public void GetColumnDefinition(IRDBTableQuerySourceGetColumnDefinitionContext context)
         {
             throw new NotImplementedException();
+        }
+        
+        public bool TryGetExpressionColumn(IRDBTableQuerySourceTryGetExpressionColumnContext context)
+        {
+            return false;
+        }
+
+        public void FinalizeBeforeResolveQuery(IRDBTableQuerySourceFinalizeBeforeResolveQueryContext context)
+        {
+            
         }
     }
 
@@ -335,6 +353,15 @@ namespace Vanrise.Data.RDB
         {
             if (this._selectQueries.Count > 0)
                 this._selectQueries[0].GetCreatedAndModifiedTime(context);
+        }
+
+        public bool TryGetExpressionColumn(IRDBTableQuerySourceTryGetExpressionColumnContext context)
+        {
+            return false;
+        }
+
+        public void FinalizeBeforeResolveQuery(IRDBTableQuerySourceFinalizeBeforeResolveQueryContext context)
+        {
         }
     }
 }

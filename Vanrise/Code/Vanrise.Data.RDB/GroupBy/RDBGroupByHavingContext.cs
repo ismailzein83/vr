@@ -8,12 +8,14 @@ namespace Vanrise.Data.RDB
 {
     public class RDBGroupByHavingContext
     {
+        RDBQueryBuilderContext _queryBuilderContext;
         IRDBTableQuerySource _table;
         string _tableAlias;
         RDBConditionGroup _conditionGroup;
 
-        internal RDBGroupByHavingContext(RDBConditionGroup conditionGroup, IRDBTableQuerySource table, string tableAlias)
+        internal RDBGroupByHavingContext(RDBQueryBuilderContext queryBuilderContext, RDBConditionGroup conditionGroup, IRDBTableQuerySource table, string tableAlias)
         {
+            _queryBuilderContext = queryBuilderContext;
             _conditionGroup = conditionGroup;
             _table = table;
             _tableAlias = tableAlias;
@@ -23,7 +25,7 @@ namespace Vanrise.Data.RDB
         {
             var childConditionGroup = new RDBConditionGroup(groupOperator);
             this._conditionGroup.Conditions.Add(childConditionGroup);
-            return new RDBGroupByHavingContext(childConditionGroup, _table, _tableAlias);
+            return new RDBGroupByHavingContext(_queryBuilderContext, childConditionGroup, _table, _tableAlias);
         }
 
         public void CompareCount(RDBCompareConditionOperator oper, BaseRDBExpression compareToValue)
@@ -59,7 +61,7 @@ namespace Vanrise.Data.RDB
 
         public void CompareAggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName, RDBCompareConditionOperator oper, Decimal value)
         {
-             CompareAggregate(aggregateType, new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, oper, value);
+             CompareAggregate(aggregateType, new RDBColumnExpression(_queryBuilderContext, tableAlias, columnName), oper, value);
         }
 
         public void CompareAggregate(RDBNonCountAggregateType aggregateType, string columnName, RDBCompareConditionOperator oper, Decimal value)
