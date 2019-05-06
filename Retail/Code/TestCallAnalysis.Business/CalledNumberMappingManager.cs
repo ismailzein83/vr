@@ -55,7 +55,7 @@ namespace TestCallAnalysis.Business
         #region Mappers
         private string MappingNumberMapper(CalledNumberMapping calledNumberMapping)
         {
-            return calledNumberMapping.MappedNumber;
+            return calledNumberMapping.Number;
         }
         #endregion
 

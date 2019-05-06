@@ -136,38 +136,42 @@ namespace TestCallAnalysis.BP.Activities
                                                         var contryCodeSettings = accountCountryCodePart.Settings as CountryCodesPartSettings;
                                                         receivedOperatorContryCodes = contryCodeSettings.CountryCodes;
                                                     }
-                                                   
-                                                    var generatedCDR = generatedCDRsByOperatorId.GetRecord(recievedOperator.Key);
-                                                    if (generatedCDR != null && generatedCDR.Count > 0)
+                                                    IEnumerable<string> mappingNumberList = calledNumberMappingManager.GetMappingNumber(rcvdcdr.OperatorID, rcvdcdr.CalledNumber);
+
+                                                    var generatedCDRs = generatedCDRsByOperatorId.GetRecord(recievedOperator.Key);
+                                                    if (generatedCDRs != null && generatedCDRs.Count > 0)
                                                     {
-                                                        foreach (var gnrtdCDR in generatedCDR)
+
+                                                        foreach (var generatedCDR in generatedCDRs)
                                                         {
-                                                            if (rcvdcdr.AttemptDateTime.Subtract(gnrtdCDR.AttemptDateTime) <= dateTimeMargin)
+                                                            if (!generatedCDR.IsCorrelated && rcvdcdr.AttemptDateTime.Subtract(generatedCDR.AttemptDateTime) <= dateTimeMargin)
                                                             {
-                                                                var generatedCalledNumber = gnrtdCDR.CalledNumber;
-                                                                IEnumerable<string> mappingNumberList = calledNumberMappingManager.GetMappingNumber(rcvdcdr.OperatorID, rcvdcdr.CalledNumber);
                                                                 if (receivedOperatorContryCodes.Count > 0)
                                                                 {
                                                                     foreach (CountryCode contryCode in receivedOperatorContryCodes)
                                                                     {
+                                                                        var generatedCalledNumber = generatedCDR.CalledNumber;
                                                                         if (generatedCalledNumber.StartsWith(contryCode.Code))
-                                                                            generatedCalledNumber = generatedCalledNumber.Substring(contryCode.Code.Length - 1);
+                                                                            generatedCalledNumber = generatedCalledNumber.Substring(contryCode.Code.Length);
 
-                                                                        if (rcvdcdr.CalledNumber == generatedCalledNumber || (mappingNumberList != null && mappingNumberList.Count() > 0 && mappingNumberList.Contains(gnrtdCDR.CalledNumber)))
+                                                                        if (rcvdcdr.CalledNumber == generatedCalledNumber || (mappingNumberList != null && mappingNumberList.Count() > 0 && mappingNumberList.Contains(generatedCalledNumber)))
                                                                         {
                                                                             rcvdcdr.IsCorrelated = true;
-                                                                            gnrtdCDR.IsCorrelated = true;
+                                                                            generatedCDR.IsCorrelated = true;
                                                                             updateMappedCDRs.MappedCDRsToUpdate.Add(rcvdcdr);
-                                                                            updateMappedCDRs.MappedCDRsToUpdate.Add(gnrtdCDR);
-                                                                            correlatedCDR.GeneratedCalledNumber = gnrtdCDR.CalledNumber;
-                                                                            correlatedCDR.GeneratedCallingNumber = gnrtdCDR.CallingNumber;
-                                                                            correlatedCDR.OrigGeneratedCalledNumber = gnrtdCDR.OrigCalledNumber;
-                                                                            correlatedCDR.OrigGeneratedCallingNumber = gnrtdCDR.OrigCallingNumber;
+                                                                            updateMappedCDRs.MappedCDRsToUpdate.Add(generatedCDR);
+                                                                            correlatedCDR.GeneratedCalledNumber = generatedCDR.CalledNumber;
+                                                                            correlatedCDR.GeneratedCallingNumber = generatedCDR.CallingNumber;
+                                                                            correlatedCDR.OrigGeneratedCalledNumber = generatedCDR.OrigCalledNumber;
+                                                                            correlatedCDR.OrigGeneratedCallingNumber = generatedCDR.OrigCallingNumber;
                                                                             correlatedCDRs.Add(correlatedCDR);
+                                                                            break;
                                                                         }
                                                                     }
                                                                 }
                                                             }
+                                                            if (rcvdcdr.IsCorrelated)
+                                                                break;
                                                         }
                                                     }
                                                     if (!rcvdcdr.IsCorrelated && DateTime.Now.Subtract(rcvdcdr.CreatedTime) > timeOutMargin)
