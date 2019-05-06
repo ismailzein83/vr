@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
     {
         #region RDB
 
-        static string TABLE_ALIAS = "spr";
+        static string TABLE_ALIAS = "supPriceList";
         static string TABLE_NAME = "TOneWhS_BE_SupplierPriceList";
         const string COL_ID = "ID";
         const string COL_CurrencyID = "CurrencyID";
@@ -78,22 +78,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
-        #region Not Used Functions
-
-        public SupplierPriceList GetPriceList(int priceListId)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-            var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition(COL_ID).Value(priceListId);
-            return queryContext.GetItem(SupplierPriceListMapper);
-        }
-
-        #endregion
-
         #region StateBackup
 
         public void BackupBySupplierId(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName, int supplierId)
@@ -131,10 +115,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public void GetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
         {
             var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(TABLE_ALIAS);
+            insertQuery.IntoTable(TABLE_NAME);
 
             var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierPriceListBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierPriceListBackupDataManager.TABLE_NAME), SupplierPriceListBackupDataManager.TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
             selectColumns.Column(COL_SupplierID, COL_SupplierID);

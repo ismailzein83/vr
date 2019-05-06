@@ -17,10 +17,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
-        public Entities.SupplierPriceList GetPriceList(int priceListId)
-        {
-            return GetItemSP("TOneWhS_BE.sp_SupplierPriceList_Get", SupplierPriceListMapper, priceListId);
-        }
+
         public List<SupplierPriceList> GetPriceLists()
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierPriceList_GetAll", SupplierPriceListMapper);
