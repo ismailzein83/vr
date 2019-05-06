@@ -1,8 +1,9 @@
 ﻿using System;
 using Vanrise.Data.RDB;
+using Vanrise.Entities;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SupplierZoneDataManager : ISupplierZoneDataManager
@@ -110,6 +111,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_SupplierID).Value(supplierId);
             BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isEffectiveInFuture, effectiveOn);
 
             return queryContext.GetItems(SupplierZoneMapper);
@@ -163,7 +165,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectColumns.Column(COL_SupplierID, COL_SupplierID);
             selectColumns.Column(COL_BED, COL_BED);
             selectColumns.Column(COL_EED, COL_EED);
-            selectColumns.Expression(COL_SourceID).Value(stateBackupId);
+            selectColumns.Column(COL_SourceID, COL_SourceID);
             selectColumns.Expression(SupplierZoneBackupDataManager.COL_StateBackupID).Value(stateBackupId);
             selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
 
@@ -180,10 +182,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public void GetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
         {
             var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(TABLE_ALIAS);
+            insertQuery.IntoTable(TABLE_NAME);
 
             var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierZoneBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierZoneBackupDataManager.TABLE_NAME), SupplierZoneBackupDataManager.TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
             selectColumns.Column(COL_CountryID, COL_CountryID);
