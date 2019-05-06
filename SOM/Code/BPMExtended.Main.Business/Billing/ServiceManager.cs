@@ -242,7 +242,7 @@ namespace BPMExtended.Main.Business
             }
 
             var services = new List<ServiceDetail>();
-            services = serviceDetailItems.Where(p => !Servicesids.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
+            services = serviceDetailItems.Where(p => !Servicesids.Any(p2 => p2.ToString() == p.Id.ToString())).ToList();
             return services;
         }
 
@@ -281,8 +281,8 @@ namespace BPMExtended.Main.Business
                 var somRequestInput = new ContractAvailableServicesInput()
                 {
                     ContractId = contractId.ToString(),
-                    RatePlanId = "TM005",//ratePlanId.ToString(),
-                    LinePathId = "184",//pathId.ToString(),
+                    RatePlanId = ratePlanId.ToString(),//"TM005",
+                    LinePathId = pathId.ToString(),//"184",
                     ExcludedPackages = packagesIds
                 };
 
@@ -318,8 +318,8 @@ namespace BPMExtended.Main.Business
         {
             return new ServiceInfo
             {
-                Name = item.Title,
-                ServiceId = item.PublicId
+                Name = item.Name,
+                ServiceId = item.Id
 
             };
         }
@@ -327,13 +327,10 @@ namespace BPMExtended.Main.Business
         {
             return new ServiceDetail
             {
-                Title = item.Title,
-                PublicId = item.PublicId,
-                Description= item.Description,
-                PackageId = item.PackageId,
-                ServiceResource=item.ServiceResource
-                
-
+                Id = item.Id,
+                Name = item.Name,
+                NeedsProvisioning = item.NeedsProvisioning,
+                IsNetwork =item.IsNetwork
             };
         }
 
@@ -341,8 +338,8 @@ namespace BPMExtended.Main.Business
         {
             return new POSServiceDetail
             {
-                Name = item.Title,
-                Id = item.PublicId
+                Name = item.Name,
+                Id = item.Id
 
             };
         }
@@ -351,8 +348,8 @@ namespace BPMExtended.Main.Business
         {
             return new POSServiceInfo
             {
-                Name = item.Title,
-                Id = item.PublicId
+                Name = item.Name,
+                Id = item.Id
 
             };
         }

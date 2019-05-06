@@ -11,7 +11,7 @@ namespace BPMExtended.Main.Entities
         public CommonInputArgument CommonInputArgument { get; set; }
 
         public string LinePathId { get; set; }
-        public List<ContractAdditionalServicesInput> ContractAdditionalServices { get; set; }
+        public List<VASService> ContractAdditionalServices { get; set; }
         public PaymentData PaymentData { get; set; }
 
     }

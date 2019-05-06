@@ -165,9 +165,12 @@ namespace BPMExtended.Main.Business
         //}
 
     
-        public bool CheckIfUserPayForWaitingList(string sequenceNumber)
+        public bool CheckIfUserPayForWaitingList(Guid requestId)
         {
-            //TODO: check if user pay
+            //Get sequence Number
+            string sequenceNumber = new CRMCustomerManager().GetSequenceNumberFromRequestHeader(requestId);
+
+            //TODO: check if user pay 
             return true;
 
         }

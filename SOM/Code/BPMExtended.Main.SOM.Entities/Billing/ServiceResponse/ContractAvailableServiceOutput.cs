@@ -15,5 +15,6 @@ namespace BPMExtended.Main.SOMAPI
         public Decimal? SubscriptionFee { get; set; }
         public Decimal AccessFee { get; set; }
         public bool NeedsProvisioning { get; set; }
+        public bool IsNetwork { get; set; }
     }
 }

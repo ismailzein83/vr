@@ -13,6 +13,5 @@ namespace BPMExtended.Main.Entities
         public string Telephony { get; set; }
         public string XDSL { get; set; }
         public string LeasedLine { get; set; }
-        public string SNPCode { get; set; }
     }
 }

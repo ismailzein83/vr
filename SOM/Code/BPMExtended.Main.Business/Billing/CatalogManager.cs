@@ -102,6 +102,7 @@ namespace BPMExtended.Main.Business
 
         }
 
+
         public OperationServices GetOperationServices(Guid requestId)
         {
             EntitySchemaQuery esq;
@@ -109,8 +110,8 @@ namespace BPMExtended.Main.Business
             EntityCollection entities;
             string requestType;
             string catalogId;
-            List<ServicePayment> fees = new List<ServicePayment>();
-            List<ServicePayment> services = new List<ServicePayment>();
+            List<SaleService> fees = new List<SaleService>();
+            List<VASService> services = new List<VASService>();
 
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
@@ -156,9 +157,10 @@ namespace BPMExtended.Main.Business
                     entities = esq.GetEntityCollection(BPM_UserConnection);
                     foreach (Entity entity in entities)
                     {
-                        fees.Add(new ServicePayment()
+                        fees.Add(new SaleService()
                         {
                             Id = (string)entity.GetColumnValue("StPOSServiceID"),
+                            Name = (string)entity.GetColumnValue("StPOSServiceName"),
                             UpFront = (bool)entity.GetColumnValue("StUpFront"),
 
                         });
@@ -170,6 +172,8 @@ namespace BPMExtended.Main.Business
                     esq.AddColumn("Id");
                     esq.AddColumn("StServiceName");
                     esq.AddColumn("StServiceID");
+                    esq.AddColumn("StIsNetwork");
+                    esq.AddColumn("StNeedsProvisioning");
 
 
                     esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StPOSServiceCatalog", catalogId);
@@ -178,10 +182,12 @@ namespace BPMExtended.Main.Business
                     entities = esq.GetEntityCollection(BPM_UserConnection);
                     foreach (Entity entity in entities)
                     {
-                        services.Add(new ServicePayment()
+                        services.Add(new VASService()
                         {
                             Id = (string)entity.GetColumnValue("StServiceID"),
-                            UpFront = true
+                            Name = (string)entity.GetColumnValue("StServiceName"),
+                            NeedProvisioning = (bool)entity.GetColumnValue("StNeedsProvisioning"),
+                            IsNetwork= (bool)entity.GetColumnValue("StIsNetwork"),
 
                         });
 
@@ -201,4 +207,13 @@ namespace BPMExtended.Main.Business
 
         }
     }
+
+
+    public class OperationServices
+    {
+        public List<SaleService> Fees { get; set; }
+        public List<VASService> Services { get; set; }
+
+    }
+
 }

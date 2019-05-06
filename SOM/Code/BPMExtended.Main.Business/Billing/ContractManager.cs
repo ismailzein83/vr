@@ -146,10 +146,24 @@ namespace BPMExtended.Main.Business
 
         public GetContractAddressOutput GetContractAddressAndDirectoryInfo(string contractId)
         {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;    
             GetContractAddressOutput item = new GetContractAddressOutput();
-            var businessEntityManager = new BusinessEntityManager();
-            Packages packages = businessEntityManager.GetServicePackagesEntity();
-            string serviceId = packages.SNPCode;
+            string serviceId = "";
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+
+            esq.AddColumn("StPublicDIId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "E7CF42F9-7A83-4AD2-A73A-5203C94A4DA2");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                serviceId = entities[0].GetColumnValue("StPublicDIId").ToString();
+            }
+
 
             using (var client = new SOMClient())
             {

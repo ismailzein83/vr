@@ -100,6 +100,7 @@
     <Compile Include="DeactivateCptRequestInput.cs" />
     <Compile Include="DeactivatePABXRequestInput.cs" />
     <Compile Include="DeportedNumberRequestInput.cs" />
+    <Compile Include="DepositDocument.cs" />
     <Compile Include="EditPABXRequestInput.cs" />
     <Compile Include="ExcludePackagesServiceInput.cs" />
     <Compile Include="FAFManagementRequestInput.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="NetworkServiceResetPasswordRequestInput.cs" />
     <Compile Include="PaymentData.cs" />
     <Compile Include="ResetNetworkServicePasswordRequestInput.cs" />
+    <Compile Include="SaleService.cs" />
     <Compile Include="ServiceAdditionRequestInput.cs" />
     <Compile Include="ServiceInput.cs" />
     <Compile Include="Packages.cs" />
@@ -175,6 +177,7 @@
     <Compile Include="Contracts\TelephonyContractDetail.cs" />
     <Compile Include="TelephonyContractOnHoldInput.cs" />
     <Compile Include="UpdateContractAddressRequestInput.cs" />
+    <Compile Include="VASService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">

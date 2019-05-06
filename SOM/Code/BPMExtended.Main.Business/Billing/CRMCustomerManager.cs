@@ -1542,10 +1542,10 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
                 var pathId = entities[0].GetColumnValue("StPathId");
-                string contractAdditionalServices = entities[0].GetColumnValue("StServices").ToString();
+                //string contractAdditionalServices = entities[0].GetColumnValue("StServices").ToString();
                 string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 string deposits = entities[0].GetColumnValue("StOperationAddedDeposites").ToString();
-                string services = entities[0].GetColumnValue("StOperationAddedServices").ToString();
+                string VASServices = entities[0].GetColumnValue("StOperationAddedServices").ToString();
                 var isPaid = entities[0].GetColumnValue("StIsPaid");
 
                 SOMRequestInput<ServiceAdditionRequestInput> somRequestInput = new SOMRequestInput<ServiceAdditionRequestInput>
@@ -1554,19 +1554,16 @@ namespace BPMExtended.Main.Business
                     InputArguments = new ServiceAdditionRequestInput
                     {
                         LinePathId = pathId.ToString(),
-                        ContractAdditionalServices = JsonConvert.DeserializeObject<List<ContractAdditionalServicesInput>>(contractAdditionalServices),
+                        ContractAdditionalServices = JsonConvert.DeserializeObject<List<VASService>>(VASServices),
                         PaymentData = new PaymentData()
                         {
-                            Fees = JsonConvert.DeserializeObject<List<ServicePayment>>(fees),
-                            Services = JsonConvert.DeserializeObject<List<ServicePayment>>(services),
-                            Deposits= JsonConvert.DeserializeObject<List<ServicePayment>>(deposits),
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
                             IsPaid = (bool)isPaid
                         },
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
                             RequestId = requestId.ToString(),
-                           // CustomerId = customerId.ToString()
                         }
                     }
 
@@ -1590,12 +1587,22 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
             DirectoryInquiry action = DirectoryInquiry.NoAction;
+            string serviceId="";
+            EntityCollection entities;
 
 
-            var businessEntityManager = new BusinessEntityManager();
-            Packages packages = businessEntityManager.GetServicePackagesEntity();
-            string serviceId = packages.SNPCode;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
 
+            esq.AddColumn("StPublicDIId");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "E7CF42F9-7A83-4AD2-A73A-5203C94A4DA2");
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                serviceId = entities[0].GetColumnValue("StPublicDIId").ToString();
+            }
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StUpdateContractAddress");
             esq.AddColumn("StContractId");
@@ -1614,7 +1621,7 @@ namespace BPMExtended.Main.Business
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
 
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractId");
@@ -1643,9 +1650,8 @@ namespace BPMExtended.Main.Business
                         Action = action,
                         PaymentData = new PaymentData()
                         {
-                            Fees = JsonConvert.DeserializeObject<List<ServicePayment>>(fees.ToString()),
-                            Services = JsonConvert.DeserializeObject<List<ServicePayment>>(services.ToString()),
-                            Deposits = JsonConvert.DeserializeObject<List<ServicePayment>>(deposits.ToString()),
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees.ToString()),
+                            //Services = JsonConvert.DeserializeObject<List<VASService>>(services.ToString()),
                             IsPaid = (bool)isPaid
                         },
                         CommonInputArgument = new CommonInputArgument()
@@ -2193,110 +2199,6 @@ namespace BPMExtended.Main.Business
         }
 
 
-
-        public OperationServices GetOperationServices(Guid requestId)
-        {
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            EntityCollection entities;
-            string requestType;
-            string catalogId;
-            List<ServicePayment> fees = new List<ServicePayment>();
-            List<ServicePayment> services = new List<ServicePayment>();
-
-
-            //Call Categories catalog and check the 'IsNormal' field if true => no need for attachments (optional), if false => attachment is required 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
-            esq.AddColumn("Id");
-            esq.AddColumn("StRequestType");
-            esq.AddColumn("StRequestId");
-
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
-
-
-            esq.Filters.Add(esqFirstFilter);
-
-            entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
-            {
-                requestType = entities[0].GetTypedColumnValue<string>("StRequestType");
-
-                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StPOSServiceOperationCatalog");
-                var catId = esq.AddColumn("Id");
-                esq.AddColumn("StOperationTypeId");
-
-
-                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationTypeId", requestType);
-                esq.Filters.Add(esqFirstFilter);
-
-                entities = esq.GetEntityCollection(BPM_UserConnection);
-                if (entities.Count > 0)
-                {
-                    //catalogId = entities[0].GetTypedColumnValue<Guid>("Id");
-                     catalogId = entities[0].GetTypedColumnValue<string>(catId.Name);
-
-                    esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StPOSServiceInCatalog");
-                    esq.AddColumn("Id");
-                    esq.AddColumn("StPOSServiceName");
-                    esq.AddColumn("StPOSServiceID");
-                    esq.AddColumn("StUpFront");
-
-
-                    esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StPOSServiceCatalog", catalogId);
-                    esq.Filters.Add(esqFirstFilter);
-
-                    entities = esq.GetEntityCollection(BPM_UserConnection);
-                    foreach (Entity entity in entities)
-                    {
-                        fees.Add(new ServicePayment()
-                        {
-                            Id = (string)entity.GetColumnValue("StPOSServiceID"),
-                            UpFront = (bool)entity.GetColumnValue("StAppFront"),
-
-                        });
-
-                    }
-
-
-                    esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceInOperationCatalog");
-                    esq.AddColumn("Id");
-                    esq.AddColumn("StServiceName");
-                    esq.AddColumn("StServiceID");
-
-
-                    esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StPOSServiceCatalog", catalogId);
-                    esq.Filters.Add(esqFirstFilter);
-
-                    entities = esq.GetEntityCollection(BPM_UserConnection);
-                    foreach (Entity entity in entities)
-                    {
-                        services.Add(new ServicePayment()
-                        {
-                            Id = (string)entity.GetColumnValue("StServiceID"),
-                            UpFront =true
-
-                        });
-
-                    }
-
-
-                }
-
-            }
-
-
-            return new OperationServices()
-            {
-                Fees = fees,
-                Services = services
-            };
-
-        }
-
-    
-
-
         public List<RequestHeaderDetail> GetRequestHeaderData(string contactId, string accountId)
         {
             EntitySchemaQuery esq;
@@ -2662,7 +2564,7 @@ namespace BPMExtended.Main.Business
                         {
                             ContactId = contactId.ToString(),
                             RequestId = requestId.ToString(),
-                            CustomerId = "CusId00026"//info.CustomerId
+                            CustomerId = info.CustomerId //"CusId00026"
                         }
                     }
 
@@ -2709,7 +2611,7 @@ namespace BPMExtended.Main.Business
         {
             return new ContractService
             {
-                sncode = item.PublicId,
+                sncode = item.Id,
                 spcode = item.PackageId
             };
         }
@@ -2833,11 +2735,6 @@ namespace BPMExtended.Main.Business
     }
 
 
-    public class OperationServices
-    {
-        public List<ServicePayment> Fees { get; set; }
-        public List<ServicePayment> Services { get; set; }
-
-    }
+ 
 
 }

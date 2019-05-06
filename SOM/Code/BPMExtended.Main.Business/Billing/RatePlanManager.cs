@@ -396,7 +396,7 @@ namespace BPMExtended.Main.Business
         {
             return new ServiceInfo
             {
-                ServiceId = service.ServiceId,
+                ServiceId = service.Id,
                 Name = service.Name
             };
         }
@@ -406,14 +406,14 @@ namespace BPMExtended.Main.Business
         {
             return new ServiceDetail
             {
-                ServiceId = service.ServiceId,
+               // ServiceId = service.ServiceId,
                 Name = service.Name,
-                Description = service.Description,
-                IsCore = service.IsCore,
-                SubscriptionFee = service.SubscriptionFee,
-                AccessFee = service.AccessFee,
-                PackageName = RatePlanMockDataGenerator.GetServicePackage(service.PackageId)!=null?RatePlanMockDataGenerator.GetServicePackage(service.PackageId).PackageName : null,
-                ServiceParams = service.ServiceParams != null ?service.ServiceParams.MapRecords(ServiceParameterMapper).ToList():null
+               // Description = service.Description,
+               // IsCore = service.IsCore,
+               // SubscriptionFee = service.SubscriptionFee,
+               // AccessFee = service.AccessFee,
+               // PackageName = RatePlanMockDataGenerator.GetServicePackage(service.PackageId)!=null?RatePlanMockDataGenerator.GetServicePackage(service.PackageId).PackageName : null,
+               // ServiceParams = service.ServiceParams != null ?service.ServiceParams.MapRecords(ServiceParameterMapper).ToList():null
             };
         }
 

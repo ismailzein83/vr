@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class PaymentData
+    public class SaleService
     {
-        public List<SaleService> Fees { get; set; }
-        public List<VASService> Services { get; set; }
-        public bool IsPaid { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public bool UpFront { get; set; }
     }
 }
