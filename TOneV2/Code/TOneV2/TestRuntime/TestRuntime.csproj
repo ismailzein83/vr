@@ -878,6 +878,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tasks\AliSakrTask.cs" />
     <Compile Include="DSMappers\DSMappers.cs" />
     <Compile Include="ExecutionFlows\AllFlows.cs" />
     <Compile Include="Tasks\ABaghdadiTask.cs" />
