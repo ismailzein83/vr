@@ -138,7 +138,6 @@
                 }
 
                 api.setData = function (Object) {
-
                     Object.OperatorDeclarationServices = {
                         $type: "Retail.RA.Entities.IntlOperatorDeclarationServices,Retail.RA.Entities",
                         Services: {

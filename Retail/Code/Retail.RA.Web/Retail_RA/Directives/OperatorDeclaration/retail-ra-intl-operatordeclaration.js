@@ -2,9 +2,9 @@
 
     'use strict';
 
-    icxOperatorDeclaration.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'Retail_Be_TrafficTypeEnum'];
+    intlOperatorDeclaration.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService','Retail_Be_TrafficTypeEnum'];
 
-    function icxOperatorDeclaration(UtilsService, VRUIUtilsService, VRNotificationService, Retail_Be_TrafficTypeEnum) {
+    function intlOperatorDeclaration(UtilsService, VRUIUtilsService, VRNotificationService, Retail_Be_TrafficTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/Templates/IcxOperatorDeclarationTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/Templates/IntlOperatorDeclarationTemplate.html"
 
         };
         function OperatorDeclaration($scope, ctrl, $attrs) {
@@ -35,7 +35,8 @@
 
             var periodSelectorAPi;
             var periodSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            var trafficType = Retail_Be_TrafficTypeEnum.Interconnect.value;
+            var trafficType = Retail_Be_TrafficTypeEnum.International.value;
+            var operatorDeclarationEntity;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -54,7 +55,7 @@
                     var operatorId = operatorSelectorAPI.getSelectedIds();
                     if (operatorId != undefined) {
                         var setLoader = function (value) { $scope.isLoadingSelector = value };
-                        var payload = {
+                        var payload= {
                             operatorId: operatorId,
                             trafficType: trafficType
                         };
@@ -73,6 +74,7 @@
                 api.load = function (payload) {
                     var promises = [];
                     if (payload != undefined) {
+                        operatorDeclarationEntity = payload.operatorDeclaration;
                         selectedValues = payload.selectedValues;
                     }
                     if (selectedValues != undefined) {
@@ -83,7 +85,7 @@
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-
+               
                 api.setData = function (Object) {
                     Object.Operator = operatorSelectorAPI.getSelectedIds();
                     Object.Period = periodSelectorAPi.getSelectedIds();
@@ -95,7 +97,7 @@
 
             function loadOperatorPeriodSection() {
                 var loadOperatorPromiseDeferred = UtilsService.createPromiseDeferred();
-
+                    
                 var promises = [];
                 promises.push(loadOperatorPromiseDeferred.promise);
 
@@ -106,10 +108,10 @@
                     payload.selectedIds = operatorId;
                     operatorSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                 }
-
+               
                 operatorSelectorReadyPromiseDeferred.promise.then(function () {
                     VRUIUtilsService.callDirectiveLoad(operatorSelectorAPI, payload, loadOperatorPromiseDeferred);
-                });
+                    });
 
                 if (operatorId != undefined) {
                     var loadPeriodPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -123,7 +125,7 @@
                             selectedIds: periodId
                         };
                         VRUIUtilsService.callDirectiveLoad(periodSelectorAPi, payload, loadPeriodPromiseDeferred);
-
+                       
                         operatorSelectedPromiseDeferred = undefined;
                     });
                 }
@@ -133,6 +135,6 @@
         }
     }
 
-    app.directive('retailRaIcxOperatordeclaration', icxOperatorDeclaration);
+    app.directive('retailRaIntlOperatordeclaration', intlOperatorDeclaration);
 
 })(app);

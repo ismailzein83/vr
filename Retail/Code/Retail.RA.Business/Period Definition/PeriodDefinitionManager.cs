@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Retail.RA.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.RA.Business
@@ -18,7 +19,57 @@ namespace Retail.RA.Business
             var cachedPeriodDefinitions = GetCachedPeriodDefinitions();
             return cachedPeriodDefinitions.GetRecord(periodDefinitionId);
         }
+        public IEnumerable<PeriodDefinitionInfo> GetPeriodDefinitionInfo(long operatorId, TrafficType trafficType)
+        {
+            List<PeriodDefinitionInfo> periodDefinitionInfo = new List<PeriodDefinitionInfo>();
+            GenericBusinessEntityManager genericBEManager = new GenericBusinessEntityManager();
+            GenericBusinessEntityInfoFilter filter = new GenericBusinessEntityInfoFilter();
+            var periodDefinitions = genericBEManager.GetGenericBusinessEntityInfo(beDefinitionId, filter);
+            if (periodDefinitions != null)
+            {
+                foreach (var genericBEInfo in periodDefinitions)
+                {
+                    genericBEInfo.ThrowIfNull("genericBEInfo");
 
+                    periodDefinitionInfo.Add(new PeriodDefinitionInfo
+                    {
+                        PeriodDefinitionId = (int)genericBEInfo.GenericBusinessEntityId,
+                        PeriodDefinitionName = genericBEInfo.Name,
+                        HasDeclaration = PeriodHasDeclaration(trafficType, operatorId, (int)genericBEInfo.GenericBusinessEntityId)
+                    });
+
+                }
+            }
+            return periodDefinitionInfo;
+        }
+        public bool PeriodHasDeclaration(TrafficType trafficType, long operatorId, int periodId)
+        {
+
+            switch (trafficType)
+            {
+                case TrafficType.Interconnect:
+                    IcxOperatorDeclarationManager icxOperatorDeclarationManager = new IcxOperatorDeclarationManager();
+                    var icxOperatorDeclarationsByOperatorId = icxOperatorDeclarationManager.GetOperatorDeclarationByPeriodId();
+                    var icxOperatorDeclarations = icxOperatorDeclarationsByOperatorId.GetRecord(periodId);
+                    if (icxOperatorDeclarations != null)
+                    {
+                        return icxOperatorDeclarations.Any(item => item.OperatorId == operatorId);
+                    }
+                    break;
+
+                case TrafficType.International:
+                    IntlOperatorDeclarationManager intlOperatorDeclarationManager = new IntlOperatorDeclarationManager();
+                    var intlOperatorDeclarationsByOperatorId = intlOperatorDeclarationManager.GetOperatorDeclarationByPeriodId();
+                    var intlOperatorDeclarations = intlOperatorDeclarationsByOperatorId.GetRecord(periodId);
+                    if (intlOperatorDeclarations != null)
+                    {
+                        return intlOperatorDeclarations.Any(item => item.OperatorId == operatorId);
+                    }
+                    break;
+
+            }
+            return false;
+        }
         public PeriodDefinition GetLastPeriod(DateTime date)
         {
             var cachedPeriodDefinition = GetCachedPeriodDefinitions();

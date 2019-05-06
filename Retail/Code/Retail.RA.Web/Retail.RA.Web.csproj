@@ -133,7 +133,6 @@
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDeclarationOnBeforeSaveHandler.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDirectionServicesCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDeclarationTemplate.html" />
-    <Content Include="Retail_RA\Directives\Operator\retail-ra-operator-selector.js" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnAfterSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnBeforeSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionSelectorTemplate.html" />
@@ -179,7 +178,6 @@
     <Content Include="Retail_RA\Directives\TransactionType\ra-retail-lookupbeextendedsettings-transactiontype.js" />
     <Content Include="Retail_RA\Directives\TransactionType\Templates\TransactionTypeLKUpBEExtendedSettingsTemplate.html" />
     <Content Include="Retail_RA\Services\APIServices\OnNetOperatorDirectionServicesAPIService.js" />
-    <Content Include="Retail_RA\Services\APIServices\OperatorDefinitionAPIService.js" />
     <Content Include="Retail_RA\Services\APIServices\OperatorDirectionServicesAPIService.js" />
     <Content Include="Retail_RA\Services\APIServices\PeriodDefinitionAPIService.js" />
     <Content Include="Retail_RA\Services\APIServices\TaxRuleAPIService.js" />
