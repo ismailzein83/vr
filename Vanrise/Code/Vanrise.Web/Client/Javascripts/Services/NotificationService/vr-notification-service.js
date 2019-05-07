@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('VRNotificationService', function (VRModalService, VRNavigationService, InsertOperationResultEnum, UpdateOperationResultEnum, DeleteOperationResultEnum, AuthenticateOperationResultEnum, $q, notify, $location) {
+app.service('VRNotificationService', function (VRModalService, VRNavigationService, InsertOperationResultEnum, UpdateOperationResultEnum, DeleteOperationResultEnum, AuthenticateOperationResultEnum, $q, notify, $location,ExcelConversionResultEnum) {
 
     return ({
         showConfirmation: showConfirmation,
@@ -92,7 +92,12 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
     }
 
     function notifyException(error, scope) {
-        showError("An error has occured");
+        if (error.isExportError) {
+            showError(error.description);
+        }
+        else {
+            showError("An error has occured");
+        }
     }
 
     function notifyExceptionWithClose(error, scope) {

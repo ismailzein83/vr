@@ -108,8 +108,7 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
                 if (isExport || (options != undefined && options.returnAllResponseParameters)) {
                    var contentValidtionType = UtilsService.getExcelContentValidtionType(response);
                     if (contentValidtionType != null) {
-                        showErrorMessage(contentValidtionType.description);
-                        deferred.reject();
+                        deferred.reject(contentValidtionType);
                         return;
                     }
                     returnedResponse = {
