@@ -206,6 +206,7 @@
     <Content Include="WhS_Invoice\Constants\CarrierTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ComparisonCriteriaEnum.js" />
     <Content Include="WhS_Invoice\Constants\ComparisonResultEnum.js" />
+    <Content Include="WhS_Invoice\Constants\AdjustmentTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
     <Content Include="WhS_Invoice\Constants\ModuleTypeEnum.js" />

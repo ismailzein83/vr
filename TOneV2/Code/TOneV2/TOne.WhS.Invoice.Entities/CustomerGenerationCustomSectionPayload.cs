@@ -11,6 +11,7 @@ namespace TOne.WhS.Invoice.Entities
     {
         public int? TimeZoneId { get; set; }
         public decimal? Commission { get; set; }
+		public decimal? Adjustment { get; set; }
         public CommissionType CommissionType { get; set; }
     }
     public class CustomerGenerationCustomSectionPayload: BaseGenerationCustomSectionPayload

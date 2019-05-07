@@ -15,7 +15,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal Duration { get; set; }
         public CommissionType? CommissionType { get; set; }
         public decimal? Commission { get; set; }
-		//public decimal? Adjustment { get; set; }
+		public decimal? Adjustment { get; set; }
         public bool DisplayComission { get; set; }
         public string PartnerType { get; set; }
         public Decimal TotalAmount { get; set; }

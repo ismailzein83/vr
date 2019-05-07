@@ -126,7 +126,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 				customerInvoiceDetails.TotalSMSOriginalAmountAfterCommission = customerInvoiceDetails.SMSOriginalAmountAfterCommission;
 
 				customerInvoiceDetails.Commission = resolvedPayload.Commission;
-				//customerInvoiceDetails.Adjustment = resolvedPayload.Adjustment;
+				customerInvoiceDetails.Adjustment = resolvedPayload.Adjustment;
 				customerInvoiceDetails.CommissionType = resolvedPayload.CommissionType;
 				customerInvoiceDetails.Offset = resolvedPayload.Offset;
 
@@ -247,8 +247,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     customerInvoiceDetails.NoRecurringCharges = customerInvoiceDetails.TotalReccurringChargesAfterTax == 0;
 
                     customerInvoiceDetails.TotalInvoiceAmount = customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalReccurringChargesAfterTax + customerInvoiceDetails.TotalSMSAmountAfterCommission + customerInvoiceDetails.TotalDealAmountAfterTax;
-					//if (customerInvoiceDetails.Adjustment.HasValue)
-					//	customerInvoiceDetails.TotalInvoiceAmount += customerInvoiceDetails.Adjustment.Value;
+					if (customerInvoiceDetails.Adjustment.HasValue)
+						customerInvoiceDetails.TotalInvoiceAmount += customerInvoiceDetails.Adjustment.Value;
 
 					if (!financialAccountInvoiceType.IgnoreFromBalance)
                     {

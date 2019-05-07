@@ -11,12 +11,13 @@ namespace TOne.WhS.Invoice.Entities
     {
       
     }
-    public class ResolvedInvoicePayloadObject
-    {
-        public string Offset { get; set; }
-        public TimeSpan? OffsetValue { get; set; }
-        public int? TimeZoneId { get; set; }
-        public decimal? Commission { get; set; }
+	public class ResolvedInvoicePayloadObject
+	{
+		public string Offset { get; set; }
+		public TimeSpan? OffsetValue { get; set; }
+		public int? TimeZoneId { get; set; }
+		public decimal? Commission { get; set; }
+		public decimal? Adjustment{get;set;}
         public CommissionType? CommissionType { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }

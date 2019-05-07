@@ -66,8 +66,12 @@ namespace TOne.WhS.Invoice.Business
                     resolvedInvoicePayloadObject.Commission = generationCustomSectionPayload.Commission.Value;
                     resolvedInvoicePayloadObject.CommissionType = generationCustomSectionPayload.CommissionType;
                 }
+				if (generationCustomSectionPayload.Adjustment.HasValue)
+				{
+					resolvedInvoicePayloadObject.Adjustment = generationCustomSectionPayload.Adjustment.Value;
+				}
 
-            }
+			}
             if (!resolvedInvoicePayloadObject.TimeZoneId.HasValue)
             {
                 resolvedInvoicePayloadObject.TimeZoneId = _financialAccountManager.GetCustomerTimeZoneId(financialAccountId);
