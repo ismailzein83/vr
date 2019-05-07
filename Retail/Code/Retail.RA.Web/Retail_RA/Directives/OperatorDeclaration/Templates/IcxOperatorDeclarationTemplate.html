@@ -1,6 +1,5 @@
-﻿<vr-columns colnum="4">
-    <retail-be-account-selector on-ready="scopeModel.onOperatorSelectorReady" customlabel="Operator" selectedvalues="scopeModel.selectedOperator" isrequired="true" onselectionchanged="scopeModel.onOperatorSelectionChanged"></retail-be-account-selector>
-</vr-columns>
-<vr-columns colnum="4">
-    <retail-ra-perioddefinition-selector on-ready="scopeModel.onPeriodSelectorReady" selectedvalues="scopeModel.selectedPeriods"></retail-ra-perioddefinition-selector>
-</vr-columns>
+﻿<vr-row>
+    <retail-be-account-selector  normal-col-num="4" on-ready="scopeModel.onOperatorSelectorReady" customlabel="Operator" selectedvalues="scopeModel.selectedOperator" isrequired="true" onselectionchanged="scopeModel.onOperatorSelectionChanged"></retail-be-account-selector>
+    <retail-ra-perioddefinition-selector  normal-col-num="4" on-ready="scopeModel.onPeriodSelectorReady" selectedvalues="scopeModel.selectedPeriods"></retail-ra-perioddefinition-selector>
+</vr-row>
+
