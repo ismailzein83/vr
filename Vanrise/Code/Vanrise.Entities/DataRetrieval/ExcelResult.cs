@@ -21,7 +21,7 @@ namespace Vanrise.Entities
 
     public enum ExcelConversionResultType
     {
-        [Description("The sheet contain cell(s) includes data having more than 32k.")]
+        [Description("Cannot export excel file containing cells with more than 32k characters.")]
         InvalidContentLenght = 1
     }
 
