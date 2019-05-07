@@ -46,12 +46,14 @@
                     if (childVisualItems != undefined) {
                         for (var i = 0; i < childVisualItems.length; i++) {
                             var childVisualItem = childVisualItems[i];
-                            childVisualItem.Id = i;
-                            childVisualItem.readyPromiseDeferred = UtilsService.createPromiseDeferred();
-                            childVisualItem.loadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                            initialPromises.push(childVisualItem.loadPromiseDeferred.promise);
-                            loadChildDirective(childVisualItem);
+                            if (childVisualItem.ChildItemDefinition != undefined && childVisualItem.ChildItemDefinition.Settings != undefined && childVisualItem.ChildItemDefinition.Settings.Editor != undefined) {
+                                childVisualItem.Id = i;
+                                childVisualItem.readyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                childVisualItem.loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                                initialPromises.push(childVisualItem.loadPromiseDeferred.promise);
+                                loadChildDirective(childVisualItem);
+                            }
+                           
                         }
                     }
 

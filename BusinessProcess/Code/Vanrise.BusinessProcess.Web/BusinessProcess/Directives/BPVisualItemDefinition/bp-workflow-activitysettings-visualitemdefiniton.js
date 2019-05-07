@@ -73,8 +73,11 @@
                             return {
                                 promises: directivePromises,
                                 getChildNode: function () {
+                                    var promises = [];
+                                    if ($scope.scopeModel.visualItemDefinition != undefined && $scope.scopeModel.visualItemDefinition.Settings != undefined && $scope.scopeModel.visualItemDefinition.Settings.Editor != undefined)
+                                        promises.push(loadDirective());
                                     return {
-                                        promises: [loadDirective()]
+                                        promises: [promises]
                                     }
                                 }
                             }
