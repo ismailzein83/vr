@@ -91,6 +91,12 @@ namespace TestCallAnalysis.BP.Activities
                                         tCAnalCaseCDRs.Add(tcanalCaseCDR);
                                         continue;
                                     }
+                                    else if (record.GeneratedCalledNumber == null && record.GeneratedCallingNumber ==null)
+                                    {
+                                        tcanalCaseCDR.StatusId = new Guid("43f65fbf-ba78-4211-a0bb-88edc91b26ff"); // Suspect
+                                        tCAnalCaseCDRs.Add(tcanalCaseCDR);
+                                        continue;
+                                    }
                                 }
 
                                 PrepareCDRCasesToInsert caseCDRsList = new PrepareCDRCasesToInsert();

@@ -58,7 +58,8 @@ namespace TestCallAnalysis.BP.Activities
                             {
                                 // dividing cases between insert and update 
                                 List<dynamic> caseCDRsToInsert = new List<dynamic>();
-                                PrepareCDRCasesToInsert cdrCaseBatch = new PrepareCDRCasesToInsert();
+                                List<dynamic> caseCDRsToUpdate = new List<dynamic>();
+
                                 foreach (var caseCDR in caseCDRsList.TCAnalListToInsert)
                                 {
                                     var indexCaseCDR = existingCallingNumbers.IndexOf(caseCDR.CallingNumber);
@@ -66,7 +67,7 @@ namespace TestCallAnalysis.BP.Activities
                                     if (indexCaseCDR != -1)
                                     {
                                         caseCDR.NumberOfCDRs++;
-                                        cdrCaseBatch.TCAnalListToInsert.Add(caseCDR);
+                                        caseCDRsToUpdate.Add(caseCDR);
                                     }
 
                                     else
@@ -74,12 +75,12 @@ namespace TestCallAnalysis.BP.Activities
                                 }
 
                                 // Update case CDRs
-                                if (cdrCaseBatch != null && cdrCaseBatch.TCAnalListToInsert.Count > 0)
+                                if (caseCDRsToUpdate.Count > 0)
                                 {
-                                    caseCDRManager.UpdateCases(cdrCaseBatch.TCAnalListToInsert);
+                                    caseCDRManager.UpdateCases(caseCDRsToUpdate);
                                     double elapsedTimeToUpdate = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
                                     handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Update case CDRs Batch is done. Events Count: {0}.  ElapsedTime: {1} (s)",
-                                        cdrCaseBatch.TCAnalListToInsert.Count, elapsedTimeToUpdate.ToString());
+                                        caseCDRsToUpdate.Count, elapsedTimeToUpdate.ToString());
                                 }
 
                                 // Insert Case CDRs

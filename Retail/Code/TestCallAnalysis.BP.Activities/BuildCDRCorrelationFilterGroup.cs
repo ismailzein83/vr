@@ -46,7 +46,7 @@ namespace TestCallAnalysis.BP.Activities
             var datetimeFieldName = dataRecordType.Settings.DateTimeField;
 
             long? overallMaxId = dataRecordStorageManager.GetMaxId(inputDataRecordStorageId, out overallMaxDate, out overallMinDate);
-            cdrCorrelationProcessState.LastImportedId = 1;
+           // cdrCorrelationProcessState.LastImportedId = 1;
 
             if (cdrCorrelationProcessState != null && cdrCorrelationProcessState.LastImportedId.HasValue)
             {
