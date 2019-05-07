@@ -300,7 +300,9 @@
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\vr-whs-be-switchcdrmappingconfiguration.js" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportTechnicalSettings\Templates\CDRImportTechnicalSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportTechnicalSettings\vr-whs-be-cdrimport-technical-settings-editor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupSubviewTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-subview.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeList\whs-be-excluded-destinations.js" />
