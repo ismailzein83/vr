@@ -360,7 +360,9 @@ namespace Vanrise.GenericData.Business
                 Name = beDefinition.Title,
                 SelectorFilterEditor = beDefinition.Settings.SelectorFilterEditor,
                 WorkFlowAddBEActivityEditor = beDefinition.Settings.WorkFlowAddBEActivityEditor,
-                WorkFlowUpdateBEActivityEditor = beDefinition.Settings.WorkFlowUpdateBEActivityEditor
+                WorkFlowUpdateBEActivityEditor = beDefinition.Settings.WorkFlowUpdateBEActivityEditor,
+                WorkFlowGetBEActivityEditor = beDefinition.Settings.WorkFlowGetBEActivityEditor
+
             };
         }
 

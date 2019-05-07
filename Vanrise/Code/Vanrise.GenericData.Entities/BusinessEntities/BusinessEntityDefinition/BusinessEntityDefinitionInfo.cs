@@ -13,5 +13,6 @@ namespace Vanrise.GenericData.Entities
         public string SelectorFilterEditor { get; set; }
         public string WorkFlowAddBEActivityEditor { get; set; }
         public string WorkFlowUpdateBEActivityEditor { get; set; }
+        public string WorkFlowGetBEActivityEditor { get; set; }
     }
 }
