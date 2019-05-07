@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -18,10 +17,15 @@ namespace TOne.WhS.BusinessEntity.Business
             return BigDataManager.Instance.RetrieveData(input, new SupplierOtherRateRequestHandler());
         }
 
+        public IEnumerable<SupplierOtherRate> GetSupplierOtherRates(IEnumerable<long> zoneIds, DateTime effectiveOn)
+        {
+            ISupplierOtherRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierOtherRateDataManager>();
+            return dataManager.GetSupplierOtherRates(zoneIds, effectiveOn);
+        }
         #endregion
 
-       
-      
+
+
 
         #region Private Classes
 
@@ -82,7 +86,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     Entity = supplierOtherRate,
                     DisplayedCurrency = _currencyManager.GetCurrencySymbol(displayedCurrencyId),
-                    DisplayedRate = systemCurrencyId.HasValue ? _currencyExchangeRateManager.ConvertValueToCurrency(supplierOtherRate.Rate,currencyId,systemCurrencyId.Value,supplierOtherRate.BED):supplierOtherRate.Rate,
+                    DisplayedRate = systemCurrencyId.HasValue ? _currencyExchangeRateManager.ConvertValueToCurrency(supplierOtherRate.Rate, currencyId, systemCurrencyId.Value, supplierOtherRate.BED) : supplierOtherRate.Rate,
                     RateTypeDescription = rateTypeDescription
                 };
             }

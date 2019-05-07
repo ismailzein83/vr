@@ -26,6 +26,7 @@ app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService
         function SupplierRateGrid($scope, ctrl, $attrs) {
 
             var gridAPI;
+            var gridQuery;
             var drillDownManager;
             var effectiveOn;
             var supplierId;
@@ -37,6 +38,7 @@ app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService
             function initializeController() {
 
                 $scope.supplierrates = [];
+                $scope.mainGridMenuActions = [];
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
 
@@ -46,17 +48,31 @@ app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService
 
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (input) {
+                            $scope.mainGridMenuActions = [];
+                            gridQuery = input;
                             hideHistory = input.Query.HideHistory;
                             isExpandable = input.Query.IsChild;
                             effectiveOn = input.EffectiveOn;
                             supplierId = input.Query.SupplierId;
                             isSystemCurrency = input.IsSystemCurrency;
                             drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(getDirectiveTabs(), gridAPI);
+                            if (!input.Query.IsChild)
+                                $scope.mainGridMenuActions.push({
+                                    name: "Export By Code",
+                                    onClicked: $scope.exportByCode
+                                });
                             return gridAPI.retrieveData(input);
                         };
 
                         return directiveAPI;
                     }
+                };
+                $scope.exportByCode = function () {
+                    console.log(gridQuery);
+                    gridQuery.Query.ByCode = true;
+                    gridAPI.exportData(gridQuery).then(function () {
+                        gridQuery.Query.ByCode = false;
+                    });;
                 };
                 $scope.isExpandable = function () {
                     return !isExpandable;

@@ -9,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<SupplierCode> GetParentsBySupplier(int supplierId, string codeNumber);
 
         IEnumerable<SupplierCode> GetFilteredSupplierCodes(SupplierCodeQuery query);
+        IEnumerable<SupplierCode> GetSupplierCodesByZoneIds(IEnumerable<long> zoneIds, DateTime effectiveDate);
 
         List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate);
 

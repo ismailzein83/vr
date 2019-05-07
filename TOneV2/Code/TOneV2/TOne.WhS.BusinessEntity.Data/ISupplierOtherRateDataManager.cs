@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
@@ -9,5 +8,7 @@ namespace TOne.WhS.BusinessEntity.Data
     {
 
         IEnumerable<SupplierOtherRate> GetFilteredSupplierOtherRates(SupplierOtherRateQuery input);
+
+        IEnumerable<SupplierOtherRate> GetSupplierOtherRates(IEnumerable<long> zoneIds, DateTime effectiveOn);
     }
 }

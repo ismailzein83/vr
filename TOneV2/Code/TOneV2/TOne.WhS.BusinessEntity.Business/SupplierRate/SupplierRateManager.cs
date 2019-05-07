@@ -232,21 +232,34 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return new ResultProcessingHandler<SupplierRateDetail>
                 {
-                    ExportExcelHandler = new SupplierRateExcelExportHandler()
+                    ExportExcelHandler = new SupplierRateExcelExportHandler(input.Query)
                 };
             }
         }
 
         private class SupplierRateExcelExportHandler : ExcelExportHandler<SupplierRateDetail>
         {
+            private BaseSupplierRateQueryHandler _query;
+            public SupplierRateExcelExportHandler(BaseSupplierRateQueryHandler baseSupplierRateQueryHandler)
+            {
+                _query = baseSupplierRateQueryHandler;
+            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierRateDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet()
+                _query.ThrowIfNull("SupplierRateQueryHandler");
+
+                context.MainSheet = _query is SupplierRateQueryHandler
+                    ? GetRateSheet(context)
+                    : GetRateSheetHistory(context);
+            }
+
+            private ExportExcelSheet GetRateSheetHistory(IConvertResultToExcelDataContext<SupplierRateDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet
                 {
                     SheetName = "Supplier Rates",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
@@ -256,7 +269,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
 
                 sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
+                if (context.BigResult?.Data != null)
                 {
                     foreach (var record in context.BigResult.Data)
                     {
@@ -274,9 +287,249 @@ namespace TOne.WhS.BusinessEntity.Business
                         }
                     }
                 }
-                context.MainSheet = sheet;
+                return sheet;
+            }
+            private ExportExcelSheet GetRateSheet(IConvertResultToExcelDataContext<SupplierRateDetail> context)
+            {
+                List<SupplierRateItem> supplierRateItems = GetRateItems(context);
+
+                var rateTypeManager = new RateTypeManager();
+                context.ThrowIfContentLengthExceeded = true;
+                ExportExcelSheet sheet = new ExportExcelSheet
+                {
+                    SheetName = "Supplier Rates",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "CodeGroup" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
+
+                var rateTypes = rateTypeManager.GetAllRateTypes();
+                foreach (var rateTypeInfo in rateTypes)
+                {
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateTypeInfo.Name });
+                }
+                sheet.Rows = new List<ExportExcelRow>();
+
+                foreach (var supplierRateItem in supplierRateItems)
+                {
+                    var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                    sheet.Rows.Add(row);
+                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ZoneName });
+                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.Codes });
+                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CodeGroupsId });
+                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CountryNames });
+                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.Rate });
+                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ChangeDescription });
+                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.CurrencySymbol });
+                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.RateBED });
+                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.RateEED });
+                    row.Cells.Add(new ExportExcelCell { Value = supplierRateItem.ServicesSymbol });
+
+                    foreach (var rateTypeInfo in rateTypes)
+                    {
+                        var ratesByRateType = supplierRateItem.RatesByRateType;
+                        if (ratesByRateType != null && ratesByRateType.Any() && ratesByRateType.TryGetValue(rateTypeInfo.RateTypeId, out var supplierOtherRate))
+                        {
+                            row.Cells.Add(new ExportExcelCell { Value = supplierOtherRate.Rate });
+                        }
+                        else row.Cells.Add(new ExportExcelCell { Value = string.Empty });
+                    }
+                }
+
+                return sheet;
+            }
+            private List<SupplierRateItem> GetRateItems(IConvertResultToExcelDataContext<SupplierRateDetail> context)
+            {
+                if (context.BigResult?.Data == null)
+                    return null;
+
+                var rateQueryHandler = _query as SupplierRateQueryHandler;
+                var supplierZoneIds = new List<long>();
+                var supplierRatesDetail = new List<SupplierRateDetail>();
+                foreach (var record in context.BigResult.Data)
+                {
+                    if (record.Entity != null)
+                    {
+                        supplierZoneIds.Add(record.Entity.ZoneId);
+                        supplierRatesDetail.Add(record);
+                    }
+                }
+
+                var supplierOtherRates = new SupplierOtherRateManager().GetSupplierOtherRates(supplierZoneIds, _query.EffectiveOn);
+                OtherRateByZoneId supplierOtherRateByZoneId = StructureOtherRateByZoneId(supplierOtherRates);
+
+                var supplierCodes = new SupplierCodeManager().GetSupplierCodesByZoneIds(supplierZoneIds, _query.EffectiveOn);
+                Dictionary<long, List<SupplierCode>> supplierCodesByZoneId = StructureSupplierCodeByZoneId(supplierCodes);
+
+                SupplierZoneServiceLocator zoneServiceLocator = new SupplierZoneServiceLocator(new SupplierZoneServiceReadAllWithCache(_query.EffectiveOn));
+
+                var rateItems = new List<SupplierRateItem>();
+                foreach (var supplierRateDetail in supplierRatesDetail)
+                {
+                    long zoneId = supplierRateDetail.Entity.ZoneId;
+                    if (!supplierCodesByZoneId.TryGetValue(zoneId, out var zoneSupplierCodes))
+                        continue;
+
+                    var supplierZoneServices = zoneServiceLocator.GetSupplierZoneServices(rateQueryHandler.Query.SupplierId, zoneId, _query.EffectiveOn);
+                    string zoneServicesName = string.Empty;
+                    if (supplierZoneServices?.Services != null)
+                        zoneServicesName = new ZoneServiceConfigManager().GetZoneServicesNames(supplierZoneServices.Services.Select(item => item.ServiceId));
+
+                    supplierOtherRateByZoneId.TryGetValue(zoneId, out var zoneOtherRates);
+
+                    if (rateQueryHandler.Query.ByCode)
+                    {
+                        var rateItemsByCode = GetRateItemsByCode(supplierRateDetail, zoneSupplierCodes, zoneServicesName, zoneOtherRates);
+                        rateItems.AddRange(rateItemsByCode);
+                    }
+                    else
+                    {
+                        SupplierRateItem rateItem = GetRateItemByZone(supplierRateDetail, zoneSupplierCodes, zoneServicesName, zoneOtherRates);
+                        rateItems.Add(rateItem);
+                    }
+                }
+                return rateItems;
+            }
+            private List<SupplierRateItem> GetRateItemsByCode(SupplierRateDetail supplierRate, List<SupplierCode> supplierCodes, string zoneServicesName, Dictionary<int, SupplierOtherRate> ratesByRateType)
+            {
+                var countryManager = new CountryManager();
+                var rateItems = new List<SupplierRateItem>();
+                foreach (var zoneSupplierCode in supplierCodes)
+                {
+                    long zoneId = supplierRate.Entity.ZoneId;
+
+                    SupplierRateItem supplierRateItem = new SupplierRateItem
+                    {
+                        RateId = supplierRate.Entity.SupplierRateId,
+                        ZoneId = zoneId,
+                        Codes = zoneSupplierCode.Code,
+                        Rate = supplierRate.DisplayedRate,
+                        RateBED = supplierRate.Entity.BED,
+                        RateEED = supplierRate.Entity.EED,
+                        ZoneName = supplierRate.SupplierZoneName,
+                        CurrencySymbol = supplierRate.DisplayedCurrency,
+                        ChangeDescription = Utilities.GetEnumDescription(supplierRate.Entity.RateChange),
+                        PriceListFileId = supplierRate.Entity.PriceListFileId,
+                        ServicesSymbol = zoneServicesName,
+                        RatesByRateType = ratesByRateType
+                    };
+                    if (zoneSupplierCode.CodeGroupId.HasValue)
+                    {
+                        var codeGroup = new CodeGroupManager().GetCodeGroup(zoneSupplierCode.CodeGroupId.Value);
+                        if (codeGroup != null)
+                        {
+                            supplierRateItem.CodeGroupsId = codeGroup.Code;
+                            supplierRateItem.CountryNames = countryManager.GetCountryName(codeGroup.CountryId);
+                        }
+                    }
+
+                    rateItems.Add(supplierRateItem);
+                }
+                return rateItems;
+            }
+            private SupplierRateItem GetRateItemByZone(SupplierRateDetail supplierRate, List<SupplierCode> supplierCodes, string zoneServicesName, Dictionary<int, SupplierOtherRate> ratesByRateType)
+            {
+                var rateItem = new SupplierRateItem
+                {
+                    ZoneId = supplierRate.Entity.ZoneId,
+                    Rate = supplierRate.DisplayedRate,
+                    RateBED = supplierRate.Entity.BED,
+                    RateEED = supplierRate.Entity.EED,
+                    ZoneName = supplierRate.SupplierZoneName,
+                    PriceListFileId = supplierRate.Entity.PriceListFileId,
+                    CurrencySymbol = supplierRate.DisplayedCurrency,
+                    ChangeDescription = Utilities.GetEnumDescription(supplierRate.Entity.RateChange),
+                    ServicesSymbol = zoneServicesName,
+                    RatesByRateType = ratesByRateType
+                };
+                List<string> codeValues = new List<string>();
+                HashSet<int> codeGroupsId = new HashSet<int>();
+                HashSet<string> countryNames = new HashSet<string>();
+                foreach (var supplierCode in supplierCodes)
+                {
+                    if (supplierCode.CodeGroupId.HasValue)
+                    {
+                        codeValues.Add(supplierCode.Code);
+                        var codeGroup = new CodeGroupManager().GetCodeGroup(supplierCode.CodeGroupId.Value);
+                        codeGroupsId.Add(supplierCode.CodeGroupId.Value);
+                        string countryName = new CountryManager().GetCountryName(codeGroup.CountryId);
+                        countryNames.Add(countryName);
+                    }
+                }
+                if (codeValues.Count > 0)
+                    rateItem.Codes = string.Join(",", codeValues);
+
+                if (codeGroupsId.Count > 0)
+                    rateItem.CodeGroupsId = string.Join(",", codeGroupsId);
+
+                if (countryNames.Count > 0)
+                    rateItem.CountryNames = string.Join(",", countryNames);
+
+                return rateItem;
+            }
+            private Dictionary<long, List<SupplierCode>> StructureSupplierCodeByZoneId(IEnumerable<SupplierCode> supplierCodes)
+            {
+                var supplierCodesByZoneId = new Dictionary<long, List<SupplierCode>>();
+                foreach (var supplierCode in supplierCodes)
+                {
+                    List<SupplierCode> codes = supplierCodesByZoneId.GetOrCreateItem(supplierCode.ZoneId);
+                    codes.Add(supplierCode);
+                }
+                return supplierCodesByZoneId;
+            }
+            private OtherRateByZoneId StructureOtherRateByZoneId(IEnumerable<SupplierOtherRate> supplierOtherRates)
+            {
+                OtherRateByZoneId supplierOtherRateByZoneId = new OtherRateByZoneId();
+                foreach (var supplierOtherRate in supplierOtherRates)
+                {
+                    if (!supplierOtherRate.RateTypeId.HasValue)
+                        continue;
+
+                    OtherRateByRateTypeId otherRateByRateTypeId = supplierOtherRateByZoneId.GetOrCreateItem(supplierOtherRate.ZoneId);
+
+                    var rateTypeId = supplierOtherRate.RateTypeId.Value;
+                    if (!otherRateByRateTypeId.ContainsKey(rateTypeId))
+                    {
+                        otherRateByRateTypeId.Add(rateTypeId, supplierOtherRate);
+                    }
+                }
+                return supplierOtherRateByZoneId;
             }
         }
+
+        private class SupplierRateItem
+        {
+            public long ZoneId { get; set; }
+            public long RateId { get; set; }
+            public decimal Rate { get; set; }
+            public string Codes { get; set; }
+            public string ZoneName { get; set; }
+            public DateTime RateBED { get; set; }
+            public DateTime? RateEED { get; set; }
+            public string CodeGroupsId { get; set; }
+            public string CountryNames { get; set; }
+            public string RateInherited { get; set; }
+            public long? PriceListFileId { get; set; }
+            public string ServicesSymbol { get; set; }
+            public string CurrencySymbol { get; set; }
+            public string ChangeDescription { get; set; }
+            public Dictionary<int, SupplierOtherRate> RatesByRateType { get; set; }
+        }
+        public class OtherRateByZoneId : Dictionary<long, OtherRateByRateTypeId>
+        {
+        }
+        public class OtherRateByRateTypeId : Dictionary<int, SupplierOtherRate>
+        {
+        }
+
         private class SupplierRateLoggableEntity : VRLoggableEntityBase
         {
             public static SupplierRateLoggableEntity Instance = new SupplierRateLoggableEntity();

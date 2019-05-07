@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using TOne.WhS.BusinessEntity.Entities;
+using System.Linq;
 using Vanrise.Data.SQL;
+using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
@@ -24,7 +25,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("[TOneWhS_BE].[sp_SupplierOtherRate_GetFiltered]", SupplierOtherRateMapper, query.ZoneId, query.EffectiveOn);
         }
+        public IEnumerable<SupplierOtherRate> GetSupplierOtherRates(IEnumerable<long> zoneIds, DateTime effectiveOn)
+        {
+            string zoneIdsString = null;
+            if (zoneIds != null && zoneIds.Any())
+                zoneIdsString = string.Join(",", zoneIds);
 
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierOtherRate_GetByZoneIds]", SupplierOtherRateMapper, zoneIdsString, effectiveOn);
+        }
         #endregion
 
         #region Private Methods

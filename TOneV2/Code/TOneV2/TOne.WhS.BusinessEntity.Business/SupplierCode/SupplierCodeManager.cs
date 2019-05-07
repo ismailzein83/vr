@@ -10,8 +10,13 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierCodeManager
     {
-      
+
         #region Public Methods
+        public IEnumerable<SupplierCode> GetSupplierCodesByZoneIds(IEnumerable<long> zoneIds, DateTime effectiveDate)
+        {
+            ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
+            return dataManager.GetSupplierCodesByZoneIds(zoneIds, effectiveDate);
+        }
         public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
@@ -25,7 +30,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<SupplierCode> GetParentsBySupplier(int supplierId, string codeNumber)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-            return dataManager.GetParentsBySupplier(supplierId,codeNumber);
+            return dataManager.GetParentsBySupplier(supplierId, codeNumber);
         }
 
         public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
@@ -60,11 +65,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Type GetSupplierCodeType()
         {
-           return this.GetType();
+            return this.GetType();
         }
 
         #endregion
-       
+
         #region Private Members
         private SupplierCodeDetail SupplierCodeDetailMapper(SupplierCode supplierCode)
         {
@@ -120,7 +125,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Supplier Codes",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code" });

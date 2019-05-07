@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Data.SQL;
-using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
@@ -51,7 +47,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetSpecificCodePrefixes", CodePrefixMapper, prefixLength, _codePrefixes, effectiveOn, isFuture);
         }
 
+        public IEnumerable<SupplierCode> GetSupplierCodesByZoneIds(IEnumerable<long> zoneIds, DateTime effectiveDate)
+        {
+            string zoneIdsStr = null;
+            if (zoneIds != null && zoneIds.Any())
+                zoneIdsStr = string.Join(",", zoneIds);
 
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierCode_GetByZoneIds]", SupplierCodeMapper, zoneIdsStr, effectiveDate);
+        }
         public IEnumerable<SupplierCode> GetFilteredSupplierCodes(SupplierCodeQuery query)
         {
             string zoneIds = null;

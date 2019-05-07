@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
@@ -12,5 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public bool ShowPending { get; set; }
         public List<int> CountriesIds { get; set; }
         public string SupplierZoneName { get; set; }
+        public bool ByCode { get; set; }
     }
 }

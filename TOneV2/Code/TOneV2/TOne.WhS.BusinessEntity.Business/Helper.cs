@@ -18,7 +18,23 @@ namespace TOne.WhS.BusinessEntity.Business
                 To = effectiveDateWithNoTime.AddDays(1)
             };
         }
+        public static IEnumerable<int> GetRateTypeIds(int ownerId, DateTime? effectiveDate)
+        {
+            var rateTypeRuleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
+            var rateTypeRuleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
 
+            var genericRuleTarget = new Vanrise.GenericData.Entities.GenericRuleTarget
+            {
+                TargetFieldValues = new Dictionary<string, object>
+                {
+                    {"CustomerId", ownerId}
+                }
+            };
+            if (effectiveDate.HasValue)
+                genericRuleTarget.EffectiveOn = effectiveDate;
+
+            return rateTypeRuleManager.GetRateTypes(rateTypeRuleDefinitionId, genericRuleTarget);
+        }
         public static IEnumerable<int> GetRateTypeIds(int ownerId, long zoneId, DateTime? effectiveDate)
         {
             var rateTypeRuleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
@@ -87,4 +103,5 @@ namespace TOne.WhS.BusinessEntity.Business
             return businessEntityInfoList.FindRecord(predicate);
         }
     }
+
 }

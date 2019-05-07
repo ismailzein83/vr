@@ -551,96 +551,294 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SaleRateDetail> context)
             {
-                var sheet = new ExportExcelSheet()
+                List<RateItem> rateItems = GetRateItems(context);
+
+                var rateTypeIds = Helper.GetRateTypeIds(query.OwnerId, DateTime.Now);
+
+                var rateTypeManager = new RateTypeManager();
+
+                var sheet = new ExportExcelSheet
                 {
                     SheetName = "Sales Rates",
-                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
                 if (query.ColumnsToShow != null && query.ColumnsToShow.Count > 0)
                 {
                     if (query.ColumnsToShow.Contains("Zone"))
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
-                    if (query.ColumnsToShow.Contains("Rate"))
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
-                    if (query.ColumnsToShow.Contains("RateChange"))
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Change" });
-                    if (query.ColumnsToShow.Contains("RateInherited"))
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Inherited" });
-                    if (query.ColumnsToShow.Contains("PricelistId"))
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Id" });
-                    if (query.ColumnsToShow.Contains("Currency"))
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
-                    if (query.ColumnsToShow.Contains("BED"))
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
-                    if (query.ColumnsToShow.Contains("EED"))
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
 
-                    sheet.Rows = new List<ExportExcelRow>();
-                    if (context.BigResult != null && context.BigResult.Data != null)
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Codes" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code Group" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
+
+                    if (query.ColumnsToShow.Contains("Rate"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
+                    if (query.ColumnsToShow.Contains("RateChange"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
+                    if (query.ColumnsToShow.Contains("RateInherited"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Inherited" });
+                    if (query.ColumnsToShow.Contains("PricelistId"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Pricelist Id" });
+                    if (query.ColumnsToShow.Contains("Currency"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                    if (query.ColumnsToShow.Contains("Rate BED"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                    if (query.ColumnsToShow.Contains("Rate EED"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
+
+                    foreach (var rateTypeId in rateTypeIds)
                     {
-                        foreach (var record in context.BigResult.Data)
+                        var rateType = rateTypeManager.GetRateType(rateTypeId);
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateType.Name });
+                    }
+                    sheet.Rows = new List<ExportExcelRow>();
+
+                    foreach (var record in rateItems)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        if (query.ColumnsToShow.Contains("Zone"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
+
+                        row.Cells.Add(new ExportExcelCell { Value = record.Codes });
+                        row.Cells.Add(new ExportExcelCell { Value = record.CodeGroupsId });
+                        row.Cells.Add(new ExportExcelCell { Value = record.CountryNames });
+
+                        if (query.ColumnsToShow.Contains("Rate"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.Rate });
+                        if (query.ColumnsToShow.Contains("RateChange"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.ChangeDescription });
+                        if (query.ColumnsToShow.Contains("RateInherited"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.RateInherited });
+                        if (query.ColumnsToShow.Contains("PricelistId"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.PriceListFileId });
+                        if (query.ColumnsToShow.Contains("Currency"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.CurrencySymbol });
+                        if (query.ColumnsToShow.Contains("Rate BED"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.RateBED });
+                        if (query.ColumnsToShow.Contains("Rate EED"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.RateEED });
+
+                        row.Cells.Add(new ExportExcelCell { Value = record.ServicesSymbol });
+                        foreach (var rateTypeId in rateTypeIds)
                         {
-                            if (record.Entity != null)
+                            if (record.RatesByRateType != null && record.RatesByRateType.TryGetValue(rateTypeId, out var otherRateHistory))
                             {
-                                var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                                if (query.ColumnsToShow.Contains("Zone"))
-                                    row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
-                                if (query.ColumnsToShow.Contains("Rate"))
-                                    row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedRate });
-                                if (query.ColumnsToShow.Contains("RateChange"))
-                                    row.Cells.Add(new ExportExcelCell() { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
-                                if (query.ColumnsToShow.Contains("RateInherited"))
-                                    row.Cells.Add(new ExportExcelCell() { Value = string.Format("{0}", record.IsRateInherited == true ? "Inherited" : "Explicit") });
-                                if (query.ColumnsToShow.Contains("PricelistId"))
-                                    row.Cells.Add(new ExportExcelCell() { Value = record.PriceListFileId });
-                                if (query.ColumnsToShow.Contains("Currency"))
-                                    row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedCurrency });
-                                if (query.ColumnsToShow.Contains("BED"))
-                                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
-                                if (query.ColumnsToShow.Contains("EED"))
-                                    row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
-                                sheet.Rows.Add(row);
+                                row.Cells.Add(new ExportExcelCell { Value = otherRateHistory.ConvertedRate });
                             }
+                            else row.Cells.Add(new ExportExcelCell { Value = string.Empty });
                         }
+
+                        sheet.Rows.Add(row);
                     }
                 }
 
                 else
                 {
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Change" });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Inherited" });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Id" });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
-
-                    sheet.Rows = new List<ExportExcelRow>();
-                    if (context.BigResult != null && context.BigResult.Data != null)
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Codes" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code Group" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Inherited" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Pricelist Id" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
+                    foreach (var rateTypeId in rateTypeIds)
                     {
-                        foreach (var record in context.BigResult.Data)
+                        var rateType = rateTypeManager.GetRateType(rateTypeId);
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateType.Name });
+                    }
+                    sheet.Rows = new List<ExportExcelRow>();
+
+                    foreach (var record in rateItems)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Codes });
+                        row.Cells.Add(new ExportExcelCell { Value = record.CodeGroupsId });
+                        row.Cells.Add(new ExportExcelCell { Value = record.CountryNames });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Rate });
+                        row.Cells.Add(new ExportExcelCell { Value = record.ChangeDescription });
+                        row.Cells.Add(new ExportExcelCell { Value = record.RateInherited });
+                        row.Cells.Add(new ExportExcelCell { Value = record.PriceListFileId });
+                        row.Cells.Add(new ExportExcelCell { Value = record.CurrencySymbol });
+                        row.Cells.Add(new ExportExcelCell { Value = record.RateBED });
+                        row.Cells.Add(new ExportExcelCell { Value = record.RateEED });
+                        row.Cells.Add(new ExportExcelCell { Value = record.ServicesSymbol });
+                        foreach (var rateTypeId in rateTypeIds)
                         {
-                            if (record.Entity != null)
+                            if (record.RatesByRateType != null && record.RatesByRateType.TryGetValue(rateTypeId, out var otherRateHistory))
                             {
-                                var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                                row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
-                                row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedRate });
-                                row.Cells.Add(new ExportExcelCell() { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
-                                row.Cells.Add(new ExportExcelCell() { Value = string.Format("{0}", record.IsRateInherited == true ? "Inherited" : "Explicit") });
-                                row.Cells.Add(new ExportExcelCell() { Value = record.PriceListFileId });
-                                row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedCurrency });
-                                row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
-                                row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
-                                sheet.Rows.Add(row);
+                                row.Cells.Add(new ExportExcelCell { Value = otherRateHistory.ConvertedRate });
                             }
+                            row.Cells.Add(new ExportExcelCell { Value = record.Rate });
                         }
+                        sheet.Rows.Add(row);
                     }
                 }
                 context.MainSheet = sheet;
             }
-        }
+            private List<RateItem> GetRateItems(IConvertResultToExcelDataContext<SaleRateDetail> context)
+            {
+                if (context.BigResult?.Data == null)
+                    return null;
 
+                var rateItems = new List<RateItem>();
+                int sellingProductId = new CarrierAccountManager().GetSellingProductId(query.OwnerId);
+                int longPrecisionValue = new GeneralSettingsManager().GetLongPrecisionValue();
+
+                var customerIds = new List<RoutingCustomerInfo> { new RoutingCustomerInfo { CustomerId = query.OwnerId } };
+                var routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerIds, query.EffectiveOn, false));
+
+                var saleZoneIds = context.BigResult.Data.Select(item => item.Entity.ZoneId).ToList();
+                var saleCodes = new SaleCodeManager().GetSaleCodesByZoneIDs(saleZoneIds, query.EffectiveOn);
+                var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(new List<int> { query.OwnerId }, new List<int> { sellingProductId }, saleZoneIds, false, true));
+
+                Dictionary<long, List<SaleCode>> saleCodesByZoneId = StructureSaleCodesByZoneId(saleCodes);
+
+                foreach (var saleRateDetail in context.BigResult.Data)
+                {
+                    if (saleRateDetail.Entity == null)
+                        continue;
+
+                    long zoneId = saleRateDetail.Entity.ZoneId;
+
+                    if (!saleCodesByZoneId.TryGetValue(zoneId, out saleCodes))
+                        continue;
+
+                    var ratesByRateType = new Dictionary<int, SaleRateHistoryRecord>();
+                    var rateTypeIds = Helper.GetRateTypeIds(query.OwnerId, saleRateDetail.Entity.ZoneId, DateTime.Now);
+
+                    SaleEntityZoneRoutingProduct currentRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(query.OwnerId, sellingProductId, zoneId);
+                    var servicesIds = new RoutingProductManager().GetZoneServiceIds(currentRoutingProduct.RoutingProductId, zoneId);
+                    string servicesSymbol = new ZoneServiceConfigManager().GetZoneServicesNames(servicesIds.ToList());
+
+                    foreach (var rateTypeId in rateTypeIds)
+                    {
+                        var otherRateHistory = customerZoneRateHistoryLocator.GetCustomerZoneRateHistoryRecord(
+                            query.OwnerId, sellingProductId, saleRateDetail.ZoneName, rateTypeId, saleRateDetail.CountryId, query.EffectiveOn,
+                            query.IsSystemCurrency ? query.CurrencyId.Value : saleRateDetail.Entity.CurrencyId.Value, longPrecisionValue);
+
+                        if (otherRateHistory != null)
+                            ratesByRateType.Add(rateTypeId, otherRateHistory);
+                    }
+
+                    if (query.ByCode)
+                    {
+                        var ratesByCode = GetRateItemByCode(saleRateDetail, saleCodes, ratesByRateType, servicesSymbol);
+                        if (ratesByCode.Count > 0)
+                            rateItems.AddRange(ratesByCode);
+                    }
+                    else
+                    {
+                        RateItem rateItem = GetRateItemByZone(saleRateDetail, saleCodes, ratesByRateType, servicesSymbol);
+                        rateItems.Add(rateItem);
+                    }
+                }
+                return rateItems;
+            }
+            private List<RateItem> GetRateItemByCode(SaleRateDetail saleRateDetail, IEnumerable<SaleCode> saleCodes, Dictionary<int, SaleRateHistoryRecord> ratesByRateType, string servicesSymbol)
+            {
+                var rateItems = new List<RateItem>();
+
+                foreach (var saleCode in saleCodes)
+                {
+                    RateItem rateItem = new RateItem
+                    {
+                        ZoneId = saleRateDetail.Entity.ZoneId,
+                        Codes = saleCode.Code,
+                        Rate = saleRateDetail.DisplayedRate,
+                        RateBED = saleRateDetail.Entity.BED,
+                        RateEED = saleRateDetail.Entity.EED,
+                        ZoneName = saleRateDetail.ZoneName,
+                        PriceListFileId = saleRateDetail.PriceListFileId,
+                        CurrencySymbol = saleRateDetail.DisplayedCurrency,
+                        RateInherited = saleRateDetail.IsRateInherited ? "Inherited" : "Explicit",
+                        ChangeDescription = Utilities.GetEnumDescription(saleRateDetail.Entity.RateChange),
+                        RatesByRateType = ratesByRateType.Count > 0 ? ratesByRateType : null
+                    };
+                    var codeGroup = new CodeGroupManager().GetCodeGroup(saleCode.CodeGroupId);
+                    if (codeGroup != null)
+                    {
+                        rateItem.CodeGroupsId = codeGroup.Code;
+                        rateItem.CountryNames = new CountryManager().GetCountryName(codeGroup.CountryId);
+                    }
+                    rateItem.ServicesSymbol = servicesSymbol;
+                    rateItems.Add(rateItem);
+                }
+                return rateItems;
+            }
+            private RateItem GetRateItemByZone(SaleRateDetail saleRateDetail, IEnumerable<SaleCode> saleCodes, Dictionary<int, SaleRateHistoryRecord> ratesByRateType, string servicesSymbol)
+            {
+                RateItem rateItem = new RateItem
+                {
+                    ZoneId = saleRateDetail.Entity.ZoneId,
+                    Rate = saleRateDetail.DisplayedRate,
+                    RateBED = saleRateDetail.Entity.BED,
+                    RateEED = saleRateDetail.Entity.EED,
+                    ZoneName = saleRateDetail.ZoneName,
+                    CurrencySymbol = saleRateDetail.DisplayedCurrency,
+                    PriceListFileId = saleRateDetail.PriceListFileId,
+                    RateInherited = saleRateDetail.IsRateInherited ? "Inherited" : "Explicit",
+                    ChangeDescription = Utilities.GetEnumDescription(saleRateDetail.Entity.RateChange),
+                    RatesByRateType = ratesByRateType.Count > 0 ? ratesByRateType : null
+                };
+                List<string> codeValues = new List<string>();
+                HashSet<int> codeGroupsId = new HashSet<int>();
+                HashSet<string> countryNames = new HashSet<string>();
+                foreach (var saleCode in saleCodes)
+                {
+                    codeValues.Add(saleCode.Code);
+                    codeGroupsId.Add(saleCode.CodeGroupId);
+                    var codeGroup = new CodeGroupManager().GetCodeGroup(saleCode.CodeGroupId);
+                    string countryName = new CountryManager().GetCountryName(codeGroup.CountryId);
+                    countryNames.Add(countryName);
+                }
+                if (codeValues.Count > 0)
+                    rateItem.Codes = string.Join(",", codeValues);
+
+                if (codeGroupsId.Count > 0)
+                    rateItem.CodeGroupsId = string.Join(",", codeGroupsId);
+
+                if (countryNames.Count > 0)
+                    rateItem.CountryNames = string.Join(",", countryNames);
+
+                rateItem.ServicesSymbol = servicesSymbol;
+                return rateItem;
+            }
+            private Dictionary<long, List<SaleCode>> StructureSaleCodesByZoneId(List<SaleCode> saleCodes)
+            {
+                var saleCodesByZoneId = new Dictionary<long, List<SaleCode>>();
+                foreach (var saleCode in saleCodes)
+                {
+                    List<SaleCode> codes = saleCodesByZoneId.GetOrCreateItem(saleCode.ZoneId);
+                    codes.Add(saleCode);
+                }
+                return saleCodesByZoneId;
+            }
+        }
+        public class RateItem
+        {
+            public long ZoneId { get; set; }
+            public decimal Rate { get; set; }
+            public string Codes { get; set; }
+            public string ZoneName { get; set; }
+            public DateTime RateBED { get; set; }
+            public DateTime? RateEED { get; set; }
+            public string CodeGroupsId { get; set; }
+            public string CountryNames { get; set; }
+            public string RateInherited { get; set; }
+            public long? PriceListFileId { get; set; }
+            public string ServicesSymbol { get; set; }
+            public string CurrencySymbol { get; set; }
+            public string ChangeDescription { get; set; }
+            public Dictionary<int, SaleRateHistoryRecord> RatesByRateType { get; set; }
+        }
         #endregion
     }
 }
