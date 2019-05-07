@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Business
 {
@@ -105,10 +106,25 @@ namespace Vanrise.GenericData.Business
 				FieldTypeGetGridColumnAttributeContext context = new FieldTypeGetGridColumnAttributeContext();
 				context.ValueFieldPath = "FieldValues." + vrCaseGridColumn.FieldName + ".Value";
 				context.DescriptionFieldPath = "FieldValues." + vrCaseGridColumn.FieldName + ".Description";
-				var vrCaseGridColumnAttribute = new GenericBEDefinitionGridColumnAttribute
+               
+                var gridColumnsAttribute = dataRecordTypeField.Type.GetGridColumnAttribute(context);
+                if(gridColumnsAttribute != null)
+                {
+                    int? widthFactor = null;
+                    int? fixedWidth = null;
+                    if (vrCaseGridColumn.GridColumnSettings != null)
+                    {
+                        widthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(vrCaseGridColumn.GridColumnSettings);
+                        if (!widthFactor.HasValue)
+                            fixedWidth = vrCaseGridColumn.GridColumnSettings.FixedWidth;
+                    }
+                    gridColumnsAttribute.FixedWidth = fixedWidth;
+                    gridColumnsAttribute.WidthFactor = widthFactor;
+                }
+                var vrCaseGridColumnAttribute = new GenericBEDefinitionGridColumnAttribute
 				{
-					Attribute = dataRecordTypeField.Type.GetGridColumnAttribute(context),
-					Name = vrCaseGridColumn.FieldName
+					Attribute = gridColumnsAttribute,
+					Name = vrCaseGridColumn.FieldName,
 				};
 				vrCaseGridColumnAttribute.Attribute.HeaderText = vrCaseGridColumn.FieldTitle;
 				gridColumns.Add(vrCaseGridColumnAttribute);
