@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class PackageUsageVolumeCombination
+    public class BasePackageUsageVolumeCombination
+    {
+        public Dictionary<int, List<Guid>> PackageItemsByPackageId { get; set; }
+    }
+
+    public class PackageUsageVolumeCombination : BasePackageUsageVolumeCombination
     {
         public int PackageUsageVolumeCombinationId { get; set; }
+    }
 
-        public Dictionary<int, List<Guid>> PackageItemsByPackageId { get; set; }
+    public class PackageUsageVolumeCombinationToAdd : BasePackageUsageVolumeCombination
+    {
+
     }
 }

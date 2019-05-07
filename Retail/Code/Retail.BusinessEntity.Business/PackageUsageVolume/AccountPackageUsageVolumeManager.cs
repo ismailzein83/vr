@@ -1,9 +1,6 @@
-﻿using Retail.BusinessEntity.Entities;
-using System;
+﻿using Retail.BusinessEntity.Data;
+using Retail.BusinessEntity.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -11,11 +8,15 @@ namespace Retail.BusinessEntity.Business
     {
         public Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> GetVolumeBalances(HashSet<PackageUsageVolumeBalanceKey> volumeBalanceKeys)
         {
-            List<AccountPackageUsageVolumeBalance> volumeBalances = null;//TODO: get Volume balances from DB based on volumeBalanceKeys
+            IAccountPackageUsageVolumeBalanceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageUsageVolumeBalanceDataManager>();
+            List<AccountPackageUsageVolumeBalance> volumeBalances = dataManager.GetAccountPackageUsageVolumeBalancesByKeys(volumeBalanceKeys);
 
-            Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey = new Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess>();
-            if (volumeBalances != null)
+            Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey = null;
+
+            if (volumeBalances != null && volumeBalances.Count > 0)
             {
+                volumeBalancesByKey = new Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess>();
+
                 foreach (var volumeBalance in volumeBalances)
                 {
                     var balanceKey = new PackageUsageVolumeBalanceKey
@@ -27,13 +28,17 @@ namespace Retail.BusinessEntity.Business
                     volumeBalancesByKey.Add(balanceKey, new AccountPackageUsageVolumeBalanceInProcess { Balance = volumeBalance });
                 }
             }
+
             return volumeBalancesByKey;
         }
-        
+
         public void UpdateVolumeBalancesInDB(IEnumerable<AccountPackageUsageVolumeBalanceInProcess> volumeBalances)
         {
+            IAccountPackageUsageVolumeBalanceDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageUsageVolumeBalanceDataManager>();
+
             List<AccountPackageUsageVolumeBalanceToAdd> balancesToAdd = new List<AccountPackageUsageVolumeBalanceToAdd>();
             List<AccountPackageUsageVolumeBalanceToUpdate> balancesToUpdate = new List<AccountPackageUsageVolumeBalanceToUpdate>();
+
             foreach (var balanceInProcess in volumeBalances)
             {
                 var balance = balanceInProcess.Balance;
@@ -60,28 +65,10 @@ namespace Retail.BusinessEntity.Business
             }
 
             if (balancesToAdd.Count > 0)
-            {
-                //TODO: add balances to DB
-            }
+                dataManager.AddAccountPackageUsageVolumeBalance(balancesToAdd);
 
             if (balancesToUpdate.Count > 0)
-            {
-                //TODO: update balances in DB
-            }
-        }
-    }
-
-    public struct PackageUsageVolumeBalanceKey
-    {
-        public long AccountPackageId { get; set; }
-
-        public Guid PackageItemId { get; set; }
-
-        public DateTime ItemFromTime { get; set; }
-
-        public override int GetHashCode()
-        {
-            return this.PackageItemId.GetHashCode();
+                dataManager.UpdateAccountPackageUsageVolumeBalance(balancesToUpdate);
         }
     }
 
@@ -93,5 +80,4 @@ namespace Retail.BusinessEntity.Business
 
         public bool ShouldUpdate { get; set; }
     }
-
 }

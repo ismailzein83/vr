@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -43,5 +39,19 @@ namespace Retail.BusinessEntity.Entities
         public long AccountPackageVolumeBalanceId { get; set; }
 
         public decimal UsedVolume { get; set; }
+    }
+
+    public struct PackageUsageVolumeBalanceKey
+    {
+        public long AccountPackageId { get; set; }
+
+        public Guid PackageItemId { get; set; }
+
+        public DateTime ItemFromTime { get; set; }
+
+        public override int GetHashCode()
+        {
+            return this.PackageItemId.GetHashCode();
+        }
     }
 }

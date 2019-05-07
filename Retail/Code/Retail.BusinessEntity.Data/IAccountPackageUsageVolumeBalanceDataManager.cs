@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Retail.BusinessEntity.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Data
 {
     public interface IAccountPackageUsageVolumeBalanceDataManager : IDataManager
     {
+        List<AccountPackageUsageVolumeBalance> GetAccountPackageUsageVolumeBalancesByKeys(HashSet<PackageUsageVolumeBalanceKey> volumeBalanceKeys);
+
+        void AddAccountPackageUsageVolumeBalance(List<AccountPackageUsageVolumeBalanceToAdd> accountPackageUsageVolumeBalances);
+
+        void UpdateAccountPackageUsageVolumeBalance(List<AccountPackageUsageVolumeBalanceToUpdate> accountPackageUsageVolumeBalances);
     }
 }
