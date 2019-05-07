@@ -657,7 +657,16 @@ namespace Vanrise.GenericData.Business
                             {
                                 #PRIVATEFIELDNAME# = value;
                             }
+                        }
+                        public void Initialize#FIELDNAME#()
+                        {
+                            var fieldType = this.#FIELDNAME#.GetType();
+                            if(fieldType.IsValueType)
+                                this.#FIELDNAME# = default(#FIELDRUNTIMETYPE#);
+                            else
+                                this.#FIELDNAME# = (#FIELDRUNTIMETYPE#) Activator.CreateInstance(fieldType);
                         }");
+
             }
             else
             {
@@ -678,7 +687,7 @@ namespace Vanrise.GenericData.Business
                         }");
             }
             globalMemberDefinitionBuilder.AppendLine();
-
+            
             globalMemberDefinitionBuilder.Replace("#FIELDRUNTIMETYPE#", fieldRuntimeTypeAsString);
             globalMemberDefinitionBuilder.Replace("#FIELDNAME#", dataRecordField.Name);
             globalMemberDefinitionBuilder.Replace("#ISFIELDFILLED#", isFieldFilledVariableName);
