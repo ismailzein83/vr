@@ -119,7 +119,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             if (customerIds != null && customerIds.Any())
                 customerIdsString = string.Join<int>(",", customerIds);
 
-            return String.Format(@"INSERT INTO {0}.[TOneWhS_BE_Bkup].[CustomerCountry] WITH (TABLOCK)
+            return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[CustomerCountry] WITH (TABLOCK)
                                                (ID
                                                ,CustomerID
                                                ,CountryID
