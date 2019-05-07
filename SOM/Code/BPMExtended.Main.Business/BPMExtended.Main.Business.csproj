@@ -79,12 +79,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\BPM\Terrasoft.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Terrasoft.Nui">
-      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\BPM\Terrasoft.Nui.dll</HintPath>
-    </Reference>
-    <Reference Include="Terrasoft.Nui.ServiceModel">
-      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\BPM\Terrasoft.Nui.ServiceModel.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
