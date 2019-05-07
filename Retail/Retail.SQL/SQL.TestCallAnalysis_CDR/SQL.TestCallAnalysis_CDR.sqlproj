@@ -67,7 +67,6 @@
     <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="TCAnal_CDR\Tables\CDR1.sql" />
     <Build Include="TCAnal_CDR\Tables\MappedCDR.sql" />
     <Build Include="TCAnal_CDR\Tables\WhiteList.sql" />
     <Build Include="TCAnal_CDR\Tables\CalledNumberMapping.sql" />

@@ -13,9 +13,10 @@
     [CalledNumberType]  INT              NULL,
     [IsCorrelated]      BIT              NULL,
     [CreatedTime]       DATETIME         NULL,
-    [timestamp]         ROWVERSION       NULL,
     CONSTRAINT [PK__MappedCD__3214EC271BFD2C07] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

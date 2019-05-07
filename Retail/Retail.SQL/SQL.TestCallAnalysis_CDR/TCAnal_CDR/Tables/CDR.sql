@@ -6,9 +6,10 @@
     [CallingNumber]     VARCHAR (40)     NULL,
     [CalledNumber]      VARCHAR (40)     NULL,
     [CDRType]           INT              NULL,
-    [timestamp]         ROWVERSION       NULL,
     CONSTRAINT [PK__CDR__3214EC272C3393D0] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
