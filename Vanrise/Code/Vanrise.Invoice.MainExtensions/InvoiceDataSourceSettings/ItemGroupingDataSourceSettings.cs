@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
@@ -17,6 +19,7 @@ namespace Vanrise.Invoice.MainExtensions
         public List<DataSourceDimension> Dimensions { get; set; }
         public List<DataSourceMeasure> Measures { get; set; }
         public string GroupingClassFQTN { get; set; }
+        public RecordFilterGroup RecordFilter { get; set; }
         public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {
             var invoice = context.InvoiceActionContext.GetInvoice();
@@ -49,26 +52,43 @@ namespace Vanrise.Invoice.MainExtensions
            var groupedItems =  invoiceItemGroupingManager.ApplyFinalGroupingAndFiltering(new GroupingInvoiceItemQueryContext(query), invoiceItems, query.DimensionIds, query.MeasureIds, null, itemGrouping);
 
 
+         //   RecordFilterManager recordFilterManager = new RecordFilterManager();
             var type = Type.GetType(this.GroupingClassFQTN);
          
             List<dynamic> invoiceItemsDetails = new List<dynamic>();
             List<PropertyInfo> propertyInfo = new List<PropertyInfo>();
 
+         //   Dictionary<string, DataRecordField> recordTypeFieldsByName = new Dictionary<string, DataRecordField>();
             for (int i = 0; i < this.Dimensions.Count; i++)
             {
                 var dimension = this.Dimensions[i];
                 var dimensionObj = itemGrouping.DimensionItemFields.FirstOrDefault(x => x.DimensionItemFieldId == dimension.DimensionId);
+                //recordTypeFieldsByName.Add(dimensionObj.FieldName, new DataRecordField
+                //{
+                //    Name = dimensionObj.FieldName,
+                //    Title = dimensionObj.FieldDescription,
+                //    Type = dimensionObj.FieldType
+                //});
+
                 propertyInfo.Add(type.GetProperty(dimensionObj.FieldName));
                 propertyInfo.Add(type.GetProperty(string.Format("{0}Description",dimensionObj.FieldName)));
             }
             foreach (var measure in this.Measures)
             {
                 var measureObj = itemGrouping.AggregateItemFields.FirstOrDefault(x => x.AggregateItemFieldId == measure.MeasureId);
+                //recordTypeFieldsByName.Add(measureObj.FieldName, new DataRecordField
+                //{
+                //    Name = measureObj.FieldName,
+                //    Title = measureObj.FieldDescription,
+                //    Type = measureObj.FieldType
+                //});
                 propertyInfo.Add(type.GetProperty(measureObj.FieldName));
             }
 
             foreach (var item in groupedItems)
             {
+              //  Dictionary<string, dynamic> dataRecord = new Dictionary<string, dynamic>();
+
                 var classInstanse = Activator.CreateInstance(type);
                 int counter = 0;
                 for (int i = 0; i < this.Dimensions.Count; i++)
@@ -76,6 +96,9 @@ namespace Vanrise.Invoice.MainExtensions
                     var dimension = this.Dimensions[i];
                     var dimensionObj = itemGrouping.DimensionItemFields.FirstOrDefault(x => x.DimensionItemFieldId == dimension.DimensionId);
                     var dimesionObjValue = item.DimensionValues[i].Value;
+
+                   // dataRecord.Add(dimensionObj.FieldName, dimesionObjValue);
+
                     var dimesionObjDescription = item.DimensionValues[i].Name;
                     SetObjectProperty(classInstanse, propertyInfo[counter], dimesionObjValue);
                     counter++;
@@ -84,13 +107,17 @@ namespace Vanrise.Invoice.MainExtensions
                 }
                 foreach (var measure in this.Measures)
                 {
-                    
+
                     var measureObj = itemGrouping.AggregateItemFields.FirstOrDefault(x => x.AggregateItemFieldId == measure.MeasureId);
                     var measureObjValue = item.MeasureValues[measureObj.FieldName].Value;
+
+                   // dataRecord.Add(measureObj.FieldName, measureObjValue);
+
                     SetObjectProperty(classInstanse, propertyInfo[counter], measureObjValue);
                     counter++;
                 }
-                invoiceItemsDetails.Add(classInstanse);
+             //   if (RecordFilter == null || recordFilterManager.IsFilterGroupMatch(RecordFilter, new DataRecordDictFilterGenericFieldMatchContext(dataRecord, recordTypeFieldsByName)))
+                    invoiceItemsDetails.Add(classInstanse);
             }
           
             return invoiceItemsDetails;
