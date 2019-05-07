@@ -44,6 +44,14 @@ namespace Vanrise.GenericData.RDBDataStorage.MainExtensions.Joins
         {
             return this.JoinConditions.Where(itm => !string.IsNullOrEmpty(itm.SourceStorageJoinName)).Select(itm => itm.SourceStorageJoinName).Distinct().ToList();
         }
+
+        public override string StorageFieldEditor
+        {
+            get
+            {
+                return "vr-genericadata-rdbdatarecordstoragesettings-joinotherrecordstorage-storagefieldeditor";
+            }
+        }
     }
 
     public class RDBDataRecordStorageJoinOtherRecordStorageCondition

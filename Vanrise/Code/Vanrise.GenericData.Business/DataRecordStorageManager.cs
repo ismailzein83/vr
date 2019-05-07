@@ -618,6 +618,18 @@ namespace Vanrise.GenericData.Business
             return extensionConfigurationManager.GetExtensionConfigurations<VRRestAPIRecordQueryInterceptorConfig>(VRRestAPIRecordQueryInterceptorConfig.EXTENSION_TYPE);
         }
 
+        public IEnumerable<RDBDataRecordStorageJoinSettingsConfig> GetRDBDataRecordStorageJoinSettingsConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<RDBDataRecordStorageJoinSettingsConfig>(RDBDataRecordStorageJoinSettingsConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<RDBDataRecordStorageExpressionFieldSettingsConfig> GetRDBDataRecordStorageExpressionFieldSettingsConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<RDBDataRecordStorageExpressionFieldSettingsConfig>(RDBDataRecordStorageExpressionFieldSettingsConfig.EXTENSION_TYPE);
+        }
+
         public object CreateTempStorage(Guid dataRecordStorageId, long processId)
         {
             DataRecordStorage dataRecordStorage;

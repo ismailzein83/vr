@@ -23,5 +23,13 @@ namespace Vanrise.GenericData.RDBDataStorage.MainExtensions.Joins
         {
             return this.DependentJoins;
         }
+
+        public override string StorageFieldEditor
+        {
+            get
+            {
+                return "vr-genericadata-rdbdatarecordstoragesettings-customcodejoin-storagefieldeditor";
+            }
+        }
     }
 }

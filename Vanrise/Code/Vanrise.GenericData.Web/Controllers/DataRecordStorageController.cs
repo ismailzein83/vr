@@ -81,5 +81,19 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetVRRestAPIRecordQueryInterceptorConfigs();
         }
+
+        [HttpGet]
+        [Route("GetRDBDataRecordStorageJoinSettingsConfigs")]
+        public IEnumerable<RDBDataRecordStorageJoinSettingsConfig> GetRDBDataRecordStorageJoinSettingsConfigs()
+        {
+            return _manager.GetRDBDataRecordStorageJoinSettingsConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetRDBDataRecordStorageExpressionFieldSettingsConfigs")]
+        public IEnumerable<RDBDataRecordStorageExpressionFieldSettingsConfig> GetRDBDataRecordStorageExpressionFieldSettingsConfigs()
+        {
+            return _manager.GetRDBDataRecordStorageExpressionFieldSettingsConfigs();
+        }
     }
 }
