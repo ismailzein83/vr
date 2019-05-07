@@ -186,7 +186,6 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controller\RAOnNetOperatorDirectionServicesController.cs" />
-    <Compile Include="Controller\RAOperatorDefinitionController.cs" />
     <Compile Include="Controller\RAOperatorDirectionServicesController.cs" />
     <Compile Include="Controller\RAPeriodDefinitionController.cs" />
     <Compile Include="Controller\RaRulesController.cs" />
