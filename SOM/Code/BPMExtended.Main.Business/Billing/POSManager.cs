@@ -8,7 +8,7 @@ namespace BPMExtended.Main.Business
 {
     public class POSManager
     {
-        public string SubmitToPOS(string sequenceNumber, string contractId, string fees, string services, string deposit)
+        public string SubmitToPOS(string sequenceNumber, string contractId, string fees)
         {
             //filter the fees by upfront (just send the fees that have the UpFront == true)
 

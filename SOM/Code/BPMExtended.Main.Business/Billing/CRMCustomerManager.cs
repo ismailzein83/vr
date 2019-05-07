@@ -2535,6 +2535,7 @@ namespace BPMExtended.Main.Business
             List<ContractService> contractServices = new List<ContractService>();
             List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
             List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
+            string linePathId;
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
             esq.AddColumn("StCoreServices");
@@ -2559,13 +2560,13 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var phoneNumber = entities[0].GetColumnValue("StNumberToReserve");
-                var pathId = entities[0].GetColumnValue("StLinePathID");
+                string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var lineType = entities[0].GetColumnValue("StLineType");
                 var city = entities[0].GetColumnValue("StCityName");
                 CRMCustomerInfo info = GetCRMCustomerInfo(contactId.ToString(), null);
 
                 if(coreServices != "\"\"") listOfCoreServices= JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
-                if (optionalServices != "\"\"")  JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
+                if (optionalServices != "\"\"") listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
 
                 var items = listOfCoreServices.Concat(listOfOptionalServices);
 
@@ -2575,12 +2576,21 @@ namespace BPMExtended.Main.Business
                     contractServices.Add(contractServiceItem);
                 }
 
+
+                if (pathId.EndsWith(".0")) {
+                            linePathId = pathId.Substring(0, pathId.Length - 2);
+                }
+                else
+                {
+                    linePathId = pathId;
+                }
+
                 //call api
                 SOMRequestInput<TelephonyContractOnHoldInput> somRequestInput = new SOMRequestInput<TelephonyContractOnHoldInput>
                 {
                     InputArguments = new TelephonyContractOnHoldInput
                     {
-                        LinePathId = pathId.ToString(),//"11112222",
+                        LinePathId = linePathId,//"11112222",
                         PhoneNumber = phoneNumber.ToString(),
                         SubType = lineType.ToString(),
                         ServiceResource = "N0047",
@@ -2636,14 +2646,7 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public ContractService ServiceDetailToContractServiceMapper(ServiceDetail item)
-        {
-            return new ContractService
-            {
-                sncode = item.Id,
-                spcode = item.PackageId
-            };
-        }
+
 
         //public void convertFileToBinaryCode()
         //{
@@ -2753,6 +2756,18 @@ namespace BPMExtended.Main.Business
 
         //}
 
+
+        #region Mappers
+        public ContractService ServiceDetailToContractServiceMapper(ServiceDetail item)
+        {
+            return new ContractService
+            {
+                sncode = item.Id,
+                spcode = item.PackageId
+            };
+        }
+
+        #endregion
     }
 
     class Flag

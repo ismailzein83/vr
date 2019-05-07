@@ -110,16 +110,15 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             string fIGAValue=null;
             string fGAValue = null;
+            bool NotAllItemsExist;
             List<string> servicesIds = new List<string>();
             List<DepositDocument> deposits = new List<DepositDocument>();
-
-            //Deserialize
-            List<string> optionalSelectedServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(selectedServices).Select(p=>p.Id).ToList();
+            List<string> optionalSelectedServices = new List<string>();
 
             //Get FGA and FIGA values
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
-            esq.AddColumn("StFIGAValue");
-            esq.AddColumn("StFGAValue");
+            esq.AddColumn("StFIGAId");
+            esq.AddColumn("StFGAId");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "D4A736AB-9C48-4F68-97D8-6285E3E1CAA8");
             esq.Filters.Add(esqFirstFilter);
@@ -127,8 +126,8 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                 fIGAValue = entities[0].GetColumnValue("StFIGAValue").ToString();
-                 fGAValue = entities[0].GetColumnValue("StFGAValue").ToString();
+                 fIGAValue = entities[0].GetColumnValue("StFIGAId").ToString();
+                 fGAValue = entities[0].GetColumnValue("StFGAId").ToString();
 
             }
 
@@ -139,14 +138,23 @@ namespace BPMExtended.Main.Business
             esq.Filters.Add(esqFirstFilter);
 
             var servicesEntities = esq.GetEntityCollection(BPM_UserConnection);
-            if (servicesEntities.Count > 0)
+            for (int i = 0; i < entities.Count; i++)
             {
                 string serviceId = servicesEntities[0].GetColumnValue("StServiceID").ToString();
                 servicesIds.Add(serviceId);
 
             }
 
-            bool NotAllItemsExist = optionalSelectedServices.Any(p => !servicesIds.Contains(p));
+            //Deserialize
+            if (selectedServices != null && selectedServices != "\"\"")
+            {
+                optionalSelectedServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(selectedServices).Select(p => p.Id).ToList();
+                NotAllItemsExist = optionalSelectedServices.Any(p => !servicesIds.Contains(p));
+            }
+            else
+            {
+                NotAllItemsExist = true;
+            }
 
             if(NotAllItemsExist)
             {

@@ -300,7 +300,7 @@ namespace BPMExtended.Main.Business
 
             //filter the ContractAvailableServices (ContractAvailableServices - special services)
             filteredServices = (from item in items
-                                where !specialServicesIds.Contains(item.ServiceCode)
+                                where !specialServicesIds.Contains(item.Id)
                                 select item).ToList();
 
 
