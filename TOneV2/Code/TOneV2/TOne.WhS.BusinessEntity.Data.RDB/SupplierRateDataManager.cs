@@ -302,7 +302,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereContext = selectQuery.Where();
 
-            whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_ID).Value(supplierId);
+            whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
 
             if (countriesIds != null && countriesIds.Any())
                 whereContext.ListCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_CountryID, RDBListConditionOperator.IN, countriesIds);
@@ -409,17 +409,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var supplierZoneDataManager = new SupplierZoneDataManager();
             supplierZoneDataManager.JoinSupplierZone(joinContext, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
-            var wherContext = deleteQuery.Where();
-            wherContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
+            var whereContext = deleteQuery.Where();
+            whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
         }
 
         public void GetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
         {
             var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(TABLE_ALIAS);
+            insertQuery.IntoTable(TABLE_NAME);
 
             var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierRateBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierRateBackupDataManager.TABLE_NAME), SupplierRateBackupDataManager.TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
 
             selectColumns.Column(COL_ID, COL_ID);
