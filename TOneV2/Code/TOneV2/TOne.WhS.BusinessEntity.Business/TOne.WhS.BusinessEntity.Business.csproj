@@ -139,6 +139,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountManager\AccountManagerAssignmentManager.cs" />
+    <Compile Include="AccountManager\AccountManagerManager.cs" />
+    <Compile Include="AccountManager\AffectedCarrierAccountFilterInAccountManagerAssignment.cs" />
     <Compile Include="ANumber\ANumberGroupManager.cs" />
     <Compile Include="ANumber\ANumberSaleCodeManager.cs" />
     <Compile Include="ANumber\ANumberSupplierCodeManager.cs" />
