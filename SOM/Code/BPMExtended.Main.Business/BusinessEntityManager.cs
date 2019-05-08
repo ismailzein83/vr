@@ -114,17 +114,6 @@ namespace BPMExtended.Main.Business
             return monthNumber;
         }
 
-        public class OperationTypeDescriptiveObject
-        {
-            public int Id { get; set; }
-            public string Description { get; set; }
-        }
-        public class Year
-        {
-            public int Id { get; set; }
-            public string Description { get; set; }
-        }
-
     }
 
 }

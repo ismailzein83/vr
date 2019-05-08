@@ -171,6 +171,28 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public int GetNumberOfRecordsPerPage()
+        {
+            int numberOfRecords = 0;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+
+            esq.AddColumn("StNumberOfRecordsPerPage");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "61FB364E-BA71-437F-9BD1-D9BF9F1AB07C");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var stringifiedNumberOfRecords = (string)entities[0].GetColumnValue("StNumberOfRecordsPerPage");
+                int.TryParse(stringifiedNumberOfRecords, out numberOfRecords);
+            }
+            return numberOfRecords;
+        }
+
 
         public OperationServices GetOperationServices(Guid requestId)
         {

@@ -81,6 +81,8 @@
     <Compile Include="BillOnDemandOutput.cs" />
     <Compile Include="BillOnDemandInputArguments.cs" />
     <Compile Include="BillOnDemandInput.cs" />
+    <Compile Include="BusinessEntity\Year.cs" />
+    <Compile Include="BusinessEntity\OperationTypeDescriptiveObject.cs" />
     <Compile Include="ChangeLeasedLineSpeedRequestInput.cs" />
     <Compile Include="ChangePhoneNumberRequestInput.cs" />
     <Compile Include="ChangeRatePlanRequestInput.cs" />
