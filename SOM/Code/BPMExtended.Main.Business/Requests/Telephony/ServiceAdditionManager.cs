@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BPMExtended.Main.Business.Requests.Telephony
+namespace BPMExtended.Main.Business
 {
-    class ServiceAdditionManager
+    public class ServiceAdditionManager
     {
+
     }
 }
