@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountManagerAssignmentController.cs" />
     <Compile Include="Controllers\ANumberSupplierCodeController.cs" />
     <Compile Include="Controllers\BusinessEntityConfigurationController.cs" />
     <Compile Include="Controllers\CustomerCountryController.cs" />
@@ -265,6 +266,8 @@
     <Content Include="WhS_BusinessEntity\Constant\VolumeCommitmentTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListTemplateSettingsCodeOnEachRowBEFieldEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ZoneRouteOptionsDisplayEnum.js" />
+    <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\Templates\AccountManagerAssignmentStaticEditorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\whs-be-accountmanager-assignment-staticeditor.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridPanelTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileTickectContactGridTemplate.html" />
@@ -647,6 +650,7 @@
     <Content Include="WhS_BusinessEntity\Images\Zone.png" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
     <Content Include="WhS_BusinessEntity\Services\ANumberSupplierCodeService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\AccountManagerAssignmentAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ANumberSupplierCodeAPIService .js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\BusinessEntityConfigAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerCountryAPIService.js" />
