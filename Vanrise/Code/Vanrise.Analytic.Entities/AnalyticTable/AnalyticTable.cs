@@ -14,9 +14,15 @@ namespace Vanrise.Analytic.Entities
 
         public AnalyticTableSettings Settings { get; set; }
         public AnalyticTableMeasureStyles MeasureStyles { get; set; }
+        public AnalyticTablePermanentFilter PermanentFilter { get; set; }
     }
     public class AnalyticTableMeasureStyles
     {
         public List<MeasureStyleRule> MeasureStyleRules { get; set; }
     }
+    public class AnalyticTablePermanentFilter
+    {
+        public AnalyticTablePermanentFilterSettings Settings { get; set; }
+    }
+   
 }

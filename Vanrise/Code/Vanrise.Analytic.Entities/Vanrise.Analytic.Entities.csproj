@@ -111,7 +111,7 @@
     <Compile Include="BusinessManagers\IAnalyticTableManager.cs" />
     <Compile Include="BusinessManagers\IAnalyticReportManager.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
-    <Compile Include="PermanentFilterSettings.cs" />
+    <Compile Include="AnalyticTablePermanentFilterSettings.cs" />
     <Compile Include="Config\Aggregate\AnalyticAggregate.cs" />
     <Compile Include="Config\Aggregate\AnalyticAggregateConfig.cs" />
     <Compile Include="Config\Aggregate\AnalyticAggregateConfigInfo.cs" />

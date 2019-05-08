@@ -8,14 +8,14 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
-    public abstract class PermanentFilterSettings
+    public abstract class AnalyticTablePermanentFilterSettings
     {
         public abstract Guid ConfigId { get; }
 
         public abstract void ConvertToRecordFilter();
 
     }
-    public class FilterGroupAnalyticTablePermanentFilter: PermanentFilterSettings
+    public class FilterGroupAnalyticTablePermanentFilter: AnalyticTablePermanentFilterSettings
     {
         public override Guid ConfigId => new Guid("5E32BB46-462E-44A0-B1F0-1F6DA3BD9053");
         public override void ConvertToRecordFilter()
@@ -26,7 +26,7 @@ namespace Vanrise.Analytic.Entities
 
     }
 
-    public class PermanentFilterSettingsConfig : ExtensionConfiguration
+    public class AnalyticTablePermanentFilterSettingsConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "VR_Analytic_PermanentFilterSettings";
         public string Editor { get; set; }
