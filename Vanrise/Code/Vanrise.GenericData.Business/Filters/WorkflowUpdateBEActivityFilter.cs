@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.Business
     {
         public bool IsMatched(IBusinessEntityDefinitionFilterContext context)
         {
-            if (context.entityDefinition == null || context.entityDefinition.Settings == null || context.entityDefinition.Settings.WorkFlowAddBEActivityEditor == null)
+            if (context.entityDefinition == null || context.entityDefinition.Settings == null || context.entityDefinition.Settings.WorkFlowUpdateBEActivityEditor == null)
                 return false;
 
             return true;

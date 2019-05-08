@@ -193,6 +193,7 @@ namespace Vanrise.GenericData.Business
                 VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
                 return connectionSettings.Get<GenericBusinessEntity>(string.Format("/api/VR_GenericData/GenericBusinessEntity/GetGenericBusinessEntity?businessEntityDefinitionId={0}&genericBusinessEntityId={1}", genericBEDefinitionSetting.RemoteGenericBEDefinitionId.Value, genericBusinessEntityId));
             }
+
         }
 
         public GenericBusinessEntityDetail GetGenericBusinessEntityDetail(Object genericBusinessEntityId, Guid businessEntityDefinitionId)
@@ -419,8 +420,11 @@ namespace Vanrise.GenericData.Business
             BusinessEntityDefinitionManager _manager = new BusinessEntityDefinitionManager();
             return _manager.GetBusinessEntityDefinition(businessEntityDefinitionId).Title;
         }
-        public InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntityToAdd)
+        public InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntityToAdd, int? userId)
         {
+            if (!userId.HasValue)
+                userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToAdd.BusinessEntityDefinitionId, false);
             if (genericBEDefinitionSetting.OnBeforeGetFilteredHandler != null)
             {
@@ -464,7 +468,7 @@ namespace Vanrise.GenericData.Business
 
                 Object insertedId;
                 bool hasInsertedId;
-                bool insertActionSucc = _dataRecordStorageManager.AddDataRecord(genericBEDefinitionSetting.DataRecordStorageId.Value, genericBusinessEntityToAdd.FieldValues, out insertedId, out hasInsertedId);
+                bool insertActionSucc = _dataRecordStorageManager.AddDataRecord(genericBEDefinitionSetting.DataRecordStorageId.Value, genericBusinessEntityToAdd.FieldValues, userId, out insertedId, out hasInsertedId);
 
                 if (insertActionSucc)
                 {
@@ -503,9 +507,19 @@ namespace Vanrise.GenericData.Business
                 return connectionSettings.Post<GenericBusinessEntityToAdd, InsertOperationOutput<GenericBusinessEntityDetail>>("/api/VR_GenericData/GenericBusinessEntity/AddGenericBusinessEntity", clonedInput, true);
             }
 
+
+
         }
-        public UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntityToUpdate genericBusinessEntityToUpdate)
+
+        public InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntityToAdd)
         {
+            return AddGenericBusinessEntity(genericBusinessEntityToAdd, null);
+        }
+        public UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntityToUpdate genericBusinessEntityToUpdate, int? userId)
+        {
+            if (!userId.HasValue)
+                userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, false);
             if (genericBEDefinitionSetting.OnBeforeGetFilteredHandler != null)
             {
@@ -579,7 +593,7 @@ namespace Vanrise.GenericData.Business
                     return updateOperationOutput;
                 }
 
-                bool updateActionSucc = _dataRecordStorageManager.UpdateDataRecord(genericBEDefinitionSetting.DataRecordStorageId.Value, genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.FieldValues, genericBusinessEntityToUpdate.FilterGroup);
+                bool updateActionSucc = _dataRecordStorageManager.UpdateDataRecord(genericBEDefinitionSetting.DataRecordStorageId.Value, genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.FieldValues, genericBusinessEntityToUpdate.FilterGroup, userId);
 
                 if (updateActionSucc)
                 {
@@ -612,6 +626,10 @@ namespace Vanrise.GenericData.Business
                 clonedInput.BusinessEntityDefinitionId = genericBEDefinitionSetting.RemoteGenericBEDefinitionId.Value;
                 return connectionSettings.Post<GenericBusinessEntityToUpdate, UpdateOperationOutput<GenericBusinessEntityDetail>>("/api/VR_GenericData/GenericBusinessEntity/UpdateGenericBusinessEntity", clonedInput, true);
             }
+        }
+        public UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntityToUpdate genericBusinessEntityToUpdate)
+        {
+            return UpdateGenericBusinessEntity(genericBusinessEntityToUpdate, null);
         }
 
         public DeleteOperationOutput<object> DeleteGenericBusinessEntity(DeleteGenericBusinessEntityInput input)

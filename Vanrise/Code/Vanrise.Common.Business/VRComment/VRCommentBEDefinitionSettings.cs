@@ -14,15 +14,11 @@ namespace Vanrise.Common.Business
         public override Guid ConfigId { get { return s_configId; } }
         public VRCommentDefinitionSecurity Security { get; set; }
         public override string SelectorFilterEditor { get; set; }
-
+        public override string WorkFlowAddBEActivityEditor { get { return "businessprocess-vr-workflowactivity-addcomment-settings"; } }
         public override string DefinitionEditor { get { return "vr-common-commentbe-editor"; } }
-
         public override string IdType { get { return "System.Int64"; } }
-
         public override string ManagerFQTN { get { return "Vanrise.Common.Business.VRCommentManager, Vanrise.Common.Business"; } }
-
         public override string SelectorUIControl { get { return ""; } }
-
     }
 
     public class VRCommentDefinitionSecurity

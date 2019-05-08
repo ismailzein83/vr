@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -277,7 +278,7 @@ namespace Vanrise.GenericData.Business
         }
 
 
-        public bool AddDataRecord(Guid dataRecordStorageId, Dictionary<string, Object> fieldValues, out Object insertedId, out bool hasInsertedId, TempStorageInformation tempStorageInformation = null)
+        public bool AddDataRecord(Guid dataRecordStorageId, Dictionary<string, Object> fieldValues, int? userId, out Object insertedId, out bool hasInsertedId, TempStorageInformation tempStorageInformation = null)
         {
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
             dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
@@ -298,10 +299,8 @@ namespace Vanrise.GenericData.Business
                 hasInsertedId = false;
                 fieldValues.Add(idFieldType.Name, idField);
             }
-
-            int? userId;
-            SecurityContext.Current.TryGetLoggedInUserId(out userId);
-
+            if (!userId.HasValue)
+                SecurityContext.Current.TryGetLoggedInUserId(out userId);
             bool insertActionSucc = storageDataManager.Insert(fieldValues, userId, userId, out insertedId);
 
             if (insertActionSucc && dataRecordStorage.Settings.EnableUseCaching)
@@ -310,14 +309,17 @@ namespace Vanrise.GenericData.Business
             return insertActionSucc;
         }
 
+        public bool AddDataRecord(Guid dataRecordStorageId, Dictionary<string, Object> fieldValues, out Object insertedId, out bool hasInsertedId, TempStorageInformation tempStorageInformation = null)
+        {
+            return AddDataRecord(dataRecordStorageId, fieldValues, null, out insertedId, out hasInsertedId,  tempStorageInformation);
+        }
         public void AddDataRecords(Guid dataRecordStorageId, IEnumerable<dynamic> records, TempStorageInformation tempStorageInformation = null)
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId, tempStorageInformation);
             storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
             storageDataManager.InsertRecords(records);
         }
-
-        public bool UpdateDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues, RecordFilterGroup filterGroup, TempStorageInformation tempStorageInformation = null)
+        public bool UpdateDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues, RecordFilterGroup filterGroup, int? userId, TempStorageInformation tempStorageInformation = null)
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId, tempStorageInformation);
             storageDataManager.ThrowIfNull("storageDataManager");
@@ -331,15 +333,19 @@ namespace Vanrise.GenericData.Business
                 var idFieldType = dataRecordType.Fields.FindRecord(x => x.Name == dataRecordType.Settings.IdField);
                 fieldValues.Add(idFieldType.Name, recordFieldId);
             }
+            if (!userId.HasValue)
+                SecurityContext.Current.TryGetLoggedInUserId(out userId);
 
-            int? userId;
-            SecurityContext.Current.TryGetLoggedInUserId(out userId);
             bool updateActionSucc = storageDataManager.Update(fieldValues, userId, filterGroup);
 
             if (updateActionSucc && dataRecordStorage.Settings.EnableUseCaching)
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<RecordCacheManager>().SetCacheExpired(dataRecordStorageId);
 
             return updateActionSucc;
+        }
+        public bool UpdateDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues, RecordFilterGroup filterGroup, TempStorageInformation tempStorageInformation = null)
+        {
+            return UpdateDataRecord(dataRecordStorageId, recordFieldId, fieldValues, filterGroup, null, tempStorageInformation);
         }
 
         public bool DeleteDataRecord(Guid dataRecordStorageId, List<object> recordFieldIds)

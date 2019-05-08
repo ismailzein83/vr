@@ -25,15 +25,22 @@ namespace Vanrise.Common.Business
 
         public InsertOperationOutput<VRCommentDetail> AddVRComment(VRComment vRComment)
         {
+            return AddVRComment(vRComment);
+        }
+        public InsertOperationOutput<VRCommentDetail> AddVRComment(VRComment vRComment,int? userId)
+        {
             IVRCommentDataManager vRCommentDataManager = CommonDataManagerFactory.GetDataManager<IVRCommentDataManager>();
             InsertOperationOutput<VRCommentDetail> insertOperationOutput = new InsertOperationOutput<VRCommentDetail>();
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             long commentId = -1;
 
-            vRComment.CreatedBy = _securityManager.GetLoggedInUserId();
-			vRComment.LastModifiedBy = _securityManager.GetLoggedInUserId();
-			bool insertActionSuccess = vRCommentDataManager.Insert(vRComment, out commentId);
+            if (!userId.HasValue)
+                userId= _securityManager.GetLoggedInUserId();
+            vRComment.CreatedBy = userId.Value;
+            vRComment.LastModifiedBy = userId.Value;
+
+            bool insertActionSuccess = vRCommentDataManager.Insert(vRComment, out commentId);
             if (insertActionSuccess)
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
@@ -43,7 +50,6 @@ namespace Vanrise.Common.Business
 
             return insertOperationOutput;
         }
-
         public VRComment GetVRCommentById(long commentId)
         {
             IVRCommentDataManager vRCommentDataManager = CommonDataManagerFactory.GetDataManager<IVRCommentDataManager>();
