@@ -19,7 +19,7 @@ namespace Vanrise.GenericData.Entities
         public bool RequiredLimitResult { get; set; }
         public bool DontReflectToDB { get; set; }
         public bool DenyAPICall { get; set; }
-        public DataRecordStorageFieldsPermission PermanentFilter { get; set; }
+        public DataRecordStoragePermanentFilter PermanentFilter { get; set; }
         public RequiredPermissionSettings RequiredPermission { get; set; }
         public List<DataRecordStorageFieldsPermission> FieldsPermissions { get; set; }
     }
