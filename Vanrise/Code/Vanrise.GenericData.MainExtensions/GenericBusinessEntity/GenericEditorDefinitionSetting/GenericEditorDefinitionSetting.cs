@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.MainExtensions
 {
@@ -14,7 +17,7 @@ namespace Vanrise.GenericData.MainExtensions
 		{
 			get { return new Guid("5BE30B11-8EE3-47EB-8269-41BDAFE077E1"); }
 		}
-		public List<GenericEditorRow> Rows { get; set; }
+        public List<GenericEditorRow> Rows { get; set; }
 		public override string RuntimeEditor
 		{
 			get
@@ -43,5 +46,39 @@ namespace Vanrise.GenericData.MainExtensions
 				}
 			}
 		}
-	}
+
+        public override List<GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
+        {
+            List<GridColumnAttribute> columnsInfo = new List<GridColumnAttribute>();
+            if (Rows != null && Rows.Count > 0)
+            {
+                Dictionary<string, GenericEditorField> fields = new Dictionary<string, GenericEditorField>();
+                DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+                foreach (var row in Rows)
+                {
+                    if (row.Fields != null && row.Fields.Count > 0)
+                    {
+                        foreach (var field in row.Fields)
+                        {
+                            fields.Add(field.FieldPath, field);
+                        }
+                    }
+                }
+                if (fields != null && fields.Count > 0)
+                {
+                    var dataRecordAttributes = dataRecordTypeManager.GetDataRecordAttributes(context.DataRecordTypeId, fields.Keys.ToList());
+
+                    foreach (var att in dataRecordAttributes)
+                    {
+                        var field = fields.GetRecord(att.Name);
+                        var columnAttribute = att.Attribute;
+                        columnAttribute.Field = field.FieldPath;
+                        columnAttribute.HeaderText = field.FieldTitle;
+                        columnsInfo.Add(att.Attribute);
+                    }
+                }
+            }
+            return columnsInfo;
+        }
+    }
 }

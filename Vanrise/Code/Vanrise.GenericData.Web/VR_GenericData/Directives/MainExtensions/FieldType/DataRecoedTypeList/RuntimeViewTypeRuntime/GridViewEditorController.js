@@ -35,7 +35,7 @@
         }
 
         function defineScope() {
-
+            $scope.scopeModel.runtimeEditor = definitionSettings.RuntimeEditor;
             $scope.scopeModel.saveDataRow = function () {
 
                 if (isEditMode)

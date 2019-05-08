@@ -89,6 +89,22 @@ namespace Vanrise.GenericData.Business
             return fields;
         }
 
+        public List<DataRecordGridColumnAttribute> GetDataRecordAttributes(Guid dataRecordTypeId, List<string> requiredColumns)
+        {
+            if (requiredColumns == null || requiredColumns.Count==0) return null;
+            List<DataRecordGridColumnAttribute> fields = new List<DataRecordGridColumnAttribute>();
+            DataRecordType dataRecordType = GetDataRecordType(dataRecordTypeId);
+            foreach (DataRecordField field in dataRecordType.Fields)
+            {
+                if (requiredColumns.Contains(field.Name))
+                {
+                    DataRecordGridColumnAttribute attribute = new DataRecordGridColumnAttribute() { Attribute = field.Type.GetGridColumnAttribute(null), Name = field.Name, DetailViewerEditor = field.Type.DetailViewerEditor };
+                    fields.Add(attribute);
+                }
+            }
+            return fields;
+        }
+
         public Dictionary<string, DataRecordField> GetDataRecordTypeFields(Guid dataRecordTypeId)
         {
             string cacheName = String.Format("GetDataRecordTypeFields_{0}", dataRecordTypeId);

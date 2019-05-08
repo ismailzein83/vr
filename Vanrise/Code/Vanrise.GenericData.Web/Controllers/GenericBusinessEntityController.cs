@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.GenericData.Web.Controllers
@@ -157,5 +158,13 @@ namespace Vanrise.GenericData.Web.Controllers
             genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
             return _manager.GetGenericBETitleFieldValue(genericBusinessEntityId, businessEntityDefinitionId);
         }
+        [HttpPost]
+        [Route("GetGenericEditorColumnsInfo")]
+        public List<GridColumnAttribute> GetGenericEditorColumnsInfo(GetGenericEditorColumnsInfoInput input)
+        {
+            GetGenericEditorColumnsInfoContext getGenericEditorColumnsInfoContext = new GetGenericEditorColumnsInfoContext { DataRecordTypeId = input.DataRecordTypeId };
+            return input.GenericEditorDefinitionSetting.GetGridColumnsAttributes(getGenericEditorColumnsInfoContext);
+        }
+       
     }
 }

@@ -2,7 +2,7 @@
     <vr-modalbody>
         <vr-form validationcontext="sectionEditorGroup">
             <vr-row>
-                <vr-genericdata-genericeditorsetting-runtime on-ready="scopeModel.onEditorRuntimeDirectiveReady"></vr-genericdata-genericeditorsetting-runtime>
+                <vr-directivewrapper ng-if="scopeModel.runtimeEditor != undefined" directive="scopeModel.runtimeEditor" on-ready="scopeModel.onEditorRuntimeDirectiveReady"></vr-directivewrapper>
             </vr-row>
         </vr-form>
     </vr-modalbody>

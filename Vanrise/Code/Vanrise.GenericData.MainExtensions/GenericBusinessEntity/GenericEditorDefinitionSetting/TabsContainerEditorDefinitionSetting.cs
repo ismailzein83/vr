@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions
@@ -38,12 +39,28 @@ namespace Vanrise.GenericData.MainExtensions
 				}
 			}
 		}
-	}
+        public override List<GridColumnAttribute> GetGridColumnsAttributes(IGetGenericEditorColumnsInfoContext context)
+        {
+            List<GridColumnAttribute> columnsAttribute = new List<GridColumnAttribute>();
+         
+            if (TabContainers != null && TabContainers.Count > 0)
+            {
+                foreach (var tabContainer in TabContainers)
+                {
+                    if (tabContainer.TabSettings != null)
+                    {
+                        columnsAttribute.AddRange(tabContainer.TabSettings.GetGridColumnsAttributes(context));
+                    }
+                }
+            }
+            return columnsAttribute;
+        }
+    }
 	public class VRTabContainer
 	{
 		public string TextResourceKey { get; set; }
 		public string TabTitle { get; set; }
 		public bool ShowTab { get; set; }
 		public VRGenericEditorDefinitionSetting TabSettings { get; set; }
-	}
+    }
 }

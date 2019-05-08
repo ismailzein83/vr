@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', ['VRUIUtilsService', 'UtilsService', 'VR_GenericData_DataRecordFieldAPIService','VR_GenericData_DataRecordTypeService',
-    function (VRUIUtilsService, UtilsService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService) {
+app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', ['VRUIUtilsService', 'UtilsService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService', 'VR_GenericData_GenericBusinessEntityAPIService',
+    function (VRUIUtilsService, UtilsService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService, VR_GenericData_GenericBusinessEntityAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -34,7 +34,6 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
             $scope.scopeModel = {};
             ctrl.datasource = [];
             $scope.scopeModel.columns = [];
-            var columns = {};
             var dataRecordTypeId;
             var definitionSettings;
             var gridAPI;
@@ -52,17 +51,6 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                 defineMenuActions();
             }
 
-            function getDataRecordTypeGridColumnsLoadPromise() {
-                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordAttributes(dataRecordTypeId).then(function (response) {
-                    var gridColumnAttributes = response;
-                    if (gridColumnAttributes != undefined) {
-                        for (var index = 0; index < gridColumnAttributes.length; index++) {
-                            var gridColumnAttribute = gridColumnAttributes[index];
-                            columns[gridColumnAttribute.Name] = gridColumnAttribute.Attribute;
-                        }
-                    }
-                });
-            }
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
@@ -71,40 +59,28 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
                     definitionSettings = payload.definitionSettings != undefined ? payload.definitionSettings.Settings : undefined;
                     var fieldsValues = payload.fieldValue;
                     $scope.scopeModel.fieldTitle = payload.fieldTitle;
-                    var rootPromiseNode = {
-                        promises: [getDataRecordTypeGridColumnsLoadPromise()],
-                        getChildNode: function () {
-
-                            if (definitionSettings != undefined && definitionSettings.Rows != undefined) {
-                                var rows = definitionSettings.Rows;
-                                for (var k = 0; k < rows.length; k++) {
-                                    var row = rows[k];
-                                    if (row.Fields != undefined) {
-                                        var fields = row.Fields;
-                                        for (var l = 0; l < fields.length; l++) {
-                                            var field = fields[l];
-                                            var column = columns[field.FieldPath];
-                                            column.Field = "Entity." + field.FieldPath;
-                                            column.HeaderText = field.FieldTitle;
-                                            column.Name = field.FieldPath;
-                                            $scope.scopeModel.columns.push(column);
-                                        } 
-                                    }
-                                }
+                    var input = {
+                        GenericEditorDefinitionSetting: definitionSettings,
+                        DataRecordTypeId: dataRecordTypeId
+                    };
+                    var getColumnsInfoPromise = VR_GenericData_GenericBusinessEntityAPIService.GetGenericEditorColumnsInfo(input).then(function (response) {
+                        if (response != undefined && response.length > 0) {
+                            for (var i = 0; i < response.length; i++) {
+                                var column = response[i];
+                                column.Field = "Entity." + column.Field;
+                                $scope.scopeModel.columns.push(column);
                             }
-
+                        }
+                    });
+                    var rootPromiseNode = {
+                        promises: [getColumnsInfoPromise],
+                        getChildNode: function () {
                             if (fieldsValues != undefined) {
                                 for (var i = 0; i < fieldsValues.length; i++) {
-                                    var values = fieldsValues[i];
-                                    var dataRow = {};
-                                    for (var j = 0; j < $scope.scopeModel.columns.length; j++) {
-                                        var columnName = $scope.scopeModel.columns[j].Name;
-                                        dataRow[columnName] = values[columnName];
-                                    }
-                                    ctrl.datasource.push({ Entity: dataRow });
-                                }
+                                    ctrl.datasource.push({ Entity: fieldsValues[i] });
+                                } 
                             }
-                            return {promises:[]}
+                            return { promises: [] };
                         }
                     };
                     return UtilsService.waitPromiseNode(rootPromiseNode);
@@ -112,10 +88,10 @@ app.directive('vrGenericdataFieldtypeDatarecordtypelistGrideditorviewRuntime', [
 
                 api.getData = function () {
 
-                    var returnedData = [];
+                    var returnedData = []; 
                     for (var i = 0; i < ctrl.datasource.length; i++) {
                         returnedData.push(ctrl.datasource[i].Entity);
-                    }
+                    } 
                     return returnedData;
                 };
 
