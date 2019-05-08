@@ -139,6 +139,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountManager\AccountManagerAnalyticPermanentFilter.cs" />
     <Compile Include="AccountManager\AccountManagerAssignmentManager.cs" />
     <Compile Include="AccountManager\AccountManagerManager.cs" />
     <Compile Include="AccountManager\AffectedCarrierAccountFilterInAccountManagerAssignment.cs" />
@@ -345,6 +346,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EventHandler\" />
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
