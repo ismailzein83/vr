@@ -1,0 +1,194 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.BusinessProcess.Extensions.WFTaskAction.MultipleWorkFlowProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:Vanrise.BusinessProcess.Extensions.WFTaskAction"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
+ xmlns:vbewa="clr-namespace:Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;assembly=Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vbewa:MultipleWorkFlowInputArgument)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.BusinessProcess.Extensions.WFTaskAction.MultipleWorkFlowProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Runtime.DurableInstancing</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Common.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Extensions.WFTaskAction</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="preparedEvaluatedExpression" />
+    </Sequence.Variables>
+    <local:MultipleWorkFlowPrepareActivity>
+      <local:MultipleWorkFlowPrepareActivity.EvaluatedExpressions>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, x:Object)">Input.EvaluatedExpressions</mca:CSharpValue>
+        </InArgument>
+      </local:MultipleWorkFlowPrepareActivity.EvaluatedExpressions>
+      <local:MultipleWorkFlowPrepareActivity.PreparedEvaluatedExpressions>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+          <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:String, x:Object)">preparedEvaluatedExpression</mca:CSharpReference>
+        </OutArgument>
+      </local:MultipleWorkFlowPrepareActivity.PreparedEvaluatedExpressions>
+      <sap2010:WorkflowViewState.IdRef>MultipleWorkFlowPrepareActivity_1</sap2010:WorkflowViewState.IdRef>
+    </local:MultipleWorkFlowPrepareActivity>
+    <Switch x:TypeArguments="vbewa:MultipleWorkFlowExecutionType" sap2010:WorkflowViewState.IdRef="Switch`1_1">
+      <Switch.Expression>
+        <InArgument x:TypeArguments="vbewa:MultipleWorkFlowExecutionType">
+          <mca:CSharpValue x:TypeArguments="vbewa:MultipleWorkFlowExecutionType">Input.ExecutionType</mca:CSharpValue>
+        </InArgument>
+      </Switch.Expression>
+      <ForEach x:TypeArguments="vbewa:MultipleWorkFlowInput" x:Key="Sequential" DisplayName="ForEach&lt;MultipleWorkFlowInput&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
+        <ForEach.Values>
+          <InArgument x:TypeArguments="scg:IEnumerable(vbewa:MultipleWorkFlowInput)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbewa:MultipleWorkFlowInput)">Input.InputArguments</mca:CSharpValue>
+          </InArgument>
+        </ForEach.Values>
+        <ActivityAction x:TypeArguments="vbewa:MultipleWorkFlowInput">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="vbewa:MultipleWorkFlowInput" Name="inputArgument" />
+          </ActivityAction.Argument>
+          <Sequence>
+            <local:MultipleWorkFlowPrepareInputArgumentActivity>
+              <local:MultipleWorkFlowPrepareInputArgumentActivity.InputArgument>
+                <InOutArgument x:TypeArguments="vbewa:MultipleWorkFlowInput">
+                  <mca:CSharpReference x:TypeArguments="vbewa:MultipleWorkFlowInput">inputArgument</mca:CSharpReference>
+                </InOutArgument>
+              </local:MultipleWorkFlowPrepareInputArgumentActivity.InputArgument>
+              <local:MultipleWorkFlowPrepareInputArgumentActivity.PreparedEvaluatedExpressions>
+                <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                  <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, x:Object)">preparedEvaluatedExpression</mca:CSharpValue>
+                </InArgument>
+              </local:MultipleWorkFlowPrepareInputArgumentActivity.PreparedEvaluatedExpressions>
+              <sap2010:WorkflowViewState.IdRef>MultipleWorkFlowPrepareInputArgumentActivity_1</sap2010:WorkflowViewState.IdRef>
+            </local:MultipleWorkFlowPrepareInputArgumentActivity>
+            <vbw:RunProcess ProcessCompletedEventPayload="{x:Null}" ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" WaitProcessCompleted="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1">
+              <vbw:RunProcess.Input>
+                <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                  <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument">inputArgument.InputArgument</mca:CSharpValue>
+                </InArgument>
+              </vbw:RunProcess.Input>
+            </vbw:RunProcess>
+            <sap2010:WorkflowViewState.IdRef>Sequence_2</sap2010:WorkflowViewState.IdRef>
+          </Sequence>
+        </ActivityAction>
+      </ForEach>
+      <ParallelForEach x:TypeArguments="vbewa:MultipleWorkFlowInput" x:Key="Parrallel" DisplayName="ParallelForEach&lt;MultipleWorkFlowInput&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
+        <ParallelForEach.Values>
+          <InArgument x:TypeArguments="scg:IEnumerable(vbewa:MultipleWorkFlowInput)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbewa:MultipleWorkFlowInput)">Input.InputArguments</mca:CSharpValue>
+          </InArgument>
+        </ParallelForEach.Values>
+        <ActivityAction x:TypeArguments="vbewa:MultipleWorkFlowInput">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="vbewa:MultipleWorkFlowInput" Name="inputArgument" />
+          </ActivityAction.Argument>
+          <Sequence>
+            <local:MultipleWorkFlowPrepareInputArgumentActivity>
+              <local:MultipleWorkFlowPrepareInputArgumentActivity.InputArgument>
+                <InOutArgument x:TypeArguments="vbewa:MultipleWorkFlowInput">
+                  <mca:CSharpReference x:TypeArguments="vbewa:MultipleWorkFlowInput">inputArgument</mca:CSharpReference>
+                </InOutArgument>
+              </local:MultipleWorkFlowPrepareInputArgumentActivity.InputArgument>
+              <local:MultipleWorkFlowPrepareInputArgumentActivity.PreparedEvaluatedExpressions>
+                <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                  <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, x:Object)">preparedEvaluatedExpression</mca:CSharpValue>
+                </InArgument>
+              </local:MultipleWorkFlowPrepareInputArgumentActivity.PreparedEvaluatedExpressions>
+              <sap2010:WorkflowViewState.IdRef>MultipleWorkFlowPrepareInputArgumentActivity_2</sap2010:WorkflowViewState.IdRef>
+            </local:MultipleWorkFlowPrepareInputArgumentActivity>
+            <vbw:RunProcess ProcessCompletedEventPayload="{x:Null}" ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" WaitProcessCompleted="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_2">
+              <vbw:RunProcess.Input>
+                <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                  <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument">inputArgument.InputArgument</mca:CSharpValue>
+                </InArgument>
+              </vbw:RunProcess.Input>
+            </vbw:RunProcess>
+            <sap2010:WorkflowViewState.IdRef>Sequence_3</sap2010:WorkflowViewState.IdRef>
+          </Sequence>
+        </ActivityAction>
+      </ParallelForEach>
+    </Switch>
+    <sads:DebugSymbol.Symbol>d2hDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5CdXNpbmVzc1Byb2Nlc3MuRXh0ZW5zaW9ucy5XRlRhc2tBY3Rpb25cTXVsdGlwbGVXb3JrRmxvd1Byb2Nlc3MueGFtbBZAA58BDgIBAUQFUC0CASxRBZ0BDgIBAkwLTIYBAgEwRwtHfQIBLVQLVHcCAQNXB3kRAgEZegecARkCAQZaDVqDAQIBKWELdxYCARp9DX2DAQIBFoQBC5oBFgIBB2INbkICASBvDXUeAgEbhQENkQFCAgENkgENmAEeAgEIahNqhgECASVlE2V5AgEhchNygAECARyNARONAYYBAgESiAETiAF5AgEOlQETlQGAAQIBCQ==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="MultipleWorkFlowPrepareActivity_1" sap:VirtualizedContainerService.HintSize="476,22" />
+      <sap2010:ViewStateData Id="MultipleWorkFlowPrepareInputArgumentActivity_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="287,358" />
+      <sap2010:ViewStateData Id="MultipleWorkFlowPrepareInputArgumentActivity_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="RunProcess_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="287,358" />
+      <sap2010:ViewStateData Id="Switch`1_1" sap:VirtualizedContainerService.HintSize="476,566" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="498,752">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.BusinessProcess.Extensions.WFTaskAction.MultipleWorkFlowProcess_1" sap:VirtualizedContainerService.HintSize="538,448" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

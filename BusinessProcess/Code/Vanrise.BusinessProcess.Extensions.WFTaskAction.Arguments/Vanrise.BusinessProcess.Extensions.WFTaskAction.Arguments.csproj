@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="CustomCodeBPArgument.cs" />
     <Compile Include="DatabaseJobProcessInput.cs" />
+    <Compile Include="MultipleWorkFlowInputArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UCT\UctMailMessage.cs" />
     <Compile Include="WFTaskActionArgument.cs" />
