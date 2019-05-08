@@ -334,9 +334,14 @@ namespace Vanrise.GenericData.Business
 			return extensionConfiguration.GetExtensionConfigurations<GenericBEGridConditionConfig>(GenericBEGridConditionConfig.EXTENSION_TYPE);
 		}
 
-		#endregion
-		#region Private Methods
-		private GenericBEDefinitionSettings TranslateGenericBEDefinitionSettings(GenericBEDefinitionSettings genericBEDefinitionSettings)
+        public IEnumerable<GenericBEAdditionalSettingsConfig> GetGenericBEAdditionalSettingsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<GenericBEAdditionalSettingsConfig>(GenericBEAdditionalSettingsConfig.EXTENSION_TYPE);
+        }
+        #endregion
+        #region Private Methods
+        private GenericBEDefinitionSettings TranslateGenericBEDefinitionSettings(GenericBEDefinitionSettings genericBEDefinitionSettings)
 		{
 			var genericBEDefinitionSettingsCopy = genericBEDefinitionSettings.VRDeepCopy();
 
