@@ -1,0 +1,27 @@
+﻿
+<vr-columns colnum={{ctrl.normalColNum}}>
+    <vr-select on-ready="scopeModel.onJoinNameSelectorReady"
+               datasource="scopeModel.joinNames"
+               datatextfield="RDBRecordStorageJoinName"
+               datavaluefield="RDBRecordStorageJoinName"
+               selectedvalues="scopeModel.selectedjoin"
+               label="Join Name"
+               onselectionchanged="scopeModel.onJoinNameSelectionChanged">
+    </vr-select>
+</vr-columns>
+
+<vr-columns colnum={{ctrl.normalColNum}} vr-loader="scopeModel.isLoadingDirective">
+    <vr-genericdata-datarecordtypefields-selector ng-if="scopeModel.selectedjoin  == undefined"
+                                                  on-ready="scopeModel.onMainFieldSelectorDirectiveReady"
+                                                  isrequired="true"
+                                                  label="Field Name"
+                                                  hideremoveicon>
+    </vr-genericdata-datarecordtypefields-selector>
+
+
+    <vr-directivewrapper ng-if="scopeModel.selectedjoin != undefined"
+                         directive="scopeModel.storageFieldEditor"
+                         on-ready="scopeModel.onFieldNameDirectiveReady"
+                         isrequired="true">
+    </vr-directivewrapper>
+</vr-columns>

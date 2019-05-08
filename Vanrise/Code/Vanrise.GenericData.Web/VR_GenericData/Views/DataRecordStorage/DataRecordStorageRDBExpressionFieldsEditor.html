@@ -1,0 +1,23 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_DataRecordStorageRDBExpressionFieldsManagementController" size="medium">
+    <vr-modalbody>
+        <vr-form name="formRDBExpressionField" vr-loader="scopeModel.isLoading">
+            <vr-row removeline>
+                <vr-columns colnum="4">
+                    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onFieldNameSelectorReady"
+                                                                  isrequired="true"
+                                                                  hideremoveicon>
+                    </vr-genericdata-datarecordtypefields-selector>
+                </vr-columns>
+            </vr-row>
+            <vr-genericdata-datarecordstorage-rdbexpressionfieldsettings-selective on-ready="scopeModel.onExpressionFieldSettingsSelectiveReady" normal-col-num="4"></vr-genericdata-datarecordstorage-rdbexpressionfieldsettings-selective>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formRDBExpressionField"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

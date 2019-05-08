@@ -1,93 +1,110 @@
-﻿//'use strict';
+﻿'use strict';
 
-//app.directive('vrGenericadataRdbdatarecordstoragesettingsJoinotherrecordstorageStoragefieldeditor', ['UtilsService', 'VRUIUtilsService',
-//    function (UtilsService, VRUIUtilsService) {
+app.directive('vrGenericadataRdbdatarecordstoragesettingsJoinotherrecordstorageStoragefieldeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordStorageAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordStorageAPIService) {
 
-//        var directiveDefinitionObject = {
-//            restrict: 'E',
-//            scope: {
-//                onReady: '=',
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var ctor = new JoinOtherRecordStorageFieldEditorCtol(ctrl, $scope, $attrs);
-//                ctor.initializeController();
-//            },
-//            controllerAs: 'ctrl',
-//            bindToController: true,
-//            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/DataStorage/DataRecordStorage/RDBJoinSettings/Templates/JoinOtherRecordStorageFieldEditorTemplate.html"
-//        };
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new JoinOtherRecordStorageFieldEditorCtol(ctrl, $scope, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/DataStorage/DataRecordStorage/RDBJoinSettings/Templates/JoinOtherRecordStorageFieldEditorTemplate.html"
+        };
 
-//        function JoinOtherRecordStorageFieldEditorCtol(ctrl, $scope, attrs) {
-//            this.initializeController = initializeController;
+        function JoinOtherRecordStorageFieldEditorCtol(ctrl, $scope, attrs) {
+            this.initializeController = initializeController;
 
-//            var sourceStorageFieldName;
-//            var context;
+            var fieldName;
+            var settings;
+            var dataRecordTypeId;
 
-//            var sourceStorageFieldNameSelectorAPI;
-//            var sourceStorageFieldNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var sourceStorageFieldNameSelectorAPI;
+            var sourceStorageFieldNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
+            function initializeController() {
+                $scope.scopeModel = {};
 
-//                $scope.scopeModel.onSourceStorageFieldNameSelectorReady = function (api) {
-//                    sourceStorageFieldNameSelectorAPI = api;
-//                    sourceStorageFieldNameSelectorReadyDeferred.resolve();
-//                };
+                $scope.scopeModel.onSourceStorageFieldNameSelectorReady = function (api) {
+                    sourceStorageFieldNameSelectorAPI = api;
+                    sourceStorageFieldNameSelectorReadyDeferred.resolve();
+                };
 
-//                UtilsService.waitMultiplePromises([sourceStorageFieldNameSelectorReadyDeferred.promise]).then(function () {
-//                    defineAPI();
-//                });
-//            }
+                UtilsService.waitMultiplePromises([sourceStorageFieldNameSelectorReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
+            }
 
-//            function defineAPI() {
-//                var api = {};
+            function defineAPI() {
+                var api = {};
 
-//                api.load = function (payload) {
-//                    var initialPromises = [];
+                api.load = function (payload) {
+                    var initialPromises = [];
 
-//                    if (payload != undefined) {
-//                        sourceStorageFieldName = payload.sourceStorageFieldName;
-//                        context = payload.context;
-//                    }
+                    if (payload != undefined) {
+                        fieldName = payload.fieldName;
+                        settings = payload.settings;
+                    }
 
-//                    initialPromises.push(loadSourceStorageFieldNameSelector());
+                    initialPromises.push(getDataRecordTypeId());
 
-//                    var rootPromiseNode = {
-//                        promises: initialPromises,
-//                        getChildNode: function () {
-//                            return {
-//                                promises: []
-//                            };
-//                        }
-//                    };
+                    var rootPromiseNode = {
+                        promises: initialPromises,
+                        getChildNode: function () {
+                            var directivePromises = [];
 
-//                    return UtilsService.waitPromiseNode(rootPromiseNode);
-//                };
+                            if (dataRecordTypeId != undefined) {
+                                directivePromises.push(loadSourceStorageFieldNameSelector());
+                            }
 
-//                api.getData = function () {
-//                    return $scope.scopeModel.sourceStorageFieldName;
-//                };
+                            return {
+                                promises: directivePromises
+                            };
+                        }
+                    };
 
-//                if (ctrl.onReady != null)
-//                    ctrl.onReady(api);
-//            }
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
+                };
 
-//            function loadSourceStorageFieldNameSelector() {
-//                var loadSourceStorageFieldNameSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                api.getData = function () {
+                    return sourceStorageFieldNameSelectorAPI.getSelectedIds();
+                };
 
-//                sourceStorageFieldNameSelectorReadyDeferred.promise.then(function () {
-//                    var sourceStorageFieldPayload = {
-//                        dataRecordTypeId: context.getDataRecordTypeId()
-//                    };
-//                    if (sourceStorageFieldName != undefined) {
-//                        directivePayload.selectedIds = sourceStorageFieldName;
-//                    }
-//                    VRUIUtilsService.callDirectiveLoad(sourceStorageFieldNameSelectorAPI, sourceStorageFieldPayload, loadSourceStorageFieldNameSelectorPromiseDeferred);
-//                });
-//                return loadSourceStorageFieldNameSelectorPromiseDeferred.promise;
-//            }
-//        }
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
 
-//        return directiveDefinitionObject;
-//    }]);
+
+            function getDataRecordTypeId() {
+                if (settings != undefined && settings.RecordStorageId != undefined) {
+                    return VR_GenericData_DataRecordStorageAPIService.GetDataRecordStorage(settings.RecordStorageId).then(function (response) {
+                        if (response != undefined)
+                            dataRecordTypeId = response.DataRecordTypeId;
+                    });
+                }
+            }
+
+            function loadSourceStorageFieldNameSelector() {
+                var loadSourceStorageFieldNameSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                sourceStorageFieldNameSelectorReadyDeferred.promise.then(function () {
+                    var sourceStorageFieldPayload = {
+                        dataRecordTypeId: dataRecordTypeId
+                    };
+                    if (fieldName != undefined) {
+                        sourceStorageFieldPayload.selectedIds = fieldName;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(sourceStorageFieldNameSelectorAPI, sourceStorageFieldPayload, loadSourceStorageFieldNameSelectorPromiseDeferred);
+                });
+                return loadSourceStorageFieldNameSelectorPromiseDeferred.promise;
+            }
+        }
+
+        return directiveDefinitionObject;
+    }]);

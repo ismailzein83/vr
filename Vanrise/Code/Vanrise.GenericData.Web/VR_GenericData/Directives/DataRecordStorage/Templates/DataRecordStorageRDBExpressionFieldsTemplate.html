@@ -1,1 +1,16 @@
-﻿
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-button type="Add" data-onclick="scopeModel.addExpressionField" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row removeline vr-loader="isLoading">
+    <vr-columns width="fullrow">
+        <vr-datagrid on-ready="scopeModel.onExpressionFieldGridReady"
+                     datasource="scopeModel.expressionFields"
+                     ondeleterow="scopeModel.removeExpressionField"
+                     hidegridmenu
+                     menuactions="scopeModel.menuActions">
+            <vr-datagridcolumn headertext="'Name'" widthfactor="6" field="'FieldName'" type="'Text'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

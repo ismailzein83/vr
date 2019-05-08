@@ -2,9 +2,9 @@
 
     'use strict';
 
-    vrGenericdataDatarecordStorageRdbJoinSettingsSelectiveDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordStorageAPIService'];
+    expressionFieldSettingsSelective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordStorageAPIService'];
 
-    function vrGenericdataDatarecordStorageRdbJoinSettingsSelectiveDirective(UtilsService, VRUIUtilsService, VR_GenericData_DataRecordStorageAPIService) {
+    function expressionFieldSettingsSelective(UtilsService, VRUIUtilsService, VR_GenericData_DataRecordStorageAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -16,18 +16,18 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new VRGenericdataDatarecordStorageRdbJoinSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new ExpressionFieldSettingsSelectiveController($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/DataRecordStorage/Templates/RDBDataRecordStorageJoinSettingsSelectiveTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/DataRecordStorage/Templates/RDBDataRecordStorageExpressionFieldSettingsSelective.html"
         };
 
-        function VRGenericdataDatarecordStorageRdbJoinSettingsCtor($scope, ctrl, $attrs) {
+        function ExpressionFieldSettingsSelectiveController($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var joinSettings;
+            var expressionFieldSettings;
             var context = [];
             var selectorAPI;
 
@@ -64,18 +64,18 @@
                     var initialPromises = [];
 
                     if (payload != undefined) {
-                        joinSettings = payload.joinSettings;
+                        expressionFieldSettings = payload.settings;
                         context = payload.context;
                     }
 
-                    initialPromises.push(getRDBDataRecordStorageJoinSettingsConfigs());
+                    initialPromises.push(getExpressionFieldSettingsConfigs());
 
                     var rootPromiseNode = {
                         promises: initialPromises,
                         getChildNode: function () {
                             var directivePromises = [];
 
-                            if (joinSettings != undefined) {
+                            if (expressionFieldSettings != undefined) {
                                 directivePromises.push(loadDirective());
                             }
 
@@ -104,15 +104,15 @@
                 }
             }
 
-            function getRDBDataRecordStorageJoinSettingsConfigs() {
-                return VR_GenericData_DataRecordStorageAPIService.GetRDBDataRecordStorageJoinSettingsConfigs().then(function (response) {
+            function getExpressionFieldSettingsConfigs() {
+                return VR_GenericData_DataRecordStorageAPIService.GetRDBDataRecordStorageExpressionFieldSettingsConfigs().then(function (response) {
                     if (response != undefined) {
                         for (var i = 0; i < response.length; i++) {
                             $scope.scopeModel.templateConfigs.push(response[i]);
                         }
 
-                        if (joinSettings != undefined) {
-                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, joinSettings.ConfigId, 'ExtensionConfigurationId');
+                        if (expressionFieldSettings != undefined) {
+                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, expressionFieldSettings.ConfigId, 'ExtensionConfigurationId');
                         }
                     }
                 });
@@ -125,7 +125,7 @@
                 directiveReadyDeferred.promise.then(function () {
                     directiveReadyDeferred = undefined;
                     var directivePayload = {
-                        joinSettings: joinSettings,
+                        expressionFieldSettings: expressionFieldSettings,
                         context: context
                     };
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
@@ -137,6 +137,6 @@
         }
     }
 
-    app.directive('vrGenericdataDatarecordstorageRdbjoinsettingsSelective', vrGenericdataDatarecordStorageRdbJoinSettingsSelectiveDirective);
+    app.directive('vrGenericdataDatarecordstorageRdbexpressionfieldsettingsSelective', expressionFieldSettingsSelective);
 
 })(app);

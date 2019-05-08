@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageRDBSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService'];
+    DataRecordStorageRDBSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_DataRecordFieldAPIService'];
 
-    function DataRecordStorageRDBSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService) {
+    function DataRecordStorageRDBSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_DataRecordFieldAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -28,9 +28,24 @@
 
             var dataRecordTypeFields;
             var dataRecordTypeId;
+            var joins = [];
+            var expressionFields = [];
+            var filterGroup;
+
+            var parentRecordStorageSelectorAPI;
+            var parentRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var rdbJoinsDataRecordStorageAPI;
+            var rdbJoinsDataRecordStorageReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var expressionFieldsAPI;
+            var expressionFieldsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var recordFilterGroupDirectiveAPI;
+            var recordFilterGroupDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -44,6 +59,11 @@
                         return true;
                     else
                         return false;
+                };
+
+                $scope.scopeModel.onParentRecordStorageSelectorReady = function (api) {
+                    parentRecordStorageSelectorAPI = api;
+                    parentRecordStorageSelectorReadyDeferred.resolve();
                 };
 
                 ctrl.columns = [];
@@ -142,6 +162,22 @@
                     }
                     $scope.scopeModel.isLoading = false;
                 };
+
+                $scope.scopeModel.onRDBJoinsDataRecordStorageReady = function (api) {
+                    rdbJoinsDataRecordStorageAPI = api;
+                    rdbJoinsDataRecordStorageReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onRDBExpressionFieldsReady = function (api) {
+                    expressionFieldsAPI = api;
+                    expressionFieldsReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
+                    recordFilterGroupDirectiveAPI = api;
+                    recordFilterGroupDirectiveReadyDeferred.resolve();
+                };
+
             }
 
             function addDataRecordFieldToColumns(dataRecordField) {
@@ -195,6 +231,10 @@
                         ctrl.tableSchema = payload.TableSchema;
                         ctrl.includeQueueItemId = payload.IncludeQueueItemId;
                     }
+                    
+                    joins = payload.Joins;
+                    expressionFields = payload.ExpressionFields;
+                    filterGroup = payload.Filter;
 
                     if (payload.DataRecordTypeId != undefined) {
                         dataRecordTypeId = payload.DataRecordTypeId;
@@ -202,9 +242,25 @@
                         loadColumns();
                     }
 
+                    //loading ParentDataRecordStorage Selector
+                    var loadParentDataRecordStorageSelectorPromise = loadParentDataRecordStorageSelector();
+                    promises.push(loadParentDataRecordStorageSelectorPromise);
+
                     //loading DataRecordType Selector
                     var loadDataRecordTypeSelectorPromise = loadDataRecordTypeSelector();
                     promises.push(loadDataRecordTypeSelectorPromise);
+
+                    //loading Joins Tab
+                    var loadRDBJoinsDataRecordStoragePromise = loadRDBJoinsDataRecordStorage();
+                    promises.push(loadRDBJoinsDataRecordStoragePromise);
+                    
+                    //loading Expression Fields Tab
+                    var loadRDBExpressionFieldsPromise = loadRDBExpressionFields();
+                    promises.push(loadRDBExpressionFieldsPromise);
+
+                    //loading Filter Tab
+                    var loadRecordFilterGroupPromise = loadRecordFilterGroup();
+                    promises.push(loadRecordFilterGroupPromise);
 
                     function loadColumns() {
                         if (payload.Columns != undefined) {
@@ -220,6 +276,27 @@
                             }
                         }
                     }
+
+                    function loadParentDataRecordStorageSelector() {
+                        var parentDataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        parentRecordStorageSelectorReadyDeferred.promise.then(function () {
+
+                            var parentDataRecordStorageSelectorPayload = {
+                                filters: [{
+                                    $type: "Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageFilter, Vanrise.GenericData.RDBDataStorage"
+                                }]
+                            };
+
+                            if (payload.ParentRecordStorageId != undefined)
+                                parentDataRecordStorageSelectorPayload.selectedIds = payload.ParentRecordStorageId;
+
+                            VRUIUtilsService.callDirectiveLoad(parentRecordStorageSelectorAPI, parentDataRecordStorageSelectorPayload, parentDataRecordStorageSelectorLoadDeferred);
+                        });
+
+                        return parentDataRecordStorageSelectorLoadDeferred.promise;
+                    }
+
 
                     function loadDataRecordTypeSelector() {
                         var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -239,19 +316,71 @@
                         return dataRecordTypeSelectorLoadDeferred.promise;
                     }
 
+
+                    function loadRDBJoinsDataRecordStorage() {
+                        var rdbJoinsDataRecordStorageLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        rdbJoinsDataRecordStorageReadyDeferred.promise.then(function () {
+                            var rdbJoinsDataRecordStoragePayload = {
+                                context: buildContext(),
+                                joins: joins != undefined && joins.length > 0 ? joins : undefined 
+                            };
+                            VRUIUtilsService.callDirectiveLoad(rdbJoinsDataRecordStorageAPI, rdbJoinsDataRecordStoragePayload, rdbJoinsDataRecordStorageLoadDeferred);
+                        });
+
+                        return rdbJoinsDataRecordStorageLoadDeferred.promise;
+                    }
+
+                    function loadRDBExpressionFields() {
+                        var rdbExpressionFieldsLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        expressionFieldsReadyPromiseDeferred.promise.then(function () {
+                            var rdbExpressionFieldsPayload = {
+                                context: buildContext(),
+                                expressionFields: expressionFields != undefined && expressionFields.length > 0 ? expressionFields : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(expressionFieldsAPI, rdbExpressionFieldsPayload, rdbExpressionFieldsLoadDeferred);
+                        });
+
+                        return rdbExpressionFieldsLoadDeferred.promise;
+                    }
+
+                    function loadRecordFilterGroup() {
+                        var recordFilterGroupLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        recordFilterGroupDirectiveReadyDeferred.promise.then(function () {
+                            VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId).then(function (response) {
+                                var dataRecordFieldsInfo = response;
+
+                                var recordFilterGroupDirectivePayload = {
+                                    context: buildContext(dataRecordFieldsInfo),
+                                    FilterGroup: filterGroup
+                                };
+                                VRUIUtilsService.callDirectiveLoad(recordFilterGroupDirectiveAPI, recordFilterGroupDirectivePayload, recordFilterGroupLoadDeferred);
+                            });
+                        });
+                        return recordFilterGroupLoadDeferred.promise;
+                    }
+
                     $scope.scopeModel.isLoading = false;
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
+                    var joinsList = rdbJoinsDataRecordStorageAPI.getData();
+                    var expressionFieldsList = expressionFieldsAPI.getData();
                     return {
                         $type: 'Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageSettings, Vanrise.GenericData.RDBDataStorage',
+                        ParentRecordStorageId: parentRecordStorageSelectorAPI.getSelectedIds(),
                         TableName: ctrl.tableName,
                         TableSchema: ctrl.tableSchema,
                         NullableFields: getNullableFields(),
                         IncludeQueueItemId: ctrl.includeQueueItemId,
                         Columns: ctrl.columns.length > 0 ? getColumns() : null,
+                        Joins: (joinsList != undefined && joinsList.length > 0) ? joinsList : null,
+                        ExpressionFields: (expressionFieldsList != undefined && expressionFieldsList.length > 0) ? expressionFieldsList : null,
+                        Filter: recordFilterGroupDirectiveAPI.getData().filterObj
                     };
                 };
 
@@ -297,7 +426,7 @@
                     gridItem.rdbDataTypeFieldSelectorAPI = api;
                     gridItem.readyRDBDataTypeFieldItemPromiseDeferred.resolve();
                 };
-            
+
                 gridItem.readyRDBDataTypeFieldItemPromiseDeferred.promise.then(function () {
                     var payload = {
                         selectedIds: gridItem.rdbDataType,
@@ -344,7 +473,7 @@
                     return true;
                 }
             }
-        
+
             function loadDefaultRDBTypeList() {
                 return VR_GenericData_DataRecordTypeAPIService.GetDataRecordFieldsTranslatedToRDB(dataRecordTypeId).then(function (response) {
                     dataRecordTypeFields = response;
@@ -382,6 +511,33 @@
                 for (var i = 0; i < dataRecordTypeFields.length; i++) {
                     gridItem.dataRecordTypeFields.push(dataRecordTypeFields[i]);
                 }
+            }
+
+            function buildContext(dataRecordFieldsInfo) {
+                var context = {
+                    getFields: function () {
+                        var fields = [];
+                        if (dataRecordFieldsInfo != undefined) {
+                            for (var i = 0; i < dataRecordFieldsInfo.length; i++) {
+                                var dataRecordField = dataRecordFieldsInfo[i].Entity;
+
+                                fields.push({
+                                    FieldName: dataRecordField.Name,
+                                    FieldTitle: dataRecordField.Title,
+                                    Type: dataRecordField.Type
+                                });
+                            }
+                        }
+                        return fields;
+                    },
+                    getJoinsList: function () {
+                        return rdbJoinsDataRecordStorageAPI.getData();
+                    },
+                    getMainDataRecordTypeId: function () {
+                        return dataRecordTypeId;
+                    }
+                };
+                return context;
             }
         }
     }

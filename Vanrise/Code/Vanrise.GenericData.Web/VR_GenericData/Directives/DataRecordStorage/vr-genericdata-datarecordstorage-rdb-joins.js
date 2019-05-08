@@ -1,139 +1,151 @@
-﻿//(function (app) {
+﻿(function (app) {
 
-//    'use strict';
+    'use strict';
 
-//    DataRecordStorageRDBJoins.$inject = ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'VR_GenericData_DataRecordStorageService'];
+    DataRecordStorageRDBJoins.$inject = ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'VR_GenericData_DataRecordStorageService'];
 
-//    function DataRecordStorageRDBJoins(VRNotificationService, VRUIUtilsService, UtilsService, VR_GenericData_DataRecordStorageService) {
-//        return {
-//            restrict: 'E',
-//            scope: {
-//                onReady: '='
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var dataRecordStorageRDBJoins = new DataRecordStorageRDBJoinsController($scope, ctrl, $attrs);
-//                dataRecordStorageRDBJoins.initializeController();
-//            },
-//            controllerAs: 'ctrl',
-//            bindToController: true,
-//            compile: function (element, attrs) {
+    function DataRecordStorageRDBJoins(VRNotificationService, VRUIUtilsService, UtilsService, VR_GenericData_DataRecordStorageService) {
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '='
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var dataRecordStorageRDBJoins = new DataRecordStorageRDBJoinsController($scope, ctrl, $attrs);
+                dataRecordStorageRDBJoins.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            compile: function (element, attrs) {
 
-//            },
-//            templateUrl: '/Client/Modules/VR_GenericData/Directives/DataRecordStorage/Templates/DataRecordStorageRDBJoinsTemplate.html'
-//        };
+            },
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/DataRecordStorage/Templates/DataRecordStorageRDBJoinsTemplate.html'
+        };
 
-//        function DataRecordStorageRDBJoinsController($scope, ctrl, $attrs) {
-//            this.initializeController = initializeController;
+        function DataRecordStorageRDBJoinsController($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-//            var mainDataRecordTypeId;
+            var context;
 
-//            var joinGridAPI;
-//            var joinGripReadyDeferred = UtilsService.createPromiseDeferred();
+            var joinGridAPI;
+            var joinGridReadyDeferred = UtilsService.createPromiseDeferred();
            
-//            function initializeController() {
-//                $scope.scopeModel = {};
-//                $scope.scopeModel.joins = [];
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.joins = [];
 
-//                $scope.scopeModel.onJoinGridReady = function (api) {
-//                    joinGridAPI = api;
-//                    joinGripReadyDeferred.resolve();
-//                    defineAPI();
-//                };
+                $scope.scopeModel.onJoinGridReady = function (api) {
+                    joinGridAPI = api;
+                    joinGridReadyDeferred.resolve();
+                    defineAPI();
+                };
 
-//                $scope.scopeModel.addJoin = function () {
-//                    var onJoinAdded = function (addedJoinObj) {
-//                        $scope.scopeModel.joins.push(addedJoinObj);
-//                        console.log($scope.scopeModel.joins);
-//                    };
-//                    var context = buildContext();
-//                    VR_GenericData_DataRecordStorageService.addRDBJoinDataRecordStorage(context, onJoinAdded);
-//                };
+                $scope.scopeModel.addJoin = function () {
+                    var onJoinAdded = function (addedJoinObj) {
+                        $scope.scopeModel.joins.push(addedJoinObj);
+                    };
+                    VR_GenericData_DataRecordStorageService.addRDBJoinDataRecordStorage(getContext(), onJoinAdded);
+                };
 
-//                $scope.scopeModel.removeJoinColumn = function (dataItem) {
-//                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.joins, dataItem.RDBRecordStorageJoinName, 'RDBRecordStorageJoinName');
-//                    if (index > -1) {
-//                        $scope.scopeModel.joins.splice(index, 1);
-//                    }
-//                };
+                $scope.scopeModel.removeJoinColumn = function (dataItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.joins, dataItem.RDBRecordStorageJoinName, 'RDBRecordStorageJoinName');
+                    if (index > -1) {
+                        $scope.scopeModel.joins.splice(index, 1);
+                    }
+                };
 
-//                defineMenuActions();
-//            }
+                $scope.scopeModel.isJoinsValid = function () {
+                    if ($scope.scopeModel.joins.length > 0 && checkDuplicateName())
+                        return "Two or more columns have the same name.";
 
-//            function defineAPI() {
-//                var api = {};
+                    return null;
+                };
 
-//                api.load = function (payload) {
-//                    $scope.isLoading = true;
-//                    var initialPromises = [];
+                defineMenuActions();
+            }
 
-//                    if (payload != undefined) {
-//                        var joinsList = payload.joinsList;
-//                        mainDataRecordTypeId = payload.dataRecordTypeId;
+            function defineAPI() {
+                var api = {};
 
-//                        if (joinsList != undefined) {
-//                            for (var i = 0; i < joinsList.length; i++) {
-//                                var join = joinsList[i];
-//                                $scope.scopeModel.joins.push(join);
-//                            }
-//                        }
-//                    }
+                api.load = function (payload) {
+                    $scope.isLoading = true;
+                    var initialPromises = [];
 
-//                    var rootPromiseNode = {
-//                        promises: initialPromises,
-//                        getChildNode: function () {
-//                            var directivePromises = [];
+                    if (payload != undefined) {
+                        context = payload.context;
+                        var joinsList = payload.joins;
 
-//                            return {
-//                                promises: directivePromises
-//                            };
-//                        }
-//                    };
+                        if (joinsList != undefined) {
+                            for (var i = 0; i < joinsList.length; i++) {
+                                var join = joinsList[i];
+                                $scope.scopeModel.joins.push(join);
+                            }
+                        }
+                    }
 
-//                    return UtilsService.waitPromiseNode(rootPromiseNode).finally(function () {
-//                        $scope.isLoading = false;
-//                    });
-//                };
+                    var rootPromiseNode = {
+                        promises: initialPromises,
+                        getChildNode: function () {
+                            var directivePromises = [];
 
-//                api.getData = function () {
-//                    return $scope.scopeModel.joins;
-//                };
+                            return {
+                                promises: directivePromises
+                            };
+                        }
+                    };
 
-//                if (ctrl.onReady != null)
-//                    ctrl.onReady(api);
-//            }
+                    return UtilsService.waitPromiseNode(rootPromiseNode).finally(function () {
+                        $scope.isLoading = false;
+                    });
+                };
 
-//            function defineMenuActions() {
-//                $scope.scopeModel.menuActions = [{
-//                    name: 'Edit',
-//                    clicked: editRDBJoinDataRecordStorage,
-//                }];
-//            }
+                api.getData = function () {
+                    return $scope.scopeModel.joins;
+                };
 
-//            function editRDBJoinDataRecordStorage(joinEntity) {
-//                var context = buildContext();
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
 
-//                var onJoinUpdated = function (updatedJoinObj) {
-//                    console.log(updatedJoinObj);
-//                };
+            function defineMenuActions() {
+                $scope.scopeModel.menuActions = [{
+                    name: 'Edit',
+                    clicked: editRDBJoinDataRecordStorage,
+                }];
+            }
 
-//                VR_GenericData_DataRecordStorageService.editRDBJoinDataRecordStorage(joinEntity, context, onJoinUpdated);
-//            }
+            function editRDBJoinDataRecordStorage(joinEntity) {
 
-//            function buildContext() {
-//                var context = {
-//                    getJoinsList: function () {
-//                        return $scope.scopeModel.joins;
-//                    },
-//                    getMainDataRecordTypeId: function () {
-//                        return mainDataRecordTypeId;
-//                    }
-//                };
-//                return context;
-//            }
-//        }
-//    }
+                var onJoinUpdated = function (updatedJoinObj) {
+                    var index = $scope.scopeModel.joins.indexOf(joinEntity);
+                    $scope.scopeModel.joins[index] = updatedJoinObj;
+                };
 
-//    app.directive('vrGenericdataDatarecordstorageRdbJoins', DataRecordStorageRDBJoins);
+                VR_GenericData_DataRecordStorageService.editRDBJoinDataRecordStorage(joinEntity, getContext(), onJoinUpdated);
+            }
 
-//})(app);
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
+            }
+
+            function checkDuplicateName() {
+                var joinsLength = $scope.scopeModel.joins.length;
+                for (var i = 0; i < joinsLength; i++) {
+                    var currentItem = $scope.scopeModel.joins[i];
+                    for (var j = i + 1; j < joinsLength; j++) {
+                        if (i != j && $scope.scopeModel.joins[j].RDBRecordStorageJoinName == currentItem.RDBRecordStorageJoinName)
+                            return true;
+                    }
+                }
+                return false;
+            }
+        }
+    }
+
+    app.directive('vrGenericdataDatarecordstorageRdbJoins', DataRecordStorageRDBJoins);
+
+})(app);

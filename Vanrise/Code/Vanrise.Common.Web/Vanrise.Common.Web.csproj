@@ -120,6 +120,7 @@
   <ItemGroup>
     <Content Include="Common\Constant\FiguresTileMaxItemsPerRowEnum.js" />
     <Content Include="Common\Constant\PatternPartsEnum.js" />
+    <Content Include="Common\Constant\RDBJoinTypeEnum.js" />
     <Content Include="Common\Constant\VRCustomCodeDynamicAPIMethodTypeEnum.js" />
     <Content Include="Common\Constant\VRHttpMessageFormatEnum.js" />
     <Content Include="Common\Constant\VRHttpMethodEnum.js" />

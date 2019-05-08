@@ -1,303 +1,319 @@
-﻿//'use strict';
+﻿'use strict';
 
-//app.directive('vrGenericadataRdbdatarecordstoragesettingsJoinotherrecordstorage', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_RDBJoinTypeEnum', 'VR_GenericData_DataRecordStorageAPIService',
-//    function (UtilsService, VRUIUtilsService, VR_GenericData_RDBJoinTypeEnum, VR_GenericData_DataRecordStorageAPIService) {
+app.directive('vrGenericadataRdbdatarecordstoragesettingsJoinotherrecordstorage', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_RDBJoinTypeEnum', 'VR_GenericData_DataRecordStorageAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_RDBJoinTypeEnum, VR_GenericData_DataRecordStorageAPIService) {
 
-//        var directiveDefinitionObject = {
-//            restrict: 'E',
-//            scope: {
-//                onReady: '='
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var ctor = new JoinOtherRecordStorageCtol(ctrl, $scope, $attrs);
-//                ctor.initializeController();
-//            },
-//            controllerAs: 'ctrl',
-//            bindToController: true,
-//            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/DataStorage/DataRecordStorage/RDBJoinSettings/Templates/JoinOtherRecordStorageTemplate.html"
-//        };
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onReady: '='
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new JoinOtherRecordStorageCtol(ctrl, $scope, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/DataStorage/DataRecordStorage/RDBJoinSettings/Templates/JoinOtherRecordStorageTemplate.html"
+        };
 
-//        function JoinOtherRecordStorageCtol(ctrl, $scope, attrs) {
-//            this.initializeController = initializeController;
+        function JoinOtherRecordStorageCtol(ctrl, $scope, attrs) {
+            this.initializeController = initializeController;
 
-//            var context;
-//            var joinsList = [];
-//            var joinSettings;
-//            var recordStorageId;
-//            var joinType;
-//            var joinConditions = [];
-//            var dataRecordStorageEntity;
+            var context;
+            var joinsList = [];
+            var joinSettings;
+            var recordStorageId;
+            var joinType;
+            var joinConditions = [];
+            var currentDataRecordStorageEntity;
 
-//            var dataRecordStorageAPI;
-//            var dataRecordStorageReadyDeferred = UtilsService.createPromiseDeferred();
+            var dataRecordStorageAPI;
+            var dataRecordStorageReadyDeferred = UtilsService.createPromiseDeferred();
+            var selectedRecordStorageSelectionChangeDeffered;
 
-//            var joinTypeSelectorAPI;
-//            var joinTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var joinTypeSelectorAPI;
+            var joinTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-//            var joinConditionsGridAPI;
-//            var joinConditionsGridReadyDeferred = UtilsService.createPromiseDeferred();
+            var joinConditionsGridAPI;
+            var joinConditionsGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
-//                $scope.scopeModel.joinTypes = [];
-//                $scope.scopeModel.joinConditions = [];
-//                $scope.scopeModel.sourceStorageJoinNames = [];
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.joinTypes = [];
+                $scope.scopeModel.joinConditions = [];
+                $scope.scopeModel.sourceStorageJoinNames = [];
 
-//                $scope.scopeModel.onDataRecordStorageSelectorReady = function (api) {
-//                    dataRecordStorageAPI = api;
-//                    dataRecordStorageReadyDeferred.resolve();
-//                };
+                $scope.scopeModel.disableAddRDBJoin = function () {
+                    return $scope.scopeModel.selectedDataRecordStorages != undefined ? false : true;
+                };
 
-//                $scope.scopeModel.onJoinTypeSelectorReady = function (api) {
-//                    console.log(api);
-//                    joinTypeSelectorAPI = api;
-//                    joinTypeSelectorReadyDeferred.resolve();
-//                };
+                $scope.scopeModel.onDataRecordStorageSelectorReady = function (api) {
+                    dataRecordStorageAPI = api;
+                    dataRecordStorageReadyDeferred.resolve();
+                };
 
-//                $scope.scopeModel.onJoinConditionsGridReady = function (api) {
-//                    joinConditionsGridAPI = api;
-//                    joinConditionsGridReadyDeferred.resolve();
-//                };
+                $scope.scopeModel.onJoinTypeSelectorReady = function (api) {
+                    joinTypeSelectorAPI = api;
+                    joinTypeSelectorReadyDeferred.resolve();
+                };
 
-//                $scope.scopeModel.addJoinCondition = function () {
-//                    addJoinCondition();
-//                };
+                $scope.scopeModel.onJoinConditionsGridReady = function (api) {
+                    joinConditionsGridAPI = api;
+                    joinConditionsGridReadyDeferred.resolve();
+                };
 
-//                $scope.scopeModel.onDataRecordStorageSelectionChanged = function (selctedDataRecordStorage) {
-//                    if (selctedDataRecordStorage != undefined) {
-//                        dataRecordStorageEntity = selctedDataRecordStorage;
-//                        var contextObj = buildContext();
-//                        console.log(contextObj.getDataRecordTypeId());
-//                    }
-//                };
+                $scope.scopeModel.addJoinCondition = function () {
+                    addJoinCondition();
+                };
 
-//                $scope.scopeModel.removeJoinConditions = function (dataItem) {
-//                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.joinConditions, dataItem.sourceStorageJoinNames, 'sourceStorageJoinNames');
-//                    if (index > -1) {
-//                        $scope.scopeModel.joinConditions.splice(index, 1);
-//                    }
-//                };
+                $scope.scopeModel.onDataRecordStorageSelectionChanged = function (selctedDataRecordStorage) {
+                    if (selctedDataRecordStorage != undefined) {
+                        currentDataRecordStorageEntity = selctedDataRecordStorage;
 
-//                UtilsService.waitMultiplePromises([dataRecordStorageReadyDeferred.promise, joinTypeSelectorReadyDeferred.promise, joinConditionsGridReadyDeferred.promise]).then(function () {
-//                    defineAPI();
-//                });
-//            }
+                        if (selectedRecordStorageSelectionChangeDeffered != undefined) {
+                            selectedRecordStorageSelectionChangeDeffered.resolve();
+                        }
+                        else {
+                            var joinConditionsList = $scope.scopeModel.joinConditions;
+                            var joinConditionsListLength = joinConditionsList.length;
 
-//            function defineAPI() {
-//                var api = {};
+                            for (var i = 0; i < joinConditionsListLength; i++) {
+                                var dataItem = joinConditionsList[i];
+                                var setLoader = function (value) {
+                                    $scope.scopeModel.isGridLoading = value;
+                                };
+                                var storageToJoinDataRecordTypeFieldSelectorPayload = {
+                                    dataRecordTypeId: currentDataRecordStorageEntity.DataRecordTypeId,
+                                };
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.storageToJoinFieldNameSelctorAPI, storageToJoinDataRecordTypeFieldSelectorPayload, setLoader);
+                            }
+                        }
+                    }
+                };
 
-//                api.load = function (payload) {
-//                    joinTypeSelectorAPI.clearDataSource();
+                $scope.scopeModel.removeJoinConditions = function (dataItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.joinConditions, dataItem.sourceStorageJoinNames, 'sourceStorageJoinNames');
+                    if (index > -1) {
+                        $scope.scopeModel.joinConditions.splice(index, 1);
+                    }
+                };
 
-//                    var initialPromises = [];
+                $scope.scopeModel.validateGrid = function () {
+                    if ($scope.scopeModel.joinConditions.length == 0) {
+                        return 'At least one condition should be added';
+                    }
+                };
 
-//                    if (payload != undefined) {
-//                        context = payload.context;
-//                        joinsList = context.getJoinsList();
-//                        joinSettings = payload.joinSettings;
+                UtilsService.waitMultiplePromises([dataRecordStorageReadyDeferred.promise, joinTypeSelectorReadyDeferred.promise, joinConditionsGridReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
+            }
 
-//                        if (joinSettings != undefined) {
-//                            recordStorageId = joinSettings.RecordStorageId;
-//                            joinType = joinSettings.JoinType;
-//                            joinConditions = joinSettings.JoinConditions;
-//                            $scope.scopeModel.storageFieldEditor = joinSettings.StorageFieldEditor;
-//                        }
-//                    }
+            function defineAPI() {
+                var api = {};
 
-//                    initialPromises.push(loadDataRecordStorage());
-//                    loadJoinTypeSelector();
+                api.load = function (payload) {
+                    joinTypeSelectorAPI.clearDataSource();
 
+                    var initialPromises = [];
 
-//                    var rootPromiseNode = {
-//                        promises: initialPromises,
-//                        getChildNode: function () {
-//                            var directivePromises = [];
+                    if (payload != undefined) {
+                        context = payload.context;
+                        joinSettings = payload.joinSettings;
 
-//                            if (joinConditions.length > 0) {
-//                                $scope.scopeModel.isGridLoading = true;
-//                                for (var i = 0; i < joinConditions.length; i++) {
-//                                    var dataItem = {
-//                                        payload: joinConditions[i],
-//                                        readySourceStorageJoinNameSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
-//                                        loadSourceStorageJoinNameSelectorPromiseDeferred: UtilsService.createPromiseDeferred()
-//                                    };
-//                                    dataItemsLoadPromises.push(dataItem.loadSourceStorageJoinNameSelectorPromiseDeferred.promise);
-//                                    addItemToJoinConditionGrid(dataItem, settings.InputArgumentsMapping);
+                        if (joinSettings != undefined) {
+                            selectedRecordStorageSelectionChangeDeffered = UtilsService.createPromiseDeferred();
+                            recordStorageId = joinSettings.RecordStorageId;
+                            joinType = joinSettings.JoinType;
+                            joinConditions = joinSettings.JoinConditions;
+                        }
+                    }
 
-//                                }
-//                                $scope.scopeModel.isGridLoading = false;
-//                            }
-//                            return {
-//                                promises: directivePromises
-//                            };
-//                        }
-//                    };
-
-//                    return UtilsService.waitPromiseNode(rootPromiseNode);
-//                };
-
-//                api.getData = function () {
-//                    return {
-//                        $type: "Vanrise.GenericData.RDBDataStorage.MainExtensions.Joins.RDBDataRecordStorageJoinOtherRecordStorage, Vanrise.GenericData.RDBDataStorage",
-//                        RecordStorageId: dataRecordStorageAPI.getSelectedIds(),
-//                        JoinType: $scope.scopeModel.selectedJoinType.value,
-//                        //JoinConditions: 
-//                    };
-//                };
-
-//                if (ctrl.onReady != null)
-//                    ctrl.onReady(api);
-//            }
-
-//            function loadDataRecordStorage() {
-//                var dataRecordStorageLoadDeferred = UtilsService.createPromiseDeferred();
-
-//                dataRecordStorageReadyDeferred.promise.then(function () {
-//                    var dataRecordStoragePayload = {
-//                        filters: [{
-//                            $type: "Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageFilter, Vanrise.GenericData.RDBDataStorage"
-//                        }]
-//                    };
-
-//                    if (recordStorageId != undefined)
-//                        dataRecordStoragePayload.selectedIds = recordStorageId;
-
-//                    VRUIUtilsService.callDirectiveLoad(dataRecordStorageAPI, dataRecordStoragePayload, dataRecordStorageLoadDeferred);
-//                });
-//                return dataRecordStorageLoadDeferred.promise;
-//            }
-
-//            function loadJoinTypeSelector() {
-//                var joinTypes = UtilsService.getArrayEnum(VR_GenericData_RDBJoinTypeEnum);
-//                for (var i = 0; i < joinTypes.length; i++) {
-//                    var jointype = joinTypes[i];
-//                    $scope.scopeModel.joinTypes.push(jointype);
-//                }
-
-//                if (joinType != undefined)
-//                    $scope.scopeModel.selectedJoinType = UtilsService.getItemByVal(joinTypes, joinType, "value");
-//                else
-//                    $scope.scopeModel.selectedJoinType = joinTypes[0];
-//            }
-
-//            function addJoinCondition() {
-//                $scope.scopeModel.isGridLoading = true;
-//                addItemToJoinConditionGridFromAdd();
-//            }
+                    initialPromises.push(loadDataRecordStorage());
+                    loadJoinTypeSelector();
 
 
-//            function addItemToJoinConditionGrid(dataItem) {
-//                dataItem = {
-//                    id: $scope.scopeModel.joinConditions.length + 1,
-//                };
+                    var rootPromiseNode = {
+                        promises: initialPromises,
+                        getChildNode: function () {
+                            var dataItemsLoadPromises = [];
 
-//                dataItem.onSourceStorageJoinNameSelectorReady = function (api) {
-//                    dataItem.sourceStorageJoinNameSelectorAPI = api;
-//                    dataItem.readySourceStorageJoinNameSelectorPromiseDeferred.resolve();
-//                };
+                            if (joinConditions.length > 0) {
+                                $scope.scopeModel.isGridLoading = true;
+                                for (var i = 0; i < joinConditions.length; i++) {
+                                    var dataItem = {
+                                        payload: joinConditions[i]
+                                    };
 
-//                dataItem.readySourceStorageJoinNameSelectorPromiseDeferred.promise.then(function () {
-//                    //    var sourceStorageJoinNameSelectorPayload = {
-//                    //    };
-//                    //    VRUIUtilsService.callDirectiveLoad(dataItem.sourceStorageJoinNameSelectorAPI, sourceStorageJoinNameSelectorPayload, dataItem.loadSourceStorageJoinNameSelectorPromiseDeferred);
-//                    for (var i = 0; i < joinsList.length; i++) {
-//                        var join = joinsList[i];
-//                        $scope.scopeModel.sourceStorageJoinNames.push(join);
-//                    }
-//                });
+                                    addItemToJoinConditionGrid(dataItem, dataItemsLoadPromises);
+                                }
+                               
+                            }
+                            return {
+                                promises: dataItemsLoadPromises
+                            };
+                        }
+                    };
 
-//                $scope.scopeModel.joinConditions.push(dataItem);
-//            }
+                    return UtilsService.waitPromiseNode(rootPromiseNode).finally(function () {
+                        $scope.scopeModel.isGridLoading = false;
+                        selectedRecordStorageSelectionChangeDeffered = undefined;
 
-//            function addItemToJoinConditionGridFromAdd() {
-//                var dataItem = {
-//                    id: $scope.scopeModel.joinConditions.length + 1,
-//                    sourceStorageJoinNames: [],
-//                    sourceMainFieldSelectorReadyDeferred: UtilsService.createPromiseDeferred(),
-//                    loadSourceMainFieldSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
-//                    sourceFieldNameReadyDeferred: UtilsService.createPromiseDeferred()
-//                };
+                        var joinCondtionsList = $scope.scopeModel.joinConditions;
+                        var joinCondtionsListLength = joinCondtionsList.length;
 
-//                dataItem.onSourceStorageJoinNameSelectorReady = function (api) {
-//                    dataItem.dataRecordTypeFieldsAPI = api;
+                        for (var i = 0; i < joinCondtionsListLength; i++) {
+                            var dataItem = joinCondtionsList[i];
+                            dataItem.sourceStorageJoinNameSelectionChangeDeffered = undefined;
+                        }
+                    });
+                };
 
-//                    for (var i = 0; i < joinsList.length; i++) {
-//                        var join = joinsList[i];
-//                        dataItem.sourceStorageJoinNames.push(join);
-//                    }
-//                };
+                api.getData = function () {
+                    return {
+                        $type: "Vanrise.GenericData.RDBDataStorage.MainExtensions.Joins.RDBDataRecordStorageJoinOtherRecordStorage, Vanrise.GenericData.RDBDataStorage",
+                        RecordStorageId: dataRecordStorageAPI.getSelectedIds(),
+                        JoinType: $scope.scopeModel.selectedJoinType.value,
+                        JoinConditions: getJoinsConditions(),
+                        StorageFieldEditor: "vr-genericadata-rdbdatarecordstoragesettings-joinotherrecordstorage-storagefieldeditor"
+                    };
+                };
 
-//                dataItem.onSourceStorageJoinNameSelectionChanged = function (item) {
-//                    if (item != undefined) {
-//                        console.log(item);
-//                        dataItem.storageFieldEditor = item.Settings.StorageFieldEditor;
-//                        if (dataItem.selectedSourceStorageJoinNameSelectionChangeDeffered != undefined) {
-//                            dataItem.selectedSourceStorageJoinNameSelectionChangeDeffered.resolve();
-//                        }
-//                        else {
-//                            dataItem.sourceFieldNameReadyDeferred.promise.then(function () {
-//                                var setLoader = function (value) { $scope.scopeModel.isGridLoading = value; };
-//                                var directivePayload = {
-//                                    context: buildContext()
-//                                };
-//                                if (dataItem.sourceStorageFieldName != undefined) {
-//                                    directivePayload.sourceStorageFieldName = dataItem.sourceStorageFieldName;
-//                                }
-//                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.sourceFieldNameAPI, directivePayload, setLoader);
-//                            });
-//                        }
-//                    }
-//                };
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
 
-//                dataItem.onSourceMainFieldSelectorDirectiveReady = function (api) {
-//                    dataItem.sourceMainFieldSelectorAPI = api;
-//                    dataItem.sourceMainFieldSelectorReadyDeferred.resolve();
-//                };
+            function loadDataRecordStorage() {
+                var dataRecordStorageLoadDeferred = UtilsService.createPromiseDeferred();
 
-//                dataItem.onSourceStorageFieldNameDirectiveReady = function (api) {
-//                    dataItem.sourceFieldNameAPI = api;
-//                    dataItem.sourceFieldNameReadyDeferred.resolve();
-//                };
+                dataRecordStorageReadyDeferred.promise.then(function () {
+                    var dataRecordStoragePayload = {
+                        filters: [{
+                            $type: "Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageFilter, Vanrise.GenericData.RDBDataStorage"
+                        }]
+                    };
 
-//                dataItem.sourceMainFieldSelectorReadyDeferred.promise.then(function () {
-//                    var mainDataRecordTypeFieldSelectorPayload = {
-//                        dataRecordTypeId: context.getMainDataRecordTypeId(),
-//                        selectedIds: dataItem.sourceStorageFieldName
-//                    };
-//                    VRUIUtilsService.callDirectiveLoad(dataItem.sourceMainFieldSelectorAPI, mainDataRecordTypeFieldSelectorPayload, dataItem.loadSourceMainFieldSelectorPromiseDeferred);
-//                });
+                    if (recordStorageId != undefined)
+                        dataRecordStoragePayload.selectedIds = recordStorageId;
 
-//                $scope.scopeModel.isGridLoading = false;
-//                $scope.scopeModel.joinConditions.push(dataItem);
-//            }
+                    VRUIUtilsService.callDirectiveLoad(dataRecordStorageAPI, dataRecordStoragePayload, dataRecordStorageLoadDeferred);
+                });
+                return dataRecordStorageLoadDeferred.promise;
+            }
 
-//            function buildContext() {
-//                var context = {
-//                    getDataRecordTypeId: function () {
-//                        if (dataRecordStorageEntity != undefined)
-//                            return dataRecordStorageEntity.DataRecordTypeId;
-//                        //else {
-//                        //    var recordStorageId = dataRecordStorageAPI.getSelectedIds();
-//                        //    getDataRecordStorageEntity(recordStorageId).then(function () {
-//                        //        console.log(dataRecordStorageEntity);
-//                        //        if (dataRecordStorageEntity != undefined)
-//                        //            return dataRecordStorageEntity.DataRecordTypeId;
-//                        //    });
-//                        //}
-//                    }
-//                };
-//                return context;
-//            }
+            function loadJoinTypeSelector() {
+                var joinTypes = UtilsService.getArrayEnum(VR_GenericData_RDBJoinTypeEnum);
+                for (var i = 0; i < joinTypes.length; i++) {
+                    var jointype = joinTypes[i];
+                    $scope.scopeModel.joinTypes.push(jointype);
+                }
 
-//            function getDataRecordStorageEntity(recordStorageId) {
-//                if (recordStorageId != undefined) {
-//                    return VR_GenericData_DataRecordStorageAPIService.GetDataRecordStorage(recordStorageId).then(function (response) {
-//                        dataRecordStorageEntity = response;
-//                    });
-//                }
-//            }
-//        }
+                if (joinType != undefined)
+                    $scope.scopeModel.selectedJoinType = UtilsService.getItemByVal(joinTypes, joinType, "value");
+            }
 
-//        return directiveDefinitionObject;
-//    }]);
+            function addJoinCondition() {
+                $scope.scopeModel.isGridLoading = true;
+                addItemToJoinConditionGridFromAdd();
+            }
+
+
+            function addItemToJoinConditionGrid(gridItem, dataItemsLoadPromises) {
+                var dataItem = {
+                    id: $scope.scopeModel.joinConditions.length + 1,
+                    sourceStorageJoinNames: [],
+                    storageToJoinFieldNameSelectorReadyDeferred: UtilsService.createPromiseDeferred(),
+                    loadStorageToJoinFieldSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),  
+                    joinFieldNameDirectiveReadyDeferred: UtilsService.createPromiseDeferred(),
+                    loadJoinFieldNameDirectiveReadyDeferred: UtilsService.createPromiseDeferred()
+                };
+
+                dataItem.onJoinFieldNameDirectiveReady = function (api) {
+                    dataItem.joinFieldNameDirectiveAPI = api;
+                    dataItem.joinFieldNameDirectiveReadyDeferred.resolve();
+                };
+
+                dataItem.joinFieldNameDirectiveReadyDeferred.promise.then(function () {
+                    var joinFieldNameDirectivePayload = {
+                        context: context,
+                        joinName: gridItem.payload.SourceStorageJoinName,
+                        fieldName: gridItem.payload.SourceStorageFieldName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataItem.joinFieldNameDirectiveAPI, joinFieldNameDirectivePayload, dataItem.loadJoinFieldNameDirectiveReadyDeferred);
+                });
+
+                dataItem.onStorageToJoinFieldNameSelectorReady = function (api) {
+                    dataItem.storageToJoinFieldNameSelctorAPI = api;
+                    dataItem.storageToJoinFieldNameSelectorReadyDeferred.resolve();
+                };
+
+                dataItem.storageToJoinFieldNameSelectorReadyDeferred.promise.then(function () {
+                    VR_GenericData_DataRecordStorageAPIService.GetDataRecordStorage(recordStorageId).then(function (response) {
+                        if (response != undefined) {
+                            var storageToJoinDataRecordTypeFieldSelectorPayload = {
+                                dataRecordTypeId: response.DataRecordTypeId,
+                                selectedIds: gridItem.payload.StorageToJoinFieldName
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(dataItem.storageToJoinFieldNameSelctorAPI, storageToJoinDataRecordTypeFieldSelectorPayload, dataItem.loadStorageToJoinFieldSelectorPromiseDeferred);
+                    });
+                });
+                
+                dataItemsLoadPromises.push(dataItem.loadJoinFieldNameDirectiveReadyDeferred.promise);
+                dataItemsLoadPromises.push(dataItem.loadStorageToJoinFieldSelectorPromiseDeferred.promise);
+
+                $scope.scopeModel.joinConditions.push(dataItem);
+            }
+
+            function addItemToJoinConditionGridFromAdd() {
+                var dataItem = {
+                    id: $scope.scopeModel.joinConditions.length + 1,
+                    sourceFieldNameReadyDeferred: UtilsService.createPromiseDeferred(),
+                    sourceStorageJoinNames: [],
+                };
+
+                dataItem.onJoinFieldNameDirectiveReady = function (api) {
+                    dataItem.joinFieldNameDirectiveAPI = api;
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isGridLoading = value;
+                    };
+                    var joinFieldNameDirectivePayload = {
+                        context: context
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.joinFieldNameDirectiveAPI, joinFieldNameDirectivePayload, setLoader);
+                };
+
+                dataItem.onStorageToJoinFieldNameSelectorReady = function (api) {
+                    dataItem.storageToJoinFieldNameSelctorAPI = api;
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isGridLoading = value;
+                    };
+                    var storageToJoinDataRecordTypeFieldSelectorPayload = {
+                        dataRecordTypeId: currentDataRecordStorageEntity.DataRecordTypeId,
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.storageToJoinFieldNameSelctorAPI, storageToJoinDataRecordTypeFieldSelectorPayload, setLoader);
+                };
+
+                $scope.scopeModel.isGridLoading = false;
+                $scope.scopeModel.joinConditions.push(dataItem);
+            }
+
+            function getJoinsConditions() {
+                var columns = [];
+                for (var i = 0; i < $scope.scopeModel.joinConditions.length; i++) {
+                    var column = $scope.scopeModel.joinConditions[i];
+                    var data = column.joinFieldNameDirectiveAPI.getData();
+                    columns.push({
+                        SourceStorageJoinName: data.JoinName,
+                        SourceStorageFieldName: data.FieldName,
+                        StorageToJoinFieldName: column.storageToJoinFieldNameSelctorAPI.getSelectedIds()
+                    });
+                }
+                return columns;
+            }
+        }
+
+        return directiveDefinitionObject;
+    }]);

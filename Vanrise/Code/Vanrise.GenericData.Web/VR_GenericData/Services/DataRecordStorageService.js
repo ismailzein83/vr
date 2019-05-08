@@ -10,7 +10,11 @@
             addDataRecordStorage: addDataRecordStorage,
             editDataRecordStorage: editDataRecordStorage,
             registerObjectTrackingDrillDownToDataRecordStorage: registerObjectTrackingDrillDownToDataRecordStorage,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            addRDBJoinDataRecordStorage: addRDBJoinDataRecordStorage,
+            editRDBJoinDataRecordStorage: editRDBJoinDataRecordStorage,
+            addRDBExpressionField: addRDBExpressionField,
+            editRDBExpressionField: editRDBExpressionField
         };
 
         function addDataRecordStorage(onDataRecordStorageAdded) {
@@ -68,6 +72,60 @@
 
         function getDrillDownDefinition() {
             return drillDownDefinitions;
+        }
+
+        function addRDBJoinDataRecordStorage(context, onJoinAdded) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onJoinAdded = onJoinAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordStorage/DataRecordStorageRDBJoinsEditor.html', modalParameters, modalSettings);
+        }
+
+        function editRDBJoinDataRecordStorage(joinEntity, context, onJoinUpdated) {
+            var modalParameters = {
+                joinEntity: joinEntity,
+                context: context
+            };
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onJoinUpdated = onJoinUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordStorage/DataRecordStorageRDBJoinsEditor.html', modalParameters, modalSettings);
+        }
+
+        function addRDBExpressionField(context, onExpressionFieldAdded) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onExpressionFieldAdded = onExpressionFieldAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordStorage/DataRecordStorageRDBExpressionFieldsEditor.html', modalParameters, modalSettings);
+        }
+
+        function editRDBExpressionField(expressionFieldEntity, context, onExpressionFieldUpdated) {
+            var modalParameters = {
+                expressionFieldEntity: expressionFieldEntity,
+                context: context
+            };
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onExpressionFieldUpdated = onExpressionFieldUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordStorage/DataRecordStorageRDBExpressionFieldsEditor.html', modalParameters, modalSettings);
         }
     }
 
