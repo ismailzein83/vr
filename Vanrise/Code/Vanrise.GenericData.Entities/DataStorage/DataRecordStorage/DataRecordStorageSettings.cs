@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.GenericData.Entities
@@ -18,6 +19,7 @@ namespace Vanrise.GenericData.Entities
         public bool RequiredLimitResult { get; set; }
         public bool DontReflectToDB { get; set; }
         public bool DenyAPICall { get; set; }
+        public DataRecordStorageFieldsPermission PermanentFilter { get; set; }
         public RequiredPermissionSettings RequiredPermission { get; set; }
         public List<DataRecordStorageFieldsPermission> FieldsPermissions { get; set; }
     }
@@ -25,5 +27,9 @@ namespace Vanrise.GenericData.Entities
     {
         public List<string> FieldNames { get; set; }
         public RequiredPermissionSettings RequiredPermission { get; set; }
+    }
+    public class DataRecordStoragePermanentFilter
+    {
+        public DataRecordStoragePermanentFilterSettings Settings { get; set; }
     }
 }
