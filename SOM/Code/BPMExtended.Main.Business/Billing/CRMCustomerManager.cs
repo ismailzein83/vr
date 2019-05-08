@@ -1948,6 +1948,47 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public CSO GetCSOByContactIdOrAccountId(string contactId, string accountId)
+        {
+
+            var customerInfo = GetCRMCustomerInfo(contactId, accountId);
+
+            var csoId = customerInfo!=null?customerInfo.csoId:null;
+            string csoName = null;
+
+            if (csoId != null)
+            {
+                csoName = GetCSONameById(csoId);
+            }
+
+            var cso = new CSO()
+            {
+                Id = csoId,
+                Name = csoName
+            };
+
+            return cso;
+        }
+
+        public string GetCSONameById(string csoId)
+        {
+            string csoName = null;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCSO");
+            esq.AddColumn("StName");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", csoId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                csoName = (string)entities[0].GetColumnValue("StName");
+            }
+            return csoName;
+        }
+
         public CRMCustomerInfo GetCRMCustomerInfo(string contactId, string accountId)
         {
             EntitySchemaQuery esq;
