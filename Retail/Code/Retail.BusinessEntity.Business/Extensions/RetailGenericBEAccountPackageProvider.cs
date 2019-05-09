@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -18,7 +21,54 @@ namespace Retail.BusinessEntity.Business
         public string PackageFieldName { get; set; }
         public override Dictionary<AccountEventTime, List<RetailAccountPackage>> GetRetailAccountPackages(IAccountPackageProviderGetRetailAccountPackagesContext context)
         {
-            throw new NotImplementedException();
+            GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
+            AccountPackageManager accountPackageManager = new AccountPackageManager();
+            var retailAccountPackagesByAccountEventTime = new Dictionary<AccountEventTime, List<RetailAccountPackage>>();
+
+            if (context.AccountEventTimeList != null)
+            {
+                foreach (var accountEventTime in context.AccountEventTimeList)
+                {
+                    var filterGroup = new RecordFilterGroup
+                    {
+                        LogicalOperator = RecordQueryLogicalOperator.And,
+                        Filters = new List<RecordFilter>
+                        {
+                            new ObjectListRecordFilter{FieldName = AccountIDFieldName, CompareOperator= ListRecordFilterOperator.In, Values = new List<object>(){accountEventTime.AccountId } },
+                            new DateTimeRecordFilter{FieldName = BEDFieldName, CompareOperator = DateTimeRecordFilterOperator.LessOrEquals, Value = accountEventTime.EventTime},
+                            new RecordFilterGroup
+                            {
+                                LogicalOperator = RecordQueryLogicalOperator.Or,
+                                Filters = new List<RecordFilter>
+                                {
+                                    new DateTimeRecordFilter{FieldName = EEDFieldName, CompareOperator = DateTimeRecordFilterOperator.Greater, Value = accountEventTime.EventTime },
+                                    new EmptyRecordFilter{FieldName = EEDFieldName}
+                                }
+                            }
+                        }
+                    };
+                    var packages = new List<RetailAccountPackage>();
+                    var packageEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(this.BusinessEntityDefinitionID, null, filterGroup);
+                    if (packageEntities != null)
+                    {
+                        foreach (var packageEntity in packageEntities)
+                        {
+                            packages.Add(new RetailAccountPackage()
+                            {
+                                AccountBEDefinitionId = context.AccountBEDefinitionId,
+                                AccountId = (long)packageEntity.FieldValues.GetRecord(AccountIDFieldName),
+                                AccountPackageId = (long)packageEntity.FieldValues.GetRecord(IDFieldName),
+                                BED = (DateTime)packageEntity.FieldValues.GetRecord(BEDFieldName),
+                                EED = (DateTime?)packageEntity.FieldValues.GetRecord(EEDFieldName),
+                                PackageId = (int)packageEntity.FieldValues.GetRecord(PackageFieldName)
+                            });
+                        }
+                    }
+                    List<RetailAccountPackage> retailAccountPackages = retailAccountPackagesByAccountEventTime.GetOrCreateItem(accountEventTime);
+                    retailAccountPackages.AddRange(packages);
+                }
+            }
+            return retailAccountPackagesByAccountEventTime;
         }
     }
 }

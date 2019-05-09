@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Security.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -61,6 +62,12 @@ namespace Retail.BusinessEntity.Entities
         public override Vanrise.Entities.VRLoggableEntityBase GetLoggableEntity(Vanrise.GenericData.Entities.IBusinessEntityDefinitionSettingsGetLoggableEntityContext context)
         {
             return BEManagerFactory.GetManager<IAccountBEManager>().GetAccountLoggableEntity(context.BEDefinition.BusinessEntityDefinitionId);
+        }
+        public override Dictionary<string, object> GetAdditionalSettings(IBEDefinitionSettingsGetAdditionalSettingsContext context)
+        {
+            var accountPackageProvider = AccountPackageProviderFactory.GetManager<IAccountPackageProvider>();
+            accountPackageProvider.CastWithValidate<AccountPackageProvider>("accountPackageProvider");
+            return new Dictionary<string, object>() {{ "AccountPackageProvider", accountPackageProvider }};
         }
     }
 

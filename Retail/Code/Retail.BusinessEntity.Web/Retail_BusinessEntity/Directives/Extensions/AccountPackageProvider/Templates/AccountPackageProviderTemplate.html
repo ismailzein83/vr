@@ -1,1 +1,16 @@
-﻿
+﻿<vr-genericdata-genericbedefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady" isrequired="true" onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectorChanged" selectedvalues="scopeModel.selectedBEDefinition" customlabel="Business Entity Definition" normal-col-num="6"></vr-genericdata-genericbedefinition-selector>
+<vr-columns width="1/2row" ng-if="scopeModel.selectedBEDefinition!=undefined">
+    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onIdMappingFieldSelectorReady" label="ID Field" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+<vr-columns width="1/2row" ng-if="scopeModel.selectedBEDefinition!=undefined">
+    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onAccountIdMappingFieldSelectorReady" label="Account ID Field" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+<vr-columns width="1/2row" ng-if="scopeModel.selectedBEDefinition!=undefined">
+    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onBEDMappingFieldSelectorReady" label="BED Field" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+<vr-columns width="1/2row" ng-if="scopeModel.selectedBEDefinition!=undefined">
+    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onEEDMappingFieldSelectorReady" label="EED Field" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+<vr-columns width="1/2row" ng-if="scopeModel.selectedBEDefinition!=undefined">
+    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onPackageMappingFieldSelectorReady" label="Package Field" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
