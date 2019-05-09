@@ -46,6 +46,9 @@
         function SaveAnalyticTableMeasureStyles(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'SaveAnalyticTableMeasureStyles'), input);
         }
+        function SaveAnalyticTablePermanentFilter(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'SaveAnalyticTablePermanentFilter'), input);
+        }
         function HasEditAnalyticTablePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Analytic_ModuleConfig.moduleName, controllerName, ['UpdateAnalyticTable']));
         }
@@ -58,7 +61,9 @@
         function GetAnalyticTableMergedMeasureStylesEditorRuntime(analyticTableId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticTableMergedMeasureStylesEditorRuntime"), { analyticTableId: analyticTableId});
         }
-       
+        function GetPermanentFilterSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetPermanentFilterSettingsConfigs"));
+        }
         return ({
             GetAnalyticTablesInfo: GetAnalyticTablesInfo,
             GetFilteredAnalyticTables: GetFilteredAnalyticTables,
@@ -71,7 +76,9 @@
             GetAnalyticTableConnectionId: GetAnalyticTableConnectionId,
             GetClientAnalyitTableInfo: GetClientAnalyitTableInfo,
             SaveAnalyticTableMeasureStyles: SaveAnalyticTableMeasureStyles,
-            GetAnalyticTableMergedMeasureStylesEditorRuntime: GetAnalyticTableMergedMeasureStylesEditorRuntime
+            GetAnalyticTableMergedMeasureStylesEditorRuntime: GetAnalyticTableMergedMeasureStylesEditorRuntime,
+            GetPermanentFilterSettingsConfigs: GetPermanentFilterSettingsConfigs,
+            SaveAnalyticTablePermanentFilter: SaveAnalyticTablePermanentFilter
         });
     }
 

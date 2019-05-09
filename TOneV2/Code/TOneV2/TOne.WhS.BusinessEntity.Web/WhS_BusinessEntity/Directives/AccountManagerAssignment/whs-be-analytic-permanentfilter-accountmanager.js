@@ -20,7 +20,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/AccountManagerAssignment/Templates/DataRecordStoragePermanentFilterAccountManager.html"
+            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/AccountManagerAssignment/Templates/AnalyticPermanentFilterAccountManager.html"
         };
 
         function AnalyticPermanentFilterAccountManager($scope, ctrl, $attrs) {
@@ -43,7 +43,7 @@
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.BusinessEntity.Business.AccountManagerDataRecordStoragePermanentFilter,TOne.WhS.BusinessEntity.Business",
+                        $type: "TOne.WhS.BusinessEntity.Business.AccountManagerAnalyticPermanentFilter,TOne.WhS.BusinessEntity.Business",
                     };
                 };
 

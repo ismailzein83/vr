@@ -242,10 +242,13 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionGroupTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\Templates\PermanentfilterRecordfilter.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\vr-genericdata-datarecordstorage-permanentfilter-recordfilter.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageRDBExpressionFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageRDBJoinsTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\RDBDataRecordStorageExpressionFieldSettingsSelective.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\RDBDataRecordStorageJoinSettingsSelectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-permanentfilter-settings.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-expressionfields.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdb-joins.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-rdbexpressionfieldsettings-selective.js" />

@@ -41,6 +41,9 @@
         var createdTimeFieldSelectorAPI;
         var createdTimeFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var permanentFilterSettingsAPI;
+        var permanentFilterSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -63,6 +66,7 @@
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
             };
+            
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function (option) {
                 if (option != undefined) {
                     if (dataRecordTypeSelectedPromiseDeferred != undefined)
@@ -143,7 +147,10 @@
                 modifiedByFieldSelectorAPI = api;
                 modifiedByFieldSelectorReadyDeferred.resolve();
             };
-
+            $scope.scopeModel.onPermanentFilterSettingsDirectiveReady = function (api) {
+                permanentFilterSettingsAPI = api;
+                permanentFilterSettingsReadyDeferred.resolve();
+            };
             //#endregion
             //#region Setting
             $scope.scopeModel.settingsEditor;
@@ -238,7 +245,7 @@
         function loadAllControls() {
 
             var rootPromiseNode = {
-                promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldsPermissions, loadCreatedTimeFieldSelector, loadModifiedTimeFieldSelector, loadCreatedByFieldSelector, loadDataRecordTypeSelector, loadDataStoreSelector, loadRequiredPermission, loadDataStoreConfigs, loadModifiedByFieldSelector, loadTimeFieldSelector])],
+                promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldsPermissions, loadCreatedTimeFieldSelector, loadModifiedTimeFieldSelector, loadCreatedByFieldSelector, loadDataRecordTypeSelector, loadDataStoreSelector, loadRequiredPermission, loadDataStoreConfigs, loadModifiedByFieldSelector, loadTimeFieldSelector, loadPermanentFilterSettingsDirective])],
                 getChildNode: function () {
                     return {
                         promises: [loadSettingsDirectiveOnPageLoad()],
@@ -571,6 +578,22 @@
                 });
             }
         }
+        function loadPermanentFilterSettingsDirective() {
+            var loadPermanentFilterSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+            permanentFilterSettingsReadyDeferred.promise.then(function () {
+                var payload;
+
+                if (dataRecordStorageEntity != undefined) {
+                    payload = {
+                        dataRecordTypeId: dataRecordStorageEntity.DataRecordTypeId,
+                        settings: (dataRecordStorageEntity.Settings != undefined && dataRecordStorageEntity.Settings.PermanentFilter != undefined) ? dataRecordStorageEntity.Settings.PermanentFilter.Settings : undefined
+                    };
+                }
+
+                VRUIUtilsService.callDirectiveLoad(permanentFilterSettingsAPI, payload, loadPermanentFilterSettingsPromiseDeferred);
+            });
+            return loadPermanentFilterSettingsPromiseDeferred.promise;
+        }
 
         function insertDataRecordStorage() {
             $scope.isLoading = true;
@@ -623,7 +646,8 @@
             obj.Settings.LastModifiedTimeField = modifiedTimeFieldSelectorAPI.getSelectedIds();
             obj.Settings.DontReflectToDB = $scope.scopeModel.dontReflectToDB;
             obj.Settings.DenyAPICall = $scope.scopeModel.denyAPICall;
-            obj.Settings.FieldsPermissions = buildFieldsPermissionsFromScope();
+            obj.Settings.FieldsPermissions = buildFieldsPermissionsFromScope(); 
+            obj.Settings.PermanentFilter = { Settings: permanentFilterSettingsAPI.getData() };
             return obj;
         }
         function buildFieldsPermissionsFromScope() {

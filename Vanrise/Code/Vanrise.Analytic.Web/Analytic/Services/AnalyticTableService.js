@@ -11,8 +11,8 @@
             editAnalyticTable: editAnalyticTable,
             getEntityUniqueName: getEntityUniqueName,
             openMeasureStyles: openMeasureStyles,
-            viewMeasureStyles: viewMeasureStyles
-            
+            viewMeasureStyles: viewMeasureStyles,
+            openPermanentFilter: openPermanentFilter
         });
 
         function addAnalyticTable(onAnalyticTableAdded) {
@@ -54,7 +54,12 @@
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Runtime/GenericAnalyticMeasureStyleViewer.html', modalParameters, null);
         }
-
+        function openPermanentFilter(analyticTableId) {
+            var modalParameters = {
+                analyticTableId: analyticTableId
+            };
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticPermanentFilterEditor.html', modalParameters, null);
+        }
         function getEntityUniqueName() {
             return "VR_Analytic_AnalyticTable";
         }

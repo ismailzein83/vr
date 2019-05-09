@@ -59,7 +59,21 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticTableManager manager = new AnalyticTableManager();
             return manager.SaveAnalyticTableMeasureStyles(analyticTableMeasureStylesInput.MeasureStyles, analyticTableMeasureStylesInput.AnalyticTableId);
         }
+        [HttpPost]
+        [Route("SaveAnalyticTablePermanentFilter")]
+        public Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail> SaveAnalyticTablePermanentFilter(AnalyticTablePermanentFilterInput analyticTablePermanentFilterInput)
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            return manager.SaveAnalyticTablePermanentFilter(analyticTablePermanentFilterInput.PermanentFilter, analyticTablePermanentFilterInput.AnalyticTableId);
+        }
 
+        [HttpGet]
+        [Route("GetPermanentFilterSettingsConfigs")]
+        public IEnumerable<AnalyticTablePermanentFilterSettingsConfig> GetPermanentFilterSettingsConfigs()
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            return manager.GetPermanentFilterSettingsConfigs();
+        }
         [HttpPost]
         [Route("AddAnalyticTable")]
         public Vanrise.Entities.InsertOperationOutput<AnalyticTableDetail> AddAnalyticTable(AnalyticTable analyticTable)
@@ -97,5 +111,10 @@ namespace Vanrise.Analytic.Web.Controllers
     {
         public Guid AnalyticTableId { get; set; }
         public AnalyticTableMeasureStyles MeasureStyles { get; set; }
+    }
+    public class AnalyticTablePermanentFilterInput
+    {
+        public Guid AnalyticTableId { get; set; }
+        public AnalyticTablePermanentFilter PermanentFilter { get; set; }
     }
 }

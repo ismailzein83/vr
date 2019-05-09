@@ -92,6 +92,33 @@ namespace Vanrise.Analytic.Business
 
             return updateOperationOutput;
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail> SaveAnalyticTablePermanentFilter(AnalyticTablePermanentFilter permanentFilter, Guid analyticTableId)
+        {
+            UpdateOperationOutput<AnalyticTableDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IAnalyticTableDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticTableDataManager>();
+            bool updateActionSucc = dataManager.SaveAnalyticTablePermanentFilter(permanentFilter, analyticTableId);
+
+            if (updateActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
+                var analyticTable = GetAnalyticTableById(analyticTableId);
+                VRActionLogger.Current.LogObjectCustomAction(AnalyticTableLoggableEntity.Instance, "Update", true, analyticTable, "Permanent Filter");
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = AnalyticTableDetailMapper(analyticTable);
+            }
+
+            return updateOperationOutput;
+        }
+        public IEnumerable<AnalyticTablePermanentFilterSettingsConfig> GetPermanentFilterSettingsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<AnalyticTablePermanentFilterSettingsConfig>(AnalyticTablePermanentFilterSettingsConfig.EXTENSION_TYPE);
+        }
         public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo(AnalyticTableInfoFilter filter)
         {
             var analyticTables = GetCachedAnalyticTables();

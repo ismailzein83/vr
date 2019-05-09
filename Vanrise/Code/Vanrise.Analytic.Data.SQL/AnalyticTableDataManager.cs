@@ -46,7 +46,13 @@ namespace Vanrise.Analytic.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_SaveMeasureStyles", analyticTableId, Vanrise.Common.Serializer.Serialize(measureStyles));
             return (recordesEffected > 0);
         }
-        
+        public bool SaveAnalyticTablePermanentFilter(AnalyticTablePermanentFilter permanentFilter, Guid analyticTableId)
+        {
+            var serializedPermanentFilter = permanentFilter != null ? Vanrise.Common.Serializer.Serialize(permanentFilter) : null;
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_SavePermanentFilter", analyticTableId, serializedPermanentFilter);
+            return (recordesEffected > 0);
+        }
+
         #endregion
 
 
@@ -59,6 +65,7 @@ namespace Vanrise.Analytic.Data.SQL
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<AnalyticTableSettings>(reader["Settings"] as string),
                 MeasureStyles = Vanrise.Common.Serializer.Deserialize<AnalyticTableMeasureStyles>(reader["MeasureStyles"] as string),
+                PermanentFilter = Vanrise.Common.Serializer.Deserialize<AnalyticTablePermanentFilter>(reader["PermanentFilter"] as string)
             };
         }
         #endregion

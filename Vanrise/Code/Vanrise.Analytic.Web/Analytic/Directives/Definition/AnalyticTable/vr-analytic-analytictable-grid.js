@@ -80,7 +80,11 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 
                 {
                     name: "Measure Styles",
                     clicked: openMeasureStyles,
-                }
+                },
+                {
+                    name: "Permanent Filter",
+                    clicked: openPermanentFilter,
+                },
             ];
         }
         function hasEditAnalyticTablePermission() {
@@ -97,6 +101,9 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 
             VR_Analytic_AnalyticTableService.openMeasureStyles(dataItem.Entity.AnalyticTableId);
         }
 
+        function openPermanentFilter(dataItem) {
+            VR_Analytic_AnalyticTableService.openPermanentFilter(dataItem.Entity.AnalyticTableId);
+        }
         function getGridDrillDownDefinitions() {
             var drillDownDefinitions = [];
             drillDownDefinitions.push(getDimensionDrillDownDefinition());

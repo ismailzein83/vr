@@ -64,8 +64,9 @@
         function GetRDBDataRecordStorageExpressionFieldSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetRDBDataRecordStorageExpressionFieldSettingsConfigs'));
         }
-
-
+        function GetPermanentFilterSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', "GetPermanentFilterSettingsConfigs"));
+        }
         return {
             GetFilteredDataRecordStorages: GetFilteredDataRecordStorages,
             GetDataRecordsStorageInfo: GetDataRecordsStorageInfo,
@@ -79,7 +80,8 @@
             GetVRRestAPIRecordQueryInterceptorConfigs: GetVRRestAPIRecordQueryInterceptorConfigs,
             GetDataRecordStorageList: GetDataRecordStorageList,
             GetRDBDataRecordStorageJoinSettingsConfigs: GetRDBDataRecordStorageJoinSettingsConfigs,
-            GetRDBDataRecordStorageExpressionFieldSettingsConfigs: GetRDBDataRecordStorageExpressionFieldSettingsConfigs
+            GetRDBDataRecordStorageExpressionFieldSettingsConfigs: GetRDBDataRecordStorageExpressionFieldSettingsConfigs,
+            GetPermanentFilterSettingsConfigs: GetPermanentFilterSettingsConfigs
         };
     }
 

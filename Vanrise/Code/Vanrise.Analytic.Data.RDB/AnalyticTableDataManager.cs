@@ -19,6 +19,8 @@ namespace Vanrise.Analytic.Data.RDB
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
         const string COL_LastModifiedTime = "LastModifiedTime";
+        const string COL_PermanentFilter = "PermanentFilter";
+
         static AnalyticTableDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -27,6 +29,8 @@ namespace Vanrise.Analytic.Data.RDB
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_PermanentFilter, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "Analytic",
@@ -50,6 +54,7 @@ namespace Vanrise.Analytic.Data.RDB
                 AnalyticTableId = reader.GetGuid(COL_ID),
                 Name = reader.GetString(COL_Name),
                 Settings = Vanrise.Common.Serializer.Deserialize<AnalyticTableSettings>(reader.GetString(COL_Settings)),
+                PermanentFilter = Vanrise.Common.Serializer.Deserialize<AnalyticTablePermanentFilter>(reader.GetString(COL_PermanentFilter))
             };
             return analyticTable;
         }
@@ -113,6 +118,19 @@ namespace Vanrise.Analytic.Data.RDB
         public bool SaveAnalyticTableMeasureStyles(AnalyticTableMeasureStyles measureStyles, Guid analyticTableId)
         {
             throw new NotImplementedException();
+        }
+        public bool SaveAnalyticTablePermanentFilter(AnalyticTablePermanentFilter permanentFilter, Guid analyticTableId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+
+            if (permanentFilter!=null)
+                updateQuery.Column(COL_PermanentFilter).Value(Vanrise.Common.Serializer.Serialize(permanentFilter));
+
+            updateQuery.Where().EqualsCondition(COL_ID).Value(analyticTableId);
+
+            return queryContext.ExecuteNonQuery() > 0;
         }
         #endregion
     }

@@ -95,5 +95,11 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetRDBDataRecordStorageExpressionFieldSettingsConfigs();
         }
+        [HttpGet]
+        [Route("GetPermanentFilterSettingsConfigs")]
+        public IEnumerable<DataRecordStoragePermanentFilterSettingsConfig> GetPermanentFilterSettingsConfigs()
+        {
+            return _manager.GetPermanentFilterSettingsConfigs();
+        }
     }
 }

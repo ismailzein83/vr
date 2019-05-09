@@ -14,5 +14,7 @@ namespace Vanrise.Analytic.Data
         bool AddAnalyticTable(AnalyticTable analyticTable);
         bool UpdateAnalyticTable(AnalyticTable analyticTable);
         bool SaveAnalyticTableMeasureStyles(AnalyticTableMeasureStyles measureStyles, Guid analyticTableId);
+        bool SaveAnalyticTablePermanentFilter(AnalyticTablePermanentFilter permanentFilter, Guid analyticTableId);
+
     }
 }

@@ -41,7 +41,7 @@
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.BusinessEntity.Business.AccountManagerAnalyticPermanentFilter,TOne.WhS.BusinessEntity.Business",
+                        $type: "TOne.WhS.BusinessEntity.Business.AccountManagerDataRecordStoragePermanentFilter,TOne.WhS.BusinessEntity.Business",
                     };
                 };
 
@@ -56,4 +56,4 @@
 
     app.directive('whsBeDatarecordstoragePermanentfilterAccountmanager', DatarecordstoragePermanentfilterAccountManager);
 
-})(app);
+})(app); 

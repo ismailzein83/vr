@@ -180,6 +180,9 @@
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalc-alertrulefilterdefinition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\Templates\MeasureStyleGridViewerTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\vr-analytic-measurestyle-grid-viewer.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\PermanentFilter\MainExtensions\Templates\PermanentfilterRecordfilter.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\PermanentFilter\MainExtensions\vr-analytic-permanentfilter-recordfilter.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\PermanentFilter\vr-analytic-permanentfilter-settings.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\AnalyticLegendTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-legend.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Gauge\Templates\GaugeWidgetDefinition.html" />
@@ -509,7 +512,9 @@
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemActionEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemConfigEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemConfigEditorController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticPermanentFilterEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticMeasureStyleEditor.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticPermanentFilterEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticMeasureStyleEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportManagement.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportManagementController.js" />
