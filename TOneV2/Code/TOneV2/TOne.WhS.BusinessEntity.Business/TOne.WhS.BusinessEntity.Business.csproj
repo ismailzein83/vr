@@ -139,6 +139,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountManager\AccountManagerDataRecordStoragePermanentFilter.cs" />
     <Compile Include="AccountManager\AccountManagerAnalyticPermanentFilter.cs" />
     <Compile Include="AccountManager\AccountManagerAssignmentManager.cs" />
     <Compile Include="AccountManager\AccountManagerAssignmentOnBeforeSaveHandler.cs" />
