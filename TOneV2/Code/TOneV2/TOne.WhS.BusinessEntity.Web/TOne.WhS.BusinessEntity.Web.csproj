@@ -266,7 +266,11 @@
     <Content Include="WhS_BusinessEntity\Constant\VolumeCommitmentTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListTemplateSettingsCodeOnEachRowBEFieldEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ZoneRouteOptionsDisplayEnum.js" />
+    <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\Templates\DataRecordStoragePermanentFilterAccountManager.html" />
+    <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\Templates\AnalyticPermanentFilterAccountManager.html" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\Templates\AccountManagerAssignmentStaticEditorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\whs-be-datarecordstorage-permanentfilter-accountmanager.js" />
+    <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\whs-be-analytic-permanentfilter-accountmanager.js" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\whs-be-accountmanager-assignment-staticeditor.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridPanelTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
