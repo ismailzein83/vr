@@ -1,4 +1,4 @@
-﻿create PROCEDURE [VR_AccountBalance].sp_AccountUsage_GetByAccountIds
+﻿CREATE PROCEDURE [VR_AccountBalance].sp_AccountUsage_GetGroupedByAccountIds
 	@AccountTypeID uniqueidentifier,
 	@AccountsIds varchar(max) = NULL,
 	@TransactionTypeIds varchar(max)
@@ -18,15 +18,13 @@ BEGIN
 		INSERT INTO @TransactionTypeIdsTable (TransactionTypeID)
 		select Convert(uniqueidentifier, ParsedString) from [VR_AccountBalance].[ParseStringList](@TransactionTypeIds)
 
-		SELECT	au.ID, au.AccountTypeID,TransactionTypeID, au.AccountID,au.CurrencyId,PeriodStart,PeriodEnd,UsageBalance, IsOverridden, OverriddenAmount, CorrectionProcessID
+		SELECT	au.AccountTypeID,TransactionTypeID, au.AccountID,au.CurrencyId,cast(PeriodEnd as date)PeriodEnd ,sum(UsageBalance) as UsageBalance
 			FROM VR_AccountBalance.AccountUsage au with(nolock) 
-		
         WHERE	(@AccountsIds  IS NULL or au.AccountID IN (select AccountID from @AccountsIdsTable))
 			    AND (@TransactionTypeIds  IS NULL OR au.TransactionTypeID IN (select TransactionTypeID from @TransactionTypeIdsTable))
 				and isnull(IsOverridden, 0) = 0
 				AND au.AccountTypeID = @AccountTypeID
-
-		
+				group by au.AccountTypeID,TransactionTypeID, au.AccountID,au.CurrencyId,cast(PeriodEnd as date)
 		END
 	SET NOCOUNT OFF
 END

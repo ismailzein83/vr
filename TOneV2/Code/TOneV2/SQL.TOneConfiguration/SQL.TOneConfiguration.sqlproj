@@ -663,7 +663,6 @@
     <Build Include="Security\VR_AccountManager.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoicePaidById.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetBySerialNumbers.sql" />
-    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByAccountIds.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateSettings.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByAccountIds.sql" />
     <Build Include="common\Stored Procedures\sp_File_GetByFileIds.sql" />
@@ -845,6 +844,7 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalanceRecreateAlertAfter.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetBalancesForRecreateAlert.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceRecreateAlertAfterUpdateTable.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetGroupedByAccountIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
