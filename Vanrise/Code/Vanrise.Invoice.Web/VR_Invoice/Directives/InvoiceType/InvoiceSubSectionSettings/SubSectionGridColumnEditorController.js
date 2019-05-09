@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SubSectionGridColumnEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService','VRCommon_GridWidthFactorEnum'];
+    SubSectionGridColumnEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRCommon_GridWidthFactorEnum','VRLocalizationService'];
 
-    function SubSectionGridColumnEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_GridWidthFactorEnum) {
+    function SubSectionGridColumnEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_GridWidthFactorEnum, VRLocalizationService) {
 
         var gridColumns = [];
         var gridColumnEntity;
@@ -15,6 +15,9 @@
 
         var gridWidthFactorAPI;
         var gridWidthFactorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -29,6 +32,7 @@
             isEditMode = (gridColumnEntity != undefined);
         }
         function defineScope() {
+
             $scope.onFieldTypeSelectiveReady = function (api) {
                 fieldTypeAPI = api;
                 fieldTypeReadyDeferred.resolve();
@@ -43,12 +47,17 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
             function builGridColumnObjFromScope() {
                 return {
                     Header: $scope.header,
                     FieldName: $scope.fieldName,
                     WidthFactor: gridWidthFactorAPI.getSelectedIds(),
-                    FieldType: fieldTypeAPI.getData()
+                    FieldType: fieldTypeAPI.getData(),
+                    TextResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
                 };
             }
 
@@ -105,7 +114,17 @@
                     });
                     return gridWidthFactorLoadDeferred.promise;
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldTypeDirective, loadGridWidthFactorDirective]).then(function () {
+                function loadLocalizationTextResourceSelector() {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var localizationTextResourcePayload = gridColumnEntity != undefined ? { selectedValue: gridColumnEntity.TextResourceKey } : undefined;
+
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
+                var promises = [setTitle, loadStaticData, loadFieldTypeDirective, loadGridWidthFactorDirective, loadLocalizationTextResourceSelector];
+                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
 
                 }).finally(function () {
                     $scope.isLoading = false;
@@ -113,9 +132,7 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             }
-
         }
-
     }
     appControllers.controller('VR_Invoice_SubSectionGridColumnEditorController', SubSectionGridColumnEditorController);
 

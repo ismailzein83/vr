@@ -2,7 +2,7 @@
 
     'use strict';
 
-    subSectionEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
+    subSectionEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
     function subSectionEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
@@ -18,6 +18,9 @@
 
         var invoiceSubsectionFilterAPI;
         var invoiceSubsectionFilterReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -35,6 +38,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onInvoiceUISubsectionSettingsReady = function (api) {
                 invoiceUISubsectionSettingsAPI = api;
                 invoiceUISubsectionSettingsReadyDeferred.resolve();
@@ -55,7 +59,10 @@
                 $scope.modalContext.closeModal();
             };
 
-
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
             function builSubSectionObjFromScope() {
                 var filterGroup = recordFilterAPI.getData();
 
@@ -64,7 +71,8 @@
                     SubSectionFilter: filterGroup != undefined ? filterGroup.filterObj : undefined,
                     InvoiceSubSectionId: subSectionEntity != undefined ? subSectionEntity.InvoiceSubSectionId : UtilsService.guid(),
                     Settings: invoiceUISubsectionSettingsAPI.getData(),
-                    Filter: invoiceSubsectionFilterAPI != undefined ? invoiceSubsectionFilterAPI.getData() : undefined
+                    Filter: invoiceSubsectionFilterAPI != undefined ? invoiceSubsectionFilterAPI.getData() : undefined,
+                    TextResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
                 };
             }
 
@@ -140,7 +148,17 @@
                     return invoiceSubsectionFilterLoadPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceUISubsectionSettingsDirective, loadRecordFilterDirective, loadInvoiceSubsectionFilterDirective]).then(function () {
+                function loadLocalizationTextResourceSelector() {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var localizationTextResourcePayload = subSectionEntity != undefined ? { selectedValue: subSectionEntity.TextResourceKey } : undefined;
+
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
+                var promises = [setTitle, loadStaticData, loadInvoiceUISubsectionSettingsDirective, loadRecordFilterDirective, loadInvoiceSubsectionFilterDirective, loadLocalizationTextResourceSelector];
+                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;

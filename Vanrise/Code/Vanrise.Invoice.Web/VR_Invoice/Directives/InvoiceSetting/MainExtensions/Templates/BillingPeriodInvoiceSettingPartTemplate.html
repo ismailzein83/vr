@@ -1,5 +1,5 @@
 ﻿<vr-columns width="1/3row">
-    <vr-switch value="scopeModel.followBillingPeriod" label="Follow Billing Period"></vr-switch>
+    <vr-switch value="scopeModel.followBillingPeriod" label="Follow Billing Period" localizedlabel="VRRes.Invoice.FollowBillingPeriod.VREnd"></vr-switch>
 </vr-columns>
 <vr-columns width="fullrow" haschildcolumns>
     <vr-invoice-billingperiod on-ready="scopeModel.onBillingPeriodReady" normal-col-num="4" isrequired="scopeModel.isBillingPeriodRequired() || scopeModel.followBillingPeriod"></vr-invoice-billingperiod>

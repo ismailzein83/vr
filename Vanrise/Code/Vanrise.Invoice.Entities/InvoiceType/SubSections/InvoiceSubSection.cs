@@ -12,6 +12,7 @@ namespace Vanrise.Invoice.Entities
         public string SectionTitle { get; set; }
         public Vanrise.GenericData.Entities.RecordFilterGroup SubSectionFilter { get; set; }
         public InvoiceSubSectionFilter Filter { get; set; }
+        public string TextResourceKey { get; set; }
         public InvoiceSubSectionSettings Settings { get; set; }
 
     }
@@ -35,6 +36,11 @@ namespace Vanrise.Invoice.Entities
         {
             return null;
         }
+        public virtual void ApplyTranslation(InvoiceTranslationContext context) {}
+    }
+    public class InvoiceTranslationContext
+    {
+        public Guid LanguageId { get; set; }
 
     }
 }

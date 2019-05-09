@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 
@@ -59,6 +60,25 @@ namespace Vanrise.Invoice.Business
                 }
             }
             return gridColumns;
+        }
+        public override void ApplyTranslation(InvoiceTranslationContext context)
+        {
+            if (SubSections != null && SubSections.Count > 0)
+            {
+                if (GridColumns != null && GridColumns.Count > 0)
+                {
+                    VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+                    foreach (var gridColumn in GridColumns)
+                    {
+                        if (gridColumn.TextResourceKey != null)
+                            gridColumn.Header = vrLocalizationManager.GetTranslatedTextResourceValue(gridColumn.TextResourceKey, gridColumn.Header, context.LanguageId);
+                    }
+                }
+                foreach (var subsection in SubSections)
+                {
+                    subsection.ApplyTranslation(context);
+                }
+            }
         }
     }
 

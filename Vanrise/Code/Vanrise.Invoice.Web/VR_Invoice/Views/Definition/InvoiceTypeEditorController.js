@@ -4,7 +4,7 @@
 
     invoiceTypeEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_GenericData_DataRecordTypeAPIService'];
 
-    function invoiceTypeEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_GenericData_DataRecordTypeAPIService) {
+    function invoiceTypeEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_GenericData_DataRecordTypeAPIServicer) {
         var isEditMode;
 
         var invoiceTypeId;
@@ -101,7 +101,8 @@
         var invoiceMenualActionsAPI;
         var invoiceMenualActionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var stagesToHoldAPI;
         var stagesToProcessAPI;
 
@@ -121,9 +122,14 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onMenualActionsReady = function (api) {
                 invoiceMenualActionsAPI = api;
                 invoiceMenualActionsReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.onCommentDefinitionSelectorReady = function (api) {
@@ -298,7 +304,7 @@
             $scope.scopeModel.onStagesToProcessSelectorReady = function (api) {
                 stagesToProcessAPI = api;
             };
-
+        
             function loadStagesToHoldSelector(executionFlowDefinitionId) {
                 var stagesToHoldPayload = {
                     executionFlowDefinitionId: executionFlowDefinitionId
@@ -364,7 +370,8 @@
                         ItemSetNamesStorageRules: itemSetNameStorageRuleAPI.getData(),
                         InvToAccBalanceRelationId: relationDefinitionSelectorAPI.getSelectedIds(),
                         InvoiceCommentDefinitionId: commentDefinitionAPI.getSelectedIds(),
-                        HidePaidFilter: $scope.scopeModel.hidePaidFilter
+                        HidePaidFilter: $scope.scopeModel.hidePaidFilter,
+                        TextResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
                     }
                 };
                 return obj;
@@ -458,6 +465,15 @@
                     return dataRecordTypeSelectorLoadPromiseDeferred.promise;
                 }
 
+                function loadLocalizationTextResourceSelector(localizationTextResourcePayload) {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var localizationTextResourcePayload = invoiceTypeEntity != undefined ? { selectedValue: invoiceTypeEntity.Settings.TextResourceKey } : undefined;
+
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
                 function loadMainGridColumnsSection() {
                     var mainGridColumnsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -814,9 +830,9 @@
                     });
                     return commentDefinitionSelectorLoadPromiseDeferred.promise;
                 }
+                var promises = [setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection, loadCommentDefinitionSelector, loadLocalizationTextResourceSelector];
 
-
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection, loadCommentDefinitionSelector])
+                return UtilsService.waitMultipleAsyncOperations(promises)
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })

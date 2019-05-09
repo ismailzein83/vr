@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Invoice.MainExtensions
 {
@@ -97,6 +98,11 @@ namespace Vanrise.Invoice.MainExtensions
                 }
             }
             return gridColumns;
+        }
+        public override void ApplyTranslation(InvoiceTranslationContext context)
+        {
+            if (Settings != null)
+                Settings.ApplyTranslation(context);
         }
     }
 }

@@ -10,6 +10,7 @@ function ( UtilsService, VRUIUtilsService) {
             isdisabled: "=",
             onselectionchanged: '=',
             isrequired: "@",
+            localizedlabel:"@",
             selectedvalues: '=',
             normalColNum: '@'
 
@@ -45,21 +46,26 @@ function ( UtilsService, VRUIUtilsService) {
 
         var multipleselection = "";
         var label = "";
+        var localizedlabel="" ;
+
         if (attrs.ismultipleselection != undefined) {
             multipleselection = "ismultipleselection";
         }
 
         if (attrs.label != undefined)
             label = attrs.label;
-
+        if (attrs.localizedlabel != undefined)
+            localizedlabel = attrs.localizedlabel; 
+        else
+            localizedlabel = label;
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-            + '<vr-select ' + multipleselection +  ' datatextfield="description" datavaluefield="value" '
-        + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" on-ready="onSelectorReady"></vr-select>'
-           + '</vr-columns>';
+        + '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" '
+            + required + '" localizedlabel="' + localizedlabel +'" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" on-ready="onSelectorReady"></vr-select>'
+            + '</vr-columns>';
     }
 
     function booleanSelectorCtor(ctrl, $scope, $attrs) {

@@ -15,6 +15,7 @@ namespace Vanrise.Invoice.Entities
         public InvoiceGridActionFilterCondition FilterCondition { get; set; }
 
         public Guid InvoiceGridActionId { get; set; }
+        public string TextResourceKey { get; set; }
 
     }
     public abstract class InvoiceGridActionFilterCondition

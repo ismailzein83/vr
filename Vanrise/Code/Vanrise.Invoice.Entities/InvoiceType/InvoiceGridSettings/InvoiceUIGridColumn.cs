@@ -17,6 +17,7 @@ namespace Vanrise.Invoice.Entities
         public GridColumnSettings GridColumnSettings { get; set; }
         public bool UseDescription { get; set; }
         public InvoiceUIGridColumnFilter Filter { get; set; }
+        public string TextResourceKey { get; set; }
     }
     public abstract class InvoiceUIGridColumnFilter
     {

@@ -17,6 +17,7 @@
                 isrequired: "=",
                 isdisabled: "=",
                 customlabel: "@",
+                localizedlabel:"@",
                 normalColNum: '=',
                 hidelabel: "@"
             },
@@ -96,6 +97,8 @@
             var multipleselection = '';
 
             var label = 'Invoice Type';
+            var localizedlabel = 'VRRes.Invoice.InvoiceType.VREnd';
+
             if (attrs.ismultipleselection != undefined) {
                 label = 'Invoice Types';
                 multipleselection = 'ismultipleselection';
@@ -108,7 +111,8 @@
             var hidelabel = "";
             if (attrs.hidelabel != undefined)
                 hidelabel = "hidelabel";
-
+            if (attrs.localizedlabel != undefined)
+                localizedlabel = attrs.localizedlabel;
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : '';
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : '';
@@ -132,6 +136,7 @@
                         + ' isrequired="ctrl.isrequired"'
                         + ' ' + hideremoveicon
                         + ' label="' + label + '"'
+                        + ' localizedlabel="' + localizedlabel + '"'
                         + ' entityName="' + label + '" '
                         + hidelabel 
                     + ' </vr-select>'

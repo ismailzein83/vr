@@ -140,8 +140,10 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                     if (ctrl.datasource.length > 0) {
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var item = ctrl.datasource[i].data;
-                            if (item.IsIdentifier)
+                            if (item.IsIdentifier) {
+                                item.IncludeInInsert = true;
                                 identifierColumnExists = true;
+                            }
                             if (item.IncludeInInsert || item.IncludeInUpdate)
                                 insertOrUpdateColumnExists = true;
                         }

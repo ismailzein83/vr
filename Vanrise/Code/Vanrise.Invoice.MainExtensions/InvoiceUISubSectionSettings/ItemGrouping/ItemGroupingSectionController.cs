@@ -61,7 +61,7 @@ namespace Vanrise.Invoice.MainExtensions
                      if( input.Query.SectionId.HasValue)
                      {
                         
-                        var invoiceType = new InvoiceTypeManager().GetInvoiceType(input.Query.InvoiceTypeId);
+                        var invoiceType = new InvoiceTypeManager().GetInvoiceType(input.Query.InvoiceTypeId,true);
                         section = GetSection(invoiceType, input.Query.SectionId.Value);
                         if(section != null)
                         {
@@ -134,7 +134,7 @@ namespace Vanrise.Invoice.MainExtensions
         private string GetSectionTitle(Guid invoiceTypeId, Guid uniqueSectionID)
         {
             string sectionTitle = null;
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId,true);
             invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceTypeId);
             invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", invoiceTypeId);

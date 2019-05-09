@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeFilenamePattern", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VRModalService","VR_Invoice_InvoiceTypeAPIService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Invoice_InvoiceTypeAPIService) {
+app.directive("vrInvoicetypeFilenamePattern", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRModalService", "VR_Invoice_InvoiceTypeAPIService","VRLocalizationService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Invoice_InvoiceTypeAPIService, VRLocalizationService) {
 
         var directiveDefinitionObject = {
 
@@ -32,8 +32,13 @@ app.directive("vrInvoicetypeFilenamePattern", ["UtilsService", "VRNotificationSe
             if (attrs.hidelabel != undefined)
                 withemptyline = '';
             var label = "File Name Pattern";
+            var localizedlabel = 'VRRes.Invoice.SerialNumberPattern.VREnd';
+            if (attrs.localizedlabel != undefined)
+                localizedlabel = attrs.localizedlabel;
             if (attrs.label != undefined)
                 label = attrs.label;
+            if (localizedlabel != undefined && localizedlabel != null && localizedlabel != '' && VRLocalizationService.isLocalizationEnabled())
+                label = localizedlabel;
             var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
                              + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
                              + '<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired" type="filename"></vr-textbox>'

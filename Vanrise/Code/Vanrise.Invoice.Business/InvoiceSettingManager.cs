@@ -248,7 +248,7 @@ namespace Vanrise.Invoice.Business
             if (invoiceSetting == null)
                 throw new NullReferenceException("invoiceSetting");
 
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceSetting.InvoiceTypeId);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceSetting.InvoiceTypeId,true);
             if (invoiceType == null)
                 throw new NullReferenceException("invoiceType");
             if (invoiceType.Settings == null)
@@ -305,7 +305,7 @@ namespace Vanrise.Invoice.Business
         public AutomaticInvoiceSettingPartRuntime GetAutomaticInvoiceSettingPartRuntime(Guid invoiceTypeId)
         {
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
+            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId,true);
             return new AutomaticInvoiceSettingPartRuntime
             {
                 AutomaticInvoiceActions = invoiceType.Settings.AutomaticInvoiceActions,

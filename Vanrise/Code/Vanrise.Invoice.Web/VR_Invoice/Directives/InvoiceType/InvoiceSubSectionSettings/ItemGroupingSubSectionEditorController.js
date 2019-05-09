@@ -17,6 +17,8 @@
         var recordFilterAPI;
         var recordFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -33,6 +35,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onItemGroupingSubSectionSettingsReady = function (api) {
                 itemGroupingSubSectionSettingsAPI = api;
                 itemGroupingSubSectionSettingsReadyPromiseDeferred.resolve();
@@ -47,7 +50,10 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
             function builSubSectionObjFromScope() {
                 var filterGroup = recordFilterAPI.getData();
                 return {
@@ -55,6 +61,7 @@
                     SectionTitle: $scope.scopeModel.sectionTitle,
                     Settings: itemGroupingSubSectionSettingsAPI.getData(),
                     SubSectionFilter: filterGroup != undefined ? filterGroup.filterObj : undefined,
+                    TextResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
                 };
             }
             function addeSubSection() {
@@ -116,7 +123,17 @@
                     });
                     return recordFilterLoadPromiseDeferred.promise;
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadItemGroupingSubSectionSettings, loadRecordFilterDirective]).then(function () {
+                function loadLocalizationTextResourceSelector() {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var localizationTextResourcePayload = subSectionEntity != undefined ? { selectedValue: subSectionEntity.TextResourceKey } : undefined;
+
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
+                var promises = [setTitle, loadStaticData, loadItemGroupingSubSectionSettings, loadRecordFilterDirective, loadLocalizationTextResourceSelector];
+                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;

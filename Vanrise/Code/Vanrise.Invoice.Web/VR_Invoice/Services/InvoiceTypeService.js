@@ -193,7 +193,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService', 'VRCommon_Object
             };
 
             var parameters = {
-                sectionTitleValue: sectionEntity,
+                sectionEntity: sectionEntity,
                 exitingSections: exitingSections
             };
 

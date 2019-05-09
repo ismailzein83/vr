@@ -62,6 +62,15 @@ namespace Vanrise.Invoice.MainExtensions
             }
             return gridColumns;
         }
+        public override void ApplyTranslation(InvoiceTranslationContext context)
+        {
+            if (SubSections != null && SubSections.Count>0)
+            {
+                foreach(var subsection in SubSections)
+                {
+                    subsection.ApplyTranslation(context);
+                }
+            }
+        }
     }
-
 }

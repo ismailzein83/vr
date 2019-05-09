@@ -7,7 +7,8 @@
                         <vr-columns width="1/3row">
                             <vr-textbox value="scopeModel.actionTitle" label="Action Title" isrequired="true"></vr-textbox>
                         </vr-columns>
-                        <vr-invoicetype-invoiceactions-selector on-ready="scopeModel.onInvoiceActionsSelectorReady" normal-col-num="4" isrequired ="true"></vr-invoicetype-invoiceactions-selector>
+                        <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceSelectorReady" normal-col-num="4"></vr-common-vrlocalizationtextresource-selector>
+                        <vr-invoicetype-invoiceactions-selector on-ready="scopeModel.onInvoiceActionsSelectorReady" normal-col-num="4" isrequired="true"></vr-invoicetype-invoiceactions-selector>
                         <vr-columns width="1/3row">
                             <vr-buttontype-selector on-ready="scopeModel.onButtonTypesSelectorReady" isrequired="true"></vr-buttontype-selector>
                         </vr-columns>

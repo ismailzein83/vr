@@ -1,6 +1,7 @@
 ﻿<vr-columns width="fullrow" haschildcolumns>
     <vr-columns width="1/3row">
         <vr-select label="Days of the Month"
+                   localizedlabel="VRRes.Common.DaysOfTheMonth.VREnd"
                    datasource="ctrl.monthlyTypes"
                    datavaluefield="value"
                    datatextfield="description"
@@ -10,7 +11,7 @@
     </vr-columns>
     <vr-validation-group validationcontext="validationContext">
         <vr-columns width="1/3row" ng-if="ctrl.selectedMonthlyType.value == 0">
-            <vr-textbox value="ctrl.specificDay" type="number" decimalprecision="0" minvalue="1" maxvalue="28" label="Specific Day" isrequired></vr-textbox>
+            <vr-textbox value="ctrl.specificDay" type="number" decimalprecision="0" minvalue="1" maxvalue="28" label="Specific Day" localizedlabel="VRRes.Common.SpecificDay.VREnd" isrequired></vr-textbox>
         </vr-columns>
         <vr-columns width="1/3row" withemptyline>
             <vr-button type="Add" vr-disabled="ctrl.selectedMonthlyType == undefined || validationContext.validate() != null" data-onclick="ctrl.addMonthlyPeriod" standalone></vr-button>
@@ -23,8 +24,8 @@
         <vr-validator validate="ctrl.isValid()">
             <vr-datagrid datasource="ctrl.data" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px" enabledraggablerow="true"
                          on-ready="onGridReady" hidegridmenu ondeleterow="ctrl.removeItem">
-                <vr-datagridcolumn headertext="'Days of the month'" field="'Entity.MonthlyType'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Specific Day'" field="'Entity.SpecificDay'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Days of the month'" localizedheadertext="'VRRes.Common.DaysOfTheMonth.VREnd'" field="'Entity.MonthlyType'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Specific Day'" localizedheadertext="'VRRes.Common.SpecificDay.VREnd'" field="'Entity.SpecificDay'" widthfactor="10" disablesorting></vr-datagridcolumn>
             </vr-datagrid>
         </vr-validator>
     </vr-columns>

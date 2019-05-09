@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicesettingGrid", ["VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_InvoiceSettingService", "VR_Invoice_PartnerInvoiceSettingService",
-    function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, VR_Invoice_InvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_InvoiceSettingService, VR_Invoice_PartnerInvoiceSettingService) {
+app.directive("vrInvoicesettingGrid", ["VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_InvoiceSettingService", "VR_Invoice_PartnerInvoiceSettingService","VRLocalizationService",
+    function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, VR_Invoice_InvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_InvoiceSettingService, VR_Invoice_PartnerInvoiceSettingService, VRLocalizationService) {
 
         var directiveDefinitionObject = {
 
@@ -26,6 +26,8 @@ app.directive("vrInvoicesettingGrid", ["VRCommon_ObjectTrackingService", "UtilsS
         };
 
         function InvoiceSettingGrid($scope, ctrl, $attrs) {
+            var isLocatizaionEnabled = VRLocalizationService.isLocalizationEnabled();
+
             this.initializeController = initializeController;
             var gridAPI;
             var gridQuery;
@@ -33,6 +35,7 @@ app.directive("vrInvoicesettingGrid", ["VRCommon_ObjectTrackingService", "UtilsS
             var showAccountSelector;
             var partnerIds;
             var invoiceTypeId;
+
             function initializeController() {
 
                 $scope.datastore = [];
@@ -45,7 +48,7 @@ app.directive("vrInvoicesettingGrid", ["VRCommon_ObjectTrackingService", "UtilsS
                     var drillDownDefinition = {};
                     var drillDownDefinitionHistory = {};
 
-                    drillDownDefinition.title = "Linked Partners";
+                    drillDownDefinition.title = isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Invoice.LinkedPartners.VREnd", "Linked Partners"):"Linked Partners";
                     drillDownDefinition.directive = "vr-invoice-partnerinvoiecsetting-search";
 
                     drillDownDefinition.loadDirective = function (directiveAPI, invoiceSettingItem) {
@@ -59,8 +62,8 @@ app.directive("vrInvoicesettingGrid", ["VRCommon_ObjectTrackingService", "UtilsS
                         return invoiceSettingItem.partnerInvoiceSettingGridAPI.load(query);
                     };
                     drillDownDefinitions.push(drillDownDefinition);
-
-                    drillDownDefinitionHistory.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                    var historyDrillDownTitle = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                    drillDownDefinitionHistory.title = (isLocatizaionEnabled && historyDrillDownTitle == 'History') ? VRLocalizationService.getResourceValue("VRRes.Common.History.VREnd", "History"): historyDrillDownTitle;
                     drillDownDefinitionHistory.directive = "vr-common-objecttracking-grid";
                     drillDownDefinitionHistory.loadDirective = function (directiveAPI, invoiceSettingItem) {
                         invoiceSettingItem.objectTrackingGridAPI = directiveAPI;
@@ -121,17 +124,18 @@ app.directive("vrInvoicesettingGrid", ["VRCommon_ObjectTrackingService", "UtilsS
             }
 
             function defineMenuActions() {
+
                 var defaultMenuAction = [{
-                    name: "Edit",
+                    name: isLocatizaionEnabled?VRLocalizationService.getResourceValue("VRRes.Common.Edit.VREnd", "Edit") : "Edit",
                     clicked: editInvoiceSetting,
                     haspermission: hasUpdateInvoiceSettingPermission
                 }];
                 var mainMenuAction = [{
-                    name: "Edit",
+                    name: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Edit.VREnd", "Edit") : "Edit",
                     clicked: editInvoiceSetting,
                     haspermission: hasUpdateInvoiceSettingPermission
                 }, {
-                    name: "Set Default",
+                        name: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.SetDefault.VREnd", "SetDefault") : "Set Default",
                     clicked: setInvoiceSettingDefault,
                     haspermission: hasUpdateInvoiceSettingPermission
                 }];

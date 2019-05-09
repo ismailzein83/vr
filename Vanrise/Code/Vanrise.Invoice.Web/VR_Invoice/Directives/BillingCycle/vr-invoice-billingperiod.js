@@ -12,7 +12,7 @@
                 normalColNum: '@',
                 label: '@',
                 customvalidate: '=',
-                isrequired:'='
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -129,22 +129,23 @@
                 hideremoveicon = 'hideremoveicon';
             }
             var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                            + ' <vr-select on-ready="scopeModel.onSelectorReady"'
-                            + ' datasource="scopeModel.templateConfigs"'
-                            + ' selectedvalues="scopeModel.selectedTemplateConfig"'
-                            + ' datavaluefield="ExtensionConfigurationId"'
-                            + ' datatextfield="Title"'
-                            + 'label="Billing Period" '
-                            + ' ' + hideremoveicon +' '
-                            + 'isrequired ="ctrl.isrequired"' 
-                           +' >'                           
-                        + '</vr-select>'
-                    + ' </vr-columns>'
-                    + '<vr-columns colnum="12" haschildcolumns>'
-                        + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                                + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate">'
-                        + '</vr-directivewrapper>'
-                    + ' </vr-columns>';
+                + ' <vr-select on-ready="scopeModel.onSelectorReady"'
+                + ' datasource="scopeModel.templateConfigs"'
+                + ' selectedvalues="scopeModel.selectedTemplateConfig"'
+                + ' datavaluefield="ExtensionConfigurationId"'
+                + ' datatextfield="Title"'
+                + 'label="Billing Period" '
+                + 'localizedlabel="VRRes.Invoice.BillingPeriod.VREnd" '
+                + ' ' + hideremoveicon + ' '
+                + 'isrequired ="ctrl.isrequired"'
+                + ' >'
+                + '</vr-select>'
+                + ' </vr-columns>'
+                + '<vr-columns colnum="12" haschildcolumns>'
+                + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
+                + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate">'
+                + '</vr-directivewrapper>'
+                + ' </vr-columns>';
             return template;
         }
     }

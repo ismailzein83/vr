@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
+app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', function (BaseDirService,VRLocalizationService) {
 
     return ({
         getTemplate: getTemplate,
@@ -55,28 +55,29 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
 
         }
     }
-
     function getButtonAttributes(type) {
+        var isLocatizaionEnabled = VRLocalizationService.isLocalizationEnabled();
+
         switch (type) {
             case "Start":
                 return {
-                    text: "Start",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Start.VREnd", "Start") : "Start",
                     class: "glyphicon  glyphicon-play"
                 };
 
             case "Reset":
                 return {
-                    text: "Reset",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Reset.VREnd", "Reset") : "Reset",
                     class: "glyphicon  glyphicon-refresh"
                 };
             case "Search":
                 return {
-                    text: "Search",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Search.VREnd", "Search") : "Search",
                     class: "glyphicon  glyphicon-search"
                 };
             case "Add":
                 return {
-                    text: "Add",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Add.VREnd", "Add") :"Add",
                     class: "glyphicon  glyphicon-plus-sign"
                 };
             case "Edit":
@@ -89,25 +90,25 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Remove",
                     class: "glyphicon  glyphicon-minus-sign"
                 };
-            case "Save":
+            case "Save": 
                 return {
-                    text: "Save",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Save.VREnd", "Save") : "Save",
                     class: "glyphicon  glyphicon-floppy-disk"
                 };
             case "Yes":
                 return {
-                    text: "Yes",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Yes.VREnd", "Yes") : "Yes",
                     class: "glyphicon  glyphicon-floppy-disk"
                 };
             case "Close":
                 return {
-                    text: "Close",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Close.VREnd", "Close") : "Close",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
 
             case "Cancel":
                 return {
-                    text: "Cancel",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Cancel.VREnd", "Cancel") : "Cancel",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
 
@@ -141,7 +142,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case "No":
                 return {
-                    text: "No",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.No.VREnd", "No")  : "No",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
             case "Login":
@@ -186,7 +187,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'Upload':
                 return {
-                    text: 'Upload',
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Upload.VREnd", "Upload") : "Upload",
                     class: 'glyphicon glyphicon-upload'
                 };
             case 'ManageCountries':
@@ -253,17 +254,17 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'SelectAll':
                 return {
-                    text: 'Select All',
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.SelectAll.VREnd", "Select All") : "Select All",
                     class: "glyphicon glyphicon-check"
                 };
             case 'DeselectAll':
                 return {
-                    text: 'Deselect All',
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.DeselectAll.VREnd", "Deselect All") : "Deselect All",
                     class: "glyphicon glyphicon-unchecked"
                 };
             case 'Export':
                 return {
-                    text: 'Export',
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Export.VREnd", "Export") : "Export",
                     class: "glyphicon glyphicon-download"
                 };
             case "Continue":
@@ -293,7 +294,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'Help':
                 return {
-                    text: 'Help',
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Help.VREnd", "Help") : "Help",
                     class: 'glyphicon glyphicon-question-sign'
                 };
             case 'Next':
@@ -318,12 +319,12 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'GenerateInvoice':
                 return {
-                    text: 'Generate Invoice',
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.GenerateInvoice.VREnd", "Generate Invoice") : "Generate Invoice",
                     class: "glyphicon glyphicon-retweet"
                 };
             case 'Generate':
                 return {
-                    text: 'Generate',
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Generate.VREnd", "Generate") : "Generate",
                     class: "glyphicon glyphicon-retweet"
                 };
             case 'Analyze':
@@ -338,7 +339,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'SendEmail':
                 return {
-                    text: 'Send Email',
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.SendEmail.VREnd", "SendEmail") : "SendEmail",
                     class: "glyphicon glyphicon-envelope"
                 };
             case 'ExcludeAll':
@@ -368,7 +369,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case "BulkActions":
                 return {
-                    text: "Bulk Actions",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.BulkActions.VREnd", "Bulk Actions") : "Bulk Actions",
                     class: "glyphicon glyphicon-tasks"
                 };
             case "Evaluate":
@@ -402,7 +403,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'Compare':
                 return {
-                    text: 'Compare',
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Compare.VREnd", "Compare") : "Compare",
                     class: "glyphicon glyphicon-retweet"
                 };
 
@@ -413,7 +414,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case "Delete":
                 return {
-                    text: "Delete",
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Delete.VREnd", "Delete") : "Delete",
                     class: "glyphicon glyphicon-trash"
                 };
             case "UploadExcel":

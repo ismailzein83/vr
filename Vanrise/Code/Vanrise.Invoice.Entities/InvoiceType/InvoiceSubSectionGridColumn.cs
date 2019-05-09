@@ -11,6 +11,7 @@ namespace Vanrise.Invoice.Entities
     {
         public string Header { get; set; }
         public string FieldName { get; set; }
+        public string TextResourceKey { get; set; }
         public GridColumnSettings GridColumnSettings { get; set; }
         public DataRecordFieldType FieldType { get; set; }
     }

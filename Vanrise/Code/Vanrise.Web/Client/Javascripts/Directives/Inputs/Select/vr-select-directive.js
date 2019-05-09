@@ -30,6 +30,7 @@
             restrict: 'E',
             scope: {
                 label: '@',
+                localizedlabel: '@',
                 customlabel: '@',
                 entityname: '@',
                 onReady: '=',
@@ -928,7 +929,11 @@
                     }
 
                     var labelTemplate = '';
-                    var labelvalue = attrs.customlabel != undefined ? attrs.customlabel : attrs.label;
+                    var labelvalue;
+                    if (!VRLocalizationService.isLocalizationEnabled())
+                        labelvalue = attrs.customlabel != undefined ? attrs.customlabel : attrs.label;
+                    else
+                        labelvalue = (attrs.localizedlabel != undefined && attrs.localizedlabel != null && attrs.localizedlabel !='') ? attrs.localizedlabel : attrs.label;
                     if (labelvalue != undefined && attrs.hidelabel == undefined)
                         labelTemplate = '<vr-label>' + labelvalue + '</vr-label>';
                     angular.element(element[0].querySelector('.dropdown-container2')).prepend(labelTemplate);

@@ -6,9 +6,8 @@
     }
     .vr-progress-bar .item {
         display: inline-block;
-        max-width: 25%;
+        /*width: 25%;*/
         position: relative;
-        width: 100%;
         height: 7px;
         z-index: 1000;
     }
@@ -18,8 +17,8 @@
             box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
             background-size: 35px 35px;
             background-color: #ddd;
-            background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
-            background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
+            /*background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
+            background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);*/
             height: 7px;
             width: 100%;
             z-index: -1000;
@@ -40,8 +39,8 @@
             height: 25px;
             width: 25px;
             box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
-            background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
-            background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+            /*background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+            background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);*/
             -webkit-box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
         }
 
@@ -71,14 +70,31 @@
         .vr-progress-bar .item .line.warning {
             background-color: #FFD800;
         }
+    @-webkit-keyframes vr-visualitem-blinker {
+        from {
+            opacity: 1.0;
+            background-color: #d7e9f1;
+        }
 
+        to {
+            opacity: 1.0;
+            background-color: #FFD800;
+        }
+    }
         .vr-progress-bar .item .circle.warning {
-            -webkit-animation: scaleIn 0.5s 0 cubic-bezier(.36, .11, .89, .32);
+            background-color: #FFD800 !important;
+            text-decoration: blink;
+            -webkit-animation-name: vr-visualitem-blinker;
+            -webkit-animation-duration: 1s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-timing-function: ease-in;
+            -webkit-animation-direction: alternate;
+            /*-webkit-animation: scaleIn 0.5s 0 cubic-bezier(.36, .11, .89, .32);
             -webkit-animation-timing-function: linear;
             -webkit-animation-iteration-count: infinite;
             -webkit-animation-timing-function: ease-in-out;
             -webkit-animation-direction: alternate;
-            background-color: #FFD800;
+            background-color: #FFD800;*/
         }
 
 @keyframes scaleIn {
@@ -93,7 +109,7 @@
 
 </style>
 <div class="vr-progress-bar">
-    <div class="item" ng-repeat="item in ctrl.items">
+    <div class="item" ng-repeat="item in ctrl.items" ng-style="{'width': 100/ctrl.items.length +'%'}">
         <div class="circle" ng-class="{completed:item.isCompleted,warning:item.isWarning,visited:item.isVisited}" data-toggle="tooltip" data-placement="top" title="{{item.text}}">
             <div class="circleText">{{item.textItem}}</div>
         </div>

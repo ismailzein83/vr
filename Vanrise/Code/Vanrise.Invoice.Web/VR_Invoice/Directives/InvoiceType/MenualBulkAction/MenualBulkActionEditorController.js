@@ -2,9 +2,9 @@
 
     'use strict';
 
-    menualBulkActionEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
+    menualBulkActionEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-   function menualBulkActionEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function menualBulkActionEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var context;
         var actionEntity;
@@ -12,7 +12,10 @@
         var isEditMode;
 
         var invoiceBulkActionsSelectorAPI;
-        var invoiceBulkActionsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+       var invoiceBulkActionsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+       var localizationTextResourceSelectorAPI;
+       var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -29,9 +32,14 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onInvoiceBulkActionsSelectorReady = function (api) {
                 invoiceBulkActionsSelectorAPI = api;
                 invoiceBulkActionsSelectorReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateInvoiceBulkAction() : addInvoiceBulkAction();
@@ -45,6 +53,7 @@
                     Title: $scope.scopeModel.actionTitle,
                     InvoiceMenualBulkActionId:actionEntity != undefined?actionEntity.InvoiceMenualBulkActionId:UtilsService.guid(),
                     InvoiceBulkActionId: invoiceBulkActionsSelectorAPI.getSelectedIds(),
+                    TextResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
                 };
             }
 
@@ -95,7 +104,17 @@
                     return invoiceBulkActionsSelectorLoadPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceBulkActionsSelector]).then(function () {
+                function loadLocalizationTextResourceSelector() {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var localizationTextResourcePayload = actionEntity != undefined ? { selectedValue: actionEntity.TextResourceKey } : undefined;
+
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
+                var promises = [setTitle, loadStaticData, loadInvoiceBulkActionsSelector, loadLocalizationTextResourceSelector];
+                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;

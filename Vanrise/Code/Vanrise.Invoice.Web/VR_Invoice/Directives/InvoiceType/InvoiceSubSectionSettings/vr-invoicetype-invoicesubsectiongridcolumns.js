@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSubSectionSettingsService", "VR_Invoice_InvoiceFieldEnum",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceSubSectionSettingsService, VR_Invoice_InvoiceFieldEnum) {
+app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["VR_Invoice_InvoiceSubSectionSettingsService", "VRLocalizationService",
+    function (VR_Invoice_InvoiceSubSectionSettingsService, VRLocalizationService) {
 
         var directiveDefinitionObject = {
 
@@ -32,7 +32,8 @@ app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRN
 
             function initializeController() {
                 ctrl.datasource = [];
-
+                $scope.scopeModel = {};
+                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
                 ctrl.isValid = function () {
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
@@ -68,6 +69,7 @@ app.directive("vrInvoicetypeInvoicesubsectiongridcolumns", ["UtilsService", "VRN
                                 FieldName: currentItem.Entity.FieldName,
                                 FieldType: currentItem.Entity.FieldType,
                                 WidthFactor: currentItem.Entity.WidthFactor,
+                                TextResourceKey: currentItem.Entity.TextResourceKey
                             });
                         }
                     }

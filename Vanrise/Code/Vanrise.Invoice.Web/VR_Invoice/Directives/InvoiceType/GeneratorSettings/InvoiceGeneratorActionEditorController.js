@@ -20,6 +20,9 @@
         var invoiceFilterConditionAPI;
         var invoiceFilterConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -34,6 +37,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onInvoiceFilterConditionReady = function (api) {
                 invoiceFilterConditionAPI = api;
                 invoiceFilterConditionReadyPromiseDeferred.resolve();
@@ -52,14 +56,20 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
 
+         
 
             function builInvoiceGeneratorActionObjFromScope() {
                 return {
                     Title: $scope.scopeModel.actionTitle,
                     InvoiceGeneratorActionId: invoiceActionsSelectorAPI.getSelectedIds(),
                     ButtonType: buttonTypesSelectorAPI.getSelectedIds(),
-                    FilterCondition: invoiceFilterConditionAPI.getData()
+                    FilterCondition: invoiceFilterConditionAPI.getData(),
+                    TextResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
                 };
             }
 
@@ -135,7 +145,17 @@
                     return buttonTypesSelectorLoadPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceActionsSelector, loadButtonTypesSelector, loadInvoiceFilterConditionDirective]).then(function () {
+                function loadLocalizationTextResourceSelector() {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var localizationTextResourcePayload = invoiceGeneratorActionEntity != undefined ? { selectedValue: invoiceGeneratorActionEntity.TextResourceKey } : undefined;
+
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
+                var promises = [setTitle, loadStaticData, loadInvoiceActionsSelector, loadButtonTypesSelector, loadInvoiceFilterConditionDirective, loadLocalizationTextResourceSelector];
+                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;

@@ -37,7 +37,7 @@ namespace Vanrise.Invoice.Business
         private IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input, bool getClientInvoices)
         {
             InvoiceTypeManager manager = new InvoiceTypeManager();
-            var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
+            var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId,true);
             var result = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler());
             if (input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
@@ -80,7 +80,7 @@ namespace Vanrise.Invoice.Business
                 return null;
             else
             {
-                var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+                var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId,true);
                 var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoiceTypeId, new List<string> { partnerId });
                 invoiceAccounts.ThrowIfNull("invoiceAccounts");
                 var invoiceAccount = invoiceAccounts.FirstOrDefault();
@@ -524,7 +524,7 @@ namespace Vanrise.Invoice.Business
         public Entities.InvoiceDetail GetInvoiceDetail(long invoiceId)
         {
             var invoice = GetInvoice(invoiceId);
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId,true);
             var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> { invoice.PartnerId });
             invoiceAccounts.ThrowIfNull("invoiceAccounts");
             var invoiceAccount = invoiceAccounts.FirstOrDefault();
@@ -752,7 +752,7 @@ namespace Vanrise.Invoice.Business
 
         public List<Guid> GetAvailableMenualBulkActionIds(Guid invoiceTypeId)
         {
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId,true);
             if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.InvoiceBulkActions != null && invoiceType.Settings.InvoiceBulkActions.Count > 0)
             {
                 var allowedBulkActionIds = new List<Guid>();
@@ -955,7 +955,7 @@ namespace Vanrise.Invoice.Business
             }
             protected override Vanrise.Entities.BigResult<InvoiceDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<InvoiceQuery> input, IEnumerable<Entities.Invoice> allRecords)
             {
-                InvoiceType invoiceType = new InvoiceTypeManager().GetInvoiceType(input.Query.InvoiceTypeId);
+                InvoiceType invoiceType = new InvoiceTypeManager().GetInvoiceType(input.Query.InvoiceTypeId,true);
 
                 return allRecords.ToBigResult(input, null, (entity) => InvoiceManager.InvoiceDetailMapper1(entity, invoiceType, input.Query.IncludeAllFields));
             }
@@ -990,7 +990,7 @@ namespace Vanrise.Invoice.Business
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
                 InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
+                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId,true);
                 invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
                 invoiceType.Settings.InvoiceGridSettings.ThrowIfNull("invoiceType.Settings.InvoiceGridSettings");

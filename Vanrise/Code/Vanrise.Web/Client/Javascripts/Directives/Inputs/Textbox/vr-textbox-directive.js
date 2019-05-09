@@ -263,18 +263,14 @@
                 var endTemplate = '</div>';
 
                 var labelTemplate = '';
-
-                //var label = "";
-
-                //if (attrs.label != undefined) {
-                //    label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
-                //}
-
-                //if (attrs.label != undefined)
-                //    labelTemplate = '<vr-label>' + label + '</vr-label>';
-
-                if (attrs.label != undefined)
-                    labelTemplate = '<vr-label>{{ctrl.label}}</vr-label>';
+                if (attrs.label != undefined) {
+                    if (attrs.localizedlabel != undefined && VRLocalizationService.isLocalizationEnabled()) {
+                        var label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+                        labelTemplate = '<vr-label>' + label +'</vr-label>';
+                    }
+                    else
+                        labelTemplate = '<vr-label>{{ctrl.label}}</vr-label>';
+                }
                 var type = 'text';
                 var isolationFormStart = "";
                 var isolationFormEnd = "";

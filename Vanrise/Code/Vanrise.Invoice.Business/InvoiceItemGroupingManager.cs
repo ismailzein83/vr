@@ -18,7 +18,7 @@ namespace Vanrise.Invoice.Business
         public IEnumerable<Entities.GroupingInvoiceItemDetail> GetFilteredGroupingInvoiceItems(GroupingInvoiceItemQuery query)
         {
             InvoiceTypeManager manager = new InvoiceTypeManager();
-            var invoiceType = manager.GetInvoiceType(query.InvoiceTypeId);
+            var invoiceType = manager.GetInvoiceType(query.InvoiceTypeId,true);
             var groupItem = invoiceType.Settings.ItemGroupings.FirstOrDefault(x => x.ItemGroupingId == query.ItemGroupingId);
             InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
             var results = invoiceItemManager.GetInvoiceItemsByItemSetNames(query.InvoiceId, new List<string> { groupItem.ItemSetName }, CompareOperator.Equal);

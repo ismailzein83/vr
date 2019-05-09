@@ -2,7 +2,7 @@
     <vr-modalbody>
         <vr-form name="formPartnerInvoiceSettingEditor">
             <vr-tabs>
-                <vr-tab header="'Definition'">
+                <vr-tab header="'Definition'" localizedheader="'VRRes.Common.Definition.VREnd'">
                     <vr-row>
                         <vr-invoice-invoicepartner-selector vr-disabled="scopeModel.isEditMode" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="4" isrequired="true" ismultipleselection ="true"></vr-invoice-invoicepartner-selector>
                         <vr-columns width="1/3row">
@@ -11,6 +11,7 @@
                                        datavaluefield="Id"
                                        selectedvalues="scopeModel.selectedOveridablePartsInfo"
                                        label="Parts to override"
+                                       localizedlabel="VRRes.Invoice.PartsToOverride.VREnd"
                                        hideselectedvaluessection
                                        ismultipleselection>
                             </vr-select>

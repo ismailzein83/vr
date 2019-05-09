@@ -14,6 +14,8 @@
         var automaticInvoiceActionSettingsAPI;
         var automaticInvoiceActionSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -29,9 +31,15 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onAutomaticInvoiceActionSettingsReady = function (api) {
                 automaticInvoiceActionSettingsAPI = api;
                 automaticInvoiceActionSettingsReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateAutomaticInvoiceAction() : addAutomaticInvoiceAction();
@@ -45,6 +53,7 @@
                     Title: $scope.scopeModel.actionTitle,
                     AutomaticInvoiceActionId: automaticInvoiceActionEntity != undefined ? automaticInvoiceActionEntity.AutomaticInvoiceActionId : UtilsService.guid(),
                     Settings: automaticInvoiceActionSettingsAPI.getData(),
+                    TextResourceKey: localizationTextResourceSelectorAPI!=undefined? localizationTextResourceSelectorAPI.getSelectedValues():undefined
                 };
             }
             function addAutomaticInvoiceAction() {
@@ -61,6 +70,7 @@
                 }
                 $scope.modalContext.closeModal();
             }
+
 
         }
 
@@ -92,7 +102,17 @@
                 });
                 return automaticInvoiceActionSettingsLoadPromiseDeferred.promise;
             }
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadAutomaticInvoiceActionSettingsDirective]).then(function () {
+            function loadLocalizationTextResourceSelector() {
+                var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                var localizationTextResourcePayload = automaticInvoiceActionEntity != undefined ? { selectedValue: automaticInvoiceActionEntity.TextResourceKey } : undefined;
+
+                localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                });
+                return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+            }
+            var promises = [setTitle, loadStaticData, loadAutomaticInvoiceActionSettingsDirective, loadLocalizationTextResourceSelector];
+            return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
 
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
