@@ -274,6 +274,8 @@ when not matched by target then
 	insert([ID],[Name],[Title],[FQTN],[VRWorkflowId],[Config])
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[VRWorkflowId],s.[Config]);
 
+DELETE FROM [bp].[BPDefinition] WHERE ID = '555CD0F8-64F8-4A35-B48F-B91E6DD8ED09';
+
 --[sec].[Group]--------------------------------------------------------------------------------
 BEGIN
 set nocount on;
