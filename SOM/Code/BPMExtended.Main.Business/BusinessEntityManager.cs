@@ -77,6 +77,32 @@ namespace BPMExtended.Main.Business
             return operationTypeDescriptiveObjectList;
         }
 
+        public List<OperationTypeDescriptiveObject> GetAvailableOperationType()
+        {
+            List<string> operationsIds = new List<string>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyOperationsInCatalog");
+            var toId = esq.AddColumn("StOperationId");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGeneralSetting", "F8A758B9-3A76-47CD-9FCF-374C934A2C31");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                foreach (var item in entities)
+                {
+                    operationsIds.Add(item.GetTypedColumnValue<string>(toId.Name));
+                }
+            }
+
+            List<OperationTypeDescriptiveObject> operationInfoItems = GetOperationTypeInfo();
+
+            var availableOperations = new List<OperationTypeDescriptiveObject>();
+            availableOperations = operationInfoItems.Where(p => !operationsIds.Any(p2 => p2.ToString() == p.Id.ToString())).ToList();
+            return availableOperations;
+        }
+
         public List<Year> GetYearsInfo()
         {
             var yearsList = new List<Year>();
