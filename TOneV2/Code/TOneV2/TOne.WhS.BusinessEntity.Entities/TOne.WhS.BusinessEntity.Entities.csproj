@@ -64,6 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountManager\AccountManager.cs" />
+    <Compile Include="AccountManager\AccountManagerAssignment.cs" />
     <Compile Include="AccountManager\CustomerGroupConfig.cs" />
     <Compile Include="AccountManager\SupplierGroupConfig.cs" />
     <Compile Include="ANumber\ANumberGroup.cs" />
