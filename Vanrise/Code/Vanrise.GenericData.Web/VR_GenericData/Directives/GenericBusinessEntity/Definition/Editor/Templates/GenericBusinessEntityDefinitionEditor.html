@@ -112,6 +112,9 @@
 <vr-tab header="'Bulk Actions'">
     <vr-genericdata-genericbe-bulkactions-management vr-loader="scopeModel.isLoadingBulkActionsDirective" on-ready="scopeModel.onGenericBEBulkActionsDirectiveReady" ></vr-genericdata-genericbe-bulkactions-management>
 </vr-tab>
+<vr-tab header="'Additional Settings'">
+    <vr-genericdata-genericbe-additionalsettings-grid on-ready="scopeModel.onAdditionalSettingsGridReady"></vr-genericdata-genericbe-additionalsettings-grid>
+</vr-tab>
 <vr-tab header="'Order Type'">
     <vr-row>
        <vr-genericdata-genericbe-orderdirection-selective on-ready="scopeModel.onOrderDirectionSelectorReady"  normal-col-num="4"></vr-genericdata-genericbe-orderdirection-selective>

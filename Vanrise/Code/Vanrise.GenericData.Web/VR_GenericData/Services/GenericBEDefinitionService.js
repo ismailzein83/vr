@@ -16,6 +16,7 @@
         var conditionalHandlerPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/OnAfterSaveHandler/Templates/AfterSaveHandlerConditionalEditor.html";
         var conditionGroupPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBESaveCondition/MainExtensions/Templates/GenericBEConditionGroupEditor.html";
         var partDefinitionPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/OnBeforeInsertHandler/Templates/SerialNumberPartDefinitionEditor.html";
+        var additionalSettingPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/AdditionalSettingEditor.html";
 
         return ({
             addGenericBEColumnDefinition: addGenericBEColumnDefinition,
@@ -39,7 +40,9 @@
             addGenericBESerialNumberPart: addGenericBESerialNumberPart,
             editGenericBESerialNumberPart: editGenericBESerialNumberPart,
             addGenericBEBulkActionDefinition: addGenericBEBulkActionDefinition,
-            editGenericBEBulkActionDefinition: editGenericBEBulkActionDefinition
+            editGenericBEBulkActionDefinition: editGenericBEBulkActionDefinition,
+            addGenericBEAdditionalSetting: addGenericBEAdditionalSetting,
+            editGenericBEAdditionalSetting: editGenericBEAdditionalSetting
         });
 
         function addGenericBEColumnDefinition(onGenericBEColumnDefinitionAdded, context) {
@@ -354,6 +357,35 @@
             };
 
             VRModalService.showModal(bulkActionModalPath, parameters, settings);
+        }
+
+        function addGenericBEAdditionalSetting(onAdditionalSettingAdded, context) {
+            var parameters = {
+                context: context
+
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEAdditionalSettingAdded = onAdditionalSettingAdded;
+            };
+
+            VRModalService.showModal(additionalSettingPath, parameters, settings);
+        }
+
+        function editGenericBEAdditionalSetting(onAdditionalSettingUpdated, additionalSettings, context) {
+            var parameters = {
+                additionalSettings: additionalSettings,
+                context: context
+
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEAdditionalSettingUpdated = onAdditionalSettingUpdated;
+            };
+            VRModalService.showModal(additionalSettingPath, parameters, settings);
         }
 
     };

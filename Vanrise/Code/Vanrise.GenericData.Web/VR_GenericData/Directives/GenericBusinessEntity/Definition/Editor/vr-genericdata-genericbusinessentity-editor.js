@@ -103,7 +103,11 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             var bulkActionsDirectiveAPI;
             var bulkActionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-			var typefieldsSelectorDefered = UtilsService.createPromiseDeferred();
+            var typefieldsSelectorDefered = UtilsService.createPromiseDeferred();
+
+            var additionalSettingsGridAPI;
+            var additionalSettingsGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 			function initializeController() {
 				$scope.scopeModel = {};
 
@@ -151,7 +155,12 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 						};
 						VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, genericBEDefinitionRemoteSelectorAPI, genericBEDefinitionRemoteSelectorPayload, setLoader);
 					}
-				};
+                };
+
+                $scope.scopeModel.onAdditionalSettingsGridReady = function (api) {
+                    additionalSettingsGridAPI = api;
+                    additionalSettingsGridReadyPromiseDeferred.resolve();
+                };
 
 				$scope.scopeModel.onGenericBEDefinitionRemoteSelectorReady = function (api) {
 					genericBEDefinitionRemoteSelectorAPI = api;
@@ -332,7 +341,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         RemoteGenericBEDefinitionId: genericBEDefinitionRemoteSelectorAPI != undefined && $scope.scopeModel.selectedGenericBEDefinitionType == VR_GenericData_GenericBEDefinitionTypeEnum.Remote ? genericBEDefinitionRemoteSelectorAPI.getSelectedIds() : undefined,
                         OnBeforeGetFilteredHandler: beforeGetFilteredHandlerAPI.getData(),
                         ShowUpload: $scope.scopeModel.showUploadButton,
-                        UploadFields: ($scope.scopeModel.showUploadButton == true) ? uploadedFieldsGridAPI.getData() : null
+                        UploadFields: ($scope.scopeModel.showUploadButton == true) ? uploadedFieldsGridAPI.getData() : null,
+                        AdditionalSettings: additionalSettingsGridAPI.getData()
                     };
                 };
 
@@ -392,7 +402,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 						promises.push(getDataRecordFieldsInfo(businessEntityDefinitionSettings.DataRecordTypeId));
 					}
 
-
+                    promises.push(loadAdditionalSettingsGrid());
 
 					function loadDataRecordTypeSelector() {
 
@@ -410,6 +420,16 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 						return loadDataRecordTypeSelectorPromiseDeferred.promise;
 					}
 
+                    function loadAdditionalSettingsGrid() {
+                        var additionalSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        additionalSettingsGridReadyPromiseDeferred.promise.then(function () {
+                            var additionalSettingsPayload = {
+                                additionalSettings: businessEntityDefinitionSettings != undefined ? businessEntityDefinitionSettings.AdditionalSettings : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(additionalSettingsGridAPI, additionalSettingsPayload, additionalSettingsLoadPromiseDeferred);
+                        });
+                        return additionalSettingsLoadPromiseDeferred.promise;
+                    }
 
 
 					function loadDataRecordTitleFieldsSelector() {

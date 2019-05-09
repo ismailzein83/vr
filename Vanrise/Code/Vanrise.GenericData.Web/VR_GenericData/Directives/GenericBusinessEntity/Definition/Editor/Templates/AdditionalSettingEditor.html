@@ -1,1 +1,15 @@
-﻿
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEAdditionalSettingController" vr-loader="scopeModel.isLoading" width="'50%'">
+    <vr-modalbody>
+        <vr-form validationcontext="additionalSettingEditor">
+               <vr-genericdata-genericbe-additionalsettings-selective on-ready="scopeModel.onAdditionalSettingsSelectiveReady" normal-col-num="6"></vr-genericdata-genericbe-additionalsettings-selective>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="additionalSettingEditor" data-onclick="scopeModel.saveAdditionalSetting"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

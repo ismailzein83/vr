@@ -1,1 +1,8 @@
-﻿
+﻿<vr-button type="Add" data-onclick="scopeModel.addAdditionalSetting" standalone></vr-button>
+
+<vr-validator validate="scopeModel.isValid()">
+    <vr-datagrid datasource="scopeModel.datasource" menuactions="gridMenuActions"
+                 on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeSetting" hidegridmenu>
+        <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

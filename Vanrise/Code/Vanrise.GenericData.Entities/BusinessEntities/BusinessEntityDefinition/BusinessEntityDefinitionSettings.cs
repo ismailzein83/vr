@@ -21,6 +21,10 @@ namespace Vanrise.GenericData.Entities
         public virtual string WorkFlowAddBEActivityEditor { get; set; }
         public virtual string WorkFlowUpdateBEActivityEditor { get; set; }
         public virtual string WorkFlowGetBEActivityEditor { get; set; }
+        public virtual Dictionary<string, object> GetAdditionalSettings(IBEDefinitionSettingsGetAdditionalSettingsContext context)
+        {
+            return null;
+        }
         public virtual Dictionary<string, DataRecordField> TryGetRecordTypeFields(IBEDefinitionSettingsTryGetRecordTypeFieldsContext context)
         {
             return null;
@@ -35,6 +39,10 @@ namespace Vanrise.GenericData.Entities
 		}
 
 	}
+    public interface IBEDefinitionSettingsGetAdditionalSettingsContext
+    {
+
+    }
     public interface IBEDefinitionSettingsTryGetRecordTypeFieldsContext
     {
         BusinessEntityDefinition BEDefinition { get; }

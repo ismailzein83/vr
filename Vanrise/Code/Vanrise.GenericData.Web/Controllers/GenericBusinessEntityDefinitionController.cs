@@ -166,5 +166,12 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetGenericBEGridConditionConfigs();
         }
+
+        [HttpGet]
+        [Route("GetGenericBEAdditionalSettingsConfigs")]
+        public IEnumerable<GenericBEAdditionalSettingsConfig> GetGenericBEAdditionalSettingsConfigs()
+        {
+            return _manager.GetGenericBEAdditionalSettingsConfigs();
+        }
     }
 }
