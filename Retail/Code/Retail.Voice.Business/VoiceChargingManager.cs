@@ -110,16 +110,16 @@ namespace Retail.Voice.Business
         /// <summary>
         /// Should Be Replacing PriceVoiceEvent
         /// </summary>
-        public CDRPricingInfo PriceCDR(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, Dictionary<string, dynamic> recordsByName, dynamic billingCDR, decimal durationInSec, DateTime eventTime)
+        public CDRPricingInfo PriceCDR(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, decimal durationInSec, DateTime eventTime, dynamic billingCDR, Dictionary<string, dynamic> recordsByName)
         {
             PriceCDRInput priceCDRInput = new PriceCDRInput()
             {
                 AccountId = accountId,
                 ServiceTypeId = serviceTypeId,
-                RecordsByName = recordsByName,
-                BillingCDR = billingCDR,
                 DurationInSec = durationInSec,
-                EventTime = eventTime
+                EventTime = eventTime,
+                BillingCDR = billingCDR,
+                RecordsByName = recordsByName
             };
             List<PriceCDROutput> priceCDROutputList = this.PriceCDRs(accountBEDefinitionId, new List<PriceCDRInput> { priceCDRInput });
             if (priceCDROutputList == null || priceCDROutputList.Count == 0)
@@ -148,8 +148,8 @@ namespace Retail.Voice.Business
             PackageManager packageManager = new PackageManager();
             List<PriceCDROutput> priceCDROutputList = new List<PriceCDROutput>();
 
-            var packageCombinationsList = new HashSet<string>();
-            var cdrPricingInfoByPackageCombinations = new Dictionary<string, List<CDRPricingInfo>>();
+            var packageCombinationsDict = new Dictionary<string, BasePackageUsageVolumeCombination>();
+            var cdrPricingInfoListByPackageCombinations = new Dictionary<string, List<CDRPricingInfo>>();
 
             foreach (var priceCDRInput in priceCDRInputs)
             {
@@ -218,19 +218,20 @@ namespace Retail.Voice.Business
 
                 if (volumePackageItemsByPackageId != null)
                 {
-                    string packageCombinations = Retail.BusinessEntity.Entities.Helper.SerializePackageCombinations(volumePackageItemsByPackageId);
-                    packageCombinationsList.Add(packageCombinations);
+                    string packageCombinations = Helper.SerializePackageCombinations(volumePackageItemsByPackageId);
+                    if (!packageCombinationsDict.ContainsKey(packageCombinations))
+                        packageCombinationsDict.Add(packageCombinations, new BasePackageUsageVolumeCombination() { PackageItemsByPackageId = volumePackageItemsByPackageId });
 
-                    List<CDRPricingInfo> currentCDRPricingInfoList = cdrPricingInfoByPackageCombinations.GetOrCreateItem(packageCombinations);
+                    List<CDRPricingInfo> currentCDRPricingInfoList = cdrPricingInfoListByPackageCombinations.GetOrCreateItem(packageCombinations);
                     currentCDRPricingInfoList.Add(cdrPricingInfo);
                 }
             }
 
-            if (packageCombinationsList.Count > 0)
+            if (packageCombinationsDict.Count > 0)
             {
-                Dictionary<string, int> combinationIdByPackageCombinations = s_packageUsageVolumeCombinationManager.InsertAndGetCombinationIds(packageCombinationsList);
+                Dictionary<string, int> combinationIdByPackageCombinations = s_packageUsageVolumeCombinationManager.InsertAndGetCombinationIds(packageCombinationsDict);
 
-                foreach (var itm in cdrPricingInfoByPackageCombinations)
+                foreach (var itm in cdrPricingInfoListByPackageCombinations)
                 {
                     string packageCombinations = itm.Key;
                     List<CDRPricingInfo> cdrPricingInfos = itm.Value;
@@ -247,71 +248,85 @@ namespace Retail.Voice.Business
             return priceCDROutputList;
         }
 
-        public void Centrex_ApplyVolumePricingToCDRs(Guid accountBEDefinitionId, List<dynamic> cdrs)
-        {
-            if (cdrs == null || cdrs.Count == 0)
-                return;
-
-            var cdrVolumePricingInputList = cdrs.Select(cdr => new CDRVolumePricingInput(cdr, cdr.SubscriberAccountId, cdr.AttemptDateTime, cdr.SaleDurationInSeconds, cdr.PackageUsageVolumeCombinationId)).ToList();
-            List<CDRVolumePricingOutput> cdrVolumePricingOutputList = this.ApplyVolumePricingToCDRs(accountBEDefinitionId, cdrVolumePricingInputList);
-
-            foreach (var cdrVolumePricingOutput in cdrVolumePricingOutputList)
-            {
-                dynamic cdr = cdrVolumePricingOutput.CDRInput.CDR;
-
-                FillOrigValues(cdr);
-
-                if (cdrVolumePricingOutput.CDRPricingOutputItem == null)
-                {
-                    var firstCDRVolumePricingOutputItem = cdrVolumePricingOutput.CDRVolumePricingOutputItems.First();
-                    cdr.PackageId = firstCDRVolumePricingOutputItem.PackageId;
-                    cdr.ChargingPolicyId = null;
-                    cdr.SaleRate = null;
-                    cdr.SaleAmount = null;
-                    cdr.SaleRateTypeId = null;
-                    cdr.SaleCurrencyId = null;
-                    cdr.SaleRateValueRuleId = null;
-                    cdr.SaleRateTypeRuleId = null;
-                    cdr.SaleTariffRuleId = null;
-                    cdr.SaleExtraChargeRuleId = null;
-                    cdr.ChargedDurationInSeconds = 0;
-                }
-                else
-                {
-                    cdr.ChargedDurationInSeconds = cdrVolumePricingOutput.CDRPricingOutputItem.PricedDurationInSec;
-                    cdr.SaleAmount = cdrVolumePricingOutput.CDRPricingOutputItem.SaleAmount;
-                }
-
-                cdr.PricingDetails = cdrVolumePricingOutput.CDRPricingDetails;
-            }
-        }
-
-        public void FillOrigValues(dynamic record)
-        {
-            record.OrigPackageId = record.PackageId;
-            record.OrigChargingPolicyId = record.ChargingPolicyId;
-            record.OrigSaleRate = record.SaleRate;
-            record.OrigSaleAmount = record.SaleAmount;
-            record.OrigSaleRateTypeId = record.SaleRateTypeId;
-            record.OrigSaleCurrencyId = record.SaleCurrencyId;
-            record.OrigSaleRateValueRuleId = record.SaleRateValueRuleId;
-            record.OrigSaleRateTypeRuleId = record.SaleRateTypeRuleId;
-            record.OrigSaleTariffRuleId = record.SaleTariffRuleId;
-            record.OrigSaleExtraChargeRuleId = record.SaleExtraChargeRuleId;
-        }
-
-        public List<CDRVolumePricingOutput> ApplyVolumePricingToCDRs(Guid accountBEDefinitionId, List<CDRVolumePricingInput> cdrs, Guid? cdrPricingDetailRecordTypeId = null)
+        public List<CDRVolumePricingOutput> ApplyVolumePricingToCDRs(Guid accountBEDefinitionId, List<CDRVolumePricingInput> cdrs, Guid? cdrPricingDetailTypeId = null)
         {
             HashSet<PackageUsageVolumeBalanceKey> volumeBalanceKeys;
             List<VolumePricingCDRInProcess> cdrsInProcess = GenerateVolumePricingCDRsInProcess(accountBEDefinitionId, cdrs, out volumeBalanceKeys);
 
             Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey = s_accountPackageUsageVolumeBalanceManager.GetVolumeBalances(volumeBalanceKeys);
 
-            List<CDRVolumePricingOutput> cdrVolumePricingOutputList = GenerateFinalCDRVolumePricingOutputs(cdrsInProcess, volumeBalancesByKey, cdrPricingDetailRecordTypeId);
+            List<CDRVolumePricingOutput> cdrVolumePricingOutputList = GenerateFinalCDRVolumePricingOutputs(cdrsInProcess, volumeBalancesByKey, cdrPricingDetailTypeId);
 
             s_accountPackageUsageVolumeBalanceManager.UpdateVolumeBalancesInDB(volumeBalancesByKey.Values);
 
             return cdrVolumePricingOutputList;
+        }
+
+        public List<dynamic> GetBillingStatsCDRRecords(CDRVolumePricingOutput cdrVolumePricingOutput, Guid billingCDRTypeId)
+        {
+            List<dynamic> billingStats = new List<dynamic>();
+
+            dynamic billingCDR = cdrVolumePricingOutput.CDRInput.CDR;
+
+            List<CDRVolumePricingOutputItem> cdrVolumePricingOutputItems = cdrVolumePricingOutput.CDRVolumePricingOutputItems;
+            if (cdrVolumePricingOutputItems == null || cdrVolumePricingOutputItems.Count == 0)
+                throw new NullReferenceException("cdrVolumePricingOutput.CDRVolumePricingOutputItems");
+
+            foreach (var cdrVolumePricingOutputItem in cdrVolumePricingOutputItems)
+            {
+                dynamic clonedBillingCDR = billingCDR.CloneRecord(billingCDRTypeId);
+                RemovePricingFieldValues(clonedBillingCDR);
+
+                clonedBillingCDR.PackageId = cdrVolumePricingOutputItem.PackageId;
+                clonedBillingCDR.PackageItemId = cdrVolumePricingOutputItem.PackageItemId; //should be added at billingCDR, billingStat and trafficStat
+                clonedBillingCDR.SaleDurationInSec = cdrVolumePricingOutputItem.PricedDurationInSec;
+                clonedBillingCDR.ChargedDurationInSec = 0;
+
+                billingStats.Add(clonedBillingCDR);
+            }
+
+            CDRPricingOutputItem cdrPricingOutputItem = cdrVolumePricingOutput.CDRPricingOutputItem;
+            if (cdrPricingOutputItem != null)
+            {
+                dynamic clonedBillingCDR = billingCDR.CloneRecord(billingCDRTypeId);
+
+                clonedBillingCDR.PackageId = cdrPricingOutputItem.PackageId;
+                clonedBillingCDR.SaleDurationInSec = cdrPricingOutputItem.PricedDurationInSec;
+                clonedBillingCDR.ChargedDurationInSec = cdrPricingOutputItem.PricedDurationInSec;
+                clonedBillingCDR.SaleAmount = cdrPricingOutputItem.SaleAmount;
+
+                billingStats.Add(clonedBillingCDR);
+            }
+
+            return billingStats;
+        }
+
+        public void FillOrigValues(dynamic billingCDR)
+        {
+            billingCDR.OrigPackageId = billingCDR.PackageId;
+            billingCDR.OrigChargingPolicyId = billingCDR.ChargingPolicyId;
+            billingCDR.OrigSaleRate = billingCDR.SaleRate;
+            billingCDR.OrigSaleAmount = billingCDR.SaleAmount;
+            billingCDR.OrigSaleRateTypeId = billingCDR.SaleRateTypeId;
+            billingCDR.OrigSaleCurrencyId = billingCDR.SaleCurrencyId;
+            billingCDR.OrigSaleRateValueRuleId = billingCDR.SaleRateValueRuleId;
+            billingCDR.OrigSaleRateTypeRuleId = billingCDR.SaleRateTypeRuleId;
+            billingCDR.OrigSaleTariffRuleId = billingCDR.SaleTariffRuleId;
+            billingCDR.OrigSaleExtraChargeRuleId = billingCDR.SaleExtraChargeRuleId;
+        }
+
+        public void RemovePricingFieldValues(dynamic billingCDR)
+        {
+            billingCDR.ChargingPolicyId = null;
+            billingCDR.SaleRate = null;
+            billingCDR.SaleAmount = null;
+            billingCDR.SaleRateTypeId = null;
+            billingCDR.SaleCurrencyId = null;
+            billingCDR.ChargedDurationInSeconds = null;
+            billingCDR.SaleRateValueRuleId = null;
+            billingCDR.SaleRateTypeRuleId = null;
+            billingCDR.SaleTariffRuleId = null;
+            billingCDR.SaleExtraChargeRuleId = null;
         }
 
         public VoiceEventPricingInfo ApplyChargingPolicyToVoiceEvent(int chargingPolicyId, Guid serviceTypeId, dynamic mappedCDR, decimal duration, DateTime eventTime, Guid accountBEDefinitionId, long packageAccountId)
@@ -514,9 +529,16 @@ namespace Retail.Voice.Business
         }
 
         private List<CDRVolumePricingOutput> GenerateFinalCDRVolumePricingOutputs(List<VolumePricingCDRInProcess> cdrsInProcess,
-            Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey, Guid? cdrPricingDetailRecordTypeId)
+            Dictionary<PackageUsageVolumeBalanceKey, AccountPackageUsageVolumeBalanceInProcess> volumeBalancesByKey, Guid? cdrPricingDetailTypeId)
         {
             List<CDRVolumePricingOutput> cdrVolumePricingOutputList = new List<CDRVolumePricingOutput>();
+
+            Type cdrPricingDetailType = null;
+            if (cdrPricingDetailTypeId.HasValue)
+            {
+                DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+                cdrPricingDetailType = dataRecordTypeManager.GetDataRecordRuntimeType(cdrPricingDetailTypeId.Value);
+            }
 
             foreach (var cdrInProcess in cdrsInProcess)
             {
@@ -580,7 +602,34 @@ namespace Retail.Voice.Business
                     };
                 }
 
-                //cdrVolumePricingOutput.RemainingDurationInSec = remainingDurationInSec;
+                if (cdrPricingDetailTypeId.HasValue)
+                {
+                    cdrOutput.CDRPricingDetails = new List<dynamic>();
+
+                    if (cdrOutput.CDRVolumePricingOutputItems.Count > 0)
+                    {
+                        foreach (var cdrVolumePricingOutputItem in cdrOutput.CDRVolumePricingOutputItems)
+                        {
+                            dynamic cdrPricingDetail = Activator.CreateInstance(cdrPricingDetailType);
+                            cdrPricingDetail.PackageId = cdrVolumePricingOutputItem.PackageId;
+                            cdrPricingDetail.PackageItemId = cdrVolumePricingOutputItem.PackageItemId;
+                            cdrPricingDetail.PricedDurationInSec = cdrVolumePricingOutputItem.PricedDurationInSec;
+
+                            cdrOutput.CDRPricingDetails.Add(cdrPricingDetail);
+                        }
+                    }
+
+                    if (cdrOutput.CDRPricingOutputItem != null)
+                    {
+                        dynamic cdrPricingDetail = Activator.CreateInstance(cdrPricingDetailType);
+                        cdrPricingDetail.PackageId = cdrOutput.CDRPricingOutputItem.PackageId;
+                        cdrPricingDetail.PricedDurationInSec = cdrOutput.CDRPricingOutputItem.PricedDurationInSec;
+                        cdrPricingDetail.SaleAmount = cdrOutput.CDRPricingOutputItem.SaleAmount;
+
+                        cdrOutput.CDRPricingDetails.Add(cdrPricingDetail);
+                    }
+                }
+
                 cdrVolumePricingOutputList.Add(cdrOutput);
             }
 
@@ -589,14 +638,19 @@ namespace Retail.Voice.Business
 
         private AccountPackageProvider GetAccountPackageProvider(Guid accountBEDefinitionId)
         {
-            var beDefinitionManager = new BusinessEntityDefinitionManager();
-            var beDefinition = beDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);
-            IAccountPackageHandler accountPackageHandler = beDefinition.Settings as IAccountPackageHandler;
-            if (accountPackageHandler == null)
-                throw new VRBusinessException("beDefinition.Settings should be of type IAccountPackageHandler");
+            var beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(accountBEDefinitionId);
+            beDefinition.ThrowIfNull("beDefinition", accountBEDefinitionId);
+            beDefinition.Settings.ThrowIfNull("beDefinition.Settings", accountBEDefinitionId);
 
-            var getAccountPackageProviderContext = new GetAccountPackageProviderContext();
-            return accountPackageHandler.GetAccountPackageProvider(getAccountPackageProviderContext);
+            var additionalSettings = beDefinition.Settings.GetAdditionalSettings(new BEDefinitionSettingsGetAdditionalSettingsContext());
+            if (additionalSettings == null)
+                return null;
+
+            var accountPackageProvider = additionalSettings.GetRecord("AccountPackageProvider");
+            if (accountPackageProvider == null)
+                return null;
+
+            return accountPackageProvider as AccountPackageProvider;
         }
 
         //private List<Package> GetAccountPackagesByPriority(long accountId, DateTime effectiveTime)
@@ -610,6 +664,7 @@ namespace Retail.Voice.Business
 
         //    return accountPackages;
         //}
+
         //private List<Package> GetAllAccountPackagesByPriority(long accountId)
         //{
         //    List<int> accountPackagesIds = null;
@@ -709,13 +764,13 @@ namespace Retail.Voice.Business
 
         public Guid ServiceTypeId { get; set; }
 
-        public Dictionary<string, dynamic> RecordsByName { get; set; }
-
-        public dynamic BillingCDR { get; set; }
-
         public decimal DurationInSec { get; set; }
 
         public DateTime EventTime { get; set; }
+
+        public dynamic BillingCDR { get; set; }
+
+        public Dictionary<string, dynamic> RecordsByName { get; set; }
     }
 
     public class PriceCDROutput
@@ -768,8 +823,6 @@ namespace Retail.Voice.Business
         public CDRPricingOutputItem CDRPricingOutputItem { get; set; }
 
         public List<dynamic> CDRPricingDetails { get; set; }
-
-        //public decimal RemainingDurationInSec { get; set; }
     }
 
     public class CDRVolumePricingOutputItem

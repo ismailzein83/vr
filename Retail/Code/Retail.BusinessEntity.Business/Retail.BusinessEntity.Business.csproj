@@ -190,6 +190,7 @@
     <Compile Include="FaultTickets\FaultTicketSettingsDetails.cs" />
     <Compile Include="FaultTickets\FaultTicketsSettings.cs" />
     <Compile Include="FaultTickets\FaultTicketStatusDefinitionFilter.cs" />
+    <Compile Include="Filters\IBusinessEntityDefinitionFilter\RetailPackageCompatibleBEDefinitionFilter.cs" />
     <Compile Include="Filters\Invoice\AssignedFinancialAccountToInvoiceSettingFilter.cs" />
     <Compile Include="Filters\Invoice\FinancialAccountInvoiceTypeFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountDefinitionFilter.cs" />

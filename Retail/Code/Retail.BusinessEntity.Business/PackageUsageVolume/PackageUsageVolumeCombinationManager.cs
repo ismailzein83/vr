@@ -14,11 +14,6 @@ namespace Retail.BusinessEntity.Business
     {
         #region Public Methods
 
-        public Dictionary<string, int> InsertAndGetCombinationIds(HashSet<string> packageCombinationsList)
-        {
-            throw new NotImplementedException();
-        }
-
         public Dictionary<string, int> InsertAndGetCombinationIds(Dictionary<string, BasePackageUsageVolumeCombination> packageCombinationsDict)
         {
             int maxLockRetryCount = Int32.MaxValue;

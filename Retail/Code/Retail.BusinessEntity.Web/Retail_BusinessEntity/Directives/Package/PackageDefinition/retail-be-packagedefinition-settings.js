@@ -64,9 +64,7 @@ app.directive('retailBePackagedefinitionSettings', ['UtilsService', 'VRUIUtilsSe
                         businessEntityDefinitionSelectorReadyDeferred.promise.then(function () {
                             var payload = {
                                 filter: {
-                                    Filters: [{
-                                        $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business",
-                                    }]
+                                    Filters: [{ $type: "Retail.BusinessEntity.Business.RetailPackageCompatibleBEDefinitionFilter, Retail.BusinessEntity.Business" }]
                                 },
                                 selectedIds: packageDefinitionEntity != undefined && packageDefinitionEntity.Settings != undefined ? packageDefinitionEntity.Settings.AccountBEDefinitionId : undefined
                             };

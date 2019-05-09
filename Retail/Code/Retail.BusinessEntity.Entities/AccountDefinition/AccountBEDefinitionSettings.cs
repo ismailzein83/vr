@@ -6,7 +6,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountBEDefinitionSettings : Vanrise.GenericData.Entities.BusinessEntityDefinitionSettings, IAccountPackageHandler
+    public class AccountBEDefinitionSettings : Vanrise.GenericData.Entities.BusinessEntityDefinitionSettings
     {
         public static Guid s_configId = new Guid("70D4A6AD-10CC-4F0B-8364-7D8EF3C044C4");
         public override Guid ConfigId { get { return s_configId; } }
@@ -53,21 +53,16 @@ namespace Retail.BusinessEntity.Entities
 
         public List<AccountBEClassification> Classifications { get; set; }
 
-        public AccountPackageProvider GetAccountPackageProvider(IGetAccountPackageProviderContext context)
+        public override Dictionary<string, object> GetAdditionalSettings(IBEDefinitionSettingsGetAdditionalSettingsContext context)
         {
             var accountPackageProvider = AccountPackageProviderFactory.GetManager<IAccountPackageProvider>();
-            return accountPackageProvider.CastWithValidate<AccountPackageProvider>("accountPackageProvider");
+            accountPackageProvider.CastWithValidate<AccountPackageProvider>("accountPackageProvider");
+            return new Dictionary<string, object>() { { "AccountPackageProvider", accountPackageProvider } };
         }
 
         public override Vanrise.Entities.VRLoggableEntityBase GetLoggableEntity(Vanrise.GenericData.Entities.IBusinessEntityDefinitionSettingsGetLoggableEntityContext context)
         {
             return BEManagerFactory.GetManager<IAccountBEManager>().GetAccountLoggableEntity(context.BEDefinition.BusinessEntityDefinitionId);
-        }
-        public override Dictionary<string, object> GetAdditionalSettings(IBEDefinitionSettingsGetAdditionalSettingsContext context)
-        {
-            var accountPackageProvider = AccountPackageProviderFactory.GetManager<IAccountPackageProvider>();
-            accountPackageProvider.CastWithValidate<AccountPackageProvider>("accountPackageProvider");
-            return new Dictionary<string, object>() {{ "AccountPackageProvider", accountPackageProvider }};
         }
     }
 
@@ -82,6 +77,7 @@ namespace Retail.BusinessEntity.Entities
         public string Title { get; set; }
         public string Name { get; set; }
     }
+
     public class AccountBulkAction
     {
         public Guid AccountBulkActionId { get; set; }
@@ -108,18 +104,19 @@ namespace Retail.BusinessEntity.Entities
             return ContextFactory.GetContext().IsAllowed(context.AccountBulkAction.RequiredPermission, context.UserId);
         }
     }
+
     public interface IAccountBulkActionSettingsCheckAccessContext
     {
         int UserId { get; }
         AccountBulkAction AccountBulkAction { get; set; }
-
     }
+
     public class AccountBulkActionSettingsCheckAccessContext : IAccountBulkActionSettingsCheckAccessContext
     {
         public int UserId { get; set; }
         public AccountBulkAction AccountBulkAction { get; set; }
-
     }
+
     public interface IAccountBulkActionSettingsContext
     {
         Account Account { get; set; }
@@ -132,8 +129,8 @@ namespace Retail.BusinessEntity.Entities
     public abstract class AccountBulkActionRuntimeSettings
     {
         public abstract void Execute(IAccountBulkActionSettingsContext context);
-
     }
+
     public class AccountExtraFieldDefinition
     {
         public Guid AccountExtraFieldDefinitionId { get; set; }
