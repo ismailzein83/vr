@@ -54,6 +54,6 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic" /S /E /R /y /v /i /z /
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Client\Modules\VR_Notification\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Client\Modules\ExcelConversion\"
 xcopy "C:\TFS\SOM\Code\SOM.Main.Web\SOM_Main" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Client\Modules\SOM_Main\"
-xcopy "C:\TFS\SOM\Code\SOM.Main.Web\SOM_ST" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Client\Modules\SOM_ST\"
+xcopy "C:\TFS\SOM\Code\SOM.ST.Web\SOM_ST" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Client\Modules\SOM_ST\"
 del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Bin\*.pdb"
 del /s /q /f																								"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Bin\*.config"
