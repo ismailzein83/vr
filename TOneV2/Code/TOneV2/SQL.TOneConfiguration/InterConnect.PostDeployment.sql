@@ -466,29 +466,32 @@ END
 
 --default data
 
+DECLARE @DEfaultCurrency varchar(15);
+select @DEfaultCurrency = 'USD'
 --[common].[Currency]-------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [common].[Currency] on;
-;with cte_data([ID],[Symbol],[Name],[SourceID])
+;with cte_data([Symbol],[Name],[SourceID])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(155,'USD','United States Dollars','USD')
+(@DEfaultCurrency,'United States Dollars','USD')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Symbol],[Name],[SourceID]))
+)c([Symbol],[Name],[SourceID]))
 merge	[common].[Currency] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
+on		1=1 and t.[Symbol] = s.[Symbol]
 --when matched then
 --	update set
---	[Symbol] = s.[Symbol],[Name] = s.[Name],[SourceID] = s.[SourceID]
+--	[Name] = s.[Name],[SourceID] = s.[SourceID]
 when not matched by target then
-	insert([ID],[Symbol],[Name],[SourceID])
-	values(s.[ID],s.[Symbol],s.[Name],s.[SourceID]);
-set identity_insert [common].[Currency] off;
+	insert([Symbol],[Name],[SourceID])
+	values(s.[Symbol],s.[Name],s.[SourceID]);
+
+DECLARE @Currency_identity int
+SELECT	@Currency_identity=ID FROM [common].[Currency] WHERE [Symbol] = @DEfaultCurrency
 
 UPDATE  [common].[Setting] 
-SET		[Data] = '{"$type":"Vanrise.Entities.CurrencySettingData, Vanrise.Entities","CurrencyId":155}'
+SET		[Data] = '{"$type":"Vanrise.Entities.CurrencySettingData, Vanrise.Entities","CurrencyId":'+CONVERT(varchar(10), @Currency_identity) +'}'
 WHERE	ID='1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE' and [Data] is null
 
 --end default data

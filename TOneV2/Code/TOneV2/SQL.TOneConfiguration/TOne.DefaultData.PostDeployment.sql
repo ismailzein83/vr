@@ -13,27 +13,32 @@ Post-Deployment Script Template
 
 --[common].[Currency]-------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
+DECLARE @DEfaultCurrency varchar(15);
+select @DEfaultCurrency = 'USD'
+--[common].[Currency]-------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [common].[Currency] on;
-;with cte_data([ID],[Symbol],[Name],[SourceID])
+;with cte_data([Symbol],[Name],[SourceID])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(155,'USD','United States Dollars','USD')
+(@DEfaultCurrency,'United States Dollars','USD')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Symbol],[Name],[SourceID]))
+)c([Symbol],[Name],[SourceID]))
 merge	[common].[Currency] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
+on		1=1 and t.[Symbol] = s.[Symbol]
 --when matched then
 --	update set
---	[Symbol] = s.[Symbol],[Name] = s.[Name],[SourceID] = s.[SourceID]
+--	[Name] = s.[Name],[SourceID] = s.[SourceID]
 when not matched by target then
-	insert([ID],[Symbol],[Name],[SourceID])
-	values(s.[ID],s.[Symbol],s.[Name],s.[SourceID]);
-set identity_insert [common].[Currency] off;
+	insert([Symbol],[Name],[SourceID])
+	values(s.[Symbol],s.[Name],s.[SourceID]);
+
+DECLARE @Currency_identity int
+SELECT	@Currency_identity=ID FROM [common].[Currency] WHERE [Symbol] = @DEfaultCurrency
 
 UPDATE  [common].[Setting] 
-SET		[Data] = '{"$type":"Vanrise.Entities.CurrencySettingData, Vanrise.Entities","CurrencyId":155}'
+SET		[Data] = '{"$type":"Vanrise.Entities.CurrencySettingData, Vanrise.Entities","CurrencyId":'+CONVERT(varchar(10), @Currency_identity) +'}'
 WHERE	ID='1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE' and [Data] is null
 
 --declare @TariffRuleTypeIdTable as table
@@ -49,8 +54,8 @@ WHERE	ID='1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE' and [Data] is null
 --;with cte_data([TypeID],[RuleDetails],[BED],[EED],[SourceID])
 --as (select * from (values
 ----//////////////////////////////////////////////////////////////////////////////////////////////////
---(@TariffRuleTypeId,'{"$type":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing","Settings":{"$type":"Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings, Vanrise.Rules.Pricing.MainExtensions","ConfigId":"35acc9c2-0675-4347-ba3e-a81025c1be12","CallFee":0.0,"FirstPeriod":0,"FirstPeriodRate":0.0,"FractionUnit":0,"PricingUnit":60,"CurrencyId":155},"DefinitionId":"f24cb510-0b65-48c8-a723-1f6ebfeea9e8","RuleId":0,"Description":"Default Sale Tariff Rule","BeginEffectiveTime":"2016-12-23T00:00:00","RefreshTimeSpan":"01:00:00"}','2010-01-01 00:00:00.000',null,null),
---(@TariffRuleTypeId,'{"$type":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing","Settings":{"$type":"Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings, Vanrise.Rules.Pricing.MainExtensions","ConfigId":"35acc9c2-0675-4347-ba3e-a81025c1be12","CallFee":0.0,"FirstPeriod":0,"FirstPeriodRate":0.0,"FractionUnit":0,"PricingUnit":60,"CurrencyId":155},"DefinitionId":"5aeb0dad-4bb8-44b4-acbe-c8c917e88b58","RuleId":0,"Description":"Default Purchase Tariff Rule","BeginEffectiveTime":"2016-12-23T00:00:00","RefreshTimeSpan":"01:00:00"}','2010-01-01 00:00:00.000',null,null)
+--(@TariffRuleTypeId,'{"$type":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing","Settings":{"$type":"Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings, Vanrise.Rules.Pricing.MainExtensions","ConfigId":"35acc9c2-0675-4347-ba3e-a81025c1be12","CallFee":0.0,"FirstPeriod":0,"FirstPeriodRate":0.0,"FractionUnit":0,"PricingUnit":60,"CurrencyId":'+CONVERT(varchar(10), @Currency_identity) +'},"DefinitionId":"f24cb510-0b65-48c8-a723-1f6ebfeea9e8","RuleId":0,"Description":"Default Sale Tariff Rule","BeginEffectiveTime":"2016-12-23T00:00:00","RefreshTimeSpan":"01:00:00"}','2010-01-01 00:00:00.000',null,null),
+--(@TariffRuleTypeId,'{"$type":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing","Settings":{"$type":"Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings, Vanrise.Rules.Pricing.MainExtensions","ConfigId":"35acc9c2-0675-4347-ba3e-a81025c1be12","CallFee":0.0,"FirstPeriod":0,"FirstPeriodRate":0.0,"FractionUnit":0,"PricingUnit":60,"CurrencyId":'+CONVERT(varchar(10), @Currency_identity) +'},"DefinitionId":"5aeb0dad-4bb8-44b4-acbe-c8c917e88b58","RuleId":0,"Description":"Default Purchase Tariff Rule","BeginEffectiveTime":"2016-12-23T00:00:00","RefreshTimeSpan":"01:00:00"}','2010-01-01 00:00:00.000',null,null)
 ----\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 --)c([TypeID],[RuleDetails],[BED],[EED],[SourceID]))
 --merge	[rules].[Rule] as t
@@ -119,7 +124,7 @@ set identity_insert [TOneWhS_BE].[SellingProduct] on;
 ;with cte_data([ID],[Name],[DefaultRoutingProductID],[SellingNumberPlanID],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Default',null,1,'{"$type":"TOne.WhS.BusinessEntity.Entities.SellingProductSettings, TOne.WhS.BusinessEntity.Entities","CurrencyId":155}')
+(1,'Default',null,1,'{"$type":"TOne.WhS.BusinessEntity.Entities.SellingProductSettings, TOne.WhS.BusinessEntity.Entities","CurrencyId":'+CONVERT(varchar(10), @Currency_identity) +'}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[DefaultRoutingProductID],[SellingNumberPlanID],[Settings]))
 merge	[TOneWhS_BE].[SellingProduct] as t
