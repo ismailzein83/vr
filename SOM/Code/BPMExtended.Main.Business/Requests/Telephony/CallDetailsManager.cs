@@ -256,7 +256,7 @@ namespace BPMExtended.Main.Business
             paragraph = section.AddParagraph();
             paragraph.Format.SpaceBefore = "5cm";
             paragraph.Style = "Reference";
-            paragraph.AddFormattedText("CDR", TextFormat.Bold);
+            paragraph.AddFormattedText("Call Details", TextFormat.Bold);
 
             Paragraph paragraph2 = this.addressFrame.AddParagraph();
             paragraph2.AddText(request.Name);
