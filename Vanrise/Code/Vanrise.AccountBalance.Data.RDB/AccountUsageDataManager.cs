@@ -74,6 +74,18 @@ namespace Vanrise.AccountBalance.Data.RDB
                 CorrectionProcessId = reader.GetNullableGuid(COL_CorrectionProcessID)
             };
         }
+        private GroupedAccountUsage GroupedAccountUsageMapper(IRDBDataReader reader)
+        {
+            return new GroupedAccountUsage
+            {
+                AccountId = reader.GetString(COL_AccountID),
+                TransactionTypeId = reader.GetGuid(COL_TransactionTypeID),
+                AccountTypeId = reader.GetGuid(COL_AccountTypeID),
+                PeriodEnd = reader.GetDateTime(COL_PeriodEnd),
+                UsageBalance = reader.GetDecimal(COL_UsageBalance),
+                CurrencyId = reader.GetInt(COL_CurrencyId),
+            };
+        }
         private AccountUsageInfo AccountUsageInfoMapper(IRDBDataReader reader)
         {
             return new AccountUsageInfo
@@ -322,24 +334,6 @@ namespace Vanrise.AccountBalance.Data.RDB
             return queryContext.GetItem(AccountUsageMapper);
         }
 
-        public IEnumerable<AccountUsage> GetAccountUsagesByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "au", null, true);
-            selectQuery.SelectColumns().AllTableColumns("au");
-
-            var where = selectQuery.Where();
-            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
-            if (accountIds != null && accountIds.Count() > 0)
-                where.ListCondition(COL_AccountID, RDBListConditionOperator.IN, accountIds);
-            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
-                where.ListCondition(COL_TransactionTypeID, RDBListConditionOperator.IN, transactionTypeIds);
-            where.ConditionIfColumnNotNull(COL_IsOverridden).EqualsCondition(COL_IsOverridden).Value(false);
-
-            return queryContext.GetItems(AccountUsageMapper);
-        }
-
         public IEnumerable<AccountUsage> GetAccountUsagesByTransactionTypes(Guid accountTypeId, List<AccountUsageByTime> accountUsagesByTime, List<Guid> transactionTypeIds)
         {
             if (accountUsagesByTime == null || accountUsagesByTime.Count == 0)
@@ -378,7 +372,31 @@ namespace Vanrise.AccountBalance.Data.RDB
 
             return queryContext.GetItems(AccountUsageMapper);
         }
+        public IEnumerable<GroupedAccountUsage> GetGroupedAccountUsagesByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au", null, true);
+            selectQuery.SelectColumns().Columns(COL_AccountTypeID, COL_TransactionTypeID, COL_AccountID, COL_CurrencyId);
+            selectQuery.SelectColumns().Expression(COL_PeriodEnd).DateTimePart(RDBDateTimePart.DateOnly).Column(COL_PeriodEnd);
+            selectQuery.SelectAggregates().ExpressionAggregate(RDBNonCountAggregateType.SUM, COL_UsageBalance).Column(COL_UsageBalance);
 
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            if (accountIds != null && accountIds.Count() > 0)
+                where.ListCondition(COL_AccountID, RDBListConditionOperator.IN, accountIds);
+            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
+                where.ListCondition(COL_TransactionTypeID, RDBListConditionOperator.IN, transactionTypeIds);
+            where.ConditionIfColumnNotNull(COL_IsOverridden).EqualsCondition(COL_IsOverridden).Value(false);
+
+           
+            var selectGrouping = selectQuery.GroupBy();
+            var groupingSelect = selectGrouping.Select();
+            groupingSelect.Columns(COL_AccountTypeID, COL_TransactionTypeID, COL_AccountID, COL_CurrencyId);
+            groupingSelect.Expression(COL_PeriodEnd).DateTimePart(RDBDateTimePart.DateOnly).Column(COL_PeriodEnd);
+            return queryContext.GetItems(GroupedAccountUsageMapper);
+        }
+       
         #endregion
 
         public void AddQueryOverrideAccountUsages(RDBQueryContext queryContext, IEnumerable<long> accountUsageIds)
@@ -428,5 +446,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             else
                 updateQuery.Column(COL_CorrectionProcessID).Null();
         }
+
+      
     }
 }

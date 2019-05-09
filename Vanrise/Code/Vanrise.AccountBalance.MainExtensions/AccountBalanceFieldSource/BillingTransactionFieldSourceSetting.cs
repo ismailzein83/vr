@@ -63,7 +63,7 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
             BillingTransactionManager billingTransactionManager = new Business.BillingTransactionManager();
             var billingTransactions = billingTransactionManager.GetBillingTransactionsByAccountIds(context.AccountTypeId, transactionTypes, accountIds);
             AccountUsageManager accountUsageManager = new AccountUsageManager();
-            var accountUsages = accountUsageManager.GetAccountUsagesByAccountIds(context.AccountTypeId, transactionTypes, accountIds);
+            var accountUsages = accountUsageManager.GetGroupedAccountUsagesByAccountIds(context.AccountTypeId, transactionTypes, accountIds);
             var usagesAsBillingTransactions = billingTransactionManager.ConvertAccountUsagesToBillingTransactionsMetaDeta(accountUsages, true);
             if (usagesAsBillingTransactions != null)
             {

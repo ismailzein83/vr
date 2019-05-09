@@ -20,4 +20,13 @@ namespace Vanrise.AccountBalance.Entities
         public decimal? OverridenAmount { get; set; }
         public Guid? CorrectionProcessId { get; set; }
     }
+    public class GroupedAccountUsage
+    {
+        public Guid AccountTypeId { get; set; }
+        public Guid TransactionTypeId { get; set; }
+        public String AccountId { get; set; }
+        public decimal UsageBalance { get; set; }
+        public int CurrencyId { get; set; }
+        public DateTime PeriodEnd { get; set; }
+    }
 }

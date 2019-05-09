@@ -206,7 +206,7 @@ namespace Vanrise.AccountBalance.Business
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.GetBillingTransactionsByAccountId(accountTypeId, accountId, status, effectiveDate, isEffectiveInFuture);
         }
-        public BillingTransactionMetaData ConvertAccountUsageToBillingTransactionMetaDeta(AccountUsage accountUsage)
+        public BillingTransactionMetaData ConvertAccountUsageToBillingTransactionMetaDeta(GroupedAccountUsage accountUsage)
         {
             return new BillingTransactionMetaData
             {
@@ -217,7 +217,7 @@ namespace Vanrise.AccountBalance.Business
                 TransactionTypeId = accountUsage.TransactionTypeId,
             };
         }
-        public IEnumerable<BillingTransactionMetaData> ConvertAccountUsagesToBillingTransactionsMetaDeta(IEnumerable<AccountUsage> accountUsages, bool shouldGroupUsagesByTransactionTypes)
+        public IEnumerable<BillingTransactionMetaData> ConvertAccountUsagesToBillingTransactionsMetaDeta(IEnumerable<GroupedAccountUsage> accountUsages, bool shouldGroupUsagesByTransactionTypes)
         {
             if (accountUsages == null || accountUsages.Count() == 0)
                 return null;
@@ -229,7 +229,7 @@ namespace Vanrise.AccountBalance.Business
                 var transactionTypeManager = new BillingTransactionTypeManager();
                 var rateExchangeManager = new CurrencyExchangeRateManager();
 
-                foreach (AccountUsage accountUsage in accountUsages)
+                foreach (var accountUsage in accountUsages)
                 {
                     Dictionary<Guid, BillingTransactionMetaData> accountTransactions = transactions.GetOrCreateItem(accountUsage.AccountId, () =>
                     {
@@ -256,7 +256,7 @@ namespace Vanrise.AccountBalance.Business
             else
             {
                 var transactions = new List<BillingTransactionMetaData>();
-                foreach (AccountUsage accountUsage in accountUsages)
+                foreach (var accountUsage in accountUsages)
                     transactions.Add(ConvertAccountUsageToBillingTransactionMetaDeta(accountUsage));
                 return transactions;
             }

@@ -218,9 +218,20 @@ namespace Vanrise.AccountBalance.Data.SQL
                 IsOverridden = GetReaderValue<bool>(reader, "IsOverridden")
             };
         }
+        private GroupedAccountUsage GroupedAccountUsageMapper(IDataReader reader)
+        {
+            return new GroupedAccountUsage
+            {
+                AccountId = reader["AccountId"] as string,
+                TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeId"),
+                AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeId"),
+                UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
+                CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
+                PeriodEnd = GetReaderValue<DateTime>(reader, "PeriodEnd"),
+            };
+        }
         #endregion
-
-        public IEnumerable<AccountUsage> GetAccountUsagesByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
+        public IEnumerable<GroupedAccountUsage> GetGroupedAccountUsagesByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
         {
             string accountsIDs = null;
             if (accountIds != null && accountIds.Count() > 0)
@@ -229,7 +240,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             string transactionTypeIDs = null;
             if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
                 transactionTypeIDs = string.Join<Guid>(",", transactionTypeIds);
-            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetByAccountIds]", AccountUsageMapper, accountTypeId, accountsIDs, transactionTypeIDs);
+            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetGroupedByAccountIds]", GroupedAccountUsageMapper, accountTypeId, accountsIDs, transactionTypeIDs);
         }
     }
 }
