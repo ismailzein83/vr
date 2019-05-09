@@ -111,19 +111,19 @@ set nocount on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('12221745-B7EC-4862-AD1D-28E6A500C49D','Inventory XATKA','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://192.168.110.195:8901"}'),
-('91E342C4-3AC0-42B6-8007-A57949F79155','BSCS','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://192.168.25.27:5550/","Interceptor":{"$type":"SOM.ST.Business.BSCSOnlineInterceptor, SOM.ST.Business","UserName":"UserName","Password":"Password","ConfigId":"461b7474-9b19-4b90-aeab-63ba37245e53"}}'),
-('56A5D484-180A-4D7B-A5EF-513C33ECDD52','Test_BSCS','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://localhost:8333","Interceptor":{"$type":"SOM.ST.Business.BSCSOnlineInterceptor, SOM.ST.Business","UserName":"ADMX","Password":"ADMX","ConfigId":"461b7474-9b19-4b90-aeab-63ba37245e53"}}'),
-('E9159CBF-974F-4F0B-9D14-BC2414736DD4','BPM','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://192.168.25.8:1000","Interceptor":{"$type":"SOM.ST.Business.BPMOnlineInterceptor, SOM.ST.Business","ConfigId":"2a61a473-a949-4781-8d06-dcb170006a3b","UserName":"Supervisor","Password":"Supervisor","AuthenticationServiceURI":"/ServiceModel/AuthService.svc/Login"}}'),
-('8D0E04EE-3917-4E3D-B0AB-EF56DA217745','XATA','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://192.168.110.195:8901"}')
+('12221745-B7EC-4862-AD1D-28E6A500C49D','Inventory','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://InventoryUrl"}'),
+('91E342C4-3AC0-42B6-8007-A57949F79155','BSCS to be removed','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://BscsUrl","Interceptor":{"$type":"SOM.ST.Business.BSCSOnlineInterceptor, SOM.ST.Business","UserName":"UserName","Password":"Password","ConfigId":"461b7474-9b19-4b90-aeab-63ba37245e53"}}'),
+('56A5D484-180A-4D7B-A5EF-513C33ECDD52','BSCS','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://BscsUrl","Interceptor":{"$type":"SOM.ST.Business.BSCSOnlineInterceptor, SOM.ST.Business","UserName":"ADMX","Password":"ADMX","ConfigId":"461b7474-9b19-4b90-aeab-63ba37245e53"}}'),
+('E9159CBF-974F-4F0B-9D14-BC2414736DD4','BPM','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://BpmUrl","Interceptor":{"$type":"SOM.ST.Business.BPMOnlineInterceptor, SOM.ST.Business","ConfigId":"2a61a473-a949-4781-8d06-dcb170006a3b","UserName":"Supervisor","Password":"Supervisor","AuthenticationServiceURI":"/ServiceModel/AuthService.svc/Login"}}'),
+('8D0E04EE-3917-4E3D-B0AB-EF56DA217745','XATA to be removed','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://InventoryUrl"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[common].[Connection] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
@@ -297,8 +297,27 @@ when not matched by target then
 
 END
 
-DECLARE @SOM_BillingGroupId int = (SELECT ID FROM sec.[Group] where [PSIdentifier] = 'SOM_Billing')
---[sec].[Permission]------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////(1,@SOM_BillingGroupId,1,'d1f22bce-cce7-4eb1-9c07-3d1225103338','[{"Name":"Invoke","Value":1},{"Name":"ViewLogs","Value":1}]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))merge	[sec].[Permission] as tusing	cte_data as son		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]--when matched then--	update set--	[PermissionFlags] = s.[PermissionFlags]when not matched by target then	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
+DECLARE @SOM_BillingGroupId int = (SELECT ID FROM sec.[Group] where [PSIdentifier] = 'SOM_Billing')
+
+--[sec].[Permission]--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,@SOM_BillingGroupId,1,'d1f22bce-cce7-4eb1-9c07-3d1225103338','[{"Name":"Invoke","Value":1},{"Name":"ViewLogs","Value":1}]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
+merge	[sec].[Permission] as t
+using	cte_data as s
+on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]
+--when matched then
+--	update set
+--	[PermissionFlags] = s.[PermissionFlags]
+when not matched by target then
+	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
+
 
 --[common].[ExtensionConfiguration]-------------------------------------------------------------------
 begin
@@ -320,4 +339,4 @@ when not matched by target then
 	insert([ID],[Name],[Title],[ConfigType],[Settings])
 	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
-end
+end
