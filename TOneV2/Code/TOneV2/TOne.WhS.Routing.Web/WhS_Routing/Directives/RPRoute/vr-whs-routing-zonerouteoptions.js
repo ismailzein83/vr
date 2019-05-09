@@ -61,7 +61,11 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
                         if (payload.RouteOptions) {
                             for (var i = 0; i < payload.RouteOptions.length; i++) {
                                 var currentRouteOption = payload.RouteOptions[i];
-                                var roundedConvertedSupplierRate = roundNumber(currentRouteOption.ConvertedSupplierRate);
+                                var roundedConvertedSupplierRate = null;
+
+                                if (currentRouteOption.ConvertedSupplierRate != undefined)
+                                    roundedConvertedSupplierRate = roundNumber(currentRouteOption.ConvertedSupplierRate);
+
                                 currentRouteOption.title = buildTooltip(currentRouteOption, roundedConvertedSupplierRate);
                                 currentRouteOption.titleToDisplay = buildTitleToDisplay(display, currentRouteOption, roundedConvertedSupplierRate);
 
@@ -131,7 +135,11 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
                         routeOption.isNumber = false;
 
                         var totalWhiteSpaceLength = 30;
-                        var roundedConvertedSupplierRateLength = roundedConvertedSupplierRate.toString().length + 2; //2 is length of " ()"
+
+                        var roundedConvertedSupplierRateLength = 0;
+                        if (roundedConvertedSupplierRate != undefined)
+                            roundedConvertedSupplierRateLength = roundedConvertedSupplierRate.toString().length + 2; //2 is length of " ()"
+
                         var remainingWhiteSpaceLength = totalWhiteSpaceLength - roundedConvertedSupplierRateLength;
 
                         var title = buildTitle(routeOption);
@@ -139,8 +147,10 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
                             title = title.substring(0, remainingWhiteSpaceLength - 2); //2 is length of "..."
                             title += "...";
                         }
-
-                        return title + ' (' + roundedConvertedSupplierRate + ')';
+                        if (roundedConvertedSupplierRate != undefined)
+                            return title + ' (' + roundedConvertedSupplierRate + ')';
+                        else
+                            return title;
 
                     default:
                         routeOption.isNumber = true;

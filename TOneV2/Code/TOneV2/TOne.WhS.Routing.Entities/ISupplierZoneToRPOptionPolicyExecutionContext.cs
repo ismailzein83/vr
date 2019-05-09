@@ -11,6 +11,9 @@ namespace TOne.WhS.Routing.Entities
 
         HashSet<int> SupplierServicesIds { get; set; }
 
-        Decimal EffectiveRate { set; }
+        decimal? EffectiveRate { set; }
+
+        bool IncludeBlockedZonesInCalculation { get; }
+
     }
 }

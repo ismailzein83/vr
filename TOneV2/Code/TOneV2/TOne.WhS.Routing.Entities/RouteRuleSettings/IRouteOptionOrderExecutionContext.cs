@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Entities
     public enum OrderDirection { Ascending = 0, Descending = 1 }
     public interface IRouteOptionOrderTarget
     {
-        Decimal SupplierRate { get; }
+        Decimal? SupplierRate { get; }
 
         Decimal OptionWeight { get; set; }
 

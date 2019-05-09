@@ -150,12 +150,12 @@ namespace TOne.WhS.Routing.Business
             };
         }
 
-        public IEnumerable<RPRouteDetailByZone> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, bool includeBlockedSuppliers)
+        public IEnumerable<RPRouteDetailByZone> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, bool includeBlockedSuppliers, bool includeSuppliersWithNullRates)
         {
-            return GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, null, null, includeBlockedSuppliers);
+            return GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, null, null, includeBlockedSuppliers, includeSuppliersWithNullRates);
         }
 
-        public IEnumerable<RPRouteDetailByZone> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, int? toCurrencyId, int? customerId, bool includeBlockedSuppliers)
+        public IEnumerable<RPRouteDetailByZone> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, int? toCurrencyId, int? customerId, bool includeBlockedSuppliers, bool includeSuppliersWithNullRates)
         {
             var latestRoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
             if (latestRoutingDatabase == null)
@@ -171,7 +171,7 @@ namespace TOne.WhS.Routing.Business
 
             int systemCurrencyId = GetSystemCurrencyId();
             DateTime effectiveDate = DateTime.Now;
-            return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId, customerProfileId, effectiveDate, includeBlockedSuppliers, null));
+            return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId, customerProfileId, effectiveDate, includeBlockedSuppliers, null, includeSuppliersWithNullRates));
         }
 
         public IEnumerable<RPRouteOptionPolicySetting> GetPoliciesOptionTemplates(RPRouteOptionPolicyFilter filter)
@@ -281,7 +281,7 @@ namespace TOne.WhS.Routing.Business
         }
 
         private IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(Dictionary<Guid, IEnumerable<RPRouteOption>> dicRouteOptions, Guid policyConfigId, int? numberOfOptions, int? systemCurrencyId,
-            int? toCurrencyId, int? customerProfileId, bool includeBlockedSuppliers, decimal? effectiveRateValue, decimal? maxSupplierRate)
+            int? toCurrencyId, int? customerProfileId, bool includeBlockedSuppliers, decimal? effectiveRateValue, decimal? maxSupplierRate, bool includeSuppliersWithNullRates)
         {
             if (dicRouteOptions == null || !dicRouteOptions.ContainsKey(policyConfigId))
                 return null;
@@ -295,6 +295,9 @@ namespace TOne.WhS.Routing.Business
             Func<RPRouteOption, bool> filterFunc = (rpRouteOption) =>
             {
                 if (!includeBlockedSuppliers && rpRouteOption.SupplierStatus == SupplierStatus.Block)
+                    return false;
+
+                if (!includeSuppliersWithNullRates && !rpRouteOption.SupplierRate.HasValue)
                     return false;
 
                 if (customerProfileId.HasValue && GetCarrierProfileId(rpRouteOption.SupplierId) == customerProfileId.Value)
@@ -451,7 +454,7 @@ namespace TOne.WhS.Routing.Business
 
                                 string routeOptionsDetails = string.Concat(optionPercentage, customerRouteOptionDetail.SupplierName);
                                 row.Cells.Add(new ExportExcelCell { Value = routeOptionsDetails });
-                                row.Cells.Add(new ExportExcelCell { Value = Math.Round(customerRouteOptionDetail.ConvertedSupplierRate, _longPrecisionValue) });
+                                row.Cells.Add(new ExportExcelCell { Value = customerRouteOptionDetail.ConvertedSupplierRate.HasValue ? Math.Round(customerRouteOptionDetail.ConvertedSupplierRate.Value, _longPrecisionValue).ToString() : string.Empty });
                             }
 
                             int remainingOptions = maxNumberOfOptions - record.RouteOptionsDetails.Count();
@@ -528,7 +531,7 @@ namespace TOne.WhS.Routing.Business
                 DateTime effectiveDate = DateTime.Now;
 
                 return allRecords.ToBigResult(input, null, (entity) => _manager.RPRouteDetailMapper(entity, input.Query.PolicyConfigId, input.Query.NumberOfOptions, systemCurrencyId,
-                    toCurrencyId, carrierProfileId, effectiveDate, input.Query.IncludeBlockedSuppliers, input.Query.MaxSupplierRate));
+                    toCurrencyId, carrierProfileId, effectiveDate, input.Query.IncludeBlockedSuppliers, input.Query.MaxSupplierRate, true));
             }
 
             protected override ResultProcessingHandler<RPRouteDetailByZone> GetResultProcessingHandler(DataRetrievalInput<RPRouteQueryByZone> input, BigResult<RPRouteDetailByZone> bigResult)
@@ -697,7 +700,7 @@ namespace TOne.WhS.Routing.Business
         #region Mappers
 
         private RPRouteDetailByZone RPRouteDetailMapper(BaseRPRoute rpRoute, Guid policyConfigId, int? numberOfOptions, int? systemCurrencyId, int? toCurrencyId, int? customerProfileId, DateTime effectiveDate,
-            bool includeBlockedSuppliers, decimal? maxSupplierRate)
+            bool includeBlockedSuppliers, decimal? maxSupplierRate, bool includeSuppliersWithNullRates)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             string currencySymbol;
@@ -728,7 +731,7 @@ namespace TOne.WhS.Routing.Business
                 SellingNumberPlan = _sellingNumberPlanManager.GetSellingNumberPlanName(rpRoute.SellingNumberPlanID),
                 SaleZoneName = rpRoute.SaleZoneName,
                 IsBlocked = rpRoute.IsBlocked,
-                RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId, customerProfileId, includeBlockedSuppliers, effectiveRateValue, maxSupplierRate),
+                RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId, customerProfileId, includeBlockedSuppliers, effectiveRateValue, maxSupplierRate, includeSuppliersWithNullRates),
                 ExecutedRuleId = rpRoute.ExecutedRuleId,
                 EffectiveRateValue = effectiveRateValue,
                 CurrencySymbol = currencySymbol
@@ -950,7 +953,7 @@ namespace TOne.WhS.Routing.Business
 
             CurrencyManager currencyManager = new CurrencyManager();
             string currencySymbol;
-            decimal convertedSupplierRate;
+            decimal? convertedSupplierRate;
 
             if (toCurrencyId.HasValue)
             {
@@ -958,7 +961,7 @@ namespace TOne.WhS.Routing.Business
                     throw new ArgumentNullException("systemCurrencyId");
 
                 currencySymbol = currencyManager.GetCurrencySymbol(toCurrencyId.Value);
-                convertedSupplierRate = GetRateConvertedToCurrency(routeOption.SupplierRate, systemCurrencyId.Value, toCurrencyId.Value, effectiveDate);
+                convertedSupplierRate = routeOption.SupplierRate.HasValue ? GetRateConvertedToCurrency(routeOption.SupplierRate.Value, systemCurrencyId.Value, toCurrencyId.Value, effectiveDate) : default(decimal?);
             }
             else
             {
@@ -967,7 +970,7 @@ namespace TOne.WhS.Routing.Business
             }
 
             bool isblocked = routeOption.SupplierStatus == SupplierStatus.Block;
-            bool isLossy = effectiveRateValue.HasValue ? effectiveRateValue.Value < convertedSupplierRate : false;
+            bool isLossy = effectiveRateValue.HasValue && convertedSupplierRate.HasValue ? effectiveRateValue.Value < convertedSupplierRate.Value : false;
 
             SupplierZoneManager _supplierZoneManager = new SupplierZoneManager();
             ZoneServiceConfigManager _zoneServiceConfigManager = new ZoneServiceConfigManager();

@@ -11,16 +11,24 @@ namespace TOne.WhS.Routing.Business
         public override void Execute(ISupplierZoneToRPOptionPolicyExecutionContext context)
         {
             var supplierZones = context.SupplierOptionDetail.SupplierZones;
-            if (supplierZones == null || !supplierZones.Any())
+            if (supplierZones == null || supplierZones.Count == 0)
                 return;
 
-            var selectedSupplierZone = supplierZones.First();
+            RPRouteOptionSupplierZone selectedSupplierZone = null;
 
             foreach (var supplierZone in supplierZones)
             {
-                if (supplierZone.SupplierRate < selectedSupplierZone.SupplierRate)
-                    selectedSupplierZone = supplierZone;
+                if (supplierZone.IsBlocked && !context.IncludeBlockedZonesInCalculation)
+                    continue;
+
+                if (selectedSupplierZone != null && supplierZone.SupplierRate >= selectedSupplierZone.SupplierRate)
+                    continue;
+
+                selectedSupplierZone = supplierZone;
             }
+
+            if (selectedSupplierZone == null)
+                return;
 
             context.SupplierZoneId = selectedSupplierZone.SupplierZoneId;
             context.SupplierServicesIds = selectedSupplierZone.ExactSupplierServiceIds;

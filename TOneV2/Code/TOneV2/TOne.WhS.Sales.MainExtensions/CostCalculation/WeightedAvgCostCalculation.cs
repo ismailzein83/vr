@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
-using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.MainExtensions.CostCalculation
@@ -20,7 +18,15 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
 
         public override void CalculateCost(ICostCalculationMethodContext context)
         {
-            if (context.Route == null || context.Route.RouteOptionsDetails == null)
+            if (context.Route == null)
+                return;
+
+            if (context.Route.RouteOptionsDetails == null || context.Route.RouteOptionsDetails.Count() == 0)
+                return;
+
+            var filteredRouteOptionDetails = context.Route.RouteOptionsDetails.FindAllRecords(itm => itm.SupplierRate.HasValue);
+
+            if (filteredRouteOptionDetails == null || filteredRouteOptionDetails.Count() == 0)
                 return;
 
             if (context.CustomObject == null)
@@ -30,10 +36,13 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
 
             decimal sumOfDuration = 0;
             decimal sumOfRatesMultipliedByDuration = 0;
+
             IEnumerable<RPRouteOptionDetail> routeOptionsDetails = new List<RPRouteOptionDetail>();
-            if (context.NumberOfOptions.HasValue && context.Route.RouteOptionsDetails.Count() >= context.NumberOfOptions.Value)
-                routeOptionsDetails = context.Route.RouteOptionsDetails.Take(context.NumberOfOptions.Value);
-            else routeOptionsDetails = context.Route.RouteOptionsDetails;
+
+            if (context.NumberOfOptions.HasValue && filteredRouteOptionDetails.Count() >= context.NumberOfOptions.Value)
+                routeOptionsDetails = filteredRouteOptionDetails.Take(context.NumberOfOptions.Value);
+            else
+                routeOptionsDetails = filteredRouteOptionDetails;
 
             foreach (RPRouteOptionDetail option in routeOptionsDetails)
             {
@@ -43,7 +52,7 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
                     decimal durationInMinutes = 0;
                     if (durationBySupplier.TryGetValue(option.SupplierId, out durationInMinutes))
                     {
-                        sumOfRatesMultipliedByDuration += durationInMinutes * option.ConvertedSupplierRate;
+                        sumOfRatesMultipliedByDuration += durationInMinutes * option.ConvertedSupplierRate.Value;
                         sumOfDuration += durationInMinutes;
                     }
                 }
@@ -57,13 +66,10 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             if (weightedAverageCost.HasValue && weightedAverageCost.Value > 0)
                 context.Cost = weightedAverageCost.Value;
             else
-            {
                 new AvgCostCalculation().CalculateCost(context);
-            }
         }
 
         #region Private Methods
-
         private DurationByZone GetDurationByZone(IEnumerable<long> zoneIds)
         {
             List<string> listMeasures = new List<string> { "DurationInMinutes" };
@@ -152,7 +158,6 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
-
         #endregion
     }
 

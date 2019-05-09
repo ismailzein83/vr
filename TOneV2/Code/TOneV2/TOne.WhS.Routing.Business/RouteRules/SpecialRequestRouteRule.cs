@@ -346,7 +346,7 @@ namespace TOne.WhS.Routing.Business
             bool isPercentage = this.OptionsWithBackups != null && this.OptionsWithBackups.FirstOrDefault(itm => itm.Percentage.HasValue) != null;
             if (isPercentage)
             {
-                options = options.OrderByDescending(itm => itm.Percentage.HasValue ? itm.Percentage : -1).ThenBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
+                options = options.OrderByDescending(itm => itm.Percentage.HasValue ? itm.Percentage : -1).ThenBy(itm => itm.SupplierRate.HasValue ? itm.SupplierRate : decimal.MaxValue).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
             }
             else
             {
@@ -364,13 +364,13 @@ namespace TOne.WhS.Routing.Business
 
                     var lcrOptions = options.FindAllRecords(itm => this.OptionsSupplierIds == null || !this.OptionsSupplierIds.Contains(itm.SupplierId));
                     if (lcrOptions.Any())
-                        finalOptions.AddRange(lcrOptions.OrderBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId));
+                        finalOptions.AddRange(lcrOptions.OrderBy(itm => itm.SupplierRate.HasValue ? itm.SupplierRate : decimal.MaxValue).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId));
 
                     options = finalOptions;
                 }
                 else
                 {
-                    options = options.OrderBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
+                    options = options.OrderBy(itm => itm.SupplierRate.HasValue ? itm.SupplierRate.Value : decimal.MaxValue).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
                 }
             }
         }

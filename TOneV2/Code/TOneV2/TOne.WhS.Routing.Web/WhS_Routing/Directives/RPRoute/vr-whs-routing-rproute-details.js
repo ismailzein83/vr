@@ -172,9 +172,10 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
             }
 
             function extendRPRouteOptionObject(rpRouteOption) {
-                //if (rpRouteOption.ConvertedSupplierRate == 0) {
-                //    rpRouteOption.ConvertedSupplierRate = 'N/A';
-                //}
+                if (rpRouteOption.ConvertedSupplierRate == undefined) {
+                    rpRouteOption.ConvertedSupplierRate = 'N/A';
+                    rpRouteOption.CurrencySymbol = '';
+                }
                 rpRouteOption.SupplierStatus = UtilsService.getEnumDescription(WhS_Routing_SupplierStatusEnum, rpRouteOption.SupplierStatus);
                 rpRouteOption.IsBlocked = rpRouteOption.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value;
 

@@ -207,7 +207,7 @@ namespace TOne.WhS.Routing.Business
 
         private List<T> ApplyOptionsOrder<T>(IEnumerable<T> options) where T : IRouteOptionOrderTarget
         {
-            options = options.OrderBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
+            options = options.OrderBy(itm => itm.SupplierRate.HasValue ? itm.SupplierRate.Value : decimal.MaxValue).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
             return options != null ? options.ToList() : null;
         }
 

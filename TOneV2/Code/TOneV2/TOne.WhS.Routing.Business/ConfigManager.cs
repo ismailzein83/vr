@@ -192,6 +192,11 @@ namespace TOne.WhS.Routing.Business
             return GetProductRouteBuildConfiguration().GenerateCostAnalysisByCustomer;
         }
 
+        public bool GetProductRouteBuildIncludeBlockedZonesInCalculation()
+        {
+            return GetProductRouteBuildConfiguration().IncludeBlockedZonesInCalculation;
+        }
+
         #endregion
 
         #region Private Methods

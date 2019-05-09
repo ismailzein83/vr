@@ -353,7 +353,7 @@ namespace TOne.WhS.Routing.Entities
 
                         var rpRouteOption = new RPRouteOption();
                         rpRouteOption.SupplierId = int.Parse(routeOptionParts[0]);
-                        rpRouteOption.SupplierRate = decimal.Parse(routeOptionParts[1]);
+                        rpRouteOption.SupplierRate = !string.IsNullOrEmpty(routeOptionParts[1]) ? decimal.Parse(routeOptionParts[1]) : default(decimal?);
                         rpRouteOption.Percentage = !string.IsNullOrEmpty(routeOptionParts[2]) ? int.Parse(routeOptionParts[2]) : default(int?);
                         rpRouteOption.OptionWeight = decimal.Parse(routeOptionParts[3]);
                         rpRouteOption.SaleZoneId = long.Parse(routeOptionParts[4]);

@@ -34,7 +34,7 @@ namespace TOne.WhS.Sales.Business
                 int? customerId = null;
                 if (ownerType == SalePriceListOwnerType.Customer)
                     customerId = ownerId;
-                IEnumerable<RPRouteDetailByZone> routes = new RPRouteManager().GetRPRoutes(routingDatabaseId, policyConfigId, null, rpZones, currencyId, customerId, includeBlockedSuppliers);
+                IEnumerable<RPRouteDetailByZone> routes = new RPRouteManager().GetRPRoutes(routingDatabaseId, policyConfigId, null, rpZones, currencyId, customerId, includeBlockedSuppliers, true);
                 StructureRPRoutesByZoneId(routes);
             }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RPRouteOption : IRouteOptionOrderTarget, IRouteOptionFilterTarget, IRouteOptionPercentageTarget
+    public class RPRouteOption : IRouteOptionOrderTarget, IRouteOptionPercentageTarget
     {
         static RPRouteOption()
         {
@@ -19,7 +19,7 @@ namespace TOne.WhS.Routing.Entities
 
         public HashSet<int> SupplierServicesIds { get; set; }
 
-        public Decimal SupplierRate { get; set; }
+        public decimal? SupplierRate { get; set; }
 
         public int? Percentage { get; set; }
 

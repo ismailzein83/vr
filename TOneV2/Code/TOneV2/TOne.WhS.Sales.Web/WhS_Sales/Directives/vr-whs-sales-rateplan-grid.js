@@ -205,7 +205,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             var array = []; // Stores the indexes of route options having a greater rate than the rate to validate
 
                             for (var i = 0; i < routeOptionsForView.length; i++) {
-                                if (routeOptionsForView[i].ConvertedSupplierRate >= rate && routeOptionsForView[i].SupplierStatus != WhS_Sales_SupplierStatusEnum.Block.value)
+                                if (routeOptionsForView[i].SupplierStatus != WhS_Sales_SupplierStatusEnum.Block.value && routeOptionsForView[i].ConvertedSupplierRate >= rate)
                                     array.push(i);
                             }
 
@@ -639,6 +639,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             }
 
             function extendZoneItem(zoneItem) {
+                if (zoneItem.RouteOptionsDetailsForView != null && zoneItem.RouteOptionsDetailsForView.length > 0) {
+                    for (var i = 0; i < zoneItem.RouteOptionsDetailsForView.length; i++) {
+                        var routeOptionDetails = zoneItem.RouteOptionsDetailsForView[i];
+                        if (routeOptionDetails.ConvertedSupplierRate == null)
+                            routeOptionDetails.ConvertedSupplierRate = 'N/A';
+                    }
+                }
+
                 zoneItem.IsDirty = isRatePlanZoneDirty();
                 zoneItem.OwnerType = gridQuery.OwnerType;
                 zoneItem.isSellingProductZone = (zoneItem.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value);

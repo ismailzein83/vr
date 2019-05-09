@@ -14,9 +14,9 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
         public override void Execute(IRouteOptionOrderExecutionContext context)
         {
             context.OrderDirection = OrderDirection.Ascending;
-            foreach(IRouteOptionOrderTarget option in context.Options)
+            foreach (IRouteOptionOrderTarget option in context.Options)
             {
-                option.OptionWeight = option.SupplierRate;
+                option.OptionWeight = option.SupplierRate.HasValue ? option.SupplierRate.Value : decimal.MaxValue;
             }
         }
     }

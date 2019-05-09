@@ -47,6 +47,7 @@ app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'WhS_Routing
                             ctrl.productRouteMaxDOP = payload.ProductRoute.MaxDOP;
                             ctrl.productRouteKeepBackupsForRemovedOptions = payload.ProductRoute.KeepBackUpsForRemovedOptions;
                             ctrl.generateCostAnalysisByCustomer = payload.ProductRoute.GenerateCostAnalysisByCustomer;
+                            ctrl.productRouteIncludeBlockedZonesInCalculation = payload.ProductRoute.IncludeBlockedZonesInCalculation;
                         }
 
                         if (payload.IncludedRules != undefined) {
@@ -72,7 +73,8 @@ app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'WhS_Routing
                             KeepBackUpsForRemovedOptions: ctrl.productRouteKeepBackupsForRemovedOptions,
                             IndexesCommandTimeoutInMinutes: ctrl.productRouteIndexCommandTimeout,
                             MaxDOP: ctrl.productRouteMaxDOP,
-                            GenerateCostAnalysisByCustomer: ctrl.generateCostAnalysisByCustomer
+                            GenerateCostAnalysisByCustomer: ctrl.generateCostAnalysisByCustomer,
+                            IncludeBlockedZonesInCalculation: ctrl.productRouteIncludeBlockedZonesInCalculation
                         },
                         IncludedRules: {
                             $type: "TOne.WhS.Routing.Entities.IncludedRulesConfiguration, TOne.WhS.Routing.Entities",

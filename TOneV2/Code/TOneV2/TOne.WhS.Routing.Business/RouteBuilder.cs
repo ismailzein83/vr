@@ -533,8 +533,11 @@ namespace TOne.WhS.Routing.Business
 
         private RPRoute ExecuteRule(int routingProductId, long saleZoneId, int sellingNumberPlanId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase)
         {
+            ConfigManager configManager = new ConfigManager();
+
             var customer = routeRuleTarget != null && routeRuleTarget.CustomerId.HasValue ? _carrierAccounts.GetRecord(routeRuleTarget.CustomerId.Value) : null;
-            bool keepBackupsForRemovedOptions = new ConfigManager().GetProductRouteBuildKeepBackUpsForRemovedOptions();
+            bool keepBackupsForRemovedOptions = configManager.GetProductRouteBuildKeepBackUpsForRemovedOptions();
+            bool includeBlockedZonesInCalculation = configManager.GetProductRouteBuildIncludeBlockedZonesInCalculation();
 
             RPRouteRuleExecutionContext routeRuleExecutionContext = new RPRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             routeRuleExecutionContext.SupplierCodeMatches = context.SupplierCodeMatches;
@@ -608,7 +611,12 @@ namespace TOne.WhS.Routing.Business
                     {
                         bool supplierZoneMatchHasClosedRate = supplierHavingZonesWithEED.Contains(item.SupplierId);
 
-                        SupplierZoneToRPOptionPolicyExecutionContext supplierZoneToRPOptionPolicyExecutionContext = new SupplierZoneToRPOptionPolicyExecutionContext { SupplierOptionDetail = item };
+                        var supplierZoneToRPOptionPolicyExecutionContext = new SupplierZoneToRPOptionPolicyExecutionContext
+                        {
+                            SupplierOptionDetail = item,
+                            IncludeBlockedZonesInCalculation = includeBlockedZonesInCalculation
+                        };
+
                         supplierZoneToRPOptionPolicy.Execute(supplierZoneToRPOptionPolicyExecutionContext);
 
                         rpRouteOptions.Add(new RPRouteOption

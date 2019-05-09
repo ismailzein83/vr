@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.MainExtensions
@@ -24,11 +23,16 @@ namespace TOne.WhS.Sales.MainExtensions
             if (context.Route == null || context.Route.RouteOptionsDetails == null)
                 return;
 
+            var filteredRouteOptionDetails = context.Route.RouteOptionsDetails.FindAllRecords(itm => itm.ConvertedSupplierRate.HasValue);
+
+            if (filteredRouteOptionDetails == null || filteredRouteOptionDetails.Count() == 0)
+                return;
+
             DurationByZone durationByZone = this.GetDurationByZone(context.Route.SaleZoneId);
 
             decimal sumOfDuration = 0;
             decimal sumOfRatesMultipliedByDuration = 0;
-            foreach (RPRouteOptionDetail option in context.Route.RouteOptionsDetails)
+            foreach (RPRouteOptionDetail option in filteredRouteOptionDetails)
             {
                 DurationBySupplier durationBySupplier = null;
                 if (durationByZone.TryGetValue(option.SaleZoneId, out durationBySupplier))
@@ -36,7 +40,7 @@ namespace TOne.WhS.Sales.MainExtensions
                     decimal durationInMinutes = 0;
                     if (durationBySupplier.TryGetValue(option.SupplierId, out durationInMinutes))
                     {
-                        sumOfRatesMultipliedByDuration += durationInMinutes * option.ConvertedSupplierRate;
+                        sumOfRatesMultipliedByDuration += durationInMinutes * option.ConvertedSupplierRate.Value;
                         sumOfDuration += durationInMinutes;
                     }
                 }

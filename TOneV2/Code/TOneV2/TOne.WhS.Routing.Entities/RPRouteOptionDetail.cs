@@ -11,10 +11,10 @@ namespace TOne.WhS.Routing.Entities
         public string SupplierZoneName { get; set; }
         public HashSet<int> SupplierServicesIds { get; set; }
         public string SupplierServicesNames { get; set; }
-        public Decimal SupplierRate { get; set; }
+        public Decimal? SupplierRate { get; set; }
         public int? Percentage { get; set; }
         public bool SupplierZoneMatchHasClosedRate { get; set; }
-        public decimal ConvertedSupplierRate { get; set; }
+        public Decimal? ConvertedSupplierRate { get; set; }
         public string CurrencySymbol { get; set; }
         public int OptionOrder { get; set; }
         public decimal? ACD { get; set; }

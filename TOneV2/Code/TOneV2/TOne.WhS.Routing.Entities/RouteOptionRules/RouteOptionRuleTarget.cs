@@ -64,6 +64,8 @@ namespace TOne.WhS.Routing.Entities
 
         long? IRouteOptionOrderTarget.SupplierZoneId { get { return this.SupplierZoneId; } }
 
+        decimal? IRouteOptionOrderTarget.SupplierRate { get { return this.SupplierRate; } }
+
         #endregion
     }
 

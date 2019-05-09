@@ -93,8 +93,11 @@ namespace TOne.WhS.Sales.Business
             {
                 foreach (RPRouteOptionDetail route in rpRouteDetail.RouteOptionsDetails)
                 {
+                    if (!route.ConvertedSupplierRate.HasValue)
+                        continue;
+
                     if (!_ratesBySupplier.ContainsKey(route.SupplierId))
-                        _ratesBySupplier.Add(route.SupplierId, route.ConvertedSupplierRate);
+                        _ratesBySupplier.Add(route.SupplierId, route.ConvertedSupplierRate.Value);
                 }
             }
         }
