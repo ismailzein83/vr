@@ -57,9 +57,6 @@ app.directive('bpVrWorkflowTaskassignees', ['UtilsService', 'VRUIUtilsService', 
                         getWorkflowArguments: getWorkflowArguments,
                         isVRWorkflowActivityDisabled: isVRWorkflowActivityDisabled,
                     };
-                    if (settings != undefined && settings.UserIds) {
-                        payload.userIds = settings.UserIds;
-                    }
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
