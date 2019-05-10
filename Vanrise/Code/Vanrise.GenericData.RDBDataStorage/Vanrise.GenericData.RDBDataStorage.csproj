@@ -49,6 +49,7 @@
     <Compile Include="IDynamicManager.cs" />
     <Compile Include="MainExtensions\ExpressionFields\RDBDataRecordStorageCustomCodeExpressionField.cs" />
     <Compile Include="MainExtensions\ExpressionFields\RDBDataRecordStorageExpressionFieldFromJoin.cs" />
+    <Compile Include="MainExtensions\Filters\RDBDataRecordStorageFilterGroup.cs" />
     <Compile Include="MainExtensions\Joins\RDBDataRecordStorageCustomCodeJoin.cs" />
     <Compile Include="MainExtensions\Joins\RDBDataRecordStorageJoinOtherRecordStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
