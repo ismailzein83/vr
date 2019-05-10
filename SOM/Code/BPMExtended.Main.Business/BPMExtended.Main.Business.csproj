@@ -108,6 +108,7 @@
     <Compile Include="Request Flow Management\UpdateContractAddressFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateRatePlanFlowManagement.cs" />
     <Compile Include="Requests\Telephony\CallDetailsManager.cs" />
+    <Compile Include="Requests\Telephony\PABXManager.cs" />
     <Compile Include="Requests\Telephony\ServiceAdditionManager.cs" />
     <Compile Include="TelephonyTechnicalComplaintManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />
