@@ -1,27 +1,27 @@
 ﻿<vr-tab header="'Settings'">
     <vr-row>
-        <vr-columns width="1/2row">
+        <vr-columns width="1/3row">
             <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady"
                                                               customlabel="Status Definition" normal-col-num="6" isrequired="true">
             </vr-genericdata-businessentitydefinition-selector>
         </vr-columns>
-        <vr-columns width="1/2row">
+        <vr-columns width="1/3row">
             <vr-switch value="scopeModel.useRemoteSelector" label="Use Remote Selector"></vr-switch>
         </vr-columns>
     </vr-row>
     <vr-row>
-        <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" normal-col-num="6" customlabel="Local Service Account Type"></retail-be-accounttype-selector>
-        <vr-columns width="1/4row">
+        <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" normal-col-num="4" customlabel="Local Service Account Type"></retail-be-accounttype-selector>
+        <vr-columns width="1/3row">
             <vr-switch value="scopeModel.useFinancialAccountModule" label="Use Financial Account Module"></vr-switch>
         </vr-columns>
-        <vr-columns width="1/4row">
+        <vr-columns width="1/3row">
             <vr-switch value="scopeModel.useRecurringChargeModule" label="Use Recurring Charges Module" ng-if="scopeModel.useFinancialAccountModule"></vr-switch>
         </vr-columns>
     </vr-row>
     <retail-be-accountbedefinition-financialaccountlocator on-ready="scopeModel.onFinancialAccountLocatorReady"
-                                                           normal-col-num="6" isrequired="true">
+                                                           normal-col-num="4" isrequired="true">
     </retail-be-accountbedefinition-financialaccountlocator>
-    <vr-columns width="1/2row">
+    <vr-columns width="fullrow">
         <retail-be-accountbedefinition-classification on-ready="scopeModel.onClassificationReady"></retail-be-accountbedefinition-classification>
     </vr-columns>
 </vr-tab>
@@ -54,7 +54,7 @@
     </vr-row>
 </vr-tab>
 <vr-tab header="'Package Assignment'">
-    <retail-be-accountcondition-selective on-ready="scopeModel.onPackageAssignmentConditionReady" normal-col-num="6"></retail-be-accountcondition-selective>
+    <retail-be-accountcondition-selective on-ready="scopeModel.onPackageAssignmentConditionReady" normal-col-num="3"></retail-be-accountcondition-selective>
 </vr-tab>
 <vr-tab header="'Bulk Actions'">
     <retail-be-accountbulkactions-management on-ready="scopeModel.onAccountBulkActionsReady"></retail-be-accountbulkactions-management>
