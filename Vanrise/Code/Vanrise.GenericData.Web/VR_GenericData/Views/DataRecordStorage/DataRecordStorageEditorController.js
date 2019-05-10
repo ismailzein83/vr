@@ -147,10 +147,10 @@
                 modifiedByFieldSelectorAPI = api;
                 modifiedByFieldSelectorReadyDeferred.resolve();
             };
-            $scope.scopeModel.onPermanentFilterSettingsDirectiveReady = function (api) {
-                permanentFilterSettingsAPI = api;
-                permanentFilterSettingsReadyDeferred.resolve();
-            };
+            //$scope.scopeModel.onPermanentFilterSettingsDirectiveReady = function (api) {
+            //    permanentFilterSettingsAPI = api;
+            //    permanentFilterSettingsReadyDeferred.resolve();
+            //};
             //#endregion
             //#region Setting
             $scope.scopeModel.settingsEditor;
@@ -245,7 +245,7 @@
         function loadAllControls() {
 
             var rootPromiseNode = {
-                promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldsPermissions, loadCreatedTimeFieldSelector, loadModifiedTimeFieldSelector, loadCreatedByFieldSelector, loadDataRecordTypeSelector, loadDataStoreSelector, loadRequiredPermission, loadDataStoreConfigs, loadModifiedByFieldSelector, loadTimeFieldSelector, loadPermanentFilterSettingsDirective])],
+                promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldsPermissions, loadCreatedTimeFieldSelector, loadModifiedTimeFieldSelector, loadCreatedByFieldSelector, loadDataRecordTypeSelector, loadDataStoreSelector, loadRequiredPermission, loadDataStoreConfigs, loadModifiedByFieldSelector, loadTimeFieldSelector)],
                 getChildNode: function () {
                     return {
                         promises: [loadSettingsDirectiveOnPageLoad()],
@@ -578,22 +578,22 @@
                 });
             }
         }
-        function loadPermanentFilterSettingsDirective() {
-            var loadPermanentFilterSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
-            permanentFilterSettingsReadyDeferred.promise.then(function () {
-                var payload;
+        //function loadPermanentFilterSettingsDirective() {
+        //    var loadPermanentFilterSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+        //    permanentFilterSettingsReadyDeferred.promise.then(function () {
+        //        var payload;
 
-                if (dataRecordStorageEntity != undefined) {
-                    payload = {
-                        dataRecordTypeId: dataRecordStorageEntity.DataRecordTypeId,
-                        settings: (dataRecordStorageEntity.Settings != undefined && dataRecordStorageEntity.Settings.PermanentFilter != undefined) ? dataRecordStorageEntity.Settings.PermanentFilter.Settings : undefined
-                    };
-                }
+        //        if (dataRecordStorageEntity != undefined) {
+        //            payload = {
+        //                dataRecordTypeId: dataRecordStorageEntity.DataRecordTypeId,
+        //                settings: (dataRecordStorageEntity.Settings != undefined && dataRecordStorageEntity.Settings.PermanentFilter != undefined) ? dataRecordStorageEntity.Settings.PermanentFilter.Settings : undefined
+        //            };
+        //        }
 
-                VRUIUtilsService.callDirectiveLoad(permanentFilterSettingsAPI, payload, loadPermanentFilterSettingsPromiseDeferred);
-            });
-            return loadPermanentFilterSettingsPromiseDeferred.promise;
-        }
+        //        VRUIUtilsService.callDirectiveLoad(permanentFilterSettingsAPI, payload, loadPermanentFilterSettingsPromiseDeferred);
+        //    });
+        //    return loadPermanentFilterSettingsPromiseDeferred.promise;
+        //}
 
         function insertDataRecordStorage() {
             $scope.isLoading = true;
@@ -647,7 +647,7 @@
             obj.Settings.DontReflectToDB = $scope.scopeModel.dontReflectToDB;
             obj.Settings.DenyAPICall = $scope.scopeModel.denyAPICall;
             obj.Settings.FieldsPermissions = buildFieldsPermissionsFromScope(); 
-            obj.Settings.PermanentFilter = { Settings: permanentFilterSettingsAPI.getData() };
+            //obj.Settings.PermanentFilter = { Settings: permanentFilterSettingsAPI.getData() };
             return obj;
         }
         function buildFieldsPermissionsFromScope() {

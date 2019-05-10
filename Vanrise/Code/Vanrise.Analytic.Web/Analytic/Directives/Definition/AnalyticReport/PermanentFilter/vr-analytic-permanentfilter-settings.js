@@ -146,7 +146,6 @@
                 + ' datavaluefield="ExtensionConfigurationId"'
                 + ' datatextfield="Title"'
                 + 'label="' + label + '"'
-                + ' isrequired="true"'
                 + '</vr-select>'
                 + ' </vr-columns>'
                 + '</vr-row>'
