@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', function (BaseDirService,VRLocalizationService) {
+app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
 
     return ({
         getTemplate: getTemplate,
@@ -10,14 +10,14 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
     function getTemplate(attrs) {
 
         var actionsMenuTemplate = ''
-          + '<ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="ctrl.showMenuActions" ng-style="{\'position\': \'fixed\', \'top\': \'initial\' , \'left\': \'initial\' , \'min-width\': \'120px\'} " >'
-       + ' <li role="presentation">'
-       + '     <div ng-repeat="action in ctrl.menuActions"  ng-hide="action.disable" class="btn-menu-item mark-select ">'
-         + '       <div class=" hand-cursor" ng-click="ctrl.menuActionClicked(action)"><span style="font-size:11px">{{action.name}}</span>'
-                    + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="action.isSubmitting" /></div>'
-        + '    </div>'
-       + ' </li>'
-       + '   </ul>';
+            + '<ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="ctrl.showMenuActions" ng-style="{\'position\': \'fixed\', \'top\': \'initial\' , \'left\': \'initial\' , \'min-width\': \'120px\'} " >'
+            + ' <li role="presentation">'
+            + '     <div ng-repeat="action in ctrl.menuActions"  ng-hide="action.disable" class="btn-menu-item mark-select ">'
+            + '       <div class=" hand-cursor" ng-click="ctrl.menuActionClicked(action)"><span style="font-size:11px">{{action.name}}</span>'
+            + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="action.isSubmitting" /></div>'
+            + '    </div>'
+            + ' </li>'
+            + '   </ul>';
 
         var type = attrs.type;
 
@@ -28,7 +28,7 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
         if (type == "Login") {
             return '<div style="position:relative;display:inline-block;width:100%" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
                 + '<button style="width:100%" type="button" class="btn btn-danger login-btn"'
-            + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
+                + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
                 + '<span class="btn-label"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                 + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
                 + '</button>'
@@ -37,47 +37,46 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
         }
         else if (attrs.standalone != undefined) {
             return '<div style="position:relative;display:inline-block;height:28px" ng-if="ctrl.isExculdedOnreadOnly()" ng-show="ctrl.showMenuButton()" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonTitle + '" '
-           + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()" ng-show="ctrl.showMenuButton()" ng-hide="ctrl.hideTemplate">'
-               + (buttonAttributes.class != undefined ? '<span  style="font-size:24px"  class="' + buttonAttributes.class + ' btn-label hand-cursor" aria-hidden="true" ng-show="!ctrl.menuActions && ctrl.showIcon()"></span>' : '')
-               + ' <span  class="glyphicon  glyphicon-chevron-down btn-label hand-cursor" ng-show="ctrl.menuActions.length > 0 " ></span>'
+                + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()" ng-show="ctrl.showMenuButton()" ng-hide="ctrl.hideTemplate">'
+                + (buttonAttributes.class != undefined ? '<span  style="font-size:24px"  class="' + buttonAttributes.class + ' btn-label hand-cursor" aria-hidden="true" ng-show="!ctrl.menuActions && ctrl.showIcon()"></span>' : '')
+                + ' <span  class="glyphicon  glyphicon-chevron-down btn-label hand-cursor" ng-show="ctrl.menuActions.length > 0 " ></span>'
                 + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:20px;margin-top:3px;" class="img-loader" ng-show="ctrl.showLoader()" />'
-               + actionsMenuTemplate + '</div>';
+                + actionsMenuTemplate + '</div>';
         }
         else {
             return '<div style="position:relative;display:inline-block" ng-if="ctrl.isExculdedOnreadOnly()" ng-show="::ctrl.showMenuButton()" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
                 + '<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; "  ng-show="ctrl.showMenuButton()" type="button" class="btn btn-default btncustom"'
-            + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
+                + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
                 + (buttonAttributes.class != undefined ? '<span ng-show="!ctrl.menuActions && ctrl.showIcon()"  class="' + buttonAttributes.class + ' btn-label"  aria-hidden="true"></span>' : '')
                 + ' <span  class="glyphicon  glyphicon-chevron-down btn-label" ng-show="ctrl.menuActions.length > 0 " ></span>'
-               +  '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="ctrl.showLoader()" />'
+                +  '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="ctrl.showLoader()" />'
                 + '</button>'
                 + actionsMenuTemplate + '</div>';
 
         }
     }
-    function getButtonAttributes(type) {
-        var isLocatizaionEnabled = VRLocalizationService.isLocalizationEnabled();
 
+    function getButtonAttributes(type) {
         switch (type) {
             case "Start":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Start.VREnd", "Start") : "Start",
+                    text: "Start",
                     class: "glyphicon  glyphicon-play"
                 };
 
             case "Reset":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Reset.VREnd", "Reset") : "Reset",
+                    text: "Reset",
                     class: "glyphicon  glyphicon-refresh"
                 };
             case "Search":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Search.VREnd", "Search") : "Search",
+                    text: "Search",
                     class: "glyphicon  glyphicon-search"
                 };
             case "Add":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Add.VREnd", "Add") :"Add",
+                    text: "Add",
                     class: "glyphicon  glyphicon-plus-sign"
                 };
             case "Edit":
@@ -90,25 +89,25 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                     text: "Remove",
                     class: "glyphicon  glyphicon-minus-sign"
                 };
-            case "Save": 
+            case "Save":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Save.VREnd", "Save") : "Save",
+                    text: "Save",
                     class: "glyphicon  glyphicon-floppy-disk"
                 };
             case "Yes":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Yes.VREnd", "Yes") : "Yes",
+                    text: "Yes",
                     class: "glyphicon  glyphicon-floppy-disk"
                 };
             case "Close":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Close.VREnd", "Close") : "Close",
+                    text: "Close",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
 
             case "Cancel":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Cancel.VREnd", "Cancel") : "Cancel",
+                    text: "Cancel",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
 
@@ -142,7 +141,7 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case "No":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.No.VREnd", "No")  : "No",
+                    text: "No",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
             case "Login":
@@ -187,7 +186,7 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case 'Upload':
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Upload.VREnd", "Upload") : "Upload",
+                    text: 'Upload',
                     class: 'glyphicon glyphicon-upload'
                 };
             case 'ManageCountries':
@@ -254,17 +253,17 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case 'SelectAll':
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.SelectAll.VREnd", "Select All") : "Select All",
+                    text: 'Select All',
                     class: "glyphicon glyphicon-check"
                 };
             case 'DeselectAll':
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.DeselectAll.VREnd", "Deselect All") : "Deselect All",
+                    text: 'Deselect All',
                     class: "glyphicon glyphicon-unchecked"
                 };
             case 'Export':
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Export.VREnd", "Export") : "Export",
+                    text: 'Export',
                     class: "glyphicon glyphicon-download"
                 };
             case "Continue":
@@ -294,7 +293,7 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case 'Help':
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Help.VREnd", "Help") : "Help",
+                    text: 'Help',
                     class: 'glyphicon glyphicon-question-sign'
                 };
             case 'Next':
@@ -319,12 +318,12 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case 'GenerateInvoice':
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.GenerateInvoice.VREnd", "Generate Invoice") : "Generate Invoice",
+                    text: 'Generate Invoice',
                     class: "glyphicon glyphicon-retweet"
                 };
             case 'Generate':
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Generate.VREnd", "Generate") : "Generate",
+                    text: 'Generate',
                     class: "glyphicon glyphicon-retweet"
                 };
             case 'Analyze':
@@ -339,7 +338,7 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case 'SendEmail':
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.SendEmail.VREnd", "SendEmail") : "SendEmail",
+                    text: 'Send Email',
                     class: "glyphicon glyphicon-envelope"
                 };
             case 'ExcludeAll':
@@ -369,7 +368,7 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case "BulkActions":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.BulkActions.VREnd", "Bulk Actions") : "Bulk Actions",
+                    text: "Bulk Actions",
                     class: "glyphicon glyphicon-tasks"
                 };
             case "Evaluate":
@@ -403,7 +402,7 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case 'Compare':
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Compare.VREnd", "Compare") : "Compare",
+                    text: 'Compare',
                     class: "glyphicon glyphicon-retweet"
                 };
 
@@ -414,7 +413,7 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case "Delete":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Delete.VREnd", "Delete") : "Delete",
+                    text: "Delete",
                     class: "glyphicon glyphicon-trash"
                 };
             case "UploadExcel":
@@ -479,7 +478,7 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case "SaveAndNew":
                 return {
-                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Save.VREnd", "Save & New") : "Save & New",
+                    text: "Save & New",
                     class: "glyphicon  glyphicon-floppy-disk"
                 };
         }

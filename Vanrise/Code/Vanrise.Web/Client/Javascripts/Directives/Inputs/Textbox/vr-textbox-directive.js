@@ -263,14 +263,18 @@
                 var endTemplate = '</div>';
 
                 var labelTemplate = '';
-                if (attrs.label != undefined) {
-                    if (attrs.localizedlabel != undefined && VRLocalizationService.isLocalizationEnabled()) {
-                        var label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
-                        labelTemplate = '<vr-label>' + label +'</vr-label>';
-                    }
-                    else
-                        labelTemplate = '<vr-label>{{ctrl.label}}</vr-label>';
-                }
+
+                //var label = "";
+
+                //if (attrs.label != undefined) {
+                //    label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+                //}
+
+                //if (attrs.label != undefined)
+                //    labelTemplate = '<vr-label>' + label + '</vr-label>';
+
+                if (attrs.label != undefined)
+                    labelTemplate = '<vr-label>{{ctrl.label}}</vr-label>';
                 var type = 'text';
                 var isolationFormStart = "";
                 var isolationFormEnd = "";
@@ -292,11 +296,11 @@
                 //if (attrs.type === TextboxTypeEnum.Number.name)
                 //    format = 'format="number"'; '+format+'
                 var textboxTemplate = '<div ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)">'
-					+ '<vr-validator validate="ctrl.validate()" vr-input>'
-					+ isolationFormStart + ' <input  tabindex="{{ctrl.tabindex}}" ' + autocomplete + ' ng-readonly="::ctrl.readOnly"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute main-input ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="::ctrl.onKeyUp($event)" ng-focus="::ctrl.onFocusDirective($event)" ng-blur="::ctrl.onBlurDirective($event)"/>' + isolationFormEnd
-					+ '</vr-validator>'
+                    + '<vr-validator validate="ctrl.validate()" vr-input>'
+                    + isolationFormStart + ' <input  tabindex="{{ctrl.tabindex}}" ' + autocomplete + ' ng-readonly="::ctrl.readOnly"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute main-input ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="::ctrl.onKeyUp($event)" ng-focus="::ctrl.onFocusDirective($event)" ng-blur="::ctrl.onBlurDirective($event)"/>' + isolationFormEnd
+                    + '</vr-validator>'
                     + '<span ng-if="(ctrl.hint!=undefined && ctrl.hint!=\'\')" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="::ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
-					+ '</div>';
+                    + '</div>';
 
 
                 //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);

@@ -30,7 +30,6 @@
             restrict: 'E',
             scope: {
                 label: '@',
-                localizedlabel: '@',
                 customlabel: '@',
                 entityname: '@',
                 onReady: '=',
@@ -444,7 +443,7 @@
                     if (controller.selectedvalues == undefined || controller.selectedvalues == null || controller.selectedvalues.length == 0) return "";
                     else return getLabel();
                 }
-                
+
                 function getSelectedSectionClass() {
                     if (!selectedSectionVisible()) return 'single-col-checklist';
                     return controller.selectedvalues.length === 0 || controller.readOnly ? 'single-col-checklist' : 'double-col-checklist';
@@ -921,19 +920,15 @@
                         var noCaret = attrs.nocaret != undefined;
                         var noborder = attrs.noborder != undefined;
                         var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle vr-dropdown-select" style="' + (noborder ? 'border:none' : '') + '" type="button"  '
-                                            + '   ' + validateButtonClass + '>'
-                                            + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px );" ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'}" ng-class="ctrl.labelclass">{{ctrl.getLabel()}}</span>'
-                                            + (noCaret === true ? '' : '<span ng-if="!ctrl.readOnly || ctrl.isMultiple()" class="caret vr-select-caret"></span>')
-                                            + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0 && !ctrl.isMobile "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
+                            + '   ' + validateButtonClass + '>'
+                            + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px );" ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'}" ng-class="ctrl.labelclass">{{ctrl.getLabel()}}</span>'
+                            + (noCaret === true ? '' : '<span ng-if="!ctrl.readOnly || ctrl.isMultiple()" class="caret vr-select-caret"></span>')
+                            + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0 && !ctrl.isMobile "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
                         divDropdown.prepend(buttonTemplate);
                     }
 
                     var labelTemplate = '';
-                    var labelvalue;
-                    if (!VRLocalizationService.isLocalizationEnabled())
-                        labelvalue = attrs.customlabel != undefined ? attrs.customlabel : attrs.label;
-                    else
-                        labelvalue = (attrs.localizedlabel != undefined && attrs.localizedlabel != null && attrs.localizedlabel !='') ? attrs.localizedlabel : attrs.label;
+                    var labelvalue = attrs.customlabel != undefined ? attrs.customlabel : attrs.label;
                     if (labelvalue != undefined && attrs.hidelabel == undefined)
                         labelTemplate = '<vr-label>' + labelvalue + '</vr-label>';
                     angular.element(element[0].querySelector('.dropdown-container2')).prepend(labelTemplate);
