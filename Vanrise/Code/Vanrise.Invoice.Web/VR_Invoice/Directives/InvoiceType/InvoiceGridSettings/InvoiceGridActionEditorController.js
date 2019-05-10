@@ -2,7 +2,7 @@
 
     'use strict';
 
-    invoiceItemActionEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    invoiceItemActionEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
 
     function invoiceItemActionEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
@@ -16,9 +16,6 @@
 
         var invoiceActionsSelectorAPI;
         var invoiceActionsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var localizationTextResourceSelectorAPI;
-        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -35,7 +32,6 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
             $scope.scopeModel.onInvoiceActionsSelectorReady = function (api) {
                 invoiceActionsSelectorAPI = api;
                 invoiceActionsSelectorReadyPromiseDeferred.resolve();
@@ -50,17 +46,13 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
-                localizationTextResourceSelectorAPI = api;
-                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
-            };
+
             function builGridActionObjFromScope() {
                 return {
                     Title: $scope.scopeModel.actionTitle,
                     ReloadGridItem: $scope.scopeModel.reloadGridItem,
                     FilterCondition: invoiceFilterConditionAPI.getData(),
-                    InvoiceGridActionId: invoiceActionsSelectorAPI.getSelectedIds(),
-                    TextResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
+                    InvoiceGridActionId: invoiceActionsSelectorAPI.getSelectedIds()
                 };
             }
 
@@ -125,17 +117,7 @@
                     return invoiceActionsSelectorLoadPromiseDeferred.promise;
                 }
 
-                function loadLocalizationTextResourceSelector() {
-                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    var localizationTextResourcePayload = actionEntity != undefined ? { selectedValue: actionEntity.TextResourceKey } : undefined;
-
-                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
-                    });
-                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
-                }
-                var promises = [setTitle, loadStaticData, loadInvoiceFilterConditionDirective, loadInvoiceActionsSelector, loadLocalizationTextResourceSelector];
-                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceFilterConditionDirective, loadInvoiceActionsSelector]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;

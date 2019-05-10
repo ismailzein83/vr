@@ -106,33 +106,30 @@
 
             drillDownDefinition.title = "Cities";
 
-            drillDownDefinition.directive = "vr-common-city-subview";
-            //drillDownDefinition.parentMenuActions = [{
-            //    name: "New City",
-            //    clicked: function (countryItem) {
-            //        if (drillDownDefinition.setTabSelected != undefined)
-            //            drillDownDefinition.setTabSelected(countryItem);
+            drillDownDefinition.directive = "vr-common-city-grid";
+            drillDownDefinition.parentMenuActions = [{
+                name: "New City",
+                clicked: function (countryItem) {
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(countryItem);
 
-            //        var onCityAdded = function (cityObj) {
-            //            if (countryItem.cityGridAPI != undefined) {
-            //                countryItem.cityGridAPI.onCityAdded(cityObj);
-            //            }
-            //        };
-            //        addCity(onCityAdded, countryItem.Entity.CountryId);
-            //    },
-            //    haspermission: hasNewCityPermission
-            //}];
+                    var onCityAdded = function (cityObj) {
+                        if (countryItem.cityGridAPI != undefined) {
+                            countryItem.cityGridAPI.onCityAdded(cityObj);
+                        }
+                    };
+                    addCity(onCityAdded, countryItem.Entity.CountryId);
+                },
+                haspermission: hasNewCityPermission
+            }];
 
             drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {
                 countryItem.cityGridAPI = directiveAPI;
-               
-                var payload = {
-                    query: {
-                        CountryIds: [countryItem.Entity.CountryId]
-                    },
-                    countryItem: countryItem
+                var query = {
+                    CountryIds: [countryItem.Entity.CountryId],
                 };
-                return countryItem.cityGridAPI.load(payload);
+
+                return countryItem.cityGridAPI.loadGrid(query);
             };
 
             VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);

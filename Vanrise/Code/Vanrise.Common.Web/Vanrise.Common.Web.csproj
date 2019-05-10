@@ -127,7 +127,6 @@
     <Content Include="Common\Constant\VRIPAddressType.js" />
     <Content Include="Common\Directives\AdditionalErrors\AdditionalErrorsTemplate.html" />
     <Content Include="Common\Directives\AdditionalErrors\vr-common-additionalerrors.js" />
-    <Content Include="Common\Directives\ProgressBar\Templates\ProgressBarTemplate.html" />
     <Content Include="Common\Directives\ProgressBar\vr-common-progress-bar.js" />
     <Content Include="Common\Directives\ConnectionString\Templates\ConnectionStringTemplate.html" />
     <Content Include="Common\Directives\ConnectionString\vr-common-connectionstring.js" />
@@ -973,6 +972,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Common\Directives\ProgressBar\Templates\" />
     <Folder Include="Common\Directives\VRIPAddress\Templates\" />
   </ItemGroup>
   <PropertyGroup>

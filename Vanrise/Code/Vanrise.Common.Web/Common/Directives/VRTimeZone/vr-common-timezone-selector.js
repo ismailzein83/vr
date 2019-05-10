@@ -60,17 +60,13 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
 
         var multipleselection = "";
         var label = "Time Zone";
-        var localizedlabel = 'VRRes.Common.TimeZone.VREnd';
-
         if (attrs.ismultipleselection != undefined) {
             label = "Time Zones";
-            localizedlabel = 'VRRes.Common.TimeZones.VREnd';
             multipleselection = "ismultipleselection";
         }
         if (attrs.label != undefined)
             label = "{{ctrl.label}}";
-        if (attrs.localizedlabel != undefined)
-            localizedlabel = attrs.localizedlabel;
+
         var addCliked = '';
         if (attrs.showaddbutton != undefined)
             addCliked = 'onaddclicked="addNewTimeZone"';
@@ -78,7 +74,7 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select on-ready="ctrl.onSelectorReady" ' + multipleselection + '  datatextfield="Name" datavaluefield="TimeZoneId" isrequired="ctrl.isrequired"'
-            + ' label="' + label + '" ' + ' localizedlabel="' + localizedlabel + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Time Zone" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>';
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Time Zone" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>';
     }
 
     function timeZoneCtor(ctrl, $scope, attrs) {
@@ -88,7 +84,7 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
                 selectorApi = api;
                 defineAPI();
             };
-           
+
         }
 
         function defineAPI() {

@@ -38,8 +38,7 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionEditor', ['UtilsService', 'V
                 ctrl.addSection = function () {
                     var onSectionAdded = function (sectionObj) {
                         var section = {
-                            sectionTitle: sectionObj.sectionTitle,
-                            textResourceKey: sectionObj.textResourceKey,
+                            sectionTitle: sectionObj,
                             onRowsDirectiveReady: function (api) {
                                 section.rowsGridAPI = api;
                                 var payload = { context: getContext() };
@@ -98,7 +97,6 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionEditor', ['UtilsService', 'V
                             rows = { Rows: section.Rows };
 
                         rows.SectionTitle = section.sectionTitle;
-                        rows.TextResourceKey = section.textResourceKey;
                         sections.push(rows);
                     }
                     return sections;
@@ -113,10 +111,10 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionEditor', ['UtilsService', 'V
                     name: "Add Row",
                     clicked: addRow,
                 },
-                 {
-                     name: "Edit",
-                     clicked: editSection,
-                 }];
+                {
+                    name: "Edit",
+                    clicked: editSection,
+                }];
             }
 
             function addRow(sectionObj) {
@@ -131,7 +129,6 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionEditor', ['UtilsService', 'V
             function prepareSectionObject(section) {
 
                 section.sectionTitle = section.SectionTitle;
-                section.textResourceKey = section.TextResourceKey;
                 section.onRowsDirectiveReady = function (api) {
                     section.rowsGridAPI = api;
                     var payload = { context: getContext(), rows: section.Rows };
@@ -151,11 +148,10 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionEditor', ['UtilsService', 'V
             function editSection(dataItem) {
                 var onSectionUpdated = function (sectionObj) {
                     var index = UtilsService.getItemIndexByVal(ctrl.sections, dataItem.sectionTitle, 'sectionTitle');
-                    ctrl.sections[index].sectionTitle = sectionObj.sectionTitle;
-                    ctrl.sections[index].textResourceKey = sectionObj.textResourceKey;
+                    ctrl.sections[index].sectionTitle = sectionObj;
                 };
 
-                VR_Invoice_InvoiceTypeService.editInvoiceSettingSection(onSectionUpdated, getExistingSections(), dataItem);
+                VR_Invoice_InvoiceTypeService.editInvoiceSettingSection(onSectionUpdated, getExistingSections(), dataItem.sectionTitle);
             }
 
             function getExistingSections() {

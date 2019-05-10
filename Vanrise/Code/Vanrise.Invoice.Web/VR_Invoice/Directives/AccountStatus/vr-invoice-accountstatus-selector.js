@@ -1,5 +1,4 @@
-﻿
-(function (app) {
+﻿(function (app) {
 
     'use strict';
 
@@ -17,7 +16,6 @@
                 ismultipleselection: "@",
                 isrequired: "=",
                 customlabel: "@",
-                localizedlabel: "@",
                 normalColNum: '='
             },
             controller: function ($scope, $element, $attrs) {
@@ -124,8 +122,6 @@
             var multipleselection = '';
 
             var label = 'Account Status';
-            var localizedlabel = 'VRRes.Invoice.AccountStatus.VREnd';
-
             if (attrs.ismultipleselection != undefined) {
                 label = 'Account Statuses';
                 multipleselection = 'ismultipleselection';
@@ -134,8 +130,7 @@
             if (attrs.customlabel != undefined) {
                 label = attrs.customlabel;
             }
-            if (attrs.localizedlabel != undefined)
-                localizedlabel = attrs.localizedlabel;
+
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
@@ -154,8 +149,6 @@
                 + ' isrequired="ctrl.isrequired"'
                 + ' ' + hideremoveicon
                 + ' label="' + label + '"'
-                + ' localizedlabel="' + localizedlabel + '"'
-
                 + ' entityName="' + label + '"'
                 + '</vr-select>'
                 + '</vr-columns>';

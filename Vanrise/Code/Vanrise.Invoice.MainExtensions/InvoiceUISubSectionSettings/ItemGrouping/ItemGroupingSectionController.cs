@@ -44,7 +44,7 @@ namespace Vanrise.Invoice.MainExtensions
                 ResultKey = input.ResultKey,
                 ToRow = input.ToRow
             };
-           
+
             if (input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
                 var result = manager.GetFilteredGroupingInvoiceItems(itemGroupingInput) as Vanrise.Entities.BigResult<GroupingInvoiceItemDetail>;
@@ -53,15 +53,15 @@ namespace Vanrise.Invoice.MainExtensions
                 bigDataResult.ResultKey = result.ResultKey;
 
                 if (result.Data != null)
-                 {
-                     List<ItemGroupingSectionResult> itemGroupingSectionResults = new List<ItemGroupingSectionResult>();
-                     RecordFilterManager filterManager = new RecordFilterManager();
-                     Dictionary<string, ItemGroupingFieldInfo> fieldInfo = new Dictionary<string, ItemGroupingFieldInfo>();
-                     ItemGroupingSectionSettings section = null;
-                     if( input.Query.SectionId.HasValue)
-                     {
-                        
-                        var invoiceType = new InvoiceTypeManager().GetInvoiceType(input.Query.InvoiceTypeId,true);
+                {
+                    List<ItemGroupingSectionResult> itemGroupingSectionResults = new List<ItemGroupingSectionResult>();
+                    RecordFilterManager filterManager = new RecordFilterManager();
+                    Dictionary<string, ItemGroupingFieldInfo> fieldInfo = new Dictionary<string, ItemGroupingFieldInfo>();
+                    ItemGroupingSectionSettings section = null;
+                    if( input.Query.SectionId.HasValue)
+                    {
+
+                        var invoiceType = new InvoiceTypeManager().GetInvoiceType(input.Query.InvoiceTypeId);
                         section = GetSection(invoiceType, input.Query.SectionId.Value);
                         if(section != null)
                         {
@@ -95,34 +95,34 @@ namespace Vanrise.Invoice.MainExtensions
                                 }
                             }
 
-                           
-                           
+
+
                         }
-                     }
-                     foreach (var item in result.Data)
-                     {
-                         ItemGroupingSectionResult itemGroupingSectionResult = new ItemGroupingSectionResult
-                         {
-                             DimensionValues = item.DimensionValues,
-                             MeasureValues = item.MeasureValues,
-                             SubSectionsIds = new List<Guid>()
-                         };
+                    }
+                    foreach (var item in result.Data)
+                    {
+                        ItemGroupingSectionResult itemGroupingSectionResult = new ItemGroupingSectionResult
+                        {
+                            DimensionValues = item.DimensionValues,
+                            MeasureValues = item.MeasureValues,
+                            SubSectionsIds = new List<Guid>()
+                        };
 
-                         if (section != null &&  section.SubSections != null)
-                         {
-                             ItemGroupingFilterFieldMatchContext context = new ItemGroupingFilterFieldMatchContext(item, fieldInfo);
+                        if (section != null &&  section.SubSections != null)
+                        {
+                            ItemGroupingFilterFieldMatchContext context = new ItemGroupingFilterFieldMatchContext(item, fieldInfo);
 
-                             foreach (var subSection in section.SubSections)
-                             {
-                                 if (subSection.SubSectionFilter==null || filterManager.IsFilterGroupMatch(subSection.SubSectionFilter, context))
-                                     itemGroupingSectionResult.SubSectionsIds.Add(subSection.InvoiceSubSectionId);
-                             }
-                         }
-                         itemGroupingSectionResults.Add(itemGroupingSectionResult);
-                     }
-                     bigDataResult.Data = itemGroupingSectionResults;
-                 }
-                 bigDataResult.TotalCount = result.TotalCount;
+                            foreach (var subSection in section.SubSections)
+                            {
+                                if (subSection.SubSectionFilter==null || filterManager.IsFilterGroupMatch(subSection.SubSectionFilter, context))
+                                    itemGroupingSectionResult.SubSectionsIds.Add(subSection.InvoiceSubSectionId);
+                            }
+                        }
+                        itemGroupingSectionResults.Add(itemGroupingSectionResult);
+                    }
+                    bigDataResult.Data = itemGroupingSectionResults;
+                }
+                bigDataResult.TotalCount = result.TotalCount;
                 return GetWebResponse(input, bigDataResult);
             }
             else
@@ -134,7 +134,7 @@ namespace Vanrise.Invoice.MainExtensions
         private string GetSectionTitle(Guid invoiceTypeId, Guid uniqueSectionID)
         {
             string sectionTitle = null;
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId,true);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
             invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceTypeId);
             invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", invoiceTypeId);

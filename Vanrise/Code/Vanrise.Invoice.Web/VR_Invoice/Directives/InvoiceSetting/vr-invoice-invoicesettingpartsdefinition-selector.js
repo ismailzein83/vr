@@ -49,8 +49,6 @@ app.directive('vrInvoiceInvoicesettingpartsdefinitionSelector', ['VR_Invoice_Inv
 
             var multipleselection = "";
             var label = "Part";
-            var localizedlabel = 'VRRes.Common.Part.VREnd';
-
             if (attrs.ismultipleselection != undefined) {
                 label = "Parts";
                 multipleselection = "ismultipleselection";
@@ -59,9 +57,8 @@ app.directive('vrInvoiceInvoicesettingpartsdefinitionSelector', ['VR_Invoice_Inv
             {
                 label = attrs.customlabel;
             }
-            if (attrs.localizedlabel != undefined)
-                localizedlabel = attrs.localizedlabel; 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="PartConfigId" label="' + label + '" localizedlabel="' + localizedlabel + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Part" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="PartConfigId" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Part" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
         }
 
         function partConfigCtor(ctrl, $scope, attrs) {

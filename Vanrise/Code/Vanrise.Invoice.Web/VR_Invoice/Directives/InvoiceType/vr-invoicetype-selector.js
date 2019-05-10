@@ -17,7 +17,6 @@
                 isrequired: "=",
                 isdisabled: "=",
                 customlabel: "@",
-                localizedlabel:"@",
                 normalColNum: '=',
                 hidelabel: "@"
             },
@@ -97,8 +96,6 @@
             var multipleselection = '';
 
             var label = 'Invoice Type';
-            var localizedlabel = 'VRRes.Invoice.InvoiceType.VREnd';
-
             if (attrs.ismultipleselection != undefined) {
                 label = 'Invoice Types';
                 multipleselection = 'ismultipleselection';
@@ -111,8 +108,7 @@
             var hidelabel = "";
             if (attrs.hidelabel != undefined)
                 hidelabel = "hidelabel";
-            if (attrs.localizedlabel != undefined)
-                localizedlabel = attrs.localizedlabel;
+
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : '';
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : '';
@@ -123,25 +119,24 @@
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + '>'
                 + '<span vr-disabled="ctrl.isdisabled">'
-                    + '<vr-select on-ready="ctrl.onSelectorReady"'
-                        + ' datasource="ctrl.datasource"'
-                        + ' selectedvalues="ctrl.selectedvalues"'
-                        + ' onselectionchanged="ctrl.onselectionchanged"'
-                        + ' onselectitem="ctrl.onselectitem"'
-                        + ' ondeselectitem="ctrl.ondeselectitem"'
-                        + ' datavaluefield="InvoiceTypeId"'
-                        + ' datatextfield="Name"'
-                        + ' ' + multipleselection
-                        + ' ' + hideselectedvaluessection
-                        + ' isrequired="ctrl.isrequired"'
-                        + ' ' + hideremoveicon
-                        + ' label="' + label + '"'
-                        + ' localizedlabel="' + localizedlabel + '"'
-                        + ' entityName="' + label + '" '
-                        + hidelabel 
-                    + ' </vr-select>'
+                + '<vr-select on-ready="ctrl.onSelectorReady"'
+                + ' datasource="ctrl.datasource"'
+                + ' selectedvalues="ctrl.selectedvalues"'
+                + ' onselectionchanged="ctrl.onselectionchanged"'
+                + ' onselectitem="ctrl.onselectitem"'
+                + ' ondeselectitem="ctrl.ondeselectitem"'
+                + ' datavaluefield="InvoiceTypeId"'
+                + ' datatextfield="Name"'
+                + ' ' + multipleselection
+                + ' ' + hideselectedvaluessection
+                + ' isrequired="ctrl.isrequired"'
+                + ' ' + hideremoveicon
+                + ' label="' + label + '"'
+                + ' entityName="' + label + '" '
+                + hidelabel
+                + ' </vr-select>'
                 + '</span>'
-            + '</vr-columns>';
+                + '</vr-columns>';
         }
     }
 

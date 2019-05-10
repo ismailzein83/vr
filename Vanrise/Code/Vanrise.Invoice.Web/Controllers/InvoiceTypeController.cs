@@ -22,8 +22,8 @@ namespace Vanrise.Invoice.Web.Controllers
         [Route("GetInvoiceType")]
         public InvoiceType GetInvoiceType(Guid invoiceTypeId)
         {
-            return _manager.GetInvoiceType(invoiceTypeId,true);
-        }      
+            return _manager.GetInvoiceType(invoiceTypeId);
+        }
         [HttpGet]
         [Route("GetInvoiceTypeRuntime")]
         public InvoiceTypeRuntime GetInvoiceTypeRuntime(Guid invoiceTypeId)
@@ -54,7 +54,7 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredInvoiceTypes(input));
         }
-        
+
         [HttpPost]
         [Route("AddInvoiceType")]
         public Vanrise.Entities.InsertOperationOutput<InvoiceTypeDetail> AddInvoiceType(InvoiceType invoiceType)

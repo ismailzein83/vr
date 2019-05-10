@@ -54,7 +54,7 @@ namespace Vanrise.Invoice.Business
         public string GetSubsectionTitle(Guid invoiceTypeId, Guid uniqueSectionID)
         {
             string sectionTitle = null;
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId,true);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
             invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceTypeId);
             invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", invoiceTypeId);
@@ -280,7 +280,7 @@ namespace Vanrise.Invoice.Business
                 ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }, Rows = new List<ExportExcelRow>() };
                 InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
                 InvoiceItemRequestHandler invoiceItemRequestHandler = new InvoiceItemRequestHandler();
-                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId,true);
+                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
                 invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings", _query.InvoiceTypeId);
                 invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", _query.InvoiceTypeId);
@@ -339,7 +339,7 @@ namespace Vanrise.Invoice.Business
             {
                 ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }, Rows = new List<ExportExcelRow>() };
                 InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId,true);
+                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
                 invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings", _query.InvoiceTypeId);
                 invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", _query.InvoiceTypeId);

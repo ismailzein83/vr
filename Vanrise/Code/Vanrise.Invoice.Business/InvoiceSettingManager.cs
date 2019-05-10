@@ -35,7 +35,7 @@ namespace Vanrise.Invoice.Business
             var allItems = GetCachedInvoiceSettings();
             PartnerManager partnerManager = new PartnerManager();
 
-           List<Guid>  invoiceSettingsIdsForRelatedPartners = null;
+            List<Guid>  invoiceSettingsIdsForRelatedPartners = null;
 
             if (input.Query.PartnerIds != null && input.Query.PartnerIds.Count > 0)
             {
@@ -210,8 +210,8 @@ namespace Vanrise.Invoice.Business
         }
         public bool CanDeleteInvoiceSetting(Guid invoiceSettingId)
         {
-           string errorMessage;
-           return CanDeleteInvoiceSetting(invoiceSettingId, out  errorMessage);
+            string errorMessage;
+            return CanDeleteInvoiceSetting(invoiceSettingId, out  errorMessage);
         }
         public bool CanDeleteInvoiceSetting(Guid invoiceSettingId, out string errorMessage)
         {
@@ -230,7 +230,7 @@ namespace Vanrise.Invoice.Business
             }
 
             return true;
-          
+
         }
         public T GetInvoiceSettingDetailByType<T>(Guid invoiceSettingId) where T : InvoiceSettingPart
         {
@@ -248,7 +248,7 @@ namespace Vanrise.Invoice.Business
             if (invoiceSetting == null)
                 throw new NullReferenceException("invoiceSetting");
 
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceSetting.InvoiceTypeId,true);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceSetting.InvoiceTypeId);
             if (invoiceType == null)
                 throw new NullReferenceException("invoiceType");
             if (invoiceType.Settings == null)
@@ -305,7 +305,7 @@ namespace Vanrise.Invoice.Business
         public AutomaticInvoiceSettingPartRuntime GetAutomaticInvoiceSettingPartRuntime(Guid invoiceTypeId)
         {
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId,true);
+            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
             return new AutomaticInvoiceSettingPartRuntime
             {
                 AutomaticInvoiceActions = invoiceType.Settings.AutomaticInvoiceActions,
@@ -409,11 +409,11 @@ namespace Vanrise.Invoice.Business
                 var automaticPartItem = GetInvoiceSettingDetailByType<AutomaticInvoiceSettingPart>(invoiceSettingObject.InvoiceSettingId);
                 if (automaticPartItem != null)
                     invoiceSettingDetail.IsAutomatic = automaticPartItem.IsEnabled;
-               
+
                 var billingPeriodPartItem = GetInvoiceSettingDetailByType<BillingPeriodInvoiceSettingPart>(invoiceSettingObject.InvoiceSettingId);
                 if (billingPeriodPartItem != null && billingPeriodPartItem.BillingPeriod != null)
                     invoiceSettingDetail.BillingPeriodDescription = billingPeriodPartItem.BillingPeriod.GetDescription();
-              
+
                 var duePeriodPartItem = GetInvoiceSettingDetailByType<DuePeriodInvoiceSettingPart>(invoiceSettingObject.InvoiceSettingId);
                 if (duePeriodPartItem != null)
                 {

@@ -11,8 +11,8 @@
         var businessEntityDefinitionId;
 
         var settingDirectiveAPI;
-		var settingReadyPromiseDeferred;
-		var additionalData;
+        var settingReadyPromiseDeferred;
+        var additionalData;
 
         loadParameters();
         defineScope();
@@ -37,7 +37,7 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, settingDirectiveAPI, undefined, setLoader, settingReadyPromiseDeferred);
             };
 
-           
+
             $scope.scopeModel.bEDefinitionSettingConfigs = [];
 
             $scope.scopeModel.SaveGenericBEEditor = function () {
@@ -65,7 +65,7 @@
             $scope.scopeModel.isLoading = true;
             getBEDefinitionSettingConfigs().then(function () {
                 if (isEditMode) {
-					getBusinessEntityDefinitionRuntimeEditor().then(function () {
+                    getBusinessEntityDefinitionRuntimeEditor().then(function () {
                         loadAllControls();
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -93,7 +93,6 @@
                     if (businessEntityDefinitionEntity != undefined) {
                         $scope.scopeModel.businessEntityName = businessEntityDefinitionEntity.Name;
                         $scope.scopeModel.businessEntityTitle = businessEntityDefinitionEntity.Title;
-                        $scope.scopeModel.nullDisplayText = businessEntityDefinitionEntity.Settings != undefined ? businessEntityDefinitionEntity.Settings.NullDisplayText : undefined;
                     }
                 }
                 function loadSettingDirectiveSection() {
@@ -106,9 +105,9 @@
                             .then(function () {
                                 var directivePayload = {
                                     businessEntityDefinitionId: businessEntityDefinitionId,
-									businessEntityDefinitionSettings: businessEntityDefinitionEntity.Settings,
-									additionalData: additionalData
-								};
+                                    businessEntityDefinitionSettings: businessEntityDefinitionEntity.Settings,
+                                    additionalData: additionalData
+                                };
                                 VRUIUtilsService.callDirectiveLoad(settingDirectiveAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                             });
 
@@ -126,10 +125,10 @@
 
             }
 
-			function getBusinessEntityDefinitionRuntimeEditor() {
-				return VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinitionRuntimeEditor(businessEntityDefinitionId).then(function (response) {
-					businessEntityDefinitionEntity = response.BusinessEntityDefinition;
-					additionalData = response.AdditionalData;
+            function getBusinessEntityDefinitionRuntimeEditor() {
+                return VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinitionRuntimeEditor(businessEntityDefinitionId).then(function (response) {
+                    businessEntityDefinitionEntity = response.BusinessEntityDefinition;
+                    additionalData = response.AdditionalData;
                 });
             }
         }
@@ -146,7 +145,6 @@
             var settings = settingDirectiveAPI.getData();
             if (settings != undefined) {
                 settings.ConfigId = $scope.scopeModel.selectedSetingsTypeConfig.ExtensionConfigurationId;
-                settings.NullDisplayText = $scope.scopeModel.nullDisplayText;
             }
             var bEdefinition = {
                 BusinessEntityDefinitionId: businessEntityDefinitionId,

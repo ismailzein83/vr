@@ -38,14 +38,11 @@
 
             var multipleselection = "";
             var label = "Period Gap Action";
-            var localizedlabel = 'VRRes.Invoice.PeriodGapAction.VREnd';
 
             if (attrs.ismultipleselection != undefined) {
                 label = "Period Gap Actions";
                 multipleselection = "ismultipleselection";
             }
-            if (attrs.localizedlabel != undefined)
-                localizedlabel = attrs.localizedlabel;
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + ' <vr-select on-ready="ctrl.onSelectorReady"'
                 + ' datasource="ctrl.datasource"'
@@ -56,7 +53,6 @@
                 + ' isrequired="ctrl.isrequired"'
                 + ' entityName="' + label + '"'
                 + ' label="' + label + '" '
-                + ' localizedlabel="' + localizedlabel + '"'
                 + ' hideremoveicon>'
                 + '</vr-select>'
                 + ' </vr-columns>';
@@ -111,6 +107,6 @@
         }
 
     }
-app.directive('vrInvoicePeriodgapactionSelector', InvoicePeriodGapActionSelectorDirective);
+    app.directive('vrInvoicePeriodgapactionSelector', InvoicePeriodGapActionSelectorDirective);
 
 })(app);

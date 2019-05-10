@@ -4,19 +4,19 @@
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
              idfield="Entity.InvoiceSettingId">
-    <vr-datagridcolumn headertext="'ID'" localizedheadertext="'VRRes.Common.ID.VREnd'" type="'Text'" field="'Entity.InvoiceSettingId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" localizedheadertext="'VRRes.Common.Name.VREnd'" type="'Text'" field="'Entity.Name'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Automatic'" localizedheadertext="'VRRes.Common.Automatic.VREnd'" type="'Text'" field="'IsAutomatic'">
+    <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.InvoiceSettingId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Automatic'" type="'Text'" field="'IsAutomatic'">
         <vr-icon icontype="dataItem.IsAutomatic"></vr-icon>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Billing Period'" localizedheadertext="'VRRes.Invoice.BillingPeriod.VREnd'" type="'Text'" field="'BillingPeriodDescription'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Billing Period'" type="'Text'" field="'BillingPeriodDescription'"></vr-datagridcolumn>
 
-    <vr-datagridcolumn headertext="'Default'" localizedheadertext="'VRRes.Common.Default.VREnd'" type="'Text'" field="'Entity.IsDefault'">
+    <vr-datagridcolumn headertext="'Default'" type="'Text'" field="'Entity.IsDefault'">
         <vr-icon icontype="dataItem.Entity.IsDefault"></vr-icon>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Due Period (Days)'" localizedheadertext="'VRRes.Invoice.DuePeriod(Days).VREnd'" type="'Text'" field="'DuePeriodDescription'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Due Period (Days)'" type="'Text'" field="'DuePeriodDescription'"></vr-datagridcolumn>
 
-    <vr-datagridcolumn headertext="'Linked Partners'" localizedheadertext="'VRRes.Invoice.LinkedPartners.VREnd'" type="'Number'" numberprecision="'NoDecimal'" field="'TotalLinkedPartners'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Linked Partners'" type="'Number'" numberprecision="'NoDecimal'" field="'TotalLinkedPartners'"></vr-datagridcolumn>
 
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>

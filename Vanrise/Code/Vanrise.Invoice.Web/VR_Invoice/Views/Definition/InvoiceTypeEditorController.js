@@ -4,7 +4,7 @@
 
     invoiceTypeEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_GenericData_DataRecordTypeAPIService'];
 
-    function invoiceTypeEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_GenericData_DataRecordTypeAPIServicer) {
+    function invoiceTypeEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_GenericData_DataRecordTypeAPIService) {
         var isEditMode;
 
         var invoiceTypeId;
@@ -101,8 +101,7 @@
         var invoiceMenualActionsAPI;
         var invoiceMenualActionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var localizationTextResourceSelectorAPI;
-        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var stagesToHoldAPI;
         var stagesToProcessAPI;
 
@@ -122,14 +121,9 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
             $scope.scopeModel.onMenualActionsReady = function (api) {
                 invoiceMenualActionsAPI = api;
                 invoiceMenualActionsReadyPromiseDeferred.resolve();
-            };
-            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
-                localizationTextResourceSelectorAPI = api;
-                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.onCommentDefinitionSelectorReady = function (api) {
@@ -304,7 +298,7 @@
             $scope.scopeModel.onStagesToProcessSelectorReady = function (api) {
                 stagesToProcessAPI = api;
             };
-        
+
             function loadStagesToHoldSelector(executionFlowDefinitionId) {
                 var stagesToHoldPayload = {
                     executionFlowDefinitionId: executionFlowDefinitionId
@@ -370,8 +364,7 @@
                         ItemSetNamesStorageRules: itemSetNameStorageRuleAPI.getData(),
                         InvToAccBalanceRelationId: relationDefinitionSelectorAPI.getSelectedIds(),
                         InvoiceCommentDefinitionId: commentDefinitionAPI.getSelectedIds(),
-                        HidePaidFilter: $scope.scopeModel.hidePaidFilter,
-                        TextResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
+                        HidePaidFilter: $scope.scopeModel.hidePaidFilter
                     }
                 };
                 return obj;
@@ -381,32 +374,32 @@
 
                 var invoiceTypeObject = buildInvoiceTypeObjFromScope();
                 return VR_Invoice_InvoiceTypeAPIService.AddInvoiceType(invoiceTypeObject)
-                .then(function (response) {
-                    $scope.scopeModel.isLoading = false;
-                    if (VRNotificationService.notifyOnItemAdded("Invoice Type", response)) {
-                        if ($scope.onInvoiceTypeAdded != undefined)
-                            $scope.onInvoiceTypeAdded(response.InsertedObject);
-                        $scope.modalContext.closeModal();
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
+                    .then(function (response) {
+                        $scope.scopeModel.isLoading = false;
+                        if (VRNotificationService.notifyOnItemAdded("Invoice Type", response)) {
+                            if ($scope.onInvoiceTypeAdded != undefined)
+                                $scope.onInvoiceTypeAdded(response.InsertedObject);
+                            $scope.modalContext.closeModal();
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
 
             }
 
             function updateInvoiceType() {
                 var invoiceTypeObject = buildInvoiceTypeObjFromScope();
                 VR_Invoice_InvoiceTypeAPIService.UpdateInvoiceType(invoiceTypeObject)
-                .then(function (response) {
-                    $scope.scopeModel.isLoading = false;
-                    if (VRNotificationService.notifyOnItemUpdated("Invoice Type", response)) {
-                        if ($scope.onInvoiceTypeUpdated != undefined)
-                            $scope.onInvoiceTypeUpdated(response.UpdatedObject);
-                        $scope.modalContext.closeModal();
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
+                    .then(function (response) {
+                        $scope.scopeModel.isLoading = false;
+                        if (VRNotificationService.notifyOnItemUpdated("Invoice Type", response)) {
+                            if ($scope.onInvoiceTypeUpdated != undefined)
+                                $scope.onInvoiceTypeUpdated(response.UpdatedObject);
+                            $scope.modalContext.closeModal();
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
             }
 
         }
@@ -465,15 +458,6 @@
                     return dataRecordTypeSelectorLoadPromiseDeferred.promise;
                 }
 
-                function loadLocalizationTextResourceSelector(localizationTextResourcePayload) {
-                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    var localizationTextResourcePayload = invoiceTypeEntity != undefined ? { selectedValue: invoiceTypeEntity.Settings.TextResourceKey } : undefined;
-
-                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
-                    });
-                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
-                }
                 function loadMainGridColumnsSection() {
                     var mainGridColumnsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -830,15 +814,15 @@
                     });
                     return commentDefinitionSelectorLoadPromiseDeferred.promise;
                 }
-                var promises = [setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection, loadCommentDefinitionSelector, loadLocalizationTextResourceSelector];
 
-                return UtilsService.waitMultipleAsyncOperations(promises)
-                   .catch(function (error) {
-                       VRNotificationService.notifyExceptionWithClose(error, $scope);
-                   })
-                  .finally(function () {
-                      $scope.scopeModel.isLoading = false;
-                  });
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection, loadCommentDefinitionSelector])
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    })
+                    .finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
             }
         }
 

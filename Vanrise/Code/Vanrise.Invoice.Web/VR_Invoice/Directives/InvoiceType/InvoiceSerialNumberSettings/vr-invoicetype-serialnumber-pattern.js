@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRModalService", "VR_Invoice_InvoiceTypeAPIService","VRLocalizationService",
-    function(UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Invoice_InvoiceTypeAPIService, VRLocalizationService) {
+app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VRModalService","VR_Invoice_InvoiceTypeAPIService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Invoice_InvoiceTypeAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -32,21 +32,15 @@ app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificati
             if (attrs.hidelabel != undefined)
                 withemptyline = '';
             var label = "Serial Number Pattern";
-            var localizedlabel = 'VRRes.Invoice.SerialNumberPattern.VREnd';
-            if (attrs.localizedlabel != undefined)
-                localizedlabel = attrs.localizedlabel;
             if (attrs.label != undefined)
                 label = attrs.label;
-            if (localizedlabel != undefined && localizedlabel != null && localizedlabel != '' && VRLocalizationService.isLocalizationEnabled())
-                label = localizedlabel;
-            
             var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                             + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
-                             + '<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired"></vr-textbox>'
-                         + '</vr-columns>'
-                         + '<vr-columns width="normal" ' + withemptyline + '>'
-                            + '<vr-button type="Help" data-onclick="scopeModel.openSerialNumberPatternHelper" standalone></vr-button>'
-                         + '</vr-columns>';
+                + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
+                + '<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired"></vr-textbox>'
+                + '</vr-columns>'
+                + '<vr-columns width="normal" ' + withemptyline + '>'
+                + '<vr-button type="Help" data-onclick="scopeModel.openSerialNumberPatternHelper" standalone></vr-button>'
+                + '</vr-columns>';
             return template;
 
         }
@@ -68,38 +62,38 @@ app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificati
                         };
                     };
                     var parameter = {
-                    context: getContext()
+                        context: getContext()
                     };
                     VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSerialNumberSettings/Templates/SerialNumberPatternHelper.html', parameter, modalSettings);
                 };
-            defineAPI();
-        }
+                defineAPI();
+            }
 
-        function defineAPI() {
-            var api = {};
+            function defineAPI() {
+                var api = {};
 
-            api.load = function (payload) {
-                if (payload != undefined) {
-                    context = payload.context;
-                    parts = payload.parts;
-                    invoiceTypeId = payload.invoiceTypeId;
-                    if (payload.serialNumberPattern != undefined)
-                        ctrl.value = payload.serialNumberPattern;
-                    var promises = [];
-                    if (invoiceTypeId != undefined && parts == undefined) {
-                        var promise = VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
-                            parts = response.Settings.InvoiceSerialNumberSettings.SerialNumberParts;
-                      });
-                      promises.push(promise);
+                api.load = function (payload) {
+                    if (payload != undefined) {
+                        context = payload.context;
+                        parts = payload.parts;
+                        invoiceTypeId = payload.invoiceTypeId;
+                        if (payload.serialNumberPattern != undefined)
+                            ctrl.value = payload.serialNumberPattern;
+                        var promises = [];
+                        if (invoiceTypeId != undefined && parts == undefined) {
+                            var promise = VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
+                                parts = response.Settings.InvoiceSerialNumberSettings.SerialNumberParts;
+                            });
+                            promises.push(promise);
+                        }
+
+                        return UtilsService.waitMultiplePromises(promises);
                     }
+                };
 
-                    return UtilsService.waitMultiplePromises(promises);
-                }
-            };
-
-            api.getData = function () {
-                return ctrl.value;
-            };
+                api.getData = function () {
+                    return ctrl.value;
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

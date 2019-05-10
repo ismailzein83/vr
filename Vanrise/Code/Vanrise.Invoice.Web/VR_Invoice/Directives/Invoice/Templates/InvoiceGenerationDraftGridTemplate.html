@@ -5,29 +5,29 @@
                      dataretrievalfunction="dataRetrievalFunction"
                      pagingtype="'Pager'" norowhighlightonclick="true"
                      idfield="InvoiceGenerationDraftId" defaultsortbyfieldname="'InvoiceGenerationDraftId'">
-            <vr-datagridcolumn headertext="'ID'" localizedheadertext="'VRRes.Common.ID.VREnd'" type="'Text'" field="'InvoiceGenerationDraftId'" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'InvoiceGenerationDraftId'" disablesorting="true"></vr-datagridcolumn>
             <vr-datagridcolumn fixedwidth="20" disablesorting="true">
                 <vr-check value="dataItem.IsSelected" onvaluechanged="dataItem.onItemChanged"></vr-check>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'Name'" localizedheadertext="'VRRes.Common.Name.VREnd'" type="'Text'" field="'PartnerName'" widthfactor="'2'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'From'" localizedheadertext="'VRRes.Common.From.VREnd'" type="'Date'" disablesorting="true" fixedwidth="100">
+            <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'PartnerName'" widthfactor="'2'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'From'" type="'Date'" disablesorting="true" fixedwidth="100">
                 <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}" >
                     <vr-datetimepicker value="dataItem.From" type="date" isrequired="true" onvaluechanged="dataItem.onDateChanged" customvalidate="dataItem.validateFromDate()"></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'To'" localizedheadertext="'VRRes.Common.To.VREnd'" type="'Date'" disablesorting="true" fixedwidth="100">
+            <vr-datagridcolumn headertext="'To'" type="'Date'" disablesorting="true" fixedwidth="100">
                 <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}">
                     <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onDateChanged" customvalidate="dataItem.validateToDate()" applytimemax></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'Settings'" localizedheadertext="'VRRes.Common.Settings.VREnd'" disablesorting="true" widthfactor="'6'" ng-if="generationCustomSectionDirective!=undefined" columnindex="5">
+            <vr-datagridcolumn headertext="'Settings'" disablesorting="true" widthfactor="'6'" ng-if="generationCustomSectionDirective!=undefined" columnindex="5">
                 <span ng-if="viewScope.generationCustomSectionDirective!=undefined" vr-loader="viewScope.isCustomPayloadLoading">
                     <vr-directivewrapper directive="viewScope.generationCustomSectionDirective" on-ready="dataItem.onGenerationCustomSectionDirectiveReady" normal-col-num="4"></vr-directivewrapper>
                 </span>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Actions'" localizedheadertext="'VRRes.Common.Actions.VREnd'" disablesorting="true" columnindex="6" widthfactor="'1'" invisibleheader fixedwidth="30">
+            <vr-datagridcolumn headertext="'Actions'" disablesorting="true" columnindex="6" widthfactor="'1'" invisibleheader fixedwidth="30">
                 <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}">
                     <span ng-repeat="action in dataItem.menuActions" ng-if="dataItem.menuActions.length > 0">
                         <vr-directivewrapper directive="'vr-button'" type="{{action.type}}" data-onclick="action.onclick" standalone menuactions="action.menuActions" vr-disabled="dataItem.isInvalid()"></vr-directivewrapper>

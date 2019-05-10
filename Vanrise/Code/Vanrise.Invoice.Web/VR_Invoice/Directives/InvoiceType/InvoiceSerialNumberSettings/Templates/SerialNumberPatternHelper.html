@@ -2,13 +2,13 @@
     <vr-modalbody maxheight="'700px'">
         <vr-form name="formSerialNumberPatternHelper">
             <vr-tabs>
-                <vr-tab header="'Definition'" localizedheader="'VRRes.Common.Definition.VREnd'">
+                <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-datagrid datasource="scopeModel.dataSource" norowhighlightonclick="true" maxheight="300px"
                                          on-ready="onGridReady" hidegridmenu>
-                                <vr-datagridcolumn headertext="'Variable Name'" localizedheadertext="'VRRes.Common.VariableName.VREnd'" field="'VariableName'" widthfactor="10" disablesorting isclickable="true" onclicked="scopeModel.save"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Description'" localizedheadertext="'VRRes.Common.Description.VREnd'" field="'Description'" widthfactor="10" disablesorting isclickable="true" onclicked="scopeModel.save" ></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Variable Name'" field="'VariableName'" widthfactor="10" disablesorting isclickable="true" onclicked="scopeModel.save"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Description'" field="'Description'" widthfactor="10" disablesorting isclickable="true" onclicked="scopeModel.save" ></vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-columns>
                     </vr-row>

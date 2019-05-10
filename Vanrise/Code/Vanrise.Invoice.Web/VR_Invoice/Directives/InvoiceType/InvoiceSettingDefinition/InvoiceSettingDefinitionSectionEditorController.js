@@ -2,18 +2,13 @@
 
     "use strict";
 
-    InvoiceSettingDefinitionSectionEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    InvoiceSettingDefinitionSectionEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function InvoiceSettingDefinitionSectionEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function InvoiceSettingDefinitionSectionEditorController($scope, UtilsService, VRNotificationService, VRNavigationService) {
 
         var isEditMode;
         var sectionTitleValue;
         var exitingSections;
-        var sectionEntity;
-        var textResourceKey;
-        var localizationTextResourceSelectorAPI;
-        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         loadParameters();
         defineScope();
 
@@ -22,12 +17,8 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                sectionEntity = parameters.sectionEntity;
+                sectionTitleValue = parameters.sectionTitleValue;
                 exitingSections = parameters.exitingSections;
-            }
-            if (sectionEntity != undefined) {
-                sectionTitleValue = sectionEntity.sectionTitle;
-                textResourceKey = sectionEntity.textResourceKey;
             }
             isEditMode = (sectionTitleValue != undefined);
         }
@@ -58,10 +49,6 @@
                 $scope.modalContext.closeModal();
             };
 
-            $scope.scopeModal.onLocalizationTextResourceSelectorReady = function (api) {
-                localizationTextResourceSelectorAPI = api;
-                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
-            };
         }
 
         function load() {
@@ -80,18 +67,8 @@
                 function loadStaticData() {
                     $scope.scopeModal.sectionValue = sectionTitleValue;
                 }
-                function loadLocalizationTextResourceSelector() {
-                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    var localizationTextResourcePayload = { selectedValue: textResourceKey };
 
-                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
-                    });
-                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
-                }
-
-                var promises = [setTitle, loadStaticData, loadLocalizationTextResourceSelector];
-                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModal.isLoading = false;
@@ -103,10 +80,8 @@
         }
 
         function buildSectionObjFromScope() {
-            return {
-                sectionTitle: $scope.scopeModal.sectionValue,
-                textResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
-            };
+            var sectionTitle = $scope.scopeModal.sectionValue;
+            return sectionTitle;
         }
 
         function insertSection() {

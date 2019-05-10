@@ -18,15 +18,15 @@ namespace Vanrise.Invoice.Business
         public IEnumerable<Entities.GroupingInvoiceItemDetail> GetFilteredGroupingInvoiceItems(GroupingInvoiceItemQuery query)
         {
             InvoiceTypeManager manager = new InvoiceTypeManager();
-            var invoiceType = manager.GetInvoiceType(query.InvoiceTypeId,true);
+            var invoiceType = manager.GetInvoiceType(query.InvoiceTypeId);
             var groupItem = invoiceType.Settings.ItemGroupings.FirstOrDefault(x => x.ItemGroupingId == query.ItemGroupingId);
             InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
             var results = invoiceItemManager.GetInvoiceItemsByItemSetNames(query.InvoiceId, new List<string> { groupItem.ItemSetName }, CompareOperator.Equal);
 
             var context = new GroupingInvoiceItemQueryContext(query);
-           return ApplyFinalGroupingAndFiltering(context, results, query.DimensionIds, query.MeasureIds, query.Filters, groupItem);
+            return ApplyFinalGroupingAndFiltering(context, results, query.DimensionIds, query.MeasureIds, query.Filters, groupItem);
 
-           
+
         }
         #endregion
 
@@ -190,7 +190,7 @@ namespace Vanrise.Invoice.Business
                         return dimFilter.FilterValue == null;
                     else
                     {
-                       
+
                         var filterValueType = dimFilter.FilterValue.GetType();
                         var convertedDimensionValue = filterValueType == typeof(string) ? dimensionValue.Value.ToString() : Convert.ChangeType(dimensionValue.Value, filterValueType);
                         if (!dimFilter.FilterValue.Equals(convertedDimensionValue))
@@ -268,7 +268,7 @@ namespace Vanrise.Invoice.Business
             }
             foreach (var measureId in measureIds)
             {
-                
+
                 var measureValue = new GetMeasureValueContext(groupingInvoiceItemQueryContext, invoiceItemRecord).GetAggregateValue(measureId);
                 var measureConfig = groupingInvoiceItemQueryContext.GetAggregateItemField(measureId);
                 analyticRecord.MeasureValues.Add(measureConfig.FieldName, new InvoiceGroupingMeasureValue { Value = measureValue });
@@ -277,7 +277,7 @@ namespace Vanrise.Invoice.Business
         }
 
         #endregion
-        
+
     }
     public class InvoiceItemRecord
     {

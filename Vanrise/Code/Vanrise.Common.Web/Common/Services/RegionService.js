@@ -47,7 +47,7 @@ app.service('VRCommon_RegionService', ['VRModalService', 'VRNotificationService'
             var parameters = {};
             if (countryId != undefined) {
                 parameters.CountryId = countryId;
-             
+
             }
             if (disableCountry != undefined)
                 parameters.disableCountry = disableCountry;
@@ -109,33 +109,30 @@ app.service('VRCommon_RegionService', ['VRModalService', 'VRNotificationService'
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Regions";
-            drillDownDefinition.directive = "vr-common-region-subview";
-            //drillDownDefinition.parentMenuActions = [{
-            //    name: "New Region",
-            //    clicked: function (countryItem) {
-            //        if (drillDownDefinition.setTabSelected != undefined)
-            //            drillDownDefinition.setTabSelected(countryItem);
-                   
-            //        var onRegionAdded = function (regionObj) {
-            //            if (countryItem.regionGridAPI != undefined) {
-            //                countryItem.regionGridAPI.onRegionAdded(regionObj);
-            //            }
-            //        };
-            //        addRegion(onRegionAdded, countryItem.Entity.CountryId);
-            //    },
-            //    haspermission: hasNewRegionPermission
-            //}];
+            drillDownDefinition.directive = "vr-common-region-grid";
+            drillDownDefinition.parentMenuActions = [{
+                name: "New Region",
+                clicked: function (countryItem) {
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(countryItem);
+
+                    var onRegionAdded = function (regionObj) {
+                        if (countryItem.regionGridAPI != undefined) {
+                            countryItem.regionGridAPI.onRegionAdded(regionObj);
+                        }
+                    };
+                    addRegion(onRegionAdded, countryItem.Entity.CountryId);
+                },
+                haspermission: hasNewRegionPermission
+            }];
 
             drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {
                 countryItem.regionGridAPI = directiveAPI;
-                var payload = {
-                    query: {
-                        CountryIds: [countryItem.Entity.CountryId]
-                    },
-                    countryItem: countryItem
+                var query = {
+                    CountryIds: [countryItem.Entity.CountryId],
                 };
-               
-                return countryItem.regionGridAPI.load(payload);
+
+                return countryItem.regionGridAPI.loadGrid(query);
             };
 
             VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);
