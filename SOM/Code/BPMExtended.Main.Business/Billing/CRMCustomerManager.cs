@@ -2240,7 +2240,7 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public List<RequestHeaderDetail> GetRequestHeaderData(string contactId, string accountId)
+        public List<RequestHeaderDetail> GetRequestHeaderData(string contactId, string accountId, string contractId)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
@@ -2261,11 +2261,12 @@ namespace BPMExtended.Main.Business
             if (contactId != null) { 
                 esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContact", contactId);
             }
-            else
+            else if (accountId != null)
             {
                 esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StAccount", accountId);
             }
-
+            else
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContractID", contractId);
             esq.Filters.Add(esqFirstFilter);
 
             entities = esq.GetEntityCollection(BPM_UserConnection);
