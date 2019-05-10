@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountbalancefinancialaccountpartnotificationtypeSearcheditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailBeFinancialaccountpartnotificationtypeSearcheditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -14,7 +14,7 @@ app.directive('retailBeAccountbalancefinancialaccountpartnotificationtypeSearche
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountBalanceNotification/Templates/AccountBalanceFinancialAccountPartNotificationTypeSearchEditorTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountBalanceNotification/Templates/FinancialAccountPartNotificationTypeSearchEditorTemplate.html'
         };
 
         function SearchEditorCtor($scope, ctrl, $attrs) {

@@ -31,7 +31,7 @@ as (select * from (values
 
 ('96935E36-6BE1-4126-B1F2-BADFEC119799','VR_BEBridge_BEConvertor_Zajil_Site','Zajil Site Convertor','VR_BEBridge_BEConvertor'	,'{"Editor":"retail-zajil-site-convertor-editor"}'),
 ('B5B45866-3B7B-4DDA-B893-F5E17E86EE1A','Assign Package Handler','Assign Package Handler','Retail_BE_AccountSynchronizerInsertHandlerConfig','{"Editor": "retail-be-accountsynchronizerhandler-assignpackage"}'),
-('34BD051D-9BA3-4CBE-8E40-7D9C1E887F30','Retail Account Balance Financial Account Part','Retail Account Balance Financial Account Part','VR_AccountBalance_NotificationTypeExtendedSettingsConfig','{"Editor":"retail-be-accountbalancefinancialaccountpartnotificationtype-settings"}')
+('34BD051D-9BA3-4CBE-8E40-7D9C1E887F30','Retail Account Balance Financial Account Part','Retail Account Balance Financial Account Part','VR_AccountBalance_NotificationTypeExtendedSettingsConfig','{"Editor":"retail-be-financialaccountpartnotificationtype-settings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

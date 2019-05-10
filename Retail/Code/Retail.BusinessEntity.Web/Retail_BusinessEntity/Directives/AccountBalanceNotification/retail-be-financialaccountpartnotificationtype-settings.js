@@ -20,7 +20,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountBalanceNotification/Templates/AccountBalanceFinancialAccountPartNotificationTypeSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountBalanceNotification/Templates/FinancialAccountPartNotificationTypeSettingsTemplate.html"
         };
 
         function SettingsCtor($scope, ctrl, $attrs) {
@@ -96,6 +96,6 @@
         }
     }
 
-    app.directive('retailBeAccountbalancefinancialaccountpartnotificationtypeSettings', AccountBalanceFinancialAccountPartNotificationTypeSettingsDirective);
+    app.directive('retailBeFinancialaccountpartnotificationtypeSettings', AccountBalanceFinancialAccountPartNotificationTypeSettingsDirective);
 
 })(app);
