@@ -844,6 +844,7 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetBalancesForRecreateAlert.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceRecreateAlertAfterUpdateTable.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetGroupedByAccountIds.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_SavePermanentFilter.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

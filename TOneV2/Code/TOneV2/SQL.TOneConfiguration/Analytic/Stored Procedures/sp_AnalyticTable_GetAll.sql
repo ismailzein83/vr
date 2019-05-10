@@ -13,6 +13,6 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT	at.[ID],at.[Name],at.[Settings],at.[MeasureStyles]      
+	SELECT	at.[ID],at.DevProjectID,at.[Name],at.[Settings],at.[MeasureStyles],at.[PermanentFilter]      
     FROM	[Analytic].[AnalyticTable] at WITH(NOLOCK) 
 END
