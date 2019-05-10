@@ -477,6 +477,11 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                     text: "Test Generate",
                     class: 'glyphicon glyphicon-download'
                 };
+            case "SaveAndNew":
+                return {
+                    text: isLocatizaionEnabled ? VRLocalizationService.getResourceValue("VRRes.Common.Save.VREnd", "Save & New") : "Save & New",
+                    class: "glyphicon  glyphicon-floppy-disk"
+                };
         }
     }
 }]);
