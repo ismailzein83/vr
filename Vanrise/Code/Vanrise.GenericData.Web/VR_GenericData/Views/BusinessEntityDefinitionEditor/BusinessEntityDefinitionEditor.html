@@ -4,22 +4,22 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="1/3row">
                             <vr-textbox value="scopeModel.businessEntityName" isrequired="true" label="Name" customvalidate="scopeModel.validate()"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="1/3row">
                             <vr-textbox value="scopeModel.businessEntityTitle" isrequired="true" label="Title" customvalidate="scopeModel.validate()"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="1/3row">
                             <vr-textbox label="Null Display Text" value="scopeModel.nullDisplayText"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="1/3row">
                             <vr-select datasource="scopeModel.bEDefinitionSettingConfigs" selectedvalues="scopeModel.selectedSetingsTypeConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" label="Type" text="None" isrequired hideremoveicon>
                             </vr-select>
                         </vr-columns>

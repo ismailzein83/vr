@@ -126,7 +126,7 @@
             }
             var template =
                 '<vr-row>'
-                   + ' <vr-columns width="1/2row">'
+                   + ' <vr-columns width="1/3row">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
