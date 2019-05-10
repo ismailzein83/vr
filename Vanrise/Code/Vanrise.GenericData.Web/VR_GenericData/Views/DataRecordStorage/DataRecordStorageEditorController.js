@@ -245,7 +245,7 @@
         function loadAllControls() {
 
             var rootPromiseNode = {
-                promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldsPermissions, loadCreatedTimeFieldSelector, loadModifiedTimeFieldSelector, loadCreatedByFieldSelector, loadDataRecordTypeSelector, loadDataStoreSelector, loadRequiredPermission, loadDataStoreConfigs, loadModifiedByFieldSelector, loadTimeFieldSelector],
+                promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldsPermissions, loadCreatedTimeFieldSelector, loadModifiedTimeFieldSelector, loadCreatedByFieldSelector, loadDataRecordTypeSelector, loadDataStoreSelector, loadRequiredPermission, loadDataStoreConfigs, loadModifiedByFieldSelector, loadTimeFieldSelector])],
                 getChildNode: function () {
                     return {
                         promises: [loadSettingsDirectiveOnPageLoad()],
