@@ -108,7 +108,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SupplierCode> GetSupplierCodesByZoneIds(IEnumerable<long> zoneIds, DateTime effectiveDate)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereContext = selectQuery.Where();
+
+            whereContext.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, zoneIds);
+            BEDataUtility.SetFutureDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveDate);
+
+            return queryContext.GetItems(SupplierCodeMapper);
         }
 
         public List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate)
@@ -121,7 +131,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinCondition = selectQuery.Join();
-            supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
+
+            supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true, RDBJoinType.Left);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
@@ -338,10 +349,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public void GetRestoreQuery(RDBQueryContext queryContext, long stateBackupId, string backupDatabaseName)
         {
             var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(TABLE_ALIAS);
+            insertQuery.IntoTable(TABLE_NAME);
 
             var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierCodeBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SupplierCodeBackupDataManager.TABLE_NAME), SupplierCodeBackupDataManager.TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
             selectColumns.Column(COL_Code, COL_Code);

@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB.StateBackup
     {
         #region RDB
 
-        static string TABLE_ALIAS = "supcbkup";
+        public static string TABLE_ALIAS = "supcbkup";
         public static string TABLE_NAME = "TOneWhS_BE_Bkup_SupplierCode";
         const string COL_ID = "ID";
         const string COL_Code = "Code";
