@@ -93,6 +93,7 @@
                     if (businessEntityDefinitionEntity != undefined) {
                         $scope.scopeModel.businessEntityName = businessEntityDefinitionEntity.Name;
                         $scope.scopeModel.businessEntityTitle = businessEntityDefinitionEntity.Title;
+                        $scope.scopeModel.nullDisplayText = businessEntityDefinitionEntity.Settings != undefined ? businessEntityDefinitionEntity.Settings.NullDisplayText : undefined;
                     }
                 }
                 function loadSettingDirectiveSection() {
@@ -145,6 +146,7 @@
             var settings = settingDirectiveAPI.getData();
             if (settings != undefined) {
                 settings.ConfigId = $scope.scopeModel.selectedSetingsTypeConfig.ExtensionConfigurationId;
+                settings.NullDisplayText = $scope.scopeModel.nullDisplayText;
             }
             var bEdefinition = {
                 BusinessEntityDefinitionId: businessEntityDefinitionId,
