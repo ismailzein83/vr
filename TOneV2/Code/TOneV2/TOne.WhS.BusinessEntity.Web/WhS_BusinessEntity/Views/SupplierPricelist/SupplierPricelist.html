@@ -12,11 +12,7 @@
                 <vr-columns width="normal">
                     <vr-datetimepicker type="date" label="To (Pricelist Date)" value="toDate" customvalidate="validateDateTime()"></vr-datetimepicker>
                 </vr-columns>
-
-                <vr-columns width="normal">
-                    <vr-sec-user-selector on-ready="onUserSelectorReady" customlabel="Created By" ismultipleselection></vr-sec-user-selector>
-                </vr-columns>
-
+                <vr-sec-user-selector normal-col-num="2" on-ready="onUserSelectorReady" customlabel="Created By" ismultipleselection></vr-sec-user-selector>
             </vr-row>
         </div>
         <vr-row removeline>

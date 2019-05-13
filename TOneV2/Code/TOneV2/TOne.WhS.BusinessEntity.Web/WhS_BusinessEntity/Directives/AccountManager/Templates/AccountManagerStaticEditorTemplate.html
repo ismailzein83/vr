@@ -1,8 +1,6 @@
 ﻿<vr-row>
-    <vr-columns width="1/2row">
-        <vr-sec-user-selector on-ready="scopeModel.onUserSelectorReady" customlabel="User" isrequired="true"></vr-sec-user-selector>
-    </vr-columns>
-    <span vr-disabled ="scopeModel.isParentSelectorDisabled">
+    <vr-sec-user-selector normal-col-num="6" on-ready="scopeModel.onUserSelectorReady" customlabel="User" isrequired="true"></vr-sec-user-selector>
+    <span vr-disabled="scopeModel.isParentSelectorDisabled">
         <vr-genericdata-genericbusinessentity-selector customlabel="Parent" on-ready="scopeModel.onAccountManagerGBESelectorReady" normal-col-num="6"></vr-genericdata-genericbusinessentity-selector>
     </span>
 </vr-row>
