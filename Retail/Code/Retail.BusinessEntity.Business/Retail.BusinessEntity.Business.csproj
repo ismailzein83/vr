@@ -170,6 +170,7 @@
     <Compile Include="AccountBalanceNotification\RetailAccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="AccountGenericFields\AccountIdGenericField.cs" />
     <Compile Include="AccountHandlers\BaseAccountEventPayload.cs" />
+    <Compile Include="AccountPackageProviderManager.cs" />
     <Compile Include="AccountPackageRecurChargeManager.cs" />
     <Compile Include="AccountPackage\RetailAccountPackageProvider.cs" />
     <Compile Include="AccountPartTaxesRuntimeManager.cs" />

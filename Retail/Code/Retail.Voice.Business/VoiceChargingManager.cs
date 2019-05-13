@@ -134,7 +134,7 @@ namespace Retail.Voice.Business
             if (priceCDRInputs == null || priceCDRInputs.Count == 0)
                 return null;
 
-            AccountPackageProvider accountPackageProvider = this.GetAccountPackageProvider(accountBEDefinitionId);
+            AccountPackageProvider accountPackageProvider = new AccountPackageProviderManager().GetAccountPackageProvider(accountBEDefinitionId);
             if (accountPackageProvider == null)
                 return new List<PriceCDROutput>(priceCDRInputs.Select(itm => new PriceCDROutput() { PriceCDRInput = itm }));
 
@@ -248,6 +248,68 @@ namespace Retail.Voice.Business
             return priceCDROutputList;
         }
 
+        public VoiceEventPricingInfo ApplyChargingPolicyToVoiceEvent(int chargingPolicyId, Guid serviceTypeId, dynamic mappedCDR, decimal duration, DateTime eventTime, Guid accountBEDefinitionId, long packageAccountId)
+        {
+            VoiceChargingPolicyEvaluator chargingPolicyEvaluator = GetVoiceChargingPolicyEvaluator(serviceTypeId);
+            var context = new VoiceChargingPolicyEvaluatorContext
+            {
+                ServiceTypeId = serviceTypeId,
+                ChargingPolicyId = chargingPolicyId,
+                MappedCDR = mappedCDR,
+                Duration = duration,
+                EventTime = eventTime,
+                AccountBEDefinitionId = accountBEDefinitionId,
+                PackageAccountId = packageAccountId
+            };
+            chargingPolicyEvaluator.ApplyChargingPolicyToVoiceEvent(context);
+            return context.EventPricingInfo;
+        }
+
+        public void Centrex_ApplyVolumePricingToCDRs(Guid accountBEDefinitionId, List<dynamic> cdrs, Guid? cdrPricingDetailTypeId)
+        {
+            List<dynamic> mainCDRs = new List<dynamic>();
+            List<dynamic> invalidCDRs = new List<dynamic>();
+            List<dynamic> failedCDRs = new List<dynamic>();
+            List<dynamic> billingStats = new List<dynamic>();
+            List<dynamic> trafficStats = new List<dynamic>();
+            //List<>
+
+            //foreach()
+            //{
+
+            //}
+
+            List<CDRVolumePricingInput> cdrVolumePricingInputList = cdrs.Select(cdr => new CDRVolumePricingInput(cdr, cdr.SubscriberAccountId, cdr.AttemptDateTime, cdr.SaleDurationInSeconds,
+                cdr.PackageUsageVolumeCombinationId)).ToList();
+
+            List<CDRVolumePricingOutput> cdrVolumePricingOutputList = this.ApplyVolumePricingToCDRs(accountBEDefinitionId, cdrVolumePricingInputList, cdrPricingDetailTypeId);
+
+            foreach (CDRVolumePricingOutput cdrVolumePricingOutput in cdrVolumePricingOutputList)
+            {
+                dynamic billingCDR = cdrVolumePricingOutput.CDRInput.CDR;
+                this.FillOrigValues(billingCDR);
+
+                if (cdrVolumePricingOutput.CDRPricingOutputItem == null)
+                {
+                    billingCDR.PackageId = cdrVolumePricingOutput.CDRVolumePricingOutputItems.First().PackageId;
+                    this.RemovePricingFieldValues(billingCDR);
+                }
+                else
+                {
+                    billingCDR.ChargedDurationInSeconds = cdrVolumePricingOutput.CDRPricingOutputItem.PricedDurationInSec;
+                    billingCDR.SaleAmount = cdrVolumePricingOutput.CDRPricingOutputItem.SaleAmount;
+                }
+
+                if (cdrVolumePricingOutput.CDRPricingDetails != null && cdrVolumePricingOutput.CDRPricingDetails.Count > 0)
+                {
+                    billingCDR.InitializeCDRPricingDetails();
+
+                    foreach (var cdrPricingDetail in cdrVolumePricingOutput.CDRPricingDetails)
+                        billingCDR.CDRPricingDetails.Add(cdrPricingDetail);
+                }
+            }
+        }
+
         public List<CDRVolumePricingOutput> ApplyVolumePricingToCDRs(Guid accountBEDefinitionId, List<CDRVolumePricingInput> cdrs, Guid? cdrPricingDetailTypeId = null)
         {
             HashSet<PackageUsageVolumeBalanceKey> volumeBalanceKeys;
@@ -275,7 +337,7 @@ namespace Retail.Voice.Business
             foreach (var cdrVolumePricingOutputItem in cdrVolumePricingOutputItems)
             {
                 dynamic clonedBillingCDR = billingCDR.CloneRecord(billingCDRTypeId);
-                RemovePricingFieldValues(clonedBillingCDR);
+                this.RemovePricingFieldValues(clonedBillingCDR);
 
                 clonedBillingCDR.PackageId = cdrVolumePricingOutputItem.PackageId;
                 clonedBillingCDR.PackageItemId = cdrVolumePricingOutputItem.PackageItemId; //should be added at billingCDR, billingStat and trafficStat
@@ -327,23 +389,6 @@ namespace Retail.Voice.Business
             billingCDR.SaleRateTypeRuleId = null;
             billingCDR.SaleTariffRuleId = null;
             billingCDR.SaleExtraChargeRuleId = null;
-        }
-
-        public VoiceEventPricingInfo ApplyChargingPolicyToVoiceEvent(int chargingPolicyId, Guid serviceTypeId, dynamic mappedCDR, decimal duration, DateTime eventTime, Guid accountBEDefinitionId, long packageAccountId)
-        {
-            VoiceChargingPolicyEvaluator chargingPolicyEvaluator = GetVoiceChargingPolicyEvaluator(serviceTypeId);
-            var context = new VoiceChargingPolicyEvaluatorContext
-            {
-                ServiceTypeId = serviceTypeId,
-                ChargingPolicyId = chargingPolicyId,
-                MappedCDR = mappedCDR,
-                Duration = duration,
-                EventTime = eventTime,
-                AccountBEDefinitionId = accountBEDefinitionId,
-                PackageAccountId = packageAccountId
-            };
-            chargingPolicyEvaluator.ApplyChargingPolicyToVoiceEvent(context);
-            return context.EventPricingInfo;
         }
 
         #endregion
@@ -419,7 +464,7 @@ namespace Retail.Voice.Business
 
         private List<ProcessedRetailAccountPackage> GetProcessedAccountPackagesByPriority(Guid accountBEDefinitionId, long accountId, DateTime effectiveTime, bool withInheritence)
         {
-            AccountPackageProvider accountPackageProvider = this.GetAccountPackageProvider(accountBEDefinitionId);
+            AccountPackageProvider accountPackageProvider = new AccountPackageProviderManager().GetAccountPackageProvider(accountBEDefinitionId);
             if (accountPackageProvider == null)
                 return null;
 
@@ -455,8 +500,8 @@ namespace Retail.Voice.Business
             var cdrsInProcess = new List<VolumePricingCDRInProcess>();
             var _volumeBalanceKeys = new HashSet<PackageUsageVolumeBalanceKey>(); //to use inside anonymous method(s)
             volumeBalanceKeys = _volumeBalanceKeys;
-
-            AccountPackageProvider accountPackageProvider = this.GetAccountPackageProvider(accountBEDefinitionId);
+             
+            AccountPackageProvider accountPackageProvider = new AccountPackageProviderManager().GetAccountPackageProvider(accountBEDefinitionId);
             if (accountPackageProvider == null)
                 return new List<VolumePricingCDRInProcess>(cdrInputs.Select(cdrInput => new VolumePricingCDRInProcess { CDRInput = cdrInput }));
 
@@ -634,23 +679,6 @@ namespace Retail.Voice.Business
             }
 
             return cdrVolumePricingOutputList;
-        }
-
-        private AccountPackageProvider GetAccountPackageProvider(Guid accountBEDefinitionId)
-        {
-            var beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(accountBEDefinitionId);
-            beDefinition.ThrowIfNull("beDefinition", accountBEDefinitionId);
-            beDefinition.Settings.ThrowIfNull("beDefinition.Settings", accountBEDefinitionId);
-
-            var additionalSettings = beDefinition.Settings.GetAdditionalSettings(new BEDefinitionSettingsGetAdditionalSettingsContext());
-            if (additionalSettings == null)
-                return null;
-
-            var accountPackageProvider = additionalSettings.GetRecord("AccountPackageProvider");
-            if (accountPackageProvider == null)
-                return null;
-
-            return accountPackageProvider as AccountPackageProvider;
         }
 
         //private List<Package> GetAccountPackagesByPriority(long accountId, DateTime effectiveTime)

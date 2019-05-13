@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -35,6 +36,16 @@ namespace Retail.BusinessEntity.Business
             }
 
             return retailAccountPackagesByAccountEventTime;
+        }
+
+        public override bool TryGetAccount(IAccountPackageProviderTryGetAccountContext context)
+        {
+            Account account = new AccountBEManager().GetAccount(context.AccountBEDefinitionId, context.AccountId);
+            if (account == null)
+                throw new DataIntegrityValidationException($"Account not found for AccountBEDefinitionId : '{context.AccountBEDefinitionId}' and AccountId: '{context.AccountId}'");
+
+            context.Account = account;
+            return true;
         }
     }
 }

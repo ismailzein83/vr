@@ -69,18 +69,18 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                     List<object> settingData = new List<object>();
                     settingData.Add(currencyManager.GetCurrencySymbol(rateValueRule.Settings.CurrencyId));
                     var rateNamesAndValues = genericRule.GetSettingsValuesByName();
-                    if (rateNamesAndValues != null && rateNamesAndValues.Count != 0 && rateValueFieldNames!=null && rateValueFieldNames.Count!=0)
+                    if (rateNamesAndValues != null && rateNamesAndValues.Count != 0 && rateValueFieldNames != null && rateValueFieldNames.Count != 0)
                     {
                         foreach (var rateName in rateValueFieldNames)
                         {
-                            if(!rateName.Equals("Currency", StringComparison.InvariantCultureIgnoreCase))
+                            if (!rateName.Equals("Currency", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 var data = rateNamesAndValues.GetRecord(rateName);
                                 settingData.Add(data);
                             }
                         }
                     }
-                   
+
                     return settingData;
                 }
                 , out exportRateValueRuleDataHeaders, out exportRateValueRuleDataList);
@@ -105,7 +105,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
             var tarrifRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(tariffRuleDefinitionId);
             tarrifRuleDefinition.ThrowIfNull("tarrifRuleDefinition", tarrifRuleDefinition);
             tarrifRuleDefinition.SettingsDefinition.ThrowIfNull("tarrifRuleDefinition.SettingsDefinition");
-         
+
             ExtractDataFromRule(tariffRuleDefinitionId, tariffRules != null ? tariffRules.Select(itm => itm as GenericRule).ToList() : null, tariffRuleSettingHeaders,
                 (genericRuleDefinition, genericRule) =>
                 {
@@ -234,7 +234,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                         foreach (var settingValue in settingData)
                         {
                             rowData[columnIndex] = settingValue;
-                          
+
                             bool valueExists;
                             if (hasValueByColumn.TryGetValue(columnIndex, out valueExists))
                             {
@@ -249,7 +249,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                             columnIndex++;
                         }
                     }
-                    int effectiveOnIndex = ruleDataHeaders.Count-1;
+                    int effectiveOnIndex = ruleDataHeaders.Count - 1;
                     if (genericRule.BeginEffectiveTime != null)
                         rowData[effectiveOnIndex] = genericRule.BeginEffectiveTime.ToString();
 
@@ -273,7 +273,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                     List<object> rowDataEditedList = new List<object>();
                     for (int i = 0; i < exportedRule.Length; i++)
                     {
-                        if(!hasValueByColumn[i])
+                        if (!hasValueByColumn[i])
                         {
                             if (!ruleDataHeadersEdited)
                             {
@@ -356,15 +356,20 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 
         private GenericRuleTarget BuildingGenericRuleTarget(IVoiceChargingPolicyEvaluatorContext context)
         {
-            Account packageAccount = new AccountBEManager().GetAccount(context.AccountBEDefinitionId, context.PackageAccountId);
-
             GenericRuleTarget genericRuleTarget = new GenericRuleTarget();
             genericRuleTarget.EffectiveOn = context.EventTime;
             genericRuleTarget.TargetFieldValues = new Dictionary<string, object>();
             genericRuleTarget.TargetFieldValues.Add("ChargingPolicy", context.ChargingPolicyId);
             genericRuleTarget.Objects = new Dictionary<string, dynamic>();
             genericRuleTarget.Objects.Add("MappedCDR", context.MappedCDR);
-            genericRuleTarget.Objects.Add("Account", packageAccount);
+
+            AccountPackageProvider accountPackageProvider = new AccountPackageProviderManager().GetAccountPackageProvider(context.AccountBEDefinitionId);
+            if (accountPackageProvider != null)
+            {
+                var getAccountContext = new AccountPackageProviderTryGetAccountContext() { AccountBEDefinitionId = context.AccountBEDefinitionId, AccountId = context.PackageAccountId };
+                if (accountPackageProvider.TryGetAccount(getAccountContext))
+                    genericRuleTarget.Objects.Add("Account", getAccountContext.Account);
+            }
 
             return genericRuleTarget;
         }
