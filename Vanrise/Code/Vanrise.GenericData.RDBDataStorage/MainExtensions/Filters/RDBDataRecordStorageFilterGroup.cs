@@ -12,5 +12,10 @@ namespace Vanrise.GenericData.RDBDataStorage.MainExtensions.Filters
         public override Guid ConfigId { get { return new Guid("1D2F3E14-AD64-41C6-AE5F-475D1CB75D2D"); } }
 
         public RecordFilterGroup RecordFilterGroup { get; set; }
+
+        public override RecordFilterGroup ConvertToRecordFilterGroup(IRDBDataRecordStorageSettingsFilterContext context)
+        {
+            return this.RecordFilterGroup;
+        }
     }
 }

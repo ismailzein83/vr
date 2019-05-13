@@ -428,7 +428,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             var queryContext = new RDBQueryContext(GetDataProvider());
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(rdbRegistrationInfo.RDBTableQuerySource);
-            
+
             object idValue;
             if (!fieldValues.TryGetValue(idFieldName, out idValue) || idValue == null)
                 throw new NullReferenceException("idValue");
@@ -690,7 +690,7 @@ namespace Vanrise.GenericData.RDBDataStorage
         {
             return GetMainStorageRegistrationInfo().RDBTableUniqueName;
         }
-        
+
         #endregion
 
         #region Private Methods
@@ -874,7 +874,7 @@ namespace Vanrise.GenericData.RDBDataStorage
 
                                         }
                                     }
-                                    
+
                                     if (_dataRecordStorageSettings.ExpressionFields != null && _dataRecordStorageSettings.ExpressionFields.Count > 0)
                                     {
                                         rdbTableDefinition.ExpressionColumns = new Dictionary<string, RDBTableExpressionColumn>();
@@ -890,7 +890,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                                         }
                                     }
 
-                                    if(_dataRecordStorageSettings.ParentRecordStorageId.HasValue)
+                                    if (_dataRecordStorageSettings.ParentRecordStorageId.HasValue)
                                     {
                                         if (rdbTableDefinition.Joins == null)
                                             rdbTableDefinition.Joins = new Dictionary<string, RDBTableJoinDefinition>();
@@ -904,7 +904,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                                         });
 
                                         var parentSupportedFieldNames = GetParentStorageDataManagerWithValidate().ResolveAllSupportedFieldNames();
-                                        if(parentSupportedFieldNames != null)
+                                        if (parentSupportedFieldNames != null)
                                         {
                                             foreach (var parentFieldName in parentSupportedFieldNames)
                                             {
@@ -950,7 +950,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(rdbRegistrationInfo.RDBTableQuerySource, MAINTABLE_RDBTABLEALIAS, numberOfRecords, true);
-            
+
             var selectColumns = selectQuery.SelectColumns();
 
             if (fieldNames == null)
@@ -960,11 +960,11 @@ namespace Vanrise.GenericData.RDBDataStorage
             {
                 selectColumns.Column(fieldName);
             }
-            
+
             var where = selectQuery.Where();
             if (fromtime.HasValue && fromtime != default(DateTime))
             {
-                where.GreaterOrEqualCondition(GetDateTimeFieldNameWithValidate()).Value(fromtime.Value);                
+                where.GreaterOrEqualCondition(GetDateTimeFieldNameWithValidate()).Value(fromtime.Value);
             }
             if (toTime.HasValue && toTime != default(DateTime))
             {
@@ -977,7 +977,7 @@ namespace Vanrise.GenericData.RDBDataStorage
 
             if (filterGroup != null)
             {
-                AddFilterGroupCondition(filterGroup, where);                
+                AddFilterGroupCondition(filterGroup, where);
             }
 
             if (orderDirection.HasValue)
@@ -992,7 +992,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             {
                 where.EqualsCondition(GetIdFieldNameWithValidate()).ObjectValue(dataRecordId);
             }
-            
+
             queryContext.ExecuteReader(onReaderReady);
         }
 
@@ -1049,19 +1049,19 @@ namespace Vanrise.GenericData.RDBDataStorage
                 });
             recordFilterRDBBuilder.RecordFilterGroupCondition(conditionContext, filterGroup);
         }
-        
+
         private string GetParentStorageTableAlias(string mainTableAlias)
         {
             return $"{mainTableAlias}_Parent";
         }
-        
+
         int DeleteRecords_Private(DateTime? fromtime, DateTime? toTime, DateTime? time, RecordFilterGroup filterGroup, List<object> ids)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var rdbRegistrationInfo = GetRDBRegistrationInfo();
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(rdbRegistrationInfo.RDBTableQuerySource);
-            
+
             var where = deleteQuery.Where();
             if (fromtime.HasValue)
             {
@@ -1088,7 +1088,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                 }
                 where.ListCondition(GetIdFieldNameWithValidate(), RDBListConditionOperator.IN, idsExpressions);
             }
-            
+
             return queryContext.ExecuteNonQuery(0);
         }
 
@@ -1170,7 +1170,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                 }
             }
         }
-        
+
         private RDBRecordStorageDataManager GetParentStorageDataManagerWithValidate()
         {
             return GetStorageDataManagerWithValidate(_dataRecordStorageSettings.ParentRecordStorageId.Value);
@@ -1196,7 +1196,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                     parentStorageFieldValues.Add(fieldValueEntry.Key, fieldValueEntry.Value);
             }
         }
-        
+
         #endregion
 
         #region Private Classes
@@ -1230,7 +1230,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             public HashSet<string> NullableFieldNames { get; set; }
 
             public RDBRegistrationInfo ParentRDBRegistrationInfo { get; set; }
-            
+
             public List<string> AllSupportedFieldNames { get; set; }
         }
 
@@ -1251,7 +1251,7 @@ namespace Vanrise.GenericData.RDBDataStorage
 
             public Object FieldValue { get; set; }
         }
-        
+
         private class RDBRecordStorageRDBTableExpressionColumn : RDBTableExpressionColumn
         {
             public Guid DataRecordStorageId { get; set; }
@@ -1272,7 +1272,7 @@ namespace Vanrise.GenericData.RDBDataStorage
 
             public override void SetJoinExpression(IRDBTableJoinSetJoinExpressionContext context)
             {
-                 RDBRecordStorageDataManager.GetStorageDataManagerWithValidate(this.DataRecordStorageId).DynamicManager.AddJoin(new RDBDataStorageAddJoinRDBExpressionContext(this.JoinName, context.JoinContext, context.TableAlias));
+                RDBRecordStorageDataManager.GetStorageDataManagerWithValidate(this.DataRecordStorageId).DynamicManager.AddJoin(new RDBDataStorageAddJoinRDBExpressionContext(this.JoinName, context.JoinContext, context.TableAlias));
             }
         }
 
@@ -1312,17 +1312,19 @@ namespace Vanrise.GenericData.RDBDataStorage
             public Guid DataRecordStorageId { get; set; }
 
             public override void SetFilterExpression(IRDBTableFilterDefinitionSetFilterExpressionContext context)
-            {                
+            {
                 var dataRecordStorage = s_dataRecordStorageManager.GetDataRecordStorage(this.DataRecordStorageId);
                 dataRecordStorage.ThrowIfNull("dataRecordStorage", this.DataRecordStorageId);
                 dataRecordStorage.Settings.ThrowIfNull("dataRecordStorage.Settings", this.DataRecordStorageId);
 
                 var rdbDataRecordStorageSettings = dataRecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("dataRecordStorage.Settings", this.DataRecordStorageId);
 
-                if(rdbDataRecordStorageSettings.Filter != null)
+                if (rdbDataRecordStorageSettings.Filter != null)
                 {
                     var dataStorageDataManager = RDBRecordStorageDataManager.GetStorageDataManagerWithValidate(this.DataRecordStorageId);
-                    dataStorageDataManager.AddFilterGroupCondition(rdbDataRecordStorageSettings.Filter, context.QueryWhereContext, context.TableAlias);
+                    var recordFilterGroup = rdbDataRecordStorageSettings.Filter.ConvertToRecordFilterGroup(new RDBDataRecordStorageSettingsFilterContext());
+                    if (recordFilterGroup != null)
+                        dataStorageDataManager.AddFilterGroupCondition(recordFilterGroup, context.QueryWhereContext, context.TableAlias);
                 }
             }
         }

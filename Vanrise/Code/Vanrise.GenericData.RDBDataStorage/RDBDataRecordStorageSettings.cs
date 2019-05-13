@@ -26,8 +26,8 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         public List<RDBDataRecordStorageJoin> Joins { get; set; }
 
-        public RecordFilterGroup Filter { get; set; }
-       // public RDBDataRecordStorageSettingsFilter Filter { get; set; }
+        public RDBDataRecordStorageSettingsFilter Filter { get; set; }
+
     }
 
     public class RDBDataRecordStorageColumn
@@ -107,5 +107,16 @@ namespace Vanrise.GenericData.RDBDataStorage
     public abstract class RDBDataRecordStorageSettingsFilter
     {
         public abstract Guid ConfigId { get; }
+
+        public abstract RecordFilterGroup ConvertToRecordFilterGroup(IRDBDataRecordStorageSettingsFilterContext context);
+    }
+
+    public interface IRDBDataRecordStorageSettingsFilterContext
+    {
+
+    }
+    public class RDBDataRecordStorageSettingsFilterContext: IRDBDataRecordStorageSettingsFilterContext
+    {
+
     }
 }
