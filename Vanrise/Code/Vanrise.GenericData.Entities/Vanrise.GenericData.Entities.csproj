@@ -134,7 +134,6 @@
     <Compile Include="DataStorage\DataRecordStorage\DataRecordStoragePermanentFilter.cs" />
     <Compile Include="DataStorage\DataRecordStorage\RDBDataRecordStorageExpressionFieldSettingsConfig.cs" />
     <Compile Include="DataStorage\DataRecordStorage\RDBDataRecordStorageJoinSettingsConfig.cs" />
-    <Compile Include="DataStorage\DataRecordStorage\RDBDataRecordStorageSettingsFilterConfig.cs" />
     <Compile Include="DataStorage\DataRecordStorage\VRRestAPIRecordQueryInterceptorConfig.cs" />
     <Compile Include="DataRecords\DataRecordSearchPageSettings.cs" />
     <Compile Include="DataRecordTypes\DataRecordTypeExtraFieldTemplate.cs" />

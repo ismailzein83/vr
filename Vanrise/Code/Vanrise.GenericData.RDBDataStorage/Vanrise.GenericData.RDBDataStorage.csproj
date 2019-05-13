@@ -37,6 +37,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Http, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="DynamicTypeGenerator.cs" />
     <Compile Include="IDynamicManager.cs" />
     <Compile Include="MainExtensions\ExpressionFields\RDBDataRecordStorageCustomCodeExpressionField.cs" />
@@ -53,8 +58,11 @@
     <Compile Include="MainExtensions\Joins\RDBDataRecordStorageCustomCodeJoin.cs" />
     <Compile Include="MainExtensions\Joins\RDBDataRecordStorageJoinOtherRecordStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDBDataRecordStorageManager.cs" />
+    <Compile Include="RDBDataRecordStorageController.cs" />
     <Compile Include="RDBDataRecordStorageFilter.cs" />
     <Compile Include="RDBDataRecordStorageSettings.cs" />
+    <Compile Include="RDBDataRecordStorageSettingsFilterConfig.cs" />
     <Compile Include="RDBDataStoreSettings.cs" />
     <Compile Include="RDBRecordStorageDataManager.cs" />
     <Compile Include="RDBTempStorageInformation.cs" />
@@ -68,6 +76,10 @@
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
       <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
       <Name>Vanrise.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
+      <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
+      <Name>Vanrise.Common.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
@@ -96,6 +108,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
