@@ -50,8 +50,6 @@ namespace TOne.WhS.BusinessEntity.Business
                             AccountManagerAssignmentId = (int)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             AccountManagerId = (int)genericBusinessEntity.FieldValues.GetRecord("AccountManagerId"),
                             CarrierAccountId = (int)genericBusinessEntity.FieldValues.GetRecord("CarrierAccountId"),
-                            CustomerAssigned = (bool)genericBusinessEntity.FieldValues.GetRecord("CustomerAssigned"),
-                            SupplierAssigned = (bool)genericBusinessEntity.FieldValues.GetRecord("SupplierAssigned"),
                             BED = (DateTime)genericBusinessEntity.FieldValues.GetRecord("BED"),
                             EED = (DateTime?)genericBusinessEntity.FieldValues.GetRecord("EED"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),

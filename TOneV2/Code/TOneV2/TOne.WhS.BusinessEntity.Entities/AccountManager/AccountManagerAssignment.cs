@@ -11,8 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int AccountManagerAssignmentId { get; set; }
         public int AccountManagerId { get; set; }
         public int CarrierAccountId { get; set; }
-        public bool CustomerAssigned { get; set; }
-        public bool SupplierAssigned { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
         public DateTime CreatedTime { get; set; }
