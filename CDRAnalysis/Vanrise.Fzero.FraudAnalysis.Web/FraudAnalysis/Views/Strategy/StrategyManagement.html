@@ -15,9 +15,9 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker label="Creatd From" typeof="'dateTime'" value="fromDate" ></vr-datetimepicker>
+                    <vr-datetimepicker label="Creatd From" typeof="'dateTime'" value="fromDate"></vr-datetimepicker>
                 </vr-columns>
-               
+
                 <vr-columns width="normal">
                     <vr-datetimepicker label="To" typeof="'dateTime'" value="toDate"></vr-datetimepicker>
                 </vr-columns>
@@ -25,9 +25,7 @@
                 <vr-columns width="normal">
                     <vr-textbox value="description" label="Description" ng-show="advancedSelected"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="normal" ng-show="advancedSelected">
-                    <vr-sec-user-selector on-ready="onUserSelectorReady" customlabel="Analysts" ismultipleselection></vr-sec-user-selector>
-                </vr-columns>
+                <vr-sec-user-selector ng-show="advancedSelected" normal-col-num="2" on-ready="onUserSelectorReady" customlabel="Analysts" ismultipleselection></vr-sec-user-selector>
                 <vr-columns width="normal" ng-show="advancedSelected">
                     <cdranalysis-fa-period-selector on-ready="onPeriodSelectorReady" label="Types" ismultipleselection></cdranalysis-fa-period-selector>
                 </vr-columns>

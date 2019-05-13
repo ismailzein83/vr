@@ -24,11 +24,7 @@
                 <vr-columns width="normal">
                     <cdranalysis-fa-strategy-selector ng-show="advancedSelected" on-ready="onStrategySelectorReady" ismultipleselection></cdranalysis-fa-strategy-selector>
                 </vr-columns>
-
-                <vr-columns width="normal" ng-show="advancedSelected">
-                    <vr-sec-user-selector on-ready="onUserSelectorReady" customlabel="User" ismultipleselection></vr-sec-user-selector>
-                </vr-columns>
-
+                <vr-sec-user-selector normal-col-num="2" ng-show="advancedSelected" on-ready="onUserSelectorReady" customlabel="User" ismultipleselection></vr-sec-user-selector>
 
                 <vr-columns width="normal" ng-show="advancedSelected">
                     <vr-select label="Status"

@@ -34,9 +34,7 @@
                     </vr-select>
                 </vr-columns>
 
-                <vr-columns width="normal" ng-show="advancedSelected">
-                    <vr-sec-user-selector on-ready="onUserSelectorReady" ismultipleselection></vr-sec-user-selector>
-                </vr-columns>
+                <vr-sec-user-selector ng-show="advancedSelected" normal-col-num="2" on-ready="onUserSelectorReady" ismultipleselection></vr-sec-user-selector>
 
             </vr-row>
         </div>
