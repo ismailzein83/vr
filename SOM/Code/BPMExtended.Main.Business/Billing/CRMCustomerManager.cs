@@ -37,15 +37,7 @@ namespace BPMExtended.Main.Business
             EntityCollection entities;
             CRMCustomerInfo info;
 
-            if (contactId != null)
-            {
-                info = GetCRMCustomerInfo(contactId, accountId);
-            }
-            else
-            {
-                //account
-                info = GetCRMCustomerInfo(contactId, accountId);
-            }
+            info = GetCRMCustomerInfo(contactId, accountId);
 
             // check categories catalog
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesInCatalog");
@@ -2503,7 +2495,6 @@ namespace BPMExtended.Main.Business
                     FirstName = FirstName,
                     LastName = LastName,
                     PaymentMethodId = PaymentMethodId,
-                    RatePlanId = null,
                     CommonInputArgument = new CommonInputArgument()
                     {
                         ContactId = contactId,

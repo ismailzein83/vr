@@ -56,6 +56,59 @@ namespace BPMExtended.Main.Business
 
         }
 
+
+        public string GetPABXServiceId()
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string pabxServiceId=null;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+            esq.AddColumn("Id");
+            esq.AddColumn("StPABXId");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "11C1BFA4-1F9E-41AB-B4D7-FE373DFBFE9C");
+
+
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                pabxServiceId = (string)entity.GetColumnValue("StPABXId");
+
+            }
+
+            return pabxServiceId;
+
+        }
+
+        public List<string> GetTelephonyOperations()
+        {
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+            List<string> telephonyOperationsIds = new List<string>();
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyOperationsInCatalog");
+            esq.AddColumn("Id");
+            esq.AddColumn("StOperationId");
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                string id = (string)entity.GetColumnValue("StOperationId");
+                telephonyOperationsIds.Add(id);
+
+            }
+
+            return telephonyOperationsIds;
+
+        }
+
         public ServiceInfo GetDepositServiceByPagesNumber(int pagesNumber) // MYA: To Be Tested 
         {
             string serviceId = null;
