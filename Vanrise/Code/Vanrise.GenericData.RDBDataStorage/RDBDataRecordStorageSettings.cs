@@ -27,12 +27,13 @@ namespace Vanrise.GenericData.RDBDataStorage
         public List<RDBDataRecordStorageJoin> Joins { get; set; }
 
         public RecordFilterGroup Filter { get; set; }
+       // public RDBDataRecordStorageSettingsFilter Filter { get; set; }
     }
 
     public class RDBDataRecordStorageColumn
     {
         public string FieldName { get; set; }
-        
+
         public string ColumnName { get; set; }
 
         public RDBDataType DataType { get; set; }
@@ -71,7 +72,7 @@ namespace Vanrise.GenericData.RDBDataStorage
     public interface IRDBDataRecordStorageJoinExpressionGetDependentJoinsContext
     {
     }
-    
+
     public class RDBDataRecordStorageExpressionField
     {
         public string FieldName { get; set; }
@@ -97,9 +98,14 @@ namespace Vanrise.GenericData.RDBDataStorage
     {
 
     }
-    
+
     public class RDBNullableField
     {
         public string Name { get; set; }
+    }
+
+    public abstract class RDBDataRecordStorageSettingsFilter
+    {
+        public abstract Guid ConfigId { get; }
     }
 }
