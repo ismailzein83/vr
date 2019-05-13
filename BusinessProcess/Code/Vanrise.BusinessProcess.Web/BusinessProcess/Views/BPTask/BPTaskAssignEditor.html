@@ -1,9 +1,7 @@
 ﻿<div vr-modalcontent ng-controller="BusinessProcess_BP_BPTaskAssignEditorController" width="'50%'">
     <vr-modalbody maxheight="'700px'">
         <vr-form name="formBPTaskAssignEditor" vr-loader="scopeModel.isLoading">
-            <vr-columns width="1/2row">
-                <vr-sec-user-selector on-ready="scopeModel.onUserSelectorReady" isrequired="true"></vr-sec-user-selector>
-            </vr-columns>
+            <vr-sec-user-selector on-ready="scopeModel.onUserSelectorReady" isrequired="true" normal-col-num="6"></vr-sec-user-selector>
         </vr-form>
     </vr-modalbody>
     <div>
