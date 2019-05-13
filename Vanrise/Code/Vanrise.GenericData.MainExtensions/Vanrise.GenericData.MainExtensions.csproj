@@ -117,10 +117,13 @@
     <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\SerialNumberOnBeforeInsertHandler.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\GenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\HistoryGenericBEDefinitionView.cs" />
+    <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\CallRestAPIEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ListEditorDefinitionSetting.cs" />
+    <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\RowsContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\StaticEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\TabsContainerEditorDefinitionSetting.cs" />
+    <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericFieldsEditorDefinitionSetting.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\BusinessEntityValues.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\GenericRuleCritieria.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\StaticValues.cs" />
