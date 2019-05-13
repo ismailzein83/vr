@@ -145,6 +145,7 @@
     <Compile Include="AccountManager\AccountManagerAssignmentOnBeforeSaveHandler.cs" />
     <Compile Include="AccountManager\AccountManagerManager.cs" />
     <Compile Include="AccountManager\AffectedCarrierAccountFilterInAccountManagerAssignment.cs" />
+    <Compile Include="AccountManager\AffectedUsersFilterInAccountManager.cs" />
     <Compile Include="ANumber\ANumberGroupManager.cs" />
     <Compile Include="ANumber\ANumberSaleCodeManager.cs" />
     <Compile Include="ANumber\ANumberSupplierCodeManager.cs" />

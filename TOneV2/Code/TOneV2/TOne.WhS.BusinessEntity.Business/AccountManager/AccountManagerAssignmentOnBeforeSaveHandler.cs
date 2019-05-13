@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Business
             context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
             context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
 
-            List<int> overlappingManagerAssignmentsIds = new List<int>();
+            bool isManagerAssignmentOverlapped = false;
             AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
@@ -39,51 +39,39 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 foreach (var acctManagerAssgn in allAccountManagerAssignments)
                 {
-                    if (carrierAccount.AccountType == CarrierAccountType.Customer)
-                    {
-                        if (acctManagerAssgn.CustomerAssigned && customerAssigned && Utilities.AreTimePeriodsOverlapped((DateTime)bed, (DateTime?)eed, acctManagerAssgn.BED, acctManagerAssgn.EED))
-                        {
-                            overlappingManagerAssignmentsIds.Add(acctManagerAssgn.AccountManagerAssignmentId);
-                            continue;
-                        }
-                    }
-                    else if (carrierAccount.AccountType == CarrierAccountType.Supplier)
-                    {
-                        if (acctManagerAssgn.SupplierAssigned && supplierAssigned && Utilities.AreTimePeriodsOverlapped((DateTime)bed, (DateTime?)eed, acctManagerAssgn.BED, acctManagerAssgn.EED))
-                        {
-                            overlappingManagerAssignmentsIds.Add(acctManagerAssgn.AccountManagerAssignmentId);
-                            continue;
-                        }
-                    }
+                    if (accountManagerAssignmentId != null && acctManagerAssgn.AccountManagerAssignmentId == (int)accountManagerAssignmentId)
+                        continue;
 
-                    else
+                    if (Utilities.AreTimePeriodsOverlapped((DateTime)bed, (DateTime?)eed, acctManagerAssgn.BED, acctManagerAssgn.EED))
                     {
-                        if (acctManagerAssgn.CustomerAssigned && customerAssigned && Utilities.AreTimePeriodsOverlapped((DateTime)bed, (DateTime?)eed, acctManagerAssgn.BED, acctManagerAssgn.EED))
+                        switch (carrierAccount.AccountType)
                         {
-                            overlappingManagerAssignmentsIds.Add(acctManagerAssgn.AccountManagerAssignmentId);
-                            continue;
-                        }
+                            case CarrierAccountType.Customer:
+                                if (acctManagerAssgn.CustomerAssigned && customerAssigned)
+                                    isManagerAssignmentOverlapped = true;
+                                break;
 
-                        if (acctManagerAssgn.SupplierAssigned && supplierAssigned && Utilities.AreTimePeriodsOverlapped((DateTime)bed, (DateTime?)eed, acctManagerAssgn.BED, acctManagerAssgn.EED))
-                        {
-                            overlappingManagerAssignmentsIds.Add(acctManagerAssgn.AccountManagerAssignmentId);
-                            continue;
-                        }
+                            case CarrierAccountType.Supplier:
+                                if (acctManagerAssgn.SupplierAssigned && supplierAssigned)
+                                    isManagerAssignmentOverlapped = true;
+                                break;
 
-                        if (acctManagerAssgn.SupplierAssigned && acctManagerAssgn.CustomerAssigned && customerAssigned && supplierAssigned && Utilities.AreTimePeriodsOverlapped((DateTime)bed, (DateTime?)eed, acctManagerAssgn.BED, acctManagerAssgn.EED))
-                        {
-                            overlappingManagerAssignmentsIds.Add(acctManagerAssgn.AccountManagerAssignmentId);
-                            continue;
+                            case CarrierAccountType.Exchange:
+                                if (acctManagerAssgn.SupplierAssigned && supplierAssigned)
+                                    isManagerAssignmentOverlapped = true;
+
+                                else if (acctManagerAssgn.CustomerAssigned && customerAssigned)
+                                    isManagerAssignmentOverlapped = true;
+                                break;
                         }
                     }
                 }
             }
 
-
-            if (overlappingManagerAssignmentsIds.Count() > 0)
+            if (isManagerAssignmentOverlapped)
             {
                 context.OutputResult.Result = false;
-                context.OutputResult.Messages.Add(string.Format("The Account Manager Assignment Added is overlapping with the following manager(s) Id(s) : '{0}'", string.Join(",", overlappingManagerAssignmentsIds)));
+                context.OutputResult.Messages.Add(string.Format("This account manager assignment is overlapped with another manager"));
             }
         }
     }

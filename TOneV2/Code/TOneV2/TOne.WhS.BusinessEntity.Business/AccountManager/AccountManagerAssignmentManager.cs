@@ -15,21 +15,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
 
-        public IEnumerable<AccountManagerAssignment> GetAllAccountManagersAssignment()
-        {
-            return GetCachedAccountManagerAssignment().Values;
-        }
-
-        public AccountManagerAssignment GetAccountManagerAssignmentById(int accountManagerAssignmentId)
-        {
-            return GetCachedAccountManagerAssignment().GetRecord(accountManagerAssignmentId);
-        }
-
-        public AccountManagerAssignment GetAccountManagerAssignmentByCarrierAccountId(int carrierAccountId)
-        {
-            return GetCachedAccountManagerAssignment().FindRecord(itm => itm.CarrierAccountId == carrierAccountId);
-        }
-
         public IEnumerable<AccountManagerAssignment> GetAllAccountManagersAssignmentByCarrierAccountId(int carrierAccountId)
         {
             return GetCachedAccountManagerAssignment().FindAllRecords(itm => itm.CarrierAccountId == carrierAccountId);
@@ -80,10 +65,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return result;
             });
         }
-        #endregion
-
-
-        #region Mappers
         #endregion
     }
 }
