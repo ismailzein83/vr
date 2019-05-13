@@ -246,7 +246,34 @@ namespace Vanrise.Analytic.Business
         {
             return GetAllFilteredRecords(query, false, out summaryRecord, out resultSubTables);
         }
-
+        private RecordFilterGroup MergeRecordFilterGroup(RecordFilterGroup oldRecordFilter, RecordFilterGroup newRecordFilter)
+        {
+            if (oldRecordFilter != null)
+            {
+                if (oldRecordFilter.LogicalOperator == RecordQueryLogicalOperator.And)
+                {
+                    if (oldRecordFilter.Filters == null)
+                        oldRecordFilter.Filters = new List<RecordFilter>();
+                    oldRecordFilter.Filters.Add(newRecordFilter);
+                    return oldRecordFilter;
+                }
+                else
+                {
+                    var recordFilterGroup = new RecordFilterGroup()
+                    {
+                        LogicalOperator = RecordQueryLogicalOperator.And,
+                        Filters = new List<RecordFilter>()
+                    };
+                    recordFilterGroup.Filters.Add(newRecordFilter);
+                    recordFilterGroup.Filters.Add(oldRecordFilter);
+                    return recordFilterGroup;
+                }
+            }
+            else
+            {
+                return newRecordFilter;
+            }
+        }
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery inputQuery, bool dontApplyOrdering, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
         {
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
@@ -270,6 +297,16 @@ namespace Vanrise.Analytic.Business
                         if (!query.MeasureFields.Contains(additionalMeasure))
                             query.MeasureFields.Add(additionalMeasure);
                     }
+                }
+            }
+            var analyticTable = analyticTableManager.GetAnalyticTableById(inputQuery.TableId);
+            analyticTable.ThrowIfNull("analyticTable", inputQuery.TableId);
+            if (analyticTable.PermanentFilter != null && analyticTable.PermanentFilter.Settings != null)
+            {
+                var permanentFilter = analyticTable.PermanentFilter.Settings.ConvertToRecordFilter(new AnalyticTablePermanentFilterContext());
+                if(permanentFilter != null)
+                {
+                    query.FilterGroup = MergeRecordFilterGroup(query.FilterGroup, permanentFilter);
                 }
             }
             ConfigManager configManager = new ConfigManager();

@@ -12,15 +12,15 @@ namespace Vanrise.Analytic.Entities
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract void ConvertToRecordFilter();
+        public abstract RecordFilterGroup ConvertToRecordFilter(IAnalyticTablePermanentFilterContext context);
 
     }
     public class FilterGroupAnalyticTablePermanentFilter: AnalyticTablePermanentFilterSettings
     {
         public override Guid ConfigId => new Guid("5E32BB46-462E-44A0-B1F0-1F6DA3BD9053");
-        public override void ConvertToRecordFilter()
+        public override RecordFilterGroup ConvertToRecordFilter(IAnalyticTablePermanentFilterContext context)
         {
-            throw new NotImplementedException();
+            return RecordFilterGroup;
         }
         public RecordFilterGroup RecordFilterGroup { get; set; }
 
@@ -30,5 +30,13 @@ namespace Vanrise.Analytic.Entities
     {
         public const string EXTENSION_TYPE = "VR_Analytic_PermanentFilterSettings";
         public string Editor { get; set; }
+    }
+    public interface IAnalyticTablePermanentFilterContext
+    {
+
+    }
+    public class AnalyticTablePermanentFilterContext: IAnalyticTablePermanentFilterContext
+    {
+
     }
 }
