@@ -37,7 +37,8 @@ namespace Vanrise.Common.Business
         {
             var result = Vanrise.Common.VRWebAPIClient.Post<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>(BaseURL,
                  "/api/VR_Sec/Security/Authenticate", credentialsInput, null);
-
+            if (result.Result != AuthenticateOperationResult.Succeeded)
+                throw new Exception($"Failed: {result.Message}");
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add(result.AuthenticationObject.TokenName, result.AuthenticationObject.Token);
 
@@ -48,6 +49,8 @@ namespace Vanrise.Common.Business
         {
             var result = Vanrise.Common.VRWebAPIClient.Post<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>(BaseURL,
                  "/api/VR_Sec/Security/Authenticate", credentialsInput, null);
+            if (result.Result != AuthenticateOperationResult.Succeeded)
+                throw new Exception($"Failed: {result.Message}");
 
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add(result.AuthenticationObject.TokenName, result.AuthenticationObject.Token);
@@ -58,7 +61,8 @@ namespace Vanrise.Common.Business
         {
             var result = Vanrise.Common.VRWebAPIClient.Post<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>(BaseURL,
                  "/api/VR_Sec/Security/Authenticate", credentialsInput, null);
-
+            if (result.Result != AuthenticateOperationResult.Succeeded)
+                throw new Exception($"Failed: {result.Message}");
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add(result.AuthenticationObject.TokenName, result.AuthenticationObject.Token);
 

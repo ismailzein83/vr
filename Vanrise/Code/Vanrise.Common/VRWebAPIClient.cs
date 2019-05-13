@@ -80,7 +80,7 @@ namespace Vanrise.Common
                 }
                 else
                 {
-                    throw new Exception(String.Format("Error occurred when calling action '{0}' on service '{1}'. Error: {2}", actionPath, url, responseTask.Result.ReasonPhrase));
+                    throw new Exception(String.Format("Error occurred when calling action '{0}' on service '{1}'. Error: {2}. Reason: {3}", actionPath, url, responseTask.Result.ReasonPhrase, responseTask.Result.Content.ReadAsStringAsync().Result));
                 }
             }
         }
@@ -106,7 +106,7 @@ namespace Vanrise.Common
                 }
                 else
                 {
-                    throw new Exception(String.Format("Error occurred when calling action '{0}' on service '{1}'. Error: {2}", actionPath, url, responseTask.Result.ReasonPhrase));
+                    throw new Exception(String.Format("Error occurred when calling action '{0}' on service '{1}'. Error: {2}. Reason: {3}", actionPath, url, responseTask.Result.ReasonPhrase, responseTask.Result.Content.ReadAsStringAsync().Result));
                 }
             }
         }
@@ -133,7 +133,7 @@ namespace Vanrise.Common
                 }
                 else
                 {
-                    throw new Exception(String.Format("Error occurred when calling action '{0}' on service '{1}'. Error: {2}", actionPath, url, responseTask.Result.ReasonPhrase));
+                    throw new Exception(String.Format("Error occurred when calling action '{0}' on service '{1}'. Error: {2}. Reason: {3}", actionPath, url, responseTask.Result.ReasonPhrase, responseTask.Result.Content.ReadAsStringAsync().Result));
                 }
             }
         }
