@@ -243,6 +243,55 @@ namespace BPMExtended.Main.Business
         }
         #endregion
 
+        public string SetRequestCompleted(string requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            string SchemaName = "";
+            string CompletedStepId = "";
+            string CompletedStep = "";
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("StRequestId");
+            var requestTypeId = esq.AddColumn("StRequestType");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                int reqcode = 0;
+                int.TryParse(entities[0].GetTypedColumnValue<int>(requestTypeId.Name).ToString(), out reqcode);
+                SchemaName = Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)reqcode).schemaName;
+                CompletedStepId = Utilities.GetEnumAttribute<OperationType, CompletedStepIdAttribute>((OperationType)reqcode).CompletedStepId;
+                CompletedStep = Utilities.GetEnumAttribute<OperationType, CompletedStepAttribute>((OperationType)reqcode).CompletedStep;
+
+                UpdateRequestStatus(requestId, SchemaName,CompletedStepId,CompletedStep);
+            }
+            return "";
+        }
+        private void UpdateRequestStatus(string requestId, string SchemaName, string CompletedStepId,string CompletedStep)
+        {
+            //TODO : Update gshdsl object
+            var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName(SchemaName);
+            var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+            var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, SchemaName);
+            eSQ.RowCount = 1;
+            eSQ.AddAllSchemaColumns();
+            eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId));
+            var collection = eSQ.GetEntityCollection(UserConnection);
+            if (collection.Count > 0)
+            {
+                recordEntity = collection[0];
+                recordEntity.SetColumnValue(CompletedStep, CompletedStepId);
+            }
+            recordEntity.Save();
+        }
+
         #region Private Methods
 
         private CreateCustomerRequestOutput CreateSOMRequest(BPMCustomerType customerType, Guid accountOrContactId, string requestTitle, SOMRequestExtendedSettings requestSettings)
