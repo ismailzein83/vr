@@ -172,7 +172,8 @@ when not matched by target then
 	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
 	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
 
-----Please note that the below script will override all changes done from your side---------------------
+--[rules].[RuleType]------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 declare @NormalizationRuleTypeIdTable as table
 (ID int)
 insert into @NormalizationRuleTypeIdTable 
