@@ -2,7 +2,7 @@
     <vr-columns width="1/2row">
         <vr-sec-user-selector on-ready="scopeModel.onUserSelectorReady" customlabel="User" isrequired="true"></vr-sec-user-selector>
     </vr-columns>
-    <vr-columns width="1/2row" vr-disabled ="scopeModel.isParentSelectorDisabled">
-        <vr-genericdata-genericbusinessentity-selector customlabel="Parent" on-ready="scopeModel.onAccountManagerGBESelectorReady"></vr-genericdata-genericbusinessentity-selector>
-    </vr-columns>
+    <span vr-disabled ="scopeModel.isParentSelectorDisabled">
+        <vr-genericdata-genericbusinessentity-selector customlabel="Parent" on-ready="scopeModel.onAccountManagerGBESelectorReady" normal-col-num="6"></vr-genericdata-genericbusinessentity-selector>
+    </span>
 </vr-row>

@@ -20,8 +20,6 @@ namespace TOne.WhS.BusinessEntity.Business
             context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
             AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
             var accountManagerAssignmentId = context.GenericBusinessEntity.FieldValues.GetRecord("ID");
-            var supplierAssigned = (bool)context.GenericBusinessEntity.FieldValues.GetRecord("SupplierAssigned");
-            var customerAssigned = (bool)context.GenericBusinessEntity.FieldValues.GetRecord("CustomerAssigned");
             var carrierAccountId = context.GenericBusinessEntity.FieldValues.GetRecord("CarrierAccountId");
             carrierAccountId.ThrowIfNull("CarrierAccountId");
             var bed = context.GenericBusinessEntity.FieldValues.GetRecord("BED");
@@ -34,14 +32,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 foreach (var acctManagerAssgn in allAccountManagerAssignments)
                 {
                     if (accountManagerAssignmentId != null && acctManagerAssgn.AccountManagerAssignmentId == (int)accountManagerAssignmentId)
+                        continue;
+
+                    if (Utilities.AreTimePeriodsOverlapped((DateTime)bed, (DateTime?)eed, acctManagerAssgn.BED, acctManagerAssgn.EED))
                     {
-                        if(Utilities.AreTimePeriodsOverlapped((DateTime)bed, (DateTime?)eed, acctManagerAssgn.BED, acctManagerAssgn.EED))
-                        {
-                            context.OutputResult.Result = false;
-                            context.OutputResult.Messages.Add(string.Format("This account manager assignment is overlapped with another manager"));
-                            return;
-                        }
-                     
+                        context.OutputResult.Result = false;
+                        context.OutputResult.Messages.Add(string.Format("This account manager assignment is overlapped with another manager"));
+                        return;
                     }
                 }
             }

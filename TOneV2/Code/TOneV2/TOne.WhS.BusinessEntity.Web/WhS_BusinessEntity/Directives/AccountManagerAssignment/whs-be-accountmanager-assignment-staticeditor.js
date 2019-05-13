@@ -31,40 +31,10 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.isCustomerAssigned = false;
-                $scope.scopeModel.isSupplierAssigned = false;
-                $scope.scopeModel.isCustomerAssignedDisabled = true;
-                $scope.scopeModel.isSupplierAssignedDisabled = true;
 
                 $scope.scopeModel.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountSelectorAPI = api;
                     carrierAccountSelectorReadyPromiseDeferred.resolve();
-                };
-
-                $scope.scopeModel.onCarrierAccountChanged = function (carrierAccount) {
-                    if (carrierAccount != undefined) {
-                        var accountType = carrierAccount.AccountType;
-
-                        if (previousCarrierAccount != undefined && carrierAccount != previousCarrierAccount) {
-                            $scope.scopeModel.isSupplierAssigned = false;
-                            $scope.scopeModel.isCustomerAssigned = false;
-                        }
-
-                        if (accountType == WhS_BE_CarrierAccountTypeEnum.Customer.value) {
-                            $scope.scopeModel.isSupplierAssignedDisabled = true;
-                            $scope.scopeModel.isCustomerAssignedDisabled = false;
-                        }
-                        else if (accountType == WhS_BE_CarrierAccountTypeEnum.Supplier.value) {
-                            $scope.scopeModel.isCustomerAssignedDisabled = true;
-                            $scope.scopeModel.isSupplierAssignedDisabled = false;
-                        }
-                        else {
-                            $scope.scopeModel.isSupplierAssignedDisabled = false;
-                            $scope.scopeModel.isCustomerAssignedDisabled = false;
-                        }
-                        
-                        previousCarrierAccount = carrierAccount;
-                    }
                 };
 
                 $scope.scopeModel.validateBED = function () {
@@ -88,8 +58,6 @@
                         accountManagerAssignementEntity = payload.selectedValues;
                         
                         if (!angular.equals({}, accountManagerAssignementEntity) && accountManagerAssignementEntity != undefined) {
-                            $scope.scopeModel.isSupplierAssigned = accountManagerAssignementEntity.SupplierAssigned;
-                            $scope.scopeModel.isCustomerAssigned = accountManagerAssignementEntity.CustomerAssigned;
                             $scope.scopeModel.beginEffectiveDate = accountManagerAssignementEntity.BED;
                             $scope.scopeModel.endEffectiveDate = accountManagerAssignementEntity.EED;
                         }
@@ -113,8 +81,6 @@
 
                 api.setData = function (obj) {
                     obj.CarrierAccountId = carrierAccountSelectorAPI.getSelectedIds();
-                    obj.CustomerAssigned = $scope.scopeModel.isCustomerAssigned;
-                    obj.SupplierAssigned = $scope.scopeModel.isSupplierAssigned;
                     obj.BED = $scope.scopeModel.beginEffectiveDate;
                     obj.EED = $scope.scopeModel.endEffectiveDate;
                 };
