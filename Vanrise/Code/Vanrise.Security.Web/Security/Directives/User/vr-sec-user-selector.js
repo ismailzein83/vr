@@ -15,7 +15,8 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 ondeselectitem: "=",
                 isdisabled: "=",
                 customlabel: "@",
-                onitemadded: "="
+                onitemadded: "=",
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -84,10 +85,10 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewUser"';
 
-            return '<div>'
+            return '<vr-columns  colnum="{{ctrl.normalColNum}}">'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="UserId" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
-                + '</div>';
+                + '</vr-columns>';
         }
 
         function userCtor(ctrl, $scope, attrs) {
