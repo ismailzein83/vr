@@ -51,7 +51,7 @@ namespace Vanrise.Common.Business
             var masterLayoutSetting = generalSettingData.MasterLayoutData;
 
             TimeSpan serverUtcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
-            uiSettings.Parameters.Add("ServerUtcOffsetInMinutes",serverUtcOffset.TotalMinutes);
+            uiSettings.Parameters.Add("ServerUtcOffsetInMinutes", serverUtcOffset.TotalMinutes);
             uiSettings.Parameters.Add("MasterLayoutSetting", masterLayoutSetting);
             if (generalSettingData != null && generalSettingData.UIData != null)
             {
@@ -102,18 +102,16 @@ namespace Vanrise.Common.Business
 
             }
 
-            var uiExtendedSettingsImplementations = Utilities.GetAllImplementations<UIExtendedSettings>();
-            if(uiExtendedSettingsImplementations != null)
+            var uiExtendedSettings = GetCashedUIExtendedSettingsByType();
+            if (uiExtendedSettings != null)
             {
-                foreach(var item in uiExtendedSettingsImplementations)
+                foreach (var item in uiExtendedSettings)
                 {
                     var convertor = Activator.CreateInstance(item).CastWithValidate<UIExtendedSettings>("uiExtendedSettings");
-
-
                     var parameters = convertor.GetUIParameters();
-                    if(parameters != null)
+                    if (parameters != null)
                     {
-                        foreach(var parameter in parameters)
+                        foreach (var parameter in parameters)
                         {
                             uiSettings.Parameters.Add(parameter.Key, parameter.Value);
                         }
@@ -124,11 +122,26 @@ namespace Vanrise.Common.Business
 
             return uiSettings;
         }
-       
+
+
+        private IEnumerable<Type> GetCashedUIExtendedSettingsByType()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCashedUIExtendedSettings",
+              () =>
+              {
+                  var uiExtendedSettingsImplementations = Utilities.GetAllImplementations<UIExtendedSettings>();
+                  return uiExtendedSettingsImplementations;
+              });
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+        }
+
         public UIParameter GetParameter(string parameterName)
         {
             var uiSettings = GetUIParameters();
-            var uiParameterValue =  uiSettings.Parameters.GetRecord(parameterName);
+            var uiParameterValue = uiSettings.Parameters.GetRecord(parameterName);
             if (uiParameterValue == null)
                 return null;
             return new UIParameter
