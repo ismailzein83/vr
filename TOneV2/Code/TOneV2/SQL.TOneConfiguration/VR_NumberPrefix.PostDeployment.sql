@@ -79,8 +79,8 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('FD633FEB-5073-449D-84C9-2B7EDDCAC43D','Number Prefix Type','Number Prefix Type',null,'89254E36-5D91-4DB1-970F-9BFEF404679A',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"fe36264a-1db1-4c1d-9228-036a43195d4d"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',null,null),
-('09F03A5B-EEC4-4418-8A63-771B66E640A9','Number Prefix','Number Prefix',null,'89254E36-5D91-4DB1-970F-9BFEF404679A',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"992c93a5-0d90-41cd-8501-7235b4cab09e"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',null,null)
+('FD633FEB-5073-449D-84C9-2B7EDDCAC43D','Number Prefix Type','Number Prefix Type',null	,'89254E36-5D91-4DB1-970F-9BFEF404679A',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"fe36264a-1db1-4c1d-9228-036a43195d4d"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',110,null),
+('09F03A5B-EEC4-4418-8A63-771B66E640A9','Number Prefix','Number Prefix',null			,'89254E36-5D91-4DB1-970F-9BFEF404679A',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"992c93a5-0d90-41cd-8501-7235b4cab09e"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',115,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
@@ -88,10 +88,10 @@ using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
-	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
-	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
+	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 
 
 --[genericdata].[VRNumberPrefixType]----------------------------------------------------------------
