@@ -102,6 +102,7 @@
     <Compile Include="GenericBusinessEntity\GenericBEBulkActions\UpdateGenericBEBulkActionRuntimeSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEBulkActions\UpdateGenericBEBulkAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEConditions\GenericFilterGroupCondition.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\IsEmptyFilterDefinitonSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\LimitResultFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEGridCondition\FilterGroupGenericBEGridCondition.cs" />
     <Compile Include="GenericBusinessEntity\GenericBESaveConditions\ConditionGroupSaveCondition.cs" />
