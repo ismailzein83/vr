@@ -10,9 +10,12 @@ namespace TOne.WhS.BusinessEntity.Business
    public class AccountManagerDataRecordStoragePermanentFilter : DataRecordStoragePermanentFilterSettings
     {
         public override Guid ConfigId => new Guid("A6F4D0D4-3562-4151-8ED8-984CE7A83C20");
-        public override void ConvertToRecordFilter()
+        public override RecordFilterGroup ConvertToRecordFilter(IDataRecordStoragePermanentFilterContext context)
         {
             throw new NotImplementedException();
         }
+        public string CustomerField { get; set; }
+        public string SupplierField { get; set; }
+
     }
 }
