@@ -1,11 +1,11 @@
-﻿<!--<vr-row>
+﻿<vr-row>
     <vr-columns colnum="{{ctrl.normalColNum}}">
         <vr-select on-ready="scopeModel.onSelectorReady"
                    datasource="scopeModel.templateConfigs"
                    selectedvalues="scopeModel.selectedTemplateConfig"
                    datavaluefield="ExtensionConfigurationId"
                    datatextfield="Title"
-                   label="Settings">
+                   label="Filter Type">
         </vr-select>
     </vr-columns>
 </vr-row>
@@ -13,4 +13,4 @@
 <span vr-loader="scopeModel.isLoadingDirective">
     <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"
                          on-ready="scopeModel.onDirectiveReady" isrequired="true" ismultipleselection></vr-directivewrapper>
-</span>-->
+</span>

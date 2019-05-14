@@ -30,7 +30,7 @@
             var dataRecordTypeId;
             var joins = [];
             var expressionFields = [];
-            var filterGroup;
+            var filter;
 
             var parentRecordStorageSelectorAPI;
             var parentRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -44,8 +44,8 @@
             var expressionFieldsAPI;
             var expressionFieldsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var recordFilterGroupDirectiveAPI;
-            var recordFilterGroupDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var filterDirectiveAPI;
+            var filterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -173,9 +173,9 @@
                     expressionFieldsReadyPromiseDeferred.resolve();
                 };
 
-                $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
-                    recordFilterGroupDirectiveAPI = api;
-                    recordFilterGroupDirectiveReadyDeferred.resolve();
+                $scope.scopeModel.onFilterDirectiveReady = function (api) {
+                    filterDirectiveAPI = api;
+                    filterDirectiveReadyDeferred.resolve();
                 };
 
             }
@@ -234,7 +234,7 @@
                     
                     joins = payload.Joins;
                     expressionFields = payload.ExpressionFields;
-                    filterGroup = payload.Filter;
+                    filter = payload.Filter;
 
                     if (payload.DataRecordTypeId != undefined) {
                         dataRecordTypeId = payload.DataRecordTypeId;
@@ -259,8 +259,8 @@
                     promises.push(loadRDBExpressionFieldsPromise);
 
                     //loading Filter Tab
-                    var loadRecordFilterGroupPromise = loadRecordFilterGroup();
-                    promises.push(loadRecordFilterGroupPromise);
+                    var loadFilterDirectivePromise = loadFilterDirective();
+                    promises.push(loadFilterDirectivePromise);
 
                     function loadColumns() {
                         if (payload.Columns != undefined) {
@@ -345,21 +345,20 @@
                         return rdbExpressionFieldsLoadDeferred.promise;
                     }
 
-                    function loadRecordFilterGroup() {
-                        var recordFilterGroupLoadDeferred = UtilsService.createPromiseDeferred();
+                    function loadFilterDirective() {
+                        var filterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        recordFilterGroupDirectiveReadyDeferred.promise.then(function () {
+                        filterDirectiveReadyDeferred.promise.then(function () {
                             VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId).then(function (response) {
                                 var dataRecordFieldsInfo = response;
-
                                 var recordFilterGroupDirectivePayload = {
                                     context: buildContext(dataRecordFieldsInfo),
-                                    FilterGroup: filterGroup
+                                    filter: filter
                                 };
-                                VRUIUtilsService.callDirectiveLoad(recordFilterGroupDirectiveAPI, recordFilterGroupDirectivePayload, recordFilterGroupLoadDeferred);
+                                VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, recordFilterGroupDirectivePayload, filterDirectiveLoadDeferred);
                             });
                         });
-                        return recordFilterGroupLoadDeferred.promise;
+                        return filterDirectiveLoadDeferred.promise;
                     }
 
                     $scope.scopeModel.isLoading = false;
@@ -380,7 +379,7 @@
                         Columns: ctrl.columns.length > 0 ? getColumns() : null,
                         Joins: (joinsList != undefined && joinsList.length > 0) ? joinsList : null,
                         ExpressionFields: (expressionFieldsList != undefined && expressionFieldsList.length > 0) ? expressionFieldsList : null,
-                        Filter: recordFilterGroupDirectiveAPI.getData().filterObj
+                        Filter: filterDirectiveAPI.getData()
                     };
                 };
 

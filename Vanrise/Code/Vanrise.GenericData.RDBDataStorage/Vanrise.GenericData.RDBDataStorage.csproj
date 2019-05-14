@@ -58,6 +58,8 @@
     <Compile Include="MainExtensions\Joins\RDBDataRecordStorageCustomCodeJoin.cs" />
     <Compile Include="MainExtensions\Joins\RDBDataRecordStorageJoinOtherRecordStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDBDataRecordStorageExpressionFieldSettingsConfig.cs" />
+    <Compile Include="RDBDataRecordStorageJoinSettingsConfig.cs" />
     <Compile Include="RDBDataRecordStorageManager.cs" />
     <Compile Include="RDBDataRecordStorageController.cs" />
     <Compile Include="RDBDataRecordStorageFilter.cs" />

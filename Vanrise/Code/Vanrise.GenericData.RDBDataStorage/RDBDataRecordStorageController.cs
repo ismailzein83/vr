@@ -12,6 +12,23 @@ namespace Vanrise.GenericData.RDBDataStorage
     [RoutePrefix(Constants.ROUTE_PREFIX + "RDBDataRecordStorage")]
     public class RDBDataRecordStorageController : BaseAPIController
     {
+
+        [HttpGet]
+        [Route("GetRDBDataRecordStorageJoinSettingsConfigs")]
+        public IEnumerable<RDBDataRecordStorageJoinSettingsConfig> GetRDBDataRecordStorageJoinSettingsConfigs()
+        {
+            RDBDataRecordStorageManager _manager = new RDBDataRecordStorageManager();
+            return _manager.GetRDBDataRecordStorageJoinSettingsConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetRDBDataRecordStorageExpressionFieldSettingsConfigs")]
+        public IEnumerable<RDBDataRecordStorageExpressionFieldSettingsConfig> GetRDBDataRecordStorageExpressionFieldSettingsConfigs()
+        {
+            RDBDataRecordStorageManager _manager = new RDBDataRecordStorageManager();
+            return _manager.GetRDBDataRecordStorageExpressionFieldSettingsConfigs();
+        }
+
         [HttpGet]
         [Route("GetRDBDataRecordStorageSettingsFilterConfigs")]
         public IEnumerable<RDBDataRecordStorageSettingsFilterConfig> GetRDBDataRecordStorageSettingsFilterConfigs()
