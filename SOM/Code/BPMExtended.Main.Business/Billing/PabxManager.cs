@@ -27,7 +27,7 @@ namespace BPMExtended.Main.Business
 
         public List<PabxContractDetail> GetPabxContractsDetail(string customerId)
         {
-            return RatePlanMockDataGenerator.GetPabxContracts(customerId);
+            return null;//RatePlanMockDataGenerator.GetPabxContracts(customerId);
         }
 
         public bool DeactivatePabxContract(string contractId)
@@ -36,11 +36,11 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
-        public bool CheckIfPilot(string customerId, string contractId)
-        {
-            return RatePlanMockDataGenerator.checkIfContactPilot(customerId, contractId).Count > 0 ? true : false ;
+        //public bool CheckIfPilot(string customerId, string contractId)
+        //{
+        //    return RatePlanMockDataGenerator.checkIfContactPilot(customerId, contractId).Count > 0 ? true : false ;
 
-        }
+        //}
 
 
 

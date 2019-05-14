@@ -57,6 +57,7 @@
     <Compile Include="Billing\ServiceResponse\ServiceDefinition.cs" />
     <Compile Include="Billing\ServiceResponse\CustomerCategory.cs" />
     <Compile Include="Billing\ServiceResponse\RatePlan.cs" />
+    <Compile Include="Billing\ServiceResponse\ServiceParameter.cs" />
     <Compile Include="Billing\WorkflowInput\ContractAvailableServicesInput.cs" />
     <Compile Include="Billing\WorkflowInput\GetContractAddressInput.cs" />
     <Compile Include="Inventory\ServiceResponse\Device.cs" />

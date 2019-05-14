@@ -743,69 +743,69 @@ namespace BPMExtended.Main.Common
 
         #region Pabx
 
-        public static List<PabxContractDetail> GetPabxContracts(string customerId)
-        {
-            return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
-        }
+        //public static List<PabxContractDetail> GetPabxContracts(string customerId)
+        //{
+        //    return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+        //}
 
-        public static List<PabxContractDetail> GetFilteredPabxContracts(string customerId, string contractId)
-        {
-            return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower() && x.ContractId != contractId);
-        }
+        //public static List<PabxContractDetail> GetFilteredPabxContracts(string customerId, string contractId)
+        //{
+        //    return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower() && x.ContractId != contractId);
+        //}
 
-        public static List<PabxContractDetail> checkIfContactPilot(string customerId, string contractId)
-        {
-            return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower() && x.ContractId.ToLower() == contractId.ToLower() && x.IsPilot == true);
-        }
+        //public static List<PabxContractDetail> checkIfContactPilot(string customerId, string contractId)
+        //{
+        //    return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower() && x.ContractId.ToLower() == contractId.ToLower() && x.IsPilot == true);
+        //}
 
-        private static List<PabxContractDetail> GetAllPabxContracts()
-        {
+        //private static List<PabxContractDetail> GetAllPabxContracts()
+        //{
 
-            return new List<PabxContractDetail>
-            {
-                 new PabxContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_TL1,
-                     CustomerId = CUSTOMER_ID_1,
-                     Address = "Haret hreik",
-                     IsPilot = true,
-                     PhoneNumber =PHONE_NUMBER_2,
-                     PabxOption = PabxPhoneNumberOption.MakeCall
+        //    return new List<PabxContractDetail>
+        //    {
+        //         new PabxContractDetail
+        //         {
+        //             ContractId = CONTRACT_CUST1_TL1,
+        //             CustomerId = CUSTOMER_ID_1,
+        //             Address = "Haret hreik",
+        //             IsPilot = true,
+        //             PhoneNumber =PHONE_NUMBER_2,
+        //             PabxOption = PabxPhoneNumberOption.MakeCall
 
-                 },
-                  new PabxContractDetail
-                 {
-                     ContractId = CONTRACT_CUST1_TL2,
-                     CustomerId = CUSTOMER_ID_1,
-                     Address = "Beirut",
-                     IsPilot = false,
-                     PhoneNumber = PHONE_NUMBER_1,
-                     PabxOption = PabxPhoneNumberOption.Both
+        //         },
+        //          new PabxContractDetail
+        //         {
+        //             ContractId = CONTRACT_CUST1_TL2,
+        //             CustomerId = CUSTOMER_ID_1,
+        //             Address = "Beirut",
+        //             IsPilot = false,
+        //             PhoneNumber = PHONE_NUMBER_1,
+        //             PabxOption = PabxPhoneNumberOption.Both
 
-                 },
+        //         },
 
-                  new PabxContractDetail
-                 {
-                     ContractId = CONTRACT_CUST3_TL1,
-                     CustomerId = CUSTOMER_ID_3,
-                     Address = "Tyr",
-                     IsPilot = false,
-                     PhoneNumber = PHONE_NUMBER_6,
-                     PabxOption = PabxPhoneNumberOption.ReceiveCall
-                 },
-                  new PabxContractDetail
-                 {
-                     ContractId = CONTRACT_CUST3_TL2,
-                     CustomerId = CUSTOMER_ID_3,
-                     Address = "Saida",
-                     IsPilot = false,
-                     PhoneNumber = PHONE_NUMBER_7,
-                     PabxOption = PabxPhoneNumberOption.ReceiveCall
-                 }
+        //          new PabxContractDetail
+        //         {
+        //             ContractId = CONTRACT_CUST3_TL1,
+        //             CustomerId = CUSTOMER_ID_3,
+        //             Address = "Tyr",
+        //             IsPilot = false,
+        //             PhoneNumber = PHONE_NUMBER_6,
+        //             PabxOption = PabxPhoneNumberOption.ReceiveCall
+        //         },
+        //          new PabxContractDetail
+        //         {
+        //             ContractId = CONTRACT_CUST3_TL2,
+        //             CustomerId = CUSTOMER_ID_3,
+        //             Address = "Saida",
+        //             IsPilot = false,
+        //             PhoneNumber = PHONE_NUMBER_7,
+        //             PabxOption = PabxPhoneNumberOption.ReceiveCall
+        //         }
 
-            };
+        //    };
 
-        }
+        //}
 
         #endregion
 

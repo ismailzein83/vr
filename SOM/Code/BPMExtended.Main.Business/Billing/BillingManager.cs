@@ -177,89 +177,89 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public PaymentInfo GetDepositAmount(Guid contactId, BPMExtended.Main.Entities.OperationType operationType, List<ServiceParameter> services)
-        {
-            PaymentInfo payment = new PaymentInfo();
-            bool isContractCreated;
-            decimal depositAmount = 0;
-            bool hasCallBaring = false;
-            bool isForeigner = false;
-            string depositId=null;
+        //public PaymentInfo GetDepositAmount(Guid contactId, BPMExtended.Main.Entities.OperationType operationType, List<ServiceParameter> services)
+        //{
+        //    PaymentInfo payment = new PaymentInfo();
+        //    bool isContractCreated;
+        //    decimal depositAmount = 0;
+        //    bool hasCallBaring = false;
+        //    bool isForeigner = false;
+        //    string depositId=null;
 
-            //TODO : Create a contract with status on hold for this customer on Billing system
+        //    //TODO : Create a contract with status on hold for this customer on Billing system
             
-            isContractCreated = true; // suppose that the contract created successfully
+        //    isContractCreated = true; // suppose that the contract created successfully
 
-            if (!isContractCreated)
-            {
-                payment.isContractCreated = false;
-                return payment;
+        //    if (!isContractCreated)
+        //    {
+        //        payment.isContractCreated = false;
+        //        return payment;
 
-            }
+        //    }
 
-            //Check if customer is foreigner and without sponsor + check if it has a call baring service selected
+        //    //Check if customer is foreigner and without sponsor + check if it has a call baring service selected
 
          
-            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var esqResult = new EntitySchemaQuery(connection.EntitySchemaManager, "Contact");
-            esqResult.AddColumn("Name");
-            esqResult.AddColumn("StCustomerDocumentType");
-            esqResult.AddColumn("StSponsorDocumentIDNumber");
+        //    UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+        //    var esqResult = new EntitySchemaQuery(connection.EntitySchemaManager, "Contact");
+        //    esqResult.AddColumn("Name");
+        //    esqResult.AddColumn("StCustomerDocumentType");
+        //    esqResult.AddColumn("StSponsorDocumentIDNumber");
 
-            // Execution of query to database and getting object with set identifier.
-            var entity = esqResult.GetEntity(connection, contactId);
-            object customerTypeId = entity.GetColumnValue("StCustomerDocumentTypeId");
-            object sponsorNumber = entity.GetColumnValue("StSponsorDocumentIDNumber");
+        //    // Execution of query to database and getting object with set identifier.
+        //    var entity = esqResult.GetEntity(connection, contactId);
+        //    object customerTypeId = entity.GetColumnValue("StCustomerDocumentTypeId");
+        //    object sponsorNumber = entity.GetColumnValue("StSponsorDocumentIDNumber");
 
-            //get customer type
-            var esqResult2 = new EntitySchemaQuery(connection.EntitySchemaManager, "StCustomerDocumentType");
-            esqResult2.AddColumn("Name");
-            var entity2 = esqResult2.GetEntity(connection, customerTypeId);
-            object customerType = entity2.GetColumnValue("Name");
+        //    //get customer type
+        //    var esqResult2 = new EntitySchemaQuery(connection.EntitySchemaManager, "StCustomerDocumentType");
+        //    esqResult2.AddColumn("Name");
+        //    var entity2 = esqResult2.GetEntity(connection, customerTypeId);
+        //    object customerType = entity2.GetColumnValue("Name");
 
 
-            if (operationType == BPMExtended.Main.Entities.OperationType.TelephonyLineSubscription)
-            {
+        //    if (operationType == BPMExtended.Main.Entities.OperationType.TelephonyLineSubscription)
+        //    {
 
    
-                if (services != null)
-                {
+        //        if (services != null)
+        //        {
 
-                    foreach (ServiceParameter service in services)
-                    {
-                        if (service.Id == "EE85D0BC-CE96-441A-A0FD-3179026423F5")
-                        {
-                            hasCallBaring = true;
-                            break;
-                        }
-                    }
+        //            foreach (ServiceParameter service in services)
+        //            {
+        //                if (service.Id == "EE85D0BC-CE96-441A-A0FD-3179026423F5")
+        //                {
+        //                    hasCallBaring = true;
+        //                    break;
+        //                }
+        //            }
 
-                }
+        //        }
 
-            }
-
-
-            if (customerType.Equals("أجنبي") && sponsorNumber.ToString().Equals(""))
-            {
-                if (hasCallBaring)
-                    depositAmount = 15000;
-                else 
-                    depositAmount = 20000;
-
-                isForeigner = true;
-                depositId = "A1D1F6E6-0D44-4D0B-AB2C-8DB759E8F8FF";
-            }
+        //    }
 
 
-            //
-            payment.isForeigner = isForeigner;
-            payment.depositAmount = depositAmount;
-            payment.depositId = depositId;
-            payment.isContractCreated = true;
+        //    if (customerType.Equals("أجنبي") && sponsorNumber.ToString().Equals(""))
+        //    {
+        //        if (hasCallBaring)
+        //            depositAmount = 15000;
+        //        else 
+        //            depositAmount = 20000;
+
+        //        isForeigner = true;
+        //        depositId = "A1D1F6E6-0D44-4D0B-AB2C-8DB759E8F8FF";
+        //    }
+
+
+        //    //
+        //    payment.isForeigner = isForeigner;
+        //    payment.depositAmount = depositAmount;
+        //    payment.depositId = depositId;
+        //    payment.isContractCreated = true;
             
 
-            return payment;
-        }
+        //    return payment;
+        //}
 
         public decimal SubmitToPOS(string contractId, string requestId, BPMExtended.Main.Entities.OperationType operationType)
         {

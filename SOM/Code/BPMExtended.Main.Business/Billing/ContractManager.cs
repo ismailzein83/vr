@@ -80,25 +80,25 @@ namespace BPMExtended.Main.Business
         {
             return RatePlanMockDataGenerator.GetTelephonyContractsByNumber(phoneNumber);
         }
-        public List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId, string pilotContractId)
-        {
-            List<TelephonyContractDetail> contracts = RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
-            List<PabxContractDetail> pabxContracts = RatePlanMockDataGenerator.GetPabxContracts(customerId);
-            InventoryManager manager = new InventoryManager();
+        //public List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId, string pilotContractId)
+        //{
+        //    List<TelephonyContractDetail> contracts = RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
+        //    List<PabxContractDetail> pabxContracts = RatePlanMockDataGenerator.GetPabxContracts(customerId);
+        //    InventoryManager manager = new InventoryManager();
 
-            Func<TelephonyContractDetail, bool> filterExpression = (item) =>
-            {
-                if (pabxContracts.Find(x => x.ContractId == item.ContractId) != null)
-                    return false;
+        //    Func<TelephonyContractDetail, bool> filterExpression = (item) =>
+        //    {
+        //        if (pabxContracts.Find(x => x.ContractId == item.ContractId) != null)
+        //            return false;
 
-                //TODO: AYman to implement if not on same switch
-                if (!manager.IsNumbersOnSameSwitch(item.ContractId, pilotContractId)) return false;
+        //        //TODO: AYman to implement if not on same switch
+        //        if (!manager.IsNumbersOnSameSwitch(item.ContractId, pilotContractId)) return false;
 
-                return true;
-            };
+        //        return true;
+        //    };
 
-            return contracts.MapRecords(TelephonyContractDetailToInfo, filterExpression).ToList();
-        }
+        //    return contracts.MapRecords(TelephonyContractDetailToInfo, filterExpression).ToList();
+        //}
 
         public GSHDSLContractDetail GetGSHDSLContract(string contractId)
         {

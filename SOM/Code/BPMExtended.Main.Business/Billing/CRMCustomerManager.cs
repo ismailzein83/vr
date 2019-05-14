@@ -61,7 +61,9 @@ namespace BPMExtended.Main.Business
             else
             {
                 //check customer balance
-                if (new BillingManager().GetCustomerBalance(info.CustomerId).Balance > 0)
+
+                //if (new BillingManager().GetCustomerBalance(info.CustomerId).Balance > 0)
+                if(new Random().Next(-10,10)> 0)
                 {
                     msg = "You must pay all invoices before proceeding this operation";
                     status = ResultStatus.Error;
@@ -2412,27 +2414,30 @@ namespace BPMExtended.Main.Business
         public void UpdateCustomerAddress(string city,string firstName,string lastName,string addressSeq,string customerId, string contactId, string accountId)
         {
 
-            CustomerAddressInput somRequestInput = new CustomerAddressInput
+            SOMRequestInput<CustomerAddressInput> somRequestInput = new SOMRequestInput<CustomerAddressInput>
             {
-                City = city,
-                FirstName = firstName,
-                LastName = lastName,
-                AddressSeq = addressSeq,             
-                CommonInputArgument = new CommonInputArgument()
+                InputArguments = new CustomerAddressInput
                 {
-                    ContactId = contactId,
-                    CustomerId = customerId
+                    City = "aaaa",
+                    FirstName = firstName,
+                    LastName = lastName,
+                    AddressSeq = addressSeq,
+                    CommonInputArgument = new CommonInputArgument()
+                    {
+                        ContactId = contactId,
+                        CustomerId = customerId
+                    }
                 }
             };
 
             using (var client = new SOMClient())
             {
-                client.Post<CustomerAddressInput, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
+                client.Post<SOMRequestInput<CustomerAddressInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateCustomerAddress/StartProcess", somRequestInput);
             }
 
         }
 
-        public void UpdateCustomerPaymentProfile(Guid paymentMethodId, string bankCode, string customerId, string accountNumber, string contactId, string accountId)
+        public void UpdateCustomerPaymentProfile(string paymentMethodId, string bankCode, string customerId, string accountNumber, string contactId, string accountId)
         {
 
             SOMRequestInput<CustomerPaymentProfileInput> somRequestInput = new SOMRequestInput<CustomerPaymentProfileInput>
@@ -2440,7 +2445,7 @@ namespace BPMExtended.Main.Business
                 InputArguments = new CustomerPaymentProfileInput
                 {
                     AccountNumber = accountNumber,
-                    PaymentMethodId = paymentMethodId.ToString(),
+                    PaymentMethodId = paymentMethodId,
                     BankCode = bankCode,
                     CommonInputArgument = new CommonInputArgument()
                     {

@@ -92,6 +92,7 @@
     <Compile Include="Contracts\ContractEntity.cs" />
     <Compile Include="Contracts\ContractInfo.cs" />
     <Compile Include="Contracts\GSHDSLContractDetail.cs" />
+    <Compile Include="Contracts\PabxContractDetail.cs" />
     <Compile Include="Contracts\TelephonyContractEntity.cs" />
     <Compile Include="Contracts\TelephonyContractInfo.cs" />
     <Compile Include="Customer.cs" />
@@ -157,7 +158,6 @@
     <Compile Include="MIC.cs" />
     <Compile Include="NormalDI.cs" />
     <Compile Include="OutputResult.cs" />
-    <Compile Include="PabxContractDetail.cs" />
     <Compile Include="PaymentDetail.cs" />
     <Compile Include="PaymentMethod.cs" />
     <Compile Include="PaymentMethodInfo.cs" />
