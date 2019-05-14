@@ -31,7 +31,7 @@
                                      ondeleterow="scopeModel.removeJoinConditions"
                                      hidegridmenu>
                             <vr-datagridcolumn headertext="'Source Storage'" widthfactor="8" disablesorting>
-                                <vr-genericdata-rdbrecordstoragesettings-joinfieldname-directive on-ready="dataItem.onJoinFieldNameDirectiveReady" normal-col-num="6"></vr-genericdata-rdbrecordstoragesettings-joinfieldname-directive>
+                                <vr-genericdata-rdbrecordstoragesettings-joinfieldname-directive on-ready="dataItem.onJoinFieldNameDirectiveReady" normal-col-num="6" isrequired="false"></vr-genericdata-rdbrecordstoragesettings-joinfieldname-directive>
                             </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Storage To Join'" widthfactor="4" disablesorting>
                                 <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onStorageToJoinFieldNameSelectorReady"

@@ -7,7 +7,8 @@ app.directive('vrGenericdataRdbrecordstoragesettingsJoinfieldnameDirective', ['U
             restrict: 'E',
             scope: {
                 onReady: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: '@',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -40,6 +41,7 @@ app.directive('vrGenericdataRdbrecordstoragesettingsJoinfieldnameDirective', ['U
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.joinNames = [];
+                $scope.scopeModel.isLoadingMainFieldSelector = (ctrl.isrequired == "false") ? true : false;
 
                 $scope.scopeModel.onJoinNameSelectorReady = function (api) {
                     joinNameSelectorAPI = api;
@@ -85,15 +87,17 @@ app.directive('vrGenericdataRdbrecordstoragesettingsJoinfieldnameDirective', ['U
                             joinNameSelectionChangedDeferred.resolve();
                         }
                         else {
-                            mainFieldSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+                            if ($scope.scopeModel.isLoadingMainFieldSelector) {
+                                mainFieldSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-                            mainFieldSelectorDirectiveReadyDeferred.promise.then(function () {
-                                var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value; };
-                                var mainDataRecordTypeFieldSelectorPayload = {
-                                    dataRecordTypeId: context.getMainDataRecordTypeId()
-                                };
-                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, mainFieldSelectorDirectiveAPI, mainDataRecordTypeFieldSelectorPayload, setLoader);
-                            });
+                                mainFieldSelectorDirectiveReadyDeferred.promise.then(function () {
+                                    var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value; };
+                                    var mainDataRecordTypeFieldSelectorPayload = {
+                                        dataRecordTypeId: context.getMainDataRecordTypeId()
+                                    };
+                                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, mainFieldSelectorDirectiveAPI, mainDataRecordTypeFieldSelectorPayload, setLoader);
+                                });
+                            }
                         }
                     }
                 };
@@ -132,7 +136,7 @@ app.directive('vrGenericdataRdbrecordstoragesettingsJoinfieldnameDirective', ['U
 
                                 directivePromises.push(loadFieldNameDirective());
                             }
-                            else {
+                            else if ($scope.scopeModel.isLoadingMainFieldSelector){
                                 directivePromises.push(loadMainFieldsSelector());
                             }
 

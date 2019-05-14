@@ -6,12 +6,13 @@
                datavaluefield="RDBRecordStorageJoinName"
                selectedvalues="scopeModel.selectedjoin"
                label="Join Name"
+               isrequired="{{ctrl.isrequired}}"
                onselectionchanged="scopeModel.onJoinNameSelectionChanged">
     </vr-select>
 </vr-columns>
 
 <vr-columns colnum={{ctrl.normalColNum}} vr-loader="scopeModel.isLoadingDirective">
-    <vr-genericdata-datarecordtypefields-selector ng-if="scopeModel.selectedjoin  == undefined"
+    <vr-genericdata-datarecordtypefields-selector ng-if="scopeModel.selectedjoin  == undefined && scopeModel.isLoadingMainFieldSelector"
                                                   on-ready="scopeModel.onMainFieldSelectorDirectiveReady"
                                                   isrequired="true"
                                                   label="Field Name"

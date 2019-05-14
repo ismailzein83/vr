@@ -2,9 +2,9 @@
 
     'use strict';
 
-    vrGenericdataDatarecordStorageRdbJoinSettingsSelectiveDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordStorageAPIService'];
+    vrGenericdataDatarecordStorageRdbJoinSettingsSelectiveDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_RDBDataRecordStorageAPIService'];
 
-    function vrGenericdataDatarecordStorageRdbJoinSettingsSelectiveDirective(UtilsService, VRUIUtilsService, VR_GenericData_DataRecordStorageAPIService) {
+    function vrGenericdataDatarecordStorageRdbJoinSettingsSelectiveDirective(UtilsService, VRUIUtilsService, VR_GenericData_RDBDataRecordStorageAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -105,7 +105,7 @@
             }
 
             function getRDBDataRecordStorageJoinSettingsConfigs() {
-                return VR_GenericData_DataRecordStorageAPIService.GetRDBDataRecordStorageJoinSettingsConfigs().then(function (response) {
+                return VR_GenericData_RDBDataRecordStorageAPIService.GetRDBDataRecordStorageJoinSettingsConfigs().then(function (response) {
                     if (response != undefined) {
                         for (var i = 0; i < response.length; i++) {
                             $scope.scopeModel.templateConfigs.push(response[i]);

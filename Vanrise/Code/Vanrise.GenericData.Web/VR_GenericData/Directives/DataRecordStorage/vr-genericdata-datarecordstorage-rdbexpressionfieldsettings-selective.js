@@ -2,9 +2,9 @@
 
     'use strict';
 
-    expressionFieldSettingsSelective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordStorageAPIService'];
+    expressionFieldSettingsSelective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_RDBDataRecordStorageAPIService'];
 
-    function expressionFieldSettingsSelective(UtilsService, VRUIUtilsService, VR_GenericData_DataRecordStorageAPIService) {
+    function expressionFieldSettingsSelective(UtilsService, VRUIUtilsService, VR_GenericData_RDBDataRecordStorageAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -105,7 +105,7 @@
             }
 
             function getExpressionFieldSettingsConfigs() {
-                return VR_GenericData_DataRecordStorageAPIService.GetRDBDataRecordStorageExpressionFieldSettingsConfigs().then(function (response) {
+                return VR_GenericData_RDBDataRecordStorageAPIService.GetRDBDataRecordStorageExpressionFieldSettingsConfigs().then(function (response) {
                     if (response != undefined) {
                         for (var i = 0; i < response.length; i++) {
                             $scope.scopeModel.templateConfigs.push(response[i]);
