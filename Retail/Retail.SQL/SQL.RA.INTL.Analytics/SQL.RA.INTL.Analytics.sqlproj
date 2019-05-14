@@ -73,18 +73,13 @@
     <Folder Include="RA_INTL_SMSAnalytics\User Defined Types\" />
     <Folder Include="RA_INTL_Analytics\User Defined Types\" />
     <Folder Include="Security\" />
-    <Folder Include="dbo\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
     <Build Include="RA_INTL_SMSAnalytics\Tables\BillingStatsDaily.sql" />
-    <Build Include="RA_INTL_SMSAnalytics\Tables\BillingStatsDailyOld.sql" />
     <Build Include="RA_INTL_SMSAnalytics\Tables\TrafficStats15Min.sql" />
-    <Build Include="RA_INTL_SMSAnalytics\Tables\TrafficStats15MinOld.sql" />
     <Build Include="RA_INTL_Analytics\Tables\BillingStatsDaily.sql" />
-    <Build Include="RA_INTL_Analytics\Tables\BillingStatsDailyOld.sql" />
     <Build Include="RA_INTL_Analytics\Tables\TrafficStats15Min.sql" />
-    <Build Include="RA_INTL_Analytics\Tables\TrafficStats15MinOld.sql" />
     <Build Include="dbo\Functions\ZeroToMax.sql" />
     <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
     <Build Include="COMMON\Functions\getExchangeRates.sql" />
@@ -95,6 +90,5 @@
     <Build Include="Security\RA_INTL_SMSAnalytics.sql" />
     <Build Include="Security\RA_INTL_Analytics.sql" />
     <Build Include="Security\COMMON.sql" />
-    <Build Include="dbo\Views\vw_OverallBillingStats.sql" />
   </ItemGroup>
 </Project>
