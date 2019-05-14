@@ -845,6 +845,10 @@
     <Build Include="VR_AccountBalance\User Defined Types\LiveBalanceRecreateAlertAfterUpdateTable.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetGroupedByAccountIds.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_SavePermanentFilter.sql" />
+    <Build Include="genericdata\Tables\VRNumberPrefixType.sql" />
+    <Build Include="genericdata\Tables\VRNumberPrefix.sql" />
+    <Build Include="genericdata\User Defined Types\VRNumberPrefixTypeType.sql" />
+    <Build Include="genericdata\User Defined Types\VRNumberPrefixType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
@@ -945,6 +949,7 @@
     <None Include="TOne.Demo.PostDeployment.sql" />
     <None Include="VRJSON_PostScripts\Retail_NetworkRental.PostDeployment_OrdersAndContracts.json" />
     <None Include="Retail_NetworkRental_OrdersAndContracts.PostDeployment.sql" />
+    <None Include="VR_NumberPrefix.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
