@@ -78,9 +78,7 @@
   <ItemGroup>
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
     <Build Include="RA_ICX_SMSAnalytics\Tables\BillingStatsDaily.sql" />
-    <Build Include="RA_ICX_SMSAnalytics\Tables\BillingStatsDailyOld.sql" />
     <Build Include="RA_ICX_SMSAnalytics\Tables\TrafficStats15Min.sql" />
-    <Build Include="RA_ICX_SMSAnalytics\Tables\TrafficStats15MinOld.sql" />
     <Build Include="RA_ICX_Analytics\Tables\BillingStatsDaily.sql" />
     <Build Include="RA_ICX_Analytics\Tables\BillingStatsDailyOld.sql" />
     <Build Include="RA_ICX_Analytics\Tables\TrafficStats15Min.sql" />
