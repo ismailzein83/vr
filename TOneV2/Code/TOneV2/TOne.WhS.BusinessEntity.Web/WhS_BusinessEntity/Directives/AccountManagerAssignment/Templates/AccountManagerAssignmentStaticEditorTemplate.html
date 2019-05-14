@@ -1,21 +1,15 @@
-﻿<vr-tabs>
-    <vr-tab header="'Definition'">
-        <vr-whs-be-carrieraccount-selector normal-col-num="4"
-                                           on-ready="scopeModel.onCarrierAccountDirectiveReady"
-                                           isrequired="true"
-                                           customlabel="Carrier"
-                                           selectedvalues="scopeModel.selectedCarrierAccount"
-                                           onselectionchanged="scopeModel.onCarrierAccountChanged">
-        </vr-whs-be-carrieraccount-selector>
-    </vr-tab>
-    <vr-tab header="'Effective Date'">
-        <vr-row>
-            <vr-columns width="1/2row">
-                <vr-datetimepicker value="scopeModel.beginEffectiveDate" type="longDateTime" label="BED" isrequired validateanyvalue="scopeModel.validateBED()"></vr-datetimepicker>
-            </vr-columns>
-            <vr-columns width="1/2row">
-                <vr-datetimepicker value="scopeModel.endEffectiveDate" type="longDateTime" label="EED" validateanyvalue="scopeModel.validateEED()"></vr-datetimepicker>
-            </vr-columns>
-        </vr-row>
-    </vr-tab>
-</vr-tabs>
+﻿<vr-row>
+    <vr-whs-be-carrieraccount-selector normal-col-num="4"
+                                       on-ready="scopeModel.onCarrierAccountDirectiveReady"
+                                       isrequired="true"
+                                       customlabel="Carrier"
+                                       selectedvalues="scopeModel.selectedCarrierAccount"
+                                       onselectionchanged="scopeModel.onCarrierAccountChanged">
+    </vr-whs-be-carrieraccount-selector>
+    <vr-columns width="1/3row">
+        <vr-datetimepicker value="scopeModel.beginEffectiveDate" type="longDateTime" label="BED" isrequired validateanyvalue="scopeModel.validateBED()"></vr-datetimepicker>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-datetimepicker value="scopeModel.endEffectiveDate" type="longDateTime" label="EED" validateanyvalue="scopeModel.validateEED()"></vr-datetimepicker>
+    </vr-columns>
+</vr-row>
