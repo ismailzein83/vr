@@ -18,6 +18,7 @@ DataAnalysis.PostDeployment.sql
 VR_MobileNetwork.PostDeployment.sql
 VR_NumberingPlan.PostDeployment.sql
 VR_BEBridge.PostDeployment.sql
+VR_NumberPrefix.PostDeployment.sql
 Enumerations.sql
 
 TOne
