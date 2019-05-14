@@ -53,7 +53,7 @@
             };
 
             function setTitle() {
-                $scope.title = UtilsService.buildTitleForAddEditor('Analytic Permanent Filter Editor');
+                $scope.title = 'Analytic Permanent Filter Editor';
             }
             function loadStaticData() {
 

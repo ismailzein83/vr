@@ -134,7 +134,7 @@
         }
 
         function getTamplate(attrs) {
-            var label = "Permanent Filter Settings";
+            var label = "Filter Type";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
             var template =
