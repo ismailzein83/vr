@@ -300,9 +300,11 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\vr-genericdata-datarecordtype-compositerecordconditiondefinition.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\Templates\CompositeRecordConditionGroupTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\Templates\FiledComparisonConditionTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\Templates\RecordFilterCompositeConditionTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\vr-genericdata-compositerecordconditiongroup.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Runtime\vr-genericdata-compositerecordcondition.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\vr-genericdata-fieldcomparisoncondition.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\vr-genericdata-recordfiltercompositecondition.js" />
     <Content Include="VR_GenericData\Directives\DataProviderExtendedSettings\vr-genericdata-dataproviderextendedsettings-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordRuleEvaluator\Templates\DataRecordRuleEvaluatorDefinitionSettingsTemplate.html" />
@@ -817,6 +819,7 @@
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeExtraFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeWithFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\ParentDataRecordTypeExtraFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\vr-genericdata-datarecordtypefield-groupfilter.js" />
@@ -828,6 +831,7 @@
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypefields-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypewithfields.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\Templates\SummaryGroupingColumnsManagement.html" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\Templates\SummaryTransformationDefinitionGrid.html" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarygroupingcolumns-grid.js" />

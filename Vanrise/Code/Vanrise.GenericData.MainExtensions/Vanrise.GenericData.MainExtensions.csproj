@@ -63,6 +63,7 @@
     <Compile Include="CDRCorrelationBPDefinitionSettings.cs" />
     <Compile Include="CompositeRecordCondition\Definition\DataRecordTypeCompositeRecordConditionDefinition.cs" />
     <Compile Include="CompositeRecordCondition\Runtime\CompositeRecordConditionGroup.cs" />
+    <Compile Include="CompositeRecordCondition\Runtime\FieldComparisonCondition.cs" />
     <Compile Include="CompositeRecordCondition\Runtime\RecordFilterCompositeCondition.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataRecordFieldFormulas\CompareToConstantFieldFormula.cs" />
