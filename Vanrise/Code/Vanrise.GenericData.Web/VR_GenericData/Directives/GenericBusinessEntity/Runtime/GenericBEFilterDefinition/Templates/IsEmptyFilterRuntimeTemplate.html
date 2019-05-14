@@ -1,9 +1,10 @@
-﻿<!--<vr-columns width="normal">
+﻿<vr-columns width="normal">
     <vr-select datasource="scopeModel.filters" 
                hideremoveicon
-               datatextfield="name" 
+               datatextfield="Title" 
                datavaluefield="Title" 
-               selectedvalues="scopeModel.selectedFilter"
-               hidefilterbox>
+               label="Type"
+               isrequired="{{scopeModel.isRequired}}"
+               selectedvalues="scopeModel.selectedFilter">
     </vr-select>
-</vr-columns>-->
+</vr-columns>

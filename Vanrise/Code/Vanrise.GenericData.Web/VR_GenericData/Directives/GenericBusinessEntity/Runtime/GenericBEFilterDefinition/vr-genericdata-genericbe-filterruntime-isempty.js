@@ -1,99 +1,134 @@
-﻿//(function (app) {
+﻿(function (app) {
 
-//    'use strict';
+    'use strict';
 
-//    IsEmptyFilterRuntimeSettingsDirective.$inject = ['UtilsService'];
+    IsEmptyFilterRuntimeSettingsDirective.$inject = ['UtilsService'];
 
-//    function IsEmptyFilterRuntimeSettingsDirective(UtilsService) {
-//        return {
-//            restrict: "E",
-//            scope: {
-//                onReady: "=",
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var ctor = new IsEmptyFilterRuntimeSettingsController($scope, ctrl, $attrs);
-//                ctor.initializeController();
-//            },
-//            controllerAs: "ctrl",
-//            bindToController: true,
-//            templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/GenericBEFilterDefinition/Templates/IsEmptyFilterRuntimeTemplate.html"
-//        };
+    function IsEmptyFilterRuntimeSettingsDirective(UtilsService) {
+        return {
+            restrict: "E",
+            scope: {
+                onReady: "=",
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new IsEmptyFilterRuntimeSettingsController($scope, ctrl, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: "ctrl",
+            bindToController: true,
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/GenericBEFilterDefinition/Templates/IsEmptyFilterRuntimeTemplate.html"
+        };
 
 
-//        function IsEmptyFilterRuntimeSettingsController($scope, ctrl, $attrs) {
-//            this.initializeController = initializeController;
+        function IsEmptyFilterRuntimeSettingsController($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-//            var definitionSettings;
-//            var filterValues;
+            var definitionSettings;
+            var fieldName;
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
-//                $scope.scopeModel.filters = [];
-//                defineAPI();
-//            }
-//            function defineAPI() {
-//                var api = {};
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.filters = [];
+                defineAPI();
+            }
+            function defineAPI() {
+                var api = {};
 
-//                api.load = function (payload) {
-//                    var initialPromises = [];
-//                    console.log(payload);
+                api.load = function (payload) {
+                    var initialPromises = [];
 
-//                    if (payload != undefined) {
-//                        definitionSettings = payload.settings;
-//                        filterValues = payload.filterValues;
+                    if (payload != undefined) {
+                        definitionSettings = payload.settings;
 
-//                        if (definitionSettings != undefined) {
-//                            var allField = definitionSettings.AllField;
-//                            allField.name = 'All';
-//                            $scope.scopeModel.filters.push(allField);
+                        if (definitionSettings != undefined) {
+                            fieldName = definitionSettings.FieldName;
+                            $scope.scopeModel.isRequired = definitionSettings.IsRequired;
+                            $scope.scopeModel.filters.push(definitionSettings.AllField);
+                            $scope.scopeModel.filters.push(definitionSettings.NullField);
+                            $scope.scopeModel.filters.push(definitionSettings.NotNullField);
+                        }
+                    }
 
-//                            var nullField = definitionSettings.NullField;
-//                            nullField.name = 'Null';
-//                            $scope.scopeModel.filters.push(nullField);
+                    var rootPromiseNode = {
+                        promises: initialPromises,
+                        getChildNode: function () {
+                            var directivePromises = [];
 
-//                            var notNullField = definitionSettings.NotNullField;
-//                            notNullField.name = 'Not Null';
-//                            $scope.scopeModel.filters.push(notNullField);
-//                        }
-//                    }
+                            return {
+                                promises: directivePromises
+                            };
+                        }
+                    };
 
-//                    var rootPromiseNode = {
-//                        promises: initialPromises,
-//                        getChildNode: function () {
-//                            var directivePromises = [];
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
+                };
 
-//                            return {
-//                                promises: directivePromises
-//                            };
-//                        }
-//                    };
+                api.getData = function () {
+                    return {
+                        RecordFilter: buildFilterGroup()
+                    };
+                };
 
-//                    return UtilsService.waitPromiseNode(rootPromiseNode);
-//                };
+                api.hasFilters = function () {
+                    return true;
+                };
 
-//                api.getData = function () {
-//                    buildFilterGroup();
-//                    return {
-//                       // FilterGroup: buildFilterGroup()
-//                    };
-//                };
+                if (ctrl.onReady != null) {
+                    ctrl.onReady(api);
+                }
+            }
 
-//                api.hasFilters = function () {
-//                    return true;
-//                };
+            function buildFilterGroup() {
+                var obj = {
+                    $type: "Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities",
+                    LogicalOperator: 0,
+                    Filters: []
+                };
 
-//                if (ctrl.onReady != null) {
-//                    ctrl.onReady(api);
-//                }
-//            }
+                var notEmptyFilter = {
+                    $type: "Vanrise.GenericData.Entities.NonEmptyRecordFilter, Vanrise.GenericData.Entities",
+                    FieldName: fieldName
+                };
+                var emptyFilter = {
+                    $type: "Vanrise.GenericData.Entities.EmptyRecordFilter, Vanrise.GenericData.Entities",
+                    FieldName: fieldName
+                };
 
-//            function buildFilterGroup() {
-//                conosle.log($scope.scopeModel.selectedFilter);
-//            }
-//        }
-//    }
+                if ($scope.scopeModel.selectedFilter == undefined) {
+                    if (definitionSettings.NotNullField.IsDefault) {
+                        $scope.scopeModel.selectedFilter = definitionSettings.NotNullField;
+                        obj.Filters.push(notEmptyFilter);
+                    }
+                    else if (definitionSettings.NullField.IsDefault) {
+                        $scope.scopeModel.selectedFilter = definitionSettings.NullField;
+                        obj.Filters.push(emptyFilter);
+                    }
+                    else if (definitionSettings.AllField.IsDefault) {
+                        $scope.scopeModel.selectedFilter = definitionSettings.AllField;
+                        obj.Filters.push(notEmptyFilter);
+                        obj.Filters.push(emptyFilter);
+                        obj.LogicalOperator = 1;
+                    }
+                }
+                else {
+                    if ($scope.scopeModel.selectedFilter.Title == definitionSettings.NotNullField.Title) {
+                        obj.Filters.push(notEmptyFilter);
+                    }
+                    else if ($scope.scopeModel.selectedFilter.Title == definitionSettings.NullField.Title) {
+                        obj.Filters.push(emptyFilter);
+                    }
+                    else {
+                        obj.Filters.push(notEmptyFilter);
+                        obj.Filters.push(emptyFilter);
+                        obj.LogicalOperator = 1;
+                    }
+                }
+                return obj;
+            }
+        }
+    }
 
-//    app.directive('vrGenericdataGenericbeFilterruntimeIsempty', IsEmptyFilterRuntimeSettingsDirective);
+    app.directive('vrGenericdataGenericbeFilterruntimeIsempty', IsEmptyFilterRuntimeSettingsDirective);
 
-//})(app);
+})(app);

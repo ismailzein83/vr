@@ -10,11 +10,9 @@ namespace Vanrise.GenericData.MainExtensions
     public class IsEmptyFilterDefinitonSettings : GenericBEFilterDefinitionSettings
     {
         public override Guid ConfigId { get { return new Guid("177D3C5C-4A3D-4B3E-B63C-60B1021C0C40"); } }
-
         public override string RuntimeEditor { get { return "vr-genericdata-genericbe-filterruntime-isempty"; }  }
-
         public bool IsRequired { get; set; }
-
+        public string FieldName { get; set; }
         public IsEmptyFilterDefinitonSettingsField AllField { get; set; }
         public IsEmptyFilterDefinitonSettingsField NullField { get; set; }
         public IsEmptyFilterDefinitonSettingsField NotNullField { get; set; }

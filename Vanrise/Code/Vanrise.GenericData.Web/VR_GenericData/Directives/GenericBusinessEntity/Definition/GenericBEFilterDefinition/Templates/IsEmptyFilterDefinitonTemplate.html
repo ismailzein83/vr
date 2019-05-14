@@ -1,11 +1,18 @@
-﻿<!--<vr-row>
-    <vr-columns colnum="4">
+﻿<vr-row>
+    <vr-columns colnum="3">
+        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorReady"
+                                                      isrequired="true"
+                                                      label="Field Name"
+                                                      hideremoveicon>
+        </vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+    <vr-columns colnum="1">
         <vr-switch label="Is Required" value="scopeModel.isRequired"></vr-switch>
     </vr-columns>
 </vr-row>
 
 <vr-row removeline vr-loader="scopeModel.isGridLoading">
-    <vr-columns width="fullrow">
+    <vr-columns width="3/4row">
         <vr-validator validate="scopeModel.validateGrid()">
             <vr-datagrid on-ready="scopeModel.onFieldGridReady"
                          datasource="scopeModel.fields"
@@ -24,4 +31,4 @@
             </vr-datagrid>
         </vr-validator>
     </vr-columns>
-</vr-row>-->
+</vr-row>
