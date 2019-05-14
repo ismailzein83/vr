@@ -9,7 +9,9 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					 
 --------------------------------------------------------------------------------------
 */
-
+delete from  [common].[extensionconfiguration] where [Id] in ('0F35BD74-81D4-4CF3-950D-98DE8CDAD7D9',
+										'696FCB6C-EE81-4C34-A390-6793ECC7252D'--,
+										)
 --[common].[extensionconfiguration]-------------------------------------------------------------------
 delete from [common].[extensionconfiguration] where ID in ('5D41FC92-ECCB-48CD-A32E-4DDE13E757ED', '02f5eb86-af71-4d35-9e5a-4739a43f2438','fe81b4b3-d90c-47de-b40c-3b4379e880a4','A4011953-B2CC-4C91-89CB-3ADFF84D94D1','26EF5E51-C9C9-4D87-97B8-4506F42892AC','44EBA251-6032-4F0F-A254-4CCF0ED62DB2','D64C95FC-5E4B-46B7-95CD-77082F91B07F', '077ECA6F-3CB8-42C3-95F4-9C563EB2BDCB', '80B1AFC2-3222-41D5-84B6-7004838BFBA9')
 BEGIN
@@ -146,8 +148,8 @@ as (select * from (values
 ('95183b89-056a-410a-b920-91ec6a134f82','Portal Account Extra Field','Portal Account Extra Field','Retail_BE_AccountExtraFieldDefinitionConfig','{"Editor":"retail-be-accountextrafield-portalaccount"}'),
 
 ('b573969d-05a2-4c92-a856-1f846557520c','Topup','Top Up','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-topup"}'),
-('696fcb6c-ee81-4c34-a390-6793ecc7252d','Voice','Voice','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidcdr"}'),
-('0f35bd74-81d4-4cf3-950d-98de8cdad7d9','SMS','SMS','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidsms"}'),
+--('696fcb6c-ee81-4c34-a390-6793ecc7252d','Voice','Voice','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidcdr"}'),
+--('0f35bd74-81d4-4cf3-950d-98de8cdad7d9','SMS','SMS','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidsms"}'),
 ('81A1FFFA-8AE6-41F0-A3E2-ED6457F72FDB','Retail_BE_AccountBulkActionsSettingConfig_SendEmail','Send Rates','Retail_BE_AccountBulkActionSettingsConfig','{"Editor":"retail-be-accountbulkactionsettings-sendrates"}'),
 ('6388F486-9BB7-47D2-B16C-31C9FDCE9A8D','Taxes','Taxes','Retail_BE_AccountPartDefinition'		,'{"DefinitionEditor":"retail-be-accounttype-part-definition-taxes","RuntimeEditor":"retail-be-accounttype-part-runtime-taxes"}'),
 ('2F5C2FB4-4380-4A18-986C-210459134B4B','Centrex Subscriber Invoice','Centrex Subscriber Invoice','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig'		,'{"Editor":"retail-invoice-invoicetype-retailsubscriberinvoicesettings"}'),
