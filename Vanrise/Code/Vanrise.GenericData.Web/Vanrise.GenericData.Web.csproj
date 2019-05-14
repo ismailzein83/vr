@@ -271,6 +271,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiongroupdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition-filtergroup.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\SendEmailGenericBEDefinitionActionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-sendemailaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\GenericBEBulkActionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\Templates\GenericBEBulkActionSettingsUpdateTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\vr-genericdata-genericbe-bulkactiondefinition-update-fieldstate.js" />
