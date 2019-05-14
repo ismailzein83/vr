@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
     {
         #region RDB
 
-        static string TABLE_ALIAS = "rpbkup";
+        public static string TABLE_ALIAS = "rpbkup";
         public static string TABLE_NAME = "TOneWhS_BE_Bkup_SaleEntityRoutingProduct";
         const string COL_ID = "ID";
         const string COL_OwnerType = "OwnerType";

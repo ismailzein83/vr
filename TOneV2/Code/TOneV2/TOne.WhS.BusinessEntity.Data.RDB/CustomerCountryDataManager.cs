@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
     {
         #region RDB
 
-        static string TABLE_ALIAS = "cc";
+        public static string TABLE_ALIAS = "cc";
         static string TABLE_NAME = "TOneWhS_BE_CustomerCountry";
         public const string COL_ID = "ID";
         const string COL_CustomerID = "CustomerID";
@@ -76,11 +76,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var selectQuery = insertQuery.FromSelect();
 
-            var joinContext = selectQuery.Join();
-            var carrierAccountDataManager = new CarrierAccountDataManager();
-            string carrierAccountTableAlias = "ca";
-            carrierAccountDataManager.JoinCarrierAccount(joinContext, carrierAccountTableAlias, TABLE_ALIAS, COL_CustomerID, true);
-
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
@@ -92,7 +87,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectColumns.Column(COL_ProcessInstanceID, COL_ProcessInstanceID);
             selectColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
 
-          
+            var joinContext = selectQuery.Join();
+            var carrierAccountDataManager = new CarrierAccountDataManager();
+            string carrierAccountTableAlias = "ca";
+            carrierAccountDataManager.JoinCarrierAccount(joinContext, carrierAccountTableAlias, TABLE_ALIAS, COL_CustomerID, true);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(carrierAccountTableAlias, CarrierAccountDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
@@ -146,7 +144,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
 
             var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, CustomerCountryBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, CustomerCountryBackupDataManager.TABLE_NAME), CustomerCountryBackupDataManager.TABLE_ALIAS, null, true);
 
             var selectColumns = selectQuery.SelectColumns();
 

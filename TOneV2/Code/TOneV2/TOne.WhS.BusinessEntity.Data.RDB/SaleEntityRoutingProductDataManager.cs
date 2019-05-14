@@ -562,7 +562,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
 
             var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, SaleEntityRoutingProductBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, SaleEntityRoutingProductBackupDataManager.TABLE_NAME), SaleEntityRoutingProductBackupDataManager.TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
             selectColumns.Column(COL_OwnerType, COL_OwnerType);
@@ -575,7 +575,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var joinContext = selectQuery.Join();
             var saleZoneDataManager = new SaleZoneDataManager();
-            saleZoneDataManager.JoinSaleZone(joinContext, "sz", TABLE_ALIAS, COL_ZoneID, true);
+            saleZoneDataManager.JoinSaleZone(joinContext, "sz", SaleEntityRoutingProductBackupDataManager.TABLE_ALIAS, COL_ZoneID, true);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(SaleEntityRoutingProductBackupDataManager.COL_StateBackupID).Value(stateBackupId);
@@ -583,9 +583,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var insertDefaultQuery = queryContext.AddInsertQuery();
             insertDefaultQuery.IntoTable(TABLE_NAME);
           
-            var defaultSelectQuery = insertQuery.FromSelect();
-            defaultSelectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, SaleEntityRoutingProductBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
-            var selectDefaultColumns = selectQuery.SelectColumns();
+            var defaultSelectQuery = insertDefaultQuery.FromSelect();
+            defaultSelectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, SaleEntityRoutingProductBackupDataManager.TABLE_NAME), SaleEntityRoutingProductBackupDataManager.TABLE_ALIAS, null, true);
+            var selectDefaultColumns = defaultSelectQuery.SelectColumns();
 
             selectDefaultColumns.Column(COL_ID, COL_ID);
             selectDefaultColumns.Column(COL_OwnerType, COL_OwnerType);
@@ -596,7 +596,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectDefaultColumns.Column(COL_EED, COL_EED);
             selectDefaultColumns.Column(COL_LastModifiedTime, COL_LastModifiedTime);
 
-            var whereDefaultContext = selectQuery.Where();
+            var whereDefaultContext = defaultSelectQuery.Where();
             whereDefaultContext.NullCondition(COL_ZoneID);
             whereDefaultContext.EqualsCondition(SaleEntityRoutingProductBackupDataManager.COL_StateBackupID).Value(stateBackupId);
 

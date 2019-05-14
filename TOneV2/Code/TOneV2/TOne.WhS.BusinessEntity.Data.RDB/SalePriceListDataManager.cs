@@ -283,11 +283,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void SetDeleteQueryBySNPId(RDBQueryContext queryContext, long sellingNumberPlanId)
         {
-            SetDeleteOwnerQuery(queryContext, (int)SalePriceListOwnerType.Customer, sellingNumberPlanId);
-            SetDeleteOwnerQuery(queryContext, (int)SalePriceListOwnerType.SellingProduct, sellingNumberPlanId);
+            SetDeleteOwnerQuery(queryContext, SalePriceListOwnerType.Customer, sellingNumberPlanId);
+            SetDeleteOwnerQuery(queryContext, SalePriceListOwnerType.SellingProduct, sellingNumberPlanId);
         }
 
-        private void SetDeleteOwnerQuery(RDBQueryContext queryContext, int ownerType, long sellingNumberPlanId)
+        private void SetDeleteOwnerQuery(RDBQueryContext queryContext, SalePriceListOwnerType ownerType, long sellingNumberPlanId)
         {
             var salePriceListIdTempTableQuery = queryContext.CreateTempTable();
             salePriceListIdTempTableQuery.AddColumn(COL_ID, RDBDataType.BigInt, true);
@@ -300,16 +300,27 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             fromSelectQuery.SelectColumns().Column(COL_ID);
 
-            var joinContextCarrierAccount = fromSelectQuery.Join();
-            var carrierAccountDataManager = new CarrierAccountDataManager();
-            string carrierAccountTableAlias = "ca";
-            carrierAccountDataManager.JoinCarrierAccount(joinContextCarrierAccount, carrierAccountTableAlias, TABLE_ALIAS, COL_OwnerID, true);
+            string ownerTableAlias = string.Empty;
+            if (ownerType == SalePriceListOwnerType.Customer)
+            {
+                var joinContextCarrierAccount = fromSelectQuery.Join();
+                var carrierAccountDataManager = new CarrierAccountDataManager();
+                ownerTableAlias = "ca";
+                carrierAccountDataManager.JoinCarrierAccount(joinContextCarrierAccount, ownerTableAlias, TABLE_ALIAS, COL_OwnerID, true);
+            }
+            else
+            {
+                var sellingProductJoincontext = fromSelectQuery.Join();
+                ownerTableAlias = "sellp";
+                var sellpJoinStatement = sellingProductJoincontext.Join(SellingProductDataManager.TABLE_NAME, ownerTableAlias);
+                sellpJoinStatement.WithNoLock();
+                var sellpJoinCondition = sellpJoinStatement.On();
+                sellpJoinCondition.EqualsCondition(TABLE_ALIAS, COL_OwnerID, ownerTableAlias, SellingProductDataManager.COL_ID);
+            }
 
             var whereContext = fromSelectQuery.Where();
-            whereContext.EqualsCondition(carrierAccountTableAlias, CarrierAccountDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
-
-            whereContext.EqualsCondition(COL_OwnerType).Value(ownerType);
-
+            whereContext.EqualsCondition(ownerTableAlias, CarrierAccountDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+            whereContext.EqualsCondition(COL_OwnerType).Value((int)ownerType);
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
 
@@ -335,7 +346,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
 
             var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SalePriceListBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDatabaseName, SalePriceListBackupDataManager.TABLE_NAME), SalePriceListBackupDataManager.TABLE_ALIAS, null, true);
             var selectColumns = selectQuery.SelectColumns();
 
             selectColumns.Column(COL_ID, COL_ID);

@@ -726,7 +726,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
 
             var selectQuery = insertQuery.FromSelect();
-            selectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, SaleRateBackupDataManager.TABLE_NAME), TABLE_ALIAS, null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(backupDataBaseName, SaleRateBackupDataManager.TABLE_NAME), SaleRateBackupDataManager.TABLE_ALIAS, null, true);
 
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_ID, COL_ID);
@@ -743,7 +743,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var joinContext = selectQuery.Join();
             var saleZoneDataManager = new SaleZoneDataManager();
-            saleZoneDataManager.JoinSaleZone(joinContext, "sz", TABLE_ALIAS, COL_ZoneID, true);
+            saleZoneDataManager.JoinSaleZone(joinContext, "sz", SaleRateBackupDataManager.TABLE_ALIAS, COL_ZoneID, true);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(SaleRateBackupDataManager.COL_StateBackupID).Value(stateBackupId);
