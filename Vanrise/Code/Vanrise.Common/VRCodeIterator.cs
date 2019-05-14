@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Common
 {
@@ -19,6 +16,7 @@ namespace Vanrise.Common
         #endregion
 
         #region Public Methods
+
         public VRCodeIterator(IEnumerable<T> codeObjects)
         {
             foreach (var codeObj in codeObjects)
@@ -41,6 +39,7 @@ namespace Vanrise.Common
                 }               
             }
         }
+
         public T GetLongestMatch(string phoneNumber)
         {
             if (phoneNumber == null)
@@ -56,6 +55,7 @@ namespace Vanrise.Common
             }
             return default(T);
         }
+
         public T GetExactMatch(string phoneNumber)
         {
             if (phoneNumber == null)
@@ -65,6 +65,7 @@ namespace Vanrise.Common
                 return matchCode;
             return default(T);
         }
+
         #endregion     
     }
 }

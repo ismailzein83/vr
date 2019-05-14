@@ -175,6 +175,7 @@
     <Compile Include="LKUPBusinessEntity\LKUPBESelectorRuntimeInfo.cs" />
     <Compile Include="LKUPBusinessEntity\LKUPBusinessEntityInfoFilter.cs" />
     <Compile Include="LKUPBusinessEntity\LKUPBusinessEntityItemInfo.cs" />
+    <Compile Include="VRNumberPrefix.cs" />
     <Compile Include="RecordFilter\FilterParameter.cs" />
     <Compile Include="RecordFilter\Filters.cs" />
     <Compile Include="DataRecords\DataRecordDetail.cs" />
