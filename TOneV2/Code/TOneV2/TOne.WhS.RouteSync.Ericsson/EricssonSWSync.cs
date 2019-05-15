@@ -177,7 +177,8 @@ namespace TOne.WhS.RouteSync.Ericsson
             if (payload.ConvertedRoutes == null || payload.ConvertedRoutes.Count == 0)
                 return;
 
-            context.ConvertedRoutes = RouteSync.Business.Helper.CompressRoutesWithCodes(payload.ConvertedRoutes, CreateEricssionConvertedRoute);
+            List<ConvertedRoute> routesAfterCompression = RouteSync.Business.Helper.CompressRoutesWithCodes(payload.ConvertedRoutes, CreateEricssionConvertedRoute);
+            context.ConvertedRoutes = ExpandConvertedRoutes(routesAfterCompression);
         }
 
         private ConvertedRouteWithCode CreateEricssionConvertedRoute(ICreateConvertedRouteWithCodeContext context)
@@ -427,7 +428,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                     if (sshCommunicator != null)
                         sshCommunicator.Dispose();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     context.WriteBusinessHandledException(ex, true);
                 }
@@ -1803,6 +1804,114 @@ namespace TOne.WhS.RouteSync.Ericsson
 
             return false;
         }
+
+        private List<ConvertedRoute> ExpandConvertedRoutes(List<ConvertedRoute> routesAfterCompression)
+        {
+            if (routesAfterCompression == null || routesAfterCompression.Count == 0)
+                return null;
+
+            List<ConvertedRoute> finalConvertedRoutes = new List<ConvertedRoute>();
+
+            EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefixByBO structuredRoutes = new EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefixByBO();
+            Func<EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefix> createConvertedRoutesByBO = () =>
+            {
+                return new EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefix()
+                    {
+                        { '1', new EricssonConvertedRouteByCodeByPrefixLength() },
+                        { '2', new EricssonConvertedRouteByCodeByPrefixLength() },
+                        { '3', new EricssonConvertedRouteByCodeByPrefixLength() },
+                        { '4', new EricssonConvertedRouteByCodeByPrefixLength() },
+                        { '5', new EricssonConvertedRouteByCodeByPrefixLength() },
+                        { '6', new EricssonConvertedRouteByCodeByPrefixLength() },
+                        { '7', new EricssonConvertedRouteByCodeByPrefixLength() },
+                        { '8', new EricssonConvertedRouteByCodeByPrefixLength() },
+                        { '9', new EricssonConvertedRouteByCodeByPrefixLength() }
+                    };
+            };
+
+            foreach (ConvertedRoute route in routesAfterCompression)
+            {
+                EricssonConvertedRoute convertedRoute = route as EricssonConvertedRoute;
+                EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefix convertedRoutesByBO = structuredRoutes.GetOrCreateItem(convertedRoute.BO, createConvertedRoutesByBO);
+                EricssonConvertedRouteByCodeByPrefixLength convertedRoutesByPrefixLength = convertedRoutesByBO.GetRecord(convertedRoute.Code[0]);
+                EricssonConvertedRouteByCode convertedRoutesByCode = convertedRoutesByPrefixLength.GetOrCreateItem(convertedRoute.Code.Length);
+                convertedRoutesByCode.Add(convertedRoute.Code, convertedRoute);
+            }
+
+            foreach (var structuredRoutesByBOKvp in structuredRoutes)
+            {
+                string bo = structuredRoutesByBOKvp.Key;
+                EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefix structuredRoutesByFirstPrefix = structuredRoutesByBOKvp.Value;
+
+                if (structuredRoutesByFirstPrefix.Count == 0)
+                    continue;
+
+                foreach (var structuredRoutesByPrefixLentghKvp in structuredRoutesByFirstPrefix)
+                {
+                    EricssonConvertedRouteByCodeByPrefixLength structuredRoutesByPrefixLength = structuredRoutesByPrefixLentghKvp.Value;
+
+                    if (structuredRoutesByPrefixLength.Count == 0)
+                        continue;
+
+                    var keys = structuredRoutesByPrefixLength.Keys;
+                    int minCodeLength = keys.MinBy(itm => itm);
+                    int maxCodeLength = keys.MaxBy(itm => itm);
+
+                    for (int currentLength = minCodeLength; currentLength <= maxCodeLength; currentLength++)
+                    {
+                        EricssonConvertedRouteByCode structuredRoutesByCode = structuredRoutesByPrefixLength.GetRecord(currentLength);
+
+                        if (structuredRoutesByCode == null)
+                            continue;
+
+                        if (currentLength == maxCodeLength)
+                        {
+                            finalConvertedRoutes.AddRange(structuredRoutesByCode.Values);
+                            continue;
+                        }
+
+                        foreach (var structuredRouteKvp in structuredRoutesByCode)
+                        {
+                            string code = structuredRouteKvp.Key;
+                            EricssonConvertedRoute convertedRoute = structuredRouteKvp.Value;
+
+                            bool hasChildCodes = false;
+
+                            for (int codeLength = currentLength + 1; codeLength <= maxCodeLength; codeLength++)
+                            {
+                                EricssonConvertedRouteByCode childRoutesByCodeLength = structuredRoutesByPrefixLength.GetRecord(codeLength);
+                                hasChildCodes = childRoutesByCodeLength != null && childRoutesByCodeLength.Values.Any(itm => itm.Code.StartsWith(code));
+
+                                if (hasChildCodes)
+                                    break;
+                            }
+
+                            if (!hasChildCodes)
+                            {
+                                finalConvertedRoutes.Add(convertedRoute);
+                            }
+                            else
+                            {
+                                List<string> newCodes = new List<string>() { $"{code}{0}", $"{code}{1}", $"{code}{2}", $"{code}{3}", $"{code}{4}", $"{code}{5}", $"{code}{6}", $"{code}{7}", $"{code}{8}", $"{code}{9}" };
+                                EricssonConvertedRouteByCode directChildRoutesByCodeLength = structuredRoutesByPrefixLength.GetOrCreateItem(currentLength + 1);
+                                foreach (string newCode in newCodes)
+                                {
+                                    if (directChildRoutesByCodeLength.ContainsKey(newCode))
+                                        continue;
+
+                                    var clonedConvertedRoute = Vanrise.Common.Utilities.CloneObject(convertedRoute);
+                                    clonedConvertedRoute.Code = newCode;
+                                    directChildRoutesByCodeLength.Add(newCode, clonedConvertedRoute);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            return finalConvertedRoutes.OrderBy(itm => (itm as EricssonConvertedRoute).BO).ThenBy(itm => (itm as EricssonConvertedRoute).Code).ToList();
+        }
         #endregion
 
         #region routeCases
@@ -1918,25 +2027,10 @@ namespace TOne.WhS.RouteSync.Ericsson
         #endregion
 
         #region Private Classes
-
-        private class CompressedEricssonConvertedRoutesByParentCode : Dictionary<string, Dictionary<string, EricssonConvertedRouteForCompression>>
-        {
-        }
-
-        private class CompressedEricssonConvertedRoutesByBO : Dictionary<string, CompressedEricssonConvertedRoutes>
-        {
-        }
-
-        private class CompressedEricssonConvertedRoutes : Dictionary<int, CompressedEricssonConvertedRoutesByParentCode>
-        {
-        }
-
-        private class EricssonConvertedRouteForCompression
-        {
-            public string Code { get; set; }
-            public int? RCNumber { get; set; }
-            public bool CanBeGrouped { get; set; }
-        }
+        private class EricssonConvertedRouteByCode : Dictionary<string, EricssonConvertedRoute> { }
+        private class EricssonConvertedRouteByCodeByPrefixLength : Dictionary<int, EricssonConvertedRouteByCode> { }
+        private class EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefix : Dictionary<char, EricssonConvertedRouteByCodeByPrefixLength> { }
+        private class EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefixByBO : Dictionary<string, EricssonConvertedRouteByCodeByPrefixLengthByFirstPrefix> { }
 
         private class RouteCaseOptionWithSupplier : IPercentageItem
         {
