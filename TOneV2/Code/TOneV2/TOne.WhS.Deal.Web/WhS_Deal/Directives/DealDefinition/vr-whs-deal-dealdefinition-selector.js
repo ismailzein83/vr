@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'VRUIUtilsService', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_DealDefinitionTypeEnum',
-    function (UtilsService, $compile, VRUIUtilsService, WhS_Deal_DealDefinitionAPIService, WhS_Deal_SwapDealService, WhS_Deal_VolumeCommitmentService, WhS_Deal_DealDefinitionTypeEnum) {
+app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'VRUIUtilsService', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_DealDefinitionTypeEnum', 'WhS_Deal_DealDefinitionInfoStatusEnum',
+    function (UtilsService, $compile, VRUIUtilsService, WhS_Deal_DealDefinitionAPIService, WhS_Deal_SwapDealService, WhS_Deal_VolumeCommitmentService, WhS_Deal_DealDefinitionTypeEnum, WhS_Deal_DealDefinitionInfoStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -15,6 +15,7 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                 isrequired: '=',
                 isdisabled: "=",
                 selectedvalues: "=",
+                ondeselectitem: "=",
                 hidelabel: '@',
                 normalColNum: '@',
                 hideremoveicon: '@',
@@ -39,11 +40,99 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
             }
         };
 
+
+        function directiveCtor(ctrl, $scope, $attrs) {
+
+            this.initializeController = initializeController;
+
+            var selectorAPI;
+
+            $scope.onViewIconClicked = function (item) {
+                if (item.ConfigId == WhS_Deal_DealDefinitionTypeEnum.SwapDeal.value)
+                    WhS_Deal_SwapDealService.viewSwapDeal(item.DealId, true);
+                else if (item.ConfigId == WhS_Deal_DealDefinitionTypeEnum.SwapDeal.value)
+                    WhS_Deal_VolumeCommitmentService.viewVolumeCommitment(item.DealId);
+            };
+
+            function initializeController() {
+
+                $scope.scopeModel = {};
+                $scope.scopeModel.onSelectorReady = function (api) {
+                    selectorAPI = api;
+                    defineAPI();
+                };
+            }
+
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+                    ctrl.datasource.length = 0;
+                    ctrl.selectedvalues.length = 0;
+
+                    var filter;
+                    var selectedIds;
+
+                    if (payload != undefined) {
+                        filter = payload.filter;
+                        selectedIds = payload.selectedIds;
+                    }
+
+                    if (filter == undefined)
+                        filter = {};
+
+                    if (selectedIds != undefined)
+                        filter.SelectedDealDefinitionIds = selectedIds;
+
+                    var serializedFilter = {};
+                    if (filter != undefined) {
+                        serializedFilter = UtilsService.serializetoJson(filter);
+                    }
+
+                    return WhS_Deal_DealDefinitionAPIService.GetDealDefinitionInfo(serializedFilter).then(function (response) {
+                        angular.forEach(response, function (itm) {
+                            itm.inactiveDeal = false;
+                            if (!itm.IsForced) {
+                                ctrl.datasource.push(itm);
+                            }
+                            else {
+                                switch (itm.DealDefinitionInfoStatus) {
+                                    case WhS_Deal_DealDefinitionInfoStatusEnum.Draft.value: itm.additionalInfo = "" + WhS_Deal_DealDefinitionInfoStatusEnum.Draft.description + ""; break;
+                                    case WhS_Deal_DealDefinitionInfoStatusEnum.Deleted.value: itm.additionalInfo = "" + WhS_Deal_DealDefinitionInfoStatusEnum.Deleted.description + ""; break;
+                                    case WhS_Deal_DealDefinitionInfoStatusEnum.Active.value: itm.additionalInfo = "" + WhS_Deal_DealDefinitionInfoStatusEnum.Active.description + ""; break;
+                                    case WhS_Deal_DealDefinitionInfoStatusEnum.Inactive.value: itm.additionalInfo = "" + WhS_Deal_DealDefinitionInfoStatusEnum.Inactive.description + ""; break;
+                                }
+
+                                itm.colorStyle = "item-warning";
+                                itm.inactiveDeal = true;
+                                ctrl.datasource.push(itm);
+                            }
+                        });
+
+                        if (selectedIds != undefined) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'DealId', $attrs, ctrl);
+                        }
+                    });
+                };
+
+                api.getSelectedIds = function () {
+                    return VRUIUtilsService.getIdSelectedIds('DealId', $attrs, ctrl);
+                };
+
+                api.clearDataSource = function () {
+                    selectorAPI.clearDataSource();
+                };
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
+        }
+
         function getTemplate(attrs) {
 
-            var label;
+            var label = "";
             if (attrs.hidelabel == undefined) {
-                label = (attrs.ismultipleselection != undefined) ? 'Deals' : 'Deal';
+                label = (attrs.ismultipleselection != undefined) ? 'label = "Deals"' : 'label = "Deal"';
             }
 
             var customlabel = '';
@@ -74,69 +163,12 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
             if (attrs.includeviewhandler != undefined)
                 onviewclicked = "onviewclicked='onViewIconClicked'";
 
-            return '<vr-columns  colnum="{{ctrl.normalColNum}}" ' + disabled + ' ' + haschildcolumns + '  > <vr-select on-ready="scopeModel.onSelectorReady" hasviewpermission="ctrl.hasviewpremission" ' + onviewclicked + ' ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId"'
-                + 'entityname="Deal" label="' + label + '" ' + customlabel + ' ' + hideremoveicon + '></vr-select> </vr-columns>';
+            return '<vr-columns  colnum="{{ctrl.normalColNum}}" ' + disabled + ' ' + haschildcolumns + '  > <vr-select on-ready="scopeModel.onSelectorReady" hasviewpermission="ctrl.hasviewpremission" ' + onviewclicked + ' ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' datadisabledselectfield="inactiveDeal" selectedvalues="ctrl.selectedvalues" ondeselectitem = "ctrl.ondeselectitem" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId" ' 
+                + 'entityname="Deal" ' + label + ' ' + customlabel + ' ' + hideremoveicon + ' datatooltipfield="additionalInfo"' +
+                ' datastylefield="colorStyle" ' + '></vr-select> </vr-columns>';
 
         }
-        function directiveCtor(ctrl, $scope, $attrs) {
-            var selectorAPI;
-            $scope.onViewIconClicked = function (item) {
-                if (item.ConfigId == WhS_Deal_DealDefinitionTypeEnum.SwapDeal.value)
-                    WhS_Deal_SwapDealService.viewSwapDeal(item.DealId, true);
-                else if (item.ConfigId == WhS_Deal_DealDefinitionTypeEnum.SwapDeal.value)
-                    WhS_Deal_VolumeCommitmentService.viewVolumeCommitment(item.DealId);
-            };
 
-            function initializeController() {
-
-                $scope.scopeModel = {};
-                $scope.scopeModel.onSelectorReady = function (api) {
-                    selectorAPI = api;
-                    defineAPI();
-                };
-            }
-
-            function defineAPI() {
-                var api = {};
-                api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('DealId', $attrs, ctrl);
-                };
-
-                api.load = function (payload) {
-                    ctrl.datasource.length = 0;
-
-                    var filter;
-                    var selectedIds;
-                    if (payload != undefined) {
-                        filter = payload.filter;
-                        selectedIds = payload.selectedIds;
-                    }
-
-                    if (filter == undefined)
-                        filter = {};
-
-                    var serializedFilter = {};
-                    if (filter != undefined)
-                        serializedFilter = UtilsService.serializetoJson(filter);
-                    return WhS_Deal_DealDefinitionAPIService.GetDealDefinitionInfo(serializedFilter).then(function (response) {
-                        angular.forEach(response, function (itm) {
-                            ctrl.datasource.push(itm);
-                        });
-                        if (selectedIds != undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'DealId', $attrs, ctrl);
-
-                    });
-                };
-
-                api.clearDataSource = function () {
-                    selectorAPI.clearDataSource();
-                };
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
-
-            this.initializeController = initializeController;
-        }
         return directiveDefinitionObject;
     }]);
 

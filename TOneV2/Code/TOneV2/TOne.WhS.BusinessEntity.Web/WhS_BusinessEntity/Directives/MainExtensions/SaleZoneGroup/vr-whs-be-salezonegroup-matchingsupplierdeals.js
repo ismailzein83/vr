@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSalezonegroupMatchingsupplierdeals', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeSalezonegroupMatchingsupplierdeals', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_CodeZoneMatchAPIService',
+    function (UtilsService, VRUIUtilsService, WhS_Routing_CodeZoneMatchAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -20,18 +20,22 @@ app.directive('vrWhsBeSalezonegroupMatchingsupplierdeals', ['UtilsService', 'VRU
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/SaleZoneGroup/Templates/SaleZoneMatchingSupplierDealsTemplate.html';
             }
         };
-         
+
         function saleZoneMatchingSupplierDealsDirectiveCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             var saleZoneGroupSettings;
+            var selectedSaleZoneIds;
+            var selectedSupplierDealIds;
 
             var dealDefinitionSelectorAPI;
             var dealDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var dealDefinitionSelectionChangedPromiseDeferred;
+            var onDeselectDealDefinitionLoadDeferred;
 
             var saleZoneSelectorAPI;
             var saleZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -53,9 +57,15 @@ app.directive('vrWhsBeSalezonegroupMatchingsupplierdeals', ['UtilsService', 'VRU
                         return;
                     }
 
+                    var _promises = [saleZoneSelectorReadyDeferred.promise];
+
+                    if (onDeselectDealDefinitionLoadDeferred != undefined)
+                        _promises.push(onDeselectDealDefinitionLoadDeferred.promise);
+
                     $scope.scopeModel.showSaleZoneSelector = true;
 
-                    saleZoneSelectorReadyDeferred.promise.then(function () {
+                    UtilsService.waitMultiplePromises(_promises).then(function () {
+                        onDeselectDealDefinitionLoadDeferred = undefined;
 
                         var saleZoneSelectorPayload = {
                             filter: {
@@ -64,14 +74,54 @@ app.directive('vrWhsBeSalezonegroupMatchingsupplierdeals', ['UtilsService', 'VRU
                                     SupplierDealIds: dealDefinitionSelectorAPI.getSelectedIds()
                                 }]
                             },
-                            showSellingNumberPlanIfMultiple: true
+                            showSellingNumberPlanIfMultiple: true,
+                            sellingNumberPlanId: saleZoneSelectorAPI.getSellingNumberPlanId(),
+                            selectedIds: selectedSaleZoneIds
                         };
-
                         var setLoader = function (value) {
                             $scope.scopeModel.isSaleZoneSelectorLoading = value;
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneSelectorAPI, saleZoneSelectorPayload, setLoader, dealDefinitionSelectionChangedPromiseDeferred);
                     });
+                };
+
+                $scope.scopeModel.onDeselectDealDefinition = function (deSelectedSupplierDeal) {
+
+                    var selectedSupplierDealIds = dealDefinitionSelectorAPI.getSelectedIds();
+
+                    if (selectedSupplierDealIds != undefined && selectedSupplierDealIds.length == 1 && saleZoneSelectorAPI != undefined) {
+                        saleZoneSelectorAPI.clearSelectedSaleZones();
+                        selectedSaleZoneIds = undefined;
+                        return;
+                    }
+
+                    var index = selectedSupplierDealIds.indexOf(deSelectedSupplierDeal.DealId);
+                    if (index != -1) {
+                        selectedSupplierDealIds.splice(index, 1);
+                    }
+
+                    var obj = {
+                        SelectedSupplierDealIds: selectedSupplierDealIds,
+                        SelectedSaleZoneIds: saleZoneSelectorAPI.getSelectedIds(),
+                        SellingNumberPlanId: saleZoneSelectorAPI.getSellingNumberPlanId()
+                    };
+
+                    onDeselectDealDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    return WhS_Routing_CodeZoneMatchAPIService.GetSaleZonesMatchingSpecificDeals(obj).then(function (response) {
+                        selectedSaleZoneIds = response;
+                        onDeselectDealDefinitionLoadDeferred.resolve();
+                    });
+                };
+
+                $scope.scopeModel.onSaleZoneSelectionChanged = function (selectedZones) {
+                    if (selectedZones == undefined)
+                        return;
+
+                    selectedSaleZoneIds = [];
+                    for (var i = 0; i < selectedZones.length; i++) {
+                        selectedSaleZoneIds.push(selectedZones[i].SaleZoneId);
+                    }
                 };
 
                 defineAPI();
@@ -87,21 +137,52 @@ app.directive('vrWhsBeSalezonegroupMatchingsupplierdeals', ['UtilsService', 'VRU
                     if (payload != undefined) {
                         sellingNumberPlanId = payload.sellingNumberPlanId;
                         saleZoneGroupSettings = payload.saleZoneGroupSettings;
+                        if (saleZoneGroupSettings != undefined) {
+                            selectedSupplierDealIds = saleZoneGroupSettings.SupplierDealIds;
+                            selectedSaleZoneIds = saleZoneGroupSettings.ZoneIds;
+                        }
                     }
 
                     var promises = [];
 
-                    var loadDealDefinitionSelectorPromise = loadDealDefinitionSelector();
+                    var loadDealDefinitionSelectorPromise = loadDealDefinitionSelector(selectedSupplierDealIds);
                     promises.push(loadDealDefinitionSelectorPromise);
 
                     if (saleZoneGroupSettings != undefined) {
                         dealDefinitionSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        var loadSaleZoneSelectorPromise = loadSaleZoneSelector(sellingNumberPlanId, saleZoneGroupSettings.ZoneIds);
+                        var loadSaleZoneSelectorPromise = loadSaleZoneSelector(sellingNumberPlanId, selectedSaleZoneIds);
                         promises.push(loadSaleZoneSelectorPromise);
                     }
 
-                    function loadDealDefinitionSelector() {
+                    function loadSaleZoneSelector(sellingNumberPlanId, saleZoneIds) {
+                        var loadSaleZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        var _promises = [saleZoneSelectorReadyDeferred.promise];
+
+                        if (dealDefinitionSelectionChangedPromiseDeferred != undefined)
+                            _promises.push(dealDefinitionSelectionChangedPromiseDeferred.promise);
+
+                        UtilsService.waitMultiplePromises(_promises).then(function () {
+                            dealDefinitionSelectionChangedPromiseDeferred = undefined;
+                            var saleZoneSelectorPayload = {
+                                filter: {
+                                    Filters: [{
+                                        $type: "TOne.WhS.Routing.MainExtensions.SaleZoneMatchingSupplierDealFilter,TOne.WhS.Routing.MainExtensions",
+                                        SupplierDealIds: selectedSupplierDealIds != undefined ? selectedSupplierDealIds : dealDefinitionSelectorAPI.getSelectedIds()
+                                    }]
+                                },
+                                showSellingNumberPlanIfMultiple: true,
+                                sellingNumberPlanId: sellingNumberPlanId,
+                                selectedIds: saleZoneIds
+                            };
+                            VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, saleZoneSelectorPayload, loadSaleZoneSelectorPromiseDeferred);
+                        });
+
+                        return loadSaleZoneSelectorPromiseDeferred.promise;
+                    }
+
+                    function loadDealDefinitionSelector(selectedIds) {
                         var loadDealDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         dealDefinitionSelectorReadyDeferred.promise.then(function () {
@@ -110,37 +191,15 @@ app.directive('vrWhsBeSalezonegroupMatchingsupplierdeals', ['UtilsService', 'VRU
                                 filter: {
                                     Filters: [{
                                         $type: "TOne.WhS.Deal.MainExtensions.DealDefinitionFilter.CostDealFilter,TOne.WhS.Deal.MainExtensions"
-                                    }]
+                                    }],
+                                    DealStatuses: ["Active", "InActive"]
                                 },
-                                selectedIds: saleZoneGroupSettings != undefined ? saleZoneGroupSettings.SupplierDealIds : undefined
+                                selectedIds: selectedIds
                             };
                             VRUIUtilsService.callDirectiveLoad(dealDefinitionSelectorAPI, dealDefinitionPayload, loadDealDefinitionSelectorPromiseDeferred);
                         });
 
                         return loadDealDefinitionSelectorPromiseDeferred.promise;
-                    }
-
-                    function loadSaleZoneSelector(sellingNumberPlanId, saleZoneIds) {
-                        var loadSaleZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        UtilsService.waitMultiplePromises([saleZoneSelectorReadyDeferred.promise, dealDefinitionSelectionChangedPromiseDeferred.promise]).then(function () {
-                            dealDefinitionSelectionChangedPromiseDeferred = undefined;
-
-                            var saleZoneSelectorPayload = {
-                                filter: {
-                                    Filters: [{
-                                        $type: "TOne.WhS.Routing.MainExtensions.SaleZoneMatchingSupplierDealFilter,TOne.WhS.Routing.MainExtensions",
-                                        SupplierDealIds: dealDefinitionSelectorAPI.getSelectedIds()
-                                    }]
-                                },
-                                sellingNumberPlanId: sellingNumberPlanId,
-                                selectedIds: saleZoneIds,
-                                showSellingNumberPlanIfMultiple: true
-                            };
-                            VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, saleZoneSelectorPayload, loadSaleZoneSelectorPromiseDeferred);
-                        });
-
-                        return loadSaleZoneSelectorPromiseDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);

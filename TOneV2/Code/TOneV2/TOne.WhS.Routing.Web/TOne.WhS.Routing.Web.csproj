@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CodeZoneMatchController.cs" />
     <Compile Include="Controllers\QualityConfigurationDefinitionController.cs" />
     <Compile Include="Controllers\SupplierZoneDetailsController.cs" />
     <Compile Include="Controllers\CustomerRouteController.cs" />
@@ -380,6 +381,7 @@
     <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch-preview.js" />
     <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch.js" />
     <Content Include="WhS_Routing\ModuleInitialization.js" />
+    <Content Include="WhS_Routing\Services\APIServices\CodeZoneMatchAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\QualityConfigurationDefinitionAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\SupplierZoneDetailsAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\CustomerRouteAPIService.js" />

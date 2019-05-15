@@ -16,12 +16,22 @@ namespace TOne.WhS.Deal.Business
 
         public IEnumerable<DealDefinitionInfo> GetDealDefinitionInfo(DealDefinitionFilter filter)
         {
-            var cachedDeals = base.GetCachedDeals();
+            bool getDeletedDeals = filter.SelectedDealDefinitionIds != null;
+            var cachedDeals = GetAllCachedDealDefinitions(getDeletedDeals);
 
             Func<DealDefinition, bool> filterExpression = (dealDefinition) =>
             {
                 if (filter == null)
                     return true;
+
+                if (filter.SelectedDealDefinitionIds != null && filter.SelectedDealDefinitionIds.Contains(dealDefinition.DealId))
+                    return true;
+
+                if (dealDefinition.IsDeleted)
+                    return false;
+
+                if (filter.DealStatuses != null && !filter.DealStatuses.Contains(dealDefinition.Settings.Status))
+                    return false;
 
                 if (filter.IncludedDealDefinitionIds != null && !filter.IncludedDealDefinitionIds.Contains(dealDefinition.DealId))
                     return false;
@@ -45,7 +55,12 @@ namespace TOne.WhS.Deal.Business
                 return true;
             };
 
-            return cachedDeals.MapRecords(DealDefinitionInfoMapper, filterExpression).OrderBy(item => item.Name);
+            Func<DealDefinition, DealDefinitionInfo> mapper = (itm) =>
+            {
+                return DealDefinitionInfoMapper(itm, filter != null ? filter.DealStatuses : null);
+            };
+
+            return cachedDeals.MapRecords(mapper, filterExpression).OrderBy(item => item.Name);
         }
         public bool DeleteDeal(int dealId)
         {
@@ -439,9 +454,9 @@ namespace TOne.WhS.Deal.Business
             return result.Count > 0 ? result : null;
         }
 
-        public DealDefinition GetDealDefinition(int dealId)
+        public DealDefinition GetDealDefinition(int dealId, bool getDeletedDeals = false)
         {
-            var cachedDealInfos = GetAllCachedDealDefinitions();
+            var cachedDealInfos = GetAllCachedDealDefinitions(getDeletedDeals);
             return cachedDealInfos.GetRecord(dealId);
         }
 
@@ -1019,16 +1034,35 @@ namespace TOne.WhS.Deal.Business
 
         #region Mappers
 
-        private DealDefinitionInfo DealDefinitionInfoMapper(DealDefinition dealDefinition)
+        private DealDefinitionInfo DealDefinitionInfoMapper(DealDefinition dealDefinition, List<DealStatus> dealStatuses)
         {
             int carrierAccountId = dealDefinition.Settings.GetCarrierAccountId();
+
+            DealDefinitionInfoStatus dealDefinitionInfoStatus;
+
+            if (!dealDefinition.IsDeleted)
+            {
+                switch (dealDefinition.Settings.Status)
+                {
+                    case DealStatus.Active: dealDefinitionInfoStatus = DealDefinitionInfoStatus.Active; break;
+                    case DealStatus.Inactive: dealDefinitionInfoStatus = DealDefinitionInfoStatus.Inactive; break;
+                    case DealStatus.Draft: dealDefinitionInfoStatus = DealDefinitionInfoStatus.Draft; break;
+                    default: throw new NotSupportedException(string.Format("DealStatus '{0}' is not supported", dealDefinition.Settings.Status));
+                }
+            }
+            else
+            {
+                dealDefinitionInfoStatus = DealDefinitionInfoStatus.Deleted;
+            }
 
             return new DealDefinitionInfo()
             {
                 DealId = dealDefinition.DealId,
                 Name = dealDefinition.Name,
                 ConfigId = dealDefinition.Settings.ConfigId,
-                SellingNumberPlanId = new CarrierAccountManager().GetCustomerSellingNumberPlanId(carrierAccountId)
+                SellingNumberPlanId = new CarrierAccountManager().GetCustomerSellingNumberPlanId(carrierAccountId),
+                DealDefinitionInfoStatus = dealDefinitionInfoStatus,
+                IsForced = dealDefinition.IsDeleted || (dealStatuses != null && !dealStatuses.Contains(dealDefinition.Settings.Status))
             };
         }
 

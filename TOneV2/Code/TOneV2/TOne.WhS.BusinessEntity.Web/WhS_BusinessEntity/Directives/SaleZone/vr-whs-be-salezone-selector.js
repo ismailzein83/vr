@@ -408,10 +408,23 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                     return sellingNumberPlanId;
                 };
 
+                api.clearSelectedSaleZones = function () {
+                    if (attrs.ismultipleselection != undefined) {
+                        saleZoneSelectorCtrl.selectedvalues.length = 0;
+                    }
+                    else {
+                        saleZoneSelectorCtrl.selectedvalues = undefined;
+                    }
+
+                    
+                    if (sellingDirectiveApi != undefined) {
+                        sellingDirectiveApi.clearDataSource();
+                    }
+                    sellingNumberPlanId = undefined;
+                };
+
                 if (saleZoneSelectorCtrl.onReady != null)
                     saleZoneSelectorCtrl.onReady(api);
-
-                return api;
             }
 
             function loadSellingNumberPlanSelector(sellingNumberPlanId) {

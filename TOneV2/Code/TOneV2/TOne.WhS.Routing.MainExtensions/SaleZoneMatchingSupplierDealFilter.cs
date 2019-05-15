@@ -8,6 +8,8 @@ namespace TOne.WhS.Routing.MainExtensions
 {
     public class SaleZoneMatchingSupplierDealFilter : ISaleZoneFilter
     {
+        DealDefinitionManager _dealDefinitionManager = new DealDefinitionManager();
+
         public List<int> SupplierDealIds { get; set; }
 
         public bool IsExcluded(ISaleZoneFilterContext context)
@@ -17,13 +19,16 @@ namespace TOne.WhS.Routing.MainExtensions
                 List<long> allDealSupplierZoneIds = new List<long>();
                 foreach (var supplierDealId in SupplierDealIds)
                 {
-                    var supplierDeal = new DealDefinitionManager().GetDealDefinition(supplierDealId);
+                    var supplierDeal = _dealDefinitionManager.GetDealDefinition(supplierDealId);
+                    if (supplierDeal == null)
+                        continue;
+
                     List<long> supplierZoneIds = supplierDeal.Settings.GetDealSupplierZoneIds();
                     if (supplierZoneIds != null)
                         allDealSupplierZoneIds.AddRange(supplierZoneIds);
                 }
 
-                context.CustomData = new CodeZoneMatchManager().GetSaleZonesMatchedToSupplierZones(allDealSupplierZoneIds, context.SellingNumberPlanId);
+                context.CustomData = new CodeZoneMatchManager().GetSaleZonesMatchedToSupplierZones(allDealSupplierZoneIds, context.SellingNumberPlanId, true);
             }
 
             if (context.CustomData != null)

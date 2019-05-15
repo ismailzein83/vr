@@ -82,11 +82,11 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 customlabel = 'customlabel="{{ctrl.customlabel}}"';
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-                       + '<vr-select ' + multipleselection + ' ' + addCliked + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId" on-ready="ctrl.onSelectorReady" '
-                           + ' label="' + label + '" datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" onselectionchanged="ctrl.onselectionchanged"'
-                           + ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission" ' + hideremoveicon + ' ' + customlabel + '>'
-                       + '</vr-select>' +
-                   '</vr-columns>';
+                + '<vr-select ' + multipleselection + ' ' + addCliked + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId" on-ready="ctrl.onSelectorReady" '
+                + ' label="' + label + '" datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" onselectionchanged="ctrl.onselectionchanged"'
+                + ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission" ' + hideremoveicon + ' ' + customlabel + '>'
+                + '</vr-select>' +
+                '</vr-columns>';
         }
 
         function sellingNumberPlanCtor(ctrl, $scope, attrs) {
@@ -143,6 +143,15 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
                 api.hasSingleItem = function () {
                     return ctrl.datasource.length == 1;
+                };
+
+                api.clearDataSource = function () {
+                    if (attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.length = 0;
+                    else
+                        ctrl.selectedvalues = undefined;
+
+                    selectorAPI.clearDataSource();
                 };
 
                 if (ctrl.onReady != null)
