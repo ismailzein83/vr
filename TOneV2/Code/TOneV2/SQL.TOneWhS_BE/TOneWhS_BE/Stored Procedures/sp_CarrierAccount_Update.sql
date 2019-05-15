@@ -15,7 +15,7 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_CarrierAccount_Update]
 	
 AS
 BEGIN
-IF NOT EXISTS(select 1 from TOneWhS_BE.CarrierAccount WHERE (@Name is null or [NameSuffix] = @Name )and [CarrierProfileID] = @CarrierProfileId and Id!=@ID and ISNULL(IsDeleted,0) = 0) 
+IF NOT EXISTS(select 1 from TOneWhS_BE.CarrierAccount WHERE  isnull([NameSuffix],'') = isnull(@Name,'') and [CarrierProfileID] = @CarrierProfileId and Id!=@ID and ISNULL(IsDeleted,0) = 0) 
 BEGIN
 	Update TOneWhS_BE.CarrierAccount
 	Set NameSuffix = @Name,
