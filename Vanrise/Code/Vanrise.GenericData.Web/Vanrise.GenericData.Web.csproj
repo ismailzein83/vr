@@ -890,6 +890,7 @@
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataStoreConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\GenericBEEmailActionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\LKUPBusinessEntityAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\LKUPBusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\RDBDataRecordStorageAPIService.js" />
@@ -976,6 +977,8 @@
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityBulkActionsEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityBulkActionEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditorUploaderController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntitySendEmailController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntitySendEmailEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagement.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditor.html" />
