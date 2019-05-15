@@ -1234,6 +1234,12 @@
     </Content>
     <Content Include="appSettings.config" />
     <None Include="Properties\PublishProfiles\Retail.pubxml" />
+    <Content Include="Web.config.TelecomCRM.exclud">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.config.NetworkInventory.exclud">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.config.Interconnect.exclud">
       <SubType>Designer</SubType>
     </None>

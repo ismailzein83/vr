@@ -699,6 +699,12 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="App.config.NetworkInventory.exclude">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="App.config.TelecomCRM.exclude">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App.config.NR.exclude">
       <SubType>Designer</SubType>
     </None>
