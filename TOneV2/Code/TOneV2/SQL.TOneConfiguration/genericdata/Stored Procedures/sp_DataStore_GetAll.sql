@@ -6,7 +6,7 @@
 CREATE PROCEDURE [genericdata].[sp_DataStore_GetAll]
 AS
 BEGIN
-	SELECT	ID, Name, Settings
+	SELECT	ID, DevProjectID, Name, Settings
 	FROM	[genericdata].DataStore WITH(NOLOCK) 
 	ORDER BY [Name]
 END

@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [bp].[VRWorkflow] (
     [ID]               UNIQUEIDENTIFIER NOT NULL,
+    [DevProjectID]     UNIQUEIDENTIFIER NULL,
     [Name]             VARCHAR (255)    NOT NULL,
     [Title]            NVARCHAR (255)   NOT NULL,
     [Settings]         NVARCHAR (MAX)   NULL,
@@ -10,4 +11,6 @@
     [timestamp]        ROWVERSION       NULL,
     CONSTRAINT [PK_VRWorkflow] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

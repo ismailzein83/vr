@@ -13,7 +13,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT	drfc.[ID],drfc.[Name],drfc.[Settings]
+	SELECT	drfc.[ID], drfc.DevProjectID,drfc.[Name],drfc.[Settings]
     FROM	[genericdata].DataRecordFieldChoice drfc WITH(NOLOCK) 
 	ORDER BY drfc.[Name]
 END

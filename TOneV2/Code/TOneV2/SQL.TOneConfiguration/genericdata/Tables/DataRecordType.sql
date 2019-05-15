@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [genericdata].[DataRecordType] (
     [ID]                   UNIQUEIDENTIFIER NOT NULL,
+    [DevProjectID]         UNIQUEIDENTIFIER NULL,
     [Name]                 NVARCHAR (1000)  NOT NULL,
     [ParentID]             UNIQUEIDENTIFIER NULL,
     [Fields]               NVARCHAR (MAX)   NULL,
@@ -10,6 +11,8 @@
     [LastModifiedTime]     DATETIME         CONSTRAINT [DF_DataRecordType_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_DataRecordType_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

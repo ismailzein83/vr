@@ -849,6 +849,7 @@
     <Build Include="genericdata\Tables\VRNumberPrefix.sql" />
     <Build Include="genericdata\User Defined Types\VRNumberPrefixTypeType.sql" />
     <Build Include="genericdata\User Defined Types\VRNumberPrefixType.sql" />
+    <Build Include="common\Tables\VRDevProject.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

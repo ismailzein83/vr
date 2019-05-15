@@ -5,6 +5,6 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT	[ID],Name,Title,[Settings],[CreatedTime],[CreatedBy],[LastModifiedTime],[LastModifiedBy]
+	SELECT	[ID],[DevProjectID],Name,Title,[Settings],[CreatedTime],[CreatedBy],[LastModifiedTime],[LastModifiedBy]
 	FROM	[bp].[VRWorkflow] WITH(NOLOCK)
 END

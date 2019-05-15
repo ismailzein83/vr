@@ -6,7 +6,7 @@
 CREATE PROCEDURE [genericdata].[sp_GenericRuleDefinition_GetAll]
 AS
 BEGIN
-	SELECT	ID, Name, Details, CreatedTime
+	SELECT	ID, DevProjectID, Name, Details, CreatedTime
 	FROM	[genericdata].GenericRuleDefinition WITH(NOLOCK) 
 	ORDER BY [Name]
 END

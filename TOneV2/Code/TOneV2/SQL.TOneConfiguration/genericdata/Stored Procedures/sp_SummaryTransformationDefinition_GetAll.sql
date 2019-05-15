@@ -7,7 +7,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT	def.[ID],def.[Name],def.Details,def.CreatedTime
+	SELECT	def.[ID], DevProjectID,def.[Name],def.Details,def.CreatedTime
     FROM	genericdata.SummaryTransformationDefinition def WITH(NOLOCK) 
 	ORDER BY def.[Name]
 END

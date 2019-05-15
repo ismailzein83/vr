@@ -6,7 +6,7 @@
 CREATE PROCEDURE [genericdata].[sp_BusinessEntityDefinition_GetAll]
 AS
 BEGIN
-	SELECT	ID, Name, Title, Settings
+	SELECT	ID, DevProjectID, Name, Title, Settings
 	FROM	[genericdata].BusinessEntityDefinition WITH(NOLOCK) 
 	ORDER BY [Name]
 END

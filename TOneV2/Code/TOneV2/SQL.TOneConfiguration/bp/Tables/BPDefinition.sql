@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [bp].[BPDefinition] (
     [ID]               UNIQUEIDENTIFIER CONSTRAINT [DF__BPDefinition__ID__14DBF883] DEFAULT (newid()) NOT NULL,
+    [DevProjectID]     UNIQUEIDENTIFIER NULL,
     [Name]             VARCHAR (255)    NOT NULL,
     [Title]            NVARCHAR (255)   NOT NULL,
     [FQTN]             VARCHAR (1000)   NULL,
@@ -10,6 +11,8 @@
     [timestamp]        ROWVERSION       NULL,
     CONSTRAINT [pk_BPDefinition] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
