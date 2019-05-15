@@ -34,7 +34,23 @@ namespace TOne.WhS.RouteSync.Entities
         {
             return false;
         }
+        public virtual bool TryBlockSupplier(ITryBlockSupplierContext context)
+        {
+            return false;
+        }
 
+        public virtual bool TryUnBlockSupplier(ITryUnBlockSupplierContext context)
+        {
+            return false;
+        }
+        public virtual bool TryReactivate(ITryReactivateContext context)
+        {
+            return false;
+        }
+        public virtual bool TryDeactivate(ITryDeactivateContext context)
+        {
+            return false;
+        }
         public virtual bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
         {
             return true;
@@ -210,6 +226,23 @@ namespace TOne.WhS.RouteSync.Entities
         public object SwitchBlockingInfo { get; set; }
     }
 
+    public interface ITryReactivateContext
+    {
+        string CarrierAccountId { get; }
+    }
+    public class TryReactivateContext : ITryReactivateContext
+    {
+        public string CarrierAccountId { get; set; }
+    }
+    public interface ITryDeactivateContext
+    {
+        string CarrierAccountId { get; }
+    }
+    public class TryDeactivateContext : ITryDeactivateContext
+    {
+        public string CarrierAccountId { get; set; }
+    }
+
     public interface ITryUnBlockCustomerContext
     {
         string CustomerId { get; }
@@ -222,7 +255,35 @@ namespace TOne.WhS.RouteSync.Entities
 
         public object SwitchBlockingInfo { get; set; }
     }
+    public interface ITryBlockSupplierContext
+    {
+        string SwitchName { get; }
 
+        string SupplierId { get; }
+
+        object SwitchBlockingInfo { set; }
+    }
+    public class TryBlockSupplierContext : ITryBlockSupplierContext
+    {
+        public string SwitchName { get; set; }
+
+        public string SupplierId { get; set; }
+
+        public object SwitchBlockingInfo { get; set; }
+    }
+
+    public interface ITryUnBlockSupplierContext
+    {
+        string SupplierId { get; }
+
+        object SwitchBlockingInfo { set; }
+    }
+    public class TryUnBlockSupplierContext : ITryUnBlockSupplierContext
+    {
+        public string SupplierId { get; set; }
+
+        public object SwitchBlockingInfo { get; set; }
+    }
     public interface IIsSwitchRouteSynchronizerValidContext
     {
         Func<int, string> GetCarrierAccountNameById { get; }
