@@ -527,7 +527,7 @@ namespace Mediation.Runtime
             result.Result = MappingResult.Valid;
             return result;
         }
-         
+
         public static MappingOutput MapCDR_File_Ogero_EricssonInternational_WHS_Txt(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
@@ -1454,7 +1454,7 @@ namespace Mediation.Runtime
 
             return result;
         }
-          
+
         #endregion
 
         #region Mobilis
@@ -1755,19 +1755,69 @@ namespace Mediation.Runtime
 
         public static MappingOutput MapCDR_File_Mobilis_Ericsson_R13(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
+            var vrNumberPrefixManager = new Vanrise.GenericData.Business.VRNumberPrefixManager();
+
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("57E3E68E-9403-440D-A67D-CC5896D6BAD5"), (parsedBatch) =>
             {
                 switch (parsedBatch.RecordType)
                 {
                     case "Mobilis_Ericsson_R13_CDR":
-                        MappedBatchItem cdrBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
+
+                        List<dynamic> filteredCDRs = new List<dynamic>();
+
+                        foreach (var record in parsedBatch.Records)
+                        {
+                            if (record.CallingPartyNumber.Length > 10 && record.CalledPartyNumber.Length > 10)
+                            {
+                                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.CallingPartyNumber);
+                                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.CalledPartyNumber);
+
+                                bool isMobileStationRoamingNumberOnNet;
+                                if (string.IsNullOrEmpty(record.MobileStationRoamingNumber))
+                                {
+                                    isMobileStationRoamingNumberOnNet = true;
+                                }
+                                else
+                                {
+                                    Guid? mobileStationRoamingNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.MobileStationRoamingNumber);
+                                    isMobileStationRoamingNumberOnNet = mobileStationRoamingNumberType.HasValue;
+                                }
+
+                                if (callingPartyNumberType.HasValue && calledPartyNumberType.HasValue && isMobileStationRoamingNumberOnNet)
+                                    continue;
+                            }
+
+                            filteredCDRs.Add(record);
+                        }
+
+                        MappedBatchItem cdrBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(filteredCDRs, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                         mappedBatches.Add("CDRTransformationStage", cdrBatch);
                         break;
 
                     case "Mobilis_Ericsson_R13_SMS":
-                        MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
-                        mappedBatches.Add("SMSTransformationStage", batch);
+
+                        List<dynamic> filteredSMSs = new List<dynamic>();
+
+                        foreach (var record in parsedBatch.Records)
+                        {
+                            if (record.CallingPartyNumber.Length > 10 && record.CalledPartyNumber.Length > 10)
+                            {
+                                string callingPartyNumber = !string.IsNullOrEmpty(record.CallingPartyNumber) ? record.CallingPartyNumber : record.OriginatingAddress;
+                                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(callingPartyNumber);
+
+                                string calledPartyNumber = !string.IsNullOrEmpty(record.CalledPartyNumber) ? record.CalledPartyNumber : record.DestinationAddress;
+                                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(calledPartyNumber);
+
+                                if (callingPartyNumberType.HasValue && calledPartyNumberType.HasValue)
+                                    continue;
+                            }
+
+                            filteredSMSs.Add(record);
+                        }
+
+                        MappedBatchItem smsBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(filteredSMSs, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
+                        mappedBatches.Add("SMSTransformationStage", smsBatch);
                         break;
                 }
             });
@@ -1945,19 +1995,69 @@ namespace Mediation.Runtime
 
         public static MappingOutput MapCDR_File_Mobilis_Huawei_R13(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
+            var vrNumberPrefixManager = new Vanrise.GenericData.Business.VRNumberPrefixManager();
+
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(importedData.Stream, importedData.Name, dataSourceId, new Guid("09DB62EC-084C-46CB-9D08-26D88C82D04F"), (parsedBatch) =>
             {
                 switch (parsedBatch.RecordType)
                 {
                     case "Mobilis_Huawei_R13_CDR":
-                        MappedBatchItem cdrBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
+
+                        List<dynamic> filteredCDRs = new List<dynamic>();
+
+                        foreach (var record in parsedBatch.Records)
+                        {
+                            if (record.CallingPartyNumber.Length > 10 && record.CalledPartyNumber.Length > 10)
+                            {
+                                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.CallingPartyNumber);
+                                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.CalledPartyNumber);
+
+                                bool isMobileStationRoamingNumberOnNet;
+                                if (string.IsNullOrEmpty(record.MobileStationRoamingNumber))
+                                {
+                                    isMobileStationRoamingNumberOnNet = true;
+                                }
+                                else
+                                {
+                                    Guid? mobileStationRoamingNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(record.MobileStationRoamingNumber);
+                                    isMobileStationRoamingNumberOnNet = mobileStationRoamingNumberType.HasValue;
+                                }
+
+                                if (callingPartyNumberType.HasValue && calledPartyNumberType.HasValue && isMobileStationRoamingNumberOnNet)
+                                    continue;
+                            }
+
+                            filteredCDRs.Add(record);
+                        }
+
+                        MappedBatchItem cdrBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(filteredCDRs, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                         mappedBatches.Add("CDRTransformationStage", cdrBatch);
                         break;
 
                     case "Mobilis_Huawei_R13_SMS":
-                        MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
-                        mappedBatches.Add("SMSTransformationStage", batch);
+
+                        List<dynamic> filteredSMSs = new List<dynamic>();
+
+                        foreach (var record in parsedBatch.Records)
+                        {
+                            if (record.CallingPartyNumber.Length > 10 && record.CalledPartyNumber.Length > 10)
+                            {
+                                string callingPartyNumber = !string.IsNullOrEmpty(record.CallingPartyNumber) ? record.CallingPartyNumber : record.OriginatingAddress;
+                                Guid? callingPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(callingPartyNumber);
+
+                                string calledPartyNumber = !string.IsNullOrEmpty(record.CalledPartyNumber) ? record.CalledPartyNumber : record.DestinationAddress;
+                                Guid? calledPartyNumberType = vrNumberPrefixManager.GetNumberPrefixTypeId(calledPartyNumber);
+
+                                if (callingPartyNumberType.HasValue && calledPartyNumberType.HasValue)
+                                    continue;
+                            }
+
+                            filteredSMSs.Add(record);
+                        }
+
+                        MappedBatchItem smsBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(filteredSMSs, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
+                        mappedBatches.Add("SMSTransformationStage", smsBatch);
                         break;
                 }
             });
@@ -2263,8 +2363,8 @@ namespace Mediation.Runtime
 
             LogVerbose("Finished");
             return result;
-        } 
-        
+        }
+
         #endregion
 
         #region Multinet
@@ -2327,7 +2427,7 @@ namespace Mediation.Runtime
             MappingOutput result = new MappingOutput();
             result.Result = MappingResult.Valid;
             return result;
-        } 
+        }
 
         #endregion
 
