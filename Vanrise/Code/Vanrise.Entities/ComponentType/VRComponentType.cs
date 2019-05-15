@@ -9,6 +9,7 @@ namespace Vanrise.Entities
     public class VRComponentType
     {
         public Guid VRComponentTypeId { get; set; }
+        public Guid? DevProjectId { get; set; }
         public string Name { get; set; }
         public VRComponentTypeSettings Settings { get; set; }
     }

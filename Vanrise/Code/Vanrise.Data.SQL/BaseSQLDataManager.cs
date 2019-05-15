@@ -313,6 +313,25 @@ namespace Vanrise.Data.SQL
             return lst;
         }
 
+        protected List<T> GetItemsSPWithActiveDevProjects<T>(string spName, Func<IDataReader, T> objectBuilder, params object[] parameters)
+        {
+            List<T> lst = new List<T>();
+            ExecuteReaderSP(spName, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    if (IsDevProjectActive(reader))
+                    {
+                        T obj = objectBuilder(reader);
+                        if (obj != null)
+                            lst.Add(obj);
+                    }
+                }
+            },
+                parameters);
+            return lst;
+        }
+
         protected List<T> GetItemsSPCmd<T>(string spName, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
         {
             List<T> lst = new List<T>();
@@ -547,6 +566,18 @@ namespace Vanrise.Data.SQL
             return regex.Replace(line, characterToReplace);
         }
 
+        public bool IsDevProjectActive(IDataReader reader)
+        {
+            var activeDevProjectIds = Vanrise.Common.Utilities.GetActiveDevProjectIds();
+            if (activeDevProjectIds == null || activeDevProjectIds.Count == 0)
+                return true;
+
+            object projectIdAsObj = reader["DevProjectID"];
+            if (projectIdAsObj == null || projectIdAsObj == DBNull.Value)
+                return true;
+            else
+                return activeDevProjectIds.Contains((Guid)projectIdAsObj);
+        }
 
         /// <summary>
         /// check https://msdn.microsoft.com/en-us/library/ms179250.aspx for BCP Format file structure

@@ -48,6 +48,7 @@ namespace Vanrise.GenericData.Data.SQL
             return new DataStore()
             {
                 DataStoreId =  GetReaderValue<Guid>(reader,"ID"),
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = (string)reader["Name"],
                 Settings = Vanrise.Common.Serializer.Deserialize<DataStoreSettings>((string)reader["Settings"])
             };

@@ -10,6 +10,8 @@ namespace Vanrise.Entities
     {
         public Guid VRMailMessageTypeId { get; set; }
 
+        public Guid? DevProjectId { get; set; }
+
         public string Name { get; set; }
 
         public VRMailMessageTypeSettings Settings { get; set; }

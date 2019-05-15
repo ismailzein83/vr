@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,29 @@ namespace Vanrise.Common
 {
     public static class Utilities
     {
+        static Utilities()
+        {
+            string projectIdsConfigValue = System.Configuration.ConfigurationManager.AppSettings["VRCommon_ActiveDevProjectIds"];
+            if (!string.IsNullOrWhiteSpace(projectIdsConfigValue))
+                s_activeDevProjectIds = projectIdsConfigValue.Split(',').Select(itm => new Guid(itm)).ToList();
+        }
+
+        static List<Guid> s_activeDevProjectIds;
+        public static List<Guid> GetActiveDevProjectIds()
+        {
+            return s_activeDevProjectIds;
+        }
+
+        public static bool ShouldHideItemHavingDevProjectId(Guid? itemDevProjectId)
+        {
+            if (itemDevProjectId.HasValue && s_activeDevProjectIds != null && s_activeDevProjectIds.Count > 0)
+            {
+                if (!s_activeDevProjectIds.Contains(itemDevProjectId.Value))
+                    return true;
+            }
+            return false;
+        }
+        
         public static Dictionary<T, Q> GetEnumAttributes<T, Q>()
             where T : struct
             where Q : Attribute
@@ -882,6 +906,36 @@ namespace Vanrise.Common
             public int CalculatedPercentage { get; set; }
             public decimal DecimalPart { get; set; }
         }
+
+        public static List<T> ResolveItemDependencies<T>(List<T> items, Func<T, List<T>> getDependantItems)
+        {
+            return ResolveItemDependencies(items, getDependantItems, (itm) => true);
+        }
+
+        public static List<T> ResolveItemDependencies<T>(List<T> items, Func<T, List<T>> getDependantItems, Func<T, bool> shouldAddItem)
+        {
+            List<T> itemsOrderedByDependencies = new List<T>();
+            foreach (var item in items)
+            {
+                AddItemToOrderedByDependencies(item, itemsOrderedByDependencies, getDependantItems, shouldAddItem);
+            }
+            return itemsOrderedByDependencies;
+        }
+
+        private static void AddItemToOrderedByDependencies<T>(T item, List<T> itemsOrderedByDependencies, Func<T, List<T>> getDependantItems, Func<T, bool> shouldAddItem)
+        {
+            List<T> dependantItems = getDependantItems(item);
+            if (dependantItems != null && dependantItems.Count > 0)
+            {
+                foreach (var dependentItem in dependantItems)
+                {
+                    AddItemToOrderedByDependencies(dependentItem, itemsOrderedByDependencies, getDependantItems, shouldAddItem);
+                }
+            }
+            if (!itemsOrderedByDependencies.Contains(item) && shouldAddItem(item))
+                itemsOrderedByDependencies.Add(item);
+        }
+
     }
 
     public interface IPercentageItem

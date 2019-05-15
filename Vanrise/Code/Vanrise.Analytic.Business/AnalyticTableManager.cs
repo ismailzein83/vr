@@ -19,7 +19,15 @@ namespace Vanrise.Analytic.Business
             var analyticTables = GetCachedAnalyticTables();
 
             Func<AnalyticTable, bool> filterExpression = (prod) =>
-                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(prod.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(AnalyticTableLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, analyticTables.ToBigResult(input, filterExpression, AnalyticTableDetailMapper));
         }
@@ -122,16 +130,24 @@ namespace Vanrise.Analytic.Business
         public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo(AnalyticTableInfoFilter filter)
         {
             var analyticTables = GetCachedAnalyticTables();
-
-            if (filter != null)
+            
+            Func<AnalyticTable, bool> filterExpression = (item) =>
             {
-                Func<AnalyticTable, bool> filterExpression = (item) =>
-                 (filter.OnlySelectedIds == null || filter.OnlySelectedIds.Contains(item.AnalyticTableId));
+                if (Utilities.ShouldHideItemHavingDevProjectId(item.DevProjectId))
+                    return false;
 
-                return analyticTables.MapRecords(AnalyticTableInfoMapper, filterExpression);
-            }
-            return analyticTables.MapRecords(AnalyticTableInfoMapper);
+                if (filter != null)
+                {
+                    if (filter.OnlySelectedIds != null && !filter.OnlySelectedIds.Contains(item.AnalyticTableId))
+                        return false;
+                }
+
+                return true;
+            };
+
+            return analyticTables.MapRecords(AnalyticTableInfoMapper, filterExpression);
         }
+
         public IEnumerable<AnalyticTableInfo> GetRemoteAnalyticTablesInfo(Guid connectionId, string serializedFilter)
         {
             VRConnectionManager connectionManager = new VRConnectionManager();

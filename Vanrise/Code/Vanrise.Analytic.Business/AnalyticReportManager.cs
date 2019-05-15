@@ -27,7 +27,15 @@ namespace Vanrise.Analytic.Business
             var analyticReports = GetCachedAnalyticReports();
 
             Func<AnalyticReport, bool> filterExpression = (prod) =>
-                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(prod.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(AnalyticReportLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, analyticReports.ToBigResult(input, filterExpression, AnalyticReportDetailMapper));
         }
@@ -36,17 +44,26 @@ namespace Vanrise.Analytic.Business
         {
             var analyticReports = GetCachedAnalyticReports();
 
-            if(filter !=null)
+            Func<AnalyticReport, bool> filterExpression = (item) =>
             {
-                Func<AnalyticReport, bool> filterExpression = (item) =>
-                 (filter.TypeId == null || item.Settings.ConfigId == filter.TypeId) &&
-                 (filter.TypeName == null || item.Settings.ConfigId == GetAnalyticReportConfigTypeByName(filter.TypeName).ExtensionConfigurationId) &&
-                 (item.AccessType == AccessType.Public || item.UserID == _loggedInUserId);
+                if (Utilities.ShouldHideItemHavingDevProjectId(item.DevProjectId))
+                    return false;
 
-                 return analyticReports.MapRecords(AnalyticReportInfoMapper, filterExpression);
-            }
+                if (filter != null)
+                {
+                    if (filter.TypeId != null && item.Settings.ConfigId != filter.TypeId)
+                        return false;
+                    if (filter.TypeName != null && item.Settings.ConfigId != GetAnalyticReportConfigTypeByName(filter.TypeName).ExtensionConfigurationId)
+                        return false;
+                }
 
-            return analyticReports.MapRecords(AnalyticReportInfoMapper, x => x.AccessType == AccessType.Public || x.UserID == _loggedInUserId);
+                if (item.AccessType != AccessType.Public && item.UserID != _loggedInUserId)
+                    return false;
+
+                return true;
+            };
+
+            return analyticReports.MapRecords(AnalyticReportInfoMapper, filterExpression);
         }
 
         public string GetAnalyticReportName(AnalyticReport analyticReport)

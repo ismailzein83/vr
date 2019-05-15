@@ -10,41 +10,43 @@ namespace Vanrise.Common.Data.RDB
 {
 	public class VRComponentTypeDataManager : IVRComponentTypeDataManager
 	{
-		#region Local Variables
-		static string TABLE_NAME = "common_VRComponentType";
+        #region Local Variables
+        public static string TABLE_NAME = "common_VRComponentType";
 		static string TABLE_ALIAS = "vrComponentType";
-		const string COL_ID = "ID";
-		const string COL_Name = "Name";
-		const string COL_ConfigID = "ConfigID";
-		const string COL_Settings = "Settings";
-		const string COL_CreatedTime = "CreatedTime";
-		const string COL_LastModifiedTime = "LastModifiedTime";
-		#endregion
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_ConfigID = "ConfigID";
+        public const string COL_Settings = "Settings";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
+        #endregion
 
-		#region Constructors
-		static VRComponentTypeDataManager()
-		{
-			var columns = new Dictionary<string, RDBTableColumnDefinition>();
-			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
-			columns.Add(COL_ConfigID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-			columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-			columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-			RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
-			{
-				DBSchemaName = "common",
-				DBTableName = "VRComponentType",
-				Columns = columns,
-				IdColumnName = COL_ID,
-				CreatedTimeColumnName = COL_CreatedTime,
-				ModifiedTimeColumnName = COL_LastModifiedTime
-			});
-		}
-		#endregion
+        #region Constructors
+        static VRComponentTypeDataManager()
+        {
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_ConfigID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            {
+                DBSchemaName = "common",
+                DBTableName = "VRComponentType",
+                Columns = columns,
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+            });
+        }
+        #endregion
 
-		#region Public Methods
-		public bool AreVRComponentTypeUpdated(ref object updateHandle)
+        #region Public Methods
+        public bool AreVRComponentTypeUpdated(ref object updateHandle)
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
@@ -119,6 +121,7 @@ namespace Vanrise.Common.Data.RDB
 			return new VRComponentType
 			{
 				VRComponentTypeId = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
 				Name = reader.GetString(COL_Name),
 				Settings = Serializer.Deserialize<VRComponentTypeSettings>(reader.GetString(COL_Settings))
 			};

@@ -10,12 +10,14 @@ namespace Vanrise.GenericData.Entities
 	{
 		public Guid BusinessEntityDefinitionId { get; set; }
 
-		public string Name { get; set; }
+        public Guid? DevProjectId { get; set; }
+
+        public string Name { get; set; }
 
 		public string Title { get; set; }
 
 		public BusinessEntityDefinitionSettings Settings { get; set; }
-	}
+    }
 
 	public class BusinessEntityDefinitionRuntimeEditor
 	{

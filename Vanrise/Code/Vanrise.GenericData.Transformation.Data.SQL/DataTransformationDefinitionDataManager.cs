@@ -56,6 +56,7 @@ namespace Vanrise.GenericData.Transformation.Data.SQL
             if(dataTransformationDefinition != null)
             {
                 dataTransformationDefinition.DataTransformationDefinitionId = GetReaderValue<Guid>(reader,"ID");
+                dataTransformationDefinition.DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID");
                 dataTransformationDefinition.Name = reader["Name"] as string;
                 dataTransformationDefinition.Title = reader["Title"] as string;
             }

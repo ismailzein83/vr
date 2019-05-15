@@ -87,6 +87,7 @@ when not matched by target then
             return new GenericRuleDefinition()
             {
                 GenericRuleDefinitionId = GetReaderValue<Guid>(reader, "ID"),
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = (string)reader["Name"],
                 Title = details.Title,
                 Objects = details.Objects,

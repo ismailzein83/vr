@@ -11,19 +11,21 @@ namespace Vanrise.Analytic.Data.RDB
     public class AnalyticReportDataManager : IAnalyticReportDataManager
     {
 
-        static string TABLE_NAME = "VR_Analytic_AnalyticReport";
+        public static string TABLE_NAME = "Analytic_AnalyticReport";
         static string TABLE_ALIAS = "vrAnalyticReport";
-        const string COL_ID = "ID";
-        const string COL_UserID = "UserID";
-        const string COL_Name = "Name";
-        const string COL_AccessType = "AccessType";
-        const string COL_Settings = "Settings";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_UserID = "UserID";
+        public const string COL_Name = "Name";
+        public const string COL_AccessType = "AccessType";
+        public const string COL_Settings = "Settings";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
         static AnalyticReportDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_UserID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_AccessType, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
@@ -52,7 +54,8 @@ namespace Vanrise.Analytic.Data.RDB
             AnalyticReport analyticTable = new AnalyticReport
             {
                 AnalyticReportId = reader.GetGuid(COL_ID),
-                AccessType= (AccessType)reader.GetInt(COL_AccessType),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
+                AccessType = (AccessType)reader.GetInt(COL_AccessType),
                 UserID=reader.GetInt(COL_UserID),
                 Name = reader.GetString(COL_Name),
                 Settings = Vanrise.Common.Serializer.Deserialize<AnalyticReportSettings>(reader.GetString(COL_Settings)),

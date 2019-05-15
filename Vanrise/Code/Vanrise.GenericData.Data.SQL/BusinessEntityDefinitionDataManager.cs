@@ -86,6 +86,7 @@ when not matched by target then
             return new BusinessEntityDefinition()
             {
                 BusinessEntityDefinitionId = GetReaderValue<Guid>( reader,"ID"),
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = (string)reader["Name"],
                 Title = (string)reader["Title"],
                 Settings = Vanrise.Common.Serializer.Deserialize<BusinessEntityDefinitionSettings>((string)reader["Settings"])

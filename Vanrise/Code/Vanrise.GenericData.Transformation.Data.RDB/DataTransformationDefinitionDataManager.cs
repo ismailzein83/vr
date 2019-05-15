@@ -11,18 +11,21 @@ namespace Vanrise.GenericData.Transformation.Data.RDB
     public class DataTransformationDefinitionDataManager : IDataTransformationDefinitionDataManager
     {
         #region RDB
-        static string TABLE_NAME = "genericdata_DataTransformationDefinition";
+        public static string TABLE_NAME = "genericdata_DataTransformationDefinition";
         static string TABLE_ALIAS = "dataTransformationDefinition";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Title = "Title";
-        const string COL_Details = "Details";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Title = "Title";
+        public const string COL_Details = "Details";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
+
         static DataTransformationDefinitionDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 900 });
             columns.Add(COL_Title, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 1000 });
             columns.Add(COL_Details, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
@@ -36,6 +39,7 @@ namespace Vanrise.GenericData.Transformation.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
 
@@ -57,6 +61,7 @@ namespace Vanrise.GenericData.Transformation.Data.RDB
                 dataTransformationDefinition.DataTransformationDefinitionId = reader.GetGuid(COL_ID);
                 dataTransformationDefinition.Name = reader.GetString(COL_Name);
                 dataTransformationDefinition.Title = reader.GetString(COL_Title);
+                dataTransformationDefinition.DevProjectId = reader.GetNullableGuid(COL_DevProjectID);
             }
             return dataTransformationDefinition;
         }

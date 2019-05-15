@@ -13,18 +13,20 @@ namespace Vanrise.GenericData.Data.RDB
     public class GenericRuleDefinitionDataManager : IGenericRuleDefinitionDataManager
     {
         #region RDB
-        static string TABLE_NAME = "genericdata_GenericRuleDefinition";
+        public static string TABLE_NAME = "genericdata_GenericRuleDefinition";
         static string TABLE_ALIAS = "genericRuleDefinition";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Details = "Details";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Details = "Details";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
 
         static GenericRuleDefinitionDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 900 });
             columns.Add(COL_Details, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -37,6 +39,7 @@ namespace Vanrise.GenericData.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
         #endregion
@@ -55,6 +58,7 @@ namespace Vanrise.GenericData.Data.RDB
             var genericRuleDefinition = new GenericRuleDefinition()
             {
                 GenericRuleDefinitionId = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Name = reader.GetString(COL_Name),
             };
             if (details != null)

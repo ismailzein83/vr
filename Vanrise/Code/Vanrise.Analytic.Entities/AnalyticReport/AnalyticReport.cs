@@ -10,6 +10,7 @@ namespace Vanrise.Analytic.Entities
     public class AnalyticReport
     {
         public Guid AnalyticReportId { get; set; }
+        public Guid? DevProjectId { get; set; }
         public int UserID { get; set; }
         public AccessType AccessType { get; set; }
         public string Name { get; set; }

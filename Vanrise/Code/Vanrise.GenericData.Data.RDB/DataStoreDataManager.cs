@@ -12,18 +12,20 @@ namespace Vanrise.GenericData.Data.RDB
     public class DataStoreDataManager : IDataStoreDataManager
     {
         #region RDB
-        static string TABLE_NAME = "genericdata_DataStore";
+        public static string TABLE_NAME = "genericdata_DataStore";
         static string TABLE_ALIAS = "ds";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Settings = "Settings";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Settings = "Settings";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
 
         static DataStoreDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 1000 });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -36,6 +38,7 @@ namespace Vanrise.GenericData.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
         #endregion
@@ -52,6 +55,7 @@ namespace Vanrise.GenericData.Data.RDB
             return new DataStore()
             {
                 DataStoreId = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Name = reader.GetString(COL_Name),
                 Settings = Vanrise.Common.Serializer.Deserialize<DataStoreSettings>(reader.GetString(COL_Settings))
             };

@@ -11,16 +11,16 @@ namespace Vanrise.GenericData.Data.RDB
     public class DataRecordStorageDataManager : IDataRecordStorageDataManager
     {
         #region RDB
-        static string TABLE_NAME = "genericdata_DataRecordStorage";
+        public static string TABLE_NAME = "genericdata_DataRecordStorage";
         static string TABLE_ALIAS = "drs";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_DataRecordTypeID = "DataRecordTypeID";
-        const string COL_DataStoreID = "DataStoreID";
-        const string COL_Settings = "Settings";
-        const string COL_State = "State";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_Name = "Name";
+        public const string COL_DataRecordTypeID = "DataRecordTypeID";
+        public const string COL_DataStoreID = "DataStoreID";
+        public const string COL_Settings = "Settings";
+        public const string COL_State = "State";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
 
         static DataRecordStorageDataManager()
         {
@@ -58,6 +58,7 @@ namespace Vanrise.GenericData.Data.RDB
             return new DataRecordStorage()
             {
                 DataRecordStorageId = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid("DevProjectID"),
                 Name = reader.GetString(COL_Name),
                 DataRecordTypeId = reader.GetGuid(COL_DataRecordTypeID),
                 DataStoreId = reader.GetGuid(COL_DataStoreID),
@@ -96,7 +97,23 @@ namespace Vanrise.GenericData.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinContext = selectQuery.Join();
+
+            joinContext.JoinOnEqualOtherTableColumn(DataStoreDataManager.TABLE_NAME, "ds", DataStoreDataManager.COL_ID, TABLE_ALIAS, COL_DataStoreID);
+
+            joinContext.JoinOnEqualOtherTableColumn(DataRecordTypeDataManager.TABLE_NAME, "rec", DataRecordTypeDataManager.COL_ID, TABLE_ALIAS, COL_DataRecordTypeID);
+
+            var selectColumns = selectQuery.SelectColumns();
+
+            selectColumns.AllTableColumns(TABLE_ALIAS);
+
+            var caseExp = selectColumns.Expression("DevProjectID").CaseExpression();
+            var case1 = caseExp.AddCase();
+            case1.When().NotNullCondition("rec", DataRecordTypeDataManager.COL_DevProjectID);
+            case1.Then().Column("rec", DataRecordTypeDataManager.COL_DevProjectID);
+            caseExp.Else().Column("ds", DataStoreDataManager.COL_DevProjectID);
+
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
             return queryContext.GetItems(DataRecordStorageMapper);
         }

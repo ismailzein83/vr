@@ -21,7 +21,16 @@ namespace Vanrise.GenericData.Business
             var allItems = GetCachedSummaryTransformationDefinitions();
 
             Func<SummaryTransformationDefinition, bool> filterExpression = (itemObject) =>
-                 (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(itemObject.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                return true;
+            };
+
             VRActionLogger.Current.LogGetFilteredAction(SummaryTransformationDefinitionLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, SummaryTransformationDefinitionDetailMapper));
         }
@@ -33,20 +42,23 @@ namespace Vanrise.GenericData.Business
         public IEnumerable<SummaryTransformationDefinitionInfo> GetSummaryTransformationDefinitionInfo(SummaryTransformationDefinitionInfoFilter filter)
         {
             var summaryTransformationDefinitions = GetCachedSummaryTransformationDefinitions();
-            if (filter != null)
-            {
-                Func<SummaryTransformationDefinition, bool> filterExpression = (x) =>
-                     (!filter.RawItemRecordTypeId.HasValue || (filter.RawItemRecordTypeId.HasValue && filter.RawItemRecordTypeId.Value == x.RawItemRecordTypeId))
-                    && (!filter.SummaryItemRecordTypeId.HasValue || (filter.SummaryItemRecordTypeId.HasValue && filter.SummaryItemRecordTypeId.Value == x.SummaryItemRecordTypeId))
-                    ;
-                return summaryTransformationDefinitions.FindAllRecords(filterExpression).MapRecords(SummaryTransformationDefinitionInfoMapper);
-            }
-            else
-            {
-                return summaryTransformationDefinitions.MapRecords(SummaryTransformationDefinitionInfoMapper);
-            }
 
+            Func<SummaryTransformationDefinition, bool> filterExpression = (x) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
 
+                if (filter != null)
+                {
+                    if (filter.RawItemRecordTypeId.HasValue && filter.RawItemRecordTypeId.Value != x.RawItemRecordTypeId)
+                        return false;
+                    if (filter.SummaryItemRecordTypeId.HasValue && filter.SummaryItemRecordTypeId.Value != x.SummaryItemRecordTypeId)
+                        return false;
+                }
+
+                return true;
+            };
+            return summaryTransformationDefinitions.FindAllRecords(filterExpression).MapRecords(SummaryTransformationDefinitionInfoMapper);
         }
         public Vanrise.Entities.InsertOperationOutput<SummaryTransformationDefinitionDetail> AddSummaryTransformationDefinition(SummaryTransformationDefinition summaryTransformationDefinition)
         {

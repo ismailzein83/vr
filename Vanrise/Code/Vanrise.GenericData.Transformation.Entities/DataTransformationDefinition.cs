@@ -10,6 +10,7 @@ namespace Vanrise.GenericData.Transformation.Entities
     public class DataTransformationDefinition
     {
         public Guid DataTransformationDefinitionId { get; set; }
+        public Guid? DevProjectId { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
         public List<DataTransformationRecordType> RecordTypes { get; set; }

@@ -92,6 +92,7 @@ when not matched by target then
             VRObjectTypeDefinition vrObjectTypeDefinition = new VRObjectTypeDefinition
             {
                 VRObjectTypeDefinitionId = (Guid) reader["ID"],
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<VRObjectTypeDefinitionSettings>(reader["Settings"] as string) 
             };

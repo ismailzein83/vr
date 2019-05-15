@@ -11,18 +11,20 @@ namespace Vanrise.GenericData.Data.RDB
     public class DataRecordFieldChoiceDataManager : IDataRecordFieldChoiceDataManager
     {
         #region RDB
-        static string TABLE_NAME = "genericdata_DataRecordFieldChoice";
+        public static string TABLE_NAME = "genericdata_DataRecordFieldChoice";
         static string TABLE_ALIAS = "drfc";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Settings = "Settings";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Settings = "Settings";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
 
         static DataRecordFieldChoiceDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -51,6 +53,7 @@ namespace Vanrise.GenericData.Data.RDB
             return new DataRecordFieldChoice()
             {
                 DataRecordFieldChoiceId = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Name = reader.GetString(COL_Name),
                 Settings = Vanrise.Common.Serializer.Deserialize<DataRecordFieldChoiceSettings>(reader.GetString(COL_Settings))
             };

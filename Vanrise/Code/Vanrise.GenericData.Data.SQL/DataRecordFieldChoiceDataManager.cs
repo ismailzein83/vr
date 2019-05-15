@@ -47,6 +47,7 @@ namespace Vanrise.GenericData.Data.SQL
             return new DataRecordFieldChoice()
             {
                 DataRecordFieldChoiceId = (Guid)reader["ID"],
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = (string)reader["Name"],
                 Settings = Vanrise.Common.Serializer.Deserialize<DataRecordFieldChoiceSettings>((string)reader["Settings"])
             };

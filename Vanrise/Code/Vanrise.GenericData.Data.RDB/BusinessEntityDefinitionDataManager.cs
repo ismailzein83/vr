@@ -13,19 +13,21 @@ namespace Vanrise.GenericData.Data.RDB
     {
         #region RDB
 
-        static string TABLE_NAME = "genericdata_BusinessEntityDefinition";
+        public static string TABLE_NAME = "genericdata_BusinessEntityDefinition";
         static string TABLE_ALIAS = "beDefinition";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Title = "Title";
-        const string COL_Settings = "Settings";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Title = "Title";
+        public const string COL_Settings = "Settings";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
 
         static BusinessEntityDefinitionDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 900 });
             columns.Add(COL_Title, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 1000 });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
@@ -53,6 +55,7 @@ namespace Vanrise.GenericData.Data.RDB
             return new BusinessEntityDefinition()
             {
                 BusinessEntityDefinitionId = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Name = reader.GetString(COL_Name),
                 Title = reader.GetString(COL_Title),
                 Settings = Vanrise.Common.Serializer.Deserialize<BusinessEntityDefinitionSettings>(reader.GetString(COL_Settings))

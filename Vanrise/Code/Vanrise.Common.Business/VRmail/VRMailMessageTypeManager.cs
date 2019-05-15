@@ -23,7 +23,16 @@ namespace Vanrise.Common.Business
         public IDataRetrievalResult<VRMailMessageTypeDetail> GetFilteredMailMessageTypes(DataRetrievalInput<VRMailMessageTypeQuery> input)
         {
             var allVRMailMessageTypes = GetCachedVRMailMessageTypes();
-            Func<VRMailMessageType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<VRMailMessageType, bool> filterExpression = (x) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(VRMailMessageTypeLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRMailMessageTypes.ToBigResult(input, filterExpression, VRMailMessageTypeDetailMapper));
         }
@@ -85,7 +94,13 @@ namespace Vanrise.Common.Business
 
         public IEnumerable<VRMailMessageTypeInfo> GetMailMessageTypesInfo(VRMailMessageTypeFilter filter)
         {
-            Func<VRMailMessageType, bool> filterExpression = null;
+            Func<VRMailMessageType, bool> filterExpression = (x) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
+
+                return true;
+            };
 
             return this.GetCachedVRMailMessageTypes().MapRecords(VRMailMessageTypeInfoMapper, filterExpression).OrderBy(x => x.Name);
         }

@@ -45,6 +45,7 @@ namespace Vanrise.Analytic.Data.SQL
             return new AnalyticReport
             {
                 AnalyticReportId =  GetReaderValue<Guid>(reader,"ID"),
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = reader["Name"] as string,
                 AccessType = (AccessType)reader["AccessType"],
                 UserID = (int)reader["UserID"],

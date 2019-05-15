@@ -59,6 +59,7 @@ namespace Vanrise.GenericData.Data.SQL
             return new DataRecordType
             {
                 DataRecordTypeId = GetReaderValue<Guid>(reader, "ID"),
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = reader["Name"] as string,
                 ParentId = GetReaderValue<Guid?>(reader, "ParentID"),
                 Fields = Vanrise.Common.Serializer.Deserialize<List<DataRecordField>>(reader["Fields"] as string),

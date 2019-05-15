@@ -10,6 +10,8 @@ namespace Vanrise.GenericData.Entities
     {
         public Guid DataRecordTypeId { get; set; }
 
+        public Guid? DevProjectId { get; set; }
+
         public string Name { get; set; }
 
         public Guid? ParentId { get; set; }

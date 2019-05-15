@@ -35,7 +35,15 @@ namespace Vanrise.GenericData.Business
             var allItems = GetCachedDataRecordTypes();
 
             Func<DataRecordType, bool> filterExpression = (itemObject) =>
-                 (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(itemObject.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(DataRecordTypeLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataRecordTypeDetailMapper));
         }
@@ -159,15 +167,22 @@ namespace Vanrise.GenericData.Business
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypeInfo(DataRecordTypeInfoFilter filter)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
-            if (filter != null)
+
+            Func<DataRecordType, bool> filterExpression = (x) =>
             {
-                Func<DataRecordType, bool> filterExpression = (x) => (filter.RecordTypeIds.Contains(x.DataRecordTypeId));
-                return dataRecordTypes.FindAllRecords(filterExpression).MapRecords(DataRecordTypeInfoMapper);
-            }
-            else
-            {
-                return dataRecordTypes.MapRecords(DataRecordTypeInfoMapper);
-            }
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
+
+                if (filter != null)
+                {
+                    if (filter.RecordTypeIds != null && !filter.RecordTypeIds.Contains(x.DataRecordTypeId))
+                        return false;
+                }
+
+                return true;
+            };
+
+            return dataRecordTypes.FindAllRecords(filterExpression).MapRecords(DataRecordTypeInfoMapper);
         }
 
         public IEnumerable<DataRecordTypeInfo> GetRemoteDataRecordTypeInfo(Guid connectionId, string serializedFilter)

@@ -489,9 +489,21 @@ namespace Vanrise.GenericData.Business
             var cachedDataRecordStorages = GetCachedDataRecordStorages();
 
             Func<DataRecordStorage, bool> filterExpression = (dataRecordStorage) =>
-                (input.Query.Name == null || dataRecordStorage.Name.ToUpper().Contains(input.Query.Name.ToUpper()))
-                && (input.Query.DataRecordTypeIds == null || input.Query.DataRecordTypeIds.Contains(dataRecordStorage.DataRecordTypeId))
-                && (input.Query.DataStoreIds == null || input.Query.DataStoreIds.Contains(dataRecordStorage.DataStoreId));
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(dataRecordStorage.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !dataRecordStorage.Name.ToUpper().Contains(input.Query.Name.ToUpper()))
+                    return false;
+
+                if (input.Query.DataRecordTypeIds != null && !input.Query.DataRecordTypeIds.Contains(dataRecordStorage.DataRecordTypeId))
+                    return false;
+
+                if (input.Query.DataStoreIds != null && !input.Query.DataStoreIds.Contains(dataRecordStorage.DataStoreId))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(DataRecordStorageLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataRecordStorages.ToBigResult(input, filterExpression, DataRecordStorageMapper));
         }
@@ -507,6 +519,9 @@ namespace Vanrise.GenericData.Business
         {
             Func<DataRecordStorage, bool> filterExpression = (dataRecordStorage) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(dataRecordStorage.DevProjectId))
+                    return false;
+
                 if (filter == null)
                     return true;
 
@@ -778,7 +793,7 @@ namespace Vanrise.GenericData.Business
             return true;
         }
 
-        Dictionary<Guid, DataRecordStorage> GetCachedDataRecordStorages()
+        public Dictionary<Guid, DataRecordStorage> GetCachedDataRecordStorages()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordStorages",
                 () =>

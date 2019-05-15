@@ -78,6 +78,7 @@ namespace Vanrise.Common.Data.SQL
             VRMailMessageType vrMailMessageType = new VRMailMessageType
             {
                 VRMailMessageTypeId = (Guid) reader["ID"],
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<VRMailMessageTypeSettings>(reader["Settings"] as string) 
             };

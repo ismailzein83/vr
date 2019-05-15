@@ -18,13 +18,29 @@ namespace Vanrise.GenericData.Business
 
         public IEnumerable<DataRecordFieldChoiceInfo> GetDataRecordFieldChoicesInfo()
         {
-            return this.GetCachedDataRecordFieldChoices().MapRecords(DataRecordFieldChoiceInfoMapper).OrderBy(x => x.Name);
+            Func<DataRecordFieldChoice, bool> filterExpression = (dataRecordFieldChoice) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(dataRecordFieldChoice.DevProjectId))
+                    return false;
+
+                return true;
+            };
+            return this.GetCachedDataRecordFieldChoices().MapRecords(DataRecordFieldChoiceInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<DataRecordFieldChoiceDetail> GetFilteredDataRecordFieldChoices(Vanrise.Entities.DataRetrievalInput<DataRecordFieldChoiceQuery> input)
         {
             var cachedDataRecordFieldChoice = GetCachedDataRecordFieldChoices();
-            Func<DataRecordFieldChoice, bool> filterExpression = (dataRecordFieldChoice) => (input.Query.Name == null || dataRecordFieldChoice.Name.ToUpper().Contains(input.Query.Name.ToUpper()));
+            Func<DataRecordFieldChoice, bool> filterExpression = (dataRecordFieldChoice) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(dataRecordFieldChoice.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !dataRecordFieldChoice.Name.ToUpper().Contains(input.Query.Name.ToUpper()))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(DataRecordFieldChoiceLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataRecordFieldChoice.ToBigResult(input, filterExpression, DataRecordFieldChoiceDetailMapper));
 

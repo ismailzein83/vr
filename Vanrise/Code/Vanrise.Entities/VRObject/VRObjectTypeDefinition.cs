@@ -10,6 +10,8 @@ namespace Vanrise.Entities
     {
         public Guid VRObjectTypeDefinitionId { get; set; }
 
+        public Guid? DevProjectId { get; set; }
+
         public string Name { get; set; }
 
         public VRObjectTypeDefinitionSettings Settings { get; set; }

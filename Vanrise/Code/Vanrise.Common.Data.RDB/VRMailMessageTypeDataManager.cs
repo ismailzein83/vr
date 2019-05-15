@@ -10,36 +10,38 @@ namespace Vanrise.Common.Data.RDB
 {
 	public class VRMailMessageTypeDataManager : IVRMailMessageTypeDataManager
 	{
-		#region Local Variables
-		static string TABLE_NAME = "common_MailMessageType";
+        #region Local Variables
+        public static string TABLE_NAME = "common_MailMessageType";
 		static string TABLE_ALIAS = "vrMailMessageType";
-		const string COL_ID = "ID";
-		const string COL_Name = "Name";
-		const string COL_Settings = "Settings";
-		const string COL_CreatedTime = "CreatedTime";
-		const string COL_LastModifiedTime = "LastModifiedTime";
-		#endregion
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Settings = "Settings";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
+        #endregion
 
-		#region Contructors
-		static VRMailMessageTypeDataManager()
+        #region Contructors
+        static VRMailMessageTypeDataManager()
 		{
-			var columns = new Dictionary<string, RDBTableColumnDefinition>();
-			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
-			columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-			columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-			RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
-			{
-				DBSchemaName = "common",
-				DBTableName = "MailMessageType",
-				Columns = columns,
-				IdColumnName = COL_ID,
-				CreatedTimeColumnName = COL_CreatedTime,
-				ModifiedTimeColumnName = COL_LastModifiedTime
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            {
+                DBSchemaName = "common",
+                DBTableName = "MailMessageType",
+                Columns = columns,
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
 
-			});
-		}
+            });
+        }
 		#endregion
 
 		#region Public Methods
@@ -111,7 +113,8 @@ namespace Vanrise.Common.Data.RDB
 			return new VRMailMessageType
 			{
 				VRMailMessageTypeId = reader.GetGuid(COL_ID),
-				Name = reader.GetString(COL_Name),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
+                Name = reader.GetString(COL_Name),
 				Settings = Vanrise.Common.Serializer.Deserialize<VRMailMessageTypeSettings>(reader.GetString(COL_Settings)),
 			};
 		}

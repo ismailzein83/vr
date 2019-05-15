@@ -11,26 +11,29 @@ namespace Vanrise.Analytic.Data.RDB
     public class AnalyticTableDataManager : IAnalyticTableDataManager
     {
 
-        static string TABLE_NAME = "VR_Analytic_AnalyticTable";
+        public static string TABLE_NAME = "Analytic_AnalyticTable";
         static string TABLE_ALIAS = "vrAnalyticTable";
 
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Settings = "Settings";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
-        const string COL_PermanentFilter = "PermanentFilter";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Settings = "Settings";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_MeasureStyles = "MeasureStyles";
+        public const string COL_PermanentFilter = "PermanentFilter";
 
         static AnalyticTableDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_MeasureStyles, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_PermanentFilter, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "Analytic",
@@ -52,6 +55,7 @@ namespace Vanrise.Analytic.Data.RDB
             AnalyticTable analyticTable = new AnalyticTable
             {
                 AnalyticTableId = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Name = reader.GetString(COL_Name),
                 Settings = Vanrise.Common.Serializer.Deserialize<AnalyticTableSettings>(reader.GetString(COL_Settings)),
                 PermanentFilter = Vanrise.Common.Serializer.Deserialize<AnalyticTablePermanentFilter>(reader.GetString(COL_PermanentFilter))

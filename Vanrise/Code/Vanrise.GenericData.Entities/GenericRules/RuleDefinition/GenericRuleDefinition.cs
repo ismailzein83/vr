@@ -8,6 +8,8 @@ namespace Vanrise.GenericData.Entities
     {
         public Guid GenericRuleDefinitionId { get; set; }
 
+        public Guid? DevProjectId { get; set; }
+
         public string Name { get; set; }
 
         public string Title { get; set; }

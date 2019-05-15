@@ -24,6 +24,8 @@ namespace Vanrise.GenericData.Business
 
             Func<BusinessEntityDefinition, bool> filterExpression = (dataRecordStorage) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(dataRecordStorage.DevProjectId))
+                    return false;
                 if (input.Query.Name != null && !dataRecordStorage.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
                 if (input.Query.TypeIds != null && !input.Query.TypeIds.Contains(dataRecordStorage.Settings.ConfigId))
@@ -69,21 +71,21 @@ namespace Vanrise.GenericData.Business
         public IEnumerable<BusinessEntityDefinitionInfo> GetBusinessEntityDefinitionsInfo(BusinessEntityDefinitionInfoFilter filter)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
-            Func<BusinessEntityDefinition, bool> filterExpression = null;
-
-            if (filter != null)
+            Func<BusinessEntityDefinition, bool> filterExpression = (item) =>
             {
-                filterExpression = (item) =>
+                if (Utilities.ShouldHideItemHavingDevProjectId(item.DevProjectId))
+                    return false;
+
+                if (filter != null)
                 {
                     if (filter.ExcludedIds != null && filter.ExcludedIds.Contains(item.BusinessEntityDefinitionId))
                         return false;
 
                     if (filter.Filters != null && !CheckIfFilterIsMatch(item, filter.Filters))
                         return false;
-
-                    return true;
-                };
-            }
+                }
+                return true;
+            };
 
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }

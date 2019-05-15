@@ -23,6 +23,8 @@ namespace Vanrise.Common.Business
             var allVRComponentTypes = GetCachedComponentTypes();
             Func<VRComponentType, bool> filterExpression = (x) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
                 if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
                 if (x.Settings.VRComponentTypeConfigId != input.Query.ExtensionConfigId)
@@ -47,21 +49,21 @@ namespace Vanrise.Common.Business
         public IEnumerable<ComponentTypeInfo> GetComponentTypeInfo(ComponentTypeInfoFilter filter)
         {
             var cachedVRComponentTypes = this.GetCachedComponentTypes();
-            Func<VRComponentType, bool> filterExpression = null;
+            Func<VRComponentType, bool> filterExpression = (item) =>
+               {
+                   if (Utilities.ShouldHideItemHavingDevProjectId(item.DevProjectId))
+                       return false;
 
-            if (filter != null)
-            {
-                filterExpression = (item) =>
-                {
-                    if (filter.ExcludedIds != null && filter.ExcludedIds.Contains(item.VRComponentTypeId))
-                        return false;
+                   if (filter != null)
+                   {
+                       if (filter.ExcludedIds != null && filter.ExcludedIds.Contains(item.VRComponentTypeId))
+                           return false;
 
-                    if (filter.Filters != null && !CheckIfFilterIsMatch(item, filter.Filters))
-                        return false;
-
-                    return true;
-                };
-            }
+                       if (filter.Filters != null && !CheckIfFilterIsMatch(item, filter.Filters))
+                           return false;
+                   }
+                   return true;
+               };
 
             return cachedVRComponentTypes.MapRecords(VRComponentTypeInfoMapper, filterExpression).OrderBy(x => x.Name);
         }

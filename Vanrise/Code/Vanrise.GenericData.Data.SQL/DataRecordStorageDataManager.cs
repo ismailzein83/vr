@@ -71,6 +71,7 @@ namespace Vanrise.GenericData.Data.SQL
         {
             return new DataRecordStorage() {
                 DataRecordStorageId = GetReaderValue<Guid>(reader,"ID"),
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = (string)reader["Name"],
                 DataRecordTypeId = GetReaderValue<Guid>(reader,"DataRecordTypeID"),
                 DataStoreId = GetReaderValue<Guid>(reader,"DataStoreID"),

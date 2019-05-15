@@ -36,7 +36,16 @@ namespace Vanrise.GenericData.Business
         public Vanrise.Entities.IDataRetrievalResult<GenericRuleDefinition> GetFilteredGenericRuleDefinitions(Vanrise.Entities.DataRetrievalInput<GenericRuleDefinitionQuery> input)
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
-            Func<GenericRuleDefinition, bool> filterExpression = (genericRuleDefinition) => (input.Query.Name == null || genericRuleDefinition.Name.ToUpper().Contains(input.Query.Name.ToUpper()));
+            Func<GenericRuleDefinition, bool> filterExpression = (genericRuleDefinition) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(genericRuleDefinition.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !genericRuleDefinition.Name.ToUpper().Contains(input.Query.Name.ToUpper()))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(GenericRuleDefinitionLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericRuleDefinitions.ToBigResult(input, filterExpression));
         }
@@ -108,12 +117,19 @@ namespace Vanrise.GenericData.Business
         public IEnumerable<GenericRuleDefinitionInfo> GetGenericRuleDefinitionsInfo(GenericRuleDefinitionInfoFilter filter)
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
-            Func<GenericRuleDefinition, bool> filterExpression = null;
-
-            if (filter != null)
+            Func<GenericRuleDefinition, bool> filterExpression = (item) =>
             {
-                filterExpression = (item) => (item.SettingsDefinition != null && item.SettingsDefinition.ConfigId == filter.RuleTypeId) || (filter.Filters != null && CheckIfFilterIsMatch(item, filter.Filters));
-            }
+                if (Utilities.ShouldHideItemHavingDevProjectId(item.DevProjectId))
+                    return false;
+
+                if (filter != null)
+                {
+                    if (!((item.SettingsDefinition != null && item.SettingsDefinition.ConfigId == filter.RuleTypeId) || (filter.Filters != null && CheckIfFilterIsMatch(item, filter.Filters))))
+                        return false;
+                }
+
+                return true;
+            };
 
             return cachedGenericRuleDefinitions.MapRecords(GenericRuleDefinitionInfoMapper, filterExpression);
         }

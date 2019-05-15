@@ -24,7 +24,14 @@ namespace Vanrise.GenericData.Transformation
 
         public IEnumerable<DataTransformationDefinitionInfo> GetDataTransformationDefinitions(DataTransformationDefinitionFilter filter)
         {
-            return this.GetCachedDataTransformationDefinitions().MapRecords(DataTransformationDefinitionInfoMapper).OrderBy(x => x.Name);
+            Func<DataTransformationDefinition, bool> filterExpression = (itemObject) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(itemObject.DevProjectId))
+                    return false;
+
+                return true;
+            };
+            return this.GetCachedDataTransformationDefinitions().MapRecords(DataTransformationDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         public IDataRetrievalResult<DataTransformationDefinitionDetail> GetFilteredDataTransformationDefinitions(DataRetrievalInput<DataTransformationDefinitionQuery> input)
@@ -32,7 +39,15 @@ namespace Vanrise.GenericData.Transformation
             var allItems = GetCachedDataTransformationDefinitions();
 
             Func<DataTransformationDefinition, bool> filterExpression = (itemObject) =>
-                (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(itemObject.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(DataTransformationDefinitionLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataTransformationDefinitionDetailMapper));
         }

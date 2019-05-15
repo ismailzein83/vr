@@ -56,6 +56,7 @@ namespace Vanrise.GenericData.Data.SQL
             if (details != null && details != string.Empty)
                 summaryTransformationDefinition = Vanrise.Common.Serializer.Deserialize<SummaryTransformationDefinition>(details);
 
+            summaryTransformationDefinition.DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID");
             summaryTransformationDefinition.SummaryTransformationDefinitionId = GetReaderValue<Guid>(reader,"ID");
 
             return summaryTransformationDefinition;

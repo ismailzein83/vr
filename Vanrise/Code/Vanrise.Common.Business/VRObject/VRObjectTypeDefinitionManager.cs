@@ -33,7 +33,16 @@ namespace Vanrise.Common.Business
         public IDataRetrievalResult<VRObjectTypeDefinitionDetail> GetFilteredVRObjectTypeDefinitions(DataRetrievalInput<VRObjectTypeDefinitionQuery> input)
         {
             var allVRObjectTypeDefinitions = GetCachedVRObjectTypeDefinitions();
-            Func<VRObjectTypeDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<VRObjectTypeDefinition, bool> filterExpression = (x) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(VRObjectTypeDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRObjectTypeDefinitions.ToBigResult(input, filterExpression, VRObjectTypeDefinitionDetailMapper));
 
@@ -91,7 +100,13 @@ namespace Vanrise.Common.Business
 
         public IEnumerable<VRObjectTypeDefinitionInfo> GetVRObjectTypeDefinitionsInfo(StyleDefinitionFilter filter)
         {
-            Func<VRObjectTypeDefinition, bool> filterExpression = null;
+            Func<VRObjectTypeDefinition, bool> filterExpression = (x) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(x.DevProjectId))
+                    return false;
+
+                return true;
+            };
 
             return this.GetCachedVRObjectTypeDefinitions().MapRecords(VRObjectTypeDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }

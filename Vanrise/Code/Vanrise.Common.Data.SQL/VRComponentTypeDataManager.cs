@@ -91,6 +91,7 @@ when not matched by target then
             return new VRComponentType
             {
                 VRComponentTypeId = GetReaderValue<Guid>(reader, "ID"),
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = reader["Name"] as string,
                 Settings = Serializer.Deserialize<VRComponentTypeSettings>(reader["Settings"] as string)
             };

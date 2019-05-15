@@ -62,6 +62,7 @@ namespace Vanrise.Analytic.Data.SQL
             return new AnalyticTable
             {
                 AnalyticTableId = (Guid)reader["ID"],
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<AnalyticTableSettings>(reader["Settings"] as string),
                 MeasureStyles = Vanrise.Common.Serializer.Deserialize<AnalyticTableMeasureStyles>(reader["MeasureStyles"] as string),

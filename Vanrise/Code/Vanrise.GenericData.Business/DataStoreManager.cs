@@ -23,13 +23,29 @@ namespace Vanrise.GenericData.Business
         }
         public IEnumerable<DataStoreInfo> GetDataStoresInfo()
         {
-            return this.GetCachedDataStores().MapRecords(DataStoreInfoMapper).OrderBy(x => x.Name);
+            Func<DataStore, bool> filterExpression = (dataStore) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(dataStore.DevProjectId))
+                    return false;
+
+                return true;
+            };
+            return this.GetCachedDataStores().MapRecords(DataStoreInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<DataStoreDetail> GetFilteredDataStores(Vanrise.Entities.DataRetrievalInput<DataStoreQuery> input)
         {
             var cachedDataStore = GetCachedDataStores();
-            Func<DataStore, bool> filterExpression = (dataStore) => (input.Query.Name == null || dataStore.Name.ToUpper().Contains(input.Query.Name.ToUpper()));
+            Func<DataStore, bool> filterExpression = (dataStore) =>
+            {
+                if (Utilities.ShouldHideItemHavingDevProjectId(dataStore.DevProjectId))
+                    return false;
+
+                if (input.Query.Name != null && !dataStore.Name.ToUpper().Contains(input.Query.Name.ToUpper()))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(DataStoreLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataStore.ToBigResult(input, filterExpression, DataStoreDetailMapper));
         }

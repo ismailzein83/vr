@@ -6,33 +6,37 @@ using System.Threading.Tasks;
 using Vanrise.Data.RDB;
 using Vanrise.Security.Entities;
 using Vanrise.Entities;
+using Vanrise.Common;
+
 namespace Vanrise.Security.Data.RDB
 {
     public class ViewDataManager : IViewDataManager
     {
         #region RDB
-        static string TABLE_NAME = "sec_View";
+        public static string TABLE_NAME = "sec_View";
         static string TABLE_ALIAS = "view";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Title = "Title";
-        const string COL_Url = "Url";
-        const string COL_Module = "Module";
-        const string COL_ActionNames = "ActionNames";
-        const string COL_Audience = "Audience";
-        const string COL_Content = "Content";
-        const string COL_Settings = "Settings";
-        const string COL_Type = "Type";
-        const string COL_Rank = "Rank";
-        const string COL_IsDeleted = "IsDeleted";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Title = "Title";
+        public const string COL_Url = "Url";
+        public const string COL_Module = "Module";
+        public const string COL_ActionNames = "ActionNames";
+        public const string COL_Audience = "Audience";
+        public const string COL_Content = "Content";
+        public const string COL_Settings = "Settings";
+        public const string COL_Type = "Type";
+        public const string COL_Rank = "Rank";
+        public const string COL_IsDeleted = "IsDeleted";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
 
 
         static ViewDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_Title, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_Url, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
@@ -54,6 +58,7 @@ namespace Vanrise.Security.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
         #endregion
@@ -148,6 +153,11 @@ namespace Vanrise.Security.Data.RDB
             var whereQuery = selectQuery.Where();
             var columnNotNullCondition = whereQuery.ConditionIfColumnNotNull(COL_IsDeleted, RDBConditionGroupOperator.OR);
             columnNotNullCondition.EqualsCondition(COL_IsDeleted).Value(false);
+
+            List<Guid> activeDevProjectIds = Utilities.GetActiveDevProjectIds();
+            if (activeDevProjectIds != null && activeDevProjectIds.Count > 0)
+                whereQuery.ListCondition(COL_DevProjectID, RDBListConditionOperator.IN, activeDevProjectIds);
+
             var sort = selectQuery.Sort();
             sort.ByColumn(COL_Module, RDBSortDirection.ASC);
             sort.ByColumn(COL_Rank, RDBSortDirection.ASC);

@@ -215,12 +215,14 @@ namespace Vanrise.Security.Business
             if (defaultViewId.HasValue)
             {
                 View defaultView = new ViewManager().GetView(defaultViewId.Value);
-                menu.Title = defaultView.Title;
-                if (defaultView.Settings != null)
-                    menu.DefaultURL = defaultView.Settings.GetURL(defaultView);
-                else
-                    menu.DefaultURL = defaultView.Url;
-
+                if (defaultView != null)
+                {
+                    menu.Title = defaultView.Title;
+                    if (defaultView.Settings != null)
+                        menu.DefaultURL = defaultView.Settings.GetURL(defaultView);
+                    else
+                        menu.DefaultURL = defaultView.Url;
+                }
             }
         }
 

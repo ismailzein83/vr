@@ -14,21 +14,23 @@ namespace Vanrise.GenericData.Data.RDB
     {
         #region RDB
 
-        static string TABLE_NAME = "genericdata_DataRecordType";
+        public static string TABLE_NAME = "genericdata_DataRecordType";
         static string TABLE_ALIAS = "drt";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_ParentID = "ParentID";
-        const string COL_Fields = "Fields";
-        const string COL_ExtraFieldsEvaluator = "ExtraFieldsEvaluator";
-        const string COL_Settings = "Settings";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_ParentID = "ParentID";
+        public const string COL_Fields = "Fields";
+        public const string COL_ExtraFieldsEvaluator = "ExtraFieldsEvaluator";
+        public const string COL_Settings = "Settings";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
 
         static DataRecordTypeDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 1000 });
             columns.Add(COL_ParentID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Fields, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
@@ -44,6 +46,7 @@ namespace Vanrise.GenericData.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
         #endregion
@@ -60,6 +63,7 @@ namespace Vanrise.GenericData.Data.RDB
             return new DataRecordType
             {
                 DataRecordTypeId = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Name = reader.GetString(COL_Name),
                 ParentId = reader.GetNullableGuid(COL_ParentID),
                 Fields = Vanrise.Common.Serializer.Deserialize<List<DataRecordField>>(reader.GetString(COL_Fields)),

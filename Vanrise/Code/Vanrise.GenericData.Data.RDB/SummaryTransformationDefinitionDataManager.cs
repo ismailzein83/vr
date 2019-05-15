@@ -12,19 +12,21 @@ namespace Vanrise.GenericData.Data.RDB
     {
 
         #region RDB
-        static string TABLE_NAME = "genericdata_SummaryTransformationDefinition";
+        public static string TABLE_NAME = "genericdata_SummaryTransformationDefinition";
         static string TABLE_ALIAS = "summaryTransformationDefinition";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Details = "Details";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Details = "Details";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
 
 
         static SummaryTransformationDefinitionDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
             columns.Add(COL_Details, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -37,6 +39,7 @@ namespace Vanrise.GenericData.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
 
@@ -59,6 +62,7 @@ namespace Vanrise.GenericData.Data.RDB
             if(summaryTransformationDefinition!=null)
                 summaryTransformationDefinition.SummaryTransformationDefinitionId = reader.GetGuid(COL_ID);
 
+            summaryTransformationDefinition.DevProjectId = reader.GetNullableGuid(COL_DevProjectID);
             return summaryTransformationDefinition;
         }
         #endregion

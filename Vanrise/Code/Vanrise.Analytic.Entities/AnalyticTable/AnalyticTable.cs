@@ -10,6 +10,7 @@ namespace Vanrise.Analytic.Entities
     {
         public Guid AnalyticTableId { get; set; }
 
+        public Guid? DevProjectId { get; set; }
         public string Name { get; set; }
 
         public AnalyticTableSettings Settings { get; set; }

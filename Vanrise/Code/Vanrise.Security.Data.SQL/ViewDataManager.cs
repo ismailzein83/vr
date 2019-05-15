@@ -23,7 +23,7 @@ namespace Vanrise.Security.Data.SQL
         #region Public Methods
         public List<Entities.View> GetViews()
         {
-            return GetItemsSP("sec.sp_View_GetAll", ViewMapper);
+            return GetItemsSPWithActiveDevProjects("sec.sp_View_GetAll", ViewMapper);
         }
 
         public bool AddView(View view)
