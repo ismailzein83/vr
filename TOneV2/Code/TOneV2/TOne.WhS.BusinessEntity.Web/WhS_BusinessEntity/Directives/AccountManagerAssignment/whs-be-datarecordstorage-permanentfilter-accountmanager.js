@@ -33,6 +33,9 @@
             var supplierFieldSelectorAPI;
             var supplierFieldSelectorReadyPromiseDeferred= UtilsService.createPromiseDeferred();
 
+            var timeFieldSelectorAPI;
+            var timeFieldSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -43,6 +46,10 @@
                 $scope.scopeModel.onSupplierFieldSelectorDirectiveReady = function (api) {
                     supplierFieldSelectorAPI = api;
                     supplierFieldSelectorReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onTimeFieldSelectorDirectiveReady = function (api) {
+                    timeFieldSelectorAPI = api;
+                    timeFieldSelectorReadyPromiseDeferred.resolve();
                 };
                 defineAPI();
             }
@@ -70,6 +77,17 @@
                 });
                 return loadSupplierFieldSelectorPromiseDeferred.promise;
             }
+            function loadTimeFieldSelector(payload) {
+                var loadTimeFieldSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                timeFieldSelectorReadyPromiseDeferred.promise.then(function () {
+                    var timeFieldPayload = {
+                        dataRecordTypeId: payload.dataRecordTypeId,
+                        selectedIds: payload.settings != undefined ? payload.settings.TimeField : undefined,
+                    };
+                    VRUIUtilsService.callDirectiveLoad(timeFieldSelectorAPI, timeFieldPayload, loadTimeFieldSelectorPromiseDeferred);
+                });
+                return loadTimeFieldSelectorPromiseDeferred.promise;
+            }
             function defineAPI() {
                 var api = {};
 
@@ -78,6 +96,7 @@
                     if (payload != undefined) {
                         promises.push(loadCustomerFieldSelector(payload));
                         promises.push(loadSupplierFieldSelector(payload));
+                        promises.push(loadTimeFieldSelector(payload));
                     }
                     return UtilsService.waitPromiseNode({
                         promises: promises
@@ -88,7 +107,8 @@
                     return {
                         $type: "TOne.WhS.BusinessEntity.Business.AccountManagerDataRecordStoragePermanentFilter,TOne.WhS.BusinessEntity.Business",
                         CustomerField: customerFieldSelectorAPI.getSelectedIds(),
-                        SupplierField: supplierFieldSelectorAPI.getSelectedIds()
+                        SupplierField: supplierFieldSelectorAPI.getSelectedIds(),
+                        TimeField: timeFieldSelectorAPI.getSelectedIds()
                     };
                 };
 

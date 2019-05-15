@@ -24,6 +24,9 @@
         };
 
         function AnalyticPermanentFilterAccountManager($scope, ctrl, $attrs) {
+            var timeDimensionSelectorAPI;
+            var timeDimensionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var customerDimensionSelectorAPI;
             var customerDimensionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -41,6 +44,10 @@
                 $scope.scopeModel.onSupplierDimensionSelectorDirectiveReady = function (api) {
                     supplierDimensionSelectorAPI = api;
                     supplierDimensionSelectorReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onTimeDimensionSelectorDirectiveReady = function (api) {
+                    timeDimensionSelectorAPI = api;
+                    timeDimensionSelectorReadyPromiseDeferred.resolve();
                 };
                 defineAPI();
 
@@ -68,6 +75,18 @@
                 });
                 return loadSupplierDimensionSelectorPromiseDeferred.promise;
             }
+            function loadTimeDimensionSelector(payload) {
+                var loadTimeDimensionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                timeDimensionSelectorReadyPromiseDeferred.promise.then(function () {
+
+                    var timeDimensionPayload = {
+                        filter: { TableIds: [payload.analyticTableId] },
+                        selectedIds: payload.settings != undefined ? payload.settings.TimeDimension : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(timeDimensionSelectorAPI, timeDimensionPayload, loadTimeDimensionSelectorPromiseDeferred);
+                });
+                return loadTimeDimensionSelectorPromiseDeferred.promise;
+            }
             function defineAPI() {
                 var api = {};
 
@@ -76,6 +95,7 @@
                     if (payload != undefined) {
                         promises.push(loadCustomerDimensionSelector(payload));
                         promises.push(loadSupplierDimensionSelector(payload));
+                        promises.push(loadTimeDimensionSelector(payload));
                     }
                     return UtilsService.waitPromiseNode({
                         promises: promises
@@ -85,6 +105,7 @@
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Business.AccountManagerAnalyticPermanentFilter,TOne.WhS.BusinessEntity.Business",
+                        TimeDimension: timeDimensionSelectorAPI.getSelectedIds(),
                         CustomerDimension: customerDimensionSelectorAPI.getSelectedIds(),
                         SupplierDimension: supplierDimensionSelectorAPI.getSelectedIds()
                     };

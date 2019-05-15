@@ -14,6 +14,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             throw new NotImplementedException();
         }
+        public string TimeField { get; set; }
         public string CustomerField { get; set; }
         public string SupplierField { get; set; }
 
