@@ -46,6 +46,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             var vrWorkflow = new VRWorkflow
             {
                 VRWorkflowId = GetReaderValue<Guid>(reader, "ID"),
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
                 CreatedBy = GetReaderValue<int>(reader, "CreatedBy"),

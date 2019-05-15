@@ -8,21 +8,23 @@ namespace Vanrise.BusinessProcess.Data.RDB
 {
     public class VRWorkflowDataManager : IVRWorkflowDataManager
     {
-        static string TABLE_NAME = "bp_VRWorkflow";
+        public static string TABLE_NAME = "bp_VRWorkflow";
         static string TABLE_ALIAS = "wf";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Title = "Title";
-        const string COL_Settings = "Settings";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_CreatedBy = "CreatedBy";
-        const string COL_LastModifiedTime = "LastModifiedTime";
-        const string COL_LastModifiedBy = "LastModifiedBy";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Title = "Title";
+        public const string COL_Settings = "Settings";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_CreatedBy = "CreatedBy";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_LastModifiedBy = "LastModifiedBy";
 
         static VRWorkflowDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
             columns.Add(COL_Title, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
@@ -38,6 +40,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
 
@@ -117,6 +120,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             VRWorkflow vrWorkflow = new VRWorkflow
             {
                 VRWorkflowId = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Name = reader.GetString(COL_Name),
                 Title = reader.GetString(COL_Title),
                 CreatedBy = reader.GetInt(COL_CreatedBy),

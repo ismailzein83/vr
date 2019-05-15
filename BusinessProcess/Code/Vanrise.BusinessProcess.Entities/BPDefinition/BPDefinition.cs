@@ -12,6 +12,8 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public Guid BPDefinitionID { get; set; }
 
+        public Guid? DevProjectId { get; set; }
+
         public string Name { get; set; }
 
         public string Title { get; set; }

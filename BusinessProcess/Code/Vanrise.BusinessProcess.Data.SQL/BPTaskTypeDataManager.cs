@@ -33,6 +33,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             var bpTaskType = new BPTaskType
             {
                 BPTaskTypeId =  GetReaderValue<Guid>(reader,"ID"),
+                DevProjectId = GetReaderValue<Guid?>(reader, "DevProjectID"),
                 Name = reader["Name"] as string
             };
             string settings = reader["Settings"] as string;

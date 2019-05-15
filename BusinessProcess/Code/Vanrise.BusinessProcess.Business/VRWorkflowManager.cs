@@ -26,6 +26,9 @@ namespace Vanrise.BusinessProcess.Business
 
             Func<VRWorkflow, bool> filterExpression = (prod) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(prod.DevProjectId))
+                    return false;
+
                 if (input.Query != null)
                 {
                     if (!string.IsNullOrEmpty(input.Query.Name) && !prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
@@ -69,6 +72,9 @@ namespace Vanrise.BusinessProcess.Business
         {
             Func<VRWorkflow, bool> filterExpression = (item) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(item.DevProjectId))
+                    return false;
+
                 if (filter != null && filter.ExcludedIds != null && filter.ExcludedIds.Contains(item.VRWorkflowId))
                     return false;
 

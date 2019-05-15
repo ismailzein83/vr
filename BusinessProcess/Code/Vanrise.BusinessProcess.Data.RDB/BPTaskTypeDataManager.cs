@@ -11,19 +11,21 @@ namespace Vanrise.BusinessProcess.Data.RDB
 {
     public class BPTaskTypeDataManager : IBPTaskTypeDataManager
     {
-        static string TABLE_NAME = "bp_BPTaskType";
+        public static string TABLE_NAME = "bp_BPTaskType";
         static string TABLE_ALIAS = "TaskType";
 
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Settings = "Settings";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Settings = "Settings";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
 
 
         static BPTaskTypeDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -65,6 +67,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             var bpTaskType = new BPTaskType
             {
                 BPTaskTypeId = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Name = reader.GetString(COL_Name)
             };
             string settings = reader.GetString(COL_Settings);

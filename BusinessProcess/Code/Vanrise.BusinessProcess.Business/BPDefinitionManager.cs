@@ -28,6 +28,9 @@ namespace Vanrise.BusinessProcess.Business
 
             Func<BPDefinition, bool> filterExpression = (prod) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(prod.DevProjectId))
+                    return false;
+
                 if (input.Query.ShowOnlyVisibleInManagementScreen == true && prod.Configuration.NotVisibleInManagementScreen)
                     return false;
 
@@ -49,6 +52,9 @@ namespace Vanrise.BusinessProcess.Business
 
             Func<BPDefinition, bool> filterExpression = (prod) =>
             {
+                if (Utilities.ShouldHideItemHavingDevProjectId(prod.DevProjectId))
+                    return false;
+
                 if (!DoesUserHaveViewAccess(SecurityContext.Current.GetLoggedInUserId(), prod))
                     return false;
 

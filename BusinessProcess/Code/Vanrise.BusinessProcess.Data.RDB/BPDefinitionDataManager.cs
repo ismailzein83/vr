@@ -8,21 +8,23 @@ namespace Vanrise.BusinessProcess.Data.RDB
 {
     public class BPDefinitionDataManager : IBPDefinitionDataManager
     {
-        static string TABLE_NAME = "bp_BPDefinition";
+        public static string TABLE_NAME = "bp_BPDefinition";
         static string TABLE_ALIAS = "bp";
-        const string COL_ID = "ID";
-        const string COL_Name = "Name";
-        const string COL_Title = "Title";
-        const string COL_FQTN = "FQTN";
-        const string COL_VRWorkflowId = "VRWorkflowId";
-        const string COL_Config = "Config";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
+        public const string COL_ID = "ID";
+        public const string COL_DevProjectID = "DevProjectID";
+        public const string COL_Name = "Name";
+        public const string COL_Title = "Title";
+        public const string COL_FQTN = "FQTN";
+        public const string COL_VRWorkflowId = "VRWorkflowId";
+        public const string COL_Config = "Config";
+        public const string COL_CreatedTime = "CreatedTime";
+        public const string COL_LastModifiedTime = "LastModifiedTime";
 
         static BPDefinitionDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_DevProjectID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
             columns.Add(COL_Title, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_FQTN, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 1000 });
@@ -38,6 +40,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
 
@@ -120,6 +123,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             BPDefinition bpDefinition = new BPDefinition
             {
                 BPDefinitionID = reader.GetGuid(COL_ID),
+                DevProjectId = reader.GetNullableGuid(COL_DevProjectID),
                 Name = reader.GetString(COL_Name),
                 Title = reader.GetString(COL_Title),
                 VRWorkflowId = reader.GetNullableGuid(COL_VRWorkflowId)

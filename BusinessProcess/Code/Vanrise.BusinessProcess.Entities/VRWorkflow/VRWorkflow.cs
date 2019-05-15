@@ -16,6 +16,8 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public Guid VRWorkflowId { get; set; }
 
+        public Guid? DevProjectId { get; set; }
+
         public DateTime CreatedTime { get; set; }
 
         public int CreatedBy { get; set; }
