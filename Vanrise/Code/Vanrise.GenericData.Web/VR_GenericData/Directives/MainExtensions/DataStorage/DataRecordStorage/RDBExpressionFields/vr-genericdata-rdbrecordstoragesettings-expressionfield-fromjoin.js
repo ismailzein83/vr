@@ -92,7 +92,8 @@ app.directive('vrGenericdataRdbrecordstoragesettingsExpressionfieldFromjoin', ['
                     var fieldNameDirectivePayload = {
                         context: context,
                         joinName: expressionFieldSettings != undefined ? expressionFieldSettings.JoinName : undefined,
-                        fieldName: expressionFieldSettings != undefined ? expressionFieldSettings.FieldName : undefined
+                        fieldName: expressionFieldSettings != undefined ? expressionFieldSettings.FieldName : undefined,
+                        loadMainFieldSelector: false
                     };
                     VRUIUtilsService.callDirectiveLoad(joinFieldNameDirectiveAPI, fieldNameDirectivePayload, joinFieldNameDirectiveLoadDeferred);
                 });

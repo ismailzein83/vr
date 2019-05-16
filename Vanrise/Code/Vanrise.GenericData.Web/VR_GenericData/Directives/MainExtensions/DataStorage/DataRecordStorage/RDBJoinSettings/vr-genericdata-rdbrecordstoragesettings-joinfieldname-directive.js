@@ -8,7 +8,7 @@ app.directive('vrGenericdataRdbrecordstoragesettingsJoinfieldnameDirective', ['U
             scope: {
                 onReady: '=',
                 normalColNum: '@',
-                isrequired: '@',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -41,7 +41,7 @@ app.directive('vrGenericdataRdbrecordstoragesettingsJoinfieldnameDirective', ['U
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.joinNames = [];
-                $scope.scopeModel.isLoadingMainFieldSelector = (ctrl.isrequired == "false") ? true : false;
+                $scope.scopeModel.isLoadingMainFieldSelector = false;
 
                 $scope.scopeModel.onJoinNameSelectorReady = function (api) {
                     joinNameSelectorAPI = api;
@@ -113,6 +113,7 @@ app.directive('vrGenericdataRdbrecordstoragesettingsJoinfieldnameDirective', ['U
                         context = payload.context;
                         joinName = payload.joinName;
                         fieldName = payload.fieldName;
+                        $scope.scopeModel.isLoadingMainFieldSelector = payload.loadMainFieldSelector;
                         joinsList = context.getJoinsList();
                     }
 

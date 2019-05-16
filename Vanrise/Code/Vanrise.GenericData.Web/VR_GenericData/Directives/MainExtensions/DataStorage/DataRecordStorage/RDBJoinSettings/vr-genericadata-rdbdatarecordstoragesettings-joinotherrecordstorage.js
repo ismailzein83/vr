@@ -239,7 +239,8 @@ app.directive('vrGenericadataRdbdatarecordstoragesettingsJoinotherrecordstorage'
                     var joinFieldNameDirectivePayload = {
                         context: context,
                         joinName: gridItem.payload.SourceStorageJoinName,
-                        fieldName: gridItem.payload.SourceStorageFieldName
+                        fieldName: gridItem.payload.SourceStorageFieldName,
+                        loadMainFieldSelector: true
                     };
                     VRUIUtilsService.callDirectiveLoad(dataItem.joinFieldNameDirectiveAPI, joinFieldNameDirectivePayload, dataItem.loadJoinFieldNameDirectiveReadyDeferred);
                 });
@@ -280,7 +281,8 @@ app.directive('vrGenericadataRdbdatarecordstoragesettingsJoinotherrecordstorage'
                         $scope.scopeModel.isGridLoading = value;
                     };
                     var joinFieldNameDirectivePayload = {
-                        context: context
+                        context: context,
+                        loadMainFieldSelector: true
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.joinFieldNameDirectiveAPI, joinFieldNameDirectivePayload, setLoader);
                 };
