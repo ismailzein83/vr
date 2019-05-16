@@ -110,6 +110,8 @@
     <Compile Include="SMSRateValueRule\SMSRateValueRuleSettings.cs" />
     <Compile Include="SMSRateValueRule\SMSRateValueRuleSettingsConfig.cs" />
     <Compile Include="SubscriberManager.cs" />
+    <Compile Include="TaxRules\Postpaid\PostpaidTaxRuleDefinitionSettings.cs" />
+    <Compile Include="TaxRules\Prepaid\PrepaidTaxRuleDefinitionSettings.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxMappingStep.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxRule.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxRuleContext.cs" />
