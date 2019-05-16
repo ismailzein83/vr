@@ -57,7 +57,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-common-country-selector  onselectionchanged="ctrl.onCountrySelectionChanged"  ng-show="ctrl.showCountrySelector" on-ready="ctrl.onCountrySelectorReady" ' + hideremoveicon + '> </vr-common-country-selector> </vr-columns>'
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" haschildcolumns><vr-common-country-selector  onselectionchanged="ctrl.onCountrySelectionChanged"  ng-show="ctrl.showCountrySelector" on-ready="ctrl.onCountrySelectorReady" ' + hideremoveicon + '> </vr-common-country-selector> </vr-columns>'
                 + '<vr-columns colnum="{{ctrl.normalColNum}}" vr-loader="ctrl.isLoadingCities"><vr-select ' + multipleselection + '  datatextfield="Name"   datavaluefield="CityId" isrequired="ctrl.isrequired" '
             + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onselectionchanged" entityName="City" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission" ' + hideremoveicon + '></vr-select>'
                + '</vr-columns>';
