@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return false;
             else
             {
-                var accountManagersAssignmet = new AccountManagerAssignmentManager().GetAllAccountManagersAssignmentByCarrierAccountId(carrierAccount.CarrierAccountId);
+                var accountManagersAssignmet = new AccountManagerAssignmentManager().GetAllAccountManagerAssignmentsByCarrierAccountId(carrierAccount.CarrierAccountId);
                 if(accountManagersAssignmet != null)
                 {
                     foreach (var acctManagerAssgn in accountManagersAssignmet)

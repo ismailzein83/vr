@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
             bed.ThrowIfNull("BED");
             var eed = context.GenericBusinessEntity.FieldValues.GetRecord("EED");
 
-            var allAccountManagerAssignments = accountManagerAssignmentManager.GetAllAccountManagersAssignmentByCarrierAccountId((int)carrierAccountId);
+            var allAccountManagerAssignments = accountManagerAssignmentManager.GetAllAccountManagerAssignmentsByCarrierAccountId((int)carrierAccountId);
             if (allAccountManagerAssignments != null)
             {
                 foreach (var acctManagerAssgn in allAccountManagerAssignments)
