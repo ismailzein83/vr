@@ -1140,60 +1140,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void PostCreatePABXToOM(Guid requestId)
-        {
-
-            //Get Data from StLineSubscriptionRequest table
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            SOMRequestOutput output;
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StPabx");
-            esq.AddColumn("StContractId");
-            esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
-
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
-            esq.Filters.Add(esqFirstFilter);
-
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
-            {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
-
-                SOMRequestInput<CreatePABXRequestInput> somRequestInput = new SOMRequestInput<CreatePABXRequestInput>
-                {
-
-                    InputArguments = new CreatePABXRequestInput
-                    {
-                        CommonInputArgument = new CommonInputArgument()
-                        {
-                           // ContractId = contractId.ToString(),
-                            //ContactId = contactId.ToString(),
-                            //AccountId = null,
-                            RequestId = requestId.ToString(),
-                           // CustomerId = customerId.ToString()
-                        }
-                    }
-
-                };
-
-                //call api
-                using (var client = new SOMClient())
-                {
-                    output = client.Post<SOMRequestInput<CreatePABXRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivatePABX/StartProcess", somRequestInput);
-                }
-
-            }
-
-        }
+       
 
         public void PostEditPABXToOM(Guid requestId)
         {

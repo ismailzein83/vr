@@ -13,6 +13,7 @@ namespace BPMExtended.Main.Business
         const string lineDescriptionStep = "AA871142-C408-48CF-A06A-DE0ED285F166";
 
         const string choosePhoneNumberStep = "94C9BF32-6459-473D-A21E-D940BCAE74F9";
+        const string changeRatePlanStep = "00807DD5-9F6C-4952-8DC2-F7DD1DCE0CF0";
         const string paymentStep = "AD9AE38B-740D-4122-88A3-BFCCD5DBF288";
         //const string validatePaymentStep = "3207851A-4BA6-463C-9D38-77D8B8C60F11";
         const string attachmentStep = "CBA12E12-AEE8-4053-877A-88234A877FE1";
@@ -24,12 +25,12 @@ namespace BPMExtended.Main.Business
             string nextStepId = "";
             switch (currentStepId)
             {
-                case welcomeStep: nextStepId = printStep; break;
-                case printStep: nextStepId = lineDescriptionStep; break;
-                case lineDescriptionStep: nextStepId = choosePhoneNumberStep; break;
-                case choosePhoneNumberStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = attachmentStep; break;
-                case attachmentStep: nextStepId = technicalStep; break;
+                case welcomeStep: nextStepId = choosePhoneNumberStep; break;
+                case choosePhoneNumberStep: nextStepId = changeRatePlanStep; break;
+                case changeRatePlanStep: nextStepId = printStep; break;
+                case printStep: nextStepId = attachmentStep; break;
+                case attachmentStep: nextStepId = paymentStep; break;
+                case paymentStep: nextStepId = technicalStep; break;
 
             }
             return nextStepId;

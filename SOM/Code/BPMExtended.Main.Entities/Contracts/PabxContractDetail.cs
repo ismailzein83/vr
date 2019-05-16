@@ -12,7 +12,7 @@ namespace BPMExtended.Main.Entities
 
         public string PhoneNumber { get; set; }
 
-        public string Address { get; set; }
+        public Address Address { get; set; }
 
         public string DeviceId { get; set; }
     }
