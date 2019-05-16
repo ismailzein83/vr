@@ -242,7 +242,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();
-            saleZoneDataManager.JoinSaleZone(join, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
+            saleZoneDataManager.JoinSaleZone(join, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true, RDBJoinType.Left);
 
             var whereContext = selectQuery.Where();
 
@@ -300,21 +300,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public bool AreZonesUpdated(ref object updateHandle)
         {
             throw new NotImplementedException();
-        }
-
-        public IEnumerable<SaleCode> GetSaleCodesByCode(string codeNumber)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-            var where = selectQuery.Where();
-            where.StartsWithCondition(COL_Code, codeNumber);
-            BEDataUtility.SetEffectiveDateCondition(where, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
-            selectQuery.Sort().ByColumn(COL_Code, RDBSortDirection.ASC);
-
-            return queryContext.GetItems(SaleCodeMapper);
         }
 
         public IEnumerable<SaleCode> GetAllSaleCodes()
@@ -395,6 +380,20 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             where.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_Name).Value(zoneName);
 
             BEDataUtility.SetEffectiveAfterDateCondition(where, TABLE_ALIAS, COL_BED, COL_EED, effectiveDate);
+
+            return queryContext.GetItems(SaleCodeMapper);
+        }
+        public IEnumerable<SaleCode> GetSaleCodesByCode(string codeNumber)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var where = selectQuery.Where();
+            where.StartsWithCondition(COL_Code, codeNumber);
+            BEDataUtility.SetEffectiveDateCondition(where, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
+            selectQuery.Sort().ByColumn(COL_Code, RDBSortDirection.ASC);
 
             return queryContext.GetItems(SaleCodeMapper);
         }

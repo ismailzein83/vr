@@ -52,23 +52,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public List<SalePricelistCodeChange> GetSalePricelistCodeChanges(int pricelistId, List<int> countryIds)
         {
-            SalePricelistCustomerChangeDataManager salePricelistCustomerChangeDataManager = new SalePricelistCustomerChangeDataManager();
+            var salePricelistCustomerChangeDataManager = new SalePricelistCustomerChangeDataManager();
             var salePricelistCustomerChangeTableAlias = "spcustc";
+
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            var selectContext = selectQuery.SelectColumns();
             var join = selectQuery.Join();
             salePricelistCustomerChangeDataManager.JoinCustomerChange(join, salePricelistCustomerChangeTableAlias, TABLE_ALIAS, SalePricelistCustomerChangeDataManager.COL_CountryID, SalePricelistCustomerChangeDataManager.COL_BatchID);
-
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-
-            var selectContext = selectQuery.SelectColumns();
-
-
+            
             selectContext.AllTableColumns(TABLE_ALIAS);
             selectContext.Column(salePricelistCustomerChangeTableAlias, SalePricelistCustomerChangeDataManager.COL_PricelistID, SalePricelistCustomerChangeDataManager.COL_PricelistID);
-
-        
-
+            
             var whereQuery = selectQuery.Where();
             whereQuery.EqualsCondition(salePricelistCustomerChangeTableAlias, SalePricelistCustomerChangeDataManager.COL_PricelistID).Value(pricelistId);
 
