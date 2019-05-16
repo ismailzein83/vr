@@ -147,3 +147,9 @@ FMSV1.PostDeployment.sql
 Inspkt
 Retail_RecordAnalysis.PostDeployment.sql
 ProbesAnalytics.PostDeployment.sql
+
+NetworkInventory
+NetworkInventory.PostDeployment.sql
+
+TelecomCRM
+TelecomCRM.PostDeployment.sql

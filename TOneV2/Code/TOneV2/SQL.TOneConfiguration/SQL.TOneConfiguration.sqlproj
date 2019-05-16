@@ -951,6 +951,8 @@
     <None Include="VRJSON_PostScripts\Retail_NetworkRental.PostDeployment_OrdersAndContracts.json" />
     <None Include="Retail_NetworkRental_OrdersAndContracts.PostDeployment.sql" />
     <None Include="VR_NumberPrefix.PostDeployment.sql" />
+    <None Include="TelecomCRM.PostDeployment.sql" />
+    <None Include="NetworkInventory.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
