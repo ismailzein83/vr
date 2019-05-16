@@ -33,11 +33,19 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                         });
                     }
 
-                    if (codeIsValid)
+                    if (codeIsValid) {
+                        $scope.addedCode = undefined;
                         $scope.codeCriteriaArray.push(codeCriteria);
+                    }
                 };
 
+                $scope.validateCodes = function () {
+                    if ($scope.codeCriteriaArray == undefined || $scope.codeCriteriaArray.length == 0) {
+                        return 'At least One Code should be added';
+                    }
 
+                    return null;
+                }
 
                 var ctor = new codeCriteriaCtor(ctrl, $scope);
                 ctor.initializeController();
