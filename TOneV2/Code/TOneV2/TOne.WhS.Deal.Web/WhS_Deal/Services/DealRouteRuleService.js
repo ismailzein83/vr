@@ -39,32 +39,10 @@
             return drillDownDefinition;
         }
 
-        function registerDealBuyRouteRuleViewToDeal() {
-            var drillDownDefinition = {};
-
-            drillDownDefinition.title = "Buy Route Rules";
-            drillDownDefinition.directive = "vr-whs-deal-buyrouterule-view";
-
-            drillDownDefinition.loadDirective = function (directiveAPI, dealItem) {
-                dealItem.DealBuyRouteRuleGridAPI = directiveAPI;
-
-                var query = {
-                    DealId: dealItem.Entity.DealId,
-                    BED: dealItem.Entity.Settings.RealBED,
-                    EED: dealItem.Entity.Settings.RealEED
-                };
-                return dealItem.DealBuyRouteRuleGridAPI.load(query);
-            };
-
-            return drillDownDefinition;
-        }
-               
         return {
-            registerDealSellRouteRuleViewToDeal: registerDealSellRouteRuleViewToDeal,
-            registerDealBuyRouteRuleViewToDeal: registerDealBuyRouteRuleViewToDeal
+            registerDealSellRouteRuleViewToDeal: registerDealSellRouteRuleViewToDeal
         };
     }
 
     appControllers.service('WhS_Deal_RouteRuleService', DealRouteRuleService);
-
 })(appControllers);

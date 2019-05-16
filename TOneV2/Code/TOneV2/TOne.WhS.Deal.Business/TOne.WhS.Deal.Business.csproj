@@ -125,7 +125,6 @@
     <Compile Include="RouteRules\StructureRulesBehaviors\RuleBehaviorByDeal.cs" />
     <Compile Include="SaleZoneFilter.cs" />
     <Compile Include="SupplierZoneFilter.cs" />
-    <Compile Include="RouteRules\DealBuyRouteRuleManager.cs" />
     <Compile Include="SwapDeals\SwapDealSettings.cs" />
     <Compile Include="SwapDeals\ValidateBeforeSaveContext.cs" />
     <Compile Include="VolCommitmentDealManager.cs" />

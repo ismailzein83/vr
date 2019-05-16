@@ -122,8 +122,6 @@
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateCustomers.cs" />
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateFixed.cs" />
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateSuppliers.cs" />
-    <Compile Include="RouteRules\FixedDealBuyRouteRule.cs" />
-    <Compile Include="RouteRules\BySaleDealBuyRouteRule.cs" />
     <Compile Include="RouteRules\DealRouteRuleDefinitionFilter.cs" />
     <Compile Include="SwapDeal\SwapDealDefinitionFilter.cs" />
     <Compile Include="SwapDeal\SwapDealCarrierFilter.cs" />

@@ -77,10 +77,6 @@
             addDrillDownDefinition(WhS_Deal_RouteRuleService.registerDealSellRouteRuleViewToDeal());
         }
 
-        function registerSwapDealBuyRouteRuleViewToSwapDeal() {
-            addDrillDownDefinition(WhS_Deal_RouteRuleService.registerDealBuyRouteRuleViewToDeal());
-        }
-
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }
@@ -134,7 +130,6 @@
             editSwapDeal: editSwapDeal,
             registerObjectTrackingDrillDownToSwapDeal: registerObjectTrackingDrillDownToSwapDeal,
             registerSwapDealSellRouteRuleViewToSwapDeal: registerSwapDealSellRouteRuleViewToSwapDeal,
-            registerSwapDealBuyRouteRuleViewToSwapDeal: registerSwapDealBuyRouteRuleViewToSwapDeal,
             getDrillDownDefinition: getDrillDownDefinition,
             registerHistoryViewAction: registerHistoryViewAction,
             analyzeSwapDeal: analyzeSwapDeal,

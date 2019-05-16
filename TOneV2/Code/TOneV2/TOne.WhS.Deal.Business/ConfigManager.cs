@@ -1,21 +1,14 @@
-﻿using System;
-using TOne.WhS.Deal.Entities;
-using Vanrise.Common.Business;
-using Vanrise.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.Deal.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Deal.Business
 {
     public class ConfigManager
     {
         #region Public Methods
-
-        public Guid GetDealBuyRouteRuleDefinitionId()
-        {
-            SwapDealTechnicalSettingData swapDealTechnicalSettingData = GetSwapDealTechnicalSettingData();
-            return swapDealTechnicalSettingData.DealBuyRouteRuleDefinitionId;
-        }
 
         public DealTechnicalSettingData GetDealTechnicalSettingData()
         {
@@ -31,29 +24,17 @@ namespace TOne.WhS.Deal.Business
             DealTechnicalSettingData dealTechnicalSettingData = GetDealTechnicalSettingData();
             return dealTechnicalSettingData.IntervalOffsetInMinutes;
         }
+
         public IEnumerable<DealSaleRateEvaluatorConfig> GetSaleRateEvaluatorConfigurationTemplateConfigs()
         {
             var extensionConfigManager = new ExtensionConfigurationManager();
             return extensionConfigManager.GetExtensionConfigurations<DealSaleRateEvaluatorConfig>(DealSaleRateEvaluatorConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
         }
+
         public IEnumerable<DealSupplierRateEvaluatorConfig> GetSupplierRateEvaluatorConfigurationTemplateConfigs()
         {
             var extensionConfigManager = new ExtensionConfigurationManager();
             return extensionConfigManager.GetExtensionConfigurations<DealSupplierRateEvaluatorConfig>(DealSupplierRateEvaluatorConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
-        }
-
-
-        #endregion
-
-        #region private methods
-
-        private SwapDealTechnicalSettingData GetSwapDealTechnicalSettingData()
-        {
-            SettingManager settingManager = new SettingManager();
-            SwapDealTechnicalSettingData swapDealTechnicalSettingData = settingManager.GetSetting<SwapDealTechnicalSettingData>(Constants.SwapDealTechnicalSettings);
-            swapDealTechnicalSettingData.ThrowIfNull("swapDealTechnicalSettingData");
-
-            return swapDealTechnicalSettingData;
         }
 
         #endregion
