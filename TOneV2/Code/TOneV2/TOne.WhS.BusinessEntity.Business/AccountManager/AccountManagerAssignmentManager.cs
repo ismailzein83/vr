@@ -39,16 +39,22 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return result;
         }
-        public AccountManager TryGetEffectiveAccountManagerByAccountId(int carrierAccountId, DateTime effectiveDate)
+        public bool TryGetEffectiveAccountManagerByCarrierAccountId(int carrierAccountId, DateTime effectiveDate, out int? accountManagerId)
         {
-            IEnumerable<AccountManagerAssignment> effectiveAccountManagerAssignments;
-            TryGetEffectiveAccountManagerAssignments(effectiveDate, out effectiveAccountManagerAssignments);
-            if (effectiveAccountManagerAssignments == null)
-                return null;
-            var effectiveAssignment = effectiveAccountManagerAssignments.FindRecord(x => x.CarrierAccountId == carrierAccountId);
-            if (effectiveAssignment == null)
-                return null;
-            return new AccountManagerManager().GetAccountManagerById(effectiveAssignment.AccountManagerId);
+            accountManagerId = null;
+            var accountManagerAssignments = GetCachedAccountManagerAssignmentByCarrierAccountId().GetRecord(carrierAccountId);
+            if (accountManagerAssignments != null)
+            {
+                foreach (var accountManagerAssignment in accountManagerAssignments)
+                {
+                    if (accountManagerAssignment.BED <= effectiveDate && (!accountManagerAssignment.EED.HasValue || accountManagerAssignment.EED > effectiveDate))
+                    {
+                        accountManagerId = accountManagerAssignment.AccountManagerId;
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
         public bool TryGetAccountManagerAssignments(out IEnumerable<AccountManagerAssignment> accountManagerAssignments)
         {
@@ -136,7 +142,7 @@ namespace TOne.WhS.BusinessEntity.Business
         private Dictionary<int, List<AccountManagerAssignment>> GetCachedAccountManagerAssignmentByAccountManagerId()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedAccountManagerAssignment", businessEntityDefinitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedAccountManagerAssignmentByAccountManagerId", businessEntityDefinitionId, () =>
             {
                 Dictionary<int, List<AccountManagerAssignment>> result = new Dictionary<int, List<AccountManagerAssignment>>();
                 var accountManagerAssignments = GetCachedAccountManagerAssignment();
@@ -151,6 +157,27 @@ namespace TOne.WhS.BusinessEntity.Business
                 return result;
             });
         }
+
+        private Dictionary<int, IOrderedEnumerable<AccountManagerAssignment>> GetCachedAccountManagerAssignmentByCarrierAccountId()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedAccountManagerAssignmentByCarrierAccountId", businessEntityDefinitionId, () =>
+            {
+                Dictionary<int, List<AccountManagerAssignment>> result = new Dictionary<int, List<AccountManagerAssignment>>();
+                var accountManagerAssignments = GetCachedAccountManagerAssignment();
+                if (accountManagerAssignments != null)
+                {
+                    foreach (var accountManagerAssignment in accountManagerAssignments.Values)
+                    {
+                        var assignments = result.GetOrCreateItem(accountManagerAssignment.CarrierAccountId);
+                        assignments.Add(accountManagerAssignment);
+                    }
+                }
+                return result.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(amItm => amItm.BED).ThenBy(amItm => amItm.EED.HasValue ? amItm.EED.Value : DateTime.MaxValue));
+            });
+        }
+
+
         internal Dictionary<int, AccountManagerTreeNode> GetCacheAccountManagerTreeNodes()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
