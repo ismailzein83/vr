@@ -79,7 +79,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_RA\Constant\ModuleConfig.js" />
+    <Content Include="Retail_RA\Constant\SMSTaxChargeTypeEnum.js" />
     <Content Include="Retail_RA\Constant\ScopeEnum.js" />
+    <Content Include="Retail_RA\Constant\VoiceTaxChargeTypeEnum.js" />
     <Content Include="Retail_RA\Constant\TrafficDirectionEnum.js" />
     <Content Include="Retail_RA\Directives\DisputeManagement\retail-ra-dispute-settings.js" />
     <Content Include="Retail_RA\Directives\DisputeManagement\Templates\DisputeSettingsTemplate.html" />
