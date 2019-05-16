@@ -56,14 +56,18 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var salePricelistCustomerChangeTableAlias = "spcustc";
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
+            var join = selectQuery.Join();
+            salePricelistCustomerChangeDataManager.JoinCustomerChange(join, salePricelistCustomerChangeTableAlias, TABLE_ALIAS, SalePricelistCustomerChangeDataManager.COL_CountryID, SalePricelistCustomerChangeDataManager.COL_BatchID);
+
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
 
             var selectContext = selectQuery.SelectColumns();
+
+
             selectContext.AllTableColumns(TABLE_ALIAS);
             selectContext.Column(salePricelistCustomerChangeTableAlias, SalePricelistCustomerChangeDataManager.COL_PricelistID, SalePricelistCustomerChangeDataManager.COL_PricelistID);
 
-            var join = selectQuery.Join();
-            salePricelistCustomerChangeDataManager.JoinCustomerChange(join, salePricelistCustomerChangeTableAlias, TABLE_ALIAS, SalePricelistCustomerChangeDataManager.COL_CountryID, SalePricelistCustomerChangeDataManager.COL_BatchID);
+        
 
             var whereQuery = selectQuery.Where();
             whereQuery.EqualsCondition(salePricelistCustomerChangeTableAlias, SalePricelistCustomerChangeDataManager.COL_PricelistID).Value(pricelistId);
