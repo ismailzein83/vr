@@ -29,7 +29,7 @@ namespace BPMExtended.Main.ConsoleApp
             //    {
             //        manager.Divide(x, y);
             //    };
-                
+
             //    manager.InvokeMethod(action);
             //}
 

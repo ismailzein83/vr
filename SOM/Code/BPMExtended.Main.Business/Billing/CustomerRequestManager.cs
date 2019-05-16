@@ -151,34 +151,7 @@ namespace BPMExtended.Main.Business
         //    s_dataManager.UpdateRequestStatus(requestId, status);
         //}
 
-        public void CreatePabxSwitchTeamWorkOrder(string requestId)
-        {
-            string workOrderId = CreateWorkOrder(requestId, "F60012C5-A0C3-4593-B7C4-B50A21988D54");
 
-            if(workOrderId != "")
-            {
-                //update technical step of the request
-                var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-                var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("StPabx");
-                var recordEntity = recordSchema.CreateEntity(UserConnection);
-
-                var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, "StPabx");
-                eSQ.RowCount = 1;
-                eSQ.AddAllSchemaColumns();
-                eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId));
-                var collection = eSQ.GetEntityCollection(UserConnection);
-                if (collection.Count > 0)
-                {
-                    recordEntity = collection[0];
-                    recordEntity.SetColumnValue("StTechnicalStep", "9BDB150C-919D-4147-9F20-62BF7F40FB5E");
-                    recordEntity.SetColumnValue("StWOrkOrderID", workOrderId);
-                    recordEntity.SetColumnValue("StIsWorkOrderCompleted", false);
-                }
-                recordEntity.Save();
-            }
-
-
-        }
 
         public string CreateWorkOrder(string requestId, string WorkOrderType)
         {
