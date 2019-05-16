@@ -953,6 +953,7 @@
     <None Include="VR_NumberPrefix.PostDeployment.sql" />
     <None Include="TelecomCRM.PostDeployment.sql" />
     <None Include="NetworkInventory.PostDeployment.sql" />
+    <None Include="NIM.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
