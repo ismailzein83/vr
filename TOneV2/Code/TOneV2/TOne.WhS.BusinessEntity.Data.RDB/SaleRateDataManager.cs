@@ -184,9 +184,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             joinCondition.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerID, "customerInfo", SalePriceListDataManager.COL_OwnerID);
             joinCondition.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerType, "customerInfo", SalePriceListDataManager.COL_OwnerType);
 
-            var whereQuery = selectQuery.Where();
+            var whereContext = selectQuery.Where();
 
-            SetDateCondition(whereQuery, effectiveAfter);
+            var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(COL_EED);
+            var dateAndCondition = orCondition.ChildConditionGroup();
+            dateAndCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
+            dateAndCondition.GreaterThanCondition(COL_EED).Value(effectiveAfter);
 
             return queryContext.GetItems(SaleRateMapper);
         }
@@ -235,11 +239,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var join = selectQuery.Join();
             salePriceListDataManager.JoinSalePriceList(join, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
-            var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
-            whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(ownerId);
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
+            whereContext.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(ownerId);
 
-            SetDateCondition(whereQuery, DateTime.Now);
+            var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(COL_EED);
+            var dateAndCondition = orCondition.ChildConditionGroup();
+            dateAndCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
+            dateAndCondition.GreaterThanCondition(COL_BED).DateNow();
 
             return queryContext.GetItems(SaleRateMapper);
         }
@@ -280,110 +288,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereContext.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, zoneIds);
 
             whereContext.GreaterThanCondition(COL_EED).Value(effectiveOn);
-            return queryContext.GetItems(SaleRateMapper);
-        }
-
-        public IEnumerable<SaleRate> GetZoneRatesBySellingProducts(IEnumerable<int> sellingProductIds, IEnumerable<long> saleZoneIds)
-        {
-            var salePriceListDataManager = new SalePriceListDataManager();
-            string priceListTableAlias = "p";
-
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-            var joinContext = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
-
-            var whereQuery = selectQuery.Where();
-
-            var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orCondition.NullCondition(COL_EED);
-            orCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
-
-            whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)SalePriceListOwnerType.SellingProduct);
-
-            whereQuery.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, saleZoneIds);
-            whereQuery.ListCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID, RDBListConditionOperator.IN, sellingProductIds);
-
-            return queryContext.GetItems(SaleRateMapper);
-        }
-
-        public IEnumerable<SaleRate> GetAllSaleRatesByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds, bool getNormalRates, bool getOtherRates)
-        {
-            var salePriceListDataManager = new SalePriceListDataManager();
-            string priceListTableAlias = "p";
-
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-            var joinContext = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
-
-            var whereContext = selectQuery.Where();
-
-            whereContext.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
-            whereContext.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(ownerId);
-
-            var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orCondition.NullCondition(COL_EED);
-            orCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
-
-            var rateTypeCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-
-            if (getNormalRates)
-                rateTypeCondition.NullCondition(COL_RateTypeID);
-
-            if (getOtherRates)
-                rateTypeCondition.NotNullCondition(COL_RateTypeID);
-
-            if (saleZoneIds != null && saleZoneIds.Any())
-                whereContext.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, saleZoneIds);
-
-            return queryContext.GetItems(SaleRateMapper);
-
-        }
-
-        public IEnumerable<SaleRate> GetAllSaleRatesBySellingProductAndCustomer(IEnumerable<long> saleZoneIds, int sellingProductId, int customerId, bool getNormalRates, bool getOtherRates)
-        {
-            var salePriceListDataManager = new SalePriceListDataManager();
-            string priceListTableAlias = "p";
-
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-            var joinContext = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
-
-            var whereQuery = selectQuery.Where();
-
-            var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orCondition.NullCondition(COL_EED);
-            orCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
-
-            var rateTypeCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            if (getNormalRates)
-                rateTypeCondition.NullCondition(COL_RateTypeID);
-            else
-                rateTypeCondition.NotNullCondition(COL_RateTypeID);
-
-            whereQuery.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, saleZoneIds);
-
-            var ownerOrCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
-
-            var customerCondition = ownerOrCondition.ChildConditionGroup();
-            customerCondition.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)SalePriceListOwnerType.Customer);
-            customerCondition.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(customerId);
-
-            var sellingProductCondition = ownerOrCondition.ChildConditionGroup();
-            sellingProductCondition.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)SalePriceListOwnerType.SellingProduct);
-            sellingProductCondition.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(sellingProductId);
-
             return queryContext.GetItems(SaleRateMapper);
         }
 
@@ -490,7 +394,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             sellingProductCondition.ListCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID, RDBListConditionOperator.IN, sellingProductIds);
 
             if (zoneIds != null && zoneIds.Any())
-                whereQuery.ListCondition(RDBListConditionOperator.IN, zoneIds);
+                whereQuery.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, zoneIds);
 
             if (BED.HasValue)
             {
@@ -545,6 +449,109 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
 
         #region Not Used Functions
+        public IEnumerable<SaleRate> GetAllSaleRatesBySellingProductAndCustomer(IEnumerable<long> saleZoneIds, int sellingProductId, int customerId, bool getNormalRates, bool getOtherRates)
+        {
+            var salePriceListDataManager = new SalePriceListDataManager();
+            string priceListTableAlias = "p";
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinContext = selectQuery.Join();
+            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
+
+            var whereQuery = selectQuery.Where();
+
+            var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(COL_EED);
+            orCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
+
+            var rateTypeCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            if (getNormalRates)
+                rateTypeCondition.NullCondition(COL_RateTypeID);
+            else
+                rateTypeCondition.NotNullCondition(COL_RateTypeID);
+
+            whereQuery.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, saleZoneIds);
+
+            var ownerOrCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
+
+            var customerCondition = ownerOrCondition.ChildConditionGroup();
+            customerCondition.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)SalePriceListOwnerType.Customer);
+            customerCondition.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(customerId);
+
+            var sellingProductCondition = ownerOrCondition.ChildConditionGroup();
+            sellingProductCondition.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)SalePriceListOwnerType.SellingProduct);
+            sellingProductCondition.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(sellingProductId);
+
+            return queryContext.GetItems(SaleRateMapper);
+        }
+
+        public IEnumerable<SaleRate> GetAllSaleRatesByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds, bool getNormalRates, bool getOtherRates)
+        {
+            var salePriceListDataManager = new SalePriceListDataManager();
+            string priceListTableAlias = "p";
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinContext = selectQuery.Join();
+            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
+
+            var whereContext = selectQuery.Where();
+
+            whereContext.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
+            whereContext.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(ownerId);
+
+            var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(COL_EED);
+            orCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
+
+            var rateTypeCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+
+            if (getNormalRates)
+                rateTypeCondition.NullCondition(COL_RateTypeID);
+
+            if (getOtherRates)
+                rateTypeCondition.NotNullCondition(COL_RateTypeID);
+
+            if (saleZoneIds != null && saleZoneIds.Any())
+                whereContext.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, saleZoneIds);
+
+            return queryContext.GetItems(SaleRateMapper);
+
+        }
+
+        public IEnumerable<SaleRate> GetZoneRatesBySellingProducts(IEnumerable<int> sellingProductIds, IEnumerable<long> saleZoneIds)
+        {
+            var salePriceListDataManager = new SalePriceListDataManager();
+            string priceListTableAlias = "p";
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinContext = selectQuery.Join();
+            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
+
+            var whereQuery = selectQuery.Where();
+
+            var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(COL_EED);
+            orCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
+
+            whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)SalePriceListOwnerType.SellingProduct);
+
+            whereQuery.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, saleZoneIds);
+            whereQuery.ListCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID, RDBListConditionOperator.IN, sellingProductIds);
+
+            return queryContext.GetItems(SaleRateMapper);
+        }
 
         public IEnumerable<SaleRate> GetZoneRatesBySellingProduct(int sellingProductId, IEnumerable<long> saleZoneIds)
         {
