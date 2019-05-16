@@ -28,61 +28,76 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return affectedCarrierAccountIds;
         }
-        public IEnumerable<AccountManagerAssignment> TryGetEffectiveAccountManagerAssignments(DateTime effectiveDate)
+        public bool TryGetEffectiveAccountManagerAssignments(DateTime effectiveDate, out IEnumerable<AccountManagerAssignment> effectiveAccountManagerAssignments)
         {
-            var accountManagerAssignments = TryGetAccountManagerAssignments();
-            if (accountManagerAssignments == null)
-                return null;
-            return accountManagerAssignments.FindAllRecords(x => x.BED <= effectiveDate && (!x.EED.HasValue || x.EED > effectiveDate));
+            effectiveAccountManagerAssignments = null;
+            IEnumerable<AccountManagerAssignment> accountManagerAssignments;
+            bool result = TryGetAccountManagerAssignments(out accountManagerAssignments);
+            if (accountManagerAssignments != null)
+            {
+                effectiveAccountManagerAssignments = accountManagerAssignments.FindAllRecords(x => x.BED <= effectiveDate && (!x.EED.HasValue || x.EED > effectiveDate));
+            }
+            return result;
         }
         public AccountManager TryGetEffectiveAccountManagerByAccountId(int carrierAccountId, DateTime effectiveDate)
         {
-            var effectiveAssignments = TryGetEffectiveAccountManagerAssignments(effectiveDate);
-            if (effectiveAssignments == null)
+            IEnumerable<AccountManagerAssignment> effectiveAccountManagerAssignments;
+            TryGetEffectiveAccountManagerAssignments(effectiveDate, out effectiveAccountManagerAssignments);
+            if (effectiveAccountManagerAssignments == null)
                 return null;
-            var effectiveAssignment = effectiveAssignments.FindRecord(x => x.CarrierAccountId == carrierAccountId);
+            var effectiveAssignment = effectiveAccountManagerAssignments.FindRecord(x => x.CarrierAccountId == carrierAccountId);
             if (effectiveAssignment == null)
                 return null;
             return new AccountManagerManager().GetAccountManagerById(effectiveAssignment.AccountManagerId);
         }
-        public IEnumerable<AccountManagerAssignment> TryGetAccountManagerAssignments()
+        public bool TryGetAccountManagerAssignments(out IEnumerable<AccountManagerAssignment> accountManagerAssignments)
         {
-            int? userId = null;
-            if (Vanrise.Security.Entities.ContextFactory.GetContext().TryGetLoggedInUserId(out userId))
+            accountManagerAssignments = null;
+
+            AccountManagerManager accountManagerManager = new AccountManagerManager();
+            var accountManagerId = accountManagerManager.GetCurrentUserAccountManagerId();
+            if (accountManagerId.HasValue)
             {
-                if (userId.HasValue)
-                {
-                    AccountManagerManager accountManagerManager = new AccountManagerManager();
-                    var accountManagerId = accountManagerManager.GetRootAccountManagerId();
-                    if (accountManagerId.HasValue)
-                    {
-                        return GetChildAccountManagerAssignments(accountManagerId.Value, true);
-                    }
-                }
+                accountManagerAssignments = GetAccountManagerAssignments(accountManagerId.Value, true);
+                return true;
             }
-            return null;
+            return false;
         }
         #endregion
 
+
         #region Private Methods
-        private List<AccountManagerAssignment> GetChildAccountManagerAssignments(int accountManagerId, bool withSubChildren)
+        private List<AccountManagerAssignment> GetAccountManagerAssignments(int accountManagerId, bool withSubChildren)
         {
             var accountManagerTreeNode = GetCacheAccountManagerTreeNodes().GetRecord(accountManagerId);
-            accountManagerTreeNode.ThrowIfNull("accountTreeNode", accountManagerId);
-            if (accountManagerTreeNode.ChildNodes != null)
+            if (accountManagerTreeNode == null)
+                return null;
+
+            List<AccountManagerAssignment> accountManagerAssignments = new List<AccountManagerAssignment>();
+            accountManagerAssignments.AddRange(accountManagerTreeNode.AccountManagerAssignments);
+
+            var childAccountManagerAssignments = GetAccountManagerAssignments(accountManagerTreeNode.ChildNodes, true);
+            if (childAccountManagerAssignments != null)
+                accountManagerAssignments.AddRange(childAccountManagerAssignments);
+
+            return accountManagerAssignments;
+        }
+        private List<AccountManagerAssignment> GetAccountManagerAssignments(List<AccountManagerTreeNode> accountManagerTreeNodes, bool withSubChildren)
+        {
+            if (accountManagerTreeNodes != null)
             {
-                List<AccountManagerAssignment> childAccountManagers = new List<AccountManagerAssignment>();
-                foreach (var childNode in accountManagerTreeNode.ChildNodes)
+                List<AccountManagerAssignment> accountManagerAssignments = new List<AccountManagerAssignment>();
+                foreach (var childNode in accountManagerTreeNodes)
                 {
-                    childAccountManagers.AddRange(childNode.AccountManagerAssignmentNode.AccountManagerAssignments);
+                    accountManagerAssignments.AddRange(childNode.AccountManagerAssignments);
                     if (withSubChildren)
                     {
-                        var subChildren = GetChildAccountManagerAssignments(childNode.AccountManagerAssignmentNode.AccountManager.AccountManagerId, withSubChildren);
+                        var subChildren = GetAccountManagerAssignments(childNode.ChildNodes, withSubChildren);
                         if (subChildren != null)
-                            childAccountManagers.AddRange(subChildren);
+                            accountManagerAssignments.AddRange(subChildren);
                     }
                 }
-                return childAccountManagers;
+                return accountManagerAssignments;
             }
             else
             {
@@ -152,11 +167,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             AccountManagerTreeNode node = new AccountManagerTreeNode
                             {
-                                AccountManagerAssignmentNode = new AccountManagerAssignmentNode
-                                {
-                                    AccountManager = accountManager,
-                                    AccountManagerAssignments = accountManagerAssignmentsByManagerId.GetRecord(accountManager.AccountManagerId)
-                                }
+                                AccountManager = accountManager,
+                                AccountManagerAssignments = accountManagerAssignmentsByManagerId.GetRecord(accountManager.AccountManagerId)
                             };
                             treeNodes.Add(accountManager.AccountManagerId, node);
                         }
@@ -165,7 +177,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     //updating nodes parent info
                     foreach (var node in treeNodes.Values)
                     {
-                        var accountManager = node.AccountManagerAssignmentNode.AccountManager;
+                        var accountManager = node.AccountManager;
                         if (accountManager.ParentId.HasValue)
                         {
                             AccountManagerTreeNode parentNode;
@@ -173,11 +185,9 @@ namespace TOne.WhS.BusinessEntity.Business
                             {
                                 node.ParentNode = parentNode;
                                 parentNode.ChildNodes.Add(node);
-                                parentNode.TotalSubAccountManagersCount++;
                                 while (parentNode.ParentNode != null)
                                 {
                                     parentNode = parentNode.ParentNode;
-                                    parentNode.TotalSubAccountManagersCount++;
                                 }
                             }
                         }
@@ -189,16 +199,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
         #region Private Classes
-        public class AccountManagerAssignmentNode
+        internal class AccountManagerTreeNode
         {
             public AccountManager AccountManager { get; set; }
             public List<AccountManagerAssignment> AccountManagerAssignments { get; set; }
-        }
-
-        internal class AccountManagerTreeNode
-        {
-            public AccountManagerAssignmentNode AccountManagerAssignmentNode { get; set; }
-
             public AccountManagerTreeNode ParentNode { get; set; }
 
             List<AccountManagerTreeNode> _childNodes = new List<AccountManagerTreeNode>();
@@ -209,7 +213,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     return _childNodes;
                 }
             }
-            public int TotalSubAccountManagersCount { get; set; }
         }
         #endregion
 

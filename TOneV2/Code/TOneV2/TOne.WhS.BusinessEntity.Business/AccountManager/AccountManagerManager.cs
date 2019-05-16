@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Business
         static Guid businessEntityDefinitionId = new Guid("0146109f-4e5d-4d66-be2f-15d689c960ee");
 
         #region Public Methods
-        public int? GetRootAccountManagerId()
+        public int? GetCurrentUserAccountManagerId()
         {
             int? userId = null;
             if (!Vanrise.Security.Entities.ContextFactory.GetContext().TryGetLoggedInUserId(out userId))
