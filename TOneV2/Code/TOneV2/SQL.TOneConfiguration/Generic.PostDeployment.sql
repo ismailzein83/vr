@@ -127,7 +127,12 @@ as (select * from (values
 ('6A8E0D5E-318C-4C6E-A99B-991EAE562B7C','Field_View','Field View','VR_GenericData_ListRecordRuntimeViewType','{"Editor":"vr-genericdata-fieldtype-datarecordtypelist-fieldview-definition"}'),
 ('F0FCE857-0119-4895-9459-648E14EFA60A','Comment View','Comment','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-common-comment-genericbeview-definition"}'),
 
-('043E058A-0E0E-40E2-82AB-FE04C896E615','VR_GenericData_ParentDataRecordType','Parent Data Record Type','VR_GenericData_DataRecordTypeExtraField','{"Editor":"vr-genericdata-datarecordtypeextrafields-parentrecordtype"}')
+('043E058A-0E0E-40E2-82AB-FE04C896E615','VR_GenericData_ParentDataRecordType','Parent Data Record Type','VR_GenericData_DataRecordTypeExtraField','{"Editor":"vr-genericdata-datarecordtypeextrafields-parentrecordtype"}'),
+('DEC7A24F-6439-4DEB-A912-1AA3B0290F21','RDBDataRecordStorageExpressionFieldFromJoin','From Join','VR_GenericData_RDBDataRecordStorageExpressionFieldSettingsConfig','{"Editor":"vr-genericdata-rdbrecordstoragesettings-expressionfield-fromjoin"}'),
+('FF293CA2-522F-47F1-808A-6178DF488E11','RDBDataRecordStorageCustomCodeJoin','Custom Code','VR_GenericData_RDBDataRecordStorageJoinSettingsConfig','{"Editor":"vr-genericadata-rdbdatarecordstoragesettings-customcodejoin"}'),
+('2E000BBE-3842-49D5-BCAE-C9B20D778F18','RDBDataRecordStorageCustomCodeExpressionField','Custom Code','VR_GenericData_RDBDataRecordStorageExpressionFieldSettingsConfig','{"Editor":"vr-genericdata-rdbrecordstoragesettings-expressionfield-customcode"}'),
+('E5FA86E6-FA20-4301-9FFE-E20A57BEC459','RDBDataRecordStorageJoinOtherRecordStorage','Other Record Storage','VR_GenericData_RDBDataRecordStorageJoinSettingsConfig','{"Editor":"vr-genericadata-rdbdatarecordstoragesettings-joinotherrecordstorage"}'),
+('1D2F3E14-AD64-41C6-AE5F-475D1CB75D2D','RDBDataRecordStorageSettingsFilterGroup','Filter Group','VR_GenericData_RDBDataRecordStorageSettingsFilterConfig','{"Editor":"vr-genericdata-rdbrecordstoragesettings-filter-filtergroup"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
