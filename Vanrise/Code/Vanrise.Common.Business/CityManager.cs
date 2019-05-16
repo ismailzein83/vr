@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class CityManager
+    public class CityManager : BaseBusinessEntityManager
     {
         #region Public Methods
 
@@ -334,6 +335,49 @@ namespace Vanrise.Common.Business
             return cityInfo;
         }
 
+        #endregion
+
+        #region IBusinessEntityManager
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetCachedCities().Select(itm => itm as dynamic).ToList();
+        }
+
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetCity(context.EntityId);
+        }
+
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var city = context.Entity as City;
+            return city.CityId;
+        }
+
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetCityName(Convert.ToInt32(context.EntityId));
+        }
+
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
