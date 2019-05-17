@@ -43,7 +43,13 @@ as (select * from (values
 ('0AD405A3-9BCF-4796-9A1A-6CC2C3F9AAA3','OpenBPInstanceViewer','Open BP Instance Viewer','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-openbpinstanceviewer-action"}'),
 ('0E9730F4-1197-456B-9261-E745FE4AFB3B','StartBPProcess_Generic','Start BP Process','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"bp-instance-genericbe-startbpprocess-action"}'),
 ('68DEA8B2-8817-40EE-977D-4EE683CE5092','FilterGroupBPGenericTaskTypeActionFilterCondition','Filter Group','BP_Generic_TaskType_ActionFilterCondition','{"Editor":"bp-generictasktypeactionfiltercondition-filtergroup"}'),
-('9B435BE4-43CD-4942-B5D3-95C8927D6885','IsTakenBPGenericTaskTypeActionFilterCondition','Taken By','BP_Generic_TaskType_ActionFilterCondition','{"Editor":"bp-generictasktypeactionfiltercondition-istaken"}')
+('9B435BE4-43CD-4942-B5D3-95C8927D6885','IsTakenBPGenericTaskTypeActionFilterCondition','Taken By','BP_Generic_TaskType_ActionFilterCondition','{"Editor":"bp-generictasktypeactionfiltercondition-istaken"}'),
+
+('a3080724-ca0f-45fa-893e-513d9857efb4','VRWorkflowUpdateBusinessEntityActivity','Update Business Entity','BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-updatebusinessentity" }'),
+('14b247ce-109f-4493-8979-57ca3dd090c3','VRWorkflowAddBusinessEntityActivity','Add Business Entity','BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-addbusinessentity" }'),
+('d92aeea3-2fca-4ccc-8beb-bb5c5181b1f0','VRWorkflowGetBusinessEntityActivity','Get Business Entity','BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-getbusinessentity" }'),
+('0defe6d7-d4c3-4e73-804a-ee6764cce57d','VRWorkflowWhileActivity','While','BP_VR_Workflow_Activity','{ "Editor": "businessprocess-vr-workflowactivity-while" }')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
