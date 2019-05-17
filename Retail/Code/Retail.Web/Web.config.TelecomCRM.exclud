@@ -55,6 +55,7 @@
     <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="QueueingConfigDBConnStringKey"                    value="ConfigurationDBConnString"/>
   </appSettings>
 
   <system.web>
