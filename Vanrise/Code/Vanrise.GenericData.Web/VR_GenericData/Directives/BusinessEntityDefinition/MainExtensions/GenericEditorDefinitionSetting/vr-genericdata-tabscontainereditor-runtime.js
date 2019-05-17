@@ -1,12 +1,11 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_GenericData_DataRecordFieldAPIService", "VR_GenericData_GenericUIRuntimeAPIService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_GenericUIRuntimeAPIService) {
+app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIUtilsService",
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
-            scope:
-            {
+            scope: {
                 onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
@@ -16,23 +15,24 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNot
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/TabsContainerRuntimeSettingTemplate.html"
         };
+
         function GenericEditorDefinitionSetting($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectedValues;
+            var fieldValuesByName;
             var definitionSettings;
             var dataRecordTypeId;
             var historyId;
             var parentFieldValues;
+            var genericContext;
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.tabContainers = [];
+
                 defineAPI();
             }
 
@@ -41,20 +41,20 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNot
 
                 api.load = function (payload) {
                     var promises = [];
-                    if (payload != undefined)
-                    {
+
+                    if (payload != undefined) {
                         selectedValues = payload.selectedValues;
+                        //fieldValuesByName = payload.fieldValuesByName;
                         definitionSettings = payload.definitionSettings;
                         dataRecordTypeId = payload.dataRecordTypeId;
                         historyId = payload.historyId;
                         parentFieldValues = payload.parentFieldValues;
+                        //genericContext = payload.genericContext;
                     }
-                    if (definitionSettings != undefined)
-                    {
-                        if(definitionSettings.TabContainers != undefined)
-                        {
-                            for(var i=0; i< definitionSettings.TabContainers.length; i++)
-                            {
+
+                    if (definitionSettings != undefined) {
+                        if (definitionSettings.TabContainers != undefined) {
+                            for (var i = 0; i < definitionSettings.TabContainers.length; i++) {
                                 var tabContainer = definitionSettings.TabContainers[i];
                                 var tabContainerDef = {
                                     payload: tabContainer,
@@ -66,12 +66,12 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNot
                             }
                         }
                     }
-                    function addTabContainer(tabContainerDef)
-                    {
+
+                    function addTabContainer(tabContainerDef) {
                         var tabContainer = {
-                            showTab :tabContainerDef.payload.ShowTab,
+                            showTab: tabContainerDef.payload.ShowTab,
                             tabTitle: tabContainerDef.payload.TabTitle,
-                            runtimeEditor: tabContainerDef.payload.TabSettings.RuntimeEditor,
+                            runtimeEditor: tabContainerDef.payload.TabSettings.RuntimeEditor
                         };
                         tabContainer.onEditorRuntimeDirectiveReady = function (api) {
                             tabContainer.editorRuntimeAPI = api;
@@ -82,8 +82,10 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNot
                                 dataRecordTypeId: dataRecordTypeId,
                                 definitionSettings: tabContainerDef.payload.TabSettings,
                                 selectedValues: selectedValues,
-                                historyId: historyId, 
-                                parentFieldValues: parentFieldValues
+                                //fieldValuesByName: fieldValuesByName,
+                                historyId: historyId,
+                                parentFieldValues: parentFieldValues,
+                               // genericContext: genericContext
                             };
                             VRUIUtilsService.callDirectiveLoad(tabContainer.editorRuntimeAPI, directivePayload, tabContainerDef.directiveLoadPromiseDeferred);
                         });
@@ -100,12 +102,45 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNot
                     }
                 };
 
+                //api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                //    if ($scope.scopeModel.tabContainers == undefined)
+                //        return null;
+
+                //    var _promises = [];
+
+                //    for (var i = 0; i < $scope.scopeModel.tabContainers.length; i++) {
+                //        var currentTabContainers = $scope.scopeModel.tabContainers[i];
+                //        if (currentTabContainers.editorRuntimeAPI.onFieldValueChanged != undefined && typeof (currentTabContainers.editorRuntimeAPI.onFieldValueChanged) == "function") {
+                //            var onFieldValueChangedPromise = currentTabContainers.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                //            if (onFieldValueChangedPromise != undefined)
+                //                _promises.push(onFieldValueChangedPromise);
+                //        }
+                //    }
+
+                //    return UtilsService.waitMultiplePromises(_promises);
+                //};
+
+                //api.setFieldValues = function (fieldValuesByNames) {
+                //    if ($scope.scopeModel.tabContainers == undefined)
+                //        return null;
+
+                //    var _promises = [];
+
+                //    for (var i = 0; i < $scope.scopeModel.tabContainers.length; i++) {
+                //        var currentTabContainers = $scope.scopeModel.tabContainers[i];
+                //        if (currentTabContainers.editorRuntimeAPI.setFieldValues != undefined && typeof (currentTabContainers.editorRuntimeAPI.setFieldValues) == "function") {
+                //            var onFieldValueSettedPromise = currentTabContainers.editorRuntimeAPI.setFieldValues(fieldValuesByNames);
+                //            if (onFieldValueSettedPromise != undefined)
+                //                _promises.push(onFieldValueSettedPromise);
+                //        }
+                //    }
+
+                //    return UtilsService.waitMultiplePromises(_promises);
+                //};
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-
         }
 
         return directiveDefinitionObject;

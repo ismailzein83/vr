@@ -1,41 +1,36 @@
 ﻿'use strict';
+
 app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
-            scope:
-            {
+            scope: {
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
                 var ctor = new SectionCtor(ctrl, $scope);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/Editor/Templates/SectionTemplate.html';
             }
-
         };
 
         function SectionCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
+
             var currentContext;
+            var genericContext;
+            var fieldValuesByName;
+            var parentFieldValues;
 
             function initializeController() {
                 ctrl.rows = [];
+
                 defineAPI();
             }
 
@@ -45,6 +40,10 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                 api.load = function (payload) {
                     if (payload.rows != undefined) {
                         currentContext = payload.context;
+                        genericContext = payload.genericContext;
+                        fieldValuesByName = payload.fieldValuesByName;
+                        parentFieldValues = payload.parentFieldValues;
+
                         var promises = [];
 
                         for (var i = 0; i < payload.rows.length; i++) {
@@ -54,6 +53,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                             promises.push(row.loadPromiseDeferred.promise);
                             prepareExtendedFieldsObject(row);
                         }
+
                         return UtilsService.waitMultiplePromises(promises);
                     }
                 };
@@ -67,6 +67,36 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                     return rows;
                 };
 
+                //api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                //    var _promises = [];
+
+                //    for (var i = 0; i < ctrl.rows.length; i++) {
+                //        var row = ctrl.rows[i];
+                //        if (row.fieldsAPI.onFieldValueChanged != undefined && typeof (row.fieldsAPI.onFieldValueChanged) == "function") {
+                //            var onFieldValueChangedPromise = row.fieldsAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                //            if (onFieldValueChangedPromise != undefined)
+                //                _promises.push(onFieldValueChangedPromise);
+                //        }
+                //    }
+
+                //    return UtilsService.waitMultiplePromises(_promises);
+                //};
+
+                //api.setFieldValues = function (fieldValuesByNames) {
+                //    var _promises = [];
+
+                //    for (var i = 0; i < ctrl.rows.length; i++) {
+                //        var row = ctrl.rows[i];
+                //        if (row.fieldsAPI.setFieldValues != undefined && typeof (row.fieldsAPI.setFieldValues) == "function") {
+                //            var onFieldValueSettedPromise = row.fieldsAPI.setFieldValues(fieldValuesByNames);
+                //            if (onFieldValueSettedPromise != undefined)
+                //                _promises.push(onFieldValueSettedPromise);
+                //        }
+                //    }
+
+                //    return UtilsService.waitMultiplePromises(_promises);
+                //};
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
@@ -77,14 +107,22 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                     row.fieldsAPI = api;
                     row.readyPromiseDeferred.resolve();
                 };
-                var payload = { context: getContext(), fields: row.Fields };
+
                 if (row.readyPromiseDeferred != undefined) {
                     row.readyPromiseDeferred.promise.then(function () {
                         row.readyPromiseDeferred = undefined;
 
+                        var payload = {
+                            fields: row.Fields,
+                            context: getContext(),
+                            //genericContext: genericContext,
+                            //fieldValuesByName: fieldValuesByName,
+                            //parentFieldValues: parentFieldValues
+                        };
                         VRUIUtilsService.callDirectiveLoad(row.fieldsAPI, payload, row.loadPromiseDeferred);
                     });
                 }
+
                 ctrl.rows.push(row);
             }
 
@@ -92,9 +130,6 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                 var context = UtilsService.cloneObject(currentContext, false);
                 return context;
             }
-
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;
