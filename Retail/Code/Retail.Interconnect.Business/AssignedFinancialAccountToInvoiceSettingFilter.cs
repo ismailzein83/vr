@@ -16,17 +16,33 @@ namespace Retail.Interconnect.Business
         public bool IsExcluded(IAccountFilterContext context)
         {
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-            var invoiceTypeExtendedSettings = invoiceTypeManager.GetInvoiceTypeExtendedSettings(base.InvoiceTypeId);
-            var interconnectInvoiceSettings = invoiceTypeExtendedSettings.CastWithValidate<InterconnectInvoiceSettings>("invoiceTypeExtendedSettings", base.InvoiceTypeId);
-            string classification;
-            if (interconnectInvoiceSettings.Type == InterconnectInvoiceType.Customer)
-                classification = "Customer";
-            else
-                classification = "Supplier";
             FinancialAccountManager manager = new FinancialAccountManager();
-            var financialAccounts = manager.GetFinancialAccounts(context.AccountBEDefinitionId, context.Account.AccountId, false, classification);
-            if (financialAccounts != null && financialAccounts.All(x => !base.IsMatched(x.FinancialAccountId)))
-                return true;
+            var invoiceTypeExtendedSettings = invoiceTypeManager.GetInvoiceTypeExtendedSettings(base.InvoiceTypeId);
+            var interconnectInvoiceSettings = invoiceTypeExtendedSettings as InterconnectInvoiceSettings;
+            if (interconnectInvoiceSettings != null)
+            {
+                string classification;
+                if (interconnectInvoiceSettings.Type == InterconnectInvoiceType.Customer)
+                    classification = "Customer";
+                else
+                    classification = "Supplier";
+                var financialAccounts = manager.GetFinancialAccounts(context.AccountBEDefinitionId, context.Account.AccountId, false, classification);
+                if (financialAccounts != null && financialAccounts.All(x => !base.IsMatched(x.FinancialAccountId)))
+                    return true;
+                return false;
+            }
+
+            var interconnectSettlementInvoiceSettings = invoiceTypeExtendedSettings as InterconnectSettlementInvoiceSettings;
+            if (interconnectSettlementInvoiceSettings != null)
+            {
+                var customerFinancialAccounts = manager.GetFinancialAccounts(context.AccountBEDefinitionId, context.Account.AccountId, false, "Customer");
+                if (customerFinancialAccounts != null && customerFinancialAccounts.All(x => !base.IsMatched(x.FinancialAccountId)))
+                    return true;
+                var supplierFinancialAccounts = manager.GetFinancialAccounts(context.AccountBEDefinitionId, context.Account.AccountId, false, "Supplier");
+                if (supplierFinancialAccounts != null && supplierFinancialAccounts.All(x => !base.IsMatched(x.FinancialAccountId)))
+                    return true;
+                return false;
+            }
             return false;
         }
 
