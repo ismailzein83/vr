@@ -9,7 +9,7 @@ ECHO TelecomCRM WebSite
 
 xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\RetailSource\list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
-xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.TelecomCRM.exclud" /y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Web.config"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.TelecomCRM.exclud" /y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Web.config*"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\menu-icons" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Images\menu-icons\"
 ::by default load flat theme
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\flat-TelecomCRM-logoonheader.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Images\logoonheader.png*"
@@ -52,6 +52,16 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules" /S /E /R /y /v /i /z /Q		
 xcopy "C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Client\Modules\VR_GenericData\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Client\Modules\Analytic\"
 xcopy "C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Client\Modules\BusinessProcess\"
-
+xcopy "C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Client\Modules\VR_BEBridge\"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\Retail.*"
+xcopy "C:\Publish\Retail\bin\Retail.Web.*" /S /E /R /y /v /i /z /Q													"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\Vanrise.Integration.*"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\Vanrise.Queueing.*"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\Vanrise.Reprocess.*"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\Vanrise.AccountManager.*"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\Vanrise.AccountBalance.*"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\Vanrise.Invoice.*"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\Vanrise.InvToAccBalanceRelation.*"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\Vanrise.NumberingPlan.*"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\*.pdb"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TelecomCRM\%YYYYMMDD%\Bin\*.config"
