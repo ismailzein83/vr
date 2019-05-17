@@ -29,6 +29,8 @@ namespace Retail.Interconnect.Entities
         public int NumberOfCalls { get; set; }
         public decimal TotalDuration { get; set; }
         public decimal TotalTrafficAmount { get; set; }
+        public decimal TotalSMSAmount { get; set; }
         public decimal TotalRecurringChargeAmount { get; set; }
+        public decimal TotalFullAmount { get; set; }
     }
 }

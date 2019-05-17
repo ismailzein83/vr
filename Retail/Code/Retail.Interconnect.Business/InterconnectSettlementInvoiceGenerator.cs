@@ -71,7 +71,7 @@ namespace Retail.Interconnect.Business
 
             BusinessEntity.Business.ConfigManager configManager = new ConfigManager();
             var invoiceSettings = configManager.GetRetailInvoiceSettings();
-            if(invoiceSettings != null)
+            if (invoiceSettings != null)
             {
                 if (invoiceSettings.RequireGroupByMonth)
                 {
@@ -186,6 +186,7 @@ namespace Retail.Interconnect.Business
 
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
+                                        settlementInvoiceDetailByCurrency.TotalFullAmount = originalDataCurrrency.OriginalAmount.Value;
 
                                         settlementInvoicedetail.DueToSystemAmount += originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoicedetail.DueToSystemAmountWithTaxes += originalDataCurrrency.OriginalAmount.Value;
@@ -209,6 +210,8 @@ namespace Retail.Interconnect.Business
 
                                         settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
                                         settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
+                                        settlementInvoiceDetailByCurrency.TotalSMSAmount = invoiceItemDetails.TotalSMSAmount;
+                                        settlementInvoiceDetailByCurrency.TotalFullAmount = invoiceItemDetails.TotalFullAmount;
 
                                         settlementInvoicedetail.DueToSystemAmount += invoiceItemDetails.AmountWithTaxes;
                                         settlementInvoicedetail.DueToSystemAmountWithTaxes += invoiceItemDetails.AmountWithTaxes;
@@ -311,6 +314,7 @@ namespace Retail.Interconnect.Business
                                         // settlementInvoiceItemSummaryDetail.DueToCompanyTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
+                                        settlementInvoiceDetailByCurrency.TotalFullAmount = originalDataCurrrency.OriginalAmount.Value;
 
                                         settlementInvoicedetail.DueToCompanyAmount += originalDataCurrrency.OriginalAmount.Value;
                                         settlementInvoicedetail.DueToCompanyAmountWithTaxes += originalDataCurrrency.OriginalAmount.Value;
@@ -337,6 +341,8 @@ namespace Retail.Interconnect.Business
 
                                         settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
                                         settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
+                                        settlementInvoiceDetailByCurrency.TotalSMSAmount = invoiceItemDetails.TotalSMSAmount;
+                                        settlementInvoiceDetailByCurrency.TotalFullAmount = invoiceItemDetails.TotalFullAmount;
 
                                         settlementInvoicedetail.DueToCompanyAmount += invoiceItemDetails.Amount;
                                         settlementInvoicedetail.DueToCompanyAmountWithTaxes += invoiceItemDetails.AmountWithTaxes;
