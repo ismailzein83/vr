@@ -133,7 +133,7 @@ namespace Retail.RA.Business
 
             foreach (var periodDefinition in cachedPeriodDefinition.Values)
             {
-                if (day != null && day.Date >= periodDefinition.FromDate.Date && day <= periodDefinition.ToDate.Date)
+                if (day != null && day.Date >= periodDefinition.FromDate.Date && day.Date <= periodDefinition.ToDate.Date)
                     return periodDefinition.PeriodDefinitionId;
             }
 
