@@ -1031,7 +1031,7 @@ La facture doit être payée avant</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>International Entrant</Value>
+                              <Value>national Entrant</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>

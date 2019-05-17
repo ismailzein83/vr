@@ -868,10 +868,8 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>
-                                ="Facture du trafic d'interconnexion International "+
-                                iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value,"",Parameters!SMSServiceTypes.Value)
-                              </Value>
+                              <Value>="Facture du trafic d'interconnexion national "+
+                                iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value,"",Parameters!SMSServiceTypes.Value)</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
