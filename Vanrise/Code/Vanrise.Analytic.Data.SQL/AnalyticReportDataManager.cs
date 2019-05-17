@@ -28,13 +28,13 @@ namespace Vanrise.Analytic.Data.SQL
         }
         public bool AddAnalyticReport(Entities.AnalyticReport analyticReport)
         {
-            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticReport_Insert", analyticReport.AnalyticReportId, analyticReport.Name, analyticReport.UserID, analyticReport.AccessType, Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticReport_Insert", analyticReport.AnalyticReportId, analyticReport.Name, analyticReport.UserID, analyticReport.AccessType, analyticReport.DevProjectId, Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
 
             return (recordesEffected > 0);
         }
         public bool UpdateAnalyticReport(Entities.AnalyticReport analyticReport)
         {
-            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticReport_Update", analyticReport.AnalyticReportId, analyticReport.Name, analyticReport.UserID, analyticReport.AccessType, Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticReport_Update", analyticReport.AnalyticReportId, analyticReport.Name, analyticReport.UserID, analyticReport.AccessType, analyticReport.DevProjectId, Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
             return (recordesEffected > 0);
         }
         #endregion

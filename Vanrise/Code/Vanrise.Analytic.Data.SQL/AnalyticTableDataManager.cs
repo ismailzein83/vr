@@ -32,13 +32,13 @@ namespace Vanrise.Analytic.Data.SQL
         {
             object analyticTableID;
 
-            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_Insert", analyticTable.AnalyticTableId, analyticTable.Name, Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_Insert", analyticTable.AnalyticTableId, analyticTable.Name,analyticTable.DevProjectId, Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
             return (recordesEffected > 0);
         }
 
         public bool UpdateAnalyticTable(Entities.AnalyticTable analyticTable)
         {
-            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_Update", analyticTable.AnalyticTableId, analyticTable.Name, Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_Update", analyticTable.AnalyticTableId, analyticTable.Name, analyticTable.DevProjectId, Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
             return (recordesEffected > 0);
         }
         public bool SaveAnalyticTableMeasureStyles(AnalyticTableMeasureStyles measureStyles,Guid analyticTableId)

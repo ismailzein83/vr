@@ -77,6 +77,9 @@ namespace Vanrise.Analytic.Data.RDB
 
             insertQuery.Column(COL_ID).Value(analyticTable.AnalyticTableId);
             insertQuery.Column(COL_Name).Value(analyticTable.Name);
+            if(analyticTable.DevProjectId.HasValue)
+            insertQuery.Column(COL_DevProjectID).Value(analyticTable.DevProjectId.Value);
+
             if (analyticTable.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
 
@@ -109,6 +112,10 @@ namespace Vanrise.Analytic.Data.RDB
             notExistsCondition.EqualsCondition(COL_Name).Value(analyticTable.Name);
 
             updateQuery.Column(COL_Name).Value(analyticTable.Name);
+            if (analyticTable.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(analyticTable.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
             if (analyticTable.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
             else

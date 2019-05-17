@@ -79,6 +79,8 @@ namespace Vanrise.Analytic.Data.RDB
             insertQuery.Column(COL_Name).Value(analyticReport.Name);
             insertQuery.Column(COL_UserID).Value(analyticReport.UserID);
             insertQuery.Column(COL_AccessType).Value((int)analyticReport.AccessType);
+            if (analyticReport.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(analyticReport.DevProjectId.Value);
             if (analyticReport.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
 
@@ -117,7 +119,10 @@ namespace Vanrise.Analytic.Data.RDB
                 updateQuery.Column(COL_Settings).Null();
             updateQuery.Column(COL_UserID).Value(analyticReport.UserID);
             updateQuery.Column(COL_AccessType).Value((int)analyticReport.AccessType);
-
+            if (analyticReport.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(analyticReport.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
             updateQuery.Where().EqualsCondition(COL_ID).Value(analyticReport.AnalyticReportId);
 
             return queryContext.ExecuteNonQuery() > 0;
