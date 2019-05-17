@@ -53,11 +53,10 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData" /S /E /R /y /
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Client\Modules\Analytic\"
 xcopy "C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Client\Modules\BusinessProcess\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Client\Modules\VR_BEBridge\"
-
+xcopy "C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Client\Modules\Queueing\"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Bin\Retail.*"
 xcopy "C:\Publish\Retail\bin\Retail.Web.*" /S /E /R /y /v /i /z /Q													"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Bin\"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Bin\Vanrise.Integration.*"
-del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Bin\Vanrise.Queueing.*"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Bin\Vanrise.Reprocess.*"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Bin\Vanrise.AccountManager.*"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\NetworkInventory\%YYYYMMDD%\Bin\Vanrise.AccountBalance.*"

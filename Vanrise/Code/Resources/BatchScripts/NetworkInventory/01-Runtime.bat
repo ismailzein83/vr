@@ -16,7 +16,6 @@ xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R			
 del /s /q /f																					"\\192.168.110.185\Fixes\WebSite\NetworkInventory\Runtime\%YYYYMMDD%\*.pdb"
 del /s /q /f																					"\\192.168.110.185\Fixes\WebSite\NetworkInventory\Runtime\%YYYYMMDD%\Retail.*"
 del /s /q /f																					"\\192.168.110.185\Fixes\WebSite\NetworkInventory\Runtime\%YYYYMMDD%\Vanrise.Integration.*"
-del /s /q /f																					"\\192.168.110.185\Fixes\WebSite\NetworkInventory\Runtime\%YYYYMMDD%\Vanrise.Queueing.*"
 del /s /q /f																					"\\192.168.110.185\Fixes\WebSite\NetworkInventory\Runtime\%YYYYMMDD%\Vanrise.Reprocess.*"
 del /s /q /f																					"\\192.168.110.185\Fixes\WebSite\NetworkInventory\Runtime\%YYYYMMDD%\Vanrise.AccountManager.*"
 del /s /q /f																					"\\192.168.110.185\Fixes\WebSite\NetworkInventory\Runtime\%YYYYMMDD%\Vanrise.AccountBalance.*"
