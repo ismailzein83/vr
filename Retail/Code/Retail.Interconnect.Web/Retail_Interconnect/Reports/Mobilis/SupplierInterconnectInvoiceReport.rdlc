@@ -232,6 +232,7 @@
                               <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
+                                <FontFamily>Verdana</FontFamily>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -303,6 +304,7 @@
                               <Value>="Du "+CDate(Parameters!FromDate.Value).ToString("dd MMM yyyy")+" au "+CDate(Parameters!ToDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
+                                <FontFamily>Verdana</FontFamily>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -371,11 +373,12 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="Facture du trafic d'interconnexion national "+
+                              <Value>="Facture du trafic d'Interconnexion National "+
 iif(Parameters!NoVoice.Value,"","Voix")+ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value OR Parameters!NoVoice.Value,"",", ") + iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS.Value,"",Parameters!SMSServiceTypes.Value)
 +" sortant du réseau de "+Parameters!CompanyName.Value+", entrant dans le réseau de "+Parameters!AccountName.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
+                                <FontFamily>Verdana</FontFamily>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1018,7 +1021,7 @@ La facture doit être payée avant</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Trafic d'interconnexion</Value>
+                              <Value>Trafic d'Interconnexion</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1031,7 +1034,7 @@ La facture doit être payée avant</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>national Entrant</Value>
+                              <Value>National Entrant</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
