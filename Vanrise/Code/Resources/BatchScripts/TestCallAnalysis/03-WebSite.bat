@@ -59,6 +59,7 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic" /S /E /R /y /v /i /z /
 xcopy "C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\%YYYYMMDD%\Client\Modules\BusinessProcess\"
 xcopy "C:\TFS\BusinessProcess\Code\Vanrise.Reprocess.Web\Reprocess" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\%YYYYMMDD%\Client\Modules\Reprocess\"
 xcopy "C:\TFS\Retail\Code\Retail.BusinessEntity.Web\Retail_BusinessEntity" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\%YYYYMMDD%\Client\Modules\Retail_BusinessEntity\"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.NumberingPlan.Web\VR_NumberingPlan" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\%YYYYMMDD%\Client\Modules\VR_NumberingPlan\"
 xcopy "C:\TFS\Retail\Code\TestCallAnalysis.Web\TestCallAnalysis" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\%YYYYMMDD%\Client\Modules\TestCallAnalysis\"
 xcopy "C:\Publish\Retail\bin\TestCallAnalysis.*" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\%YYYYMMDD%\Bin\"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TestCallAnalysis\%YYYYMMDD%\Bin\*.pdb"
