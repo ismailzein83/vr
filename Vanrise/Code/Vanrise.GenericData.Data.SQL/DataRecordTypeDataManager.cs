@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.Data.SQL
             string serializedExtraFieldsEvaluator = dataRecordType.ExtraFieldsEvaluator != null ? Vanrise.Common.Serializer.Serialize(dataRecordType.ExtraFieldsEvaluator) : null;
             string serializedSettings = dataRecordType.Settings != null ? Vanrise.Common.Serializer.Serialize(dataRecordType.Settings) : null;
 
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Update", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, serializedFields, serializedExtraFieldsEvaluator, serializedSettings);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Update", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, dataRecordType.DevProjectId, serializedFields, serializedExtraFieldsEvaluator, serializedSettings);
             return (recordesEffected > 0);
         }
 
@@ -42,7 +42,7 @@ namespace Vanrise.GenericData.Data.SQL
             string serializedExtraFieldsEvaluator = dataRecordType.ExtraFieldsEvaluator != null ? Vanrise.Common.Serializer.Serialize(dataRecordType.ExtraFieldsEvaluator) : null;
             string serializedSettings = dataRecordType.Settings != null ? Vanrise.Common.Serializer.Serialize(dataRecordType.Settings) : null;
 
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Insert", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, serializedFields, serializedExtraFieldsEvaluator, serializedSettings);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Insert", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId,dataRecordType.DevProjectId, serializedFields, serializedExtraFieldsEvaluator, serializedSettings);
             return (recordesEffected > 0);
         }
 

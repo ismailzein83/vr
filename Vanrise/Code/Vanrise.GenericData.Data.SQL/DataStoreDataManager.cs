@@ -26,12 +26,12 @@ namespace Vanrise.GenericData.Data.SQL
         public bool AddDataStore(DataStore dataStore) 
         {
 
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataStore_Insert", dataStore.DataStoreId, dataStore.Name, Vanrise.Common.Serializer.Serialize(dataStore.Settings));
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataStore_Insert", dataStore.DataStoreId, dataStore.Name,dataStore.DevProjectId, Vanrise.Common.Serializer.Serialize(dataStore.Settings));
             return (affectedRows == 1);
         }
         public bool UpdateDataStore(DataStore dataStore)
         {
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataStore_Update", dataStore.DataStoreId, dataStore.Name, Vanrise.Common.Serializer.Serialize(dataStore.Settings));
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataStore_Update", dataStore.DataStoreId, dataStore.Name, dataStore.DevProjectId, Vanrise.Common.Serializer.Serialize(dataStore.Settings));
             return (affectedRows == 1);
         }
         public bool AreDataStoresUpdated(ref object updateHandle)

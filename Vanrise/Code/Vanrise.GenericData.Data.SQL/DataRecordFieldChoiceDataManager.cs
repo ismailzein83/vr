@@ -25,12 +25,12 @@ namespace Vanrise.GenericData.Data.SQL
 
         public bool AddDataRecordFieldChoice(DataRecordFieldChoice dataRecordFieldChoice)
         {
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataRecordFieldChoice_Insert", dataRecordFieldChoice.DataRecordFieldChoiceId, dataRecordFieldChoice.Name, Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataRecordFieldChoice_Insert", dataRecordFieldChoice.DataRecordFieldChoiceId, dataRecordFieldChoice.Name, dataRecordFieldChoice.DevProjectId, Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
             return (affectedRows > 0 );
         }
         public bool UpdateDataRecordFieldChoice(DataRecordFieldChoice dataRecordFieldChoice)
         {
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataRecordFieldChoice_Update", dataRecordFieldChoice.DataRecordFieldChoiceId, dataRecordFieldChoice.Name, Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataRecordFieldChoice_Update", dataRecordFieldChoice.DataRecordFieldChoiceId, dataRecordFieldChoice.Name, dataRecordFieldChoice.DevProjectId, Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
             return (affectedRows > 0);
         }
         public bool AreDataRecordFieldChoicesUpdated(ref object updateHandle)

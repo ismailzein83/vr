@@ -78,6 +78,10 @@ namespace Vanrise.GenericData.Data.RDB
             insertQuery.Column(COL_ID).Value(businessEntityDefinition.BusinessEntityDefinitionId);
             insertQuery.Column(COL_Name).Value(businessEntityDefinition.Name);
             insertQuery.Column(COL_Title).Value(businessEntityDefinition.Title);
+
+            if (businessEntityDefinition.DevProjectId.HasValue)
+            insertQuery.Column(COL_DevProjectID).Value(businessEntityDefinition.DevProjectId.Value);
+
             if (businessEntityDefinition.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Serializer.Serialize(businessEntityDefinition.Settings));
             return queryContext.ExecuteNonQuery() > 0;
@@ -141,6 +145,10 @@ when not matched by target then
             ifNotExists.NotEqualsCondition(COL_ID).Value(businessEntityDefinition.BusinessEntityDefinitionId);
             updateQuery.Column(COL_Name).Value(businessEntityDefinition.Name);
             updateQuery.Column(COL_Title).Value(businessEntityDefinition.Title);
+            if (businessEntityDefinition.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(businessEntityDefinition.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
             if (businessEntityDefinition.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Serializer.Serialize(businessEntityDefinition.Settings));
             else

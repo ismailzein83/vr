@@ -69,7 +69,11 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.EqualsCondition(COL_Name).Value(dataRecordFieldChoice.Name);
             insertQuery.Column(COL_ID).Value(dataRecordFieldChoice.DataRecordFieldChoiceId);
             insertQuery.Column(COL_Name).Value(dataRecordFieldChoice.Name);
-            if(dataRecordFieldChoice.Settings!=null)
+
+            if (dataRecordFieldChoice.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(dataRecordFieldChoice.DevProjectId.Value);
+
+            if (dataRecordFieldChoice.Settings!=null)
                 insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -99,6 +103,12 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.NotEqualsCondition(COL_ID).Value(dataRecordFieldChoice.DataRecordFieldChoiceId);
             ifNotExists.EqualsCondition(COL_Name).Value(dataRecordFieldChoice.Name);
             updateQuery.Column(COL_Name).Value(dataRecordFieldChoice.Name);
+
+            if (dataRecordFieldChoice.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(dataRecordFieldChoice.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+
             if (dataRecordFieldChoice.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
             else

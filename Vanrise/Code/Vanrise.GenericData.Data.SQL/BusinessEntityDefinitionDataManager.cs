@@ -30,7 +30,7 @@ namespace Vanrise.GenericData.Data.SQL
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(businessEntityDefinition.Settings);
             }
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_BusinessEntityDefinition_Update", businessEntityDefinition.BusinessEntityDefinitionId, businessEntityDefinition.Name, businessEntityDefinition.Title, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_BusinessEntityDefinition_Update", businessEntityDefinition.BusinessEntityDefinitionId, businessEntityDefinition.Name, businessEntityDefinition.Title, businessEntityDefinition.DevProjectId, serializedObj);
             return (recordesEffected > 0);
         }
 
@@ -41,7 +41,7 @@ namespace Vanrise.GenericData.Data.SQL
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(businessEntityDefinition.Settings);
             }
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_BusinessEntityDefinition_Insert", businessEntityDefinition.BusinessEntityDefinitionId, businessEntityDefinition.Name, businessEntityDefinition.Title, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_BusinessEntityDefinition_Insert", businessEntityDefinition.BusinessEntityDefinitionId, businessEntityDefinition.Name, businessEntityDefinition.Title, businessEntityDefinition.DevProjectId, serializedObj);
 
 
             return (recordesEffected > 0);

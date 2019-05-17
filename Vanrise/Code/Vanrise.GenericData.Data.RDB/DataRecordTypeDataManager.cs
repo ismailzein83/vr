@@ -85,6 +85,8 @@ namespace Vanrise.GenericData.Data.RDB
             insertQuery.Column(COL_Name).Value(dataRecordType.Name);
             if (dataRecordType.ParentId.HasValue)
                 insertQuery.Column(COL_ParentID).Value(dataRecordType.ParentId.Value);
+            if (dataRecordType.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(dataRecordType.DevProjectId.Value);
             if (dataRecordType.Fields != null)
                 insertQuery.Column(COL_Fields).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.Fields));
             if (dataRecordType.ExtraFieldsEvaluator != null)
@@ -142,6 +144,10 @@ namespace Vanrise.GenericData.Data.RDB
                 updateQuery.Column(COL_ParentID).Value(dataRecordType.ParentId.Value);
             else
                 updateQuery.Column(COL_ParentID).Null();
+            if (dataRecordType.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(dataRecordType.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
             if (dataRecordType.Fields != null)
                 updateQuery.Column(COL_Fields).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.Fields));
             else

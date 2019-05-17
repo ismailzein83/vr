@@ -71,7 +71,9 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.EqualsCondition(COL_Name).Value(dataStore.Name);
             insertQuery.Column(COL_ID).Value(dataStore.DataStoreId);
             insertQuery.Column(COL_Name).Value(dataStore.Name);
-            if(dataStore.Settings!=null)
+            if (dataStore.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(dataStore.DevProjectId.Value);
+            if (dataStore.Settings!=null)
                 insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataStore.Settings));
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -101,6 +103,12 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.NotEqualsCondition(COL_ID).Value(dataStore.DataStoreId);
             ifNotExists.EqualsCondition(COL_Name).Value(dataStore.Name);
             updateQuery.Column(COL_Name).Value(dataStore.Name);
+
+            if (dataStore.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(dataStore.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+
             if (dataStore.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataStore.Settings));
             else
