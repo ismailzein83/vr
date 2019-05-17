@@ -95,6 +95,7 @@
     <Compile Include="Contracts\PabxContractDetail.cs" />
     <Compile Include="Contracts\TelephonyContractEntity.cs" />
     <Compile Include="Contracts\TelephonyContractInfo.cs" />
+    <Compile Include="Service.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="ContractService.cs" />
     <Compile Include="ContractTakeOverRequestInput.cs" />
@@ -174,7 +175,7 @@
     <Compile Include="ServiceDetail.cs" />
     <Compile Include="ServicePayment.cs" />
     <Compile Include="SOMRequestInput.cs" />
-    <Compile Include="SOMRequestOutput - Copy.cs" />
+    <Compile Include="WriteBusinessTransactionInput.cs" />
     <Compile Include="SOMRequestOutput.cs" />
     <Compile Include="CustomerContractService.cs" />
     <Compile Include="Contracts\TelephonyContractDetail.cs" />

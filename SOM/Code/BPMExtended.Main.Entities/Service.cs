@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class WriteBusinessTransactionInput
+    public class ServiceData
     {
-        public string ContractId { get; set; }
-        public List<ServicePayment> Services { get; set; } 
+        public string Id { get; set; }
+        public string packageId { get; set; }
     }
 }
