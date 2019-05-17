@@ -54,5 +54,6 @@
     Run: { value: 52, description: "Run", type: "Run" },
     CalculateRate: { value: 53, description: "CalculateRate", type: "CalculateRate" },
     Skip: { value: 54, description: "Skip", type: "Skip" },
-    Generate: { value: 55, description: "Generate", type: "Generate" }
+    Generate: { value: 55, description: "Generate", type: "Generate" },
+    SaveAndNew: { value: 56, description: "Save & New", type: "SaveAndNew" }
 });

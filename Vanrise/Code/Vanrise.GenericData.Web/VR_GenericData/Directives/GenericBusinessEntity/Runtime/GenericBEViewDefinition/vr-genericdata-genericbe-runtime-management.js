@@ -130,8 +130,11 @@
                 };
 
                 $scope.addBusinessEntity = function () {
-                    var onGenericBusinessEntityAdded = function (addedGenericBusinessEntity) {
+                    var onGenericBusinessEntityAdded = function (addedGenericBusinessEntity, reopen) {
                         gridDirectiveAPI.onGenericBEAdded(addedGenericBusinessEntity);
+                        if (reopen) {
+                            VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessEntityDefinitionAPI.getSelectedIds(), editorSize);
+                        }
                     };
 
                     var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", genericBEDefinitionSettings.EditorSize);

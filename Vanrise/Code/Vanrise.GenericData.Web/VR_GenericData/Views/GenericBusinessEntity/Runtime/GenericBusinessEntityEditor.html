@@ -9,6 +9,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
+                <vr-button type="SaveAndNew" formname="formGenericBusinessEntityEditor"  ng-if="!scopeModel.isEditMode"  data-onclick="scopeModel.saveAndNew"></vr-button>
                 <vr-button type="Save" formname="formGenericBusinessEntityEditor" data-onclick="scopeModel.save"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>

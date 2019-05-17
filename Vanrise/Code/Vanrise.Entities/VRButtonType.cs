@@ -62,6 +62,7 @@ namespace Vanrise.Entities
         Load = 51,
         Run = 52,
         CalculateRate = 53,
-        Skip = 54
+        Skip = 54,
+        SaveAndNew = 56
     }
 }

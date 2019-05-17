@@ -6,7 +6,7 @@
 
     function GenericBusinessEntityEditorController($scope, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_GenericBusinessEntityAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
-        var isEditMode;
+        var saveAndNew = false;
         var definitionTitle;
         var titleFieldName;
         var titleOperation;
@@ -22,6 +22,8 @@
         var runtimeEditorAPI;
         var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        $scope.scopeModel = {};
+
         loadParameters();
         defineScope();
         load();
@@ -34,13 +36,10 @@
                 genericBusinessEntityId = parameters.genericBusinessEntityId;
                 fieldValues = parameters.fieldValues;
             }
-
-            isEditMode = (genericBusinessEntityId != undefined);
+            $scope.scopeModel.isEditMode = (genericBusinessEntityId != undefined);
         }
 
         function defineScope() {
-            $scope.scopeModel = {
-            };
 
             $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
                 runtimeEditorAPI = api;
@@ -50,8 +49,12 @@
                 additionalErrorsDirectiveAPI = api;
                 additionalErrorsReadyDeferred.resolve();
             };
+            $scope.scopeModel.saveAndNew = function () {
+                saveAndNew = true;
+                return $scope.scopeModel.save();
+            };
             $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateBusinessEntity() : insertBusinessEntity();
+                return ($scope.scopeModel.isEditMode) ? updateBusinessEntity() : insertBusinessEntity();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
@@ -114,7 +117,7 @@
             return VR_GenericData_GenericBusinessEntityAPIService.AddGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded(titleOperation, response, 'Title', additionalErrorsDirectiveAPI)) {
                     if ($scope.onGenericBEAdded != undefined)
-                        $scope.onGenericBEAdded(response.InsertedObject);
+                        $scope.onGenericBEAdded(response.InsertedObject, saveAndNew);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
