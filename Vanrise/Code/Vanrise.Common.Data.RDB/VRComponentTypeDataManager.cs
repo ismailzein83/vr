@@ -79,7 +79,11 @@ namespace Vanrise.Common.Data.RDB
 			insertQuery.Column(COL_ID).Value(componentType.VRComponentTypeId);
 			insertQuery.Column(COL_Name).Value(componentType.Name);
 			insertQuery.Column(COL_ConfigID).Value(componentType.Settings.VRComponentTypeConfigId);
-			if(componentType.Settings!=null)
+
+            if (componentType.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(componentType.DevProjectId.Value);
+
+            if (componentType.Settings!=null)
 			insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(componentType.Settings));
 			return queryContext.ExecuteNonQuery() > 0;
 		}
@@ -95,7 +99,13 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.EqualsCondition(COL_Name).Value(componentType.Name);
 
 			updateQuery.Column(COL_Name).Value(componentType.Name);
-			if (componentType.Settings != null)
+
+            if (componentType.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(componentType.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+
+            if (componentType.Settings != null)
 				updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(componentType.Settings));
 			else
 				updateQuery.Column(COL_Settings).Null();

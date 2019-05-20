@@ -84,7 +84,8 @@ namespace Vanrise.Security.Data.RDB
                 ViewContent = Common.Serializer.Deserialize<ViewContent>(reader.GetString(COL_Content)),
                 Type = reader.GetGuid(COL_Type), 
                 ModuleId = reader.GetNullableGuid(COL_Module),
-                Rank = reader.GetInt(COL_Rank)
+                Rank = reader.GetInt(COL_Rank),
+                DevProjectId= reader.GetNullableGuid(COL_DevProjectID)
             };
             var settings = reader.GetString(COL_Settings);
             if (!string.IsNullOrEmpty(settings))
@@ -110,6 +111,8 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.Column(COL_Url).Value(view.Url);
             if (view.ModuleId.HasValue)
                 insertQuery.Column(COL_Module).Value(view.ModuleId.Value);
+            if (view.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(view.DevProjectId.Value);
             if (view.Audience != null && ((view.Audience.Groups != null && view.Audience.Groups.Count > 0) || (view.Audience.Users != null && view.Audience.Users.Count > 0)))
             {
                 insertQuery.Column(COL_Audience).Value(Common.Serializer.Serialize(view.Audience, true));
@@ -180,6 +183,12 @@ namespace Vanrise.Security.Data.RDB
                 updateQuery.Column(COL_Module).Value(view.ModuleId.Value);
             else
                 updateQuery.Column(COL_Module).Null();
+
+            if (view.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(view.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+
             updateQuery.Column(COL_Title).Value(view.Title);
             if (view.Audience != null)
             {

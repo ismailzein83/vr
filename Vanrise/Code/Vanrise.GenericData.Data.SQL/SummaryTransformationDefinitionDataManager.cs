@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.Data.SQL
         {
             string serializedObj = null;
             serializedObj = Vanrise.Common.Serializer.Serialize(summaryTransformationDefinition);
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_SummaryTransformationDefinition_Update", summaryTransformationDefinition.SummaryTransformationDefinitionId, summaryTransformationDefinition.Name, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_SummaryTransformationDefinition_Update", summaryTransformationDefinition.SummaryTransformationDefinitionId, summaryTransformationDefinition.Name, summaryTransformationDefinition.DevProjectId, serializedObj);
             return (recordesEffected > 0);
         }
 
@@ -40,7 +40,7 @@ namespace Vanrise.GenericData.Data.SQL
         {
             string serializedObj = null;
             serializedObj = Vanrise.Common.Serializer.Serialize(summaryTransformationDefinition);
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_SummaryTransformationDefinition_Insert", summaryTransformationDefinition.SummaryTransformationDefinitionId, summaryTransformationDefinition.Name, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_SummaryTransformationDefinition_Insert", summaryTransformationDefinition.SummaryTransformationDefinitionId, summaryTransformationDefinition.Name, summaryTransformationDefinition.DevProjectId, serializedObj);
 
             return (recordesEffected > 0);
         }

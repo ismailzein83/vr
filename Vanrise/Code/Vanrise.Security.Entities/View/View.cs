@@ -29,6 +29,7 @@ namespace Vanrise.Security.Entities
         public ViewContent ViewContent { get; set; }
 
         public int Rank { get; set; }
+        public Guid? DevProjectId { get; set; }
 
         public ViewSettings Settings { get; set; }
     }

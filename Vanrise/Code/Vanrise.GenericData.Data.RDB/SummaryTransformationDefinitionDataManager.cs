@@ -77,6 +77,8 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.EqualsCondition(COL_Name).Value(summaryTransformationDefinition.Name);
             insertQuery.Column(COL_ID).Value(summaryTransformationDefinition.SummaryTransformationDefinitionId);
             insertQuery.Column(COL_Name).Value(summaryTransformationDefinition.Name);
+            if (summaryTransformationDefinition.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(summaryTransformationDefinition.DevProjectId.Value);
             insertQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(summaryTransformationDefinition));
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -106,6 +108,10 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.NotEqualsCondition(COL_ID).Value(summaryTransformationDefinition.SummaryTransformationDefinitionId);
             ifNotExists.EqualsCondition(COL_Name).Value(summaryTransformationDefinition.Name);
             updateQuery.Column(COL_Name).Value(summaryTransformationDefinition.Name);
+            if (summaryTransformationDefinition.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(summaryTransformationDefinition.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
             updateQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(summaryTransformationDefinition));
             updateQuery.Where().EqualsCondition(COL_ID).Value(summaryTransformationDefinition.SummaryTransformationDefinitionId);
             return queryContext.ExecuteNonQuery() > 0;
