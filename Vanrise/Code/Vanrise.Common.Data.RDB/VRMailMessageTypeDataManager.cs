@@ -70,7 +70,11 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.EqualsCondition(COL_Name).Value(vrMailMessageTypeItem.Name);
 			insertQuery.Column(COL_ID).Value(vrMailMessageTypeItem.VRMailMessageTypeId);
 			insertQuery.Column(COL_Name).Value(vrMailMessageTypeItem.Name);
-			if (vrMailMessageTypeItem.Settings != null)
+
+            if (vrMailMessageTypeItem.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(vrMailMessageTypeItem.DevProjectId.Value);
+
+            if (vrMailMessageTypeItem.Settings != null)
 				insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrMailMessageTypeItem.Settings));
 			else
 				insertQuery.Column(COL_Settings).Null();
@@ -86,7 +90,13 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.NotEqualsCondition(COL_ID).Value(vrMailMessageTypeItem.VRMailMessageTypeId);
 			ifNotExist.EqualsCondition(COL_Name).Value(vrMailMessageTypeItem.Name);
 			updateQuery.Column(COL_Name).Value(vrMailMessageTypeItem.Name);
-			if (vrMailMessageTypeItem.Settings != null)
+
+            if (vrMailMessageTypeItem.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(vrMailMessageTypeItem.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+
+            if (vrMailMessageTypeItem.Settings != null)
 				updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrMailMessageTypeItem.Settings));
 			else
 				updateQuery.Column(COL_Settings).Null();

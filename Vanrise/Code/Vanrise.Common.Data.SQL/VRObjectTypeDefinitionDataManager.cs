@@ -36,7 +36,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Insert(VRObjectTypeDefinition vrObjectTypeDefinitionItem)
         {
             string serializedSettings = vrObjectTypeDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vrObjectTypeDefinitionItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_VRObjectTypeDefinition_Insert", vrObjectTypeDefinitionItem.VRObjectTypeDefinitionId, vrObjectTypeDefinitionItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("common.sp_VRObjectTypeDefinition_Insert", vrObjectTypeDefinitionItem.VRObjectTypeDefinitionId, vrObjectTypeDefinitionItem.Name, vrObjectTypeDefinitionItem.DevProjectId, serializedSettings);
 
             if (affectedRecords > 0)
             {
@@ -49,7 +49,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Update(VRObjectTypeDefinition vrObjectTypeDefinitionItem)
         {
             string serializedSettings = vrObjectTypeDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vrObjectTypeDefinitionItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_VRObjectTypeDefinition_Update", vrObjectTypeDefinitionItem.VRObjectTypeDefinitionId, vrObjectTypeDefinitionItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("common.sp_VRObjectTypeDefinition_Update", vrObjectTypeDefinitionItem.VRObjectTypeDefinitionId, vrObjectTypeDefinitionItem.Name, vrObjectTypeDefinitionItem.DevProjectId, serializedSettings);
             return (affectedRecords > 0);
         }
         public void GenerateScript(List<VRObjectTypeDefinition> objTypeDefs, Action<string, string> addEntityScript)

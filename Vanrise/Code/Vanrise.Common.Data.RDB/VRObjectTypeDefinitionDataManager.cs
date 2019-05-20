@@ -77,7 +77,10 @@ namespace Vanrise.Common.Data.RDB
 
 			insertQuery.Column(COL_ID).Value(vrObjectTypeDefinitionItem.VRObjectTypeDefinitionId);
 			insertQuery.Column(COL_Name).Value(vrObjectTypeDefinitionItem.Name);
-			if (vrObjectTypeDefinitionItem.Settings!=null)
+            if(vrObjectTypeDefinitionItem.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(vrObjectTypeDefinitionItem.DevProjectId.Value);
+
+            if (vrObjectTypeDefinitionItem.Settings!=null)
 				insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrObjectTypeDefinitionItem.Settings));
 
 			return queryContext.ExecuteNonQuery() > 0;
@@ -94,7 +97,12 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExists.EqualsCondition(COL_Name).Value(vrObjectTypeDefinitionItem.Name);
 
 			updateQuery.Column(COL_Name).Value(vrObjectTypeDefinitionItem.Name);
-			if (vrObjectTypeDefinitionItem.Settings != null)
+
+            if (vrObjectTypeDefinitionItem.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(vrObjectTypeDefinitionItem.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
+            if (vrObjectTypeDefinitionItem.Settings != null)
 				updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrObjectTypeDefinitionItem.Settings));
 			else
 				updateQuery.Column(COL_Settings).Null();

@@ -35,7 +35,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Insert(VRMailMessageType vrMailMessageTypeItem)
         {
             string serializedSettings = vrMailMessageTypeItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vrMailMessageTypeItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_MailMessageType_Insert", vrMailMessageTypeItem.VRMailMessageTypeId, vrMailMessageTypeItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("common.sp_MailMessageType_Insert", vrMailMessageTypeItem.VRMailMessageTypeId, vrMailMessageTypeItem.Name, vrMailMessageTypeItem.DevProjectId, serializedSettings);
 
             if (affectedRecords > 0)
             {
@@ -48,7 +48,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Update(VRMailMessageType vrMailMessageTypeItem)
         {
             string serializedSettings = vrMailMessageTypeItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vrMailMessageTypeItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_MailMessageType_Update", vrMailMessageTypeItem.VRMailMessageTypeId, vrMailMessageTypeItem.Name, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("common.sp_MailMessageType_Update", vrMailMessageTypeItem.VRMailMessageTypeId, vrMailMessageTypeItem.Name, vrMailMessageTypeItem.DevProjectId, serializedSettings);
             return (affectedRecords > 0);
         }
 
