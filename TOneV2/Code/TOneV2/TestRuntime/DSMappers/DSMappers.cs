@@ -996,6 +996,67 @@ namespace TestRuntime
             return result;
         }
 
+        public static Vanrise.Integration.Entities.MappingOutput MapCallQuality_SQL(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        {
+            LogVerbose("Started");
+
+            List<dynamic> callQualities = new List<dynamic>();
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type callQualityRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("RawCallQuality");
+
+            int maximumBatchSize = 50000;
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("RawCallQuality");
+
+            var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
+
+            IDataReader reader = importedData.Reader;
+
+            int rowCount = 0;
+            while (reader.Read())
+            {
+                dynamic callQuality = Activator.CreateInstance(callQualityRuntimeType) as dynamic;
+                callQuality.IDonSwitch = Utils.GetReaderValue<long>(reader, "IDonSwitch");
+                callQuality.AttemptDateTime = (DateTime)reader["AttemptDateTime"];
+                callQuality.OutCarrier = reader["OUT_CARRIER"] as string;
+                callQuality.CGPN = reader["CGPN"] as string;
+                callQuality.CDPN = reader["CDPN"] as string;
+                callQuality.IsCLI = (bool)reader["IsCLI"];
+                callQuality.IsFAS = (bool)reader["IsFAS"];
+
+                callQualities.Add(callQuality);
+                importedData.LastImportedId = reader["CDRID"];
+
+                rowCount++;
+                if (rowCount == maximumBatchSize)
+                    break;
+            }
+
+            if (callQualities.Count > 0)
+            {
+                long startingId;
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
+                long currentCDRId = startingId;
+
+                foreach (var callQuality in callQualities)
+                {
+                    callQuality.Id = currentCDRId;
+                    currentCDRId++;
+                }
+
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(callQualities, "#RECORDSCOUNT# of Raw CDRs", "RawCallQuality");
+                mappedBatches.Add("Distribute Raw Call Quality Stage", batch);
+            }
+            else
+            {
+                importedData.IsEmpty = true;
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
+
         private static void LogVerbose(string Message)
         {
             Console.WriteLine(Message);
