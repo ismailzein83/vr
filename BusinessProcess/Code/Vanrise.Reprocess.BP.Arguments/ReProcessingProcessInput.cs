@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Vanrise.Reprocess.Entities;
 
 namespace Vanrise.Reprocess.BP.Arguments
@@ -19,14 +20,19 @@ namespace Vanrise.Reprocess.BP.Arguments
         public bool UseTempStorage { get; set; }
 
         public bool IgnoreSynchronisation { get; set; }
-        
+
         public ReprocessFilter Filter { get; set; }
 
         public override string GetTitle()
         {
             IReprocessDefinitionManager reprocessDefinitionManager = ReprocessManagerFactory.GetManager<IReprocessDefinitionManager>();
             string reprocessName = reprocessDefinitionManager.GetReprocessDefinition(ReprocessDefinitionId).Name;
-            return String.Format("{0} from {1} to {2}", reprocessName, FromTime.ToString("yyyy-MM-dd HH:mm:ss"), ToTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            string title = $"{reprocessName} from {FromTime.ToString("yyyy-MM-dd HH:mm:ss")} to {ToTime.ToString("yyyy-MM-dd HH:mm:ss")}";
+
+            if (Filter != null)
+                title = string.Concat(title, " with Filter");
+
+            return title;
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
