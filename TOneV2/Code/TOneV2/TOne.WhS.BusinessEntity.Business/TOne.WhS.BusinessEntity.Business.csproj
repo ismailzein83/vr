@@ -154,6 +154,7 @@
     <Compile Include="CarrierAccountStatusHistory\CarrierAccountStatusHistoryManager.cs" />
     <Compile Include="CarrierAccounts\BaseCarrierAccountEventPayload.cs" />
     <Compile Include="CarrierAccounts\CarrierAccountBE360DegreeNodeType.cs" />
+    <!--<Compile Include="CarrierAccounts\ReevaluateEndPointRouteStatusChangedHandler.cs" />-->
     <Compile Include="CarrierAccounts\ReevaluateRuleStatusChangedHandler.cs" />
     <Compile Include="CarrierAccounts\SMSServiceTypeManager.cs" />
     <Compile Include="CarrierProfiles\BaseCarrierProfileEventPayload.cs" />
@@ -326,6 +327,10 @@
     <Compile Include="ZoneServiceConfigManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Entities\TOne.WhS.AccountBalance.Entities.csproj">
+      <Project>{6463E524-5B13-453F-BD95-6974ED0C7B86}</Project>
+      <Name>TOne.WhS.AccountBalance.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data\TOne.WhS.BusinessEntity.Data.csproj">
       <Project>{616524aa-3c88-43e4-87da-2e2f2410fdbe}</Project>
       <Name>TOne.WhS.BusinessEntity.Data</Name>
