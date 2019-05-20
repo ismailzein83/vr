@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -40,6 +41,20 @@ namespace TOne.WhS.BusinessEntity.Business
                     var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(context.DefinitionSettings.DataRecordTypeId);
                     var dataRecord = Activator.CreateInstance(dataRecordRuntimeType, context.GenericBusinessEntity.FieldValues);
                     return dataRecord;
+                case "EmailTemplateId":
+                    if (context.GenericBusinessEntity != null && context.GenericBusinessEntity.FieldValues != null)
+                    {
+                        StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
+                        var statusId = context.GenericBusinessEntity.FieldValues.GetRecord("StatusId");
+                        switch (statusId.ToString().ToUpper())
+                        {
+                            case "7EB94106-43F1-43EB-8952-8F0B585FD7E5": return new ConfigManager().GetFaultTicketsCustomerOpenMailTemplateId();
+                            case "05A87955-DC2A-4E22-A879-6BEA3C31690E": return new ConfigManager().GetFaultTicketsCustomerPendingMailTemplateId();
+                            case "F299EB6D-B50C-4338-812F-142D4D8515CA": return new ConfigManager().GetFaultTicketsCustomerClosedMailTemplateId();
+                            default: return null;
+                        }
+                    }
+                    else return null;
                 default: return null;
             }
         }
