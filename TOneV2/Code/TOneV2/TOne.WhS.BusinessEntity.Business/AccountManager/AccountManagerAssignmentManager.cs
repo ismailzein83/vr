@@ -28,6 +28,10 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return affectedCarrierAccountIds;
         }
+        public bool TryGetEffectiveNowAccountManagerAssignments(out IEnumerable<AccountManagerAssignment> effectiveAccountManagerAssignments)
+        {
+            return TryGetEffectiveAccountManagerAssignments(DateTime.Now, out effectiveAccountManagerAssignments);
+        }
         public bool TryGetEffectiveAccountManagerAssignments(DateTime effectiveDate, out IEnumerable<AccountManagerAssignment> effectiveAccountManagerAssignments)
         {
             effectiveAccountManagerAssignments = null;
