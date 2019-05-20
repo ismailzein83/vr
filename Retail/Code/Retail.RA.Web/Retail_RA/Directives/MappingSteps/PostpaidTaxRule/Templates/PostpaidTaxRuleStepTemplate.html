@@ -1,0 +1,27 @@
+﻿<vr-genericdata-datatransformation-rulestep-common on-ready="onRuleStepCommonReady"></vr-genericdata-datatransformation-rulestep-common>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Voice">
+            <vr-genericdata-expressionbuilder on-ready="onTotalVoiceAmountDirectiveReady" label="Total voice amount"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="onDurationInSecondsDirectiveReady" label="Duration (sec)"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="onTotalVoiceTaxValueDirectiveReady" label="Total voice tax value"></vr-genericdata-expressionbuilder>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="SMS">
+            <vr-genericdata-expressionbuilder on-ready="onTotalSMSAmountDirectiveReady" label="Total sms amount"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="onNumberOfSMSDirectiveReady" label="Number of SMS"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="onTotalSMSTaxValueDirectiveReady" label="Total sms tax value"></vr-genericdata-expressionbuilder>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Transaction">
+            <vr-genericdata-expressionbuilder on-ready="onTotalTransactionAmountDirectiveReady" label="Total transaction amount"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="onTotalTransactionTaxValueDirectiveReady" label="Total transaction tax value"></vr-genericdata-expressionbuilder>
+        </vr-section>
+    </vr-columns>
+</vr-row>
