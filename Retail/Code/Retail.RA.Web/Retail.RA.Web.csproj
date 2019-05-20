@@ -89,8 +89,6 @@
     <Content Include="Retail_RA\Directives\Extensions\INTL\Templates\INTLBusinessObjectDataProviderSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Postpaid\ra-genericruledefinitionsettings-postpaidtax.js" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Postpaid\Templates\PostpaidTaxDefinitionSettingsTemplate.html" />
-    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Prepaid\ra-genericruledefinitionsettings-prepaidtax.js" />
-    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Prepaid\Templates\PrepaidTaxDefinitionSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Transaction\ra-genericruledefinitionsettings-transactiontax.js" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Transaction\ra-rules-transactiontaxrule-overall.js" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Transaction\Templates\TransactionTaxGenericRuleDefinitionSettingsTemplate.html" />

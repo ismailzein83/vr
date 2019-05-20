@@ -116,12 +116,6 @@
     <Compile Include="TaxRules\Postpaid\PostpaidTaxRuleDefinitionSettings.cs" />
     <Compile Include="TaxRules\Postpaid\PostpaidTaxRuleManager.cs" />
     <Compile Include="TaxRules\Postpaid\PostpaidTaxRuleSettings.cs" />
-    <Compile Include="TaxRules\Prepaid\PrepaidTaxMappingStep.cs" />
-    <Compile Include="TaxRules\Prepaid\PrepaidTaxRule.cs" />
-    <Compile Include="TaxRules\Prepaid\PrepaidTaxRuleContext.cs" />
-    <Compile Include="TaxRules\Prepaid\PrepaidTaxRuleDefinitionSettings.cs" />
-    <Compile Include="TaxRules\Prepaid\PrepaidTaxRuleManager.cs" />
-    <Compile Include="TaxRules\Prepaid\PrepaidTaxRuleSettings.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxMappingStep.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxRule.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxRuleContext.cs" />
