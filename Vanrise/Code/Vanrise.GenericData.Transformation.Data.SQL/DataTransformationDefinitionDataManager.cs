@@ -33,7 +33,7 @@ namespace Vanrise.GenericData.Transformation.Data.SQL
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(dataTransformationDefinition);
             }
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataTransformationDefinition_Update", dataTransformationDefinition.DataTransformationDefinitionId, dataTransformationDefinition.Name, dataTransformationDefinition.Title, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataTransformationDefinition_Update", dataTransformationDefinition.DataTransformationDefinitionId, dataTransformationDefinition.Name, dataTransformationDefinition.Title, dataTransformationDefinition.DevProjectId, serializedObj);
             return (recordesEffected > 0);
         }
         public bool AddDataTransformationDefinition(Entities.DataTransformationDefinition dataTransformationDefinition)
@@ -43,7 +43,7 @@ namespace Vanrise.GenericData.Transformation.Data.SQL
             {
                 serializedObj = Vanrise.Common.Serializer.Serialize(dataTransformationDefinition);
             }
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataTransformationDefinition_Insert", dataTransformationDefinition.DataTransformationDefinitionId, dataTransformationDefinition.Name, dataTransformationDefinition.Title, serializedObj);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataTransformationDefinition_Insert", dataTransformationDefinition.DataTransformationDefinitionId, dataTransformationDefinition.Name, dataTransformationDefinition.Title, dataTransformationDefinition.DevProjectId,serializedObj);
 
             return (recordesEffected > 0);
         }

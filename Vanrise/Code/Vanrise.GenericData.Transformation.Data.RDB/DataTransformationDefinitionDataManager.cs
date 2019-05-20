@@ -78,6 +78,8 @@ namespace Vanrise.GenericData.Transformation.Data.RDB
             insertQuery.Column(COL_ID).Value(dataTransformationDefinition.DataTransformationDefinitionId);
             insertQuery.Column(COL_Name).Value(dataTransformationDefinition.Name);
             insertQuery.Column(COL_Title).Value(dataTransformationDefinition.Title);
+            if(dataTransformationDefinition.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(dataTransformationDefinition.DevProjectId.Value);
             insertQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(dataTransformationDefinition));
             return queryContext.ExecuteNonQuery() > 0;
 
@@ -109,6 +111,10 @@ namespace Vanrise.GenericData.Transformation.Data.RDB
             ifNotExists.EqualsCondition(COL_Name).Value(dataTransformationDefinition.Name);
             updateQuery.Column(COL_Name).Value(dataTransformationDefinition.Name);
             updateQuery.Column(COL_Title).Value(dataTransformationDefinition.Title);
+            if (dataTransformationDefinition.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(dataTransformationDefinition.DevProjectId.Value);
+            else
+            updateQuery.Column(COL_DevProjectID).Null();
             updateQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(dataTransformationDefinition));
             updateQuery.Where().EqualsCondition(COL_ID).Value(dataTransformationDefinition.DataTransformationDefinitionId);
             return queryContext.ExecuteNonQuery() > 0;
