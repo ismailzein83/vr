@@ -65,7 +65,7 @@ namespace Vanrise.GenericData.Business
         //    GetCacheManager().SetCacheExpired(dataRecordStorageId);
         //}
 
-        public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityInfoFilter filter, string searchValue)
+        public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityInfoFilter filter, string searchValue = null)
         {
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, false);
             if (genericBEDefinitionSetting.DataRecordStorageId.HasValue)
@@ -84,7 +84,7 @@ namespace Vanrise.GenericData.Business
 
                 var idDataRecordField = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(businessEntityDefinitionId);
 
-                string searchValueAsLower = !string.IsNullOrEmpty(searchValue) ? searchValue.ToLower() : null; //searchValue != null ??
+                string searchValueAsLower = !string.IsNullOrEmpty(searchValue) ? searchValue.ToLower() : null;
 
                 RecordFilterGroup recordFilterGroup = null;
                 if (!dataRecordStorage.Settings.EnableUseCaching && !string.IsNullOrEmpty(searchValueAsLower))
@@ -161,7 +161,7 @@ namespace Vanrise.GenericData.Business
             }
             else
             {
-                if(string.IsNullOrEmpty(searchValue))
+                if (string.IsNullOrEmpty(searchValue))
                     throw new Exception($"searchValue should not be null for remote selector of BEDefinitionId: {businessEntityDefinitionId}");
 
                 var vrConnection = _connectionManager.GetVRConnection<VRInterAppRestConnection>(genericBEDefinitionSetting.VRConnectionId.Value);
