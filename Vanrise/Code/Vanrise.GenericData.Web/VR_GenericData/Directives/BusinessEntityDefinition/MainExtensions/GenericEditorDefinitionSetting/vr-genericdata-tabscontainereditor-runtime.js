@@ -22,7 +22,7 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIU
             this.initializeController = initializeController;
 
             var selectedValues;
-            var fieldValuesByName;
+            var allFieldValuesByName;
             var definitionSettings;
             var dataRecordTypeId;
             var historyId;
@@ -44,12 +44,12 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIU
 
                     if (payload != undefined) {
                         selectedValues = payload.selectedValues;
-                        //fieldValuesByName = payload.fieldValuesByName;
+                        allFieldValuesByName = payload.allFieldValuesByName;
                         definitionSettings = payload.definitionSettings;
                         dataRecordTypeId = payload.dataRecordTypeId;
                         historyId = payload.historyId;
                         parentFieldValues = payload.parentFieldValues;
-                        //genericContext = payload.genericContext;
+                        genericContext = payload.genericContext;
                     }
 
                     if (definitionSettings != undefined) {
@@ -82,10 +82,10 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIU
                                 dataRecordTypeId: dataRecordTypeId,
                                 definitionSettings: tabContainerDef.payload.TabSettings,
                                 selectedValues: selectedValues,
-                                //fieldValuesByName: fieldValuesByName,
+                                allFieldValuesByName: allFieldValuesByName,
                                 historyId: historyId,
                                 parentFieldValues: parentFieldValues,
-                               // genericContext: genericContext
+                                genericContext: genericContext
                             };
                             VRUIUtilsService.callDirectiveLoad(tabContainer.editorRuntimeAPI, directivePayload, tabContainerDef.directiveLoadPromiseDeferred);
                         });
@@ -102,23 +102,23 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIU
                     }
                 };
 
-                //api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
-                //    if ($scope.scopeModel.tabContainers == undefined)
-                //        return null;
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                    if ($scope.scopeModel.tabContainers == undefined)
+                        return null;
 
-                //    var _promises = [];
+                    var _promises = [];
 
-                //    for (var i = 0; i < $scope.scopeModel.tabContainers.length; i++) {
-                //        var currentTabContainers = $scope.scopeModel.tabContainers[i];
-                //        if (currentTabContainers.editorRuntimeAPI.onFieldValueChanged != undefined && typeof (currentTabContainers.editorRuntimeAPI.onFieldValueChanged) == "function") {
-                //            var onFieldValueChangedPromise = currentTabContainers.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames);
-                //            if (onFieldValueChangedPromise != undefined)
-                //                _promises.push(onFieldValueChangedPromise);
-                //        }
-                //    }
+                    for (var i = 0; i < $scope.scopeModel.tabContainers.length; i++) {
+                        var currentTabContainers = $scope.scopeModel.tabContainers[i];
+                        if (currentTabContainers.editorRuntimeAPI.onFieldValueChanged != undefined && typeof (currentTabContainers.editorRuntimeAPI.onFieldValueChanged) == "function") {
+                            var onFieldValueChangedPromise = currentTabContainers.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                            if (onFieldValueChangedPromise != undefined)
+                                _promises.push(onFieldValueChangedPromise);
+                        }
+                    }
 
-                //    return UtilsService.waitMultiplePromises(_promises);
-                //};
+                    return UtilsService.waitMultiplePromises(_promises);
+                };
 
                 //api.setFieldValues = function (fieldValuesByNames) {
                 //    if ($scope.scopeModel.tabContainers == undefined)

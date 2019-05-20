@@ -1,12 +1,11 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService", "VRNotificationService", "VRUIUtilsService", 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_GenericBusinessEntityAPIService) {
+app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService", "VRUIUtilsService", 'VR_GenericData_GenericBusinessEntityAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
-            scope:
-            {
+            scope: {
                 onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
@@ -16,11 +15,9 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Templates/GenericBusinessEntityEditor.html"
         };
+
         function GenericBusinessEntityEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
@@ -35,20 +32,19 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
             var genericBusinessEntity;
 
             var fieldValues;
-
-            var titleFieldName;
-
-            var runtimeEditorAPI;
-            var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
             var context;
             var historyId;
+
+            var rootRuntimeEditorAPI;
+            var rootRuntimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
 
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
-                    runtimeEditorAPI = api;
-                    runtimeEditorReadyDeferred.resolve();
+                $scope.scopeModel.onRootEditorRuntimeDirectiveReady = function (api) {
+                    rootRuntimeEditorAPI = api;
+                    rootRuntimeEditorReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -90,7 +86,6 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                 api.getData = function () {
 
                     var genericBusinessEntity = {};
-
                     genericBusinessEntity.GenericBusinessEntityId = genericBusinessEntityId;
                     genericBusinessEntity.BusinessEntityDefinitionId = businessEntityDefinitionId;
 
@@ -104,14 +99,17 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                         }
                     }
 
-                    runtimeEditorAPI.setData(fieldValuesObj);
-                    if (fieldValuesObj != undefined)
-                    for (var field in fieldValuesObj) {
-                        if (fieldValuesObj[field] == undefined)
-                            nullFields.push(field);
+                    rootRuntimeEditorAPI.setData(fieldValuesObj);
+                    if (fieldValuesObj != undefined) {
+                        for (var field in fieldValuesObj) {
+                            if (fieldValuesObj[field] == undefined) {
+                                nullFields.push(field);
+                            }
+                        }
                     }
+
                     genericBusinessEntity.FieldValues = fieldValuesObj;
-                    genericBusinessEntity.NullFields = nullFields; 
+                    genericBusinessEntity.NullFields = nullFields;
                     return genericBusinessEntity;
                 };
 
@@ -127,7 +125,6 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                         if (context != undefined) {
                             context.setTitleFieldName(response.TitleFieldName);
                             context.setTitleOperation(definitionTitle);
-                            titleFieldName = response.TitleFieldName;
                         }
                         genericBusinessEntity = response.GenericBusinessEntity;
                         businessEntityDefinitionSettings = response.GenericBEDefinitionSettings;
@@ -151,9 +148,9 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                     }
                 }
 
-                function loadEditorRuntimeDirective() {
+                function loadRootEditorRuntimeDirective() {
                     var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
-                    runtimeEditorReadyDeferred.promise.then(function () {
+                    rootRuntimeEditorReadyDeferred.promise.then(function () {
                         var defaultValues;
                         if (fieldValues != undefined) {
                             defaultValues = {};
@@ -163,22 +160,23 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                                     defaultValues[prop] = propValue.value;
                             }
                         }
-                       
 
                         var runtimeEditorPayload = {
+                            businessEntityDefinitionId: businessEntityDefinitionId,
                             selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : defaultValues,
                             dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,
                             definitionSettings: businessEntityDefinitionSettings.EditorDefinition.Settings,
                             historyId: historyId,
-                            parentFieldValues: fieldValues
+                            parentFieldValues: fieldValues,
+                            runtimeEditor: $scope.scopeModel.runtimeEditor
                         };
-                        VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
+                        VRUIUtilsService.callDirectiveLoad(rootRuntimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
                     });
 
                     return runtimeEditorLoadDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadEditorRuntimeDirective, setTitle]);
+                return UtilsService.waitMultipleAsyncOperations([loadRootEditorRuntimeDirective, setTitle]);
             }
         }
 

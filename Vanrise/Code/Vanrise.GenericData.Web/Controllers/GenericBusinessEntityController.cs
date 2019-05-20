@@ -8,6 +8,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.Web.Controllers
 {
@@ -37,8 +38,8 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetGenericBusinessEntityDetail")]
         public GenericBusinessEntityDetail GetGenericBusinessEntityDetail(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId)
         {
-           genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
-           return _manager.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId);
+            genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
+            return _manager.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId);
         }
         [HttpGet]
         [Route("GetGenericBusinessEntity")]
@@ -47,6 +48,7 @@ namespace Vanrise.GenericData.Web.Controllers
             genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
             return _manager.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
         }
+
         [HttpGet]
         [Route("DoesUserHaveAddAccess")]
         public bool DoesUserHaveAddAccess(Guid businessEntityDefinitionId)
@@ -77,7 +79,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("DeleteGenericBusinessEntity")]
         public object DeleteGenericBusinessEntity(DeleteGenericBusinessEntityInput input)
         {
-            if (!_manager.DoesUserHaveActionAccess("Delete", input.BusinessEntityDefinitionId,input.BusinessEntityActionTypeId))
+            if (!_manager.DoesUserHaveActionAccess("Delete", input.BusinessEntityDefinitionId, input.BusinessEntityActionTypeId))
                 return GetUnauthorizedResponse();
 
             return _manager.DeleteGenericBusinessEntity(input);
@@ -109,41 +111,41 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericBusinessEntityInfo")]
-        public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, string serializedFilter = null)
+        public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, string serializedFilter = null, string searchValue = null)
         {
             GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
             GenericBusinessEntityInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<GenericBusinessEntityInfoFilter>(serializedFilter) : null;
-            return manager.GetGenericBusinessEntityInfo(businessEntityDefinitionId, filter);
+            return manager.GetGenericBusinessEntityInfo(businessEntityDefinitionId, filter, searchValue);
         }
 
-		[HttpGet]
-		[Route("DownloadGenericBusinessEntityTemplate")]
-		public object DownloadGenericBusinessEntityTemplate(Guid businessEntityDefinitionId)
-		{
-			GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
-			byte[] templateWithDateFormatBytes = manager.DownloadGenericBusinessEntityTemplate(businessEntityDefinitionId);
-			MemoryStream memoryStream = new System.IO.MemoryStream();
-			memoryStream.Write(templateWithDateFormatBytes, 0, templateWithDateFormatBytes.Length);
-			memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-			return GetExcelResponse(memoryStream, string.Format("{0} Template.xlsx", manager.GenericBusinessEntityDefinitionTitle(businessEntityDefinitionId)));
+        [HttpGet]
+        [Route("DownloadGenericBusinessEntityTemplate")]
+        public object DownloadGenericBusinessEntityTemplate(Guid businessEntityDefinitionId)
+        {
+            GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+            byte[] templateWithDateFormatBytes = manager.DownloadGenericBusinessEntityTemplate(businessEntityDefinitionId);
+            MemoryStream memoryStream = new System.IO.MemoryStream();
+            memoryStream.Write(templateWithDateFormatBytes, 0, templateWithDateFormatBytes.Length);
+            memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
+            return GetExcelResponse(memoryStream, string.Format("{0} Template.xlsx", manager.GenericBusinessEntityDefinitionTitle(businessEntityDefinitionId)));
 
-		}
+        }
 
-		[HttpGet]
-		[Route("UploadGenericBusinessEntities")]
-		public UploadGenericBusinessEntityLog UploadGenericBusinessEntities(Guid businessEntityDefinitionId,int fileID)
-		{
-			GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
-			return manager.AddUploadedGenericBusinessEntities(businessEntityDefinitionId, fileID);
-		}
-		[HttpGet]
-		[Route("DownloadBusinessEntityLog")]
-		public object DownloadBusinessEntityLog(int fileID)
-		{
-			GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
-			byte[] bytes = manager.DownloadBusinessEntityLog(fileID);
-			return GetExcelResponse(bytes, "ImportedResults.xls");
-		}
+        [HttpGet]
+        [Route("UploadGenericBusinessEntities")]
+        public UploadGenericBusinessEntityLog UploadGenericBusinessEntities(Guid businessEntityDefinitionId, int fileID)
+        {
+            GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+            return manager.AddUploadedGenericBusinessEntities(businessEntityDefinitionId, fileID);
+        }
+        [HttpGet]
+        [Route("DownloadBusinessEntityLog")]
+        public object DownloadBusinessEntityLog(int fileID)
+        {
+            GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+            byte[] bytes = manager.DownloadBusinessEntityLog(fileID);
+            return GetExcelResponse(bytes, "ImportedResults.xls");
+        }
 
         [HttpPost]
         [Route("ExecuteGenericBEBulkActions")]
@@ -165,6 +167,22 @@ namespace Vanrise.GenericData.Web.Controllers
             GetGenericEditorColumnsInfoContext getGenericEditorColumnsInfoContext = new GetGenericEditorColumnsInfoContext { DataRecordTypeId = input.DataRecordTypeId };
             return input.GenericEditorDefinitionSetting.GetGridColumnsAttributes(getGenericEditorColumnsInfoContext);
         }
-       
+
+
+        [HttpPost]
+        [Route("GetDependentFieldValues")]
+        public Dictionary<string, object> GetDependentFieldValues(GetDependentFieldValuesInput input)
+        {
+            input.ThrowIfNull("input");
+            return _manager.GetDependentFieldValues(input.BusinessEntityDefinitionId, input.FieldValues);
+        }
+
+        public class GetDependentFieldValuesInput
+        {
+            public Guid BusinessEntityDefinitionId { get; set; }
+
+            public Dictionary<string, object> FieldValues { get; set; }
+        }
+
     }
 }

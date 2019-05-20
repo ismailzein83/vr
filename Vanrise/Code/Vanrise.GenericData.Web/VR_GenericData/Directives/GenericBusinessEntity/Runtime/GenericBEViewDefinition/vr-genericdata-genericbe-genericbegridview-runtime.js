@@ -51,6 +51,7 @@
                 api.load = function (payload) {
                     $scope.scopeModel.isGridLoading = true;
                     if (payload != undefined) {
+
                         fieldValues = payload.parentBEEntity != undefined ? payload.parentBEEntity.FieldValues : undefined;
                         genericBEGridView = payload.genericBEGridView;
                         if (genericBEGridView != undefined && genericBEGridView.Settings != undefined) {
@@ -61,8 +62,6 @@
                                 filterValues: buildMappingfields()
                             };
                         }
-
-
                     }
 
 
@@ -93,7 +92,6 @@
                         };
                     }
                 }
-
                 return fields;
             }
         }

@@ -1,8 +1,6 @@
-﻿
+﻿(function (app) {
 
-(function (app) {
-
-    'use strict';
+    "use strict";
 
     listEditorRuntime.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
@@ -10,7 +8,7 @@
         return {
             restrict: "E",
             scope: {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -20,12 +18,14 @@
             controllerAs: "Ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/ListEditorRuntimeSettingTemplate.html"
-
         };
+
         function FaultCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
             var definitionSettings;
             var selectedValues;
+            var genericContext;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -48,19 +48,22 @@
                     }
                     return null;
                 };
+
                 $scope.scopeModel.addItem = function () {
                     $scope.scopeModel.itemList.push($scope.scopeModel.itemToAdd);
                     $scope.scopeModel.itemToAdd = undefined;
                 };
+
                 defineAPI();
             }
-            function defineAPI() {
 
+            function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     var selectedValues;
                     var settings;
+
                     if (payload != undefined) {
                         definitionSettings = payload.definitionSettings;
                         if (definitionSettings.ItemTitle != undefined && definitionSettings.ItemTitle != "")
@@ -69,6 +72,7 @@
                             $scope.scopeModel.itemLabel = "Value";
 
                         selectedValues = payload.selectedValues;
+                        genericContext = payload.genericContext;
                         if (selectedValues != undefined)
                             settings = selectedValues.Settings;
                         if (settings != undefined && settings.Codes != undefined) {
@@ -100,5 +104,4 @@
     }
 
     app.directive('vrGenericdataListeditorRuntime', listEditorRuntime);
-
 })(app);

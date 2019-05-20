@@ -25,7 +25,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
 
             var currentContext;
             var genericContext;
-            var fieldValuesByName;
+            var allFieldValuesByName;
             var parentFieldValues;
 
             function initializeController() {
@@ -41,7 +41,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                     if (payload.rows != undefined) {
                         currentContext = payload.context;
                         genericContext = payload.genericContext;
-                        fieldValuesByName = payload.fieldValuesByName;
+                        allFieldValuesByName = payload.allFieldValuesByName;
                         parentFieldValues = payload.parentFieldValues;
 
                         var promises = [];
@@ -67,20 +67,20 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                     return rows;
                 };
 
-                //api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
-                //    var _promises = [];
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                    var _promises = [];
 
-                //    for (var i = 0; i < ctrl.rows.length; i++) {
-                //        var row = ctrl.rows[i];
-                //        if (row.fieldsAPI.onFieldValueChanged != undefined && typeof (row.fieldsAPI.onFieldValueChanged) == "function") {
-                //            var onFieldValueChangedPromise = row.fieldsAPI.onFieldValueChanged(allFieldValuesByFieldNames);
-                //            if (onFieldValueChangedPromise != undefined)
-                //                _promises.push(onFieldValueChangedPromise);
-                //        }
-                //    }
+                    for (var i = 0; i < ctrl.rows.length; i++) {
+                        var row = ctrl.rows[i];
+                        if (row.fieldsAPI.onFieldValueChanged != undefined && typeof (row.fieldsAPI.onFieldValueChanged) == "function") {
+                            var onFieldValueChangedPromise = row.fieldsAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                            if (onFieldValueChangedPromise != undefined)
+                                _promises.push(onFieldValueChangedPromise);
+                        }
+                    }
 
-                //    return UtilsService.waitMultiplePromises(_promises);
-                //};
+                    return UtilsService.waitMultiplePromises(_promises);
+                };
 
                 //api.setFieldValues = function (fieldValuesByNames) {
                 //    var _promises = [];
@@ -115,9 +115,9 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                         var payload = {
                             fields: row.Fields,
                             context: getContext(),
-                            //genericContext: genericContext,
-                            //fieldValuesByName: fieldValuesByName,
-                            //parentFieldValues: parentFieldValues
+                            genericContext: genericContext,
+                            allFieldValuesByName: allFieldValuesByName,
+                            parentFieldValues: parentFieldValues
                         };
                         VRUIUtilsService.callDirectiveLoad(row.fieldsAPI, payload, row.loadPromiseDeferred);
                     });

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -17,37 +18,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-businessentity-viewereditor"; } }
 
-        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
-        {
-            RDBDataRecordFieldAttribute rDBDataRecordFieldAttribute = new RDBDataRecordFieldAttribute();
+        public override DataRecordFieldOrderType OrderType { get { return DataRecordFieldOrderType.ByFieldDescription; } }
 
-            switch (GetBusinessEntityDefinition().Settings.IdType)
-            {
-                case "System.Int64":
-                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.BigInt;
-                    break;
-                case "System.Int32":
-                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.Int;
-                    break;
-                case "System.Guid":
-                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.UniqueIdentifier;
-                    break;
-
-                default:
-                    throw new NotSupportedException(String.Format("Field Business Entity Type"));
-            }
-
-            return rDBDataRecordFieldAttribute;
-        }
         public Guid BusinessEntityDefinitionId { get; set; }
-
-        public List<FieldBusinessEntityTypeDependantField> DependantFields { get; set; }
 
         public bool IsNullable { get; set; }
 
         public BERuntimeSelectorFilter BERuntimeSelectorFilter { get; set; }
 
-        public override DataRecordFieldOrderType OrderType { get { return DataRecordFieldOrderType.ByFieldDescription; } }
+        public List<FieldBusinessEntityTypeDependantField> DependantFields { get; set; }
 
         #region Public Methods
 
@@ -296,6 +275,62 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return true;
             else
                 return false;
+        }
+
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            RDBDataRecordFieldAttribute rDBDataRecordFieldAttribute = new RDBDataRecordFieldAttribute();
+
+            switch (GetBusinessEntityDefinition().Settings.IdType)
+            {
+                case "System.Int64":
+                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.BigInt;
+                    break;
+                case "System.Int32":
+                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.Int;
+                    break;
+                case "System.Guid":
+                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.UniqueIdentifier;
+                    break;
+
+                default:
+                    throw new NotSupportedException(String.Format("Field Business Entity Type"));
+            }
+
+            return rDBDataRecordFieldAttribute;
+        }
+
+        public override void SetDependentFieldValues(ISetDependentFieldValuesContext context)
+        {
+            if (this.DependantFields == null || this.DependantFields.Count == 0)
+                return;
+
+            Entities.GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntityManager().GetGenericBusinessEntity(context.FieldValue, this.BusinessEntityDefinitionId);
+            genericBusinessEntity.ThrowIfNull("genericBusinessEntity", context.FieldValue as object);
+
+            foreach (var dependantField in this.DependantFields)
+            {
+                object dependantFieldValue;
+                if (!genericBusinessEntity.FieldValues.TryGetValue(dependantField.MappedFieldName, out dependantFieldValue))
+                    continue;
+
+                if (!context.DependentFieldValues.ContainsKey(dependantField.FieldName))
+                    context.DependentFieldValues.Add(dependantField.FieldName, dependantFieldValue);
+
+                DataRecordField dependantFieldType;
+                if (!context.DataRecordFields.TryGetValue(dependantField.FieldName, out dependantFieldType))
+                    throw new Exception($"context.DataRecordFields does not contain {dependantField.FieldName} in DataRecordType Id : {context.DataRecordTypeId}");
+
+                SetDependentFieldValuesContext setDependentFieldValuesContext = new SetDependentFieldValuesContext()
+                {
+                    FieldName = dependantField.FieldName,
+                    FieldValue = dependantFieldValue,
+                    DataRecordTypeId = context.DataRecordTypeId,
+                    DataRecordFields = context.DataRecordFields,
+                    DependentFieldValues = context.DependentFieldValues
+                };
+                dependantFieldType.Type.SetDependentFieldValues(setDependentFieldValuesContext);
+            }
         }
 
         #endregion

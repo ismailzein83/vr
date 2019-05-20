@@ -28,17 +28,22 @@
         }
 
         function callDirectiveLoadOrResolvePromise(scope, directiveAPI, directiveLoadPayload, setLoader, readyPromiseDeferred) {
-            if (readyPromiseDeferred != undefined)
+            var promise;
+            if (readyPromiseDeferred != undefined) {
                 readyPromiseDeferred.resolve();
+                promise = readyPromiseDeferred.promise;
+            }
             else {
                 setLoader(true);
-                UtilsService.convertToPromiseIfUndefined(directiveAPI.load(directiveLoadPayload))
+                promise = UtilsService.convertToPromiseIfUndefined(directiveAPI.load(directiveLoadPayload))
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, scope);
                     }).finally(function () {
                         setLoader(false);
                     });
             }
+
+            return promise;
         }
 
         function getIdSelectedIds(idProperty, attrs, ctrl) {
@@ -134,7 +139,7 @@ function GridDrillDownTabs(UtilsService, drillDownDefinitions, gridAPI, gridMenu
     function getDataItemMenuActions(dataItem) {
         var dataItemMenuActions = [];
         if (gridMenuActions != undefined) {
-            for (var i = 0; i < gridMenuActions.length ; i++) {
+            for (var i = 0; i < gridMenuActions.length; i++) {
                 dataItemMenuActions.push(gridMenuActions[i]);
             }
         }
@@ -153,8 +158,7 @@ function GridDrillDownTabs(UtilsService, drillDownDefinitions, gridAPI, gridMenu
         return dataItemMenuActions;
     }
 
-    function createMenuAction(menuActionDefinition)
-    {
+    function createMenuAction(menuActionDefinition) {
         return {
             name: menuActionDefinition.name,
             clicked: menuActionDefinition.clicked,

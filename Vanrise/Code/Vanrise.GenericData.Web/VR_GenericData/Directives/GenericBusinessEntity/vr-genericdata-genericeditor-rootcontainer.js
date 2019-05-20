@@ -1,141 +1,242 @@
-﻿//"use strict";
+﻿"use strict";
 
-//app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRNotificationService", "VRUIUtilsService", 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService',
-//    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_GenericBusinessEntityAPIService) {
+app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIUtilsService", "VR_GenericData_GenericBusinessEntityAPIService",
+    function (UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService) {
 
-//        var directiveDefinitionObject = {
-//            restrict: "E",
-//            scope:
-//            {
-//                onReady: "="
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var ctor = new GenericBusinessEntityRootEditorCtor($scope, ctrl, $attrs);
-//                ctor.initializeController();
-//            },
-//            controllerAs: "ctrl",
-//            bindToController: true,
-//            compile: function (element, attrs) {
+        var directiveDefinitionObject = {
+            restrict: "E",
+            scope: {
+                onReady: "="
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new GenericBusinessEntityRootEditorCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: "ctrl",
+            bindToController: true,
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Templates/GenericBusinessEntityRootContainerEditor.html"
+        };
 
-//            },
-//            templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Templates/GenericBusinessEntityRootContainerEditor.html"
-//        };
-//        function GenericBusinessEntityRootEditorCtor($scope, ctrl, $attrs) {
-//            this.initializeController = initializeController;
+        function GenericBusinessEntityRootEditorCtor($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-//            var selectedValues;
-//            var runtimeEditorAPI;
-//            var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
+            var selectedValues;
+            var allFieldValuesByFieldNames = {};
+            //var settedFieldValues;
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
+            var runtimeEditorAPI;
+            var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
-//                $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
-//                    runtimeEditorAPI = api;
-//                    runtimeEditorReadyDeferred.resolve();
-//                };
 
-//                defineAPI();
-//            }
+            function initializeController() {
+                $scope.scopeModel = {};
 
-//            function defineAPI() {
-//                var api = {};
+                $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
+                    runtimeEditorAPI = api;
+                    runtimeEditorReadyDeferred.resolve();
+                };
 
-//                api.load = function (payload) {
-//                    var promises = [];
+                defineAPI();
+            }
 
-//                    var dataRecordTypeId;
-//                    var definitionSettings;
-//                    var historyId;
-//                    var parentFieldValues;
+            function defineAPI() {
+                var api = {};
 
-//                    if (payload != undefined) {
-//                        selectedValues = payload.selectedValues;
-//                        dataRecordTypeId = payload.dataRecordTypeId;
-//                        definitionSettings = payload.definitionSettings;
-//                        historyId = payload.historyId;
-//                        parentFieldValues = payload.parentFieldValues;
-//                        $scope.scopeModel.runtimeEditor = payload.runtimeEditor;
-//                    }
+                api.load = function (payload) {
 
-//                    var loadEditorRuntimeDirectivePromise = getLoadEditorRuntimeDirective();
-//                    promises.push(loadEditorRuntimeDirectivePromise);
+                    var promises = [];
 
-//                    function getLoadEditorRuntimeDirective() {
-//                        var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
-//                        runtimeEditorReadyDeferred.promise.then(function () {
-//                            var runtimeEditorPayload = {
-//                                selectedValues: selectedValues,
-//                                dataRecordTypeId: dataRecordTypeId,
-//                                definitionSettings: definitionSettings,
-//                                historyId: historyId,
-//                                parentFieldValues: parentFieldValues
-//                            };
+                    var businessEntityDefinitionId;
+                    var dataRecordTypeId;
+                    var definitionSettings;
+                    var historyId;
+                    var parentFieldValues;
 
-//                            var context = {
-//                                notifyFieldChanged: function (changedField) { // changedField = {fieldName : 'name', fieldValue : 'value' }
-//                                    var _promises = [];
-//                                    if (runtimeEditorAPI.onFieldValueChanged != undefined && typeof (runtimeEditorAPI.onFieldValueChanged) == "function") {
-//                                        var promise = runtimeEditorAPI.onFieldValueChanged(changedField);
-//                                        if (promise != undefined)
-//                                            _promises.push(promise);
-//                                    }
+                    if (payload != undefined) {
+                        businessEntityDefinitionId = payload.businessEntityDefinitionId;
+                        selectedValues = payload.selectedValues;
+                        dataRecordTypeId = payload.dataRecordTypeId;
+                        definitionSettings = payload.definitionSettings;
+                        historyId = payload.historyId;
+                        parentFieldValues = payload.parentFieldValues;
+                        $scope.scopeModel.runtimeEditor = payload.runtimeEditor;
+                    }
 
-//                                    return UtilsService.waitMultiplePromises(_promises);
-//                                },
-//                                getFieldValues: function (dicFieldValuesByNames) {
-//                                    runtimeEditorAPI.setData(dicFieldValuesByNames);
-//                                    return dicFieldValuesByNames;
-//                                },
-//                                setFieldValues: function (dicFieldValuesByNames) {
-//                                    var _promises = [];
-//                                    var handledDicFieldValuesByNames = {};
-//                                    if (selectedValues != undefined) {
-//                                        for (var prop in dicFieldValuesByNames) {
-//                                            if (selectedValues[prop] == undefined)
-//                                                handledDicFieldValuesByNames[prop] = dicFieldValuesByNames[prop];
-//                                        }
-//                                    }
-//                                    else {
-//                                        handledDicFieldValuesByNames = dicFieldValuesByNames;
-//                                    }
+                    if (selectedValues != undefined) {
+                        for (var key in selectedValues) {
+                            var value = selectedValues[key];
+                            if (typeof (value) == "object")
+                                allFieldValuesByFieldNames[key] = value;
+                            else
+                                allFieldValuesByFieldNames[key] = [value];
+                        }
+                    }
 
-//                                    if (Object.keys(handledDicFieldValuesByNames).length > 0) {
-//                                        var onFieldValueSettedPromise = runtimeEditorAPI.setFieldValues(dicFieldValuesByNames);
-//                                        selectedValues = undefined;
-//                                        if (onFieldValueSettedPromise != undefined)
-//                                            _promises.push(onFieldValueSettedPromise);
-//                                    }
+                    var innerPromises = [];
 
-//                                    return UtilsService.waitMultiplePromises(_promises);
-//                                }
-//                            };
+                    if (parentFieldValues != undefined) {
+                        var getDependentFieldValuesPromise = getDependentFieldValues();
+                        innerPromises.push(getDependentFieldValuesPromise);
+                    }
 
-//                            runtimeEditorPayload.genericContext = context;
+                    var loadEditorRuntimeDirectivePromiseDefered = UtilsService.createPromiseDeferred();
+                    promises.push(loadEditorRuntimeDirectivePromiseDefered.promise);
 
-//                            VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
-//                        });
+                    UtilsService.waitMultiplePromises(innerPromises).then(function () {
+                        getLoadEditorRuntimeDirective().then(function () {
+                            loadEditorRuntimeDirectivePromiseDefered.resolve();
+                        });
+                    });
 
-//                        return runtimeEditorLoadDeferred.promise;
-//                    }
+                    function getDependentFieldValues() {
+                        var getDependentFieldValuesPromiseDeferred = UtilsService.createPromiseDeferred();
 
-//                    return UtilsService.waitMultiplePromises(promises);
-//                };
+                        var fieldValues = {};
+                        for (var prop in parentFieldValues) {
+                            fieldValues[prop] = parentFieldValues[prop].value;
+                        }
 
-//                api.getData = function () {
-//                    return runtimeEditorAPI.getData();
-//                };
+                        var input = {
+                            BusinessEntityDefinitionId: businessEntityDefinitionId,
+                            FieldValues: fieldValues
+                        };
 
-//                api.setData = function (dicData) {
-//                    runtimeEditorAPI.setData(dicData);
-//                };
+                        VR_GenericData_GenericBusinessEntityAPIService.GetDependentFieldValues(input).then(function (response) {
+                            if (response) {
+                                console.log(response);
+                                for (var prop in response) {
+                                    var dependentFieldValue = response[prop];
+                                    if (prop != "$type") {
+                                        allFieldValuesByFieldNames[prop] = typeof (dependentFieldValue) == "object" ? dependentFieldValue : [dependentFieldValue];
+                                        if (!(prop in parentFieldValues)) {
+                                            parentFieldValues[prop] = {
+                                                value: dependentFieldValue,
+                                                isHidden: true,
+                                                isDisabled: false
+                                            };
+                                        }
+                                    }
+                                }
+                            }
 
-//                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
-//                    ctrl.onReady(api);
-//            }
-//        }
+                            getDependentFieldValuesPromiseDeferred.resolve();
+                        });
 
-//        return directiveDefinitionObject;
-//    }
-//]);
+                        return getDependentFieldValuesPromiseDeferred.promise;
+                    }
+
+                    function getLoadEditorRuntimeDirective() {
+                        var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        runtimeEditorReadyDeferred.promise.then(function () {
+
+                            var runtimeEditorPayload = {
+                                selectedValues: selectedValues,
+                                allFieldValuesByName: allFieldValuesByFieldNames,
+                                dataRecordTypeId: dataRecordTypeId,
+                                definitionSettings: definitionSettings,
+                                historyId: historyId,
+                                parentFieldValues: parentFieldValues,
+                                genericContext: buildGenericContext()
+                            };
+                            VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
+                        });
+
+                        return runtimeEditorLoadDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+
+                api.getData = function () {
+                    return runtimeEditorAPI.getData();
+                };
+
+                api.setData = function (dicData) {
+                    runtimeEditorAPI.setData(dicData);
+                };
+
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function") {
+                    ctrl.onReady(api);
+                }
+            }
+
+            function buildGenericContext() {
+                var context = {
+                    notifyFieldValueChanged: function (changedField) {  //changedField = {fieldName : 'name', fieldValues : ['value1', 'value2'...] }
+                        var fieldName = changedField.fieldName;
+                        var fieldValues = changedField.fieldValues;
+
+                        var _promises = [];
+
+                        if (!tryUpdateAllFieldValuesByFieldNames(fieldName, fieldValues)) {
+                            return UtilsService.waitMultiplePromises(_promises);
+                        }
+
+                        if (runtimeEditorAPI.onFieldValueChanged != undefined && typeof (runtimeEditorAPI.onFieldValueChanged) == "function") {
+
+                            var promise = runtimeEditorAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                            if (promise != undefined) {
+                                _promises.push(promise);
+                            }
+                        }
+
+                        function tryUpdateAllFieldValuesByFieldNames(fieldName, fieldValues) {
+                            var oldValues = allFieldValuesByFieldNames[fieldName];
+                            if (oldValues == undefined && fieldValues == undefined)
+                                return false;
+
+                            if (!(fieldName in allFieldValuesByFieldNames) || fieldValues == undefined || oldValues == undefined || oldValues.length != fieldValues.length) {
+                                allFieldValuesByFieldNames[fieldName] = fieldValues;
+                                return true;
+                            }
+
+                            for (var i = 0; i < fieldValues.length; i++) {
+                                var currentValue = fieldValues[i];
+                                if (oldValues.indexOf(currentValue) == -1) {
+                                    allFieldValuesByFieldNames[fieldName] = fieldValues;
+                                    return true;
+                                }
+                            }
+
+                            return false;
+                        }
+
+                        return UtilsService.waitMultiplePromises(_promises);
+                    },
+                    //setFieldValues: function (fieldValuesByNameDict) { //fieldValuesByNamesDict = {'name' :'value1', .... }
+                    //    var _promises = [];
+
+                    //    //var valuesToSet = {};
+                    //    //if (settedFieldValues == undefined) {
+                    //    //    settedFieldValues = fieldValuesByNameDict;
+                    //    //    valuesToSet = fieldValuesByNameDict;
+                    //    //}
+                    //    //else {
+                    //    //    for (var key in fieldValuesByNameDict) {
+                    //    //        if (settedFieldValues[key] == undefined) {
+                    //    //            settedFieldValues[key] = fieldValuesByNameDict[key];
+                    //    //            valuesToSet[key] = fieldValuesByNameDict[key];
+                    //    //        }
+                    //    //    }
+                    //    //}
+
+                    //    if (Object.keys(fieldValuesByNameDict).length > 0) {
+
+                    //        var onFieldValueSettedPromise = runtimeEditorAPI.setFieldValues(fieldValuesByNameDict);
+                    //        if (onFieldValueSettedPromise != undefined)
+                    //            _promises.push(onFieldValueSettedPromise);
+                    //    }
+
+                    //    return UtilsService.waitMultiplePromises(_promises);
+                    //}
+                };
+
+                return context;
+            }
+        }
+
+        return directiveDefinitionObject;
+    }
+]);

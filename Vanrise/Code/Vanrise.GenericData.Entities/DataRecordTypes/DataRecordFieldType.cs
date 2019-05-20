@@ -14,20 +14,35 @@ namespace Vanrise.GenericData.Entities
         public abstract Guid ConfigId { get; }
 
         public abstract string RuntimeEditor { get; }
+
         public virtual string RuntimeViewSettingEditor { get; }
+
+        public virtual string DifferenceEditor { get; set; }
+
+        public virtual string ViewerEditor { get; set; }
+
+        public string GetValueMethod { get; set; }
+
+        public string ConvertFilterMethod { get; set; }
+
+        public virtual string DetailViewerEditor { get { return "vr-genericdata-datarecordfield-defaultdetailviewer"; } }
+
         public abstract Type GetRuntimeType();
-        public abstract string GetRuntimeTypeDescription();
 
         public abstract Type GetNonNullableRuntimeType();
+
+        public abstract string GetRuntimeTypeDescription();
 
         public virtual bool AreEqual(Object newValue, Object oldValue)
         {
             return newValue == oldValue;
         }
+
         public virtual bool TryResolveDifferences(IDataRecordFieldTypeTryResolveDifferencesContext context)
         {
             return false;
         }
+
         public virtual void GetValueByDescription(IGetValueByDescriptionContext context)
         {
         }
@@ -36,6 +51,7 @@ namespace Vanrise.GenericData.Entities
         {
 
         }
+
         public virtual void onAfterSave(IDataRecordFieldTypeOnAfterSaveContext context)
         {
 
@@ -47,8 +63,7 @@ namespace Vanrise.GenericData.Entities
         }
 
         public abstract RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context);
-        public virtual string DifferenceEditor { get; set; }
-        public virtual string ViewerEditor { get; set; }
+
         public abstract string GetDescription(Object value);
 
         public abstract bool IsMatched(Object fieldValue, Object filterValue);
@@ -64,12 +79,11 @@ namespace Vanrise.GenericData.Entities
             uniqueIdentifier = null;
             return false;
         }
+
         public virtual void SetExcelCellType(IDataRecordFieldTypeSetExcelCellTypeContext context)
         {
 
         }
-
-        public virtual string DetailViewerEditor { get { return "vr-genericdata-datarecordfield-defaultdetailviewer"; } }
 
         protected Type GetNullableType(Type type)
         {
@@ -83,10 +97,6 @@ namespace Vanrise.GenericData.Entities
                 return DataRecordFieldOrderType.ByFieldValue;
             }
         }
-
-        public string GetValueMethod { get; set; }
-
-        public string ConvertFilterMethod { get; set; }
 
         public virtual bool StoreValueSerialized { get { return false; } }
         public virtual string SerializeValue(ISerializeDataRecordFieldValueContext context)
@@ -118,7 +128,7 @@ namespace Vanrise.GenericData.Entities
             if (originalValue == null)
             {
                 var fieldRuntimeType = GetRuntimeType();
-            
+
                 if (fieldRuntimeType.IsValueType)
                     return Activator.CreateInstance(fieldRuntimeType);
                 else
@@ -135,7 +145,6 @@ namespace Vanrise.GenericData.Entities
             return false;
         }
 
-
         protected virtual dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
             return Convert.ChangeType(originalValue, GetNonNullableRuntimeType());
@@ -150,13 +159,18 @@ namespace Vanrise.GenericData.Entities
         {
             return false;
         }
+
+        public virtual void SetDependentFieldValues(ISetDependentFieldValuesContext context)
+        {
+        }
     }
+
     public interface IDataRecordFieldTypeDefaultRDBFieldAttributeContext
     {
 
     }
 
-    public class DataRecordFieldTypeDefaultRDBFieldAttributeContext: IDataRecordFieldTypeDefaultRDBFieldAttributeContext
+    public class DataRecordFieldTypeDefaultRDBFieldAttributeContext : IDataRecordFieldTypeDefaultRDBFieldAttributeContext
     {
 
     }
@@ -167,12 +181,14 @@ namespace Vanrise.GenericData.Entities
         List<Object> FilterValues { get; }
         bool StrictEqual { get; }
     }
+
     public class DataRecordFieldTypeConvertToRecordFilterContext : IDataRecordFieldTypeConvertToRecordFilterContext
     {
         public string FieldName { get; set; }
         public List<object> FilterValues { get; set; }
         public bool StrictEqual { get; set; }
     }
+
     public interface IDataRecordFieldTypeParseValueToFieldTypeContext
     {
         Object Value { get; }
@@ -229,7 +245,7 @@ namespace Vanrise.GenericData.Entities
     public interface IDataRecordFieldTypeTryResolveDifferencesContext
     {
         Object OldValue { get; }
-        Object NewValue { get;  }
+        Object NewValue { get; }
         Object Changes { set; }
     }
 
@@ -255,8 +271,35 @@ namespace Vanrise.GenericData.Entities
     {
         dynamic EntityId { get; }
     }
+
     public interface IDataRecordFieldTypeConvertFlatFileValueContext
     {
         object FieldValue { get; }
+    }
+
+    public interface ISetDependentFieldValuesContext
+    {
+        string FieldName { get; }
+
+        object FieldValue { get; }
+
+        Guid DataRecordTypeId { get; }
+
+        Dictionary<string, DataRecordField> DataRecordFields { get; }
+
+        Dictionary<string, object> DependentFieldValues { get; }
+    }
+
+    public class SetDependentFieldValuesContext : ISetDependentFieldValuesContext
+    {
+        public string FieldName { get; set; }
+
+        public object FieldValue { get; set; }
+
+        public Guid DataRecordTypeId { get; set; }
+
+        public Dictionary<string, DataRecordField> DataRecordFields { get; set; }
+
+        public Dictionary<string, object> DependentFieldValues { get; set; }
     }
 }

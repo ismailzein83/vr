@@ -2,7 +2,7 @@
 
     'use strict';
 
-    GenericBusinessEntitySelector.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService', 'UtilsService', 'VRUIUtilsService','VR_GenericData_GenericBusinessEntityService'];
+    GenericBusinessEntitySelector.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBusinessEntityService'];
 
     function GenericBusinessEntitySelector(VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_GenericBusinessEntityAPIService, UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityService) {
         return {
@@ -29,13 +29,6 @@
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
             }
@@ -43,26 +36,31 @@
 
         function BusinessentitySelector(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
-            var businessEntityDefinitionId;
 
+            var selectorAPI;
+
+            var businessEntityDefinitionId;
             var titleFieldName;
             var idFieldName;
-            var selectorAPI;
             var filter;
+
+            var isRemote;
+            var isFirstLoad = true;
+            var hasEmtyRequiredDependentField;
+
+
             function initializeController() {
+
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
-
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                    defineAPI();
                 };
+
                 $scope.addNewGenericBusinessEntity = function () {
                     var onGenericBEAdded = function (genericBusinessEntity) {
                         var idField = genericBusinessEntity.FieldValues[idFieldName];
                         var selectedIds;
-                        if (idField != undefined)
-                        {
+                        if (idField != undefined) {
                             if (attrs.ismultipleselection != undefined)
                                 selectedIds = [idField.Value];
                             else
@@ -71,7 +69,7 @@
                         }
                         $scope.isLoadingSelector = true;
 
-                        GetGenericBusinessEntityInfo(selectedIds).finally(function () {
+                        getGenericBusinessEntityInfo(selectedIds).finally(function () {
                             $scope.isLoadingSelector = false;
                         });
                     };
@@ -79,60 +77,155 @@
                 };
             }
 
-            function getDirectiveAPI() {
+            function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    
+
                     var selectedIds;
                     var selectIfSingleItem;
+
                     var promises = [];
 
                     if (payload != undefined) {
                         ctrl.fieldTitle = payload.fieldTitle;
+                        ctrl.isDisabled = payload.isDisabled;
+
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                         selectIfSingleItem = payload.selectIfSingleItem;
-                     var getGenericBERuntimeInfoPromise = getGenericBusinessEntityRuntimeInfo();
-                     promises.push(getGenericBERuntimeInfoPromise);
+                        hasEmtyRequiredDependentField = payload.hasEmtyRequiredDependentField;
 
-                     function getGenericBusinessEntityRuntimeInfo() {
-
-                            return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBusinessEntityRuntimeInfo(businessEntityDefinitionId).then(function (response) {
-                                if (response != undefined) {
-
-                                    if(attrs.ismultipleselection != undefined){
-                                        if (response.SelectorPluralTitle != undefined) ctrl.fieldTitle = response.SelectorPluralTitle;
-                                    } else {
-                                        if (response.SelectorSingularTitle != undefined) ctrl.fieldTitle = response.SelectorSingularTitle;
-                                    }
-                                   // titleFieldName = response.TitleFieldName;
-                                    idFieldName = response.IdFieldName;
-                                }
-                            });
-
-                        }
+                        var getGenericBERuntimeInfoPromise = getGenericBusinessEntityRuntimeInfo();
+                        promises.push(getGenericBERuntimeInfoPromise);
                     }
 
-                    var getGenericBusinessEntityInfoPromise = GetGenericBusinessEntityInfo(selectedIds, selectIfSingleItem);
-                    promises.push(getGenericBusinessEntityInfoPromise);
+                    if (!hasEmtyRequiredDependentField) {
+                        var getGenericBusinessEntityInfoPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(getGenericBusinessEntityInfoPromiseDeferred.promise);
 
-                    return UtilsService.waitMultiplePromises(promises);
+                        getGenericBERuntimeInfoPromise.then(function () {
+                            if (isRemote) {
+                                if (selectedIds != undefined) {
+                                    if (isFirstLoad) {
+                                        var fieldFilter = { FieldName: idFieldName, FilterValues: typeof (selectedIds) != "object" ? [selectedIds] : selectedIds };
+                                        if (filter == undefined)
+                                            filter = { FieldFilters: [fieldFilter] };
 
+                                        if (filter.FieldFilters == undefined)
+                                            filter.FieldFilters = [fieldFilter];
+                                    }
+
+                                    VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
+                                        selectorAPI.clearDataSource();
+                                        ctrl.datasource.length = 0;
+
+                                        angular.forEach(response, function (item) {
+                                            ctrl.datasource.push(item);
+                                        });
+
+                                        VRUIUtilsService.setSelectedValues(selectedIds, 'GenericBusinessEntityId', attrs, ctrl);
+                                        getGenericBusinessEntityInfoPromiseDeferred.resolve();
+                                    });
+                                }
+                                else {
+                                    if (!isFirstLoad)
+                                        selectorAPI.clearDataSource();
+
+                                    getGenericBusinessEntityInfoPromiseDeferred.resolve();
+                                }
+                            }
+                            else {
+                                getGenericBusinessEntityInfo(selectedIds, selectIfSingleItem).then(function () {
+                                    getGenericBusinessEntityInfoPromiseDeferred.resolve();
+                                });
+                            }
+                        });
+                    }
+
+                    function getGenericBusinessEntityRuntimeInfo() {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBusinessEntityRuntimeInfo(businessEntityDefinitionId).then(function (response) {
+                            if (response != undefined) {
+                                if (attrs.ismultipleselection != undefined) {
+                                    if (response.SelectorPluralTitle != undefined) {
+                                        ctrl.fieldTitle = response.SelectorPluralTitle;
+                                    }
+                                }
+                                else {
+                                    if (response.SelectorSingularTitle != undefined) {
+                                        ctrl.fieldTitle = response.SelectorSingularTitle;
+                                    }
+                                }
+
+                                titleFieldName = response.TitleFieldName;
+                                idFieldName = response.IdFieldName;
+                                isRemote = response.IsRemote;
+
+                                if (isRemote && !hasEmtyRequiredDependentField)
+                                    ctrl.searchGenericBE = searchGenericBE;
+                                else
+                                    ctrl.searchGenericBE = ctrl.datasource;
+                            }
+                        });
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        isFirstLoad = false;
+                    });
                 };
-
-
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('GenericBusinessEntityId', attrs, ctrl);
                 };
 
-                return api;
+                api.clearDataSource = function () {
+                    ctrl.searchGenericBE = [];
+                    selectorAPI.clearDataSource();
+                };
+
+                //api.setFieldValues = function (value, context) {
+                //    var promises = [];
+
+                //    $scope.isDisabled = context.isDisabled;
+                //    filter = context.filter;
+
+                //    if (isRemote) {
+                //        var getGenericBusinessEntityInfoPromiseDeferred = UtilsService.createPromiseDeferred();
+                //        promises.push(getGenericBusinessEntityInfoPromiseDeferred.promise);
+
+                //        var fieldFilter = { FieldName: idFieldName, FilterValues: typeof (value) != "object" ? [value] : value };
+                //        if (filter == undefined)
+                //            filter = { FieldFilters: [fieldFilter] };
+
+                //        if (filter.FieldFilters == undefined)
+                //            filter.FieldFilters = [fieldFilter];
+
+                //        VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
+                //            selectorAPI.clearDataSource();
+                //            ctrl.datasource.length = 0;
+
+                //            angular.forEach(response, function (item) {
+                //                ctrl.datasource.push(item);
+                //            });
+
+                //            VRUIUtilsService.setSelectedValues(value, 'GenericBusinessEntityId', attrs, ctrl);
+                //            getGenericBusinessEntityInfoPromiseDeferred.resolve();
+                //        });
+                //    }
+                //    else {
+                //        promises.push(getGenericBusinessEntityInfo(value));
+                //    }
+
+                //    return UtilsService.waitMultiplePromises(promises);
+                //};
+
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
+                }
             }
 
-            function GetGenericBusinessEntityInfo(selectedIds, selectIfSingleItem) {
-                
+            function getGenericBusinessEntityInfo(selectedIds, selectIfSingleItem) {
                 return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
                     selectorAPI.clearDataSource();
 
@@ -145,12 +238,14 @@
                     if (selectedIds) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'GenericBusinessEntityId', attrs, ctrl);
                     }
-                    else if (selectedIds == undefined && selectIfSingleItem)
-                    {
+                    else if (selectedIds == undefined && selectIfSingleItem) {
                         selectorAPI.selectIfSingleItem();
                     }
                 });
+            }
 
+            function searchGenericBE(searchValue) {
+                return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter), searchValue);
             }
         }
 
@@ -184,24 +279,25 @@
                 haschildcolumns = "haschildcolumns";
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" vr-loader="isLoadingSelector" ' + haschildcolumns + '>'
-                    + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
-                    + '<vr-select on-ready="ctrl.onSelectorReady"'
-                    + ' datasource="ctrl.datasource"'
-                    + ' selectedvalues="ctrl.selectedvalues"'
-                    + ' onselectionchanged="ctrl.onselectionchanged"'
-                    + ' onselectitem="ctrl.onselectitem"'
-                    + ' ondeselectitem="ctrl.ondeselectitem"'
-                    + ' datavaluefield="GenericBusinessEntityId"'
-                    + ' datatextfield="Name"'
-                    + ' ' + multipleselection
-                    + ' ' + hideselectedvaluessection
-                    + ' isrequired="ctrl.isrequired"'
-                    + ' ' + hideremoveicon
-                 + ' ' + addCliked
-                + '</vr-select></vr-columns>';
+                + '<span vr-disabled="ctrl.isDisabled">'
+                + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
+                + '<vr-select on-ready="ctrl.onSelectorReady"'
+                + ' datasource="ctrl.searchGenericBE"'
+                + ' selectedvalues="ctrl.selectedvalues"'
+                + ' onselectionchanged="ctrl.onselectionchanged"'
+                + ' onselectitem="ctrl.onselectitem"'
+                + ' ondeselectitem="ctrl.ondeselectitem"'
+                + ' datavaluefield="GenericBusinessEntityId"'
+                + ' datatextfield="Name"'
+                + ' ' + multipleselection
+                + ' ' + hideselectedvaluessection
+                + ' isrequired="ctrl.isrequired"  '  
+                + ' ' + hideremoveicon
+                + ' ' + addCliked
+                + ' limitcharactercount="ctrl.limitcharactercount">'
+                + '</vr-select></span></vr-columns>';
         }
     }
 
     app.directive('vrGenericdataGenericbusinessentitySelector', GenericBusinessEntitySelector);
-
 })(app);

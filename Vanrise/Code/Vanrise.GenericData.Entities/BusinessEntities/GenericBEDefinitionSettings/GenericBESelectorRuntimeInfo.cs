@@ -12,5 +12,6 @@ namespace Vanrise.GenericData.Entities
         public string SelectorPluralTitle { get; set; }
         public string IdFieldName { get; set; }
         public string TitleFieldName { get; set; }
+        public bool IsRemote { get; set; }
     }
 }
