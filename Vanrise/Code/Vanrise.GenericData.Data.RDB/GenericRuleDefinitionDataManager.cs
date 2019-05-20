@@ -101,6 +101,8 @@ namespace Vanrise.GenericData.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
             insertQuery.Column(COL_ID).Value(genericRuleDefinition.GenericRuleDefinitionId);
             insertQuery.Column(COL_Name).Value(genericRuleDefinition.Name);
+            if (genericRuleDefinition.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(genericRuleDefinition.DevProjectId.Value);
             insertQuery.Column(COL_Details).Value(Common.Serializer.Serialize(genericRuleDefinition));
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -114,6 +116,10 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.NotEqualsCondition(COL_ID).Value(genericRuleDefinition.GenericRuleDefinitionId);
             ifNotExists.EqualsCondition(COL_Name).Value(genericRuleDefinition.Name);
             updateQuery.Column(COL_Name).Value(genericRuleDefinition.Name);
+            if (genericRuleDefinition.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(genericRuleDefinition.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
             updateQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(genericRuleDefinition));
             updateQuery.Where().EqualsCondition(COL_ID).Value(genericRuleDefinition.GenericRuleDefinitionId);
             return queryContext.ExecuteNonQuery() > 0;

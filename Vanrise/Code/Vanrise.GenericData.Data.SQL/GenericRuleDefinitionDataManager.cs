@@ -33,14 +33,14 @@ namespace Vanrise.GenericData.Data.SQL
         public bool AddGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition)
         {
 
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericRuleDefinition_Insert", genericRuleDefinition.GenericRuleDefinitionId, genericRuleDefinition.Name, Vanrise.Common.Serializer.Serialize(genericRuleDefinition));
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericRuleDefinition_Insert", genericRuleDefinition.GenericRuleDefinitionId, genericRuleDefinition.Name,genericRuleDefinition.DevProjectId, Vanrise.Common.Serializer.Serialize(genericRuleDefinition));
 
             return (affectedRows == 1);
         }
 
         public bool UpdateGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition)
         {
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericRuleDefinition_Update", genericRuleDefinition.GenericRuleDefinitionId, genericRuleDefinition.Name, Vanrise.Common.Serializer.Serialize(genericRuleDefinition));
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericRuleDefinition_Update", genericRuleDefinition.GenericRuleDefinitionId, genericRuleDefinition.Name, genericRuleDefinition.DevProjectId, Vanrise.Common.Serializer.Serialize(genericRuleDefinition));
             return (affectedRows == 1);
         }
 
