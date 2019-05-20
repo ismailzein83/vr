@@ -273,7 +273,9 @@
     <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\whs-be-datarecordstorage-permanentfilter-accountmanager.js" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\whs-be-analytic-permanentfilter-accountmanager.js" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManagerAssignment\whs-be-accountmanager-assignment-staticeditor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\AccountManager\Templates\AccountManagerSettingsEditorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\Templates\AccountManagerStaticEditorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\AccountManager\vr-whs-be-accountmanager-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\whs-be-accountmanager-staticeditor.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridPanelTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
