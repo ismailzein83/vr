@@ -95,6 +95,7 @@
     <Compile Include="Contracts\PabxContractDetail.cs" />
     <Compile Include="Contracts\TelephonyContractEntity.cs" />
     <Compile Include="Contracts\TelephonyContractInfo.cs" />
+    <Compile Include="ServiceHistoryRecord .cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="ContractService.cs" />

@@ -636,12 +636,6 @@ namespace BPMExtended.Main.Business
 
 
     }
-    public class Service
-    {
-
-        public string Id { get; set; }
-
-    }
     public class BillCycle
     {
         public int Id { get; set; }
