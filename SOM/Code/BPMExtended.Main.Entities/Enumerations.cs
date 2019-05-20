@@ -94,8 +94,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("New Pabx Operation")]
         [EntitySchemaName("StPabx")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("1386C350-017D-400B-855C-04FC427868BF")]
         NewPabxOperation = 7,
 
         [LineOfBusiness(LineOfBusiness.ADSL)]

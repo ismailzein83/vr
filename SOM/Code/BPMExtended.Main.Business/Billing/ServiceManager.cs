@@ -25,6 +25,20 @@ namespace BPMExtended.Main.Business
 
         #region Public
 
+
+        public RatePlanChangeResponse ReadProductChangeServices(string contractId , string newRatePlanId)
+        {
+
+            var item = new RatePlanChangeResponse();
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<RatePlanChangeResponse>(String.Format("api/SOM.ST/Billing/ReadProductChangeServices?ContractId={0}&NewRatePlanId={1}", contractId, newRatePlanId));
+
+            }
+            return item;
+
+        }
+
         public List<ServiceInfo> GetServicesInfo()
         {
             var servicesInfoItems = new List<ServiceInfo>();
@@ -270,7 +284,8 @@ namespace BPMExtended.Main.Business
                 PackageId = item.PackageId,
                 Name = item.Name,
                 NeedsProvisioning = item.NeedsProvisioning,
-                IsNetwork =item.IsNetwork
+                IsNetwork =item.IsNetwork,
+                IsServiceResource=item.IsServiceResource
             };
         }
 

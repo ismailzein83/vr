@@ -133,7 +133,7 @@ namespace BPMExtended.Main.Business
                 if (collection.Count > 0)
                 {
                     recordEntity = collection[0];
-                    recordEntity.SetColumnValue("StTechnicalStep", "9BDB150C-919D-4147-9F20-62BF7F40FB5E");
+                    recordEntity.SetColumnValue("StTechnicalStepId", "9BDB150C-919D-4147-9F20-62BF7F40FB5E");
                     recordEntity.SetColumnValue("StWOrkOrderID", workOrderId);
                     recordEntity.SetColumnValue("StIsWorkOrderCompleted", false);
                 }
@@ -192,7 +192,7 @@ namespace BPMExtended.Main.Business
                         {
                             PilotContract = new PabxContractInput()
                             {
-                                ContractId = contactId.ToString(),
+                                ContractId = contractId.ToString(),
                                 PhoneNumber = phoneNumber.ToString(),
                                 PabxParameterValue = pilotParameter
 
@@ -270,7 +270,7 @@ namespace BPMExtended.Main.Business
                         {
                             PilotContract = new PabxContractInput()
                             {
-                                ContractId = contactId.ToString(),
+                                ContractId = contractId.ToString(),
                                 PhoneNumber = phoneNumber.ToString(),
                                 PabxParameterValue = pilotParameter
 

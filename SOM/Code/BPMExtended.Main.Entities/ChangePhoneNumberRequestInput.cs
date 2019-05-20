@@ -9,6 +9,12 @@ namespace BPMExtended.Main.Entities
     public class ChangePhoneNumberRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
-
+        public string OldDirectoryNumber { get; set; }
+        public string NewDirectoryNumber { get; set; }
+        public string OldRatePlanId { get; set; }
+        public string NewRatePlanId { get; set; }
+        public List<ServiceData> FeesToRemove { get; set; }
     }
+
 }
+    

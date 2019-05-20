@@ -9,6 +9,7 @@ namespace BPMExtended.Main.Entities
     public class ChangeRatePlanRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public string NewRatePlanId { get; set; }
 
     }
 }

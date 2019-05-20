@@ -296,7 +296,7 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
+                            ContractId = contractId.ToString(),
                             RequestId = requestId.ToString()
                         }
                     }
@@ -720,52 +720,6 @@ namespace BPMExtended.Main.Business
             }
         }
 
-        public void PostChangeRatePlanToOM(Guid requestId)
-        {
-            
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            SOMRequestOutput output;
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangeRatePlan");
-            esq.AddColumn("StContractId");
-            esq.AddColumn("StCustomerId");
-        
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
-            esq.Filters.Add(esqFirstFilter);
-
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
-            {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
-
-                SOMRequestInput<ChangeRatePlanRequestInput> somRequestInput = new SOMRequestInput<ChangeRatePlanRequestInput>
-                {
-
-                    InputArguments = new ChangeRatePlanRequestInput
-                    {
-                        CommonInputArgument = new CommonInputArgument()
-                        {
-                           // ContractId = contractId.ToString(),
-                            RequestId = requestId.ToString(),
-                           // CustomerId = customerId.ToString()
-                        }
-                    }
-
-                };
-
-
-                //call api
-                using (var client = new SOMClient())
-                {
-                    output = client.Post<SOMRequestInput<ChangeRatePlanRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_ChangeRatePlan/StartProcess", somRequestInput);
-                }
-
-            }
-
-        }
 
         public void PostADSLAlterSpeedToOM(Guid requestId)
         {
@@ -1033,61 +987,6 @@ namespace BPMExtended.Main.Business
                 using (var client = new SOMClient())
                 {
                     output = client.Post<SOMRequestInput<ContractTakeOverRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ContractTakeOver/StartProcess", somRequestInput);
-                }
-
-            }
-
-        }
-
-        public void PostChangePhoneNumberToOM(Guid requestId)
-        {
-
-            //Get Data from StLineSubscriptionRequest table
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            SOMRequestOutput output;
-
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangePhoneNumberRequest");
-            esq.AddColumn("StContractID");
-            esq.AddColumn("StCustomerId");
-            esq.AddColumn("StContact");
-            esq.AddColumn("StContact.Id");
-            esq.AddColumn("StAccount");
-            esq.AddColumn("StAccount.Id");
-
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
-            esq.Filters.Add(esqFirstFilter);
-
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
-            {
-                var contractId = entities[0].GetColumnValue("StContractID");
-                var contactId = entities[0].GetColumnValue("StContactId");
-                var accountId = entities[0].GetColumnValue("StAccountId");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
-
-                SOMRequestInput<ChangePhoneNumberRequestInput> somRequestInput = new SOMRequestInput<ChangePhoneNumberRequestInput>
-                {
-
-                    InputArguments = new ChangePhoneNumberRequestInput
-                    {
-                        CommonInputArgument = new CommonInputArgument()
-                        {
-                            //ContractId = contractId.ToString(),
-                            //ContactId = contactId.ToString(),
-                            //AccountId = null,
-                            RequestId = requestId.ToString(),
-                           // CustomerId = customerId.ToString()
-                        }
-                    }
-
-                };
-
-                //call api
-                using (var client = new SOMClient())
-                {
-                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ChangePhoneNumber/StartProcess", somRequestInput);
                 }
 
             }
@@ -1948,7 +1847,6 @@ namespace BPMExtended.Main.Business
                 esq.AddColumn("StCustomerId");
                 esq.AddColumn("StCustomerCategoryID");
                 esq.AddColumn("StCustomerCategoryName");
-                esq.AddColumn("StCustomerCategoryName");
 
                 esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
                 esq.Filters.Add(esqFirstFilter);
@@ -2525,6 +2423,7 @@ namespace BPMExtended.Main.Business
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
             esq.AddColumn("StCoreServices");
             esq.AddColumn("StServices");
+            esq.AddColumn("StServiceResourceId");
             esq.AddColumn("StNumberToReserve");
             esq.AddColumn("StLinePathID");
             esq.AddColumn("StLineType");
@@ -2545,6 +2444,7 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var phoneNumber = entities[0].GetColumnValue("StNumberToReserve");
+                var serviceResourceId = entities[0].GetColumnValue("StServiceResourceId");
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var lineType = entities[0].GetColumnValue("StLineType");
                 var city = entities[0].GetColumnValue("StCityName");
@@ -2578,7 +2478,7 @@ namespace BPMExtended.Main.Business
                         LinePathId = linePathId,//"11112222",
                         PhoneNumber = phoneNumber.ToString(),
                         SubType = lineType.ToString(),
-                        ServiceResource = "N0047",
+                        ServiceResource = serviceResourceId.ToString(),
                         City = city.ToString(),
                         CSO = info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),

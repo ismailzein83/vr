@@ -24,6 +24,51 @@ namespace BPMExtended.Main.Business
             }
         }
 
+        public List<ServiceData> GetTelephonyPhoneCategoryFees(string phoneCategoryName)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            List<ServiceData> feesToRemove = new List<ServiceData>();
+            string id=null, serviceID;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyPhoneCategoryServicesCatalog");
+            esq.AddColumn("Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StName", phoneCategoryName);
+
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                id = (string)entities[0].GetColumnValue("Id");
+            }
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StPOSServiceInPhoneCategoryCatalog");
+            esq.AddColumn("StPOSServiceID");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StTelephonyPhoneCategoryServicesCatalogId", id);
+
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                serviceID = (string)entity.GetColumnValue("StPOSServiceID");
+
+                feesToRemove.Add(new ServiceData()
+                {
+                    Id=serviceID,
+                    packageId=""
+                    
+                });
+            }
+            return feesToRemove;
+
+        }
+
         public List<string> GetSpecialServicesIds()
         {
             EntitySchemaQuery esq;

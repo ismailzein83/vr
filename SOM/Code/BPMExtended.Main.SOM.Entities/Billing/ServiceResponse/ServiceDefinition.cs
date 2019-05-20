@@ -13,5 +13,6 @@
         public string PackageId { get; set; }
         public bool NeedsProvisioning { get; set; }
         public bool IsNetwork { get; set; }
+        public bool IsServiceResource { get; set; }
     }
 }

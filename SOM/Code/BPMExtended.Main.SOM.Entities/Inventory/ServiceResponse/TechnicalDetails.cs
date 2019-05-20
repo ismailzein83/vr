@@ -12,6 +12,7 @@ namespace BPMExtended.Main.SOMAPI
     {
         public PhoneType PhoneType { get; set; }
         public PhoneStatus PhoneStatus { get; set; }
+        public string PhoneCategory { get; set; }
         public string VerticalMDF { get; set; }
         public string PhoneID { get; set; }
         public string MDFPort { get; set; }
