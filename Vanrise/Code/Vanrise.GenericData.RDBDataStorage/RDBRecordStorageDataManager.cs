@@ -340,8 +340,16 @@ namespace Vanrise.GenericData.RDBDataStorage
 
             if (rdbRegistrationInfo.IsIdIdentity)
                 insertQuery.AddSelectGeneratedId();
+            
+            int nbOfAddedColumns = SetRDBWriteQueryColumnsFromDict(insertQuery, false, null, currentStorageFieldValues, createdUserId, modifiedUserId, rdbRegistrationInfo);
 
-            SetRDBWriteQueryColumnsFromDict(insertQuery, false, null, currentStorageFieldValues, createdUserId, modifiedUserId, rdbRegistrationInfo);
+            if (nbOfAddedColumns == 0)
+            {
+                var firstNotIdentityColumn = _dataRecordStorageSettings.Columns.FirstOrDefault(col => !col.IsIdentity);
+                firstNotIdentityColumn.ThrowIfNull("firstNotIdentityColumn", _dataRecordStorage.DataRecordStorageId);
+
+                insertQuery.Column(firstNotIdentityColumn.ColumnName).Null();
+            }
 
             if (rdbRegistrationInfo.IsIdIdentity)
             {
@@ -433,7 +441,15 @@ namespace Vanrise.GenericData.RDBDataStorage
             if (!fieldValues.TryGetValue(idFieldName, out idValue) || idValue == null)
                 throw new NullReferenceException("idValue");
 
-            SetRDBWriteQueryColumnsFromDict(updateQuery, true, idValue, currentStorageFieldValues, null, modifiedUserId, rdbRegistrationInfo);
+            int nbOfAddedColumns = SetRDBWriteQueryColumnsFromDict(updateQuery, true, idValue, currentStorageFieldValues, null, modifiedUserId, rdbRegistrationInfo);
+
+            if(nbOfAddedColumns == 0)
+            {
+                var firstNotIdentityColumn = _dataRecordStorageSettings.Columns.FirstOrDefault(col => !col.IsIdentity);
+                firstNotIdentityColumn.ThrowIfNull("firstNotIdentityColumn", _dataRecordStorage.DataRecordStorageId);
+
+                updateQuery.Column(firstNotIdentityColumn.ColumnName).Column(firstNotIdentityColumn.ColumnName);
+            }
 
             var where = updateQuery.Where();
             where.EqualsCondition(idFieldName).ObjectValue(idValue);
@@ -1092,8 +1108,9 @@ namespace Vanrise.GenericData.RDBDataStorage
             return queryContext.ExecuteNonQuery(0);
         }
 
-        void SetRDBWriteQueryColumnsFromDict(Vanrise.Data.RDB.BaseRDBWriteDataQuery writeQuery, bool isUpdateQuery, object idValue, Dictionary<string, object> fieldValues, int? createdUserId, int? modifiedUserId, RDBRegistrationInfo rdbRegistrationInfo)
+        int SetRDBWriteQueryColumnsFromDict(Vanrise.Data.RDB.BaseRDBWriteDataQuery writeQuery, bool isUpdateQuery, object idValue, Dictionary<string, object> fieldValues, int? createdUserId, int? modifiedUserId, RDBRegistrationInfo rdbRegistrationInfo)
         {
+            int nbOfAddedColumns = 0;
             var fieldInfos = rdbRegistrationInfo.FieldInfosByFieldName;
             string idFieldName = GetIdFieldNameWithValidate();
             List<WriteQueryUniqueFieldValue> uniqueFieldsValues = new List<WriteQueryUniqueFieldValue>();
@@ -1111,30 +1128,47 @@ namespace Vanrise.GenericData.RDBDataStorage
                         continue;
                 }
                 RDBStorageFieldInfo fieldInfo;
-                if (!fieldInfos.TryGetValue(fieldName, out fieldInfo))
-                    throw new NullReferenceException($"fieldInfo '{fieldName}'");
-                SetFieldRDBValue(writeQuery.Column(fieldName), fieldValue, fieldInfo.FieldType, isUpdateQuery);
-                if (fieldInfo.Column.IsUnique)
+                if (fieldInfos.TryGetValue(fieldName, out fieldInfo))
                 {
-                    uniqueFieldsValues.Add(new WriteQueryUniqueFieldValue
+                    SetFieldRDBValue(writeQuery.Column(fieldName), fieldValue, fieldInfo.FieldType, isUpdateQuery);
+                    nbOfAddedColumns++;
+                    if (fieldInfo.Column.IsUnique)
                     {
-                        FieldName = fieldName,
-                        FieldType = fieldInfo.FieldType,
-                        FieldValue = fieldValue
-                    });
+                        uniqueFieldsValues.Add(new WriteQueryUniqueFieldValue
+                        {
+                            FieldName = fieldName,
+                            FieldType = fieldInfo.FieldType,
+                            FieldValue = fieldValue
+                        });
+                    }
+                }
+                else if (rdbRegistrationInfo.AllSupportedFieldNames.Contains(fieldName))
+                {
+                    continue;
+                }
+                else
+                {
+                    throw new NullReferenceException($"fieldInfo '{fieldName}'");
                 }
             }
+
             if (createdUserId.HasValue)
             {
                 string createdUserFieldName = this._dataRecordStorage.Settings.CreatedByField;
                 if (!string.IsNullOrEmpty(createdUserFieldName))
+                {
                     writeQuery.Column(createdUserFieldName).Value(createdUserId.Value);
+                    nbOfAddedColumns++;
+                }
             }
             if (modifiedUserId.HasValue)
             {
                 string modifiedUserFieldName = this._dataRecordStorage.Settings.LastModifiedByField;
                 if (!string.IsNullOrEmpty(modifiedUserFieldName))
+                {
                     writeQuery.Column(modifiedUserFieldName).Value(modifiedUserId.Value);
+                    nbOfAddedColumns++;
+                }
             }
             if (uniqueFieldsValues.Count > 0 && uniqueFieldsValues.Count == rdbRegistrationInfo.UniqueFieldNames.Count)
             {
@@ -1148,6 +1182,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                     SetFieldRDBValue(ifNotExistsCondition.EqualsCondition(fieldValueEntry.FieldName), fieldValueEntry.FieldValue, fieldValueEntry.FieldType, true);
                 }
             }
+            return nbOfAddedColumns;
         }
 
         private void SetFieldRDBValue(RDBExpressionContext fieldRDBExpressionContext, object fieldValue, DataRecordFieldType fieldType, bool setNullIfValueNull)
