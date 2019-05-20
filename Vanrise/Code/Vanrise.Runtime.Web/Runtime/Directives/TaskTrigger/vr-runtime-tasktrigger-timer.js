@@ -28,7 +28,8 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
 
 
     function DirectiveConstructor($scope, ctrl) {
-        
+        this.initializeController = initializeController;
+
         var timerTypeDirectiveAPI;
         var timerTypeDirectiveReadyPromiseDeferred;
 
@@ -49,15 +50,12 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
         function defineAPI() {
             var api = {};
             
-            api.getData = function () {
-                var data = timerTypeDirectiveAPI.getData();
-                data.IgnoreSkippedIntervals = $scope.ignoreSkippedIntervals;
-                return data;
-            };
+            
 
             api.load = function (payload) {
                 var data;
                 var promises = [];
+
                 if (payload != undefined && payload.data != undefined) {
                     data = payload.data;
                     $scope.ignoreSkippedIntervals = data.IgnoreSkippedIntervals;
@@ -80,20 +78,25 @@ function (UtilsService, VRUIUtilsService, TimeSchedulerTypeEnum) {
                     promises.push(loadTimerTypePromiseDeferred.promise);
                 }
 
+                function setToDefaultValues() {
+                    $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, TimeSchedulerTypeEnum.Interval.FQTN, "FQTN");
+                    $scope.ignoreSkippedIntervals = true;
+                }
 
                 return UtilsService.waitMultiplePromises(promises);
             };
 
-            function setToDefaultValues()
-            {
-                $scope.selectedType = UtilsService.getItemByVal($scope.schedulerTypes, TimeSchedulerTypeEnum.Interval.FQTN, "FQTN");
-            }
+            api.getData = function () {
+                var data = timerTypeDirectiveAPI.getData();
+                data.IgnoreSkippedIntervals = $scope.ignoreSkippedIntervals;
+                return data;
+            };
 
-            if (ctrl.onReady != null)
+            if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                 ctrl.onReady(api);
         }
 
-        this.initializeController = initializeController;
+        
     }
 
     return directiveDefinitionObject;
