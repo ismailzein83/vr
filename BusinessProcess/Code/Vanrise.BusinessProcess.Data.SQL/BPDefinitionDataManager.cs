@@ -25,13 +25,13 @@ namespace Vanrise.BusinessProcess.Data.SQL
         public bool InsertBPDefinition(BPDefinition bpDefinition)
         {
             string serializedConfiguration = bpDefinition.Configuration != null ? Vanrise.Common.Serializer.Serialize(bpDefinition.Configuration) : null;
-            int affectedRecords = ExecuteNonQuerySP("[bp].[sp_BPDefinition_Insert]", bpDefinition.BPDefinitionID, bpDefinition.Name, bpDefinition.Title, bpDefinition.VRWorkflowId, serializedConfiguration);
+            int affectedRecords = ExecuteNonQuerySP("[bp].[sp_BPDefinition_Insert]", bpDefinition.BPDefinitionID, bpDefinition.Name, bpDefinition.Title, bpDefinition.VRWorkflowId,bpDefinition.DevProjectId, serializedConfiguration);
             return affectedRecords > 0 ? true : false;
         }
 
         public bool UpdateBPDefinition(BPDefinition bpDefinition)
         {
-            int recordesEffected = ExecuteNonQuerySP("[bp].[sp_BPDefinition_Update]", bpDefinition.BPDefinitionID, bpDefinition.Title, bpDefinition.VRWorkflowId, Vanrise.Common.Serializer.Serialize(bpDefinition.Configuration));
+            int recordesEffected = ExecuteNonQuerySP("[bp].[sp_BPDefinition_Update]", bpDefinition.BPDefinitionID, bpDefinition.Title, bpDefinition.VRWorkflowId, bpDefinition.DevProjectId, Vanrise.Common.Serializer.Serialize(bpDefinition.Configuration));
             return (recordesEffected > 0);
         }
 

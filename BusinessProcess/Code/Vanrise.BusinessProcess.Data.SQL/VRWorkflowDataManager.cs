@@ -24,13 +24,13 @@ namespace Vanrise.BusinessProcess.Data.SQL
         public bool InsertVRWorkflow(VRWorkflowToAdd vrWorkflow, Guid vrWorkflowId, int createdBy)
         {
             string serializedSettings = vrWorkflow.Settings != null ? Vanrise.Common.Serializer.Serialize(vrWorkflow.Settings) : null;
-            return ExecuteNonQuerySP("[bp].[sp_VRWorkflow_Insert]", vrWorkflowId, vrWorkflow.Name, vrWorkflow.Title, serializedSettings, createdBy) > 0;
+            return ExecuteNonQuerySP("[bp].[sp_VRWorkflow_Insert]", vrWorkflowId, vrWorkflow.Name, vrWorkflow.Title,vrWorkflow.DevProjectId, serializedSettings, createdBy) > 0;
         }
 
         public bool UpdateVRWorkflow(VRWorkflowToUpdate vrWorkflow, int lastModifiedBy)
         {
             string serializedSettings = vrWorkflow.Settings != null ? Vanrise.Common.Serializer.Serialize(vrWorkflow.Settings) : null;
-            return ExecuteNonQuerySP("[bp].[sp_VRWorkflow_Update]", vrWorkflow.VRWorkflowId, vrWorkflow.Name, vrWorkflow.Title, serializedSettings, lastModifiedBy) > 0;
+            return ExecuteNonQuerySP("[bp].[sp_VRWorkflow_Update]", vrWorkflow.VRWorkflowId, vrWorkflow.Name, vrWorkflow.Title, vrWorkflow.DevProjectId, serializedSettings, lastModifiedBy) > 0;
         }
 
         public bool AreVRWorkflowsUpdated(ref object lastReceivedDataInfo)

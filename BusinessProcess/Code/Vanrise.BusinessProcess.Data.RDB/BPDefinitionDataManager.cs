@@ -76,7 +76,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
             insertQuery.Column(COL_Name).Value(bpDefinition.Name);
             insertQuery.Column(COL_Title).Value(bpDefinition.Title);
             insertQuery.Column(COL_VRWorkflowId).Value(bpDefinition.VRWorkflowId.Value);
-
+            if(bpDefinition.DevProjectId.HasValue)
+                insertQuery.Column(COL_DevProjectID).Value(bpDefinition.DevProjectId.Value);
             if (bpDefinition.Configuration != null)
                 insertQuery.Column(COL_Config).Value(Serializer.Serialize(bpDefinition.Configuration));
 
@@ -101,6 +102,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
             else
                 updateQuery.Column(COL_VRWorkflowId).Null();
 
+            if (bpDefinition.DevProjectId.HasValue)
+                updateQuery.Column(COL_DevProjectID).Value(bpDefinition.DevProjectId.Value);
+            else
+                updateQuery.Column(COL_DevProjectID).Null();
             if (bpDefinition.Configuration != null)
                 updateQuery.Column(COL_Config).Value(Serializer.Serialize(bpDefinition.Configuration));
             else
