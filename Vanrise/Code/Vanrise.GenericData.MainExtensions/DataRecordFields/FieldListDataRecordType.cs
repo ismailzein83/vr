@@ -10,6 +10,60 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
+    public class FieldDataRecordType : DataRecordFieldType
+    {
+        public override Guid ConfigId => new Guid("19519705-330A-4E5B-A2E9-BCD7746BE99F");
+
+        public override string RuntimeEditor => "";
+
+        public Guid DataRecordTypeId { get; set; }
+
+        public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetDescription(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Type GetNonNullableRuntimeType()
+        {
+            return new DataRecordTypeManager().GetDataRecordRuntimeType(this.DataRecordTypeId);
+        }
+
+        public override Type GetRuntimeType()
+        {
+            return GetNonNullableRuntimeType();
+        }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsMatched(object fieldValue, object filterValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class FieldListDataRecordType : DataRecordFieldType
     {
         public override Guid ConfigId => new Guid("8C0574CD-8862-4F29-828A-CE398635F2F7");
