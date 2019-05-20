@@ -10,7 +10,9 @@ using MigraDoc.DocumentObjectModel.Shapes;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
 using System.IO;
-
+using SOM.Main.Entities;
+using BPMExtended.Main.Entities;
+using BPMExtended.Main.Common;
 
 namespace BPMExtended.Main.Business
 {
@@ -200,6 +202,27 @@ namespace BPMExtended.Main.Business
             };
             return paymentinfo;
         }
+        public string WriteBusinessTransaction(string contractId, List<ServiceData> services)
+        {
+            string documentId = null;
+
+            SOMRequestInput<WriteBusinessTransactionInput> somRequestInput = new SOMRequestInput<WriteBusinessTransactionInput>
+            {
+                InputArguments = new WriteBusinessTransactionInput
+                {
+                    ContractId = contractId,
+                    Services = services
+                }
+            };
+
+            using (var client = new SOMClient())
+            {
+                documentId = client.Post<SOMRequestInput<WriteBusinessTransactionInput>, string>("api/SOM.ST/Billing/WriteBusinessTransaction", somRequestInput);
+            }
+
+            return documentId;
+        }
+
         #endregion
 
         #region Private
@@ -259,15 +282,30 @@ namespace BPMExtended.Main.Business
             paragraph.AddFormattedText("Call Details", TextFormat.Bold);
 
             Paragraph paragraph2 = this.addressFrame.AddParagraph();
-            paragraph2.AddText(request.Name);
-            paragraph2.AddLineBreak();
-            paragraph2.AddText(request.PhoneNumber);
-            paragraph2.AddLineBreak();
-            paragraph2.AddText(request.UserName);
-            paragraph2.AddLineBreak();
-            paragraph2.AddText(request.CSO);
-            paragraph2.AddLineBreak();
-            paragraph2.AddText(request.Date);
+            if (request.Name != null)
+            {
+                paragraph2.AddText(request.Name);
+                paragraph2.AddLineBreak();
+            }
+            if (request.PhoneNumber != null)
+            {
+                paragraph2.AddText(request.PhoneNumber);
+                paragraph2.AddLineBreak();
+            }
+            if (request.UserName != null)
+            {
+                paragraph2.AddText(request.UserName);
+                paragraph2.AddLineBreak();
+            }
+            if (request.CSO != null)
+            {
+                paragraph2.AddText(request.CSO);
+                paragraph2.AddLineBreak();
+            }
+            if (request.CSO != null)
+            {
+                paragraph2.AddText(request.Date);
+            }
 
             bool isFirtsPage = true;
             for (int i = 0; i < request.Items.Count; i += numberOfRecords)
@@ -452,7 +490,6 @@ namespace BPMExtended.Main.Business
 
         }
         #endregion
-
 
         #region Mappers
         public CallDetailsEntity CallDetailsToEntityMapper(CallDetails callDetails)
