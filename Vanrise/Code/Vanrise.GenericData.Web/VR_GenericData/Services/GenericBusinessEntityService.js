@@ -12,7 +12,8 @@
             defineGenericBEViewTabs: defineGenericBEViewTabs,
 			uploadGenericBusinessEntity:uploadGenericBusinessEntity,
             getEntityUniqueName: getEntityUniqueName,
-            openBulkActionsEditor: openBulkActionsEditor
+            openBulkActionsEditor: openBulkActionsEditor,
+            sendEmailGenericBE: sendEmailGenericBE
          //   getDrillDownDefinition: getDrillDownDefinition
 
         });
@@ -129,12 +130,24 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityBulkActionsEditor.html', parameters, settings);
         }
+        function sendEmailGenericBE(onGenericBEEmailSend, genericBEDefinitionId, businessEntityDefinitionId, genericBEAction) {
+            var parameters = {
+                genericBEDefinitionId: genericBEDefinitionId,
+                businessEntityDefinitionId: businessEntityDefinitionId,
+                genericBEAction: genericBEAction
+            };
+            var settings = {};
 
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEEmailSend = onGenericBEEmailSend;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntitySendEmailEditor.html', parameters, settings);
+        }
         //function registerObjectTrackingDrillDownToGenericBusinessEntity() {
         //    var drillDownDefinition = {};
 

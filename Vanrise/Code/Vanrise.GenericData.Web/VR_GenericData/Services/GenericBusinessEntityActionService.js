@@ -216,12 +216,35 @@
             registerActionType(deleteActionType);
         }
 
+        function registerSendEmailGenericBEAction() {
+            var sendEmailActionType = {
+                ActionTypeName: "SendEmailGenericBEAction",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+                    var businessEntityDefinitionId = payload.businessEntityDefinitionId; 
+                    var genericBusinessEntityId = payload.genericBusinessEntityId;
+                    var genericBEAction = payload.genericBEAction;
+
+                    var promiseDeffered = UtilsService.createPromiseDeferred();
+                    var onGenericBEEmailSend = function (response) {
+                        promiseDeffered.resolve(true);
+                    };
+                    VR_GenericData_GenericBusinessEntityService.sendEmailGenericBE(onGenericBEEmailSend, genericBusinessEntityId, businessEntityDefinitionId, genericBEAction);
+                    return promiseDeffered.promise;
+                }
+            };
+            registerActionType(sendEmailActionType);
+        }
+
+
         return ({
             defineGenericBEMenuActions: defineGenericBEMenuActions,
             getActionTypeIfExist: getActionTypeIfExist,
             registerActionType: registerActionType,
             registerEditBEAction: registerEditBEAction,
             registerDeleteBEAction: registerDeleteBEAction,
+            registerSendEmailGenericBEAction: registerSendEmailGenericBEAction
         });
     };
 

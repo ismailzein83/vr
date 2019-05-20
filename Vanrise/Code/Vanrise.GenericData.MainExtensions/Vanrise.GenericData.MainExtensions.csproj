@@ -101,6 +101,9 @@
     <Compile Include="GenericBusinessEntity\GenericBEActions\DeleteGenericBEAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\EditGenericBEAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\SendEmailGenericBEAction.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEActions\SendEmail\EmailTemplateRuntimeEditor.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEActions\SendEmail\GenericBEEmailActionController.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEActions\SendEmail\GenericBEEmailActionManager.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEBulkActions\UpdateGenericBEBulkActionRuntimeSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEBulkActions\UpdateGenericBEBulkAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEConditions\GenericFilterGroupCondition.cs" />
