@@ -8,14 +8,15 @@ CREATE PROCEDURE [genericdata].[sp_BusinessEntityDefinition_Insert]
 	@ID uniqueidentifier,
 	@Name nvarchar(50),
 	@Title nvarchar(50),
+	@DevProjectId uniqueidentifier,
 	@Settings nvarchar(max)
 
 AS
 BEGIN
 IF NOT EXISTS(select 1 from genericdata.BusinessEntityDefinition where Name = @Name) 
 	BEGIN	
-		INSERT INTO  genericdata.BusinessEntityDefinition(ID,Name,Title,Settings) 
-		VALUES (@ID,@Name,@Title,@Settings)
+		INSERT INTO  genericdata.BusinessEntityDefinition(ID,Name,Title,DevProjectId,Settings) 
+		VALUES (@ID,@Name,@Title,@DevProjectId,@Settings)
 
 	END
 END

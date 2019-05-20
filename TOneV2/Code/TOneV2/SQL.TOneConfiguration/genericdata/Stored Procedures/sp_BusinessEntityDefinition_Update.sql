@@ -7,6 +7,7 @@ CREATE PROCEDURE [genericdata].[sp_BusinessEntityDefinition_Update]
 	@ID uniqueidentifier ,
 	@Name nvarchar(50),
 	@Title  nvarchar(50),
+	@DevProjectId uniqueidentifier,
 	@Settings nvarchar(max)
 	
 AS
@@ -18,7 +19,9 @@ IF NOT EXISTS(select 1 from genericdata.BusinessEntityDefinition where Name = @N
 	UPDATE	genericdata.BusinessEntityDefinition
 	SET	    Name = @Name,
 			Title =@Title,
+			DevProjectId=@DevProjectId,
 			Settings = @Settings,
+	
 			LastModifiedTime = GETDATE()
 	WHERE	ID = @ID
 	END
