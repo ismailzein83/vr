@@ -179,7 +179,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         carrierSummary.Profit = Convert.ToDouble(profit.Value ?? 0.0);
                         carrierSummary.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Profit);
 
-                        carrierSummary.ProfitPercentage = carrierSummary.SaleAmount == 0 || carrierSummary.CostAmount == 0 ? "" : (carrierSummary.SaleAmount != 0) ? ReportHelpers.FormatNumberPercentage(((1 - carrierSummary.CostAmount / carrierSummary.SaleAmount))) : "-100%";
+                        carrierSummary.ProfitPercentage = carrierSummary.SaleAmount == 0 ? "" :ReportHelpers.FormatNumberPercentage(((1 - carrierSummary.CostAmount / carrierSummary.SaleAmount)));
 
 
                         listCarrierSummaryDetailed.Add(carrierSummary);
