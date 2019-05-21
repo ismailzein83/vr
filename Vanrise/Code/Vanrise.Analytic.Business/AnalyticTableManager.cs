@@ -82,17 +82,17 @@ namespace Vanrise.Analytic.Business
         }
         public Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail> SaveAnalyticTableMeasureStyles(AnalyticTableMeasureStyles measureStyles, Guid analyticTableId)
         {
-            IAnalyticTableDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticTableDataManager>();
-            bool updateActionSucc = dataManager.SaveAnalyticTableMeasureStyles(measureStyles, analyticTableId);
             UpdateOperationOutput<AnalyticTableDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail>();
-
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
+            IAnalyticTableDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticTableDataManager>();
+            bool updateActionSucc = dataManager.SaveAnalyticTableMeasureStyles(measureStyles, analyticTableId);
+
             if (updateActionSucc)
             {
-                var analyticTable = GetAnalyticTableById(analyticTableId);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var analyticTable = GetAnalyticTableById(analyticTableId);
                 VRActionLogger.Current.LogObjectCustomAction(AnalyticTableLoggableEntity.Instance, "Update", true, analyticTable, "Measure Style");
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = AnalyticTableDetailMapper(analyticTable);
@@ -348,5 +348,5 @@ namespace Vanrise.Analytic.Business
             };
         }
         #endregion
-    }
+    } 
 }
