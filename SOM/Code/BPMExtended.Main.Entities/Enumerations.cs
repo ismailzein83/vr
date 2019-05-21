@@ -45,8 +45,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Line Subscription")]
         [EntitySchemaName("StLineSubscriptionRequest")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("EBACDCBA-0DB9-4582-999B-6317DA0094A7")]
         TelephonyLineSubscription = 0,
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
@@ -177,9 +177,9 @@ namespace BPMExtended.Main.Entities
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Service Addition")]
-        [EntitySchemaName("StServiceAddition")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [EntitySchemaName("StServiceAdditionRequest")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("64436D8D-547F-4B12-AFAA-B44425FE6EAF")]
         ServiceAddition = 19,
 
         [LineOfBusiness(LineOfBusiness.LeasedLine)]
@@ -262,8 +262,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Change Rate Plan")]
         [EntitySchemaName("StChangeRatePlan")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("1F05083D-6074-47DD-822D-ED30362E30BE")]
         ChangeRatePlan = 31,
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
