@@ -130,15 +130,15 @@
                 };
 
                 $scope.addBusinessEntity = function () {
+                    var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", genericBEDefinitionSettings.EditorSize);
+                    var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
+
                     var onGenericBusinessEntityAdded = function (addedGenericBusinessEntity, reopen) {
                         gridDirectiveAPI.onGenericBEAdded(addedGenericBusinessEntity);
                         if (reopen) {
                             VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessEntityDefinitionAPI.getSelectedIds(), editorSize);
                         }
                     };
-
-                    var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", genericBEDefinitionSettings.EditorSize);
-                    var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
                     VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessEntityDefinitionAPI.getSelectedIds(), editorSize);
                 };
 
