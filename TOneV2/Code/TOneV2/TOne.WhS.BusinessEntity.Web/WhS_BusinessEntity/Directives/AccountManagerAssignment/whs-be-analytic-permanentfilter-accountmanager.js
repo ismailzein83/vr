@@ -52,50 +52,15 @@
                 defineAPI();
 
             }
-            function loadCustomerDimensionSelector(payload) {
-                var loadCustomerDimensionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                customerDimensionSelectorReadyPromiseDeferred.promise.then(function () {
-                    var customerDimensionPayload = {
-                        filter: { TableIds: [payload.analyticTableId] },
-                        selectedIds: payload.settings != undefined ? payload.settings.CustomerDimension : undefined
-                    };
-                    VRUIUtilsService.callDirectiveLoad(customerDimensionSelectorAPI, customerDimensionPayload, loadCustomerDimensionSelectorPromiseDeferred);
-                });
-                return loadCustomerDimensionSelectorPromiseDeferred.promise;
-            }
-            function loadSupplierDimensionSelector(payload) {
-                var loadSupplierDimensionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                supplierDimensionSelectorReadyPromiseDeferred.promise.then(function () {
-
-                    var supplierDimensionPayload = {
-                        filter: { TableIds: [payload.analyticTableId] },
-                        selectedIds: payload.settings != undefined ? payload.settings.SupplierDimension : undefined
-                    };
-                    VRUIUtilsService.callDirectiveLoad(supplierDimensionSelectorAPI, supplierDimensionPayload, loadSupplierDimensionSelectorPromiseDeferred);
-                });
-                return loadSupplierDimensionSelectorPromiseDeferred.promise;
-            }
-            function loadTimeDimensionSelector(payload) {
-                var loadTimeDimensionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                timeDimensionSelectorReadyPromiseDeferred.promise.then(function () {
-
-                    var timeDimensionPayload = {
-                        filter: { TableIds: [payload.analyticTableId] },
-                        selectedIds: payload.settings != undefined ? payload.settings.TimeDimension : undefined
-                    };
-                    VRUIUtilsService.callDirectiveLoad(timeDimensionSelectorAPI, timeDimensionPayload, loadTimeDimensionSelectorPromiseDeferred);
-                });
-                return loadTimeDimensionSelectorPromiseDeferred.promise;
-            }
+            
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     var promises = [];
                     if (payload != undefined) {
-                        promises.push(loadCustomerDimensionSelector(payload));
-                        promises.push(loadSupplierDimensionSelector(payload));
-                        promises.push(loadTimeDimensionSelector(payload));
+                        promises.push(loadCustomerAccountManagerDimensionSelector(payload));
+                        promises.push(loadSupplierAccountManagerDimensionSelector(payload));
                     }
                     return UtilsService.waitPromiseNode({
                         promises: promises
@@ -105,15 +70,39 @@
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Business.AccountManagerAnalyticPermanentFilter,TOne.WhS.BusinessEntity.Business",
-                        TimeDimension: timeDimensionSelectorAPI.getSelectedIds(),
-                        CustomerDimension: customerDimensionSelectorAPI.getSelectedIds(),
-                        SupplierDimension: supplierDimensionSelectorAPI.getSelectedIds()
+                        CustomerAccountManagerDimension: customerDimensionSelectorAPI.getSelectedIds(),
+                        SupplierAccountManagerDimension: supplierDimensionSelectorAPI.getSelectedIds()
                     };
                 };
 
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
+            }
+
+            function loadCustomerAccountManagerDimensionSelector(payload) {
+                var loadCustomerDimensionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                customerDimensionSelectorReadyPromiseDeferred.promise.then(function () {
+                    var customerDimensionPayload = {
+                        filter: { TableIds: [payload.analyticTableId] },
+                        selectedIds: payload.settings != undefined ? payload.settings.CustomerAccountManagerDimension : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(customerDimensionSelectorAPI, customerDimensionPayload, loadCustomerDimensionSelectorPromiseDeferred);
+                });
+                return loadCustomerDimensionSelectorPromiseDeferred.promise;
+            }
+
+            function loadSupplierAccountManagerDimensionSelector(payload) {
+                var loadSupplierDimensionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                supplierDimensionSelectorReadyPromiseDeferred.promise.then(function () {
+
+                    var supplierDimensionPayload = {
+                        filter: { TableIds: [payload.analyticTableId] },
+                        selectedIds: payload.settings != undefined ? payload.settings.SupplierAccountManagerDimension : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(supplierDimensionSelectorAPI, supplierDimensionPayload, loadSupplierDimensionSelectorPromiseDeferred);
+                });
+                return loadSupplierDimensionSelectorPromiseDeferred.promise;
             }
 
 
