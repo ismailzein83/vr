@@ -84,7 +84,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
 
             List<AccountManagerAssignment> accountManagerAssignments = new List<AccountManagerAssignment>();
-            accountManagerAssignments.AddRange(accountManagerTreeNode.AccountManagerAssignments);
+            if (accountManagerTreeNode.AccountManagerAssignments != null)
+                  accountManagerAssignments.AddRange(accountManagerTreeNode.AccountManagerAssignments);
 
             var childAccountManagerAssignments = GetAccountManagerAssignments(accountManagerTreeNode.ChildNodes, true);
             if (childAccountManagerAssignments != null)
@@ -99,7 +100,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 List<AccountManagerAssignment> accountManagerAssignments = new List<AccountManagerAssignment>();
                 foreach (var childNode in accountManagerTreeNodes)
                 {
-                    accountManagerAssignments.AddRange(childNode.AccountManagerAssignments);
+                    if (childNode.AccountManagerAssignments != null)
+                        accountManagerAssignments.AddRange(childNode.AccountManagerAssignments);
                     if (withSubChildren)
                     {
                         var subChildren = GetAccountManagerAssignments(childNode.ChildNodes, withSubChildren);
