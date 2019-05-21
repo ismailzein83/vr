@@ -108,7 +108,7 @@ app.directive('vrWhsBeSalezonegroupMatchingsupplierdeals', ['UtilsService', 'VRU
 
                     onDeselectDealDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    return WhS_Routing_CodeZoneMatchAPIService.GetSaleZonesMatchingSpecificDeals(obj).then(function (response) {
+                    return WhS_Routing_CodeZoneMatchAPIService.GetSaleZonesMatchingSupplierDeals(obj).then(function (response) {
                         selectedSaleZoneIds = response;
                         onDeselectDealDefinitionLoadDeferred.resolve();
                     });

@@ -8,12 +8,12 @@
 
         var controllerName = "CodeZoneMatch";
 
-        function GetSaleZonesMatchingSpecificDeals(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetSaleZonesMatchingSpecificDeals"), input);
+        function GetSaleZonesMatchingSupplierDeals(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetSaleZonesMatchingSupplierDeals"), input);
         }
 
         return ({
-            GetSaleZonesMatchingSpecificDeals: GetSaleZonesMatchingSpecificDeals
+            GetSaleZonesMatchingSupplierDeals: GetSaleZonesMatchingSupplierDeals
         });
     }
 

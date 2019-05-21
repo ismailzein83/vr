@@ -9,15 +9,15 @@ namespace TOne.WhS.Routing.Web.Controllers
     public class CodeZoneMatchController : BaseAPIController
     {
         [HttpPost]
-        [Route("GetSaleZonesMatchingSpecificDeals")]
-        public List<long> GetSaleZonesMatchingSupplierDeals(GetSaleZonesMatchingSpecificDealsInput input)
+        [Route("GetSaleZonesMatchingSupplierDeals")]
+        public List<long> GetSaleZonesMatchingSupplierDeals(GetSaleZonesMatchingSupplierDealsInput input)
         {
             CodeZoneMatchManager _manager = new CodeZoneMatchManager();
             return _manager.GetSaleZonesMatchingSupplierDeals(input.SelectedSupplierDealIds, input.SellingNumberPlanId, input.SelectedSaleZoneIds);
         }
     }
 
-    public class GetSaleZonesMatchingSpecificDealsInput
+    public class GetSaleZonesMatchingSupplierDealsInput
     {
         public List<int> SelectedSupplierDealIds { get; set; }
 
