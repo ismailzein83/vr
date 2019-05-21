@@ -132,7 +132,8 @@ as (select * from (values
 ('FF293CA2-522F-47F1-808A-6178DF488E11','RDBDataRecordStorageCustomCodeJoin','Custom Code','VR_GenericData_RDBDataRecordStorageJoinSettingsConfig','{"Editor":"vr-genericadata-rdbdatarecordstoragesettings-customcodejoin"}'),
 ('2E000BBE-3842-49D5-BCAE-C9B20D778F18','RDBDataRecordStorageCustomCodeExpressionField','Custom Code','VR_GenericData_RDBDataRecordStorageExpressionFieldSettingsConfig','{"Editor":"vr-genericdata-rdbrecordstoragesettings-expressionfield-customcode"}'),
 ('E5FA86E6-FA20-4301-9FFE-E20A57BEC459','RDBDataRecordStorageJoinOtherRecordStorage','Other Record Storage','VR_GenericData_RDBDataRecordStorageJoinSettingsConfig','{"Editor":"vr-genericadata-rdbdatarecordstoragesettings-joinotherrecordstorage"}'),
-('1D2F3E14-AD64-41C6-AE5F-475D1CB75D2D','RDBDataRecordStorageSettingsFilterGroup','Filter Group','VR_GenericData_RDBDataRecordStorageSettingsFilterConfig','{"Editor":"vr-genericdata-rdbrecordstoragesettings-filter-filtergroup"}')
+('1D2F3E14-AD64-41C6-AE5F-475D1CB75D2D','RDBDataRecordStorageSettingsFilterGroup','Filter Group','VR_GenericData_RDBDataRecordStorageSettingsFilterConfig','{"Editor":"vr-genericdata-rdbrecordstoragesettings-filter-filtergroup"}'),
+('CBAFD46F-676F-4CC1-ADA4-4DF7ED762C95','SendEmail_Generic','Send Email Generic','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-sendemailaction-definition"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
