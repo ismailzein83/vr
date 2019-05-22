@@ -22,15 +22,8 @@ namespace TOne.WhS.Deal.Entities
         public DateTime? DeActivationDate { get; set; }
         public DateTime BeginDate { get; set; }
         public DateTime? EEDToStore { get; set; }
-        public DateTime? EndDate
-        {
-            get { return EEDToStore.HasValue ? EEDToStore.Value.AddDays(1) : EEDToStore; }
-        }
-        public DateTime BEDToDisplay
-        {
-            get { return OffSet.HasValue ? BeginDate.Subtract(OffSet.Value) : BeginDate; }
-
-        }
+        public DateTime? EndDate { get { return EEDToStore.HasValue ? EEDToStore.Value.AddDays(1) : EEDToStore; } }
+        public DateTime BEDToDisplay { get { return OffSet.HasValue ? BeginDate.Subtract(OffSet.Value) : BeginDate; } }
         public DateTime? EEDToDisplay
         {
             get
@@ -44,6 +37,9 @@ namespace TOne.WhS.Deal.Entities
         }
         public abstract DateTime? RealEED { get; }
         public abstract DateTime RealBED { get; }
+        public bool IsRecurrable { get; set; }
+        public TimeSpan? OffSet { get; set; }
+
         public abstract int GetCarrierAccountId();
         public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
         public abstract void GetRoutingZoneGroups(IDealGetRoutingZoneGroupsContext context);
@@ -54,23 +50,16 @@ namespace TOne.WhS.Deal.Entities
         public abstract string GetSupplierZoneGroupName(int dealGroupNumber);
         public abstract TimeSpan? GetCarrierOffSet(TimeSpan? currentOffSet);
         public abstract DealZoneGroupPart GetDealZoneGroupPart();
-        public bool IsRecurrable { get; set; }
-        public TimeSpan? OffSet { get; set; }
     }
 
     public interface IDealGetZoneGroupsContext
     {
         int DealId { get; }
-
         DealZoneGroupPart DealZoneGroupPart { get; }
-
         bool EvaluateRates { get; }
-
         List<BaseDealSaleZoneGroup> SaleZoneGroups { set; }
-
         List<BaseDealSupplierZoneGroup> SupplierZoneGroups { set; }
     }
-
     public class DealGetZoneGroupsContext : IDealGetZoneGroupsContext
     {
         public DealGetZoneGroupsContext(int dealId, DealZoneGroupPart dealZoneGroupPart, bool evaluateRates)
@@ -79,28 +68,19 @@ namespace TOne.WhS.Deal.Entities
             this.DealZoneGroupPart = dealZoneGroupPart;
             this.EvaluateRates = evaluateRates;
         }
-
         public int DealId { get; set; }
-
         public DealZoneGroupPart DealZoneGroupPart { get; set; }
-
         public bool EvaluateRates { get; set; }
-
         public List<BaseDealSaleZoneGroup> SaleZoneGroups { get; set; }
-
         public List<BaseDealSupplierZoneGroup> SupplierZoneGroups { get; set; }
-
     }
 
     public interface IDealGetRoutingZoneGroupsContext
     {
         DealZoneGroupPart DealZoneGroupPart { get; }
-
         List<DealRoutingSaleZoneGroup> SaleZoneGroups { set; }
-
         List<DealRoutingSupplierZoneGroup> SupplierZoneGroups { set; }
     }
-
     public class DealGetRoutingZoneGroupsContext : IDealGetRoutingZoneGroupsContext
     {
         public DealZoneGroupPart DealZoneGroupPart { get; set; }
@@ -118,7 +98,6 @@ namespace TOne.WhS.Deal.Entities
     public class DealRoutingSaleZoneGroupTier
     {
         public int TierNumber { get; set; }
-
         public decimal? SubstituteRate { get; set; }
     }
 
@@ -132,7 +111,6 @@ namespace TOne.WhS.Deal.Entities
     public class DealRoutingSupplierZoneGroupTier
     {
         public int TierNumber { get; set; }
-
         public decimal? SubstituteRate { get; set; }
     }
 }

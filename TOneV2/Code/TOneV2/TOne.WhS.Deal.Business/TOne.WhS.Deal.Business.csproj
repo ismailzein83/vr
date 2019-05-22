@@ -119,6 +119,7 @@
     <Compile Include="DealZoneInfoByZoneId.cs" />
     <Compile Include="DealZoneRateManager.cs" />
     <Compile Include="Extensions\DealBusinessObjectDataProviderSettings.cs" />
+    <Compile Include="Extensions\DealMemoryAnalyticDataManager.cs" />
     <Compile Include="Extensions\DealOverallProgressDataProviderSettings.cs" />
     <Compile Include="Extensions\SwapDealMemoryAnalyticDataManager.cs" />
     <Compile Include="Helper.cs" />

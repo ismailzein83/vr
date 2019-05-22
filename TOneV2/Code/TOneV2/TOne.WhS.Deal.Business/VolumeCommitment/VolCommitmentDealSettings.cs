@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
-using Vanrise.Common;
-using TOne.WhS.Deal.Entities;
-using Vanrise.Common.Business;
 using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Deal.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.Business
@@ -16,22 +16,21 @@ namespace TOne.WhS.Deal.Business
         Supplier = 1,
         Customer = 2
     }
+
     public enum DealBillingType
     {
         byTraffic = 0,
         EstimatedVolume = 1,
     }
+
     public class VolCommitmentDealSettings : DealSettings
     {
         public static Guid VolCommitmentDealSettingsConfigId = new Guid("B606E88C-4AE5-4BF0-BCE5-10D456A092F5");
         public override Guid ConfigId { get { return VolCommitmentDealSettingsConfigId; } }
 
         public VolCommitmentDealType DealType { get; set; }
-
         public int CarrierAccountId { get; set; }
-
         public List<VolCommitmentDealItem> Items { get; set; }
-
         public int LastGroupNumber { get; set; }
         public int CurrencyId { get; set; }
         public VolCommitmentTimeZone VolCommitmentTimeZone { get; set; }
@@ -52,7 +51,6 @@ namespace TOne.WhS.Deal.Business
                 return EndDate;
             }
         }
-
         public override DateTime RealBED
         {
             get
@@ -62,6 +60,9 @@ namespace TOne.WhS.Deal.Business
                 return BeginDate;
             }
         }
+
+        #region Public Methods
+
         public override int GetCarrierAccountId()
         {
             return CarrierAccountId;
@@ -108,6 +109,7 @@ namespace TOne.WhS.Deal.Business
 
             return timeZone.Settings.Offset;
         }
+
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
             DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
@@ -189,26 +191,6 @@ namespace TOne.WhS.Deal.Business
                 }
             }
             return zoneIds;
-        }
-        private List<int> ValidateVolumeCommitmentCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
-        {
-            List<int> invalidCountries = new List<int>();
-            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
-            var customerCountries = customerCountryManager.GetCustomerCountryIds(customerId, effectiveOn, isEffectiveInFuture);
-            foreach (var item in Items)
-            {
-                if (item.CountryIds != null)
-                {
-                    foreach (var countryId in item.CountryIds)
-                    {
-                        if (!customerCountries.Contains(countryId))
-                        {
-                            invalidCountries.Add(countryId);
-                        }
-                    }
-                }
-            }
-            return invalidCountries;
         }
 
         public override List<long> GetDealSupplierZoneIds()
@@ -338,10 +320,38 @@ namespace TOne.WhS.Deal.Business
             }
 
         }
+
         public override DealZoneGroupPart GetDealZoneGroupPart()
         {
             return DealType == VolCommitmentDealType.Buy ? DealZoneGroupPart.Cost : DealZoneGroupPart.Sale;
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private List<int> ValidateVolumeCommitmentCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            List<int> invalidCountries = new List<int>();
+            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+            var customerCountries = customerCountryManager.GetCustomerCountryIds(customerId, effectiveOn, isEffectiveInFuture);
+            foreach (var item in Items)
+            {
+                if (item.CountryIds != null)
+                {
+                    foreach (var countryId in item.CountryIds)
+                    {
+                        if (!customerCountries.Contains(countryId))
+                        {
+                            invalidCountries.Add(countryId);
+                        }
+                    }
+                }
+            }
+            return invalidCountries;
+        }
+
+        #endregion
 
         #region Sale Methods
 
@@ -373,7 +383,6 @@ namespace TOne.WhS.Deal.Business
 
             getCustomerZoneRatesFunc = (zoneName, countryId) => customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(CarrierAccountId, sellingProductId, zoneName, null, countryId, null, null);
         }
-
 
         private IOrderedEnumerable<DealSaleZoneGroupTier> BuildSaleTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers, List<DealSaleZoneGroupZoneItem> saleZones, DateTime dealBED, DateTime? dealEED)
         {
@@ -511,6 +520,7 @@ namespace TOne.WhS.Deal.Business
             }
             return dealSupplierTiers;
         }
+
         private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers, List<DealSupplierZoneGroupZoneItem> supplierZones, DateTime dealBED, DateTime? dealEED)
         {
             if (volCommitmentDealItemTiers == null || volCommitmentDealItemTiers.Count == 0)

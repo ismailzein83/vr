@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Linq;
-using Vanrise.Common;
-using Vanrise.Entities;
-using System.ComponentModel;
-using TOne.WhS.Deal.Entities;
-using Vanrise.Common.Business;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.Deal.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -36,10 +36,12 @@ namespace TOne.WhS.Deal.Business
         System = 0,
         Supplier = 1
     }
+
     public class SwapDealSettings : DealSettings
     {
         public static Guid SwapDealSettingsConfigId = new Guid("63C1310D-FDEA-4AC7-BDE1-58FD11E4EC65");
         public override Guid ConfigId { get { return SwapDealSettingsConfigId; } }
+
         public int CarrierAccountId { get; set; }
         public DealContract DealContract { get; set; }
         public DealType DealType { get; set; }
@@ -51,8 +53,6 @@ namespace TOne.WhS.Deal.Business
         public int GracePeriod { get; set; }
         public int CurrencyId { get; set; }
         public SwapDealTimeZone SwapDealTimeZone { get; set; }
-
-        #region Public Methods
         public override DateTime RealBED
         {
             get
@@ -62,7 +62,6 @@ namespace TOne.WhS.Deal.Business
                 return BeginDate;
             }
         }
-
         public override DateTime? RealEED
         {
             get
@@ -85,6 +84,8 @@ namespace TOne.WhS.Deal.Business
                 return EndDate;
             }
         }
+
+        #region Public Methods
 
         public override int GetCarrierAccountId()
         {
@@ -123,7 +124,6 @@ namespace TOne.WhS.Deal.Business
 
             return timeZone.Settings.Offset;
         }
-
 
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
@@ -255,6 +255,7 @@ namespace TOne.WhS.Deal.Business
             }
             return zoneIds;
         }
+
         public override List<long> GetDealSupplierZoneIds()
         {
             var zoneIds = new List<long>();
@@ -267,6 +268,11 @@ namespace TOne.WhS.Deal.Business
                 }
             }
             return zoneIds;
+        }
+
+        public override DealZoneGroupPart GetDealZoneGroupPart()
+        {
+            return DealZoneGroupPart.Both;
         }
 
         //TODO: ASA Check if inbounds can have null value and throw exception if not
@@ -292,7 +298,6 @@ namespace TOne.WhS.Deal.Business
             }
             return costAmount;
         }
-
         public decimal? GetSaleVolume()
         {
             if (Inbounds == null || Inbounds.Count == 0)
@@ -314,10 +319,6 @@ namespace TOne.WhS.Deal.Business
                 costVolume += outbound.Volume;
             }
             return costVolume;
-        }
-        public override DealZoneGroupPart GetDealZoneGroupPart()
-        {
-            return DealZoneGroupPart.Both;
         }
 
         #endregion
@@ -398,6 +399,7 @@ namespace TOne.WhS.Deal.Business
                 }
             }
         }
+
         private List<int> ValidateSwapDealCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             var invalidCountries = new List<int>();
@@ -419,6 +421,7 @@ namespace TOne.WhS.Deal.Business
             }
             return invalidCountries;
         }
+
         private List<BaseDealSaleZoneGroup> BuildSaleZoneGroups(int dealId, bool evaluateRates)
         {
             if (Inbounds == null || Inbounds.Count == 0)
@@ -490,6 +493,7 @@ namespace TOne.WhS.Deal.Business
             }
             return dealSaleZoneGroupTiers.OrderBy(itm => itm.TierNumber);
         }
+
         private Dictionary<long, List<DealRate>> GetDealSaleRatesByZoneId(decimal rate, List<DealSaleZoneGroupZoneItem> zones)
         {
             var dealRateByZoneId = new Dictionary<long, List<DealRate>>();
@@ -508,6 +512,7 @@ namespace TOne.WhS.Deal.Business
             }
             return dealRateByZoneId;
         }
+
         private List<BaseDealSupplierZoneGroup> BuildSupplierZoneGroups(int dealId, bool evaluateRates)
         {
             if (Outbounds == null || Outbounds.Count == 0)
@@ -679,6 +684,7 @@ namespace TOne.WhS.Deal.Business
             }
             return dealRateByZoneId;
         }
+
         #endregion
     }
 }

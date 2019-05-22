@@ -33,6 +33,7 @@ namespace TOne.WhS.Deal.Business
             }
             return dealDefinitions;
         }
+
         public IEnumerable<DealDefinition> GetSwapDealsBetweenDate(DateTime beginDate, DateTime endDate)
         {
             var dealDefinitions = new List<DealDefinition>();
@@ -49,6 +50,7 @@ namespace TOne.WhS.Deal.Business
             }
             return dealDefinitions;
         }
+
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredSwapDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
             var cachedEntities = this.GetCachedSwapDeals();
@@ -203,7 +205,9 @@ namespace TOne.WhS.Deal.Business
                 return deals.FirstOrDefault(d => d.DealId == dealId);
             return null;
         }
+
         #endregion
+
         #region Private Classes
 
         private class SwapDealExcelExportHandler : ExcelExportHandler<DealDefinitionDetail>
@@ -292,8 +296,8 @@ namespace TOne.WhS.Deal.Business
 
         #endregion
 
-
         #region IBusinessEntityManager
+
         public override List<dynamic> GetAllEntities(Vanrise.GenericData.Entities.IBusinessEntityGetAllContext context)
         {
             throw new NotImplementedException();
@@ -339,7 +343,7 @@ namespace TOne.WhS.Deal.Business
         {
             throw new NotImplementedException();
         }
+
         #endregion
     }
-
 }

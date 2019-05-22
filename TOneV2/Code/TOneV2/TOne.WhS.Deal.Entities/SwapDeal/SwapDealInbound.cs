@@ -16,8 +16,11 @@ namespace TOne.WhS.Deal.Entities
         public int Volume { get; set; }
 
         public Decimal Rate { get; set; }
+
         public Decimal? ExtraVolumeRate { get; set; }
+
         public SubstituteRateType SubstituteRateType { get; set; }
+
         public Decimal? FixedRate { get; set; }
     }
 
