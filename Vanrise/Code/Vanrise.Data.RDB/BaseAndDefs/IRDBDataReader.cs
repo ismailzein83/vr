@@ -186,16 +186,25 @@ namespace Vanrise.Data.RDB
             var value = _originalReader[fieldName];
             if (value == null || value == DBNull.Value)
                 return null;
-            else if(value is DateTime)
+            else if (value is DateTime)
             {
-                return new Vanrise.Entities.Time((DateTime)value);                
+                return new Vanrise.Entities.Time((DateTime)value);
+            }
+            else if (value is TimeSpan)
+            {
+                return new Time((TimeSpan)value);
+            }
+            else if (value is string)
+            {
+                string valueAsString = value as string;
+                if (String.IsNullOrEmpty(valueAsString))
+                    return null;
+                return new Vanrise.Entities.Time(valueAsString);
             }
             else
             {
-                string valueAsString = value as string;
-                return new Vanrise.Entities.Time(valueAsString);
+                throw new NotSupportedException($"Invalid Time value '{value}' value type is '{value.GetType()}");
             }
-            throw new NotSupportedException($"Invalid Time value '{value}' value type is '{value.GetType()}");
         }
     }
 }

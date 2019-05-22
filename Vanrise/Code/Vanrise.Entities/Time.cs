@@ -86,6 +86,14 @@ namespace Vanrise.Entities
             this.MilliSecond = millisecond;
         }
 
+        public Time(TimeSpan timeSpan)
+        {
+            this.Hour = timeSpan.Hours;
+            this.Minute = timeSpan.Minutes;
+            this.Second = timeSpan.Seconds;
+            this.MilliSecond = timeSpan.Milliseconds;
+        }
+
         #endregion
 
         #region Public Methods
