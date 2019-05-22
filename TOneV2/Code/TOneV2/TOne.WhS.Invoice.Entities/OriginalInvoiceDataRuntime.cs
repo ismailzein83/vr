@@ -16,6 +16,11 @@ namespace TOne.WhS.Invoice.Entities
     {
         public string CurrencySymbol { get; set; }
         public decimal? OriginalAmount { get; set; }
+        public decimal? VoiceAmount { get; set; }
+        public decimal? SMSAmount { get; set; }
+        public decimal? RecurringChargeAmount { get; set; }
+        public decimal? DealAmount { get; set; }
+
         public bool IncludeOriginalAmountInSettlement { get; set; }
     }
     public class AttachementFileRuntime
