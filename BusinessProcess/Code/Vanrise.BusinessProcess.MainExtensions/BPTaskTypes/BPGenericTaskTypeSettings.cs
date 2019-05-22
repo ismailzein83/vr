@@ -33,6 +33,10 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
     public class BPGenericTaskData : BPTaskData
     {
         public Dictionary<string, dynamic> FieldValues { get; set; }
+        public T GetFieldValue<T>(String FieldName)
+        {
+            return this.FieldValues[FieldName];
+        }
     }
 
     public class BPGenericTaskExecutionInformation : BPTaskExecutionInformation
