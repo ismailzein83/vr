@@ -1,9 +1,9 @@
 ﻿<vr-row>
     <vr-columns width="fullrow">
-        <vr-section header="Code" collapsible>
+        <vr-section header="MNC" collapsible>
             <vr-row removeline>
                 <vr-columns colnum="2" left-medium-spacing>
-                    <vr-textbox value="scopeModel.codeToAdd" type="number" label="Code" customvalidate="scopeModel.validateCode()"></vr-textbox>
+                    <vr-textbox value="scopeModel.codeToAdd" type="number" label="MNC" customvalidate="scopeModel.validateCode()"></vr-textbox>
                 </vr-columns>
                 <vr-columns colnum="1" withemptyline haschildcolumns>
                     <vr-button type="Add" data-onclick="scopeModel.addCode" standalone vr-disabled="!scopeModel.isCodeValid()"></vr-button>

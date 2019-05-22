@@ -154,7 +154,10 @@
                         var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", response.EditorSize);
                         var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
                         var fieldValues = payload.fieldValues;
-                        var onGenericBEUpdated = function (updatedGenericBE) {
+                        var onGenericBEUpdated = function (updatedGenericBE, errorEntity) {
+                            if (errorEntity != undefined && errorEntity.message != undefined) {
+                                VR_GenericData_GenericBusinessEntityService.openErrorMessageEditor(errorEntity);
+                            }
                             if (onItemUpdated != undefined)
                                 onItemUpdated(updatedGenericBE);
                         };

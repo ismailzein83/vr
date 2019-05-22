@@ -22,6 +22,8 @@
         var runtimeEditorAPI;
         var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var errorEntity;
+
         $scope.scopeModel = {};
 
         loadParameters();
@@ -116,8 +118,14 @@
 
             return VR_GenericData_GenericBusinessEntityAPIService.AddGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded(titleOperation, response, 'Title', additionalErrorsDirectiveAPI)) {
-                    if ($scope.onGenericBEAdded != undefined)
-                        $scope.onGenericBEAdded(response.InsertedObject, saveAndNew);
+                    if ($scope.onGenericBEAdded != undefined) {
+                        if (response.Message != undefined && response.ShowPopupErrorMessage) {
+                            errorEntity = {
+                                message: response.Message
+                            };
+                        }
+                        $scope.onGenericBEAdded(response.InsertedObject, saveAndNew, errorEntity);
+                    }
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -132,8 +140,14 @@
 
             return VR_GenericData_GenericBusinessEntityAPIService.UpdateGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated(titleOperation, response, 'Title', additionalErrorsDirectiveAPI)) {
-                    if ($scope.onGenericBEUpdated != undefined)
-                        $scope.onGenericBEUpdated(response.UpdatedObject);
+                    if ($scope.onGenericBEUpdated != undefined) {
+                        if (response.Message != undefined && response.ShowPopupErrorMessage) {
+                            errorEntity = {
+                                message: response.Message
+                            };
+                        }
+                        $scope.onGenericBEUpdated(response.UpdatedObject,errorEntity);
+                    }
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

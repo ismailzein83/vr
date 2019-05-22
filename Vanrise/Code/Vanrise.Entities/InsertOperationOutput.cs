@@ -14,6 +14,7 @@ namespace Vanrise.Entities
         public T InsertedObject { get; set; }
 
         public string Message { get; set; }
+        public bool ShowPopupErrorMessage { get; set; }
 
         public bool ShowExactMessage { get; set; }
         public List<InsertAdditionalMessage> AdditionalMessages { get; set; }

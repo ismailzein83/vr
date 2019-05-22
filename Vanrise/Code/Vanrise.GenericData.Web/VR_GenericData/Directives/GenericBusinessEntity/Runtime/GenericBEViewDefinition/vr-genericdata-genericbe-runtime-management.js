@@ -133,7 +133,10 @@
                     var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", genericBEDefinitionSettings.EditorSize);
                     var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
 
-                    var onGenericBusinessEntityAdded = function (addedGenericBusinessEntity, reopen) {
+                    var onGenericBusinessEntityAdded = function (addedGenericBusinessEntity, reopen, errorEntity) {
+                        if (errorEntity != undefined && errorEntity.message != undefined) {
+                            VR_GenericData_GenericBusinessEntityService.openErrorMessageEditor(errorEntity);
+                        }
                         gridDirectiveAPI.onGenericBEAdded(addedGenericBusinessEntity);
                         if (reopen) {
                             VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessEntityDefinitionAPI.getSelectedIds(), editorSize);

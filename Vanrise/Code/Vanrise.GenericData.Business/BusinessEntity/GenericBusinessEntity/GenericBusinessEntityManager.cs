@@ -502,8 +502,18 @@ namespace Vanrise.GenericData.Business
                             genericBusinessEntityToAdd.FieldValues.Add(idFieldType.Name, insertedId);
                     }
                     VRActionLogger.Current.TrackAndLogObjectAdded(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToAdd.BusinessEntityDefinitionId), genericBusinessEntityToAdd);
-
-                    OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToAdd.BusinessEntityDefinitionId, null, genericBusinessEntity, HandlerOperationType.Add);
+                    try
+                    {
+                        OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToAdd.BusinessEntityDefinitionId, null, genericBusinessEntity, HandlerOperationType.Add);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex != null)
+                        {
+                            insertOperationOutput.Message = ex.Message;
+                            insertOperationOutput.ShowPopupErrorMessage = true;
+                        }
+                    }
                     OnAfterSaveMethod(fieldTypes, genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityId);
 
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -621,8 +631,18 @@ namespace Vanrise.GenericData.Business
 
 
                     VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate, oldGenericBE);
-
-                    OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, oldGenericBE, newGenericBE, HandlerOperationType.Update);
+                    try
+                    {
+                        OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, oldGenericBE, newGenericBE, HandlerOperationType.Update);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex != null)
+                        {
+                            updateOperationOutput.Message = ex.Message;
+                            updateOperationOutput.ShowPopupErrorMessage = true;
+                        }
+                    }
                     OnAfterSaveMethod(fieldTypes, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, newGenericBE, genericBusinessEntityToUpdate.GenericBusinessEntityId);
 
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;

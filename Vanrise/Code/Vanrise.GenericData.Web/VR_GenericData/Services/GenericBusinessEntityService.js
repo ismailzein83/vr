@@ -13,7 +13,8 @@
 			uploadGenericBusinessEntity:uploadGenericBusinessEntity,
             getEntityUniqueName: getEntityUniqueName,
             openBulkActionsEditor: openBulkActionsEditor,
-            sendEmailGenericBE: sendEmailGenericBE
+            sendEmailGenericBE: sendEmailGenericBE,
+            openErrorMessageEditor: openErrorMessageEditor
          //   getDrillDownDefinition: getDrillDownDefinition
 
         });
@@ -147,6 +148,16 @@
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntitySendEmailEditor.html', parameters, settings);
+        }
+        function openErrorMessageEditor(errorEntity) {
+            var parameters = {
+                errorEntity: errorEntity,
+            };
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+            };
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityErrorMessageEditor.html', parameters, settings);
         }
         //function registerObjectTrackingDrillDownToGenericBusinessEntity() {
         //    var drillDownDefinition = {};
