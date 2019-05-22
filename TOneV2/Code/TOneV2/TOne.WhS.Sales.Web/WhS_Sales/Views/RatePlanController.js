@@ -677,9 +677,15 @@
 
 			var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 			promises.push(carrierAccountSelectorLoadDeferred.promise);
-
+            var payload = {
+                filter: {
+                    Filters: [{
+                        $type: 'TOne.WhS.BusinessEntity.Business.AssignedCarrierAccountsForAccountManager, TOne.WhS.BusinessEntity.Business',
+                    }]
+                }
+            };
 			carrierAccountSelectorReadyDeferred.promise.then(function () {
-				VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, undefined, carrierAccountSelectorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorLoadDeferred);
 			});
 
 			return UtilsService.waitMultiplePromises(promises);
