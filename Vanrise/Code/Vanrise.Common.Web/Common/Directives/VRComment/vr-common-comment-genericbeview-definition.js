@@ -67,7 +67,7 @@ app.directive('vrCommonCommentGenericbeviewDefinition', ['VRCommon_VRCommentAPIS
                 api.getData = function () {
 
                     return {
-                        $type: "Vanrise.Common.Business.VRCommentGenericBEDefinitionView, Vanrise.Common.Business",
+                        $type: "Vanrise.Common.MainExtensions.VRCommentGenericBEDefinitionView, Vanrise.Common.MainExtensions",
                         CommentBEDefinitionId: beDefinitionSelectorApi.getSelectedIds()
                     };
                 };

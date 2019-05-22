@@ -64,9 +64,6 @@
     <Reference Include="TimeZoneConverter">
       <HintPath>..\Resources\DLLs\TimeZoneConverter.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.GenericData.Business">
-      <HintPath>..\Output\Vanrise.GenericData.Business.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BE360Degree\BE360DegreeManager.cs" />
@@ -123,7 +120,6 @@
     <Compile Include="VRActionAudit\VRObjectTrackingManager.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityManager.cs" />
     <Compile Include="VRBulkActionDraft\VRBulkActionDraftManager.cs" />
-    <Compile Include="VRComment\VRCommentGenericBEDefinitionView.cs" />
     <Compile Include="VRComment\VRCommentBEDefinitionSettings.cs" />
     <Compile Include="VRComment\VRCommentDefinitionManager.cs" />
     <Compile Include="VRComment\VRCommentManager.cs" />

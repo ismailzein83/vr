@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 
-namespace Vanrise.Common.Business
+namespace Vanrise.Common.MainExtensions
 {
     public class VRCommentGenericBEDefinitionView : GenericBEViewDefinitionSettings
     {
