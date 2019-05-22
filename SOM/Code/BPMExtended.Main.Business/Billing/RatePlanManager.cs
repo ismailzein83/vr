@@ -363,6 +363,7 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             IEntitySchemaQueryFilterItem esqSecondFilter;
 
+
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRatePlanCatalog");
             var IdCol = esq.AddColumn("Id");
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StLineofBusinessSubType", subTypeId);

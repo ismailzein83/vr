@@ -2418,12 +2418,11 @@ namespace BPMExtended.Main.Business
             List<ContractService> contractServices = new List<ContractService>();
             List<ServiceDetail> listOfCoreServices = new List<ServiceDetail>();
             List<ServiceDetail> listOfOptionalServices = new List<ServiceDetail>();
-            string linePathId;
+            string linePathId,serviceResourceId="";
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineSubscriptionRequest");
             esq.AddColumn("StCoreServices");
             esq.AddColumn("StServices");
-            esq.AddColumn("StServiceResourceId");
             esq.AddColumn("StNumberToReserve");
             esq.AddColumn("StLinePathID");
             esq.AddColumn("StLineType");
@@ -2444,7 +2443,6 @@ namespace BPMExtended.Main.Business
                 var contactId = entities[0].GetColumnValue("StContactId");
                 var accountId = entities[0].GetColumnValue("StAccountId");
                 var phoneNumber = entities[0].GetColumnValue("StNumberToReserve");
-                var serviceResourceId = entities[0].GetColumnValue("StServiceResourceId");
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var lineType = entities[0].GetColumnValue("StLineType");
                 var city = entities[0].GetColumnValue("StCityName");
@@ -2454,6 +2452,11 @@ namespace BPMExtended.Main.Business
                 if (optionalServices != "\"\"") listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
 
                 var items = listOfCoreServices.Concat(listOfOptionalServices);
+
+                foreach (var item in listOfCoreServices)
+                {
+                    if (item.IsServiceResource) serviceResourceId = item.Id;
+                }
 
                 foreach (var item in items)
                 {
@@ -2478,7 +2481,7 @@ namespace BPMExtended.Main.Business
                         LinePathId = linePathId,//"11112222",
                         PhoneNumber = phoneNumber.ToString(),
                         SubType = lineType.ToString(),
-                        ServiceResource = serviceResourceId.ToString(),
+                        ServiceResource = serviceResourceId,
                         City = city.ToString(),
                         CSO = info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),

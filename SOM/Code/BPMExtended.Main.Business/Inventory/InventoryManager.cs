@@ -18,6 +18,14 @@ namespace BPMExtended.Main.Business
     public class InventoryManager
     {
 
+        public UserConnection BPM_UserConnection
+        {
+            get
+            {
+                return (UserConnection)HttpContext.Current.Session["UserConnection"];
+            }
+        }
+
         public TechnicalDetails GetTechnicalDetails(string phoneNumber) // old : GetInventoryDetail()
         {
             TechnicalDetails item = null;
@@ -162,6 +170,29 @@ namespace BPMExtended.Main.Business
 
             //};
         }
+
+        public string GetSubTypeId(string phoneNumber)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            string subTypeId = null;
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSubTypes");
+            var IdCol = esq.AddColumn("Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StName", GetTechnicalDetails(phoneNumber).PhoneType.ToString());
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                subTypeId = entities[0].GetTypedColumnValue<string>(IdCol.Name);
+            }
+
+            return subTypeId;
+        }
+
 
         public List<PhoneNumberInfo> GetAvailablePhoneNumbers(string switchId, string category, string type, int top)
         {
