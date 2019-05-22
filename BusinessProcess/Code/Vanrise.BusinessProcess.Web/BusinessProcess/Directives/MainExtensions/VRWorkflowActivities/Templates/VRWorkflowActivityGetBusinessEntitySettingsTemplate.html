@@ -1,0 +1,28 @@
+﻿    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-section title="Task Output" collapsible>
+                <vr-datagrid on-ready="scopeModel.onOutputGridReady"
+                             datasource="scopeModel.outputItems"
+                             hidegridmenu="true"
+                             maxheight="500px"
+                             disabledraggablecolumns
+                             vr-loader="scopeModel.isOutputGridLoading">
+
+                    <vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true" widthfactor="20">
+                        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables"
+                                                                                getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
+                                                                                value="dataItem.outputValue"
+                                                                                hidelabel="true">
+                        </businessprocess-vr-workflow-activity-expressionbuilder>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn disablesorting="true" fixedwidth="15">
+                        <vr-label>=</vr-label>
+                    </vr-datagridcolumn>
+
+                    <vr-datagridcolumn headertext="'Field Name'" disablesorting="true" widthfactor="10">
+                        <vr-label>{{dataItem.fieldName}}</vr-label>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-section>
+        </vr-columns>
+    </vr-row>
