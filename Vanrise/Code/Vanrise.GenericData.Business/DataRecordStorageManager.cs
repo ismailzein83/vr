@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.Business
             {
                 FromTime = fromTime,
                 ToTime = toTime,
-                FilterGroup = filterGroup,
+                FilterGroup = MergeRecordFilterGroup(dataRecordStorageId, filterGroup),
                 LimitResult = limitResult,
                 FieldNames = fieldNames,
                 Direction = direction
@@ -131,6 +131,8 @@ namespace Vanrise.GenericData.Business
                     input.Query.FilterGroup = filterGroup;
                 }
 
+                input.Query.FilterGroup = MergeRecordFilterGroup(dataRecordStorageId, input.Query.FilterGroup);
+
                 if (!string.IsNullOrEmpty(input.SortByColumnName) && input.SortByColumnName.Contains("FieldValues"))
                 {
                     string[] fieldValueproperty = input.SortByColumnName.Split('.');
@@ -206,7 +208,7 @@ namespace Vanrise.GenericData.Business
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId);
             storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
-            storageDataManager.GetDataRecords(from, to, recordFilterGroup, shouldStop, onItemReady, orderColumnName, isOrderAscending);
+            storageDataManager.GetDataRecords(from, to, MergeRecordFilterGroup(dataRecordStorageId, recordFilterGroup), shouldStop, onItemReady, orderColumnName, isOrderAscending);
         }
 
         public IEnumerable<DataRecord> GetAllDataRecords(Guid dataRecordStorageId, List<string> columnsNeeded = null, RecordFilterGroup filterGroup = null, List<DataRecordFilter> filters = null)
@@ -225,6 +227,7 @@ namespace Vanrise.GenericData.Business
                 var mergedFilterGroup = recordFilterManager.BuildRecordFilterGroup(recordType.DataRecordTypeId, filters, filterGroup);
                 filterGroupObj = ConvertFilterGroup(mergedFilterGroup, recordType);
             }
+            filterGroupObj = MergeRecordFilterGroup(dataRecordStorageId, filterGroupObj);
             Func<DataRecord, bool> filterExpression = (dataRecord) =>
             {
                 if (filterGroupObj != null)
@@ -651,6 +654,11 @@ namespace Vanrise.GenericData.Business
             return extensionConfigurationManager.GetExtensionConfigurations<RDBDataRecordStorageExpressionFieldSettingsConfig>(RDBDataRecordStorageExpressionFieldSettingsConfig.EXTENSION_TYPE);
         }
 
+        public IEnumerable<DataRecordStoragePermanentFilterSettingsConfig> GetPermanentFilterSettingsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<DataRecordStoragePermanentFilterSettingsConfig>(DataRecordStoragePermanentFilterSettingsConfig.EXTENSION_TYPE);
+        }
         public object CreateTempStorage(Guid dataRecordStorageId, long processId)
         {
             DataRecordStorage dataRecordStorage;
@@ -791,6 +799,45 @@ namespace Vanrise.GenericData.Business
                 }
             }
             return true;
+        }
+        private RecordFilterGroup MergeRecordFilterGroup(Guid dataRecordStorageId, RecordFilterGroup oldRecordFilter)
+        {
+            var dataRecord = GetDataRecordStorage(dataRecordStorageId);
+
+            if (dataRecord != null && dataRecord.Settings != null && dataRecord.Settings.PermanentFilter != null && dataRecord.Settings.PermanentFilter.Settings != null)
+            {
+                var permanentFilter = dataRecord.Settings.PermanentFilter.Settings.ConvertToRecordFilter(new DataRecordStoragePermanentFilterContext());
+                if (permanentFilter != null)
+                {
+                    if (oldRecordFilter != null)
+                    {
+                        if (oldRecordFilter.LogicalOperator == RecordQueryLogicalOperator.And)
+                        {
+                            if (oldRecordFilter.Filters == null)
+                                oldRecordFilter.Filters = new List<RecordFilter>();
+                            oldRecordFilter.Filters.Add(permanentFilter);
+                            return oldRecordFilter;
+                        }
+                        else
+                        {
+                            var recordFilterGroup = new RecordFilterGroup()
+                            {
+                                LogicalOperator = RecordQueryLogicalOperator.And,
+                                Filters = new List<RecordFilter>()
+                            };
+                            recordFilterGroup.Filters.Add(permanentFilter);
+                            recordFilterGroup.Filters.Add(oldRecordFilter);
+                            return recordFilterGroup;
+                        }
+                    }
+                    else
+                    {
+                        return permanentFilter;
+                    }
+
+                }
+            }
+            return oldRecordFilter;
         }
 
         public Dictionary<Guid, DataRecordStorage> GetCachedDataRecordStorages()
@@ -1250,7 +1297,7 @@ namespace Vanrise.GenericData.Business
         private IEnumerable<DataRecord> GetOrderedDataRecordResults(Guid dataRecordTypeId, OrderDirection direction, int? limitresult, List<string> fieldNames, List<DataRecord> records, Dictionary<string, DataRecordField> formulaDataRecordFieldsDict)
         {
             if (records == null || records.Count == 0)
-                return null;
+                return records;
             List<DataRecord> orderedDataRecordResults = GetTopOrderedResults(records, direction, limitresult);
 
             FillDataRecordsFormulaFields(dataRecordTypeId, formulaDataRecordFieldsDict, orderedDataRecordResults);
