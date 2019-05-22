@@ -25,7 +25,7 @@ namespace Vanrise.Common.Business
 
         public InsertOperationOutput<VRCommentDetail> AddVRComment(VRComment vRComment)
         {
-            return AddVRComment(vRComment);
+            return AddVRComment(vRComment, null);
         }
         public InsertOperationOutput<VRCommentDetail> AddVRComment(VRComment vRComment,int? userId)
         {
