@@ -170,6 +170,12 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
             return saleAreaSettings.PricingSettings.MaximumRate.Value;
         }
+        public bool GetRatePlanCustomerFiltering()
+        {
+            AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
+            accountManagerSettings.ThrowIfNull("accountManagerSettings");
+            return accountManagerSettings.CustomerFiltering.RatePlan;
+        }
         public int GetSaleAreaRetroactiveDayOffset()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
@@ -612,6 +618,10 @@ namespace TOne.WhS.BusinessEntity.Business
         private SaleAreaSettingsData GetSaleAreaSettings()
         {
             return GetSettings<SaleAreaSettingsData>(Constants.SaleAreaSettings);
+        }
+        private AccountManagerSettings GetAccountManagerSettings()
+        {
+            return GetSettings<AccountManagerSettings>(Constants.AccountManagerSettingsData);
         }
         private PurchaseAreaSettingsData GetPurchaseAreaSettings()
         {

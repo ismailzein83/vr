@@ -17,6 +17,8 @@
         public const string AutoImportSettings = "WhS_BE_AutoImport_Settings";
 
         public const string FaultTicketsSettingsData = "WhS_BE_FaultTickets_Settings";
-     
+
+
+        public const string AccountManagerSettingsData = "WhS_BE_AccountManagerSettings";
     }
 }
