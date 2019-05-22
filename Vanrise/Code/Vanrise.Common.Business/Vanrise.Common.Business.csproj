@@ -155,6 +155,7 @@
     <Compile Include="VRConnections\MainImplementations\VRInterAppRestConnection.cs" />
     <Compile Include="VRDashboardDefinition\VRDashboardViewSettings.cs" />
     <Compile Include="VRDashboardDefinition\VRDashboardDefinitionManager.cs" />
+    <Compile Include="VRDevProjectManager.cs" />
     <Compile Include="VRDynamicAPIModule\VRDynamicAPIDiscovery.cs" />
     <Compile Include="VRDynamicAPIModule\VRDynamicAPIModuleManager.cs" />
     <Compile Include="VRDynamicAPI\VRDynamicAPIManager.cs" />
