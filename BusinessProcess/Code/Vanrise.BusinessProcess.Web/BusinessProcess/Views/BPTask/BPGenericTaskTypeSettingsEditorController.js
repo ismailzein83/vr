@@ -190,7 +190,8 @@
                                 if (key != "$type") {
                                     fieldValueObjects[key] = {
                                         value: fieldValues[key],
-                                        isHidden: false
+                                        isHidden: false,
+                                        isDisabled: false
                                     };
                                 }
                             }
