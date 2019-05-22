@@ -32,7 +32,7 @@
                 ctrl.datasource = [];
                
                 $scope.scopeModel.addSendEmailObjectInfo = function () {
-                    ctrl.datasource.push({ data: {} });
+                    ctrl.datasource.push({ data: { SendEmailObjectInfoId: UtilsService.guid()} });
                 };
 
                 $scope.scopeModel.onMailMessageTypeDirectiveReady = function (api) {
