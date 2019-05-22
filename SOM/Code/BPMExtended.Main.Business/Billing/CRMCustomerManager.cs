@@ -2194,7 +2194,7 @@ namespace BPMExtended.Main.Business
 
                 if (entities.Count > 0)
                 {
-                    var typeColumnValue = entities[0].GetColumnValue("StStepId");
+                    var typeColumnValue = entities[0].GetColumnValue(stepColumnName+"Id");
 
                     esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysModuleEdit");
                     esq.RowCount = 1;

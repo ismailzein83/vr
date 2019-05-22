@@ -303,6 +303,24 @@ namespace BPMExtended.Main.Entities
         [CompletedStep("")]
         [CompletedStepId("")]
         LineUnblocking = 36,
+        
+        [Description("Update Customer Category")]
+        [EntitySchemaName("StUpdateCustomerCategory")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("27F9394B-B0EC-402B-9A92-4184C3BBD033")]
+        UpdateCustomerCategory = 37,
+        
+        [Description("Update Customer Address")]
+        [EntitySchemaName("StUpdateCustomerAddress")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("BBBC9189-E003-4730-909A-D75DA81B9807")]
+        UpdateCustomerAddress = 38,
+
+        [Description("Update Customer Profile")]
+        [EntitySchemaName("StUpdateCustomerProfile")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("0E818E54-C363-4EE2-8D9D-FD41D9D5A5B1")]
+        UpdateCustomerProfile = 39,
 
     }
     public enum ContractStatus
