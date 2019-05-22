@@ -1,7 +1,7 @@
 ﻿<div vr-modalcontent ng-controller="BusinessProcess_BP_BPGenericTaskTypeSettingsEditorController" resclass="resClass" vr-loader="scopeModel.isLoading">
     <vr-modalbody maxheight="'700px'">
         <vr-form name="formBPGenericTaskTypeSettings">
-            <vr-directivewrapper ng-if="scopeModel.runtimeEditor != undefined" directive="scopeModel.runtimeEditor" on-ready="scopeModel.onEditorRuntimeDirectiveReady" vr-disabled="!scopeModel.showRelease && scopeModel.includeTaskLock" ></vr-directivewrapper>
+            <vr-genericdata-genericeditor-rootcontainer on-ready="scopeModel.onEditorRuntimeDirectiveReady" ></vr-genericdata-genericeditor-rootcontainer>
         </vr-form>
     </vr-modalbody>
     <div ng-if="scopeModel.showActionBar">

@@ -218,7 +218,6 @@
                             promises: [getBPTaskType(bpTask.TypeId)],
                             getChildNode: function () {
                                 if (bpTaskType != undefined && bpTaskType.Settings != undefined) {
-                                    $scope.scopeModel.runtimeEditor = bpTaskType.Settings.EditorSettings != undefined ? bpTaskType.Settings.EditorSettings.RuntimeEditor : undefined;
                                     $scope.scopeModel.includeTaskLock = bpTaskType.Settings.IncludeTaskLock;
                                     return {
                                         promises: !isReload ? [getInitialBPTaskDefaultActionsState(), loadRuntimeEditor()] : [loadRuntimeEditor()]
@@ -251,7 +250,8 @@
                     selectedValues: defaultValues,
                     dataRecordTypeId: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.RecordTypeId : undefined,
                     definitionSettings: bpTaskType != undefined && bpTaskType.Settings != undefined ? bpTaskType.Settings.EditorSettings : undefined,
-                    parentFieldValues: fieldValues
+                    parentFieldValues: fieldValues,
+                    runtimeEditor: bpTaskType.Settings.EditorSettings != undefined ? bpTaskType.Settings.EditorSettings.RuntimeEditor : undefined
                 };
                 VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadPromiseDeferred);
             });
