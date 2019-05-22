@@ -174,12 +174,12 @@ namespace Vanrise.GenericData.Web.Controllers
         public Dictionary<string, object> GetDependentFieldValues(GetDependentFieldValuesInput input)
         {
             input.ThrowIfNull("input");
-            return _manager.GetDependentFieldValues(input.BusinessEntityDefinitionId, input.FieldValues);
+            return _manager.GetDependentFieldValues(input.DataRecordTypeId, input.FieldValues);
         }
 
         public class GetDependentFieldValuesInput
         {
-            public Guid BusinessEntityDefinitionId { get; set; }
+            public Guid DataRecordTypeId { get; set; }
 
             public Dictionary<string, object> FieldValues { get; set; }
         }

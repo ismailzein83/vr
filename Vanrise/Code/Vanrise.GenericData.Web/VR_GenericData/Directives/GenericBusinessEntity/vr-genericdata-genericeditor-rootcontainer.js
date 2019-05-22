@@ -47,14 +47,12 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
                     var promises = [];
 
-                    var businessEntityDefinitionId;
                     var dataRecordTypeId;
                     var definitionSettings;
                     var historyId;
                     var parentFieldValues;
 
                     if (payload != undefined) {
-                        businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         selectedValues = payload.selectedValues;
                         dataRecordTypeId = payload.dataRecordTypeId;
                         definitionSettings = payload.definitionSettings;
@@ -98,7 +96,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                         }
 
                         var input = {
-                            BusinessEntityDefinitionId: businessEntityDefinitionId,
+                            DataRecordTypeId: dataRecordTypeId,
                             FieldValues: fieldValues
                         };
 

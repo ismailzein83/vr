@@ -1078,12 +1078,11 @@ namespace Vanrise.GenericData.Business
             return GetGenericBusinessEntityName(genericBusinessEntityId, businessEntityDefinitionId);
         }
 
-        public Dictionary<string, object> GetDependentFieldValues(Guid businessEntityDefinitionId, Dictionary<string, object> fieldValues)
+        public Dictionary<string, object> GetDependentFieldValues(Guid dataRecordTypeId, Dictionary<string, object> fieldValues)
         {
             Dictionary<string, object> dependentFieldValues = new Dictionary<string, object>(fieldValues);
 
-            GenericBEDefinitionSettings genericBEDefinitionSettings = new GenericBusinessEntityDefinitionManager().GetGenericBEDefinitionSettings(businessEntityDefinitionId);
-            DataRecordType dataRecordType = new DataRecordTypeManager().GetDataRecordType(genericBEDefinitionSettings.DataRecordTypeId);
+            DataRecordType dataRecordType = new DataRecordTypeManager().GetDataRecordType(dataRecordTypeId);
             Dictionary<string, DataRecordField> dataRecordFields = dataRecordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
 
             foreach (var fieldValue in fieldValues)
