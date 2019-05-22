@@ -35,7 +35,7 @@ namespace Vanrise.GenericData.Business
             return instance.CastWithValidate<IGenericRuleManager>("instance");
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<GenericRuleDefinition> GetFilteredGenericRuleDefinitions(Vanrise.Entities.DataRetrievalInput<GenericRuleDefinitionQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<GenericRuleDefinitionDetail> GetFilteredGenericRuleDefinitions(Vanrise.Entities.DataRetrievalInput<GenericRuleDefinitionQuery> input)
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
             Func<GenericRuleDefinition, bool> filterExpression = (genericRuleDefinition) =>
@@ -51,9 +51,9 @@ namespace Vanrise.GenericData.Business
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(GenericRuleDefinitionLoggableEntity.Instance, input);
-            return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericRuleDefinitions.ToBigResult(input, filterExpression));
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericRuleDefinitions.ToBigResult(input, filterExpression, GenericRuleDefinitionDetailMapper));
         }
-
+         
         public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId)
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
@@ -792,7 +792,27 @@ namespace Vanrise.GenericData.Business
                 Title = genericRuleDefinition.Title
             };
         }
+        private GenericRuleDefinitionDetail GenericRuleDefinitionDetailMapper(GenericRuleDefinition genericRuleDefinitionObject)
+        {
+            GenericRuleDefinitionDetail genericRuleDefinitionDetail = new GenericRuleDefinitionDetail();
+            if (genericRuleDefinitionObject != null)
+            {
+                genericRuleDefinitionDetail.DevProjectId = genericRuleDefinitionObject.DevProjectId;
+                genericRuleDefinitionDetail.GenericRuleDefinitionId = genericRuleDefinitionObject.GenericRuleDefinitionId;
+                genericRuleDefinitionDetail.Name = genericRuleDefinitionObject.Name;
+                genericRuleDefinitionDetail.Objects = genericRuleDefinitionObject.Objects;
+                genericRuleDefinitionDetail.Security = genericRuleDefinitionObject.Security;
+                genericRuleDefinitionDetail.SettingsDefinition = genericRuleDefinitionObject.SettingsDefinition;
+                genericRuleDefinitionDetail.Title = genericRuleDefinitionObject.Title;
+                genericRuleDefinitionDetail.CriteriaDefinition = genericRuleDefinitionObject.CriteriaDefinition;
 
+                if (genericRuleDefinitionObject.DevProjectId.HasValue)
+                {
+                    genericRuleDefinitionDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(genericRuleDefinitionObject.DevProjectId.Value);
+                }
+            }
+            return genericRuleDefinitionDetail;
+        }
         #endregion
     }
 }
