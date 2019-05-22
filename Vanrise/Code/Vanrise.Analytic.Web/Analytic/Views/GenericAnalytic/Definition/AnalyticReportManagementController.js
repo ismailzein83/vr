@@ -1,9 +1,13 @@
 ﻿'use strict';
-AnalyticreportManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VR_Analytic_AnalyticReportService', 'VR_Analytic_AnalyticReportAPIService', 'VRModalService'];
+AnalyticreportManagementController.$inject = ['$scope', 'UtilsService','VRUIUtilsService', 'VRNotificationService', 'VR_Analytic_AnalyticReportService', 'VR_Analytic_AnalyticReportAPIService', 'VRModalService'];
 
-function AnalyticreportManagementController($scope, UtilsService, VRNotificationService, VR_Analytic_AnalyticReportService, VR_Analytic_AnalyticReportAPIService, VRModalService) {
+function AnalyticreportManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VR_Analytic_AnalyticReportService, VR_Analytic_AnalyticReportAPIService, VRModalService) {
     var mainGridAPI;
     var analyticReportConfigTypes = [];
+
+    var devProjectDirectiveApi;
+    var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
     defineScope();
     load();
 
@@ -27,13 +31,18 @@ function AnalyticreportManagementController($scope, UtilsService, VRNotification
         $scope.searchClicked = function () {
             return mainGridAPI.loadGrid(getFilterObject());
         };
+        $scope.onDevProjectSelectorReady = function (api) {
+            devProjectDirectiveApi = api;
+            devProjectPromiseReadyDeferred.resolve();
+        };
 
         $scope.addMenuActions = [];
     }
 
     function getFilterObject() {
         var query = {
-            Name: $scope.analyticReportName
+            Name: $scope.analyticReportName,
+            DevProjectIds: devProjectDirectiveApi.getSelectedIds()
         };
         return query;
     }
@@ -44,7 +53,7 @@ function AnalyticreportManagementController($scope, UtilsService, VRNotification
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadAnalyticReportTypes])
+        return UtilsService.waitMultipleAsyncOperations([loadAnalyticReportTypes, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -78,6 +87,13 @@ function AnalyticreportManagementController($scope, UtilsService, VRNotification
             }
           
         });
+    }
+    function loadDevProjectSelector() {
+        var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+        devProjectPromiseReadyDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+        });
+        return devProjectPromiseLoadDeferred.promise;
     }
 
 };

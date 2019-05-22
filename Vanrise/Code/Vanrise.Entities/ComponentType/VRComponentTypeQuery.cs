@@ -11,5 +11,6 @@ namespace Vanrise.Entities
         public string Name { get; set; }
 
         public Guid ExtensionConfigId { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

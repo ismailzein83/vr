@@ -21,6 +21,8 @@ namespace Vanrise.GenericData.Business
 
     public class DataRecordTypeManager : IDataRecordTypeManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
 
         static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
@@ -41,7 +43,8 @@ namespace Vanrise.GenericData.Business
 
                 if (input.Query.Name != null && !itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
-
+                if (input.Query.DevProjectIds != null && (!itemObject.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(itemObject.DevProjectId.Value)))
+                    return false;
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(DataRecordTypeLoggableEntity.Instance, input);
@@ -810,6 +813,10 @@ namespace Vanrise.GenericData.Business
             dataRecordTypeDetail.Entity = dataRecordTypeObject;
             if (dataRecordTypeObject.ParentId != null)
                 dataRecordTypeDetail.ParentName = GetDataRecordTypeName((Guid)dataRecordTypeObject.ParentId);
+            if (dataRecordTypeObject.DevProjectId.HasValue)
+            {
+                dataRecordTypeDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(dataRecordTypeObject.DevProjectId.Value);
+            }
             return dataRecordTypeDetail;
         }
 

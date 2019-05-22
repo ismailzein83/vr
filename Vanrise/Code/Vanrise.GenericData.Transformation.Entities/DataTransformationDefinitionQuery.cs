@@ -9,5 +9,6 @@ namespace Vanrise.GenericData.Transformation.Entities
     public class DataTransformationDefinitionQuery
     {
         public string Name { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

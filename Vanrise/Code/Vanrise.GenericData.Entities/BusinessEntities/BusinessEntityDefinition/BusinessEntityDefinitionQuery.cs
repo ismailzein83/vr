@@ -10,5 +10,6 @@ namespace Vanrise.GenericData.Entities
     {
         public string Name { get; set; }
         public List<Guid> TypeIds { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

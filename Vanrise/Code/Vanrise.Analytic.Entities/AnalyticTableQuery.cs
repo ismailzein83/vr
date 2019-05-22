@@ -9,5 +9,6 @@ namespace Vanrise.Analytic.Entities
     public class AnalyticTableQuery
     {
         public string Name { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

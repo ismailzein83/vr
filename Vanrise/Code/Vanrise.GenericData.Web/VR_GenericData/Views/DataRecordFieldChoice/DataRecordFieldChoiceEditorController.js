@@ -12,6 +12,9 @@
         var choicesGridAPI;
         var choicesGridReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -30,6 +33,10 @@
             $scope.scopeModel.onChoicesGridReady = function (api) {
                 choicesGridAPI = api;
                 choicesGridReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
             $scope.scopeModel.saveDataRecordFieldChoice = function () {
                 $scope.isLoading = true;
@@ -91,6 +98,7 @@
                 return {
                     DataRecordFieldChoiceId: dataRecordFieldChoiceId,
                     Name: $scope.scopeModel.choiceName,
+                    DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                     Settings: {
                         Choices: choicesGridAPI.getData()
                     }
@@ -152,7 +160,20 @@
                 return loadChoicesGridPromiseDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadChoicesGrid])
+            function loadDevProjectSelector() {
+                var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                devProjectPromiseReadyDeferred.promise.then(function () {
+                    var payloadDirective;
+                    if (dataRecordFieldChoiceEntity != undefined) {
+                        payloadDirective = {
+                            selectedIds: dataRecordFieldChoiceEntity.DevProjectId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                });
+                return devProjectPromiseLoadDeferred.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadChoicesGrid, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })

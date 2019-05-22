@@ -4,9 +4,11 @@
 
     VRObjectTypeDefinitionManagementController.$inject = ['$scope', 'VRCommon_VRObjectTypeDefinitionAPIService', 'VRCommon_VRObjectTypeDefinitionService', 'UtilsService', 'VRUIUtilsService'];
 
-    function VRObjectTypeDefinitionManagementController($scope, VRCommon_VRObjectTypeDefinitionAPIService, VRCommon_VRObjectTypeDefinitionService, UtilsService, VRUIUtilsService) {
+    function VRObjectTypeDefinitionManagementController($scope,  VRCommon_VRObjectTypeDefinitionAPIService, VRCommon_VRObjectTypeDefinitionService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -34,14 +36,35 @@
                 gridAPI = api;
                 gridAPI.load({});
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
         }
         function load() {
-
+            $scope.isLoading = true;
+            loadAllControls();
         }
-
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadDevProjectSelector])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
+                DevProjectIds: devProjectDirectiveApi.getSelectedIds()
             };
         }
     }

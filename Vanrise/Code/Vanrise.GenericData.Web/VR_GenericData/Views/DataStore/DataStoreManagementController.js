@@ -1,12 +1,14 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    DataStoreManagementController.$inject = ['$scope', 'VR_GenericData_DataStoreService', 'VR_GenericData_DataStoreAPIService'];
+    DataStoreManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataStoreService', 'VR_GenericData_DataStoreAPIService'];
 
-    function DataStoreManagementController($scope, VR_GenericData_DataStoreService, VR_GenericData_DataStoreAPIService) {
+    function DataStoreManagementController($scope, UtilsService, VRUIUtilsService, VR_GenericData_DataStoreService, VR_GenericData_DataStoreAPIService) {
 
         var DatStoreGridAPI;
         var filter = {};
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -31,15 +33,37 @@
 
                 VR_GenericData_DataStoreService.addDataStore(onDataStoreAdded);
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
         }
 
         function load() {
-
+            $scope.isLoading = true;
+            loadAllControls();
         }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadDevProjectSelector])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function getFilterObject() {
             filter = {
                 Name: $scope.name,
+                DevProjectIds: devProjectDirectiveApi.getSelectedIds()
             };
         }
     }

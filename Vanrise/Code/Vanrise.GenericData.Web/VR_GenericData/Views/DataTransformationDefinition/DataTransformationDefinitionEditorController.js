@@ -18,6 +18,9 @@
         var sequenceDirectiveAPI;
         var sequenceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var savePromiseDeferred = UtilsService.createPromiseDeferred();
         var selectedComposite;
 
@@ -68,6 +71,10 @@
                 dataRecordTypeReadyPromiseDeferred.resolve();
             };
 
+            $scope.scopeModal.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModal.SaveDataTransformationDefinition = function () {
 
             
@@ -155,7 +162,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadDataRecordType, loadAllStepts]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadDataRecordType, loadAllStepts, loadDevProjectSelector]).then(function () {
                     loadSequenceStepSection().catch(function (error) {
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
                         }).finally(function () {
@@ -213,7 +220,19 @@
                 }
 
             }
-
+            function loadDevProjectSelector() {
+                var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                devProjectPromiseReadyDeferred.promise.then(function () {
+                    var payloadDirective;
+                    if (dataTransformationDefinitionEntity != undefined) {
+                        payloadDirective = {
+                            selectedIds: dataTransformationDefinitionEntity.DevProjectId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                });
+                return devProjectPromiseLoadDeferred.promise;
+            }
             function getDataTransformationDefinition() {
                 return VR_GenericData_DataTransformationDefinitionAPIService.GetDataTransformationDefinition(dataTransformationDefinitionId).then(function (dataTransformationDefinition) {
                     dataTransformationDefinitionEntity = dataTransformationDefinition;
@@ -475,6 +494,7 @@
             var dataTransformationDefinition = {
                 Name: $scope.scopeModal.name,
                 Title: $scope.scopeModal.title,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 DataTransformationDefinitionId: dataTransformationDefinitionId,
                 RecordTypes: obj != undefined ? obj.RecordTypes : undefined,
                 MappingSteps: sequenceDirectiveAPI != undefined ? sequenceDirectiveAPI.getData() : undefined

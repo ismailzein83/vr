@@ -1,11 +1,13 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    DataRecordFieldChoiceManagementController.$inject = ['$scope', 'VR_GenericData_DataRecordFieldChoiceService', 'VR_GenericData_DataRecordFieldChoiceAPIService'];
+    DataRecordFieldChoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldChoiceService', 'VR_GenericData_DataRecordFieldChoiceAPIService'];
 
-    function DataRecordFieldChoiceManagementController($scope, VR_GenericData_DataRecordFieldChoiceService, VR_GenericData_DataRecordFieldChoiceAPIService) {
+    function DataRecordFieldChoiceManagementController($scope, UtilsService,VRUIUtilsService,VR_GenericData_DataRecordFieldChoiceService, VR_GenericData_DataRecordFieldChoiceAPIService) {
 
         var dataRecordFieldChoiceGridAPI;
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -30,15 +32,37 @@
 
                 VR_GenericData_DataRecordFieldChoiceService.addDataRecordFieldChoice(onDataRecordFieldChoiceAdded);
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
         }
 
         function load() {
-
+            $scope.isLoading = true;
+            loadAllControls();
         }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadDevProjectSelector])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function getFilterObject() {
           var  filter = {
-                Name: $scope.name,
+              Name: $scope.name,
+              DevProjectIds: devProjectDirectiveApi.getSelectedIds()
             };
             return filter;
         }

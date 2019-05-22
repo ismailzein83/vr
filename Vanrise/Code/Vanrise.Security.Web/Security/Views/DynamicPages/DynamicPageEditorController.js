@@ -23,6 +23,9 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
     var timeDimentionDirectiveAPI;
     var timeDimentionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+    var devProjectDirectiveApi;
+    var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
     loadParameters();
     defineScope();
     load();
@@ -80,6 +83,10 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
             groupReadyPromiseDeferred.resolve();
         };
 
+        $scope.scopeModal.onDevProjectSelectorReady = function (api) {
+            devProjectDirectiveApi = api;
+            devProjectPromiseReadyDeferred.resolve();
+        };
         $scope.scopeModal.tabObject;
 
         $scope.scopeModal.widgets = [];
@@ -441,7 +448,8 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
         $scope.scopeModal.View = {
             Name: $scope.scopeModal.pageName,
             Title: $scope.scopeModal.pageName,
-            Type: viewEntity !=undefined?viewEntity.Type:undefined,
+            Type: viewEntity != undefined ? viewEntity.Type : undefined,
+            DevProjectId: devProjectDirectiveApi.getSelectedIds(),
             Url: "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview",
             ModuleId:$scope.scopeModal.selectedMenuNode!=undefined ? $scope.scopeModal.selectedMenuNode.Id : undefined,
             Audience: Audiences,
@@ -473,7 +481,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
 
     function loadAllControls() {
 
-        return UtilsService.waitMultipleAsyncOperations([loadTree, loadWidgets, loadUsers, loadGroups, defineWidgetSections, defineColumnWidth, loadPeriodSelector, loadTimeDimentionSelector])
+        return UtilsService.waitMultipleAsyncOperations([loadTree, loadWidgets, loadUsers, loadGroups, defineWidgetSections, defineColumnWidth, loadPeriodSelector, loadTimeDimentionSelector, loadDevProjectSelector])
             .then(function () {
                 if (treeAPI != undefined && !isEditMode) {
                     treeAPI.refreshTree($scope.scopeModal.menuList);
@@ -673,6 +681,20 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 });
             });
 
+    }
+
+    function loadDevProjectSelector() {
+        var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+        devProjectPromiseReadyDeferred.promise.then(function () {
+            var payloadDirective;
+            if (viewEntity != undefined) {
+                payloadDirective = {
+                    selectedIds: viewEntity.DevProjectId
+                };
+            }
+            VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+        });
+        return devProjectPromiseLoadDeferred.promise;
     }
 
     function defineColumnWidth() {

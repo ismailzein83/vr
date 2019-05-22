@@ -1,11 +1,13 @@
 ﻿<div vr-modalcontent ng-controller="VRCommon_VRComponentTypeEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formEditor">
+                <vr-common-devproject-selector on-ready="scopeModel.onDevProjectSelectorReady" normal-col-num="6"></vr-common-devproject-selector>
+            <vr-row></vr-row>
             <vr-row>
                 <vr-columns width="fullrow">
-                        <vr-row removeline>
-                            <vr-directivewrapper directive="scopeModel.ExtensionConfigurationEditor" on-ready="scopeModel.onVRComponentTypeEditorReady"></vr-directivewrapper>
-                        </vr-row>
+                    <vr-row removeline>
+                        <vr-directivewrapper directive="scopeModel.ExtensionConfigurationEditor" on-ready="scopeModel.onVRComponentTypeEditorReady"></vr-directivewrapper>
+                    </vr-row>
                 </vr-columns>
             </vr-row>
         </vr-form>

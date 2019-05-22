@@ -14,6 +14,9 @@
         var settingReadyPromiseDeferred;
         var additionalData;
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -37,6 +40,10 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, settingDirectiveAPI, undefined, setLoader, settingReadyPromiseDeferred);
             };
 
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.bEDefinitionSettingConfigs = [];
 
@@ -115,9 +122,21 @@
                         return loadSettingDirectivePromiseDeferred.promise;
                     }
                 }
+                function loadDevProjectSelector() {
+                    var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                    devProjectPromiseReadyDeferred.promise.then(function () {
+                        var payloadDirective;
+                        if (businessEntityDefinitionEntity != undefined) {
+                            payloadDirective = {
+                                selectedIds: businessEntityDefinitionEntity.DevProjectId
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                    });
+                    return devProjectPromiseLoadDeferred.promise;
+                }
 
-
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadSettingDirectiveSection, setTitle]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadSettingDirectiveSection, setTitle, loadDevProjectSelector]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -152,6 +171,7 @@
                 BusinessEntityDefinitionId: businessEntityDefinitionId,
                 Name: $scope.scopeModel.businessEntityName,
                 Title: $scope.scopeModel.businessEntityTitle,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: settings
             };
             return bEdefinition;

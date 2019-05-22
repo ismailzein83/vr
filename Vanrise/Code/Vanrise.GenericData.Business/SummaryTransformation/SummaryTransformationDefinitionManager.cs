@@ -14,6 +14,7 @@ namespace Vanrise.GenericData.Business
 {
     public class SummaryTransformationDefinitionManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
 
         #region Public Methods
         public IDataRetrievalResult<SummaryTransformationDefinitionDetail> GetFilteredSummaryTransformationDefinitions(DataRetrievalInput<SummaryTransformationDefinitionQuery> input)
@@ -27,7 +28,8 @@ namespace Vanrise.GenericData.Business
 
                 if (input.Query.Name != null && !itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
-
+                if (input.Query.DevProjectIds != null && (!itemObject.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(itemObject.DevProjectId.Value)))
+                    return false;
                 return true;
             };
 
@@ -202,6 +204,10 @@ namespace Vanrise.GenericData.Business
         {
             SummaryTransformationDefinitionDetail summaryTransformationDefinitionDetail = new SummaryTransformationDefinitionDetail();
             summaryTransformationDefinitionDetail.Entity = summaryTransformationDefinitionObject;
+            if (summaryTransformationDefinitionObject.DevProjectId.HasValue)
+            {
+                summaryTransformationDefinitionDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(summaryTransformationDefinitionObject.DevProjectId.Value);
+            }
             return summaryTransformationDefinitionDetail;
         }
         private SummaryTransformationDefinitionInfo SummaryTransformationDefinitionInfoMapper(SummaryTransformationDefinition summaryTransformationDefinitionObject)

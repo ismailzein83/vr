@@ -11,9 +11,11 @@ namespace Vanrise.Common.Business
 {
     public class VRObjectTypeDefinitionManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
 
-       
+
         public VRObjectTypeDefinition GetVRObjectTypeDefinition(Guid styleDefinitionId)
         {
             Dictionary<Guid, VRObjectTypeDefinition> cachedVRObjectTypeDefinitions = this.GetCachedVRObjectTypeDefinitions();
@@ -40,7 +42,8 @@ namespace Vanrise.Common.Business
 
                 if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
-
+                if (input.Query.DevProjectIds != null && (!x.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(x.DevProjectId.Value)))
+                    return false;
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(VRObjectTypeDefinitionLoggableEntity.Instance, input);
@@ -197,6 +200,10 @@ namespace Vanrise.Common.Business
             {
                 Entity = styleDefinition
             };
+            if (styleDefinition.DevProjectId.HasValue)
+            {
+                styleDefinitionDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(styleDefinition.DevProjectId.Value);
+            }
             return styleDefinitionDetail;
         }
 

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class VRMailMessageTypeDetail
+    public class VRDevProjectInfo
     {
-        public VRMailMessageType Entity { get; set; }
-        public string DevProjectName { get; set; }
+        public Guid VRDevProjectID { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -12,8 +12,9 @@ using Vanrise.Common.Business;
 namespace Vanrise.GenericData.Business
 {
     public class DataRecordFieldChoiceManager
-    {     
-   
+    {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
 
         public IEnumerable<DataRecordFieldChoiceInfo> GetDataRecordFieldChoicesInfo()
@@ -38,7 +39,8 @@ namespace Vanrise.GenericData.Business
 
                 if (input.Query.Name != null && !dataRecordFieldChoice.Name.ToUpper().Contains(input.Query.Name.ToUpper()))
                     return false;
-
+                if (input.Query.DevProjectIds != null && (!dataRecordFieldChoice.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(dataRecordFieldChoice.DevProjectId.Value)))
+                    return false;
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(DataRecordFieldChoiceLoggableEntity.Instance, input);
@@ -204,9 +206,15 @@ namespace Vanrise.GenericData.Business
 
         DataRecordFieldChoiceDetail DataRecordFieldChoiceDetailMapper(DataRecordFieldChoice dataRecordFieldChoice)
         {
+            string devProjectName = null;
+            if (dataRecordFieldChoice.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(dataRecordFieldChoice.DevProjectId.Value);
+            }
             return new DataRecordFieldChoiceDetail()
             {
-                Entity = dataRecordFieldChoice
+                Entity = dataRecordFieldChoice,
+                DevProjectName= devProjectName
             };
         }
 

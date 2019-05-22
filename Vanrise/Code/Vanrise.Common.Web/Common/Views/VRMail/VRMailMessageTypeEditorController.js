@@ -14,6 +14,9 @@
         var objectDirectiveAPI;
         var objectDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -34,6 +37,11 @@
             $scope.scopeModel.onObjectDirectiveReady = function (api) {
                 objectDirectiveAPI = api;
                 objectDirectiveReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
 
             $scope.scopeModel.save = function () {
@@ -72,7 +80,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectDirective, loadDevProjectSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -109,7 +117,19 @@
 
             return objectDirectiveLoadDeferred.promise;
         }
-
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (mailMessageTypeEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: mailMessageTypeEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function insert() {
             $scope.scopeModel.isLoading = true;
             return VRCommon_VRMailMessageTypeAPIService.AddMailMessageType(buildMailMessageTypeObjFromScope()).then(function (response) {
@@ -154,6 +174,7 @@
             return {
                 VRMailMessageTypeId: mailMessageTypeEntity != undefined ? mailMessageTypeEntity.VRMailMessageTypeId : undefined,
                 Name: $scope.scopeModel.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: {
                     Objects: objects
                 }

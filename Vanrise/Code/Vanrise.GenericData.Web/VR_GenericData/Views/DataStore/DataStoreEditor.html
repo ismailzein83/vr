@@ -10,6 +10,9 @@
                 </vr-columns>
             </vr-row>
             <vr-row>
+                <vr-common-devproject-selector on-ready="onDevProjectSelectorReady" normal-col-num="6"></vr-common-devproject-selector>
+            </vr-row>
+            <vr-row>
                     <span vr-loader="isLoadingConfigDirective" ng-if="selectedDataStoreConfig.Editor">
                         <vr-directivewrapper directive="selectedDataStoreConfig.Editor" on-ready="onReadyDataStoreConfigDirective"></vr-directivewrapper>
                     </span>

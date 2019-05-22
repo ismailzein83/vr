@@ -13,6 +13,7 @@ namespace Vanrise.Common.Business
         #region Ctor/Variables
 
         static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
 
         #endregion
 
@@ -28,6 +29,8 @@ namespace Vanrise.Common.Business
                 if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
                 if (x.Settings.VRComponentTypeConfigId != input.Query.ExtensionConfigId)
+                    return false;
+                if (input.Query.DevProjectIds != null && (!x.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(x.DevProjectId.Value)))
                     return false;
                 return true;
             };
@@ -341,9 +344,15 @@ namespace Vanrise.Common.Business
         }
         private VRComponentTypeDetail VRComponentTypeDetailMapper(VRComponentType componentType)
         {
+            string devProjectName = null;
+            if (componentType.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(componentType.DevProjectId.Value);
+            }
             VRComponentTypeDetail componentTypeDetail = new VRComponentTypeDetail()
             {
-                Entity = componentType
+                Entity = componentType,
+                DevProjectName= devProjectName
             };
             return componentTypeDetail;
         }

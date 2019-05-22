@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class VRMailMessageTypeQuery
+    public class VRDevProject
     {
+        public Guid VRDevProjectID { get; set; }
         public string Name { get; set; }
-        public List<Guid> DevProjectIds { get; set; }
+        public DateTime? CreatedTime { get; set; }
+        public DateTime? LastModifiedTime { get; set; }
     }
 }

@@ -3,6 +3,10 @@ AnalyticTableManagementController.$inject = ['$scope', 'UtilsService', 'VRNotifi
 
 function AnalyticTableManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Analytic_AnalyticTableService, VR_Analytic_AnalyticTableAPIService) {
     var mainGridAPI;
+
+    var devProjectDirectiveApi;
+    var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
     defineScope();
     load();
 
@@ -25,12 +29,16 @@ function AnalyticTableManagementController($scope, UtilsService, VRNotificationS
         $scope.searchClicked = function () {
             return mainGridAPI.loadGrid(getFilterObject());
         };
-
+        $scope.onDevProjectSelectorReady = function (api) {
+            devProjectDirectiveApi = api;
+            devProjectPromiseReadyDeferred.resolve();
+        };
     }
 
     function getFilterObject() {
         var query = {
-            Name: $scope.tableName
+            Name: $scope.tableName,
+            DevProjectIds: devProjectDirectiveApi.getSelectedIds()
         };
         return query;
     }
@@ -41,13 +49,20 @@ function AnalyticTableManagementController($scope, UtilsService, VRNotificationS
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([])
+        return UtilsService.waitMultipleAsyncOperations([loadDevProjectSelector])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
             .finally(function () {
                 $scope.isLoading = false;
             });
+    }
+    function loadDevProjectSelector() {
+        var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+        devProjectPromiseReadyDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+        });
+        return devProjectPromiseLoadDeferred.promise;
     }
 
 };

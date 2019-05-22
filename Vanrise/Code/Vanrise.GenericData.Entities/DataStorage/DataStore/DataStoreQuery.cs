@@ -9,6 +9,6 @@ namespace Vanrise.GenericData.Entities
     public class DataStoreQuery
     {
         public string Name { get; set; }
-       
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

@@ -8,7 +8,9 @@
                     </vr-columns>
                     <vr-columns width="1/3row">
                         <vr-select label="Access Type" datasource="scopeModel.accessTypes" selectedvalues="scopeModel.selectedAccessType"
-                                   datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon></vr-columns>
+                                   datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon>
+                    </vr-columns>
+                    <vr-common-devproject-selector on-ready="scopeModel.onDevProjectSelectorReady" normal-col-num="4"></vr-common-devproject-selector>
                 </vr-tab>
                 <vr-directivewrapper ng-if="scopeModel.selectedAnalyticReportConfig !=undefined" directive="scopeModel.selectedAnalyticReportConfig.Editor" on-ready="scopeModel.onEditorDirectiveReady"></vr-directivewrapper>
             </vr-tabs>

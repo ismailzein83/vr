@@ -9,7 +9,8 @@
                         </vr-columns>       
                         <vr-columns width="1/3row">
                             <vr-textbox type="text" label="Title" value="scopeModel.title" isrequired></vr-textbox>
-                        </vr-columns>                             
+                        </vr-columns>    
+                            <vr-common-devproject-selector on-ready="scopeModel.onDevProjectSelectorReady" normal-col-num="4"></vr-common-devproject-selector>
                     </vr-row>
                 </vr-tab>
                  <vr-genericdata-genericruledefinition-settings on-ready="scopeModel.onGenericRuleDefinfitionSettingsReady"></vr-genericdata-genericruledefinition-settings>

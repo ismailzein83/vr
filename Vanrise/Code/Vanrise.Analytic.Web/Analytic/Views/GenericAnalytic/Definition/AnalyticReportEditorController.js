@@ -14,6 +14,9 @@
         var editorDirectiveAPI;
         var editorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
 
@@ -37,7 +40,10 @@
                 editorDirectiveAPI = api;
                 editorReadyDeferred.resolve();
             };
-
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModel.saveAnalyticReport = function () {
                 if (isEditMode) {
                     return update();
@@ -74,7 +80,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadEditorDirective]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadEditorDirective, loadDevProjectSelector]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -95,6 +101,20 @@
                     $scope.scopeModel.selectedAccessType = UtilsService.getItemByVal($scope.scopeModel.accessTypes, analyticReportEntity.AccessType, "value");
                 }
             } 
+
+            function loadDevProjectSelector() {
+                var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                devProjectPromiseReadyDeferred.promise.then(function () {
+                    var payloadDirective;
+                    if (analyticReportEntity != undefined) {
+                        payloadDirective = {
+                            selectedIds: analyticReportEntity.DevProjectId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                });
+                return devProjectPromiseLoadDeferred.promise;
+            }
 
             function loadEditorDirective() {
                 var loadEditorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -138,6 +158,7 @@
                 AnalyticReportId:analyticReportId,
                 AccessType: $scope.scopeModel.selectedAccessType !=undefined?$scope.scopeModel.selectedAccessType.value:undefined,
                 Name: $scope.scopeModel.reportName,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: analyticReportSettings,
             };
             return analyticReport;

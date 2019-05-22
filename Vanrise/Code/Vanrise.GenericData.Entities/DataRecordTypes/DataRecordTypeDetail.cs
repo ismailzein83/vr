@@ -10,5 +10,6 @@ namespace Vanrise.GenericData.Entities
     {
         public DataRecordType Entity { get; set; }
         public string ParentName { get; set; }
+        public string DevProjectName { get; set; }
     }
 }

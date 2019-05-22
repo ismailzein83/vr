@@ -9,5 +9,6 @@ namespace Vanrise.GenericData.Entities
     public class DataRecordTypeQuery
     {
         public string Name { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

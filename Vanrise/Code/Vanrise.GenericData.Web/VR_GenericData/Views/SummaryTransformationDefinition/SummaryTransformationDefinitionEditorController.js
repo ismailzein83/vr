@@ -54,6 +54,9 @@
         var batchTimeIntervalSelectorAPI;
         var batchTimeIntervalSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var directiveSummaryReadyAPI;
         var directiveSummaryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var directiveSummarySelectedPromiseDeferred;
@@ -133,6 +136,11 @@
             $scope.scopeModal.onDataTransformationDefinitionRecordRawInsertReady = function (api) {
                 dataTransformationDefinitionRecordRawInsertSelectorAPI = api;
                 dataTransformationDefinitionRecordRawInsertSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModal.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
             $scope.scopeModal.onDataTransformationDefinitionInsertSelectionChanged = function () {
                 var selectedRawDataRecordTypeId = dataRawRecordTypeSelectorAPI.getSelectedIds();
@@ -492,6 +500,18 @@
                 VRUIUtilsService.callDirectiveLoad(dataSummaryRecordTypeSelectorAPI, payloadSummaryRecordTypeSelector, dataSummaryRecordTypeSelectorLoadDeferred);
             });
 
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            promises.push(devProjectPromiseLoadDeferred.promise);
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (summaryTransformationDefinitionEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: summaryTransformationDefinitionEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+
             if (summaryTransformationDefinitionEntity != undefined) {
                 directiveSummarySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -562,7 +582,8 @@
                     });
                 });
 
-
+              
+                
             }
             // End Load Summary Data Record Type
 
@@ -587,6 +608,7 @@
 
             return batchStartIdentificationSelectorLoadDeferred.promise;
         }
+
 
         //function loadColumnGroup() {
         //    if (summaryTransformationDefinitionEntity != undefined) {
@@ -753,6 +775,7 @@
 
             var item = {
                 Name: $scope.scopeModal.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 SummaryTransformationDefinitionId: summaryTransformationDefinitionId,
                 RawItemRecordTypeId: dataRawRecordTypeSelectorAPI.getSelectedIds(),
                 SummaryItemRecordTypeId: dataSummaryRecordTypeSelectorAPI.getSelectedIds(),

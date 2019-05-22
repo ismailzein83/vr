@@ -1,12 +1,14 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    GenericBEDefinitionManagementController.$inject = ['$scope', 'VR_GenericData_BusinessEntityDefinitionService', 'VR_GenericData_BusinessEntityDefinitionAPIService','UtilsService'];
+    GenericBEDefinitionManagementController.$inject = ['$scope', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionService', 'VR_GenericData_BusinessEntityDefinitionAPIService','UtilsService'];
 
-    function GenericBEDefinitionManagementController($scope, VR_GenericData_BusinessEntityDefinitionService, businessEntityDefinitionAPIService, UtilsService) {
+    function GenericBEDefinitionManagementController($scope, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionService, businessEntityDefinitionAPIService, UtilsService) {
 
         var gridAPI;
        
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
 
 
@@ -36,6 +38,10 @@
 
                 VR_GenericData_BusinessEntityDefinitionService.addBusinessEntityDefinition(onBusinessEntityDefinitionAdded);
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
         }
 
         function load() {
@@ -56,10 +62,15 @@
             });
         }
 
-
-
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([loadDevProjectSelector]).then(function () {
             }).finally(function () {
                 $scope.isLoading = false;
             }).catch(function (error) {
@@ -79,6 +90,7 @@
             return {
                 Name: $scope.name,
                 TypeIds: typeIds,
+                DevProjectIds: devProjectDirectiveApi.getSelectedIds()
             };
         }
     }

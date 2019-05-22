@@ -10,11 +10,13 @@
 
         var vrComponentTypeId;
         var componentTypeEntity;
-
         var extensionConfigurationId;
 
         var componentTypeEditorAPI;
         var componentTypeEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -25,6 +27,7 @@
             if (parameters != undefined && parameters != null) {
                 vrComponentTypeId = parameters.vrComponentTypeId;
                 extensionConfigurationId = parameters.extensionConfigId;
+
             }
             isEditMode = (vrComponentTypeId != undefined);
         }
@@ -39,6 +42,10 @@
                 componentTypeEditorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.saveComponentType = function () {
                 if (isEditMode) {
                     return updateComponentType();
@@ -101,7 +108,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadComponentTypeEditor])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadComponentTypeEditor, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -122,7 +129,19 @@
             });
             return loadComponentTypeEditorPromiseDeferred.promise;
         }
-
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective; 
+                if (componentTypeEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: componentTypeEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function setTitle() {
             if (isEditMode) {
                 $scope.title = UtilsService.buildTitleForUpdateEditor(componentTypeEntity.Name, "Component Type");
@@ -140,6 +159,7 @@
 
         function buildComponentTypeObjFromScope() {
             var obj = componentTypeEditorAPI.getData();
+            obj.DevProjectId = devProjectDirectiveApi.getSelectedIds();
             return obj;
         }
 

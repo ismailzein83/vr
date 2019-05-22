@@ -12,6 +12,9 @@
         var dataStoreReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var dataStoreDirectiveAPI;
         var dataStoreConfigReadyPromiseDeferred; // = UtilsService.createPromiseDeferred();
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -36,6 +39,10 @@
 
                 var setLoader = function (value) { $scope.isLoadingConfigDirective = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataStoreDirectiveAPI, undefined, setLoader, dataStoreConfigReadyPromiseDeferred);
+            };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
             $scope.saveDataStore = function () {
                 $scope.isLoading = true;
@@ -82,7 +89,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataStoreConfigSelector, loadDataStoreConfigDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataStoreConfigSelector, loadDataStoreConfigDirective, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -132,7 +139,19 @@
          
         }
 
-
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (dataStoreEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: dataStoreEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function updateDataStore() {
             var dataStoreObj = buildDataSToreObjFromScope();
             return VR_GenericData_DataStoreAPIService.UpdateDataStore(dataStoreObj)
@@ -178,6 +197,7 @@
             return {
                 DataStoreId: dataStoreId,
                 Name: $scope.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: settings
             };
         }

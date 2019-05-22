@@ -17,6 +17,7 @@ namespace Vanrise.Analytic.Business
         #region Fields
 
         int _loggedInUserId = new Vanrise.Security.Business.SecurityContext().GetLoggedInUserId();
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
 
         #endregion
 
@@ -33,7 +34,8 @@ namespace Vanrise.Analytic.Business
 
                 if (input.Query.Name != null && !prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
-
+                if (input.Query.DevProjectIds != null && (!prod.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(prod.DevProjectId.Value)))
+                    return false;
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(AnalyticReportLoggableEntity.Instance, input);
@@ -244,9 +246,15 @@ namespace Vanrise.Analytic.Business
 
         AnalyticReportDetail AnalyticReportDetailMapper(AnalyticReport analyticReport)
         {
+            string devProjectName = null;
+            if (analyticReport.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(analyticReport.DevProjectId.Value);
+            }
             return new AnalyticReportDetail
             {
-                Entity = analyticReport
+                Entity = analyticReport,
+                DevProjectName=devProjectName
             };
         }
         AnalyticReportInfo AnalyticReportInfoMapper(AnalyticReport analyticReport)

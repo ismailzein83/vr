@@ -23,6 +23,9 @@
         var viewCommonPropertiesAPI;
         var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
         var viewEntity;
@@ -56,6 +59,10 @@
                 viewCommonPropertiesReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModel.onReportTypeSelectionChanged = function (selectedItem) {
                 if (selectedItem != undefined) {
 
@@ -117,7 +124,7 @@
 
             function loadAllControls() {
                 var rootPromiseNode = {
-                    promises: [UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadReportTypeSelector, loadViewCommonProperties])],
+                    promises: [UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadReportTypeSelector, loadViewCommonProperties, loadDevProjectSelector])],
                     getChildNode: function () {
                         return {
                             promises: [UtilsService.waitMultipleAsyncOperations([loadReportSelector])]
@@ -237,7 +244,19 @@
                 return viewCommmonPropertiesLoadDeferred.promise;
 
             }
-
+            function loadDevProjectSelector() {
+                var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                devProjectPromiseReadyDeferred.promise.then(function () {
+                    var payloadDirective;
+                    if (viewEntity != undefined) {
+                        payloadDirective = {
+                            selectedIds: viewEntity.DevProjectId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                });
+                return devProjectPromiseLoadDeferred.promise;
+            }
             function getView() {
                 return VR_Sec_ViewAPIService.GetView(viewId).then(function (viewEntityObj) {
                     viewEntity = viewEntityObj;
@@ -261,7 +280,7 @@
                 ModuleId: ($scope.scopeModel.selectedMenuItem != undefined) ? $scope.scopeModel.selectedMenuItem.Id : undefined,
                 Settings: viewSettings,
                 Type: viewEntity != undefined ? viewEntity.Type : undefined,
-
+                DevProjectId: devProjectDirectiveApi.getSelectedIds()
             };
 
             return view;

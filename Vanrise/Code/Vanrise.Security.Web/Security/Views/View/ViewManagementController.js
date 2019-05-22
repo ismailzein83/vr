@@ -5,6 +5,9 @@ function ViewManagementController($scope, UtilsService, VRNotificationService, V
     var mainGridAPI;
     var viewTypeDirectiveApi;
     var viewTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    var devProjectDirectiveApi;
+    var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
     defineScope();
     load();
 
@@ -28,13 +31,18 @@ function ViewManagementController($scope, UtilsService, VRNotificationService, V
         $scope.hasAddViewPermission = function () {
             return VR_Sec_ViewAPIService.HasAddViewPermission();
         };
+        $scope.onDevProjectSelectorReady = function (api) {
+            devProjectDirectiveApi = api;
+            devProjectPromiseReadyDeferred.resolve();
+        };
     }
 
     function getFilterObject() {
 
         var query = {
             Name: $scope.viewName,
-            ViewTypes: viewTypeDirectiveApi != undefined ? viewTypeDirectiveApi.getSelectedIds() : undefined
+            ViewTypes: viewTypeDirectiveApi != undefined ? viewTypeDirectiveApi.getSelectedIds() : undefined,
+            DevProjectIds: devProjectDirectiveApi.getSelectedIds()
         };
         return query;
     }
@@ -45,7 +53,7 @@ function ViewManagementController($scope, UtilsService, VRNotificationService, V
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadViewTypeSelector, loadMenuActions])
+        return UtilsService.waitMultipleAsyncOperations([loadViewTypeSelector, loadMenuActions, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -63,7 +71,13 @@ function ViewManagementController($scope, UtilsService, VRNotificationService, V
             });
         return viewTypeLoadPromiseDeferred.promise;
     }
-
+    function loadDevProjectSelector() {
+        var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+        devProjectPromiseReadyDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+        });
+        return devProjectPromiseLoadDeferred.promise;
+    }
     function loadMenuActions()
     {
         VR_Sec_ViewTypeAPIService.GetViewTypes().then(function (response) {

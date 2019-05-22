@@ -22,6 +22,11 @@
 
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
+
         var viewEntity;
         loadParameters();
         defineScope();
@@ -52,6 +57,11 @@
             $scope.scopeModel.onTableSelectorDirectiveReady = function (api) {
                 tableSelectorAPI = api;
                 tableSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onTableSelectionChanged = function () {
@@ -142,7 +152,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadTableSelector, loadSearchSettings]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadTableSelector, loadSearchSettings, loadDevProjectSelector]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -243,6 +253,20 @@
 
             }
 
+            function loadDevProjectSelector() {
+                var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                devProjectPromiseReadyDeferred.promise.then(function () {
+                    var payloadDirective;
+                    if (viewEntity != undefined) {
+                        payloadDirective = {
+                            selectedIds: viewEntity.DevProjectId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                });
+                return devProjectPromiseLoadDeferred.promise;
+            }
+
             function getView() {
                 return VR_Sec_ViewAPIService.GetView(viewId).then(function (viewEntityObj) {
                     viewEntity = viewEntityObj;
@@ -273,6 +297,7 @@
                 Name: $scope.scopeModel.reportName,
                 Title: $scope.scopeModel.reportTitle,
                 ModuleId: ($scope.scopeModel.selectedMenuItem != undefined) ? $scope.scopeModel.selectedMenuItem.Id : undefined,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: viewSettings,
                 Type: viewEntity != undefined ? viewEntity.Type : undefined,
 

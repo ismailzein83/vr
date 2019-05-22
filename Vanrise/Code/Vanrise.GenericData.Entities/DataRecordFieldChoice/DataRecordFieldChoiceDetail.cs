@@ -9,5 +9,7 @@ namespace Vanrise.GenericData.Entities
     public class DataRecordFieldChoiceDetail
     {
         public  DataRecordFieldChoice Entity { get; set; }
+        public string DevProjectName { get; set; }
+
     }
 }

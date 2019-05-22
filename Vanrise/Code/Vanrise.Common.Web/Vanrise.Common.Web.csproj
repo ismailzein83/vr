@@ -150,6 +150,7 @@
     <Content Include="Common\Directives\VRComment\Templates\CommentGenericBEViewDefinition.html" />
     <Content Include="Common\Directives\VRComment\vr-common-comment-genericbeview-runtime.js" />
     <Content Include="Common\Directives\VRComment\vr-common-comment-genericbeview-definition.js" />
+    <Content Include="Common\Directives\VRDevProject\vr-common-devproject-selector.js" />
     <Content Include="Common\Directives\VRIPAddress\vr-common-ipaddress.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\FTPConnectionEditorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionCallInterceptorSelectiveTemplate.html" />
@@ -219,6 +220,7 @@
     <Content Include="Common\Directives\MasterLayoutSettings\Templates\MasterLayoutTemplateSettings.html" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-masterlayout-settings-editor.js" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
+    <Content Include="Common\Services\APIServices\VRDevProjectAPIService.js" />
     <Content Include="Common\Services\APIServices\ThemeExtendedAPIService.js" />
     <Content Include="Common\Services\APIServices\FigureIconAPIService.js" />
     <Content Include="Common\Services\APIServices\HttpCallConnectionInterceptorAPIService.js" />
@@ -257,6 +259,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VRDevProjectController.cs" />
     <Compile Include="Controllers\ThemeExtendedController.cs" />
     <Compile Include="Controllers\FigureIconController.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />

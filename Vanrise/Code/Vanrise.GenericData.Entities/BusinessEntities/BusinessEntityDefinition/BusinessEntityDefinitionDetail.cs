@@ -11,5 +11,7 @@ namespace Vanrise.GenericData.Entities
         public BusinessEntityDefinition Entity { get; set; }
 
         public bool IsExtensible { get; set; }
+        public string DevProjectName { get; set; }
+
     }
 }

@@ -45,7 +45,8 @@ namespace Vanrise.GenericData.Transformation
 
                 if (input.Query.Name != null && !itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
-
+                if (input.Query.DevProjectIds != null && (!itemObject.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(itemObject.DevProjectId.Value)))
+                    return false;
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(DataTransformationDefinitionLoggableEntity.Instance, input);
@@ -271,6 +272,11 @@ namespace Vanrise.GenericData.Transformation
         {
             DataTransformationDefinitionDetail dataTransformationDefinitionDetail = new DataTransformationDefinitionDetail();
             dataTransformationDefinitionDetail.Entity = dataTransformationDefinition;
+            if(dataTransformationDefinition.DevProjectId.HasValue)
+            {
+                VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+                dataTransformationDefinitionDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(dataTransformationDefinition.DevProjectId.Value);
+            }
             return dataTransformationDefinitionDetail;
         }
 

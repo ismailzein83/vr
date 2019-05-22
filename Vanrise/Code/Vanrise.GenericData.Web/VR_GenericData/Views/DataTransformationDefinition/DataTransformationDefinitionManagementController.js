@@ -1,12 +1,14 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    DataTransformationDefinitionManagementController.$inject = ['$scope', 'VR_GenericData_DataTransformationDefinitionService', 'VR_GenericData_DataTransformationDefinitionAPIService'];
+    DataTransformationDefinitionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataTransformationDefinitionService', 'VR_GenericData_DataTransformationDefinitionAPIService'];
 
-    function DataTransformationDefinitionManagementController($scope, VR_GenericData_DataTransformationDefinitionService, dataTransformationDefinitionAPIService) {
+    function DataTransformationDefinitionManagementController($scope, UtilsService, VRUIUtilsService, VR_GenericData_DataTransformationDefinitionService, dataTransformationDefinitionAPIService) {
 
         var gridAPI;
         var filter = {};
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -32,15 +34,37 @@
             $scope.hasAddDataTransformationDefinition = function () {
                 return dataTransformationDefinitionAPIService.HasAddDataTransformationDefinition();
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
         }
 
         function load() {
-
+            $scope.isLoading = true;
+            loadAllControls();
         }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadDevProjectSelector])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function getFilterObject() {
             filter = {
                 Name: $scope.name,
+                DevProjectIds: devProjectDirectiveApi.getSelectedIds()
             };
         }
     }

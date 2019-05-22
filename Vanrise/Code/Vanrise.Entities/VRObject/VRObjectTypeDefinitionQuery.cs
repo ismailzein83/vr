@@ -9,6 +9,7 @@ namespace Vanrise.Entities
     public class VRObjectTypeDefinitionQuery
     {
         public string Name { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }
  

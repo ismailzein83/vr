@@ -9,5 +9,6 @@ namespace Vanrise.GenericData.Entities
     public class SummaryTransformationDefinitionDetail
     {
         public SummaryTransformationDefinition Entity { get; set; }
+        public string DevProjectName { get; set; }
     }
 }

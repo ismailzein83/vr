@@ -20,6 +20,8 @@ namespace Vanrise.GenericData.Business
 {
     public class GenericRuleDefinitionManager : IGenericRuleDefinitionManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
         public IGenericRuleManager GetManager(Guid ruleDefinitionId)
         {
@@ -43,7 +45,9 @@ namespace Vanrise.GenericData.Business
 
                 if (input.Query.Name != null && !genericRuleDefinition.Name.ToUpper().Contains(input.Query.Name.ToUpper()))
                     return false;
-
+                if (input.Query.DevProjectIds != null && (!genericRuleDefinition.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(genericRuleDefinition.DevProjectId.Value)))
+                    return false;
+              
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(GenericRuleDefinitionLoggableEntity.Instance, input);

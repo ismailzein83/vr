@@ -8,18 +8,27 @@
                             <vr-columns width="1/3row">
                                 <vr-section title="Page Setting">
                                     <vr-row removeline>
-                                        <vr-textbox value="scopeModal.pageName" label="Page Name" localizedlabel="VRRes.PageName.VREnd" isrequired></vr-textbox>
+                                        <vr-columns width="fullrow">
+                                            <vr-textbox value="scopeModal.pageName" label="Page Name" localizedlabel="VRRes.PageName.VREnd" isrequired></vr-textbox>
+                                        </vr-columns>
                                     </vr-row>
                                     <vr-row>
-                                        <vr-switch value="scopeModal.nonSearchable" label="Non Searchable" localizedlabel="VRRes.NonSearchable.VREnd" onvaluechanged="scopeModal.nonSearchableValueChanged()" "></vr-switch>
+                                        <vr-columns width="fullrow">
+                                            <vr-switch value="scopeModal.nonSearchable" label="Non Searchable" localizedlabel="VRRes.NonSearchable.VREnd" onvaluechanged="scopeModal.nonSearchableValueChanged()" "></vr-switch>
+                                        </vr-columns>
                                     </vr-row>
                                     <vr-row ng-if="!scopeModal.nonSearchable">
-                                        <vr-period-selector on-ready="scopeModal.onPeriodDirectiveReady" label="Default Period" selectedvalues="scopeModal.selectedPeriod" onselectionchanged="scopeModal.periodSelectionChanged" isrequired="true"></vr-period-selector>
+                                        <vr-columns width="fullrow">
+                                            <vr-period-selector on-ready="scopeModal.onPeriodDirectiveReady" label="Default Period" selectedvalues="scopeModal.selectedPeriod" onselectionchanged="scopeModal.periodSelectionChanged" isrequired="true"></vr-period-selector>
+                                        </vr-columns>
                                     </vr-row>
                                     <vr-row ng-if="!scopeModal.nonSearchable">
-                                        <vr-timedimension-selector on-ready="scopeModal.onTimeDimentionDirectiveReady" label="Default Grouping" selectedvalues="scopeModal.selectedTimeDimensionType" isrequired="true"></vr-timedimension-selector>
-
-
+                                        <vr-columns width="fullrow">
+                                            <vr-timedimension-selector on-ready="scopeModal.onTimeDimentionDirectiveReady" label="Default Grouping" selectedvalues="scopeModal.selectedTimeDimensionType" isrequired="true"></vr-timedimension-selector>
+                                        </vr-columns>
+                                    </vr-row>
+                                    <vr-row>
+                                        <vr-common-devproject-selector on-ready="scopeModal.onDevProjectSelectorReady" normal-col-num="12"></vr-common-devproject-selector>
                                     </vr-row>
                                 </vr-section>
                             </vr-columns>

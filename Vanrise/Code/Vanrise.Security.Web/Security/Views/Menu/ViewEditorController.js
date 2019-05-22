@@ -20,6 +20,9 @@
         var viewCommonPropertiesAPI;
         var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -61,6 +64,12 @@
 
                 groupReadyPromiseDeferred.resolve();
             };
+
+            $scope.scopeModal.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
+
         }
 
         function load() {
@@ -84,7 +93,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadUsers, loadGroups, loadViewCommonProperties])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadUsers, loadGroups, loadViewCommonProperties, loadDevProjectSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -137,7 +146,19 @@
             return viewCommmonPropertiesLoadDeferred.promise;
         }
 
-
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (viewEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: viewEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function loadStaticData() {
 
             if (viewEntity == undefined)
@@ -165,6 +186,7 @@
                 Type: viewEntity.Type,
                 ViewContent: viewEntity.ViewContent,
                 Rank: viewEntity.Rank,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: viewSettings,
             };
             return viewObject;

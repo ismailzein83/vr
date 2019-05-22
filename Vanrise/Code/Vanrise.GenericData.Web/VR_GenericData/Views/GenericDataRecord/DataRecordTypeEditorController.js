@@ -13,6 +13,9 @@
         var dataRecordFieldAPI;
         var dataRecordFieldReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -31,6 +34,11 @@
             $scope.scopeModel.onDataRecordFieldDirectiveReady = function (api) {
                 dataRecordFieldAPI = api;
                 dataRecordFieldReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
 
             $scope.hasSaveDataRecordType = function () {
@@ -76,7 +84,7 @@
         };
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordField])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordField, loadDevProjectSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -96,6 +104,7 @@
 
             var dataRecordType = {
                 Name: $scope.scopeModel.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 DataRecordTypeId: dataRecordTypeId,
             };
 
@@ -119,6 +128,19 @@
 
             return loadDataRecordFieldPromiseDeferred.promise;
         };
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (dataRecordTypeEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: dataRecordTypeEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
 
         function loadFilterBySection() {
             if (dataRecordTypeEntity != undefined) {

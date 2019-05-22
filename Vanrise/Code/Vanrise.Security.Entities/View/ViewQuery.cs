@@ -11,5 +11,6 @@ namespace Vanrise.Security.Entities
         public Guid? ModuleId { get; set; }
         public List<Guid> ViewTypes { get; set; }
         public string Name { get; set; }
+        public List<Guid> DevProjectIds { get; set; }
     }
 }

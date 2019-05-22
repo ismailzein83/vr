@@ -16,6 +16,8 @@ namespace Vanrise.GenericData.Business
 {
     public class BusinessEntityDefinitionManager : IBusinessEntityDefinitionManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<BusinessEntityDefinitionDetail> GetFilteredBusinessEntityDefinitions(Vanrise.Entities.DataRetrievalInput<BusinessEntityDefinitionQuery> input)
@@ -29,6 +31,8 @@ namespace Vanrise.GenericData.Business
                 if (input.Query.Name != null && !dataRecordStorage.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
                 if (input.Query.TypeIds != null && !input.Query.TypeIds.Contains(dataRecordStorage.Settings.ConfigId))
+                    return false;
+                if (input.Query.DevProjectIds != null && (!dataRecordStorage.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(dataRecordStorage.DevProjectId.Value)))
                     return false;
                 return true;
             };
@@ -372,10 +376,16 @@ namespace Vanrise.GenericData.Business
         {
             Type beManagerType = Type.GetType(beDefinition.Settings.ManagerFQTN);
             bool isExtensible = typeof(ExtensibleBEManager).IsAssignableFrom(beManagerType);
+            string devProjectName=null;
+            if (beDefinition.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(beDefinition.DevProjectId.Value);
+            }
             return new BusinessEntityDefinitionDetail()
             {
                 Entity = beDefinition,
-                IsExtensible = isExtensible
+                IsExtensible = isExtensible,
+                DevProjectName = devProjectName
             };
         }
 

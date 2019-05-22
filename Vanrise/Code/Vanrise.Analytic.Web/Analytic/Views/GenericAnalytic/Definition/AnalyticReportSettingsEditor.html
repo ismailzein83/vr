@@ -8,25 +8,34 @@
                         <vr-columns width="1/3row">
                             <vr-section title="Page Setting">
                                 <vr-row removeline>
-                                    <vr-textbox value="scopeModel.reportName" isrequired="true" label="Menu Title" customvalidate="scopeModel.validate()"></vr-textbox>
+                                    <vr-columns width="fullrow">
+                                        <vr-textbox value="scopeModel.reportName" isrequired="true" label="Menu Title" customvalidate="scopeModel.validate()"></vr-textbox>
+                                    </vr-columns>
                                 </vr-row>
                                 <vr-row>
-                                    <vr-textbox value="scopeModel.reportTitle" isrequired="true" label="Page Title" customvalidate="scopeModel.validate()"></vr-textbox>
+                                    <vr-columns width="fullrow">
+                                        <vr-textbox value="scopeModel.reportTitle" isrequired="true" label="Page Title" customvalidate="scopeModel.validate()"></vr-textbox>
+                                    </vr-columns>
                                 </vr-row>
                                 <vr-row>
-                                    <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTables" ismultipleselection onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
+                                    <vr-columns width="fullrow">
+                                        <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTables" ismultipleselection onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
+                                    </vr-columns>
+                                </vr-row>
+                                <vr-row>
+                                    <vr-common-devproject-selector on-ready="scopeModel.onDevProjectSelectorReady" normal-col-num="12"></vr-common-devproject-selector>
                                 </vr-row>
                             </vr-section>
                         </vr-columns>
                         <vr-columns width="2/3row">
                             <vr-section title="Menu Location">
-                                    <vr-treeview on-ready="scopeModel.onTreeReady"
-                                                 datavaluefield="Id"
-                                                 datatextfield="Name"
-                                                 datachildrenfield="Childs"
-                                                 selecteditem="scopeModel.selectedMenuItem"
-                                                 wholerow>
-                                    </vr-treeview>
+                                <vr-treeview on-ready="scopeModel.onTreeReady"
+                                             datavaluefield="Id"
+                                             datatextfield="Name"
+                                             datachildrenfield="Childs"
+                                             selecteditem="scopeModel.selectedMenuItem"
+                                             wholerow>
+                                </vr-treeview>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
@@ -45,7 +54,7 @@
                         <vr-columns width="fullrow">
                             <vr-validator validate="scopeModel.isWidgetValid()">
                                 <vr-datagrid datasource="scopeModel.widgets" norowhighlightonclick="true" enabledraggablerow="true"
-                                             on-ready="onGridReady"  ondeleterow="scopeModel.removeWidget" menuactions="widgetsGridMenuActions" hidegridmenu>
+                                             on-ready="onGridReady" ondeleterow="scopeModel.removeWidget" menuactions="widgetsGridMenuActions" hidegridmenu>
                                     <vr-datagridcolumn headertext="'Widget Name'" field="'widgetSettings.WidgetTitle'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-validator>

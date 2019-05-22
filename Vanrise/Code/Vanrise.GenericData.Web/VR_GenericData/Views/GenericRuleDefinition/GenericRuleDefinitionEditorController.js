@@ -20,6 +20,8 @@
         var genericRuleDefinitionSettingsAPI;
         var genericRuleDefinitionSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -42,6 +44,11 @@
             $scope.scopeModel.onGenericRuleDefinfitionSettingsReady = function (api) {
                 genericRuleDefinitionSettingsAPI = api;
                 genericRuleDefinitionSettingsReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
 
             $scope.scopeModel.save = function () {
@@ -90,7 +97,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGenericRuleDefintionSettings]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGenericRuleDefintionSettings, loadDevProjectSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -129,6 +136,20 @@
                 });
 
                 return genericRuleDefinitionSettingsLoadDeferred.promise;
+            }
+
+            function loadDevProjectSelector() {
+                var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                devProjectPromiseReadyDeferred.promise.then(function () {
+                    var payloadDirective;
+                    if (genericRuleDefinitionEntity != undefined) {
+                        payloadDirective = {
+                            selectedIds: genericRuleDefinitionEntity.DevProjectId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                });
+                return devProjectPromiseLoadDeferred.promise;
             }
         }
 
@@ -182,6 +203,7 @@
                 GenericRuleDefinitionId: genericRuleDefinitionId,
                 Name: $scope.scopeModel.name,
                 Title: $scope.scopeModel.title,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 CriteriaDefinition: genericRuleDefinitionSettings.criteriaDefinition,
                 SettingsDefinition: genericRuleDefinitionSettings.settingsDefinition,
                 Objects: genericRuleDefinitionSettings.objects,

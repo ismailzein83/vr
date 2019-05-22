@@ -17,6 +17,8 @@ namespace Vanrise.Security.Business
 
         ModuleManager _moduleManager;
         IViewDataManager _dataManager;
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         public ViewManager()
         {
             _dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
@@ -204,7 +206,7 @@ namespace Vanrise.Security.Business
                  ((input.Query.ModuleId == null || itemObject.ModuleId == input.Query.ModuleId)
                  && (input.Query.ViewTypes == null || input.Query.ViewTypes.Contains(itemObject.Type))
                   && (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                 );
+                  && ((input.Query.DevProjectIds==null) ||(itemObject.DevProjectId.HasValue && input.Query.DevProjectIds.Contains(itemObject.DevProjectId.Value))));
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, ViewDetailMapper));
         }
@@ -301,6 +303,10 @@ namespace Vanrise.Security.Business
             viewDetail.Entity = view;
             if (view.ModuleId.HasValue)
                 viewDetail.ModuleName = _moduleManager.GetModuleName(view.ModuleId.Value);
+            if(view.DevProjectId.HasValue)
+            {
+                viewDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(view.DevProjectId.Value);
+            }
             return viewDetail;
         }
         private ViewInfo ViewInfoMapper(View view)

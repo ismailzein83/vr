@@ -19,6 +19,8 @@
         var propertyDirectiveAPI;
         var propertyDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -40,6 +42,10 @@
             $scope.scopeModel.onObjectTypeSelectiveReady = function (api) {
                 objectTypeSelectiveAPI = api;
                 objectTypeSelectiveReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
             $scope.scopeModel.onObjectTypeSelectionChanged = function () {
                 if (propertyDirectiveAPI != undefined) {
@@ -92,7 +98,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectTypeSelective]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadObjectTypeSelective, loadDevProjectSelector]).then(function () {
                 loadPropertyDirective().then(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -144,6 +150,19 @@
                 });
 
                 return propertyDirectiveLoadDeferred.promise;
+            }
+            function loadDevProjectSelector() {
+                var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                devProjectPromiseReadyDeferred.promise.then(function () {
+                    var payloadDirective;
+                    if (vrObjectTypeDefinitionEntity != undefined) {
+                        payloadDirective = {
+                            selectedIds: vrObjectTypeDefinitionEntity.DevProjectId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                });
+                return devProjectPromiseLoadDeferred.promise;
             }
         }
 
@@ -197,6 +216,7 @@
             return {
                 VRObjectTypeDefinitionId: vrObjectTypeDefinitionEntity != undefined ? vrObjectTypeDefinitionEntity.VRObjectTypeDefinitionId : undefined,
                 Name: $scope.scopeModel.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: {
                     ObjectType: objectTypeSelectiveAPI.getData(),
                     Properties: propertyDirectiveAPI.getData()

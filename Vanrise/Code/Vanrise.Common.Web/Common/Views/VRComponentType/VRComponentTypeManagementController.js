@@ -4,7 +4,7 @@
 
     VRComponentTypeManagementController.$inject = ['$scope', 'VRCommon_VRComponentTypeAPIService', 'VRCommon_VRComponentTypeService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function VRComponentTypeManagementController($scope, VRCommon_VRComponentTypeAPIService, VRCommon_VRComponentTypeService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function VRComponentTypeManagementController($scope,VRCommon_VRComponentTypeAPIService, VRCommon_VRComponentTypeService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var selectedComponentType;
 
@@ -12,6 +12,9 @@
 
         var componentTypeSelectorAPI;
         var componentTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -51,11 +54,15 @@
             $scope.scopeModel.hasAddVRComponentTypePermission = function () {
                 return VRCommon_VRComponentTypeAPIService.HasAddVRComponentTypePermission();
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
         }
         function load() {
             $scope.scopeModel.isLoading = true;
 
-            return UtilsService.waitMultipleAsyncOperations([loadVRComponentTypes]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadVRComponentTypes, loadDevProjectSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -81,11 +88,18 @@
 
             return loadComponentTypesPromiseDeferred.promise;
         }
-
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
-                ExtensionConfigId: selectedComponentType != undefined ? selectedComponentType.ExtensionConfigurationId : undefined
+                ExtensionConfigId: selectedComponentType != undefined ? selectedComponentType.ExtensionConfigurationId : undefined,
+                DevProjectIds: devProjectDirectiveApi.getSelectedIds()
             };
         }
     }

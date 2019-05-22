@@ -28,6 +28,9 @@
         var connectionStringApi;
         var connectionStringPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred= UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
 
@@ -66,6 +69,7 @@
                     $scope.scopeModel.selectedStatusDefinition = undefined;
                 }
             };
+
             $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
@@ -81,6 +85,10 @@
             $scope.onConnectionStringReady = function (api) {
                 connectionStringApi = api;
                 connectionStringPromiseReadyDeferred.resolve();
+            };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
 
             $scope.scopeModel.saveTable = function () {
@@ -113,7 +121,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadRequiredPermission, loadAnalyticDataProviderSettingsDirective, loadBeDefinitionStatusDefinitionSection, loadConnectionStringDirective]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadRequiredPermission, loadAnalyticDataProviderSettingsDirective, loadBeDefinitionStatusDefinitionSection, loadConnectionStringDirective, loadDevProjectSelector]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -192,6 +200,21 @@
             return connectionStringPromiseLoadDeferred.promise;
         }
 
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (tableEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: tableEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
+
+
         function getTable() {
             return VR_Analytic_AnalyticTableAPIService.GetTableById(tableId).then(function (response) {
                 tableEntity = response;
@@ -243,6 +266,7 @@
             var table = {
                 AnalyticTableId: tableId,
                 Name: $scope.scopeModel.name,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: {
                     TableName: $scope.scopeModel.tableName,
                     TimeColumnName: $scope.scopeModel.timeColumnName,

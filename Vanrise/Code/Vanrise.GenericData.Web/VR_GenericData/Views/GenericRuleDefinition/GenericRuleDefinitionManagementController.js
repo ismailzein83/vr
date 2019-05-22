@@ -2,12 +2,14 @@
 
     'use strict';
 
-    GenericRuleDefinitionManagementController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionService', 'VR_GenericData_GenericRuleDefinitionAPIService'];
+    GenericRuleDefinitionManagementController.$inject = ['$scope', 'UtilsService','VRUIUtilsService', 'VR_GenericData_GenericRuleDefinitionService', 'VR_GenericData_GenericRuleDefinitionAPIService'];
 
-    function GenericRuleDefinitionManagementController($scope, VR_GenericData_GenericRuleDefinitionService, genericRuleDefinitionAPIService) {
+    function GenericRuleDefinitionManagementController($scope, UtilsService,VRUIUtilsService,VR_GenericData_GenericRuleDefinitionService, genericRuleDefinitionAPIService) {
 
         var gridAPI;
         var gridQuery = {};
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -31,15 +33,38 @@
                 };
                 VR_GenericData_GenericRuleDefinitionService.addGenericRuleDefinition(onGenericRuleDefinitionAdded);
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
         }
 
         function load() {
+            $scope.isLoading = true;
+            loadAllControls();
+        }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadDevProjectSelector])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
         }
 
         function setGridQuery() {
             gridQuery = {
-                Name: $scope.name
+                Name: $scope.name,
+                DevProjectIds: devProjectDirectiveApi.getSelectedIds()
             };
         }
     }

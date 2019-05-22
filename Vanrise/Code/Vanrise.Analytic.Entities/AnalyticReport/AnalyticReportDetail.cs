@@ -9,5 +9,6 @@ namespace Vanrise.Analytic.Entities
     public class AnalyticReportDetail
     {
         public AnalyticReport Entity { get; set; }
+        public string DevProjectName { get; set; }
     }
 }

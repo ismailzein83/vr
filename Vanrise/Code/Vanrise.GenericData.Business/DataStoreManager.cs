@@ -15,6 +15,8 @@ namespace Vanrise.GenericData.Business
 {
     public class DataStoreManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
         public IEnumerable<DataStoreConfig> GetDataStoreConfigs()
         {
@@ -43,7 +45,8 @@ namespace Vanrise.GenericData.Business
 
                 if (input.Query.Name != null && !dataStore.Name.ToUpper().Contains(input.Query.Name.ToUpper()))
                     return false;
-
+                if (input.Query.DevProjectIds != null && (!dataStore.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(dataStore.DevProjectId.Value)))
+                    return false;
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(DataStoreLoggableEntity.Instance, input);
@@ -201,9 +204,15 @@ namespace Vanrise.GenericData.Business
 
         DataStoreDetail DataStoreDetailMapper(DataStore dataStore)
         {
+            string devProjectName = null;
+            if (dataStore.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(dataStore.DevProjectId.Value);
+            }
             return new DataStoreDetail()
             {
-                Entity = dataStore
+                Entity = dataStore,
+                DevProjectName=devProjectName
             };
         }
 

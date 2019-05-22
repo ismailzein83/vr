@@ -1,13 +1,14 @@
 ﻿<vr-datagrid datasource="datarecordTypes"
-                on-ready="onGridReady"
-                dataretrievalfunction="dataRetrievalFunction"
-                pagingtype="'PagingOnScroll'"
-                menuactions="gridMenuActions"
-                idfield="Entity.DataRecordTypeId">
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.DataRecordTypeId">
 
     <vr-datagridcolumn headertext="'ID'" field="'Entity.DataRecordTypeId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Parent Name'" field="'ParentName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Project'" field="'DevProjectName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

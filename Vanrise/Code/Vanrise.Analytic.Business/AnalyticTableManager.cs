@@ -13,6 +13,8 @@ namespace Vanrise.Analytic.Business
 {
     public class AnalyticTableManager : IAnalyticTableManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<AnalyticTableDetail> GetFilteredAnalyticTables(Vanrise.Entities.DataRetrievalInput<AnalyticTableQuery> input)
         {
@@ -25,7 +27,8 @@ namespace Vanrise.Analytic.Business
 
                 if (input.Query.Name != null && !prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
-
+                if (input.Query.DevProjectIds != null && (!prod.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(prod.DevProjectId.Value)))
+                    return false;
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(AnalyticTableLoggableEntity.Instance, input);
@@ -331,9 +334,15 @@ namespace Vanrise.Analytic.Business
 
         AnalyticTableDetail AnalyticTableDetailMapper(AnalyticTable analyticTable)
         {
+            string devProjectName = null;
+            if (analyticTable.DevProjectId.HasValue)
+            {
+                devProjectName = vrDevProjectManager.GetVRDevProjectName(analyticTable.DevProjectId.Value);
+            }
             return new AnalyticTableDetail()
             {
                 Entity = analyticTable,
+                DevProjectName= devProjectName
             };
 
         }

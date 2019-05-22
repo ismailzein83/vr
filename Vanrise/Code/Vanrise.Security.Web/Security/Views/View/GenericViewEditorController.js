@@ -19,6 +19,9 @@
         var viewCommonPropertiesAPI;
         var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         $scope.scopeModel = {};
         loadParameters();
         defineScope();
@@ -40,6 +43,10 @@
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
             $scope.scopeModel.SaveView = function () {
                 if (isEditMode) {
@@ -154,7 +161,21 @@
                         return viewCommmonPropertiesLoadDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadSettingsDirective, loadViewCommonProperties]).then(function () {
+                function loadDevProjectSelector() {
+                    var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                    devProjectPromiseReadyDeferred.promise.then(function () {
+                        var payloadDirective;
+                        if (viewEntity != undefined) {
+                            payloadDirective = {
+                                selectedIds: viewEntity.DevProjectId
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                    });
+                    return devProjectPromiseLoadDeferred.promise;
+                }
+
+                    return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadSettingsDirective, loadViewCommonProperties, loadDevProjectSelector]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -178,6 +199,7 @@
                 Name: $scope.scopeModel.reportName,
                 Title: $scope.scopeModel.reportTitle,
                 ModuleId: $scope.scopeModel.selectedMenuItem != undefined ? $scope.scopeModel.selectedMenuItem.Id : undefined,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: settingsDirectiveAPI.getData(),
                 Type: viewType != undefined ? viewType.ExtensionConfigurationId : undefined,
             };

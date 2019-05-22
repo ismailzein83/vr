@@ -11,6 +11,8 @@ namespace Vanrise.Common.Business
 {
     public class VRMailMessageTypeManager
     {
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
+
         #region Public Methods
 
         public VRMailMessageType GetMailMessageType(Guid vrMailMessageTypeId)
@@ -29,6 +31,8 @@ namespace Vanrise.Common.Business
                     return false;
 
                 if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.DevProjectIds != null && (!x.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(x.DevProjectId.Value)))
                     return false;
 
                 return true;
@@ -190,6 +194,10 @@ namespace Vanrise.Common.Business
             {
                 Entity = vrMailMessageType
             };
+            if (vrMailMessageType.DevProjectId.HasValue)
+            {
+                vrMailMessageTypeDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(vrMailMessageType.DevProjectId.Value);
+            }
             return vrMailMessageTypeDetail;
         }
 
