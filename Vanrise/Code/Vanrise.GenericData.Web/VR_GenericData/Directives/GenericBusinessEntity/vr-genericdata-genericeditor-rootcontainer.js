@@ -104,18 +104,17 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
                         VR_GenericData_GenericBusinessEntityAPIService.GetDependentFieldValues(input).then(function (response) {
                             if (response) {
-                                console.log(response);
                                 for (var prop in response) {
                                     var dependentFieldValue = response[prop];
                                     if (prop != "$type") {
                                         allFieldValuesByFieldNames[prop] = typeof (dependentFieldValue) == "object" ? dependentFieldValue : [dependentFieldValue];
-                                        if (!(prop in parentFieldValues)) {
-                                            parentFieldValues[prop] = {
-                                                value: dependentFieldValue,
-                                                isHidden: true,
-                                                isDisabled: false
-                                            };
-                                        }
+
+                                        parentFieldValues[prop] = {
+                                            value: dependentFieldValue,
+                                            isHidden: false,
+                                            isDisabled: true
+                                        };
+
                                     }
                                 }
                             }

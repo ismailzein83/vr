@@ -212,7 +212,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                         }
 
                                         if (parentFieldValues != undefined && fieldName in parentFieldValues) {
-                                            payload.isDisabled = true;
+                                            payload.isDisabled = parentFieldValues[fieldName].isDisabled;
                                             if (fieldValue == undefined) {
                                                 fieldValue = parentFieldValues[fieldName].value;
                                                 payload.hasEmtyRequiredDependentField = false;

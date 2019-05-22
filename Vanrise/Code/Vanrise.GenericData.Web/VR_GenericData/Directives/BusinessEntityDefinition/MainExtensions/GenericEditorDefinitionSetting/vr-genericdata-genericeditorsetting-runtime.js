@@ -82,7 +82,7 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
                                 context: getContext(),
                                 allFieldValuesByName: allFieldValuesByName,
                                 genericContext: genericContext,
-                                parentFieldValues: parentFieldValues
+                                parentFieldValues: parentFieldValues,
                             };
                             VRUIUtilsService.callDirectiveLoad(sectionDirectiveApi, payloadSelector, sectionDirectiveLoadDeferred);
                         });
@@ -117,7 +117,7 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
 
                 //api.setFieldValues = function (fieldValuesByNames) {
                 //    var _promises = [];
-                   
+
                 //    if (sectionDirectiveApi.setFieldValues != undefined && typeof (sectionDirectiveApi.setFieldValues) == "function") {
                 //        var setFieldValuesPromise = sectionDirectiveApi.setFieldValues(fieldValuesByNames);
                 //        if (setFieldValuesPromise != undefined)
@@ -171,8 +171,8 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
                     }
 
                     var parentFieldValue = parentFieldValues[currentField.FieldPath];
-                    //if (parentFieldValue == undefined || !parentFieldValue.isHidden) // ***** Here We hide ParentField *****
-                    extendedFields.push(currentField);
+                    if (parentFieldValue == undefined || !parentFieldValue.isHidden) // ***** Here We hide ParentField *****
+                        extendedFields.push(currentField);
                 }
 
                 return extendedFields;
