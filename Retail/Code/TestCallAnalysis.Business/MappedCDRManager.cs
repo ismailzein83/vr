@@ -18,7 +18,8 @@ namespace TestCallAnalysis.Business
             runtimeCDR.AttemptDateTime = mappedCDR.AttemptDateTime;
             runtimeCDR.DurationInSeconds = mappedCDR.DurationInSeconds;
             runtimeCDR.CalledNumber = mappedCDR.CalledNumber;
-            runtimeCDR.OperatorID = mappedCDR.OperatorID;
+            runtimeCDR.CalledOperatorID = mappedCDR.CalledOperatorID;
+            runtimeCDR.CallingOperatorID = mappedCDR.CallingOperatorID;
             runtimeCDR.OrigCallingNumber = mappedCDR.OrigCallingNumber;
             runtimeCDR.OrigCalledNumber = mappedCDR.OrigCalledNumber;
             runtimeCDR.DataSourceId = mappedCDR.DataSourceId;
@@ -26,8 +27,8 @@ namespace TestCallAnalysis.Business
             runtimeCDR.CDRType = (int)mappedCDR.CDRType;
             runtimeCDR.IsCorrelated = mappedCDR.IsCorrelated;
             runtimeCDR.CallingNumberType = (int?)mappedCDR.CallingNumberType;
-            runtimeCDR.CalledNumberType = (int?)mappedCDR.CalledNumberType;
             runtimeCDR.CreatedTime = mappedCDR.CreatedTime;
+            runtimeCDR.ClientId = mappedCDR.ClientId;
             return runtimeCDR;
         }
 
@@ -57,13 +58,14 @@ namespace TestCallAnalysis.Business
                 CalledNumber = cdr.CalledNumber,
                 CallingNumber = cdr.CallingNumber,
                 CDRType = (CDRType)cdr.CDRType,
-                OperatorID = cdr.OperatorID,
+                CalledOperatorID = cdr.CalledOperatorID,
+                CallingOperatorID = cdr.CallingOperatorID,
                 OrigCallingNumber = cdr.OrigCallingNumber,
                 OrigCalledNumber = cdr.OrigCalledNumber,
                 CreatedTime = cdr.CreatedTime,
                 CallingNumberType = (CDRNumberType?)cdr.CallingNumberType,
-                CalledNumberType = (CDRNumberType?)cdr.CalledNumberType,
                 IsCorrelated = cdr.IsCorrelated,
+                ClientId = cdr.ClientId
             };
         }
     }

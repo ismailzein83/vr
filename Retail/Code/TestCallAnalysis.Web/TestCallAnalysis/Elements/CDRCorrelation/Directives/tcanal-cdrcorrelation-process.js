@@ -30,10 +30,6 @@ app.directive("tcanalCdrcorrelationProcess", ['UtilsService', 'VRDateTimeService
             
             function initializeController() {
                 $scope.scopeModel = {};
-
-                $scope.scopeModel.datetimeMargin = "00:00:00";
-                $scope.scopeModel.timeOutMargin = "00:00:00";
-
                 defineAPI();
             }
 
@@ -44,8 +40,6 @@ app.directive("tcanalCdrcorrelationProcess", ['UtilsService', 'VRDateTimeService
                     return {
                         InputArguments: {
                             $type: "TestCallAnalysis.BP.Arguments.CDRCorrelationAndAnalysisProcessInput,TestCallAnalysis.BP.Arguments",
-                            DateTimeMargin: $scope.scopeModel.datetimeMargin,
-                            TimeOutMargin: $scope.scopeModel.timeOutMargin
                         }
                     };
                 };

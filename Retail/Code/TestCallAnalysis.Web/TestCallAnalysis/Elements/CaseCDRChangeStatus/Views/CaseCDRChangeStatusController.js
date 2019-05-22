@@ -102,7 +102,8 @@
                                 $type: "TestCallAnalysis.Business.CaseCDRChangeStatusFilter ,TestCallAnalysis.Business",
                                 StatusDefinitionId: caseCDREntity.StatusId
                             }]
-                        }
+                        },
+                        selectedIds: caseCDREntity.StatusId
                     };
                     VRUIUtilsService.callDirectiveLoad(statusDefinitionAPI, statusDefinitionPayload, loadStatusDefinitionPromiseDeferred);
                 });

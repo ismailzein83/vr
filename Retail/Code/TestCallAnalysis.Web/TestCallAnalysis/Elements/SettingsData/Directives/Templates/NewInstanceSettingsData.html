@@ -1,0 +1,14 @@
+﻿<vr-row removeline>
+    <vr-columns colnum="5">
+        <vr-timespan value="scopeModel.timeMargin" label="Time Margin" isrequired></vr-timespan>
+    </vr-columns>
+    <vr-columns colnum="1" withemptyline haschildcolumns>
+        <vr-hint value="Time margin between generated CDRs and received CDRs that is used to create corrolations"></vr-hint>
+    </vr-columns>
+    <vr-columns colnum="5">
+        <vr-timespan value="scopeModel.timeOutMargin" label="Time Out Margin" isrequired></vr-timespan>
+    </vr-columns>
+    <vr-columns colnum="1" withemptyline haschildcolumns>
+        <vr-hint value="After this time, if no corrolation is created for a received CDR add this CDR as a corrolation"></vr-hint>
+    </vr-columns>
+</vr-row>

@@ -10,12 +10,12 @@ namespace TestCallAnalysis.Entities
     {
         public long CaseId { get; set; }
         public string CallingNumber {get; set;}
-        public string CalledNumber {get; set;}
         public DateTime FirstAttempt {get; set;}
         public DateTime LastAttempt {get; set;}
         public int NumberOfCDRs {get; set;}
         public Guid StatusId {get; set;}
         public long? OperatorID {get; set;}
+        public long? ClientId { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime LastModifiedTime { get; set; }
         public int CreatedBy { get; set; }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TestCallAnalysis.Entities;
+using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 
 namespace TestCallAnalysis.Business
@@ -23,7 +24,8 @@ namespace TestCallAnalysis.Business
             runtimeCDR.ReceivedCalledNumber = correlatedCDR.ReceivedCalledNumber;
             runtimeCDR.GeneratedCallingNumber = correlatedCDR.GeneratedCallingNumber;
             runtimeCDR.ReceivedCallingNumber = correlatedCDR.ReceivedCallingNumber;
-            runtimeCDR.OperatorID = correlatedCDR.OperatorID;
+            runtimeCDR.CalledOperatorID = correlatedCDR.CalledOperatorID;
+            runtimeCDR.CallingOperatorID = correlatedCDR.CallingOperatorID;
             runtimeCDR.OrigGeneratedCallingNumber = correlatedCDR.OrigGeneratedCallingNumber;
             runtimeCDR.OrigGeneratedCalledNumber = correlatedCDR.OrigGeneratedCalledNumber;
             runtimeCDR.OrigReceivedCallingNumber = correlatedCDR.OrigReceivedCallingNumber;
@@ -31,6 +33,9 @@ namespace TestCallAnalysis.Business
             runtimeCDR.ReceivedCallingNumberType = (int?)correlatedCDR.ReceivedCallingNumberType;
             runtimeCDR.CaseId = correlatedCDR.CaseId;
             runtimeCDR.CreatedTime = correlatedCDR.CreatedTime;
+            runtimeCDR.GeneratedId = correlatedCDR.GeneratedId;
+            runtimeCDR.ReceivedId = correlatedCDR.ReceivedId;
+            runtimeCDR.ClientId = correlatedCDR.ClientId;
             return runtimeCDR;
         }
 
@@ -56,37 +61,58 @@ namespace TestCallAnalysis.Business
             Entities.CDRCorrelationBatch correlationBatch = new Entities.CDRCorrelationBatch();
             foreach (var correlatedCDR in correlatedCDRsToUpdate)
             {
-                var index = listOfCaseCDRsCallingNumbers.FirstOrDefault(x => x.Value == correlatedCDR.ReceivedCallingNumber).Key;
-                if (index != 0)
-                    correlatedCDR.CaseId = index;
-                correlationBatch.OutputRecordsToInsert.Add(correlatedCDR);
+                var caseId = listOfCaseCDRsCallingNumbers.FirstOrDefault(x => x.Value == correlatedCDR.ReceivedCallingNumber).Key;
+                if (caseId != 0)
+                {
+                    correlatedCDR.CaseId = caseId;
+                    correlationBatch.OutputRecordsToInsert.Add(correlatedCDR);
+                }
             }
             List<string> fieldsToJoin = new List<string>();
             List<string> fieldsToUpdate = new List<string>();
             fieldsToJoin.Add("ID");
             fieldsToUpdate.Add("CaseId");
-            recordStorageDataManager.UpdateRecords(correlationBatch.OutputRecordsToInsert, fieldsToJoin, fieldsToUpdate);
+
+            if (correlationBatch.OutputRecordsToInsert.Count() > 0)
+                recordStorageDataManager.UpdateRecords(correlationBatch.OutputRecordsToInsert, fieldsToJoin, fieldsToUpdate);
+
             return correlationBatch.OutputRecordsToInsert.Count;
+        }
+
+        public long ReserveIDRange(int numberOfIDs)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(GetCorrelatedCDRsType(), numberOfIDs, out startingId);
+            return startingId;
         }
 
         public TCAnalCorrelatedCDR CorrelatedCDRMapper(TCAnalMappedCDR mappedCDR)
         {
             return new TCAnalCorrelatedCDR
             {
-                CorrelatedCDRId = mappedCDR.MappedCDRId,
                 AttemptDateTime = mappedCDR.AttemptDateTime,
                 DurationInSeconds = mappedCDR.DurationInSeconds,
                 ReceivedCalledNumber = mappedCDR.CalledNumber,
                 ReceivedCallingNumber = mappedCDR.CallingNumber,
-                OperatorID = mappedCDR.OperatorID,
+                CalledOperatorID = mappedCDR.CalledOperatorID,
+                CallingOperatorID = mappedCDR.CallingOperatorID,
                 OrigReceivedCallingNumber = mappedCDR.OrigCallingNumber,
                 OrigReceivedCalledNumber = mappedCDR.OrigCalledNumber,
                 ReceivedCallingNumberType = (ReceivedCallingNumberType?)mappedCDR.CallingNumberType,
                 CaseId = null,
-                CreatedTime = mappedCDR.CreatedTime
+                CreatedTime = mappedCDR.CreatedTime,
+                ReceivedId = mappedCDR.MappedCDRId,
+                ClientId = mappedCDR.ClientId
             };
         }
 
+        #endregion
+
+        #region Private Methods
+        private Type GetCorrelatedCDRsType()
+        {
+            return this.GetType();
+        }
         #endregion
     }
 }

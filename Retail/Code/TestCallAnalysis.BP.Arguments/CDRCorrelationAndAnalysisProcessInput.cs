@@ -9,10 +9,6 @@ namespace TestCallAnalysis.BP.Arguments
 {
     public class CDRCorrelationAndAnalysisProcessInput : BaseProcessInputArgument
     {
-        public TimeSpan DateTimeMargin { get; set; }
-
-        public TimeSpan TimeOutMargin { get; set; }
-
         public override string GetTitle()
         {
             return "CDR Correlation And Analysis Process";

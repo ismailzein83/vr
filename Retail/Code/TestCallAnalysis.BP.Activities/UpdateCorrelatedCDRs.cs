@@ -44,7 +44,7 @@ namespace TestCallAnalysis.BP.Activities
                     if (inputArgument.InsertedCorrelatedCDRs != null && inputArgument.InsertedCorrelatedCDRs.Count > 0)
                     {
                         DateTime batchStartTime = DateTime.Now;
-                        var callingNumbersList = caseCDRManager.GetCasesCDRCallingNumbers();
+                        var callingNumbersList = caseCDRManager.GetExistingCases();
                         if (callingNumbersList != null && callingNumbersList.Count > 0)
                         {
                             hasItems = inputArgument.InsertedCorrelatedCDRs.TryDequeue((listOfUpdatedCorrolatedCDRs) =>

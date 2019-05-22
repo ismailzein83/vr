@@ -23,12 +23,13 @@ namespace TestCallAnalysis.Entities
         public string CalledNumber { get; set; }
         public string CallingNumber { get; set; }
         public CDRType CDRType { get; set; }
-        public long? OperatorID { get; set; }
+        public long? CalledOperatorID { get; set; }
+        public long? CallingOperatorID { get; set; }
         public string OrigCallingNumber { get; set; }
         public string OrigCalledNumber { get; set; }
         public bool IsCorrelated { get; set; }
         public CDRNumberType? CallingNumberType { get; set; }
-        public CDRNumberType? CalledNumberType { get; set; }
         public DateTime CreatedTime { get; set; }
+        public long? ClientId { get; set; }
     }
 }

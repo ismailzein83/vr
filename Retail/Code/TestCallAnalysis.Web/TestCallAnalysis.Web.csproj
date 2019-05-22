@@ -177,6 +177,8 @@
     <Content Include="TestCallAnalysis\Elements\CaseCDRChangeStatus\Views\CaseCDRChangeStatusController.js" />
     <Content Include="TestCallAnalysis\Elements\CDRCorrelation\Directives\tcanal-cdrcorrelation-process.js" />
     <Content Include="TestCallAnalysis\Elements\CDRCorrelation\Directives\Templates\CDRCorrelationProcessTemplate.html" />
+    <Content Include="TestCallAnalysis\Elements\SettingsData\Directives\Templates\NewInstanceSettingsData.html" />
+    <Content Include="TestCallAnalysis\Elements\SettingsData\tcanal-instance-settings-editor.js" />
     <Content Include="TestCallAnalysis\ModuleInitialization.js" />
     <Content Include="TestCallAnalysis\Services\APIServices\CaseCDRAPIService.js" />
     <Content Include="TestCallAnalysis\Services\CaseCDRActionService.js" />
@@ -191,6 +193,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

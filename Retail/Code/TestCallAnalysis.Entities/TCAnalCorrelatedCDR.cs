@@ -17,7 +17,8 @@ namespace TestCallAnalysis.Entities
         public string ReceivedCalledNumber { get; set; }
         public string GeneratedCallingNumber { get; set; }
         public string ReceivedCallingNumber { get; set; }
-        public long? OperatorID { get; set; }
+        public long? CalledOperatorID { get; set; }
+        public long? CallingOperatorID { get; set; }
         public string OrigGeneratedCallingNumber { get; set; }
         public string OrigGeneratedCalledNumber { get; set; }
         public string OrigReceivedCallingNumber { get; set; }
@@ -25,5 +26,8 @@ namespace TestCallAnalysis.Entities
         public ReceivedCallingNumberType? ReceivedCallingNumberType { get; set; }
         public long? CaseId { get; set; }
         public DateTime CreatedTime { get; set; }
+        public long? GeneratedId { get; set; }
+        public long ReceivedId { get; set; }
+        public long? ClientId { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TestCallAnalysis.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -20,7 +21,6 @@ namespace TestCallAnalysis.Business
             List<string> columns = new List<string>();
             columns.Add("ID");
             columns.Add("CallingNumber");
-            columns.Add("CalledNumber");
             columns.Add("FirstAttempt");
             columns.Add("LastAttempt");
             columns.Add("NumberOfCDRs");
@@ -37,11 +37,32 @@ namespace TestCallAnalysis.Business
                 return null;
         }
 
-        public Dictionary<long, string> GetCasesCDRCallingNumbers()
+        public List<TCAnalCaseCDR> GetCases()
+        {
+            List<TCAnalCaseCDR> tcanalCaseCDRs = new List<TCAnalCaseCDR>();
+            List<DataRecord> allCasesCDRs = GetAllCases();
+            if(allCasesCDRs != null && allCasesCDRs.Count > 0)
+            {
+                foreach (var caseCDR in allCasesCDRs)
+                {
+                    tcanalCaseCDRs.Add(CaseCDRMapperFromDataRecord(caseCDR));
+                }
+            }
+            return tcanalCaseCDRs;
+        }
+
+        public long ReserveIDRange(int numberOfIDs)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(GetCaseCDRsType(), numberOfIDs, out startingId);
+            return startingId;
+        }
+
+        public Dictionary<long, string> GetExistingCases()
         {
             Dictionary<long, string> ExcitingCaseCDRs = new Dictionary<long, string>();
-            List<DataRecord> allCasesCDRs = new List<DataRecord>();
-            allCasesCDRs = GetAllCases();
+            List<DataRecord> allCasesCDRs = GetAllCases();
+
             if (allCasesCDRs != null && allCasesCDRs.Count > 0)
             {
                 foreach (var record in allCasesCDRs)
@@ -63,7 +84,7 @@ namespace TestCallAnalysis.Business
                 return null;
         }
 
-        public List<string> GetCasesCDRCallingNumbersList()
+        public List<string> GetExistingCasesCallingNumber()
         {
             var allCasesCDRs = GetAllCases();
             if (allCasesCDRs != null && allCasesCDRs.Count > 0)
@@ -92,12 +113,12 @@ namespace TestCallAnalysis.Business
             dynamic runtimeCDR = Activator.CreateInstance(cdrRuntimeType) as dynamic;
             runtimeCDR.ID = caseCDR.CaseId;
             runtimeCDR.CallingNumber = caseCDR.CallingNumber;
-            runtimeCDR.CalledNumber = caseCDR.CalledNumber;
             runtimeCDR.FirstAttempt = caseCDR.FirstAttempt;
             runtimeCDR.LastAttempt = caseCDR.LastAttempt;
             runtimeCDR.NumberOfCDRs = caseCDR.NumberOfCDRs;
             runtimeCDR.StatusId = caseCDR.StatusId;
             runtimeCDR.OperatorID = caseCDR.OperatorID;
+            runtimeCDR.ClientId = caseCDR.ClientId;
             runtimeCDR.CreatedTime = caseCDR.CreatedTime;
             runtimeCDR.LastModifiedTime = caseCDR.LastModifiedTime;
             runtimeCDR.CreatedBy = caseCDR.CreatedBy;
@@ -105,32 +126,36 @@ namespace TestCallAnalysis.Business
             return runtimeCDR;
         }
 
-        public List<dynamic> CaseCDRsToRuntime(List<TCAnalCaseCDR> tCAnalCaseCDRs)
+        public void InsertCases(List<TCAnalCaseCDR> casesToInsert)
         {
-            List<dynamic> result = new List<dynamic>();
-            foreach (var tCAnalCaseCDR in tCAnalCaseCDRs)
+            var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorage);
+            List<dynamic> runtimeCases = new List<dynamic>();
+        
+            foreach (var tCAnalCaseCDR in casesToInsert)
             {
                 var runtimeCaseCDR = CaseCDRToRuntime(tCAnalCaseCDR);
-                result.Add(runtimeCaseCDR);
+                runtimeCases.Add(runtimeCaseCDR);
             }
-            return result;
+            recordStorageDataManager.InsertRecords(runtimeCases);
         }
 
-        public void InsertCases(List<dynamic> casesToInsert)
+        public void UpdateCases(List<TCAnalCaseCDR> casesToUpdate)
         {
             var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorage);
-            recordStorageDataManager.InsertRecords(casesToInsert);
-        }
 
-        public void UpdateCases(List<dynamic> casesToUpdate)
-        {
-            var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorage);
+            List<dynamic> runtimeCases = new List<dynamic>();
+            foreach (var tCAnalCaseCDR in casesToUpdate)
+            {
+                var runtimeCaseCDR = CaseCDRToRuntime(tCAnalCaseCDR);
+                runtimeCases.Add(runtimeCaseCDR);
+            }
+
             List<string> fieldsToJoin = new List<string>();
             List<string> fieldsToUpdate = new List<string>();
             fieldsToJoin.Add("ID");
             fieldsToUpdate.Add("NumberOfCDRs");
             fieldsToUpdate.Add("LastAttempt");
-            recordStorageDataManager.UpdateRecords(casesToUpdate, fieldsToJoin, fieldsToUpdate);
+            recordStorageDataManager.UpdateRecords(runtimeCases, fieldsToJoin, fieldsToUpdate);
         }
 
         public TCAnalCaseCDR GetCaseCDREntity(Guid businessEntityDefinitionId, Object genericBusinessEntityId)
@@ -166,7 +191,7 @@ namespace TestCallAnalysis.Business
             }
             else
                 return null;
-             
+
         }
 
         public bool DoesUserHaveEditAccess()
@@ -179,13 +204,12 @@ namespace TestCallAnalysis.Business
         {
             return new TCAnalCaseCDR()
             {
-                CaseId = correlatedCDR.CorrelatedCDRId,
                 CallingNumber = correlatedCDR.ReceivedCallingNumber,
-                CalledNumber = correlatedCDR.ReceivedCalledNumber,
                 FirstAttempt = correlatedCDR.AttemptDateTime,
                 LastAttempt = correlatedCDR.AttemptDateTime,
                 NumberOfCDRs = 1,
-                OperatorID = correlatedCDR.OperatorID,
+                OperatorID = correlatedCDR.CallingOperatorID,
+                ClientId = correlatedCDR.ClientId,
                 CreatedTime = correlatedCDR.CreatedTime,
                 LastModifiedTime = DateTime.Now,
                 CreatedBy = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(),
@@ -200,12 +224,12 @@ namespace TestCallAnalysis.Business
         {
             TCAnalCaseCDR caseCDR = new TCAnalCaseCDR();
             caseCDR.CaseId = (long)genericBusinessEntity.FieldValues.GetRecord("ID");
-            caseCDR.CallingNumber = (string)genericBusinessEntity.FieldValues.GetRecord("ReceivedCallingNumber");
-            caseCDR.CalledNumber = (string)genericBusinessEntity.FieldValues.GetRecord("CalledNumber");
+            caseCDR.CallingNumber = (string)genericBusinessEntity.FieldValues.GetRecord("CallingNumber");
             caseCDR.FirstAttempt = (DateTime)genericBusinessEntity.FieldValues.GetRecord("FirstAttempt");
             caseCDR.LastAttempt = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastAttempt");
             caseCDR.NumberOfCDRs = (int)genericBusinessEntity.FieldValues.GetRecord("NumberOfCDRs");
             caseCDR.StatusId = (Guid)genericBusinessEntity.FieldValues.GetRecord("StatusId");
+            caseCDR.ClientId = (long?)genericBusinessEntity.FieldValues.GetRecord("ClientId");
             caseCDR.OperatorID = (long?)genericBusinessEntity.FieldValues.GetRecord("OperatorID");
             caseCDR.CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime");
             caseCDR.LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime");
@@ -213,7 +237,30 @@ namespace TestCallAnalysis.Business
             caseCDR.LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy");
             return caseCDR;
         }
-    
+
+        private TCAnalCaseCDR CaseCDRMapperFromDataRecord (DataRecord dataRecord)
+        {
+            TCAnalCaseCDR caseCDR = new TCAnalCaseCDR();
+            caseCDR.CaseId = (long)dataRecord.FieldValues.GetRecord("ID");
+            caseCDR.CallingNumber = (string)dataRecord.FieldValues.GetRecord("CallingNumber");
+            caseCDR.FirstAttempt = (DateTime)dataRecord.FieldValues.GetRecord("FirstAttempt");
+            caseCDR.LastAttempt = (DateTime)dataRecord.FieldValues.GetRecord("LastAttempt");
+            caseCDR.NumberOfCDRs = (int)dataRecord.FieldValues.GetRecord("NumberOfCDRs");
+            caseCDR.StatusId = (Guid)dataRecord.FieldValues.GetRecord("StatusId");
+            caseCDR.ClientId = (long?)dataRecord.FieldValues.GetRecord("ClientId");
+            caseCDR.OperatorID = (long?)dataRecord.FieldValues.GetRecord("OperatorID");
+            caseCDR.CreatedTime = (DateTime)dataRecord.FieldValues.GetRecord("CreatedTime");
+            caseCDR.LastModifiedTime = (DateTime)dataRecord.FieldValues.GetRecord("LastModifiedTime");
+            caseCDR.CreatedBy = (int)dataRecord.FieldValues.GetRecord("CreatedBy");
+            caseCDR.LastModifiedBy = (int)dataRecord.FieldValues.GetRecord("LastModifiedBy");
+            return caseCDR;
+        }
+
+        private Type GetCaseCDRsType()
+        {
+            return this.GetType();
+        }
+
         #endregion
     }
 }

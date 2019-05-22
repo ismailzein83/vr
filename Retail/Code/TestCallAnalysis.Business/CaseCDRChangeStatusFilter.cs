@@ -18,7 +18,7 @@ namespace TestCallAnalysis.Business
                 return false;
 
             if (context.StatusDefinition.StatusDefinitionId == StatusDefinitionId)
-                return false;
+                return true;
 
             return true;
         }

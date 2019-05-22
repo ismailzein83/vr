@@ -2,6 +2,8 @@
 using System.Activities;
 using System.Collections.Generic;
 using TestCallAnalysis.Business;
+using TestCallAnalysis.Entities;
+using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -9,26 +11,25 @@ namespace TestCallAnalysis.BP.Activities
 {
     public sealed class BuildCDRCorrelationFilterGroup : CodeActivity
     {
-
-        [RequiredArgument]
-        public InArgument<TimeSpan> DateTimeMargin { get; set; }
-
         [RequiredArgument]
         public InArgument<TestCallAnalysis.Entities.CDRCorrelationProcessState> CDRCorrelationProcessState { get; set; }
-
         [RequiredArgument]
         public OutArgument<List<TestCallAnalysis.Entities.CDRCorrelationFilterGroup>> CDRCorrelationFilterGroups { get; set; }
-
         [RequiredArgument]
         public OutArgument<bool> NewDataImported { get; set; }
-
         [RequiredArgument]
         public OutArgument<long?> LastImportedId { get; set; }
+        [RequiredArgument]
+        public OutArgument<TCAnalSettingsData> TCAnalSettingsData { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            TimeSpan dateTimeMargin = this.DateTimeMargin.Get(context);
             TestCallAnalysis.Entities.CDRCorrelationProcessState cdrCorrelationProcessState = this.CDRCorrelationProcessState.Get(context);
+
+            var TCanalComponentSettingsId = new Guid("6627cae7-7653-482b-a67f-6d44cfa00096");
+            SettingManager settingManager = new SettingManager();
+            var tcanalComponentSettings = settingManager.GetSetting(TCanalComponentSettingsId);
+            var tcanalSettingsData = tcanalComponentSettings.Data as TCAnalSettingsData;
 
             DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
             long? lastImportedId = null;
@@ -46,7 +47,6 @@ namespace TestCallAnalysis.BP.Activities
             var datetimeFieldName = dataRecordType.Settings.DateTimeField;
 
             long? overallMaxId = dataRecordStorageManager.GetMaxId(inputDataRecordStorageId, out overallMaxDate, out overallMinDate);
-           // cdrCorrelationProcessState.LastImportedId = 1;
 
             if (cdrCorrelationProcessState != null && cdrCorrelationProcessState.LastImportedId.HasValue)
             {
@@ -59,7 +59,7 @@ namespace TestCallAnalysis.BP.Activities
                 {
                     newDataImported = true;
                     lastImportedId = maxId;
-                    DateTime minDateMinusMargin = minDate.Value.AddSeconds(-1 * dateTimeMargin.TotalSeconds);
+                    DateTime minDateMinusMargin = minDate.Value.AddSeconds(-1 * tcanalSettingsData.TimeMargin.TotalSeconds);
                     cdrCorrelationFilterGroups = BuildRecordFilterGroups(minDateMinusMargin, overallMaxDate.Value, datetimeFieldName, maxId.Value, idFieldName);
                 }
             }
@@ -76,6 +76,7 @@ namespace TestCallAnalysis.BP.Activities
             this.CDRCorrelationFilterGroups.Set(context, cdrCorrelationFilterGroups);
             this.NewDataImported.Set(context, newDataImported);
             this.LastImportedId.Set(context, lastImportedId);
+            this.TCAnalSettingsData.Set(context, tcanalSettingsData);
         }
 
         private List<TestCallAnalysis.Entities.CDRCorrelationFilterGroup> BuildRecordFilterGroups(DateTime minDate, DateTime maxDate, string datetimeFieldName, long maxId, string idFieldName)

@@ -73,6 +73,7 @@
       <Variable x:TypeArguments="vq:MemoryQueue(te:CDRCorrelationBatch)" Name="correlateCDRsOutputQueue" />
       <Variable x:TypeArguments="vq:MemoryQueue(vge:RecordBatch)" Name="loadCDRsToCorrelateOutputQueue" />
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="correlateCDRsStatus" />
+      <Variable x:TypeArguments="te:TCAnalSettingsData" Name="TCAnalSettingsData" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Starting CDR Correlation Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -99,11 +100,6 @@
           <mca:CSharpValue x:TypeArguments="te:CDRCorrelationProcessState">CDRCorrelationProcessState</mca:CSharpValue>
         </InArgument>
       </tba1:BuildCDRCorrelationFilterGroup.CDRCorrelationProcessState>
-      <tba1:BuildCDRCorrelationFilterGroup.DateTimeMargin>
-        <InArgument x:TypeArguments="x:TimeSpan">
-          <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.DateTimeMargin</mca:CSharpValue>
-        </InArgument>
-      </tba1:BuildCDRCorrelationFilterGroup.DateTimeMargin>
       <tba1:BuildCDRCorrelationFilterGroup.LastImportedId>
         <OutArgument x:TypeArguments="s:Nullable(x:Int64)">
           <mca:CSharpReference x:TypeArguments="s:Nullable(x:Int64)">lastImportedId</mca:CSharpReference>
@@ -114,6 +110,11 @@
           <mca:CSharpReference x:TypeArguments="x:Boolean">newDataImported</mca:CSharpReference>
         </OutArgument>
       </tba1:BuildCDRCorrelationFilterGroup.NewDataImported>
+      <tba1:BuildCDRCorrelationFilterGroup.TCAnalSettingsData>
+        <OutArgument x:TypeArguments="te:TCAnalSettingsData">
+          <mca:CSharpReference x:TypeArguments="te:TCAnalSettingsData">TCAnalSettingsData</mca:CSharpReference>
+        </OutArgument>
+      </tba1:BuildCDRCorrelationFilterGroup.TCAnalSettingsData>
     </tba1:BuildCDRCorrelationFilterGroup>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
@@ -129,11 +130,12 @@
               <Variable x:TypeArguments="vq:MemoryQueue(te:CDRCaseBatch)" Name="correlateCaseCDRsOutputQueue" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCDRCasesStatus" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="updateMappedCDRsStatus" />
-              <Variable x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesToInsert)" Name="prepareCaseCDRsToInsert" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="insertOrUpdateCDRsStatus" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="updateCorrelatedCDRsStatus" />
               <Variable x:TypeArguments="vq:MemoryQueue(te:CDRCorrelationBatch)" Name="updateCorrelatedCDRsListInput" />
               <Variable x:TypeArguments="vq:MemoryQueue(te:UpdatedMappedCDRs)" Name="updateMappedCDRs" />
+              <Variable x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesOutput)" Name="prepareCasesOutput" />
+              <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="insertOrUpdateCaseCDRsStatus" />
             </Parallel.Variables>
             <tba1:LoadCDRsToCorrelate sap2010:WorkflowViewState.IdRef="LoadCDRsToCorrelate_2">
               <tba1:LoadCDRsToCorrelate.CDRCorrelationFilterGroups>
@@ -153,11 +155,6 @@
               </tba1:LoadCDRsToCorrelate.Status>
             </tba1:LoadCDRsToCorrelate>
             <tba1:CorrelateCDRs sap2010:WorkflowViewState.IdRef="CorrelateCDRs_1">
-              <tba1:CorrelateCDRs.DateTimeMargin>
-                <InArgument x:TypeArguments="x:TimeSpan">
-                  <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.DateTimeMargin</mca:CSharpValue>
-                </InArgument>
-              </tba1:CorrelateCDRs.DateTimeMargin>
               <tba1:CorrelateCDRs.InputRecordsQueue>
                 <InArgument x:TypeArguments="vq:MemoryQueue(vge:RecordBatch)">
                   <mca:CSharpValue x:TypeArguments="vq:MemoryQueue(vge:RecordBatch)">loadCDRsToCorrelateOutputQueue</mca:CSharpValue>
@@ -183,11 +180,11 @@
                   <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">correlateCDRsStatus</mca:CSharpReference>
                 </OutArgument>
               </tba1:CorrelateCDRs.Status>
-              <tba1:CorrelateCDRs.TimeOutMargin>
-                <InArgument x:TypeArguments="x:TimeSpan">
-                  <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.TimeOutMargin</mca:CSharpValue>
+              <tba1:CorrelateCDRs.TCAnalSettingsData>
+                <InArgument x:TypeArguments="te:TCAnalSettingsData">
+                  <mca:CSharpValue x:TypeArguments="te:TCAnalSettingsData">TCAnalSettingsData</mca:CSharpValue>
                 </InArgument>
-              </tba1:CorrelateCDRs.TimeOutMargin>
+              </tba1:CorrelateCDRs.TCAnalSettingsData>
               <tba1:CorrelateCDRs.UpdatedCDRCorrelationBatchInput>
                 <InOutArgument x:TypeArguments="vq:MemoryQueue(te:CDRCorrelationBatch)">
                   <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(te:CDRCorrelationBatch)">updateCorrelatedCDRsListInput</mca:CSharpReference>
@@ -199,23 +196,6 @@
                 </InOutArgument>
               </tba1:CorrelateCDRs.UpdatedMappedCDRsInput>
             </tba1:CorrelateCDRs>
-            <tba1:UpdateMappedCDRs sap2010:WorkflowViewState.IdRef="UpdateMappedCDRs_1">
-              <tba1:UpdateMappedCDRs.InputQueueIds>
-                <InArgument x:TypeArguments="vq:MemoryQueue(te:UpdatedMappedCDRs)">
-                  <mca:CSharpValue x:TypeArguments="vq:MemoryQueue(te:UpdatedMappedCDRs)">updateMappedCDRs</mca:CSharpValue>
-                </InArgument>
-              </tba1:UpdateMappedCDRs.InputQueueIds>
-              <tba1:UpdateMappedCDRs.PreviousActivityStatus>
-                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">correlateCDRsStatus</mca:CSharpValue>
-                </InArgument>
-              </tba1:UpdateMappedCDRs.PreviousActivityStatus>
-              <tba1:UpdateMappedCDRs.Status>
-                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">updateMappedCDRsStatus</mca:CSharpReference>
-                </OutArgument>
-              </tba1:UpdateMappedCDRs.Status>
-            </tba1:UpdateMappedCDRs>
             <tba1:InsertCorrelatedCDRs sap2010:WorkflowViewState.IdRef="InsertCorrelatedCDRs_1">
               <tba1:InsertCorrelatedCDRs.InputQueueToInsert>
                 <InOutArgument x:TypeArguments="vq:MemoryQueue(te:CDRCorrelationBatch)">
@@ -239,11 +219,11 @@
                   <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(te:CDRCaseBatch)">correlateCaseCDRsOutputQueue</mca:CSharpReference>
                 </InOutArgument>
               </tba1:PrepareCDRCases.InputQueue>
-              <tba1:PrepareCDRCases.PrepareCDRCasesToInsert>
-                <InOutArgument x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesToInsert)">
-                  <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesToInsert)">prepareCaseCDRsToInsert</mca:CSharpReference>
-                </InOutArgument>
-              </tba1:PrepareCDRCases.PrepareCDRCasesToInsert>
+              <tba1:PrepareCDRCases.PrepareCDRCasesOutput>
+                <OutArgument x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesOutput)">
+                  <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesOutput)">prepareCasesOutput</mca:CSharpReference>
+                </OutArgument>
+              </tba1:PrepareCDRCases.PrepareCDRCasesOutput>
               <tba1:PrepareCDRCases.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
                   <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">correlateCDRsStatus</mca:CSharpValue>
@@ -256,11 +236,11 @@
               </tba1:PrepareCDRCases.Status>
             </tba1:PrepareCDRCases>
             <tba1:InsertOrUpdateCases sap2010:WorkflowViewState.IdRef="InsertOrUpdateCases_2">
-              <tba1:InsertOrUpdateCases.InputQueueToInsert>
-                <InOutArgument x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesToInsert)">
-                  <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesToInsert)">prepareCaseCDRsToInsert</mca:CSharpReference>
+              <tba1:InsertOrUpdateCases.InputQueueToInsertOrUpdate>
+                <InOutArgument x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesOutput)">
+                  <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(tba1:PrepareCDRCasesOutput)">prepareCasesOutput</mca:CSharpReference>
                 </InOutArgument>
-              </tba1:InsertOrUpdateCases.InputQueueToInsert>
+              </tba1:InsertOrUpdateCases.InputQueueToInsertOrUpdate>
               <tba1:InsertOrUpdateCases.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
                   <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareCDRCasesStatus</mca:CSharpValue>
@@ -268,7 +248,7 @@
               </tba1:InsertOrUpdateCases.PreviousActivityStatus>
               <tba1:InsertOrUpdateCases.Status>
                 <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">insertOrUpdateCDRsStatus</mca:CSharpReference>
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">insertOrUpdateCaseCDRsStatus</mca:CSharpReference>
                 </OutArgument>
               </tba1:InsertOrUpdateCases.Status>
             </tba1:InsertOrUpdateCases>
@@ -280,7 +260,7 @@
               </tba1:UpdateCorrelatedCDRs.InsertedCorrelatedCDRs>
               <tba1:UpdateCorrelatedCDRs.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">insertOrUpdateCDRsStatus</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">insertOrUpdateCaseCDRsStatus</mca:CSharpValue>
                 </InArgument>
               </tba1:UpdateCorrelatedCDRs.PreviousActivityStatus>
               <tba1:UpdateCorrelatedCDRs.Status>
@@ -289,6 +269,23 @@
                 </OutArgument>
               </tba1:UpdateCorrelatedCDRs.Status>
             </tba1:UpdateCorrelatedCDRs>
+            <tba1:UpdateMappedCDRs sap2010:WorkflowViewState.IdRef="UpdateMappedCDRs_1">
+              <tba1:UpdateMappedCDRs.InputQueueIds>
+                <InArgument x:TypeArguments="vq:MemoryQueue(te:UpdatedMappedCDRs)">
+                  <mca:CSharpValue x:TypeArguments="vq:MemoryQueue(te:UpdatedMappedCDRs)">updateMappedCDRs</mca:CSharpValue>
+                </InArgument>
+              </tba1:UpdateMappedCDRs.InputQueueIds>
+              <tba1:UpdateMappedCDRs.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">insertOrUpdateCaseCDRsStatus</mca:CSharpValue>
+                </InArgument>
+              </tba1:UpdateMappedCDRs.PreviousActivityStatus>
+              <tba1:UpdateMappedCDRs.Status>
+                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">updateMappedCDRsStatus</mca:CSharpReference>
+                </OutArgument>
+              </tba1:UpdateMappedCDRs.Status>
+            </tba1:UpdateMappedCDRs>
           </Parallel>
           <vbw:SaveDefinitionObjectState ObjectKey="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveDefinitionObjectState_1">
             <vbw:SaveDefinitionObjectState.ObjectValue>
@@ -316,7 +313,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0xDOlxURlNcUmV0YWlsXENvZGVcVGVzdENhbGxBbmFseXNpcy5CUFxDRFJDb3JyZWxhdGlvbkFuZEFuYWx5c2lzUHJvY2Vzcy54YW1sO0IDwAIOAgEBTQVTIAMBiwVUBVokAwGABVsFdSsDAc0EdgW3AgoCAQ64AgW+AiACAQJQC1CFAQMBjQVNYE2DAQMBjAVXC1eAAQMBgQVeC16JAQMB9gRjC2N4AwHsBG0LbWoDAeIEcgtyYQMB2ARoC2hfAwHOBHkLeVkCAQ99CawCFAIBJa8CCbUCJAIBGbsCC7sChQECAQS4AmC4AoEBAgEDfgukAhYCATGlAgurAisCASayAg+yAokBAgEbrwJkrwKCAQIBGooBDZoBKAMBkwSbAQ3JASIDAecCygEN2gElAwGtAtsBDesBKQMB8wHsAQ2BAiQDAaYBggINkgIoAgFskwINowIpAgEyqAIRqAKTAQIBJ40BE40BiQEDAboElwETlwGAAQMBpwSSAROSAY4BAwGUBMYBE8YBhQEDAYAEwQETwQGUAQMB7QOyAROyAXgDAdoDrQETrQGPAQMBxwO3ARO3AXoDAbQDowETowGGAQMBoQO8ARO8AWYDAY4DqAETqAGMAQMB+wKeAROeAWcDAegCzQETzQF9AwHUAtIBE9IBcgMBwQLXARPXAX0DAa4C3gET3gGPAQMBmgLjARPjAXIDAYcC6AET6AGBAQMB9AH5ARP5AXIDAeAB7wET7wGMAQMBzQH+ARP+AXwDAboB9AET9AGUAQMBpwGFAhOFApQBAwGTAYoCE4oCdAMBgAGPAhOPAn8CAW2bAhObAncCAVmWAhOWApQBAgFGoAIToAKBAQIBMw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0xDOlxURlNcUmV0YWlsXENvZGVcVGVzdENhbGxBbmFseXNpcy5CUFxDRFJDb3JyZWxhdGlvbkFuZEFuYWx5c2lzUHJvY2Vzcy54YW1sOkIDvQIOAgEBTgVUIAMBuAVVBVskAwGsBVwFdisDAfQEdwW0AgoCAQ+1AgW7AiACAQJRC1GFAQMBugVOYE6DAQMBuQVYC1iAAQMBrQVzC3NwAwGhBV8LX4kBAwGWBWQLZHgDAYsFaQtpagMBgAVuC25hAwH1BHoLelkCARB+CakCFAIBKKwCCbICJAIBG7gCC7gChQECAQS1AmC1AoEBAgEDfwuhAhYCATWiAguoAisCASmvAg+vAokBAgEdrAJkrAKCAQIBHIwBDZwBKAMBtASdAQ3GASIDAYsDxwEN1wEpAwHLAtgBDe0BJAMB9gHuAQ3+ASgDAbYB/wENjwIpAgF2kAINoAIlAgE2pQIRpQKTAQIBKo8BE48BiQEDAd8EmQETmQGAAQMBygSUAROUAY4BAwG1BLkBE7kBcAMBnwTDARPDAYUBAwGKBL4BE74BlAEDAfUDrwETrwF4AwHgA6oBE6oBjwEDAcsDtAETtAF6AwG2A6ABE6ABhgEDAaEDpQETpQGMAQMBjAPKARPKAY8BAwH2As8BE88BcgMB4QLUARPUAYEBAwHMAuABE+ABjQEDAbYC5QET5QFyAwGhAtsBE9sBjAEDAYwC6gET6gF8AwH3AfEBE/EBjQEDAeEB9gET9gF0AwHMAfsBE/sBgwEDAbcBhwIThwJ7AwGhAYICE4IClAEDAYwBjAITjAKBAQIBd5MCE5MCfQIBYZgCE5gCewIBTJ0CE50CfQIBNw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -325,11 +322,11 @@
       <sap2010:ViewStateData Id="BuildCDRCorrelationFilterGroup_2" sap:VirtualizedContainerService.HintSize="2001,22" />
       <sap2010:ViewStateData Id="LoadCDRsToCorrelate_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CorrelateCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="UpdateMappedCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="InsertCorrelatedCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareCDRCases_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="InsertOrUpdateCases_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="UpdateCorrelatedCDRs_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="UpdateMappedCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1754,86" />
       <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="1754,22" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1776,272">
