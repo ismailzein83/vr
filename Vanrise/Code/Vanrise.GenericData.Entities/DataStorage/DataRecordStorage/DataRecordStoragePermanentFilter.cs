@@ -24,6 +24,17 @@ namespace Vanrise.GenericData.Entities
         public RecordFilterGroup RecordFilterGroup { get; set; }
 
     }
+    public class ConditionFilterDataRecordStoragePermanentFilter : DataRecordStoragePermanentFilterSettings
+    {
+        public override Guid ConfigId => new Guid("1AE4EAB5-C93A-48C3-ADA6-FDDCFA7F1027");
+        public override RecordFilterGroup ConvertToRecordFilter(IDataRecordStoragePermanentFilterContext context)
+        {
+            return null;
+        }
+        public RecordQueryLogicalOperator LogicalOperator { get; set; }
+        public List<DataRecordStoragePermanentFilterSettings> Filters { get; set; }
+
+    }
     public class DataRecordStoragePermanentFilterSettingsConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "VR_GenericData_PermanentFilterSettings";
