@@ -72,6 +72,13 @@
   <ItemGroup>
     <Compile Include="AnalyticMeasureInfo.cs" />
     <Compile Include="IRouteRuleAreSuppliersIncludedContext.cs" />
+    <Compile Include="PartialRoute\ModifiedCustomerRouteOptionDetail.cs" />
+    <Compile Include="PartialRoute\ModifiedCustomerRoutesPreviewDetail.cs" />
+    <Compile Include="PartialRoute\ModifiedCustomerRoutesPreviewQuery.cs" />
+    <Compile Include="PartialRoute\ModifiedCustomerRoutesPreview.cs" />
+    <Compile Include="PartialRoute\ModifiedCustomerRoutePreviewData.cs" />
+    <Compile Include="PartialRoute\PartialCustomerRoutesPreviewBatch.cs" />
+    <Compile Include="PartialRoute\PartialRoutingApprovalType.cs" />
     <Compile Include="RouteRuleApplyOptionsPercentageContext.cs" />
     <Compile Include="BusinessManagers\IRoutingDatabaseManager.cs" />
     <Compile Include="BusinessManagers\ISwitchSyncDataManager.cs" />
@@ -97,6 +104,7 @@
     <Compile Include="RouteRuleSettings\FixedRouteOptionSettings.cs" />
     <Compile Include="RouteRuleSettings\IRouteOptionSettings.cs" />
     <Compile Include="Routes\CustomerRouteOptionDetail.cs" />
+    <Compile Include="Routes\ICompleteSupplierData.cs" />
     <Compile Include="RoutingExcludedDestinations\CodeRange.cs" />
     <Compile Include="RoutingExcludedDestinations\RoutingExcludedDestinationData.cs" />
     <Compile Include="RoutingExcludedDestinations\RoutingExcludedDestinations.cs" />

@@ -11,6 +11,9 @@
  xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
  xmlns:twre="clr-namespace:TOne.WhS.Routing.Entities;assembly=TOne.WhS.Routing.Entities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
+ xmlns:vbmb="clr-namespace:Vanrise.BusinessProcess.MainExtensions.BPTaskTypes;assembly=Vanrise.BusinessProcess.MainExtensions"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -32,6 +35,9 @@
       <x:String>TOne.WhS.Routing.Entities</x:String>
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>TOne.WhS.Routing.Business</x:String>
+      <x:String>Vanrise.BusinessProcess.MainExtensions.BPTaskTypes</x:String>
+      <x:String>Vanrise.BusinessProcess.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -52,6 +58,7 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Common</AssemblyReference>
@@ -69,6 +76,7 @@
       <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
@@ -86,6 +94,9 @@
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildCustomerRoutesStatus" />
       <Variable x:TypeArguments="x:Boolean" Name="HasModifiedCustomerRoute" />
       <Variable x:TypeArguments="x:Int32" Name="currentVersionNumber" />
+      <Variable x:TypeArguments="vq:BaseQueue(twre:PartialCustomerRoutesPreviewBatch)" Name="CustomerRoutesPreviewQueue" />
+      <Variable x:TypeArguments="x:Int64" Name="TotalChangedRoutes" />
+      <Variable x:TypeArguments="x:Boolean" Name="needsApproval" />
     </Sequence.Variables>
     <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
@@ -134,7 +145,43 @@
           </InArgument>
         </twrba:LoadPartialCustomerZoneDetails.RoutingDatabase>
       </twrba:LoadPartialCustomerZoneDetails>
+      <twrba:InitializeModifiedCustomerRoutesPreviewTable Status="{x:Null}">
+        <twrba:InitializeModifiedCustomerRoutesPreviewTable.RoutingDatabase>
+          <InArgument x:TypeArguments="twre:RoutingDatabase">
+            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+          </InArgument>
+        </twrba:InitializeModifiedCustomerRoutesPreviewTable.RoutingDatabase>
+        <sap2010:WorkflowViewState.IdRef>InitializeModifiedCustomerRoutesPreviewTable_1</sap2010:WorkflowViewState.IdRef>
+      </twrba:InitializeModifiedCustomerRoutesPreviewTable>
     </Parallel>
+    <twrba:GetPartialRouteBuildParameters sap2010:WorkflowViewState.IdRef="GetPartialRouteBuildParameters_1">
+      <twrba:GetPartialRouteBuildParameters.NeedsApproval>
+        <OutArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpReference x:TypeArguments="x:Boolean">needsApproval</mca:CSharpReference>
+        </OutArgument>
+      </twrba:GetPartialRouteBuildParameters.NeedsApproval>
+    </twrba:GetPartialRouteBuildParameters>
+    <If sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">needsApproval</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+          <Assign.To>
+            <OutArgument x:TypeArguments="vq:BaseQueue(twre:PartialCustomerRoutesPreviewBatch)">
+              <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:PartialCustomerRoutesPreviewBatch)">CustomerRoutesPreviewQueue</mca:CSharpReference>
+            </OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="vq:MemoryQueue(twre:PartialCustomerRoutesPreviewBatch)">
+              <mca:CSharpValue x:TypeArguments="vq:MemoryQueue(twre:PartialCustomerRoutesPreviewBatch)">new MemoryQueue&lt;PartialCustomerRoutesPreviewBatch&gt;()</mca:CSharpValue>
+            </InArgument>
+          </Assign.Value>
+        </Assign>
+      </If.Then>
+    </If>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_3">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteData))" Name="CustomerRoutesDataUpdateQueue">
@@ -197,11 +244,21 @@
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteData))">CustomerRoutesDataUpdateQueue</mca:CSharpValue>
           </InArgument>
         </twrba:CheckModifiedCustomerRoutes.CustomerRoutesDataQueueOutput>
+        <twrba:CheckModifiedCustomerRoutes.CustomerRoutesPreviewBatchQueueInput>
+          <InArgument x:TypeArguments="vq:BaseQueue(twre:PartialCustomerRoutesPreviewBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:PartialCustomerRoutesPreviewBatch)">CustomerRoutesPreviewQueue</mca:CSharpValue>
+          </InArgument>
+        </twrba:CheckModifiedCustomerRoutes.CustomerRoutesPreviewBatchQueueInput>
         <twrba:CheckModifiedCustomerRoutes.HasModifiedCustomerRoute>
           <OutArgument x:TypeArguments="x:Boolean">
             <mca:CSharpReference x:TypeArguments="x:Boolean">HasModifiedCustomerRoute</mca:CSharpReference>
           </OutArgument>
         </twrba:CheckModifiedCustomerRoutes.HasModifiedCustomerRoute>
+        <twrba:CheckModifiedCustomerRoutes.NeedsApproval>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">needsApproval</mca:CSharpValue>
+          </InArgument>
+        </twrba:CheckModifiedCustomerRoutes.NeedsApproval>
         <twrba:CheckModifiedCustomerRoutes.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildCustomerRoutesStatus</mca:CSharpValue>
@@ -212,24 +269,190 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">ModifiedCustomerRouteDataStatus</mca:CSharpReference>
           </OutArgument>
         </twrba:CheckModifiedCustomerRoutes.Status>
+        <twrba:CheckModifiedCustomerRoutes.TotalChangedRoutes>
+          <OutArgument x:TypeArguments="x:Int64">
+            <mca:CSharpReference x:TypeArguments="x:Int64">TotalChangedRoutes</mca:CSharpReference>
+          </OutArgument>
+        </twrba:CheckModifiedCustomerRoutes.TotalChangedRoutes>
       </twrba:CheckModifiedCustomerRoutes>
-      <twrba:ApplyAffectedCustomerRoutesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyAffectedCustomerRoutesToDB_1">
-        <twrba:ApplyAffectedCustomerRoutesToDB.CustomerRoutesDataQueueInput>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteData))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteData))">CustomerRoutesDataUpdateQueue</mca:CSharpValue>
+      <If sap2010:WorkflowViewState.IdRef="If_3">
+        <If.Condition>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">needsApproval</mca:CSharpValue>
           </InArgument>
-        </twrba:ApplyAffectedCustomerRoutesToDB.CustomerRoutesDataQueueInput>
-        <twrba:ApplyAffectedCustomerRoutesToDB.PreviousActivityStatus>
-          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ModifiedCustomerRouteDataStatus</mca:CSharpValue>
-          </InArgument>
-        </twrba:ApplyAffectedCustomerRoutesToDB.PreviousActivityStatus>
-        <twrba:ApplyAffectedCustomerRoutesToDB.RoutingDatabase>
-          <InArgument x:TypeArguments="twre:RoutingDatabase">
-            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
-          </InArgument>
-        </twrba:ApplyAffectedCustomerRoutesToDB.RoutingDatabase>
-      </twrba:ApplyAffectedCustomerRoutesToDB>
+        </If.Condition>
+        <If.Then>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="vbmb:BPGenericTaskData" Name="TaskData" />
+              <Variable x:TypeArguments="x:Int64" Name="Decision" />
+              <Variable x:TypeArguments="vbe:BPTask" Name="AssignTask" />
+            </Sequence.Variables>
+            <Parallel DisplayName="Parallel_BCP" sap2010:WorkflowViewState.IdRef="Parallel_5">
+              <Parallel.Variables>
+                <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PrepareModifiedCustomerRoutesPreviewStatus" />
+                <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedCustomerRoutesPreviewQueue" />
+              </Parallel.Variables>
+              <twrba:PrepareModifiedCustomerRoutesPreviewForApply sap2010:WorkflowViewState.IdRef="PrepareModifiedCustomerRoutesPreviewForApply_1">
+                <twrba:PrepareModifiedCustomerRoutesPreviewForApply.InputQueue>
+                  <InArgument x:TypeArguments="vq:BaseQueue(twre:PartialCustomerRoutesPreviewBatch)">
+                    <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:PartialCustomerRoutesPreviewBatch)">CustomerRoutesPreviewQueue</mca:CSharpValue>
+                  </InArgument>
+                </twrba:PrepareModifiedCustomerRoutesPreviewForApply.InputQueue>
+                <twrba:PrepareModifiedCustomerRoutesPreviewForApply.OutputQueue>
+                  <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                    <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedCustomerRoutesPreviewQueue</mca:CSharpReference>
+                  </InOutArgument>
+                </twrba:PrepareModifiedCustomerRoutesPreviewForApply.OutputQueue>
+                <twrba:PrepareModifiedCustomerRoutesPreviewForApply.PreviousActivityStatus>
+                  <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                    <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ModifiedCustomerRouteDataStatus</mca:CSharpValue>
+                  </InArgument>
+                </twrba:PrepareModifiedCustomerRoutesPreviewForApply.PreviousActivityStatus>
+                <twrba:PrepareModifiedCustomerRoutesPreviewForApply.Status>
+                  <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                    <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PrepareModifiedCustomerRoutesPreviewStatus</mca:CSharpReference>
+                  </OutArgument>
+                </twrba:PrepareModifiedCustomerRoutesPreviewForApply.Status>
+              </twrba:PrepareModifiedCustomerRoutesPreviewForApply>
+              <twrba:ApplyModifiedCustomerRoutesPreviewToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyModifiedCustomerRoutesPreviewToDB_2">
+                <twrba:ApplyModifiedCustomerRoutesPreviewToDB.InputQueue>
+                  <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                    <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedCustomerRoutesPreviewQueue</mca:CSharpValue>
+                  </InArgument>
+                </twrba:ApplyModifiedCustomerRoutesPreviewToDB.InputQueue>
+                <twrba:ApplyModifiedCustomerRoutesPreviewToDB.PreviousActivityStatus>
+                  <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                    <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PrepareModifiedCustomerRoutesPreviewStatus</mca:CSharpValue>
+                  </InArgument>
+                </twrba:ApplyModifiedCustomerRoutesPreviewToDB.PreviousActivityStatus>
+                <twrba:ApplyModifiedCustomerRoutesPreviewToDB.RoutingDatabase>
+                  <InArgument x:TypeArguments="twre:RoutingDatabase">
+                    <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+                  </InArgument>
+                </twrba:ApplyModifiedCustomerRoutesPreviewToDB.RoutingDatabase>
+              </twrba:ApplyModifiedCustomerRoutesPreviewToDB>
+            </Parallel>
+            <If sap2010:WorkflowViewState.IdRef="If_5">
+              <If.Condition>
+                <InArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">TotalChangedRoutes &gt; 0</mca:CSharpValue>
+                </InArgument>
+              </If.Condition>
+              <If.Then>
+                <Sequence DisplayName="Task_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                  <Assign sap2010:WorkflowViewState.IdRef="Assign_6">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="vbmb:BPGenericTaskData">
+                        <mca:CSharpReference x:TypeArguments="vbmb:BPGenericTaskData">TaskData</mca:CSharpReference>
+                      </OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="vbmb:BPGenericTaskData">
+                        <mca:CSharpValue x:TypeArguments="vbmb:BPGenericTaskData" xml:space="preserve">new Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.BPGenericTaskData()
+            {
+                TaskTypeId = new Guid("303B42FA-B816-4E3C-8773-9D48C87D3F99"),
+                FieldValues= new Dictionary&lt;string, dynamic&gt;() {
+                    {"TotalChangedRoutes",TotalChangedRoutes},
+                    {"RoutingDatabaseId",RoutingDatabase.ID} }
+            }</mca:CSharpValue>
+                      </InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <vbw:AssignTask x:TypeArguments="vbmb:BPGenericTaskExecutionInformation" TaskExecutionInformation="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_1" TaskTitle="Approving Partial Routes">
+                    <vbw:AssignTask.AssignedTo>
+                      <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+                        <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee" xml:space="preserve">new Vanrise.BusinessProcess.MainExtensions.FixedUsersBPTaskAssignee() {
+UserIds= new ConfigManager().GetApprovalTaskUsersIds()
+            }</mca:CSharpValue>
+                      </InArgument>
+                    </vbw:AssignTask.AssignedTo>
+                    <vbw:AssignTask.ExecutedTask>
+                      <OutArgument x:TypeArguments="vbe:BPTask">
+                        <mca:CSharpReference x:TypeArguments="vbe:BPTask">AssignTask</mca:CSharpReference>
+                      </OutArgument>
+                    </vbw:AssignTask.ExecutedTask>
+                    <vbw:AssignTask.TaskData>
+                      <InArgument x:TypeArguments="vbe:BPTaskData">
+                        <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">TaskData</mca:CSharpValue>
+                      </InArgument>
+                    </vbw:AssignTask.TaskData>
+                  </vbw:AssignTask>
+                  <Assign sap2010:WorkflowViewState.IdRef="Assign_7">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:Int64">
+                        <mca:CSharpReference x:TypeArguments="x:Int64">Decision</mca:CSharpReference>
+                      </OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:Int64">
+                        <mca:CSharpValue x:TypeArguments="x:Int64">(AssignTask.TaskData as BPGenericTaskData).GetFieldValue&lt;long&gt;("Decision")</mca:CSharpValue>
+                      </InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <Switch x:TypeArguments="twre:PartialRoutingApprovalType" sap2010:WorkflowViewState.IdRef="Switch`1_1">
+                    <Switch.Expression>
+                      <InArgument x:TypeArguments="twre:PartialRoutingApprovalType">
+                        <mca:CSharpValue x:TypeArguments="twre:PartialRoutingApprovalType">(PartialRoutingApprovalType)Decision</mca:CSharpValue>
+                      </InArgument>
+                    </Switch.Expression>
+                    <Sequence x:Key="ApproveAll" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                      <twrba:ApplyAffectedCustomerRoutesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyAffectedCustomerRoutesToDB_3">
+                        <twrba:ApplyAffectedCustomerRoutesToDB.CustomerRoutesDataQueueInput>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteData))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteData))">CustomerRoutesDataUpdateQueue</mca:CSharpValue>
+                          </InArgument>
+                        </twrba:ApplyAffectedCustomerRoutesToDB.CustomerRoutesDataQueueInput>
+                        <twrba:ApplyAffectedCustomerRoutesToDB.PreviousActivityStatus>
+                          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ModifiedCustomerRouteDataStatus</mca:CSharpValue>
+                          </InArgument>
+                        </twrba:ApplyAffectedCustomerRoutesToDB.PreviousActivityStatus>
+                        <twrba:ApplyAffectedCustomerRoutesToDB.RoutingDatabase>
+                          <InArgument x:TypeArguments="twre:RoutingDatabase">
+                            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+                          </InArgument>
+                        </twrba:ApplyAffectedCustomerRoutesToDB.RoutingDatabase>
+                      </twrba:ApplyAffectedCustomerRoutesToDB>
+                    </Sequence>
+                    <Sequence x:Key="RejectAll" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                      <Assign sap2010:WorkflowViewState.IdRef="Assign_8">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Boolean">
+                            <mca:CSharpReference x:TypeArguments="x:Boolean">HasModifiedCustomerRoute</mca:CSharpReference>
+                          </OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                    </Sequence>
+                  </Switch>
+                </Sequence>
+              </If.Then>
+            </If>
+          </Sequence>
+        </If.Then>
+        <If.Else>
+          <twrba:ApplyAffectedCustomerRoutesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyAffectedCustomerRoutesToDB_1">
+            <twrba:ApplyAffectedCustomerRoutesToDB.CustomerRoutesDataQueueInput>
+              <InArgument x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteData))">
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteData))">CustomerRoutesDataUpdateQueue</mca:CSharpValue>
+              </InArgument>
+            </twrba:ApplyAffectedCustomerRoutesToDB.CustomerRoutesDataQueueInput>
+            <twrba:ApplyAffectedCustomerRoutesToDB.PreviousActivityStatus>
+              <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ModifiedCustomerRouteDataStatus</mca:CSharpValue>
+              </InArgument>
+            </twrba:ApplyAffectedCustomerRoutesToDB.PreviousActivityStatus>
+            <twrba:ApplyAffectedCustomerRoutesToDB.RoutingDatabase>
+              <InArgument x:TypeArguments="twre:RoutingDatabase">
+                <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+              </InArgument>
+            </twrba:ApplyAffectedCustomerRoutesToDB.RoutingDatabase>
+          </twrba:ApplyAffectedCustomerRoutesToDB>
+        </If.Else>
+      </If>
     </Parallel>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
@@ -266,29 +489,72 @@
         </Assign>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEFwcGx5QWZmZWN0ZWRSdWxlcy54YW1sK00DjgIOAgEBUwtToQECAQJaBWUOAwGKA2YFiQEQAwG/AooBBekBEAIBTeoBBYwCCgIBDmILYmEDAZcDXQtdZAMBiwNnB3cmAwHlAngHiAEuAwHAAo4BDY4BpwECAU6TAQe8ASoDAc4BvQEH1wErAwGHAdgBB+gBLwIBXO0BC+0BYgIBD/EBCfwBEgIBNP8BCYoCEgIBG2oNankDAf4Cbw1vggEDAfICdA10ZgMB5gKAAQ2AAYABAwHZAnsNe3kDAc0ChQENhQFmAwHBApsBDZsBeAMBsQKWAQ2WAXkDAaMCqgENqgF6AwGVAqABDaABWgMBhwKvAQ2vAWYDAfkBtAENtAF6AwHrAaUBDaUBiwEDAd0BuQENuQFeAwHPAc8BDc8BcgMBwAHKAQ3KAWwDAbIB1AEN1AGAAQMBpAHFAQ3FAY4BAwGWAcABDcABgwEDAYgB4AEN4AF4AgF52wEN2wGOAQIBa+UBDeUBZgIBXfkBD/kBYAIBQfQBD/QBaAIBNYcCD4cCYQIBKIICD4ICaAIBHA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEFwcGx5QWZmZWN0ZWRSdWxlcy54YW1sXVUD7QMOAgEBWwtboQECAQJlBXAOAwGjCHEFnAEQAwG2B50BBaMBLAMBpgekAQW4AQoDAfcGuQEFyAMQAgFfyQMF6wMKAgERbQttYQMBswhoC2hkAwGkCHIHggEmAwH1B4MBB5MBLgMBxweUAQebATwDAbcHoAELoAFfAwGnB6cBC6cBVwMB+AarAQm2ARIDAYcHvQENvQGnAQIBYMIBB+sBKgMB7gXsAQeVAisDAeUElgIHxwMMAgFxzAMLzANiAgES0AMJ2wMSAgFA3gMJ6QMSAgEhdQ11eQMBlAh6DXqCAQMBhQh/DX9mAwH2B4sBDYsBgAEDAeYHhgENhgF5AwHXB5ABDZABZgMByAeXAQ2XAWYDAbgHswEPswG1AQMBlweuAQ+uAZsBAwGIB8oBDcoBeAMB5gbFAQ3FAXkDAdUG2QEN2QF6AwHEBs8BDc8BWgMBswbeAQ3eAWYDAaIG4wEN4wF6AwGRBtQBDdQBiwEDAYAG6AEN6AFeAwHvBZICDZICZAMB3QWIAg2IAnIDAcwF/gEN/gFsAwG7BY0CDY0CgAEDAaoFgwINgwJZAwGZBfkBDfkBkQEDAYgF9AEN9AGOAQMB9wTvAQ3vAYMBAwHmBJkCDZkCWQIBcp0CC7IDFgMBtwG1AwvFAzMDAYMB2AMP2ANgAgFQ0wMP0wNoAgFB5gMP5gNhAgEx4QMP4QNoAgEiowINzwIYAwHIA9ACDbEDEgMBuAG9AxG9A3wDAaYBuAMRuAOSAQMBlQHCAxHCA2oDAYQBqAIPvQJEAwGMBL4CD84CPgMByQPTAhPTAmsDAbkB1wIRrwMcAwHNAbUCFbUCgAEDAc8EqwIVqwKZAQMBuQS6AhW6ApMBAwGjBLACFbACiwEDAY0ExgIVxgKLAQMB9gPBAhXBAoMBAwHgA8sCFcsCbgMBygPYAhPpAhwDAZ8D6gIT/AIkAwHhAv0CE4gDHAMBuAKJAxOuAxwDAc4B4AIZ5gIgAwG0A9sCGdsCdQMBoAP5Ahn5AmUDAYsD6gK7AeoC1QEDAYoD7QIZ7wIgAwH2AvQCGfQCawMB4gKFAxmFA6YBAwHNAoADGYADZgMBuQKMAxmMA5IBAwHPAY8DFaEDIAMB+gGiAxWtAyADAeMBkAMXoAM/AwH7AaMDF6wDIAMB5AGYAx2YA4gBAwGkApMDHZMDngEDAZACnQMdnQN2AwH8AaoDQ6oDSAMB+QGmAx2mA3wDAeUB</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="794,62" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1464,62" />
       <sap2010:ViewStateData Id="LoadPartialCodeMatches_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="LoadPartialCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="BuildPartialCustomerRoutes_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="CheckModifiedCustomerRoutes_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ApplyAffectedCustomerRoutesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="794,212" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,690">
+      <sap2010:ViewStateData Id="InitializeModifiedCustomerRoutesPreviewTable_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1464,86" />
+      <sap2010:ViewStateData Id="GetPartialRouteBuildParameters_1" sap:VirtualizedContainerService.HintSize="1464,22" />
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1464,212" />
+      <sap2010:ViewStateData Id="BuildPartialCustomerRoutes_1" sap:VirtualizedContainerService.HintSize="200,1102" />
+      <sap2010:ViewStateData Id="CheckModifiedCustomerRoutes_1" sap:VirtualizedContainerService.HintSize="200,1102" />
+      <sap2010:ViewStateData Id="PrepareModifiedCustomerRoutesPreviewForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyModifiedCustomerRoutesPreviewToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_5" sap:VirtualizedContainerService.HintSize="623,86" />
+      <sap2010:ViewStateData Id="Assign_6" sap:VirtualizedContainerService.HintSize="476,62" />
+      <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="476,22" />
+      <sap2010:ViewStateData Id="Assign_7" sap:VirtualizedContainerService.HintSize="476,62" />
+      <sap2010:ViewStateData Id="ApplyAffectedCustomerRoutesToDB_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap:VirtualizedContainerService.HintSize="856,770" />
+      <sap2010:ViewStateData Id="Assign_8" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="264,185">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Switch`1_1" sap:VirtualizedContainerService.HintSize="476,162" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="498,552">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="623,702" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="645,952">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ApplyAffectedCustomerRoutesToDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="870,1102" />
+      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1464,1148" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1464,212" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1486,2066">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap:VirtualizedContainerService.HintSize="1526,2146" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class CustomerRoute : BaseRoute
+    public class CustomerRoute : BaseRoute, ICompleteSupplierDataRoute
     {
         public int CustomerId { get; set; }
 
@@ -15,6 +15,11 @@ namespace TOne.WhS.Routing.Entities
         public string SaleZoneName { get; set; }
 
         public int VersionNumber { get; set; }
+
+        public List<List<RouteOption>> GetAvailableRouteOptionsList()
+        {
+            return new List<List<RouteOption>>() { Options };
+        }
     }
 
     public class CustomerRouteDefinition

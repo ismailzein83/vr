@@ -50,4 +50,17 @@
         </vr-columns>
     </vr-row>
 </vr-section>
+<vr-section header="Partial Route">
+    <vr-row>
+        <vr-columns colnum="4">
+            <vr-switch value="ctrl.needsApproval" label="Needs Approval"></vr-switch>
+        </vr-columns>
+    </vr-row>
+</vr-section>
+<vr-section header="Users Role">
+    <vr-row>
+        <vr-sec-user-selector normal-col-num="4" on-ready="onAdmindUsersSelectorReady" customlabel="Admin Users" ismultipleselection hideSelectAll></vr-sec-user-selector>
+        <vr-sec-user-selector normal-col-num="4" on-ready="onApprovalTaskUsersSelectorReady" customlabel="Approval Task Users" isrequired="true" ismultipleselection hideSelectAll></vr-sec-user-selector>
+    </vr-row>
+</vr-section>
 

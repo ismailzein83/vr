@@ -100,7 +100,7 @@ namespace TOne.WhS.Routing.Data.SQL
             }
 
             queryBuilder.Replace("#FILTER#", string.Format("Where (@Code is null or cr.Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) {0} {1} {2} {3}", customerIdsFilter, saleZoneIdsFilter, sellingNumberPlanId, supplierIdsFilter));
-         
+
             IEnumerable<Entities.CustomerRoute> customerRoutes = GetItemsText(queryBuilder.ToString(), CustomerRouteMapper, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@Code", !string.IsNullOrEmpty(input.Query.Code) ? string.Format("{0}%", input.Query.Code) : (object)DBNull.Value));
@@ -280,25 +280,33 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Private Methods
 
-        private void CompleteSupplierData(IEnumerable<CustomerRoute> customerRoutes)
+        internal void CompleteSupplierData(IEnumerable<ICompleteSupplierDataRoute> routes)
         {
-            if (customerRoutes == null || customerRoutes.Count() == 0)
+            if (routes == null || routes.Count() == 0)
                 return;
 
             HashSet<long> supplierZoneIds = new HashSet<long>();
-            foreach (CustomerRoute customerRoute in customerRoutes)
+            foreach (var route in routes)
             {
-                if (customerRoute.Options == null || customerRoute.Options.Count == 0)
+                var routeOptionsList = route.GetAvailableRouteOptionsList();
+
+                if (routeOptionsList == null || routeOptionsList.Count == 0)
                     continue;
 
-                foreach (RouteOption routeOption in customerRoute.Options)
+                foreach (var routeOptions in routeOptionsList)
                 {
-                    supplierZoneIds.Add(routeOption.SupplierZoneId);
-                    if (routeOption.Backups == null || routeOption.Backups.Count == 0)
+                    if (routeOptions == null || routeOptions.Count == 0)
                         continue;
 
-                    foreach (RouteBackupOption backup in routeOption.Backups)
-                        supplierZoneIds.Add(backup.SupplierZoneId);
+                    foreach (RouteOption routeOption in routeOptions)
+                    {
+                        supplierZoneIds.Add(routeOption.SupplierZoneId);
+                        if (routeOption.Backups == null || routeOption.Backups.Count == 0)
+                            continue;
+
+                        foreach (RouteBackupOption backup in routeOption.Backups)
+                            supplierZoneIds.Add(backup.SupplierZoneId);
+                    }
                 }
             }
 
@@ -309,27 +317,35 @@ namespace TOne.WhS.Routing.Data.SQL
 
                 Dictionary<long, SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsDataManager.GetFilteredSupplierZoneDetailsBySupplierZone(supplierZoneIds).ToDictionary(itm => itm.SupplierZoneId, itm => itm);
 
-                foreach (CustomerRoute customerRoute in customerRoutes)
+                foreach (var route in routes)
                 {
-                    if (customerRoute.Options == null || customerRoute.Options.Count == 0)
+                    var routeOptionsList = route.GetAvailableRouteOptionsList();
+
+                    if (routeOptionsList == null || routeOptionsList.Count == 0)
                         continue;
 
-                    foreach (RouteOption routeOption in customerRoute.Options)
+                    foreach (var routeOptions in routeOptionsList)
                     {
-                        SupplierZoneDetail supplierZoneDetail = supplierZoneDetails.GetRecord(routeOption.SupplierZoneId);
-                        routeOption.SupplierId = supplierZoneDetail.SupplierId;
-                        routeOption.SupplierRate = supplierZoneDetail.EffectiveRateValue;
-                        routeOption.ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds;
-
-                        if (routeOption.Backups == null || routeOption.Backups.Count == 0)
+                        if (routeOptions == null || routeOptions.Count == 0)
                             continue;
 
-                        foreach (RouteBackupOption backup in routeOption.Backups)
+                        foreach (RouteOption routeOption in routeOptions)
                         {
-                            SupplierZoneDetail backupSupplierZoneDetail = supplierZoneDetails.GetRecord(backup.SupplierZoneId);
-                            backup.SupplierId = backupSupplierZoneDetail.SupplierId;
-                            backup.SupplierRate = backupSupplierZoneDetail.EffectiveRateValue;
-                            backup.ExactSupplierServiceIds = backupSupplierZoneDetail.ExactSupplierServiceIds;
+                            SupplierZoneDetail supplierZoneDetail = supplierZoneDetails.GetRecord(routeOption.SupplierZoneId);
+                            routeOption.SupplierId = supplierZoneDetail.SupplierId;
+                            routeOption.SupplierRate = supplierZoneDetail.EffectiveRateValue;
+                            routeOption.ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds;
+
+                            if (routeOption.Backups == null || routeOption.Backups.Count == 0)
+                                continue;
+
+                            foreach (RouteBackupOption backup in routeOption.Backups)
+                            {
+                                SupplierZoneDetail backupSupplierZoneDetail = supplierZoneDetails.GetRecord(backup.SupplierZoneId);
+                                backup.SupplierId = backupSupplierZoneDetail.SupplierId;
+                                backup.SupplierRate = backupSupplierZoneDetail.EffectiveRateValue;
+                                backup.ExactSupplierServiceIds = backupSupplierZoneDetail.ExactSupplierServiceIds;
+                            }
                         }
                     }
                 }

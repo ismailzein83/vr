@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -9,6 +10,25 @@ namespace TOne.WhS.Routing.Entities
         public ProductRouteBuildConfiguration ProductRoute { get; set; }
 
         public IncludedRulesConfiguration IncludedRules { get; set; }
+
+        PartialRouteBuildConfiguration _partialRoute { get; set; }
+
+        public PartialRouteBuildConfiguration PartialRoute
+        {
+            get
+            {
+                if (_partialRoute == null)
+                    _partialRoute = new PartialRouteBuildConfiguration() { NeedsApproval = false };
+
+                return _partialRoute;
+            }
+            set
+            {
+                _partialRoute = value;
+            }
+        }
+
+        public UsersRoleConfiguration UsersRole { get; set; }
     }
 
     public class CustomerRouteBuildConfiguration
@@ -33,6 +53,17 @@ namespace TOne.WhS.Routing.Entities
         public bool GenerateCostAnalysisByCustomer { get; set; }
 
         public bool IncludeBlockedZonesInCalculation { get; set; }
+    }
+
+    public class UsersRoleConfiguration
+    {
+        public List<int> AdminUsersIds { get; set; }
+        public List<int> ApprovalTaskUsersIds { get; set; }
+    }
+
+    public class PartialRouteBuildConfiguration
+    {
+        public bool NeedsApproval { get; set; }
     }
 
     public class IncludedRulesConfiguration

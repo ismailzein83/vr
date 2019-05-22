@@ -110,6 +110,7 @@
     <Compile Include="CodeMatchBuilder.cs" />
     <Compile Include="CodeZoneMatchManager.cs" />
     <Compile Include="CustomerZoneDetailsManager.cs" />
+    <Compile Include="ModifiedCustomerRoutePreviewManager.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationDefinition\QualityConfigurationDefinitionManager.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationDefinition\TrafficStatisticQCDefinitionSettings.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationRuntime\TrafficStatisticQualityConfigurationManager.cs" />

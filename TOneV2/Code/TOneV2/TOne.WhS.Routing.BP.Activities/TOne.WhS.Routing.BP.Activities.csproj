@@ -104,6 +104,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PartialRoute\ApplyModifiedCustomerRoutesPreviewToDB.cs" />
     <Compile Include="ApplyZoneCodeGroupToDB.cs" />
     <Compile Include="ApplyCodeMatchesToDB.cs" />
     <Compile Include="ApplyCodesToCodeSaleZoneTable.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="GenerateZoneCodeGroup.cs" />
     <Compile Include="GetCustomerRoutingQualityData.cs" />
     <Compile Include="InitializeRouteProcess.cs" />
+    <Compile Include="PartialRoute\GetPartialRouteBuildParameters.cs" />
     <Compile Include="PartialRoute\CheckModifiedCustomerRoutes.cs" />
     <Compile Include="PartialRoute\BuildPartialCustomerRoutes.cs" />
     <Compile Include="BuildCustomerRoutes.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="PartialRoute\GetAffectedRoutes.cs" />
     <Compile Include="PartialRoute\ApplyPartialRouteInfo.cs" />
     <Compile Include="PartialRoute\GetPartialRouteInfo.cs" />
+    <Compile Include="PartialRoute\InitializeModifiedCustomerRoutesPreviewTable.cs" />
     <Compile Include="PartialRoute\LoadPartialCustomerZoneDetails.cs" />
     <Compile Include="PartialRoute\LoadPartialCodeMatches.cs" />
     <Compile Include="PartialRoute\LoadAffectedRules.cs" />
@@ -165,6 +168,7 @@
     <Compile Include="PrepareCustomerRouteQualityDataForDBApply.cs" />
     <Compile Include="PrepareCustomerRoutesForApply.cs" />
     <Compile Include="PrepareCustomerZoneDetailForDBApply.cs" />
+    <Compile Include="PartialRoute\PrepareModifiedCustomerRoutesPreviewForApply.cs" />
     <Compile Include="PrepareZoneCodeGroupForApply.cs" />
     <Compile Include="PrepareProductRoutesForApply.cs" />
     <Compile Include="PrepareRPQualityDataForDBApply.cs" />

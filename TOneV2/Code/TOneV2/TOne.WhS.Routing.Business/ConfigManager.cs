@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Analytic.Business;
-using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 
@@ -197,6 +195,20 @@ namespace TOne.WhS.Routing.Business
             return GetProductRouteBuildConfiguration().IncludeBlockedZonesInCalculation;
         }
 
+        public bool GetPartialRouteBuildNeedsApproval()
+        {
+            return PartialRouteBuildConfiguration().NeedsApproval;
+        }
+
+        public List<int> GetAdminUsersIds()
+        {
+            return GetUsersRoleConfiguration().AdminUsersIds;
+        }
+
+        public List<int> GetApprovalTaskUsersIds()
+        {
+            return GetUsersRoleConfiguration().ApprovalTaskUsersIds;
+        }
         #endregion
 
         #region Private Methods
@@ -281,6 +293,26 @@ namespace TOne.WhS.Routing.Business
                 throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration.ProductRoute");
 
             return routeBuildConfiguration.ProductRoute;
+        }
+
+        private PartialRouteBuildConfiguration PartialRouteBuildConfiguration()
+        {
+            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
+
+            if (routeBuildConfiguration.PartialRoute == null)
+                throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration.PartialRoute");
+
+            return routeBuildConfiguration.PartialRoute;
+        }
+
+        private UsersRoleConfiguration GetUsersRoleConfiguration()
+        {
+            RouteBuildConfiguration routeBuildConfiguration = GetRouteBuildConfiguration();
+
+            if (routeBuildConfiguration.UsersRole == null)
+                throw new NullReferenceException("routeSettingsData.RouteBuildConfiguration.UsersRole");
+
+            return routeBuildConfiguration.UsersRole;
         }
 
         private RouteOptionRuleConfiguration GetRouteOptionRuleConfiguration()

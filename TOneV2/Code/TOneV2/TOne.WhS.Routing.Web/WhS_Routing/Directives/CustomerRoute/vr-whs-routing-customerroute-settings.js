@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'WhS_Routing_TimeSettingsTypeEnum',
-    function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
+app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -26,7 +26,22 @@ app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'WhS_Routing
         function settingsCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
+            var admindUsersSelectorApi;
+            var adminUsersSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var approvalTaskUsersSelectorApi;
+            var approvalTaskUsersSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
+                $scope.onAdmindUsersSelectorReady = function (api) {
+                    admindUsersSelectorApi = api;
+                    adminUsersSelectorReadyDeferred.resolve();
+                };
+
+                $scope.onApprovalTaskUsersSelectorReady = function (api) {
+                    approvalTaskUsersSelectorApi = api;
+                    approvalTaskUsersSelectorReadyDeferred.resolve();
+                };
 
                 defineAPI();
             }
@@ -34,6 +49,10 @@ app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'WhS_Routing
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
+                    var adminUsersIds;
+                    var approvalTaskUsersIds;
+
                     if (payload != undefined) {
                         if (payload.CustomerRoute != undefined) {
                             ctrl.customerRouteNumberOfOptions = payload.CustomerRoute.NumberOfOptions;
@@ -55,7 +74,46 @@ app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'WhS_Routing
                             ctrl.includeExtraChargeRules = payload.IncludedRules.IncludeExtraChargeRules;
                             ctrl.includeTariffRules = payload.IncludedRules.IncludeTariffRules;
                         }
+
+                        if (payload.PartialRoute != undefined) {
+                            ctrl.needsApproval = payload.PartialRoute.NeedsApproval;
+                        }
+
+                        if (payload.UsersRole != undefined) {
+                            adminUsersIds = payload.UsersRole.AdminUsersIds;
+                            approvalTaskUsersIds = payload.UsersRole.ApprovalTaskUsersIds;
+                        }
                     }
+
+                    promises.push(loadAdminUserSelector(), loadApprovalTaskUserSelector());
+
+                    function loadAdminUserSelector() {
+                        var adminUsersSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        adminUsersSelectorReadyDeferred.promise.then(function () {
+
+                            var adminSelectorPayload;
+                            if (adminUsersIds != undefined)
+                                adminSelectorPayload = { selectedIds: adminUsersIds };
+
+                            VRUIUtilsService.callDirectiveLoad(admindUsersSelectorApi, adminSelectorPayload, adminUsersSelectorLoadDeferred);
+                        });
+                        return adminUsersSelectorLoadDeferred.promise;
+                    }
+
+                    function loadApprovalTaskUserSelector() {
+                        var approvalTaskusersSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        approvalTaskUsersSelectorReadyDeferred.promise.then(function () {
+
+                            var approvalTaskSelectorPayload;
+                            if (approvalTaskUsersIds != undefined)
+                                approvalTaskSelectorPayload = { selectedIds: approvalTaskUsersIds };
+
+                            VRUIUtilsService.callDirectiveLoad(approvalTaskUsersSelectorApi, approvalTaskSelectorPayload, approvalTaskusersSelectorLoadDeferred);
+                        });
+                        return approvalTaskusersSelectorLoadDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -75,6 +133,15 @@ app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'WhS_Routing
                             MaxDOP: ctrl.productRouteMaxDOP,
                             GenerateCostAnalysisByCustomer: ctrl.generateCostAnalysisByCustomer,
                             IncludeBlockedZonesInCalculation: ctrl.productRouteIncludeBlockedZonesInCalculation
+                        },
+                        PartialRoute: {
+                            $type: "TOne.WhS.Routing.Entities.PartialRouteBuildConfiguration, TOne.WhS.Routing.Entities",
+                            NeedsApproval: ctrl.needsApproval
+                        },
+                        UsersRole: {
+                            $type: "TOne.WhS.Routing.Entities.UsersRoleConfiguration, TOne.WhS.Routing.Entities",
+                            AdminUsersIds: admindUsersSelectorApi.getSelectedIds(),
+                            ApprovalTaskUsersIds: approvalTaskUsersSelectorApi.getSelectedIds()
                         },
                         IncludedRules: {
                             $type: "TOne.WhS.Routing.Entities.IncludedRulesConfiguration, TOne.WhS.Routing.Entities",
