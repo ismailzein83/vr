@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 
-namespace Vanrise.BusinessProcess.Business
+namespace Vanrise.BusinessProcess.MainExtensions
 {
     public class StartBPProcessAction: GenericBEActionSettings
     {

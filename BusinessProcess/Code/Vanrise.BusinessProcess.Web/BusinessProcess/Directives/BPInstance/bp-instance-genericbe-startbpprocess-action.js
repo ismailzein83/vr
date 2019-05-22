@@ -171,7 +171,7 @@ app.directive("bpInstanceGenericbeStartbpprocessAction", ["UtilsService", "VRUIU
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.BusinessProcess.Business.StartBPProcessAction,Vanrise.BusinessProcess.Business",
+                        $type: "Vanrise.BusinessProcess.MainExtensions.StartBPProcessAction,Vanrise.BusinessProcess.MainExtensions",
                         BPDefinitionId: bpDefinitionSelectorAPI.getSelectedIds(),
                         InputArgumentsMapping: getInputArgumentsMappings()
                     };

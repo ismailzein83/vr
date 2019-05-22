@@ -61,7 +61,7 @@ app.directive("bpInstanceOpenbpinstanceviewerAction", ["BusinessProcess_BPInstan
 
 				api.getData = function () {
 					return {
-						$type: "Vanrise.BusinessProcess.Business.OpenBPInstanceViewerAction,Vanrise.BusinessProcess.Business",
+                        $type: "Vanrise.BusinessProcess.MainExtensions.OpenBPInstanceViewerAction,Vanrise.BusinessProcess.MainExtensions",
 						ProcessInstanceIdFieldName: dataRecordTypeTitleFieldsSelectorAPI.getSelectedValue().Name
 					};
 				};
