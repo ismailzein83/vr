@@ -64,12 +64,20 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
 
                 ctrl.getMeasureColor = function (dataItem, colDef) {
-                    var measure = eval(UtilsService.trim('dataItem.' + colDef.tag, ".Value"));
-                    // var measure = dataItem.MeasureValues[colDef.tag];
-                    if (measure != undefined)
-                        var style = UtilsService.getItemByVal(styleDefinitions, measure.StyleDefinitionId, 'StyleDefinitionId');
-                    if (style != undefined)
-                        return style.StyleDefinitionSettings.StyleFormatingSettings;
+                    //var measure = eval(UtilsService.trim('dataItem.' + colDef.tag, ".Value"));
+                    var tag = colDef.tag;
+                    if (tag != undefined)
+                    {
+                        var tagArr = tag.split(".");
+                        if (tagArr != undefined && tagArr.length == 3) {
+                            var measure = dataItem.MeasureValues[tagArr[1]];
+                            if (measure != undefined) {
+                                var style = UtilsService.getItemByVal(styleDefinitions, measure.StyleDefinitionId, 'StyleDefinitionId');
+                                if (style != undefined)
+                                    return style.StyleDefinitionSettings.StyleFormatingSettings;
+                            }
+                        }
+                    }
                 };
                 ctrl.gridReady = function (api) {
                     gridApi = api;
