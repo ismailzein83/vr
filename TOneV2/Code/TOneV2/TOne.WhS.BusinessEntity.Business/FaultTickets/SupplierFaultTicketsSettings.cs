@@ -12,6 +12,9 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierFaultTicketsSettings : GenericBEExtendedSettings
     {
+        static Guid openMailTemplateId = new Guid("7EB94106-43F1-43EB-8952-8F0B585FD7E5");
+        static Guid pendingMailTemplateId = new Guid("05A87955-DC2A-4E22-A879-6BEA3C31690E");
+        static Guid closedMailTemplateId = new Guid("F299EB6D-B50C-4338-812F-142D4D8515CA");
         public override Guid ConfigId
         {
             get { return new Guid("FCFA0193-9463-4435-9D96-54FD2B6D050B"); }    
@@ -45,14 +48,14 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (context.GenericBusinessEntity != null && context.GenericBusinessEntity.FieldValues != null)
                     {
                         StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
-                        var statusId = context.GenericBusinessEntity.FieldValues.GetRecord("StatusId");
-                        switch (statusId.ToString().ToUpper())
-                        {
-                            case "7EB94106-43F1-43EB-8952-8F0B585FD7E5": return new ConfigManager().GetFaultTicketsSupplierOpenMailTemplateId();
-                            case "05A87955-DC2A-4E22-A879-6BEA3C31690E": return new ConfigManager().GetFaultTicketsSupplierPendingMailTemplateId();
-                            case "F299EB6D-B50C-4338-812F-142D4D8515CA": return new ConfigManager().GetFaultTicketsSupplierClosedMailTemplateId();
-                            default: return null;
-                        }
+                        var statusId = (Guid)context.GenericBusinessEntity.FieldValues.GetRecord("StatusId");
+                        if(statusId==openMailTemplateId)
+                            return new ConfigManager().GetFaultTicketsSupplierOpenMailTemplateId();
+                        else if(statusId==pendingMailTemplateId)
+                            return new ConfigManager().GetFaultTicketsSupplierPendingMailTemplateId();
+                        else if (statusId==closedMailTemplateId)
+                            return new ConfigManager().GetFaultTicketsSupplierClosedMailTemplateId();
+                        else return null;
                     }
                     else return null;
                 default: return null;
