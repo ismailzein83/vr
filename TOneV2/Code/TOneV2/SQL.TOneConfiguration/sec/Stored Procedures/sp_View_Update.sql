@@ -13,7 +13,8 @@ CREATE PROCEDURE [sec].[sp_View_Update]
 	@Audience NVARCHAR(255),
 	@Content NVARCHAR(max),
 	@Settings nvarchar(max),
-	@Type uniqueidentifier
+	@Type uniqueidentifier,
+	@DevProjectId uniqueidentifier
 	
 AS
 BEGIN
@@ -28,7 +29,8 @@ IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName and Module=@Module
 				Title = @Title,
 				Audience=@Audience,
 				[Content]=@Content,
-				Settings = @Settings,
+			  	Settings = @Settings,
+			    DevProjectId=@DevProjectId,
 				LastModifiedTime = GETDATE()
 		WHERE	Id = @pageID
 	END
