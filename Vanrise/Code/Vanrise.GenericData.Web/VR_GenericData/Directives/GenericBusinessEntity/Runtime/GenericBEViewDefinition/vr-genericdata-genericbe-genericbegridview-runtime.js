@@ -88,7 +88,7 @@
                         fields[childName] = {
                             value: parentFieldValue.Value,
                             isHidden: true,
-                            isDisabled: false
+                            isDisabled: true
                         };
                     }
                 }

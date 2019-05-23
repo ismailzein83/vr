@@ -106,13 +106,17 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                                     var dependentFieldValue = response[prop];
                                     if (prop != "$type") {
                                         allFieldValuesByFieldNames[prop] = typeof (dependentFieldValue) == "object" ? dependentFieldValue : [dependentFieldValue];
-
-                                        parentFieldValues[prop] = {
-                                            value: dependentFieldValue,
-                                            isHidden: false,
-                                            isDisabled: true
-                                        };
-
+                                        if (prop in parentFieldValues) {
+                                            parentFieldValues[prop].value = dependentFieldValue;
+                                            parentFieldValues[prop].isHidden = false;
+                                        }
+                                        else {
+                                            parentFieldValues[prop] = {
+                                                value: dependentFieldValue,
+                                                isHidden: false,
+                                                isDisabled: true
+                                            };
+                                        }
                                     }
                                 }
                             }
