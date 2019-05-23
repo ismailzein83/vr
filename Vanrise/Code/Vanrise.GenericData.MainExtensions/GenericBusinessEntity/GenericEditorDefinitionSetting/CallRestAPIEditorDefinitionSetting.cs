@@ -18,9 +18,9 @@ namespace Vanrise.GenericData.MainExtensions
 
         public HTTPMethodType HTTPMethodType { get; set; }
 
-        public List<RestAPIItem> InputItems { get; set; }
+        public List<RestAPIInputItem> InputItems { get; set; }
 
-        public List<RestAPIItem> OutputItems { get; set; }
+        public List<RestAPIOutputItem> OutputItems { get; set; }
     }
 
     public class RestAPIItem
@@ -28,5 +28,14 @@ namespace Vanrise.GenericData.MainExtensions
         public string FieldName { get; set; }
 
         public string PropertyName { get; set; }
+    }
+
+    public class RestAPIInputItem : RestAPIItem
+    {
+        public bool IsRequired { get; set; }
+    }
+
+    public class RestAPIOutputItem : RestAPIItem
+    {
     }
 }
