@@ -405,6 +405,7 @@
     <Content Include="WhS_Routing\Services\RouteOptionRuleService.js" />
     <Content Include="WhS_Routing\Services\MarketPriceService.js" />
     <Content Include="WhS_Routing\Services\RouteRuleService.js" />
+    <Content Include="WhS_Routing\Services\RoutingUtilsService.js" />
     <Content Include="WhS_Routing\Services\RPRouteService.js" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\RPBuildProductRoutesProcess.html" />
     <Content Include="WhS_Routing\Views\ProcessInputTemplates\BuildRouteProcess.html" />
