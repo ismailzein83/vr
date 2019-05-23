@@ -133,6 +133,7 @@
     <Compile Include="BusinessRules\Conditions\OtherRateDateRangeNotIncludedInSalePricingRuleRangeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\RateIsZeroCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SellingProductZoneRateIsEndedCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\SellingRuleCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SPDefaultRPDoesNotExistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneCountryIsEndedAndZoneIsChangedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneIsPendingClosedAndChangedCondition.cs" />
