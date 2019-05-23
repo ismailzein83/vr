@@ -145,13 +145,12 @@
           </InArgument>
         </twrba:LoadPartialCustomerZoneDetails.RoutingDatabase>
       </twrba:LoadPartialCustomerZoneDetails>
-      <twrba:InitializeModifiedCustomerRoutesPreviewTable Status="{x:Null}">
+      <twrba:InitializeModifiedCustomerRoutesPreviewTable Status="{x:Null}" sap2010:WorkflowViewState.IdRef="InitializeModifiedCustomerRoutesPreviewTable_1">
         <twrba:InitializeModifiedCustomerRoutesPreviewTable.RoutingDatabase>
           <InArgument x:TypeArguments="twre:RoutingDatabase">
             <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
           </InArgument>
         </twrba:InitializeModifiedCustomerRoutesPreviewTable.RoutingDatabase>
-        <sap2010:WorkflowViewState.IdRef>InitializeModifiedCustomerRoutesPreviewTable_1</sap2010:WorkflowViewState.IdRef>
       </twrba:InitializeModifiedCustomerRoutesPreviewTable>
     </Parallel>
     <twrba:GetPartialRouteBuildParameters sap2010:WorkflowViewState.IdRef="GetPartialRouteBuildParameters_1">
@@ -390,14 +389,14 @@ UserIds= new ConfigManager().GetApprovalTaskUsersIds()
                       </InArgument>
                     </Assign.Value>
                   </Assign>
-                  <Switch x:TypeArguments="twre:PartialRoutingApprovalType" sap2010:WorkflowViewState.IdRef="Switch`1_1">
+                  <Switch x:TypeArguments="twre:RoutingApprovalType" sap2010:WorkflowViewState.IdRef="Switch`1_2">
                     <Switch.Expression>
-                      <InArgument x:TypeArguments="twre:PartialRoutingApprovalType">
-                        <mca:CSharpValue x:TypeArguments="twre:PartialRoutingApprovalType">(PartialRoutingApprovalType)Decision</mca:CSharpValue>
+                      <InArgument x:TypeArguments="twre:RoutingApprovalType">
+                        <mca:CSharpValue x:TypeArguments="twre:RoutingApprovalType">(RoutingApprovalType)Decision</mca:CSharpValue>
                       </InArgument>
                     </Switch.Expression>
-                    <Sequence x:Key="ApproveAll" sap2010:WorkflowViewState.IdRef="Sequence_4">
-                      <twrba:ApplyAffectedCustomerRoutesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyAffectedCustomerRoutesToDB_3">
+                    <Sequence x:Key="ApproveAll" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                      <twrba:ApplyAffectedCustomerRoutesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyAffectedCustomerRoutesToDB_4">
                         <twrba:ApplyAffectedCustomerRoutesToDB.CustomerRoutesDataQueueInput>
                           <InArgument x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteData))">
                             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteData))">CustomerRoutesDataUpdateQueue</mca:CSharpValue>
@@ -415,8 +414,8 @@ UserIds= new ConfigManager().GetApprovalTaskUsersIds()
                         </twrba:ApplyAffectedCustomerRoutesToDB.RoutingDatabase>
                       </twrba:ApplyAffectedCustomerRoutesToDB>
                     </Sequence>
-                    <Sequence x:Key="RejectAll" sap2010:WorkflowViewState.IdRef="Sequence_5">
-                      <Assign sap2010:WorkflowViewState.IdRef="Assign_8">
+                    <Sequence x:Key="RejectAll" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                      <Assign sap2010:WorkflowViewState.IdRef="Assign_9">
                         <Assign.To>
                           <OutArgument x:TypeArguments="x:Boolean">
                             <mca:CSharpReference x:TypeArguments="x:Boolean">HasModifiedCustomerRoute</mca:CSharpReference>
@@ -489,7 +488,7 @@ UserIds= new ConfigManager().GetApprovalTaskUsersIds()
         </Assign>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEFwcGx5QWZmZWN0ZWRSdWxlcy54YW1sXVUD7QMOAgEBWwtboQECAQJlBXAOAwGjCHEFnAEQAwG2B50BBaMBLAMBpgekAQW4AQoDAfcGuQEFyAMQAgFfyQMF6wMKAgERbQttYQMBswhoC2hkAwGkCHIHggEmAwH1B4MBB5MBLgMBxweUAQebATwDAbcHoAELoAFfAwGnB6cBC6cBVwMB+AarAQm2ARIDAYcHvQENvQGnAQIBYMIBB+sBKgMB7gXsAQeVAisDAeUElgIHxwMMAgFxzAMLzANiAgES0AMJ2wMSAgFA3gMJ6QMSAgEhdQ11eQMBlAh6DXqCAQMBhQh/DX9mAwH2B4sBDYsBgAEDAeYHhgENhgF5AwHXB5ABDZABZgMByAeXAQ2XAWYDAbgHswEPswG1AQMBlweuAQ+uAZsBAwGIB8oBDcoBeAMB5gbFAQ3FAXkDAdUG2QEN2QF6AwHEBs8BDc8BWgMBswbeAQ3eAWYDAaIG4wEN4wF6AwGRBtQBDdQBiwEDAYAG6AEN6AFeAwHvBZICDZICZAMB3QWIAg2IAnIDAcwF/gEN/gFsAwG7BY0CDY0CgAEDAaoFgwINgwJZAwGZBfkBDfkBkQEDAYgF9AEN9AGOAQMB9wTvAQ3vAYMBAwHmBJkCDZkCWQIBcp0CC7IDFgMBtwG1AwvFAzMDAYMB2AMP2ANgAgFQ0wMP0wNoAgFB5gMP5gNhAgEx4QMP4QNoAgEiowINzwIYAwHIA9ACDbEDEgMBuAG9AxG9A3wDAaYBuAMRuAOSAQMBlQHCAxHCA2oDAYQBqAIPvQJEAwGMBL4CD84CPgMByQPTAhPTAmsDAbkB1wIRrwMcAwHNAbUCFbUCgAEDAc8EqwIVqwKZAQMBuQS6AhW6ApMBAwGjBLACFbACiwEDAY0ExgIVxgKLAQMB9gPBAhXBAoMBAwHgA8sCFcsCbgMBygPYAhPpAhwDAZ8D6gIT/AIkAwHhAv0CE4gDHAMBuAKJAxOuAxwDAc4B4AIZ5gIgAwG0A9sCGdsCdQMBoAP5Ahn5AmUDAYsD6gK7AeoC1QEDAYoD7QIZ7wIgAwH2AvQCGfQCawMB4gKFAxmFA6YBAwHNAoADGYADZgMBuQKMAxmMA5IBAwHPAY8DFaEDIAMB+gGiAxWtAyADAeMBkAMXoAM/AwH7AaMDF6wDIAMB5AGYAx2YA4gBAwGkApMDHZMDngEDAZACnQMdnQN2AwH8AaoDQ6oDSAMB+QGmAx2mA3wDAeUB</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEFwcGx5QWZmZWN0ZWRSdWxlcy54YW1sXVUD7AMOAgEBWwtboQECAQJlBXAOAwGjCHEFmwEQAwG2B5wBBaIBLAMBpgejAQW3AQoDAfcGuAEFxwMQAgFfyAMF6gMKAgERbQttYQMBswhoC2hkAwGkCHIHggEmAwH1B4MBB5MBLgMBxweUAQeaATwDAbcHnwELnwFfAwGnB6YBC6YBVwMB+AaqAQm1ARIDAYcHvAENvAGnAQIBYMEBB+oBKgMB7gXrAQeUAisDAeUElQIHxgMMAgFxywMLywNiAgESzwMJ2gMSAgFA3QMJ6AMSAgEhdQ11eQMBlAh6DXqCAQMBhQh/DX9mAwH2B4sBDYsBgAEDAeYHhgENhgF5AwHXB5ABDZABZgMByAeXAQ2XAWYDAbgHsgEPsgG1AQMBlwetAQ+tAZsBAwGIB8kBDckBeAMB5gbEAQ3EAXkDAdUG2AEN2AF6AwHEBs4BDc4BWgMBswbdAQ3dAWYDAaIG4gEN4gF6AwGRBtMBDdMBiwEDAYAG5wEN5wFeAwHvBZECDZECZAMB3QWHAg2HAnIDAcwF/QEN/QFsAwG7BYwCDYwCgAEDAaoFggINggJZAwGZBfgBDfgBkQEDAYgF8wEN8wGOAQMB9wTuAQ3uAYMBAwHmBJgCDZgCWQIBcpwCC7EDFgMBtwG0AwvEAzMDAYMB1wMP1wNgAgFQ0gMP0gNoAgFB5QMP5QNhAgEx4AMP4ANoAgEiogINzgIYAwHIA88CDbADEgMBuAG8AxG8A3wDAaYBtwMRtwOSAQMBlQHBAxHBA2oDAYQBpwIPvAJEAwGMBL0CD80CPgMByQPSAhPSAmsDAbkB1gIRrgMcAwHNAbQCFbQCgAEDAc8EqgIVqgKZAQMBuQS5AhW5ApMBAwGjBK8CFa8CiwEDAY0ExQIVxQKLAQMB9gPAAhXAAoMBAwHgA8oCFcoCbgMBygPXAhPoAhwDAZ8D6QIT+wIkAwHhAvwCE4cDHAMBuAKIAxOtAxwDAc4B3wIZ5QIgAwG0A9oCGdoCdQMBoAP4Ahn4AmUDAYsD6QK7AekC1QEDAYoD7AIZ7gIgAwH2AvMCGfMCawMB4gKEAxmEA6YBAwHNAv8CGf8CZgMBuQKLAxmLA4QBAwHPAY4DFaADIAMB+gGhAxWsAyADAeMBjwMXnwM/AwH7AaIDF6sDIAMB5AGXAx2XA4gBAwGkApIDHZIDngEDAZACnAMdnAN2AwH8AakDQ6kDSAMB+QGlAx2lA3wDAeUB</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -509,23 +508,23 @@ UserIds= new ConfigManager().GetApprovalTaskUsersIds()
       <sap2010:ViewStateData Id="Assign_6" sap:VirtualizedContainerService.HintSize="476,62" />
       <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="476,22" />
       <sap2010:ViewStateData Id="Assign_7" sap:VirtualizedContainerService.HintSize="476,62" />
-      <sap2010:ViewStateData Id="ApplyAffectedCustomerRoutesToDB_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="222,146">
+      <sap2010:ViewStateData Id="ApplyAffectedCustomerRoutesToDB_4" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Assign_8" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="264,185">
+      <sap2010:ViewStateData Id="Assign_9" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="264,185">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Switch`1_1" sap:VirtualizedContainerService.HintSize="476,162" />
+      <sap2010:ViewStateData Id="Switch`1_2" sap:VirtualizedContainerService.HintSize="476,162" />
       <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="498,552">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

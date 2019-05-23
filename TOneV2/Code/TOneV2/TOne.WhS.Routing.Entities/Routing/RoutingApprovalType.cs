@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public enum PartialRoutingApprovalType
+    public enum RoutingApprovalType
     {
         [Description("Approve All")]
         ApproveAll = 0,
