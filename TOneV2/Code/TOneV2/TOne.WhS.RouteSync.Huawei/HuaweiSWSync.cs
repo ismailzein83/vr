@@ -14,6 +14,8 @@ namespace TOne.WhS.RouteSync.Huawei
     {
         public override Guid ConfigId { get { return new Guid("376687E2-268D-4DFA-AA39-3205C3CD18E5"); } }
 
+        public override bool SupportSyncWithinRouteBuild { get { return false; } }
+
         public int NumberOfOptions { get; set; }
 
         public int MinRNLength { get; set; }
