@@ -8,7 +8,7 @@
                     </vr-columns>
                     <vr-columns colnum="9">
                         <vr-label> : </vr-label>
-                        <a style="cursor:pointer;font-size:11px" ng-click="scopeModel.onChangingTask()">{{scopeModel.taskEntity.Title}}</a>
+                        <a style="cursor:pointer;font-size:11px" ng-click="scopeModel.onChangingTask()">{{scopeModel.taskEntity.Entity.Title}}</a>
                     </vr-columns>
                     <vr-columns colnum="2" >
                         <div class="vr-status-progress initial-algin" ng-class="{ 'new': scopeModel.isNew,
@@ -27,7 +27,7 @@
                     </vr-columns>
                     <vr-columns colnum="5">
                         <vr-label> : </vr-label>
-                        <vr-label>{{scopeModel.taskEntity.AssignedUsersDescription}}</vr-label>
+                        <vr-label>{{scopeModel.taskEntity.Entity.AssignedUsersDescription}}</vr-label>
                     </vr-columns>
 
                     <vr-columns colnum="1">
@@ -35,7 +35,7 @@
                     </vr-columns>
                     <vr-columns colnum="5">
                         <vr-label> : </vr-label>
-                        <vr-label>{{scopeModel.taskEntity.TakenByDescription}}</vr-label>
+                        <vr-label>{{scopeModel.taskEntity.Entity.TakenByDescription}}</vr-label>
                     </vr-columns>
                 </vr-row>
 
@@ -45,14 +45,14 @@
                     </vr-columns>
                     <vr-columns colnum="5">
                         <vr-label> : </vr-label>
-                        <vr-label>{{scopeModel.taskEntity.ExecutedByIdDescription}}</vr-label>
+                        <vr-label>{{scopeModel.taskEntity.Entity.ExecutedByIdDescription}}</vr-label>
                     </vr-columns>
                     <vr-columns colnum="1">
                         <vr-label>Decision </vr-label>
                     </vr-columns>
                     <vr-columns colnum="5">
                         <vr-label> : </vr-label>
-                        <vr-label>{{scopeModel.taskEntity.Decision}}</vr-label>
+                        <vr-label>{{scopeModel.taskEntity.Entity.Decision}}</vr-label>
                     </vr-columns>
                 </vr-row>
 
@@ -62,7 +62,7 @@
                     </vr-columns>
                     <vr-columns colnum="11">
                         <vr-label> : </vr-label>
-                        <vr-label>{{scopeModel.taskEntity.Notes}}</vr-label>
+                        <vr-label>{{scopeModel.taskEntity.Entity.Notes}}</vr-label>
                     </vr-columns>
                 </vr-row>
 

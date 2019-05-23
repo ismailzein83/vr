@@ -59,6 +59,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetTaskDetail")]
+        public BPTaskDetail GetTaskDetail(long taskId)
+        {
+            BPTaskManager manager = new BPTaskManager();
+            return manager.GetTaskDetail(taskId);
+        }
+
+        [HttpGet]
         [Route("TakeTask")]
         public BPTaskDefaultActionsState TakeTask(long taskId)
         {

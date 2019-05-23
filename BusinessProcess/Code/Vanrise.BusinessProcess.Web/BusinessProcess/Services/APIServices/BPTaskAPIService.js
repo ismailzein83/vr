@@ -30,6 +30,13 @@
                 taskId: taskId
             });
         }
+
+        function GetTaskDetail(taskId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "GetTaskDetail"), {
+                taskId: taskId
+            });
+        }
+
         function TakeTask(taskId) {
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "TakeTask"), {
                 taskId: taskId
@@ -69,6 +76,7 @@
             GetMyTasksBeforeId: GetMyTasksBeforeId,
             ExecuteTask: ExecuteTask,
             GetTask: GetTask,
+            GetTaskDetail: GetTaskDetail,
             TakeTask: TakeTask,
             ReleaseTask: ReleaseTask,
             GetAssignedUsers: GetAssignedUsers,

@@ -122,6 +122,19 @@ namespace Vanrise.BusinessProcess.Business
             return taskDataManager.GetTask(taskId);
         }
 
+        public BPTaskDetail GetTaskDetail (long taskId)
+        {
+            int? loggedInUser = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
+            if (!loggedInUser.HasValue)
+                return null;
+
+            BPTask task = GetTask(taskId);
+            if (task == null)
+                return null;
+
+            return BPTaskDetailMapper(task, loggedInUser.Value);
+        }
+
         public BPTaskDefaultActionsState TakeTask(long taskId)
         {
             int userId = Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();

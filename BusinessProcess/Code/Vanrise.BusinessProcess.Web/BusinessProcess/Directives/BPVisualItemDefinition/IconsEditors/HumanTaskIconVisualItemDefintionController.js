@@ -69,12 +69,11 @@
                 }
             }
             if (taskId != undefined) {
-                BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
+                BusinessProcess_BPTaskAPIService.GetTaskDetail(taskId).then(function (response) {
                     if (response != undefined) {
                         $scope.scopeModel.taskEntity = response;
-                        $scope.scopeModel.taskEntity.StatusDescription = UtilsService.getEnumDescription(BPTaskStatusEnum, response.Status);
-                        $scope.scopeModel.taskEntity.CreatedTime = UtilsService.getDateTimeFormat(response.CreatedTime, DateTimeFormatEnum.DateTime);
-                        $scope.scopeModel.taskEntity.LastUpdatedTime = UtilsService.getDateTimeFormat(response.LastUpdatedTime, DateTimeFormatEnum.DateTime);
+                        $scope.scopeModel.taskEntity.CreatedTime = UtilsService.getDateTimeFormat(response.Entity.CreatedTime, DateTimeFormatEnum.DateTime);
+                        $scope.scopeModel.taskEntity.LastUpdatedTime = UtilsService.getDateTimeFormat(response.Entity.LastUpdatedTime, DateTimeFormatEnum.DateTime);
                         loadStatus();
                     }
                 });
@@ -96,7 +95,7 @@
         function loadStatus() {
 
             var statusItems = [];
-            var status = $scope.scopeModel.taskEntity.Status;
+            var status = $scope.scopeModel.taskEntity.Entity.Status;
 
             switch (status) {
                 case BPInstanceStatusEnum.New.value:
