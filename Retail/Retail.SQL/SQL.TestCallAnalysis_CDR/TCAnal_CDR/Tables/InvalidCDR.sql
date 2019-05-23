@@ -1,26 +1,19 @@
-﻿CREATE TABLE [TCAnal_CDR].[MappedCDR] (
+﻿CREATE TABLE [TCAnal_CDR].[InvalidCDR] (
     [ID]                BIGINT           NOT NULL,
     [DataSourceId]      UNIQUEIDENTIFIER NULL,
+    [AttemptDateTime]   DATETIME         NULL,
     [ClientId]          BIGINT           NULL,
-    [CallingNumber]     VARCHAR (40)     NULL,
-    [CalledNumber]      VARCHAR (40)     NULL,
+    [CallingNumber]     NVARCHAR (255)   NULL,
+    [CalledNumber]      NVARCHAR (255)   NULL,
     [OriginatedZoneId]  BIGINT           NULL,
     [CDRType]           INT              NULL,
-    [AttemptDateTime]   DATETIME         NULL,
     [DurationInSeconds] DECIMAL (20, 4)  NULL,
     [CallingOperatorID] BIGINT           NULL,
     [CalledOperatorID]  BIGINT           NULL,
-    [OrigCallingNumber] VARCHAR (40)     NULL,
-    [OrigCalledNumber]  VARCHAR (40)     NULL,
+    [OrigCallingNumber] NVARCHAR (255)   NULL,
+    [OrigCalledNumber]  NVARCHAR (255)   NULL,
     [CallingNumberType] INT              NULL,
-    [IsCorrelated]      BIT              NULL,
     [CreatedTime]       DATETIME         NULL,
-    CONSTRAINT [PK__MappedCD__3214EC271BFD2C07] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK__InvalidC__3214EC275629CD9C] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
-
-
-
-
-
-
 

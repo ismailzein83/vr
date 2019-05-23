@@ -79,5 +79,6 @@
     <Build Include="TCAnal_CDR\User Defined Types\CorrelatedCDRType.sql" />
     <Build Include="TCAnal_CDR\User Defined Types\MappedCDRType.sql" />
     <Build Include="Security\TCAnal_CDR.sql" />
+    <Build Include="TCAnal_CDR\Tables\InvalidCDR.sql" />
   </ItemGroup>
 </Project>
