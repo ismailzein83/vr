@@ -1,27 +1,30 @@
-﻿<vr-columns colnum="6">
-    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
-                                                            getworkflowarguments="scopeModel.context.getWorkflowArguments"
-                                                            value="scopeModel.condition" label="Condition" isrequired="!scopeModel.isVRWorkflowActivityDisabled">
-    </businessprocess-vr-workflow-activity-expressionbuilder>
-</vr-columns>
-<vr-columns colnum="6">
-    <vr-textbox label="Condition Description" value="scopeModel.conditionDescription"></vr-textbox>
-</vr-columns>
-
-<vr-columns colnum="6" right-medium-spacing>
-    <vr-fieldset header="Then">
-        <businessprocess-vr-workflow-containerv2 on-ready="scopeModel.onTrueWorkflowContainerReady"
-                                                 dragdropsetting="scopeModel.dragdropsetting"
-                                                 single-activity="true">
-        </businessprocess-vr-workflow-containerv2>
-    </vr-fieldset>
-</vr-columns>
-<vr-columns colnum="6" left-medium-spacing>
-    <vr-fieldset header="Else">
-        <businessprocess-vr-workflow-containerv2 on-ready="scopeModel.onFalseWorkflowContainerReady"
-                                                 dragdropsetting="scopeModel.dragdropsetting"
-                                                 single-activity="true"
-                                                 accept-empty-container="true">
-        </businessprocess-vr-workflow-containerv2>
-    </vr-fieldset>
-</vr-columns>
+﻿<vr-row>
+    <vr-columns colnum="6">
+        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables"
+                                                                getworkflowarguments="scopeModel.context.getWorkflowArguments"
+                                                                value="scopeModel.condition" label="Condition" isrequired="!scopeModel.isVRWorkflowActivityDisabled">
+        </businessprocess-vr-workflow-activity-expressionbuilder>
+    </vr-columns>
+    <vr-columns colnum="6">
+        <vr-textbox label="Condition Description" value="scopeModel.conditionDescription"></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns colnum="6" right-medium-spacing>
+        <vr-fieldset header="Then">
+            <businessprocess-vr-workflow-containerv2 on-ready="scopeModel.onTrueWorkflowContainerReady"
+                                                     dragdropsetting="scopeModel.dragdropsetting"
+                                                     single-activity="true">
+            </businessprocess-vr-workflow-containerv2>
+        </vr-fieldset>
+    </vr-columns>
+    <vr-columns colnum="6" left-medium-spacing>
+        <vr-fieldset header="Else">
+            <businessprocess-vr-workflow-containerv2 on-ready="scopeModel.onFalseWorkflowContainerReady"
+                                                     dragdropsetting="scopeModel.dragdropsetting"
+                                                     single-activity="true"
+                                                     accept-empty-container="true">
+            </businessprocess-vr-workflow-containerv2>
+        </vr-fieldset>
+    </vr-columns>
+</vr-row>
