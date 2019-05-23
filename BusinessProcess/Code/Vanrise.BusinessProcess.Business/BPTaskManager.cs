@@ -129,9 +129,6 @@ namespace Vanrise.BusinessProcess.Business
                 return null;
 
             BPTask task = GetTask(taskId);
-            if (task == null)
-                return null;
-
             return BPTaskDetailMapper(task, loggedInUser.Value);
         }
 
