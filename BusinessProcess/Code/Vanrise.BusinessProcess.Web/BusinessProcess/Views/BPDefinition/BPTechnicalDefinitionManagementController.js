@@ -2,11 +2,15 @@
 
     "use strict";
 
-    BusinessProcess_BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcess_BPDefinitionService', 'BusinessProcess_BPDefinitionAPIService'];
+    BusinessProcess_BPDefinitionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionService', 'BusinessProcess_BPDefinitionAPIService'];
 
-    function BusinessProcess_BPDefinitionManagementController($scope, BusinessProcess_BPDefinitionService, BusinessProcess_BPDefinitionAPIService) {
+    function BusinessProcess_BPDefinitionManagementController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPDefinitionService, BusinessProcess_BPDefinitionAPIService) {
         var gridAPI;
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
+        load();
 
         function defineScope() {
 
@@ -30,11 +34,36 @@
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
+        }
+        function load() {
+            $scope.isLoading = true;
+            loadAllControls();
         }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadDevProjectSelector])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function getFilterObject() {
             var filter = {};
             filter.Title = $scope.title;
+            filter.DevProjectIds = devProjectDirectiveApi.getSelectedIds();
             return filter;
         }
     }

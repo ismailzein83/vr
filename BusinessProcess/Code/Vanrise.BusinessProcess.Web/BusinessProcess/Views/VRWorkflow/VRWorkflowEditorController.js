@@ -22,6 +22,9 @@
         var workflowDesignerAPI;
         var workflowDesignerReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var activitiesList = [];
         var context;
 
@@ -45,6 +48,10 @@
             $scope.scopeModel.onArgumentsGridReady = function (api) {
                 argumentsGridAPI = api;
                 argumentsGridReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
             $scope.scopeModel.isCompileValidContext =
                 {
@@ -231,8 +238,20 @@
                 });
                 return workflowDesignerLoadDeferred.promise;
             }
-
-            return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadArgumentsGrid, loadWorkflowDesigner]).then(function () {
+            function loadDevProjectSelector() {
+                var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                devProjectPromiseReadyDeferred.promise.then(function () {
+                    var payloadDirective;
+                    if (vrWorkflowEntity != undefined) {
+                        payloadDirective = {
+                            selectedIds: vrWorkflowEntity.DevProjectId
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                });
+                return devProjectPromiseLoadDeferred.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadArgumentsGrid, loadWorkflowDesigner, loadDevProjectSelector]).then(function () {
 
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -335,6 +354,7 @@
             var vrWorkflowObj = {
                 Name: $scope.scopeModel.name,
                 Title: $scope.scopeModel.title,
+                DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 Settings: {
                     Arguments: argumentsGridAPI.getData(),
                     ClassMembers: { ClassMembersCode: $scope.scopeModel.classMembersCode },

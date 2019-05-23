@@ -17,6 +17,7 @@ namespace Vanrise.BusinessProcess.Business
         #region Ctor/Properties
 
         static SecurityManager s_securityManager = new SecurityManager();
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
 
         #endregion
 
@@ -36,7 +37,8 @@ namespace Vanrise.BusinessProcess.Business
 
                 if (!string.IsNullOrEmpty(input.Query.Title) && !prod.Title.ToLower().Contains(input.Query.Title.ToLower()))
                     return false;
-
+                if (input.Query.DevProjectIds != null && (!prod.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(prod.DevProjectId.Value)))
+                    return false;
                 if (viewableByUserId.HasValue && !DoesUserHaveViewAccess((int)viewableByUserId, prod))
                     return false;
 
@@ -480,6 +482,10 @@ namespace Vanrise.BusinessProcess.Business
                 bpDefinitionDetail.ScheduleTaskAccess = DoesUserHaveScheduleTaskAccess(userID.Value, bpDefinition); // bpDefinition.Configuration.Security !=null ? DoesUserHaveBPPermission((int)userID, bpDefinition.Configuration.Security.ScheduleTask) : true;
                 bpDefinitionDetail.StartNewInstanceAccess = DoesUserHaveStartNewInstanceAccess(userID.Value, bpDefinition);//bpDefinition.Configuration.Security !=null ?  DoesUserHaveBPPermission((int)userID, bpDefinition.Configuration.Security.StartNewInstance) : true;
 
+            }
+            if (bpDefinition.DevProjectId.HasValue)
+            {
+                bpDefinitionDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(bpDefinition.DevProjectId.Value);
             }
             return bpDefinitionDetail;
         }

@@ -13,5 +13,6 @@ namespace Vanrise.BusinessProcess.Entities
         public bool StartNewInstanceAccess { get; set; }
 
         public bool ScheduleTaskAccess { get; set; }
+        public string DevProjectName { get; set; }
     }
 }

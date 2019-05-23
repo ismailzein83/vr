@@ -38,6 +38,9 @@
         var scheduleEditorDefinitionAPI;
         var scheduleEditorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var vrWorkflowFields;
 
         loadParameters();
@@ -97,6 +100,10 @@
                 scheduleEditorDefinitionReadyPromiseDeferred.resolve();
             };
 
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModel.onVRWorkflowSelectionChanged = function (selectedVRWorkflow) {
                 validationMessages = undefined;
                 if (selectedVRWorkflow != undefined) {
@@ -288,6 +295,19 @@
             return loadScheduleEditorDefinitionDirectivePromiseDeferred.promise;
         }
 
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (businessProcessDefinitionEntity != undefined) {
+                    payloadDirective = {
+                        selectedIds: businessProcessDefinitionEntity.DevProjectId
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function loadAllControls() {
 
             function setTitle() {
@@ -431,7 +451,7 @@
                 return getVRWorkflowArgumentsLoadDeferred.promise;
             }
             var operations = [setTitle, loadStaticData, loadVRWorkflowSelector, loadModalWidthSelector, GetVRWorkflowArguments, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission,
-                loadScheduleTaskRequiredPermission, loadBPInstanceInsertHandlerSettings];
+                loadScheduleTaskRequiredPermission, loadBPInstanceInsertHandlerSettings, loadDevProjectSelector];
             if (businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.VRWorkflowId != undefined) {
                 operations.push(getVRWorkflowInputArgumentFields);
 
@@ -564,6 +584,7 @@
 
             obj.Title = $scope.scopeModel.title;
             obj.VRWorkflowId = $scope.scopeModel.loadVRWorklowSelector ? vrWorkflowSelectorAPI.getSelectedIds() : null;
+            obj.DevProjectId = devProjectDirectiveApi.getSelectedIds();
             obj.Configuration.ProcessTitle = $scope.scopeModel.loadVRWorklowSelector ? $scope.scopeModel.processTitle : null;
             obj.Configuration.EditorSize = modalWidthSelectorAPI.getSelectedIds();
             obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModel.MaxConcurrentWorkflows;

@@ -22,6 +22,7 @@
                         <vr-columns ng-if="scopeModel.selectedVRWorkflow!=undefined" width="1/3row" vr-loader="scopeModel.isModalWidthSelectorLoading">
                             <vr-common-modalwidth-selector on-ready="scopeModel.onModalWidthSelectorReady" isrequired="true"></vr-common-modalwidth-selector>
                         </vr-columns>
+                        <vr-common-devproject-selector on-ready="scopeModel.onDevProjectSelectorReady" normal-col-num="4"></vr-common-devproject-selector>
                         <span ng-if="scopeModel.loadVRWorklowSelector">
                             <vr-columns colnum="11">
                                 <span vr-loader="scopeModel.isLoadingArguments">

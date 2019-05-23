@@ -17,6 +17,7 @@ namespace Vanrise.BusinessProcess.Business
     public class VRWorkflowManager : IVRWorkflowManager
     {
         private string ClassMemberRegionText = "ClassMemberRegion";
+        VRDevProjectManager vrDevProjectManager = new VRDevProjectManager();
 
         #region Public Methods
 
@@ -35,6 +36,8 @@ namespace Vanrise.BusinessProcess.Business
                         return false;
 
                     if (!string.IsNullOrEmpty(input.Query.Title) && !prod.Title.ToLower().Contains(input.Query.Title.ToLower()))
+                        return false;
+                    if (input.Query.DevProjectIds != null && (!prod.DevProjectId.HasValue || !input.Query.DevProjectIds.Contains(prod.DevProjectId.Value)))
                         return false;
                 }
 
@@ -871,6 +874,10 @@ namespace Vanrise.BusinessProcess.Business
                 Title = vrWorkflow.Title,
                 LastModifiedTime = vrWorkflow.LastModifiedTime
             };
+            if (vrWorkflow.DevProjectId.HasValue)
+            {
+                vrWorkflowDetail.DevProjectName = vrDevProjectManager.GetVRDevProjectName(vrWorkflow.DevProjectId.Value);
+            }
             return vrWorkflowDetail;
         }
 

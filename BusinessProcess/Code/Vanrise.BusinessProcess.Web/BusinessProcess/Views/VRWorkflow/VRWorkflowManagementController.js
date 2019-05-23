@@ -2,14 +2,17 @@
 
     "use strict";
 
-    BusinessProcess_VRWorkflowManagementController.$inject = ['$scope', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_VRWorkflowAPIService'];
+    BusinessProcess_VRWorkflowManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_VRWorkflowAPIService'];
 
-    function BusinessProcess_VRWorkflowManagementController($scope, BusinessProcess_VRWorkflowService, BusinessProcess_VRWorkflowAPIService) {
+    function BusinessProcess_VRWorkflowManagementController($scope, UtilsService,VRUIUtilsService,BusinessProcess_VRWorkflowService, BusinessProcess_VRWorkflowAPIService) {
 
 
         var gridAPI;
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
+        load();
 
         function defineScope() {
 
@@ -33,13 +36,46 @@
             $scope.hasAddVRWorkflowPermission = function () {
                 return BusinessProcess_VRWorkflowAPIService.HasAddVRWorkflowPermission();
             };
+            $scope.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
+            };
+        }
+        function load() {
+            $scope.isLoading = true;
+            loadAllControls();
         }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadDevProjectSelector])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
+        }
         function getFilterObject() {
             var filter = {};
             filter.Name = $scope.name;
             filter.Title = $scope.title;
+            filter.DevProjectIds = devProjectDirectiveApi.getSelectedIds();
+
             return filter;
+        }
+        function loadDevProjectSelector() {
+            var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            devProjectPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, undefined, devProjectPromiseLoadDeferred);
+            });
+            return devProjectPromiseLoadDeferred.promise;
         }
     }
 
