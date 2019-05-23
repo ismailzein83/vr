@@ -169,6 +169,7 @@
             if (isReload) {
                 $scope.scopeModel.runtimeEditor = undefined;
                 runtimeEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                runtimeEditorReadyPromiseDeferred.resolve();
                 bpTask = undefined;
             }
             var rootPromiseNode = {

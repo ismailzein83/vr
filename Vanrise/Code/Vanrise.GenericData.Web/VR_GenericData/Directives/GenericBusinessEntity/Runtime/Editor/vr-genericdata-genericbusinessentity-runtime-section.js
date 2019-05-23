@@ -38,6 +38,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                 var api = {};
 
                 api.load = function (payload) {
+                    ctrl.rows.length = 0;
                     if (payload.rows != undefined) {
                         currentContext = payload.context;
                         genericContext = payload.genericContext;
