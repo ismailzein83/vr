@@ -62,7 +62,8 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                     var rows = {};
                     for (var i = 0; i < ctrl.rows.length; i++) {
                         var row = ctrl.rows[i];
-                        rows = UtilsService.mergeObject(rows, row.fieldsAPI.getData(), false);
+                        if (row.fieldsAPI != undefined)
+                            rows = UtilsService.mergeObject(rows, row.fieldsAPI.getData(), false);
                     }
                     return rows;
                 };
@@ -82,20 +83,20 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
                     return UtilsService.waitMultiplePromises(_promises);
                 };
 
-                //api.setFieldValues = function (fieldValuesByNames) {
-                //    var _promises = [];
+                api.setFieldValues = function (fieldValuesByNames) {
+                    var _promises = [];
 
-                //    for (var i = 0; i < ctrl.rows.length; i++) {
-                //        var row = ctrl.rows[i];
-                //        if (row.fieldsAPI.setFieldValues != undefined && typeof (row.fieldsAPI.setFieldValues) == "function") {
-                //            var onFieldValueSettedPromise = row.fieldsAPI.setFieldValues(fieldValuesByNames);
-                //            if (onFieldValueSettedPromise != undefined)
-                //                _promises.push(onFieldValueSettedPromise);
-                //        }
-                //    }
+                    for (var i = 0; i < ctrl.rows.length; i++) {
+                        var row = ctrl.rows[i];
+                        if (row.fieldsAPI.setFieldValues != undefined && typeof (row.fieldsAPI.setFieldValues) == "function") {
+                            var onFieldValueSettedPromise = row.fieldsAPI.setFieldValues(fieldValuesByNames);
+                            if (onFieldValueSettedPromise != undefined)
+                                _promises.push(onFieldValueSettedPromise);
+                        }
+                    }
 
-                //    return UtilsService.waitMultiplePromises(_promises);
-                //};
+                    return UtilsService.waitMultiplePromises(_promises);
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
