@@ -82,8 +82,15 @@ namespace TOne.WhS.Routing.BP.Activities
                 Guid qualityConfigurationDefinitionId = kvp.Key;
                 List<RouteRuleQualityConfiguration> currentRouteRuleQualityConfigurations = kvp.Value;
 
-                QualityConfigurationDefinitionExtendedSettings extendedSettings = qualityConfigurationDefinitionManager.GetQualityConfigurationDefinitionExtendedSettings(qualityConfigurationDefinitionId);
-                Dictionary<Guid, InitializedQualityConfiguration> initializedQualityConfigurations = extendedSettings.InitializeQualityConfigurations(currentRouteRuleQualityConfigurations);
+                var extendedSettings = qualityConfigurationDefinitionManager.GetQualityConfigurationDefinitionExtendedSettings(qualityConfigurationDefinitionId);
+
+                var initializeQualityConfigurationsContext = new InitializeQualityConfigurationsContext()
+                {
+                    QualityConfigurationDefinitionId = qualityConfigurationDefinitionId,
+                    QualityConfigurations = currentRouteRuleQualityConfigurations
+                };
+                extendedSettings.InitializeQualityConfigurations(initializeQualityConfigurationsContext);
+                Dictionary<Guid, InitializedQualityConfiguration> initializedQualityConfigurationsById = initializeQualityConfigurationsContext.InitializedQualityConfigurationsById;
 
                 foreach (var routeRuleQualityConfiguration in currentRouteRuleQualityConfigurations)
                 {
@@ -94,7 +101,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         QualityConfigurationId = routeRuleQualityConfiguration.QualityConfigurationId,
                         QualityConfigurationDefinitionId = qualityConfigurationDefinitionId,
                         QualityConfigurationName = routeRuleQualityConfiguration.Name,
-                        InitializedQualityConfiguration = initializedQualityConfigurations.GetRecord(routeRuleQualityConfiguration.QualityConfigurationId),
+                        InitializedQualityConfiguration = initializedQualityConfigurationsById.GetRecord(routeRuleQualityConfiguration.QualityConfigurationId),
                         RoutingProcessType = routingProcessType,
                         EffectiveDate = effectiveDate,
                         VersionNumber = inputArgument.VersionNumber

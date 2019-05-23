@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -12,14 +9,27 @@ namespace TOne.WhS.Routing.Entities
 
         public virtual string RuntimeEditor { get; set; }
 
-        public virtual Dictionary<Guid, InitializedQualityConfiguration> InitializeQualityConfigurations(List<RouteRuleQualityConfiguration> qualityConfigurations)
+        public virtual void InitializeQualityConfigurations(IInitializeQualityConfigurationsContext context)
         {
-            return null;
         }
     }
 
     public abstract class InitializedQualityConfiguration
     {
 
+    }
+
+    public interface IInitializeQualityConfigurationsContext
+    {
+        Guid QualityConfigurationDefinitionId { get; }
+        List<RouteRuleQualityConfiguration> QualityConfigurations { get; }
+        Dictionary<Guid, InitializedQualityConfiguration> InitializedQualityConfigurationsById { set; }
+    }
+
+    public class InitializeQualityConfigurationsContext : IInitializeQualityConfigurationsContext
+    {
+        public Guid QualityConfigurationDefinitionId { get; set; }
+        public List<RouteRuleQualityConfiguration> QualityConfigurations { get; set; }
+        public Dictionary<Guid, InitializedQualityConfiguration> InitializedQualityConfigurationsById { get; set; }
     }
 }

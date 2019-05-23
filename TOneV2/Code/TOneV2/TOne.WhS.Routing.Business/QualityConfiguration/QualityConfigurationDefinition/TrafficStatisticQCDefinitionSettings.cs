@@ -23,9 +23,11 @@ namespace TOne.WhS.Routing.Business
 
         public string SupplierZoneFieldName { get; set; }
 
-        public override Dictionary<Guid, InitializedQualityConfiguration> InitializeQualityConfigurations(List<RouteRuleQualityConfiguration> qualityConfigurations)
+        public override void InitializeQualityConfigurations(IInitializeQualityConfigurationsContext context)
         {
-            return new TrafficStatisticQualityConfigurationManager().InitializeTrafficStatisticQualityConfigurations(qualityConfigurations);
+            var qcManager = new TrafficStatisticQualityConfigurationManager();
+            context.InitializedQualityConfigurationsById = qcManager.InitializeTrafficStatisticQualityConfigurations(context.QualityConfigurationDefinitionId, 
+                context.QualityConfigurations);
         }
     }
 

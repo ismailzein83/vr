@@ -13,12 +13,14 @@ namespace TOne.WhS.Routing.Business
 {
     public class TrafficStatisticQualityConfigurationManager
     {
-        public Dictionary<Guid, InitializedQualityConfiguration> InitializeTrafficStatisticQualityConfigurations(List<RouteRuleQualityConfiguration> routeRuleQualityConfigurations)
+        public Dictionary<Guid, InitializedQualityConfiguration> InitializeTrafficStatisticQualityConfigurations(Guid qualityConfigurationDefinitionId,
+            List<RouteRuleQualityConfiguration> routeRuleQualityConfigurations)
         {
             if (routeRuleQualityConfigurations == null || routeRuleQualityConfigurations.Count == 0)
                 return null;
 
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOne.WhS.Routing.Business.QualityConfigurationCacheManager>().GetOrCreateObject("InitializeTrafficStatisticQualityConfigurations",
+            var cacheName = new InitializeTrafficStatisticQualityConfigurationsCacheName() { QualityConfigurationDefinitionId = qualityConfigurationDefinitionId };
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOne.WhS.Routing.Business.QualityConfigurationCacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
                     Dictionary<Guid, string> routeRuleQualityConfigurationFullTypeById = new Dictionary<Guid, string>();
@@ -191,6 +193,16 @@ namespace TOne.WhS.Routing.Business
             }
 
             return analyticMeasureInfos;
+        }
+
+        private struct InitializeTrafficStatisticQualityConfigurationsCacheName
+        {
+            public Guid QualityConfigurationDefinitionId { get; set; }
+
+            public override int GetHashCode()
+            {
+                return this.QualityConfigurationDefinitionId.GetHashCode();
+            }
         }
     }
 }
