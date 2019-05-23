@@ -1,59 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class SellingRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleSaleZoneCriteria
+    public class SellingRule : GenericRule
     {
-        public string Description { get; set; }
-
-        public SellingRuleCriteria Criteria { get; set; }
-
         public SellingRuleSettings Settings { get; set; }
-
-        public ISaleZoneGroupContext GetSaleZoneGroupContext()
+        public override string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context)
         {
-            ISaleZoneGroupContext context = ContextFactory.CreateContext<ISaleZoneGroupContext>();
-            context.FilterSettings = new SaleZoneFilterSettings
-            {
-                SellingProductId = this.Criteria.SellingProductId
-            };
-            return context;
-        }
+            Settings.ThrowIfNull("SellingRuleSettings");
+            Settings.RateRuleGrouped.ThrowIfNull("Settings.RateRuleGrouped");
+            Settings.RateRuleGrouped.RateRules.ThrowIfNull("RateRules");
 
-        public ICustomerGroupContext GetCustomerGroupContext()
-        {
-            ICustomerGroupContext context = ContextFactory.CreateContext<ICustomerGroupContext>();
-            context.FilterSettings = new CustomerFilterSettings
+            var settingsDescription = new StringBuilder();
+            var rateRules = Settings.RateRuleGrouped.RateRules;
+            foreach (var rateRule in rateRules)
             {
-            };
-            return context;
-        }
-
-        IEnumerable<int> IRuleCustomerCriteria.CustomerIds
-        {
-            get
-            {
-                if (this.Criteria != null && this.Criteria.CustomerGroupSettings != null)
-                    return this.GetCustomerGroupContext().GetGroupCustomerIds(this.Criteria.CustomerGroupSettings);
-                else
-                    return null;
+                settingsDescription.AppendLine(rateRule.Threshold.GetDescription());
             }
+            return settingsDescription.ToString();
         }
 
-        public IEnumerable<long> SaleZoneIds
+        public override bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue)
         {
-            get
-            {
-                if (this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null)
-                    return GetSaleZoneGroupContext().GetGroupZoneIds(this.Criteria.SaleZoneGroupSettings);
-                else
-                    return null;
-            }
+            return true;
         }
     }
 }

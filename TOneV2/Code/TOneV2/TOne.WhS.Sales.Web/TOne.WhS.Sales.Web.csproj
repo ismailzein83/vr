@@ -124,6 +124,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
@@ -145,12 +149,12 @@
     <Compile Include="Controllers\CountryWithDefaultRateController.cs" />
     <Compile Include="Controllers\ExcludedItemsController.cs" />
     <Compile Include="Controllers\PricingTemplateController.cs" />
+    <Compile Include="Controllers\SellingRuleController.cs" />
     <Compile Include="Controllers\SupplierTargetMatchController.cs" />
     <Compile Include="Controllers\CodeCompareController.cs" />
     <Compile Include="Controllers\RatePlanConfigController.cs" />
     <Compile Include="Controllers\RatePlanController.cs" />
     <Compile Include="Controllers\RatePlanPreviewController.cs" />
-    <Compile Include="Controllers\SellingRuleController.cs" />
     <Compile Include="Controllers\ZoneWithDefaultRateController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -234,10 +238,12 @@
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\vr-whs-sales-marginratecalculation.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\AvgCostCalculation.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\CostColumnsTemplate.html" />
-    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Fixed\Templates\FixedRuleDirective.html" />
-    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Fixed\vr-whs-sales-sellingrulesettings-fixed.js" />
-    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Margin\Templates\MarginRuleDirective.html" />
-    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Margin\vr-whs-sales-sellingrulesettings-margin.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Fixed\Templates\FixedThresholdSellingRule.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Fixed\vr-whs-sales-sellingrulesettings-threshold-fixed.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Percentage\Templates\PercentageThresholdSellingRule.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Percentage\vr-whs-sales-sellingrulesettings-threshold-percentage.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRule\Templates\EmptyDefinitionSettingsTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRule\vr-whs-sales-genericruledefinitionsettings-sellingrule.js" />
     <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\Templates\SupplierTargetMatchMethodsLCR2Template.html" />
     <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\Templates\SupplierTargetMatchMethodsLCR3Template.html" />
     <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\Templates\SupplierTargetMatchMethodsAverageTemplate.html" />
@@ -278,8 +284,8 @@
     <Content Include="WhS_Sales\Directives\PricingTemplate\vr-whs-sales-pricingtemplate-rates.js" />
     <Content Include="WhS_Sales\Directives\PricingTemplate\vr-whs-sales-pricingtemplate-zonefilter.js" />
     <Content Include="WhS_Sales\Directives\PricingTemplate\vr-whs-sales-pricingtemplaterule-management.js" />
-    <Content Include="WhS_Sales\Directives\SellingRules\Templates\SellingRulesGridTemplate.html" />
-    <Content Include="WhS_Sales\Directives\SellingRules\vr-whs-sales-sellingrules-grid.js" />
+    <Content Include="WhS_Sales\Directives\SellingRules\Templates\SellingRulesSettingsTemplate.html" />
+    <Content Include="WhS_Sales\Directives\SellingRules\vr-whs-sales-sellingrulesettings.js" />
     <Content Include="WhS_Sales\Directives\Service\Templates\DefaultServiceTemplate.html" />
     <Content Include="WhS_Sales\Directives\Service\Templates\ZoneServiceTemplate.html" />
     <Content Include="WhS_Sales\Directives\Service\vr-whs-sales-default-service.js" />
@@ -366,10 +372,6 @@
     <Content Include="WhS_Sales\Views\RatePlanSettingsController.js" />
     <Content Include="WhS_Sales\Views\RPRouteOptionSupplier.html" />
     <Content Include="WhS_Sales\Views\RPRouteOptionSupplierController.js" />
-    <Content Include="WhS_Sales\Views\SellingRule\SellingRuleEditor.html" />
-    <Content Include="WhS_Sales\Views\SellingRule\SellingRuleEditorController.js" />
-    <Content Include="WhS_Sales\Views\SellingRule\SellingRuleManagement.html" />
-    <Content Include="WhS_Sales\Views\SellingRule\SellingRuleManagementController.js" />
     <Content Include="WhS_Sales\Views\ManageCountries.html" />
     <Content Include="WhS_Sales\Views\ManageCountriesController.js" />
     <Content Include="WhS_Sales\Views\RatePlan.html" />

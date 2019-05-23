@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,6 +68,10 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkActions\ActionTypes\BEDBulkActionType.cs" />
@@ -95,6 +99,9 @@
     <Compile Include="RateCalculation\FixedRateCalculationMethod.cs" />
     <Compile Include="RateCalculation\PricingTemplateCalculationMethod.cs" />
     <Compile Include="RateCalculation\MarginRateCalculationMethod.cs" />
+    <Compile Include="SellingRules\Action\StopExecutionAction.cs" />
+    <Compile Include="SellingRules\Threshold\PercentageRateThreshold.cs" />
+    <Compile Include="SellingRules\Threshold\FixedRateThreshold.cs" />
     <Compile Include="SupplierTargetMatchCalculation\WeightedAverageTargetMatchCalculation.cs" />
     <Compile Include="SupplierTargetMatchCalculation\AverageTargetMatchCalculation.cs" />
     <Compile Include="SupplierTargetMatchCalculation\LCR2TargetMatchCalculation.cs" />

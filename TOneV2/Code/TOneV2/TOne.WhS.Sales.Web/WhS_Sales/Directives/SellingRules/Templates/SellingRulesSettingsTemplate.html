@@ -1,0 +1,25 @@
+﻿<vr-row>
+    <vr-columns width="1/4row">
+        <vr-select datatextfield="Title"
+                   on-ready="onThresholdSelectorReady"
+                   datavaluefield="ExtensionConfigurationId"
+                   label="Threshold"
+                   datasource="thresholdTemplateDataSource"
+                   selectedvalues="thresholdSelectedTemplate"
+                   hideremoveicon
+                   >
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="3/4row">
+        <vr-directivewrapper directive="thresholdSelectedTemplate.Editor" on-ready="onThresholdDirectiveReady"></vr-directivewrapper>
+    </vr-columns>
+    <!--<vr-columns width="1/4row">
+        <vr-select datatextfield="Title"
+                   datavaluefield="executionExtensionConfigurationId"
+                   label="Action"
+                   datasource="ctrl.actionTemplates"
+                   selectedvalues="ctrl.executionSelectedTemplate"
+                   onselectionchanged="ctrl.onActionTemplateChanged">
+        </vr-select>
+    </vr-columns>-->
+</vr-row>

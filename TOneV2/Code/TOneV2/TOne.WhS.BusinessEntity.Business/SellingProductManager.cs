@@ -7,10 +7,11 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SellingProductManager
+    public class SellingProductManager : BaseBusinessEntityManager
     {
         #region ctor/Local Variables
         #endregion
@@ -608,6 +609,53 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
+        #region IBusinessEntityManager Members
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetSellingProduct(Convert.ToInt32(context.EntityId));
+        }
+
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var allSellingProducts = GetAllSellingProduct();
+            if (allSellingProducts == null)
+                return null;
+            else
+                return allSellingProducts.Select(itm => itm as dynamic).ToList();
+        }
+
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetSellingProductName(Convert.ToInt32(context.EntityId));
+        }
+
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var sellingProduct = context.Entity as SellingProduct;
+            return sellingProduct.SellingProductId;
+        }
+
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+               
+        #endregion
         public class SellingProductLoggableEntity : VRLoggableEntityBase
         {
             public static SellingProductLoggableEntity Instance = new SellingProductLoggableEntity();

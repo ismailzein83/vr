@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public enum MarginStatus { Valid = 0, Invalid = 1 }
-    public abstract class SellingRuleSettings
+    public class SellingRuleSettings
     {
-        public abstract Guid ConfigId { get; }
-        public abstract void Execute(ISellingRuleExecutionContext context);
+        public RateRuleGrouped RateRuleGrouped { get; set; }
+
+        public void ApplySellingRule(ISellingRuleContext context)
+        {
+            if (RateRuleGrouped == null)
+                return;
+
+            foreach (var rateRule in RateRuleGrouped.RateRules)
+            {
+                rateRule.Threshold.Execute(context);
+            }
+        }
     }
 }
