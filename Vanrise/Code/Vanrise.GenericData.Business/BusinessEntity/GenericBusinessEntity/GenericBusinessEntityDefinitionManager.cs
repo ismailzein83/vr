@@ -78,10 +78,15 @@ namespace Vanrise.GenericData.Business
         }
         public DataRecordType GetGenericBEDataRecordType(Guid businessEntityDefinitionId)
         {
-            var genericBEDefinitionSettings = GetGenericBEDefinitionSettings(businessEntityDefinitionId, false);
-            var dataRecordType = _dataRecordTypeManager.GetDataRecordType(genericBEDefinitionSettings.DataRecordTypeId);
-            dataRecordType.ThrowIfNull("dataRecordType", genericBEDefinitionSettings.DataRecordTypeId);
+            var dataRecordTypeId = GetGenericBEDataRecordTypeId(businessEntityDefinitionId);
+            var dataRecordType = _dataRecordTypeManager.GetDataRecordType(dataRecordTypeId);
+            dataRecordType.ThrowIfNull("dataRecordType", dataRecordTypeId);
             return dataRecordType;
+        }
+        public Guid GetGenericBEDataRecordTypeId(Guid businessEntityDefinitionId)
+        {
+            var genericBEDefinitionSettings = GetGenericBEDefinitionSettings(businessEntityDefinitionId, false);
+            return genericBEDefinitionSettings.DataRecordTypeId;
         }
         public GenericBEGridDefinition GetGenericBEDefinitionGridDefinition(Guid businessEntityDefinitionId)
         {
