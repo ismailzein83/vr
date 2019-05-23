@@ -56,14 +56,7 @@
         function GetVRRestAPIRecordQueryInterceptorConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetVRRestAPIRecordQueryInterceptorConfigs'));
         }
-
-        function GetRDBDataRecordStorageJoinSettingsConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetRDBDataRecordStorageJoinSettingsConfigs'));
-        }
-
-        function GetRDBDataRecordStorageExpressionFieldSettingsConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetRDBDataRecordStorageExpressionFieldSettingsConfigs'));
-        }
+ 
         function GetPermanentFilterSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', "GetPermanentFilterSettingsConfigs"));
         }
@@ -79,8 +72,6 @@
             CheckRecordStoragesAccess: CheckRecordStoragesAccess,
             GetVRRestAPIRecordQueryInterceptorConfigs: GetVRRestAPIRecordQueryInterceptorConfigs,
             GetDataRecordStorageList: GetDataRecordStorageList,
-            GetRDBDataRecordStorageJoinSettingsConfigs: GetRDBDataRecordStorageJoinSettingsConfigs,
-            GetRDBDataRecordStorageExpressionFieldSettingsConfigs: GetRDBDataRecordStorageExpressionFieldSettingsConfigs,
             GetPermanentFilterSettingsConfigs: GetPermanentFilterSettingsConfigs
         };
     }
@@ -88,3 +79,4 @@
     appControllers.service('VR_GenericData_DataRecordStorageAPIService', DataRecordStorageAPIService);
 
 })(appControllers);
+

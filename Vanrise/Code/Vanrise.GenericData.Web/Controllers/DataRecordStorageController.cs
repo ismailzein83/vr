@@ -83,19 +83,6 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetRDBDataRecordStorageJoinSettingsConfigs")]
-        public IEnumerable<RDBDataRecordStorageJoinSettingsConfig> GetRDBDataRecordStorageJoinSettingsConfigs()
-        {
-            return _manager.GetRDBDataRecordStorageJoinSettingsConfigs();
-        }
-
-        [HttpGet]
-        [Route("GetRDBDataRecordStorageExpressionFieldSettingsConfigs")]
-        public IEnumerable<RDBDataRecordStorageExpressionFieldSettingsConfig> GetRDBDataRecordStorageExpressionFieldSettingsConfigs()
-        {
-            return _manager.GetRDBDataRecordStorageExpressionFieldSettingsConfigs();
-        }
-        [HttpGet]
         [Route("GetPermanentFilterSettingsConfigs")]
         public IEnumerable<DataRecordStoragePermanentFilterSettingsConfig> GetPermanentFilterSettingsConfigs()
         {
