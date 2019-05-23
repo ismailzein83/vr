@@ -142,6 +142,7 @@ namespace TestCallAnalysis.BP.Activities
                                                                     correlatedCDR.OrigGeneratedCalledNumber = generatedCDR.OrigCalledNumber;
                                                                     correlatedCDR.OrigGeneratedCallingNumber = generatedCDR.OrigCallingNumber;
                                                                     correlatedCDR.GeneratedId = generatedCDR.MappedCDRId;
+                                                                    correlatedCDR.OriginatedGeneratedZoneId = generatedCDR.OriginatedZoneId;
                                                                     correlatedCDRs.Add(correlatedCDR);
                                                                     break;
                                                                 }
@@ -157,6 +158,7 @@ namespace TestCallAnalysis.BP.Activities
                                                         correlatedCDR.OrigGeneratedCalledNumber = null;
                                                         correlatedCDR.OrigGeneratedCallingNumber = null;
                                                         correlatedCDR.GeneratedId = null;
+                                                        correlatedCDR.OriginatedGeneratedZoneId = null;
                                                         rcvdcdr.IsCorrelated = true;
                                                         updateMappedCDRs.MappedCDRsToUpdate.Add(rcvdcdr);
                                                         correlatedCDRs.Add(correlatedCDR);

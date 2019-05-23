@@ -31,5 +31,6 @@ namespace TestCallAnalysis.Entities
         public CDRNumberType? CallingNumberType { get; set; }
         public DateTime CreatedTime { get; set; }
         public long? ClientId { get; set; }
+        public long? OriginatedZoneId { get; set; }
     }
 }

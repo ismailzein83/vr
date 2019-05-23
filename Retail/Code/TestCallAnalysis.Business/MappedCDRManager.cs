@@ -29,6 +29,7 @@ namespace TestCallAnalysis.Business
             runtimeCDR.CallingNumberType = (int?)mappedCDR.CallingNumberType;
             runtimeCDR.CreatedTime = mappedCDR.CreatedTime;
             runtimeCDR.ClientId = mappedCDR.ClientId;
+            runtimeCDR.OriginatedZoneId = mappedCDR.OriginatedZoneId;
             return runtimeCDR;
         }
 
@@ -65,7 +66,8 @@ namespace TestCallAnalysis.Business
                 CreatedTime = cdr.CreatedTime,
                 CallingNumberType = (CDRNumberType?)cdr.CallingNumberType,
                 IsCorrelated = cdr.IsCorrelated,
-                ClientId = cdr.ClientId
+                ClientId = cdr.ClientId,
+                OriginatedZoneId = cdr.OriginatedZoneId
             };
         }
     }

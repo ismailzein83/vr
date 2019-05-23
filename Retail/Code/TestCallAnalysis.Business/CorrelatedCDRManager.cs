@@ -36,6 +36,8 @@ namespace TestCallAnalysis.Business
             runtimeCDR.GeneratedId = correlatedCDR.GeneratedId;
             runtimeCDR.ReceivedId = correlatedCDR.ReceivedId;
             runtimeCDR.ClientId = correlatedCDR.ClientId;
+            runtimeCDR.OriginatedGeneratedZoneId = correlatedCDR.OriginatedGeneratedZoneId;
+            runtimeCDR.OriginatedReceivedZoneId = correlatedCDR.OriginatedReceivedZoneId;
             return runtimeCDR;
         }
 
@@ -102,7 +104,8 @@ namespace TestCallAnalysis.Business
                 CaseId = null,
                 CreatedTime = mappedCDR.CreatedTime,
                 ReceivedId = mappedCDR.MappedCDRId,
-                ClientId = mappedCDR.ClientId
+                ClientId = mappedCDR.ClientId,
+                OriginatedReceivedZoneId = mappedCDR.OriginatedZoneId
             };
         }
 
