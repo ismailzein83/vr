@@ -76,7 +76,8 @@ as (select * from (values
 ('A0833F27-6718-40E1-BB69-344B0BD3CFAF','MostRelevantAnalytic','Most Relevant Analytic','VR_Analytic_FiguresTileQuerySettings','{"Editor":"vr-analytic-mostrelevant-figurestilequery"}'),
 ('E9CC9A31-DD48-45F5-A849-5402CCE3B7AF','VR_Analytic_WidgetSettings_Gauge','Gauge','Analytic_AnalyticWidgetsSettings','{"Editor":"vr-analytic-widgets-gauge-definition","RuntimeEditor":"vr-analytic-gauge-runtime"}'),
 ('76285A3E-C385-49C3-8833-DEA21A40471E','WidgetSettings','Analytic Widget','VRCommon_VRTileExtendedSettings','{"Editor":"vr-common-widgetsettings-definition"}'),
-('2E88B323-DE47-4C6B-8AD5-CC941BB3611E','RDB Data Provider','RDB Data Provider','VR_Analytic_AnalyticDataProviderSettings',' {"Editor":"vr-analytic-rdb-dataprovider"}')
+('2E88B323-DE47-4C6B-8AD5-CC941BB3611E','RDB Data Provider','RDB Data Provider','VR_Analytic_AnalyticDataProviderSettings',' {"Editor":"vr-analytic-rdb-dataprovider"}'),
+('5E32BB46-462E-44A0-B1F0-1F6DA3BD9053','VR_Analytic_FilterGroupAnalyticTablePermanentFilter','Filter Group','VR_Analytic_PermanentFilterSettings','{"Editor": "vr-analytic-permanentfilter-recordfilter" }')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
