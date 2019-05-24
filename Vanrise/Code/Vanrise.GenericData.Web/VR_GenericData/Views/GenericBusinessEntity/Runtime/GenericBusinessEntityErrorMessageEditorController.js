@@ -8,7 +8,7 @@
 
   
         var errorEntity;
-        var className ='alert alert-danger'
+        var className = 'alert alert-danger';
         loadParameters();
         defineScope();
         load();
