@@ -94,7 +94,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                     if (fieldValues != undefined) {
                         for (var prop in fieldValues) {
                             var fieldValue = fieldValues[prop];
-                            if (fieldValue.isHidden)
+                            if (fieldValue != undefined)
                                 fieldValuesObj[prop] = fieldValue.value;
                         }
                     }
@@ -162,7 +162,6 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                         }
 
                         var runtimeEditorPayload = {
-                            businessEntityDefinitionId: businessEntityDefinitionId,
                             selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : defaultValues,
                             dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,
                             definitionSettings: businessEntityDefinitionSettings.EditorDefinition.Settings,
