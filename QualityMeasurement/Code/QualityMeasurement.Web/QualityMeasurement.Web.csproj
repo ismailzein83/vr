@@ -161,6 +161,9 @@
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TimeZoneConverter">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\TimeZoneConverter.dll</HintPath>
+    </Reference>
     <Reference Include="TOne.CDRProcess.Arguments">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\TOne.CDRProcess\bin\Debug\TOne.CDRProcess.Arguments.dll</HintPath>
     </Reference>
