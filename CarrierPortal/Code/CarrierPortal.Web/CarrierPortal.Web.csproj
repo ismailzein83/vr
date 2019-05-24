@@ -162,6 +162,9 @@
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TimeZoneConverter">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\TimeZoneConverter.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>
