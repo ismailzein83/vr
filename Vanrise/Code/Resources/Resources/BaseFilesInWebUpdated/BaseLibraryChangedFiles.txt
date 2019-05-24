@@ -1,0 +1,16 @@
+﻿
+____________________________________________________
+
+1- bootstrap-datetimepicker.js 
+
+	-stop fill data on focus 
+	-fix drop-down layout 
+	-add date-section and time-section
+	-fix DSt time zone date selection
+_____________________________________________________
+
+2-bootstrap.css
+
+	-remove color override in print media query 
+_____________________________________________________
+

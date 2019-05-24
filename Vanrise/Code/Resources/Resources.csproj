@@ -134,6 +134,7 @@
     <Content Include="DLLs\TimeZoneConverter.dll" />
     <Content Include="DLLs\TimeZoneConverter.xml" />
     <Content Include="Files\RoslynCompiler.txt" />
+    <Content Include="Resources\BaseFilesInWebUpdated\BaseLibraryChangedFiles.txt" />
     <Content Include="Resources\dotnetCore\ProjectConversion.txt" />
     <Content Include="Resources\RDB\CreateTablesSamples\Create Tables in MySQL %28AccountBalance and Invoice%29.sql" />
     <Content Include="Resources\RDB\CreateTablesSamples\Oracle Create AccountBalance And Invoice Tables.sql" />
