@@ -41,6 +41,7 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIU
 
                 api.load = function (payload) {
                     var promises = [];
+                    $scope.scopeModel.tabContainers.length = 0;
 
                     if (payload != undefined) {
                         selectedValues = payload.selectedValues;
