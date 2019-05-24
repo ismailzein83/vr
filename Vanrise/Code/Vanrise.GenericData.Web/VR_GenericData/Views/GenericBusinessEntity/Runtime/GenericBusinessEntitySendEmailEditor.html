@@ -1,9 +1,7 @@
 ﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBusinessEntitySendEmailController" vr-loader="scopeModel.isLoading" width="'35%'">
     <vr-modalbody>
         <vr-form name="formGenericSendEmailEditor">
-            <vr-tabs>
-                <vr-tab header="'Definition'" localizedheader="'VRRes.Common.Definition.VREnd'">
-                    <vr-row removeline>
+               <vr-row removeline>
                         <vr-columns width="fullrow">
                             <vr-common-mailmessagetemplate-selector ng-if="scopeModel.showMailMessageTemplateSelector" showaddbutton hideremoveicon on-ready="scopeModel.onGenericBEMailTemplateSelectorReady" isrequired="true" customlabel="Email Template" localizedlabel="VRRes.Common.EmailTemplate.VREnd" onselectionchanged="scopeModel.onGenericBEMailTemplateSelectionChanged"></vr-common-mailmessagetemplate-selector>
                         </vr-columns>
@@ -43,8 +41,6 @@
                     <vr-datalist maxitemsperrow="3" datasource="scopeModel.uploadedAttachements" autoremoveitem="true">
                         <a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.fileId)">{{dataItem.fileName}}</a>
                     </vr-datalist>
-                </vr-tab>
-            </vr-tabs>
 
         </vr-form>
     </vr-modalbody>

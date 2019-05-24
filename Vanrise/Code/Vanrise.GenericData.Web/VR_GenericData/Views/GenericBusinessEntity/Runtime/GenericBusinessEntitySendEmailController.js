@@ -114,8 +114,6 @@
                 var emailObject = buildGenericBETemplateObjFromScope();
                 return VR_GenericData_GenericBEEmailActionAPIService.SendEmail(emailObject)
                     .then(function (response) {
-                        if ($scope.onGenericBEEmailSend != undefined)
-                            $scope.onGenericBEEmailSend(response);
                         $scope.modalContext.closeModal();
                     })
                     .catch(function (error) {
@@ -165,7 +163,7 @@
         function loadAllControls() {
 
             function setTitle() {
-                $scope.title = "Generic Business Entity Email";
+                $scope.title = "Send Email";
             }
             function loadStaticData() {
                 if (genericBETemplateEntity != undefined && genericBETemplateEntity.VRMailEvaluatedTemplate != undefined) {

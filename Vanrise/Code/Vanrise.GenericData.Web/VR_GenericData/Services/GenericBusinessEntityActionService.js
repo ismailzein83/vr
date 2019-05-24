@@ -228,13 +228,8 @@
                     var businessEntityDefinitionId = payload.businessEntityDefinitionId; 
                     var genericBusinessEntityId = payload.genericBusinessEntityId;
                     var genericBEAction = payload.genericBEAction;
-
-                    var promiseDeffered = UtilsService.createPromiseDeferred();
-                    var onGenericBEEmailSend = function (response) {
-                        promiseDeffered.resolve(true);
-                    };
-                    VR_GenericData_GenericBusinessEntityService.sendEmailGenericBE(onGenericBEEmailSend, genericBusinessEntityId, businessEntityDefinitionId, genericBEAction);
-                    return promiseDeffered.promise;
+                    
+                    VR_GenericData_GenericBusinessEntityService.sendEmailGenericBE(genericBusinessEntityId, businessEntityDefinitionId, genericBEAction);
                 }
             };
             registerActionType(sendEmailActionType);

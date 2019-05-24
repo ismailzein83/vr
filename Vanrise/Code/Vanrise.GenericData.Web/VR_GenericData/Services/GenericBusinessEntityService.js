@@ -135,7 +135,7 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityBulkActionsEditor.html', parameters, settings);
         }
-        function sendEmailGenericBE(onGenericBEEmailSend, genericBEDefinitionId, businessEntityDefinitionId, genericBEAction) {
+        function sendEmailGenericBE(genericBEDefinitionId, businessEntityDefinitionId, genericBEAction) {
             var parameters = {
                 genericBEDefinitionId: genericBEDefinitionId,
                 businessEntityDefinitionId: businessEntityDefinitionId,
@@ -144,7 +144,6 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onGenericBEEmailSend = onGenericBEEmailSend;
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntitySendEmailEditor.html', parameters, settings);
