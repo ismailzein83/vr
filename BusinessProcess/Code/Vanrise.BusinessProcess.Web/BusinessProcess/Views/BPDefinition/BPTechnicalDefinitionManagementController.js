@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BusinessProcess_BPDefinitionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionService', 'BusinessProcess_BPDefinitionAPIService'];
+    BusinessProcess_BPDefinitionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionService', 'BusinessProcess_BPDefinitionAPIService','VRNotificationService'];
 
-    function BusinessProcess_BPDefinitionManagementController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPDefinitionService, BusinessProcess_BPDefinitionAPIService) {
+    function BusinessProcess_BPDefinitionManagementController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPDefinitionService, BusinessProcess_BPDefinitionAPIService, VRNotificationService) {
         var gridAPI;
         var devProjectDirectiveApi;
         var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BusinessProcess_VRWorkflowManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_VRWorkflowAPIService'];
+    BusinessProcess_VRWorkflowManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_VRWorkflowAPIService','VRNotificationService'];
 
-    function BusinessProcess_VRWorkflowManagementController($scope, UtilsService,VRUIUtilsService,BusinessProcess_VRWorkflowService, BusinessProcess_VRWorkflowAPIService) {
+    function BusinessProcess_VRWorkflowManagementController($scope, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowService, BusinessProcess_VRWorkflowAPIService, VRNotificationService) {
 
 
         var gridAPI;
