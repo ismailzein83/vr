@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Business;
-using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.Ericsson.Entities
@@ -29,43 +28,32 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
             foreach (var sourceRoute in context.SourceRoutes)
             {
-                EricssonRouteType targetRouteRouteType;
-
-                if (sourceRoute.RouteType == EricssonRouteType.ANumber)
-                    targetRouteRouteType = EricssonRouteType.ANumberServiceLanguage;
-                else if (sourceRoute.RouteType == EricssonRouteType.BNumber)
-                    targetRouteRouteType = EricssonRouteType.BNumberServiceLanguage;
-                else
-                    throw new ArgumentException(string.Format("{0} can not be source route type.", sourceRoute.RouteType));
-
                 result.Add(new EricssonConvertedRoute()
                 {
                     BO = context.TargetBO,
                     Code = sourceRoute.Code,
                     RCNumber = sourceRoute.RCNumber,
-                    RouteType = targetRouteRouteType
+                    RouteType = sourceRoute.RouteType
                 });
+            }
 
-                if (CodeGroupSuffixes != null && CodeGroupSuffixes.Count > 0)
+            if (CodeGroupSuffixes != null && context.CodeGroupRoutes != null)
+            {
+                foreach (var codeGroupRoute in context.CodeGroupRoutes)
                 {
-                    var codeGroupObject = codeGroupManager.GetMatchCodeGroup(sourceRoute.Code);
-                    codeGroupObject.ThrowIfNull(string.Format("No Code Group found for code '{0}'.", sourceRoute.Code));
-
-                    if (string.Compare(codeGroupObject.Code, sourceRoute.Code) == 0)
+                    foreach (var suffix in CodeGroupSuffixes)
                     {
-                        foreach (var suffix in CodeGroupSuffixes)
+                        result.Add(new EricssonConvertedRoute()
                         {
-                            result.Add(new EricssonConvertedRoute()
-                            {
-                                BO = context.TargetBO,
-                                Code = sourceRoute.Code + suffix.Suffix,
-                                RCNumber = sourceRoute.RCNumber,
-                                RouteType = targetRouteRouteType
-                            });
-                        }
+                            BO = context.TargetBO,
+                            Code = string.Concat(codeGroupRoute.CodeGroup, suffix.Suffix),
+                            RCNumber = codeGroupRoute.RCNumber,
+                            RouteType = EricssonRouteType.BNumberServiceLanguage
+                        });
                     }
                 }
             }
+
             return result;
         }
     }
@@ -84,13 +72,19 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
     public interface IEricssonSpecialRoutingSettingContext
     {
-        List<EricssonConvertedRoute> SourceRoutes { get; set; }
-        string TargetBO { get; set; }
+        List<EricssonConvertedRoute> SourceRoutes { get; }
+
+        List<CodeGroupRoute> CodeGroupRoutes { get; }
+
+        string TargetBO { get; }
     }
 
     public class EricssonSpecialRoutingSettingContext : IEricssonSpecialRoutingSettingContext
     {
         public List<EricssonConvertedRoute> SourceRoutes { get; set; }
+
+        public List<CodeGroupRoute> CodeGroupRoutes { get; set; }
+
         public string TargetBO { get; set; }
     }
 }

@@ -105,6 +105,7 @@
     <Compile Include="Controller\EricssonManualRoutesController.cs" />
     <Compile Include="Controller\EricssonSwitchLoggerController.cs" />
     <Compile Include="Data\ICustomerMappingDataManager.cs" />
+    <Compile Include="Data\ICodeGroupRouteDataManager.cs" />
     <Compile Include="Data\IWhSRouteSyncEricssonDataManager.cs" />
     <Compile Include="Data\RouteSyncEricssonDataManagerFactory.cs" />
     <Compile Include="Data\IDataManager.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Entities\BranchRouteSettings.cs" />
     <Compile Include="Entities\BranchRouteSettingsConfig.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
+    <Compile Include="Entities\CodeGroupRoute.cs" />
     <Compile Include="Entities\EricssonConvertedRoutesPayload.cs" />
     <Compile Include="Entities\EricssonManualRouteAction.cs" />
     <Compile Include="Entities\EricssonSpecialRouting.cs" />

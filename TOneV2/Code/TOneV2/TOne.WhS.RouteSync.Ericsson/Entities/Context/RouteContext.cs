@@ -13,7 +13,18 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 	}
 
-	public interface IRouteCompareTablesContext
+    public interface ICodeGroupRouteInitializeContext
+    {
+
+    }
+
+    public class CodeGroupRouteInitializeContext : ICodeGroupRouteInitializeContext
+    {
+
+    }
+
+
+    public interface IRouteCompareTablesContext
 	{
 		Dictionary<string, EricssonConvertedRouteDifferences> RouteDifferencesByBO { set; }
 	}

@@ -29,17 +29,20 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
             context.ThrowIfNull("context");
             this.Settings.ThrowIfNull("Settings");
 
-            return Settings.Execute(new EricssonSpecialRoutingSettingContext() { SourceRoutes = context.SourceRoutes, TargetBO = TargetBO });
+            return Settings.Execute(new EricssonSpecialRoutingSettingContext() { SourceRoutes = context.SourceRoutes, TargetBO = TargetBO, CodeGroupRoutes = context.CodeGroupRoutes });
         }
     }
 
     public interface IGetSpecialRoutesContext
     {
-        List<EricssonConvertedRoute> SourceRoutes { get; set; }
+        List<EricssonConvertedRoute> SourceRoutes { get; }
+
+        List<CodeGroupRoute> CodeGroupRoutes { get; }
     }
 
     public class GetSpecialRoutesContext : IGetSpecialRoutesContext
     {
         public List<EricssonConvertedRoute> SourceRoutes { get; set; }
+        public List<CodeGroupRoute> CodeGroupRoutes { get; set; }
     }
 }

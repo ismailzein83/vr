@@ -88,7 +88,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
                 } while (!ShouldStop(handle) && hasItem);
             });
 
-            var switchRouteSynchronizerOnAllRoutesConvertedContext = new SwitchRouteSynchronizerOnAllRoutesConvertedContext() { ConvertedRoutesPayload = convertedRoutesPayload };
+            var switchRouteSynchronizerOnAllRoutesConvertedContext = new SwitchRouteSynchronizerOnAllRoutesConvertedContext() { ConvertedRoutesPayload = convertedRoutesPayload, SwitchId = inputArgument.SwitchInProcess.Switch.SwitchId };
             switchInProcess.Switch.RouteSynchronizer.onAllRoutesConverted(switchRouteSynchronizerOnAllRoutesConvertedContext);
             if (switchRouteSynchronizerOnAllRoutesConvertedContext.ConvertedRoutes != null && switchRouteSynchronizerOnAllRoutesConvertedContext.ConvertedRoutes.Count > 0)
             {

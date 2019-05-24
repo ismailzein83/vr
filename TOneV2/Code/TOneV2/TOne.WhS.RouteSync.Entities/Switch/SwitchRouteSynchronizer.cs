@@ -198,12 +198,16 @@ namespace TOne.WhS.RouteSync.Entities
 
     public interface ISwitchRouteSynchronizerOnAllRoutesConvertedContext
     {
+        string SwitchId { get; }
+
         Object ConvertedRoutesPayload { get; }
 
         List<ConvertedRoute> ConvertedRoutes { set; }
     }
     public class SwitchRouteSynchronizerOnAllRoutesConvertedContext : ISwitchRouteSynchronizerOnAllRoutesConvertedContext
     {
+        public string SwitchId { get; set; }
+
         public Object ConvertedRoutesPayload { get; set; }
 
         public List<ConvertedRoute> ConvertedRoutes { get; set; }

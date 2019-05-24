@@ -58,6 +58,10 @@ namespace TOne.WhS.RouteSync.Ericsson
             routeCaseDataManager.SwitchId = context.SwitchId;
             routeCaseDataManager.Initialize(new RouteCaseInitializeContext() { FirstRCNumber = FirstRCNumber, BranchRouteSettings = BranchRouteSettings });
 
+            ICodeGroupRouteDataManager codeGroupRouteDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<ICodeGroupRouteDataManager>();
+            codeGroupRouteDataManager.SwitchId = context.SwitchId;
+            codeGroupRouteDataManager.Initialize(new CodeGroupRouteInitializeContext());
+
             CustomerMappingManager customerMappingManager = new CustomerMappingManager();
             customerMappingManager.Initialize(context.SwitchId, CarrierMappings.Values);
 
@@ -178,7 +182,30 @@ namespace TOne.WhS.RouteSync.Ericsson
                 return;
 
             List<ConvertedRoute> routesAfterCompression = RouteSync.Business.Helper.CompressRoutesWithCodes(payload.ConvertedRoutes, CreateEricssionConvertedRoute);
-            context.ConvertedRoutes = ExpandConvertedRoutes(routesAfterCompression);
+            Dictionary<string, Dictionary<string, int>> routeCaseByCodeGroupByBO;
+            context.ConvertedRoutes = ExpandConvertedRoutes(routesAfterCompression, out routeCaseByCodeGroupByBO);
+
+            if (routeCaseByCodeGroupByBO != null)
+            {
+                List<CodeGroupRoute> codeGroupRoutes = new List<CodeGroupRoute>();
+                foreach (var routeCaseByCodeGroupKVP in routeCaseByCodeGroupByBO)
+                {
+                    string bo = routeCaseByCodeGroupKVP.Key;
+                    Dictionary<string, int> routeCaseByCodeGroup = routeCaseByCodeGroupKVP.Value;
+                    foreach (var kvp in routeCaseByCodeGroup)
+                    {
+                        string codeGroup = kvp.Key;
+                        int rcNumber = kvp.Value;
+
+                        CodeGroupRoute item = new CodeGroupRoute() { BO = bo, CodeGroup = codeGroup, RCNumber = rcNumber };
+                        codeGroupRoutes.Add(item);
+                    }
+                }
+
+                ICodeGroupRouteDataManager codeGroupRouteDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<ICodeGroupRouteDataManager>();
+                codeGroupRouteDataManager.SwitchId = context.SwitchId;
+                codeGroupRouteDataManager.InsertRoutes(codeGroupRoutes);
+            }
         }
 
         private ConvertedRouteWithCode CreateEricssionConvertedRoute(ICreateConvertedRouteWithCodeContext context)
@@ -233,6 +260,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 
             ICustomerMappingDataManager customerMappingDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<ICustomerMappingDataManager>();
             customerMappingDataManager.SwitchId = context.SwitchId;
+
+            ICodeGroupRouteDataManager codeGroupRouteDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<ICodeGroupRouteDataManager>();
+            codeGroupRouteDataManager.SwitchId = context.SwitchId;
             #endregion
 
             #region Handle Special Routing
@@ -242,6 +272,8 @@ namespace TOne.WhS.RouteSync.Ericsson
                 IEnumerable<string> specialRouteSourceBOs = ManualRouteSettings.EricssonSpecialRoutes.Select(itm => itm.SourceBO);
                 Dictionary<string, List<EricssonConvertedRoute>> sourceEricssonConvertedRoutesByBOs = routeDataManager.GetFilteredConvertedRouteByBO(specialRouteSourceBOs);
 
+                Dictionary<string, List<CodeGroupRoute>> codeGroupRoutesByBOs = codeGroupRouteDataManager.GetFilteredCodeGroupRouteByBO(specialRouteSourceBOs);
+
                 if (sourceEricssonConvertedRoutesByBOs != null && sourceEricssonConvertedRoutesByBOs.Count > 0)
                 {
                     foreach (var ericssonSpecialRoute in ManualRouteSettings.EricssonSpecialRoutes)
@@ -249,7 +281,13 @@ namespace TOne.WhS.RouteSync.Ericsson
                         List<EricssonConvertedRoute> sourceEricssonConvertedRoutes;
                         if (sourceEricssonConvertedRoutesByBOs.TryGetValue(ericssonSpecialRoute.SourceBO, out sourceEricssonConvertedRoutes))
                         {
-                            var routes = ericssonSpecialRoute.GetSpecialRoutes(new GetSpecialRoutesContext() { SourceRoutes = sourceEricssonConvertedRoutes });
+                            var specialRoutecontext = new GetSpecialRoutesContext()
+                            {
+                                SourceRoutes = sourceEricssonConvertedRoutes,
+                                CodeGroupRoutes = codeGroupRoutesByBOs != null ? codeGroupRoutesByBOs.GetRecord(ericssonSpecialRoute.SourceBO) : null
+                            };
+
+                            var routes = ericssonSpecialRoute.GetSpecialRoutes(specialRoutecontext);
                             if (routes != null && routes.Count > 0)
                                 specialRoutes.AddRange(routes);
                         }
@@ -1805,10 +1843,15 @@ namespace TOne.WhS.RouteSync.Ericsson
             return false;
         }
 
-        private List<ConvertedRoute> ExpandConvertedRoutes(List<ConvertedRoute> routesAfterCompression)
+        private List<ConvertedRoute> ExpandConvertedRoutes(List<ConvertedRoute> routesAfterCompression, out Dictionary<string, Dictionary<string, int>> routeCaseByCodeGroupByBO)
         {
+            routeCaseByCodeGroupByBO = null;
+
             if (routesAfterCompression == null || routesAfterCompression.Count == 0)
                 return null;
+
+            routeCaseByCodeGroupByBO = new Dictionary<string, Dictionary<string, int>>();
+            CodeGroupManager codeGroupManager = new CodeGroupManager();
 
             List<ConvertedRoute> finalConvertedRoutes = new List<ConvertedRoute>();
 
@@ -1836,6 +1879,12 @@ namespace TOne.WhS.RouteSync.Ericsson
                 EricssonConvertedRouteByCodeByPrefixLength convertedRoutesByPrefixLength = convertedRoutesByBO.GetRecord(convertedRoute.Code[0]);
                 EricssonConvertedRouteByCode convertedRoutesByCode = convertedRoutesByPrefixLength.GetOrCreateItem(convertedRoute.Code.Length);
                 convertedRoutesByCode.Add(convertedRoute.Code, convertedRoute);
+
+                Dictionary<string, int> routeCaseByCode = routeCaseByCodeGroupByBO.GetOrCreateItem(convertedRoute.BO);
+
+                var codeGroupObject = codeGroupManager.GetMatchCodeGroup(convertedRoute.Code);
+                if (string.Compare(codeGroupObject.Code, convertedRoute.Code) == 0)
+                    routeCaseByCode.Add(codeGroupObject.Code, convertedRoute.RCNumber);
             }
 
             foreach (var structuredRoutesByBOKvp in structuredRoutes)
