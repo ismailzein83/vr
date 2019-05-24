@@ -190,9 +190,6 @@ namespace Vanrise.GenericData.Business
                         }, dataRecordStorageId);
                         input.ResultKey = resultKey;
                     }
-                    var orderType = input.Query.OrderType;
-                    if (orderType.HasValue)
-                        cachedAccountsWithSelectionHandling = GetOrderedDataRecords(orderType.Value, input.Query.Columns, input.Query.AdvancedOrderOptions, cachedAccountsWithSelectionHandling);
                     return DataRetrievalManager.Instance.ProcessResult(input, AllRecordsToBigResult(input, cachedAccountsWithSelectionHandling, recordType), handler);
 
                 }
@@ -970,10 +967,10 @@ namespace Vanrise.GenericData.Business
             return orderedRecords;
         }
 
-        private static IEnumerable<DataRecord> GetOrderedDataRecords(OrderType orderType, List<string> fieldNames, AdvancedOrderOptionsBase advancedOrderOptions,
-            IEnumerable<DataRecord> allRecords)
+        private static IOrderedEnumerable<DataRecordDetail> GetOrderedDataRecords(OrderType orderType, List<string> fieldNames, AdvancedOrderOptionsBase advancedOrderOptions,
+            IEnumerable<DataRecordDetail> allRecords)
         {
-            IEnumerable<DataRecord> orderedRecords;
+            IOrderedEnumerable<DataRecordDetail> orderedRecords;
             switch (orderType)
             {
                 case OrderType.ByAllFields: orderedRecords = GetOrderedByAllFields(fieldNames, allRecords, false); break;
@@ -983,15 +980,15 @@ namespace Vanrise.GenericData.Business
             }
             return orderedRecords;
         }
-        private static IEnumerable<DataRecord> GetOrderedByAllFields(List<string> fieldNames, IEnumerable<DataRecord> allRecords, bool descOrder)
+        private static IOrderedEnumerable<DataRecordDetail> GetOrderedByAllFields(List<string> fieldNames, IEnumerable<DataRecordDetail> allRecords, bool descOrder)
         {
             List<string> orderByFields = fieldNames;
             if (orderByFields == null || orderByFields.Count == 0)
                 throw new NullReferenceException($"orderByFields '{orderByFields}'");
 
             var firstField = orderByFields[0];
-            IOrderedEnumerable<DataRecord> orderedRecords;
-            Func<DataRecord, Object> firstOrderByFunction = record => record.FieldValues[firstField];
+            IOrderedEnumerable<DataRecordDetail> orderedRecords;
+            Func<DataRecordDetail, Object> firstOrderByFunction = record => record.FieldValues[firstField].Value;
             orderedRecords = descOrder ? allRecords.OrderByDescending(firstOrderByFunction) : allRecords.OrderBy(firstOrderByFunction);
 
             if (orderByFields.Count > 1)
@@ -999,14 +996,14 @@ namespace Vanrise.GenericData.Business
                 for (int i = 1; i < orderByFields.Count; i++)
                 {
                     var field = orderByFields[i];
-                    Func<DataRecord, Object> orderByFunction = record => record.FieldValues[field];
+                    Func<DataRecordDetail, Object> orderByFunction = record => record.FieldValues[field].Value;
                     orderedRecords = descOrder ? orderedRecords.ThenByDescending(orderByFunction) : orderedRecords.ThenBy(orderByFunction);
                 }
             }
             return orderedRecords;
         }
 
-        private static IEnumerable<DataRecord> GetOrderedByAdvancedFieldOrder(List<string> fieldNames, AdvancedOrderOptionsBase advancedOrderOptions, IEnumerable<DataRecord> allRecords)
+        private static IOrderedEnumerable<DataRecordDetail> GetOrderedByAdvancedFieldOrder(List<string> fieldNames, AdvancedOrderOptionsBase advancedOrderOptions, IEnumerable<DataRecordDetail> allRecords)
         {
             if (fieldNames == null)
                 throw new NullReferenceException($"fieldNames '{fieldNames}'");
@@ -1020,9 +1017,9 @@ namespace Vanrise.GenericData.Business
             var firstFieldOrder = fieldOrders[0];
             if (!fieldNames.Contains(firstFieldOrder.FieldName))
                 throw new Exception(String.Format("Field Order '{0}' is not available in the query field names", firstFieldOrder.FieldName));
-            Func<DataRecord, Object> firstOrderByFunction = record => record.FieldValues[firstFieldOrder.FieldName];
-
-            IOrderedEnumerable<DataRecord> orderedRecords = firstFieldOrder.OrderDirection == OrderDirection.Ascending ?
+            Func<DataRecordDetail, Object> firstOrderByFunction = record => record.FieldValues[firstFieldOrder.FieldName].Value;
+            
+            IOrderedEnumerable<DataRecordDetail> orderedRecords = firstFieldOrder.OrderDirection == OrderDirection.Ascending ?
                 allRecords.OrderBy(firstOrderByFunction) :
                 allRecords.OrderByDescending(firstOrderByFunction);
             if (fieldOrders.Count > 1)
@@ -1032,7 +1029,7 @@ namespace Vanrise.GenericData.Business
                     var fieldOrder = fieldOrders[i];
                     if (!fieldNames.Contains(fieldOrder.FieldName))
                         throw new Exception(String.Format("Field Order '{0}' is not available in the query fields", fieldOrder.FieldName));
-                    Func<DataRecord, Object> orderByFunction = record => record.FieldValues[fieldOrder.FieldName];
+                    Func<DataRecordDetail, Object> orderByFunction = record => record.FieldValues[fieldOrder.FieldName].Value;
 
                     orderedRecords = fieldOrder.OrderDirection == OrderDirection.Ascending ?
                         orderedRecords.ThenBy(orderByFunction) :
@@ -1092,18 +1089,27 @@ namespace Vanrise.GenericData.Business
                     Data = null,
                     TotalCount = 0
                 };
-
+         
             HashSet<string> fieldsThatDescriptionUsedForOrdering = GetFieldsThatDescriptionUsedForOrdering(input, recordType);
             IEnumerable<DataRecordDetail> allRecordsDetails = DataRecordDetailMapperList(allRecords, recordType, fieldsThatDescriptionUsedForOrdering);
 
             IOrderedEnumerable<DataRecordDetail> orderedRecords;
-            if (!string.IsNullOrEmpty(input.SortByColumnName))
-                orderedRecords = allRecordsDetails.VROrderList(input);
-            else
-                orderedRecords = input.Query.Direction == OrderDirection.Ascending ? allRecordsDetails.OrderBy(itm => itm.RecordTime) : allRecordsDetails.OrderByDescending(itm => itm.RecordTime);
 
-            if (input.Query.SortColumns != null && input.Query.SortColumns.Count > 0)
-                orderedRecords = GetOrderedByFields(input.Query.SortColumns, orderedRecords, recordType);
+            var orderType = input.Query.OrderType;
+            if (orderType.HasValue)
+            {
+                orderedRecords = GetOrderedDataRecords(orderType.Value, input.Query.Columns, input.Query.AdvancedOrderOptions, allRecordsDetails);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(input.SortByColumnName))
+                    orderedRecords = allRecordsDetails.VROrderList(input);
+                else
+                    orderedRecords = input.Query.Direction == OrderDirection.Ascending ? allRecordsDetails.OrderBy(itm => itm.RecordTime) : allRecordsDetails.OrderByDescending(itm => itm.RecordTime);
+
+                if (input.Query.SortColumns != null && input.Query.SortColumns.Count > 0)
+                    orderedRecords = GetOrderedByFields(input.Query.SortColumns, orderedRecords, recordType);
+            }
 
             IEnumerable<DataRecordDetail> pagedRecords = orderedRecords.VRGetPage(input);
 
@@ -1432,11 +1438,7 @@ namespace Vanrise.GenericData.Business
 
                     });
                 }
-                var orderType = input.Query.OrderType;
-                if (orderType.HasValue)
-                    dataRecordsFinalResult = GetOrderedDataRecords(orderType.Value, input.Query.Columns, input.Query.AdvancedOrderOptions, dataRecordsFinalResult);
                 return dataRecordsFinalResult;
-
             }
 
             protected override Vanrise.Entities.BigResult<DataRecordDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, IEnumerable<DataRecord> allRecords)
