@@ -791,12 +791,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\PublishTOneV2.pubxml" />
-    <Content Include="appSettings.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="ConnectionStrings.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="images\default-tone-iconheader.ico" />
     <Content Include="images\default-tone-login.png" />
     <Content Include="images\default-tone-logoonheader.png" />
