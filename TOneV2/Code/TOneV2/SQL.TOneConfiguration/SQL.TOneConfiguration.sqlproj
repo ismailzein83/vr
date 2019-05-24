@@ -954,6 +954,7 @@
     <None Include="TelecomCRM.PostDeployment.sql" />
     <None Include="NetworkInventory.PostDeployment.sql" />
     <None Include="NIM.PostDeployment.sql" />
+    <None Include="TOne.AccountManager.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
