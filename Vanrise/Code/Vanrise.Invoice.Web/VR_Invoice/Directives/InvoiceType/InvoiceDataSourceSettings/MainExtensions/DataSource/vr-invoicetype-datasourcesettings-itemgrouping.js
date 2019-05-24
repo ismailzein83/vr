@@ -178,11 +178,11 @@ app.directive("vrInvoicetypeDatasourcesettingsItemgrouping", ["UtilsService", "V
 				if (allMeasures != undefined)
 					for (var i = 0; i < allMeasures.length; i++) {
 						var measure = allMeasures[i];
-						var field = {
-							FieldName: measure.FieldName,
-							FieldTitle: measure.FieldDescription,
-							Type: measure.FieldType
-						}
+                        var field = {
+                            FieldName: measure.FieldName,
+                            FieldTitle: measure.FieldDescription,
+                            Type: measure.FieldType
+                        };
 						contextDataSource.push(field);
 					}
 				if (allDimensions != undefined)
