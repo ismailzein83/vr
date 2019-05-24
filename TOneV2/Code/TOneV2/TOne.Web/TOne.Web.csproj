@@ -215,6 +215,9 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TimeZoneConverter">
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\TimeZoneConverter.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.BP">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.dll</HintPath>
     </Reference>
@@ -660,10 +663,6 @@
     </Reference>
     <Reference Include="Vanrise.Queueing.Data.SQL">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.SQL.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Queueing.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Queueing.Extensions">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Extensions.dll</HintPath>
