@@ -28,7 +28,7 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
-
+END
 --[sec].[Module]-----------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;

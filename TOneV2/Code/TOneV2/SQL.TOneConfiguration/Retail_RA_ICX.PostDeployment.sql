@@ -27,7 +27,7 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
-
+END
 
 DELETE FROM	[sec].[View] WHERE ID IN ('1F11C51B-1EDB-4559-8EE2-25A44330CCA4',
 									  '11927F62-D139-452B-B23B-14EC58F87012',
