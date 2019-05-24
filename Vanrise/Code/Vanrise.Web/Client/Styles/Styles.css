@@ -5358,4 +5358,22 @@ span.option-marketprice {
     background-color: #FF0000 !important;
 }
 
+
 /*end vr-progress*/
+@media print {
+    #wrapper {
+        padding-top:unset !important;
+    }
+    #sidebar-wrapper, .vr-top-nav-container, .version-container, vr-actionbar, vr-choices-filter, .vr-remote-footer {
+        display: none !important;
+    }   
+
+    .wrapper-toogled {
+        padding-left: unset !important;
+    }
+
+    .label {
+        border: unset;
+    }
+   
+}
