@@ -2,9 +2,9 @@
 
     "use strict";
 
-    MailMessageTemplateManagementController.$inject = ['$scope', 'VRCommon_VRMailMessageTemplateAPIService', 'VRCommon_VRMailMessageTemplateService', 'UtilsService', 'VRUIUtilsService'];
+    MailMessageTemplateManagementController.$inject = ['$scope', 'VRCommon_VRMailMessageTemplateAPIService', 'VRCommon_VRMailMessageTemplateService', 'UtilsService', 'VRUIUtilsService','VRNotificationService'];
 
-    function MailMessageTemplateManagementController($scope, VRCommon_VRMailMessageTemplateAPIService, VRCommon_VRMailMessageTemplateService, UtilsService, VRUIUtilsService) {
+    function MailMessageTemplateManagementController($scope, VRCommon_VRMailMessageTemplateAPIService, VRCommon_VRMailMessageTemplateService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var gridAPI;
 

@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    DataTransformationDefinitionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataTransformationDefinitionService', 'VR_GenericData_DataTransformationDefinitionAPIService'];
+    DataTransformationDefinitionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataTransformationDefinitionService', 'VR_GenericData_DataTransformationDefinitionAPIService','VRNotificationService'];
 
-    function DataTransformationDefinitionManagementController($scope, UtilsService, VRUIUtilsService, VR_GenericData_DataTransformationDefinitionService, dataTransformationDefinitionAPIService) {
+    function DataTransformationDefinitionManagementController($scope, UtilsService, VRUIUtilsService, VR_GenericData_DataTransformationDefinitionService, dataTransformationDefinitionAPIService, VRNotificationService) {
 
         var gridAPI;
         var filter = {};

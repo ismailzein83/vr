@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    DataRecordFieldChoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldChoiceService', 'VR_GenericData_DataRecordFieldChoiceAPIService'];
+    DataRecordFieldChoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldChoiceService', 'VR_GenericData_DataRecordFieldChoiceAPIService','VRNotificationService'];
 
-    function DataRecordFieldChoiceManagementController($scope, UtilsService,VRUIUtilsService,VR_GenericData_DataRecordFieldChoiceService, VR_GenericData_DataRecordFieldChoiceAPIService) {
+    function DataRecordFieldChoiceManagementController($scope, UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldChoiceService, VR_GenericData_DataRecordFieldChoiceAPIService, VRNotificationService) {
 
         var dataRecordFieldChoiceGridAPI;
         var devProjectDirectiveApi;

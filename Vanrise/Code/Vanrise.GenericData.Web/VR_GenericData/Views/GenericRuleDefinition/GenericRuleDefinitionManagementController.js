@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionManagementController.$inject = ['$scope', 'UtilsService','VRUIUtilsService', 'VR_GenericData_GenericRuleDefinitionService', 'VR_GenericData_GenericRuleDefinitionAPIService'];
+    GenericRuleDefinitionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericRuleDefinitionService', 'VR_GenericData_GenericRuleDefinitionAPIService','VRNotificationService'];
 
-    function GenericRuleDefinitionManagementController($scope, UtilsService,VRUIUtilsService,VR_GenericData_GenericRuleDefinitionService, genericRuleDefinitionAPIService) {
+    function GenericRuleDefinitionManagementController($scope, UtilsService, VRUIUtilsService, VR_GenericData_GenericRuleDefinitionService, genericRuleDefinitionAPIService, VRNotificationService) {
 
         var gridAPI;
         var gridQuery = {};

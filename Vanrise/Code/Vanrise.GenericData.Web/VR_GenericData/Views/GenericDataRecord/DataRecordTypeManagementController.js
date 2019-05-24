@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    DataRecordTypeManagementController.$inject = ['$scope', 'UtilsService','VRUIUtilsService', 'VR_GenericData_DataRecordTypeService', 'VR_GenericData_DataRecordTypeAPIService'];
+    DataRecordTypeManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeService', 'VR_GenericData_DataRecordTypeAPIService','VRNotificationService'];
 
-    function DataRecordTypeManagementController($scope, UtilsService, VRUIUtilsService, VR_GenericData_DataRecordTypeService,dataRecordTypeAPIService) {
+    function DataRecordTypeManagementController($scope, UtilsService, VRUIUtilsService, VR_GenericData_DataRecordTypeService, dataRecordTypeAPIService, VRNotificationService) {
 
         var gridAPI;
         var filter = {};

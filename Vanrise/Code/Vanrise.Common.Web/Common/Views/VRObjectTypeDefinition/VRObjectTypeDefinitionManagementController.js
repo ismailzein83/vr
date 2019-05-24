@@ -2,9 +2,9 @@
 
     "use strict";
 
-    VRObjectTypeDefinitionManagementController.$inject = ['$scope', 'VRCommon_VRObjectTypeDefinitionAPIService', 'VRCommon_VRObjectTypeDefinitionService', 'UtilsService', 'VRUIUtilsService'];
+    VRObjectTypeDefinitionManagementController.$inject = ['$scope', 'VRCommon_VRObjectTypeDefinitionAPIService', 'VRCommon_VRObjectTypeDefinitionService', 'UtilsService', 'VRUIUtilsService','VRNotificationService'];
 
-    function VRObjectTypeDefinitionManagementController($scope,  VRCommon_VRObjectTypeDefinitionAPIService, VRCommon_VRObjectTypeDefinitionService, UtilsService, VRUIUtilsService) {
+    function VRObjectTypeDefinitionManagementController($scope, VRCommon_VRObjectTypeDefinitionAPIService, VRCommon_VRObjectTypeDefinitionService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var gridAPI;
         var devProjectDirectiveApi;

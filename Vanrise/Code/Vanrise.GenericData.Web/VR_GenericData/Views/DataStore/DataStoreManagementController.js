@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    DataStoreManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataStoreService', 'VR_GenericData_DataStoreAPIService'];
+    DataStoreManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataStoreService', 'VR_GenericData_DataStoreAPIService','VRNotificationService'];
 
-    function DataStoreManagementController($scope, UtilsService, VRUIUtilsService, VR_GenericData_DataStoreService, VR_GenericData_DataStoreAPIService) {
+    function DataStoreManagementController($scope, UtilsService, VRUIUtilsService, VR_GenericData_DataStoreService, VR_GenericData_DataStoreAPIService, VRNotificationService) {
 
         var DatStoreGridAPI;
         var filter = {};
