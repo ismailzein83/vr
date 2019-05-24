@@ -28,7 +28,7 @@ namespace TestCallAnalysis.Entities
         public DateTime CreatedTime { get; set; }
         public long? GeneratedId { get; set; }
         public long ReceivedId { get; set; }
-        public long? ClientId { get; set; }
+        public string ClientId { get; set; }
         public long? OriginatedGeneratedZoneId { get; set; }
         public long? OriginatedReceivedZoneId { get; set; }
     }

@@ -229,7 +229,7 @@ namespace TestCallAnalysis.Business
             caseCDR.LastAttempt = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastAttempt");
             caseCDR.NumberOfCDRs = (int)genericBusinessEntity.FieldValues.GetRecord("NumberOfCDRs");
             caseCDR.StatusId = (Guid)genericBusinessEntity.FieldValues.GetRecord("StatusId");
-            caseCDR.ClientId = (long?)genericBusinessEntity.FieldValues.GetRecord("ClientId");
+            caseCDR.ClientId = (string)genericBusinessEntity.FieldValues.GetRecord("ClientId");
             caseCDR.OperatorID = (long?)genericBusinessEntity.FieldValues.GetRecord("OperatorID");
             caseCDR.CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime");
             caseCDR.LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime");
@@ -247,7 +247,7 @@ namespace TestCallAnalysis.Business
             caseCDR.LastAttempt = (DateTime)dataRecord.FieldValues.GetRecord("LastAttempt");
             caseCDR.NumberOfCDRs = (int)dataRecord.FieldValues.GetRecord("NumberOfCDRs");
             caseCDR.StatusId = (Guid)dataRecord.FieldValues.GetRecord("StatusId");
-            caseCDR.ClientId = (long?)dataRecord.FieldValues.GetRecord("ClientId");
+            caseCDR.ClientId = (string)dataRecord.FieldValues.GetRecord("ClientId");
             caseCDR.OperatorID = (long?)dataRecord.FieldValues.GetRecord("OperatorID");
             caseCDR.CreatedTime = (DateTime)dataRecord.FieldValues.GetRecord("CreatedTime");
             caseCDR.LastModifiedTime = (DateTime)dataRecord.FieldValues.GetRecord("LastModifiedTime");

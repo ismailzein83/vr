@@ -15,7 +15,7 @@ namespace TestCallAnalysis.Entities
         public int NumberOfCDRs {get; set;}
         public Guid StatusId {get; set;}
         public long? OperatorID {get; set;}
-        public long? ClientId { get; set; }
+        public string ClientId { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime LastModifiedTime { get; set; }
         public int CreatedBy { get; set; }

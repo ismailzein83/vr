@@ -30,7 +30,7 @@ namespace TestCallAnalysis.Entities
         public bool IsCorrelated { get; set; }
         public CDRNumberType? CallingNumberType { get; set; }
         public DateTime CreatedTime { get; set; }
-        public long? ClientId { get; set; }
+        public string ClientId { get; set; }
         public long? OriginatedZoneId { get; set; }
     }
 }
