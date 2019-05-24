@@ -200,6 +200,9 @@
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TimeZoneConverter">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\TimeZoneConverter.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.BP.dll</HintPath>
     </Reference>
