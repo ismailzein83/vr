@@ -110,9 +110,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "ExecuteGenericBEBulkActions"), input);
         }
 
-        //function GetGenericEditorColumnsInfo(input) {
-        //    return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericEditorColumnsInfo'), input);
-        //}
+        function GetGenericEditorColumnsInfo(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericEditorColumnsInfo'), input);
+        }
 
         return {
             GetGenericBETitleFieldValue: GetGenericBETitleFieldValue,
@@ -131,8 +131,8 @@
             DownloadBusinessEntityLog: DownloadBusinessEntityLog,
             ExecuteGenericBEBulkActions: ExecuteGenericBEBulkActions,
             DoesUserHaveViewAccess: DoesUserHaveViewAccess,
-            GetDependentFieldValues: GetDependentFieldValues
-            //GetGenericEditorColumnsInfo: GetGenericEditorColumnsInfo
+            GetDependentFieldValues: GetDependentFieldValues,
+            GetGenericEditorColumnsInfo: GetGenericEditorColumnsInfo
         };
     }
 
