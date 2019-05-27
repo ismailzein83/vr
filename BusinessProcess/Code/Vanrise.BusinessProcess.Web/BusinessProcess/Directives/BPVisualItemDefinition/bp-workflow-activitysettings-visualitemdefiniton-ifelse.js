@@ -82,24 +82,28 @@
                 api.tryApplyVisualEventToChilds = function (visualEvents) {
                     var status = false;
                     if (visualEvents != undefined && visualEvents.length >= 0) {
-                        
                         var unsucceededVisualEvents = [];
+
                         for (var i = 0; i < visualEvents.length; i++) {
                             var visualEvent = visualEvents[i];
 
                             if (trueBranchDirectiveAPI != undefined && trueBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
-                                if (trueBranchDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
-                                    $scope.scopeModel.trueConditionCompleted = true;
-                                    status = true;
-                                    continue;
+                                if (visualItemDefinition != undefined && visualItemDefinition.Settings.TrueBranchActivityId == visualEvent.ActivityId) {
+                                    if (trueBranchDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
+                                        $scope.scopeModel.trueConditionCompleted = true;
+                                        status = true;
+                                        continue;
+                                    }
                                 }
                             }
 
                             if (falseBranchDirectiveAPI != undefined && falseBranchDirectiveAPI.tryApplyVisualEvent != undefined) {
-                                if (falseBranchDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
-                                    $scope.scopeModel.falseConditionCompleted = true;
-                                    status = true;
-                                    continue;
+                                if (visualItemDefinition != undefined && visualItemDefinition.Settings.FalseBranchActivityId == visualEvent.ActivityId) {
+                                    if (falseBranchDirectiveAPI.tryApplyVisualEvent(visualEvent)) {
+                                        $scope.scopeModel.falseConditionCompleted = true;
+                                        status = true;
+                                        continue;
+                                    }
                                 }
                             }
 
