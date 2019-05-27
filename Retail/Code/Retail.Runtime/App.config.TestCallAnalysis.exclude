@@ -65,13 +65,12 @@
     <add key="QueueingConfigDBConnStringKey"                    value="ConfigurationDBConnString"/>
     <add key="InvoiceDBConnStringKey"                           value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
-
-    <add key="TestCallAnalysis_DBConnStringKey"                 value="ConfigurationDBConnString"/>
-  
-    <add key="TestCallAnalysisCDRDBConnStringKey"               value="TestCallAnalysisCDRDBConnString"/>
-
+    <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
-
+    <add key="TestCallAnalysis_DBConnStringKey"                 value="ConfigurationDBConnString"/>  
+    
+    <add key="TestCallAnalysisCDRDBConnStringKey"               value="TestCallAnalysisCDRDBConnString"/>
+    
     <add key="ExposedConnectionStringNames" value=""/>
   </appSettings>
   <runtime>

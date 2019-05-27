@@ -57,7 +57,6 @@
     <add key="BusinessProcessTrackingDBConnStringKey"           value="LogDBConnString" />
     <add key="LoggingDBConnStringKey"                           value="LogDBConnString"/>
 
-
     <add key="SecurityDBConnStringKey"                          value="ConfigurationDBConnString"/>
     <add key="BusinessProcessConfigDBConnStringKey"             value="ConfigurationDBConnString"/>
     <add key="IntegrationConfigDBConnStringKey"                 value="ConfigurationDBConnString"/>
@@ -70,17 +69,15 @@
 
     <add key="VR_AccountBalance_TransactionDBConnStringKey"     value="ConfigurationDBConnString"/>
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
-
+    <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
     <add key="TestCallAnalysis_DBConnStringKey"                 value="ConfigurationDBConnString"/>
    
     <add key="TestCallAnalysisCDRDBConnStringKey"               value="TestCallAnalysisCDRDBConnString"/>
-   
-    <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
     
     <add key="ImportCodePreparationTemplatePath"                value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath"                  value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
-    <add key="ExposedConnectionStringNames"                     value="ConfigurationDBConnString,LogDBConnString"/>
+    <add key="ExposedConnectionStringNames"                     value=""/>
   </appSettings>
 
   <system.web>
