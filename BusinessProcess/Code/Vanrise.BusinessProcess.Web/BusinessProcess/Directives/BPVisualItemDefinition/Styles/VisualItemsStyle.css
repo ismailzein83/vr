@@ -130,10 +130,11 @@
 .vr-visualitem-separatordesignline {
     border-color: #d7e9f1 !important;
     height: 20px;
-    width: 20px;
+    width: 16px;
     border-left: 2px solid;
     display: block;
     float: right;
+    margin-bottom:10px;
 }
 
 .vr-visualitem-separatordesigndown {
