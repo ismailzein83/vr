@@ -158,6 +158,9 @@
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TimeZoneConverter">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\TimeZoneConverter.dll</HintPath>
+    </Reference>
     <Reference Include="TOne.Entities">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.Entities.dll</HintPath>
     </Reference>
