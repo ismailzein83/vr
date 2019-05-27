@@ -52,6 +52,7 @@ namespace BPMExtended.Main.Business
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString()
                         },
                         NewRatePlanId = newRatePlanId.ToString()
                     }

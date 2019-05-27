@@ -10,7 +10,7 @@ namespace BPMExtended.Main.Entities
 {
     public enum BPMCustomerType { Residential = 0, Enterprise = 1, Offical = 2 }
     public enum DirectoryInquiry { NoAction = 0, Add = 1, Remove = 2 }
-
+    public enum ResultStatus { Error = 0, Success = 1, Warning = 2 }
     public enum ContacrtOnHoldStatus { New = 0, Postponed = 5, Running = 10, Waiting = 20, Cancelling = 30, Completed = 50, Aborted = 60, Suspended = 70, Terminated = 80, Cancelled=90 }
 
     public class EntitySchemaNameAttribute : Attribute
@@ -52,29 +52,29 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Line Termination")]
         [EntitySchemaName("StLineTerminationRequest")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("CEBCB883-84AA-4183-9938-817E711EB2BF")]
         TelephonyLineTermination = 1,
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Line Moving Same Switch")]
         [EntitySchemaName("StLineMovingSameSwitchRequest")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("15F6B32E-978A-421E-9FDF-CCA45D422AB8")]
         TelephonyLineMovingSameSwitch = 2,
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Change Phone Number")]
         [EntitySchemaName("StChangePhoneNumberRequest")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("A359D1DA-9970-4C97-A669-8F30E7B31550")]
         TelephonyChangePhoneNumber = 3,
 
         [LineOfBusiness(LineOfBusiness.LeasedLine)]
         [Description("Leased Line Subscription")]
         [EntitySchemaName("StLeasedLine")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("DBEF5609-03E6-47D9-A901-6F48914A57F3")]
         LeasedLineSubscription = 4,
 
         [LineOfBusiness(LineOfBusiness.ADSL)]

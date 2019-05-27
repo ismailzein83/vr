@@ -69,9 +69,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account.cs" />
     <Compile Include="ActivateCptRequestInput.cs" />
     <Compile Include="ActivateTelephonyContractInput.cs" />
     <Compile Include="AddOtherChargesRequestInput.cs" />
+    <Compile Include="Contact.cs" />
     <Compile Include="CreditDebitNotesDetail.cs" />
     <Compile Include="CreditDebitNotes.cs" />
     <Compile Include="ADSLAlterSpeedRequestInput.cs" />

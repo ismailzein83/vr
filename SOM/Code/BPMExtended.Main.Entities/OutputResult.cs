@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public enum ResultStatus { Error = 0 , Success = 1 , Warning = 2}
 
     public class OutputResult
     {

@@ -21,6 +21,35 @@ namespace BPMExtended.Main.Business
             }
         }
 
+        public void CreateChangePhoneNumberSwitchTeamWorkOrder(string requestId)
+        {
+            string workOrderId = new CustomerRequestManager().CreateWorkOrder(requestId, "B6ECD46A-556A-404C-8C4E-E7B1645EB186");
+
+            if (workOrderId != "")
+            {
+                //update technical step of the request
+                var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+                var recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("StChangePhoneNumberRequest");
+                var recordEntity = recordSchema.CreateEntity(UserConnection);
+
+                var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, "StChangePhoneNumberRequest");
+                eSQ.RowCount = 1;
+                eSQ.AddAllSchemaColumns();
+                eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId));
+                var collection = eSQ.GetEntityCollection(UserConnection);
+                if (collection.Count > 0)
+                {
+                    recordEntity = collection[0];
+                    recordEntity.SetColumnValue("StTechnicalStepId", "4EE8DB9E-684E-4FB6-AE69-C04C41C4635B");
+                    recordEntity.SetColumnValue("StWorkOrderID", workOrderId);
+                    recordEntity.SetColumnValue("StIsWorkOrderCompleted", false);
+                }
+                recordEntity.Save();
+            }
+
+
+        }
+
         public void PostChangePhoneNumberToOM(Guid requestId)
         {
             EntitySchemaQuery esq;
