@@ -72,6 +72,8 @@
     <Compile Include="ActivateCptRequestInput.cs" />
     <Compile Include="ActivateTelephonyContractInput.cs" />
     <Compile Include="AddOtherChargesRequestInput.cs" />
+    <Compile Include="CreditDebitNotesDetail.cs" />
+    <Compile Include="CreditDebitNotes.cs" />
     <Compile Include="ADSLAlterSpeedRequestInput.cs" />
     <Compile Include="ADSLChangePasswordRequestInput.cs" />
     <Compile Include="ADSLForISPRequestInput.cs" />

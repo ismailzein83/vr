@@ -10,6 +10,7 @@ namespace BPMExtended.Main.Entities
     {
         public string ServiceId { get; set; }
         public string Status { get; set; }
+        public string Name { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime ValidFromDate { get; set; }
     }

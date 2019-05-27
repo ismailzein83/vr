@@ -272,7 +272,7 @@ namespace BPMExtended.Main.Business
         {
             object pagesize = "";
             SysSettings.TryGetValue(this.BPM_UserConnection, "CDR_Page_Size", out pagesize);
-
+            
             decimal pgsize = 0;
             decimal.TryParse(pagesize.ToString(), out pgsize);
             decimal number = 0;
@@ -379,6 +379,41 @@ namespace BPMExtended.Main.Business
             }
             return invoicesDetailItems;
         }
+
+        public List<CreditDebitNotesDetail> GetCreditDebitNotes(string customerId)
+        {
+            var creditDebitNotesItems = new List<CreditDebitNotesDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                // List<CreditDebitNotes> items = client.Get<List<CreditDebitNotes>>(String.Format("api/SOM.ST/Billing/GetCustomerDebitAndCreditNotes?CustomerId=={0}", customerId));
+                List<CreditDebitNotes> items = new List<CreditDebitNotes>();
+                if (items.Count() == 0)
+                {
+                    var mockItem = new CreditDebitNotes()
+                    {
+                        Id = "123",
+                        CustomerId = "Customer123",
+                        Amount = 123,
+                        BillingAccountCode = "BillingAccountCode123",
+                        OpenAmount = 1123,
+                        DocumentType = "documentType",
+                        DueDate = DateTime.Today,
+                        EntryDate = DateTime.Today
+                    };
+                    for (var i=0; i < 10; i++)
+                    {
+                        items.Add(mockItem);
+                    }
+                }
+                foreach (var item in items)
+                {
+                    var detailItem = CreditDebitNotesMapper(item);
+                    creditDebitNotesItems.Add(detailItem);
+                }
+            }
+            return creditDebitNotesItems;
+        }
+
 
         public InvoiceDetail GetInvoiceById(string invoiceId)
         {
@@ -547,6 +582,9 @@ namespace BPMExtended.Main.Business
         }
 
         #region Mappers
+
+        
+
         public PaymentPlanTemplateInfo TemplateToInfoMapper(PaymentPlanTemplate item)
         {
             return new PaymentPlanTemplateInfo
@@ -569,6 +607,22 @@ namespace BPMExtended.Main.Business
                 PaymentCode = item.Code,
                 PaymentDate = paymentDate,
                 CashierUserName = item.GLAccount,
+            };
+        }
+
+        public CreditDebitNotesDetail CreditDebitNotesMapper(CreditDebitNotes item)
+        {
+            return new CreditDebitNotesDetail
+            {
+                DocumentId = item.Id,
+                DocType = item.DocumentType,
+                BillingAccountCode = item.BillingAccountCode,
+                IssueDate = item.EntryDate.ToString(),
+                DocumentAmount = item.Amount.ToString(),
+                DocumentOpenAmount = item.OpenAmount.ToString()
+               // IssueDate = item.EntryDate.ToString(),
+               // DocumentAmount = item.Amount.ToString(),
+               // DocumentOpenAmount = item.OpenAmount.ToString()
             };
         }
 

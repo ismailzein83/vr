@@ -53,15 +53,14 @@ namespace BPMExtended.Main.Business
             }
             return servicesInfoItems;
         }
-        public ServiceHistoryRecord GetServiceHistory(string contractId)
+        public List<ServiceHistoryRecord> GetServiceHistory(string contractId, string serviceId)
         {
-            var item = new ServiceHistoryRecord();
+            var items = new List<ServiceHistoryRecord>();
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<ServiceHistoryRecord>(String.Format("api/SOM.ST/Billing/GetContractServiceHistory?ContractId={0}", contractId));
-                
+                items = client.Get<List<ServiceHistoryRecord>>(String.Format("api/SOM.ST/Billing/GetContractServiceHistory?ContractId={0}&ServiceId={1}", contractId, serviceId));
             }
-            return item;
+            return items;
         }
 
         public List<CustomerContractServiceDetail> GetContractServicesDetail(string contractId)
