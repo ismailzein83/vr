@@ -6,7 +6,7 @@
                                                           'vr-visualitem-event-error': scopeModel.classEventError,
                                                           'vr-visualitem-event-retrying': scopeModel.classEventRetrying}">
 
-    <span class="vr-visualitem-rightimg fas fa-box-open" ng-class="{'vr-visualitem-hintstarted': scopeModel.isHintStarted}"></span>
+    <span class="vr-visualitem-rightimg glyphicon glyphicon-info-sign" ng-class="{'vr-visualitem-hintstarted': scopeModel.isHintStarted}"></span>
     <span style="display:inline-block;width: 115px;">
         <vr-label ng-if="!scopeModel.isHintStarted" style="text-align:center;" breakline>{{scopeModel.displayName}} </vr-label>
         <vr-label ng-if="scopeModel.isHintStarted" style="text-align:center; " breakline isclickable>{{scopeModel.displayName}}</vr-label>
