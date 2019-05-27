@@ -17,7 +17,8 @@ namespace Vanrise.GenericData.Entities
         public int? LimitResult { get; set; }
         public List<GenericBusinessEntityFilter> Filters { get; set; }
         public BulkActionState BulkActionState { get; set; }
-
+        public OrderType? OrderType { get; set; }
+        public AdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
     }
     public class GenericBusinessEntityFilter
     {

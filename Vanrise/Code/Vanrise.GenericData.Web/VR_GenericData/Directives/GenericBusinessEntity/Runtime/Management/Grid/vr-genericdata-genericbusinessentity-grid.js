@@ -34,7 +34,7 @@
             var bulkActionDraftInstance;
             var context;
             var gridQuery;
-
+            var initialQueryOrderType;
             var gridAPI;
             var gridAPIPromiseDeferred = UtilsService.createPromiseDeferred();
             var gridDrillDownTabsObj;
@@ -72,7 +72,11 @@
                 };
 
 
-                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
+                    if (!retrieveDataContext.isDataSorted)
+                        dataRetrievalInput.Query.OrderType = initialQueryOrderType;
+                    else
+                        dataRetrievalInput.Query.OrderType = undefined;
                     return VR_GenericData_GenericBusinessEntityAPIService.GetFilteredGenericBusinessEntities(dataRetrievalInput).then(function (response) {
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
@@ -115,6 +119,7 @@
 
                 api.load = function (payload) {
                     var promises = [];
+                    initialQueryOrderType = payload.query.OrderType;
 
                     if (payload != undefined) {
                         if (businessEntityDefinitionId != undefined && businessEntityDefinitionId != payload.businessEntityDefinitionId) {

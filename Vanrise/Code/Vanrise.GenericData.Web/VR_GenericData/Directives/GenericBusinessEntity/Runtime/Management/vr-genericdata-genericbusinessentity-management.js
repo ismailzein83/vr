@@ -100,7 +100,6 @@
 
                     promises.push(loadBusinessEntityDefinitionSettings());
                     promises.push(loadExistingFilter());
-                    promises.push(loadGridDirective());
                     promises.push(loadCheckDoesUserHaveAddAccess());
 
                     function loadCheckDoesUserHaveAddAccess() {
@@ -164,14 +163,23 @@
                         return promiseDeferred.promise;
                     }
 
-                    return UtilsService.waitMultiplePromises(promises).then(function () {
+
+                    var rootPromiseNode = {
+                        promises: promises,
+                        getChildNode: function () {
+                            var directivePromises = [loadGridDirective()];
+                            return {
+                                promises: directivePromises
+                            };
+                        }
+                    };
+                    return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
                         $scope.scopeModel.showAddButton = showAddFromDefinitionSettings && showAddFromAccess;
                         $scope.scopeModel.showUploadButton = showUploadFromDefinitionSettings && showUploadFromAccess;
                     });
-
                 };
 
-                if (ctrl.onReady != null) {
+                if (ctrl.onReady != null) { 
                     ctrl.onReady(api);
                 }
             }
@@ -216,7 +224,6 @@
                         });
                     }
                 }
-
                 var gridPayload = {
                     query: {
                         FilterGroup: filterGroup,
@@ -224,10 +231,13 @@
                         ToTime: filterData != undefined ? filterData.ToTime : undefined,
                         Filters: filters,
                         fieldValues: fieldValues,
-                        LimitResult: filterData != undefined ? filterData.LimitResult : undefined
+                        OrderType: genericBEDefinitionSettings.OrderType,
+                        AdvancedOrderOptions: genericBEDefinitionSettings.AdvancedOrderOptions,
+                        LimitResult: filterData != undefined ? filterData.LimitResult : undefined,
                     },
                     businessEntityDefinitionId: businessDefinitionId
                 };
+
                 return gridPayload;
             }
         }

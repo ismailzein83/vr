@@ -1015,8 +1015,6 @@ namespace Vanrise.GenericData.Business
 
             var fieldOrders = advancedFieldOrderOptions.Fields;
             var firstFieldOrder = fieldOrders[0];
-            if (!fieldNames.Contains(firstFieldOrder.FieldName))
-                throw new Exception(String.Format("Field Order '{0}' is not available in the query field names", firstFieldOrder.FieldName));
             Func<DataRecordDetail, Object> firstOrderByFunction = record => record.FieldValues[firstFieldOrder.FieldName].Value;
             
             IOrderedEnumerable<DataRecordDetail> orderedRecords = firstFieldOrder.OrderDirection == OrderDirection.Ascending ?
@@ -1027,8 +1025,6 @@ namespace Vanrise.GenericData.Business
                 for (int i = 1; i < fieldOrders.Count; i++)
                 {
                     var fieldOrder = fieldOrders[i];
-                    if (!fieldNames.Contains(fieldOrder.FieldName))
-                        throw new Exception(String.Format("Field Order '{0}' is not available in the query fields", fieldOrder.FieldName));
                     Func<DataRecordDetail, Object> orderByFunction = record => record.FieldValues[fieldOrder.FieldName].Value;
 
                     orderedRecords = fieldOrder.OrderDirection == OrderDirection.Ascending ?
@@ -1409,24 +1405,45 @@ namespace Vanrise.GenericData.Business
 
             public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
             {
+                var inputForDataManager = input.VRDeepCopy();
+                var firstDataRecordStorageId = inputForDataManager.Query.DataRecordStorageIds.First();
+                var dataRecordStorage = new DataRecordStorageManager().GetDataRecordStorage(firstDataRecordStorageId);
+                dataRecordStorage.ThrowIfNull("dataRecordStorage", firstDataRecordStorageId);
+                var idField = new DataRecordTypeManager().GetDataRecordTypeIdField(dataRecordStorage.DataRecordTypeId);
+                if (idField.Name != null)
+                {
+                    if (!inputForDataManager.Query.Columns.Contains(idField.Name))
+                    {
+                        inputForDataManager.Query.Columns.Add(idField.Name);
+                    }
+                }
+
+                if (inputForDataManager.Query.AdvancedOrderOptions != null)
+                {
+                    inputForDataManager.Query.Columns.ThrowIfNull("input.Query.Columns");
+                    List<string> additionalMeasureNames = inputForDataManager.Query.AdvancedOrderOptions.GetAdditionalFieldNames();
+                    if (additionalMeasureNames != null)
+                    {
+                        foreach (var m in additionalMeasureNames)
+                        {
+                            if (!inputForDataManager.Query.Columns.Contains(m))
+                                inputForDataManager.Query.Columns.Add(m);
+                        }
+                    }
+                }
+
                 DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
-                var dataRecordsFinalResult = dataRecordStorageManager.GetDataRecordsFinalResult(DataRecordType, input, (dataRecordStorageId, cloneInput) =>
+                var dataRecordsFinalResult = dataRecordStorageManager.GetDataRecordsFinalResult(DataRecordType, inputForDataManager, (dataRecordStorageId, cloneInput) =>
                 {
                     return dataRecordStorageManager.GetDataRecords(cloneInput.Query.FromTime, cloneInput.Query.ToTime, cloneInput.Query.FilterGroup, cloneInput.Query.Columns, cloneInput.Query.LimitResult, cloneInput.Query.Direction, dataRecordStorageId);
                 });
-                if (input.Query.BulkActionState != null)
+                if (inputForDataManager.Query.BulkActionState != null)
                 {
                     VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
                     GenericBusinessEntityDefinitionManager _genericBEDefinitionManager = new GenericBusinessEntityDefinitionManager();
-                    bulkActionDraftManager.CreateWithClearVRBulkActionDraft(input.Query.BulkActionState, dataRecordsFinalResult, (records) =>
+                    bulkActionDraftManager.CreateWithClearVRBulkActionDraft(inputForDataManager.Query.BulkActionState, dataRecordsFinalResult, (records) =>
                     {
-                        DataRecordStorageManager manager = new DataRecordStorageManager();
-                        DataRecordTypeManager _recordTypeManager = new DataRecordTypeManager();
                         List<BulkActionItem> bulkActionItems = new List<BulkActionItem>();
-                        var dataRecordStorageId = input.Query.DataRecordStorageIds.First();
-                        var dataRecordStorage = manager.GetDataRecordStorage(dataRecordStorageId);
-                        dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
-                        var idField = _recordTypeManager.GetDataRecordTypeIdField(dataRecordStorage.DataRecordTypeId);
                         foreach (var record in records)
                         {
                             bulkActionItems.Add(new BulkActionItem

@@ -333,8 +333,8 @@ namespace Vanrise.GenericData.Business
                         Direction = genericBEDefinitionSetting.Direction.HasValue ? genericBEDefinitionSetting.Direction.Value : OrderDirection.Descending,
                         LimitResult = input.Query.LimitResult,
                         BulkActionState = input.Query.BulkActionState,
-                        OrderType = genericBEDefinitionSetting.OrderType,
-                        AdvancedOrderOptions = genericBEDefinitionSetting.AdvancedOrderOptions
+                        OrderType = input.Query.OrderType,
+                        AdvancedOrderOptions = input.Query.AdvancedOrderOptions
                         //SortColumns=,
                         //ToTime
                     },

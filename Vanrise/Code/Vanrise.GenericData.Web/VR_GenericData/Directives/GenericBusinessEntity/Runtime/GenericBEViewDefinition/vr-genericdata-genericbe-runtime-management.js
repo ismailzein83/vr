@@ -290,14 +290,15 @@
                     }
                 }
 
-
                 var gridPayload = {
                     query: {
                         FilterGroup: filterGroup,
                         FromTime: filterData != undefined ? filterData.FromTime : undefined,
                         ToTime: filterData != undefined ? filterData.ToTime : undefined,
                         Filters: filters,
-                        LimitResult: filterData != undefined ? filterData.LimitResult : undefined
+                        LimitResult: filterData != undefined ? filterData.LimitResult : undefined,
+                        OrderType: genericBEDefinitionSettings.OrderType,
+                        AdvancedOrderOptions: genericBEDefinitionSettings.AdvancedOrderOptions
                     },
                     businessEntityDefinitionId: businessEntityDefinitionAPI.getSelectedIds(),
                     context: getGridContext(),
