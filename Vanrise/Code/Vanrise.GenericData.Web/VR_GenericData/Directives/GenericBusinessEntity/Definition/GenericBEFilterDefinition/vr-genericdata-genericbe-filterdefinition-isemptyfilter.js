@@ -191,7 +191,7 @@
                 for (var i = 0; i < fieldLength; i++) {
                     var currentItem = $scope.scopeModel.fields[i];
                     for (var j = i + 1; j < fieldLength; j++) {
-                        if (i != j && $scope.scopeModel.fields[j].isDefault && currentItem.isDefault)
+                        if ($scope.scopeModel.fields[j].isDefault && currentItem.isDefault)
                             return true;
                     }
                 }

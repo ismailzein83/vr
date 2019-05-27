@@ -2,9 +2,9 @@
 
     'use strict';
 
-    IsEmptyFilterRuntimeSettingsDirective.$inject = ['UtilsService'];
+    IsEmptyFilterRuntimeSettingsDirective.$inject = ['UtilsService', 'VR_Invoice_LogicalOperatorEnum'];
 
-    function IsEmptyFilterRuntimeSettingsDirective(UtilsService) {
+    function IsEmptyFilterRuntimeSettingsDirective(UtilsService, VR_Invoice_LogicalOperatorEnum) {
         return {
             restrict: "E",
             scope: {
@@ -82,7 +82,7 @@
             function buildFilterGroup() {
                 var obj = {
                     $type: "Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities",
-                    LogicalOperator: 0,
+                    LogicalOperator: VR_Invoice_LogicalOperatorEnum.AND.value,
                     Filters: []
                 };
 
@@ -108,7 +108,7 @@
                         $scope.scopeModel.selectedFilter = definitionSettings.AllField;
                         obj.Filters.push(notEmptyFilter);
                         obj.Filters.push(emptyFilter);
-                        obj.LogicalOperator = 1;
+                        obj.LogicalOperator = VR_Invoice_LogicalOperatorEnum.OR.value;
                     }
                 }
                 else {
@@ -121,7 +121,7 @@
                     else {
                         obj.Filters.push(notEmptyFilter);
                         obj.Filters.push(emptyFilter);
-                        obj.LogicalOperator = 1;
+                        obj.LogicalOperator = VR_Invoice_LogicalOperatorEnum.OR.value;
                     }
                 }
                 return obj;
