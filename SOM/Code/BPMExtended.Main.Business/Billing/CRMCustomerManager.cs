@@ -2111,19 +2111,26 @@ namespace BPMExtended.Main.Business
             entities = esq.GetEntityCollection(BPM_UserConnection);
             foreach (Entity entity in entities)
             {
-                int value = int.Parse((string)entity.GetColumnValue("StRequestType"));
-
-
-                requests.Add(new RequestHeaderDetail()
+                int value = -1;
+                try
                 {
-                    step = (string)entity.GetColumnValue("StStep"),
-                    technicalStep = (string)entity.GetColumnValue("StTechnicalStep"),
-                    RequestId = (Guid)entity.GetColumnValue("StRequestId"),
-                    status = (string)entity.GetColumnValue("StStatusName"),
-                    contractId = (string)entity.GetColumnValue("StContractID"),
-                    RequestTypeName = Utilities.GetEnumAttribute<OperationType, DescriptionAttribute>((OperationType)value).Description,
-                    EntityName =  Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)value).schemaName
-            });
+                    int.TryParse((string)entity.GetColumnValue("StRequestType"), out value);
+                }
+                catch { }
+
+                if (value >= 0)
+                {
+                    requests.Add(new RequestHeaderDetail()
+                    {
+                        step = (string)entity.GetColumnValue("StStep"),
+                        technicalStep = (string)entity.GetColumnValue("StTechnicalStep"),
+                        RequestId = (Guid)entity.GetColumnValue("StRequestId"),
+                        status = (string)entity.GetColumnValue("StStatusName"),
+                        contractId = (string)entity.GetColumnValue("StContractID"),
+                        RequestTypeName = Utilities.GetEnumAttribute<OperationType, DescriptionAttribute>((OperationType)value).Description,
+                        EntityName = Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)value).schemaName
+                    });
+                }
                   
             }
 
@@ -2256,7 +2263,7 @@ namespace BPMExtended.Main.Business
             }
         }
 
-        public void UpdateCustomerAddress(string city,string firstName,string lastName,string addressSeq,string customerId, string contactId, string accountId)
+        public void UpdateCustomerAddress(string city,string firstName,string lastName,string addressSeq,string customerId, string contactId, string accountId, string requestId)
         {
 
             SOMRequestInput<CustomerAddressInput> somRequestInput = new SOMRequestInput<CustomerAddressInput>
@@ -2270,7 +2277,8 @@ namespace BPMExtended.Main.Business
                     CommonInputArgument = new CommonInputArgument()
                     {
                         ContactId = contactId,
-                        CustomerId = customerId
+                        CustomerId = customerId,
+                        RequestId = requestId
                     }
                 }
             };
@@ -2282,7 +2290,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void UpdateCustomerPaymentProfile(string paymentMethodId, string bankCode, string customerId, string accountNumber, string contactId, string accountId)
+        public void UpdateCustomerPaymentProfile(string paymentMethodId, string bankCode, string customerId, string accountNumber, string contactId, string accountId, string requestId)
         {
 
             SOMRequestInput<CustomerPaymentProfileInput> somRequestInput = new SOMRequestInput<CustomerPaymentProfileInput>
@@ -2295,7 +2303,8 @@ namespace BPMExtended.Main.Business
                     CommonInputArgument = new CommonInputArgument()
                     {
                         ContactId = contactId,
-                        CustomerId = customerId
+                        CustomerId = customerId,
+                        RequestId = requestId
                     }
                 }
 
@@ -2308,7 +2317,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void UpdateCustomerCategory(string customerCategoryId, string customerId,string contactId, string accountId)
+        public void UpdateCustomerCategory(string customerCategoryId, string customerId,string contactId, string accountId, string requestId)
         {
                 SOMRequestInput<CustomerCategoryInput> somRequestInput = new SOMRequestInput<CustomerCategoryInput>
                 {
@@ -2318,7 +2327,8 @@ namespace BPMExtended.Main.Business
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId,
-                            CustomerId = customerId
+                            CustomerId = customerId,
+                            RequestId = requestId
                         }
                     }
                 };
