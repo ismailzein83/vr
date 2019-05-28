@@ -30,7 +30,8 @@ namespace Retail.RA.Entities
     public enum ServiceType
     {
         Voice = 0,
-        SMS = 1
+        SMS = 1,
+        Data = 2
     }
 
     public enum SubscriberType
@@ -45,9 +46,12 @@ namespace Retail.RA.Entities
         OffNet = 2,
         International = 3
     }
-    public enum SourceType
+
+    public enum RevenueType
     {
         Usage = 0,
-        NonUsage = 1
+        VAS = 1,
+        Residual = 2,
+        NonUsage = 3
     }
 }

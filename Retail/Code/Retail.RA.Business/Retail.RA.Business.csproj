@@ -100,7 +100,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OperatorDeclaration\RAInterconnectOperatorDeclarationOnBeforeSaveHandler.cs" />
     <Compile Include="Reconciliation\Reconciliation.cs" />
-    <Compile Include="Reconciliation\RetailReconciliation.cs" />
+    <Compile Include="Reconciliation\RetailProcessedReconciliation.cs" />
     <Compile Include="Reconciliation\SMSReconciliation.cs" />
     <Compile Include="SMSRateValueRule\SMSRateValueMappingStep.cs" />
     <Compile Include="SMSRateValueRule\SMSRateValueRule.cs" />

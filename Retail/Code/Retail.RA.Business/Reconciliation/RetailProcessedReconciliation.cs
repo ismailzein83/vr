@@ -10,7 +10,7 @@ using Vanrise.Common;
 
 namespace Retail.RA.Business
 {
-    public class RetailReconciliationMemoryAnalyticDataManager : MemoryAnalyticDataManager
+    public class RetailProcessedReconciliationMemoryAnalyticDataManager : MemoryAnalyticDataManager
     {
         #region MemoryAnalyticDataManager
         public override List<RawMemoryRecord> GetRawRecords(AnalyticQuery query, List<string> neededFieldNames)
@@ -44,7 +44,7 @@ namespace Retail.RA.Business
             AnalyticQuery prepaidCDRAnalyticQuery = new AnalyticQuery
             {
                 TableId = Guid.Parse("7a865558-0ac3-408e-85dc-3dd134a94588"),
-                MeasureFields = new List<string> { "TotalDurationInMinutes", "TotalRevenue","NumberOfCDRs" },
+                MeasureFields = new List<string> { "TotalDurationInMinutes", "TotalRevenue", "NumberOfCalls" },
                 DimensionFields = new List<string> { "Operator", "Period" ,"Subscriber", "Scope"},
                 FromTime = Utilities.Min(minDate, query.FromTime),
                 ToTime = Utilities.Max(maxDate, toTime),
@@ -54,7 +54,7 @@ namespace Retail.RA.Business
             AnalyticQuery postpaidCDRAnalyticQuery = new AnalyticQuery
             {
                 TableId = Guid.Parse("080b5588-685d-4b98-84f9-ebca6af81887"),
-                MeasureFields = new List<string> { "TotalDurationInMinutes", "TotalRevenue","NumberOfCDRs" },
+                MeasureFields = new List<string> { "TotalDurationInMinutes", "TotalRevenue", "NumberOfCalls" },
                 DimensionFields = new List<string> { "Operator", "Period" ,"Subscriber" ,"Scope" },
                 FromTime = Utilities.Min(minDate, query.FromTime),
                 ToTime = Utilities.Max(maxDate, toTime),
@@ -153,7 +153,7 @@ namespace Retail.RA.Business
                         {
                             var onNetPrepaidVoiceOperationDeclarationService = operatorDeclaration.Settings.CastWithValidate<OnNetPrepaidVoiceOperationDeclarationService>("onNetPrepaidVoiceOperationDeclarationService");
                             reconcilationObj.SubscriberType = SubscriberType.Prepaid;
-                            reconcilationObj.SourceType = SourceType.Usage;
+                            reconcilationObj.RevenueType = RevenueType.Usage;
                             reconcilationObj.ServiceType = ServiceType.Voice;
 
                             reconcilationObj.DeclaredNumberOfCalls = onNetPrepaidVoiceOperationDeclarationService.Calls;
@@ -166,7 +166,7 @@ namespace Retail.RA.Business
                         {
                             var onNetPostpaidVoiceOperationDeclarationService = operatorDeclaration.Settings.CastWithValidate<OnNetPostpaidVoiceOperationDeclarationService>("onNetPostpaidVoiceOperationDeclarationService");
                             reconcilationObj.SubscriberType = SubscriberType.Postpaid;
-                            reconcilationObj.SourceType = SourceType.Usage;
+                            reconcilationObj.RevenueType = RevenueType.Usage;
                             reconcilationObj.ServiceType = ServiceType.Voice;
 
                             reconcilationObj.DeclaredNumberOfCalls = onNetPostpaidVoiceOperationDeclarationService.Calls;
@@ -180,7 +180,7 @@ namespace Retail.RA.Business
                         {
                             var onNetPrepaidSMSOperationDeclarationService = operatorDeclaration.Settings.CastWithValidate<OnNetPrepaidSMSOperationDeclarationService>("OnNetPrepaidSMSOperationDeclarationService");
                             reconcilationObj.SubscriberType = SubscriberType.Prepaid;
-                            reconcilationObj.SourceType = SourceType.Usage;
+                            reconcilationObj.RevenueType = RevenueType.Usage;
                             reconcilationObj.ServiceType = ServiceType.SMS;
 
                             reconcilationObj.DeclaredNumberOfSMS = onNetPrepaidSMSOperationDeclarationService.SMS;
@@ -192,7 +192,7 @@ namespace Retail.RA.Business
                         {
                             var onNetPostpaidSMSOperationDeclarationService = operatorDeclaration.Settings.CastWithValidate<OnNetPostpaidSMSOperationDeclarationService>("onNetPostpaidSMSOperationDeclarationService");
                             reconcilationObj.SubscriberType = SubscriberType.Postpaid;
-                            reconcilationObj.SourceType = SourceType.Usage;
+                            reconcilationObj.RevenueType = RevenueType.Usage;
                             reconcilationObj.ServiceType = ServiceType.SMS;
 
                             reconcilationObj.DeclaredNumberOfSMS = onNetPostpaidSMSOperationDeclarationService.SMS;
@@ -204,14 +204,16 @@ namespace Retail.RA.Business
                         {
                             var onNetPrepaidTotalOperationDeclarationService = operatorDeclaration.Settings.CastWithValidate<OnNetPrepaidTotalOperationDeclarationService>("onNetPrepaidTotalOperationDeclarationService");
                             reconcilationObj.SubscriberType = SubscriberType.Prepaid;
-
+                            reconcilationObj.RevenueType = RevenueType.VAS;
+                            //reconcilationObj.ServiceType = ServiceType.Data;
                             reconcilationObj.DeclaredTransactionAmount = onNetPrepaidTotalOperationDeclarationService.AmountFromTopups;
                         }
                         else if (operatorDeclaration.Settings is OnNetPostpaidTotalOperationDeclarationService)
                         {
                             var onNetPostpaidTotalOperationDeclarationService = operatorDeclaration.Settings.CastWithValidate<OnNetPostpaidTotalOperationDeclarationService>("onNetPostpaidTotalOperationDeclarationService");
                             reconcilationObj.SubscriberType = SubscriberType.Postpaid;
-
+                            reconcilationObj.RevenueType = RevenueType.NonUsage;
+                           // reconcilationObj.ServiceType = ServiceType.Data;
                             reconcilationObj.DeclaredRevenue = onNetPostpaidTotalOperationDeclarationService.Revenue;
                         }
                     }
@@ -228,7 +230,7 @@ namespace Retail.RA.Business
                     recordObj.OperatorID = billingRecord.Value.OperatorID;
                     recordObj.PeriodID = billingRecord.Value.PeriodID;
                     recordObj.SubscriberType = billingRecord.Value.SubscriberType;
-                    recordObj.SourceType = billingRecord.Value.SourceType;
+                    recordObj.RevenueType = billingRecord.Value.RevenueType;
                     recordObj.ServiceType = billingRecord.Value.ServiceType;
                     recordObj.Scope = billingRecord.Value.Scope;
                     recordObj.SubscriberID = billingRecord.Value.SubscriberID;
@@ -239,7 +241,7 @@ namespace Retail.RA.Business
 
                     if (!recordObj.CalculatedNumberOfCalls.HasValue)
                         recordObj.CalculatedNumberOfCalls = 0;
-                    recordObj.CalculatedNumberOfCalls += billingRecord.Value.NumberOfCDRs;
+                    recordObj.CalculatedNumberOfCalls += billingRecord.Value.NumberOfCalls;
 
                     if (!recordObj.CalculatedRevenue.HasValue)
                         recordObj.CalculatedRevenue = 0;
@@ -256,7 +258,7 @@ namespace Retail.RA.Business
                     recordObj.OperatorID = billingRecord.Value.OperatorID;
                     recordObj.PeriodID = billingRecord.Value.PeriodID;
                     recordObj.SubscriberType = billingRecord.Value.SubscriberType;
-                    recordObj.SourceType = billingRecord.Value.SourceType;
+                    recordObj.RevenueType = billingRecord.Value.RevenueType;
                     recordObj.ServiceType = billingRecord.Value.ServiceType;
                     recordObj.Scope = billingRecord.Value.Scope;
                     recordObj.SubscriberID = billingRecord.Value.SubscriberID;
@@ -267,7 +269,7 @@ namespace Retail.RA.Business
 
                     if (!recordObj.CalculatedNumberOfCalls.HasValue)
                         recordObj.CalculatedNumberOfCalls = 0;
-                    recordObj.CalculatedNumberOfCalls += billingRecord.Value.NumberOfCDRs;
+                    recordObj.CalculatedNumberOfCalls += billingRecord.Value.NumberOfCalls;
 
                     if (!recordObj.CalculatedRevenue.HasValue)
                         recordObj.CalculatedRevenue = 0;
@@ -284,7 +286,7 @@ namespace Retail.RA.Business
                     recordObj.OperatorID = billingRecord.Value.OperatorID;
                     recordObj.PeriodID = billingRecord.Value.PeriodID;
                     recordObj.SubscriberType = billingRecord.Value.SubscriberType;
-                    recordObj.SourceType = billingRecord.Value.SourceType;
+                    recordObj.RevenueType = billingRecord.Value.RevenueType;
                     recordObj.ServiceType = billingRecord.Value.ServiceType;
                     recordObj.Scope = billingRecord.Value.Scope;
                     recordObj.SubscriberID = billingRecord.Value.SubscriberID;
@@ -307,7 +309,7 @@ namespace Retail.RA.Business
                     recordObj.OperatorID = billingRecord.Value.OperatorID;
                     recordObj.PeriodID = billingRecord.Value.PeriodID;
                     recordObj.SubscriberType = billingRecord.Value.SubscriberType;
-                    recordObj.SourceType = billingRecord.Value.SourceType;
+                    recordObj.RevenueType = billingRecord.Value.RevenueType;
                     recordObj.ServiceType = billingRecord.Value.ServiceType;
                     recordObj.Scope = billingRecord.Value.Scope;
                     recordObj.SubscriberID = billingRecord.Value.SubscriberID;
@@ -331,7 +333,7 @@ namespace Retail.RA.Business
                     recordObj.OperatorID = billingRecord.Value.OperatorID;
                     recordObj.PeriodID = billingRecord.Value.PeriodID;
                     recordObj.SubscriberType = billingRecord.Value.SubscriberType;
-                    recordObj.SourceType = billingRecord.Value.SourceType;
+                    recordObj.RevenueType = billingRecord.Value.RevenueType;
                     recordObj.ServiceType = billingRecord.Value.ServiceType;
                     recordObj.Scope = billingRecord.Value.Scope;
                     recordObj.SubscriberID = billingRecord.Value.SubscriberID;
@@ -355,7 +357,7 @@ namespace Retail.RA.Business
                     recordObj.OperatorID = billingRecord.Value.OperatorID;
                     recordObj.PeriodID = billingRecord.Value.PeriodID;
                     recordObj.SubscriberType = billingRecord.Value.SubscriberType;
-                    recordObj.SourceType = billingRecord.Value.SourceType;
+                    recordObj.RevenueType = billingRecord.Value.RevenueType;
                     recordObj.ServiceType = billingRecord.Value.ServiceType;
                     recordObj.Scope = billingRecord.Value.Scope;
                     recordObj.SubscriberID = billingRecord.Value.SubscriberID;
@@ -391,7 +393,7 @@ namespace Retail.RA.Business
             rawMemoryRecord.FieldValues.Add("SubscriberType", reconciliationObj.SubscriberType);
             rawMemoryRecord.FieldValues.Add("Scope", reconciliationObj.Scope);
             rawMemoryRecord.FieldValues.Add("ServiceType", reconciliationObj.ServiceType);
-            rawMemoryRecord.FieldValues.Add("SourceType", reconciliationObj.SourceType);
+            rawMemoryRecord.FieldValues.Add("RevenueType", reconciliationObj.RevenueType);
             rawMemoryRecord.FieldValues.Add("TransactionTypeID", reconciliationObj.TransactionTypeID);
 
             rawMemoryRecord.FieldValues.Add("CalculatedDurationInMinutes", reconciliationObj.CalculatedDurationInMinutes);
@@ -433,7 +435,7 @@ namespace Retail.RA.Business
                         Scope = (Scope)scopeDimension.Value,
                         SubscriberType = isPrepaid ? SubscriberType.Prepaid : SubscriberType.Postpaid,
                         ServiceType = ServiceType.Voice,
-                        SourceType = SourceType.Usage
+                        RevenueType = RevenueType.Usage
                     };
 
                     RetailBillingRecord billingRecord = new RetailBillingRecord
@@ -443,7 +445,7 @@ namespace Retail.RA.Business
                         Scope = (Scope)scopeDimension.Value,
                         SubscriberType = isPrepaid ? SubscriberType.Prepaid : SubscriberType.Postpaid,
                         ServiceType = ServiceType.Voice,
-                        SourceType = SourceType.Usage,
+                        RevenueType = RevenueType.Usage,
                         SubscriberID = (long?)subscriberIdDimension.Value
                     };
 
@@ -460,12 +462,12 @@ namespace Retail.RA.Business
                     MeasureValue countCDR;
                     analyticRecord.MeasureValues.TryGetValue("NumberOfCDRs", out countCDR);
                     if (countCDR?.Value != null)
-                        billingRecord.NumberOfCDRs = Convert.ToInt64(countCDR.Value ?? 0.0);
+                        billingRecord.NumberOfCalls = Convert.ToInt64(countCDR.Value ?? 0.0);
 
                     if (reconcilationRecords.ContainsKey(dimensionFields))
                     {
                         reconcilationRecords[dimensionFields].DurationInMinutes += billingRecord.DurationInMinutes;
-                        reconcilationRecords[dimensionFields].NumberOfCDRs += billingRecord.NumberOfCDRs;
+                        reconcilationRecords[dimensionFields].NumberOfCalls += billingRecord.NumberOfCalls;
                         reconcilationRecords[dimensionFields].Revenue += billingRecord.Revenue;
                     }
                     else
@@ -497,7 +499,7 @@ namespace Retail.RA.Business
                     Scope = (Scope)scopeDimension.Value,
                     SubscriberType = isPrepaid ? SubscriberType.Prepaid : SubscriberType.Postpaid,
                     ServiceType = ServiceType.SMS,
-                    SourceType = SourceType.Usage
+                    RevenueType = RevenueType.Usage
                 };
 
                 RetailBillingRecord billingRecord = new RetailBillingRecord
@@ -507,7 +509,7 @@ namespace Retail.RA.Business
                     Scope = (Scope)scopeDimension.Value,
                     SubscriberType = isPrepaid ? SubscriberType.Prepaid : SubscriberType.Postpaid,
                     ServiceType = ServiceType.SMS,
-                    SourceType = SourceType.Usage,
+                    RevenueType = RevenueType.Usage,
                     SubscriberID = (long?)subscriberIdDimension.Value,
                 };
 
@@ -557,7 +559,8 @@ namespace Retail.RA.Business
                     OperatorID = (long)operatorIdDimension.Value,
                     PeriodID = (int)periodDimension.Value,
                     SubscriberType = isPrepaid ? SubscriberType.Prepaid : SubscriberType.Postpaid,
-                    SourceType = SourceType.NonUsage
+                  //  ServiceType = ServiceType.Data,
+                    RevenueType = isPrepaid ? RevenueType.VAS : RevenueType.NonUsage
                 };
 
                 RetailBillingRecord billingRecord = new RetailBillingRecord
@@ -565,7 +568,8 @@ namespace Retail.RA.Business
                     OperatorID = (long)operatorIdDimension.Value,
                     PeriodID = (int)periodDimension.Value,
                     SubscriberType = isPrepaid ? SubscriberType.Prepaid : SubscriberType.Postpaid,
-                    SourceType = SourceType.NonUsage,
+                    RevenueType = isPrepaid ? RevenueType.VAS : RevenueType.NonUsage,
+                  //  ServiceType = ServiceType.Data,
                     TransactionTypeID = (Guid?)transactionTypeIdDimension.Value,
                     SubscriberID = (long?)subscriberIdDimension.Value
                 };
@@ -596,7 +600,7 @@ namespace Retail.RA.Business
         public int PeriodID { get; set; }
         public SubscriberType SubscriberType { get; set; }
         public Scope? Scope { get; set; }
-        public SourceType SourceType { get; set; }
+        public RevenueType RevenueType { get; set; }
         public ServiceType? ServiceType { get; set; }
 
         public long? SubscriberID { get; set; }
@@ -604,7 +608,7 @@ namespace Retail.RA.Business
 
         public decimal? Revenue { get; set; }
         public decimal? DurationInMinutes { get; set; }
-        public long? NumberOfCDRs { get; set; }
+        public long? NumberOfCalls { get; set; }
         public long? NumberOfSMS { get; set; }
         public decimal? TransactionAmount { get; set; }
     }
@@ -615,8 +619,8 @@ namespace Retail.RA.Business
         public int PeriodID { get; set; }
         public SubscriberType SubscriberType { get; set; }
         public Scope? Scope { get; set; }
-        public SourceType SourceType { get; set; }
         public ServiceType? ServiceType { get; set; }
+        public RevenueType RevenueType { get; set; }
 
         public long? SubscriberID { get; set; }
         public Guid? TransactionTypeID { get; set; }
@@ -643,8 +647,8 @@ namespace Retail.RA.Business
         public int PeriodID { get; set; }
         public SubscriberType SubscriberType { get; set; }
         public Scope? Scope { get; set; }
-        public SourceType SourceType { get; set; }
         public ServiceType? ServiceType { get; set; }
+        public RevenueType RevenueType { get; set; }
     }
 
 }
