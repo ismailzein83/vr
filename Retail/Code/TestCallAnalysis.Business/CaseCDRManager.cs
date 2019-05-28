@@ -208,7 +208,7 @@ namespace TestCallAnalysis.Business
                 FirstAttempt = correlatedCDR.AttemptDateTime,
                 LastAttempt = correlatedCDR.AttemptDateTime,
                 NumberOfCDRs = 1,
-                OperatorID = correlatedCDR.CallingOperatorID,
+                OperatorID = correlatedCDR.CalledOperatorID,
                 ClientId = correlatedCDR.ClientId,
                 CreatedTime = correlatedCDR.CreatedTime,
                 LastModifiedTime = DateTime.Now,
