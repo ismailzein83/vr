@@ -242,8 +242,10 @@
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\CostColumnsTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Fixed\Templates\FixedThresholdSellingRule.html" />
     <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Fixed\vr-whs-sales-sellingrulesettings-threshold-fixed.js" />
-    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Percentage\Templates\PercentageThresholdSellingRule.html" />
-    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Percentage\vr-whs-sales-sellingrulesettings-threshold-percentage.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Percentage\Templates\MaxMarginPercentageThresholdSellingRule.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Percentage\Templates\MinMarginPercentageThresholdSellingRule.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Percentage\vr-whs-sales-sellingrulesettings-threshold-maxmarginpercentage.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Percentage\vr-whs-sales-sellingrulesettings-threshold-minmarginpercentage.js" />
     <Content Include="WhS_Sales\Directives\Extensions\SellingRule\Templates\EmptyDefinitionSettingsTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\SellingRule\vr-whs-sales-genericruledefinitionsettings-sellingrule.js" />
     <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\Templates\SupplierTargetMatchMethodsLCR2Template.html" />

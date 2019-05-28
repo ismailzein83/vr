@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsSalesSellingrulesettingsThresholdPercentage', ['$compile',
+app.directive('vrWhsSalesSellingrulesettingsThresholdMinmarginpercentage', ['$compile',
     function ($compile) {
 
         var directiveDefinitionObject = {
@@ -18,7 +18,7 @@ app.directive('vrWhsSalesSellingrulesettingsThresholdPercentage', ['$compile',
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/WhS_Sales/Directives/Extensions/SellingRuleSettings/Percentage/Templates/PercentageThresholdSellingRule.html"
+            templateUrl: "/Client/Modules/WhS_Sales/Directives/Extensions/SellingRuleSettings/Percentage/Templates/MinMarginPercentageThresholdSellingRule.html"
 
         };
 
