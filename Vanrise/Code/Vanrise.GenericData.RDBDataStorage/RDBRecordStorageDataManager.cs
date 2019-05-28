@@ -345,7 +345,7 @@ namespace Vanrise.GenericData.RDBDataStorage
 
             if (nbOfAddedColumns == 0)
             {
-                var firstNotIdentityColumn = _dataRecordStorageSettings.Columns.FirstOrDefault(col => !col.IsIdentity);
+                var firstNotIdentityColumn = _dataRecordStorageSettings.Columns.FirstOrDefault(col => !col.IsIdentity && !rdbRegistrationInfo.AutoFilledFieldNames.Contains(col.FieldName));
                 firstNotIdentityColumn.ThrowIfNull("firstNotIdentityColumn", _dataRecordStorage.DataRecordStorageId);
 
                 insertQuery.Column(firstNotIdentityColumn.ColumnName).Null();
@@ -445,7 +445,7 @@ namespace Vanrise.GenericData.RDBDataStorage
 
             if(nbOfAddedColumns == 0)
             {
-                var firstNotIdentityColumn = _dataRecordStorageSettings.Columns.FirstOrDefault(col => !col.IsIdentity);
+                var firstNotIdentityColumn = _dataRecordStorageSettings.Columns.FirstOrDefault(col => !col.IsIdentity && !rdbRegistrationInfo.AutoFilledFieldNames.Contains(col.FieldName));
                 firstNotIdentityColumn.ThrowIfNull("firstNotIdentityColumn", _dataRecordStorage.DataRecordStorageId);
 
                 updateQuery.Column(firstNotIdentityColumn.ColumnName).Column(firstNotIdentityColumn.ColumnName);
@@ -766,7 +766,8 @@ namespace Vanrise.GenericData.RDBDataStorage
                             UniqueFieldNames = mainStorageRegistrationInfo.UniqueFieldNames,
                             NullableFieldNames = mainStorageRegistrationInfo.NullableFieldNames,
                             ParentRDBRegistrationInfo = mainStorageRegistrationInfo.ParentRDBRegistrationInfo,
-                            AllSupportedFieldNames = mainStorageRegistrationInfo.AllSupportedFieldNames
+                            AllSupportedFieldNames = mainStorageRegistrationInfo.AllSupportedFieldNames,
+                            AutoFilledFieldNames = mainStorageRegistrationInfo.AutoFilledFieldNames
                         };
                     });
             }
@@ -936,6 +937,16 @@ namespace Vanrise.GenericData.RDBDataStorage
                                             }
                                         }
                                     }
+                                    HashSet<string> autoFilledFieldNames = new HashSet<string>();
+
+                                    if (!String.IsNullOrEmpty(_dataRecordStorageSettings.CreatedByField))
+                                        autoFilledFieldNames.Add(_dataRecordStorageSettings.CreatedByField);
+                                    if (!String.IsNullOrEmpty(_dataRecordStorageSettings.CreatedTimeField))
+                                        autoFilledFieldNames.Add(_dataRecordStorageSettings.CreatedTimeField);
+                                    if (!String.IsNullOrEmpty(_dataRecordStorageSettings.LastModifiedByField))
+                                        autoFilledFieldNames.Add(_dataRecordStorageSettings.LastModifiedByField);
+                                    if (!String.IsNullOrEmpty(_dataRecordStorageSettings.LastModifiedTimeField))
+                                        autoFilledFieldNames.Add(_dataRecordStorageSettings.LastModifiedTimeField);
 
                                     RDBSchemaManager.Current.RegisterDefaultTableDefinition(rdbTableName, rdbTableDefinition);
 
@@ -951,7 +962,8 @@ namespace Vanrise.GenericData.RDBDataStorage
                                         UniqueFieldNames = uniqueFieldNames,
                                         NullableFieldNames = nullableFieldNames,
                                         ParentRDBRegistrationInfo = parentRDBRegistrationInfo,
-                                        AllSupportedFieldNames = ResolveAllSupportedFieldNames()
+                                        AllSupportedFieldNames = ResolveAllSupportedFieldNames(),
+                                        AutoFilledFieldNames = autoFilledFieldNames
                                     };
                                     return registrationInfo;
                                 });
@@ -1122,6 +1134,9 @@ namespace Vanrise.GenericData.RDBDataStorage
                 if (rdbRegistrationInfo.NullableFieldNames.Contains(fieldName))
                     continue;
 
+                if (rdbRegistrationInfo.AutoFilledFieldNames.Contains(fieldName))
+                    continue;
+
                 if (fieldName == idFieldName)
                 {
                     if (isUpdateQuery || rdbRegistrationInfo.IsIdIdentity)
@@ -1267,6 +1282,8 @@ namespace Vanrise.GenericData.RDBDataStorage
             public RDBRegistrationInfo ParentRDBRegistrationInfo { get; set; }
 
             public List<string> AllSupportedFieldNames { get; set; }
+
+            public HashSet<string> AutoFilledFieldNames { get; set; }
         }
 
         private class RDBStorageFieldInfo
