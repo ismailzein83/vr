@@ -86,6 +86,8 @@
   <ItemGroup>
     <Compile Include="Billing\BillingManager.cs" />
     <Compile Include="Billing\CatalogManager.cs" />
+    <Compile Include="Billing\InvoiceManager.cs" />
+    <Compile Include="Billing\PaymentManager.cs" />
     <Compile Include="CommonManager.cs" />
     <Compile Include="Billing\ContractManager.cs" />
     <Compile Include="Billing\CRMCustomerManager.cs" />
