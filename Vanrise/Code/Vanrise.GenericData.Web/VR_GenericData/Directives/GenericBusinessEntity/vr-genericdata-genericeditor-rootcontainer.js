@@ -22,12 +22,11 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
             this.initializeController = initializeController;
 
             var selectedValues;
+            var dataRecordTypeId;
             var allFieldValuesByFieldNames = {};
-            //var settedFieldValues;
 
             var runtimeEditorAPI;
             var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
-
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -47,7 +46,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
                     var promises = [];
 
-                    var dataRecordTypeId;
+
                     var definitionSettings;
                     var historyId;
                     var parentFieldValues;
@@ -183,56 +182,93 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                             }
                         }
 
-                        function tryUpdateAllFieldValuesByFieldNames(fieldName, fieldValues) {
-                            var oldValues = allFieldValuesByFieldNames[fieldName];
-                            if (oldValues == undefined && fieldValues == undefined)
-                                return false;
-
-                            if (!(fieldName in allFieldValuesByFieldNames) || fieldValues == undefined || oldValues == undefined || oldValues.length != fieldValues.length) {
-                                allFieldValuesByFieldNames[fieldName] = fieldValues;
-                                return true;
-                            }
-
-                            for (var i = 0; i < fieldValues.length; i++) {
-                                var currentValue = fieldValues[i];
-                                if (oldValues.indexOf(currentValue) == -1) {
-                                    allFieldValuesByFieldNames[fieldName] = fieldValues;
-                                    return true;
-                                }
-                            }
-
-                            return false;
-                        }
-
                         return UtilsService.waitMultiplePromises(_promises);
                     },
-                    //setFieldValues: function (fieldValuesByNameDict) { //fieldValuesByNamesDict = {'name' :'value1', .... }
-                    //    var _promises = [];
 
-                    //    //var valuesToSet = {};
-                    //    //if (settedFieldValues == undefined) {
-                    //    //    settedFieldValues = fieldValuesByNameDict;
-                    //    //    valuesToSet = fieldValuesByNameDict;
-                    //    //}
-                    //    //else {
-                    //    //    for (var key in fieldValuesByNameDict) {
-                    //    //        if (settedFieldValues[key] == undefined) {
-                    //    //            settedFieldValues[key] = fieldValuesByNameDict[key];
-                    //    //            valuesToSet[key] = fieldValuesByNameDict[key];
-                    //    //        }
-                    //    //    }
-                    //    //}
+                    getFieldValues: function () {
+                        var dicFieldValues = {};
+                        runtimeEditorAPI.setData(dicFieldValues);
+                        return dicFieldValues;
+                    },
 
-                    //    if (Object.keys(fieldValuesByNameDict).length > 0) {
+                    setFieldValues: function (fieldValuesByNameDict) { //fieldValuesByNamesDict = {'name' :'value1', .... }
+                        if (fieldValuesByNameDict == undefined)
+                            return UtilsService.waitMultiplePromises([]);
 
-                    //        var onFieldValueSettedPromise = runtimeEditorAPI.setFieldValues(fieldValuesByNameDict);
-                    //        if (onFieldValueSettedPromise != undefined)
-                    //            _promises.push(onFieldValueSettedPromise);
-                    //    }
+                        $scope.scopeModel.isRootContainerLoading = true;
 
-                    //    return UtilsService.waitMultiplePromises(_promises);
-                    //}
+                        var rootPromiseNode = {
+                            promises: [],
+                            getChildNode: function () {
+                                var getDependentFieldValuesPromiseDeferred = UtilsService.createPromiseDeferred();
+                                var isValueToSetChanged = false;
+                                var valuesToSet = {};
+
+                                var input = {
+                                    DataRecordTypeId: dataRecordTypeId,
+                                    FieldValues: fieldValuesByNameDict
+                                };
+
+                                VR_GenericData_GenericBusinessEntityAPIService.GetDependentFieldValues(input).then(function (response) {
+                                    for (var prop in response) {
+                                        if (prop == "$type")
+                                            continue;
+
+                                        var dependentFieldValue = response[prop];
+                                        var convertedFieldValue = typeof (dependentFieldValue) == "object" ? dependentFieldValue : [dependentFieldValue];
+
+                                        if (tryUpdateAllFieldValuesByFieldNames(prop, convertedFieldValue)) {
+                                            isValueToSetChanged = true;
+                                            valuesToSet[prop] = dependentFieldValue;
+                                        }
+                                    }
+
+                                    getDependentFieldValuesPromiseDeferred.resolve();
+                                });
+
+                                return {
+                                    promises: [getDependentFieldValuesPromiseDeferred.promise],
+                                    getChildNode: function () {
+                                        var _promises = [];
+                                        if (isValueToSetChanged) {
+                                            var onFieldValueSettedPromise = runtimeEditorAPI.setFieldValues(valuesToSet);
+                                            if (onFieldValueSettedPromise != undefined)
+                                                _promises.push(onFieldValueSettedPromise);
+                                        }
+                                        return {
+                                            promises: _promises
+                                        };
+                                    }
+                                };
+                            }
+                        };
+
+                        return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
+                            $scope.scopeModel.isRootContainerLoading = false;
+                        });
+                    }
                 };
+
+                function tryUpdateAllFieldValuesByFieldNames(fieldName, fieldValues) {
+                    var oldValues = allFieldValuesByFieldNames[fieldName];
+                    if (oldValues == undefined && fieldValues == undefined)
+                        return false;
+
+                    if (!(fieldName in allFieldValuesByFieldNames) || fieldValues == undefined || oldValues == undefined || oldValues.length != fieldValues.length) {
+                        allFieldValuesByFieldNames[fieldName] = fieldValues;
+                        return true;
+                    }
+
+                    for (var i = 0; i < fieldValues.length; i++) {
+                        var currentValue = fieldValues[i];
+                        if (oldValues.indexOf(currentValue) == -1) {
+                            allFieldValuesByFieldNames[fieldName] = fieldValues;
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
 
                 return context;
             }

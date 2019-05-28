@@ -32,7 +32,6 @@
 
             var businessDefinitionId;
             var genericBEDefinitionSettings;
-            var businessEntityDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
             var fieldValues;
             var filterValues;
 
@@ -90,17 +89,45 @@
                 api.load = function (payload) {
                     $scope.scopeModel.hasFilter = false;
 
-                    var promises = [];
-
                     if (payload != undefined) {
                         businessDefinitionId = payload.businessEntityDefinitionId;
                         fieldValues = payload.fieldValues;
                         filterValues = payload.filterValues;
                     }
 
-                    promises.push(loadBusinessEntityDefinitionSettings());
-                    promises.push(loadExistingFilter());
-                    promises.push(loadCheckDoesUserHaveAddAccess());
+                    var rootPromiseNode = {
+                        promises: [],
+                        getChildNode: function () {
+                            var promises1 = [];
+                            promises1.push(loadCheckDoesUserHaveAddAccess());
+                            promises1.push(loadBusinessEntityDefinitionSettings());
+                            return {
+                                promises: promises1,
+                                getChildNode: function () {
+                                    var promises2 = [];
+                                    if (filterValues != undefined)
+                                        promises2.push(getDependentFieldValues());
+                                    return {
+                                        promises: promises2,
+                                        getChildNode: function () {
+                                            var promises3 = [];
+                                            promises3.push(loadExistingFilter());
+                                            return {
+                                                promises: promises3,
+                                                getChildNode: function () {
+                                                    var promises4 = [];
+                                                    promises4.push(loadGridDirective());
+                                                    return {
+                                                        promises: promises4
+                                                    };
+                                                }
+                                            };
+                                        }
+                                    };
+                                }
+                            };
+                        }
+                    };
 
                     function loadCheckDoesUserHaveAddAccess() {
                         return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(businessDefinitionId).then(function (response) {
@@ -108,7 +135,6 @@
                             showUploadFromAccess = response;
                         });
                     }
-
 
                     function loadBusinessEntityDefinitionSettings() {
 
@@ -125,6 +151,39 @@
                         });
                     }
 
+                    function getDependentFieldValues() {
+                        var getDependentFieldValuesPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        var fieldValues = {};
+                        for (var prop in filterValues) {
+                            fieldValues[prop] = filterValues[prop].value;
+                        }
+
+                        var input = {
+                            DataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
+                            FieldValues: fieldValues
+                        };
+
+                        VR_GenericData_GenericBusinessEntityAPIService.GetDependentFieldValues(input).then(function (response) {
+                            if (response) {
+                                for (var prop in response) {
+                                    var dependentFieldValue = response[prop];
+                                    if (prop != "$type") {
+                                        filterValues[prop] = {
+                                            value: dependentFieldValue,
+                                            isHidden: true,
+                                            isDisabled: true
+                                        };
+                                    }
+                                }
+                            }
+
+                            getDependentFieldValuesPromiseDeferred.resolve();
+                        });
+
+                        return getDependentFieldValuesPromiseDeferred.promise;
+                    }
+
                     function loadExistingFilter() {
                         return loadFilterDirective().then(function () {
                             $scope.scopeModel.hasFilter = filterDirectiveAPI != undefined ? filterDirectiveAPI.hasFilters() : false;
@@ -133,24 +192,23 @@
 
                     function loadFilterDirective() {
                         var filterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                        UtilsService.waitMultiplePromises([loadBusinessEntityDefinitionSettings()]).then(function () {
-                            if ($scope.scopeModel.filterDirective != undefined) {
-                                filterDirectiveReadyDeferred.promise.then(function () {
 
-                                    var filterDirectivePayload = {
-                                        settings: genericBEDefinitionSettings.FilterDefinition.Settings,
-                                        dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
-                                        filterValues: filterValues
-                                    };
-                                    VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, filterDirectivePayload, filterDirectiveLoadDeferred);
-                                });
-                            } else {
-                                filterDirectiveLoadDeferred.resolve();
-                            }
-                        });
+                        if ($scope.scopeModel.filterDirective != undefined) {
+                            filterDirectiveReadyDeferred.promise.then(function () {
+
+                                var filterDirectivePayload = {
+                                    settings: genericBEDefinitionSettings.FilterDefinition.Settings,
+                                    dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
+                                    filterValues: filterValues
+                                };
+                                VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, filterDirectivePayload, filterDirectiveLoadDeferred);
+                            });
+                        } else {
+                            filterDirectiveLoadDeferred.resolve();
+                        }
+
                         return filterDirectiveLoadDeferred.promise;
                     }
-
 
                     function loadGridDirective() {
                         var promiseDeferred = UtilsService.createPromiseDeferred();
@@ -163,23 +221,13 @@
                         return promiseDeferred.promise;
                     }
 
-
-                    var rootPromiseNode = {
-                        promises: promises,
-                        getChildNode: function () {
-                            var directivePromises = [loadGridDirective()];
-                            return {
-                                promises: directivePromises
-                            };
-                        }
-                    };
                     return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
                         $scope.scopeModel.showAddButton = showAddFromDefinitionSettings && showAddFromAccess;
                         $scope.scopeModel.showUploadButton = showUploadFromDefinitionSettings && showUploadFromAccess;
                     });
                 };
 
-                if (ctrl.onReady != null) { 
+                if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
             }
@@ -224,6 +272,7 @@
                         });
                     }
                 }
+
                 var gridPayload = {
                     query: {
                         FilterGroup: filterGroup,
@@ -233,7 +282,7 @@
                         fieldValues: fieldValues,
                         OrderType: genericBEDefinitionSettings.OrderType,
                         AdvancedOrderOptions: genericBEDefinitionSettings.AdvancedOrderOptions,
-                        LimitResult: filterData != undefined ? filterData.LimitResult : undefined,
+                        LimitResult: filterData != undefined ? filterData.LimitResult : undefined
                     },
                     businessEntityDefinitionId: businessDefinitionId
                 };

@@ -70,7 +70,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
                         row: row,
                         onRowDirectiveReady: function (api) {
                             rowObj.rowAPI = api;
-                            var payload = { fields: rowObj.row};
+                            var payload = { fields: rowObj.row };
                             var setLoader = function (value) { $scope.isLoading = value; };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, rowObj.rowAPI, payload, setLoader);
                         }
@@ -98,10 +98,10 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
             function prepareRowObject(row) {
                 var rowObj = {
                     numberOfFields: row.Fields.length + fieldSelectedText,
-                    row:  row.Fields,
+                    row: row.Fields,
                     onRowDirectiveReady: function (api) {
                         rowObj.rowAPI = api;
-                        var payload = { fields: rowObj.row};
+                        var payload = { fields: rowObj.row };
                         var setLoader = function (value) { $scope.isLoading = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, rowObj.rowAPI, payload, setLoader);
                     }
@@ -114,10 +114,10 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
                     name: "Edit Row",
                     clicked: editRow,
                 },
-                 {
-                     name: "Delete",
-                     clicked: deleteRow,
-                 }];
+                {
+                    name: "Delete",
+                    clicked: deleteRow,
+                }];
             }
 
             function editRow(dataItem) {
@@ -125,8 +125,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
                 var onRowUpdated = function (row) {
                     var rowObj = UtilsService.getItemByVal(ctrl.rows, dataItem.row, 'row');
 
-                    if (rowObj != undefined)
-                    {
+                    if (rowObj != undefined) {
                         rowObj.numberOfFields = row.length + fieldSelectedText;
                         rowObj.row = row;
                         rowObj.rowAPI.applyChanges(row);
@@ -138,13 +137,13 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionSection', ['UtilsServ
             function deleteRow(dataItem) {
                 var onRowDeleted = function (rowObj) {
                     var index = ctrl.rows.indexOf(rowObj);
-                    if (index != -1);
-                    ctrl.rows.splice(index, 1);
+                    if (index != -1)
+                        ctrl.rows.splice(index, 1);
                 };
 
                 VR_GenericData_ExtensibleBEItemService.deleteRow($scope, dataItem, onRowDeleted);
             }
-            
+
 
             this.initializeController = initializeController;
         }

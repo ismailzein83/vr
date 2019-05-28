@@ -41,6 +41,15 @@ namespace Vanrise.GenericData.Web.Controllers
             GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
             return manager.GetGenericEditorRuntimeRows(input.Rows, input.DataRecordTypeId);
         }
+
+        [HttpPost]
+        [Route("GetGenericFieldsRuntimeRow")]
+        public GenericFieldsRuntimeRowOutput GetGenericFieldsRuntimeRow(GenericFieldsRuntimeRowInput input)
+        {
+            GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
+            return manager.GetGenericFieldsRuntimeRow(input.Fields, input.DataRecordTypeId);
+        }
+
         [HttpPost]
         [Route("GetGenericEditorRuntimeSections")]
         public List<GenericEditorRuntimeSection> GetGenericEditorRuntimeSections(GenericEditorDefinitionSectionsInput input)
@@ -65,6 +74,14 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
     }
+
+    public class GenericFieldsRuntimeRowInput
+    {
+        public Guid DataRecordTypeId { get; set; }
+
+        public List<GenericEditorField> Fields { get; set; }
+    }
+
     public class GenericEditorDefinitionSectionsInput
     {
         public Guid DataRecordTypeId { get; set; }

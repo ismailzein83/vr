@@ -184,41 +184,41 @@
                     selectorAPI.clearDataSource();
                 };
 
-                //api.setFieldValues = function (value, context) {
-                //    var promises = [];
+                api.setFieldValues = function (value, context) {
+                    var promises = [];
 
-                //    $scope.isDisabled = context.isDisabled;
-                //    filter = context.filter;
+                    $scope.isDisabled = context.isDisabled;
+                    filter = context.filter;
 
-                //    if (isRemote) {
-                //        var getGenericBusinessEntityInfoPromiseDeferred = UtilsService.createPromiseDeferred();
-                //        promises.push(getGenericBusinessEntityInfoPromiseDeferred.promise);
+                    if (isRemote) {
+                        var getGenericBusinessEntityInfoPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(getGenericBusinessEntityInfoPromiseDeferred.promise);
 
-                //        var fieldFilter = { FieldName: idFieldName, FilterValues: typeof (value) != "object" ? [value] : value };
-                //        if (filter == undefined)
-                //            filter = { FieldFilters: [fieldFilter] };
+                        var fieldFilter = { FieldName: idFieldName, FilterValues: typeof (value) != "object" ? [value] : value };
+                        if (filter == undefined)
+                            filter = { FieldFilters: [fieldFilter] };
 
-                //        if (filter.FieldFilters == undefined)
-                //            filter.FieldFilters = [fieldFilter];
+                        if (filter.FieldFilters == undefined)
+                            filter.FieldFilters = [fieldFilter];
 
-                //        VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
-                //            selectorAPI.clearDataSource();
-                //            ctrl.datasource.length = 0;
+                        VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
+                            selectorAPI.clearDataSource();
+                            ctrl.datasource.length = 0;
 
-                //            angular.forEach(response, function (item) {
-                //                ctrl.datasource.push(item);
-                //            });
+                            angular.forEach(response, function (item) {
+                                ctrl.datasource.push(item);
+                            });
 
-                //            VRUIUtilsService.setSelectedValues(value, 'GenericBusinessEntityId', attrs, ctrl);
-                //            getGenericBusinessEntityInfoPromiseDeferred.resolve();
-                //        });
-                //    }
-                //    else {
-                //        promises.push(getGenericBusinessEntityInfo(value));
-                //    }
+                            VRUIUtilsService.setSelectedValues(value, 'GenericBusinessEntityId', attrs, ctrl);
+                            getGenericBusinessEntityInfoPromiseDeferred.resolve();
+                        });
+                    }
+                    else {
+                        promises.push(getGenericBusinessEntityInfo(value));
+                    }
 
-                //    return UtilsService.waitMultiplePromises(promises);
-                //};
+                    return UtilsService.waitMultiplePromises(promises);
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

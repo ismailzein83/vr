@@ -2,9 +2,9 @@
 
     'use strict';
 
-    editorDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    editorDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_ContainerTypeEnum'];
 
-    function editorDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function editorDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_ContainerTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -13,7 +13,8 @@
                 label: '@',
                 customvalidate: '=',
                 isnotrequired: '=',
-                showremoveicon:'@'
+                showremoveicon: '@',
+                customlabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -67,11 +68,16 @@
 
                     var promises = [];
                     var settings;
+                    var containerType;
 
                     if (payload != undefined) {
                         settings = payload.settings;
                         context = payload.context;
+                        containerType = payload.containerType;
                     }
+
+                    if (containerType == undefined)
+                        containerType = VR_GenericData_ContainerTypeEnum.Root.value;
 
                     if (settings != undefined) {
                         var loadDirectivePromise = loadDirective();
@@ -82,7 +88,7 @@
                     promises.push(getSettingsConfigsPromise);
 
                     function getGenericBEEditorDefinitionSettingsConfigs() {
-                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEEditorDefinitionSettingsConfigs().then(function (response) {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEEditorDefinitionSettingsConfigs(containerType).then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);

@@ -13,9 +13,9 @@ namespace Vanrise.GenericData.Business
 {
     public class GenericUIRuntimeManager
     {
-      
+
         #region Private Methods
-       
+
         public GenericEditor GetEditor(int editorId)
         {
             return null;
@@ -62,18 +62,24 @@ namespace Vanrise.GenericData.Business
         {
             return BuildEditorRuntimeRows(rows, dataRecordTypeId);
         }
+
+        public GenericFieldsRuntimeRowOutput GetGenericFieldsRuntimeRow(List<GenericEditorField> fields, Guid dataRecordTypeId)
+        {
+            var runtimeFields = BuildEditorRuntimeFields(fields, dataRecordTypeId);
+            return runtimeFields != null && runtimeFields.Count > 0 ? new GenericFieldsRuntimeRowOutput() { Fields = runtimeFields } : null;
+        }
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(Guid businessEntityId)
         {
             ExtensibleBEItemManager manager = new ExtensibleBEItemManager();
             var allExtensibleBEItems = manager.GetAllExtensibleBEItems();
             var extensibleBEItems = allExtensibleBEItems.FindAllRecords(x => x.BusinessEntityDefinitionId == businessEntityId);
-             var dataRecordTypeManager = new DataRecordTypeManager();
-             List<Guid> recordTypeIds = new List<Guid>();
-             foreach (ExtensibleBEItem extensibleBEItem in extensibleBEItems)
-             {
-                 recordTypeIds.Add(extensibleBEItem.DataRecordTypeId);
-             }
-             return dataRecordTypeManager.GetDataRecordTypeInfo(new DataRecordTypeInfoFilter { RecordTypeIds = recordTypeIds }).OrderBy(x => x.Name);
+            var dataRecordTypeManager = new DataRecordTypeManager();
+            List<Guid> recordTypeIds = new List<Guid>();
+            foreach (ExtensibleBEItem extensibleBEItem in extensibleBEItems)
+            {
+                recordTypeIds.Add(extensibleBEItem.DataRecordTypeId);
+            }
+            return dataRecordTypeManager.GetDataRecordTypeInfo(new DataRecordTypeInfoFilter { RecordTypeIds = recordTypeIds }).OrderBy(x => x.Name);
         }
 
         //public GenericManagementRuntime GetManagementRuntime(Guid businessEntityDefinitionId)
@@ -117,10 +123,10 @@ namespace Vanrise.GenericData.Business
             var fields = dataRecordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
             genericManagementRuntime.Grid = new GenericGridRuntime();
             genericManagementRuntime.Filter = new GenericFilterRuntime();
-            BuildGridRuntime(genericManagement.GridDesign, genericManagementRuntime.Grid,fields, dataRecordTypeId);
-            BuildFilterRuntime(genericManagement.FilterDesign, genericManagementRuntime.Filter,fields, dataRecordTypeId);
+            BuildGridRuntime(genericManagement.GridDesign, genericManagementRuntime.Grid, fields, dataRecordTypeId);
+            BuildFilterRuntime(genericManagement.FilterDesign, genericManagementRuntime.Filter, fields, dataRecordTypeId);
         }
-    
+
         #region Grid Runtime
         private void BuildGridRuntime(GenericGrid gridDesign, GenericGridRuntime genericGridRuntime, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, Guid dataRecordTypeId)
         {
@@ -136,7 +142,7 @@ namespace Vanrise.GenericData.Business
             }
         }
         #endregion
-        
+
         #region Filter Runtime
         private void BuildFilterRuntime(GenericFilter genericFilter, GenericFilterRuntime genericFilterRuntime, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, Guid dataRecordTypeId)
         {
@@ -152,7 +158,7 @@ namespace Vanrise.GenericData.Business
             }
         }
         #endregion
-     
+
         #endregion
 
         #region ExtensibleBEItem Runtime
@@ -217,7 +223,7 @@ namespace Vanrise.GenericData.Business
             if (sections != null)
             {
                 editorRuntime.Sections = GetGenericEditorRuntimeSections(sections, dataRecordTypeId);
-                
+
             }
         }
 
@@ -270,6 +276,29 @@ namespace Vanrise.GenericData.Business
                     runtimeRow.Fields.Add(runtimeField);
                 }
             }
+        }
+
+        private List<GenericEditorRuntimeField> BuildEditorRuntimeFields(List<GenericEditorField> fields, Guid dataRecordTypeId)
+        {
+            if (fields == null || fields.Count == 0)
+                return null;
+
+            var dataRecordTypeManager = new DataRecordTypeManager();
+            var dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
+            if (dataRecordTypeFields == null)
+                throw new NullReferenceException($"fields of DataRecordType '{dataRecordTypeId}'");
+
+            List<GenericEditorRuntimeField> genericEditorRuntimeFields = new List<GenericEditorRuntimeField>();
+            foreach (var field in fields)
+            {
+                var runtimeField = BuildRuntimeField<GenericEditorRuntimeField>(field, dataRecordTypeFields, dataRecordTypeId);
+                runtimeField.IsRequired = field.IsRequired;
+                runtimeField.IsDisabled = field.IsDisabled;
+                //runtimeField.IsDisabledOnEdit = field.IsDisabledOnEdit;
+                genericEditorRuntimeFields.Add(runtimeField);
+            }
+
+            return genericEditorRuntimeFields;
         }
 
         #endregion

@@ -1,7 +1,8 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService) {
+app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_GenericBusinessEntityAPIService) {
+
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -56,8 +57,8 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 return '<span vr-loader="isLoading">'
                     + '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" onselectitem = "selector.onselectitem" '
                     + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
-                    + '<vr-row removeline> <vr-columns width="fullrow"> <vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
-                    '</vr-section> </vr-columns> </vr-row>'
+                    + ' <vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
+                    '</vr-section> '
                     + '</span>';
             }
             else {
@@ -243,7 +244,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
                     if (ctrl.selectionmode == "dynamic") {
                         if (missingGroupSelectorUIControl) {
-                            var selectedIds = $scope.selector.directiveAPI != undefined ? $scope.selector.directiveAPI.getSelectedIds() : undefined;
+                            var selectedIds = $scope.selector != undefined && $scope.selector.directiveAPI != undefined ? $scope.selector.directiveAPI.getSelectedIds() : undefined;
                             if (selectedIds != undefined) {
                                 retVal = {
                                     $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
@@ -262,7 +263,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                         }
                     }
                     else if (ctrl.selectionmode == "single" || ctrl.selectionmode == "multiple") {
-                        retVal = $scope.selector.directiveAPI != undefined ? $scope.selector.directiveAPI.getSelectedIds() : undefined;
+                        retVal = $scope.selector != undefined && $scope.selector.directiveAPI != undefined ? $scope.selector.directiveAPI.getSelectedIds() : undefined;
                     }
 
                     return retVal;
@@ -289,69 +290,69 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     return reloadDirectiveOnValueChanged(directiveAPI, data);
                 };
 
-                //api.setFieldValues = function (fieldValuesByNames) {
+                api.setFieldValues = function (fieldValuesByNames) {
 
-                //    var setFieldValuesPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var setFieldValuesPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                //    var directiveAPI = getDirectiveAPI();
-                //    if (fieldValuesByNames == undefined || !(fieldName in fieldValuesByNames) || directiveAPI == undefined || directiveAPI.setFieldValues == undefined || typeof (directiveAPI.setFieldValues) != "function") {
-                //        setFieldValuesPromiseDeferred.resolve();
-                //        return setFieldValuesPromiseDeferred.promise;
-                //    }
+                    var directiveAPI = getDirectiveAPI();
+                    if (fieldValuesByNames == undefined || !(fieldName in fieldValuesByNames) || directiveAPI == undefined || directiveAPI.setFieldValues == undefined || typeof (directiveAPI.setFieldValues) != "function") {
+                        setFieldValuesPromiseDeferred.resolve();
+                        return setFieldValuesPromiseDeferred.promise;
+                    }
 
-                //    var newFieldValue = fieldValuesByNames[fieldName]; //single value (multiple not supported yet)
+                    var newFieldValue = fieldValuesByNames[fieldName]; //single value (multiple not supported yet)
 
-                //    var oldFieldValues = directiveAPI.getSelectedIds();
-                //    if (typeof (oldFieldValues) != "object" && oldFieldValues != undefined)
-                //        oldFieldValues = [oldFieldValues];
+                    var oldFieldValues = directiveAPI.getSelectedIds();
+                    if (typeof (oldFieldValues) != "object" && oldFieldValues != undefined)
+                        oldFieldValues = [oldFieldValues];
 
-                //    var isValueChanged = false;
-                //    var valueToSet;
+                    var isValueChanged = false;
+                    var valueToSet;
 
-                //    if (newFieldValue == undefined) {
-                //        isValueChanged = true;
-                //    }
-                //    else if (oldFieldValues == undefined) {
-                //        isValueChanged = true;
-                //        valueToSet = [newFieldValue];
-                //    }
-                //    else if (oldFieldValues.indexOf(newFieldValue) == -1) {
-                //        isValueChanged = true;
-                //        valueToSet = oldFieldValues;
-                //        valueToSet.push(newFieldValue);
-                //    }
+                    if (newFieldValue == undefined) {
+                        isValueChanged = true;
+                    }
+                    else if (oldFieldValues == undefined) {
+                        isValueChanged = true;
+                        valueToSet = [newFieldValue];
+                    }
+                    else if (oldFieldValues.indexOf(newFieldValue) == -1) {
+                        isValueChanged = true;
+                        valueToSet = oldFieldValues;
+                        valueToSet.push(newFieldValue);
+                    }
 
-                //    if (!isValueChanged) {
-                //        setFieldValuesPromiseDeferred.resolve();
-                //        return setFieldValuesPromiseDeferred.promise;
-                //    }
+                    if (!isValueChanged) {
+                        setFieldValuesPromiseDeferred.resolve();
+                        return setFieldValuesPromiseDeferred.promise;
+                    }
 
-                //    var loadParentGenericBusinessEntitiesPromise = loadParentGenericBusinessEntities(newFieldValue);
+                    //var loadParentGenericBusinessEntitiesPromise = loadParentGenericBusinessEntities(newFieldValue);
 
-                //    UtilsService.waitMultiplePromises([loadParentGenericBusinessEntitiesPromise, $scope.selector.directiveLoadPromiseDeferred.promise]).then(function () {
+                    UtilsService.waitMultiplePromises([ $scope.selector.directiveLoadPromiseDeferred.promise]).then(function () {
 
-                //        fieldValuesByName[fieldName] = valueToSet;
+                        fieldValuesByName[fieldName] = valueToSet;
 
-                //        var context = {
-                //            isDisabled: true,
-                //            filter: getFilter()
-                //        };
+                        var context = {
+                            isDisabled: true,
+                            filter: getFilter()
+                        };
 
-                //        var innerSetFieldValuesPromise = directiveAPI.setFieldValues(valueToSet, context);
-                //        if (innerSetFieldValuesPromise != undefined) {
-                //            innerSetFieldValuesPromise.then(function () {
-                //                notifyFieldValueChanged(valueToSet).then(function () {
-                //                    setFieldValuesPromiseDeferred.resolve();
-                //                });
-                //            });
-                //        }
-                //        else {
-                //            setFieldValuesPromiseDeferred.resolve();
-                //        }
-                //    });
+                        var innerSetFieldValuesPromise = directiveAPI.setFieldValues(valueToSet, context);
+                        if (innerSetFieldValuesPromise != undefined) {
+                            innerSetFieldValuesPromise.then(function () {
+                                notifyFieldValueChanged(valueToSet).then(function () {
+                                    setFieldValuesPromiseDeferred.resolve();
+                                });
+                            });
+                        }
+                        else {
+                            setFieldValuesPromiseDeferred.resolve();
+                        }
+                    });
 
-                //    return setFieldValuesPromiseDeferred.promise;
-                //};
+                    return setFieldValuesPromiseDeferred.promise;
+                };
 
                 if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
@@ -483,7 +484,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             //        if (response) {
             //            var beFieldValues = response.FieldValues;
 
-            //            var promise = setDependentFieldsValues(beFieldValues);
+            //            var promise; // = setDependentFieldsValues(beFieldValues);
             //            if (promise != undefined) {
             //                promise.then(function () {
             //                    loadParentGenericBusinessEntitiesDeferred.resolve();
@@ -493,6 +494,9 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             //                loadParentGenericBusinessEntitiesDeferred.resolve();
             //            }
             //        }
+
+            //    }).finally(function () {
+            //        loadParentGenericBusinessEntitiesDeferred.resolve();
             //    });
 
             //    function setDependentFieldsValues(beFieldValues) {

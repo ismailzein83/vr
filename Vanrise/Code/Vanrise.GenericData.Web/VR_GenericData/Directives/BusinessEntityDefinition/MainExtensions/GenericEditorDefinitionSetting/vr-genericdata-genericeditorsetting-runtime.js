@@ -115,17 +115,17 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
                     return UtilsService.waitMultiplePromises(_promises);
                 };
 
-                //api.setFieldValues = function (fieldValuesByNames) {
-                //    var _promises = [];
+                api.setFieldValues = function (fieldValuesByNames) {
+                    var _promises = [];
 
-                //    if (sectionDirectiveApi.setFieldValues != undefined && typeof (sectionDirectiveApi.setFieldValues) == "function") {
-                //        var setFieldValuesPromise = sectionDirectiveApi.setFieldValues(fieldValuesByNames);
-                //        if (setFieldValuesPromise != undefined)
-                //            _promises.push(setFieldValuesPromise);
-                //    }
+                    if (sectionDirectiveApi.setFieldValues != undefined && typeof (sectionDirectiveApi.setFieldValues) == "function") {
+                        var setFieldValuesPromise = sectionDirectiveApi.setFieldValues(fieldValuesByNames);
+                        if (setFieldValuesPromise != undefined)
+                            _promises.push(setFieldValuesPromise);
+                    }
 
-                //    return UtilsService.waitMultiplePromises(_promises);
-                //};
+                    return UtilsService.waitMultiplePromises(_promises);
+                };
 
                 if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);

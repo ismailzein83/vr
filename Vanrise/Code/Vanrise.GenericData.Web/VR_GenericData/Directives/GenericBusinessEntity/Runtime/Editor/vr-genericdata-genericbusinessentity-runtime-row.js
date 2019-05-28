@@ -83,20 +83,20 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                     return UtilsService.waitMultiplePromises(_promises);
                 };
 
-                //api.setFieldValues = function (fieldValuesByNames) {
-                //    var _promises = [];
+                api.setFieldValues = function (fieldValuesByNames) {
+                    var _promises = [];
 
-                //    for (var i = 0; i < ctrl.fields.length; i++) {
-                //        var field = ctrl.fields[i];
-                //        if (field.fieldAPI != undefined && field.fieldAPI.setFieldValues != undefined && typeof (field.fieldAPI.setFieldValues) == "function") {
-                //            var onFieldValueSettedPromise = field.fieldAPI.setFieldValues(fieldValuesByNames);
-                //            if (onFieldValueSettedPromise != undefined)
-                //                _promises.push(onFieldValueSettedPromise);
-                //        }
-                //    }
+                    for (var i = 0; i < ctrl.fields.length; i++) {
+                        var field = ctrl.fields[i];
+                        if (field.fieldAPI != undefined && field.fieldAPI.setFieldValues != undefined && typeof (field.fieldAPI.setFieldValues) == "function") {
+                            var onFieldValueSettedPromise = field.fieldAPI.setFieldValues(fieldValuesByNames);
+                            if (onFieldValueSettedPromise != undefined)
+                                _promises.push(onFieldValueSettedPromise);
+                        }
+                    }
 
-                //    return UtilsService.waitMultiplePromises(_promises);
-                //};
+                    return UtilsService.waitMultiplePromises(_promises);
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

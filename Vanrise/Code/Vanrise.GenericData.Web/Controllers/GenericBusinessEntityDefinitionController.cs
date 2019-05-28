@@ -15,13 +15,13 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         GenericBusinessEntityDefinitionManager _manager = new GenericBusinessEntityDefinitionManager();
 
-         [HttpGet]
-         [Route("GetGenericBusinessEntityRuntimeInfo")]
+        [HttpGet]
+        [Route("GetGenericBusinessEntityRuntimeInfo")]
         public GenericBESelectorRuntimeInfo GetGenericBusinessEntityRuntimeInfo(Guid businessEntityDefinitionId)
         {
             return _manager.GetGenericBESelectorRuntimeInfo(businessEntityDefinitionId);
         }
-    
+
         [HttpGet]
         [Route("GetGenericBEGridDefinition")]
         public GenericBEGridDefinition GetGenericBEGridDefinition(Guid businessEntityDefinitionId)
@@ -38,7 +38,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetGenericBEDefinitionSettings")]
         public GenericBEDefinitionSettings GetGenericBEDefinitionSettings(Guid businessEntityDefinitionId)
         {
-           return _manager.GetGenericBEDefinitionSettings(businessEntityDefinitionId,true);
+            return _manager.GetGenericBEDefinitionSettings(businessEntityDefinitionId, true);
         }
         [HttpGet]
         [Route("GetIdFieldTypeForGenericBE")]
@@ -56,9 +56,9 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericBEEditorDefinitionSettingsConfigs")]
-        public IEnumerable<GenericBEEditorDefinitionSettingsConfig> GetGenericBEEditorDefinitionSettingsConfigs()
+        public IEnumerable<GenericBEEditorDefinitionSettingsConfig> GetGenericBEEditorDefinitionSettingsConfigs(ContainerType containerType)
         {
-            return _manager.GetGenericBEEditorDefinitionSettingsConfigs();
+            return _manager.GetGenericBEEditorDefinitionSettingsConfigs(containerType);
         }
 
         [HttpGet]
@@ -173,5 +173,6 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetGenericBEAdditionalSettingsConfigs();
         }
+
     }
 }

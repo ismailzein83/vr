@@ -99,7 +99,9 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIU
                 api.setData = function (dicData) {
                     for (var i = 0; i < $scope.scopeModel.tabContainers.length; i++) {
                         var tabContainer = $scope.scopeModel.tabContainers[i];
-                        tabContainer.editorRuntimeAPI.setData(dicData);
+                        if (tabContainer.editorRuntimeAPI != undefined) {
+                            tabContainer.editorRuntimeAPI.setData(dicData);
+                        }
                     }
                 };
 
@@ -121,23 +123,23 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIU
                     return UtilsService.waitMultiplePromises(_promises);
                 };
 
-                //api.setFieldValues = function (fieldValuesByNames) {
-                //    if ($scope.scopeModel.tabContainers == undefined)
-                //        return null;
+                api.setFieldValues = function (fieldValuesByNames) {
+                    if ($scope.scopeModel.tabContainers == undefined)
+                        return null;
 
-                //    var _promises = [];
+                    var _promises = [];
 
-                //    for (var i = 0; i < $scope.scopeModel.tabContainers.length; i++) {
-                //        var currentTabContainers = $scope.scopeModel.tabContainers[i];
-                //        if (currentTabContainers.editorRuntimeAPI.setFieldValues != undefined && typeof (currentTabContainers.editorRuntimeAPI.setFieldValues) == "function") {
-                //            var onFieldValueSettedPromise = currentTabContainers.editorRuntimeAPI.setFieldValues(fieldValuesByNames);
-                //            if (onFieldValueSettedPromise != undefined)
-                //                _promises.push(onFieldValueSettedPromise);
-                //        }
-                //    }
+                    for (var i = 0; i < $scope.scopeModel.tabContainers.length; i++) {
+                        var currentTabContainers = $scope.scopeModel.tabContainers[i];
+                        if (currentTabContainers.editorRuntimeAPI.setFieldValues != undefined && typeof (currentTabContainers.editorRuntimeAPI.setFieldValues) == "function") {
+                            var onFieldValueSettedPromise = currentTabContainers.editorRuntimeAPI.setFieldValues(fieldValuesByNames);
+                            if (onFieldValueSettedPromise != undefined)
+                                _promises.push(onFieldValueSettedPromise);
+                        }
+                    }
 
-                //    return UtilsService.waitMultiplePromises(_promises);
-                //};
+                    return UtilsService.waitMultiplePromises(_promises);
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

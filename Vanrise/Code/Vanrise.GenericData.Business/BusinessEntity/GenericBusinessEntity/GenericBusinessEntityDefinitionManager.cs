@@ -270,22 +270,16 @@ namespace Vanrise.GenericData.Business
             return extensionConfiguration.GetExtensionConfigurations<GenericBEViewDefinitionSettingsConfig>(GenericBEViewDefinitionSettingsConfig.EXTENSION_TYPE);
         }
 
-        public IEnumerable<GenericBEEditorDefinitionSettingsConfig> GetGenericBEEditorDefinitionSettingsConfigs() // ContainerType containerType
+        public IEnumerable<GenericBEEditorDefinitionSettingsConfig> GetGenericBEEditorDefinitionSettingsConfigs(ContainerType containerType)
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
-            return extensionConfiguration.GetExtensionConfigurations<GenericBEEditorDefinitionSettingsConfig>(GenericBEEditorDefinitionSettingsConfig.EXTENSION_TYPE);
+            var genericBEEditorDefinitionSettingsConfigs = extensionConfiguration.GetExtensionConfigurations<GenericBEEditorDefinitionSettingsConfig>(GenericBEEditorDefinitionSettingsConfig.EXTENSION_TYPE);
+
+            if (genericBEEditorDefinitionSettingsConfigs == null)
+                return null;
+
+            return genericBEEditorDefinitionSettingsConfigs.Where(item => item.ValidContainers == null || item.ValidContainers.Contains(containerType));
         }
-
-        //public IEnumerable<GenericBEEditorDefinitionSettingsConfig> GetGenericBEEditorDefinitionSettingsConfigs(ContainerType containerType)
-        //{
-        //    var extensionConfiguration = new ExtensionConfigurationManager();
-        //    var genericBEEditorDefinitionSettingsConfigs = extensionConfiguration.GetExtensionConfigurations<GenericBEEditorDefinitionSettingsConfig>(GenericBEEditorDefinitionSettingsConfig.EXTENSION_TYPE);
-
-        //    if (genericBEEditorDefinitionSettingsConfigs == null)
-        //        return null;
-
-        //    return genericBEEditorDefinitionSettingsConfigs.Where(item => item.ValidContainers == null || item.ValidContainers.Contains(containerType));
-        //}
 
         public IEnumerable<GenericBEFilterDefinitionSettingsConfig> GetGenericBEFilterDefinitionSettingsConfigs()
         {

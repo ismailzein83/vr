@@ -23,19 +23,19 @@ namespace Vanrise.GenericData.MainExtensions
         public List<RestAPIOutputItem> OutputItems { get; set; }
     }
 
-    public class RestAPIItem
+    public abstract class BaseRestAPIItem
     {
         public string FieldName { get; set; }
 
         public string PropertyName { get; set; }
     }
 
-    public class RestAPIInputItem : RestAPIItem
+    public class RestAPIInputItem : BaseRestAPIItem
     {
         public bool IsRequired { get; set; }
     }
 
-    public class RestAPIOutputItem : RestAPIItem
+    public class RestAPIOutputItem : BaseRestAPIItem
     {
     }
 }

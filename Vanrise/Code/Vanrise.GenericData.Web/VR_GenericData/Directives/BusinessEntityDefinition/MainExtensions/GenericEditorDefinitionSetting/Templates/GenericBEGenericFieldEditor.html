@@ -1,0 +1,17 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericFieldEditorController" vr-loader="scopeModel.isLoading" width="'90%'">
+    <vr-modalbody maxheight="'500px'">
+        <vr-form validationcontext="genericFieldEditorGroup">
+            <vr-row removeline>
+                <vr-genericdata-businessentitydefinitionsetting-genericfielddefinition on-ready="scopeModel.onGenericFieldDefinitionDirectiveReady"></vr-genericdata-businessentitydefinitionsetting-genericfielddefinition>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="genericFieldEditorGroup" data-onclick="scopeModel.saveGenericField"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+﻿<vr-button type="Add" data-onclick="scopeModel.onAddRestAPIItemClicked" standalone></vr-button>
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.restApiItems"
+             ondeleterow="scopeModel.onDeleteRow"
+             disablesorting="true"
+             disabledraggablecolumns hidegridmenu>
+    <vr-datagridcolumn headertext="'Property Name'">
+        <vr-textbox value="dataItem.propertyName" isrequired="true"></vr-textbox>
+    </vr-datagridcolumn>
+
+    <vr-datagridcolumn headertext="'Field Name'">
+        <vr-select on-ready="dataItem.onDataRecordFieldsSelectorReady"
+                   datasource="viewScope.scopeModel.dataRecordTypeFields"
+                   selectedvalues="dataItem.selectedItem"
+                   datatextfield="FieldTitle"
+                   datavaluefield="FieldName"
+                   onselectionchanged="dataItem.onDataRecordFieldChanged"
+                   entityName="Field Name" isrequired="true" hidelabel hideremoveicon>
+        </vr-select>
+    </vr-datagridcolumn>
+</vr-datagrid>

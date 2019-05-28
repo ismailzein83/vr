@@ -11,7 +11,8 @@
             GetGenericEditorRuntime: GetGenericEditorRuntime,
             GetDataRecordTypesInfo: GetDataRecordTypesInfo,
             GetGenericEditorRuntimeSections: GetGenericEditorRuntimeSections,
-            GetGenericEditorRuntimeRows: GetGenericEditorRuntimeRows
+            GetGenericEditorRuntimeRows: GetGenericEditorRuntimeRows,
+            GetGenericFieldsRuntimeRow: GetGenericFieldsRuntimeRow
         };
 
 
@@ -42,6 +43,10 @@
         }
         function GetGenericEditorRuntimeRows(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericUIRuntime', 'GetGenericEditorRuntimeRows'), input);
+        }
+
+        function GetGenericFieldsRuntimeRow(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericUIRuntime', 'GetGenericFieldsRuntimeRow'), input);
         }
     }
 

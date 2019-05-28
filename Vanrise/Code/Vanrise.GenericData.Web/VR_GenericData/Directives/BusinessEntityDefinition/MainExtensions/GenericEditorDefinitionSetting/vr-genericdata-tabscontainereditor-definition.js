@@ -131,6 +131,9 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
             function getContext() {
 
                 var currentContext = {
+                    getFields: function () {
+                        return context.getFields();
+                    },
                     getFilteredFields: function () {
                         return context.getRecordTypeFields();
                     },

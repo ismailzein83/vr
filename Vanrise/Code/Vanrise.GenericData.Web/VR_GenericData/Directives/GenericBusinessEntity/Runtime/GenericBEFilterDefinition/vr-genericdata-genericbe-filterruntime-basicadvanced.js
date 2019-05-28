@@ -99,7 +99,7 @@
 
                     for (var i = 0; i < $scope.scopeModel.filters.length; i++) {
                         var filter = $scope.scopeModel.filters[i];
-                        var data = filter.filterAPI.getData();
+                        var data = filter.filterAPI != undefined ? filter.filterAPI.getData() : undefined;
                         if (data != undefined) {
                             if (data.RecordFilter != undefined)
                                 recordFilters.push(data.RecordFilter);

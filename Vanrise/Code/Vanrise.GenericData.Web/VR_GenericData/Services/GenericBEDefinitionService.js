@@ -8,6 +8,8 @@
         var columnModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/ColumnDefinitionEditor.html";
         var viewModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/ViewDefinitionEditor.html";
         var tabModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBETabContainerEditorController.html";
+        var rowContainerModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBERowContainerEditor.html";
+        var BEFieldModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBEGenericFieldEditor.html";
         var basicAdvancefilterModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBEFilterDefinition/Templates/BasicAdvancedFilterEditor.html";
         var actionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionEditor.html";
         var bulkActionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBEBulkActionDefinition/Templates/GenericBEBulkActionDefinitionEditor.html";
@@ -42,7 +44,11 @@
             addGenericBEBulkActionDefinition: addGenericBEBulkActionDefinition,
             editGenericBEBulkActionDefinition: editGenericBEBulkActionDefinition,
             addGenericBEAdditionalSetting: addGenericBEAdditionalSetting,
-            editGenericBEAdditionalSetting: editGenericBEAdditionalSetting
+            editGenericBEAdditionalSetting: editGenericBEAdditionalSetting,
+            addGenericBERowContainer: addGenericBERowContainer,
+            editGenericBERowContainer: editGenericBERowContainer,
+            addGenericBEField: addGenericBEField,
+            editGenericBEField: editGenericBEField
         });
 
         function addGenericBEColumnDefinition(onGenericBEColumnDefinitionAdded, context) {
@@ -72,7 +78,6 @@
             VRModalService.showModal(columnModalPath, parameters, settings);
         }
 
-
         function addGenericBEViewDefinition(onGenericBEViewDefinitionAdded,context) {
             var parameters = {
                 context: context
@@ -100,11 +105,9 @@
             VRModalService.showModal(viewModalPath, parameters, settings);
         }
 
-
         function addGenericBETabContainer(onTabContainerAdded, context) {
             var parameters = {
                 context: context
-
             };
 
             var settings = {};
@@ -120,7 +123,6 @@
             var parameters = {
                 tabDefinition: tabDefinition,
                 context: context
-
             };
 
             var settings = {};
@@ -187,8 +189,6 @@
             VRModalService.showModal(actionModalPath, parameters, settings);
         }
 
-
-        
         function addGenericBEGridActionDefinition(onGenericBEGridActionDefinitionAdded, context) {
             var parameters = {
                 context: context
@@ -299,7 +299,6 @@
             VRModalService.showModal(conditionGroupPath, parameters, settings);
         }
 
-
         function addGenericBESerialNumberPart(onGenericBESerialNumberPartAdded, context) {
             var parameters = {
                 context: context
@@ -388,6 +387,62 @@
             VRModalService.showModal(additionalSettingPath, parameters, settings);
         }
 
+        function addGenericBERowContainer(onRowContainerAdded, context) {
+            var parameters = {
+                context: context
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onRowContainerAdded = onRowContainerAdded;
+            };
+
+            VRModalService.showModal(rowContainerModalPath, parameters, settings);
+        }
+
+        function editGenericBERowContainer(onRowContainerUpdated, rowContainerEntity, context) {
+            var parameters = {
+                rowContainerEntity: rowContainerEntity,
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onRowContainerUpdated = onRowContainerUpdated;
+            };
+            VRModalService.showModal(rowContainerModalPath, parameters, settings);
+        }
+
+        function addGenericBEField(onBEFieldAdded, context, recordTypeFields) {
+            var parameters = {
+                context: context,
+                recordTypeFields: recordTypeFields
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onBEFieldAdded = onBEFieldAdded;
+            };
+
+            VRModalService.showModal(BEFieldModalPath, parameters, settings);
+        }
+
+        function editGenericBEField(onBEFieldUpdated, context, recordTypeFields, fieldEntity) {
+            var parameters = {
+                recordTypeFields: recordTypeFields,
+                context: context, 
+                fieldEntity: fieldEntity
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onBEFieldUpdated = onBEFieldUpdated;
+            };
+
+            VRModalService.showModal(BEFieldModalPath, parameters, settings);
+        }
     };
 
     app.service('VR_GenericData_GenericBEDefinitionService', GenericBEDefinitionService);

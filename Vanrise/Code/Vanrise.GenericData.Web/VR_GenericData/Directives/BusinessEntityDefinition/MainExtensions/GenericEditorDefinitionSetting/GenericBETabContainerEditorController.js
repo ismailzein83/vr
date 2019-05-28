@@ -2,9 +2,9 @@
 
     "use strict";
 
-    GenericBETabContainerEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    GenericBETabContainerEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_ContainerTypeEnum'];
 
-    function GenericBETabContainerEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function GenericBETabContainerEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_ContainerTypeEnum) {
 
         var isEditMode;
         var tabDefinition;
@@ -84,7 +84,8 @@
                     editorDefinitionReadyPromiseDeferred.promise.then(function () {
                         var payload = {
                             settings: tabDefinition != undefined && tabDefinition.TabSettings || undefined,
-                            context: getContext()
+                            context: getContext(),
+                            containerType: VR_GenericData_ContainerTypeEnum.Tab.value
                         };
                         VRUIUtilsService.callDirectiveLoad(editorDefinitionAPI, payload, loadEditorDefinitionDirectivePromiseDeferred);
                     });
