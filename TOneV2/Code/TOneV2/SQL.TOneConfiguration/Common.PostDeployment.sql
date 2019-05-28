@@ -245,6 +245,7 @@ as (select * from (values
 
 ('A28351BA-A5D7-4651-913C-6C9E09B92AC1','System',null				,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,1,0),
 ('FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','System Processes',null		,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,20,0),
+('AD9EEB65-70A3-4F57-B261-79F40D541E23','Business CRM'				,null,null,'/images/menu-icons/plug.png',22,1),
 ('A459D3D0-35AE-4B0E-B267-54436FDA729A','Entities Definition',null	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,65,0),
 
 ('50624672-CD25-44FD-8580-0E3AC8E34C71','Administration',null,null,'/Client/Images/menu-icons/admin.png',5,0),
