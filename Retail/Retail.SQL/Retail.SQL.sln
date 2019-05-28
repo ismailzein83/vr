@@ -33,6 +33,10 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.RA", "SQL.RA\SQL.RA.sql
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.TestCallAnalysis_CDR", "SQL.TestCallAnalysis_CDR\SQL.TestCallAnalysis_CDR.sqlproj", "{8BD98940-AB35-4A21-8FB1-A1B3D46DCD76}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.CommonEntities", "SQL.CommonEntities\SQL.CommonEntities.sqlproj", "{2B3F3F20-DC8B-4F9C-BEFB-11AE838A3D63}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.CRM.FixedOperator", "SQL.CRM.FixedOperator\SQL.CRM.FixedOperator.sqlproj", "{63845E91-4E8D-442E-AF65-27A55D8A74F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +109,18 @@ Global
 		{8BD98940-AB35-4A21-8FB1-A1B3D46DCD76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BD98940-AB35-4A21-8FB1-A1B3D46DCD76}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8BD98940-AB35-4A21-8FB1-A1B3D46DCD76}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2B3F3F20-DC8B-4F9C-BEFB-11AE838A3D63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B3F3F20-DC8B-4F9C-BEFB-11AE838A3D63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B3F3F20-DC8B-4F9C-BEFB-11AE838A3D63}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2B3F3F20-DC8B-4F9C-BEFB-11AE838A3D63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B3F3F20-DC8B-4F9C-BEFB-11AE838A3D63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B3F3F20-DC8B-4F9C-BEFB-11AE838A3D63}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{63845E91-4E8D-442E-AF65-27A55D8A74F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63845E91-4E8D-442E-AF65-27A55D8A74F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63845E91-4E8D-442E-AF65-27A55D8A74F4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{63845E91-4E8D-442E-AF65-27A55D8A74F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63845E91-4E8D-442E-AF65-27A55D8A74F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63845E91-4E8D-442E-AF65-27A55D8A74F4}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,7 +144,7 @@ Global
 		SolutionGuid = {6368FAF0-4E49-43BC-A244-28822B5F68CE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -175,5 +191,11 @@ Global
 		SccProjectUniqueName11 = SQL.TestCallAnalysis_CDR\\SQL.TestCallAnalysis_CDR.sqlproj
 		SccProjectName11 = SQL.TestCallAnalysis_CDR
 		SccLocalPath11 = SQL.TestCallAnalysis_CDR
+		SccProjectUniqueName12 = SQL.CommonEntities\\SQL.CommonEntities.sqlproj
+		SccProjectName12 = SQL.CommonEntities
+		SccLocalPath12 = SQL.CommonEntities
+		SccProjectUniqueName13 = SQL.CRM.FixedOperator\\SQL.CRM.FixedOperator.sqlproj
+		SccProjectName13 = SQL.CRM.FixedOperator
+		SccLocalPath13 = SQL.CRM.FixedOperator
 	EndGlobalSection
 EndGlobal

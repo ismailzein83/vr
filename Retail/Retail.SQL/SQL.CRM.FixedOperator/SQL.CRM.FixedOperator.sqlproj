@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>SQL.CRM.FixedOperator</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{63845e91-4e8d-442e-af65-27a55d8a74f4}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>SQL.CRM.FixedOperator</RootNamespace>
+    <AssemblyName>SQL.CRM.FixedOperator</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="CRMFixedOper\" />
+    <Folder Include="CRMFixedOper\Tables\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="CRMFixedOper\Tables\Complaint_Telephony.sql" />
+    <Build Include="CRMFixedOper\Tables\Contract_FTTH.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_FTTHSubscription.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_TelephonyServicesAddition.sql" />
+    <Build Include="CRMFixedOper\Tables\Contract_Telephony.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_TelephonySubscription.sql" />
+    <Build Include="CRMFixedOper\Tables\CustomerCategory.sql" />
+    <Build Include="CRMFixedOper\Tables\Customer_Residential.sql" />
+    <Build Include="CRMFixedOper\Tables\Customer_Corporate.sql" />
+    <Build Include="CRMFixedOper\Tables\Customer.sql" />
+    <Build Include="CRMFixedOper\Tables\Complaint.sql" />
+    <Build Include="CRMFixedOper\Tables\ComplaintType.sql" />
+    <Build Include="CRMFixedOper\Tables\ComplaintPriority.sql" />
+    <Build Include="CRMFixedOper\Tables\TelephonyComplaintBrokenCategory.sql" />
+    <Build Include="CRMFixedOper\Tables\TelephonyComplaintDamageType.sql" />
+    <Build Include="CRMFixedOper\Tables\TelephonyComplaintType.sql" />
+    <Build Include="CRMFixedOper\Tables\ContractService.sql" />
+    <Build Include="CRMFixedOper\Tables\ServiceType.sql" />
+    <Build Include="CRMFixedOper\Tables\RatePlan.sql" />
+    <Build Include="CRMFixedOper\Tables\Order.sql" />
+    <Build Include="CRMFixedOper\Tables\Contract.sql" />
+    <Build Include="CRMFixedOper\Tables\ContractType.sql" />
+    <Build Include="CRMFixedOper\Tables\OrderType.sql" />
+    <Build Include="Security\CRMFixedOper.sql" />
+  </ItemGroup>
+</Project>
