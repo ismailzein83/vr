@@ -955,6 +955,7 @@
     <None Include="NetworkInventory.PostDeployment.sql" />
     <None Include="NIM.PostDeployment.sql" />
     <None Include="TOne.AccountManager.PostDeployment.sql" />
+    <None Include="Common.Localization.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
