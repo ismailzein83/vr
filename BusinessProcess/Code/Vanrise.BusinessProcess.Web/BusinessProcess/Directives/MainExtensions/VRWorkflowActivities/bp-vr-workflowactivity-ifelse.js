@@ -135,22 +135,18 @@ app.directive('businessprocessVrWorkflowactivityIfelse', ['UtilsService', 'VRUIU
 
 	                    falseWorkflowContainerReadyPromiseDeferred.promise.then(function () {
 
-	                        if (falseActivity == undefined) {
-	                            falseActivity = {
-	                                VRWorkflowActivityId: UtilsService.guid(),
-	                                Settings: {
-	                                    $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowSequenceActivity, Vanrise.BusinessProcess.MainExtensions",
-	                                    Editor: "businessprocess-vr-workflowactivity-sequence",
-	                                    Title: "Sequence"
-	                                }
-	                            };
-	                        }
+                            if (falseActivity != undefined) {
+                                var falseWorkflowContainerPayload = {
+                                    vRWorkflowActivity: falseActivity,
+                                    getChildContext: ctrl.getChildContext
+                                };
+                                VRUIUtilsService.callDirectiveLoad(falseWorkflowContainerAPI, falseWorkflowContainerPayload, falseWorkflowContainerLoadDeferred);
+                            }
+                            else {
+                                falseWorkflowContainerLoadDeferred.resolve();
+                            }
 
-	                        var falseWorkflowContainerPayload = {
-	                            vRWorkflowActivity: falseActivity,
-	                            getChildContext: ctrl.getChildContext
-	                        };
-	                        VRUIUtilsService.callDirectiveLoad(falseWorkflowContainerAPI, falseWorkflowContainerPayload, falseWorkflowContainerLoadDeferred);
+	                        
 	                    });
 
 	                    return falseWorkflowContainerLoadDeferred.promise;
