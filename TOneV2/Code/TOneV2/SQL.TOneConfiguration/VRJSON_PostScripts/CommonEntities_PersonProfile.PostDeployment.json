@@ -1,0 +1,369 @@
+﻿{
+  "Scripts": [
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "VRDevProject",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b",
+              "Name": "Common Person Profile",
+              "CreatedTime": "2019-05-28T10:35:51.307",
+              "LastModifiedTime": "2019-05-28T10:35:51.307"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "ID = 'ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "genericdata",
+      "TableName": "DataRecordType",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "4bf2a5b8-37f6-4314-b0b1-2d912fb2fb69",
+              "Name": "Com_PersonProf_Career",
+              "DevProjectID": "ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b",
+              "Fields": "{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[]}",
+              "ExtraFieldsEvaluator": "{\"$type\":\"Vanrise.GenericData.MainExtensions.ParentDataRecordTypeExtraFields, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"043e058a-0e0e-40e2-82ab-fe04c896e615\",\"DataRecordTypeId\":\"157157b3-4aa0-4f96-9217-d4614aba9bbd\"}",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.DataRecordTypeSettings, Vanrise.GenericData.Entities\",\"DateTimeField\":\"CreatedTime\",\"IdField\":\"ID\"}",
+              "CreatedTime": "2019-05-16T10:44:03.13",
+              "LastModifiedTime": "2019-05-28T10:37:48.813"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "a2f976e8-6679-485b-a3b2-6f9d2a1159a3",
+              "Name": "Com_PersonProf_Salutation",
+              "DevProjectID": "ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b",
+              "Fields": "{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.DataRecordField, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[]}",
+              "ExtraFieldsEvaluator": "{\"$type\":\"Vanrise.GenericData.MainExtensions.ParentDataRecordTypeExtraFields, Vanrise.GenericData.MainExtensions\",\"ConfigId\":\"043e058a-0e0e-40e2-82ab-fe04c896e615\",\"DataRecordTypeId\":\"3e50b634-706a-4245-b274-30cfe03f30f6\"}",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Entities.DataRecordTypeSettings, Vanrise.GenericData.Entities\",\"DateTimeField\":\"CreatedTime\",\"IdField\":\"ID\"}",
+              "CreatedTime": "2019-05-16T09:15:52.517",
+              "LastModifiedTime": "2019-05-28T10:37:54.67"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Fields",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ExtraFieldsEvaluator",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = 'ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "genericdata",
+      "TableName": "DataRecordStorage",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "9ab813e4-61ca-481b-bc48-ba5a2864b4f9",
+              "Name": "Com_PersonProf_Career Table",
+              "DataRecordTypeID": "4bf2a5b8-37f6-4314-b0b1-2d912fb2fb69",
+              "DataStoreID": "ff5bf627-0d23-4d5e-9c2c-6cc2a41e4a61",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageSettings, Vanrise.GenericData.RDBDataStorage\",\"TableName\":\"Career\",\"TableSchema\":\"Com_PersonProf\",\"Columns\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"ID\",\"ColumnName\":\"ID\",\"DataType\":2,\"IsUnique\":false,\"IsIdentity\":true},{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"Name\",\"ColumnName\":\"Name\",\"DataType\":1,\"Size\":255,\"IsUnique\":true,\"IsIdentity\":false},{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"CreatedTime\",\"ColumnName\":\"CreatedTime\",\"DataType\":5,\"IsUnique\":false,\"IsIdentity\":false},{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"CreatedBy\",\"ColumnName\":\"CreatedBy\",\"DataType\":2,\"IsUnique\":false,\"IsIdentity\":false},{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"LastModifiedTime\",\"ColumnName\":\"LastModifiedTime\",\"DataType\":5,\"IsUnique\":false,\"IsIdentity\":false},{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"LastModifiedBy\",\"ColumnName\":\"LastModifiedBy\",\"DataType\":2,\"IsUnique\":false,\"IsIdentity\":false}]},\"NullableFields\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.RDBDataStorage.RDBNullableField, Vanrise.GenericData.RDBDataStorage]], mscorlib\",\"$values\":[]},\"IncludeQueueItemId\":false,\"DateTimeField\":\"CreatedTime\",\"LastModifiedByField\":\"LastModifiedBy\",\"CreatedByField\":\"CreatedBy\",\"LastModifiedTimeField\":\"LastModifiedTime\",\"CreatedTimeField\":\"CreatedTime\",\"EnableUseCaching\":true,\"RequiredLimitResult\":false,\"DontReflectToDB\":false,\"DenyAPICall\":true,\"RequiredPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}},\"FieldsPermissions\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.DataRecordStorageFieldsPermission, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[]}}",
+              "CreatedTime": "2019-05-16T10:45:23.853",
+              "LastModifiedTime": "2019-05-16T10:45:23.7"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "f8e465c4-39d6-4155-a924-738f70a55b7e",
+              "Name": "Com_PersonProf_Salutation Table",
+              "DataRecordTypeID": "a2f976e8-6679-485b-a3b2-6f9d2a1159a3",
+              "DataStoreID": "ff5bf627-0d23-4d5e-9c2c-6cc2a41e4a61",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageSettings, Vanrise.GenericData.RDBDataStorage\",\"TableName\":\"Salutation\",\"TableSchema\":\"Com_PersonProf\",\"Columns\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"ID\",\"ColumnName\":\"ID\",\"DataType\":6,\"IsUnique\":false,\"IsIdentity\":false},{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"Name\",\"ColumnName\":\"Name\",\"DataType\":1,\"Size\":255,\"IsUnique\":true,\"IsIdentity\":false},{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"CreatedTime\",\"ColumnName\":\"CreatedTime\",\"DataType\":5,\"IsUnique\":false,\"IsIdentity\":false},{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"CreatedBy\",\"ColumnName\":\"CreatedBy\",\"DataType\":2,\"IsUnique\":false,\"IsIdentity\":false},{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"LastModifiedTime\",\"ColumnName\":\"LastModifiedTime\",\"DataType\":5,\"IsUnique\":false,\"IsIdentity\":false},{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage\",\"FieldName\":\"LastModifiedBy\",\"ColumnName\":\"LastModifiedBy\",\"DataType\":2,\"IsUnique\":false,\"IsIdentity\":false}]},\"NullableFields\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.RDBDataStorage.RDBNullableField, Vanrise.GenericData.RDBDataStorage]], mscorlib\",\"$values\":[]},\"IncludeQueueItemId\":false,\"DateTimeField\":\"CreatedTime\",\"LastModifiedByField\":\"LastModifiedBy\",\"CreatedByField\":\"CreatedBy\",\"LastModifiedTimeField\":\"LastModifiedTime\",\"CreatedTimeField\":\"CreatedTime\",\"EnableUseCaching\":true,\"RequiredLimitResult\":false,\"DontReflectToDB\":false,\"DenyAPICall\":true,\"RequiredPermission\":{\"$type\":\"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities\",\"Entries\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib\",\"$values\":[]}},\"FieldsPermissions\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.DataRecordStorageFieldsPermission, Vanrise.GenericData.Entities]], mscorlib\",\"$values\":[]}}",
+              "CreatedTime": "2019-05-16T09:17:09.287",
+              "LastModifiedTime": "2019-05-16T10:47:19.763"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "DataRecordTypeID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "DataStoreID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = 'ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b'",
+        "LastJoinStatement": "JOIN genericdata.DataRecordType rec ON MainTable.DataRecordTypeID = rec.ID",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "sec",
+      "TableName": "View",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "79236029-bb14-4aae-8347-5315539696c8",
+              "Name": "Salutations",
+              "DevProjectID": "ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b",
+              "Title": "Salutations",
+              "Module": "89254e36-5d91-4db1-970f-9bfef404679a",
+              "Url": null,
+              "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"2f6e55d2-44b6-4bcb-b398-758fcb709e05\"}]}}",
+              "Rank": 4,
+              "ActionNames": null,
+              "Content": null,
+              "Audience": null,
+              "CreatedTime": "2019-05-16T09:18:59.483",
+              "LastModifiedTime": "2019-05-28T10:42:56.313",
+              "IsDeleted": null
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "b6621a10-2665-41da-a0a8-cf6485fb3573",
+              "Name": "Careers",
+              "DevProjectID": "ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b",
+              "Title": "Careers",
+              "Module": "89254e36-5d91-4db1-970f-9bfef404679a",
+              "Url": null,
+              "Type": "b99b2b0a-9a80-49fc-b68f-c946e1628595",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business\",\"Settings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business\",\"BusinessEntityDefinitionId\":\"0c36853f-e2dc-4391-913e-420a8d064641\"}]}}",
+              "Rank": null,
+              "ActionNames": null,
+              "Content": null,
+              "Audience": null,
+              "CreatedTime": "2019-05-28T11:49:56.823",
+              "LastModifiedTime": "2019-05-28T11:49:56.823",
+              "IsDeleted": null
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Title",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Module",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Url",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Type",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Rank",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ActionNames",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Content",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Audience",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "IsDeleted",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectID = 'ead1feb0-78ec-4bb7-bcb9-d3f18fe3e39b'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    }
+  ]
+}

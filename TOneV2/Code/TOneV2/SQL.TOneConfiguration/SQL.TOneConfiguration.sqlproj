@@ -965,5 +965,11 @@
     <None Include="SomST.PostDeployment.sql" />
     <None Include="Retail.SwitchReleaseCause.PostDeployment.sql" />
     <None Include="TestCallAnalysis.PotDeployment.sql" />
+    <None Include="VRJSON_PostScripts\Retail_CRMForFixedOperator.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\CommonEntities_Address.PostDeployment.json" />
+    <None Include="VRJSON_PostScripts\CommonEntities_PersonProfile.PostDeployment.json" />
+    <None Include="CommonEntities_Address.PostDeployment.sql" />
+    <None Include="CommonEntities_PersonProfile.PostDeployment.sql" />
+    <None Include="Retail_CRMForFixedOperator.PostDeployment.sql" />
   </ItemGroup>
 </Project>
