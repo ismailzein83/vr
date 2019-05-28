@@ -4,7 +4,7 @@
 
     IsEmptyFilterRuntimeSettingsDirective.$inject = ['UtilsService', 'VR_GenericData_RecordQueryLogicalOperatorEnum'];
 
-    function IsEmptyFilterRuntimeSettingsDirective(UtilsService, VR_Invoice_LogicalOperatorEnum) {
+    function IsEmptyFilterRuntimeSettingsDirective(UtilsService, VR_GenericData_RecordQueryLogicalOperatorEnum) {
         return {
             restrict: "E",
             scope: {
