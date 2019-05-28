@@ -9,7 +9,7 @@ namespace BPMExtended.Main.SOMAPI
         public string BillingAccountCode { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime DueDate { get; set; }
-        public decimal InvoiceAmount { get; set; }
+        public decimal Amount { get; set; }
         public decimal OpenAmount { get; set; }
     }
 }

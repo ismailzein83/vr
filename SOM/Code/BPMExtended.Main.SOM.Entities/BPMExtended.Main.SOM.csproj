@@ -50,6 +50,7 @@
     <Compile Include="Billing\ServiceResponse\ContractAvailableServiceOutput.cs" />
     <Compile Include="Billing\ServiceResponse\GetContractAddressOutput.cs" />
     <Compile Include="Billing\ServiceResponse\Invoices.cs" />
+    <Compile Include="Billing\ServiceResponse\PaymentPlan.cs" />
     <Compile Include="Billing\ServiceResponse\Payment.cs" />
     <Compile Include="Billing\ServiceResponse\CustomerContact.cs" />
     <Compile Include="Billing\ServiceResponse\Installment.cs" />

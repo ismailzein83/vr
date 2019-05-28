@@ -1,4 +1,5 @@
 ﻿using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -2097,109 +2098,112 @@ namespace BPMExtended.Main.Common
 
         public static List<PaymentPlanDetail> GetPaymentPlansByInvoiceId(string invoiceId)
         {
-            return GetAllPaymentPlans().FindAllRecords(x => x.InvoiceId == invoiceId).MapRecords(PaymentPlanDetailMapper).ToList();
+            return null;
+           // return GetAllPaymentPlans().FindAllRecords(x => x.InvoiceId == invoiceId).MapRecords(PaymentPlanDetailMapper).ToList();
         }
         public static PaymentPlan GetPaymentPlanById(string paymentPlanId)
         {
-            return GetAllPaymentPlans().Find(x => x.Id.ToLower() == paymentPlanId.ToLower());
+            return null;
+            //return GetAllPaymentPlans().Find(x => x.Id.ToLower() == paymentPlanId.ToLower());
         }
 
         private static List<PaymentPlan> GetAllPaymentPlans()
         {
+            return null;
+            //return new List<PaymentPlan>
+            //    {
+            //         new PaymentPlan
+            //         {
+            //             Id= "1",
+            //             Name ="Payment Plan A",
+            //             Description  = "dddd",
+            //             TotalAmount ="2000",
+            //             StartDate = "10/10/2019",
+            //             EndDate = "20/10/2019",
+            //             NextInstallmentDueDate = "12/10/2019",
+            //             Status ="s1",
+            //             Rate ="5%",
+            //             PaymentPlanTemplateId ="1",
+            //             InvoiceId ="INV_ID_1"
 
-            return new List<PaymentPlan>
-            {
-                 new PaymentPlan
-                 {
-                     Id= "1",
-                     Name ="Payment Plan A",
-                     Description  = "dddd",
-                     TotalAmount ="2000",
-                     StartDate = "10/10/2019",
-                     EndDate = "20/10/2019",
-                     NextInstallmentDueDate = "12/10/2019",
-                     Status ="s1",
-                     Rate ="5%",
-                     PaymentPlanTemplateId ="1",
-                     InvoiceId ="INV_ID_1"
+            //         },
+            //         new PaymentPlan
+            //         {
+            //            Id= "2",
+            //            Name ="Payment Plan B",
+            //            Description  = "dddd",
+            //            TotalAmount ="2200",
+            //            StartDate = "10/1/2019",
+            //            EndDate = "20/2/2019",
+            //            NextInstallmentDueDate = "14/1/2019",
+            //            Status ="s2",
+            //            Rate ="15%",
+            //            PaymentPlanTemplateId ="2",
+            //            InvoiceId ="INV_ID_1"
 
-                 },
-                 new PaymentPlan
-                 {
-                    Id= "2",
-                    Name ="Payment Plan B",
-                    Description  = "dddd",
-                    TotalAmount ="2200",
-                    StartDate = "10/1/2019",
-                    EndDate = "20/2/2019",
-                    NextInstallmentDueDate = "14/1/2019",
-                    Status ="s2",
-                    Rate ="15%",
-                    PaymentPlanTemplateId ="2",
-                    InvoiceId ="INV_ID_1"
+            //         },
+            //         new PaymentPlan
+            //         {
+            //             Id= "3",
+            //             Name ="Payment Plan C",
+            //             Description  = "eeee",
+            //            TotalAmount ="2250",
+            //            StartDate = "10/1/2019",
+            //            EndDate = "20/2/2019",
+            //            NextInstallmentDueDate = "14/1/2019",
+            //            Status ="s2",
+            //            Rate ="25%",
+            //            PaymentPlanTemplateId ="3",
+            //             InvoiceId ="INV_ID_2"
 
-                 },
-                 new PaymentPlan
-                 {
-                     Id= "3",
-                     Name ="Payment Plan C",
-                     Description  = "eeee",
-                    TotalAmount ="2250",
-                    StartDate = "10/1/2019",
-                    EndDate = "20/2/2019",
-                    NextInstallmentDueDate = "14/1/2019",
-                    Status ="s2",
-                    Rate ="25%",
-                    PaymentPlanTemplateId ="3",
-                     InvoiceId ="INV_ID_2"
+            //         },
+            //         new PaymentPlan
+            //         {
+            //              Id= "4",
+            //             Name ="Payment Plan D",
+            //              Description  = "aaaa",
+            //            TotalAmount ="2200",
+            //            StartDate = "10/1/2019",
+            //            EndDate = "20/2/2019",
+            //            NextInstallmentDueDate = "14/1/2019",
+            //            Status ="s3",
+            //            Rate ="45%",
+            //            PaymentPlanTemplateId ="4",
+            //             InvoiceId ="INV_ID_3"
 
-                 },
-                 new PaymentPlan
-                 {
-                      Id= "4",
-                     Name ="Payment Plan D",
-                      Description  = "aaaa",
-                    TotalAmount ="2200",
-                    StartDate = "10/1/2019",
-                    EndDate = "20/2/2019",
-                    NextInstallmentDueDate = "14/1/2019",
-                    Status ="s3",
-                    Rate ="45%",
-                    PaymentPlanTemplateId ="4",
-                     InvoiceId ="INV_ID_3"
+            //         },
+            //         new PaymentPlan
+            //         {
+            //             Id= "5",
+            //             Name ="Payment Plan E",
+            //              Description  = "aaaa",
+            //            TotalAmount ="2200",
+            //            StartDate = "10/1/2019",
+            //            EndDate = "20/2/2019",
+            //            NextInstallmentDueDate = "14/1/2019",
+            //            Status ="s3",
+            //            Rate ="95%",
+            //            PaymentPlanTemplateId ="5",
+            //             InvoiceId ="INV_ID_4"
 
-                 },
-                 new PaymentPlan
-                 {
-                     Id= "5",
-                     Name ="Payment Plan E",
-                      Description  = "aaaa",
-                    TotalAmount ="2200",
-                    StartDate = "10/1/2019",
-                    EndDate = "20/2/2019",
-                    NextInstallmentDueDate = "14/1/2019",
-                    Status ="s3",
-                    Rate ="95%",
-                    PaymentPlanTemplateId ="5",
-                     InvoiceId ="INV_ID_4"
-
-                 },                
-            };
+            //         },                
+            //    };
 
         }
 
         private static PaymentPlanDetail PaymentPlanDetailMapper(PaymentPlan paymentPlan)
         {
-            return new PaymentPlanDetail
-            {
-                Id = paymentPlan.Id,
-                Name = paymentPlan.Name,
-                Description = paymentPlan.Description,
-                TotalAmount = paymentPlan.TotalAmount,
-                Rate = paymentPlan.Rate,
-                PaymentPlanTemplateId = paymentPlan.PaymentPlanTemplateId,
-                InvoiceId = paymentPlan.InvoiceId
-            };
+            return null;
+            //return new PaymentPlanDetail
+            //{
+            //    Id = paymentPlan.Id,
+            //    Name = paymentPlan.Name,
+            //    Description = paymentPlan.Description,
+            //    TotalAmount = paymentPlan.TotalAmount,
+            //    Rate = paymentPlan.Rate,
+            //    PaymentPlanTemplateId = paymentPlan.PaymentPlanTemplateId,
+            //    InvoiceId = paymentPlan.InvoiceId
+            //};
         }
 
         #endregion

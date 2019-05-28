@@ -385,26 +385,26 @@ namespace BPMExtended.Main.Business
             var creditDebitNotesItems = new List<CreditDebitNotesDetail>();
             using (SOMClient client = new SOMClient())
             {
-                // List<CreditDebitNotes> items = client.Get<List<CreditDebitNotes>>(String.Format("api/SOM.ST/Billing/GetCustomerDebitAndCreditNotes?CustomerId=={0}", customerId));
-                List<CreditDebitNotes> items = new List<CreditDebitNotes>();
-                if (items.Count() == 0)
-                {
-                    var mockItem = new CreditDebitNotes()
-                    {
-                        Id = "123",
-                        CustomerId = "Customer123",
-                        Amount = 123,
-                        BillingAccountCode = "BillingAccountCode123",
-                        OpenAmount = 1123,
-                        DocumentType = "documentType",
-                        DueDate = DateTime.Today,
-                        EntryDate = DateTime.Today
-                    };
-                    for (var i=0; i < 10; i++)
-                    {
-                        items.Add(mockItem);
-                    }
-                }
+                List<CreditDebitNotes> items = client.Get<List<CreditDebitNotes>>(String.Format("api/SOM.ST/Billing/GetCustomerDebitAndCreditNotes?CustomerId={0}", customerId));
+                //List<CreditDebitNotes> items = new List<CreditDebitNotes>();
+                //if (items.Count() == 0)
+                //{
+                //    var mockItem = new CreditDebitNotes()
+                //    {
+                //        Id = "123",
+                //        CustomerId = "Customer123",
+                //        Amount = 123,
+                //        BillingAccountCode = "BillingAccountCode123",
+                //        OpenAmount = 1123,
+                //        DocumentType = "documentType",
+                //        DueDate = DateTime.Today,
+                //        EntryDate = DateTime.Today
+                //    };
+                //    for (var i=0; i < 10; i++)
+                //    {
+                //        items.Add(mockItem);
+                //    }
+                //}
                 foreach (var item in items)
                 {
                     var detailItem = CreditDebitNotesMapper(item);
@@ -415,10 +415,14 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public InvoiceDetail GetInvoiceById(string invoiceId)
+        public Invoice GetInvoiceById(string invoiceId)
         {
-            return null;
-           // return RatePlanMockDataGenerator.GetInvoiceById(invoiceId);
+            var item = new Invoice();
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<Invoice>(String.Format("api/SOM.ST/Billing/GetInvoiceDetails?InvoiceId={0}", invoiceId));
+            }
+            return item;
         }
 
         public List<PaymentDetail> GetPayments(string customerId)
@@ -437,10 +441,7 @@ namespace BPMExtended.Main.Business
             return paymentDetailItems;
         }
 
-        public List<PaymentPlanDetail> GetPaymentPlansByInvoiceId(string invoiceId)
-        {
-            return RatePlanMockDataGenerator.GetPaymentPlansByInvoiceId(invoiceId);
-        }
+
 
         public PaymentPlan GetPaymentPlanById(string paymentPlanId)
         {
@@ -617,9 +618,9 @@ namespace BPMExtended.Main.Business
                 DocumentId = item.Id,
                 DocType = item.DocumentType,
                 BillingAccountCode = item.BillingAccountCode,
-                IssueDate = item.EntryDate.ToString(),
-                DocumentAmount = item.Amount.ToString(),
-                DocumentOpenAmount = item.OpenAmount.ToString()
+                IssueDate = Convert.ToString(item.EntryDate),
+                DocumentAmount = Convert.ToString(item.Amount),
+                DocumentOpenAmount = Convert.ToString(item.OpenAmount)
                // IssueDate = item.EntryDate.ToString(),
                // DocumentAmount = item.Amount.ToString(),
                // DocumentOpenAmount = item.OpenAmount.ToString()
@@ -627,12 +628,13 @@ namespace BPMExtended.Main.Business
         }
 
         public InvoiceDetail InvoiceToDetailMapper(Invoice item)
-        {//Invoice Code, Bill Cycle, phone Number , invoice_amount, open amount, Invoice URL
+        {//Invoice Code, Bill Cycle, phone Number , InvoiceAmount, open amount, Invoice URL
             return new InvoiceDetail
             {
                 InvoiceCode = item.Id,
-                InvoiceAccount = item.InvoiceAmount.ToString(),
-                OpenAmount = item.OpenAmount.ToString(),
+                InvoiceAccount = item.BillingAccountCode,
+                OpenAmount = Convert.ToString(item.OpenAmount),
+                Amount = Convert.ToString(item.Amount)
             };
         }
 
@@ -724,4 +726,14 @@ namespace BPMExtended.Main.Business
         public Decimal Amount { get; set; }
         public DateTime CallDate { get; set; }
     }
+
+
+
+    #region commented
+    //public List<PaymentPlanDetail> GetPaymentPlansByInvoiceId(string invoiceId)
+    //{
+    //    return RatePlanMockDataGenerator.GetPaymentPlansByInvoiceId(invoiceId);
+    //}
+    #endregion
+
 }

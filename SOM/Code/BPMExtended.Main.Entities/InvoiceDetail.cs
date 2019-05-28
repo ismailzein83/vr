@@ -16,7 +16,9 @@ namespace BPMExtended.Main.Entities
         public string DueDate { get; set; }
         public string Resource { get; set; }
         public string InvoiceAccount { get; set; }
+        public string Amount { get; set; }
         public string OpenAmount { get; set; }
+        public string PhoneNumber { get; set; }
         public string URL { get; set; }
         public bool CollectionStatus { get; set; }
         public bool InvoiceInstallmentFlag { get; set; }
