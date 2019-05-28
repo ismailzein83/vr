@@ -3,9 +3,9 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
-    public class PercentageRateThreshold : RateThreshold
+    public class MaxMarginPercentageRateThreshold : RateThreshold
     {
-        public override Guid ConfigId => new Guid("E78BD4E6-6D9C-4432-B564-5B5A1DD1EF73");
+        public override Guid ConfigId => new Guid("2B794920-FE60-4186-80DE-1CB05512F338");
         public int Percentage { get; set; }
 
         public override void Execute(ISellingRuleContext context)
@@ -13,12 +13,12 @@ namespace TOne.WhS.Sales.MainExtensions
             decimal ratePercentageValue = (context.CurrentRate * Percentage) / 100;
             decimal calculatedRate = context.CurrentRate - ratePercentageValue;
 
-            context.ViolateRateRule = context.NewRate < calculatedRate;
+            context.ViolateRateRule = context.NewRate > calculatedRate;
         }
 
         public override string GetDescription()
         {
-            return $"{Percentage}%";
+            return $"Max Percentage: {Percentage}%";
         }
     }
 }

@@ -101,7 +101,8 @@
     <Compile Include="RateCalculation\PricingTemplateCalculationMethod.cs" />
     <Compile Include="RateCalculation\MarginRateCalculationMethod.cs" />
     <Compile Include="SellingRules\Action\StopExecutionAction.cs" />
-    <Compile Include="SellingRules\Threshold\PercentageRateThreshold.cs" />
+    <Compile Include="SellingRules\Threshold\MaxMarginPercentageRateThreshold.cs" />
+    <Compile Include="SellingRules\Threshold\MinMarginPercentageRateThreshold.cs" />
     <Compile Include="SellingRules\Threshold\FixedRateThreshold.cs" />
     <Compile Include="SupplierTargetMatchCalculation\WeightedAverageTargetMatchCalculation.cs" />
     <Compile Include="SupplierTargetMatchCalculation\AverageTargetMatchCalculation.cs" />
