@@ -170,11 +170,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                 {
                                     foreach (var originalAmountByCurrency in supplierInvoiceDetails.OriginalAmountByCurrency)
                                     {
-                                        if (originalAmountByCurrency.Value.OriginalAmount.HasValue)
+                                        var totalAmount = originalAmountByCurrency.Value.TrafficAmount.HasValue ? originalAmountByCurrency.Value.TrafficAmount.Value : 0;
+                                        if (originalAmountByCurrency.Value.SMSAmount.HasValue)
+                                            totalAmount += originalAmountByCurrency.Value.SMSAmount.Value;
+                                        if (originalAmountByCurrency.Value.DealAmount.HasValue)
+                                            totalAmount += originalAmountByCurrency.Value.DealAmount.Value;
+                                        if (originalAmountByCurrency.Value.RecurringChargeAmount.HasValue)
+                                            totalAmount += originalAmountByCurrency.Value.RecurringChargeAmount.Value;
+
+                                        if (totalAmount > 0)
                                         {
                                             if (!originalAmount.HasValue)
                                                 originalAmount = 0;
-                                            originalAmount += _currencyExchangeRateManager.ConvertValueToCurrency(originalAmountByCurrency.Value.OriginalAmount.Value, originalAmountByCurrency.Key, currencyId, context.Invoice.IssueDate);
+                                            originalAmount += _currencyExchangeRateManager.ConvertValueToCurrency(totalAmount, originalAmountByCurrency.Key, currencyId, context.Invoice.IssueDate);
                                         }
                                     }
                                 }

@@ -130,6 +130,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                 foreach (var customerInvoice in customerInvoices)
                 {
+                    List<int> currenciesUsed = new List<int>();
 
                     var customerInvoiceDetails = customerInvoice.Details as CustomerInvoiceDetails;
                     if (customerInvoiceDetails != null)
@@ -147,19 +148,33 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                 if (invoiceItemDetails != null && availableCustomerInvoices.Any(x => x.InvoiceId == customerInvoice.InvoiceId && x.CurrencyId == invoiceItemDetails.CurrencyId && x.IsSelected))
                                 {
-                                    var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, invoiceItemDetails.Month), () =>
+                                    OriginalDataCurrrency originalDataCurrrency = new OriginalDataCurrrency();
+
+                                    var month = invoiceItemDetails.Month;
+
+                                    bool hasOriginalAmount = false;
+                                    var fromDate = invoiceItemDetails.FromDate;
+                                    var toDate = invoiceItemDetails.ToDate;
+
+                                    if (customerInvoiceDetails.OriginalAmountByCurrency != null && customerInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetails.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && (originalDataCurrrency.TrafficAmount.HasValue || originalDataCurrrency.SMSAmount.HasValue || originalDataCurrrency.DealAmount.HasValue || originalDataCurrrency.RecurringChargeAmount.HasValue))
+                                    {
+                                        hasOriginalAmount = true;
+                                        fromDate = customerInvoice.FromDate;
+                                        toDate = customerInvoice.ToDate;
+                                        month = string.Format("{0}_{1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
+                                    }
+                                    var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, month), () =>
                                     {
                                         return new SettlementInvoiceItemDetail()
                                         {
                                             CurrencyId = invoiceItemDetails.CurrencyId,
                                             InvoiceId = customerInvoice.InvoiceId,
-                                            Month = invoiceItemDetails.Month,
-                                            FromDate = invoiceItemDetails.FromDate,
-                                            ToDate = invoiceItemDetails.ToDate,
+                                            Month = month,
+                                            FromDate = fromDate,
+                                            ToDate = toDate,
                                         };
                                     });
 
-                                    OriginalDataCurrrency originalDataCurrrency;
 
                                     var settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
                                     settlementInvoiceDetailByCurrency.InvoiceId = customerInvoice.InvoiceId;
@@ -167,25 +182,89 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                     settlementInvoiceDetailByCurrency.TotalDuration = invoiceItemDetails.Duration;
                                     settlementInvoiceDetailByCurrency.NumberOfCalls = invoiceItemDetails.NumberOfCalls;
 
-                                    if (customerInvoiceDetails.OriginalAmountByCurrency != null && customerInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetails.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
+                                    bool canAddSettlementInvoiceDetailByCurrency = false;
+
+                                    if (hasOriginalAmount)
                                     {
                                         var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
                                         settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemAmount += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommission += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommissionWithTaxes += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
-                                        settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += originalDataCurrrency.OriginalAmount.Value;
 
+                                        var canUseCurrency = false;
+                                        if (!currenciesUsed.Contains(invoiceItemDetails.CurrencyId))
+                                        {
+                                            currenciesUsed.Add(invoiceItemDetails.CurrencyId);
+                                            canUseCurrency = true;
+                                            canAddSettlementInvoiceDetailByCurrency = true;
+                                        }
 
-                                        settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = originalDataCurrrency.OriginalAmount.Value;
+                                        decimal dueToSystemFullAmountSettlementInvoiceItemSummaryDetail = 0;
+                                        decimal dueToSystemFullAmountSettlementInvoicedetail = 0;
+                                        if (originalDataCurrrency.TrafficAmount.HasValue)
+                                        {
+                                            if (canUseCurrency)
+                                            {
+                                                settlementInvoiceItemSummaryDetail.DueToSystemAmount += originalDataCurrrency.TrafficAmount.Value;
+                                                settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommission += originalDataCurrrency.TrafficAmount.Value;
+                                                settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommissionWithTaxes += originalDataCurrrency.TrafficAmount.Value;
+                                                settlementInvoiceItemSummaryDetail.DueToSystemTotalTrafficAmount += originalDataCurrrency.TrafficAmount.Value;
 
-                                        settlementInvoicedetail.DueToSystemAmount += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoicedetail.DueToSystemAmountAfterCommission += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoicedetail.DueToSystemAmountAfterCommissionWithTaxes += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoicedetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
-                                        settlementInvoicedetail.DueToSystemFullAmount += originalDataCurrrency.OriginalAmount.Value;
+                                                settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.TrafficAmount.Value;
+                                                settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = originalDataCurrrency.TrafficAmount.Value;
+                                                settlementInvoiceDetailByCurrency.TotalTrafficAmount = originalDataCurrrency.TrafficAmount.Value;
+
+                                                dueToSystemFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.TrafficAmount.Value;
+                                            }
+
+                                            dueToSystemFullAmountSettlementInvoicedetail+= originalDataCurrrency.TrafficAmount.Value;
+                                            settlementInvoicedetail.DueToSystemAmount = originalDataCurrrency.TrafficAmount.Value;
+                                            settlementInvoicedetail.DueToSystemAmountAfterCommission = originalDataCurrrency.TrafficAmount.Value;
+                                            settlementInvoicedetail.DueToSystemAmountAfterCommissionWithTaxes = originalDataCurrrency.TrafficAmount.Value;
+                                            settlementInvoicedetail.DueToSystemTotalTrafficAmount = originalDataCurrrency.TrafficAmount.Value;
+                                        }
+                                        if (canUseCurrency)
+                                        {
+                                            settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
+                                        }
+
+                                        settlementInvoicedetail.DueToSystemNumberOfCalls = customerInvoiceDetails.TotalNumberOfCalls;
+
+                                        if (originalDataCurrrency.SMSAmount.HasValue)
+                                        {
+                                            if (canUseCurrency)
+                                            {
+                                                settlementInvoiceItemSummaryDetail.DueToSystemTotalSMSAmount += originalDataCurrrency.SMSAmount.Value;
+                                                dueToSystemFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.SMSAmount.Value;
+                                            }
+                                            dueToSystemFullAmountSettlementInvoicedetail += originalDataCurrrency.SMSAmount.Value;
+
+                                            settlementInvoicedetail.DueToSystemTotalSMSAmount = originalDataCurrrency.SMSAmount.Value;
+                                        }
+                                        if (originalDataCurrrency.DealAmount.HasValue)
+                                        {
+                                            if (canUseCurrency)
+                                            {
+                                                settlementInvoiceItemSummaryDetail.DueToSystemTotalDealAmount += originalDataCurrrency.DealAmount.Value;
+                                                dueToSystemFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.DealAmount.Value;
+                                            }
+
+                                            dueToSystemFullAmountSettlementInvoicedetail += originalDataCurrrency.DealAmount.Value;
+                                            settlementInvoicedetail.DueToSystemTotalDealAmount = originalDataCurrrency.DealAmount.Value;
+                                        }
+                                        if (originalDataCurrrency.RecurringChargeAmount.HasValue)
+                                        {
+                                            if (canUseCurrency)
+                                            {
+                                                settlementInvoiceItemSummaryDetail.DueToSystemAmountRecurringCharges += originalDataCurrrency.RecurringChargeAmount.Value;
+                                                settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = originalDataCurrrency.RecurringChargeAmount.Value;
+                                                dueToSystemFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.RecurringChargeAmount.Value;
+                                            }
+
+                                            dueToSystemFullAmountSettlementInvoicedetail += originalDataCurrrency.RecurringChargeAmount.Value;
+
+                                            settlementInvoicedetail.DueToSystemAmountRecurringCharges = originalDataCurrrency.RecurringChargeAmount.Value;
+                                        }
+                                        settlementInvoiceItemSummaryDetail.DueToSystemFullAmount = dueToSystemFullAmountSettlementInvoiceItemSummaryDetail;
+                                        settlementInvoicedetail.DueToSystemFullAmount = dueToSystemFullAmountSettlementInvoicedetail;
 
                                     }
                                     else
@@ -219,11 +298,29 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoicedetail.DueToSystemTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
 
                                     }
-                                    settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
+                                    if (!hasOriginalAmount || (hasOriginalAmount && canAddSettlementInvoiceDetailByCurrency))
+                                        settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
                                 }
                             }
                         }
-
+                        decimal totalOriginalAmountByCurrency = 0;
+                        bool originalAmountByCurrencyExists = false;
+                        if (customerInvoiceDetails.OriginalAmountByCurrency != null && customerInvoiceDetails.OriginalAmountByCurrency.Count > 0)
+                        {
+                            originalAmountByCurrencyExists = true;
+                            if (!multipleCurrencies)
+                            {
+                                var originalAmountByCurrencyItem = customerInvoiceDetails.OriginalAmountByCurrency.First();
+                                if (originalAmountByCurrencyItem.Value.TrafficAmount.HasValue)
+                                    totalOriginalAmountByCurrency += originalAmountByCurrencyItem.Value.TrafficAmount.Value;
+                                if (originalAmountByCurrencyItem.Value.SMSAmount.HasValue)
+                                    totalOriginalAmountByCurrency += originalAmountByCurrencyItem.Value.SMSAmount.Value;
+                                if (originalAmountByCurrencyItem.Value.DealAmount.HasValue)
+                                    totalOriginalAmountByCurrency += originalAmountByCurrencyItem.Value.DealAmount.Value;
+                                if (originalAmountByCurrencyItem.Value.RecurringChargeAmount.HasValue)
+                                    totalOriginalAmountByCurrency += originalAmountByCurrencyItem.Value.RecurringChargeAmount.Value;
+                            }
+                        }
                         var sattlementInvoiceItemDetails = new SattlementInvoiceItemDetails
                         {
 
@@ -240,7 +337,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             MultipleCurrencies = multipleCurrencies,
                             DueDate = customerInvoice.DueDate,
                             FromDate = customerInvoice.FromDate,
-                            OriginalAmount = !multipleCurrencies && customerInvoiceDetails.OriginalAmountByCurrency != null && customerInvoiceDetails.OriginalAmountByCurrency.Count > 0 ? customerInvoiceDetails.OriginalAmountByCurrency.First().Value.OriginalAmount : default(decimal?),
+                            OriginalAmount = !multipleCurrencies && originalAmountByCurrencyExists ? totalOriginalAmountByCurrency : default(decimal?),
                             TimeZoneId = customerInvoiceDetails.TimeZoneId,
                             ToDate = customerInvoice.ToDate,
                         };
@@ -258,6 +355,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                 foreach (var supplierInvoice in supplierInvoices)
                 {
+                    List<int> currenciesUsed = new List<int>();
 
                     var supplierInvoiceDetails = supplierInvoice.Details as SupplierInvoiceDetails;
                     if (supplierInvoiceDetails != null)
@@ -278,19 +376,32 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                 if (invoiceItemDetails != null && availableSupplierInvoices.Any(x => x.InvoiceId == supplierInvoice.InvoiceId && x.CurrencyId == invoiceItemDetails.CurrencyId && x.IsSelected))
                                 {
+                                    OriginalDataCurrrency originalDataCurrrency = new OriginalDataCurrrency();
+
+                                    var month = invoiceItemDetails.Month;
+
+                                    bool hasOriginalAmount = false;
+                                    var fromDate = invoiceItemDetails.FromDate;
+                                    var toDate = invoiceItemDetails.ToDate;
+
+                                    if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetails.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && (originalDataCurrrency.TrafficAmount.HasValue || originalDataCurrrency.SMSAmount.HasValue || originalDataCurrrency.DealAmount.HasValue || originalDataCurrrency.RecurringChargeAmount.HasValue))
+                                    {
+                                        hasOriginalAmount = true;
+                                        fromDate = supplierInvoice.FromDate;
+                                        toDate = supplierInvoice.ToDate;
+                                        month = string.Format("{0}_{1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
+                                    }
                                     var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, invoiceItemDetails.Month), () =>
                                     {
                                         return new SettlementInvoiceItemDetail()
                                         {
                                             CurrencyId = invoiceItemDetails.CurrencyId,
                                             InvoiceId = supplierInvoice.InvoiceId,
-                                            Month = invoiceItemDetails.Month,
-                                            FromDate = invoiceItemDetails.FromDate,
-                                            ToDate = invoiceItemDetails.ToDate,
+                                            Month = month,
+                                            FromDate = fromDate,
+                                            ToDate = toDate,
                                         };
                                     });
-
-                                    OriginalDataCurrrency originalDataCurrrency;
 
                                     var settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
                                     settlementInvoiceDetailByCurrency.InvoiceId = supplierInvoice.InvoiceId;
@@ -298,26 +409,91 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                     settlementInvoiceDetailByCurrency.TotalDuration = invoiceItemDetails.Duration;
                                     settlementInvoiceDetailByCurrency.NumberOfCalls = invoiceItemDetails.NumberOfCalls;
 
-                                    if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetails.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
+                                    bool canAddSettlementInvoiceDetailByCurrency = false;
+
+                                    if (hasOriginalAmount)
                                     {
                                         var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
                                         settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
-                                        settlementInvoiceItemSummaryDetail.DueToCarrierAmount += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceItemSummaryDetail.DueToCarrierAmountAfterCommission += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceItemSummaryDetail.DueToCarrierAmountAfterCommissionWithTaxes += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceItemSummaryDetail.DueToCarrierNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
-                                        // settlementInvoiceItemSummaryDetail.DueToCarrierTotalDealAmount += invoiceItemDetails.TotalDealAmount;
-                                        settlementInvoiceItemSummaryDetail.DueToCarrierFullAmount += originalDataCurrrency.OriginalAmount.Value;
-                                        // settlementInvoiceItemSummaryDetail.DueToCarrierTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
 
-                                        settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = originalDataCurrrency.OriginalAmount.Value;
+                                        var canUseCurrency = false;
+                                        if (!currenciesUsed.Contains(invoiceItemDetails.CurrencyId))
+                                        {
+                                            currenciesUsed.Add(invoiceItemDetails.CurrencyId);
+                                            canUseCurrency = true;
+                                            canAddSettlementInvoiceDetailByCurrency = true;
+                                        }
+                                        decimal dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail = 0;
+                                        decimal dueToCarrierFullAmountSettlementInvoicedetail = 0;
+                                        if (originalDataCurrrency.TrafficAmount.HasValue)
+                                        {
+                                            if (canUseCurrency)
+                                            {
+                                                settlementInvoiceItemSummaryDetail.DueToCarrierAmount += originalDataCurrrency.TrafficAmount.Value;
+                                                settlementInvoiceItemSummaryDetail.DueToCarrierAmountAfterCommission += originalDataCurrrency.TrafficAmount.Value;
+                                                settlementInvoiceItemSummaryDetail.DueToCarrierAmountAfterCommissionWithTaxes += originalDataCurrrency.TrafficAmount.Value;
+                                                settlementInvoiceItemSummaryDetail.DueToCarrierTotalTrafficAmount += originalDataCurrrency.TrafficAmount.Value;
 
-                                        settlementInvoicedetail.DueToCarrierAmount += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoicedetail.DueToCarrierAmountAfterCommission += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoicedetail.DueToCarrierAmountAfterCommissionWithTaxes += originalDataCurrrency.OriginalAmount.Value;
-                                        settlementInvoicedetail.DueToCarrierNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
-                                        settlementInvoicedetail.DueToCarrierFullAmount += originalDataCurrrency.OriginalAmount.Value;
+                                                dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.TrafficAmount.Value;
+
+                                                settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.TrafficAmount.Value;
+                                                settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = originalDataCurrrency.TrafficAmount.Value;
+                                                settlementInvoiceDetailByCurrency.TotalTrafficAmount = originalDataCurrrency.TrafficAmount.Value;
+                                            }
+                                            dueToCarrierFullAmountSettlementInvoicedetail += originalDataCurrrency.TrafficAmount.Value;
+
+                                            settlementInvoicedetail.DueToCarrierAmount = originalDataCurrrency.TrafficAmount.Value;
+                                            settlementInvoicedetail.DueToCarrierAmountAfterCommission = originalDataCurrrency.TrafficAmount.Value;
+                                            settlementInvoicedetail.DueToCarrierAmountAfterCommissionWithTaxes = originalDataCurrrency.TrafficAmount.Value;
+                                            settlementInvoicedetail.DueToCarrierTotalTrafficAmount = originalDataCurrrency.TrafficAmount.Value;
+                                        }
+                                        if (canUseCurrency)
+                                        {
+                                            settlementInvoiceItemSummaryDetail.DueToCarrierNumberOfCalls += supplierInvoiceDetails.TotalNumberOfCalls;
+                                        }
+                                        settlementInvoicedetail.DueToCarrierNumberOfCalls = supplierInvoiceDetails.TotalNumberOfCalls;
+
+                                        if (originalDataCurrrency.SMSAmount.HasValue)
+                                        {
+                                            if (canUseCurrency)
+                                            {
+                                                dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.SMSAmount.Value;
+
+                                                settlementInvoiceItemSummaryDetail.DueToCarrierTotalSMSAmount += originalDataCurrrency.SMSAmount.Value;
+                                            }
+                                            dueToCarrierFullAmountSettlementInvoicedetail += originalDataCurrrency.SMSAmount.Value;
+
+                                            settlementInvoicedetail.DueToCarrierTotalSMSAmount = originalDataCurrrency.SMSAmount.Value;
+                                        }
+                                        if (originalDataCurrrency.DealAmount.HasValue)
+                                        {
+                                            if (canUseCurrency)
+                                            {
+                                                dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.DealAmount.Value;
+
+                                                settlementInvoiceItemSummaryDetail.DueToCarrierTotalDealAmount += originalDataCurrrency.DealAmount.Value;
+                                            }
+                                            dueToCarrierFullAmountSettlementInvoicedetail += originalDataCurrrency.DealAmount.Value;
+
+                                            settlementInvoicedetail.DueToCarrierTotalDealAmount = originalDataCurrrency.DealAmount.Value;
+
+                                        }
+                                        if (originalDataCurrrency.RecurringChargeAmount.HasValue)
+                                        {
+                                            if (canUseCurrency)
+                                            {
+                                                dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail += originalDataCurrrency.RecurringChargeAmount.Value;
+
+                                                settlementInvoiceItemSummaryDetail.DueToCarrierAmountRecurringCharges += originalDataCurrrency.RecurringChargeAmount.Value;
+
+                                                settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = originalDataCurrrency.RecurringChargeAmount.Value;
+                                            }
+                                            dueToCarrierFullAmountSettlementInvoicedetail += originalDataCurrrency.RecurringChargeAmount.Value;
+
+                                            settlementInvoicedetail.DueToCarrierAmountRecurringCharges = originalDataCurrrency.RecurringChargeAmount.Value;
+                                        }
+                                        settlementInvoiceItemSummaryDetail.DueToCarrierFullAmount = dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail;
+                                        settlementInvoicedetail.DueToCarrierFullAmount = dueToCarrierFullAmountSettlementInvoicedetail;
 
                                     }
                                     else
@@ -353,15 +529,30 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                         settlementInvoicedetail.DueToCarrierTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
                                     }
-                                    settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
-
-
+                                    if(!hasOriginalAmount || (hasOriginalAmount && canAddSettlementInvoiceDetailByCurrency))
+                                        settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
                                 }
                             }
                         }
 
-
-
+                        decimal totalOriginalAmountByCurrency = 0;
+                        bool originalAmountByCurrencyExists = false;
+                        if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.Count > 0)
+                        {
+                            originalAmountByCurrencyExists = true;
+                            if (!multipleCurrencies)
+                            {
+                                var originalAmountByCurrencyItem = supplierInvoiceDetails.OriginalAmountByCurrency.First();
+                                if (originalAmountByCurrencyItem.Value.TrafficAmount.HasValue)
+                                    totalOriginalAmountByCurrency += originalAmountByCurrencyItem.Value.TrafficAmount.Value;
+                                if (originalAmountByCurrencyItem.Value.SMSAmount.HasValue)
+                                    totalOriginalAmountByCurrency += originalAmountByCurrencyItem.Value.SMSAmount.Value;
+                                if (originalAmountByCurrencyItem.Value.DealAmount.HasValue)
+                                    totalOriginalAmountByCurrency += originalAmountByCurrencyItem.Value.DealAmount.Value;
+                                if (originalAmountByCurrencyItem.Value.RecurringChargeAmount.HasValue)
+                                    totalOriginalAmountByCurrency += originalAmountByCurrencyItem.Value.RecurringChargeAmount.Value;
+                            }
+                        }
 
                         var sattlementInvoiceItemDetails = new SattlementInvoiceItemDetails
                         {
@@ -378,7 +569,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             MultipleCurrencies = multipleCurrencies,
                             DueDate = supplierInvoice.DueDate,
                             FromDate = supplierInvoice.FromDate,
-                            OriginalAmount = !multipleCurrencies && supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.Count > 0 ? supplierInvoiceDetails.OriginalAmountByCurrency.First().Value.OriginalAmount : default(decimal?),
+                            OriginalAmount = !multipleCurrencies && originalAmountByCurrencyExists ? totalOriginalAmountByCurrency : default(decimal?),
                             TimeZoneId = supplierInvoiceDetails.TimeZoneId,
                             ToDate = supplierInvoice.ToDate,
                             IsOriginalAmountSetted = isOriginalAmountSetted

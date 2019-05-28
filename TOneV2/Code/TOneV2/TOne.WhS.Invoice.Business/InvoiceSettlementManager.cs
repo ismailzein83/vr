@@ -175,8 +175,16 @@ namespace TOne.WhS.Invoice.Business
                                 var record = supplierDetail.OriginalAmountByCurrency.GetRecord(currentInvoiceItemDetail.CurrencyId);
                                 if (record != null)
                                 {
-                                    useOriginalAmount =record.IncludeOriginalAmountInSettlement;
-                                    originalAmount = record.OriginalAmount;
+                                    decimal totalOriginalAmount = record.TrafficAmount.HasValue ? record.TrafficAmount.Value : 0;
+                                    if (record.SMSAmount.HasValue)
+                                        totalOriginalAmount += record.SMSAmount.Value;
+                                    if (record.DealAmount.HasValue)
+                                        totalOriginalAmount += record.DealAmount.Value;
+                                    if (record.RecurringChargeAmount.HasValue)
+                                        totalOriginalAmount += record.RecurringChargeAmount.Value;
+
+                                    useOriginalAmount = record.IncludeOriginalAmountInSettlement;
+                                    originalAmount = totalOriginalAmount>0 ? totalOriginalAmount : default(decimal?);
                                 }
                             }
                             var supplierInvoiceDetail = supplierInvoiceDetails.FindRecord(x => x.InvoiceId == invoiceDetail.Entity.InvoiceId && x.CurrencyId == currentInvoiceItemDetail.CurrencyId);
@@ -256,8 +264,16 @@ namespace TOne.WhS.Invoice.Business
                                 var record = customerDetail.OriginalAmountByCurrency.GetRecord(currentInvoiceItemDetail.CurrencyId);
                                 if (record != null)
                                 {
+                                    decimal totalOriginalAmount = record.TrafficAmount.HasValue ? record.TrafficAmount.Value : 0;
+                                    if (record.SMSAmount.HasValue)
+                                        totalOriginalAmount += record.SMSAmount.Value;
+                                    if (record.DealAmount.HasValue)
+                                        totalOriginalAmount += record.DealAmount.Value;
+                                    if (record.RecurringChargeAmount.HasValue)
+                                        totalOriginalAmount += record.RecurringChargeAmount.Value;
+
                                     useOriginalAmount = record.IncludeOriginalAmountInSettlement;
-                                    originalAmount = record.OriginalAmount;
+                                    originalAmount = totalOriginalAmount > 0 ? totalOriginalAmount : default(decimal?);
                                 }
                             }
                             var customerInvoiceDetail = customerInvoiceDetails.FindRecord(x => x.InvoiceId == invoiceDetail.Entity.InvoiceId && x.CurrencyId == currentInvoiceItemDetail.CurrencyId);
@@ -479,16 +495,24 @@ namespace TOne.WhS.Invoice.Business
                                         string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceItemDetail.CurrencyId);
                                         currencySymbol.ThrowIfNull("currencySymbol", invoiceItemDetail.CurrencyId);
                                         OriginalDataCurrrency originalDataCurrrency;
-                                        if (innvoiceDetails.OriginalAmountByCurrency != null && innvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetail.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
+                                        if (innvoiceDetails.OriginalAmountByCurrency != null && innvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetail.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && (originalDataCurrrency.TrafficAmount.HasValue || originalDataCurrrency.SMSAmount.HasValue || originalDataCurrrency.DealAmount.HasValue || originalDataCurrrency.RecurringChargeAmount.HasValue))
                                         {
                                             decimal amountValue;
+                                            decimal totalOriginalAmount = originalDataCurrrency.TrafficAmount.HasValue ? originalDataCurrrency.TrafficAmount.Value : 0;
+                                            if (originalDataCurrrency.SMSAmount.HasValue)
+                                                totalOriginalAmount += originalDataCurrrency.SMSAmount.Value;
+                                            if (originalDataCurrrency.DealAmount.HasValue)
+                                                totalOriginalAmount += originalDataCurrrency.DealAmount.Value;
+                                            if (originalDataCurrrency.RecurringChargeAmount.HasValue)
+                                                totalOriginalAmount += originalDataCurrrency.RecurringChargeAmount.Value;
+
                                             if (!amountByCurrency.TryGetValue(currencySymbol, out amountValue))
                                             {
-                                                amountByCurrency.Add(currencySymbol, Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue));
+                                                amountByCurrency.Add(currencySymbol, Math.Round(totalOriginalAmount, normalPrecisionValue));
                                             }
                                             else if(newInvoiceCheck)
                                             {
-                                                amountByCurrency[currencySymbol] = amountValue + Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue);
+                                                amountByCurrency[currencySymbol] = amountValue + Math.Round(totalOriginalAmount, normalPrecisionValue);
                                             }
                                         }
                                         else

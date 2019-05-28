@@ -109,17 +109,17 @@ namespace TOne.WhS.Invoice.Business
                     customerInvoiceDetails.IsOriginalAmountSetted = false;
                     if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0)
                     {
-                        if (input.OriginalDataCurrency.Any(x => x.Value.OriginalAmount.HasValue))
+                        if (input.OriginalDataCurrency.Any(x => x.Value.TrafficAmount.HasValue || x.Value.SMSAmount.HasValue || x.Value.DealAmount.HasValue || x.Value.RecurringChargeAmount.HasValue))
                         {
                             customerInvoiceDetails.OriginalAmountByCurrency = new Dictionary<int, OriginalDataCurrrency>();
 
                             foreach (var item in input.OriginalDataCurrency)
                             {
-                                if (item.Value.OriginalAmount.HasValue)
+                                if (item.Value.TrafficAmount.HasValue || item.Value.SMSAmount.HasValue || item.Value.DealAmount.HasValue || item.Value.RecurringChargeAmount.HasValue)
                                     customerInvoiceDetails.OriginalAmountByCurrency.Add(item.Key, item.Value);
                             }
                         }
-                        if (input.OriginalDataCurrency.All(x => x.Value.OriginalAmount.HasValue))
+                        if (input.OriginalDataCurrency.All(x => x.Value.TrafficAmount.HasValue || x.Value.SMSAmount.HasValue || x.Value.DealAmount.HasValue || x.Value.RecurringChargeAmount.HasValue))
                         {
                             customerInvoiceDetails.IsOriginalAmountSetted = true;
                         }
@@ -134,17 +134,17 @@ namespace TOne.WhS.Invoice.Business
                     supplierInvoiceDetails.IsOriginalAmountSetted = false;
                     if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0)
                     {
-                        if (input.OriginalDataCurrency.Any(x => x.Value.OriginalAmount.HasValue))
+                        if (input.OriginalDataCurrency.Any(x => x.Value.TrafficAmount.HasValue || x.Value.SMSAmount.HasValue || x.Value.DealAmount.HasValue || x.Value.RecurringChargeAmount.HasValue))
                         {
                             supplierInvoiceDetails.OriginalAmountByCurrency = new Dictionary<int, OriginalDataCurrrency>();
 
                             foreach (var item in input.OriginalDataCurrency)
                             {
-                                if (item.Value.OriginalAmount.HasValue)
+                                if (item.Value.TrafficAmount.HasValue || item.Value.SMSAmount.HasValue || item.Value.DealAmount.HasValue || item.Value.RecurringChargeAmount.HasValue)
                                     supplierInvoiceDetails.OriginalAmountByCurrency.Add(item.Key, item.Value);
                             }
                         }
-                        if (input.OriginalDataCurrency.All(x => x.Value.OriginalAmount.HasValue))
+                        if (input.OriginalDataCurrency.All(x => x.Value.TrafficAmount.HasValue || x.Value.SMSAmount.HasValue || x.Value.DealAmount.HasValue || x.Value.RecurringChargeAmount.HasValue))
                         {
                             supplierInvoiceDetails.IsOriginalAmountSetted = true;
                         }
@@ -205,7 +205,7 @@ namespace TOne.WhS.Invoice.Business
             var currencyItemSetName = invoiceItemManager.GetInvoiceItemsByItemSetNames(invoiceId, new List<string> { "GroupingByCurrency" }, CompareOperator.Equal);
             if (currencyItemSetName != null)
             {
-                originalInvoiceDataRuntime.OriginalDataCurrency = new Dictionary<int, OriginalDataCurrrency>();
+                originalInvoiceDataRuntime.OriginalDataCurrency = new Dictionary<int, OriginalDataCurrrencyRuntime>();
                 foreach (var item in currencyItemSetName)
                 {
                     var itemDetails = item.Details as InvoiceBySaleCurrencyItemDetails;
@@ -215,6 +215,14 @@ namespace TOne.WhS.Invoice.Business
                         currencySymbol.ThrowIfNull("currencySymbol", itemDetails.CurrencyId);
                         var originalDataCurrrency = originalInvoiceDataRuntime.OriginalDataCurrency.GetOrCreateItem(itemDetails.CurrencyId);
                         originalDataCurrrency.CurrencySymbol = currencySymbol;
+                        if(itemDetails.TotalTrafficAmount > 0)
+                            originalDataCurrrency.HasTrafficAmount = true;
+                        if(itemDetails.TotalSMSAmount > 0)
+                            originalDataCurrrency.HasSMSAmount = true;
+                        if(itemDetails.TotalDealAmount > 0)
+                            originalDataCurrrency.HasDealAmount = true;
+                        if(itemDetails.TotalRecurringChargeAmount > 0)
+                            originalDataCurrrency.HasRecurringChargeAmount = true;
                     }
                 }
             }
@@ -228,6 +236,10 @@ namespace TOne.WhS.Invoice.Business
                     if (record != null)
                     {
                         record.OriginalAmount = originalAmount.Value.OriginalAmount;
+                        record.TrafficAmount = originalAmount.Value.TrafficAmount;
+                        record.SMSAmount = originalAmount.Value.SMSAmount;
+                        record.DealAmount = originalAmount.Value.DealAmount;
+                        record.RecurringChargeAmount = originalAmount.Value.RecurringChargeAmount;
                         record.IncludeOriginalAmountInSettlement = originalAmount.Value.IncludeOriginalAmountInSettlement;
                     }
                 }

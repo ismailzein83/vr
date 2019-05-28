@@ -2,9 +2,9 @@
 
     'use strict';
 
-    originalInvoiceDataTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Invoice_InvoiceAPIService','VR_Invoice_InvoiceAPIService','VRCommon_VRMailAPIService'];
+    originalInvoiceDataTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Invoice_InvoiceAPIService', 'VR_Invoice_InvoiceAPIService', 'VRCommon_VRMailAPIService', 'WhS_BE_ToneModuleService'];
 
-    function originalInvoiceDataTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Invoice_InvoiceAPIService, VR_Invoice_InvoiceAPIService, VRCommon_VRMailAPIService) {
+    function originalInvoiceDataTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Invoice_InvoiceAPIService, VR_Invoice_InvoiceAPIService, VRCommon_VRMailAPIService, WhS_BE_ToneModuleService) {
 
         var invoiceAccountEntity;
         var invoiceId;
@@ -30,6 +30,14 @@
             $scope.scopeModel = {};
             $scope.scopeModel.uploadedAttachements = [];
             $scope.scopeModel.originalDataCurrency = [];
+            $scope.scopeModel.isSMSModuleEnabled = false;
+            $scope.scopeModel.isVoiceModuleEnabled = false;
+
+            $scope.scopeModel.showVoiceColumn = false;
+            $scope.scopeModel.showSMSColumn = false;
+            $scope.scopeModel.showRecurringChargeColumn = false;
+            $scope.scopeModel.showDealColumn = false;
+
             $scope.scopeModel.save = function () {
                 return updateOriginalInvoiceData();
             };
@@ -64,16 +72,17 @@
 
         function getOriginalInvoiceDataRuntime()
         {
-            return WhS_Invoice_InvoiceAPIService.GetOriginalInvoiceDataRuntime(invoiceId,invoiceCarrierType).then(function (response) {
+            return WhS_Invoice_InvoiceAPIService.GetOriginalInvoiceDataRuntime(invoiceId, invoiceCarrierType).then(function (response) {
                 originalInvoiceDataRuntime = response;
-                if (originalInvoiceDataRuntime != undefined)
-                {
-                    if (originalInvoiceDataRuntime.OriginalDataCurrency != undefined)
-                    {
-                        for( var p in originalInvoiceDataRuntime.OriginalDataCurrency)
-                        {
-                            if (p != "$type")
-                            {
+                if (originalInvoiceDataRuntime != undefined) {
+                    if (originalInvoiceDataRuntime.OriginalDataCurrency != undefined) {
+                        var noVoiceCount = 0;
+                        var noSMSCount = 0;
+                        var noRecurringChargeCount = 0;
+                        var noDealCount = 0;
+                        var originalDataCurrencyCount = 0;
+                        for (var p in originalInvoiceDataRuntime.OriginalDataCurrency) {
+                            if (p != "$type") {
                                 var item = originalInvoiceDataRuntime.OriginalDataCurrency[p];
                                 $scope.scopeModel.originalDataCurrency.push({
                                     Entity: {
@@ -81,11 +90,31 @@
                                         CurrencyId: p,
                                         IncludeOriginalAmountInSettlement: item.IncludeOriginalAmountInSettlement,
                                         OriginalAmount: item.OriginalAmount,
+                                        TrafficAmount: item.HasTrafficAmount ? item.TrafficAmount : undefined,
+                                        SMSAmount: item.HasSMSAmount ? item.SMSAmount : undefined,
+                                        RecurringChargeAmount: item.HasRecurringChargeAmount ? item.RecurringChargeAmount : undefined,
+                                        DealAmount: item.HasDealAmount ? item.DealAmount : undefined,
+                                        HasTrafficAmount: item.HasTrafficAmount,
+                                        HasSMSAmount: item.HasSMSAmount,
+                                        HasRecurringChargeAmount: item.HasRecurringChargeAmount,
+                                        HasDealAmount: item.HasDealAmount
                                     }
                                 });
+                                originalDataCurrencyCount++;
+                                if (!item.HasTrafficAmount)
+                                    noVoiceCount++;
+                                if (!item.HasSMSAmount)
+                                    noSMSCount++;
+                                if (!item.HasRecurringChargeAmount)
+                                    noRecurringChargeCount++;
+                                if (!item.HasDealAmount)
+                                    noDealCount++;
                             }
-                            
                         }
+                        $scope.scopeModel.showVoiceColumn = originalDataCurrencyCount != noVoiceCount;
+                        $scope.scopeModel.showSMSColumn = originalDataCurrencyCount != noSMSCount;
+                        $scope.scopeModel.showRecurringChargeColumn = originalDataCurrencyCount != noRecurringChargeCount;
+                        $scope.scopeModel.showDealColumn = originalDataCurrencyCount != noDealCount;
                     }
                     $scope.scopeModel.reference = originalInvoiceDataRuntime.Reference;
                     if(originalInvoiceDataRuntime.AttachementFilesRuntime != undefined)
@@ -114,7 +143,11 @@
 
                 }
             }
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            function getModuleFlags() {
+                $scope.scopeModel.isSMSModuleEnabled = WhS_BE_ToneModuleService.isSMSModuleEnabled();
+                $scope.scopeModel.isVoiceModuleEnabled = WhS_BE_ToneModuleService.isVoiceModuleEnabled();
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, getModuleFlags]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -156,10 +189,14 @@
                 originalDataCurrencyDic = {};
                 for (var i = 0; i < $scope.scopeModel.originalDataCurrency.length; i++) {
                     var originalDataCurrency = $scope.scopeModel.originalDataCurrency[i];
-                   originalDataCurrencyDic[originalDataCurrency.Entity.CurrencyId] = {
-                            CurrencySymbol: originalDataCurrency.Entity.CurrencySymbol,
-                            OriginalAmount: originalDataCurrency.Entity.OriginalAmount,
-                            IncludeOriginalAmountInSettlement: originalDataCurrency.Entity.IncludeOriginalAmountInSettlement
+                    originalDataCurrencyDic[originalDataCurrency.Entity.CurrencyId] = {
+                                CurrencySymbol: originalDataCurrency.Entity.CurrencySymbol,
+                                OriginalAmount: originalDataCurrency.Entity.OriginalAmount,
+                                TrafficAmount: originalDataCurrency.Entity.TrafficAmount,
+                                SMSAmount: originalDataCurrency.Entity.SMSAmount,
+                                RecurringChargeAmount: originalDataCurrency.Entity.RecurringChargeAmount,
+                                DealAmount: originalDataCurrency.Entity.DealAmount,
+                                IncludeOriginalAmountInSettlement: originalDataCurrency.Entity.IncludeOriginalAmountInSettlement
                     };
                 }
             }
