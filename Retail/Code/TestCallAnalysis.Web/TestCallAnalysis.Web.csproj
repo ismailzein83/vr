@@ -177,6 +177,8 @@
     <Content Include="TestCallAnalysis\Elements\CaseCDRChangeStatus\Views\CaseCDRChangeStatusController.js" />
     <Content Include="TestCallAnalysis\Elements\CDRCorrelation\Directives\tcanal-cdrcorrelation-process.js" />
     <Content Include="TestCallAnalysis\Elements\CDRCorrelation\Directives\Templates\CDRCorrelationProcessTemplate.html" />
+    <Content Include="TestCallAnalysis\Elements\Scheduled\Directives\Templates\TestCallAnalysisProcessScheduledTemplate.html" />
+    <Content Include="TestCallAnalysis\Elements\Scheduled\Directives\vr-testcallanalysisprocess-scheduled.js" />
     <Content Include="TestCallAnalysis\Elements\SettingsData\Directives\Templates\NewInstanceSettingsData.html" />
     <Content Include="TestCallAnalysis\Elements\SettingsData\Directives\tcanal-instance-settings-editor.js" />
     <Content Include="TestCallAnalysis\ModuleInitialization.js" />
