@@ -134,7 +134,8 @@ as (select * from (values
 ('E5FA86E6-FA20-4301-9FFE-E20A57BEC459','RDBDataRecordStorageJoinOtherRecordStorage','Other Record Storage','VR_GenericData_RDBDataRecordStorageJoinSettingsConfig','{"Editor":"vr-genericadata-rdbdatarecordstoragesettings-joinotherrecordstorage"}'),
 ('1D2F3E14-AD64-41C6-AE5F-475D1CB75D2D','RDBDataRecordStorageSettingsFilterGroup','Filter Group','VR_GenericData_RDBDataRecordStorageSettingsFilterConfig','{"Editor":"vr-genericdata-rdbrecordstoragesettings-filter-filtergroup"}'),
 ('CBAFD46F-676F-4CC1-ADA4-4DF7ED762C95','SendEmail_Generic','Send Email Generic','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-sendemailaction-definition"}'),
-('5F841B8D-D330-496A-BC62-0720352B25B7','DataRecordStorageFilterGroupPermanentFilter','Filter Group','VR_GenericData_PermanentFilterSettings','{"Editor": "vr-genericdata-datarecordstorage-permanentfilter-recordfilter" }')
+('5F841B8D-D330-496A-BC62-0720352B25B7','DataRecordStorageFilterGroupPermanentFilter','Filter Group','VR_GenericData_PermanentFilterSettings','{"Editor": "vr-genericdata-datarecordstorage-permanentfilter-recordfilter" }'),
+('177D3C5C-4A3D-4B3E-B63C-60B1021C0C40','IsEmpty_Filter','Empty Filter','VR_GenericData_GenericBEFilterDefinitionSettings','{"Editor":"vr-genericdata-genericbe-filterdefinition-isemptyfilter"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
