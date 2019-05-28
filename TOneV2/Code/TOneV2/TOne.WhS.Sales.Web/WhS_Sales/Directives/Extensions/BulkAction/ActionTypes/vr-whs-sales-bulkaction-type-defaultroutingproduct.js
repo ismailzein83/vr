@@ -150,12 +150,12 @@ app.directive('vrWhsSalesBulkactionTypeDefaultroutingproduct', ['WhS_Sales_RateP
 
         function getTemplate(attrs) {
             return '<vr-columns colnum="{{ctrl.normalColNum}}">\
-					<vr-whs-be-routingproduct-selector on-ready="scopeModel.onRoutingProductSelectorReady"\
+					<vr-whs-be-routingproduct-selector-old on-ready="scopeModel.onRoutingProductSelectorReady"\
 						selectedvalues="scopeModel.selectedRoutingProduct"\
 						onselectitem="scopeModel.onRoutingProductSelected"\
 						isrequired="ctrl.isrequired"\
 						hideremoveicon="ctrl.isrequired">\
-					</vr-whs-be-routingproduct-selector>\
+					</vr-whs-be-routingproduct-selector-old>\
 				</vr-columns>';
         }
     }]);

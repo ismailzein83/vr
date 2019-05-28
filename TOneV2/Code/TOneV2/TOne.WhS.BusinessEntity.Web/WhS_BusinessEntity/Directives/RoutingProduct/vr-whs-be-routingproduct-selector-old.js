@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_RoutingProductService',
+app.directive('vrWhsBeRoutingproductSelectorOld', ['WhS_BE_RoutingProductAPIService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_RoutingProductService',
     function (WhS_BE_RoutingProductAPIService, UtilsService, VRUIUtilsService, WhS_BE_RoutingProductService) {
 
         var directiveDefinitionObject = {
@@ -8,16 +8,15 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 onReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
-                isrequired: "=",
+                isrequired: "@",
                 selectedvalues: '=',
                 hideremoveicon: "@",
                 onselectitem: "=",
                 ondeselectitem: "=",
                 hideselectedvaluessection: "@",
-                onbeforeselectionchanged: "=",
+                onbeforeselectionchanged:"=",
                 label: '@',
-                showaddbutton: "@",
-                normalColNum: '@'
+                showaddbutton:"@"
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -73,6 +72,10 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
             if (labelAttributeValue != undefined && labelAttributeValue != null && labelAttributeValue != '')
                 labelAttribute = "label='" + labelAttributeValue + "'";
 
+            var required = "";
+            if (attrs.isrequired != undefined)
+                required = "isrequired";
+
             var addClicked = '';
             if (attrs.showaddbutton != undefined)
                 addClicked = 'onaddclicked="addNewRoutingProduct"';
@@ -90,10 +93,10 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
             if (attrs.stopreadonly != undefined)
                 stopreadonly = "stopreadonly";
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-                + '<vr-select isrequired="ctrl.isrequired" ' + multipleselection + ' ' + addClicked + '  datatextfield="Name" datavaluefield="RoutingProductId" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem"'
-                + labelAttribute + ' ' + '"  on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + labelAttributeValue + '" ' + hideremoveicon + ' ' + hideselectedvaluessection + ' ' + stopreadonly + ' ></vr-select>'
-                + '</vr-columns>';
+            return '<div>'
+                + '<vr-select ' + multipleselection + ' ' + addClicked+ '  datatextfield="Name" datavaluefield="RoutingProductId" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem"'
+                + required + ' ' + labelAttribute + ' ' + '"  on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + labelAttributeValue + '" ' + hideremoveicon + ' ' + hideselectedvaluessection + ' ' + stopreadonly + ' ></vr-select>'
+                + '</div>';
         }
 
         function routingProductCtor(ctrl, $scope, $attrs) {

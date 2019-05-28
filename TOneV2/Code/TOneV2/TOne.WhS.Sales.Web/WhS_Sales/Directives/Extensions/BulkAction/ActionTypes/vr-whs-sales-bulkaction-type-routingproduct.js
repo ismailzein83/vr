@@ -133,13 +133,13 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 
     function getTemplate(attrs) {
         return '<vr-columns colnum="{{ctrl.normalColNum}}">\
-					<vr-whs-be-routingproduct-selector on-ready="scopeModel.onSelectorReady"\
+					<vr-whs-be-routingproduct-selector-old on-ready="scopeModel.onSelectorReady"\
 						selectedvalues="scopeModel.selectedRoutingProduct"\
 						onselectitem="scopeModel.onRoutingProductSelected"\
                         onbeforeselectionchanged="scopeModel.onRoutingProductBeforeSelectionChanged"\
 						isrequired="ctrl.isrequired"\
 						hideremoveicon="ctrl.isrequired">\
-					</vr-whs-be-routingproduct-selector>\
+					</vr-whs-be-routingproduct-selector-old>\
 				</vr-columns>\
 				<vr-columns colnum="{{ctrl.normalColNum}}"  ng-show="scopeModel.showRateSource">\
                     <vr-whs-sales-ratesource-selector customelabel="Apply on Rates" ismultipleselection on-ready="scopeModel.onRateSourceSelectorReady"></vr-whs-sales-ratesource-selector>\

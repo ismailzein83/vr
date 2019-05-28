@@ -11,7 +11,8 @@
                 <div style="height:25px"><vr-whs-be-services-viewer on-ready="ctrl.onCurrentServiceViewerReady"></vr-whs-be-services-viewer></div>
             </vr-columns>
             <vr-columns width="1/4row">
-                <vr-whs-be-routingproduct-selector on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedRP" onselectionchanged="ctrl.onSelectionChanged"></vr-whs-be-routingproduct-selector>
+                <vr-whs-be-routingproduct-selector-old on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedRP" onselectionchanged="ctrl.onSelectionChanged">
+                </vr-whs-be-routingproduct-selector-old>
             </vr-columns>
             <vr-columns width="1/4row" ng-if="ctrl.isSwitchVisible()">
                 <span ng-init="ctrl.initializeSwitchValue()">
