@@ -1,10 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Vanrise.Common;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Business
@@ -18,19 +16,47 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
+            var allImportedCountries = context.Target as AllImportedCountries;
+            var zonewWithCancelPendingRates = new HashSet<string>();
+
+            foreach (var importedCountry in allImportedCountries.ImportedCountries)
+            {
+                foreach (var importedZone in importedCountry.ImportedZones)
+                {
+                    var importedRate = importedZone.ImportedNormalRate;
+                    importedRate.ThrowIfNull("ImportedRate", importedZone.ZoneName);
+
+                    if (HasCanceledPendingRate(importedRate.ChangedExistingRates))
+                        zonewWithCancelPendingRates.Add(importedRate.ZoneName);
+
+                    foreach (var importedOtherRate in importedZone.ImportedOtherRates.Values)
+                    {
+                        if (HasCanceledPendingRate(importedOtherRate.ChangedExistingRates))
+                            zonewWithCancelPendingRates.Add(importedOtherRate.ZoneName);
+                    }
+                }
+            }
+
+            if (zonewWithCancelPendingRates.Any())
+            {
+                context.Message = string.Format("Following zone(s) have cancel pending rates :'{0}'", string.Join("; ", zonewWithCancelPendingRates));
+                return false;
+            }
             return true;
         }
-        private Dictionary<string, List<SupplierRate>> StructureSupplierRateByZoneName(IEnumerable<SupplierRate> supplierRates)
+        private bool HasCanceledPendingRate(List<ExistingRate> ChangedExistingRates)
         {
-            var supplierZoneManager = new SupplierZoneManager();
-            var supplierRateByZoneId = new Dictionary<string, List<SupplierRate>>();
-            foreach (var supplierRate in supplierRates)
+            if (ChangedExistingRates == null || !ChangedExistingRates.Any())
+                return false;
+
+            foreach (var changedExistingRate in ChangedExistingRates)
             {
-                string supplierZoneName = supplierZoneManager.GetSupplierZoneName(supplierRate.ZoneId);
-                List<SupplierRate> rates = supplierRateByZoneId.GetOrCreateItem(supplierZoneName);
-                rates.Add(supplierRate);
+                if (changedExistingRate.BED > DateTime.Today
+                    && changedExistingRate.EED.HasValue
+                    && changedExistingRate.BED == changedExistingRate.EED)
+                    return true;
             }
-            return supplierRateByZoneId;
+            return false;
         }
         public override string GetMessage(IRuleTarget target)
         {
