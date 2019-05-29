@@ -953,9 +953,9 @@
     <None Include="VR_NumberPrefix.PostDeployment.sql" />
     <None Include="TelecomCRM.PostDeployment.sql" />
     <None Include="NetworkInventory.PostDeployment.sql" />
-    <None Include="NIM.PostDeployment.sql" />
     <None Include="TOne.AccountManager.PostDeployment.sql" />
     <None Include="Common.Localization.PostDeployment.sql" />
+    <None Include="Retail_NIMForFixedOperator.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
@@ -971,5 +971,6 @@
     <None Include="CommonEntities_Address.PostDeployment.sql" />
     <None Include="CommonEntities_PersonProfile.PostDeployment.sql" />
     <None Include="Retail_CRMForFixedOperator.PostDeployment.sql" />
+    <None Include="VRJSON_PostScripts\Retail_NIMForFixedOperator.PostDeployment.json" />
   </ItemGroup>
 </Project>
