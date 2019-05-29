@@ -536,3 +536,31 @@
               end
             ----------------------------------------------------------------------------------------------------
               
+
+                 --- [common].[Connection]-------------------------------------------------------------------
+                 -----------------------------------------------------------------------------------------------
+                 begin
+                 
+                 set nocount on;
+                 
+                 ;with cte_data([ID],[Name],[Settings],[CreatedTime],[LastModifiedTime])
+                  as (select* from (values
+                 --//////////////////////////////////////////////////////////////////////////////////////////////////
+                       ('197e3981-75f0-4c4f-9912-9eacf176e10d','Inventory Connection','{"$type":"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business","ConfigId":"071d54d2-463b-4404-8219-45fcd539ff01","BaseURL":"http://192.168.110.195:8901","WorkflowRetrySettings":{"$type":"System.Collections.Generic.List`1[[Vanrise.Common.Business.VRWorkflowRetrySettings, Vanrise.Common.Business]], mscorlib","$values":[{"$type":"Vanrise.Common.Business.VRWorkflowRetrySettings, Vanrise.Common.Business","MaxRetryCount":2,"RetryInterval":"00:00:10"},{"$type":"Vanrise.Common.Business.VRWorkflowRetrySettings, Vanrise.Common.Business","MaxRetryCount":2,"RetryInterval":"00:00:25"}]}}','2019-03-25 10:36:11.667','2019-04-08 14:00:39.487')
+                 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                )c([ID],[Name],[Settings],[CreatedTime],[LastModifiedTime]))
+                merge[common].[Connection] as t
+                using  cte_data as s
+                on            1=1 and t.[ID]=s.[ID]
+                  
+                  when matched then
+                 update set
+                 [ID]=s.[ID] ,[Name]=s.[Name] ,[Settings]=s.[Settings] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] 
+                 when not matched by target then
+                 insert([ID],[Name],[Settings],[CreatedTime],[LastModifiedTime])
+                 values(s.[ID], s.[Name], s.[Settings], s.[CreatedTime], s.[LastModifiedTime]);
+                  
+            ----------------------------------------------------------------------------------------------------
+              end
+            ----------------------------------------------------------------------------------------------------
+              

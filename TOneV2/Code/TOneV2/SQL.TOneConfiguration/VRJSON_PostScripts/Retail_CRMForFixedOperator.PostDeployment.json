@@ -2758,6 +2758,62 @@
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "common",
+      "TableName": "Connection",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "197e3981-75f0-4c4f-9912-9eacf176e10d",
+              "Name": "Inventory Connection",
+              "Settings": "{\"$type\":\"Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business\",\"ConfigId\":\"071d54d2-463b-4404-8219-45fcd539ff01\",\"BaseURL\":\"http://192.168.110.195:8901\",\"WorkflowRetrySettings\":{\"$type\":\"System.Collections.Generic.List`1[[Vanrise.Common.Business.VRWorkflowRetrySettings, Vanrise.Common.Business]], mscorlib\",\"$values\":[{\"$type\":\"Vanrise.Common.Business.VRWorkflowRetrySettings, Vanrise.Common.Business\",\"MaxRetryCount\":2,\"RetryInterval\":\"00:00:10\"},{\"$type\":\"Vanrise.Common.Business.VRWorkflowRetrySettings, Vanrise.Common.Business\",\"MaxRetryCount\":2,\"RetryInterval\":\"00:00:25\"}]}}",
+              "CreatedTime": "2019-03-25T10:36:11.667",
+              "LastModifiedTime": "2019-04-08T14:00:39.487"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "Name like '%Inventory%'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
     }
   ]
 }
