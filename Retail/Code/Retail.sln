@@ -276,8 +276,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Interconnect.Data", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Interconnect.Data.RDB", "Retail.Interconnect.Data.RDB\Retail.Interconnect.Data.RDB.csproj", "{441BCB61-49A2-40C0-8A07-30F60423E1A0}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "NIM", "NIM\NIM.sqlproj", "{7103AC59-46B6-446D-8B2F-005E7A9D03A1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -770,12 +768,6 @@ Global
 		{441BCB61-49A2-40C0-8A07-30F60423E1A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{441BCB61-49A2-40C0-8A07-30F60423E1A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{441BCB61-49A2-40C0-8A07-30F60423E1A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7103AC59-46B6-446D-8B2F-005E7A9D03A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7103AC59-46B6-446D-8B2F-005E7A9D03A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7103AC59-46B6-446D-8B2F-005E7A9D03A1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{7103AC59-46B6-446D-8B2F-005E7A9D03A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7103AC59-46B6-446D-8B2F-005E7A9D03A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7103AC59-46B6-446D-8B2F-005E7A9D03A1}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -910,13 +902,12 @@ Global
 		{954C104F-E2E7-44C0-8F0C-E224EFCC1555} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{19D00A8A-5F7B-4BEB-BB0A-E408E68C4765} = {5EEB3C1D-9A37-4E9C-897A-CB9364A80C9D}
 		{441BCB61-49A2-40C0-8A07-30F60423E1A0} = {5EEB3C1D-9A37-4E9C-897A-CB9364A80C9D}
-		{7103AC59-46B6-446D-8B2F-005E7A9D03A1} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 115
+		SccNumberOfProjects = 114
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1372,9 +1363,5 @@ Global
 		SccProjectTopLevelParentUniqueName113 = Retail.sln
 		SccProjectName113 = Retail.Interconnect.Data.RDB
 		SccLocalPath113 = Retail.Interconnect.Data.RDB
-		SccProjectUniqueName114 = NIM\\NIM.sqlproj
-		SccProjectTopLevelParentUniqueName114 = Retail.sln
-		SccProjectName114 = NIM
-		SccLocalPath114 = NIM
 	EndGlobalSection
 EndGlobal
