@@ -82,7 +82,7 @@
             function buildFilterGroup() {
                 var obj = {
                     $type: "Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities",
-                    LogicalOperator: VR_GenericData_RecordQueryLogicalOperatorEnum.AND.value,
+                    LogicalOperator: VR_GenericData_RecordQueryLogicalOperatorEnum.And.value,
                     Filters: []
                 };
 
@@ -108,7 +108,7 @@
                         $scope.scopeModel.selectedFilter = definitionSettings.AllField;
                         obj.Filters.push(notEmptyFilter);
                         obj.Filters.push(emptyFilter);
-                        obj.LogicalOperator = VR_GenericData_RecordQueryLogicalOperatorEnum.OR.value;
+                        obj.LogicalOperator = VR_GenericData_RecordQueryLogicalOperatorEnum.Or.value;
                     }
                 }
                 else {
@@ -121,7 +121,7 @@
                     else {
                         obj.Filters.push(notEmptyFilter);
                         obj.Filters.push(emptyFilter);
-                        obj.LogicalOperator = VR_GenericData_RecordQueryLogicalOperatorEnum.OR.value;
+                        obj.LogicalOperator = VR_GenericData_RecordQueryLogicalOperatorEnum.Or.value;
                     }
                 }
                 return obj;
