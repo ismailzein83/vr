@@ -56,6 +56,10 @@
     <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="QueueingConfigDBConnStringKey"                    value="ConfigurationDBConnString"/>
+
+    <add key="CommonEntitiesConnStringKey"                      value="ConfigurationDBConnString"/>
+    <add key="CRM_FixedOperatorConnStringKey"                   value="ConfigurationDBConnString"/>
+    
   </appSettings>
 
   <system.web>
