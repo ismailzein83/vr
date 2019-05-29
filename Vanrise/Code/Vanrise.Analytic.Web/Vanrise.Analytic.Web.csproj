@@ -180,8 +180,10 @@
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalc-alertrulefilterdefinition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\Templates\MeasureStyleGridViewerTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\vr-analytic-measurestyle-grid-viewer.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\PermanentFilter\MainExtensions\Templates\PermanentFilterConditionFilter.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\PermanentFilter\MainExtensions\Templates\PermanentfilterRecordfilter.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\PermanentFilter\MainExtensions\vr-analytic-permanentfilter-recordfilter.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\PermanentFilter\MainExtensions\vr-analytic-permanentfilter-conditionfilter.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\PermanentFilter\vr-analytic-permanentfilter-settings.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\AnalyticLegendTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-legend.js" />
@@ -530,6 +532,8 @@
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticWidgetEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportEditorController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticPermanentFilterConditionFilterItemEditor.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticPermanentFilterConditionFilterItemEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\DataRecordSourceEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\DataRecordSourceEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\MeasureStyleEditor.html" />
