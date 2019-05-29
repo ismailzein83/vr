@@ -161,7 +161,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         hasOriginalAmount = true;
                                         fromDate = customerInvoice.FromDate;
                                         toDate = customerInvoice.ToDate;
-                                        month = string.Format("{0}_{1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
+                                        month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
                                     }
                                     var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, month), () =>
                                     {
@@ -389,9 +389,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         hasOriginalAmount = true;
                                         fromDate = supplierInvoice.FromDate;
                                         toDate = supplierInvoice.ToDate;
-                                        month = string.Format("{0}_{1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
+                                        month = string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
                                     }
-                                    var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, invoiceItemDetails.Month), () =>
+                                    var settlementInvoicedetail = settlementInvoiceByCurrency.GetOrCreateItem(string.Format("{0}_{1}", invoiceItemDetails.CurrencyId, month), () =>
                                     {
                                         return new SettlementInvoiceItemDetail()
                                         {
