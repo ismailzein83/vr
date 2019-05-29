@@ -1800,6 +1800,119 @@
     {
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "sec",
+      "TableName": "Module",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "bd846d48-821e-43c6-9199-32642c239ee9",
+              "Name": "NIM Nodes",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "e73c4aba-fd03-4137-b047-f3fb4f7eed03",
+              "Icon": null,
+              "Rank": 3,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\"}",
+              "RenderedAsView": true,
+              "LastModifiedTime": "2019-05-28T20:07:03.093"
+            }
+          },
+          {
+            "FieldValues": {
+              "ID": "36e41565-e43b-404f-870b-805cc97644da",
+              "Name": "NIM Entities",
+              "Url": null,
+              "DefaultViewId": null,
+              "ParentId": "e73c4aba-fd03-4137-b047-f3fb4f7eed03",
+              "Icon": null,
+              "Rank": 2,
+              "AllowDynamic": false,
+              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\"}",
+              "RenderedAsView": true,
+              "LastModifiedTime": "2019-05-28T20:07:03.083"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Url",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "DefaultViewId",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "ParentId",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Icon",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Rank",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "AllowDynamic",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "RenderedAsView",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "Name Like '%NIM%'",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "sec",
       "TableName": "View",
       "Settings": {
         "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
@@ -2208,119 +2321,6 @@
     },
     {
       "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
-      "Schema": "sec",
-      "TableName": "Module",
-      "Settings": {
-        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
-        "DataRows": [
-          {
-            "FieldValues": {
-              "ID": "bd846d48-821e-43c6-9199-32642c239ee9",
-              "Name": "NIM Nodes",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "e73c4aba-fd03-4137-b047-f3fb4f7eed03",
-              "Icon": null,
-              "Rank": 3,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\"}",
-              "RenderedAsView": true,
-              "LastModifiedTime": "2019-05-28T20:07:03.093"
-            }
-          },
-          {
-            "FieldValues": {
-              "ID": "36e41565-e43b-404f-870b-805cc97644da",
-              "Name": "NIM Entities",
-              "Url": null,
-              "DefaultViewId": null,
-              "ParentId": "e73c4aba-fd03-4137-b047-f3fb4f7eed03",
-              "Icon": null,
-              "Rank": 2,
-              "AllowDynamic": false,
-              "Settings": "{\"$type\":\"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities\"}",
-              "RenderedAsView": true,
-              "LastModifiedTime": "2019-05-28T20:07:03.083"
-            }
-          }
-        ],
-        "Columns": [
-          {
-            "ColumnName": "ID",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": true
-          },
-          {
-            "ColumnName": "Name",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "Url",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "DefaultViewId",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "ParentId",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "Icon",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "Rank",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "AllowDynamic",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "Settings",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "RenderedAsView",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          },
-          {
-            "ColumnName": "LastModifiedTime",
-            "IncludeInInsert": true,
-            "IncludeInUpdate": true,
-            "IsIdentifier": false
-          }
-        ],
-        "IsIdentity": false,
-        "Variables": [],
-        "LastWhereCondition": "Name Like '%NIM%'",
-        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
-      },
-      "Title": "Merge"
-    },
-    {
-      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
       "Schema": "common",
       "TableName": "StatusDefinition",
       "Settings": {
@@ -2573,6 +2573,69 @@
         "Variables": [],
         "LastWhereCondition": "DevProjectID = 'A100EAF5-B0D9-45A3-96DD-2833A7D7BA8C'",
         "LastJoinStatement": "JOIN genericdata.businessentitydefinition bed on MainTable.BusinessEntityDefinitionID = bed.Id",
+        "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
+      },
+      "Title": "Merge"
+    },
+    {
+      "ConnectionId": "719772f8-053d-48f7-9760-3ac83132700f",
+      "Schema": "genericdata",
+      "TableName": "DataStore",
+      "Settings": {
+        "$type": "Vanrise.DevTools.MainExtensions.MergeGeneratedScriptItem, Vanrise.DevTools.MainExtensions",
+        "DataRows": [
+          {
+            "FieldValues": {
+              "ID": "52787a39-525e-4aaf-a722-d3fc52de0143",
+              "Name": "NIM DB",
+              "DevProjectID": "a100eaf5-b0d9-45a3-96dd-2833a7d7ba8c",
+              "Settings": "{\"$type\":\"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage\",\"ConfigId\":\"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8\",\"ConnectionStringName\":\"ConfigurationDBConnString\",\"IsRemoteDataStore\":false}",
+              "CreatedTime": "2019-04-15T19:10:26.783",
+              "LastModifiedTime": "2019-05-29T12:25:32.55"
+            }
+          }
+        ],
+        "Columns": [
+          {
+            "ColumnName": "ID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": true
+          },
+          {
+            "ColumnName": "Name",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "DevProjectID",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "Settings",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "CreatedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          },
+          {
+            "ColumnName": "LastModifiedTime",
+            "IncludeInInsert": true,
+            "IncludeInUpdate": true,
+            "IsIdentifier": false
+          }
+        ],
+        "IsIdentity": false,
+        "Variables": [],
+        "LastWhereCondition": "DevProjectId = 'A100EAF5-B0D9-45A3-96DD-2833A7D7BA8C'",
         "ConfigId": "9837cad1-1f8f-4edf-8aab-25864c4ef842"
       },
       "Title": "Merge"

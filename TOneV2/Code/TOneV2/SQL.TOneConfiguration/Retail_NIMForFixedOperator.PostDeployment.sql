@@ -243,6 +243,35 @@ values(s.[ID], s.[Name], s.[DevProjectID], s.[Title], s.[Settings], s.[CreatedTi
 ----------------------------------------------------------------------------------------------------
 end
 ----------------------------------------------------------------------------------------------------
+                           
+
+--- [sec].[Module]-------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+begin
+                 
+set nocount on;
+                 
+;with cte_data([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView],[LastModifiedTime])
+as (select* from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('bd846d48-821e-43c6-9199-32642c239ee9','NIM Nodes',NULL,NULL,'e73c4aba-fd03-4137-b047-f3fb4f7eed03',NULL,3,'False','{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}','True','2019-05-28 20:07:03.093'),
+('36e41565-e43b-404f-870b-805cc97644da','NIM Entities',NULL,NULL,'e73c4aba-fd03-4137-b047-f3fb4f7eed03',NULL,2,'False','{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}','True','2019-05-28 20:07:03.083')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView],[LastModifiedTime]))
+merge[sec].[Module] as t
+using  cte_data as s
+on            1=1 and t.[ID]=s.[ID]
+                  
+when matched then
+update set
+[ID]=s.[ID] ,[Name]=s.[Name] ,[Url]=s.[Url] ,[DefaultViewId]=s.[DefaultViewId] ,[ParentId]=s.[ParentId] ,[Icon]=s.[Icon] ,[Rank]=s.[Rank] ,[AllowDynamic]=s.[AllowDynamic] ,[Settings]=s.[Settings] ,[RenderedAsView]=s.[RenderedAsView] ,[LastModifiedTime]=s.[LastModifiedTime] 
+when not matched by target then
+insert([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView],[LastModifiedTime])
+values(s.[ID], s.[Name], s.[Url], s.[DefaultViewId], s.[ParentId], s.[Icon], s.[Rank], s.[AllowDynamic], s.[Settings], s.[RenderedAsView], s.[LastModifiedTime]);
+                  
+----------------------------------------------------------------------------------------------------
+end
+----------------------------------------------------------------------------------------------------
               
 
 --- [sec].[View]-------------------------------------------------------------------
@@ -290,36 +319,7 @@ values(s.[ID], s.[Name], s.[DevProjectID], s.[Title], s.[Url], s.[Module], s.[Ac
 ----------------------------------------------------------------------------------------------------
 end
 ----------------------------------------------------------------------------------------------------
-              
 
---- [sec].[Module]-------------------------------------------------------------------
------------------------------------------------------------------------------------------------
-begin
-                 
-set nocount on;
-                 
-;with cte_data([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView],[LastModifiedTime])
-as (select* from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('bd846d48-821e-43c6-9199-32642c239ee9','NIM Nodes',NULL,NULL,'e73c4aba-fd03-4137-b047-f3fb4f7eed03',NULL,3,'False','{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}','True','2019-05-28 20:07:03.093'),
-('36e41565-e43b-404f-870b-805cc97644da','NIM Entities',NULL,NULL,'e73c4aba-fd03-4137-b047-f3fb4f7eed03',NULL,2,'False','{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}','True','2019-05-28 20:07:03.083')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView],[LastModifiedTime]))
-merge[sec].[Module] as t
-using  cte_data as s
-on            1=1 and t.[ID]=s.[ID]
-                  
-when matched then
-update set
-[ID]=s.[ID] ,[Name]=s.[Name] ,[Url]=s.[Url] ,[DefaultViewId]=s.[DefaultViewId] ,[ParentId]=s.[ParentId] ,[Icon]=s.[Icon] ,[Rank]=s.[Rank] ,[AllowDynamic]=s.[AllowDynamic] ,[Settings]=s.[Settings] ,[RenderedAsView]=s.[RenderedAsView] ,[LastModifiedTime]=s.[LastModifiedTime] 
-when not matched by target then
-insert([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView],[LastModifiedTime])
-values(s.[ID], s.[Name], s.[Url], s.[DefaultViewId], s.[ParentId], s.[Icon], s.[Rank], s.[AllowDynamic], s.[Settings], s.[RenderedAsView], s.[LastModifiedTime]);
-                  
-----------------------------------------------------------------------------------------------------
-end
-----------------------------------------------------------------------------------------------------
-              
 
 --- [common].[StatusDefinition]-------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------
@@ -358,6 +358,34 @@ update set
 when not matched by target then
 insert([ID],[Name],[BusinessEntityDefinitionID],[Settings],[CreatedBy],[CreatedTime],[LastModifiedBy],[LastModifiedTime])
 values(s.[ID], s.[Name], s.[BusinessEntityDefinitionID], s.[Settings], s.[CreatedBy], s.[CreatedTime], s.[LastModifiedBy], s.[LastModifiedTime]);
+                  
+----------------------------------------------------------------------------------------------------
+end
+----------------------------------------------------------------------------------------------------
+
+
+--- [genericdata].[DataStore]-------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+begin
+                 
+set nocount on;
+                 
+;with cte_data([ID],[Name],[DevProjectID],[Settings],[CreatedTime],[LastModifiedTime])
+as (select* from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('52787a39-525e-4aaf-a722-d3fc52de0143','NIM DB','a100eaf5-b0d9-45a3-96dd-2833a7d7ba8c','{"$type":"Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage","ConfigId":"f8dd5b05-7f69-4f16-bfc6-d65ef9b65bf8","ConnectionStringName":"ConfigurationDBConnString","IsRemoteDataStore":false}','2019-04-15 19:10:26.783','2019-05-29 12:25:32.550')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[DevProjectID],[Settings],[CreatedTime],[LastModifiedTime]))
+merge[genericdata].[DataStore] as t
+using  cte_data as s
+on            1=1 and t.[ID]=s.[ID]
+                  
+when matched then
+update set
+[ID]=s.[ID] ,[Name]=s.[Name] ,[DevProjectID]=s.[DevProjectID] ,[Settings]=s.[Settings] ,[CreatedTime]=s.[CreatedTime] ,[LastModifiedTime]=s.[LastModifiedTime] 
+when not matched by target then
+insert([ID],[Name],[DevProjectID],[Settings],[CreatedTime],[LastModifiedTime])
+values(s.[ID], s.[Name], s.[DevProjectID], s.[Settings], s.[CreatedTime], s.[LastModifiedTime]);
                   
 ----------------------------------------------------------------------------------------------------
 end
