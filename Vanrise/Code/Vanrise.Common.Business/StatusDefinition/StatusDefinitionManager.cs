@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
@@ -202,6 +200,18 @@ namespace Vanrise.Common.Business
             }
         }
 
+
+        private class CacheManagerByBEDefinition : Vanrise.Caching.BaseCacheManager<Guid>
+        {
+            IStatusDefinitionDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IStatusDefinitionDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(Guid parameter)
+            {
+                return _dataManager.AreStatusDefinitionUpdated(ref _updateHandle);
+            }
+        }
+
         private class StatusDefinitionLoggableEntity : VRLoggableEntityBase
         {
             public static StatusDefinitionLoggableEntity Instance = new StatusDefinitionLoggableEntity();
@@ -259,6 +269,24 @@ namespace Vanrise.Common.Business
                });
         }
 
+
+        Dictionary<string, StatusDefinition> GetCachedStatusDefinitionsByName(Guid businessEntityDefinitionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManagerByBEDefinition>().GetOrCreateObject("GetStatusDefinitionsByName", businessEntityDefinitionId,
+               () =>
+               {
+                   Dictionary<string, StatusDefinition> result = new Dictionary<string, StatusDefinition>();
+                   Dictionary<Guid, StatusDefinition> statusDefinitions = GetCachedStatusDefinitions();
+                   foreach(var statusDefinitionKvp in statusDefinitions)
+                   {
+                       StatusDefinition item = statusDefinitionKvp.Value;
+                       if (item.BusinessEntityDefinitionId == businessEntityDefinitionId)
+                           result.Add(item.Name, item);
+                   }
+
+                   return result;
+               });
+        }
         #endregion
 
         #region Mappers
@@ -326,6 +354,28 @@ namespace Vanrise.Common.Business
         public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();
+        }
+
+        public override void GetIdByDescription(IBusinessEntityGetIdByDescriptionContext context)
+        {
+            context.ThrowIfNull("context");
+
+            var cachedGenericBEByTitleField = GetCachedStatusDefinitionsByName(context.BusinessEntityDefinitionId);
+            if (cachedGenericBEByTitleField == null)
+            {
+                context.ErrorMessage = $"No data exist for this entity.";
+                return;
+            }
+
+            var genericBE = cachedGenericBEByTitleField.GetRecord(context.FieldDescription.ToString());
+            if (genericBE != null)
+            {
+                context.FieldValue = genericBE.StatusDefinitionId;
+            }
+            else
+            {
+                context.ErrorMessage = $"This { context.FieldDescription} does not exist.";
+            }
         }
 
         #endregion
