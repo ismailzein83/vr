@@ -3,9 +3,6 @@
     [Name]             NVARCHAR (255) NULL,
     [Area]             BIGINT         NULL,
     [Technology]       BIGINT         NULL,
-    [Address]          NVARCHAR (255) NULL,
-    [City]             INT            NULL,
-    [Street]           NVARCHAR (255) NULL,
     [Type]             BIGINT         NULL,
     [CreatedBy]        INT            NULL,
     [CreatedTime]      DATETIME       NULL,
@@ -14,4 +11,6 @@
     [timestamp]        ROWVERSION     NULL,
     CONSTRAINT [PK__Site__3214EC0703317E3D] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 

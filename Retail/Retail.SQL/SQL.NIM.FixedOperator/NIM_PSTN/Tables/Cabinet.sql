@@ -2,8 +2,11 @@
     [Id]               BIGINT           IDENTITY (1, 1) NOT NULL,
     [Name]             NVARCHAR (255)   NULL,
     [Site]             BIGINT           NULL,
-    [Location]         NVARCHAR (255)   NULL,
     [Status]           UNIQUEIDENTIFIER NULL,
+    [Region]           INT              NULL,
+    [City]             INT              NULL,
+    [Town]             INT              NULL,
+    [Street]           BIGINT           NULL,
     [CreatedBy]        INT              NULL,
     [CreatedTime]      DATETIME         NULL,
     [LastModifiedBy]   INT              NULL,
@@ -11,4 +14,6 @@
     [timestamp]        ROWVERSION       NULL,
     CONSTRAINT [PK__Cabinet__3214EC076A30C649] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 

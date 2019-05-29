@@ -75,5 +75,6 @@
     <Build Include="Com_Address\Tables\Region.sql" />
     <Build Include="Security\Com_PersonProf.sql" />
     <Build Include="Security\Com_Address.sql" />
+    <Build Include="Com_Address\Tables\Street.sql" />
   </ItemGroup>
 </Project>
