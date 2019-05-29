@@ -5,6 +5,7 @@ using System.Linq;
 using TestCallAnalysis.Business;
 using TestCallAnalysis.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 using Vanrise.Queueing;
 
@@ -71,7 +72,7 @@ namespace TestCallAnalysis.BP.Activities
             prepareCDRCasesOutput.CasesToUpdate = new List<TCAnalCaseCDR>();
 
             List<string> existingCasesCallingNumbers = caseCDRManager.GetExistingCasesCallingNumber();
-            List<TCAnalCaseCDR> existingCasesCDRs = caseCDRManager.GetCases();
+            Dictionary<string, List<TCAnalCaseCDR>> existingCasesCDRs = caseCDRManager.GetCases();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -98,10 +99,14 @@ namespace TestCallAnalysis.BP.Activities
 
                                     if (existingCasesCallingNumbers != null && existingCasesCDRs != null && existingCasesCallingNumbers.Count() > 0 && existingCasesCallingNumbers.IndexOf(tcanalCaseCDR.CallingNumber) != -1)
                                     {
-                                        var caseCDR = existingCasesCDRs.Find(itm => itm.CallingNumber == tcanalCaseCDR.CallingNumber && itm.CreatedTime == tcanalCaseCDR.CreatedTime);
-                                        tcanalCaseCDR.CaseId = caseCDR.CaseId;
-                                        tcanalCaseCDR.NumberOfCDRs = ++caseCDR.NumberOfCDRs;
-                                        prepareCDRCasesOutput.CasesToUpdate.Add(tcanalCaseCDR);
+                                       List<TCAnalCaseCDR>  cases = existingCasesCDRs.GetRecord(record.ReceivedCallingNumber);
+                                        if(cases != null && cases.Count > 0)
+                                        {
+                                            var caseCDR = cases.OrderByDescending(x => x.CreatedTime).First();
+                                            tcanalCaseCDR.CaseId = caseCDR.CaseId;
+                                            tcanalCaseCDR.NumberOfCDRs = ++caseCDR.NumberOfCDRs;
+                                            prepareCDRCasesOutput.CasesToUpdate.Add(tcanalCaseCDR);
+                                        }
                                     }
                                     else
                                     {

@@ -13,6 +13,8 @@ namespace TestCallAnalysis.Business
     {
         static Guid dataRecordStorage = new Guid("529032BA-D2C2-4612-88C2-FF64AEE9E6CC");
         static Guid statusBusinessEntityDefinitionId = new Guid("1264c992-479e-45fb-8e8a-7edd54a9bc18");
+        static Guid fraudStatusId = new Guid("4ea323c2-56ba-46db-a84d-5792009924a3");
+        static Guid suspectStatusId = new Guid("43f65fbf-ba78-4211-a0bb-88edc91b26ff");
 
         #region Public Methods
         public List<DataRecord> GetAllCases()
@@ -37,15 +39,20 @@ namespace TestCallAnalysis.Business
                 return null;
         }
 
-        public List<TCAnalCaseCDR> GetCases()
+        public Dictionary<string ,List<TCAnalCaseCDR>> GetCases()
         {
-            List<TCAnalCaseCDR> tcanalCaseCDRs = new List<TCAnalCaseCDR>();
+            Dictionary<string, List<TCAnalCaseCDR>> tcanalCaseCDRs = new Dictionary<string, List<TCAnalCaseCDR>>();
             List<DataRecord> allCasesCDRs = GetAllCases();
-            if(allCasesCDRs != null && allCasesCDRs.Count > 0)
+            if (allCasesCDRs != null && allCasesCDRs.Count > 0)
             {
                 foreach (var caseCDR in allCasesCDRs)
                 {
-                    tcanalCaseCDRs.Add(CaseCDRMapperFromDataRecord(caseCDR));
+                    var caseCDREntity = CaseCDRMapperFromDataRecord(caseCDR);
+                    if ((Guid)caseCDR.FieldValues["StatusId"] == fraudStatusId || (Guid)caseCDR.FieldValues["StatusId"] == suspectStatusId)
+                    {
+                        tcanalCaseCDRs.GetOrCreateItem(caseCDREntity.CallingNumber).Add(caseCDREntity);
+                    }
+
                 }
             }
             return tcanalCaseCDRs;
