@@ -610,7 +610,9 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeRuntime\vr-genericdata-fieldtype-datarecordtypelist-grideditorview-runtime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeRuntime\vr-genericdata-fieldtype-datarecordtypelist-gridview-runtime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\RuntimeViewTypeRuntime\vr-genericdata-fieldtype-datarecordtypelist-fieldview-runtime.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\Templates\DataRecordFieldTypeTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\Templates\DataRecordTypeListFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\vr-genericdata-fieldtype-datarecord.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\vr-genericdata-fieldtype-datarecordtypelist.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\vr-genericdata-fieldtype-datarecordtypelist-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DataRecoedTypeList\vr-genericdata-fieldtype-datarecordtypelist-settings.js" />

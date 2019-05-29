@@ -305,6 +305,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (this.DependantFields == null || this.DependantFields.Count == 0)
                 return;
 
+            if (context.FieldValue == null)
+                return;
+
             Entities.GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntityManager().GetGenericBusinessEntity(context.FieldValue, this.BusinessEntityDefinitionId);
             genericBusinessEntity.ThrowIfNull("genericBusinessEntity", context.FieldValue as object);
 

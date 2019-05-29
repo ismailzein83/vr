@@ -24,15 +24,21 @@ namespace Vanrise.GenericData.Business
 
         public List<DataRecord> GetFilteredDataRecords(IDataRecordDataManagerGetFilteredDataRecordsContext context)
         {
+            return GetFilteredDataRecords(context.FromTime, context.ToTime, context.FilterGroup, context.FieldNames, context.LimitResult, context.Direction);
+        }
+
+        private List<DataRecord> GetFilteredDataRecords(DateTime? fromTime,DateTime? toTime , RecordFilterGroup filterGroup, 
+            List<string> fieldNames ,int? limitResult, OrderDirection? direction)
+        {
             List<DataRecord> dataRecords = new List<DataRecord>();
             var loadContext = new BusinessObjectDataProviderLoadRecordsContext
             {
-                FromTime = context.FromTime,
-                ToTime = context.ToTime,
-                FilterGroup = context.FilterGroup,
-                Fields = context.FieldNames,
-                LimitResult = context.LimitResult,
-                OrderDirection = context.Direction
+                FromTime = fromTime,
+                ToTime = toTime,
+                FilterGroup = filterGroup,
+                Fields = fieldNames,
+                LimitResult = limitResult,
+                OrderDirection = direction
             };
             bool doesSupportFilterOnAllFields = _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.DoesSupportFilterOnAllFields;
             int loadedRecords = 0;
@@ -45,7 +51,7 @@ namespace Vanrise.GenericData.Business
                 }
                 else
                 {
-                    if (context.FilterGroup == null || s_recordFilterManager.IsFilterGroupMatch(context.FilterGroup, new DataRecordFilterGenericFieldMatchContext(dataRecordObject)))
+                    if (filterGroup == null || s_recordFilterManager.IsFilterGroupMatch(filterGroup, new DataRecordFilterGenericFieldMatchContext(dataRecordObject)))
                     {
                         shouldAddRecord = true;
                     }
@@ -53,16 +59,16 @@ namespace Vanrise.GenericData.Business
                 if (shouldAddRecord)
                 {
                     var dataRecord = new DataRecord { RecordTime = recordTime, FieldValues = new Dictionary<string, object>() };
-                    if (context.FieldNames != null)
+                    if (fieldNames != null)
                     {
-                        foreach (var fieldName in context.FieldNames)
+                        foreach (var fieldName in fieldNames)
                         {
                             dataRecord.FieldValues.Add(fieldName, dataRecordObject.GetFieldValue(fieldName));
                         }
                     }
                     dataRecords.Add(dataRecord);
                     loadedRecords++;
-                    if (loadedRecords >= context.LimitResult)
+                    if (loadedRecords >= limitResult)
                         loadContext.StopLoadingRecords();
                 }
             };
@@ -104,7 +110,7 @@ namespace Vanrise.GenericData.Business
 
         public List<DataRecord> GetAllDataRecords(List<string> columns)
         {
-            throw new NotImplementedException();
+            return GetFilteredDataRecords(null, null, null, columns, null, null);
         }
 
         public bool Insert(Dictionary<string, object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId)
@@ -144,7 +150,24 @@ namespace Vanrise.GenericData.Business
 
         public bool AreDataRecordsUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            if(updateHandle is DateTime)
+            {
+                DateTime lastUpdateHandle = (DateTime)updateHandle;
+                if((DateTime.Now - lastUpdateHandle).TotalMinutes > 5)
+                {
+                    updateHandle = DateTime.Now;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                updateHandle = DateTime.Now;
+                return true;
+            }
         }
 
         public int GetDBQueryMaxParameterNumber()
@@ -189,7 +212,26 @@ namespace Vanrise.GenericData.Business
 
         public DataRecord GetDataRecord(object dataRecordId, List<string> fieldNames)
         {
-            throw new NotImplementedException();
+            var dataRecordType = s_dataRecordTypeManager.GetDataRecordType(_dataRecordStorage.DataRecordTypeId);
+            dataRecordType.ThrowIfNull("dataRecordType", _dataRecordStorage.DataRecordTypeId);
+            dataRecordType.Settings.ThrowIfNull("dataRecordType.Settings", _dataRecordStorage.DataRecordTypeId);
+            dataRecordType.Settings.IdField.ThrowIfNull("dataRecordType.Settings.IdField", _dataRecordStorage.DataRecordTypeId);
+            var idField = s_dataRecordTypeManager.GetDataRecordField(_dataRecordStorage.DataRecordTypeId, dataRecordType.Settings.IdField);
+            idField.ThrowIfNull("idField", _dataRecordStorage.DataRecordTypeId);
+            var idRecordFilter = idField.Type.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext
+            {
+                FieldName = dataRecordType.Settings.IdField,
+                FilterValues = new List<object> { dataRecordId },
+                StrictEqual = true
+            });
+            idRecordFilter.ThrowIfNull("recordFilter", _dataRecordStorage.DataRecordTypeId);
+            var idFilterGroup = new RecordFilterGroup
+            {
+                LogicalOperator = RecordQueryLogicalOperator.And,
+                Filters = new List<RecordFilter> { idRecordFilter }
+            };
+            var records = GetFilteredDataRecords(null, null, idFilterGroup, fieldNames, null, null);
+            return records != null && records.Count > 0 ? records[0] : null;
         }
 
         #region Private Classes
