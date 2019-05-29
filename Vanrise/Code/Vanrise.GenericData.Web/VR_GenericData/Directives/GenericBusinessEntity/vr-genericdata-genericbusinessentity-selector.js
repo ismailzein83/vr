@@ -193,17 +193,26 @@
                     if (isRemote) {
                         var getGenericBusinessEntityInfoPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(getGenericBusinessEntityInfoPromiseDeferred.promise);
+                        var resetFilter = false;
 
                         var fieldFilter = { FieldName: idFieldName, FilterValues: typeof (value) != "object" ? [value] : value };
-                        if (filter == undefined)
+                        if (filter == undefined) {
                             filter = { FieldFilters: [fieldFilter] };
+                            resetFilter = true;
+                        }
 
-                        if (filter.FieldFilters == undefined)
+                        if (filter.FieldFilters == undefined) {
                             filter.FieldFilters = [fieldFilter];
+                            resetFilter = true;
+                        }
 
                         VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
                             selectorAPI.clearDataSource();
                             ctrl.datasource.length = 0;
+
+                            if (resetFilter) {
+                                filter = undefined;
+                            }
 
                             angular.forEach(response, function (item) {
                                 ctrl.datasource.push(item);

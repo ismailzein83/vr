@@ -30,6 +30,11 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
     };
 
     function textCtor(ctrl, $scope, $attrs) {
+
+        this.initializeController = initializeController;
+
+        var fieldName;
+
         function initializeController() {
             $scope.scopeModel.value;
 
@@ -81,9 +86,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                 var fieldValue;
 
                 if (payload != undefined) {
-
-
-
+                    fieldName = payload.fieldName;
                     $scope.scopeModel.label = payload.fieldTitle;
                     fieldType = payload.fieldType;
                     if (fieldType != undefined)
@@ -92,19 +95,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                 }
 
                 if (fieldValue != undefined) {
-                    if (ctrl.selectionmode == "dynamic") {
-                        angular.forEach(fieldValue.Values, function (val) {
-                            $scope.scopeModel.values.push(val);
-                        });
-                    }
-                    else if (ctrl.selectionmode == "multiple") {
-                        for (var i = 0; i < fieldValue.length; i++) {
-                            $scope.scopeModel.values.push(fieldValue[i]);
-                        }
-                    }
-                    else {
-                        $scope.scopeModel.value = fieldValue;
-                    }
+                    setFieldValue(fieldValue);
                 }
             };
 
@@ -131,11 +122,40 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                 return retVal;
             };
 
+            api.setFieldValues = function (fieldValuesByNames) {
+                if (!(fieldName in fieldValuesByNames))
+                    return;
+
+                var fieldValue = fieldValuesByNames[fieldName];
+                if (fieldValue == undefined) {
+                    $scope.scopeModel.values.length = 0;
+                    $scope.scopeModel.value = undefined;
+                    return;
+                }
+
+                setFieldValue(fieldValue);
+            };
+
+            function setFieldValue(fieldValue) {
+                if (ctrl.selectionmode == "dynamic") {
+                    angular.forEach(fieldValue.Values, function (val) {
+                        $scope.scopeModel.values.push(val);
+                    });
+                }
+                else if (ctrl.selectionmode == "multiple") {
+                    for (var i = 0; i < fieldValue.length; i++) {
+                        $scope.scopeModel.values.push(fieldValue[i]);
+                    }
+                }
+                else {
+                    $scope.scopeModel.value = fieldValue;
+                }
+            }
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
 
-        this.initializeController = initializeController;
     }
 
     function getDirectiveTemplate(attrs) {
@@ -165,7 +185,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
         }
 
         function getSingleSelectionModeTemplate() {
-          
+
             return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
                 + '<vr-textbox type="text" label="{{scopeModel.label}}" hint ="{{scopeModel.hint}}"  value="scopeModel.value" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
                 + '</vr-columns>';

@@ -216,11 +216,9 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
                                         var dependentFieldValue = response[prop];
                                         var convertedFieldValue = typeof (dependentFieldValue) == "object" ? dependentFieldValue : [dependentFieldValue];
+                                        tryUpdateAllFieldValuesByFieldNames(prop, convertedFieldValue);
 
-                                        if (tryUpdateAllFieldValuesByFieldNames(prop, convertedFieldValue)) {
-                                            isValueToSetChanged = true;
-                                            valuesToSet[prop] = dependentFieldValue;
-                                        }
+                                        valuesToSet[prop] = dependentFieldValue;
                                     }
 
                                     getDependentFieldValuesPromiseDeferred.resolve();
@@ -230,11 +228,9 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                                     promises: [getDependentFieldValuesPromiseDeferred.promise],
                                     getChildNode: function () {
                                         var _promises = [];
-                                        if (isValueToSetChanged) {
-                                            var onFieldValueSettedPromise = runtimeEditorAPI.setFieldValues(valuesToSet);
-                                            if (onFieldValueSettedPromise != undefined)
-                                                _promises.push(onFieldValueSettedPromise);
-                                        }
+                                        var onFieldValueSettedPromise = runtimeEditorAPI.setFieldValues(valuesToSet);
+                                        if (onFieldValueSettedPromise != undefined)
+                                            _promises.push(onFieldValueSettedPromise);
                                         return {
                                             promises: _promises
                                         };

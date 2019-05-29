@@ -108,7 +108,7 @@
                             if (outputItems != undefined) {
                                 for (var i = 0; i < outputItems.length; i++) {
                                     var output = outputItems[i];
-                                    if (output.PropertyName in response)
+                                    if (output.PropertyName in response && currentFieldValues[output.FieldName] != response[output.PropertyName])
                                         outputFields[output.FieldName] = response[output.PropertyName];
                                 }
                             }

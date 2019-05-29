@@ -28,6 +28,7 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
             this.initializeController = initializeController;
 
             var fieldType;
+            var fieldName;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -83,24 +84,13 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
 
                     if (payload != undefined) {
                         $scope.scopeModel.label = payload.fieldTitle;
+                        fieldName = payload.fieldName;
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
                     }
 
                     if (fieldValue != undefined) {
-                        if (ctrl.selectionmode == "dynamic") {
-                            angular.forEach(fieldValue.Values, function (val) {
-                                $scope.scopeModel.values.push(val);
-                            });
-                        }
-                        else if (ctrl.selectionmode == "multiple") {
-                            for (var i = 0; i < fieldValue.length; i++) {
-                                $scope.scopeModel.values.push(fieldValue[i]);
-                            }
-                        }
-                        else {
-                            $scope.scopeModel.value = fieldValue;
-                        }
+                        setFieldValue(fieldValue);
                     }
                 };
 
@@ -130,6 +120,36 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
                 api.setLabel = function (value) {
                     $scope.scopeModel.label = value;
                 };
+
+                api.setFieldValues = function (fieldValuesByNames) {
+                    if (!(fieldName in fieldValuesByNames))
+                        return;
+
+                    var fieldValue = fieldValuesByNames[fieldName];
+                    if (fieldValue == undefined) {
+                        $scope.scopeModel.values.length = 0;
+                        $scope.scopeModel.value = undefined;
+                        return;
+                    }
+
+                    setFieldValue(fieldValue);
+                };
+
+                function setFieldValue(fieldValue) {
+                    if (ctrl.selectionmode == "dynamic") {
+                        angular.forEach(fieldValue.Values, function (val) {
+                            $scope.scopeModel.values.push(val);
+                        });
+                    }
+                    else if (ctrl.selectionmode == "multiple") {
+                        for (var i = 0; i < fieldValue.length; i++) {
+                            $scope.scopeModel.values.push(fieldValue[i]);
+                        }
+                    }
+                    else {
+                        $scope.scopeModel.value = fieldValue;
+                    }
+                }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
