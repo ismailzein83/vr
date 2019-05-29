@@ -354,31 +354,7 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public List<InvoiceDetail> GetInvoices(string customerId)
-        {
-            //TODO:Get invoices
-            // List<InvoiceDetail> invoices =  RatePlanMockDataGenerator.GetInvoices(customerId);
 
-            //foreach (InvoiceDetail invoice in invoices)
-            //{
-            //    invoice.CollectionStatus = GetCollectionStatus(invoice.InvoiceCode);
-            //    invoice.InvoiceInstallmentFlag = GetInvoiceInstallmentFlag(invoice.InvoiceId);
-            //    invoice.FinancialDisputes = GetFinancialDisputes(invoice.InvoiceId);
-            //}
-            //            return invoices;
-
-            var invoicesDetailItems = new List<InvoiceDetail>();
-            using (SOMClient client = new SOMClient())
-            {
-                List<Invoice> items = client.Get<List<Invoice>>(String.Format("api/SOM.ST/Billing/GetCustomerInvoices?CustomerId={0}", customerId));
-                foreach (var item in items)
-                {
-                    var detailItem = InvoiceToDetailMapper(item);
-                    invoicesDetailItems.Add(detailItem);
-                }
-            }
-            return invoicesDetailItems;
-        }
 
         public List<CreditDebitNotesDetail> GetCreditDebitNotes(string customerId)
         {
@@ -415,15 +391,7 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public Invoice GetInvoiceById(string invoiceId)
-        {
-            var item = new Invoice();
-            using (SOMClient client = new SOMClient())
-            {
-                item = client.Get<Invoice>(String.Format("api/SOM.ST/Billing/GetInvoiceDetails?InvoiceId={0}", invoiceId));
-            }
-            return item;
-        }
+
 
         public List<PaymentDetail> GetPayments(string customerId)
         {
@@ -627,16 +595,7 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        public InvoiceDetail InvoiceToDetailMapper(Invoice item)
-        {//Invoice Code, Bill Cycle, phone Number , InvoiceAmount, open amount, Invoice URL
-            return new InvoiceDetail
-            {
-                InvoiceCode = item.Id,
-                InvoiceAccount = item.BillingAccountCode,
-                OpenAmount = Convert.ToString(item.OpenAmount),
-                Amount = Convert.ToString(item.Amount)
-            };
-        }
+
 
 
 
@@ -734,6 +693,54 @@ namespace BPMExtended.Main.Business
     //{
     //    return RatePlanMockDataGenerator.GetPaymentPlansByInvoiceId(invoiceId);
     //}
+
+    //public Invoice GetInvoiceById(string invoiceId)
+    //{
+    //    var item = new Invoice();
+    //    using (SOMClient client = new SOMClient())
+    //    {
+    //        item = client.Get<Invoice>(String.Format("api/SOM.ST/Billing/GetInvoiceDetails?InvoiceId={0}", invoiceId));
+    //    }
+    //    return item;
+    //}
+
+    //public List<InvoiceDetail> GetInvoices(string customerId)
+    //{
+    //    //TODO:Get invoices
+    //    // List<InvoiceDetail> invoices =  RatePlanMockDataGenerator.GetInvoices(customerId);
+
+    //    //foreach (InvoiceDetail invoice in invoices)
+    //    //{
+    //    //    invoice.CollectionStatus = GetCollectionStatus(invoice.InvoiceCode);
+    //    //    invoice.InvoiceInstallmentFlag = GetInvoiceInstallmentFlag(invoice.InvoiceId);
+    //    //    invoice.FinancialDisputes = GetFinancialDisputes(invoice.InvoiceId);
+    //    //}
+    //    //            return invoices;
+
+    //    var invoicesDetailItems = new List<InvoiceDetail>();
+    //    using (SOMClient client = new SOMClient())
+    //    {
+    //        List<Invoice> items = client.Get<List<Invoice>>(String.Format("api/SOM.ST/Billing/GetCustomerInvoices?CustomerId={0}", customerId));
+    //        foreach (var item in items)
+    //        {
+    //            var detailItem = InvoiceToDetailMapper(item);
+    //            invoicesDetailItems.Add(detailItem);
+    //        }
+    //    }
+    //    return invoicesDetailItems;
+    //}
+
+    //public InvoiceDetail InvoiceToDetailMapper(Invoice item)
+    //{//Invoice Code, Bill Cycle, phone Number , InvoiceAmount, open amount, Invoice URL
+    //    return new InvoiceDetail
+    //    {
+    //        InvoiceCode = item.Id,
+    //        InvoiceAccount = item.BillingAccountCode,
+    //        OpenAmount = Convert.ToString(item.OpenAmount),
+    //        Amount = Convert.ToString(item.Amount)
+    //    };
+    //}
+
     #endregion
 
 }
