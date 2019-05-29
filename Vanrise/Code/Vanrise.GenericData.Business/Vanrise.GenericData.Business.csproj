@@ -102,6 +102,7 @@
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataRecordDataManager.cs" />
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataRecordStorageSettings.cs" />
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataStoreSettings.cs" />
+    <Compile Include="BusinessObjectDataStore\CustomClassBusinessObjectDataProvider.cs" />
     <Compile Include="CompositeRecordConditionDefinitionManager.cs" />
     <Compile Include="CompositeRecordConditionManager.cs" />
     <Compile Include="Constants.cs" />
