@@ -90,5 +90,6 @@
     <Build Include="CRMFixedOper\Tables\ContractType.sql" />
     <Build Include="CRMFixedOper\Tables\OrderType.sql" />
     <Build Include="Security\CRMFixedOper.sql" />
+    <Build Include="CRMFixedOper\Tables\InventoryPhoneNumberCategory.sql" />
   </ItemGroup>
 </Project>
