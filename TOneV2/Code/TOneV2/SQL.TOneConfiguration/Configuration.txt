@@ -150,6 +150,7 @@ ProbesAnalytics.PostDeployment.sql
 
 NetworkInventory
 NetworkInventory.PostDeployment.sql
+Retail_NIMForFixedOperator.PostDeployment.sql
 
 TelecomCRM
 TelecomCRM.PostDeployment.sql
