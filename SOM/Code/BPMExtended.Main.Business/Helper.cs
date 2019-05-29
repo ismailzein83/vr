@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 using SOM.Main.Entities;
 
 namespace BPMExtended.Main.Business

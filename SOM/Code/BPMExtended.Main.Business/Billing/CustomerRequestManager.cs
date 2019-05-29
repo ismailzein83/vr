@@ -12,6 +12,7 @@ using Terrasoft.Core.Entities;
 using Terrasoft.Core;
 using System.Web;
 using Terrasoft.Core.DB;
+using BPMExtended.Main.SOMAPI;
 
 namespace BPMExtended.Main.Business
 {

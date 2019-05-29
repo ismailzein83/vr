@@ -13,6 +13,7 @@ using System.IO;
 using SOM.Main.Entities;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.Common;
+using BPMExtended.Main.SOMAPI;
 
 namespace BPMExtended.Main.Business
 {

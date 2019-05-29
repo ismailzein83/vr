@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -13,6 +14,7 @@ namespace BPMExtended.Main.Business
 {
     public class ChangeRatePlanManager
     {
+        #region User Connection
         public UserConnection BPM_UserConnection
         {
             get
@@ -20,7 +22,9 @@ namespace BPMExtended.Main.Business
                 return (UserConnection)HttpContext.Current.Session["UserConnection"];
             }
         }
+        #endregion
 
+        #region Public
         public void PostChangeRatePlanToOM(Guid requestId)
         {
 
@@ -42,7 +46,7 @@ namespace BPMExtended.Main.Business
             {
                 var contractId = entities[0].GetColumnValue("StContractId");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
-                var newRatePlanId = entities[0].GetColumnValue("StNewRatePlan");
+                var newRatePlanId = entities[0].GetColumnValue("StNewRatePlanId");
 
                 SOMRequestInput<ChangeRatePlanRequestInput> somRequestInput = new SOMRequestInput<ChangeRatePlanRequestInput>
                 {
@@ -69,5 +73,6 @@ namespace BPMExtended.Main.Business
             }
 
         }
+        #endregion
     }
 }

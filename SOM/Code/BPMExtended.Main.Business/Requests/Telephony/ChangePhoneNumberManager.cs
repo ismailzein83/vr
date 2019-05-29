@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -13,6 +14,7 @@ namespace BPMExtended.Main.Business
 {
     public class ChangePhoneNumberManager
     {
+        #region User Connection
         public UserConnection BPM_UserConnection
         {
             get
@@ -20,7 +22,9 @@ namespace BPMExtended.Main.Business
                 return (UserConnection)HttpContext.Current.Session["UserConnection"];
             }
         }
+        #endregion
 
+        #region Public
         public void CreateChangePhoneNumberSwitchTeamWorkOrder(string requestId)
         {
             string workOrderId = new CustomerRequestManager().CreateWorkOrder(requestId, "B6ECD46A-556A-404C-8C4E-E7B1645EB186");
@@ -78,7 +82,7 @@ namespace BPMExtended.Main.Business
             var entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                var contractId = entities[0].GetColumnValue("StContractID");
+                var contractId = entities[0].GetColumnValue("StContractId");
                 var oldDirectoryNumber = entities[0].GetColumnValue("StPhoneNumber");
                 var oldRatePlanId = entities[0].GetColumnValue("StRatePlanId");
                 var newRatePlanId = entities[0].GetColumnValue("StNewRatePlanId");
@@ -197,6 +201,6 @@ namespace BPMExtended.Main.Business
 
             }
         }
-
+        #endregion
     }
 }

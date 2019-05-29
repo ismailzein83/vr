@@ -15,7 +15,7 @@ namespace BPMExtended.Main.Business
 {
     public class CatalogManager
     {
-
+        #region User Connection
         public UserConnection BPM_UserConnection
         {
             get
@@ -23,7 +23,9 @@ namespace BPMExtended.Main.Business
                 return (UserConnection)HttpContext.Current.Session["UserConnection"];
             }
         }
+        #endregion
 
+        #region public
         public List<ServiceData> GetTelephonyPhoneCategoryFees(string phoneCategoryName)
         {
             EntitySchemaQuery esq;
@@ -100,7 +102,6 @@ namespace BPMExtended.Main.Business
             return specialServicesIds;
 
         }
-
 
         public string GetPABXServiceId()
         {
@@ -291,7 +292,6 @@ namespace BPMExtended.Main.Business
             return numberOfRecords;
         }
 
-
         public OperationServices GetOperationServices(Guid requestId)
         {
             EntitySchemaQuery esq;
@@ -395,6 +395,7 @@ namespace BPMExtended.Main.Business
             };
 
         }
+        #endregion
     }
 
 

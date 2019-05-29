@@ -11,12 +11,12 @@ namespace BPMExtended.Main.Business
     public class PabxManager
     {
 
-        public bool RegisterPabxContracts(string customerId, List<PabxContractDetail> contracts)
-        {
-            //send contracts to bscc
+        //public bool RegisterPabxContracts(string customerId, List<PabxContractDetail> contracts)
+        //{
+        //    //send contracts to bscc
 
-            return true;
-        }
+        //    return true;
+        //}
 
         public bool UpdatePabxContracts(string customerId , List<PabxContractDetail> contracts)
         {

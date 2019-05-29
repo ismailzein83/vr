@@ -97,7 +97,6 @@
     <Compile Include="Billing\CustomerCategoryManager.cs" />
     <Compile Include="Billing\CustomerRequestManager.cs" />
     <Compile Include="Billing\PabxManager.cs" />
-    <Compile Include="Billing\SubmissionManager.cs" />
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="MainProxy.cs" />
@@ -111,12 +110,44 @@
     <Compile Include="Request Flow Management\OtherChargesFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateContractAddressFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateRatePlanFlowManagement.cs" />
+    <Compile Include="Requests\Administrative\AdministrativeComplaintManager.cs" />
+    <Compile Include="Requests\Administrative\CreatePaymentPlanManager.cs" />
+    <Compile Include="Requests\ADSL\ADSLAlterSpeedManager.cs" />
+    <Compile Include="Requests\ADSL\ADSLChangePasswordManager.cs" />
+    <Compile Include="Requests\ADSL\ADSLComplaintManager.cs" />
+    <Compile Include="Requests\ADSL\ADSLForISPManager.cs" />
+    <Compile Include="Requests\ADSL\ADSLLineMovingManager.cs" />
+    <Compile Include="Requests\ADSL\ADSLLineTerminationManager.cs" />
+    <Compile Include="Requests\ADSL\ADSLPrintConfigurationManager.cs" />
+    <Compile Include="Requests\ADSL\ADSLSubscriptionManager.cs" />
+    <Compile Include="Requests\GSHDSL\GSHDSLSubscriptionManager.cs" />
+    <Compile Include="Requests\GSHDSL\GSHDSLTerminationManager.cs" />
+    <Compile Include="Requests\Leased Line\ChangeLeasedLineSpeedManager.cs" />
+    <Compile Include="Requests\Leased Line\LeasedLineComplaintManager.cs" />
+    <Compile Include="Requests\Leased Line\LeasedLineSubscriptionManager.cs" />
+    <Compile Include="Requests\Leased Line\LeasedLineTerminationManager.cs" />
+    <Compile Include="Requests\Telephony\ActivateCPTManager.cs" />
     <Compile Include="Requests\Telephony\CallDetailsManager.cs" />
     <Compile Include="Requests\Telephony\ChangePhoneNumberManager.cs" />
     <Compile Include="Requests\Telephony\ChangeRatePlanManager.cs" />
+    <Compile Include="Requests\Telephony\ContractTakeOverManager.cs" />
+    <Compile Include="Requests\Telephony\DeactivateCPTManager.cs" />
+    <Compile Include="Requests\Telephony\DeactivatePABXManager.cs" />
+    <Compile Include="Requests\Telephony\DeportedNumberManager.cs" />
+    <Compile Include="Requests\Telephony\EditPABXManager.cs" />
+    <Compile Include="Requests\Telephony\FriendAndFamilyManager.cs" />
+    <Compile Include="Requests\Telephony\LineBlockingManager.cs" />
+    <Compile Include="Requests\Telephony\LineMovingNewSwitchManager.cs" />
+    <Compile Include="Requests\Telephony\LineMovingSameSwitchManager.cs" />
+    <Compile Include="Requests\Telephony\LineSubscriptionManager.cs" />
+    <Compile Include="Requests\Telephony\LineTerminationManager.cs" />
+    <Compile Include="Requests\Telephony\LineUnBlockingManager.cs" />
+    <Compile Include="Requests\Telephony\NetworkResetPasswordManager.cs" />
+    <Compile Include="Requests\Telephony\OtherChargesManager.cs" />
     <Compile Include="Requests\Telephony\PABXManager.cs" />
     <Compile Include="Requests\Telephony\ServiceAdditionManager.cs" />
-    <Compile Include="TelephonyTechnicalComplaintManager.cs" />
+    <Compile Include="Requests\Telephony\UpdateContractAddressManager.cs" />
+    <Compile Include="Requests\Telephony\TelephonyTechnicalComplaintManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Inventory\CPTManager.cs" />
@@ -197,6 +228,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

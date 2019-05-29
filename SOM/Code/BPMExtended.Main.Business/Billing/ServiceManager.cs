@@ -141,6 +141,7 @@ namespace BPMExtended.Main.Business
             };
 
             var servicesDetailItems = new List<ServiceDetail>();
+            var filteredServicesDetailItems = new List<ServiceDetail>();
             using (SOMClient client = new SOMClient())
             {
                 List<ServiceDefinition> items = client.Post<MultiplePackagesServiceInput, List<ServiceDefinition>>("api/SOM.ST/Billing/GetRatePlanServices", multiplePackagesServiceInput);
@@ -149,8 +150,17 @@ namespace BPMExtended.Main.Business
                     var serviceDetailItem = ServiceDefinitionToDetailMapper(item);
                     servicesDetailItems.Add(serviceDetailItem);
                 }
+
+                //Get special services from service definition catalog 
+                List<string> specialServicesIds = new CatalogManager().GetSpecialServicesIds();
+
+                //filter the optional services (servicesDetailItems - special services)
+                filteredServicesDetailItems = (from item in servicesDetailItems
+                                               where !specialServicesIds.Contains(item.Id)
+                                                select item).ToList();
+
             }
-            return servicesDetailItems;
+            return filteredServicesDetailItems;
         }
         public List<ServiceDetail> GetRatePlanServicesDetail(string rateplanId, List<string> excludedPackages)
         {
