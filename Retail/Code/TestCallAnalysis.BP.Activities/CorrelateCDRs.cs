@@ -178,7 +178,7 @@ namespace TestCallAnalysis.BP.Activities
                                                                 }
                                                                 if (recievedCDR.IsCorrelated)
                                                                 {
-                                                                    break;
+                                                                    continue;
                                                                 }
                                                             }
                                                             if (!recievedCDR.IsCorrelated && DateTime.Now.Subtract(recievedCDR.CreatedTime) > timeOutMargin)

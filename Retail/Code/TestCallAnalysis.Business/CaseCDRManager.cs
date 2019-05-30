@@ -39,7 +39,7 @@ namespace TestCallAnalysis.Business
                 return null;
         }
 
-        public Dictionary<string ,List<TCAnalCaseCDR>> GetCases()
+        public Dictionary<string ,List<TCAnalCaseCDR>> GetNotCleanCases()
         {
             Dictionary<string, List<TCAnalCaseCDR>> tcanalCaseCDRs = new Dictionary<string, List<TCAnalCaseCDR>>();
             List<DataRecord> allCasesCDRs = GetAllCases();
