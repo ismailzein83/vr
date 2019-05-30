@@ -257,17 +257,22 @@ namespace TOne.WhS.Deal.Business
             if (toDateDate.Date == dateTimeValue.Date)
                 billing.ToDateVolume += saleDurationValue;
 
+            if (dateTimeValue.Date == DateTime.Now.AddDays(-1).Date)
+                billing.YesterdayVolume += saleDurationValue;
+
             billing.ReachedVolume += saleDurationValue;
-            if (rate.HasValue) billing.TotalRateDuration = rate.Value;
+            if (rate.HasValue)
+                billing.TotalRateDuration = rate.Value;
         }
         private DataRecordObject CreatePlusDataRecordObject(BaseDealInfo dealInfo, string direction, BillingData billingData, decimal? dealRate)
         {
-            decimal reachedVolume = 0, toDateVolume = 0, rate = 0, remainingVolumePrecentage = 0;
+            decimal reachedVolume = 0, toDateVolume = 0, rate = 0, remainingVolumePrecentage = 0, yesterdayVolume = 0;
 
             if (billingData != null)
             {
                 reachedVolume = billingData.ReachedVolume;
                 toDateVolume = billingData.ToDateVolume;
+                yesterdayVolume = billingData.YesterdayVolume;
                 if (billingData.TotalRateDuration.HasValue)
                 {
                     decimal totalRate = billingData.TotalRateDuration.Value;
@@ -279,6 +284,7 @@ namespace TOne.WhS.Deal.Business
                 rate = dealRate.Value;
 
             decimal reachedAmount = reachedVolume * rate;
+            decimal yesterdayAmount = yesterdayVolume * rate;
 
             var swapDealProgressObject = new Dictionary<string, object>
             {
@@ -300,19 +306,22 @@ namespace TOne.WhS.Deal.Business
                 {"DealBED", dealInfo.DealBED},
                 {"DealEED", dealInfo.DealEED},
                 {"Status", dealInfo.Status},
-                {"Notes", dealInfo.Notes}
+                {"Notes", dealInfo.Notes},
+                {"YesterdayVolume",yesterdayVolume },
+                {"YesterdayAmount", yesterdayAmount}
             };
             return new DataRecordObject(new Guid("1d21b26c-9541-4204-8440-cd8fccf11c61"), swapDealProgressObject);
         }
 
         private DataRecordObject CreateDataRecordObject(BaseDealInfo dealInfo, string direction, BillingData billingData, decimal dealRate)
         {
-            decimal reachedVolume = 0, toDateVolume = 0, remainingVolume = 0, remainingVolumePrecentage = 0, remainingVolumePerDays = 0;
+            decimal reachedVolume = 0, toDateVolume = 0, remainingVolume = 0, remainingVolumePrecentage = 0, remainingVolumePerDays = 0, yesterdayVolume = 0;
 
             if (billingData != null)
             {
                 reachedVolume = billingData.ReachedVolume;
                 toDateVolume = billingData.ToDateVolume;
+                yesterdayVolume = billingData.YesterdayVolume;
             }
             if (dealInfo != null)
             {
@@ -329,6 +338,7 @@ namespace TOne.WhS.Deal.Business
                                     : (Math.Ceiling(remainingVolume / toDateVolume)).ToString();
 
             decimal reachedAmount = reachedVolume * dealRate;
+            decimal yesterdayAmount = yesterdayVolume * dealRate;
 
             var swapDealProgressObject = new Dictionary<string, object>
             {
@@ -350,7 +360,9 @@ namespace TOne.WhS.Deal.Business
                 {"DealBED", dealInfo.DealBED},
                 {"DealEED", dealInfo.DealEED},
                 {"Status", dealInfo.Status},
-                {"Notes", dealInfo.Notes}
+                {"Notes", dealInfo.Notes},
+                {"YesterdayVolume",yesterdayVolume },
+                {"YesterdayAmount", yesterdayAmount}
             };
             return new DataRecordObject(new Guid("1d21b26c-9541-4204-8440-cd8fccf11c61"), swapDealProgressObject);
         }
@@ -397,6 +409,7 @@ namespace TOne.WhS.Deal.Business
     public class BillingData
     {
         public decimal ToDateVolume { get; set; }
+        public decimal YesterdayVolume { get; set; }
         public decimal ReachedVolume { get; set; }
         public decimal? TotalRateDuration { get; set; }
     }
