@@ -185,6 +185,9 @@
                             if (businessEntityGridColumnAttributes != undefined) {
                                 for (var index = 0; index < businessEntityGridColumnAttributes.length; index++) {
                                     var businessEntityGridColumnAttribute = businessEntityGridColumnAttributes[index];
+                                    if (index == 0) {
+                                        $scope.scopeModel.sortingColumn = 'FieldValues.' + businessEntityGridColumnAttribute.Name + '.Description';
+                                    }
                                     if (fieldValues == undefined) {
                                         $scope.scopeModel.columns.push(businessEntityGridColumnAttribute.Attribute);
                                         continue;

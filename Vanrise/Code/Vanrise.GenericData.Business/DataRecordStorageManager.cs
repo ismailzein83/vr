@@ -1406,18 +1406,6 @@ namespace Vanrise.GenericData.Business
             public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
             {
                 var inputForDataManager = input.VRDeepCopy();
-                var firstDataRecordStorageId = inputForDataManager.Query.DataRecordStorageIds.First();
-                var dataRecordStorage = new DataRecordStorageManager().GetDataRecordStorage(firstDataRecordStorageId);
-                dataRecordStorage.ThrowIfNull("dataRecordStorage", firstDataRecordStorageId);
-                var idField = new DataRecordTypeManager().GetDataRecordTypeIdField(dataRecordStorage.DataRecordTypeId);
-                if (idField.Name != null)
-                {
-                    if (!inputForDataManager.Query.Columns.Contains(idField.Name))
-                    {
-                        inputForDataManager.Query.Columns.Add(idField.Name);
-                    }
-                }
-
                 if (inputForDataManager.Query.AdvancedOrderOptions != null)
                 {
                     inputForDataManager.Query.Columns.ThrowIfNull("input.Query.Columns");
@@ -1443,6 +1431,11 @@ namespace Vanrise.GenericData.Business
                     GenericBusinessEntityDefinitionManager _genericBEDefinitionManager = new GenericBusinessEntityDefinitionManager();
                     bulkActionDraftManager.CreateWithClearVRBulkActionDraft(inputForDataManager.Query.BulkActionState, dataRecordsFinalResult, (records) =>
                     {
+                        var firstDataRecordStorageId = inputForDataManager.Query.DataRecordStorageIds.First();
+                        var dataRecordStorage = new DataRecordStorageManager().GetDataRecordStorage(firstDataRecordStorageId);
+                        dataRecordStorage.ThrowIfNull("dataRecordStorage", firstDataRecordStorageId);
+                        var idField = new DataRecordTypeManager().GetDataRecordTypeIdField(dataRecordStorage.DataRecordTypeId);
+
                         List<BulkActionItem> bulkActionItems = new List<BulkActionItem>();
                         foreach (var record in records)
                         {
