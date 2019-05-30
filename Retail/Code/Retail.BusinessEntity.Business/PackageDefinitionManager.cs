@@ -162,7 +162,14 @@ namespace Retail.BusinessEntity.Business
         }
         public bool DoesUserHaveViewAccess(int UserId, Guid PackageDefinitionId)
         {
-            return DoesUserHaveAccessToPackageDef(PackageDefinitionId, UserId, new AccountBEDefinitionManager().DoesUserHaveViewPackageAccess);
+            var accountBEDefinitionId = GetPackageDefinitionAccountBEDefId(PackageDefinitionId);
+            AccountPackageProvider accountPackageProvider = new AccountPackageProviderManager().GetAccountPackageProvider(accountBEDefinitionId);
+            return accountPackageProvider.DoesUserHaveViewPackageAccess(new PackageDefinitionAccessContext
+            {
+                AccountBEDefinitionId = accountBEDefinitionId,
+                PackageDefinitionId = PackageDefinitionId,
+                UserId = UserId
+            });
         }
         public bool DoesUserHaveAddPackageDefinitions()
         {
@@ -188,8 +195,14 @@ namespace Retail.BusinessEntity.Business
 
         public bool DoesUserHaveAddPackageDefinitions(Guid packageDefinitionId, int userId)
         {
-            return DoesUserHaveAccessToPackageDef(packageDefinitionId, userId, new AccountBEDefinitionManager().DoesUserHaveAddPackageAccess);
-
+            var accountBEDefinitionId = GetPackageDefinitionAccountBEDefId(packageDefinitionId);
+            AccountPackageProvider accountPackageProvider = new AccountPackageProviderManager().GetAccountPackageProvider(accountBEDefinitionId);
+            return accountPackageProvider.DoesUserHaveAddPackageAccess(new PackageDefinitionAccessContext
+            {
+                AccountBEDefinitionId = accountBEDefinitionId,
+                PackageDefinitionId = packageDefinitionId,
+                UserId = userId
+            });
         }
         public bool DoesUserHaveEditPackageDefinitions(Guid packageDefinitionId)
         {
@@ -199,16 +212,14 @@ namespace Retail.BusinessEntity.Business
 
         public bool DoesUserHaveEditPackageDefinitions(Guid packageDefinitionId, int userId)
         {
-            return DoesUserHaveAccessToPackageDef(packageDefinitionId, userId, new AccountBEDefinitionManager().DoesUserHaveEditPackageAccess);
-        }
-
-
-        public bool DoesUserHaveAccessToPackageDef(Guid packageDefinitionId, int userId, Func<int, Guid, bool> doesUserHavePackageAccessOnAccDef)
-        {
-            var package = GetPackageDefinitionById(packageDefinitionId);
-            if (package != null && package.Settings != null && package.Settings.AccountBEDefinitionId != null)
-                return doesUserHavePackageAccessOnAccDef(userId, package.Settings.AccountBEDefinitionId);
-            return true;
+            var accountBEDefinitionId = GetPackageDefinitionAccountBEDefId(packageDefinitionId);
+            AccountPackageProvider accountPackageProvider = new AccountPackageProviderManager().GetAccountPackageProvider(accountBEDefinitionId);
+            return accountPackageProvider.DoesUserHaveEditPackageAccess(new PackageDefinitionAccessContext
+            {
+                AccountBEDefinitionId = accountBEDefinitionId,
+                PackageDefinitionId = packageDefinitionId,
+                UserId = userId
+            });
         }
 
         #endregion

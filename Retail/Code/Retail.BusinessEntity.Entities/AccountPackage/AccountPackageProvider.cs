@@ -7,6 +7,9 @@ namespace Retail.BusinessEntity.Entities
     public abstract class AccountPackageProvider : GenericBEAdditionalSettings
     {
         public abstract Dictionary<AccountEventTime, List<RetailAccountPackage>> GetRetailAccountPackages(IAccountPackageProviderGetRetailAccountPackagesContext context);
+        public abstract bool DoesUserHaveViewPackageAccess(IPackageDefinitionAccessContext context);
+        public abstract bool DoesUserHaveAddPackageAccess(IPackageDefinitionAccessContext context);
+        public abstract bool DoesUserHaveEditPackageAccess(IPackageDefinitionAccessContext context);
 
         public virtual bool TryGetAccount(IAccountPackageProviderTryGetAccountContext context)
         {
@@ -22,6 +25,18 @@ namespace Retail.BusinessEntity.Entities
         List<AccountEventTime> AccountEventTimeList { get; }
     }
 
+    public class PackageDefinitionAccessContext : IPackageDefinitionAccessContext
+    {
+        public Guid PackageDefinitionId { get; set; }
+        public int UserId { get; set; }
+        public Guid AccountBEDefinitionId { get; set; }
+    }
+    public interface IPackageDefinitionAccessContext
+    {
+        Guid PackageDefinitionId { get; }
+        int UserId { get;}
+        Guid AccountBEDefinitionId { get;  }
+    }
     public class AccountPackageProviderGetRetailAccountPackagesContext : IAccountPackageProviderGetRetailAccountPackagesContext
     {
         public Guid AccountBEDefinitionId { get; set; }
