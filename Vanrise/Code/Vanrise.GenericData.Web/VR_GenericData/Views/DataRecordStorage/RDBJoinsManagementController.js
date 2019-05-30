@@ -49,12 +49,12 @@
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
             UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRDBJoinsSelective]).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
         }
 
