@@ -30,7 +30,9 @@ app.directive('vrIcon', ['$compile', function ($compile) {
             icontype: '=',
             text: '=',
             iconurl: '=',
-            tooltip: '='
+            tooltip: '=',
+            height: '@',
+            width: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -70,8 +72,8 @@ app.directive('vrIcon', ['$compile', function ($compile) {
 
         var template = '';
 
-        var widthAsInt = ctrl.icon.width || 20;
-        var heightAsInt = ctrl.icon.height || 20;
+        var widthAsInt = ctrl.width || ctrl.icon.width || 20;
+        var heightAsInt = ctrl.height || ctrl.icon.height || 20;
 
         var width = widthAsInt + 'px';
         var height = heightAsInt + 'px';
