@@ -114,13 +114,13 @@
                     {
                         $type: "TOne.WhS.Sales.Entities.RateRuleGrouped,TOne.WhS.Sales.Entities",
                         RateRules: rateRules
-                    }
+                    };
 
                     var setting =
                     {
                         $type: "TOne.WhS.Sales.Entities.SellingRuleSettings,TOne.WhS.Sales.Entities",
                         RateRuleGrouped: rateRuleGroupped
-                    }
+                    };
                     return setting;
 
                 };
