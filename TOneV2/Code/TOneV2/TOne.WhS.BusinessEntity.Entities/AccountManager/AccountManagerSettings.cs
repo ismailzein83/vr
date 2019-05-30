@@ -9,10 +9,14 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class AccountManagerSettings : SettingData
     {
-        public CustomerFiltering CustomerFiltering { get; set; }
+        public CarrierAccountFiltering CarrierAccountFiltering { get; set; }
     }
-    public class CustomerFiltering
+    public class CarrierAccountFiltering
     {
         public bool RatePlan { get; set; }
+
+        public bool CustomerRoute { get; set; }
+
+        //public bool ProductRoute { get; set; }
     }
 }

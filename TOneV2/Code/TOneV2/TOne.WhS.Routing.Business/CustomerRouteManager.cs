@@ -18,11 +18,14 @@ namespace TOne.WhS.Routing.Business
         CarrierAccountManager _carrierAccountManager;
         SupplierZoneManager _supplierZoneManager;
         Dictionary<Guid, RouteRuleSettingsConfig> _routeRuleSettingsConfigDict;
-
+        AccountManagerAssignmentManager _accountManagerAssignmentManager;
+        BusinessEntity.Business.ConfigManager _configManager;
         public CustomerRouteManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
             _supplierZoneManager = new SupplierZoneManager();
+            _accountManagerAssignmentManager = new AccountManagerAssignmentManager();
+            _configManager = new BusinessEntity.Business.ConfigManager();
 
             IEnumerable<RouteRuleSettingsConfig> routeRuleSettingsConfig = new RouteRuleManager().GetRouteRuleTypesTemplates();
             _routeRuleSettingsConfigDict = routeRuleSettingsConfig.ToDictionary(itm => itm.ExtensionConfigurationId, itm => itm);
@@ -141,6 +144,11 @@ namespace TOne.WhS.Routing.Business
 
             List<CustomerRouteOptionDetail> optionDetails = new List<CustomerRouteOptionDetail>();
 
+            List<int> currentUserCarrierAccountIds = null;
+            bool isAccountManager = false;
+            if (_configManager.GetCustomerRouteCarrierAccountFiltering())
+                isAccountManager = _accountManagerAssignmentManager.TryGetCurrentUserEffectiveNowCarrierAccountIds(out currentUserCarrierAccountIds);
+
             foreach (RouteOption routeOption in customerRoute.Options)
             {
                 List<CustomerRouteBackupOptionDetail> backups = null;
@@ -150,7 +158,12 @@ namespace TOne.WhS.Routing.Business
 
                     foreach (var routeBackupOption in routeOption.Backups)
                     {
-                        string routeBackupOptionSupplierName = _carrierAccountManager.GetCarrierAccountName(routeBackupOption.SupplierId);
+                        string routeBackupOptionSupplierName;
+                        if (isAccountManager && (currentUserCarrierAccountIds == null || !currentUserCarrierAccountIds.Contains(routeBackupOption.SupplierId)))
+                            routeBackupOptionSupplierName = "N/A";
+                        else
+                            routeBackupOptionSupplierName = _carrierAccountManager.GetCarrierAccountName(routeBackupOption.SupplierId);
+
                         string routeBackupOptionSupplierZoneName = _supplierZoneManager.GetSupplierZoneName(routeBackupOption.SupplierZoneId);
                         var linkedRouteBackupOptionRules = routeOptionRuleManager.GetEffectiveLinkedRouteOptionRules(customerRoute.CustomerId, customerRoute.Code, routeBackupOption.SupplierId, routeBackupOption.SupplierZoneId, effectiveDate);
                         List<int> linkedRouteBackupOptionRuleIds = linkedRouteBackupOptionRules != null ? linkedRouteBackupOptionRules.Select(itm => itm.RuleId).ToList() : null;
@@ -159,7 +172,12 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
 
-                string routeOptionSupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId);
+                string routeOptionSupplierName;
+                if (isAccountManager && (currentUserCarrierAccountIds == null || !currentUserCarrierAccountIds.Contains(routeOption.SupplierId)))
+                    routeOptionSupplierName = "N/A";
+                else
+                    routeOptionSupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId);
+
                 string routeOptionSupplierZoneName = _supplierZoneManager.GetSupplierZoneName(routeOption.SupplierZoneId);
 
                 var linkedRouteOptionRules = routeOptionRuleManager.GetEffectiveLinkedRouteOptionRules(customerRoute.CustomerId, customerRoute.Code, routeOption.SupplierId, routeOption.SupplierZoneId, effectiveDate);
@@ -340,6 +358,22 @@ namespace TOne.WhS.Routing.Business
 
             public override IEnumerable<CustomerRoute> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
             {
+                var accountManagerAssignmentManager = new AccountManagerAssignmentManager();
+                var configManager = new BusinessEntity.Business.ConfigManager();
+
+                if (configManager.GetCustomerRouteCarrierAccountFiltering())
+                {
+                    List<int> currentUserCarrierAccountIds = null;
+                    if (accountManagerAssignmentManager.TryGetCurrentUserEffectiveNowCarrierAccountIds(out currentUserCarrierAccountIds))
+                    {
+                        if (currentUserCarrierAccountIds == null || currentUserCarrierAccountIds.Count == 0)
+                            return null;
+
+                        if (input.Query.CustomerIds == null || input.Query.CustomerIds.Count == 0)
+                            input.Query.CustomerIds = currentUserCarrierAccountIds;
+                    }
+                }
+
                 RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
                 var routingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
 

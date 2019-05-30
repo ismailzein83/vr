@@ -18,6 +18,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCachedAccountManagerAssignment().FindAllRecords(itm => itm.CarrierAccountId == carrierAccountId);
         }
+
         public IEnumerable<int> GetAffectedCarrierAccountIds()
         {
             List<int> affectedCarrierAccountIds = new List<int>();
@@ -28,21 +29,24 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return affectedCarrierAccountIds;
         }
-        public bool TryGetEffectiveNowAccountManagerAssignments(out IEnumerable<AccountManagerAssignment> effectiveAccountManagerAssignments)
+
+        public bool TryGetCurrentUserEffectiveNowAccountManagerAssignments(out IEnumerable<AccountManagerAssignment> effectiveAccountManagerAssignments)
         {
-            return TryGetEffectiveAccountManagerAssignments(DateTime.Now, out effectiveAccountManagerAssignments);
+            return TryGetCurrentUserEffectiveAccountManagerAssignments(DateTime.Now, out effectiveAccountManagerAssignments);
         }
-        public bool TryGetEffectiveAccountManagerAssignments(DateTime effectiveDate, out IEnumerable<AccountManagerAssignment> effectiveAccountManagerAssignments)
+
+        public bool TryGetCurrentUserEffectiveAccountManagerAssignments(DateTime effectiveDate, out IEnumerable<AccountManagerAssignment> effectiveAccountManagerAssignments)
         {
             effectiveAccountManagerAssignments = null;
             IEnumerable<AccountManagerAssignment> accountManagerAssignments;
-            bool result = TryGetAccountManagerAssignments(out accountManagerAssignments);
+            bool result = TryGetCurrentUserAccountManagerAssignments(out accountManagerAssignments);
             if (accountManagerAssignments != null)
             {
                 effectiveAccountManagerAssignments = accountManagerAssignments.FindAllRecords(x => x.BED <= effectiveDate && (!x.EED.HasValue || x.EED > effectiveDate));
             }
             return result;
         }
+
         public bool TryGetEffectiveAccountManagerByCarrierAccountId(int carrierAccountId, DateTime effectiveDate, out int? accountManagerId)
         {
             accountManagerId = null;
@@ -60,7 +64,8 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return false;
         }
-        public bool TryGetAccountManagerAssignments(out IEnumerable<AccountManagerAssignment> accountManagerAssignments)
+
+        public bool TryGetCurrentUserAccountManagerAssignments(out IEnumerable<AccountManagerAssignment> accountManagerAssignments)
         {
             accountManagerAssignments = null;
 
@@ -73,8 +78,26 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return false;
         }
-        #endregion
 
+        public bool TryGetCurrentUserEffectiveNowCarrierAccountIds(out List<int> carrierAccountIds)
+        {
+            carrierAccountIds = null;
+            IEnumerable<AccountManagerAssignment> effectiveAccountManagerAssignments;
+
+            if (!TryGetCurrentUserEffectiveNowAccountManagerAssignments(out effectiveAccountManagerAssignments))
+                return false;
+
+            if (effectiveAccountManagerAssignments == null || effectiveAccountManagerAssignments.Count() == 0)
+                return false;
+
+            carrierAccountIds = new List<int>();
+            foreach (var effectiveAccountManagerAssignment in effectiveAccountManagerAssignments)
+                carrierAccountIds.Add(effectiveAccountManagerAssignment.CarrierAccountId);
+
+            return true;
+        }
+
+        #endregion
 
         #region Private Methods
         private List<AccountManagerAssignment> GetAccountManagerAssignments(int accountManagerId, bool withSubChildren)
@@ -85,7 +108,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             List<AccountManagerAssignment> accountManagerAssignments = new List<AccountManagerAssignment>();
             if (accountManagerTreeNode.AccountManagerAssignments != null)
-                  accountManagerAssignments.AddRange(accountManagerTreeNode.AccountManagerAssignments);
+                accountManagerAssignments.AddRange(accountManagerTreeNode.AccountManagerAssignments);
 
             var childAccountManagerAssignments = GetAccountManagerAssignments(accountManagerTreeNode.ChildNodes, true);
             if (childAccountManagerAssignments != null)
@@ -93,6 +116,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return accountManagerAssignments;
         }
+
         private List<AccountManagerAssignment> GetAccountManagerAssignments(List<AccountManagerTreeNode> accountManagerTreeNodes, bool withSubChildren)
         {
             if (accountManagerTreeNodes != null)
@@ -116,6 +140,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
             }
         }
+
         private Dictionary<int, AccountManagerAssignment> GetCachedAccountManagerAssignment()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
@@ -145,6 +170,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return result;
             });
         }
+
         private Dictionary<int, List<AccountManagerAssignment>> GetCachedAccountManagerAssignmentByAccountManagerId()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
@@ -152,9 +178,9 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Dictionary<int, List<AccountManagerAssignment>> result = new Dictionary<int, List<AccountManagerAssignment>>();
                 var accountManagerAssignments = GetCachedAccountManagerAssignment();
-                if(accountManagerAssignments != null)
+                if (accountManagerAssignments != null)
                 {
-                    foreach(var accountManagerAssignment in accountManagerAssignments.Values)
+                    foreach (var accountManagerAssignment in accountManagerAssignments.Values)
                     {
                         var assignments = result.GetOrCreateItem(accountManagerAssignment.AccountManagerId);
                         assignments.Add(accountManagerAssignment);
@@ -183,7 +209,6 @@ namespace TOne.WhS.BusinessEntity.Business
             });
         }
 
-
         internal Dictionary<int, AccountManagerTreeNode> GetCacheAccountManagerTreeNodes()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
@@ -193,7 +218,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     Dictionary<int, AccountManagerTreeNode> treeNodes = new Dictionary<int, AccountManagerTreeNode>();
                     var accountManagers = new AccountManagerManager().GetAllAccountManagers();
-                    if(accountManagers != null)
+                    if (accountManagers != null)
                     {
                         var accountManagerAssignmentsByManagerId = GetCachedAccountManagerAssignmentByAccountManagerId();
                         foreach (var accountManager in accountManagers)
@@ -230,14 +255,12 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #endregion
 
-
         #region Private Classes
         internal class AccountManagerTreeNode
         {
             public AccountManager AccountManager { get; set; }
             public List<AccountManagerAssignment> AccountManagerAssignments { get; set; }
             public AccountManagerTreeNode ParentNode { get; set; }
-
             List<AccountManagerTreeNode> _childNodes = new List<AccountManagerTreeNode>();
             public List<AccountManagerTreeNode> ChildNodes
             {

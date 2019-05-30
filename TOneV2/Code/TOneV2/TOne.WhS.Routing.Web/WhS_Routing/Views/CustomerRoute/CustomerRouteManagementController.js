@@ -2,9 +2,9 @@
 
     "use strict";
 
-    customerRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Routing_RoutingDatabaseTypeEnum'];
+    customerRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Routing_RoutingDatabaseTypeEnum', 'Whs_BusinessEntity_ModuleNamesEnum'];
 
-    function customerRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Routing_RoutingDatabaseTypeEnum) {
+    function customerRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Routing_RoutingDatabaseTypeEnum, Whs_BusinessEntity_ModuleNamesEnum) {
 
         var parametersCustomersIds;
         var parametersZoneIds;
@@ -188,9 +188,10 @@
         function loadCustomersSection() {
             var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var payload;
+            var payload = { filter: { Filters: getCarrierAccountSelectorFilter() } };
+
             if (parametersCustomersIds != null)
-                payload = { selectedIds: parametersCustomersIds };
+                payload.selectedIds = parametersCustomersIds;
 
             carrierAccountReadyPromiseDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, payload, loadCarrierAccountPromiseDeferred);
@@ -201,8 +202,10 @@
         function loadSuppliersSection() {
             var loadSupplierCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var payload = { filter: { Filters: getCarrierAccountSelectorFilter() } };
+
             supplierCarrierAccountReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(supplierCarrierAccountDirectiveAPI, undefined, loadSupplierCarrierAccountPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(supplierCarrierAccountDirectiveAPI, payload, loadSupplierCarrierAccountPromiseDeferred);
             });
 
             return loadSupplierCarrierAccountPromiseDeferred.promise;
@@ -242,6 +245,18 @@
                 customerSelectorPayload.selectedIds = $scope.selectedCustomer.CarrierAccountId;
             }
             VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, customerSelectorPayload, undefined);
+        }
+
+        function getCarrierAccountSelectorFilter() {
+            var carrierAccountSelectorFilters = [];
+
+            var carrierAccountFilterAffected = {
+                $type: 'TOne.WhS.BusinessEntity.Business.AssignedCarrierAccountsForAccountManager, TOne.WhS.BusinessEntity.Business',
+                ModuleName: Whs_BusinessEntity_ModuleNamesEnum.CustomerRoute.value
+            };
+            carrierAccountSelectorFilters.push(carrierAccountFilterAffected);
+
+            return carrierAccountSelectorFilters;
         }
     }
 

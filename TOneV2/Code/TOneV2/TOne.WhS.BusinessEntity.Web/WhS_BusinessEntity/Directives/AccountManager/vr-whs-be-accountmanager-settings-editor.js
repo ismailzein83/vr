@@ -22,7 +22,7 @@ app.directive('vrWhsBeAccountmanagerSettingsEditor', ['UtilsService', 'VRUIUtils
 
         function accountmanagerSettingsCtor(ctrl, $scope, $attrs) {
 
-            var accountManagerSettings;
+            var carrierAccountFiltering;
 
             this.initializeController = initializeController;
             function initializeController() {
@@ -34,21 +34,27 @@ app.directive('vrWhsBeAccountmanagerSettingsEditor', ['UtilsService', 'VRUIUtils
             function defineApi() {
                 var api = {};
                 api.load = function (payload) {
+                
                     if (payload != undefined && payload.data != undefined) {
-                        accountManagerSettings = payload.data.AccountManagerSettings;
+                        carrierAccountFiltering = payload.data.CarrierAccountFiltering;
                     }
-                    if (accountManagerSettings != undefined && accountManagerSettings.CustomerFiltering) {
-                        $scope.scopeModel.ratePlanRestricted = accountManagerSettings.CustomerFiltering.RatePlan;
+                    if (carrierAccountFiltering != undefined) {
+                        $scope.scopeModel.ratePlanRestricted = carrierAccountFiltering.RatePlan;
+                        $scope.scopeModel.customerRouteRestricted = carrierAccountFiltering.CustomerRoute;
+                        //$scope.scopeModel.productRouteRestricted = carrierAccountFiltering.ProductRoute;
                     }
                 };
                 api.getData = function () {
-                    var customerFiltering = {
-                        RatePlan: $scope.scopeModel.ratePlanRestricted
+                    var carrierAccountFiltering = {
+                        RatePlan: $scope.scopeModel.ratePlanRestricted,
+                        CustomerRoute: $scope.scopeModel.customerRouteRestricted,
+                        //ProductRoute: $scope.scopeModel.productRouteRestricted
                     };
                     var obj = {
                         $type: "TOne.WhS.BusinessEntity.Entities.AccountManagerSettings,TOne.WhS.BusinessEntity.Entities",
-                        CustomerFiltering: customerFiltering
+                        CarrierAccountFiltering: carrierAccountFiltering
                     };
+                    console.log(obj);
                     return obj;
                 };
                 if (ctrl.onReady != null)

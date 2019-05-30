@@ -170,12 +170,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
             return saleAreaSettings.PricingSettings.MaximumRate.Value;
         }
-        public bool GetRatePlanCustomerFiltering()
-        {
-            AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
-            accountManagerSettings.ThrowIfNull("accountManagerSettings");
-            return accountManagerSettings.CustomerFiltering.RatePlan;
-        }
+
         public int GetSaleAreaRetroactiveDayOffset()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
@@ -530,6 +525,26 @@ namespace TOne.WhS.BusinessEntity.Business
             return setting.DocumentCategoryDefinition.ItemDefinitions;
         }
 
+        public bool GetRatePlanCarrierAccountFiltering()
+        {
+            AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
+            accountManagerSettings.ThrowIfNull("accountManagerSettings");
+            return accountManagerSettings.CarrierAccountFiltering.RatePlan;
+        }
+
+        public bool GetCustomerRouteCarrierAccountFiltering()
+        {
+            AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
+            accountManagerSettings.ThrowIfNull("accountManagerSettings");
+            return accountManagerSettings.CarrierAccountFiltering.CustomerRoute;
+        }
+
+        //public bool GetProductRouteCarrierAccountFiltering()
+        //{
+        //    AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
+        //    accountManagerSettings.ThrowIfNull("accountManagerSettings");
+        //    return accountManagerSettings.CarrierAccountFiltering.ProductRoute;
+        //}
         #endregion
 
         #region Private Methods

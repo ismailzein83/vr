@@ -2,9 +2,9 @@
 
 	'use strict';
 
-	CustomerRoutesService.$inject = ['VRModalService', 'VR_Analytic_AnalyticItemActionService'];
+    CustomerRoutesService.$inject = ['VRModalService', 'VR_Analytic_AnalyticItemActionService', 'UtilsService'];
 
-	function CustomerRoutesService(VRModalService, VR_Analytic_AnalyticItemActionService) {
+    function CustomerRoutesService(VRModalService, VR_Analytic_AnalyticItemActionService, UtilsService) {
 
 		function registerOpenCustomerRoutes() {
 			var actionType = {
@@ -23,13 +23,20 @@
 			if (payload.Settings.DimensionFilters == null)
 				return;
 			var customersIds;
-			var zoneIds;
+            var zoneIds;
+            var hasSaleZoneDimension;
+
+            if (UtilsService.getItemByVal(payload.Settings.DimensionFilters, 'SaleZone', 'Dimension') != undefined)
+                hasSaleZoneDimension = true;
 
 			for (var i = 0; i < payload.Settings.DimensionFilters.length; i++) {
 				var item = payload.Settings.DimensionFilters[i];
 
-				if (item.Dimension == 'MasterZone')
+                if (item.Dimension == 'MasterZone' && !hasSaleZoneDimension)
 					zoneIds = item.FilterValues;
+
+                if (item.Dimension == 'SaleZone')
+                    zoneIds = item.FilterValues;
 
 				if (item.Dimension == 'Customer')
 					customersIds = item.FilterValues;
