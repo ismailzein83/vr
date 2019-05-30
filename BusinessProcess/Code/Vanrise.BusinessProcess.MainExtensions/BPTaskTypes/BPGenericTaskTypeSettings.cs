@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Entities;
 
@@ -35,7 +33,19 @@ namespace Vanrise.BusinessProcess.MainExtensions.BPTaskTypes
         public Dictionary<string, dynamic> FieldValues { get; set; }
         public T GetFieldValue<T>(String FieldName)
         {
-            return this.FieldValues[FieldName];
+            Type typeParameterType = typeof(T);
+
+            switch (typeParameterType.FullName)
+            {
+                case "System.Guid":
+                    {
+                        GuidConverter guidConverter = new GuidConverter();
+                        return guidConverter.ConvertFrom(this.FieldValues[FieldName]);
+                    }
+
+                default:
+                    return (T)Convert.ChangeType(this.FieldValues[FieldName], typeParameterType);
+            }
         }
     }
 
