@@ -54,6 +54,7 @@
     <add key="RuntimeConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="QueueingConfigDBConnStringKey"                    value="ConfigurationDBConnString"/>
+    <add key="CommonEntitiesConnStringKey"                      value="ConfigurationDBConnString"/>
     <add key="NIMDBConnStringKey"                               value="ConfigurationDBConnString"/>
   </appSettings>
   <runtime>
