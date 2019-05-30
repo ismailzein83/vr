@@ -6,7 +6,18 @@ using Vanrise.Entities;
 
 namespace Vanrise.Common.BP.Activities
 {
-    public sealed class MigrateData : BaseCodeActivity
+    public class MigrateDataInput
+    {
+        public DateTime FromTime { get; set; }
+
+        public DateTime ToTime { get; set; }
+
+        public int NumberOfDaysPerInterval { get; set; }
+
+        public IDBReplicationDataManager DBReplicationDataManager { get; set; }
+    }
+
+    public sealed class MigrateData : BaseAsyncActivity<MigrateDataInput>
     {
         [RequiredArgument]
         public InArgument<DateTime> FromTime { get; set; }
@@ -20,12 +31,12 @@ namespace Vanrise.Common.BP.Activities
         [RequiredArgument]
         public InArgument<IDBReplicationDataManager> DBReplicationDataManager { get; set; }
 
-        protected override void VRExecute(IBaseCodeActivityContext context)
+        protected override void DoWork(MigrateDataInput inputArgument, AsyncActivityHandle handle)
         {
-            IDBReplicationDataManager dbReplicationDataManager = this.DBReplicationDataManager.Get(context.ActivityContext);
-            DateTime fromTime = this.FromTime.Get(context.ActivityContext);
-            DateTime toTime = this.ToTime.Get(context.ActivityContext);
-            int numberOfDaysPerInterval = this.NumberOfDaysPerInterval.Get(context.ActivityContext);
+            IDBReplicationDataManager dbReplicationDataManager = inputArgument.DBReplicationDataManager;
+            DateTime fromTime = inputArgument.FromTime;
+            DateTime toTime = inputArgument.ToTime;
+            int numberOfDaysPerInterval = inputArgument.NumberOfDaysPerInterval;
 
             dbReplicationDataManager.MigrateData(new DBReplicationMigrateDataContext()
             {
@@ -34,9 +45,21 @@ namespace Vanrise.Common.BP.Activities
                 NumberOfDaysPerInterval = numberOfDaysPerInterval,
                 WriteInformation = (message) =>
                 {
-                    context.ActivityContext.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
-                }
+                    handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
+                },
+                ShouldStop = () => { return ShouldStop(handle); }
             });
+        }
+
+        protected override MigrateDataInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new MigrateDataInput
+            {
+                DBReplicationDataManager = this.DBReplicationDataManager.Get(context),
+                FromTime = this.FromTime.Get(context),
+                NumberOfDaysPerInterval = this.NumberOfDaysPerInterval.Get(context),
+                ToTime = this.ToTime.Get(context)
+            };
         }
     }
 }

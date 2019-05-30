@@ -28,16 +28,22 @@ namespace Vanrise.Common.Data.SQL
 
             foreach (var dbReplicationTableDetailsListKvp in context.DBReplicationTableDetailsListByTargetServer)
             {
+                if (context.ShouldStop())
+                    return;
+
                 string targetServerConnectionString = dbReplicationTableDetailsListKvp.Key;
                 SqlConnectionStringBuilder targetConnectionString = new SqlConnectionStringBuilder(targetServerConnectionString);
                 string targetServerAddress = targetConnectionString.DataSource;
                 ServerConnection targetServerConnection = new ServerConnection(targetServerAddress, targetConnectionString.UserID, targetConnectionString.Password);
 
-                Server targetServer = BuildServer(targetServerConnection); 
+                Server targetServer = BuildServer(targetServerConnection);
 
                 List<TableInfo> tableInfoList = TableInfoListByTargetServer.GetOrCreateItem(targetServerAddress);
                 foreach (var dbReplicationTableDetails in dbReplicationTableDetailsListKvp.Value)
                 {
+                    if (context.ShouldStop())
+                        return;
+
                     var sourceConnectionString = ConfigurationManager.ConnectionStrings[dbReplicationTableDetails.SourceConnectionStringName];
                     SqlConnection sourceSQLConnection = new SqlConnection(sourceConnectionString.ConnectionString);
                     ServerConnection sourceServerConnection = new ServerConnection(sourceSQLConnection);
@@ -81,9 +87,15 @@ namespace Vanrise.Common.Data.SQL
         {
             foreach (var tableInfoListKvp in TableInfoListByTargetServer)
             {
+                if (context.ShouldStop())
+                    return;
+
                 List<TableInfo> tableInfoList = tableInfoListKvp.Value;
                 foreach (TableInfo tableInfo in tableInfoList)
                 {
+                    if (context.ShouldStop())
+                        return;
+
                     DBReplicationTableDetails dbReplicationTableDetails = tableInfo.DBReplicationTableDetails;
                     context.WriteInformation(string.Format("Data Replication for table {0} started", GetFullTableName(dbReplicationTableDetails.TableName, null, dbReplicationTableDetails.TableSchema)));
 
@@ -96,6 +108,7 @@ namespace Vanrise.Common.Data.SQL
 
         public void Finalize(IDBReplicationFinalizeContext context)
         {
+            bool allowCancelAction = true;
             foreach (var tableInfoListKvp in TableInfoListByTargetServer)
             {
                 List<TableInfo> tableInfoList = tableInfoListKvp.Value;
@@ -105,12 +118,24 @@ namespace Vanrise.Common.Data.SQL
                     targetServerConnection.BeginTransaction();
                     foreach (TableInfo tableInfo in tableInfoList)
                     {
+                        if (allowCancelAction && context.ShouldStop())
+                        {
+                            targetServerConnection.RollBackTransaction();
+                            return;
+                        }
+
                         DBReplicationTableDetails dbReplicationTableDetails = tableInfo.DBReplicationTableDetails;
                         DropFKs(context, tableInfo);
                     }
 
                     foreach (TableInfo tableInfo in tableInfoList)
                     {
+                        if (allowCancelAction && context.ShouldStop())
+                        {
+                            targetServerConnection.RollBackTransaction();
+                            return;
+                        }
+
                         DBReplicationTableDetails dbReplicationTableDetails = tableInfo.DBReplicationTableDetails;
                         DropOriginalTables(context, tableInfo);
                         RenameTempTables(context, tableInfo);
@@ -119,12 +144,19 @@ namespace Vanrise.Common.Data.SQL
 
                     foreach (TableInfo tableInfo in tableInfoList)
                     {
+                        if (allowCancelAction && context.ShouldStop())
+                        {
+                            targetServerConnection.RollBackTransaction();
+                            return;
+                        }
+
                         DBReplicationTableDetails dbReplicationTableDetails = tableInfo.DBReplicationTableDetails;
                         CreateFKs(context, tableInfo);
                         context.WriteInformation(string.Format("Finalizing table {0} done", GetFullTableName(dbReplicationTableDetails.TableName, null, dbReplicationTableDetails.TableSchema)));
                     }
 
                     targetServerConnection.CommitTransaction();
+                    allowCancelAction = false;
                 }
                 catch (Exception ex)
                 {

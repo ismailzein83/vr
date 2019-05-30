@@ -1,4 +1,5 @@
 ﻿using System;
+using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common.BP.Arguments;
 
 namespace Vanrise.Common.MainExtensions.DBReplication
@@ -22,5 +23,10 @@ namespace Vanrise.Common.MainExtensions.DBReplication
         }
 
         public override bool StoreLastArgumentState { get { return true; } }
+
+        public override bool CanCancelBPInstance(IBPDefinitionCanCancelBPInstanceContext context)
+        {
+            return true;
+        }
     }
 }

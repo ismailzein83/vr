@@ -11,12 +11,16 @@ namespace Vanrise.Entities
         Dictionary<string, List<DBReplicationTableDetails>> DBReplicationTableDetailsListByTargetServer { get; }
 
         Action<string> WriteInformation { get; }
+
+        Func<bool> ShouldStop { get; }
     }
     public class DBReplicationInitializeContext : IDBReplicationInitializeContext
     {
         public Dictionary<string, List<DBReplicationTableDetails>> DBReplicationTableDetailsListByTargetServer { get; set; }
 
         public Action<string> WriteInformation { get; set; }
+
+        public Func<bool> ShouldStop { get; set; }
     }
 
     public interface IDBReplicationMigrateDataContext
@@ -28,6 +32,8 @@ namespace Vanrise.Entities
         int NumberOfDaysPerInterval { get; }
 
         Action<string> WriteInformation { get; }
+
+        Func<bool> ShouldStop { get; }
     }
 
     public class DBReplicationMigrateDataContext : IDBReplicationMigrateDataContext
@@ -39,16 +45,22 @@ namespace Vanrise.Entities
         public int NumberOfDaysPerInterval { get; set; }
 
         public Action<string> WriteInformation { get; set; }
+
+        public Func<bool> ShouldStop { get; set; }
     }
 
     public interface IDBReplicationFinalizeContext
     {
         Action<string> WriteInformation { get; }
+
+        Func<bool> ShouldStop { get; }
     }
 
     public class DBReplicationFinalizeContext : IDBReplicationFinalizeContext
     {
         public Action<string> WriteInformation { get; set; }
+
+        public Func<bool> ShouldStop { get; set; }
     }
 
     public interface IDBReplicationTableMigrateDataContext

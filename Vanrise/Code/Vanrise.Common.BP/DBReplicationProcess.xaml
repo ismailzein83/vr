@@ -80,7 +80,7 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <vcba1:InitializeDBReplication sap2010:WorkflowViewState.IdRef="InitializeDBReplication_1">
+    <vcba1:InitializeDBReplication Status="{x:Null}" sap2010:WorkflowViewState.IdRef="InitializeDBReplication_1">
       <vcba1:InitializeDBReplication.DBReplicatioDefinition>
         <InArgument x:TypeArguments="ve:DBReplicationDefinition">
           <mca:CSharpValue x:TypeArguments="ve:DBReplicationDefinition">DBReplicationDefinition</mca:CSharpValue>
@@ -97,7 +97,7 @@
         </InArgument>
       </vcba1:InitializeDBReplication.DBReplicationSettings>
     </vcba1:InitializeDBReplication>
-    <vcba1:MigrateData sap2010:WorkflowViewState.IdRef="MigrateData_1">
+    <vcba1:MigrateData Status="{x:Null}" sap2010:WorkflowViewState.IdRef="MigrateData_1">
       <vcba1:MigrateData.DBReplicationDataManager>
         <InArgument x:TypeArguments="vcd:IDBReplicationDataManager">
           <mca:CSharpValue x:TypeArguments="vcd:IDBReplicationDataManager">DBReplicationDataManager</mca:CSharpValue>
@@ -119,7 +119,7 @@
         </InArgument>
       </vcba1:MigrateData.ToTime>
     </vcba1:MigrateData>
-    <vcba1:FinalizeDBReplication sap2010:WorkflowViewState.IdRef="FinalizeDBReplication_1">
+    <vcba1:FinalizeDBReplication Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FinalizeDBReplication_1">
       <vcba1:FinalizeDBReplication.DBReplicationDataManager>
         <InArgument x:TypeArguments="vcd:IDBReplicationDataManager">
           <mca:CSharpValue x:TypeArguments="vcd:IDBReplicationDataManager">DBReplicationDataManager</mca:CSharpValue>

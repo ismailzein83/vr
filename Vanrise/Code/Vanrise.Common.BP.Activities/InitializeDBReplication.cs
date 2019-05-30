@@ -8,7 +8,20 @@ using Vanrise.Entities;
 
 namespace Vanrise.Common.BP.Activities
 {
-    public sealed class InitializeDBReplication : BaseCodeActivity
+
+    public class InitializeDBReplicationInput
+    {
+        public DBReplicationSettings DBReplicationSettings { get; set; }
+
+        public DBReplicationDefinition DBReplicatioDefinition { get; set; }
+    }
+
+    public class InitializeDBReplicationOutput
+    {
+        public IDBReplicationDataManager DBReplicationDataManager { get; set; }
+    }
+
+    public sealed class InitializeDBReplication : BaseAsyncActivity<InitializeDBReplicationInput, InitializeDBReplicationOutput>
     {
         [RequiredArgument]
         public InArgument<DBReplicationSettings> DBReplicationSettings { get; set; }
@@ -19,10 +32,10 @@ namespace Vanrise.Common.BP.Activities
         [RequiredArgument]
         public OutArgument<IDBReplicationDataManager> DBReplicationDataManager { get; set; }
 
-        protected override void VRExecute(IBaseCodeActivityContext context)
+        protected override InitializeDBReplicationOutput DoWorkWithResult(InitializeDBReplicationInput inputArgument, AsyncActivityHandle handle)
         {
-            DBReplicationSettings dbReplicationSettings = this.DBReplicationSettings.Get(context.ActivityContext);
-            DBReplicationDefinition dbReplicatioDefinition = this.DBReplicatioDefinition.Get(context.ActivityContext);
+            DBReplicationSettings dbReplicationSettings = inputArgument.DBReplicationSettings;
+            DBReplicationDefinition dbReplicatioDefinition = inputArgument.DBReplicatioDefinition;
 
             IDBReplicationDataManager dbReplicationDataManager = CommonDataManagerFactory.GetDataManager<IDBReplicationDataManager>();
             VRConnectionManager vrConnectionManager = new VRConnectionManager();
@@ -32,6 +45,9 @@ namespace Vanrise.Common.BP.Activities
 
             foreach (var databaseDefinitionKvp in dbReplicatioDefinition.Settings.DatabaseDefinitions)
             {
+                if (ShouldStop(handle))
+                    break;
+
                 Guid databaseDefinitionId = databaseDefinitionKvp.Key;
 
                 DBConnectionEntity dbConnectionEntity = dbConnectionEntities.GetRecord(databaseDefinitionId);
@@ -40,6 +56,9 @@ namespace Vanrise.Common.BP.Activities
 
                 foreach (DBReplicationTableDefinition table in databaseDefinitionKvp.Value.Tables)
                 {
+                    if (ShouldStop(handle))
+                        break;
+
                     DBReplicationTableDetails dbReplicationTableDetails = new DBReplicationTableDetails()
                     {
                         DBReplicationPreInsert = table.DBReplicationPreInsert,
@@ -62,11 +81,29 @@ namespace Vanrise.Common.BP.Activities
                 DBReplicationTableDetailsListByTargetServer = dbReplicationTableDetailsListByTargetLinkedServer,
                 WriteInformation = (message) =>
                 {
-                    context.ActivityContext.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
-                }
+                    handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
+                },
+                ShouldStop = () => { return ShouldStop(handle); }
             });
 
-            this.DBReplicationDataManager.Set(context.ActivityContext, dbReplicationDataManager);
+            return new InitializeDBReplicationOutput
+            {
+                DBReplicationDataManager = dbReplicationDataManager
+            };
+        }
+
+        protected override InitializeDBReplicationInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new InitializeDBReplicationInput()
+            {
+                DBReplicatioDefinition = this.DBReplicatioDefinition.Get(context),
+                DBReplicationSettings = this.DBReplicationSettings.Get(context)
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, InitializeDBReplicationOutput result)
+        {
+            context.SetValue(this.DBReplicationDataManager, result.DBReplicationDataManager);
         }
 
         private Dictionary<Guid, DBConnectionEntity> GetDBConnectionEntities(DBReplicationSettings dbReplicationSettings)
