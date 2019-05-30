@@ -14,6 +14,18 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SwitchCDRMappingConfiguration SwitchCDRMappingConfiguration { get; set; }
 
         public CDRImportZoneIdentification CDRImportZoneIdentification { get; set; }
+
+        CDRImportConfiguration _cdrImportConfiguration;
+        public CDRImportConfiguration CDRImportConfiguration
+        {
+            get
+            {
+                if (_cdrImportConfiguration == null)
+                    _cdrImportConfiguration = new CDRImportConfiguration() { GenerateTrafficStatsByCode = false };
+                return _cdrImportConfiguration;
+            }
+            set { _cdrImportConfiguration = value; }
+        }
     }
 
     public class SwitchCDRMappingConfiguration
@@ -32,5 +44,10 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class CDRImportZoneIdentification
     {
         public int? SecondarySellingNumberPlanId { get; set; }
+    }
+
+    public class CDRImportConfiguration
+    {
+        public bool GenerateTrafficStatsByCode { get; set; }
     }
 }

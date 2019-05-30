@@ -26,6 +26,7 @@ app.directive('vrWhsRoutingCustomerrouteGridfilters', ['UtilsService', 'VRUIUtil
 
             var parametersCustomersIds;
             var parametersZoneIds;
+            var parametersSaleCode;
             var routingDatabase;
 
             var selectedRoutingDatabaseObject;
@@ -102,10 +103,13 @@ app.directive('vrWhsRoutingCustomerrouteGridfilters', ['UtilsService', 'VRUIUtil
                     if (payload != undefined) {
                         parametersCustomersIds = payload.customersIds;
                         parametersZoneIds = payload.zoneIds;
+                        parametersSaleCode = payload.saleCode;
                         routingDatabase = payload.routingDatabase;
                     }
 
                     $scope.scopeModel.showRoutingDatabaseSelector = routingDatabase == undefined;
+
+                    $scope.scopeModel.code = parametersSaleCode;
 
                     var promises = [];
 

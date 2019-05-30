@@ -60,6 +60,10 @@ app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                     if (payload != undefined && payload.data != undefined) {
                         switchCDRMappingConfiguration = payload.data.SwitchCDRMappingConfiguration;
                         cdrImportZoneIdentification = payload.data.CDRImportZoneIdentification;
+
+                        if (payload.data.CDRImportConfiguration != undefined) {
+                            $scope.scopeModel.generateTrafficStatsByCode = payload.data.CDRImportConfiguration.GenerateTrafficStatsByCode;
+                        }
                     }
 
                     var promises = [];
@@ -101,7 +105,8 @@ app.directive('vrWhsBeCdrimportSettingsEditor', ['UtilsService', 'VRUIUtilsServi
                     var obj = {
                         $type: "TOne.WhS.BusinessEntity.Entities.CDRImportSettings, TOne.WhS.BusinessEntity.Entities",
                         SwitchCDRMappingConfiguration: switchCDRMappingConfigurationDirectiveAPI.getData(),
-                        CDRImportZoneIdentification: cdrImportZoneIdentificationDirectiveAPI.getData()
+                        CDRImportZoneIdentification: cdrImportZoneIdentificationDirectiveAPI.getData(),
+                        CDRImportConfiguration: { GenerateTrafficStatsByCode: $scope.scopeModel.generateTrafficStatsByCode }
                     };
 
                     return obj;

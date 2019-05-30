@@ -8,6 +8,7 @@
 
         var parametersCustomersIds;
         var parametersZoneIds;
+        var parametresSaleCode;
         var loadGrid;
 
         var gridAPI;
@@ -28,6 +29,7 @@
             if (parameters != null) {
                 parametersCustomersIds = parameters.CustomersIds;
                 parametersZoneIds = parameters.ZoneIds;
+                parametresSaleCode = parameters.SaleCode;
                 loadGrid = true;
             }
         }
@@ -133,7 +135,8 @@
 
             var payload = {
                 zoneIds: parametersZoneIds,
-                customersIds: parametersCustomersIds
+                customersIds: parametersCustomersIds,
+                saleCode: parametresSaleCode
             };
 
             gridFiltersReadyPromiseDeferred.promise.then(function () {

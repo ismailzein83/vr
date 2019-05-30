@@ -545,6 +545,12 @@ namespace TOne.WhS.BusinessEntity.Business
         //    accountManagerSettings.ThrowIfNull("accountManagerSettings");
         //    return accountManagerSettings.CarrierAccountFiltering.ProductRoute;
         //}
+
+        public bool GetGenerateTrafficStatsByCode()
+        {
+            CDRImportConfiguration cdrImportConfiguration = GetCDRImportConfiguration();
+            return cdrImportConfiguration.GenerateTrafficStatsByCode;
+        }
         #endregion
 
         #region Private Methods
@@ -612,6 +618,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return cdrImportSettings.CDRImportZoneIdentification;
         }
+
+        private CDRImportConfiguration GetCDRImportConfiguration()
+        {
+            CDRImportSettings cdrImportSettings = GetCDRImportSettings();
+            if (cdrImportSettings.CDRImportConfiguration == null)
+                throw new NullReferenceException("cdrImportSettings.CDRImportConfiguration");
+
+            return cdrImportSettings.CDRImportConfiguration;
+        }
+
         private BusinessEntitySettingsData GetBusinessEntitySettingsData()
         {
             SettingManager settingManager = new SettingManager();
