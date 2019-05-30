@@ -3,38 +3,44 @@
         <vr-form name="formInvoiceCompareEditor">
             <vr-row>
                 <vr-columns width="fullrow" haschildcolumns>
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/3row">
                         <vr-textbox label="Reference" value="scopeModel.reference"></vr-textbox>
                     </vr-columns>
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/3row">
                         <vr-fileupload extension="all" value="scopeModel.inPutFile"
                                        label="Upload Attachement"
                                        on-ready="scopeModel.onUploadedAttachementFileReady"
                                        onvaluechanged="scopeModel.addUploadedAttachement" tempfile="true"></vr-fileupload>
                     </vr-columns>
+                    <vr-columns width="1/3row">
+                        <vr-switch value="scopeModel.includeOriginalAmountInSettlement" label="Include In Settlement"></vr-switch>
+                    </vr-columns>
                 </vr-columns>
             </vr-row>
             <vr-row>
                 <vr-columns width="fullrow" ng-if="scopeModel.originalDataCurrency.length > 0" withemptyline>
-                    <vr-datagrid on-ready="scopeModel.onGridReady"
-                                 datasource="scopeModel.originalDataCurrency" hidegridmenu>
-                        <vr-datagridcolumn headertext="'Currency'" type="'Text'" field="'Entity.Currency'" widthfactor="5"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Voice Amount'" widthfactor="10" ng-if="scopeModel.isVoiceModuleEnabled && scopeModel.showVoiceColumn">
-                            <vr-textbox value="dataItem.Entity.TrafficAmount" isrequired="dataItem.Entity.IncludeOriginalAmountInSettlement" type="number" ng-if="dataItem.Entity.HasTrafficAmount"></vr-textbox>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'SMS Amount'" widthfactor="10" ng-if="scopeModel.isSMSModuleEnabled && scopeModel.showSMSColumn">
-                            <vr-textbox value="dataItem.Entity.SMSAmount" isrequired="dataItem.Entity.IncludeOriginalAmountInSettlement" type="number" ng-if="dataItem.Entity.HasSMSAmount"></vr-textbox>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Recurring Charge Amount'" widthfactor="10" ng-if="scopeModel.showRecurringChargeColumn">
-                            <vr-textbox value="dataItem.Entity.RecurringChargeAmount" isrequired="dataItem.Entity.IncludeOriginalAmountInSettlement" type="number" ng-if="dataItem.Entity.HasRecurringChargeAmount"></vr-textbox>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Deal Amount'" widthfactor="10" ng-if="scopeModel.showDealColumn">
-                            <vr-textbox value="dataItem.Entity.DealAmount" isrequired="dataItem.Entity.IncludeOriginalAmountInSettlement" type="number" ng-if="dataItem.Entity.HasDealAmount"></vr-textbox>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Include In Settlement'" widthfactor="10" ng-if="(scopeModel.isVoiceModuleEnabled && scopeModel.showVoiceColumn) || (scopeModel.isSMSModuleEnabled && scopeModel.showSMSColumn) || scopeModel.showRecurringChargeColumn || scopeModel.showDealColumn">
-                            <vr-switch value="dataItem.Entity.IncludeOriginalAmountInSettlement"></vr-switch>
-                        </vr-datagridcolumn>
-                    </vr-datagrid>
+                    <vr-validator validate="scopeModel.validateOriginalData()">
+                        <vr-datagrid on-ready="scopeModel.onGridReady"
+                                     datasource="scopeModel.originalDataCurrency" hidegridmenu>
+                            <vr-datagridcolumn headertext="'Currency'" type="'Text'" field="'Entity.Currency'" widthfactor="5"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Voice Amount'" widthfactor="10" ng-if="scopeModel.isVoiceModuleEnabled && scopeModel.showVoiceColumn">
+                                <vr-textbox value="dataItem.Entity.TrafficAmount" isrequired="dataItem.Entity.IsTrafficRequired" type="number" ng-if="dataItem.Entity.HasTrafficAmount"></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'SMS Amount'" widthfactor="10" ng-if="scopeModel.isSMSModuleEnabled && scopeModel.showSMSColumn">
+                                <vr-textbox value="dataItem.Entity.SMSAmount" isrequired="dataItem.Entity.IsSMSRequired" type="number" ng-if="dataItem.Entity.HasSMSAmount"></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Recurring Charge Amount'" widthfactor="10" ng-if="scopeModel.showRecurringChargeColumn">
+                                <vr-textbox value="dataItem.Entity.RecurringChargeAmount" isrequired="dataItem.Entity.IsRecurringChargeRequired" type="number" ng-if="dataItem.Entity.HasRecurringChargeAmount"></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Deal Amount'" widthfactor="10" ng-if="scopeModel.showDealColumn" >
+                                <vr-textbox value="dataItem.Entity.DealAmount" isrequired="dataItem.Entity.IsDealRequired" type="number" ng-if="dataItem.Entity.HasDealAmount"></vr-textbox>
+                            </vr-datagridcolumn>
+
+
+
+
+                        </vr-datagrid>
+                    </vr-validator>
                 </vr-columns>
             </vr-row>
           

@@ -183,7 +183,7 @@ namespace TOne.WhS.Invoice.Business
                                     if (record.RecurringChargeAmount.HasValue)
                                         totalOriginalAmount += record.RecurringChargeAmount.Value;
 
-                                    useOriginalAmount = record.IncludeOriginalAmountInSettlement;
+                                    useOriginalAmount = supplierDetail.IncludeOriginalAmountInSettlement;
                                     originalAmount = totalOriginalAmount>0 ? totalOriginalAmount : default(decimal?);
                                 }
                             }
@@ -272,7 +272,7 @@ namespace TOne.WhS.Invoice.Business
                                     if (record.RecurringChargeAmount.HasValue)
                                         totalOriginalAmount += record.RecurringChargeAmount.Value;
 
-                                    useOriginalAmount = record.IncludeOriginalAmountInSettlement;
+                                    useOriginalAmount = customerDetail.IncludeOriginalAmountInSettlement;
                                     originalAmount = totalOriginalAmount > 0 ? totalOriginalAmount : default(decimal?);
                                 }
                             }
@@ -495,7 +495,7 @@ namespace TOne.WhS.Invoice.Business
                                         string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceItemDetail.CurrencyId);
                                         currencySymbol.ThrowIfNull("currencySymbol", invoiceItemDetail.CurrencyId);
                                         OriginalDataCurrrency originalDataCurrrency;
-                                        if (innvoiceDetails.OriginalAmountByCurrency != null && innvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetail.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && (originalDataCurrrency.TrafficAmount.HasValue || originalDataCurrrency.SMSAmount.HasValue || originalDataCurrrency.DealAmount.HasValue || originalDataCurrrency.RecurringChargeAmount.HasValue))
+                                        if (innvoiceDetails.OriginalAmountByCurrency != null && innvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetail.CurrencyId, out originalDataCurrrency) && innvoiceDetails.IncludeOriginalAmountInSettlement && (originalDataCurrrency.TrafficAmount.HasValue || originalDataCurrrency.SMSAmount.HasValue || originalDataCurrrency.DealAmount.HasValue || originalDataCurrrency.RecurringChargeAmount.HasValue))
                                         {
                                             decimal amountValue;
                                             decimal totalOriginalAmount = originalDataCurrrency.TrafficAmount.HasValue ? originalDataCurrrency.TrafficAmount.Value : 0;

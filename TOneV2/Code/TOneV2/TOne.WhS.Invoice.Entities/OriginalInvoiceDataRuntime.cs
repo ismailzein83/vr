@@ -11,6 +11,7 @@ namespace TOne.WhS.Invoice.Entities
         public Dictionary<int, OriginalDataCurrrencyRuntime>  OriginalDataCurrency { get; set; }
         public string Reference { get; set; }
         public List<AttachementFileRuntime> AttachementFilesRuntime { get; set; }
+        public bool IncludeOriginalAmountInSettlement { get; set; }
     }
     public class OriginalDataCurrrencyRuntime
     {

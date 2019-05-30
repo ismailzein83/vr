@@ -103,6 +103,7 @@ namespace TOne.WhS.Invoice.Business
                     customerInvoiceDetails.ThrowIfNull("customerInvoiceDetails");
                     customerInvoiceDetails.AttachementFiles = input.AttachementFiles;
                     customerInvoiceDetails.Reference = input.Reference;
+                    customerInvoiceDetails.IncludeOriginalAmountInSettlement = input.IncludeOriginalAmountInSettlement;
 
 
 
@@ -131,6 +132,8 @@ namespace TOne.WhS.Invoice.Business
                     supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
                     supplierInvoiceDetails.AttachementFiles = input.AttachementFiles;
                     supplierInvoiceDetails.Reference = input.Reference;
+                    supplierInvoiceDetails.IncludeOriginalAmountInSettlement = input.IncludeOriginalAmountInSettlement;
+
                     supplierInvoiceDetails.IsOriginalAmountSetted = false;
                     if (input.OriginalDataCurrency != null && input.OriginalDataCurrency.Count > 0)
                     {
@@ -174,6 +177,7 @@ namespace TOne.WhS.Invoice.Business
             string reference = null;
             Dictionary<int, OriginalDataCurrrency> originalAmountByCurrency = null;
             List<AttachementFile> attachementFiles = null;
+            bool includeOriginalAmountInSettlement = false;
             switch (invoiceCarrierType)
             {
                 case InvoiceCarrierType.Customer:
@@ -182,7 +186,7 @@ namespace TOne.WhS.Invoice.Business
                     reference = customerInvoiceDetails.Reference;
                     originalAmountByCurrency = customerInvoiceDetails.OriginalAmountByCurrency;
                     attachementFiles = customerInvoiceDetails.AttachementFiles;
-
+                    includeOriginalAmountInSettlement = customerInvoiceDetails.IncludeOriginalAmountInSettlement;
                     break;
 
                 case InvoiceCarrierType.Supplier:
@@ -191,6 +195,7 @@ namespace TOne.WhS.Invoice.Business
                     reference = supplierInvoiceDetails.Reference;
                     originalAmountByCurrency = supplierInvoiceDetails.OriginalAmountByCurrency;
                     attachementFiles = supplierInvoiceDetails.AttachementFiles;
+                    includeOriginalAmountInSettlement = supplierInvoiceDetails.IncludeOriginalAmountInSettlement;
                     break;
             }
 
@@ -198,6 +203,7 @@ namespace TOne.WhS.Invoice.Business
             var originalInvoiceDataRuntime = new OriginalInvoiceDataRuntime
             {
                 Reference = reference,
+                IncludeOriginalAmountInSettlement = includeOriginalAmountInSettlement
             };
             CurrencyManager currencyManager = new CurrencyManager();
 

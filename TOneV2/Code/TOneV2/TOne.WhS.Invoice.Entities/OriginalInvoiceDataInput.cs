@@ -13,6 +13,7 @@ namespace TOne.WhS.Invoice.Entities
         public string Reference { get; set; }
         public List<AttachementFile> AttachementFiles { get; set; }
         public Dictionary<int, OriginalDataCurrrency> OriginalDataCurrency { get; set; }
+        public bool IncludeOriginalAmountInSettlement { get; set; }
         public InvoiceCarrierType invoiceCarrierType { get; set; }
 
     }

@@ -41,6 +41,48 @@
             $scope.scopeModel.save = function () {
                 return updateOriginalInvoiceData();
             };
+
+            $scope.scopeModel.validateOriginalData = function () {
+                if ($scope.scopeModel.includeOriginalAmountInSettlement) {
+                    var doesVoiceExist = false;
+                    var doesSMSExist = false;
+                    var doesRecurringChargeExist = false;
+                    var doesDealExist = false;
+                    for (var i = 0; i < $scope.scopeModel.originalDataCurrency.length; i++) {
+                        var item = $scope.scopeModel.originalDataCurrency[i].Entity;
+                        if (item.TrafficAmount != undefined || item.SMSAmount != undefined || item.DealAmount != undefined || item.RecurringChargeAmount != undefined) {
+                            if (item.TrafficAmount != undefined)
+                                doesVoiceExist = true;
+                            if (item.SMSAmount != undefined)
+                                doesSMSExist = true;
+                            if (item.DealAmount != undefined)
+                                doesDealExist = true;
+                            if (item.RecurringChargeAmount != undefined)
+                                doesRecurringChargeExist = true;
+                        }
+                    }
+                    for (var j = 0; j < $scope.scopeModel.originalDataCurrency.length; j++) {
+                        var entity = $scope.scopeModel.originalDataCurrency[j].Entity;
+                        entity.IsTrafficRequired = doesVoiceExist;
+                        entity.IsSMSRequired = doesSMSExist;
+                        entity.IsDealRequired = doesDealExist;
+                        entity.IsRecurringChargeRequired = doesRecurringChargeExist;
+                    }
+
+                    if (!doesVoiceExist && !doesSMSExist && !doesDealExist && !doesRecurringChargeExist)
+                        return "At least one value must be added.";
+                }
+                else {
+                    for (var k = 0; k < $scope.scopeModel.originalDataCurrency.length; k++) {
+                        var data = $scope.scopeModel.originalDataCurrency[k].Entity;
+                        data.IsTrafficRequired = false;
+                        data.IsSMSRequired = false;
+                        data.IsDealRequired = false;
+                        data.IsRecurringChargeRequired = false;
+                    }
+                    return null;
+                }
+            };
             $scope.scopeModel.onUploadedAttachementFileReady = function (api) {
                 fileAPI = api;
             };
@@ -75,6 +117,7 @@
             return WhS_Invoice_InvoiceAPIService.GetOriginalInvoiceDataRuntime(invoiceId, invoiceCarrierType).then(function (response) {
                 originalInvoiceDataRuntime = response;
                 if (originalInvoiceDataRuntime != undefined) {
+                    $scope.scopeModel.includeOriginalAmountInSettlement = originalInvoiceDataRuntime.IncludeOriginalAmountInSettlement;
                     if (originalInvoiceDataRuntime.OriginalDataCurrency != undefined) {
                         var noVoiceCount = 0;
                         var noSMSCount = 0;
@@ -88,7 +131,6 @@
                                     Entity: {
                                         Currency: item.CurrencySymbol,
                                         CurrencyId: p,
-                                        IncludeOriginalAmountInSettlement: item.IncludeOriginalAmountInSettlement,
                                         OriginalAmount: item.OriginalAmount,
                                         TrafficAmount: item.HasTrafficAmount ? item.TrafficAmount : undefined,
                                         SMSAmount: item.HasSMSAmount ? item.SMSAmount : undefined,
@@ -195,8 +237,7 @@
                                 TrafficAmount: originalDataCurrency.Entity.TrafficAmount,
                                 SMSAmount: originalDataCurrency.Entity.SMSAmount,
                                 RecurringChargeAmount: originalDataCurrency.Entity.RecurringChargeAmount,
-                                DealAmount: originalDataCurrency.Entity.DealAmount,
-                                IncludeOriginalAmountInSettlement: originalDataCurrency.Entity.IncludeOriginalAmountInSettlement
+                                DealAmount: originalDataCurrency.Entity.DealAmount
                     };
                 }
             }
@@ -206,7 +247,8 @@
                 Reference: $scope.scopeModel.reference,
                 AttachementFiles: attachementFileIds,
                 InvoiceId: invoiceId,
-                InvoiceCarrierType:invoiceCarrierType
+                InvoiceCarrierType: invoiceCarrierType,
+                IncludeOriginalAmountInSettlement: $scope.scopeModel.includeOriginalAmountInSettlement
             };
             return obj;
         }
