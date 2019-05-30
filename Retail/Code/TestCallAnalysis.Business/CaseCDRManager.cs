@@ -39,18 +39,22 @@ namespace TestCallAnalysis.Business
                 return null;
         }
 
-        public Dictionary<string ,List<TCAnalCaseCDR>> GetNotCleanCases()
+        public Dictionary<string ,List<TCAnalCaseCDR>> GetNotCleanCases(out TCAnalCaseCDR nullCallingNumberEntity)
         {
             Dictionary<string, List<TCAnalCaseCDR>> tcanalCaseCDRs = new Dictionary<string, List<TCAnalCaseCDR>>();
             List<DataRecord> allCasesCDRs = GetAllCases();
+            nullCallingNumberEntity = null;
             if (allCasesCDRs != null && allCasesCDRs.Count > 0)
             {
                 foreach (var caseCDR in allCasesCDRs)
                 {
                     var caseCDREntity = CaseCDRMapperFromDataRecord(caseCDR);
-                    if ((Guid)caseCDR.FieldValues["StatusId"] == fraudStatusId || (Guid)caseCDR.FieldValues["StatusId"] == suspectStatusId)
+                    if (((Guid)caseCDR.FieldValues["StatusId"] == fraudStatusId || (Guid)caseCDR.FieldValues["StatusId"] == suspectStatusId))
                     {
-                        tcanalCaseCDRs.GetOrCreateItem(caseCDREntity.CallingNumber).Add(caseCDREntity);
+                        if (caseCDREntity.CallingNumber == null)
+                            nullCallingNumberEntity = caseCDREntity;
+                        else
+                         tcanalCaseCDRs.GetOrCreateItem(caseCDREntity.CallingNumber).Add(caseCDREntity);
                     }
 
                 }

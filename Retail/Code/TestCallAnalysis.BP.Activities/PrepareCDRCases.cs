@@ -66,13 +66,8 @@ namespace TestCallAnalysis.BP.Activities
         {
             WhiteListManager whiteListManager = new WhiteListManager();
             CaseCDRManager caseCDRManager = new CaseCDRManager();
-
-            PrepareCDRCasesOutput prepareCDRCasesOutput = new PrepareCDRCasesOutput();
-            prepareCDRCasesOutput.CasesToInsert = new List<TCAnalCaseCDR>();
-            prepareCDRCasesOutput.CasesToUpdate = new List<TCAnalCaseCDR>();
-
-            List<string> existingCasesCallingNumbers = caseCDRManager.GetExistingCasesCallingNumber();
-            Dictionary<string, List<TCAnalCaseCDR>> existingCasesCDRs = caseCDRManager.GetNotCleanCases();
+            var suspectStatusId = new Guid("43f65fbf-ba78-4211-a0bb-88edc91b26ff");
+            var fraudStatusId = new Guid("4ea323c2-56ba-46db-a84d-5792009924a3");
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -85,7 +80,17 @@ namespace TestCallAnalysis.BP.Activities
                         {
                             if (recordBatch.CaseCDRsToInsert != null && recordBatch.CaseCDRsToInsert.Count > 0)
                             {
+
+                                PrepareCDRCasesOutput prepareCDRCasesOutput = new PrepareCDRCasesOutput();
+                                prepareCDRCasesOutput.CasesToInsert = new List<TCAnalCaseCDR>();
+                                prepareCDRCasesOutput.CasesToUpdate = new List<TCAnalCaseCDR>();
+
+                                TCAnalCaseCDR existingNullCaseEntity = null;
+                                Dictionary<string, List<TCAnalCaseCDR>> existingCasesCDRs = caseCDRManager.GetNotCleanCases(out existingNullCaseEntity);
+
                                 Dictionary<string, TCAnalCaseCDR> casesToInsert = new Dictionary<string, TCAnalCaseCDR>();
+                                Dictionary<string, TCAnalCaseCDR> casesToUpdate = new Dictionary<string, TCAnalCaseCDR>();
+                                TCAnalCaseCDR nullCaseEntity = null;
                                 foreach (var record in recordBatch.CaseCDRsToInsert)
                                 {
                                     if (record.CallingOperatorID.HasValue)
@@ -98,47 +103,84 @@ namespace TestCallAnalysis.BP.Activities
                                     TCAnalCaseCDR tcanalCaseCDR = new TCAnalCaseCDR();
                                     tcanalCaseCDR = caseCDRManager.CaseCDRMapper(record);
 
-                                    if (existingCasesCallingNumbers != null && existingCasesCDRs != null && existingCasesCallingNumbers.Count() > 0 && existingCasesCallingNumbers.IndexOf(tcanalCaseCDR.CallingNumber) != -1)
+                                    if (record.ReceivedCallingNumber == null)
                                     {
-                                       List<TCAnalCaseCDR>  cases = existingCasesCDRs.GetRecord(record.ReceivedCallingNumber);
-                                        if(cases != null && cases.Count > 0)
+                                        if (existingNullCaseEntity != null)
                                         {
-                                            var caseCDR = cases.OrderByDescending(x => x.CreatedTime).First();
-                                            tcanalCaseCDR.CaseId = caseCDR.CaseId;
-                                            tcanalCaseCDR.NumberOfCDRs = ++caseCDR.NumberOfCDRs;
-                                            tcanalCaseCDR.LastAttempt = caseCDR.LastAttempt;
-                                            prepareCDRCasesOutput.CasesToUpdate.Add(tcanalCaseCDR);
+                                            existingNullCaseEntity.NumberOfCDRs++;
+                                            existingNullCaseEntity.LastAttempt = tcanalCaseCDR.LastAttempt;
+                                            prepareCDRCasesOutput.CasesToUpdate.Add(existingNullCaseEntity);
+                                        }
+                                        else
+                                        {
+                                            tcanalCaseCDR.StatusId = suspectStatusId;
+                                            if (nullCaseEntity == null)
+                                                nullCaseEntity = tcanalCaseCDR;
+                                            else
+                                            {
+                                                nullCaseEntity.NumberOfCDRs++;
+                                                nullCaseEntity.LastAttempt = tcanalCaseCDR.LastAttempt;
+                                            }
                                         }
                                     }
                                     else
                                     {
-                                        if (record.ReceivedCallingNumberType.HasValue && record.ReceivedCallingNumberType != ReceivedCallingNumberType.International)
+                                        if (existingCasesCDRs != null && existingCasesCDRs.ContainsKey(record.ReceivedCallingNumber))
                                         {
-                                            tcanalCaseCDR.StatusId = new Guid("4ea323c2-56ba-46db-a84d-5792009924a3"); // Fraud
-                                            InsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
-                                            continue;
+                                            List<TCAnalCaseCDR> cases = existingCasesCDRs.GetRecord(record.ReceivedCallingNumber);
+                                            if (cases != null && cases.Count > 0)
+                                            {
+                                                var caseCDR = cases.OrderByDescending(x => x.CreatedTime).First();
+                                                GetUpdateOrUpdateItem(caseCDR, casesToUpdate);
+                                            }
                                         }
-                                        else if (!record.ReceivedCallingNumberType.HasValue)
+                                        else
                                         {
-                                            tcanalCaseCDR.StatusId = new Guid("43f65fbf-ba78-4211-a0bb-88edc91b26ff"); // Suspect
-                                            InsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
-                                            continue;
-                                        }
-                                        else if (record.GeneratedCalledNumber == null && record.GeneratedCallingNumber == null)
-                                        {
-                                            tcanalCaseCDR.StatusId = new Guid("43f65fbf-ba78-4211-a0bb-88edc91b26ff"); // Suspect
-                                            InsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
-                                            continue;
+                                            if (record.ReceivedCallingNumberType.HasValue && record.ReceivedCallingNumberType != ReceivedCallingNumberType.International)
+                                            {
+                                                tcanalCaseCDR.StatusId = fraudStatusId;
+                                                GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
+
+                                                continue;
+                                            }
+                                            else if (!record.ReceivedCallingNumberType.HasValue)
+                                            {
+                                                tcanalCaseCDR.StatusId = suspectStatusId;
+                                                GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
+                                                continue;
+                                            }
+                                            else if (record.GeneratedCalledNumber == null && record.GeneratedCallingNumber == null)
+                                            {
+                                                tcanalCaseCDR.StatusId = suspectStatusId;
+                                                GetInsertOrUpdateInsertedItem(tcanalCaseCDR, casesToInsert);
+                                                continue;
+                                            }
                                         }
                                     }
                                 }
 
-                                long caseCDRStartingId = caseCDRManager.ReserveIDRange(prepareCDRCasesOutput.CasesToInsert.Count);
+                                var numberOfInsertedItems = casesToInsert.Count;
+                                if (nullCaseEntity != null)
+                                    numberOfInsertedItems++;
+
+                                long caseCDRStartingId = caseCDRManager.ReserveIDRange(numberOfInsertedItems);
                                 foreach (var caseCDR in casesToInsert.Values)
                                 {
                                     caseCDR.CaseId = caseCDRStartingId++;
                                     prepareCDRCasesOutput.CasesToInsert.Add(caseCDR);
                                 }
+                                if (nullCaseEntity != null)
+                                {
+                                    nullCaseEntity.CaseId = caseCDRStartingId++;
+                                    prepareCDRCasesOutput.CasesToInsert.Add(nullCaseEntity);
+
+                                }
+
+                                foreach (var caseCDR in casesToUpdate.Values)
+                                {
+                                    prepareCDRCasesOutput.CasesToUpdate.Add(caseCDR);
+                                }
+
                                 inputArgument.OutputQueue.Enqueue(prepareCDRCasesOutput);
                             }
 
@@ -152,7 +194,7 @@ namespace TestCallAnalysis.BP.Activities
             });
         }
 
-        private void InsertOrUpdateInsertedItem(TCAnalCaseCDR tcanalCaseCDR, Dictionary<string, TCAnalCaseCDR> casesToInsert)
+        private void GetInsertOrUpdateInsertedItem(TCAnalCaseCDR tcanalCaseCDR, Dictionary<string, TCAnalCaseCDR> casesToInsert)
         {
             TCAnalCaseCDR insertedItem = null;
             if (casesToInsert.TryGetValue(tcanalCaseCDR.CallingNumber, out insertedItem))
@@ -163,6 +205,20 @@ namespace TestCallAnalysis.BP.Activities
             else
             {
                 casesToInsert.Add(tcanalCaseCDR.CallingNumber, tcanalCaseCDR);
+            }
+        }
+
+        private void GetUpdateOrUpdateItem(TCAnalCaseCDR tcanalCaseCDR, Dictionary<string, TCAnalCaseCDR> casesToUpdate)
+        {
+            TCAnalCaseCDR updatedItem = null;
+            if (casesToUpdate.TryGetValue(tcanalCaseCDR.CallingNumber, out updatedItem))
+            {
+                updatedItem.NumberOfCDRs++;
+                updatedItem.LastAttempt = tcanalCaseCDR.LastAttempt;
+            }
+            else
+            {
+                casesToUpdate.Add(tcanalCaseCDR.CallingNumber, tcanalCaseCDR);
             }
         }
     }
