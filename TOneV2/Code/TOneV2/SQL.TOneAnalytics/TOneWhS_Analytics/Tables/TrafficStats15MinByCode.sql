@@ -1,4 +1,4 @@
-﻿CREATE TABLE [TOneWhS_Analytics].[TrafficStats15Min] (
+﻿CREATE TABLE [TOneWhS_Analytics].[TrafficStats15MinByCode] (
     [Id]                             BIGINT           NULL,
     [BatchStart]                     DATETIME         NULL,
     [SwitchID]                       INT              NULL,
@@ -7,6 +7,7 @@
     [SellingNumberPlanID]            INT              NULL,
     [CountryID]                      INT              NULL,
     [SaleZoneID]                     BIGINT           NULL,
+    [SaleCode]                       VARCHAR (50)     NULL,
     [MasterPlanZoneID]               BIGINT           NULL,
     [SecondaryPlanZoneId]            BIGINT           NULL,
     [OriginatingZoneID]              BIGINT           NULL,
@@ -61,37 +62,6 @@
     [CostDealDurInSec]               DECIMAL (20, 4)  NULL,
     [ReleaseCode]                    VARCHAR (50)     NULL,
     [ReleaseSource]                  VARCHAR (10)     NULL,
-    CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
+    CONSTRAINT [IX_TrafficStats15MinByCode_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-GO
-CREATE CLUSTERED INDEX [IX_TrafficStats15Min_BatchStart]
-    ON [TOneWhS_Analytics].[TrafficStats15Min]([BatchStart] ASC);
 

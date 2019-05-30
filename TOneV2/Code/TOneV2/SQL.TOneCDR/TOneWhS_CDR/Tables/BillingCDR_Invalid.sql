@@ -8,6 +8,7 @@
     [DurationInSeconds]              DECIMAL (20, 4) NULL,
     [PDDInSeconds]                   DECIMAL (20, 4) NULL,
     [CustomerID]                     INT             NULL,
+    [CustomerAccountManagerId]       INT             NULL,
     [SellingNumberPlanID]            INT             NULL,
     [SaleZoneID]                     BIGINT          NULL,
     [SaleCode]                       VARCHAR (20)    NULL,
@@ -19,6 +20,7 @@
     [MasterPlanOriginatingZoneId]    BIGINT          NULL,
     [SecondaryPlanOriginatingZoneId] BIGINT          NULL,
     [SupplierID]                     INT             NULL,
+    [SupplierAccountManagerId]       INT             NULL,
     [SupplierZoneID]                 BIGINT          NULL,
     [CGPN]                           VARCHAR (50)    NULL,
     [CDPN]                           VARCHAR (50)    NULL,
@@ -48,8 +50,11 @@
     [OrigCostDealID]                 INT             NULL,
     [OrigCostDealZoneGroupNb]        INT             NULL,
     [Type]                           INT             NULL,
-    [QueueItemId]                    BIGINT          NULL
+    [QueueItemId]                    BIGINT          NULL,
+    [ExtraFields]                    NVARCHAR (MAX)  NULL
 );
+
+
 
 
 

@@ -3,7 +3,9 @@
     [BatchStart]                     DATETIME         NULL,
     [SwitchID]                       INT              NULL,
     [CustomerId]                     INT              NULL,
+    [CustomerAccountManagerId]       INT              NULL,
     [SupplierId]                     INT              NULL,
+    [SupplierAccountManagerId]       INT              NULL,
     [CustomerProfileId]              INT              NULL,
     [SupplierProfileId]              INT              NULL,
     [SupplierZoneId]                 BIGINT           NULL,
@@ -51,6 +53,8 @@
     [SaleFinancialAccountId]         INT              NULL,
     [CostFinancialAccountId]         INT              NULL,
     [Type]                           INT              NULL);
+
+
 
 
 

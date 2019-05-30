@@ -3,6 +3,7 @@
     [BatchStart]                     DATETIME         NULL,
     [SwitchID]                       INT              NULL,
     [CustomerId]                     INT              NULL,
+    [CustomerAccountManagerId]       INT              NULL,
     [CustomerProfileId]              INT              NULL,
     [SaleZoneId]                     BIGINT           NULL,
     [MasterPlanZoneID]               BIGINT           NULL,
@@ -11,6 +12,7 @@
     [MasterPlanOriginatingZoneId]    BIGINT           NULL,
     [SecondaryPlanOriginatingZoneId] BIGINT           NULL,
     [SupplierId]                     INT              NULL,
+    [SupplierAccountManagerId]       INT              NULL,
     [SupplierProfileId]              INT              NULL,
     [SupplierZoneId]                 BIGINT           NULL,
     [NumberOfCalls]                  INT              NULL,
@@ -53,6 +55,8 @@
     [Type]                           INT              NULL,
     CONSTRAINT [IX_BillingStatsDaily_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

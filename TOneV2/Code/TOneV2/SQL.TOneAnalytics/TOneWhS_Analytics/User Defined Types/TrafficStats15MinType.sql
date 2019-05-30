@@ -3,6 +3,7 @@
     [BatchStart]                     DATETIME         NULL,
     [SwitchID]                       INT              NULL,
     [CustomerID]                     INT              NULL,
+    [CustomerAccountManagerId]       INT              NULL,
     [SellingNumberPlanID]            INT              NULL,
     [CountryID]                      INT              NULL,
     [SaleZoneID]                     BIGINT           NULL,
@@ -12,6 +13,7 @@
     [MasterPlanOriginatingZoneID]    BIGINT           NULL,
     [SecondaryPlanOriginatingZoneId] BIGINT           NULL,
     [SupplierId]                     INT              NULL,
+    [SupplierAccountManagerId]       INT              NULL,
     [SupplierZoneId]                 BIGINT           NULL,
     [FirstCDRAttempt]                DATETIME         NULL,
     [LastCDRAttempt]                 DATETIME         NULL,
@@ -59,6 +61,8 @@
     [CostDealTierNb]                 INT              NULL,
     [CostDealRateTierNb]             INT              NULL,
     [CostDealDurInSec]               DECIMAL (20, 4)  NULL);
+
+
 
 
 

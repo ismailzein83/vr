@@ -1,4 +1,4 @@
-﻿CREATE TABLE [TOneWhS_Analytics].[TrafficStats15Min] (
+﻿CREATE TYPE [TOneWhS_Analytics].[TrafficStats15MinByCodeType] AS TABLE (
     [Id]                             BIGINT           NULL,
     [BatchStart]                     DATETIME         NULL,
     [SwitchID]                       INT              NULL,
@@ -7,6 +7,7 @@
     [SellingNumberPlanID]            INT              NULL,
     [CountryID]                      INT              NULL,
     [SaleZoneID]                     BIGINT           NULL,
+    [SaleCode]                       VARCHAR (50)     NULL,
     [MasterPlanZoneID]               BIGINT           NULL,
     [SecondaryPlanZoneId]            BIGINT           NULL,
     [OriginatingZoneID]              BIGINT           NULL,
@@ -39,11 +40,14 @@
     [PortOUT]                        VARCHAR (42)     NULL,
     [CustomerProfileId]              INT              NULL,
     [SupplierProfileId]              INT              NULL,
+    [ReleaseCode]                    VARCHAR (50)     NULL,
+    [ReleaseSource]                  VARCHAR (10)     NULL,
     [ReleaseSourceSCount]            INT              NULL,
     [SaleExtraCharges]               DECIMAL (26, 10) NULL,
     [CostExtraCharges]               DECIMAL (26, 10) NULL,
     [SaleFinancialAccountId]         INT              NULL,
     [CostFinancialAccountId]         INT              NULL,
+    [SaleDealDurInSec]               DECIMAL (20, 4)  NULL,
     [Type]                           INT              NULL,
     [OrigSaleDealID]                 INT              NULL,
     [OrigSaleDealZoneGroupNb]        INT              NULL,
@@ -51,47 +55,11 @@
     [SaleDealZoneGroupNb]            INT              NULL,
     [SaleDealTierNb]                 INT              NULL,
     [SaleDealRateTierNb]             INT              NULL,
-    [SaleDealDurInSec]               DECIMAL (20, 4)  NULL,
     [OrigCostDealID]                 INT              NULL,
     [OrigCostDealZoneGroupNb]        INT              NULL,
     [CostDealID]                     INT              NULL,
     [CostDealZoneGroupNb]            INT              NULL,
     [CostDealTierNb]                 INT              NULL,
     [CostDealRateTierNb]             INT              NULL,
-    [CostDealDurInSec]               DECIMAL (20, 4)  NULL,
-    [ReleaseCode]                    VARCHAR (50)     NULL,
-    [ReleaseSource]                  VARCHAR (10)     NULL,
-    CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
-);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-GO
-CREATE CLUSTERED INDEX [IX_TrafficStats15Min_BatchStart]
-    ON [TOneWhS_Analytics].[TrafficStats15Min]([BatchStart] ASC);
+    [CostDealDurInSec]               DECIMAL (20, 4)  NULL);
 
