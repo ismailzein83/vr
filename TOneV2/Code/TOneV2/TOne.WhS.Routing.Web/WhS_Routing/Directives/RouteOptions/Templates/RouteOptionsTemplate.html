@@ -1,0 +1,24 @@
+﻿<div class="responsive-container" style="white-space: normal;">
+    <span ng-repeat="details in scopeModel.routeOptionDetails" style="font-size: 11px; display: inline-block; text-align: center; padding: 0 10px 0 0;">
+        <span vr-desktop-element class="option bold-label" ng-class="details.EvaluatedStatusCssClass" title="Rate: {{details.SupplierRate}}, Services: {{details.ExactSupplierServiceSymbols}}">
+            <span ng-if="details.Percentage!=null">{{details.Percentage}}% </span> {{details.SupplierName}}
+        </span>
+        <span vr-mobile-element ng-class="details.EvaluatedStatusCssClass" bs-tooltip data-title="Rate: {{details.SupplierRate}}"><span ng-if="details.Percentage!=null">{{details.Percentage}}% </span> {{details.SupplierName}}</span>
+
+        <span ng-if="details.Backups != null && details.Backups.length > 0">
+            &lt;
+            <span ng-repeat="backupDetails in details.Backups">
+                <span vr-desktop-element style="font-style:italic" class="option" ng-class="backupDetails.EvaluatedStatusCssClass"
+                      title="Rate: {{backupDetails.SupplierRate}}, Services: {{backupDetails.ExactSupplierServiceSymbols}}">
+                    {{backupDetails.SupplierName}}
+                </span>
+                <span vr-mobile-element style="font-style:italic" bs-tooltip class="option" ng-class="backupDetails.EvaluatedStatusCssClass"
+                      data-title="Rate: {{backupDetails.SupplierRate}}">
+                    {{backupDetails.SupplierName}}
+                </span>
+                <span ng-if="!$last">,</span>
+            </span>
+            &gt;
+        </span>
+    </span>
+</div>

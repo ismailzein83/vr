@@ -59,6 +59,7 @@ app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'VRUIUtilsSe
                             ctrl.customerRouteIndexCommandTimeout = payload.CustomerRoute.IndexesCommandTimeoutInMinutes;
                             ctrl.customerRouteMaxDOP = payload.CustomerRoute.MaxDOP;
                             ctrl.customerRouteKeepBackupsForRemovedOptions = payload.CustomerRoute.KeepBackUpsForRemovedOptions;
+                            ctrl.customerRouteNeedsApproval = payload.CustomerRoute.NeedsApproval;
                         }
 
                         if (payload.ProductRoute != undefined) {
@@ -76,7 +77,7 @@ app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'VRUIUtilsSe
                         }
 
                         if (payload.PartialRoute != undefined) {
-                            ctrl.needsApproval = payload.PartialRoute.NeedsApproval;
+                            ctrl.partialRouteNeedsApproval = payload.PartialRoute.NeedsApproval;
                         }
 
                         if (payload.UsersRole != undefined) {
@@ -124,7 +125,8 @@ app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'VRUIUtilsSe
                             NumberOfOptions: ctrl.customerRouteNumberOfOptions,
                             KeepBackUpsForRemovedOptions: ctrl.customerRouteKeepBackupsForRemovedOptions,
                             IndexesCommandTimeoutInMinutes: ctrl.customerRouteIndexCommandTimeout,
-                            MaxDOP: ctrl.customerRouteMaxDOP
+                            MaxDOP: ctrl.customerRouteMaxDOP,
+                            NeedsApproval: ctrl.customerRouteNeedsApproval
                         },
                         ProductRoute: {
                             $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
@@ -136,7 +138,7 @@ app.directive('vrWhsRoutingCustomerrouteSettings', ['UtilsService', 'VRUIUtilsSe
                         },
                         PartialRoute: {
                             $type: "TOne.WhS.Routing.Entities.PartialRouteBuildConfiguration, TOne.WhS.Routing.Entities",
-                            NeedsApproval: ctrl.needsApproval
+                            NeedsApproval: ctrl.partialRouteNeedsApproval
                         },
                         UsersRole: {
                             $type: "TOne.WhS.Routing.Entities.UsersRoleConfiguration, TOne.WhS.Routing.Entities",

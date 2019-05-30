@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingPartialrouteApprovalStaticeditor', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_RoutingApprovalTypeEnum',
-    function (UtilsService, VRUIUtilsService, WhS_Routing_RoutingApprovalTypeEnum) {
+app.directive('vrWhsRoutingPartialrouteApprovalStaticeditor', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_RoutingApprovalTypeEnum', 'WhS_Routing_UtilsService',
+    function (UtilsService, VRUIUtilsService, WhS_Routing_RoutingApprovalTypeEnum, WhS_Routing_UtilsService) {
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -31,7 +31,7 @@ app.directive('vrWhsRoutingPartialrouteApprovalStaticeditor', ['UtilsService', '
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.legendHeader = "Legend";
-                $scope.scopeModel.legendContent = getLegendContent();
+                $scope.scopeModel.legendContent = WhS_Routing_UtilsService.getLegendContent();
 
                 $scope.scopeModel.totalChangedRoutes;
 
@@ -39,15 +39,6 @@ app.directive('vrWhsRoutingPartialrouteApprovalStaticeditor', ['UtilsService', '
                     gridAPI = api;
                     gridReadyPromiseDeferred.resolve();
                 };
-
-                function getLegendContent() {
-                    return '<div style="font-size:12px; margin:10px">' +
-                        '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #FF0000; margin: 0px 3px"></div> Blocked </div>' +
-                        '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #FFA500; margin: 0px 3px"></div> Lossy </div>' +
-                        '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #0000FF; margin: 0px 3px"></div> Forced </div>' +
-                        '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #28A744; margin: 0px 3px"></div> Market Price </div>' +
-                        '</div>';
-                }
 
                 defineApi();
             }

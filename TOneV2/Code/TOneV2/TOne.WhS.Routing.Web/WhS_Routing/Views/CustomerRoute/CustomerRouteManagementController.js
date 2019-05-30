@@ -2,9 +2,9 @@
 
     "use strict";
 
-    customerRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Routing_RoutingDatabaseTypeEnum', 'Whs_BusinessEntity_ModuleNamesEnum'];
+    customerRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_UtilsService'];
 
-    function customerRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Routing_RoutingDatabaseTypeEnum, Whs_BusinessEntity_ModuleNamesEnum) {
+    function customerRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_UtilsService) {
 
         var parametersCustomersIds;
         var parametersZoneIds;
@@ -13,23 +13,8 @@
         var gridAPI;
         var gridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var routingDatabaseSelectorAPI;
-        var routingDatabaseReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var saleZoneSelectorAPI;
-        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var carrierAccountDirectiveAPI;
-        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var supplierCarrierAccountDirectiveAPI;
-        var supplierCarrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var routeStatusSelectorAPI;
-        var routeStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var routingDatabaseSelectPromiseDeferred = UtilsService.createPromiseDeferred();
-        var routingDatabaseLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        var gridFiltersAPI;
+        var gridFiltersReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -49,11 +34,16 @@
 
         function defineScope() {
             $scope.legendHeader = "Legend";
-            $scope.legendContent = getLegendContent();
+            $scope.legendContent = WhS_Routing_UtilsService.getLegendContent();
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onGridFiltersReady = function (api) {
+                gridFiltersAPI = api;
+                gridFiltersReadyPromiseDeferred.resolve();
             };
 
             $scope.onRoutingDatabaseSelectorReady = function (api) {
@@ -83,17 +73,8 @@
 
             $scope.searchClicked = function () {
                 if (gridAPI != undefined)
-                    return gridAPI.loadGrid(getFilterObject());
+                    return gridAPI.loadGrid(gridFiltersAPI.getData());
             };
-
-            function getLegendContent() {
-                return '<div style="font-size:12px; margin:10px">' +
-                    '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #FF0000; margin: 0px 3px"></div> Blocked </div>' +
-                    '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #FFA500; margin: 0px 3px"></div> Lossy </div>' +
-                    '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #0000FF; margin: 0px 3px"></div> Forced </div>' +
-                    '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #28A744; margin: 0px 3px"></div> Market Price </div>' +
-                    '</div>';
-            }
 
             function getFilterObject() {
 
@@ -131,7 +112,7 @@
 
             var promiseDeferred = UtilsService.createPromiseDeferred();
 
-            UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadSaleZoneSection, loadCustomersSection, loadSuppliersSection, loadRouteStatusSelector]).then(function () {
+            UtilsService.waitMultipleAsyncOperations([loadGridFilters]).then(function () {
                 gridReadyPromiseDeferred.promise.then(function () {
                     if (loadGrid) {
                         $scope.searchClicked();
@@ -144,119 +125,22 @@
 
             return promiseDeferred.promise.then(function () {
                 $scope.isLoading = false;
-                routingDatabaseSelectPromiseDeferred = undefined;
             });
         }
 
+        function loadGridFilters() {
+            var loadGridFiltersPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        function loadRoutingDatabaseSelector() {
-            var loadRoutingDatabasePromiseDeferred = UtilsService.createPromiseDeferred();
-
-            routingDatabaseReadyPromiseDeferred.promise.then(function () {
-                var routingDatabaseSelectorPayload = { onLoadRoutingDatabaseInfo: onLoadRoutingDatabaseInfo };
-                VRUIUtilsService.callDirectiveLoad(routingDatabaseSelectorAPI, routingDatabaseSelectorPayload, loadRoutingDatabasePromiseDeferred);
-            });
-
-            return loadRoutingDatabasePromiseDeferred.promise;
-        }
-
-        function onLoadRoutingDatabaseInfo(selectedObject) {
-            selectedRoutingDatabaseObject = selectedObject;
-            routingDatabaseLoadPromiseDeferred.resolve();
-        }
-
-        function loadSaleZoneSection() {
-            var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
-
-            UtilsService.waitMultiplePromises([routingDatabaseLoadPromiseDeferred.promise, saleZoneReadyPromiseDeferred.promise]).then(function () {
-                var payload = {
-                    onSellingNumberPlanSelectionChanged: onSellingNumberPlanSelectionchanged,
-                    areSaleZonesRequired: false
-                };
-
-                if (parametersZoneIds != null)
-                    payload.selectedIds = parametersZoneIds;
-                var databaseType = getDatabaseEffectiveType(selectedRoutingDatabaseObject);
-                if (databaseType != undefined)
-                    payload.filter = { EffectiveMode: databaseType };
-
-                VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, payload, loadSaleZonePromiseDeferred);
-            });
-
-            return loadSaleZonePromiseDeferred.promise;
-        }
-        function loadCustomersSection() {
-            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            var payload = { filter: { Filters: getCarrierAccountSelectorFilter() } };
-
-            if (parametersCustomersIds != null)
-                payload.selectedIds = parametersCustomersIds;
-
-            carrierAccountReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, payload, loadCarrierAccountPromiseDeferred);
-            });
-
-            return loadCarrierAccountPromiseDeferred.promise;
-        }
-        function loadSuppliersSection() {
-            var loadSupplierCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            var payload = { filter: { Filters: getCarrierAccountSelectorFilter() } };
-
-            supplierCarrierAccountReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(supplierCarrierAccountDirectiveAPI, payload, loadSupplierCarrierAccountPromiseDeferred);
-            });
-
-            return loadSupplierCarrierAccountPromiseDeferred.promise;
-        }
-        function loadRouteStatusSelector() {
-            var loadRouteStatusPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            routeStatusSelectorReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(routeStatusSelectorAPI, undefined, loadRouteStatusPromiseDeferred);
-            });
-
-            return loadRouteStatusPromiseDeferred.promise;
-        }
-
-        function getDatabaseEffectiveType(selectedObject) {
-            if (selectedObject == undefined) {
-                return undefined;
-            }
-
-            if (selectedObject.Type == WhS_Routing_RoutingDatabaseTypeEnum.Current.value) {
-                return VRCommon_EntityFilterEffectiveModeEnum.Current.value;
-            }
-            if (selectedObject.Type == WhS_Routing_RoutingDatabaseTypeEnum.Future.value) {
-                return VRCommon_EntityFilterEffectiveModeEnum.Future.value;
-            }
-        }
-
-        function onSellingNumberPlanSelectionchanged(selectedSellingNumberPlan) {
-
-            var selectedSellingNumberPlanId = selectedSellingNumberPlan != undefined ? selectedSellingNumberPlan.SellingNumberPlanId : undefined;
-
-            var customerSelectorPayload = {};
-            if (selectedSellingNumberPlanId != undefined) {
-                customerSelectorPayload.filter = { SellingNumberPlanId: selectedSellingNumberPlanId };
-            }
-            if ($scope.selectedCustomer != undefined && (selectedSellingNumberPlanId == undefined || selectedSellingNumberPlanId == $scope.selectedCustomer.SellingNumberPlanId)) {
-                customerSelectorPayload.selectedIds = $scope.selectedCustomer.CarrierAccountId;
-            }
-            VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, customerSelectorPayload, undefined);
-        }
-
-        function getCarrierAccountSelectorFilter() {
-            var carrierAccountSelectorFilters = [];
-
-            var carrierAccountFilterAffected = {
-                $type: 'TOne.WhS.BusinessEntity.Business.AssignedCarrierAccountsForAccountManager, TOne.WhS.BusinessEntity.Business',
-                ModuleName: Whs_BusinessEntity_ModuleNamesEnum.CustomerRoute.value
+            var payload = {
+                zoneIds: parametersZoneIds,
+                customersIds: parametersCustomersIds
             };
-            carrierAccountSelectorFilters.push(carrierAccountFilterAffected);
 
-            return carrierAccountSelectorFilters;
+            gridFiltersReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(gridFiltersAPI, payload, loadGridFiltersPromiseDeferred);
+            });
+
+            return loadGridFiltersPromiseDeferred.promise;
         }
     }
 

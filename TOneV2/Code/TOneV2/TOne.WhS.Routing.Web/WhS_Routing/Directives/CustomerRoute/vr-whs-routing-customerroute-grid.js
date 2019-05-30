@@ -24,6 +24,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
         function customerRouteGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var hidemenuactions = $attrs.hidemenuactions != undefined;
             var isDatabaseTypeCurrent;
             var routeOptionEvaluatedStatusEnum = UtilsService.getArrayEnum(WhS_Routing_RouteOptionEvaluatedStatusEnum);
 
@@ -54,8 +55,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var customerRoute = response.Data[i];
-                                extendCutomerRouteObject(customerRoute);
-                                customerRouteLoadGridPromises.push(customerRoute.cutomerRouteLoadDeferred.promise);
+                                customerRouteLoadGridPromises.push(extendCutomerRouteObject(customerRoute));
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(customerRoute);
                             }
                         }
@@ -103,29 +103,26 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
 
             function extendCutomerRouteObject(customerRoute) {
 
+                var promises = [];
+
                 if (customerRoute != undefined && customerRoute.RouteOptionDetails != undefined) {
-                    for (var i = 0; i < customerRoute.RouteOptionDetails.length; i++) {
-                        var currentRouteOptionDetail = customerRoute.RouteOptionDetails[i];
+                    customerRoute.cutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(customerRoute.cutomerRouteOptionsLoadDeferred.promise);
 
-                        var evaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, currentRouteOptionDetail.EvaluatedStatus, "value");
-                        if (evaluatedStatus != undefined) {
-                            currentRouteOptionDetail.EvaluatedStatusCssClass = evaluatedStatus.cssclass;
+                    customerRoute.onRouteOptionsReady = function (api) {
+                        customerRoute.routeOptionsAPI = api;
+
+                        var routeOptionsPayload;
+                        if (customerRoute.RouteOptionDetails != undefined) {
+                            routeOptionsPayload = { routeOptionDetails: customerRoute.RouteOptionDetails };
                         }
-
-                        if (currentRouteOptionDetail.Backups) {
-                            for (var j = 0; j < currentRouteOptionDetail.Backups.length; j++) {
-                                var currentRouteBackupOptionDetail = currentRouteOptionDetail.Backups[j];
-
-                                var backupEvaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, currentRouteBackupOptionDetail.EvaluatedStatus, "value");
-                                if (backupEvaluatedStatus != undefined) {
-                                    currentRouteBackupOptionDetail.EvaluatedStatusCssClass = backupEvaluatedStatus.cssclass;
-                                }
-                            }
-                        }
-                    }
+                        VRUIUtilsService.callDirectiveLoad(customerRoute.routeOptionsAPI, routeOptionsPayload, customerRoute.cutomerRouteOptionsLoadDeferred);
+                    };
                 }
 
                 customerRoute.cutomerRouteLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(customerRoute.cutomerRouteLoadDeferred.promise);
+
                 customerRoute.onServiceViewerReady = function (api) {
                     customerRoute.serviceViewerAPI = api;
 
@@ -135,58 +132,62 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                     }
                     VRUIUtilsService.callDirectiveLoad(customerRoute.serviceViewerAPI, serviceViewerPayload, customerRoute.cutomerRouteLoadDeferred);
                 };
+
+                return UtilsService.waitMultiplePromises(promises);
             }
 
             function defineMenuActions() {
-                $scope.gridMenuActions = function (dataItem) {
-                    var menu = [];
+                if (!hidemenuactions) {
+                    $scope.gridMenuActions = function (dataItem) {
+                        var menu = [];
 
-                    if (dataItem.CanEditMatchingRule) {
-                        menu.push({
-                            name: "Edit Matching Rule",
-                            clicked: editLinkedRouteRule,
-                            haspermission: hasUpdateRulePermission
-                        });
-                    }
-                    else {
-                        menu.push({
-                            name: "Matching Rule",
-                            clicked: viewRouteRuleEditor,
-                        });
-                    }
+                        if (dataItem.CanEditMatchingRule) {
+                            menu.push({
+                                name: "Edit Matching Rule",
+                                clicked: editLinkedRouteRule,
+                                haspermission: hasUpdateRulePermission
+                            });
+                        }
+                        else {
+                            menu.push({
+                                name: "Matching Rule",
+                                clicked: viewRouteRuleEditor,
+                            });
+                        }
 
-                    if (dataItem.CanAddRuleByCode || dataItem.LinkedRouteRuleIds == undefined || dataItem.LinkedRouteRuleIds.length == 0) {
-                        menu.push({
-                            name: "Add Rule By Code",
-                            clicked: addRouteRuleByCode,
-                            haspermission: hasAddRulePermission
-                        });
-                    }
+                        if (dataItem.CanAddRuleByCode || dataItem.LinkedRouteRuleIds == undefined || dataItem.LinkedRouteRuleIds.length == 0) {
+                            menu.push({
+                                name: "Add Rule By Code",
+                                clicked: addRouteRuleByCode,
+                                haspermission: hasAddRulePermission
+                            });
+                        }
 
-                    if (dataItem.CanAddRuleByZone) {
-                        menu.push({
-                            name: "Add Rule By Zone",
-                            clicked: addRouteRuleByZone,
-                            haspermission: hasAddRulePermission
-                        });
-                    }
+                        if (dataItem.CanAddRuleByZone) {
+                            menu.push({
+                                name: "Add Rule By Zone",
+                                clicked: addRouteRuleByZone,
+                                haspermission: hasAddRulePermission
+                            });
+                        }
 
-                    if (dataItem.CanAddRuleByCountry) {
-                        menu.push({
-                            name: "Add Rule By Country",
-                            clicked: addRouteRuleByCountry,
-                            haspermission: hasAddRulePermission
-                        });
-                    }
+                        if (dataItem.CanAddRuleByCountry) {
+                            menu.push({
+                                name: "Add Rule By Country",
+                                clicked: addRouteRuleByCountry,
+                                haspermission: hasAddRulePermission
+                            });
+                        }
 
-                    if (dataItem.LinkedRouteRuleIds != undefined && dataItem.LinkedRouteRuleIds.length > 1) {
-                        menu.push({
-                            name: "Linked Rules",
-                            clicked: viewLinkedRouteRules
-                        });
-                    }
-                    return menu;
-                };
+                        if (dataItem.LinkedRouteRuleIds != undefined && dataItem.LinkedRouteRuleIds.length > 1) {
+                            menu.push({
+                                name: "Linked Rules",
+                                clicked: viewLinkedRouteRules
+                            });
+                        }
+                        return menu;
+                    };
+                }
             }
 
             function hasUpdateRulePermission() {

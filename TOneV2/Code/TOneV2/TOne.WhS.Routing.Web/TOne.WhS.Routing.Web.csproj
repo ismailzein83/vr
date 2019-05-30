@@ -186,12 +186,16 @@
     <Content Include="WhS_Routing\Constant\RoutingSaleZoneRangeOptions.js" />
     <Content Include="WhS_Routing\Constant\TOneRouteRangeType.js" />
     <Content Include="WhS_Routing\Constant\QualityOptionTypeEnum.js" />
+    <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteGridFilterTemplate.html" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteDetailTemplate.html" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteApprovalStaticEditorTemplate.html" />
+    <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-gridfilters.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-details.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-grid.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-settings.js" />
+    <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-approval-staticeditor.js" />
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockCustomeAccount\Templates\BlockCustomerAccountAction.html" />
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockCustomeAccount\Templates\BlockCustomerAccountActionDefinition.html" />
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockCustomeAccount\whs-routing-actiondefinition-blockcustomeraccount.js" />
@@ -298,6 +302,8 @@
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-routingentitiesupdaterprocess.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-buildpartialrouteprocess.js" />
     <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationRuntime\RouteRuleQualityConfigurationEditor.js" />
+    <Content Include="WhS_Routing\Directives\RouteOptions\Templates\RouteOptionsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteOptions\vr-whs-routing-routeoptions.js" />
     <Content Include="WhS_Routing\Directives\RouteRule\Templates\RouteRuleViewTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRule\vr-whs-be-routerule-view.js" />
     <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationGridTemplate.html" />
@@ -445,6 +451,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

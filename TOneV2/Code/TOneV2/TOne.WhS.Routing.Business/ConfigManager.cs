@@ -209,6 +209,12 @@ namespace TOne.WhS.Routing.Business
         {
             return GetUsersRoleConfiguration().ApprovalTaskUsersIds;
         }
+
+        public bool GetCustomerRouteNeedsApproval()
+        {
+            return GetCustomerRouteBuildConfiguration().NeedsApproval;
+        }
+
         #endregion
 
         #region Private Methods

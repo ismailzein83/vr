@@ -45,8 +45,7 @@ app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotifica
                             for (var i = 0; i < response.Data.length; i++) {
                                 var customerRoute = response.Data[i];
                                 if (customerRoute != undefined) {
-                                    extendCutomerRouteObject(customerRoute.RouteOptionDetails);
-                                    extendCutomerRouteObject(customerRoute.OrigRouteOptionDetails);
+                                    customerRouteLoadGridPromises.push(extendCutomerRouteObject(customerRoute));
                                 }
                             }
                         }
@@ -89,29 +88,41 @@ app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotifica
                     ctrl.onReady(api);
             }
 
-            function extendCutomerRouteObject(routeOptionDetails) {
+            function extendCutomerRouteObject(customerRoute) {
 
-                if (routeOptionDetails != undefined) {
-                    for (var i = 0; i < routeOptionDetails.length; i++) {
-                        var currentRouteOptionDetail = routeOptionDetails[i];
+                var promises = [];
+                if (customerRoute != undefined) {
 
-                        var evaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, currentRouteOptionDetail.EvaluatedStatus, "value");
-                        if (evaluatedStatus != undefined) {
-                            currentRouteOptionDetail.EvaluatedStatusCssClass = evaluatedStatus.cssclass;
-                        }
+                    if (customerRoute.OrigRouteOptionDetails != undefined) {
+                        customerRoute.origCutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(customerRoute.origCutomerRouteOptionsLoadDeferred.promise);
 
-                        if (currentRouteOptionDetail.Backups) {
-                            for (var j = 0; j < currentRouteOptionDetail.Backups.length; j++) {
-                                var currentRouteBackupOptionDetail = currentRouteOptionDetail.Backups[j];
+                        customerRoute.onOrigRouteOptionsReady = function (api) {
+                            customerRoute.origRouteOptionsAPI = api;
 
-                                var backupEvaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, currentRouteBackupOptionDetail.EvaluatedStatus, "value");
-                                if (backupEvaluatedStatus != undefined) {
-                                    currentRouteBackupOptionDetail.EvaluatedStatusCssClass = backupEvaluatedStatus.cssclass;
-                                }
+                            var origRouteOptionsPayload = { routeOptionDetails: customerRoute.OrigRouteOptionDetails };
+
+                            VRUIUtilsService.callDirectiveLoad(customerRoute.origRouteOptionsAPI, origRouteOptionsPayload, customerRoute.origCutomerRouteOptionsLoadDeferred);
+                        };
+                    }
+
+                    if (customerRoute.RouteOptionDetails != undefined) {
+                        customerRoute.cutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(customerRoute.cutomerRouteOptionsLoadDeferred.promise);
+
+                        customerRoute.onRouteOptionsReady = function (api) {
+                            customerRoute.routeOptionsAPI = api;
+
+                            var routeOptionsPayload;
+                            if (customerRoute.RouteOptionDetails != undefined) {
+                                routeOptionsPayload = { routeOptionDetails: customerRoute.RouteOptionDetails };
                             }
-                        }
+                            VRUIUtilsService.callDirectiveLoad(customerRoute.routeOptionsAPI, routeOptionsPayload, customerRoute.cutomerRouteOptionsLoadDeferred);
+                        };
                     }
                 }
+
+                return UtilsService.waitMultiplePromises(promises);
             }
         }
 

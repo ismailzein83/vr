@@ -12,6 +12,7 @@
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:twbba="clr-namespace:TOne.WhS.BusinessEntity.BP.Activities;assembly=TOne.WhS.BusinessEntity.BP.Activities"
  xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
+ xmlns:twrb="clr-namespace:TOne.WhS.Routing.Business;assembly=TOne.WhS.Routing.Business"
  xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Arguments;assembly=TOne.WhS.Routing.BP.Arguments"
  xmlns:twrba1="clr-namespace:TOne.WhS.RouteSync.BP.Activities;assembly=TOne.WhS.RouteSync.BP.Activities"
  xmlns:twrba2="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
@@ -20,6 +21,7 @@
  xmlns:twre1="clr-namespace:TOne.WhS.RouteSync.Entities;assembly=TOne.WhS.RouteSync.Entities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
+ xmlns:vbmb="clr-namespace:Vanrise.BusinessProcess.MainExtensions.BPTaskTypes;assembly=Vanrise.BusinessProcess.MainExtensions"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
@@ -41,6 +43,8 @@
       <x:String>TOne.WhS.BusinessEntity.Entities</x:String>
       <x:String>TOne.WhS.RouteSync.Entities</x:String>
       <x:String>System.Collections.Concurrent</x:String>
+      <x:String>TOne.WhS.Routing.Business</x:String>
+      <x:String>Vanrise.BusinessProcess.MainExtensions.BPTaskTypes</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -61,6 +65,7 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Common</AssemblyReference>
@@ -78,6 +83,7 @@
       <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
@@ -116,6 +122,12 @@
       <Variable x:TypeArguments="x:Boolean" Name="BuildRouteSync" />
       <Variable x:TypeArguments="x:Boolean" Default="True" Name="ShouldApplyCodeZoneMatch" />
       <Variable x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)" Name="SwitchSyncOutputDict" />
+      <Variable x:TypeArguments="x:Boolean" Name="NeedsApproval" />
+      <Variable x:TypeArguments="x:Int64" Name="Decision" />
+      <Variable x:TypeArguments="x:Object" Name="MaxSupplierRateTimeStamp" />
+      <Variable x:TypeArguments="x:Object" Name="MaxSaleRateTimeStamp" />
+      <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="NextOpenOrCloseSaleRateTime" />
+      <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="NextOpenOrCloseSupplierRateTime" />
     </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
@@ -606,244 +618,342 @@
         </InArgument>
       </twrba2:UnLoadSupplierCodesFromSubProcesses.SubProcessesRuntimeProcessIds>
     </twrba2:UnLoadSupplierCodesFromSubProcesses>
-    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_3">
-      <Sequence DisplayName="Finalize_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_7">
-        <Sequence.Variables>
-          <Variable x:TypeArguments="x:Object" Name="MaxSupplierRateTimeStamp" />
-          <Variable x:TypeArguments="x:Object" Name="MaxSaleRateTimeStamp" />
-          <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="NextOpenOrCloseSaleRateTime" />
-          <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="NextOpenOrCloseSupplierRateTime" />
-        </Sequence.Variables>
-        <If sap2010:WorkflowViewState.IdRef="If_8">
-          <If.Condition>
-            <InArgument x:TypeArguments="x:Boolean">
-              <mca:CSharpValue x:TypeArguments="x:Boolean">Input.RoutingDatabaseType==RoutingDatabaseType.Current</mca:CSharpValue>
-            </InArgument>
-          </If.Condition>
-          <If.Then>
-            <Parallel sap2010:WorkflowViewState.IdRef="Parallel_5">
-              <twbba:GetMaxSupplierRateTimeStamp Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetMaxSupplierRateTimeStamp_2">
-                <twbba:GetMaxSupplierRateTimeStamp.MaxSupplierRateTimeStamp>
-                  <OutArgument x:TypeArguments="x:Object">
-                    <mca:CSharpReference x:TypeArguments="x:Object">MaxSupplierRateTimeStamp</mca:CSharpReference>
-                  </OutArgument>
-                </twbba:GetMaxSupplierRateTimeStamp.MaxSupplierRateTimeStamp>
-              </twbba:GetMaxSupplierRateTimeStamp>
-              <twbba:GetMaxSaleRateTimeStamp Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetMaxSaleRateTimeStamp_2">
-                <twbba:GetMaxSaleRateTimeStamp.MaxSaleRateTimeStamp>
-                  <OutArgument x:TypeArguments="x:Object">
-                    <mca:CSharpReference x:TypeArguments="x:Object">MaxSaleRateTimeStamp</mca:CSharpReference>
-                  </OutArgument>
-                </twbba:GetMaxSaleRateTimeStamp.MaxSaleRateTimeStamp>
-              </twbba:GetMaxSaleRateTimeStamp>
-              <twbba:GetNextOpenOrCloseSaleRateTime Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetNextOpenOrCloseSaleRateTime_2">
-                <twbba:GetNextOpenOrCloseSaleRateTime.EffectiveDate>
-                  <InArgument x:TypeArguments="s:DateTime">
-                    <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime.Value</mca:CSharpValue>
-                  </InArgument>
-                </twbba:GetNextOpenOrCloseSaleRateTime.EffectiveDate>
-                <twbba:GetNextOpenOrCloseSaleRateTime.NextOpenOrCloseSaleRateTime>
-                  <OutArgument x:TypeArguments="s:Nullable(s:DateTime)">
-                    <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSaleRateTime</mca:CSharpReference>
-                  </OutArgument>
-                </twbba:GetNextOpenOrCloseSaleRateTime.NextOpenOrCloseSaleRateTime>
-              </twbba:GetNextOpenOrCloseSaleRateTime>
-              <twbba:GetNextOpenOrCloseSupplierRateTime Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetNextOpenOrCloseSupplierRateTime_2">
-                <twbba:GetNextOpenOrCloseSupplierRateTime.EffectiveDate>
-                  <InArgument x:TypeArguments="s:DateTime">
-                    <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime.Value</mca:CSharpValue>
-                  </InArgument>
-                </twbba:GetNextOpenOrCloseSupplierRateTime.EffectiveDate>
-                <twbba:GetNextOpenOrCloseSupplierRateTime.NextOpenOrCloseSupplierRateTime>
-                  <OutArgument x:TypeArguments="s:Nullable(s:DateTime)">
-                    <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSupplierRateTime</mca:CSharpReference>
-                  </OutArgument>
-                </twbba:GetNextOpenOrCloseSupplierRateTime.NextOpenOrCloseSupplierRateTime>
-              </twbba:GetNextOpenOrCloseSupplierRateTime>
-            </Parallel>
-          </If.Then>
-        </If>
-        <Parallel sap2010:WorkflowViewState.IdRef="Parallel_6">
-          <twrba2:FinalizeCustomerRouteDatabase Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FinalizeCustomerRouteDatabase_1">
+    <twrba2:GetCustomerRouteParameters sap2010:WorkflowViewState.IdRef="GetCustomerRouteParameters_1">
+      <twrba2:GetCustomerRouteParameters.NeedsApproval>
+        <OutArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpReference x:TypeArguments="x:Boolean">NeedsApproval</mca:CSharpReference>
+        </OutArgument>
+      </twrba2:GetCustomerRouteParameters.NeedsApproval>
+    </twrba2:GetCustomerRouteParameters>
+    <If sap2010:WorkflowViewState.IdRef="If_30">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">NeedsApproval</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence DisplayName="Task_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_28">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="vbmb:BPGenericTaskData" Name="TaskData" />
+            <Variable x:TypeArguments="vbe:BPTask" Name="AssignTask" />
+            <Variable x:TypeArguments="twrb:ConfigManager" Name="ConfigManager">
+              <Variable.Default>
+                <mca:CSharpValue x:TypeArguments="twrb:ConfigManager">new ConfigManager()</mca:CSharpValue>
+              </Variable.Default>
+            </Variable>
+          </Sequence.Variables>
+          <twrba2:FinalizeCustomerRouteDatabase Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FinalizeCustomerRouteDatabase_5">
             <twrba2:FinalizeCustomerRouteDatabase.RoutingDatabaseId>
               <InArgument x:TypeArguments="x:Int32">
                 <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
               </InArgument>
             </twrba2:FinalizeCustomerRouteDatabase.RoutingDatabaseId>
           </twrba2:FinalizeCustomerRouteDatabase>
-          <If sap2010:WorkflowViewState.IdRef="If_9">
-            <If.Condition>
-              <InArgument x:TypeArguments="x:Boolean">
-                <mca:CSharpValue x:TypeArguments="x:Boolean">Input.RoutingDatabaseType == RoutingDatabaseType.Current</mca:CSharpValue>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_16">
+            <Assign.To>
+              <OutArgument x:TypeArguments="vbmb:BPGenericTaskData">
+                <mca:CSharpReference x:TypeArguments="vbmb:BPGenericTaskData">TaskData</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="vbmb:BPGenericTaskData">
+                <mca:CSharpValue x:TypeArguments="vbmb:BPGenericTaskData" xml:space="preserve">new Vanrise.BusinessProcess.MainExtensions.BPTaskTypes.BPGenericTaskData()
+            {
+                TaskTypeId = new Guid("A5629EDE-B5CD-4E22-BB61-29A45A1706BA"),
+                FieldValues = new Dictionary&lt;string, dynamic&gt;() {
+                    {"RoutingDatabaseId",routingDatabaseId},
+                    {"RoutingDatabaseType",(long)Input.RoutingDatabaseType}
+                }
+            }</mca:CSharpValue>
               </InArgument>
-            </If.Condition>
-            <If.Then>
-              <twrba2:FillRoutingEntityDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FillRoutingEntityDetails_1">
-                <twrba2:FillRoutingEntityDetails.EffectiveDate>
-                  <InArgument x:TypeArguments="s:DateTime">
-                    <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime.Value</mca:CSharpValue>
-                  </InArgument>
-                </twrba2:FillRoutingEntityDetails.EffectiveDate>
-                <twrba2:FillRoutingEntityDetails.MaxSaleRateTimeStamp>
-                  <InArgument x:TypeArguments="x:Object">
-                    <mca:CSharpValue x:TypeArguments="x:Object">MaxSaleRateTimeStamp</mca:CSharpValue>
-                  </InArgument>
-                </twrba2:FillRoutingEntityDetails.MaxSaleRateTimeStamp>
-                <twrba2:FillRoutingEntityDetails.MaxSupplierRateTimeStamp>
-                  <InArgument x:TypeArguments="x:Object">
-                    <mca:CSharpValue x:TypeArguments="x:Object">MaxSupplierRateTimeStamp</mca:CSharpValue>
-                  </InArgument>
-                </twrba2:FillRoutingEntityDetails.MaxSupplierRateTimeStamp>
-                <twrba2:FillRoutingEntityDetails.NextOpenOrCloseSaleRateTime>
-                  <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-                    <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSaleRateTime</mca:CSharpValue>
-                  </InArgument>
-                </twrba2:FillRoutingEntityDetails.NextOpenOrCloseSaleRateTime>
-                <twrba2:FillRoutingEntityDetails.NextOpenOrCloseSupplierRateTime>
-                  <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-                    <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSupplierRateTime</mca:CSharpValue>
-                  </InArgument>
-                </twrba2:FillRoutingEntityDetails.NextOpenOrCloseSupplierRateTime>
-                <twrba2:FillRoutingEntityDetails.RoutingDatabaseId>
-                  <InArgument x:TypeArguments="x:Int32">
-                    <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
-                  </InArgument>
-                </twrba2:FillRoutingEntityDetails.RoutingDatabaseId>
-              </twrba2:FillRoutingEntityDetails>
-            </If.Then>
-          </If>
-        </Parallel>
-        <twrba2:SetRoutingDatabaseReady PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SetRoutingDatabaseReady_1">
-          <twrba2:SetRoutingDatabaseReady.RoutingDatabaseId>
-            <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
-            </InArgument>
-          </twrba2:SetRoutingDatabaseReady.RoutingDatabaseId>
-        </twrba2:SetRoutingDatabaseReady>
-        <If sap2010:WorkflowViewState.IdRef="If_7">
-          <If.Condition>
-            <InArgument x:TypeArguments="x:Boolean">
-              <mca:CSharpValue x:TypeArguments="x:Boolean">Input.RoutingDatabaseType==RoutingDatabaseType.Current</mca:CSharpValue>
-            </InArgument>
-          </If.Condition>
-          <If.Then>
-            <twrba2:DeleteRouteRuleChanged RouteOptionRuleId="{x:Null}" RouteRuleId="{x:Null}" sap2010:WorkflowViewState.IdRef="DeleteRouteRuleChanged_1" />
-          </If.Then>
-        </If>
-      </Sequence>
-      <If sap2010:WorkflowViewState.IdRef="If_4">
-        <If.Condition>
-          <InArgument x:TypeArguments="x:Boolean">
-            <mca:CSharpValue x:TypeArguments="x:Boolean">BuildRouteSync</mca:CSharpValue>
-          </InArgument>
-        </If.Condition>
-        <If.Then>
-          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
-            <twrba1:UpdateAndGetSwitchSyncOutputDict sap2010:WorkflowViewState.IdRef="UpdateAndGetSwitchSyncOutputDict_4">
-              <twrba1:UpdateAndGetSwitchSyncOutputDict.LatestSwitchSyncOutputDict>
-                <OutArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
-                  <mca:CSharpReference x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpReference>
-                </OutArgument>
-              </twrba1:UpdateAndGetSwitchSyncOutputDict.LatestSwitchSyncOutputDict>
-              <twrba1:UpdateAndGetSwitchSyncOutputDict.SwitchSyncOutputDict>
-                <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
-                  <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">null</mca:CSharpValue>
-                </InArgument>
-              </twrba1:UpdateAndGetSwitchSyncOutputDict.SwitchSyncOutputDict>
-            </twrba1:UpdateAndGetSwitchSyncOutputDict>
-            <twrba1:UnloadSwitchSyncOutputDict sap2010:WorkflowViewState.IdRef="UnloadSwitchSyncOutputDict_1" />
-            <twrbs:FinalizeRouteSyncSwitches RouteRangeType="{x:Null}" sap2010:WorkflowViewState.IdRef="FinalizeRouteSyncSwitches_1">
-              <twrbs:FinalizeRouteSyncSwitches.SwitchSyncOutputDict>
-                <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
-                  <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpValue>
-                </InArgument>
-              </twrbs:FinalizeRouteSyncSwitches.SwitchSyncOutputDict>
-              <twrbs:FinalizeRouteSyncSwitches.SwitchesInProcess>
-                <InArgument x:TypeArguments="scg:List(twrba1:SwitchInProcess)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(twrba1:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
-                </InArgument>
-              </twrbs:FinalizeRouteSyncSwitches.SwitchesInProcess>
-            </twrbs:FinalizeRouteSyncSwitches>
-            <twrba1:ApplySwitchSyncData sap2010:WorkflowViewState.IdRef="ApplySwitchSyncData_1" LastVersionNumber="0">
-              <twrba1:ApplySwitchSyncData.RoutingDatabaseId>
-                <InArgument x:TypeArguments="x:Int32">
-                  <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
-                </InArgument>
-              </twrba1:ApplySwitchSyncData.RoutingDatabaseId>
-              <twrba1:ApplySwitchSyncData.SwitchSyncOutputDict>
-                <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
-                  <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpValue>
-                </InArgument>
-              </twrba1:ApplySwitchSyncData.SwitchSyncOutputDict>
-              <twrba1:ApplySwitchSyncData.Switches>
-                <InArgument x:TypeArguments="scg:List(twre1:SwitchInfo)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(twre1:SwitchInfo)">Switches</mca:CSharpValue>
-                </InArgument>
-              </twrba1:ApplySwitchSyncData.Switches>
-            </twrba1:ApplySwitchSyncData>
-          </Sequence>
-        </If.Then>
-      </If>
-    </Parallel>
-    <twrba2:FinalizeRouteProcess sap2010:WorkflowViewState.IdRef="FinalizeRouteProcess_1">
-      <twrba2:FinalizeRouteProcess.BuildRouteSync>
-        <InArgument x:TypeArguments="x:Boolean">
-          <mca:CSharpValue x:TypeArguments="x:Boolean">BuildRouteSync</mca:CSharpValue>
-        </InArgument>
-      </twrba2:FinalizeRouteProcess.BuildRouteSync>
-      <twrba2:FinalizeRouteProcess.RoutingDatabaseId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
-        </InArgument>
-      </twrba2:FinalizeRouteProcess.RoutingDatabaseId>
-      <twrba2:FinalizeRouteProcess.RoutingDatabaseType>
-        <InArgument x:TypeArguments="twre:RoutingDatabaseType">
-          <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
-        </InArgument>
-      </twrba2:FinalizeRouteProcess.RoutingDatabaseType>
-    </twrba2:FinalizeRouteProcess>
-    <twrba2:DropOldRoutingDatabases sap2010:WorkflowViewState.IdRef="DropOldRoutingDatabases_1">
-      <twrba2:DropOldRoutingDatabases.DatabaseType>
-        <InArgument x:TypeArguments="twre:RoutingDatabaseType">
-          <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
-        </InArgument>
-      </twrba2:DropOldRoutingDatabases.DatabaseType>
-      <twrba2:DropOldRoutingDatabases.ProcessType>
-        <InArgument x:TypeArguments="twre:RoutingProcessType">
-          <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">Input.RoutingProcessType</mca:CSharpValue>
-        </InArgument>
-      </twrba2:DropOldRoutingDatabases.ProcessType>
-    </twrba2:DropOldRoutingDatabases>
-    <If sap2010:WorkflowViewState.IdRef="If_6">
+            </Assign.Value>
+          </Assign>
+          <vbw:AssignTask x:TypeArguments="vbmb:BPGenericTaskExecutionInformation" TaskExecutionInformation="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_4" TaskTitle="Approving Customer Routes">
+            <vbw:AssignTask.AssignedTo>
+              <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+                <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee" xml:space="preserve">new Vanrise.BusinessProcess.MainExtensions.FixedUsersBPTaskAssignee() {
+UserIds= new ConfigManager().GetApprovalTaskUsersIds()
+            }</mca:CSharpValue>
+              </InArgument>
+            </vbw:AssignTask.AssignedTo>
+            <vbw:AssignTask.ExecutedTask>
+              <OutArgument x:TypeArguments="vbe:BPTask">
+                <mca:CSharpReference x:TypeArguments="vbe:BPTask">AssignTask</mca:CSharpReference>
+              </OutArgument>
+            </vbw:AssignTask.ExecutedTask>
+            <vbw:AssignTask.TaskData>
+              <InArgument x:TypeArguments="vbe:BPTaskData">
+                <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">TaskData</mca:CSharpValue>
+              </InArgument>
+            </vbw:AssignTask.TaskData>
+          </vbw:AssignTask>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_17">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Int64">
+                <mca:CSharpReference x:TypeArguments="x:Int64">Decision</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int64">
+                <mca:CSharpValue x:TypeArguments="x:Int64">(AssignTask.TaskData as BPGenericTaskData).GetFieldValue&lt;long&gt;("Decision")</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+      </If.Then>
+    </If>
+    <If sap2010:WorkflowViewState.IdRef="If_35">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
-          <mca:CSharpValue x:TypeArguments="x:Boolean">SwitchSyncOutputDict != null &amp;&amp; SwitchSyncOutputDict.Values.FirstOrDefault(itm =&gt; itm.SwitchSyncResult == SwitchSyncResult.Failed || itm.SwitchSyncResult == SwitchSyncResult.PartialFailed) != null</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:Boolean">!NeedsApproval || (RoutingApprovalType)Decision == RoutingApprovalType.ApproveAll</mca:CSharpValue>
         </InArgument>
       </If.Condition>
       <If.Then>
-        <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_3">
-          <TerminateWorkflow.Exception>
-            <InArgument x:TypeArguments="s:Exception">
-              <mca:CSharpValue x:TypeArguments="s:Exception">new Vanrise.Entities.VRBusinessException("Route Build Process Completed successfully but errors occured on some switches. Check error logs.")</mca:CSharpValue>
-            </InArgument>
-          </TerminateWorkflow.Exception>
-        </TerminateWorkflow>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_33">
+          <Parallel sap2010:WorkflowViewState.IdRef="Parallel_14">
+            <Sequence DisplayName="Finalize_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_35">
+              <If sap2010:WorkflowViewState.IdRef="If_39">
+                <If.Condition>
+                  <InArgument x:TypeArguments="x:Boolean">
+                    <mca:CSharpValue x:TypeArguments="x:Boolean">Input.RoutingDatabaseType==RoutingDatabaseType.Current</mca:CSharpValue>
+                  </InArgument>
+                </If.Condition>
+                <If.Then>
+                  <Parallel sap2010:WorkflowViewState.IdRef="Parallel_16">
+                    <twbba:GetMaxSupplierRateTimeStamp Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetMaxSupplierRateTimeStamp_7">
+                      <twbba:GetMaxSupplierRateTimeStamp.MaxSupplierRateTimeStamp>
+                        <OutArgument x:TypeArguments="x:Object">
+                          <mca:CSharpReference x:TypeArguments="x:Object">MaxSupplierRateTimeStamp</mca:CSharpReference>
+                        </OutArgument>
+                      </twbba:GetMaxSupplierRateTimeStamp.MaxSupplierRateTimeStamp>
+                    </twbba:GetMaxSupplierRateTimeStamp>
+                    <twbba:GetMaxSaleRateTimeStamp Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetMaxSaleRateTimeStamp_7">
+                      <twbba:GetMaxSaleRateTimeStamp.MaxSaleRateTimeStamp>
+                        <OutArgument x:TypeArguments="x:Object">
+                          <mca:CSharpReference x:TypeArguments="x:Object">MaxSaleRateTimeStamp</mca:CSharpReference>
+                        </OutArgument>
+                      </twbba:GetMaxSaleRateTimeStamp.MaxSaleRateTimeStamp>
+                    </twbba:GetMaxSaleRateTimeStamp>
+                    <twbba:GetNextOpenOrCloseSaleRateTime Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetNextOpenOrCloseSaleRateTime_7">
+                      <twbba:GetNextOpenOrCloseSaleRateTime.EffectiveDate>
+                        <InArgument x:TypeArguments="s:DateTime">
+                          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime.Value</mca:CSharpValue>
+                        </InArgument>
+                      </twbba:GetNextOpenOrCloseSaleRateTime.EffectiveDate>
+                      <twbba:GetNextOpenOrCloseSaleRateTime.NextOpenOrCloseSaleRateTime>
+                        <OutArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                          <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSaleRateTime</mca:CSharpReference>
+                        </OutArgument>
+                      </twbba:GetNextOpenOrCloseSaleRateTime.NextOpenOrCloseSaleRateTime>
+                    </twbba:GetNextOpenOrCloseSaleRateTime>
+                    <twbba:GetNextOpenOrCloseSupplierRateTime Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetNextOpenOrCloseSupplierRateTime_7">
+                      <twbba:GetNextOpenOrCloseSupplierRateTime.EffectiveDate>
+                        <InArgument x:TypeArguments="s:DateTime">
+                          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime.Value</mca:CSharpValue>
+                        </InArgument>
+                      </twbba:GetNextOpenOrCloseSupplierRateTime.EffectiveDate>
+                      <twbba:GetNextOpenOrCloseSupplierRateTime.NextOpenOrCloseSupplierRateTime>
+                        <OutArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                          <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSupplierRateTime</mca:CSharpReference>
+                        </OutArgument>
+                      </twbba:GetNextOpenOrCloseSupplierRateTime.NextOpenOrCloseSupplierRateTime>
+                    </twbba:GetNextOpenOrCloseSupplierRateTime>
+                  </Parallel>
+                </If.Then>
+              </If>
+              <Parallel sap2010:WorkflowViewState.IdRef="Parallel_17">
+                <If sap2010:WorkflowViewState.IdRef="If_40">
+                  <If.Condition>
+                    <InArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpValue x:TypeArguments="x:Boolean">!NeedsApproval</mca:CSharpValue>
+                    </InArgument>
+                  </If.Condition>
+                  <If.Then>
+                    <twrba2:FinalizeCustomerRouteDatabase Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FinalizeCustomerRouteDatabase_7">
+                      <twrba2:FinalizeCustomerRouteDatabase.RoutingDatabaseId>
+                        <InArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+                        </InArgument>
+                      </twrba2:FinalizeCustomerRouteDatabase.RoutingDatabaseId>
+                    </twrba2:FinalizeCustomerRouteDatabase>
+                  </If.Then>
+                </If>
+                <If sap2010:WorkflowViewState.IdRef="If_41">
+                  <If.Condition>
+                    <InArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpValue x:TypeArguments="x:Boolean">Input.RoutingDatabaseType == RoutingDatabaseType.Current</mca:CSharpValue>
+                    </InArgument>
+                  </If.Condition>
+                  <If.Then>
+                    <twrba2:FillRoutingEntityDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FillRoutingEntityDetails_6">
+                      <twrba2:FillRoutingEntityDetails.EffectiveDate>
+                        <InArgument x:TypeArguments="s:DateTime">
+                          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime.Value</mca:CSharpValue>
+                        </InArgument>
+                      </twrba2:FillRoutingEntityDetails.EffectiveDate>
+                      <twrba2:FillRoutingEntityDetails.MaxSaleRateTimeStamp>
+                        <InArgument x:TypeArguments="x:Object">
+                          <mca:CSharpValue x:TypeArguments="x:Object">MaxSaleRateTimeStamp</mca:CSharpValue>
+                        </InArgument>
+                      </twrba2:FillRoutingEntityDetails.MaxSaleRateTimeStamp>
+                      <twrba2:FillRoutingEntityDetails.MaxSupplierRateTimeStamp>
+                        <InArgument x:TypeArguments="x:Object">
+                          <mca:CSharpValue x:TypeArguments="x:Object">MaxSupplierRateTimeStamp</mca:CSharpValue>
+                        </InArgument>
+                      </twrba2:FillRoutingEntityDetails.MaxSupplierRateTimeStamp>
+                      <twrba2:FillRoutingEntityDetails.NextOpenOrCloseSaleRateTime>
+                        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSaleRateTime</mca:CSharpValue>
+                        </InArgument>
+                      </twrba2:FillRoutingEntityDetails.NextOpenOrCloseSaleRateTime>
+                      <twrba2:FillRoutingEntityDetails.NextOpenOrCloseSupplierRateTime>
+                        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSupplierRateTime</mca:CSharpValue>
+                        </InArgument>
+                      </twrba2:FillRoutingEntityDetails.NextOpenOrCloseSupplierRateTime>
+                      <twrba2:FillRoutingEntityDetails.RoutingDatabaseId>
+                        <InArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+                        </InArgument>
+                      </twrba2:FillRoutingEntityDetails.RoutingDatabaseId>
+                    </twrba2:FillRoutingEntityDetails>
+                  </If.Then>
+                </If>
+              </Parallel>
+              <twrba2:SetRoutingDatabaseReady PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SetRoutingDatabaseReady_6">
+                <twrba2:SetRoutingDatabaseReady.RoutingDatabaseId>
+                  <InArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+                  </InArgument>
+                </twrba2:SetRoutingDatabaseReady.RoutingDatabaseId>
+              </twrba2:SetRoutingDatabaseReady>
+              <If sap2010:WorkflowViewState.IdRef="If_36">
+                <If.Condition>
+                  <InArgument x:TypeArguments="x:Boolean">
+                    <mca:CSharpValue x:TypeArguments="x:Boolean">Input.RoutingDatabaseType==RoutingDatabaseType.Current</mca:CSharpValue>
+                  </InArgument>
+                </If.Condition>
+                <If.Then>
+                  <twrba2:DeleteRouteRuleChanged RouteOptionRuleId="{x:Null}" RouteRuleId="{x:Null}" sap2010:WorkflowViewState.IdRef="DeleteRouteRuleChanged_5" />
+                </If.Then>
+              </If>
+            </Sequence>
+            <If sap2010:WorkflowViewState.IdRef="If_33">
+              <If.Condition>
+                <InArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">BuildRouteSync</mca:CSharpValue>
+                </InArgument>
+              </If.Condition>
+              <If.Then>
+                <Sequence DisplayName="Sequence_RouteSync" sap2010:WorkflowViewState.IdRef="Sequence_31">
+                  <twrba1:UpdateAndGetSwitchSyncOutputDict sap2010:WorkflowViewState.IdRef="UpdateAndGetSwitchSyncOutputDict_6">
+                    <twrba1:UpdateAndGetSwitchSyncOutputDict.LatestSwitchSyncOutputDict>
+                      <OutArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
+                        <mca:CSharpReference x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpReference>
+                      </OutArgument>
+                    </twrba1:UpdateAndGetSwitchSyncOutputDict.LatestSwitchSyncOutputDict>
+                    <twrba1:UpdateAndGetSwitchSyncOutputDict.SwitchSyncOutputDict>
+                      <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
+                        <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">null</mca:CSharpValue>
+                      </InArgument>
+                    </twrba1:UpdateAndGetSwitchSyncOutputDict.SwitchSyncOutputDict>
+                  </twrba1:UpdateAndGetSwitchSyncOutputDict>
+                  <twrba1:UnloadSwitchSyncOutputDict sap2010:WorkflowViewState.IdRef="UnloadSwitchSyncOutputDict_3" />
+                  <twrbs:FinalizeRouteSyncSwitches RouteRangeType="{x:Null}" sap2010:WorkflowViewState.IdRef="FinalizeRouteSyncSwitches_3">
+                    <twrbs:FinalizeRouteSyncSwitches.SwitchSyncOutputDict>
+                      <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
+                        <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpValue>
+                      </InArgument>
+                    </twrbs:FinalizeRouteSyncSwitches.SwitchSyncOutputDict>
+                    <twrbs:FinalizeRouteSyncSwitches.SwitchesInProcess>
+                      <InArgument x:TypeArguments="scg:List(twrba1:SwitchInProcess)">
+                        <mca:CSharpValue x:TypeArguments="scg:List(twrba1:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
+                      </InArgument>
+                    </twrbs:FinalizeRouteSyncSwitches.SwitchesInProcess>
+                  </twrbs:FinalizeRouteSyncSwitches>
+                  <twrba1:ApplySwitchSyncData sap2010:WorkflowViewState.IdRef="ApplySwitchSyncData_3" LastVersionNumber="0">
+                    <twrba1:ApplySwitchSyncData.RoutingDatabaseId>
+                      <InArgument x:TypeArguments="x:Int32">
+                        <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+                      </InArgument>
+                    </twrba1:ApplySwitchSyncData.RoutingDatabaseId>
+                    <twrba1:ApplySwitchSyncData.SwitchSyncOutputDict>
+                      <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
+                        <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpValue>
+                      </InArgument>
+                    </twrba1:ApplySwitchSyncData.SwitchSyncOutputDict>
+                    <twrba1:ApplySwitchSyncData.Switches>
+                      <InArgument x:TypeArguments="scg:List(twre1:SwitchInfo)">
+                        <mca:CSharpValue x:TypeArguments="scg:List(twre1:SwitchInfo)">Switches</mca:CSharpValue>
+                      </InArgument>
+                    </twrba1:ApplySwitchSyncData.Switches>
+                  </twrba1:ApplySwitchSyncData>
+                </Sequence>
+              </If.Then>
+            </If>
+          </Parallel>
+          <twrba2:FinalizeRouteProcess sap2010:WorkflowViewState.IdRef="FinalizeRouteProcess_3">
+            <twrba2:FinalizeRouteProcess.BuildRouteSync>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">BuildRouteSync</mca:CSharpValue>
+              </InArgument>
+            </twrba2:FinalizeRouteProcess.BuildRouteSync>
+            <twrba2:FinalizeRouteProcess.RoutingDatabaseId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+              </InArgument>
+            </twrba2:FinalizeRouteProcess.RoutingDatabaseId>
+            <twrba2:FinalizeRouteProcess.RoutingDatabaseType>
+              <InArgument x:TypeArguments="twre:RoutingDatabaseType">
+                <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
+              </InArgument>
+            </twrba2:FinalizeRouteProcess.RoutingDatabaseType>
+          </twrba2:FinalizeRouteProcess>
+          <twrba2:DropOldRoutingDatabases sap2010:WorkflowViewState.IdRef="DropOldRoutingDatabases_3">
+            <twrba2:DropOldRoutingDatabases.DatabaseType>
+              <InArgument x:TypeArguments="twre:RoutingDatabaseType">
+                <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">Input.RoutingDatabaseType</mca:CSharpValue>
+              </InArgument>
+            </twrba2:DropOldRoutingDatabases.DatabaseType>
+            <twrba2:DropOldRoutingDatabases.ProcessType>
+              <InArgument x:TypeArguments="twre:RoutingProcessType">
+                <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">Input.RoutingProcessType</mca:CSharpValue>
+              </InArgument>
+            </twrba2:DropOldRoutingDatabases.ProcessType>
+          </twrba2:DropOldRoutingDatabases>
+          <If sap2010:WorkflowViewState.IdRef="If_34">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">SwitchSyncOutputDict != null &amp;&amp; SwitchSyncOutputDict.Values.FirstOrDefault(itm =&gt; itm.SwitchSyncResult == SwitchSyncResult.Failed || itm.SwitchSyncResult == SwitchSyncResult.PartialFailed) != null</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_5">
+                <TerminateWorkflow.Exception>
+                  <InArgument x:TypeArguments="s:Exception">
+                    <mca:CSharpValue x:TypeArguments="s:Exception">new Vanrise.Entities.VRBusinessException("Route Build Process Completed successfully but errors occured on some switches. Check error logs.")</mca:CSharpValue>
+                  </InArgument>
+                </TerminateWorkflow.Exception>
+              </TerminateWorkflow>
+            </If.Then>
+          </If>
+        </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1799,62" />
-      <sap2010:ViewStateData Id="CreateRoutingDatabase_3" sap:VirtualizedContainerService.HintSize="1799,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1799,22" />
-      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="1799,62" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1946,62" />
+      <sap2010:ViewStateData Id="CreateRoutingDatabase_3" sap:VirtualizedContainerService.HintSize="1946,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1946,22" />
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="1946,62" />
       <sap2010:ViewStateData Id="GetActiveCustomerInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetActiveSupplierInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetSwitches_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1799,86" />
-      <sap2010:ViewStateData Id="InitializeRouteProcess_1" sap:VirtualizedContainerService.HintSize="1799,22" />
-      <sap2010:ViewStateData Id="LoadRoutingSettings_1" sap:VirtualizedContainerService.HintSize="1799,22" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1946,86" />
+      <sap2010:ViewStateData Id="InitializeRouteProcess_1" sap:VirtualizedContainerService.HintSize="1946,22" />
+      <sap2010:ViewStateData Id="LoadRoutingSettings_1" sap:VirtualizedContainerService.HintSize="1946,22" />
       <sap2010:ViewStateData Id="InitializeRouteSyncSwitches_3" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="UpdateAndGetSwitchSyncOutputDict_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="222,208">
@@ -853,7 +963,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1799,358" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1946,360" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="489,62" />
       <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="489,62" />
@@ -888,7 +998,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ViewStateData_16" sap:VirtualizedContainerService.HintSize="603,1510" />
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.BuildCarrierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,1044" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.BuildCarrierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,1047" />
       <sap2010:ViewStateData Id="ViewStateData_17" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="ViewStateData_18" sap:VirtualizedContainerService.HintSize="489,62" />
       <sap2010:ViewStateData Id="ViewStateData_19" sap:VirtualizedContainerService.HintSize="489,62" />
@@ -935,7 +1045,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ViewStateData_38" sap:VirtualizedContainerService.HintSize="856.8,291.2" />
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.CalculateCustomerRouteQualityData_1" sap:VirtualizedContainerService.HintSize="200,1044" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.CalculateCustomerRouteQualityData_1" sap:VirtualizedContainerService.HintSize="200,1047" />
       <sap2010:ViewStateData Id="PrepareCodePrefixes_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="MakeCodePrefixesAvailableForSubProcesses_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="RunProcess_2" sap:VirtualizedContainerService.HintSize="489,22" />
@@ -948,31 +1058,31 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="489,336" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="511,522">
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="489,338" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="511,524">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_4" sap:VirtualizedContainerService.HintSize="541,672" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_4" sap:VirtualizedContainerService.HintSize="541,675" />
       <sap2010:ViewStateData Id="MakeCodePrefixesUnavailable_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="541,22" />
-      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="563,1044">
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="563,1047">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1799,1090" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1799,22" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1946,1093" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1946,22" />
       <sap2010:ViewStateData Id="GetCodePrefixGroupDetails_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="Assign_7" sap:VirtualizedContainerService.HintSize="489,62" />
       <sap2010:ViewStateData Id="UpdateAndGetSwitchSyncOutputDict_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="489,210" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="489,212" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="242,22" />
@@ -983,62 +1093,84 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="489,398" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,998">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="489,400" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="511,1002">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_7" sap:VirtualizedContainerService.HintSize="1799,1148" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="1799,22" />
-      <sap2010:ViewStateData Id="UnLoadSupplierCodesFromSubProcesses_1" sap:VirtualizedContainerService.HintSize="1799,22" />
-      <sap2010:ViewStateData Id="GetMaxSupplierRateTimeStamp_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GetMaxSaleRateTimeStamp_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GetNextOpenOrCloseSaleRateTime_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GetNextOpenOrCloseSupplierRateTime_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_5" sap:VirtualizedContainerService.HintSize="1034,86" />
-      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="1159,236" />
-      <sap2010:ViewStateData Id="FinalizeCustomerRouteDatabase_1" sap:VirtualizedContainerService.HintSize="200,210" />
-      <sap2010:ViewStateData Id="FillRoutingEntityDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="464,210" />
-      <sap2010:ViewStateData Id="Parallel_6" sap:VirtualizedContainerService.HintSize="1159,256" />
-      <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="1159,22" />
-      <sap2010:ViewStateData Id="DeleteRouteRuleChanged_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="1159,210" />
-      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="1181,968">
+      <sap2010:ViewStateData Id="ParallelForEach`1_7" sap:VirtualizedContainerService.HintSize="1946,1153" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="1946,22" />
+      <sap2010:ViewStateData Id="UnLoadSupplierCodesFromSubProcesses_1" sap:VirtualizedContainerService.HintSize="1946,22" />
+      <sap2010:ViewStateData Id="GetCustomerRouteParameters_1" sap:VirtualizedContainerService.HintSize="1946,22" />
+      <sap2010:ViewStateData Id="FinalizeCustomerRouteDatabase_5" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_16" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="AssignTask`1_4" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_17" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_28" sap:VirtualizedContainerService.HintSize="264,412">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="UpdateAndGetSwitchSyncOutputDict_4" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="UnloadSwitchSyncOutputDict_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="FinalizeRouteSyncSwitches_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ApplySwitchSyncData_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="222,332">
+      <sap2010:ViewStateData Id="If_30" sap:VirtualizedContainerService.HintSize="1946,564" />
+      <sap2010:ViewStateData Id="GetMaxSupplierRateTimeStamp_7" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetMaxSaleRateTimeStamp_7" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetNextOpenOrCloseSaleRateTime_7" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetNextOpenOrCloseSupplierRateTime_7" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_16" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="If_39" sap:VirtualizedContainerService.HintSize="1159,238" />
+      <sap2010:ViewStateData Id="FinalizeCustomerRouteDatabase_7" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_40" sap:VirtualizedContainerService.HintSize="464,212" />
+      <sap2010:ViewStateData Id="FillRoutingEntityDetails_6" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_41" sap:VirtualizedContainerService.HintSize="464,212" />
+      <sap2010:ViewStateData Id="Parallel_17" sap:VirtualizedContainerService.HintSize="1159,258" />
+      <sap2010:ViewStateData Id="SetRoutingDatabaseReady_6" sap:VirtualizedContainerService.HintSize="1159,22" />
+      <sap2010:ViewStateData Id="DeleteRouteRuleChanged_5" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_36" sap:VirtualizedContainerService.HintSize="1159,212" />
+      <sap2010:ViewStateData Id="Sequence_35" sap:VirtualizedContainerService.HintSize="1181,974">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="464,968" />
-      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1799,1014" />
-      <sap2010:ViewStateData Id="FinalizeRouteProcess_1" sap:VirtualizedContainerService.HintSize="1799,22" />
-      <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="1799,22" />
-      <sap2010:ViewStateData Id="TerminateWorkflow_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1799,210" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1821,4992">
+      <sap2010:ViewStateData Id="UpdateAndGetSwitchSyncOutputDict_6" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="UnloadSwitchSyncOutputDict_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="FinalizeRouteSyncSwitches_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ApplySwitchSyncData_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_31" sap:VirtualizedContainerService.HintSize="222,332">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="1861,5072" />
+      <sap2010:ViewStateData Id="If_33" sap:VirtualizedContainerService.HintSize="464,974" />
+      <sap2010:ViewStateData Id="Parallel_14" sap:VirtualizedContainerService.HintSize="1799,1020" />
+      <sap2010:ViewStateData Id="FinalizeRouteProcess_3" sap:VirtualizedContainerService.HintSize="1799,22" />
+      <sap2010:ViewStateData Id="DropOldRoutingDatabases_3" sap:VirtualizedContainerService.HintSize="1799,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_5" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_34" sap:VirtualizedContainerService.HintSize="1799,212" />
+      <sap2010:ViewStateData Id="Sequence_33" sap:VirtualizedContainerService.HintSize="1821,1520">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_35" sap:VirtualizedContainerService.HintSize="1946,1672" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1968,5952">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="2008,6032" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

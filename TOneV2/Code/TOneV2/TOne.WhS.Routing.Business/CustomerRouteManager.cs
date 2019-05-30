@@ -383,12 +383,20 @@ namespace TOne.WhS.Routing.Business
                 if (routingDatabase == null)
                     throw new NullReferenceException(string.Format("routingDatabase. RoutingDatabaseId: {0}", input.Query.RoutingDatabaseId));
 
-                var latestRoutingDatabase = routingDatabaseManager.GetLatestRoutingDatabase(routingDatabase.ProcessType, routingDatabase.Type);
-                if (latestRoutingDatabase == null)
-                    return null;
-
                 ICustomerRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
-                manager.RoutingDatabase = latestRoutingDatabase;
+
+                if (input.Query.ForceRoutingDatabaseId)
+                {
+                    manager.RoutingDatabase = routingDatabase;
+                }
+                else
+                {
+                    var latestRoutingDatabase = routingDatabaseManager.GetLatestRoutingDatabase(routingDatabase.ProcessType, routingDatabase.Type);
+                    if (latestRoutingDatabase == null)
+                        return null;
+
+                    manager.RoutingDatabase = latestRoutingDatabase;
+                }
 
                 IEnumerable<CustomerRoute> customerRoutes = manager.GetFilteredCustomerRoutes(input);
                 FilterCustomerRoutes(customerRoutes, input);

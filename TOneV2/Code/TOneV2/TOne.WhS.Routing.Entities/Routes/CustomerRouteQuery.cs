@@ -23,5 +23,7 @@ namespace TOne.WhS.Routing.Entities
         public bool IncludeBlockedSuppliers { get; set; }
 
         public bool ApplyDefaultSorting { get; set; }
+
+        public bool ForceRoutingDatabaseId { get; set; }
     }
 }

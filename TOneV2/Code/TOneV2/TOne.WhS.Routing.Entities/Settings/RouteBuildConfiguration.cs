@@ -40,6 +40,8 @@ namespace TOne.WhS.Routing.Entities
         public int IndexesCommandTimeoutInMinutes { get; set; }
 
         public int? MaxDOP { get; set; }
+
+        public bool NeedsApproval { get; set; }
     }
 
     public class ProductRouteBuildConfiguration
