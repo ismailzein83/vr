@@ -10,21 +10,6 @@ namespace Retail.BusinessEntity.Business
     {
         public override Guid ConfigId { get { return new Guid("C8E34E16-B5F9-41B6-BC84-BA5E7F637E95"); } }
 
-        public override bool DoesUserHaveAddPackageAccess(IPackageDefinitionAccessContext context)
-        {
-            return new AccountBEDefinitionManager().DoesUserHaveAddPackageAccess(context.UserId, context.AccountBEDefinitionId);
-        }
-
-        public override bool DoesUserHaveEditPackageAccess(IPackageDefinitionAccessContext context)
-        {
-            return new AccountBEDefinitionManager().DoesUserHaveEditPackageAccess(context.UserId, context.AccountBEDefinitionId);
-        }
-
-        public override bool DoesUserHaveViewPackageAccess(IPackageDefinitionAccessContext context)
-        {
-            return new AccountBEDefinitionManager().DoesUserHaveViewPackageAccess(context.UserId, context.AccountBEDefinitionId);
-        }
-
         public override Dictionary<AccountEventTime, List<RetailAccountPackage>> GetRetailAccountPackages(IAccountPackageProviderGetRetailAccountPackagesContext context)
         {
             AccountPackageManager accountPackageManager = new AccountPackageManager();
@@ -61,6 +46,21 @@ namespace Retail.BusinessEntity.Business
 
             context.Account = account;
             return true;
+        }
+
+        public override bool DoesUserHaveViewPackageAccess(IPackageDefinitionAccessContext context)
+        {
+            return new AccountBEDefinitionManager().DoesUserHaveViewPackageAccess(context.UserId, context.AccountBEDefinitionId);
+        }
+
+        public override bool DoesUserHaveAddPackageAccess(IPackageDefinitionAccessContext context)
+        {
+            return new AccountBEDefinitionManager().DoesUserHaveAddPackageAccess(context.UserId, context.AccountBEDefinitionId);
+        }
+
+        public override bool DoesUserHaveEditPackageAccess(IPackageDefinitionAccessContext context)
+        {
+            return new AccountBEDefinitionManager().DoesUserHaveEditPackageAccess(context.UserId, context.AccountBEDefinitionId);
         }
     }
 }
