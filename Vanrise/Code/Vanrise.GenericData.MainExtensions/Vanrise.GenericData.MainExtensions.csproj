@@ -79,6 +79,7 @@
     <Compile Include="DataRecordFields\FieldDataRecordType.cs" />
     <Compile Include="DataRecordFields\FieldDictionaryType.cs" />
     <Compile Include="DataRecordFields\FieldListDataRecordType.cs" />
+    <Compile Include="DataRecordFields\FieldTextResourceType.cs" />
     <Compile Include="DataRecordFields\FieldTypeHelper.cs" />
     <Compile Include="DataRecordFields\Filters\BusinessEntityFieldTypeFilter.cs" />
     <Compile Include="DataRecordFields\Filters\ChoicesFieldTypeFilter.cs" />
