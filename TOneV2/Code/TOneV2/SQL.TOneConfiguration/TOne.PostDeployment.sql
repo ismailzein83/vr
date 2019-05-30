@@ -650,7 +650,7 @@ as (select * from (values
 ('69A42A6E-DDA8-4396-A5A2-1F540D961739','WhS_BE_SupplierRate','Supplier Rate'							,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View"]'),
 ('F41DAD6A-EE43-4C4A-9F1D-A575F002DF20','WhS_BE_SupplierPricelist','Supplier Pricelist'					,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View", "Start Process"]'),
 ('93DA33D5-4713-4784-99D2-5055C2468204','Whs_Purchase_Rules','Purchase Rules'							,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View","Add","Edit"]'),
-('B187A659-497C-44BC-9EA7-2F659588D262','WhS_BE_SupplierTargetGeneration','Supplier Target Generation'	,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View"]')
+('B187A659-497C-44BC-9EA7-2F659588D262','WhS_BE_SupplierTargetGeneration','Supplier Target Generation'	,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View"]'),
 
 ('6182C49F-5B9C-415C-8E59-2D2430ED3DED','Whs_CDRRules','CDR Rules'										,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]'),
 ('FE79D4D7-2351-4B74-B2AB-3E1AAD43908B','WhS_Routing_RoutingRule','Route Rule'							,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]'),
