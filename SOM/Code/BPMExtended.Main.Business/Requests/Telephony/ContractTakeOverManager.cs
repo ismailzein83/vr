@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
@@ -76,6 +77,17 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public bool BillOnDemand(string contactId,string customerId,string accountId,string contractId)
+        {
+            //get number of contracts
+            List<TelephonyContractDetail> telephonyContracts = new ContractManager().GetTelephonyContracts(customerId);
+            telephonyContracts.RemoveAll(item => item.ContractId == contractId);
+
+            //check if segment type is official
+
+            return true;
+        }
+        
         #endregion
     }
 }

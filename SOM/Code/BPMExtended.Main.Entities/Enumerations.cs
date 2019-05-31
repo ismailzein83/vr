@@ -11,6 +11,7 @@ namespace BPMExtended.Main.Entities
     public enum BPMCustomerType { Residential = 0, Enterprise = 1, Offical = 2 }
     public enum DirectoryInquiry { NoAction = 0, Add = 1, Remove = 2 }
     public enum ResultStatus { Error = 0, Success = 1, Warning = 2 }
+    public enum ADSLSubType { None = 0, Internet= 1, VPN = 2 }
     public enum ContacrtOnHoldStatus { New = 0, Postponed = 5, Running = 10, Waiting = 20, Cancelling = 30, Completed = 50, Aborted = 60, Suspended = 70, Terminated = 80, Cancelled=90 }
 
     public class EntitySchemaNameAttribute : Attribute

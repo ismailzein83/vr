@@ -292,6 +292,28 @@ namespace BPMExtended.Main.Business
             return numberOfRecords;
         }
 
+        public int GetNumberOfInvoicesForTelephonyContractTakeOver()
+        {
+            int numberOfInvoices = 0;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StGeneralSettings");
+
+            esq.AddColumn("StNumberOfInvoices");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", "25B26C43-B28F-4C1F-B745-992F9D2D55B4");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var stringifiedNumberOfInvoices = (string)entities[0].GetColumnValue("StNumberOfInvoices");
+                int.TryParse(stringifiedNumberOfInvoices, out numberOfInvoices);
+            }
+            return numberOfInvoices;
+        }
+
         public OperationServices GetOperationServices(Guid requestId)
         {
             EntitySchemaQuery esq;
@@ -395,6 +417,37 @@ namespace BPMExtended.Main.Business
             };
 
         }
+
+        public List<SaleService> GetADSLFeesForTelephonyContractTakeOver()
+        {
+            List<SaleService> fees = new List<SaleService>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceInGeneralSettings");
+            var Id = esq.AddColumn("StServiceID");
+            esq.AddColumn("StServiceName");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGeneralSettings", "25B26C43-B28F-4C1F-B745-992F9D2D55B4");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                foreach (var item in entities)
+                {
+                    fees.Add(new SaleService() {
+
+                        Id = item.GetTypedColumnValue<string>(Id.Name),
+                        Name = item.GetTypedColumnValue<string>("StServiceName"),
+                        UpFront = false
+                    });
+                }
+            }
+
+            return fees;
+
+        }
+
         #endregion
     }
 

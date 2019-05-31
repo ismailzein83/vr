@@ -77,6 +77,27 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public int GetNumberOfAttachments(string schemaName , string requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, schemaName+"File");
+            esq.AddColumn("Id");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, schemaName+".Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities != null)
+            {
+                return entities.Count;
+            }
+
+            return 0;
+        }
+
         public Contact GetContact(string contactId)
         {
             EntitySchemaQuery esq;

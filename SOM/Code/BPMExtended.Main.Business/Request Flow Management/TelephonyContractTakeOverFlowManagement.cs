@@ -40,60 +40,32 @@ namespace BPMExtended.Main.Business
             {
                 case welcomeStep: nextStepId = targetCustomerStep; break;
                 case targetCustomerStep: nextStepId = printStep; break;
-                case printStep: nextStepId = NBOfActiveContracts(id) == "1" ? billOnDemandStep : paymentStep; break;
-                case billOnDemandStep: nextStepId = paymentStep; break;
-                //  case paymentStep: nextStepId = IsTelephonyLineHasADSLContract(id)? adslCredentialStep : mdfTeamStep; break;
-                //  case adslCredentialStep: nextStepId = pdnTeamStep; break;
-                //   case pdnTeamStep: nextStepId = mdfTeamStep; break;
-                //   case mdfTeamStep: nextStepId = completedStep; break;
-                case paymentStep: nextStepId = adslCredentialStep; break;
-                case adslCredentialStep: nextStepId = attachmentStep; break;
-                case attachmentStep: nextStepId = technicalStep; break;
+                case printStep: nextStepId = checkADSLContract(id)? adslCredentialStep : paymentStep; break;
+                case adslCredentialStep: nextStepId = paymentStep; break;
+                case paymentStep: nextStepId = technicalStep; break;
 
             }
             return nextStepId;
         }
 
-        public string NBOfActiveContracts(string id)
+        public bool checkADSLContract(string id)
         {
+            bool hasAnADSL = false;
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyContractTakeOver");
+            esq.AddColumn("Id");
+            esq.AddColumn("StHasAnADSL");
 
-            //TODO : Get the count of active contracts for this customer (customerId)
+            var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", id);
+            esq.Filters.Add(esqFirstFilter);
 
-            Random gen = new Random();
-            int prob = gen.Next(10);
-            return prob <= 6 ? "1" : "4";
-        }
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
 
-        public bool IsTelephonyLineHasADSLContract(string id)
-        {
-            //TODO: check if Telephony Line  mapped to an ADSL contract
+            if (entities.Count > 0)
+            {
+                hasAnADSL = (bool)entities[0].GetColumnValue("StHasAnADSL");
+            }
 
-          
-                //get request from bpm
-                Guid idd = new Guid(id.ToUpper());
-                // Creation of query instance with "City" root schema. 
-                var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyContractTakeOver");
-                esq.AddColumn("Id");
-                esq.AddColumn("StContractId");
-                // Creation of the first filter instance.
-                var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
-                // Adding created filters to query collection. 
-                esq.Filters.Add(esqFirstFilter);
-                // Objects, i.e. query results, filtered by two filters, will be included into this collection.
-                var entities = esq.GetEntityCollection(BPM_UserConnection);
-                
-                var contractId = entities[0].GetColumnValue("StContractId");
-                ContractManager contractManager = new ContractManager();
-                //TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId.ToString());
-
-                SOM.Main.Entities.LinePath item = new SOM.Main.Entities.LinePath();
-                using (SOMClient client = new SOMClient())
-                {
-                    item = client.Get<SOM.Main.Entities.LinePath>(String.Format("api/SOM_Main/Inventory/CheckADSL?phoneNumber={0}", "1111"));
-                }
-                string[] path = item.Path.Split(',');
-                return path[6] == "1";
-             
+            return hasAnADSL;
         }
 
 
