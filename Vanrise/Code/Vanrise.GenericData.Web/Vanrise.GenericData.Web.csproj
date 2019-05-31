@@ -637,6 +637,10 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESN\vr-genricdata-be-sn-editor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\Templates\NumberFieldTypeViewerEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\vr-genericdata-fieldtype-number-viewereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\TextResource\Templates\TextResourceFieldTypeRuntimeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\TextResource\Templates\TextResourceFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\TextResource\vr-genericdata-fieldtype-textresource-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\TextResource\vr-genericdata-fieldtype-textresource.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\Templates\TextFieldTypeViewerEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-viewereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\Templates\EmptyDefinitionSettingsTemplate.html" />
