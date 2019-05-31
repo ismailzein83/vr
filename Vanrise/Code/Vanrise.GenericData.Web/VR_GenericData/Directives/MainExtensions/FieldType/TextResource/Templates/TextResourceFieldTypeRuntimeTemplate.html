@@ -1,20 +1,20 @@
-﻿    <!--<vr-columns width="fullrow">
-        <vr-section title="Translated Values">
-            <vr-button type="Add" data-onclick="scopeModel.addTranslatedValue" standalone></vr-button>
+﻿<vr-columns width="2/3row">
+    <vr-section title="Translated Values">
+        <vr-button type="Add" data-onclick="scopeModel.addTranslatedValue" standalone></vr-button>
 
-            <vr-datagrid datasource="scopeModel.translatedValues"
-                         pagingtype="'PagingOnScroll'"
-                         on-ready="scopeModel.onGridReady"
-                         hidegridmenu
-                         ondeleterow="scopeModel.onDeleteRow">
-                <vr-datagridcolumn headertext="'Language'" widthfactor="8" disablesorting="true">
-                    <vr-span vr-loader="dataItem.isLanguageSelectorLoading">
-                        <vr-common-vrlocalizationlanguage-selector on-ready="dataItem.onLanguageSelectorReady" hidelabel="true" isrequired="true"></vr-common-vrlocalizationlanguage-selector>
-                    </vr-span>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Translation'" type="'Text'" widthfactor="9" disablesorting="true">
-                    <vr-textbox value="dataItem.Translation" isrequired="true"></vr-textbox>
-                </vr-datagridcolumn>
-            </vr-datagrid>
-        </vr-section>
-    </vr-columns>-->
+        <vr-datagrid datasource="scopeModel.translatedValues"
+                     pagingtype="'PagingOnScroll'"
+                     on-ready="scopeModel.onGridReady"
+                     hidegridmenu
+                     ondeleterow="scopeModel.onDeleteRow">
+            <vr-datagridcolumn headertext="'Language'" widthfactor="8" disablesorting="true">
+                <vr-span vr-loader="dataItem.isLanguageSelectorLoading">
+                    <vr-common-vrlocalizationlanguage-selector on-ready="dataItem.onLanguageSelectorReady" hidelabel="true" isrequired="true"></vr-common-vrlocalizationlanguage-selector>
+                </vr-span>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Translation'" type="'Text'" widthfactor="8" disablesorting="true">
+                <vr-textbox value="dataItem.Translation" isrequired="true"></vr-textbox>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-section>
+</vr-columns>
