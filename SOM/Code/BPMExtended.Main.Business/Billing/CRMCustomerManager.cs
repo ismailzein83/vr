@@ -1018,7 +1018,25 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public bool IsContactForeigner(Guid contactId)
+        {
+            
+            bool isForeigner = false;
+            EntitySchemaQuery esq;
+            EntityCollection entities;
 
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
+            esq.AddColumn("Id");
+            var nationalitycol = esq.AddColumn("StNationality.Id");
+            esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId));
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                isForeigner = entities[0].GetTypedColumnValue<Guid>(nationalitycol.Name) == Guid.Parse("BC3E1014-D6BA-42E1-BB2D-CF9F40E6B241") ? false : true;
+            }
+            return isForeigner;
+        }
 
 
         //public void convertFileToBinaryCode()
