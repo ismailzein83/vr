@@ -836,9 +836,9 @@ namespace TOne.WhS.BusinessEntity.Business
 		public bool TryUpdateCarrierAccount(CarrierAccountToEdit carrierAccountToEdit, bool withTracking, out List<string> validationMessages)
 		{
 			int carrierProfileId;
+			//bool isCarrierAccountStatusChanged = false;
 			//bool isCustomerRoutingStatusChanged = false;
 			//bool isSupplierRoutingStatusChanged = false;
-			//bool isCarrierAccountStatusChanged = false;
 			validationMessages = new List<string>();
 			if (ValidateCarrierAccountToEdit(carrierAccountToEdit, out carrierProfileId, validationMessages))
 			{
@@ -848,6 +848,7 @@ namespace TOne.WhS.BusinessEntity.Business
 				ActivationStatus previousActivationStatus = cachedAccount.CarrierAccountSettings.ActivationStatus;
 				ActivationStatus activationStatus = carrierAccountToEdit.CarrierAccountSettings.ActivationStatus;
 
+				//isCarrierAccountStatusChanged = previousActivationStatus != activationStatus;
 				//if (cachedAccount.CustomerSettings != null && carrierAccountToEdit.CustomerSettings != null)
 				//{
 				//	isCustomerRoutingStatusChanged = cachedAccount.CustomerSettings.RoutingStatus != carrierAccountToEdit.CustomerSettings.RoutingStatus;
@@ -877,6 +878,7 @@ namespace TOne.WhS.BusinessEntity.Business
 						var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
 						VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, updatedCA);
 					}
+					//if (isCarrierAccountStatusChanged || isCustomerRoutingStatusChanged || isSupplierRoutingStatusChanged)
 					if (previousActivationStatus != activationStatus)
 					{
 						new CarrierAccountStatusHistoryManager().AddAccountStatusHistory(carrierAccountToEdit.CarrierAccountId, activationStatus, previousActivationStatus);
@@ -892,7 +894,7 @@ namespace TOne.WhS.BusinessEntity.Business
 							CarrierAccountId = carrierAccountToEdit.CarrierAccountId,
 							//IsCustomerRoutingStatusChanged = isCustomerRoutingStatusChanged,
 							//IsSupplierRoutingStatusChanged = isSupplierRoutingStatusChanged,
-							//IsCarrierAccountStatusChanged = true
+							//IsCarrierAccountStatusChanged = isCarrierAccountStatusChanged
 						});
 					}
 					return true;
