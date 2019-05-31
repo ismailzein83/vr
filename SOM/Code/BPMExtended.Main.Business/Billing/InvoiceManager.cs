@@ -13,12 +13,13 @@ namespace BPMExtended.Main.Business
     {
 
         #region Public
-        public Invoice GetInvoiceById(string invoiceId)
+        public InvoiceEntity GetInvoiceById(string invoiceId)
         {
-            var item = new Invoice();
+            var item = new InvoiceEntity();
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<Invoice>(String.Format("api/SOM.ST/Billing/GetInvoiceDetails?InvoiceId={0}", invoiceId));
+                var invoice = client.Get<Invoice>(String.Format("api/SOM.ST/Billing/GetInvoiceDetails?InvoiceId={0}", invoiceId));
+               item = InvoiceToEntityMapper(invoice);
             }
             return item;
         }
@@ -97,6 +98,21 @@ namespace BPMExtended.Main.Business
                 Amount = Convert.ToString(item.Amount)
             };
         }
+
+        public InvoiceEntity InvoiceToEntityMapper(Invoice item)
+        {
+            return new InvoiceEntity
+            {
+                Id = item.Id,
+                CustomerId = item.CustomerId,
+                BillingAccountCode = item.BillingAccountCode,
+                EntryDate = item.EntryDate!=null? item.EntryDate.ToString("MM/dd/yyyy HH:mm"):null,
+                DueDate= item.DueDate != null ? item.DueDate.ToString("MM/dd/yyyy HH:mm") : null,
+                Amount = Convert.ToString(item.Amount),
+                OpenAmount=Convert.ToString(item.OpenAmount),
+                DocumentCode= item.DocumentCode
+            };
+    }
 
         public PaymentPlanDetail PaymentPlanToDetailMapper(PaymentPlan item)
         {
