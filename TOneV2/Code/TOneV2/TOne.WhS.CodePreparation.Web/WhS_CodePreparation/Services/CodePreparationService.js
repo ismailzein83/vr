@@ -26,20 +26,20 @@
             return promiseDeferred.promise;
         }
 
-        function createNewProcess(sellingNumberPlanId, fileId, effectiveDate, hasHeader, isFromExcel, onCodePreparationAction) {
+        function createNewProcess(sellingNumberPlanId, fileId, effectiveDate, hasHeader, isFromExcel, onCodePreparationAction, notes) {
 
             var inputArguments = {
                 $type: "TOne.WhS.CodePreparation.BP.Arguments.CodePreparationInput, TOne.WhS.CodePreparation.BP.Arguments",
-                SellingNumberPlanId: (sellingNumberPlanId!=undefined)?sellingNumberPlanId:undefined,
-                FileId: (fileId!=undefined)?fileId:undefined,
-                EffectiveDate: (effectiveDate!=undefined)?effectiveDate:undefined,
-                HasHeader: (hasHeader!=undefined)?hasHeader:undefined,
-                IsFromExcel: (isFromExcel!=undefined)?isFromExcel:undefined
+                SellingNumberPlanId: (sellingNumberPlanId != undefined) ? sellingNumberPlanId : undefined,
+                FileId: (fileId != undefined) ? fileId : undefined,
+                EffectiveDate: (effectiveDate != undefined) ? effectiveDate : undefined,
+                HasHeader: (hasHeader != undefined) ? hasHeader : undefined,
+                IsFromExcel: (isFromExcel != undefined) ? isFromExcel : undefined,
+                Notes: notes
             };
             var input = {
                 InputArguments: inputArguments
             };
-
             return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
                 if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                     var context = {
@@ -47,7 +47,7 @@
                     }
                 }
 
-                BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context); 
+                BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
             });
         }
 
@@ -55,7 +55,7 @@
             NotifyValidationWarning: NotifyValidationWarning,
             hasRunningProcessesForSellingNumberPlan: hasRunningProcessesForSellingNumberPlan,
             createNewProcess: createNewProcess
-           
+
         });
     }
 

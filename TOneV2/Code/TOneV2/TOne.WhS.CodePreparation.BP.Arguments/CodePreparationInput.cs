@@ -15,6 +15,7 @@ namespace TOne.WhS.CodePreparation.BP.Arguments
         public DateTime? EffectiveDate { get; set; }
         public bool HasHeader { get; set; }
         public bool IsFromExcel { get; set; }
+        public string Notes { get; set; }
         public override string EntityId
         {
             get
