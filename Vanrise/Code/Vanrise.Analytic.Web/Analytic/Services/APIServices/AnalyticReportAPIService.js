@@ -12,10 +12,11 @@
                     filter: filter
                 });
         }
-        function GetAnalyticReportById(analyticReportId) {
+        function GetAnalyticReportById(analyticReportId,getTranslated) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticReportById"),
                {
-                   analyticReportId: analyticReportId
+                   analyticReportId: analyticReportId,
+                   getTranslated: getTranslated
                });
         }
         function GetFilteredAnalyticReports(input) {

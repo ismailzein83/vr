@@ -81,23 +81,21 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    var rootPromiseNode = {};
+                    var promises = [];
 
                     var onlySelectedMeasuresIds;
                     if (payload != undefined && payload.tableIds != undefined) {
                         tableIds = payload.tableIds;
                         onlySelectedMeasuresIds = payload.onlySelectedMeasureIds;
-                        var promises = [];
                         var selectedMeasureIds;
                         if (payload.advancedOrderOptions != undefined) {
-                            if (payload.advancedOrderOptions.MeasureOrders != undefined && payload.advancedOrderOptions.MeasureOrders.length > 0) {
+                            var measureOrders = payload.advancedOrderOptions.MeasureOrders;
+                            if (measureOrders != undefined && measureOrders.length > 0) {
                                 selectedMeasureIds = [];
-                                for (var i = 0; i < payload.advancedOrderOptions.MeasureOrders.length; i++) {
-                                    var measure = payload.advancedOrderOptions.MeasureOrders[i];
-                                    var measureOrder = {
-                                        payload: measure,
-                                    };
+                                for (var i = 0; i < measureOrders.length; i++) {
+                                    var measure = measureOrders[i];
                                     selectedMeasureIds.push(measure.MeasureName);
-                                    addMeasureGridWidthAPI(measureOrder);
                                 }
                             }
                         }
@@ -116,11 +114,23 @@
                         promises.push(loadMeasureDirectivePromiseDeferred.promise);
 
                         promises.push(getAllMeasures());
-
-
-                        return UtilsService.waitMultiplePromises(promises);
+                        rootPromiseNode.promises = promises;
+                        rootPromiseNode.getChildNode = function () {
+                            if ($scope.scopeModel.selectedMeasures != undefined && $scope.scopeModel.selectedMeasures.length > 0) {
+                                for (var i = 0; i < measureOrders.length; i++) {
+                                    var measureOrder = measureOrders[i];
+                                    if (UtilsService.getItemByVal($scope.scopeModel.selectedMeasures, measureOrder.MeasureName, "Name")) {
+                                        var measureOrder = {
+                                            payload: measureOrder,
+                                        };
+                                        addMeasureGridWidthAPI(measureOrder);
+                                    }
+                                }
+                            }
+                            return { promises: [] };
+                        };
+                        return UtilsService.waitPromiseNode(rootPromiseNode);
                     }
-
                 };
 
                 api.getData = getData;

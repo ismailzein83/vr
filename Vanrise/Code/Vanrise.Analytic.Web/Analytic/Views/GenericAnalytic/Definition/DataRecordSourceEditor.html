@@ -7,6 +7,7 @@
                         <vr-columns width="1/4row">
                             <vr-textbox value="scopeModel.title" label="Title" isrequired="true"></vr-textbox>
                         </vr-columns>
+                        <vr-common-vrlocalizationtextresource-selector on-ready="onLocalizationTextResourceSelectorReady" normal-col-num="3"></vr-common-vrlocalizationtextresource-selector>
                         <vr-columns width="1/4row">
                             <vr-textbox value="scopeModel.sourceName" label="Name" isrequired="true"></vr-textbox>
                         </vr-columns>
@@ -42,6 +43,11 @@
                                             <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
                                                 <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
                                             </vr-datagridcolumn>
+                                            <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="5" disablesorting="true">
+                                                <vr-span vr-loader="dataItem.isFieldTextResourceSelectorLoading">
+                                                    <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                                                </vr-span>
+                                            </vr-datagridcolumn>
                                             <vr-datagridcolumn headertext="'Hidden'" fixedwidth="50" disablesorting="true">
                                                 <vr-switch value="dataItem.isHidden"></vr-switch>
                                             </vr-datagridcolumn>
@@ -70,6 +76,11 @@
                                         <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
                                             <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
                                         </vr-datagridcolumn>
+                                        <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="5" disablesorting="true">
+                                            <vr-span vr-loader="dataItem.isFilterTextResourceSelectorLoading">
+                                                <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                                            </vr-span>
+                                        </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Required'" widthfactor="3" disablesorting="true">
                                             <vr-switch value="dataItem.IsRequired"></vr-switch>
                                         </vr-datagridcolumn>
@@ -90,6 +101,11 @@
                                         <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
                                             <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
+                                        </vr-datagridcolumn>
+                                        <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="5" disablesorting="true">
+                                            <vr-span vr-loader="dataItem.isFieldDetailTextResourceSelectorLoading">
+                                                <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                                            </vr-span>
                                         </vr-datagridcolumn>
                                         <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
                                             <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.detailWidths"

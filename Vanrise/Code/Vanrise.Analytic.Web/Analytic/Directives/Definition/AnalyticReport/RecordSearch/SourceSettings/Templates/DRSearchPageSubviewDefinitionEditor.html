@@ -5,7 +5,9 @@
                 <vr-columns width="1/2row">
                     <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
                 </vr-columns>
-                <vr-analytic-datarecordsearchpage-subviewdefinition-settings on-ready="scopeModel.onSubviewDefinitionSettingsDirectiveReady" 
+                <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceSelectorReady" normal-col-num="6"></vr-common-vrlocalizationtextresource-selector>
+
+                <vr-analytic-datarecordsearchpage-subviewdefinition-settings on-ready="scopeModel.onSubviewDefinitionSettingsDirectiveReady"
                                                                              normal-col-num="6" isrequired="true">
                 </vr-analytic-datarecordsearchpage-subviewdefinition-settings>
             </vr-row>

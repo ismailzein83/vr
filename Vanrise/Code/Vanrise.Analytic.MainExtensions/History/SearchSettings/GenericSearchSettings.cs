@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Analytic.MainExtensions.History.SearchSettings
 {
@@ -20,21 +21,42 @@ namespace Vanrise.Analytic.MainExtensions.History.SearchSettings
         public bool ShowLegend { get; set; }
 
         public List<GenericSearchSettingsLegend> Legends { get; set; }
+        public override void ApplyTranslation(IAnalyticHistoryReportTranslationContext context)
+        {
+            VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+
+            if (GroupingDimensions != null && GroupingDimensions.Count > 0)
+            {
+                foreach (var dimension in GroupingDimensions)
+                {
+                    if (dimension.TitleResourceKey != null)
+                        dimension.Title = vrLocalizationManager.GetTranslatedTextResourceValue(dimension.TitleResourceKey, dimension.Title, context.LanguageId);
+                }
+            }
+            if (Filters != null && Filters.Count > 0)
+            {
+                foreach (var filter in Filters)
+                {
+                    if (filter.TitleResourceKey != null)
+                        filter.Title = vrLocalizationManager.GetTranslatedTextResourceValue(filter.TitleResourceKey, filter.Title, context.LanguageId);
+                }
+            }
+        }
     }
 
     public class GenericSearchSettingsDimension
     {
         public string DimensionName { get; set; }
-
+        public string Title { get; set; }
+        public string TitleResourceKey { get; set; }
         public bool IsSelected { get; set; }
     }
 
     public class GenericSearchSettingsFilter
     {
         public string DimensionName { get; set; }
-
         public string Title { get; set; }
-
+        public string TitleResourceKey { get; set; }
         public bool IsRequired { get; set; }
     }
 

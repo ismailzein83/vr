@@ -28,6 +28,7 @@ namespace Vanrise.Analytic.Entities
         public bool HideDescriptionInLegend { get; set; }
         public AnalyticMeasureUnit MeasureUnit { get; set; }
         public string FixedMeasureUnit { get; set; }
+        public string TitleResourceKey { get; set; }
 
     }
 }

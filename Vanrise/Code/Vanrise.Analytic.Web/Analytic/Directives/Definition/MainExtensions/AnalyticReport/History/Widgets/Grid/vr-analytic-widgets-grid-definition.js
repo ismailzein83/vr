@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WidgetsGridDefinition.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticTypeEnum', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_GridWidthEnum', 'VRCommon_GridWidthFactorEnum'];
+    WidgetsGridDefinition.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticTypeEnum', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_GridWidthEnum', 'VRCommon_GridWidthFactorEnum','VRLocalizationService'];
 
-    function WidgetsGridDefinition(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_GridWidthEnum, VRCommon_GridWidthFactorEnum) {
+    function WidgetsGridDefinition(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_GridWidthEnum, VRCommon_GridWidthFactorEnum, VRLocalizationService) {
         return {
             restrict: "E",
             scope: {
@@ -48,6 +48,7 @@
                 };
 
                 $scope.scopeModel.gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
+                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
 
                 $scope.scopeModel.dimensions = [];
                 $scope.scopeModel.subTables = [];
@@ -64,7 +65,8 @@
                         AnalyticItemConfigId: dimension.AnalyticItemConfigId,
                         Title: dimension.Title,
                         Name: dimension.Name,
-                        IsRootDimension: false
+                        IsRootDimension: false,
+                        TitleResourceKey: dimension.TitleResourceKey
                     };
                     dataItem.onDimensionGridWidthFactorEditorReady = function (api) {
                         dataItem.dimensionGridWidthFactorAPI = api;
@@ -83,7 +85,11 @@
                         var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionGridStyleAPI, dataItemPayload, setLoader);
                     };
-
+                    dataItem.onTextResourceSelectorReady = function (api) {
+                        dataItem.textResourceSeletorAPI = api;
+                        var setLoader = function (value) { dataItem.isDimensionTextResourceSelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
+                    };
                     $scope.scopeModel.dimensions.push(dataItem);
                 };
 
@@ -122,7 +128,8 @@
                     var dataItem = {
                         AnalyticItemConfigId: measure.AnalyticItemConfigId,
                         Title: measure.Title,
-                        Name: measure.Name
+                        Name: measure.Name,
+                        TitleResourceKey: measure.TitleResourceKey
                     };
                     dataItem.onMeasureGridWidthFactorEditorReady = function (api) {
                         dataItem.measureGridWidthFactorAPI = api;
@@ -141,7 +148,11 @@
                         var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.measureGridStyleAPI, dataItemPayload, setLoader);
                     };
-
+                    dataItem.onTextResourceSelectorReady = function (api) {
+                        dataItem.textResourceSeletorAPI = api;
+                        var setLoader = function (value) { dataItem.isMeasureTextResourceSelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
+                    };
                     $scope.scopeModel.measures.push(dataItem);
                 };
 
@@ -174,7 +185,9 @@
                         measureReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                         measureLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
                         positionValueReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                        positionValueLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                        positionValueLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                        textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                        textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                     };
 
                     dataItem.onMeasureGridWidthFactorEditorReady = function (api) {
@@ -210,9 +223,11 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    var rootPromiseNode = {};
+                    var promises = [];
+
                     if (payload != undefined && payload.tableIds != undefined) {
                         tableIds = payload.tableIds;
-                        var promises = [];
                         var selectedDimensionIds;
                         var selectedMeasureIds;
                         if (payload.widgetEntity != undefined) {
@@ -221,68 +236,23 @@
                             $scope.scopeModel.autoRefresh = payload.widgetEntity.AutoRefresh;
                             $scope.scopeModel.autoRefreshInterval = payload.widgetEntity.AutoRefreshInterval;
                             selectedDimensionIds = [];
-                            if (payload.widgetEntity.Dimensions != undefined && payload.widgetEntity.Dimensions.length > 0) {
-                                for (var i = 0; i < payload.widgetEntity.Dimensions.length; i++) {
-                                    var dimension = payload.widgetEntity.Dimensions[i];
+                            var dimensions = payload.widgetEntity.Dimensions;
+                            if (dimensions != undefined && dimensions.length > 0) {
+                                for (var i = 0; i < dimensions.length; i++) {
+                                    var dimension = dimensions[i];
                                     selectedDimensionIds.push(dimension.DimensionName);
-                                    var dimensionGridField = {
-                                        payload: dimension,
-                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        loadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        styleReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        styleLoadPromiseDeferred: UtilsService.createPromiseDeferred()
-                                    };
-                                    promises.push(dimensionGridField.loadPromiseDeferred.promise);
-                                    promises.push(dimensionGridField.styleLoadPromiseDeferred.promise);
-                                    addDimensionGridWidthAPI(dimensionGridField);
                                 }
                             }
 
                             selectedMeasureIds = [];
-                            if (payload.widgetEntity.Measures != undefined && payload.widgetEntity.Measures.length > 0) {
-                                for (var i = 0; i < payload.widgetEntity.Measures.length; i++) {
-                                    var measure = payload.widgetEntity.Measures[i];
-                                    var measureGridField = {
-                                        payload: measure,
-                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        loadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        styleReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        styleLoadPromiseDeferred: UtilsService.createPromiseDeferred()
-                                    };
+                            var measures = payload.widgetEntity.Measures;
+                            if (measures != undefined && measures.length > 0) {
+                                for (var i = 0; i < measures.length; i++) {
+                                    var measure = measures[i];
                                     selectedMeasureIds.push(measure.MeasureName);
-                                    promises.push(measureGridField.loadPromiseDeferred.promise);
-                                    promises.push(measureGridField.styleLoadPromiseDeferred.promise);
-                                    addMeasureGridWidthAPI(measureGridField);
                                 }
                             }
-
-                            if (payload.widgetEntity.SubTables != undefined && payload.widgetEntity.SubTables.length > 0) {
-                                var subTables = payload.widgetEntity.SubTables;
-
-                                for (var j = 0; j < subTables.length; j++) {
-                                    var dataItem = {
-                                        dimensionReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        dimensionLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        measureReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        measureLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        positionValueReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        positionValueLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        columnSettingsReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        columnSettingsLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        styleReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        styleLoadPromiseDeferred: UtilsService.createPromiseDeferred()
-                                    };
-                                    promises.push(dataItem.columnSettingsLoadPromiseDeferred.promise);
-                                    promises.push(dataItem.styleLoadPromiseDeferred.promise);
-                                    promises.push(dataItem.dimensionLoadPromiseDeferred.promise);
-                                    promises.push(dataItem.measureLoadPromiseDeferred.promise);
-                                    promises.push(dataItem.positionValueLoadPromiseDeferred.promise);
-
-                                    var subTableDefinitionEntity = subTables[j];
-
-                                    extendSubTableDefinitionDataItem(dataItem, subTableDefinitionEntity);
-                                }
-                            }
+                           
                         }
 
                         var loadDimensionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -332,8 +302,85 @@
 
                         promises.push(getAllMeasures());
 
-                        return UtilsService.waitMultiplePromises(promises);
+                        rootPromiseNode.promises = promises;
+                        rootPromiseNode.getChildNode = function () {
+                            var childPromises = [];
+                            if ($scope.scopeModel.selectedDimensions != undefined && $scope.scopeModel.selectedDimensions.length > 0) {
+                                for (var i = 0; i < dimensions.length; i++) {
+                                    var dimension = dimensions[i];
+                                    if (UtilsService.getItemByVal($scope.scopeModel.selectedDimensions, dimension.DimensionName, "Name")) {
+                                        var dimensionGridField = {
+                                            payload: dimension,
+                                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            styleReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            styleLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                        };
+                                        childPromises.push(dimensionGridField.loadPromiseDeferred.promise);
+                                        childPromises.push(dimensionGridField.styleLoadPromiseDeferred.promise);
+                                        childPromises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
+                                        addDimensionGridWidthAPI(dimensionGridField);
+                                    }
+                                   
+                                }
+                            }
+                            if ($scope.scopeModel.selectedMeasures != undefined && $scope.scopeModel.selectedMeasures.length > 0) {
+                                for (var i = 0; i < measures.length; i++) {
+                                    var measure = measures[i];
+                                    if (UtilsService.getItemByVal($scope.scopeModel.selectedMeasures, measure.MeasureName, "Name")) {
+                                        var measureGridField = {
+                                            payload: measure,
+                                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            styleReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            styleLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                        };
+                                        childPromises.push(measureGridField.loadPromiseDeferred.promise);
+                                        childPromises.push(measureGridField.styleLoadPromiseDeferred.promise);
+                                        childPromises.push(measureGridField.textResourceLoadPromiseDeferred.promise);
+                                        addMeasureGridWidthAPI(measureGridField);
+                                    }
+
+                                }
+                            }
+                            var subTables = payload.widgetEntity != undefined ? payload.widgetEntity.SubTables : undefined;
+
+                            if (subTables != undefined && subTables.length > 0) {
+
+                                for (var j = 0; j < subTables.length; j++) {
+                                    var dataItem = {
+                                        dimensionReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        dimensionLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        measureReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        measureLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        positionValueReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        positionValueLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        columnSettingsReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        columnSettingsLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        styleReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        styleLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                    };
+                                    promises.push(dataItem.columnSettingsLoadPromiseDeferred.promise);
+                                    promises.push(dataItem.styleLoadPromiseDeferred.promise);
+                                    promises.push(dataItem.dimensionLoadPromiseDeferred.promise);
+                                    promises.push(dataItem.measureLoadPromiseDeferred.promise);
+                                    promises.push(dataItem.positionValueLoadPromiseDeferred.promise);
+                                    promises.push(dataItem.textResourceLoadPromiseDeferred.promise);
+                                    var subTableDefinitionEntity = subTables[j];
+
+                                    extendSubTableDefinitionDataItem(dataItem, subTableDefinitionEntity);
+                                }
+                            }
+                            return { promises: childPromises };
+                        };
                     }
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
 
                 };
 
@@ -352,6 +399,7 @@
                             dimensions.push({
                                 DimensionName: dimension.Name,
                                 Title: dimension.Title,
+                                TitleResourceKey: dimension.textResourceSeletorAPI != undefined ? dimension.textResourceSeletorAPI.getSelectedValues() : undefined,
                                 IsRootDimension: dimension.IsRootDimension,
                                 ColumnSettings: dimension.dimensionGridWidthFactorAPI.getData(),
                                 ColumnStyleId: dimension.dimensionGridStyleAPI.getSelectedIds()
@@ -367,6 +415,7 @@
                             measures.push({
                                 MeasureName: measure.Name,
                                 Title: measure.Title,
+                                TitleResourceKey: measure.textResourceSeletorAPI != undefined ? measure.textResourceSeletorAPI.getSelectedValues() : undefined,
                                 ColumnSettings: measure.measureGridWidthFactorAPI.getData(),
                                 ColumnStyleId: measure.measureGridStyleAPI.getSelectedIds(),
                                 IsHidden: measure.isHidden,
@@ -384,6 +433,7 @@
                             var measure = {
                                 MeasureName: subTable.measureSelectorAPI != undefined ? subTable.measureSelectorAPI.getSelectedIds() : undefined,
                                 Title: subTable.Title,
+                                TitleResourceKey: subTable.textResourceSeletorAPI != undefined ? subTable.textResourceSeletorAPI.getSelectedValues() : undefined,
                                 ColumnSettings: subTable.measureGridWidthFactorAPI.getData(),
                                 ColumnStyleId: subTable.measureGridStyleAPI.getSelectedIds(),
                             };
@@ -426,12 +476,16 @@
                 };
                 var stylePayload;
                 var dataItem = {};
+                var textResourcePayload;
                 if (gridField.payload != undefined) {
                     dataItem.Name = gridField.payload.DimensionName;
                     dataItem.Title = gridField.payload.Title;
                     dataItem.IsRootDimension = gridField.payload.IsRootDimension;
                     dataItemPayload.data = gridField.payload.ColumnSettings;
                     stylePayload = { selectedIds: gridField.payload.ColumnStyleId };
+                    textResourcePayload = {
+                        selectedValue: gridField.payload.TitleResourceKey
+                    };
                 }
                 dataItem.onDimensionGridWidthFactorEditorReady = function (api) {
                     dataItem.dimensionGridWidthFactorAPI = api;
@@ -441,6 +495,11 @@
                     dataItem.dimensionGridStyleAPI = api;
                     gridField.styleReadyPromiseDeferred.resolve();
                 };
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    gridField.textResourceReadyPromiseDeferred.resolve();
+                };
+               
                 gridField.readyPromiseDeferred.promise
                     .then(function () {
                         VRUIUtilsService.callDirectiveLoad(dataItem.dimensionGridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
@@ -449,7 +508,10 @@
                     .then(function () {
                         VRUIUtilsService.callDirectiveLoad(dataItem.dimensionGridStyleAPI, stylePayload, gridField.styleLoadPromiseDeferred);
                     });
-
+                gridField.textResourceReadyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridField.textResourceLoadPromiseDeferred);
+                    });
                 $scope.scopeModel.dimensions.push(dataItem);
             }
             function addMeasureGridWidthAPI(gridField) {
@@ -460,6 +522,8 @@
                 };
                 var stylePayload;
                 var dataItem = {};
+                var textResourcePayload;
+
                 if (gridField.payload != undefined) {
                     dataItem.Name = gridField.payload.MeasureName;
                     dataItem.Title = gridField.payload.Title;
@@ -467,6 +531,9 @@
                     dataItem.isHiddenInListView = gridField.payload.IsHiddenInListView;
                     dataItemPayload.data = gridField.payload.ColumnSettings;
                     stylePayload = { selectedIds: gridField.payload.ColumnStyleId };
+                    textResourcePayload = {
+                        selectedValue: gridField.payload.TitleResourceKey
+                    };
                 }
                 dataItem.onMeasureGridWidthFactorEditorReady = function (api) {
                     dataItem.measureGridWidthFactorAPI = api;
@@ -476,6 +543,10 @@
                     dataItem.measureGridStyleAPI = api;
                     gridField.styleReadyPromiseDeferred.resolve();
                 };
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    gridField.textResourceReadyPromiseDeferred.resolve();
+                };
                 gridField.readyPromiseDeferred.promise
                     .then(function () {
                         VRUIUtilsService.callDirectiveLoad(dataItem.measureGridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
@@ -483,6 +554,11 @@
                 gridField.styleReadyPromiseDeferred.promise
                     .then(function () {
                         VRUIUtilsService.callDirectiveLoad(dataItem.measureGridStyleAPI, stylePayload, gridField.styleLoadPromiseDeferred);
+                    });
+            
+                gridField.textResourceReadyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridField.textResourceLoadPromiseDeferred);
                     });
                 $scope.scopeModel.measures.push(dataItem);
             }
@@ -499,6 +575,7 @@
             function extendSubTableDefinitionDataItem(dataItem, payloadEntity) {
                 var selectedDimensionIds = [];
                 var selectedMeasureId;
+                var titleResourceKey;
                 var subtablePosition;
                 var selectedPositionValue;
                 var stylePayload;
@@ -522,6 +599,7 @@
                     if (payloadEntity.Measures != undefined && payloadEntity.Measures.length > 0) {
                         var measure = payloadEntity.Measures[0];
                         selectedMeasureId = measure.MeasureName;
+                        titleResourceKey = measure.TitleResourceKey;
                         dataItem.Title = measure.Title;
                         columnSettingPayload.data = measure.ColumnSettings;
                         stylePayload = { selectedIds: measure.ColumnStyleId };
@@ -590,6 +668,17 @@
                             selectedIds: selectedMeasureId
                         };
                         VRUIUtilsService.callDirectiveLoad(dataItem.measureSelectorAPI, measureDirectivePayload, dataItem.measureLoadPromiseDeferred);
+                    });
+
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    dataItem.textResourceReadyPromiseDeferred.resolve();
+                };
+
+                dataItem.textResourceReadyPromiseDeferred.promise
+                    .then(function () {
+                        var textResourcePayload = { selectedValue: titleResourceKey };
+                        VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, dataItem.textResourceLoadPromiseDeferred);
                     });
 
                 var orderTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();

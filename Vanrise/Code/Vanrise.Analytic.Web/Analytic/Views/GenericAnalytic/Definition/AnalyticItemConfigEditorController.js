@@ -13,6 +13,9 @@
         var analyticItemConfigId;
         var analyticTableId;
         var itemconfigType;
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
 
@@ -44,6 +47,11 @@
                     return insert();
                 }
             };
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
+
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -65,7 +73,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadItemConfigTypeDirective, loadStaticData]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadItemConfigTypeDirective, loadStaticData, loadLocalizationTextResourceSelector]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -95,7 +103,15 @@
                     });
                     return loadItemConfigTypeDirectivePromiseDeferred.promise;
                 }
+                function loadLocalizationTextResourceSelector() {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var localizationTextResourcePayload = (analyticItemConfigEntity != undefined && analyticItemConfigEntity.Config != undefined) ? { selectedValue: analyticItemConfigEntity.Config.TitleResourceKey } : undefined;
 
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
                 function loadStaticData()
                 {
                     if(analyticItemConfigEntity !=undefined)
@@ -137,6 +153,9 @@
                 ItemType:itemconfigType,
                 Config: analyticItemConfigdetail
             };
+            if (analyticItemConfig.Config == undefined)
+                analyticItemConfig.Config = {};
+            analyticItemConfig.Config.TitleResourceKey = localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined;
             var analyticItemConfigForAdd = {
                 ItemType: itemconfigType,
                 AnalyticItemConfig: UtilsService.serializetoJson(analyticItemConfig)

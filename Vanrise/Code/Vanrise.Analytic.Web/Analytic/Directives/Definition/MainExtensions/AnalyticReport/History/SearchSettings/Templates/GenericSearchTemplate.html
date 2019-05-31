@@ -24,6 +24,11 @@
                             <vr-datagridcolumn headertext="'Title'" widthfactor="5" disablesorting="true">
                                 <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                             </vr-datagridcolumn>
+                            <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="10" disablesorting>
+                                <vr-span vr-loader="dataItem.isDimensionTextResourceSelectorLoading">
+                                    <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                                </vr-span>
+                            </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Selected'" widthfactor="3" disablesorting="true">
                                 <vr-switch value="dataItem.IsSelected"></vr-switch>
                             </vr-datagridcolumn>
@@ -50,6 +55,11 @@
                         <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Title'" widthfactor="5" disablesorting="true">
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="10" disablesorting>
+                            <vr-span vr-loader="dataItem.isFilterDimensionTextResourceSelectorLoading">
+                                <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                            </vr-span>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Required'" widthfactor="3" disablesorting="true">
                             <vr-switch value="dataItem.IsRequired"></vr-switch>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -32,6 +33,28 @@ namespace Vanrise.Analytic.Entities
                     return false;
             }
             return true;
+        }
+
+        public override void ApplyTranslation(IAnalyticReportTranslationContext context)
+        {
+            if (SearchSettings != null)
+                SearchSettings.ApplyTranslation(new AnalyticRealTimeReportTranslationContext { LanguageId=context.LanguageId});
+
+            if (Widgets != null && Widgets.Count > 0)
+            {
+                VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+
+                foreach (var widget in Widgets)
+                {
+                    if (widget.TitleResourceKey != null)
+                        widget.WidgetTitle = vrLocalizationManager.GetTranslatedTextResourceValue(widget.TitleResourceKey, widget.WidgetTitle, context.LanguageId);
+                    widget.ApplyTranslation(new RealTimeReportWidgetTranslationContext
+                    {
+                        LanguageId = context.LanguageId,
+                        AnalyticTableId = AnalyticTableIds[0]
+                    });
+                }
+            }
         }
     }
 }

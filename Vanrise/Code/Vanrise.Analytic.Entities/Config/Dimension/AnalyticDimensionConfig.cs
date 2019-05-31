@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
         public string IdColumn { get; set; }
 
         public string NameColumn { get; set; }
-
+        public string TitleResourceKey { get; set; }
         public string SQLExpression { get; set; }
 
         /// <summary>

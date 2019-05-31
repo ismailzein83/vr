@@ -26,6 +26,11 @@
                         <vr-datagridcolumn headertext="'Title'" widthfactor="8" disablesorting="true">
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
+                        <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="8" disablesorting="true">
+                            <vr-span vr-loader="dataItem.isFilterDimensionTextResourceSelectorLoading">
+                                <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                            </vr-span>
+                        </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="9" disablesorting="true">
                             <vr-common-gridcolumnwidth-editor on-ready="dataItem.onDimensionGridWidthFactorEditorReady" hidelabel showhint></vr-common-gridcolumnwidth-editor>
                         </vr-datagridcolumn>
@@ -50,6 +55,11 @@
                         <vr-datagridcolumn headertext="'Measure Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Title'" widthfactor="6" disablesorting="true">
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="6" disablesorting="true">
+                            <vr-span vr-loader="dataItem.isMeasureTextResourceSelectorLoading">
+                                <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                            </vr-span>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="9" disablesorting="true">
                             <vr-common-gridcolumnwidth-editor on-ready="dataItem.onMeasureGridWidthFactorEditorReady" hidelabel showhint></vr-common-gridcolumnwidth-editor>
@@ -84,6 +94,11 @@
                         <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
+                        <vr-datagridcolumn ng-if="scopeModel.isLocalizationEnabled" headertext="'Text Resource'" widthfactor="6" disablesorting="true">
+                            <vr-span vr-loader="dataItem.isSubTableTextResourceSelectorLoading">
+                                <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onTextResourceSelectorReady" hidelabel="true"></vr-common-vrlocalizationtextresource-selector>
+                            </vr-span>
+                        </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="12" disablesorting="true">
                             <vr-common-gridcolumnwidth-editor on-ready="dataItem.onMeasureGridWidthFactorEditorReady" hidelabel showhint></vr-common-gridcolumnwidth-editor>
                         </vr-datagridcolumn>
@@ -101,7 +116,7 @@
                                                datatextfield="Name"
                                                isrequired="true"
                                                col-num="8"
-                                               on-ready="dataItem.onReferenceMeasureSelectorDirectiveReady" selectedvalues="dataItem.selectedReferenceMeasure" hideremoveicon ></vr-select>
+                                               on-ready="dataItem.onReferenceMeasureSelectorDirectiveReady" selectedvalues="dataItem.selectedReferenceMeasure" hideremoveicon></vr-select>
                                 </vr-columns>
                             </vr-columns>
                         </vr-datagridcolumn>

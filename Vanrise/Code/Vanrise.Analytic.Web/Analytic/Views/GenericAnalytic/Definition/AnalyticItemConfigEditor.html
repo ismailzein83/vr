@@ -10,9 +10,10 @@
                         <vr-columns width="1/3row">
                             <vr-textbox value="scopeModel.title" isrequired="true" label="Title" customvalidate="scopeModel.validate()"></vr-textbox>
                         </vr-columns>
+                        <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceSelectorReady" normal-col-num="4"></vr-common-vrlocalizationtextresource-selector>
                     </vr-row>
                 </vr-tab>
-                 <vr-directivewrapper directive="scopeModel.selectedItemConfigType.editor" on-ready="scopeModel.onItemConfigTypeDirectiveReady"></vr-directivewrapper>
+                <vr-directivewrapper directive="scopeModel.selectedItemConfigType.editor" on-ready="scopeModel.onItemConfigTypeDirectiveReady"></vr-directivewrapper>
             </vr-tabs>
 
         </vr-form>

@@ -75,12 +75,46 @@ namespace Vanrise.Analytic.Business
             return null;
         }
 
-        public AnalyticReport GetAnalyticReportById(Guid analyticReportId)
+        public AnalyticReport GetAnalyticReportById(Guid analyticReportId, bool getTranslated = false)
         {
             var analyticReports = GetCachedAnalyticReports();
-            return analyticReports.GetRecord(analyticReportId);
+            var analyticReport = analyticReports.GetRecord(analyticReportId);
+
+            if (getTranslated)
+            {
+                return GetTranslatedAnalyticReport(analyticReport);
+            }
+            else
+            {
+                return analyticReport;
+            }
         }
 
+        public AnalyticReport GetTranslatedAnalyticReport (AnalyticReport analyticReport)
+        {
+            VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+            var analyticReportCopy = analyticReport.VRDeepCopy();
+
+            if (vrLocalizationManager.IsLocalizationEnabled())
+            {
+                var languageId = vrLocalizationManager.GetCurrentLanguageId();
+                if (languageId.HasValue)
+                {
+                    var languageIdValue = languageId.Value;
+
+                    if (analyticReportCopy != null)
+                    {
+
+                        if (analyticReportCopy.Settings != null)
+                        {
+                            analyticReport.Settings.ApplyTranslation(new AnalyticReportTranslationContext { LanguageId = languageIdValue });
+                        }
+                    }
+                }
+            }
+            return analyticReportCopy;
+        }
+       
         public Vanrise.Entities.InsertOperationOutput<AnalyticReportDetail> AddAnalyticReport(AnalyticReport analyticReport)
         {
             InsertOperationOutput<AnalyticReportDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AnalyticReportDetail>();

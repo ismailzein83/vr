@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Analytic.MainExtensions.History.Widgets
 {
@@ -25,6 +28,35 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public override List<string> GetMeasureNames()
         {
             return this.Measures.Select(measure => measure.MeasureName).ToList();
+        }
+        public override void ApplyTranslation(IAnalyticHistoryReportWidgetTranslationContext context)
+        {
+            AnalyticItemConfigManager configManager = new AnalyticItemConfigManager();
+            VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+
+            if (Dimensions!=null && Dimensions.Count > 0)
+            {
+                var dimensions = configManager.GetDimensions(context.AnalyticTableId);
+
+                foreach (var widgetDimension in Dimensions)
+                {
+                    var dimension = dimensions.GetRecord(widgetDimension.DimensionName);
+                    if (dimension != null && dimension.Config != null && dimension.Config.TitleResourceKey != null)
+                        widgetDimension.Title = vrLocalizationManager.GetTranslatedTextResourceValue(dimension.Config.TitleResourceKey, widgetDimension.Title, context.LanguageId);
+                }
+            }
+
+            if (Measures != null && Measures.Count > 0)
+            {
+                var measures = configManager.GetMeasures(context.AnalyticTableId);
+
+                foreach (var widgetMeasure in Measures)
+                {
+                    var measure = measures.GetRecord(widgetMeasure.MeasureName);
+                    if (measure != null && measure.Config != null && measure.Config.TitleResourceKey != null)
+                        widgetMeasure.Title = vrLocalizationManager.GetTranslatedTextResourceValue(measure.Config.TitleResourceKey, widgetMeasure.Title, context.LanguageId);
+                }
+            }
         }
     }
 

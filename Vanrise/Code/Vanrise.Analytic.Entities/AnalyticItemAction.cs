@@ -10,6 +10,7 @@ namespace Vanrise.Analytic.Entities
     {
         public abstract Guid ConfigId { get; }
         public string Title { get; set; }
+        public string TitleResourceKey { get; set; }
         public abstract void Execute(IAnalyticItemActionContext context);
     }
 

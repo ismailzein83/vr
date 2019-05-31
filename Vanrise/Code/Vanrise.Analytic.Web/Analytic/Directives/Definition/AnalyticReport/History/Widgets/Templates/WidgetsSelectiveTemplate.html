@@ -4,6 +4,7 @@
             <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">
                 <vr-textbox label="Title" value="scopeModel.widgetTitle" isrequired="true"></vr-textbox>
             </vr-columns>
+            <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceSelectorReady" normal-col-num="{{searchSettingsCtrl.normalColNum}}"></vr-common-vrlocalizationtextresource-selector>
 
             <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">
                 <vr-select datasource="scopeModel.columnWidth" datatextfield="description" datavaluefield="value" hideremoveicon label="Row Space" selectedvalues="scopeModel.selectedColumnWidth" isrequired hidefilterbox></vr-select>

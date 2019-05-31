@@ -10,6 +10,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
             isdisabled: "=",
             onselectionchanged: '=',
             isrequired: "=",
+            localizedlabel: "@",
             selectedvalues: '=',
             hideremoveicon: "@",
             label: '@'
@@ -45,12 +46,16 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
     function getTemplate(attrs) {
         var multipleselection = "";
         var label = "Period";
+        var localizedlabel = "VRRes.Common.Period.VREnd";
         var hideremoveicon = "";
 
         if (attrs.ismultipleselection != undefined) {
             label = "Periods";
             multipleselection = "ismultipleselection";
         }
+        if (attrs.localizedlabel != undefined)
+            localizedlabel = attrs.localizedlabel;
+
         else if (attrs.hideremoveicon != undefined) {
             hideremoveicon = "hideremoveicon";
         }
@@ -59,7 +64,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
 
         return '<div  vr-loader="isLoadingDirective" >'
             + '<vr-select  isrequired="ctrl.isrequired" ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="description" datavaluefield="value" '
-        + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled" ></vr-select>'
+            + ' label="' + label + '" localizedlabel="' + localizedlabel +  '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled" ></vr-select>'
             + '</div>';
     }
 

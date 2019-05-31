@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum', 'Analytic_RecordSearchService'];
+    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum', 'Analytic_RecordSearchService','VRLocalizationService'];
 
-    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum, VRCommon_GridWidthFactorEnum, Analytic_RecordSearchService) {
+    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum, VRCommon_GridWidthFactorEnum, Analytic_RecordSearchService, VRLocalizationService) {
 
         var isEditMode;
         var dataRecordSource;
@@ -22,6 +22,9 @@
 
         var subviewDefinitionGridAPI;
         var subviewDefinitionGridReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -53,6 +56,7 @@
             $scope.selectedDetailsGrid = [];
             $scope.selectedSubviewDefinitionsGrid = [];
             $scope.selectedSortColumnsGrid = [];
+            $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
 
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
@@ -69,7 +73,10 @@
                 subviewDefinitionGridAPI = api;
                 subviewDefinitionGridReadyDeferred.resolve();
             };
-
+            $scope.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
             $scope.onBeforeDataRecordTypeSelectionChanged = function () {
 
                 var selectedDataRecordType = $scope.scopeModel.selectedDataRecordType;
@@ -123,6 +130,7 @@
                 var dataItem = {
                     FieldName: selectedField.Name,
                     FieldTitle: selectedField.Title,
+                    TitleResourceKey: selectedField.TitleResourceKey
                 };
                 dataItem.onGridWidthFactorSelectorReady = function (api) {
                     dataItem.gridWidthFactorAPI = api;
@@ -141,13 +149,23 @@
                     var setLoader = function (value) { $scope.isLoadingDirective = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dataRecordGridStyleAPI, dataItemPayload, setLoader);
                 };
-
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    var setLoader = function (value) { dataItem.isFieldTextResourceSelectorLoading = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
+                };
                 $scope.selectedFieldsGrid.push(dataItem);
             };
             $scope.onSelectedFilter = function (selectedFilter) {
                 var dataItem = {
                     FieldName: selectedFilter.Name,
                     FieldTitle: selectedFilter.Title,
+                    TitleResourceKey: selectedFilter.TitleResourceKey
+                };
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    var setLoader = function (value) { dataItem.isFilterTextResourceSelectorLoading = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
                 };
                 $scope.selectedFiltersGrid.push(dataItem);
             };
@@ -155,7 +173,13 @@
                 var dataItem = {
                     FieldName: detailItem.Name,
                     FieldTitle: detailItem.Title,
-                    SelectedDetailWidth: ColumnWidthEnum.QuarterRow
+                    SelectedDetailWidth: ColumnWidthEnum.QuarterRow,
+                    TitleResourceKey: detailItem.TitleResourceKey
+                };
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    var setLoader = function (value) { dataItem.isFieldDetailTextResourceSelectorLoading = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
                 };
                 $scope.selectedDetailsGrid.push(dataItem);
             };
@@ -300,7 +324,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, setData, loadDataRecordTypeSelector, loadDataRecordFields, loadRecordFilterDirectiveLoadPromise, loadSubviewGrid]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, setData, loadDataRecordTypeSelector, loadDataRecordFields, loadRecordFilterDirectiveLoadPromise, loadSubviewGrid, loadLocalizationTextResourceSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -355,10 +379,13 @@
                                 readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 loadPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 styleReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                styleLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                styleLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                             };
                             promises.push(gridColumnItem.loadPromiseDeferred.promise);
                             promises.push(gridColumnItem.styleLoadPromiseDeferred.promise);
+                            promises.push(gridColumnItem.textResourceLoadPromiseDeferred.promise);
                             addGridColumnAPI(gridColumnItem, currentColumn);
                         }
                     }
@@ -371,7 +398,11 @@
                             $scope.selectedDetails.push(selectedDetail);
                             var itemDetail = {
                                 payload: selectedDetail,
+                                textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                             };
+                            promises.push(itemDetail.textResourceLoadPromiseDeferred.promise);
+
                             addGridItemDetailAPI(itemDetail, currentDetail);
                         }
                     }
@@ -399,7 +430,11 @@
 
                             var filter = {
                                 payload: selectedFilter,
+                                textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                             };
+                            promises.push(filter.textResourceLoadPromiseDeferred.promise);
+
                             addFilterAPI(filter, currentFilter);
                         }
                     }
@@ -457,7 +492,15 @@
                 }
             });
         }
+        function loadLocalizationTextResourceSelector() {
+            var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            var localizationTextResourcePayload = { selectedValue: dataRecordSource != undefined ? dataRecordSource.TitleResourceKey : undefined };
 
+            localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+            });
+            return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+        }
         function addGridColumnAPI(gridField, payload) {
             var dataItemPayload = {
                 data: {
@@ -469,12 +512,13 @@
                 FieldTitle: gridField.payload.Title,
             };
             var stylePayload;
+            var textResourcePayload;
             if (payload) {
                 dataItem.FieldTitle = payload.FieldTitle;
                 dataItemPayload.data = payload.ColumnSettings;
                 dataItem.isHidden = payload.IsHidden;
                 stylePayload = { selectedIds: payload.ColumnStyleId };
-
+                textResourcePayload = { selectedValue: payload.TitleResourceKey};
             }
             dataItem.onGridWidthFactorSelectorReady = function (api) {
                 dataItem.gridWidthFactorAPI = api;
@@ -484,6 +528,10 @@
                 dataItem.dataRecordGridStyleAPI = api;
                 gridField.styleReadyPromiseDeferred.resolve();
             };
+            dataItem.onTextResourceSelectorReady = function (api) {
+                dataItem.textResourceSeletorAPI = api;
+                gridField.textResourceReadyPromiseDeferred.resolve();
+            };
             gridField.readyPromiseDeferred.promise
                 .then(function () {
                     VRUIUtilsService.callDirectiveLoad(dataItem.gridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
@@ -492,6 +540,11 @@
                 .then(function () {
                     VRUIUtilsService.callDirectiveLoad(dataItem.dataRecordGridStyleAPI, stylePayload, gridField.styleLoadPromiseDeferred);
                 });
+            gridField.textResourceReadyPromiseDeferred.promise
+                .then(function () {
+                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridField.textResourceLoadPromiseDeferred);
+                });
+
             $scope.selectedFieldsGrid.push(dataItem);
         }
         function addGridItemDetailAPI(gridField, payload) {
@@ -500,9 +553,21 @@
                 FieldTitle: gridField.payload.Title,
                 SelectedDetailWidth: payload != undefined ? UtilsService.getItemByVal($scope.scopeModel.detailWidths, payload.ColumnWidth, 'value') : ColumnWidthEnum.QuarterRow
             };
+            var textResourcePayload = { selectedValue: payload != undefined ? payload.TitleResourceKey : undefined };
+
             if (payload) {
                 dataItem.FieldTitle = payload.FieldTitle;
             }
+            dataItem.onTextResourceSelectorReady = function (api) {
+                dataItem.textResourceSeletorAPI = api;
+                gridField.textResourceReadyPromiseDeferred.resolve();
+            };
+
+            gridField.textResourceReadyPromiseDeferred.promise
+                .then(function () {
+                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridField.textResourceLoadPromiseDeferred);
+                });
+
             $scope.selectedDetailsGrid.push(dataItem);
         }
         function addSortColumnAPI(gridField, payload) {
@@ -522,10 +587,21 @@
                 FieldTitle: filter.payload.Title,
                 IsRequired: filter.payload.IsRequired
             };
+            var textResourcePayload;
+           
             if (payload) {
                 dataItem.FieldTitle = payload.FieldTitle;
                 dataItem.IsRequired = payload.IsRequired;
+                textResourcePayload = { selectedValue: payload.TitleResourceKey };
             }
+            dataItem.onTextResourceSelectorReady = function (api) {
+                dataItem.textResourceSeletorAPI = api;
+                filter.textResourceReadyPromiseDeferred.resolve();
+            };
+            filter.textResourceReadyPromiseDeferred.promise
+                .then(function () {
+                    VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, filter.textResourceLoadPromiseDeferred);
+                });
             $scope.selectedFiltersGrid.push(dataItem);
         }
 
@@ -549,7 +625,14 @@
             var columns = [];
             for (var x = 0; x < $scope.selectedFieldsGrid.length; x++) {
                 var currentItem = $scope.selectedFieldsGrid[x];
-                columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle, ColumnSettings: currentItem.gridWidthFactorAPI.getData(), IsHidden: currentItem.isHidden, ColumnStyleId: currentItem.dataRecordGridStyleAPI.getSelectedIds() });
+                columns.push({
+                    FieldName: currentItem.FieldName,
+                    FieldTitle: currentItem.FieldTitle,
+                    ColumnSettings: currentItem.gridWidthFactorAPI.getData(),
+                    IsHidden: currentItem.isHidden,
+                    ColumnStyleId: currentItem.dataRecordGridStyleAPI.getSelectedIds(),
+                    TitleResourceKey: currentItem.textResourceSeletorAPI != undefined ? currentItem.textResourceSeletorAPI.getSelectedValues() : undefined
+                });
             }
 
             var filters = [];
@@ -558,14 +641,20 @@
                 filters.push({
                     FieldName: currentFilter.FieldName,
                     FieldTitle: currentFilter.FieldTitle,
-                    IsRequired: currentFilter.IsRequired
+                    IsRequired: currentFilter.IsRequired,
+                    TitleResourceKey: currentFilter.textResourceSeletorAPI != undefined ? currentFilter.textResourceSeletorAPI.getSelectedValues() : undefined
                 });
             }
 
             var details = [];
             for (var y = 0; y < $scope.selectedDetailsGrid.length; y++) {
                 var currentDetail = $scope.selectedDetailsGrid[y];
-                details.push({ FieldName: currentDetail.FieldName, FieldTitle: currentDetail.FieldTitle, ColumnWidth: currentDetail.SelectedDetailWidth.value });
+                details.push({
+                    FieldName: currentDetail.FieldName,
+                    FieldTitle: currentDetail.FieldTitle,
+                    ColumnWidth: currentDetail.SelectedDetailWidth.value,
+                    TitleResourceKey: currentDetail.textResourceSeletorAPI != undefined ? currentDetail.textResourceSeletorAPI.getSelectedValues() : undefined
+                });
             }
 
             var subviewDefinitions = [];
@@ -590,7 +679,8 @@
                 SubviewDefinitions: subviewDefinitions,
                 SortColumns: sortColumns,
                 Filters: filters,
-                RecordFilter: recordFilterDirectiveAPI.getData().filterObj
+                RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
+                TitleResourceKey:localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
             };
             return obj;
         }

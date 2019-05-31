@@ -49,17 +49,17 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
         var onblurchanged = "";
         if (attrs.hideperiodsection == undefined) {
             periodSection = '<vr-columns width="' + attrs.width + '">'
-                          + '<vr-period-selector on-ready="scopeModel.onPeriodDirectiveReady" ' + hideremoveicon + ' selectedvalues="ctrltimerange.period" onselectionchanged="scopeModel.periodSelectionChanged"></vr-period-selector>'
+                          + '<vr-period-selector on-ready="scopeModel.onPeriodDirectiveReady" ' + hideremoveicon + ' selectedvalues="ctrltimerange.period"  onselectionchanged="scopeModel.periodSelectionChanged"></vr-period-selector>'
                           + '</vr-columns>';
             onblurchanged = ' onvaluechanged="scopeModel.onBlurChanged" ';
         }
 
         return periodSection
                + '<vr-columns width="' + attrs.width + '">'
-               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.from" label="From" customvalidate="scopeModel.validateDateTime()" isrequired="true" ' + onblurchanged + '></vr-datetimepicker>'
+            + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.from" label="From" localizedlabel="VRRes.Common.From.VREnd" customvalidate="scopeModel.validateDateTime()" isrequired="true" ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>'
                + '<vr-columns width="' + attrs.width + '">'
-               + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.to" label="To" applytimemax customvalidate="scopeModel.validateDateTime()" isrequired="ctrltimerange.isrequired" ' + onblurchanged + '></vr-datetimepicker>'
+            + '    <vr-datetimepicker type="' + attrs.type + '" value="ctrltimerange.to" label="To" localizedlabel="VRRes.Common.To.VREnd" applytimemax customvalidate="scopeModel.validateDateTime()" isrequired="ctrltimerange.isrequired" ' + onblurchanged + '></vr-datetimepicker>'
                + '</vr-columns>';
     }
 

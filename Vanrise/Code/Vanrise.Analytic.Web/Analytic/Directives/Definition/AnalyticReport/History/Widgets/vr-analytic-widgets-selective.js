@@ -45,6 +45,9 @@
             var recordFilterDirectiveAPI;
             var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var localizationTextResourceSelectorAPI;
+            var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -72,9 +75,15 @@
                     recordFilterDirectiveReadyDeferred.resolve();
                 };
 
+                $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                    localizationTextResourceSelectorAPI = api;
+                    localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+                };
+
                 $scope.scopeModel.onSelectionTableChanged = function () {
                     $scope.scopeModel.selectedTemplateConfig = undefined;
                 };
+
                 $scope.scopeModel.onAnalyticTableSelectorChanged = function (selectedItem) {
 
                     if (selectedItem != undefined) {
@@ -159,6 +168,8 @@
                             promises.push(recordFilterDirectiveLoadPromise);
                         }
 
+                        promises.push(loadLocalizationTextResourceSelector());
+
                         function getWidgetsTemplateConfigs() {
                             return VR_Analytic_AnalyticConfigurationAPIService.GetWidgetsTemplateConfigs().then(function (response) {
                                 if (selectorAPI != undefined)
@@ -202,7 +213,15 @@
 
                             return recordFilterDirectiveLoadDeferred.promise;
                         }
+                        function loadLocalizationTextResourceSelector() {
+                            var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                            var localizationTextResourcePayload = widgetEntity != undefined ? { selectedValue: widgetEntity.TitleResourceKey } : undefined;
 
+                            localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                                VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                            });
+                            return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                        }
                         return UtilsService.waitMultiplePromises(promises).then(function () {
 
                             tableSelectedPromiseDeffered = undefined;
@@ -223,6 +242,7 @@
                             data.ColumnWidth = $scope.scopeModel.selectedColumnWidth.value;
                             data.ShowTitle = $scope.scopeModel.showTitle;
                             data.RecordFilter = recordFilterDirectiveAPI.getData().filterObj;
+                            data.TitleResourceKey= localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined;
                         }
                     }
                     return data;

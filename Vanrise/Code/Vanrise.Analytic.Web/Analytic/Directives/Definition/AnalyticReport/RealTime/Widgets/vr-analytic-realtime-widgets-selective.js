@@ -35,10 +35,13 @@
             }
 
             var template =
-                '<vr-row>'
+
+                + '<vr-row>'
+            + ' <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceSelectorReady" normal-col-num="3"></vr-common-vrlocalizationtextresource-selector>'
+
                + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
                 + ' <vr-textbox label="Title" value="scopeModel.widgetTitle" isrequired="true"></vr-textbox>'
-              + ' </vr-columns>'
+                + ' </vr-columns>'
                + '  <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
                 + '  <vr-select datasource="scopeModel.columnWidth" datatextfield="description" datavaluefield="value" hideremoveicon label="Row Space" selectedvalues="scopeModel.selectedColumnWidth" isrequired hidefilterbox></vr-select>'
                 + ' </vr-columns>'
@@ -86,6 +89,9 @@
             var recordFilterDirectiveAPI;
             var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var localizationTextResourceSelectorAPI;
+            var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -113,7 +119,10 @@
                     recordFilterDirectiveAPI = api;
                     recordFilterDirectiveReadyDeferred.resolve();
                 };
-
+                $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                    localizationTextResourceSelectorAPI = api;
+                    localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+                };
                 $scope.scopeModel.onTableSelectorSelectionChanged = function (selectedItem) {
                     //$scope.scopeModel.selectedTemplateConfig = undefined;
 
@@ -173,6 +182,9 @@
                         var widgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
                         promises.push(widgetsTemplateConfigsPromise);
 
+                        var loadLocalizationTextResourceSelectorPromise = loadLocalizationTextResourceSelector();
+                        promises.push(loadLocalizationTextResourceSelectorPromise);
+
                         if (isEditMode) {
                             //Loading DirectiveWrapper
                             var directiveWrapperLoadPromise = getDirectiveWrapperLoadPromise();
@@ -181,6 +193,8 @@
                             //Loading RecordFilter Directive
                             var recordFilterDirectiveLoadPromise = getRecordFilterDirectiveLoadPromise();
                             promises.push(recordFilterDirectiveLoadPromise);
+
+                            
                         }
 
                         function getTableSelectorLoadPromise() {
@@ -259,6 +273,16 @@
                             return recordFilterDirectiveLoadDeferred.promise;
                         }
 
+                        function loadLocalizationTextResourceSelector() {
+                            var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                            var localizationTextResourcePayload = { selectedValue: widgetEntity != undefined ? widgetEntity.TitleResourceKey : undefined };
+
+                            localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                                VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                            });
+                            return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                        }
+
                         return UtilsService.waitMultiplePromises(promises);
                     }
                 };
@@ -275,6 +299,7 @@
                             data.ColumnWidth = $scope.scopeModel.selectedColumnWidth.value;
                             data.ShowTitle = $scope.scopeModel.showTitle;
                             data.RecordFilter = recordFilterDirectiveAPI.getData().filterObj;
+                            data.TitleResourceKey = localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined;
                         }
                     }
                     return data;

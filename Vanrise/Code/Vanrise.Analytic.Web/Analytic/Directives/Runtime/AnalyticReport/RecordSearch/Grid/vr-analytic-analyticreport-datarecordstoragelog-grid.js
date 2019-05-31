@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum', 'VRUIUtilsService', 'VRCommon_StyleDefinitionAPIService'];
+    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum', 'VRUIUtilsService', 'VRCommon_StyleDefinitionAPIService','VRLocalizationService'];
 
-    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum, ColumnWidthEnum, VRUIUtilsService, VRCommon_StyleDefinitionAPIService) {
+    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum, ColumnWidthEnum, VRUIUtilsService, VRCommon_StyleDefinitionAPIService, VRLocalizationService) {
         return {
             restrict: 'E',
             scope: {
@@ -280,7 +280,7 @@
 
                 function buildDetailsDrillDownTab() {
                     var detailsTab = {};
-                    detailsTab.title = 'Details';
+                    detailsTab.title = VRLocalizationService.isLocalizationEnabled() ? 'VRRes.Common.Details.VREnd' : 'Details';
                     detailsTab.directive = 'vr-analytic-datarecordsearchpage-itemdetails';
 
                     detailsTab.loadDirective = function (directiveAPI, dataRecordStorageLog) {

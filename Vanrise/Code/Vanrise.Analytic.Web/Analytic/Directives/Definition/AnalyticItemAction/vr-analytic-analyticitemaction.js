@@ -38,7 +38,8 @@
                 '<vr-row>'
                    + '<vr-columns colnum="{{analytiItemActionCtrl.normalColNum * 2}}">'
                      + '<vr-textbox isrequired="true" value="actionTitle" label="Title"></vr-textbox>'
-                   + '</vr-columns>'
+                + '</vr-columns>'
+                + '<vr-common-vrlocalizationtextresource-selector on-ready="onLocalizationTextResourceSelectorReady" normal-col-num="{{analytiItemActionCtrl.normalColNum* 2}}"></vr-common-vrlocalizationtextresource-selector>'
                    + '<vr-columns colnum="{{analytiItemActionCtrl.normalColNum * 2}}">'
                      + ' <vr-select on-ready="onSelectorReady" datasource="templateConfigs" selectedvalues="selectedTemplateConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title"'
                      + label + ' isrequired="analytiItemActionCtrl.isrequired" hideremoveicon></vr-select>'
@@ -57,6 +58,9 @@
             var directiveReadyDeferred;
             var directivePayload;
             var action;
+            var localizationTextResourceSelectorAPI;
+            var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.templateConfigs = [];
                 $scope.selectedTemplateConfig;
@@ -64,6 +68,11 @@
                 $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
+                };
+
+                $scope.onLocalizationTextResourceSelectorReady = function (api) {
+                    localizationTextResourceSelectorAPI = api;
+                    localizationTextResourceSelectorReadyPromiseDeferred.resolve();
                 };
 
                 $scope.onDirectiveReady = function (api) {
@@ -82,10 +91,13 @@
 
                 api.load = function (payload) {
                     var promises = [];
+                    var titleResourceKey;
                     if (payload != undefined) {
                         action = payload.itemAction;
-                        if (action !=undefined)
-                          $scope.actionTitle = action.Title;
+                        if (action != undefined) {
+                            $scope.actionTitle = action.Title;
+                            titleResourceKey = action.TitleResourceKey;
+                        }
                         directiveReadyDeferred = UtilsService.createPromiseDeferred();
                         var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         directiveReadyDeferred.promise.then(function () {
@@ -100,7 +112,8 @@
 
                     var getAnalyticItemActionsTemplateConfigsPromise = getAnalyticItemActionsTemplateConfigs();
                     promises.push(getAnalyticItemActionsTemplateConfigsPromise);
-
+                    var loadLocalizationTextResourceSelectorPromise = loadLocalizationTextResourceSelector();
+                    promises.push(loadLocalizationTextResourceSelectorPromise);
                     return UtilsService.waitMultiplePromises(promises);
 
                     function getAnalyticItemActionsTemplateConfigs() {
@@ -118,6 +131,15 @@
                         });
                     }
 
+                    function loadLocalizationTextResourceSelector() {
+                        var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        var localizationTextResourcePayload = { selectedValue: titleResourceKey };
+
+                        localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                            VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                        });
+                        return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                    }
 
                 };
 
@@ -135,6 +157,7 @@
                         if (data != undefined) {
                             data.ConfigId = $scope.selectedTemplateConfig.ExtensionConfigurationId;
                             data.Title = $scope.actionTitle;
+                            data.TitleResourceKey = localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined;
                         }
                     }
                     return data;

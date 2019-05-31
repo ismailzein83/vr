@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AnalyticreportRealtimeDefaultsearch.$inject = ["UtilsService", 'VRUIUtilsService'];
+    AnalyticreportRealtimeDefaultsearch.$inject = ["UtilsService", 'VRUIUtilsService','VRLocalizationService'];
 
-    function AnalyticreportRealtimeDefaultsearch(UtilsService, VRUIUtilsService) {
+    function AnalyticreportRealtimeDefaultsearch(UtilsService, VRUIUtilsService, VRLocalizationService) {
         return {
             restrict: "E",
             scope: {
@@ -28,14 +28,23 @@
             this.initializeController = initializeController;
             var filterDimensionSelectorAPI;
             var filterDimensionReadyDeferred = UtilsService.createPromiseDeferred();
+            var localizationTextResourceSelectorAPI;
+            var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.timeInterval = 15;
                 $scope.scopeModel.filterDimensions = [];
+                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
 
                 $scope.scopeModel.onFilterDimensionSelectorDirectiveReady = function (api) {
                     filterDimensionSelectorAPI = api;
                     filterDimensionReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                    localizationTextResourceSelectorAPI = api;
+                    localizationTextResourceSelectorReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onSelectFilterDimensionItem = function (dimension) {
@@ -43,7 +52,13 @@
                         AnalyticItemConfigId: dimension.AnalyticItemConfigId,
                         Title: dimension.Title,
                         Name: dimension.Name,
-                        IsRequired: false
+                        IsRequired: false,
+                        TitleResourceKey: dimension.TitleResourceKey
+                    };
+                    dataItem.onTextResourceSelectorReady = function (api) {
+                        dataItem.textResourceSeletorAPI = api;
+                        var setLoader = function (value) { dataItem.isDimensionTextResourceSelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
                     };
                     $scope.scopeModel.filterDimensions.push(dataItem);
                 };
@@ -63,6 +78,33 @@
                 defineAPI();
             }
 
+     
+            function addSelectedFilterDimension(gridDimension) {
+
+                var textResourcePayload;
+
+                var dataItem = {};
+                if (gridDimension.payload != undefined) {
+                    dataItem.Name = gridDimension.payload.DimensionName;
+                    dataItem.Title = gridDimension.payload.Title;
+                    dataItem.IsRequired = gridDimension.IsRequired;
+                    textResourcePayload = { selectedValue: gridDimension.payload.TitleResourceKey };
+
+                }
+              
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    gridDimension.textResourceReadyPromiseDeferred.resolve();
+                };
+
+                gridDimension.textResourceReadyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridDimension.textResourceLoadPromiseDeferred);
+                    });
+
+                $scope.scopeModel.filterDimensions.push(dataItem);
+            }
+
             function defineAPI() {
                 var api = {};
 
@@ -79,14 +121,14 @@
                                 selectedFilterIds = [];
                                 for (var i = 0 ; i < payload.searchSettings.Filters.length; i++) {
                                     var filterDimension = payload.searchSettings.Filters[i];
-                                    selectedFilterIds.push(filterDimension.DimensionName);
-                                    var dataItem = {
-                                        Name: filterDimension.DimensionName,
-                                        Title: filterDimension.Title,
-                                        IsRequired: filterDimension.IsRequired,
+                                    var dimensionGridField = {
+                                        payload: filterDimension,
+                                        textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                                     };
-                                    $scope.scopeModel.filterDimensions.push(dataItem);
-
+                                    selectedFilterIds.push(filterDimension.DimensionName);
+                                    promises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
+                                    addSelectedFilterDimension(dimensionGridField);
                                 }
                             }
                         }
@@ -100,7 +142,6 @@
                             VRUIUtilsService.callDirectiveLoad(filterDimensionSelectorAPI, payloadFilterDirective, loadFilterDirectivePromiseDeferred);
                         });
                         promises.push(loadFilterDirectivePromiseDeferred.promise);
-
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
@@ -124,6 +165,7 @@
                                 DimensionName:filterDimension.Name,
                                 Title: filterDimension.Title,
                                 IsRequired: filterDimension.IsRequired,
+                                TitleResourceKey: filterDimension.textResourceSeletorAPI != undefined ? filterDimension.textResourceSeletorAPI.getSelectedValues() : undefined
                             });
                         }
                     }

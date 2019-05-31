@@ -30,6 +30,7 @@
             restrict: 'E',
             scope: {
                 label: '@',
+                localizedlabel: '@',
                 customlabel: '@',
                 entityname: '@',
                 onReady: '=',
@@ -49,7 +50,7 @@
                 onselectionchanged: '=',
                 onselectitem: '=',
                 ondeselectitem: '=',
-                onremoveitem:'=',
+                onremoveitem: '=',
                 ondeselectallitems: '=',
                 onaddclicked: "=",
                 hint: '@',
@@ -474,7 +475,7 @@
                     clearFilter: clearFilter,
                     selectFirstItem: selectFirstItem,
                     getLabel: getLabel,
-                    getButtonTitle:getButtonTitle,
+                    getButtonTitle: getButtonTitle,
                     getSelectedSectionClass: getSelectedSectionClass,
                     onAddhandler: onAddhandler,
                     includeOnAddHandler: includeOnAddHandler,
@@ -929,6 +930,8 @@
 
                     var labelTemplate = '';
                     var labelvalue = attrs.customlabel != undefined ? attrs.customlabel : attrs.label;
+                    if (VRLocalizationService.isLocalizationEnabled())
+                        labelvalue = (attrs.localizedlabel != undefined && attrs.localizedlabel != null && attrs.localizedlabel != '') ? attrs.localizedlabel : labelvalue;
                     if (labelvalue != undefined && attrs.hidelabel == undefined)
                         labelTemplate = '<vr-label>' + labelvalue + '</vr-label>';
                     angular.element(element[0].querySelector('.dropdown-container2')).prepend(labelTemplate);
@@ -1085,9 +1088,9 @@
                         ctrl.selectValue = function (e, item, removeselection) {
                             if (ctrl.getObjectDisabled(item) == true || ctrl.readOnly)
                                 return;
-                            if (ctrl.getObjectDisabledSelect(item) == true && getItemIndex(item) < 0 && ctrl.isMultiple() )
+                            if (ctrl.getObjectDisabledSelect(item) == true && getItemIndex(item) < 0 && ctrl.isMultiple())
                                 return;
-                            if(ctrl.getObjectDisabledSelect(item) == true && !ctrl.isMultiple())
+                            if (ctrl.getObjectDisabledSelect(item) == true && !ctrl.isMultiple())
                                 return;
                             var onBeforeSelectionChanged = $scope.$parent.$eval(iAttrs.onbeforeselectionchanged);
                             if (onBeforeSelectionChanged != undefined && typeof (onBeforeSelectionChanged) == 'function') {

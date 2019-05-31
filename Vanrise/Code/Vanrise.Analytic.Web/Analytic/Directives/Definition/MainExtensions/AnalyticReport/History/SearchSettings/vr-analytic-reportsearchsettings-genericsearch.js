@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ReportsearchsettingsGenericsearch.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AdvancedFilterFieldsRelationType'];
+    ReportsearchsettingsGenericsearch.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AdvancedFilterFieldsRelationType','VRLocalizationService'];
 
-    function ReportsearchsettingsGenericsearch(UtilsService, VRUIUtilsService, VR_Analytic_AdvancedFilterFieldsRelationType) {
+    function ReportsearchsettingsGenericsearch(UtilsService, VRUIUtilsService, VR_Analytic_AdvancedFilterFieldsRelationType, VRLocalizationService) {
         return {
             restrict: "E",
             scope: {
@@ -45,6 +45,8 @@
                 $scope.scopeModel.groupingDimensions = [];
                 $scope.scopeModel.filterDimensions = [];
                 $scope.scopeModel.showAdvancedFilterFields = false;
+                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
+
                 //$scope.scopeModel.advancedFilterFields = [];
                 $scope.scopeModel.advancedFilterFieldsRelationTypeDS = UtilsService.getArrayEnum(VR_Analytic_AdvancedFilterFieldsRelationType);
                 $scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues =
@@ -89,7 +91,13 @@
                     var dataItem = {
                         Name: dimension.Name,
                         Title: dimension.Title,
-                        IsSelected: false
+                        IsSelected: false,
+                        TitleResourceKey: dimension.TitleResourceKey
+                    };
+                    dataItem.onTextResourceSelectorReady = function (api) {
+                        dataItem.textResourceSeletorAPI = api;
+                        var setLoader = function (value) { dataItem.isDimensionTextResourceSelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
                     };
                     $scope.scopeModel.groupingDimensions.push(dataItem);
                 };
@@ -102,7 +110,13 @@
                     var dataItem = {
                         Name: dimension.Name,
                         Title: dimension.Title,
-                        IsRequired: false
+                        IsRequired: false,
+                        TitleResourceKey: dimension.TitleResourceKey
+                    };
+                    dataItem.onTextResourceSelectorReady = function (api) {
+                        dataItem.textResourceSeletorAPI = api;
+                        var setLoader = function (value) { dataItem.isFilterDimensionTextResourceSelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
                     };
                     $scope.scopeModel.filterDimensions.push(dataItem);
                 };
@@ -163,12 +177,63 @@
 
                 defineAPI();
             }
+            function addSelectedDimension(gridDimension) {
 
+                var textResourcePayload;
+
+                var dataItem = {};
+                if (gridDimension.payload != undefined) {
+                    dataItem.Name = gridDimension.payload.DimensionName;
+                    dataItem.Title = gridDimension.payload.Title != undefined ? gridDimension.payload.Title : gridDimension.payload.DimensionName;
+                    dataItem.IsSelected = gridDimension.payload.IsRequired;
+                    textResourcePayload = { selectedValue: gridDimension.payload.TitleResourceKey };
+
+                }
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    gridDimension.textResourceReadyPromiseDeferred.resolve();
+                };
+
+                gridDimension.textResourceReadyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridDimension.textResourceLoadPromiseDeferred);
+                    });
+
+                $scope.scopeModel.groupingDimensions.push(dataItem);
+
+            }
+            function addSelectedFilterDimension(filterDimension) {
+
+                var textResourcePayload;
+
+                var dataItem = {};
+                if (filterDimension.payload != undefined) {
+                    dataItem.Name = filterDimension.payload.DimensionName;
+                    dataItem.Title = filterDimension.payload.Title != undefined ? filterDimension.payload.Title : filterDimension.payload.DimensionName;
+                    dataItem.IsRequired = filterDimension.payload.IsSelected;
+                    textResourcePayload = { selectedValue: filterDimension.payload.TitleResourceKey };
+
+                }
+                dataItem.onTextResourceSelectorReady = function (api) {
+                    dataItem.textResourceSeletorAPI = api;
+                    filterDimension.textResourceReadyPromiseDeferred.resolve();
+                };
+
+                filterDimension.textResourceReadyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, filterDimension.textResourceLoadPromiseDeferred);
+                    });
+
+                $scope.scopeModel.filterDimensions.push(dataItem);
+
+            }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var rootPromiseNode = {};
                     var promises = [];
+
                     if (payload != undefined && payload.tableIds != undefined) {
                         var tableIds = payload.tableIds;
                         $scope.scopeModel.analyticTables = tableIds;
@@ -181,30 +246,21 @@
                             $scope.scopeModel.isRequiredGroupingDimensions = payload.searchSettings.IsRequiredGroupingDimensions;
                             $scope.scopeModel.showCurrency = payload.searchSettings.ShowCurrency;
 
-                            if (payload.searchSettings.GroupingDimensions != undefined && payload.searchSettings.GroupingDimensions.length > 0) {
+                            var groupingDimensions = payload.searchSettings.GroupingDimensions;
+                            if (groupingDimensions != undefined && groupingDimensions.length > 0) {
                                 selectedGroupingIds = [];
-                                for (var i = 0; i < payload.searchSettings.GroupingDimensions.length; i++) {
-                                    var groupingDimension = payload.searchSettings.GroupingDimensions[i];
+                                for (var i = 0; i < groupingDimensions.length; i++) {
+                                    var groupingDimension = groupingDimensions[i];
                                     selectedGroupingIds.push(groupingDimension.DimensionName);
-                                    $scope.scopeModel.groupingDimensions.push({
-                                        Name: groupingDimension.DimensionName,
-                                        Title: groupingDimension.DimensionName,
-                                        IsSelected: groupingDimension.IsSelected
-                                    });
                                 }
                             }
-
-                            if (payload.searchSettings.Filters != undefined && payload.searchSettings.Filters.length > 0) {
+                            var filters =payload.searchSettings.Filters;
+                            if (filters != undefined && filters.length > 0) {
                                 selectedFilterIds = [];
-                                for (var i = 0; i < payload.searchSettings.Filters.length; i++) {
-                                    var filterDimension = payload.searchSettings.Filters[i];
+                                for (var i = 0; i < filters.length; i++) {
+                                    var filterDimension = filters[i];
                                     selectedFilterIds.push(filterDimension.DimensionName);
-                                    var dataItem = {
-                                        Name: filterDimension.DimensionName,
-                                        Title: filterDimension.Title,
-                                        IsRequired: filterDimension.IsRequired,
-                                    };
-                                    $scope.scopeModel.filterDimensions.push(dataItem);
+                                   
                                 }
                             }
                             if (payload.searchSettings != undefined)
@@ -274,8 +330,41 @@
                             VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, tableSelectorpayLoad, loadTableSelectorPromiseDeferred);
                         });
 
+                        rootPromiseNode.promises = promises;
+                        rootPromiseNode.getChildNode = function () {
+                            var childPromises = [];
+                            if ($scope.scopeModel.selectedGroupingDimensions != undefined && $scope.scopeModel.selectedGroupingDimensions.length > 0) {
+                                for (var i = 0; i < groupingDimensions.length; i++) {
+                                    var groupingDimension = groupingDimensions[i];
+                                    if (UtilsService.getItemByVal($scope.scopeModel.selectedGroupingDimensions, groupingDimension.DimensionName, "Name")) {
+                                        var dimensionGridField = {
+                                            payload: groupingDimension,
+                                            textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                        };
+                                        childPromises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
+                                        addSelectedDimension(dimensionGridField);
+                                    }
+                                }
+                            }
+                            if ($scope.scopeModel.selectedFilterDimensions != undefined && $scope.scopeModel.selectedFilterDimensions.length > 0) {
+                                for (var i = 0; i < filters.length; i++) {
+                                    var filterDimension = filters[i];
+                                    if (UtilsService.getItemByVal($scope.scopeModel.selectedFilterDimensions, filterDimension.DimensionName, "Name")) {
+                                        var filterDimensionField = {
+                                            payload: filterDimension,
+                                            textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                        };
+                                        childPromises.push(filterDimensionField.textResourceLoadPromiseDeferred.promise);
+                                        addSelectedFilterDimension(filterDimensionField);
+                                    }
+                                }
+                            }
+                            return { promises: childPromises };
+                        };
 
-                        return UtilsService.waitMultiplePromises(promises);
+                        return UtilsService.waitPromiseNode(rootPromiseNode);
                     };
                 };
                 api.getData = function getData() {
@@ -287,7 +376,9 @@
                             var groupingDimension = $scope.scopeModel.groupingDimensions[i];
                             groupingDimensions.push({
                                 DimensionName: groupingDimension.Name,
-                                IsSelected: groupingDimension.IsSelected
+                                IsSelected: groupingDimension.IsSelected,
+                                Title: groupingDimension.Title,
+                                TitleResourceKey: groupingDimension.textResourceSeletorAPI != undefined ? groupingDimension.textResourceSeletorAPI.getSelectedValues() : undefined
                             });
                         }
                     }
@@ -301,6 +392,7 @@
                                 DimensionName: filterDimension.Name,
                                 Title: filterDimension.Title,
                                 IsRequired: filterDimension.IsRequired,
+                                TitleResourceKey: filterDimension.textResourceSeletorAPI != undefined ? filterDimension.textResourceSeletorAPI.getSelectedValues() : undefined
                             });
                         }
                     }

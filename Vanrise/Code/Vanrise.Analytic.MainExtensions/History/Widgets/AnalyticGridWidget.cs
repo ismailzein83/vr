@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.History.Widgets
@@ -35,12 +36,48 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         {
             return this.Measures.Select(measure => measure.MeasureName).ToList();
         }
+        public override void ApplyTranslation(IAnalyticHistoryReportWidgetTranslationContext context)
+        {
+            VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+
+            if (Dimensions != null && Dimensions.Count > 0)
+            {
+                foreach (var dimension in Dimensions)
+                {
+                    if (dimension.TitleResourceKey != null)
+                        dimension.Title = vrLocalizationManager.GetTranslatedTextResourceValue(dimension.TitleResourceKey, dimension.Title, context.LanguageId);
+                }
+            }
+            if (Measures != null && Measures.Count > 0)
+            {
+                foreach (var measure in Measures)
+                {
+                    if (measure.TitleResourceKey != null)
+                        measure.Title = vrLocalizationManager.GetTranslatedTextResourceValue(measure.TitleResourceKey, measure.Title, context.LanguageId);
+                }
+            }
+            if (SubTables != null && SubTables.Count > 0)
+            {
+                foreach (var subTable in SubTables)
+                {
+                    if (subTable != null && subTable.Measures != null && subTable.Measures.Count > 0)
+                    {
+                        foreach (var measure in subTable.Measures)
+                        {
+                            if (measure.TitleResourceKey != null)
+                                measure.Title = vrLocalizationManager.GetTranslatedTextResourceValue(measure.TitleResourceKey, measure.Title, context.LanguageId);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public class AnalyticGridWidgetDimension
     {
         public string DimensionName { get; set; }
         public string Title { get; set; }
+        public string TitleResourceKey { get; set; }
         public bool IsRootDimension { get; set; }
         public GridColumnSettings ColumnSettings { get; set; }
         public Guid? ColumnStyleId { get; set; }
@@ -50,6 +87,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
     {
         public string MeasureName { get; set; }
         public string Title { get; set; }
+        public string TitleResourceKey { get; set; }
         public GridColumnSettings ColumnSettings { get; set; }
         public Guid? ColumnStyleId { get; set; }
         public bool IsHidden { get; set; }
@@ -70,6 +108,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
     {
         public string MeasureName { get; set; }
         public string Title { get; set; }
+        public string TitleResourceKey { get; set; }
         public GridColumnSettings ColumnSettings { get; set; }
         public Guid? ColumnStyleId { get; set; }
 

@@ -13,6 +13,9 @@
         var subviewDefinitionSettingsDirectiveAPI;
         var subviewDefinitionSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -35,6 +38,10 @@
                 subviewDefinitionSettingsDirectiveReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.save = function () {
                 if (isEditMode)
                     return update();
@@ -52,7 +59,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSubviewDefinitionSettingsDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSubviewDefinitionSettingsDirective, loadLocalizationTextResourceSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -84,7 +91,15 @@
 
             return subviewDefinitionSettingsDirectiveLoadDeferred.promise;
         }
+        function loadLocalizationTextResourceSelector() {
+            var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            var localizationTextResourcePayload = { selectedValue: subviewDefinition != undefined ? subviewDefinition.NameResourceKey : undefined };
 
+            localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+            });
+            return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+        }
         function insert() {
             var subviewDefinition = buildDRSearchPageSubviewDefinition();
 
@@ -107,6 +122,7 @@
             var subviewDefinition = {
                 SubviewDefinitionId: subviewDefinition && subviewDefinition.SubviewDefinitionId ? subviewDefinition.SubviewDefinitionId : UtilsService.guid(),
                 Name: $scope.scopeModel.name,
+                NameResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined,
                 Settings: subviewDefinitionSettingsDirectiveAPI.getData()
             };
 

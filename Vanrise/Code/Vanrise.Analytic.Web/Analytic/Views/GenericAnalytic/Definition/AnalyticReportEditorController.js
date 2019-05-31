@@ -65,7 +65,7 @@
             if (isEditMode) {
                 UtilsService.waitMultipleAsyncOperations([getAnalyticReport, getAnalyticConfigTypes]).then(function () {
                     loadAllControls();
-                }).catch(function () {
+                }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
                 });
@@ -73,7 +73,7 @@
             else {
                 getAnalyticConfigTypes().then(function () {
                     loadAllControls();
-                }).catch(function () {
+                }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
                 });
@@ -132,7 +132,7 @@
             }
 
             function getAnalyticReport() {
-                return VR_Analytic_AnalyticReportAPIService.GetAnalyticReportById(analyticReportId).then(function (analyticReportEntityObj) {               
+                return VR_Analytic_AnalyticReportAPIService.GetAnalyticReportById(analyticReportId,false).then(function (analyticReportEntityObj) {               
                     analyticReportEntity = analyticReportEntityObj;
                 });
             }
