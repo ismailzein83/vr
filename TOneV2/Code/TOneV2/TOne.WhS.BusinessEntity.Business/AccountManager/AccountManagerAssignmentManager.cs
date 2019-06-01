@@ -88,7 +88,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return false;
 
             if (effectiveAccountManagerAssignments == null || effectiveAccountManagerAssignments.Count() == 0)
-                return false;
+                return true;
 
             carrierAccountIds = new List<int>();
             foreach (var effectiveAccountManagerAssignment in effectiveAccountManagerAssignments)

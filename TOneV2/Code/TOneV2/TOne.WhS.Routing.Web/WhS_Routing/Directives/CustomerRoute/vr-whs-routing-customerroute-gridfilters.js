@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingCustomerrouteGridfilters', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RoutingDatabaseTypeEnum','VRCommon_EntityFilterEffectiveModeEnum',
-    function (UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RoutingDatabaseTypeEnum, VRCommon_EntityFilterEffectiveModeEnum) {
+app.directive('vrWhsRoutingCustomerrouteGridfilters', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'VRCommon_EntityFilterEffectiveModeEnum','Whs_BusinessEntity_ModuleNamesEnum',
+    function (UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RoutingDatabaseTypeEnum, VRCommon_EntityFilterEffectiveModeEnum, Whs_BusinessEntity_ModuleNamesEnum) {
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -184,9 +184,10 @@ app.directive('vrWhsRoutingCustomerrouteGridfilters', ['UtilsService', 'VRUIUtil
                     function loadCustomersSection() {
                         var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        var payload;
+                        var payload = { filter: { Filters: getCarrierAccountSelectorFilter() } };
+
                         if (parametersCustomersIds != null)
-                            payload = { selectedIds: parametersCustomersIds };
+                            payload.selectedIds = parametersCustomersIds;
 
                         carrierAccountReadyPromiseDeferred.promise.then(function () {
                             VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, payload, loadCarrierAccountPromiseDeferred);
@@ -197,8 +198,10 @@ app.directive('vrWhsRoutingCustomerrouteGridfilters', ['UtilsService', 'VRUIUtil
                     function loadSuppliersSection() {
                         var loadSupplierCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
+                        var payload = { filter: { Filters: getCarrierAccountSelectorFilter() } };
+
                         supplierCarrierAccountReadyPromiseDeferred.promise.then(function () {
-                            VRUIUtilsService.callDirectiveLoad(supplierCarrierAccountDirectiveAPI, undefined, loadSupplierCarrierAccountPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(supplierCarrierAccountDirectiveAPI, payload, loadSupplierCarrierAccountPromiseDeferred);
                         });
 
                         return loadSupplierCarrierAccountPromiseDeferred.promise;
@@ -242,6 +245,18 @@ app.directive('vrWhsRoutingCustomerrouteGridfilters', ['UtilsService', 'VRUIUtil
                             }
                             VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, customerSelectorPayload, undefined);
                         }
+                    }
+
+                    function getCarrierAccountSelectorFilter() {
+                        var carrierAccountSelectorFilters = [];
+
+                        var carrierAccountFilterAffected = {
+                            $type: 'TOne.WhS.BusinessEntity.Business.AssignedCarrierAccountsForAccountManager, TOne.WhS.BusinessEntity.Business',
+                            ModuleName: Whs_BusinessEntity_ModuleNamesEnum.CustomerRoute.value
+                        };
+                        carrierAccountSelectorFilters.push(carrierAccountFilterAffected);
+
+                        return carrierAccountSelectorFilters;
                     }
                 };
 

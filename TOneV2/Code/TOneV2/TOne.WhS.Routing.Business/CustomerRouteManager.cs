@@ -367,7 +367,7 @@ namespace TOne.WhS.Routing.Business
                     if (accountManagerAssignmentManager.TryGetCurrentUserEffectiveNowCarrierAccountIds(out currentUserCarrierAccountIds))
                     {
                         if (currentUserCarrierAccountIds == null || currentUserCarrierAccountIds.Count == 0)
-                            return null;
+                            return new List<CustomerRoute>();
 
                         if (input.Query.CustomerIds == null || input.Query.CustomerIds.Count == 0)
                             input.Query.CustomerIds = currentUserCarrierAccountIds;
