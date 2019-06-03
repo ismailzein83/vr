@@ -1,3 +1,0 @@
-﻿CREATE SCHEMA [TOneWhS_AM]
-    AUTHORIZATION [dbo];
-

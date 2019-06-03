@@ -115,8 +115,6 @@
     <Folder Include="TOneWhS_Deal\Functions\" />
     <Folder Include="TOneWhS_SMSBE\" />
     <Folder Include="TOneWhS_SMSBE\Tables\" />
-    <Folder Include="TOneWhS_AM\" />
-    <Folder Include="TOneWhS_AM\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -665,8 +663,5 @@
     <Build Include="TOneWhS_BE\Tables\TechnicalCode.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierOtherRate_GetByZoneIds.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetByZoneIds.sql" />
-    <Build Include="TOneWhS_AM\Tables\AccountManagerAssignment.sql" />
-    <Build Include="TOneWhS_AM\Tables\AccountManager.sql" />
-    <Build Include="Security\TOneWhS_AM.sql" />
   </ItemGroup>
 </Project>
