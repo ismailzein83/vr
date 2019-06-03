@@ -50,6 +50,6 @@ namespace TOne.WhS.Deal.MainExtensions.DealTimePeriod
 
             context.ToTime = context.EffectiveDate;
             context.FromTime = fromTime;
-        }
+        } 
     }
 }
