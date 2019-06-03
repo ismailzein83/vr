@@ -1,0 +1,68 @@
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.reportTypeName" label="Name" isrequired></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorReady"
+                                                   selectedvalues="scopeModel.selectedDataRecordStorage"
+                                                   onselectionchanged="scopeModel.onDataStorageChanged"
+                                                   isrequired="true"
+                                                   customlabel="Record Storage">
+        </vr-genericdata-datarecordstorage-selector>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Filter Fields">
+            <span vr-loader="scopeModel.isFilterGridLoading">
+                <vr-columns width="fullrow">
+                    <vr-button type="Add" data-onclick="scopeModel.addFilterField" standalone vr-disabled="scopeModel.disableAddFilterFields()"></vr-button>
+                </vr-columns>
+                <vr-columns width="fullrow">
+                    <vr-validator validate="scopeModel.validateFilterGrid()">
+                        <vr-datagrid on-ready="scopeModel.onFilterFieldsGridReady"
+                                     datasource="scopeModel.filterFields"
+                                     ondeleterow="scopeModel.removeFilterFields"
+                                     hidegridmenu>
+                            <vr-datagridcolumn headertext="'Field Name'" widthfactor="6" disablesorting>
+                                <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onFilterFieldNameSelectorReady"
+                                                                              isrequired="true"
+                                                                              hidelabel
+                                                                              hideremoveicon>
+                                </vr-genericdata-datarecordtypefields-selector>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Required'" widthfactor="6" disablesorting>
+                                <vr-switch value="dataItem.isFilterFieldNameRequired"></vr-switch>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
+            </span>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Attachements">
+            <span vr-loader="scopeModel.isAttachementsGridLoading">
+                <vr-columns width="fullrow">
+                    <vr-button type="Add" data-onclick="scopeModel.addAttachement" standalone vr-disabled="scopeModel.disableAddAttachement()"></vr-button>
+                </vr-columns>
+                <vr-columns width="fullrow">
+                    <vr-validator validate="scopeModel.validateAttachementGrid()">
+                        <vr-datagrid on-ready="scopeModel.onAttachementsGridReady"
+                                     datasource="scopeModel.attachements"
+                                     ondeleterow="scopeModel.removeAttachement"
+                                     hidegridmenu
+                                     menuactions="scopeModel.menuActions">
+                            <vr-datagridcolumn headertext="'Name'" widthfactor="6" field="'Name'" type="'Text'">
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
+            </span>
+        </vr-section>
+    </vr-columns>
+</vr-row>

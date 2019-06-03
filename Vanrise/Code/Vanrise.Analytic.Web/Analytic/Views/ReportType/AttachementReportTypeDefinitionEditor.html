@@ -1,0 +1,35 @@
+﻿<div vr-modalcontent ng-controller="VR_Analytic_VRReportTypeDefinitionAttachementManagementController" width="'40%'" vr-loader="scopeModel.isLoading" size="large">
+    <vr-modalbody>
+        <vr-form name="formAttachementReportTypeEditor">
+            <vr-tabs>
+                <vr-tab header="'Defenition'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row" >
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onAttachementFieldNameSelectorReady"
+                                                                          label="Fields"
+                                                                          onselectionchanged="scopeModel.onFieldsNameSelectorChanged"
+                                                                          ismultipleselection>
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Attachements'" vr-loader="scopeModel.isFileGeneratorLoading">
+                    <vr-row>
+                        <vr-analytic-automatedreport-filegenerator on-ready="scopeModel.onAutomatedReportFileGeneratorReady" ></vr-analytic-automatedreport-filegenerator>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formAttachementReportTypeEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

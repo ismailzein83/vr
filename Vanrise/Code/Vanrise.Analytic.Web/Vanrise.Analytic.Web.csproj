@@ -378,6 +378,8 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-timevariation-definition.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-chart-definition.js" />
     <Content Include="Analytic\Directives\AnalyticMeasureExternalSource\MainExtensions\vr-analytic-measuremappingrulesettings-specificmapping.js" />
+    <Content Include="Analytic\Directives\MainExtensions\ReportType\Templates\VRReportTypeDefinitionSettingsTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\ReportType\vr-analytic-reporttypedefintion-settings.js" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\LastPeriodFilterTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\PreviousPeriodFilterTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-lastperiodfilter.js" />
@@ -460,6 +462,7 @@
     <Content Include="Analytic\Services\APIServices\MeasureStyleRuleAPIService.js" />
     <Content Include="Analytic\Services\APIServices\ReportGenerationCustomCodeAPIService.js" />
     <Content Include="Analytic\Services\ReportGenerationCustomCodeService.js" />
+    <Content Include="Analytic\Services\ReportTypeService.js" />
     <Content Include="Analytic\Services\VRReportGenerationActionService.js" />
     <Content Include="Analytic\Services\AnalyticItemActionService.js" />
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
@@ -548,6 +551,8 @@
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReportController.js" />
     <Content Include="Analytic\Views\Reports\AnalyticReport.html" />
     <Content Include="Analytic\Views\Reports\AnalyticReportController.js" />
+    <Content Include="Analytic\Views\ReportType\AttachementReportTypeDefinitionEditor.html" />
+    <Content Include="Analytic\Views\ReportType\VRReportTypeDefinitionAttachementManagementController.js" />
     <Content Include="Analytic\Views\VRReportGeneration\VRReportGenerationGeneratorController.js" />
     <Content Include="Analytic\Views\VRReportGeneration\VRReportGenerationGenerator.html" />
     <Content Include="Analytic\Views\VRReportGeneration\VRReportGenerationEditor.html" />
