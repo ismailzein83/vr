@@ -67,6 +67,10 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+            var joinContext = selectQuery.Join();
+            new CustomerSMSPriceListDataManager().JoinRateTableWithPriceListTable(joinContext, otherTableAlias, TABLE_ALIAS, COL_PriceListID);
+
             selectQuery.SelectColumns().Columns(COL_ID, COL_PriceListID, COL_MobileNetworkID, COL_Rate, COL_BED, COL_EED);
 
             var where = selectQuery.Where();
@@ -75,10 +79,6 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             var childWhere = where.ChildConditionGroup().ConditionIfColumnNotNull(COL_EED);
             childWhere.NotEqualsCondition(COL_BED).Column(COL_EED);
             childWhere.GreaterThanCondition(COL_EED).Value(effectiveDate);
-
-            var joinContext = selectQuery.Join();
-
-            new CustomerSMSPriceListDataManager().JoinRateTableWithPriceListTable(joinContext, otherTableAlias, TABLE_ALIAS, COL_PriceListID);
 
             selectQuery.Sort().ByColumn(TABLE_ALIAS, COL_BED, RDBSortDirection.ASC);
             return queryContext.GetItems(CustomerSMSRateMapper);
