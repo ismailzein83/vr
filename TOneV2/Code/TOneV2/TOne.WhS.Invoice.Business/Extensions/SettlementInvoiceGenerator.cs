@@ -301,7 +301,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                             }
                                         }
                                         if (canUseCurrency)
-                                            settlementInvoiceItemSummaryDetail.DueToSystemFullAmount = dueToSystemFullAmountSettlementInvoiceItemSummaryDetail;
+                                            settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += dueToSystemFullAmountSettlementInvoiceItemSummaryDetail;
                                         if (isNewInvoice)
                                         {
                                             settlementInvoicedetail.DueToSystemFullAmount += dueToSystemFullAmountSettlementInvoicedetail;
@@ -572,7 +572,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                             }
                                         }
                                         if (canUseCurrency)
-                                            settlementInvoiceItemSummaryDetail.DueToCarrierFullAmount = dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail;
+                                            settlementInvoiceItemSummaryDetail.DueToCarrierFullAmount += dueToCarrierFullAmountSettlementInvoiceItemSummaryDetail;
                                         if (isNewInvoice)
                                         {
                                             settlementInvoicedetail.DueToCarrierFullAmount += dueToCarrierFullAmountSettlementInvoicedetail;
