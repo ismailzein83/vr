@@ -179,7 +179,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Traffic</Value>
+                              <Value>Voice</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>12pt</FontSize>
@@ -530,6 +530,9 @@
         <Left>0.1107in</Left>
         <Height>0.94119in</Height>
         <Width>7.52364in</Width>
+        <Visibility>
+          <Hidden>=iif(CountRows("InvoiceMonths")&lt;=0,true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -544,6 +547,9 @@
         <Height>0cm</Height>
         <Width>19.11005cm</Width>
         <ZIndex>1</ZIndex>
+        <Visibility>
+          <Hidden>=iif(CountRows("InvoiceMonths")&lt;=0,true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1053,6 +1059,9 @@
         <Height>0.94119in</Height>
         <Width>7.52364in</Width>
         <ZIndex>2</ZIndex>
+        <Visibility>
+          <Hidden>=iif(CountRows("RecurringChargeInvoiceMonths")&lt;=0,true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1067,6 +1076,9 @@
         <Height>0cm</Height>
         <Width>19.11005cm</Width>
         <ZIndex>3</ZIndex>
+        <Visibility>
+          <Hidden>=iif(CountRows("RecurringChargeInvoiceMonths")&lt;=0,true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -1241,6 +1253,9 @@
         <Height>0.6cm</Height>
         <Width>19.11001cm</Width>
         <ZIndex>4</ZIndex>
+        <Visibility>
+          <Hidden>=iif(CountRows("RecurringChargeInvoiceMonths")&lt;=0,true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1414,6 +1429,9 @@
         <Height>0.6cm</Height>
         <Width>19.11001cm</Width>
         <ZIndex>5</ZIndex>
+        <Visibility>
+          <Hidden>=iif(CountRows("InvoiceMonths")&lt;=0,true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>

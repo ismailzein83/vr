@@ -28,6 +28,9 @@
             </Style>
           </Subreport>
         </ReportItems>
+        <PageBreak>
+          <BreakLocation>Start</BreakLocation>
+        </PageBreak>
         <KeepTogether>true</KeepTogether>
         <Top>21.27834cm</Top>
         <Left>0.23962cm</Left>
