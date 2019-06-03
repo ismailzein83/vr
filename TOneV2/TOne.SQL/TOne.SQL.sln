@@ -9,6 +9,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TOne.SQL.JAZZERPIntegration
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.TOneWhS_BE_SMS", "SQL.TOneWhS_BE_SMS\SQL.TOneWhS_BE_SMS.sqlproj", "{5E6F5F0A-9357-4D7C-BE8A-F61A712F274A}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.TOneWhS_AccountManager", "SQL.TOneWhS_AccountManager\SQL.TOneWhS_AccountManager.sqlproj", "{A05761D2-BA69-4110-95FF-6B416341D085}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,12 @@ Global
 		{5E6F5F0A-9357-4D7C-BE8A-F61A712F274A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E6F5F0A-9357-4D7C-BE8A-F61A712F274A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5E6F5F0A-9357-4D7C-BE8A-F61A712F274A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A05761D2-BA69-4110-95FF-6B416341D085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A05761D2-BA69-4110-95FF-6B416341D085}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A05761D2-BA69-4110-95FF-6B416341D085}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A05761D2-BA69-4110-95FF-6B416341D085}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A05761D2-BA69-4110-95FF-6B416341D085}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A05761D2-BA69-4110-95FF-6B416341D085}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,7 +49,7 @@ Global
 		SolutionGuid = {8D5E2ECC-EAE7-4A68-BEF1-419017C6DFC2}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -54,5 +62,8 @@ Global
 		SccProjectUniqueName3 = SQL.TOneWhS_BE_SMS\\SQL.TOneWhS_BE_SMS.sqlproj
 		SccProjectName3 = SQL.TOneWhS_BE_SMS
 		SccLocalPath3 = SQL.TOneWhS_BE_SMS
+		SccProjectUniqueName4 = SQL.TOneWhS_AccountManager\\SQL.TOneWhS_AccountManager.sqlproj
+		SccProjectName4 = SQL.TOneWhS_AccountManager
+		SccLocalPath4 = SQL.TOneWhS_AccountManager
 	EndGlobalSection
 EndGlobal
