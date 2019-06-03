@@ -432,7 +432,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Round(Fields!DueToCarrierTotalTrafficAmount.Value,Parameters!NormalPrecisionValue.Value) &gt; 0, FormatNumber(Round(Fields!DueToCarrierAmount.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)+" "+Fields!CurrencyIdDescription.Value,"")</Value>
+                              <Value>=IIF(Round(Fields!DueToCarrierTotalTrafficAmount.Value,Parameters!NormalPrecisionValue.Value) &gt; 0, FormatNumber(Round(Fields!DueToCarrierTotalTrafficAmount.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)+" "+Fields!CurrencyIdDescription.Value,"")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -467,7 +467,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Round(Fields!DueToSystemTotalTrafficAmount.Value,Parameters!NormalPrecisionValue.Value) &gt; 0, FormatNumber(Round(Fields!DueToSystemAmount.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)+" "+Fields!CurrencyIdDescription.Value,"")</Value>
+                              <Value>=IIF(Round(Fields!DueToSystemTotalTrafficAmount.Value,Parameters!NormalPrecisionValue.Value) &gt; 0, FormatNumber(Round(Fields!DueToSystemTotalTrafficAmount.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)+" "+Fields!CurrencyIdDescription.Value,"")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -491,6 +491,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
