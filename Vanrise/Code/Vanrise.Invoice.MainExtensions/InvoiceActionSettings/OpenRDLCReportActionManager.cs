@@ -68,8 +68,8 @@ namespace Vanrise.Invoice.MainExtensions
                     if (reportFilePath != null)
                     {
                         reportURL = string.Format("~/Client/Modules/{0}", reportFilePath);
-                        reportRuntimeURL = reportFilePath;
-                    }
+                        reportRuntimeURL = string.Format("Modules/{0}", reportFilePath);
+                }
                     if(VRWebContext.IsInWebContext())
                     {
                         reportViewer.LocalReport.ReportPath = VRWebContext.MapVirtualToPhysicalPath(reportURL);
