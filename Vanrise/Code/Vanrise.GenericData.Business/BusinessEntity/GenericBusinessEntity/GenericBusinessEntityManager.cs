@@ -87,7 +87,7 @@ namespace Vanrise.GenericData.Business
                 string searchValueAsLower = !string.IsNullOrEmpty(searchValue) ? searchValue.ToLower() : null;
 
                 RecordFilterGroup recordFilterGroup = null;
-                if (!dataRecordStorage.Settings.EnableUseCaching && !string.IsNullOrEmpty(searchValueAsLower))
+                if (genericBEDefinitionSetting.IsRemoteSelector && !string.IsNullOrEmpty(searchValueAsLower))
                 {
                     recordFilterGroup = new RecordFilterGroup
                     {
@@ -109,8 +109,8 @@ namespace Vanrise.GenericData.Business
                     }
                 }
 
-                if (!dataRecordStorage.Settings.EnableUseCaching && recordFilterGroup == null && mappedDataRecordFilters == null)
-                    throw new Exception($"Caching not enabled for Data Record Storage {genericBEDefinitionSetting.DataRecordStorageId.Value}");
+                if (genericBEDefinitionSetting.IsRemoteSelector && recordFilterGroup == null && mappedDataRecordFilters == null)
+                    throw new Exception($"No Filters for BE Remote Selector: {businessEntityDefinitionId}");
 
                 List<GenericBusinessEntity> genericBusinessEntities = new List<GenericBusinessEntity>();
 
@@ -161,9 +161,6 @@ namespace Vanrise.GenericData.Business
             }
             else
             {
-                if (string.IsNullOrEmpty(searchValue))
-                    throw new Exception($"searchValue should not be null for remote selector of BEDefinitionId: {businessEntityDefinitionId}");
-
                 var vrConnection = _connectionManager.GetVRConnection<VRInterAppRestConnection>(genericBEDefinitionSetting.VRConnectionId.Value);
                 VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
                 string serializedFilter = filter != null ? Vanrise.Common.Serializer.Serialize(filter) : null;

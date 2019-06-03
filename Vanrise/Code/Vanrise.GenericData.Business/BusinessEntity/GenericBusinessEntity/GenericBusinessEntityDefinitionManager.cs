@@ -52,7 +52,7 @@ namespace Vanrise.GenericData.Business
                 SelectorPluralTitle = genericBEDefinitionSettings.SelectorPluralTitle,
                 IdFieldName = idFieldType != null ? idFieldType.Name : null,
                 TitleFieldName = GetGenericBEDefinitionTitleFieldName(businessEntityDefinitionId),
-                IsRemote = IsRemoteGenericBEType(businessEntityDefinitionId, genericBEDefinitionSettings)
+                IsRemote = genericBEDefinitionSettings.IsRemoteSelector
             };
 
         }
@@ -439,32 +439,6 @@ namespace Vanrise.GenericData.Business
                 }
             }
             return genericBEDefinitionSettingsCopy;
-        }
-
-        private bool IsRemoteGenericBEType(Guid businessEntityDefinitionId, GenericBEDefinitionSettings genericBEDefinitionSettings)
-        {
-            genericBEDefinitionSettings.ThrowIfNull("genericBEDefinitionSettings");
-
-            switch (genericBEDefinitionSettings.GenericBEType)
-            {
-                case GenericBEDefinitionType.Remote:
-                    return true;
-
-                case GenericBEDefinitionType.RecordStorage:
-                    Guid? dataRecordStorageId = genericBEDefinitionSettings.DataRecordStorageId;
-                    if (!dataRecordStorageId.HasValue)
-                        throw new NullReferenceException($"dataRecordStorage at BusinessEntityId {businessEntityDefinitionId}");
-
-                    var dataRecordStorage = new DataRecordStorageManager().GetDataRecordStorage(dataRecordStorageId.Value);
-                    dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId.Value);
-                    dataRecordStorage.Settings.ThrowIfNull("dataRecordStorage.Settings", dataRecordStorageId.Value);
-                    if (dataRecordStorage.Settings.EnableUseCaching)
-                        return false;
-
-                    return true;
-
-                default: throw new NotSupportedException($"GenericBEDefinitionType '{genericBEDefinitionSettings.GenericBEType}' is not supported");
-            }
         }
 
         #endregion
