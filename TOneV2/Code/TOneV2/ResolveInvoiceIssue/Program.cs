@@ -21,7 +21,7 @@ namespace ResolveInvoiceIssue
         static void Main(string[] args)
         {
 
-              new TestMethod().Method();
+            new TestMethod().Method();
         }
         public class Class2
         {
@@ -32,7 +32,7 @@ namespace ResolveInvoiceIssue
 
 
 
-        public class TestMethod: BaseSQLDataManager
+        public class TestMethod : BaseSQLDataManager
         {
             public TestMethod()
             : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
@@ -40,34 +40,75 @@ namespace ResolveInvoiceIssue
 
             public void Method()
             {
-                BackUpInvoiceTable();
-
-                var customerInvoiceTypeId = new Guid("EADC10C8-FFD7-4EE3-9501-0B2CE09029AD");
-                var supplierInvoiceTypeId = new Guid("5FD8DF00-71E8-4EDB-BBEC-108EE3CD66B3");
-                var invoices = GetItemsText($"Select ID,Details,InvoiceTypeId From  VR_Invoice.Invoice where Details not like '%TotalInvoiceAmount%' and invoiceTypeId in ('{supplierInvoiceTypeId}','{customerInvoiceTypeId}')", InvoiceMapper, (cmd) => { });
-                if (invoices != null)
+                try
                 {
-                    foreach (var invoice in invoices)
+                    BackUpInvoiceTable();
+                    var customerInvoiceTypeId = new Guid("EADC10C8-FFD7-4EE3-9501-0B2CE09029AD");
+                    var supplierInvoiceTypeId = new Guid("5FD8DF00-71E8-4EDB-BBEC-108EE3CD66B3");
+                    var invoices = GetItemsText($"Select ID,Details,InvoiceTypeId From  VR_Invoice.Invoice where Details not like '%TotalInvoiceAmount\"%' and invoiceTypeId in ('{supplierInvoiceTypeId}','{customerInvoiceTypeId}')", InvoiceMapper, (cmd) => { });
+                    if (invoices != null)
                     {
-                        if (invoice.InvoiceTypeId == customerInvoiceTypeId)
+                        int suplierInvoices = 0;
+                        int customerInvoices = 0;
+                        int invoicesCount = invoices.Count;
+
+                        Console.WriteLine("{0} invoices to be updated.", invoicesCount);
+
+                        foreach (var invoice in invoices)
                         {
-                            var customerInvoiceDetail = Serializer.Deserialize<CustomerInvoiceDetails>(invoice.Details);
-                            customerInvoiceDetail.TotalInvoiceAmount = customerInvoiceDetail.TotalAmountAfterCommission;
-                            ExecuteNonQueryText($"Update  VR_Invoice.Invoice set Details = '{Serializer.Serialize(customerInvoiceDetail)}' where ID = {invoice.InvoiceId}", null);
+                            if (invoice.InvoiceTypeId == customerInvoiceTypeId)
+                            {
+                                var customerInvoiceDetail = Serializer.Deserialize<CustomerInvoiceDetails>(invoice.Details);
+                                customerInvoiceDetail.TotalInvoiceAmount = customerInvoiceDetail.TotalAmountAfterCommission;
+                                if (ExecuteNonQueryText($"Update  VR_Invoice.Invoice set Details = '{Serializer.Serialize(customerInvoiceDetail)}' where ID = {invoice.InvoiceId}", null) > 0)
+                                {
+                                    customerInvoices++;
+                                    Console.WriteLine("InvoiceId {0} updated.", invoice.InvoiceId);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("InvoiceId {0} failed to updated.", invoice.InvoiceId);
+                                }
+
+                            }
+                            else if (invoice.InvoiceTypeId == supplierInvoiceTypeId)
+                            {
+                                var supplierInvoiceDetail = Serializer.Deserialize<SupplierInvoiceDetails>(invoice.Details);
+                                supplierInvoiceDetail.TotalInvoiceAmount = supplierInvoiceDetail.TotalAmountAfterCommission;
+                                if (ExecuteNonQueryText($"Update  VR_Invoice.Invoice set Details = '{Serializer.Serialize(supplierInvoiceDetail)}' where ID = {invoice.InvoiceId}", null) > 0)
+                                {
+                                    suplierInvoices++;
+                                    Console.WriteLine("InvoiceId {0} updated.", invoice.InvoiceId);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("InvoiceId {0} failed to updated.", invoice.InvoiceId);
+                                }
+
+
+                            }
+
                         }
-                        else if (invoice.InvoiceTypeId == supplierInvoiceTypeId)
-                        {
-                            var supplierInvoiceDetail = Serializer.Deserialize<SupplierInvoiceDetails>(invoice.Details);
-                            supplierInvoiceDetail.TotalInvoiceAmount = supplierInvoiceDetail.TotalAmountAfterCommission;
-                            ExecuteNonQueryText($"Update  VR_Invoice.Invoice set Details = '{Serializer.Serialize(supplierInvoiceDetail)}' where ID = {invoice.InvoiceId}", null);
-                        }
+                        if (suplierInvoices > 0) Console.WriteLine("{0} supplier invoices are updated.", suplierInvoices);
+                        if (customerInvoices > 0) Console.WriteLine("{0} customer invoices are updated.", customerInvoices);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("All invoices are already updated.");
                     }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+                Console.ReadKey();
             }
 
             private void BackUpInvoiceTable()
             {
-                ExecuteNonQueryText($"Select * into VR_Invoice.Invoice_{DateTime.Now:yyyy_MM_dd_hh_mm_ss} from VR_Invoice.Invoice",null);
+                ExecuteNonQueryText($"Select * into VR_Invoice.Invoice_{DateTime.Now:yyyy_MM_dd_hh_mm_ss} from VR_Invoice.Invoice", null);
             }
 
             Invoice InvoiceMapper(IDataReader reader)
@@ -80,6 +121,6 @@ namespace ResolveInvoiceIssue
                 };
             }
         }
-     
+
     }
 }
