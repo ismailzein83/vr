@@ -9,7 +9,7 @@ namespace TOne.WhS.Deal.Business
 {
     public class SwapDealInboundCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId => new Guid("E30E4332-DB9F-414D-B58A-8F06E07D0D41");
 
         public override bool AreEqual(object newValue, object oldValue)
         {
