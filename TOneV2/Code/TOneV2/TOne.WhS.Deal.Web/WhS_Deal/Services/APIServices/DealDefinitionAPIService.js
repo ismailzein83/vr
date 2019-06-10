@@ -47,3 +47,25 @@
     app.service('WhS_Deal_DealDefinitionAPIService', DealDefinitionAPIService);
 
 })(app);
+
+(function (app) {
+
+    'use strict';
+
+    DealTimePeriodAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Deal_ModuleConfig'];
+
+    function DealTimePeriodAPIService(BaseAPIService, UtilsService, WhS_Deal_ModuleConfig) {
+
+        var controllerName = 'DealTimePeriod';
+
+        function GetDealTimePeriodTemplateConfigs(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetDealTimePeriodTemplateConfigs"));
+        }
+
+        return {
+            GetDealTimePeriodTemplateConfigs: GetDealTimePeriodTemplateConfigs
+        };
+    }
+
+    app.service('WhS_Deal_DealTimePeriodAPIService', DealTimePeriodAPIService);
+})(app);
