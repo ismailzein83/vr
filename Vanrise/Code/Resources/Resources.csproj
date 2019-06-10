@@ -387,6 +387,7 @@
     <None Include="BatchScripts\CloudXPointV2\All.bat" />
     <None Include="BatchScripts\CloudXPoint\All.bat" />
     <None Include="BatchScripts\CloudXPoint\WebSite.bat" />
+    <None Include="BatchScripts\Common\TOneV2.ResolveInvoiceIssue.bat" />
     <None Include="BatchScripts\Common\Vanrise.HelperTools.bat" />
     <None Include="BatchScripts\Component-Voucher\01-Runtime.bat" />
     <None Include="BatchScripts\Component-Voucher\02-DataBaseFirstDeploymentScripts.bat" />
