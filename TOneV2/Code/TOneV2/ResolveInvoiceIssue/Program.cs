@@ -103,7 +103,7 @@ namespace ResolveInvoiceIssue
                     Console.WriteLine(ex);
                 }
 
-                Console.ReadKey();
+                Console.ReadLine();
             }
 
             private void BackUpInvoiceTable()
