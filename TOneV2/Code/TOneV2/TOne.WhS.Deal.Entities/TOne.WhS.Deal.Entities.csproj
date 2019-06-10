@@ -73,6 +73,8 @@
     <Compile Include="DealSubstituteRate.cs" />
     <Compile Include="DealSupplierZoneGroup.cs" />
     <Compile Include="DealProcess\DealZoneRate.cs" />
+    <Compile Include="DealTimePeriod\DealTimePeriod.cs" />
+    <Compile Include="DealTimePeriod\DealTimePeriodConfig.cs" />
     <Compile Include="IRuleDealCriteria.cs" />
     <Compile Include="IRuleDealTarget.cs" />
     <Compile Include="DealZoneInfo.cs" />
