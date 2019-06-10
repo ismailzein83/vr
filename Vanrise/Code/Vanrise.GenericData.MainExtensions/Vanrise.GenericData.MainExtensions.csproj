@@ -85,6 +85,7 @@
     <Compile Include="DataRecordFields\Filters\ChoicesFieldTypeFilter.cs" />
     <Compile Include="DataRecordFields\FieldBusinessEntityType.cs" />
     <Compile Include="DataRecordFields\FieldNumberType.cs" />
+    <Compile Include="DataRecordFields\Filters\TextResourceFieldFilter.cs" />
     <Compile Include="DataRecordTypeExtraFields\ParentDataRecordTypeExtraFields.cs" />
     <Compile Include="DataRecordTypeReferences\LocalDataRecordType.cs" />
     <Compile Include="DataRecordTypeReferences\GlobalDataRecordType.cs" />
