@@ -211,6 +211,7 @@
     <Content Include="VR_GenericData\Constants\CompareToConstantOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\DateCounterTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\FieldNumberDataPrecisionEnum.js" />
+    <Content Include="VR_GenericData\Constants\FieldTextTextTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\GenericBEDefinitionBulkActionUpdateFieldStateEnum.js" />
     <Content Include="VR_GenericData\Constants\GenericBEDefinitionTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\ContainerTypeEnum.js" />
@@ -269,7 +270,9 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionGroupTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\Templates\PermanentFilterConditionFilter.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\Templates\PermanentfilterRecordfilter.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\vr-genericdata-datarecordstorage-permanentfilter-conditionfilter.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\MainExtensions\vr-genericdata-datarecordstorage-permanentfilter-recordfilter.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageRDBExpressionFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageRDBJoinsTemplate.html" />
@@ -642,6 +645,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\TextResource\vr-genericdata-fieldtype-textresource-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\TextResource\vr-genericdata-fieldtype-textresource.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\Templates\TextFieldTypeViewerEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-texttype-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-viewereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\Templates\EmptyDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-tax.js" />
@@ -963,6 +967,8 @@
     <Content Include="VR_GenericData\Views\BEParentChildRelation\BEParentChildRelationEditorController.js" />
     <Content Include="VR_GenericData\Views\BEParentChildRelation\BEParentChildRelationManagement.html" />
     <Content Include="VR_GenericData\Views\BEParentChildRelation\BEParentChildRelationManagementController.js" />
+    <Content Include="VR_GenericData\Views\ConditionFilter\ConditionFilterItemEditor.html" />
+    <Content Include="VR_GenericData\Views\ConditionFilter\ConditionFilterItemEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordFieldChoice\DataRecordFieldChoiceEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordFieldChoice\DataRecordFieldChoiceEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordFieldChoice\DataRecordFieldChoiceManagement.html" />
