@@ -30,62 +30,6 @@ namespace BPMExtended.Main.Business
         #endregion
 
         #region public
-        public OutputResult ValidateRequest(string contactId, string accountId)
-        {
-            bool isSkip = false;
-            string msg = "";
-            ResultStatus status;
-            EntitySchemaQuery esq;
-            IEntitySchemaQueryFilterItem esqFirstFilter;
-            EntityCollection entities;
-            CRMCustomerInfo info;
-
-            info = GetCRMCustomerInfo(contactId, accountId);
-
-            // check categories catalog
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesInCatalog");
-            esq.AddColumn("Id");
-            esq.AddColumn("StSkipBalanceCheck");
-
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryID", info.CustomerCategoryID);
-            esq.Filters.Add(esqFirstFilter);
-
-            entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
-            {
-                isSkip = (bool)entities[0].GetColumnValue("StSkipBalanceCheck");
-            }
-
-            if (isSkip)
-            {
-                msg = "Operation is allowed";
-                status = ResultStatus.Success;
-            }
-            else
-            {
-                //check customer balance
-
-                //if (new BillingManager().GetCustomerBalance(info.CustomerId).Balance > 0)
-                if(new Random().Next(-10,10)> 0)
-                {
-                    msg = "You must pay all invoices before proceeding this operation";
-                    status = ResultStatus.Error;
-                }
-                else
-                {
-                    msg = "Operation is allowed";
-                    status = ResultStatus.Success;
-                }
-
-            }
-
-            return new OutputResult()
-            {
-                messages = new List<string>() { msg },
-                status = status
-            };
-
-        }
 
         public bool IsCustomerCategoryNormal(string customerCategoryId)
         {
@@ -611,7 +555,7 @@ namespace BPMExtended.Main.Business
 
 
             return requests;
-        }
+        } 
 
 
         public string GetEntityNameByRequestId(string requestId)
