@@ -127,6 +127,8 @@
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\GenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\HistoryGenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\CallRestAPIEditorDefinitionSetting.cs" />
+    <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ConditionalRuleContainerSetting.cs" />
+    <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorContainerRules\GenericEditorFieldValueContainerRule.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ListEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\RowsContainerEditorDefinitionSetting.cs" />
