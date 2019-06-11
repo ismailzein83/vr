@@ -227,6 +227,31 @@ namespace Vanrise.GenericData.Business
                 var fieldValue = genericBusinessEntity.FieldValues.GetRecord(genericBEDefinitionSetting.TitleFieldName);
                 if (fieldValue != null)
                 {
+                    //if (genericBEDefinitionSetting.TextResourceField != null)
+                    //{
+                    //    VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+
+                    //    if (vrLocalizationManager.IsLocalizationEnabled())
+                    //    {
+                    //        var languageId = vrLocalizationManager.GetCurrentLanguageId();
+                    //        if (languageId.HasValue)
+                    //        {
+                                
+                    //            var textResourceFieldValue = genericBusinessEntity.FieldValues.GetRecord(genericBEDefinitionSetting.TextResourceField);
+                    //            if (textResourceFieldValue != null)
+                    //            {
+                    //               var textResourceField = (
+                    //                    TextResourceFieldTypeEntity)textResourceFieldValue;
+                    //                if (textResourceField.TranslatedValues != null && textResourceField.TranslatedValues.Count > 0)
+                    //                {
+                    //                    var localizedTitle = textResourceField.TranslatedValues.GetRecord(languageId.Value);
+                    //                    if (localizedTitle != null)
+                    //                        return localizedTitle;
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
                     return titleFieldType.Type.GetDescription(fieldValue);
                 }
             }
@@ -1369,6 +1394,7 @@ namespace Vanrise.GenericData.Business
                     {
                         Value = fieldValue.Value,
                         Description = dataRecordTypeField.Type.GetDescription(fieldValue.Value)
+                        //StyleDefinitionId=dataRecordTypeField.Type.TryGetStyleDefinitionId(new DataRecordFieldStyleDefinitionIdContext {StatusDefinitionId=fieldValue.Value})
                     });
                 }
             }
