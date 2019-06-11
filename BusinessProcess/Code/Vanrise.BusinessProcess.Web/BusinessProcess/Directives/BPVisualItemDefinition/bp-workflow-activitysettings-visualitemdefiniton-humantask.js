@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VisualItemDefinitonHumanTask.$inject = ['UtilsService', 'VRUIUtilsService', 'VisualEventTypeEnum', 'BusinessProcess_BPVisualItemDefintionService'];
+    VisualItemDefinitonHumanTask.$inject = ['UtilsService', 'VRUIUtilsService', 'VisualEventTypeEnum', 'BusinessProcess_BPVisualItemDefintionService', 'DateTimeFormatEnum'];
 
-    function VisualItemDefinitonHumanTask(UtilsService, VRUIUtilsService, VisualEventTypeEnum, BusinessProcess_BPVisualItemDefintionService) {
+    function VisualItemDefinitonHumanTask(UtilsService, VRUIUtilsService, VisualEventTypeEnum, BusinessProcess_BPVisualItemDefintionService, DateTimeFormatEnum) {
         return {
             restrict: "E",
             scope: {
@@ -38,7 +38,10 @@
                 $scope.scopeModel.classEventRetrying = false;
                 $scope.scopeModel.isHintStarted = false;
                 $scope.scopeModel.hint = "Not Started";
-
+                $scope.scopeModel.eventCreatedTime = "N/A";
+                $scope.scopeModel.eventStartedTime = "N/A";
+                $scope.scopeModel.eventOverdueTime = "N/A";
+                $scope.scopeModel.eventCompletedTime = "N/A";        
 
                 $scope.scopeModel.onHumanTasksClick = function () {
                     if ($scope.scopeModel.isHintStarted) {
@@ -83,13 +86,20 @@
                             $scope.scopeModel.classEventStarted = true;
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Started";
+                            $scope.scopeModel.eventCreatedTime = UtilsService.getDateTimeFormat(visualItemEvent.CreatedTime, DateTimeFormatEnum.DateTime);
+                        }
+                        else if (eventTypeId == VisualEventTypeEnum.Taken.value.toLowerCase()) {
+                            $scope.scopeModel.eventStartedTime = UtilsService.getDateTimeFormat(visualItemEvent.CreatedTime, DateTimeFormatEnum.DateTime);
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Completed.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = false;
                             $scope.scopeModel.classEventCompleted = true;
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Completed";
-                          
+                            $scope.scopeModel.eventCompletedTime = UtilsService.getDateTimeFormat(visualItemEvent.CreatedTime, DateTimeFormatEnum.DateTime);
+                        }
+                        else if (eventTypeId == VisualEventTypeEnum.Overdue.value.toLowerCase()) {
+                            $scope.scopeModel.eventOverdueTime = UtilsService.getDateTimeFormat(visualItemEvent.CreatedTime, DateTimeFormatEnum.DateTime);
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Error.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = false;

@@ -1,14 +1,20 @@
-﻿
-<div class="vr-visualitem-activityblock" data-toggle="tooltip" data-placement="right" data-original-title={{scopeModel.hint}} 
-     ng-click="scopeModel.onHumanTasksClick()" ng-class="{'vr-visualitem-event-started': scopeModel.classEventStarted,
-                                                          'vr-visualitem-event-completed': scopeModel.classEventCompleted,
-                                                          'vr-visualitem-event-error': scopeModel.classEventError,
-                                                          'vr-visualitem-event-retrying': scopeModel.classEventRetrying}">
+﻿<div style="position: relative;display: block;">
+    <div class="vr-visualitem-activityblock" ng-click="scopeModel.onHumanTasksClick()" ng-class="{'vr-visualitem-event-started': scopeModel.classEventStarted,
+                                                                                               'vr-visualitem-event-completed': scopeModel.classEventCompleted,
+                                                                                               'vr-visualitem-event-error': scopeModel.classEventError,
+                                                                                               'vr-visualitem-event-retrying': scopeModel.classEventRetrying}">
 
-    <span class="vr-visualitem-rightimg glyphicon glyphicon glyphicon-user" ng-class="{'vr-visualitem-hintstarted': scopeModel.isHintStarted}"></span>
-    <span style="display:inline-block;width: 115px;">
-        <vr-label ng-if="!scopeModel.isHintStarted" style="text-align:center;" breakline>{{scopeModel.displayName}}</vr-label>
-        <vr-label ng-if="scopeModel.isHintStarted" style="text-align:center;" breakline isclickable>{{scopeModel.displayName}}</vr-label>
+        <span data-toggle="tooltip" data-placement="right" data-original-title={{scopeModel.hint}}>
+            <span class="vr-visualitem-rightimg glyphicon glyphicon glyphicon-user" ng-class="{'vr-visualitem-hintstarted': scopeModel.isHintStarted}"></span>
+            <span style="display:inline-block;width: 115px;">
+                <vr-label ng-if="!scopeModel.isHintStarted" style="text-align:center;" breakline>{{scopeModel.displayName}}</vr-label>
+                <vr-label ng-if="scopeModel.isHintStarted" style="text-align:center;" breakline isclickable>{{scopeModel.displayName}}</vr-label>
+            </span>
+        </span>
+
+    </div>
+    <span style="position: absolute; top: 3px;left: calc(50% + 68px);">
+        <vr-hint value="Created: {{scopeModel.eventCreatedTime }}  <br> Started:  {{scopeModel.eventStartedTime}} <br> Overdue: {{scopeModel.eventOverdueTime}} <br> Completed: {{scopeModel.eventCompletedTime}}"></vr-hint>
     </span>
 </div>
 
