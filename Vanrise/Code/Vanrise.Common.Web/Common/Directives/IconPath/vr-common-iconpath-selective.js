@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrCommonFigureiconSelective', ['VRCommon_FigureIconAPIService', 'UtilsService', 'VRUIUtilsService', function (VRCommon_FigureIconAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrCommonIconpathSelective', ['VRCommon_VRIconPathAPIService', 'UtilsService', 'VRUIUtilsService', function (VRCommon_VRIconPathAPIService, UtilsService, VRUIUtilsService) {
 
     return {
         restrict: 'E',
@@ -52,12 +52,13 @@ app.directive('vrCommonFigureiconSelective', ['VRCommon_FigureIconAPIService', '
             api.load = function (payload) {
 
                 var selectedIds;
-
+                var paths;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
+                    paths = payload.paths;
                 }
 
-                return VRCommon_FigureIconAPIService.GetFigureIconsInfo().then(function (response) {
+                return VRCommon_VRIconPathAPIService.GetVRIconPathsInfo(paths).then(function (response) {
                     selectorAPI.clearDataSource();
                     if (response != null) {
                         for (var i = 0; i < response.length; i++) {

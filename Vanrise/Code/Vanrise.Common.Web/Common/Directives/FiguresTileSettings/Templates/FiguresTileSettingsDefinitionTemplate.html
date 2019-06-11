@@ -3,7 +3,7 @@
 </vr-row>
 <vr-row>
     <vr-sec-view-selector on-ready="scopeModel.onViewsSelectorReady" normal-col-num="4" onselectionchanged="scopeModel.onViewsSelectorSelectionChanged" customlabel="Redirect To View"></vr-sec-view-selector>
-    <vr-common-figureicon-selective on-ready="scopeModel.onFigureIconSelectorReady" normal-col-num="4" selectedvalues="scopeModel.selectedIconValue"></vr-common-figureicon-selective>
+    <vr-common-iconpath-selective on-ready="scopeModel.onFigureIconSelectorReady" normal-col-num="4" selectedvalues="scopeModel.selectedIconValue"></vr-common-iconpath-selective>
     <vr-columns width="1/3row">
         <vr-select label="Maximum Items Per Row" datasource="scopeModel.maximumItemsDataSource" selectedvalues="scopeModel.selectedMaxItem"
                    datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon>

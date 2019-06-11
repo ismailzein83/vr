@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FigurestilesettingsDefinition.$inject = ['UtilsService', 'VRUIUtilsService','VRCommon_FiguresTileMaxItemsPerRowEnum'];
+    FigurestilesettingsDefinition.$inject = ['UtilsService', 'VRUIUtilsService', 'VRCommon_FiguresTileMaxItemsPerRowEnum', 'VRCommon_VRIconVirtualPathEnum'];
 
-    function FigurestilesettingsDefinition(UtilsService, VRUIUtilsService, VRCommon_FiguresTileMaxItemsPerRowEnum) {
+    function FigurestilesettingsDefinition(UtilsService, VRUIUtilsService, VRCommon_FiguresTileMaxItemsPerRowEnum, VRCommon_VRIconVirtualPathEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -130,11 +130,11 @@
                 function loadFigureIconSelector() {
                     var loadFigureIconSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                     figureIconSelectorReadyDeferred.promise.then(function () {
-                        var figureIconSelectorPayload;
+                        var figureIconSelectorPayload = {
+                            paths: [VRCommon_VRIconVirtualPathEnum.Figure.value]
+                        };
                         if (settings != undefined) {
-                            figureIconSelectorPayload = {
-                                selectedIds: settings.IconPath
-                            };
+                            figureIconSelectorPayload.selectedIds= settings.IconPath;
                         };
                         VRUIUtilsService.callDirectiveLoad(figureIconSelectorAPI, figureIconSelectorPayload, loadFigureIconSelectorPromiseDeferred);
                     });

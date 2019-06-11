@@ -118,6 +118,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Constant\VRIconVirtualPathEnum.js" />
     <Content Include="Common\Constant\FiguresTileMaxItemsPerRowEnum.js" />
     <Content Include="Common\Constant\PatternPartsEnum.js" />
     <Content Include="Common\Constant\RDBJoinTypeEnum.js" />
@@ -139,7 +140,7 @@
     <Content Include="Common\Directives\GeneralSettings\Templates\TemplateTheme.html" />
     <Content Include="Common\Directives\GeneralSettings\vr-common-themepreview.js" />
     <Content Include="Common\Directives\ThemeExtended\vr-common-themeextended-selector.js" />
-    <Content Include="Common\Directives\FigureIcon\vr-common-figureicon-selective.js" />
+    <Content Include="Common\Directives\IconPath\vr-common-iconpath-selective.js" />
     <Content Include="Common\Directives\FiguresTileSettings\Templates\FiguresTileSettingsDefinitionTemplate.html" />
     <Content Include="Common\Directives\FiguresTileSettings\Templates\FiguresTileSettingsRuntimeTemplate.html" />
     <Content Include="Common\Directives\FiguresTileSettings\vr-common-figurestilesettings-definition.js" />
@@ -222,7 +223,7 @@
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
     <Content Include="Common\Services\APIServices\VRDevProjectAPIService.js" />
     <Content Include="Common\Services\APIServices\ThemeExtendedAPIService.js" />
-    <Content Include="Common\Services\APIServices\FigureIconAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRIconPathAPIService.js" />
     <Content Include="Common\Services\APIServices\HttpCallConnectionInterceptorAPIService.js" />
     <Content Include="Common\Services\APIServices\RDBDataTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />
@@ -261,7 +262,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\VRDevProjectController.cs" />
     <Compile Include="Controllers\ThemeExtendedController.cs" />
-    <Compile Include="Controllers\FigureIconController.cs" />
+    <Compile Include="Controllers\VRIconPathController.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
     <Compile Include="Controllers\CacheRefreshController.cs" />
     <Compile Include="Controllers\HttpCallConnectionInterceptorsController.cs" />

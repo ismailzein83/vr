@@ -77,7 +77,7 @@
     <Compile Include="VRConnection\VRHttpConnectionCallInterceptorConfig.cs" />
     <Compile Include="VRDashboardDefinition\VRDashboardDefinitionFilter.cs" />
     <Compile Include="VRThemeExtended.cs" />
-    <Compile Include="VRFigureIcon.cs" />
+    <Compile Include="VRIconPath.cs" />
     <Compile Include="ProcessState.cs" />
     <Compile Include="RDBDataType\RDBDataType.cs" />
     <Compile Include="RDBDataType\RDBDataTypeInfo.cs" />
