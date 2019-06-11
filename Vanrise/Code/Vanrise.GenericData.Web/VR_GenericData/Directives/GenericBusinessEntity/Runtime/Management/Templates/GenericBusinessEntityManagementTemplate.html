@@ -1,9 +1,17 @@
 ﻿<vr-row removeline>
-    <vr-directivewrapper ng-if="scopeModel.filterDirective != undefined" directive="scopeModel.filterDirective" on-ready="scopeModel.onFilterDirectiveReady"></vr-directivewrapper>
-    <vr-columns withemptyline="{{scopeModel.filterDirective != undefined}}"  >
-        <vr-button type="Search" ng-if="scopeModel.filterDirective != undefined && scopeModel.hasFilter" formname="formFilter" data-onclick="search" standalone></vr-button>
+    <vr-columns width="fullrow" haschildcolumns  ng-show="scopeModel.isFilterSectionShow">
+        <vr-directivewrapper  ng-if="scopeModel.filterDirective != undefined" directive="scopeModel.filterDirective" on-ready="scopeModel.onFilterDirectiveReady"></vr-directivewrapper>
+        <vr-columns withemptyline="{{scopeModel.filterDirective != undefined}}">
+            <vr-button type="Search" ng-if="scopeModel.filterDirective != undefined && scopeModel.hasFilter" formname="formFilter" data-onclick="search" standalone></vr-button>
+            <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton" standalone></vr-button>
+            <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton" standalone></vr-button>
+            <span class="glyphicon glyphicon-menu-up" style="font-size:26px;cursor:pointer;" ng-click="scopeModel.showFilterSection()"></span>
+        </vr-columns>
+    </vr-columns>
+    <vr-columns ng-hide="scopeModel.isFilterSectionShow">
         <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton" standalone></vr-button>
         <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton" standalone></vr-button>
+        <span class="glyphicon glyphicon-menu-down" style="font-size:26px;cursor:pointer;" ng-click="scopeModel.showFilterSection()"></span>
     </vr-columns>
 
     <vr-columns width="fullrow" simplecol>

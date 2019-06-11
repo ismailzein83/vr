@@ -57,7 +57,10 @@
                     gridDirectiveAPI = api;
                     gridDirectiveReadyDeferred.resolve();
                 };
-
+                $scope.scopeModel.isFilterSectionShow = false;
+                $scope.scopeModel.showFilterSection = function () {
+                    $scope.scopeModel.isFilterSectionShow = !$scope.scopeModel.isFilterSectionShow;
+                };
                 $scope.search = function () {
                     return gridDirectiveAPI.load(getGridFilter());
                 };
