@@ -47,10 +47,10 @@
                     <div class="vr-page-header">
                         <div class="page-header-wrapper">
                             <div class="header-item info-container">
-                                <div class="company-name-container">                                    
+                                <div class="company-name-container">
                                     <span title="@ViewBag.CompanyName" class="vr-company-name">
-                                    <label class="vr-company-separator" ng-show="$root.masterLayoutSettings.IsBreadcrumbVisible">|</label>
-                                    @ViewBag.CompanyName
+                                        <label class="vr-company-separator" ng-show="$root.masterLayoutSettings.IsBreadcrumbVisible">|</label>
+                                        @ViewBag.CompanyName
                                     </span>
                                 </div>
                                 <label class="vr-user-separator" ng-show="currentPage.Title && !$root.masterLayoutSettings.IsBreadcrumbVisible">|</label>
@@ -191,6 +191,7 @@
                                         <li ng-repeat="a in $root.getPreviousReversedViews()">
                                             <a href="{{::a.Location}}" ng-click="$root.setViewSelectedIndex(a.orderedIndex)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
                                                 <label class="hand-cursor">
+                                                    <img class="page-view-icon" ng-show="::a.Icon" ng-src="{{::a.Icon}}">
                                                     {{a.Name}}
                                                 </label>
                                             </a>
@@ -199,7 +200,11 @@
                                 </span>
 
                                 <a ng-repeat="c in $root.moduleRenderedAsView.Childs" ng-show="$index < $root.viewsCountLimit  && $index >= $root.viewsCountStart " ng-href="{{c.Location}}" ng-click="$root.changeView =  true">
-                                    <label class="hand-cursor" ng-class="c.Id == currentPage.Id ? 'choiced-view' : ''"> {{c.Name}}</label>
+
+                                    <label class="hand-cursor" ng-class="c.Id == currentPage.Id ? 'choiced-view' : ''">
+                                        <img class="page-view-icon" ng-show="::c.Icon" ng-src="{{::c.Icon}}">
+                                        {{c.Name}}
+                                    </label>
                                     <span style="cursor:default" ng-hide="$index == $root.viewsCountLimit - 1 || $last ">|</span>
                                 </a>
                                 <span id="dropdownTabsFor" style="position:relative" ng-show="$root.moduleRenderedAsView.Childs.length > $root.viewsPageSize && $root.viewsCountLimit < $root.moduleRenderedAsView.Childs.length ">
@@ -210,6 +215,7 @@
                                         <li ng-repeat="a in $root.moduleRenderedAsView.Childs" ng-hide=" $index < $root.viewsCountLimit">
                                             <a href="{{::a.Location}}" ng-click="$root.setLastViewSelectedIndex($index)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
                                                 <label class="hand-cursor">
+                                                    <img class="page-view-icon" ng-show="::a.Icon" ng-src="{{::a.Icon}}">
                                                     {{a.Name}}
                                                 </label>
                                             </a>
@@ -293,6 +299,7 @@
                                                 <li ng-repeat="a in $root.getPreviousReversedViews()">
                                                     <a href="{{::a.Location}}" ng-click="$root.setViewSelectedIndex(a.orderedIndex)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
                                                         <label class="hand-cursor">
+                                                            <img class="page-view-icon" ng-show="::a.Icon" ng-src="{{::a.Icon}}">
                                                             {{a.Name}}
                                                         </label>
                                                     </a>
@@ -300,7 +307,10 @@
                                             </ul>
                                         </span>
                                         <a ng-repeat="c in $root.moduleRenderedAsView.Childs" dataindex="{{$index}}" viewscountlimit="{{$root.viewsCountLimit}}" viewscountstart="{{$root.viewsCountStart}}" ng-show="$index < $root.viewsCountLimit  && $index >= $root.viewsCountStart " ng-href="{{c.Location}}" ng-click="$root.changeView =  true">
-                                            <label class="hand-cursor" ng-class="c.Id == currentPage.Id ? 'choiced-view' : ''"> {{c.Name}}</label>
+                                            <label class="hand-cursor" ng-class="c.Id == currentPage.Id ? 'choiced-view' : ''">
+                                                <img class="page-view-icon" ng-show="::c.Icon" ng-src="{{::c.Icon}}">
+                                                {{c.Name}}
+                                            </label>
                                             <span style="cursor:default" ng-hide="$index == $root.viewsCountLimit - 1 || $last ">|</span>
                                         </a>
                                         <span id="dropdownTabsFor" style="position:relative" ng-show="$root.moduleRenderedAsView.Childs.length > $root.viewsPageSize && $root.viewsCountLimit < $root.moduleRenderedAsView.Childs.length ">
@@ -311,6 +321,7 @@
                                                 <li ng-repeat="a in $root.moduleRenderedAsView.Childs" ng-hide=" $index < $root.viewsCountLimit">
                                                     <a href="{{::a.Location}}" ng-click="$root.setLastViewSelectedIndex($index)" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
                                                         <label class="hand-cursor">
+                                                            <img class="page-view-icon" ng-show="::a.Icon" ng-src="{{::a.Icon}}">
                                                             {{a.Name}}
                                                         </label>
                                                     </a>
@@ -435,4 +446,6 @@
 @VRWebScripts.Render("~/bundles/Javascripts")
 @VRWebScripts.Render("~/bundles/ModulesJavascripts")
 @VRWebScripts.Render("~/bundles/waves")
+
+
 </html>

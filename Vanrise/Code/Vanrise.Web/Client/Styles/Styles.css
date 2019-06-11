@@ -157,6 +157,26 @@
     background-color: #fff;
 }
 
+.page-view-icon {
+    width: 14px;
+    filter: invert(75%);
+    position: relative;
+    top: -2px;
+}
+
+.page-view-icon.tab-icon {
+    top: -1px;
+    left: -5px;
+}
+
+.choiced-view .page-view-icon {
+    filter: invert(0%);
+}
+
+.vr-choices-filter .dropdown-menu .page-view-icon {
+    left: -5px;
+}
+
 span.vr-module-tabs-view {
     display: inline;
     margin-left: 0px !important;
@@ -2619,6 +2639,8 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     border-bottom: 1px solid #fff;
 }
 
+
+
 .vr-datagrid-datacells:hover {
     cursor: pointer !important;
 }
@@ -3654,7 +3676,8 @@ vr-tab-header-link .tab-remove-icon {
 vr-tabs .tab-validation-sign {
     color: #D44A47;
     position: relative;
-    right: calc(100% + 11px);
+    right: calc(100% + 10px);
+    top: -3px;
 }
 
 vr-columns[grouped] > div[class^="col"] {

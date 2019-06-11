@@ -188,6 +188,7 @@ function GridDrillDownTabs(UtilsService, drillDownDefinitions, gridAPI, gridMenu
 
         drillDownDirectiveTab.drillDownDefinitionId = drillDownDefinition.drillDownDefinitionId;
         drillDownDirectiveTab.title = drillDownDefinition.title;
+        drillDownDirectiveTab.iconurl = drillDownDefinition.iconurl;
         drillDownDirectiveTab.localizedtitle = drillDownDefinition.localizedtitle;
         drillDownDirectiveTab.directive = drillDownDefinition.directive;
         drillDownDirectiveTab.haspermission = drillDownDefinition.haspermission;

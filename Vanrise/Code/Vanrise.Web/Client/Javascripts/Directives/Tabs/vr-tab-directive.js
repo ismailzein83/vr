@@ -26,6 +26,7 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService", "VRLocalizatio
             tab.onremove = iAttrs.onremove != undefined ? $scope.$parent.$eval(iAttrs.onremove) : undefined;
 
             var header = iAttrs.header != undefined ? $scope.$parent.$eval(iAttrs.header) : iAttrs.header;
+            var iconurl = iAttrs.iconurl != undefined ? $scope.$parent.$eval(iAttrs.iconurl) : null;
             if (iAttrs.localizedheader != undefined) {
                 var localizedheader = $scope.$parent.$eval(iAttrs.localizedheader);
                 if (localizedheader != undefined && VRLocalizationService.isLocalizationEnabled()) {
@@ -35,6 +36,7 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService", "VRLocalizatio
                 }
             }
             tab.header = header;
+            tab.iconurl = iconurl;
             tab.data = iAttrs.data != undefined ? $scope.$parent.$eval(iAttrs.data) : header;
             if (tab.showTab == undefined)
                 tab.showTab = iAttrs.showtab != undefined ? $scope.$parent.$eval(iAttrs.showtab) : undefined;
