@@ -52,6 +52,11 @@ namespace Vanrise.GenericData.Business
             var dataRecordStorageId = _genericBEDefinitionManager.GetGenericBEDataRecordStorageId(businessEntityDefinitionId);
             return GetCacheManager().GetOrCreateObject(cacheName, dataRecordStorageId, createObject);
         }
+        public R GetCachedOrCreate<R>(Object cacheName, Guid businessEntityDefinitionId, CacheExpirationChecker cacheExpirationChecker, Func<R> createObject)
+        {
+            var dataRecordStorageId = _genericBEDefinitionManager.GetGenericBEDataRecordStorageId(businessEntityDefinitionId);
+            return GetCacheManager().GetOrCreateObject(cacheName, dataRecordStorageId, cacheExpirationChecker, createObject);
+        }
 
         public bool IsCacheExpired(Guid businessEntityDefinitionId, ref DateTime? lastCheckTime)
         {
