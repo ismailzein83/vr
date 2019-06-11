@@ -86,6 +86,7 @@ namespace Vanrise.GenericData.Business
         public Guid DataRecordTypeId { get; set; }
         public Guid? DataRecordStorageId { get; set; }
         public string TitleFieldName { get; set; }
+        public string TextResourceField { get; set; }
         public string RequiredParentFieldName { get; set; }
         public List<GenericBEAction> GenericBEActions { get; set; }
         public GenericBEGridDefinition GridDefinition { get; set; }
