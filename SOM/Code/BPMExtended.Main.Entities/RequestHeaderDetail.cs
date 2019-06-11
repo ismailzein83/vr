@@ -21,7 +21,7 @@ namespace BPMExtended.Main.Entities
         public string RequestTypeName { get; set; }
 
         public string EntityName { get; set; }
-
-
+        public string CreatedBy { get; set; }
+        public string CreatedOn { get; set; }
     }
 }

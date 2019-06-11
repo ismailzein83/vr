@@ -1,6 +1,7 @@
 ﻿using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,11 +91,11 @@ namespace BPMExtended.Main.Business
 
             //var corePackageName = packages.Core;
 
-           var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, packagesIds);
+           var coreServices = GetServicesDetailByRateplanAndPackage(ratePlanId, packagesIds,true);
             return coreServices;
         }
 
-        public List<ServiceDetail> GetOptionalServices(string ratePlanId , string switchId)
+        public List<ServiceDetail> GetOptionalServices(string ratePlanId , string switchId, string contactId)
         {
             //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
             //return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
@@ -104,17 +105,21 @@ namespace BPMExtended.Main.Business
             var excludedPackages = new List<string>();
             excludedPackages.Add(packages.Core);
             excludedPackages.Add(packages.Telephony);
-
-            var services = GetServicesDetailByRateplanAndPackages(ratePlanId, switchId, excludedPackages);
+            CRMCustomerManager manager = new CRMCustomerManager();
+            bool isForeigner = false;
+            if(contactId!=null && contactId != "")
+                isForeigner = manager.IsContactForeigner(new Guid(contactId));
+            var services = GetServicesDetailByRateplanAndPackages(ratePlanId, switchId, excludedPackages,isForeigner);
             return services;
         }
-        public List<ServiceDetail> GetServicesDetailByRateplanAndPackage(string rateplanId, List<string> packagesIds)
+        public List<ServiceDetail> GetServicesDetailByRateplanAndPackage(string rateplanId, List<string> packagesIds, bool onlyCoreServices)
         {
 
             var serviceInput = new ServiceInput()
             {
                 RatePlanId = rateplanId,
-                Packages = packagesIds
+                Packages = packagesIds,
+                OnlyCoreServices = onlyCoreServices
             };
             var servicesDetailItems = new List<ServiceDetail>();
             using (SOMClient client = new SOMClient())
@@ -130,7 +135,7 @@ namespace BPMExtended.Main.Business
             return servicesDetailItems;
         }
 
-        public List<ServiceDetail> GetServicesDetailByRateplanAndPackages(string rateplanId,string switchId, List<string> packages)
+        public List<ServiceDetail> GetServicesDetailByRateplanAndPackages(string rateplanId,string switchId, List<string> packages,bool isForeigner)
         {
 
             var multiplePackagesServiceInput = new MultiplePackagesServiceInput()
@@ -158,9 +163,48 @@ namespace BPMExtended.Main.Business
                 filteredServicesDetailItems = (from item in servicesDetailItems
                                                where !specialServicesIds.Contains(item.Id)
                                                 select item).ToList();
+                if (isForeigner)
+                {
+                    List<string> serviceIds = new List<string>();
+                    EntitySchemaQuery esq;
+                    EntityCollection entities;
+                    esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceInGeneralSettings");
+                    esq.AddColumn("Id");
+                    var Idcol = esq.AddColumn("StServiceID");
 
+                    entities = esq.GetEntityCollection(BPM_UserConnection);
+                    foreach (Entity entity in entities)
+                    {
+                        serviceIds.Add(entity.GetTypedColumnValue<string>(Idcol.Name));
+                    }
+
+                    filteredServicesDetailItems = (from item in filteredServicesDetailItems
+                                                   where !serviceIds.Contains(item.Id)
+                                                   select item).ToList();
+                }
             }
             return filteredServicesDetailItems;
+        }
+        public List<ServiceDetail> AddForeignerServicesToSelectedServices(string optionalServices)
+        {
+            List<ServiceDetail> listOfOptionalServices = JsonConvert.DeserializeObject<List<ServiceDetail>>(optionalServices);
+            if (listOfOptionalServices == null) listOfOptionalServices = new List<ServiceDetail>();
+
+            List<string> serviceIds = new List<string>();
+            EntitySchemaQuery esq;
+            EntityCollection entities;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceInGeneralSettings");
+            esq.AddColumn("Id");
+            var Idcol = esq.AddColumn("StServiceID");
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                ServiceDetail det = new ServiceDetail() { Id = entity.GetTypedColumnValue<string>(Idcol.Name), PackageId=""};
+                listOfOptionalServices.Add(det);
+            }
+
+            return listOfOptionalServices;
         }
         public List<ServiceDetail> GetRatePlanServicesDetail(string rateplanId, List<string> excludedPackages)
         {

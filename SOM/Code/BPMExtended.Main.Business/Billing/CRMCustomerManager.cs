@@ -343,7 +343,62 @@ namespace BPMExtended.Main.Business
 
             return null;
         }
+        public OutputResult ValidateRequest(string contactId, string accountId)
+        {
+            bool isSkip = false;
+            string msgCode = "";
+            ResultStatus status;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            CRMCustomerInfo customerInfo;
 
+            customerInfo = new CRMCustomerManager().GetCRMCustomerInfo(contactId, accountId);
+
+            // check categories catalog
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesInCatalog");
+            esq.AddColumn("Id");
+            esq.AddColumn("StSkipBalanceCheck");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryID", customerInfo.CustomerCategoryID);
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                isSkip = (bool)entities[0].GetColumnValue("StSkipBalanceCheck");
+            }
+
+            if (isSkip)
+            {
+                msgCode = Constant.VALIDATION_BALANCE_VALID;
+                status = ResultStatus.Success;
+            }
+            else
+            {
+                //check customer balance
+
+                //if (new BillingManager().GetCustomerBalance(info.CustomerId).Balance > 0)
+                if (new Random().Next(-10, 10) > 0)
+                {
+                    msgCode = Constant.VALIDATION_BALANCE_NOT_VALID;
+                    status = ResultStatus.Error;
+                }
+                else
+                {
+                    msgCode = Constant.VALIDATION_BALANCE_VALID;
+                    status = ResultStatus.Success;
+                }
+
+            }
+
+            return new OutputResult()
+            {
+                messages = new List<string>() { msgCode },
+                status = status
+            };
+
+        }
         public bool ValidatePayment(string sequenceNumber)
         {
             //TODO: check if user has paid
@@ -513,8 +568,11 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StStatus");
             esq.AddColumn("StContractID");
             esq.AddColumn("StRequestType");
-           // var c = esq.AddColumn("StContact");
-           // var contact = esq.AddColumn("StContact.Id");
+            esq.AddColumn("CreatedOn");
+            var createdbycol = esq.AddColumn("CreatedBy.Name");
+
+            // var c = esq.AddColumn("StContact");
+            // var contact = esq.AddColumn("StContact.Id");
 
             if (contactId != null) { 
                 esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StContact", contactId);
@@ -539,6 +597,7 @@ namespace BPMExtended.Main.Business
 
                 if (value >= 0)
                 {
+                    DateTime CreatedOn = entity.GetTypedColumnValue<DateTime>("CreatedOn");
                     requests.Add(new RequestHeaderDetail()
                     {
                         step = (string)entity.GetColumnValue("StStep"),
@@ -546,6 +605,8 @@ namespace BPMExtended.Main.Business
                         RequestId = (Guid)entity.GetColumnValue("StRequestId"),
                         status = (string)entity.GetColumnValue("StStatusName"),
                         contractId = (string)entity.GetColumnValue("StContractID"),
+                        CreatedOn = CreatedOn.ToString("dd/MM/yyyy"),
+                        CreatedBy = entity.GetTypedColumnValue<string>(createdbycol.Name),
                         RequestTypeName = Utilities.GetEnumAttribute<OperationType, DescriptionAttribute>((OperationType)value).Description,
                         EntityName = Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)value).schemaName
                     });
@@ -861,6 +922,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAccount.Id");
             esq.AddColumn("StCity");
             esq.AddColumn("StCity.Id");
+            esq.AddColumn("StSponsor");
+            var sponsorcol = esq.AddColumn("StSponsor.Id");
+
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -875,6 +939,7 @@ namespace BPMExtended.Main.Business
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var lineType = entities[0].GetColumnValue("StLineType");
                 var city = entities[0].GetColumnValue("StCityName");
+                
                 CRMCustomerInfo info = GetCRMCustomerInfo(contactId.ToString(), null);
 
                 if(coreServices != "\"\"") listOfCoreServices= JsonConvert.DeserializeObject<List<ServiceDetail>>(coreServices);
@@ -902,6 +967,15 @@ namespace BPMExtended.Main.Business
                     linePathId = pathId;
                 }
 
+                Guid sponsor = Guid.Empty;
+                try { sponsor = entities[0].GetTypedColumnValue<Guid>(sponsorcol.Name); }
+                catch { }
+                bool isForeigner = IsContactForeigner(new Guid(contactId.ToString()));
+                List<DepositDocument> depositServices = new List<DepositDocument>();
+                if(isForeigner && ( sponsor == Guid.Empty))
+                {
+                    depositServices = new CatalogManager().GetForeignerDeposits(optionalServices);
+                }
                 //call api
                 SOMRequestInput<TelephonyContractOnHoldInput> somRequestInput = new SOMRequestInput<TelephonyContractOnHoldInput>
                 {
@@ -915,7 +989,7 @@ namespace BPMExtended.Main.Business
                         CSO = info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),
                         ContractServices = contractServices,
-                        DepositServices = new CatalogManager().GetForeignerDeposits(optionalServices),
+                        DepositServices = depositServices,
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId.ToString(),
