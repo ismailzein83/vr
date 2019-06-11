@@ -16,5 +16,6 @@ namespace Vanrise.GenericData.Entities
         public Guid? PreviousStatusId { get; set; }
         public DateTime StatusChangedDate { get; set; }
         public bool IsDeleted { get; set; }
+		public string MoreInfo { get; set; }
     }
 }

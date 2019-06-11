@@ -23,9 +23,11 @@ namespace Vanrise.GenericData.Data.RDB
         const string COL_StatusChangedDate = "StatusChangedDate";
         const string COL_IsDeleted = "IsDeleted";
         const string COL_CreatedTime = "CreatedTime";
+		const string COL_MoreInfo = "MoreInfo";
 
 
-        static BusinessEntityStatusHistoryDataManager()
+
+		static BusinessEntityStatusHistoryDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
@@ -36,7 +38,9 @@ namespace Vanrise.GenericData.Data.RDB
             columns.Add(COL_PreviousStatusID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_StatusChangedDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_IsDeleted, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+			columns.Add(COL_MoreInfo, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar});
+
+			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "genericdata",
@@ -72,8 +76,7 @@ namespace Vanrise.GenericData.Data.RDB
             return RDBDataProviderFactory.CreateProvider("VR_GenericData", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
         }
         #endregion
-        public BusinessEntityStatusHistory GetLastBusinessEntityStatusHistory(Guid businessEntityDefinitionId, string businessEntityId, string fieldName)
-        {
+        public BusinessEntityStatusHistory GetLastBusinessEntityStatusHistory(Guid businessEntityDefinitionId, string businessEntityId, string fieldName){
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1 , false);
@@ -87,7 +90,7 @@ namespace Vanrise.GenericData.Data.RDB
             return queryContext.GetItem(BusinessEntityStatusHistoryMapper);
         }
 
-        public bool Insert(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId, Guid? previousStatusId)
+        public bool Insert(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId, Guid? previousStatusId, string moreInfo)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
@@ -100,6 +103,7 @@ namespace Vanrise.GenericData.Data.RDB
                 insertQuery.Column(COL_PreviousStatusID).Value(previousStatusId.Value);
             insertQuery.Column(COL_StatusChangedDate).DateNow();
             insertQuery.Column(COL_IsDeleted).Value(false);
+			insertQuery.Column(COL_MoreInfo).Value(moreInfo);
             return queryContext.ExecuteNonQuery() > 0;
         }
     }

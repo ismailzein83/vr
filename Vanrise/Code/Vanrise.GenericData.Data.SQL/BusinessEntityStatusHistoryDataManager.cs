@@ -13,9 +13,9 @@ namespace Vanrise.GenericData.Data.SQL
     {
         public BusinessEntityStatusHistoryDataManager() : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey")) { }
 
-        public bool Insert(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId, Guid? previousStatusId)
+        public bool Insert(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId, Guid? previousStatusId,string moreInfo)
         {
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_BusinessEntityStatusHistory_Insert", businessEntityDefinitionId, businessEntityId.ToString(), fieldName, statusId,previousStatusId);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_BusinessEntityStatusHistory_Insert", businessEntityDefinitionId, businessEntityId.ToString(), fieldName, statusId,previousStatusId, moreInfo);
             return (recordesEffected > 0);
         }
 
@@ -37,6 +37,8 @@ namespace Vanrise.GenericData.Data.SQL
                 BusinessEntityStatusHistoryId = GetReaderValue<long>(reader, "ID"),
                 BusinessEntityDefinitionId = GetReaderValue<Guid>(reader, "BusinessEntityDefinitionId"),
                 BusinessEntityId = reader["BusinessEntityId"] as string,
+				MoreInfo=reader["MoreInfo"] as string
+				
             };
         }
     }
