@@ -10,6 +10,7 @@ namespace BPMExtended.Main.Entities
     {
         public string RatePlanId { get; set; }
         public List<string> Packages { get; set; }
+        public bool OnlyCoreServices { get; set; }
 
     }
 
