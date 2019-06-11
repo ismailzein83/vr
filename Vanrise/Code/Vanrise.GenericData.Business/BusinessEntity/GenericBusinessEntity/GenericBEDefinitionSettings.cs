@@ -9,7 +9,7 @@ using Vanrise.Common;
 using Vanrise.Security.Entities;
 namespace Vanrise.GenericData.Business
 {
-   
+
     public class GenericBEDefinitionSettings : BusinessEntityDefinitionSettings
     {
         public static Guid s_configId = new Guid("6F3FBD7B-275A-4D92-8E06-AD7F7B04C7D6");
@@ -80,7 +80,7 @@ namespace Vanrise.GenericData.Business
         public string SelectorSingularTitle { get; set; }
         public string SelectorPluralTitle { get; set; }
         public GenericBEDefinitionSecurity Security { get; set; }
-        
+
         // public string FieldPath { get; set; }
         public ModalWidthEnum EditorSize { get; set; }
         public Guid DataRecordTypeId { get; set; }
@@ -103,6 +103,7 @@ namespace Vanrise.GenericData.Business
         public OrderDirection? Direction { get; set; }
         public bool ShowUpload { get; set; }
         public List<GenericBEUploadField> UploadFields { get; set; }
+        public List<GenericBECustomAction> CustomActions { get; set; }
     }
 
     #region Enums
@@ -113,6 +114,20 @@ namespace Vanrise.GenericData.Business
     #endregion
 
     #region Abstract Classes
+    public class GenericBECustomAction
+    {
+        public Guid GenericBECustomActionId { get; set; }
+        public string Title { get; set; }
+        public VRButtonType ButtonType { get; set; }
+        public GenericBECustomActionSettings Settings { get; set; }
+    }
+
+    public abstract class GenericBECustomActionSettings
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract string ActionTypeName { get; }
+    }
+
 
     public abstract class GenericBEBulkActionSettings
     {

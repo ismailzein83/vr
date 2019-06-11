@@ -110,6 +110,7 @@
     <Compile Include="GenericBusinessEntity\GenericBEBulkActions\UpdateGenericBEBulkActionRuntimeSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEBulkActions\UpdateGenericBEBulkAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEConditions\GenericFilterGroupCondition.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBECustomAction\GenericBEBulkAddCustomAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\IsEmptyFilterDefinitonSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\LimitResultFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEGridCondition\FilterGroupGenericBEGridCondition.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorContainerRules\GenericEditorFieldValueContainerRule.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ListEditorDefinitionSetting.cs" />
+    <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\RangeGenericEditorDefinition.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\RowsContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\StaticEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\TabsContainerEditorDefinitionSetting.cs" />

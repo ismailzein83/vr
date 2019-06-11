@@ -107,6 +107,7 @@
     <Compile Include="CDRCorrelation\CDRCorrelationBatch.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationFilterGroup.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationProcessState.cs" />
+    <Compile Include="GenericBusinessEntity\RangeGenericEditorDefinitionSettings.cs" />
     <Compile Include="GenericEditor\Runtime\GenericFieldsRuntimeRow.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionDetail.cs" />
     <Compile Include="SendEmailActionInput.cs" />
