@@ -2,7 +2,7 @@
     <div class="vr-visualitem-activityblock" ng-click="scopeModel.onHumanTasksClick()" ng-class="{'vr-visualitem-event-started': scopeModel.classEventStarted,
                                                                                                'vr-visualitem-event-completed': scopeModel.classEventCompleted,
                                                                                                'vr-visualitem-event-error': scopeModel.classEventError,
-                                                                                               'vr-visualitem-event-retrying': scopeModel.classEventRetrying}">
+                                                                                               'vr-visualitem-event-retrying': scopeModel.classEventRetrying || scopeModel.classEventOverdue}">
 
         <span data-toggle="tooltip" data-placement="right" data-original-title={{scopeModel.hint}}>
             <span class="vr-visualitem-rightimg glyphicon glyphicon glyphicon-user" ng-class="{'vr-visualitem-hintstarted': scopeModel.isHintStarted}"></span>

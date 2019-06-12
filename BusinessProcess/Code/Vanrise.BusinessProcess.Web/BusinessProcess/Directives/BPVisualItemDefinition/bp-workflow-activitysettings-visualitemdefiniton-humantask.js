@@ -36,6 +36,7 @@
                 $scope.scopeModel.classEventCompleted = false;
                 $scope.scopeModel.classEventError = false;
                 $scope.scopeModel.classEventRetrying = false;
+                $scope.scopeModel.classEventOverdue = false;
                 $scope.scopeModel.isHintStarted = false;
                 $scope.scopeModel.hint = "Not Started";
                 $scope.scopeModel.eventCreatedTime = "N/A";
@@ -93,17 +94,21 @@
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Completed.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = false;
+                            $scope.scopeModel.classEventOverdue = false;
                             $scope.scopeModel.classEventCompleted = true;
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Completed";
                             $scope.scopeModel.eventCompletedTime = UtilsService.getDateTimeFormat(visualItemEvent.CreatedTime, DateTimeFormatEnum.DateTime);
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Overdue.value.toLowerCase()) {
+                            $scope.scopeModel.classEventStarted = false;
+                            $scope.scopeModel.classEventOverdue = true;
                             $scope.scopeModel.eventOverdueTime = UtilsService.getDateTimeFormat(visualItemEvent.CreatedTime, DateTimeFormatEnum.DateTime);
                         }
                         else if (eventTypeId == VisualEventTypeEnum.Error.value.toLowerCase()) {
                             $scope.scopeModel.classEventStarted = false;
                             $scope.scopeModel.classEventRetrying = false;
+                            $scope.scopeModel.classEventOverdue = false;
                             $scope.scopeModel.classEventError = true;
                             $scope.scopeModel.isHintStarted = true;
                             $scope.scopeModel.hint = "Error";
