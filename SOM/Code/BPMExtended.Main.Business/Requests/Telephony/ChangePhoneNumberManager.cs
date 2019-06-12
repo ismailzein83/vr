@@ -62,7 +62,7 @@ namespace BPMExtended.Main.Business
             List<ServiceData> feesToRemove = new List<ServiceData>();
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StChangePhoneNumberRequest");
-            esq.AddColumn("StContractID");
+            esq.AddColumn("StContractId");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StPhoneNumber");
             esq.AddColumn("StRatePlanId");

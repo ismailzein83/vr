@@ -134,11 +134,11 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("")]
         ADSLChangePassword = 12,
 
-        [LineOfBusiness(LineOfBusiness.ADSL)]
+        [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Contract Take Over")]
         [EntitySchemaName("StTelephonyContractTakeOver")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("A826F4E8-9352-46FB-814E-8B0B52655659")]
         ContractTakeOver = 13,
 
         [LineOfBusiness(LineOfBusiness.LeasedLine)]

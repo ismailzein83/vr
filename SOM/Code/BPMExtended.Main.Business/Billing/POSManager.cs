@@ -32,14 +32,28 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SubmitToPOSResponse item=null;
             bool depositFlag;
-            string contractId,contactId, fees,deposits;
+            string contractId=null,contactId, fees,deposits;
             Contact contact;
+            EntityCollection entities;
             List<SaleService> services = new List<SaleService>();
+
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("StContractID");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+             entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                contractId = entities[0].GetColumnValue("StContractID").ToString();
+            }
 
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager,  new CRMCustomerManager().GetEntityNameByRequestId(requestId));
             var stContact = esq.AddColumn("StContact.Id");
-            esq.AddColumn("StContractId");
             esq.AddColumn("StDepositFlag");
             esq.AddColumn("StOperationAddedFees");
             esq.AddColumn("StOperationAddedDeposites");
@@ -48,11 +62,10 @@ namespace BPMExtended.Main.Business
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
 
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
+             entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
-                contactId = entities[0].GetTypedColumnValue<string>(stContact.Name).ToString();
-                contractId = entities[0].GetColumnValue("StContractId").ToString();
+                contactId = entities[0].GetTypedColumnValue<string>(stContact.Name).ToString();             
                 depositFlag = (bool)entities[0].GetColumnValue("StDepositFlag");
                 fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
                 deposits = entities[0].GetColumnValue("StOperationAddedDeposites").ToString();
