@@ -236,9 +236,12 @@
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationDefinition\vr-genericdata-beparentchildrelationdefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\Templates\BEParentChildRelationGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\vr-genericdata-beparentchildrelation-grid.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorConditionalRuleSetting\Templates\ConditionalRuleFieldValueSettingTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorConditionalRuleSetting\vr-genericeditor-conditionalrule-fieldvalue.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\GenericBERowContainerEditorController.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\GenericBEGenericFieldEditorController.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\GenericBEGenericFieldEditor.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\ConditionalRuleContainerDefinitionSettingTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\GenericBERowContainerEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\ListEditorDefinitionSettingTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\ListEditorRuntimeSettingTemplate.html" />
@@ -249,6 +252,7 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\RowsContainerEditorRuntimeSettingTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\RowsContainerEditorDefinitionSettingTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-callrestapieditorsetting-runtime.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-conditionalrulecontainersetting-definition.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-genericfieldseditorsetting-runtime.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-listeditor-definition.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-listeditor-runtime.js" />
@@ -293,6 +297,7 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionGroupDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-additionalsettings-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-additionalsettings-selective.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericeditor-conditionalrules.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiongroupdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiongroupdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition.js" />
@@ -319,7 +324,9 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\vr-genericdata-genericbe-filterruntime-isempty.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericBERuntimeManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-runtime-management.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBEFilterRuntimeRootContainerEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityRootContainerEditor.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbe-filterruntime-rootcontainer.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericeditor-rootcontainer.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\Templates\DataRecordTypeCompositeRecordConditionDefinitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinitiongroup.js" />

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIUtilsService", "VR_GenericData_GenericBusinessEntityAPIService",
-    function (UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService) {
+app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIUtilsService", "VR_GenericData_GenericBusinessEntityAPIService", "VR_GenericData_GenericBusinessEntityService",
+    function (UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBusinessEntityService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -170,7 +170,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
                         var _promises = [];
 
-                        if (!tryUpdateAllFieldValuesByFieldNames(fieldName, fieldValues)) {
+                        if (!VR_GenericData_GenericBusinessEntityService.tryUpdateAllFieldValuesByFieldName(fieldName, fieldValues, allFieldValuesByFieldNames)) {
                             return UtilsService.waitMultiplePromises(_promises);
                         }
 
@@ -201,7 +201,6 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                             promises: [],
                             getChildNode: function () {
                                 var getDependentFieldValuesPromiseDeferred = UtilsService.createPromiseDeferred();
-                                var isValueToSetChanged = false;
                                 var valuesToSet = {};
 
                                 var input = {
@@ -216,7 +215,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
                                         var dependentFieldValue = response[prop];
                                         var convertedFieldValue = typeof (dependentFieldValue) == "object" ? dependentFieldValue : [dependentFieldValue];
-                                        tryUpdateAllFieldValuesByFieldNames(prop, convertedFieldValue);
+                                        VR_GenericData_GenericBusinessEntityService.tryUpdateAllFieldValuesByFieldName(prop, convertedFieldValue, allFieldValuesByFieldNames);
 
                                         valuesToSet[prop] = dependentFieldValue;
                                     }
@@ -244,27 +243,6 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                         });
                     }
                 };
-
-                function tryUpdateAllFieldValuesByFieldNames(fieldName, fieldValues) {
-                    var oldValues = allFieldValuesByFieldNames[fieldName];
-                    if (oldValues == undefined && fieldValues == undefined)
-                        return false;
-
-                    if (!(fieldName in allFieldValuesByFieldNames) || fieldValues == undefined || oldValues == undefined || oldValues.length != fieldValues.length) {
-                        allFieldValuesByFieldNames[fieldName] = fieldValues;
-                        return true;
-                    }
-
-                    for (var i = 0; i < fieldValues.length; i++) {
-                        var currentValue = fieldValues[i];
-                        if (oldValues.indexOf(currentValue) == -1) {
-                            allFieldValuesByFieldNames[fieldName] = fieldValues;
-                            return true;
-                        }
-                    }
-
-                    return false;
-                }
 
                 return context;
             }

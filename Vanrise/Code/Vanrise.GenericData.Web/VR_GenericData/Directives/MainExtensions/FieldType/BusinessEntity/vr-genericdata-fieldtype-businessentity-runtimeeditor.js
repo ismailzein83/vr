@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_GenericBusinessEntityAPIService) {
+app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService', 'VR_GenericData_GenericUIRuntimeAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_GenericUIRuntimeAPIService) {
 
 
         var directiveDefinitionObject = {
@@ -10,7 +10,8 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 onReady: '=',
                 selectionmode: '@',
                 normalColNum: '@',
-                isrequired: '='
+                isrequired: '=',
+                onselectionchanged: '='
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -82,6 +83,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             var isFirstLoad = true;
             var fieldValuesByName = {};
             var dependentFields = [];
+            //var dataRecordTypeId;
 
             function initializeController() {
                 //ctrl.showSelector = ($attrs.selectionmode == "dynamic");
@@ -108,135 +110,198 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                         genericContext = payload.genericContext;
                         allFieldValuesByName = payload.allFieldValuesByName;
                         parentFieldValues = payload.parentFieldValues;
+                        //dataRecordTypeId = payload.dataRecordTypeId;
                     }
 
-                    if (fieldType != undefined) {
-                        businessEntityDefinitionId = fieldType.BusinessEntityDefinitionId;
+                    businessEntityDefinitionId = fieldType.BusinessEntityDefinitionId;
 
-                        var data;
-                        var hasEmtyRequiredDependentField = false;
+                    var data;
+                    var hasEmtyRequiredDependentField = false;
 
-                        if (fieldType.DependantFields != null && fieldType.DependantFields != undefined) {
-                            dependentFields = fieldType.DependantFields;
+                    if (fieldType.DependantFields != null && fieldType.DependantFields != undefined) {
+                        dependentFields = fieldType.DependantFields;
+                            data = evaluateAndApplyFieldState(allFieldValuesByName);
+                            hasEmtyRequiredDependentField = data.hasEmtyRequiredDependentField;
+                    }
 
-                            if (allFieldValuesByName != undefined) {
-                                data = evaluateAndApplyFieldState(allFieldValuesByName);
-                                hasEmtyRequiredDependentField = data.hasEmtyRequiredDependentField;
+                    var promises = [];
+
+                    var loadWholeSectionPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadWholeSectionPromiseDeferred.promise);
+
+                    var loadBusinessEntityDefPromiseDeferred = VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(businessEntityDefinitionId);
+                    promises.push(loadBusinessEntityDefPromiseDeferred);
+
+                    loadBusinessEntityDefPromiseDeferred.then(function (businessEntityDef) {
+                        if (businessEntityDef.Settings != null) {
+
+                            if (businessEntityDef.Settings.GroupSelectorUIControl == null || businessEntityDef.Settings.GroupSelectorUIControl == "") {
+                                $scope.scopeModel.showInDynamicMode = false;
+                                missingGroupSelectorUIControl = true;
+                                $scope.scopeModel.calculatedColNum = ctrl.normalColNum;
                             }
-                        }
 
-                        var promises = [];
+                            var innerSectionPromises = [];
 
-                        var loadWholeSectionPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadWholeSectionPromiseDeferred.promise);
+                            //var requiredParentFieldName = businessEntityDef.Settings.RequiredParentFieldName;
+                            //if (requiredParentFieldName != undefined) {
+                            //    var loadRequiredParentPromise = loadRequiredParentDirective(requiredParentFieldName);
+                            //    innerSectionPromises.push(loadRequiredParentPromise);
+                            //}
 
-                        var loadBusinessEntityDefPromiseDeferred = VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(businessEntityDefinitionId);
-                        promises.push(loadBusinessEntityDefPromiseDeferred);
+                            if ($attrs.selectionmode == "dynamic" && !missingGroupSelectorUIControl) {
+                                $scope.dynamic = {};
+                                $scope.dynamic.directive = businessEntityDef.Settings.GroupSelectorUIControl;
+                                $scope.dynamic.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                $scope.dynamic.onDirectiveReady = function (api) {
+                                    $scope.dynamic.directiveAPI = api;
+                                    $scope.dynamic.directiveReadyPromiseDeferred.resolve();
+                                };
 
-                        loadBusinessEntityDefPromiseDeferred.then(function (businessEntityDef) {
-                            if (businessEntityDef.Settings != null) {
+                                $scope.dynamic.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                                innerSectionPromises.push($scope.dynamic.directiveLoadPromiseDeferred.promise);
 
-                                if (businessEntityDef.Settings.GroupSelectorUIControl == null || businessEntityDef.Settings.GroupSelectorUIControl == "") {
-                                    $scope.scopeModel.showInDynamicMode = false;
-                                    missingGroupSelectorUIControl = true;
-                                    $scope.scopeModel.calculatedColNum = ctrl.normalColNum;
-                                }
+                                $scope.dynamic.directiveReadyPromiseDeferred.promise.then(function () {
 
-                                var innerSectionPromises = [];
-                                if ($attrs.selectionmode == "dynamic" && !missingGroupSelectorUIControl) {
-                                    $scope.dynamic = {};
-                                    $scope.dynamic.directive = businessEntityDef.Settings.GroupSelectorUIControl;
-                                    $scope.dynamic.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                                    $scope.dynamic.onDirectiveReady = function (api) {
-                                        $scope.dynamic.directiveAPI = api;
-                                        $scope.dynamic.directiveReadyPromiseDeferred.resolve();
-                                    };
-
-                                    $scope.dynamic.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                                    innerSectionPromises.push($scope.dynamic.directiveLoadPromiseDeferred.promise);
-
-                                    $scope.dynamic.directiveReadyPromiseDeferred.promise.then(function () {
-
-                                        var payload;
-                                        if (fieldValue != undefined) {
-                                            payload = fieldValue.BusinessEntityGroup;
-                                        }
-                                        VRUIUtilsService.callDirectiveLoad($scope.dynamic.directiveAPI, payload, $scope.dynamic.directiveLoadPromiseDeferred);
-                                    });
-                                }
-                                else {
-                                    if ($scope.selector == undefined) {
-                                        $scope.selector = {};
-                                        $scope.selector.directive = businessEntityDef.Settings.SelectorUIControl;
-                                        $scope.selector.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    var payload;
+                                    if (fieldValue != undefined) {
+                                        payload = fieldValue.BusinessEntityGroup;
                                     }
-
-                                    $scope.selector.onDirectiveReady = function (api) {
-                                        $scope.selector.directiveAPI = api;
-                                        $scope.selector.directiveReadyPromiseDeferred.resolve();
-                                    };
-
-                                    $scope.selector.onselectionchanged = function (selectedvalue) {
-                                        if (isFirstLoad)
-                                            return;
-
-                                        if (genericUIContext != undefined && genericUIContext.notifyValueChanged != undefined && typeof (genericUIContext.notifyValueChanged) == "function") {
-                                            genericUIContext.notifyValueChanged(selectedvalue);
-                                        }
-
-                                        if ($attrs.selectionmode != "dynamic") {
-                                            var selectedIds = $scope.selector.directiveAPI.getSelectedIds();
-                                            if (ctrl.selectionmode == "single" && selectedIds != undefined)
-                                                selectedIds = [selectedIds];
-
-                                            fieldValuesByName[fieldName] = selectedIds;
-                                            notifyFieldValueChanged(selectedIds);
-                                        }
-                                    };
-
-                                    $scope.selector.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                                    innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
-
-                                    $scope.selector.directiveReadyPromiseDeferred.promise.then(function () {
-
-                                        var payload = {
-                                            businessEntityDefinitionId: businessEntityDefinitionId,
-                                            fieldTitle: $scope.scopeModel.fieldTitle,
-                                            beRuntimeSelectorFilter: fieldType.BERuntimeSelectorFilter,
-                                            genericUIContext: genericUIContext,
-                                            hasEmtyRequiredDependentField: hasEmtyRequiredDependentField,
-                                            filter: data != undefined && data.genericBusinessEntityFilters != undefined ? { FieldFilters: data.genericBusinessEntityFilters } : getFilter()
-                                        };
-
-                                        if (fieldValue != undefined) {
-                                            payload.selectedIds = ($attrs.selectionmode == "dynamic" && missingGroupSelectorUIControl) ? fieldValue.Values : fieldValue;
-                                        }
-
-                                        if (parentFieldValues != undefined && fieldName in parentFieldValues) {
-                                            payload.isDisabled = parentFieldValues[fieldName].isDisabled;
-                                            if (fieldValue == undefined) {
-                                                fieldValue = parentFieldValues[fieldName].value;
-                                                payload.hasEmtyRequiredDependentField = false;
-                                                payload.selectedIds = fieldValue;
-                                            }
-                                        }
-
-                                        VRUIUtilsService.callDirectiveLoad($scope.selector.directiveAPI, payload, $scope.selector.directiveLoadPromiseDeferred);
-                                    });
-                                }
-
-                                UtilsService.waitMultiplePromises(innerSectionPromises).then(function () {
-                                    loadWholeSectionPromiseDeferred.resolve();
-                                }).catch(function (error) {
-                                    loadWholeSectionPromiseDeferred.reject(error);
+                                    VRUIUtilsService.callDirectiveLoad($scope.dynamic.directiveAPI, payload, $scope.dynamic.directiveLoadPromiseDeferred);
                                 });
                             }
-                        });
+                            else {
+                                if ($scope.selector == undefined) {
+                                    $scope.selector = {};
+                                    $scope.selector.directive = businessEntityDef.Settings.SelectorUIControl;
+                                    $scope.selector.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                }
 
-                        return UtilsService.waitMultiplePromises(promises).then(function () {
-                            isFirstLoad = false;
-                        });
-                    }
+                                $scope.selector.onDirectiveReady = function (api) {
+                                    $scope.selector.directiveAPI = api;
+                                    $scope.selector.directiveReadyPromiseDeferred.resolve();
+                                };
+
+                                $scope.selector.onselectionchanged = function (selectedvalue) {
+                                    if (isFirstLoad)
+                                        return;
+
+                                    if (genericUIContext != undefined && genericUIContext.notifyValueChanged != undefined && typeof (genericUIContext.notifyValueChanged) == "function") {
+                                        genericUIContext.notifyValueChanged(selectedvalue);
+                                    }
+
+                                    if ($attrs.selectionmode != "dynamic") {
+                                        var selectedIds = $scope.selector.directiveAPI.getSelectedIds();
+                                        if (ctrl.selectionmode == "single" && selectedIds != undefined)
+                                            selectedIds = [selectedIds];
+
+                                        fieldValuesByName[fieldName] = selectedIds;
+                                        notifyFieldValueChanged(selectedIds);
+                                    }
+                                };
+
+                                $scope.selector.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                                innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
+
+                                $scope.selector.directiveReadyPromiseDeferred.promise.then(function () {
+
+                                    var payload = {
+                                        businessEntityDefinitionId: businessEntityDefinitionId,
+                                        fieldTitle: $scope.scopeModel.fieldTitle,
+                                        beRuntimeSelectorFilter: fieldType.BERuntimeSelectorFilter,
+                                        genericUIContext: genericUIContext,
+                                        hasEmtyRequiredDependentField: hasEmtyRequiredDependentField,
+                                        filter: data != undefined && data.genericBusinessEntityFilters != undefined ? { FieldFilters: data.genericBusinessEntityFilters } : getFilter()
+                                    };
+
+                                    if (fieldValue != undefined) {
+                                        payload.selectedIds = ($attrs.selectionmode == "dynamic" && missingGroupSelectorUIControl) ? fieldValue.Values : fieldValue;
+                                    }
+
+                                    if (parentFieldValues != undefined && fieldName in parentFieldValues) {
+                                        payload.isDisabled = parentFieldValues[fieldName].isDisabled;
+                                        if (fieldValue == undefined) {
+                                            fieldValue = parentFieldValues[fieldName].value;
+                                            payload.hasEmtyRequiredDependentField = false;
+                                            payload.selectedIds = fieldValue;
+                                        }
+                                    }
+
+                                    VRUIUtilsService.callDirectiveLoad($scope.selector.directiveAPI, payload, $scope.selector.directiveLoadPromiseDeferred);
+                                });
+                            }
+
+                            UtilsService.waitMultiplePromises(innerSectionPromises).then(function () {
+                                loadWholeSectionPromiseDeferred.resolve();
+                            }).catch(function (error) {
+                                loadWholeSectionPromiseDeferred.reject(error);
+                            });
+                        }
+                    });
+
+                    //function loadRequiredParentDirective(requiredParentFieldName) {
+                    //    var innerParentDirectivePromise = [];
+
+                    //    var shouldDrawParent = true;
+                    //    for (var i = 0; i < dependentFields.length; i++) {
+                    //        if (dependentFields[i].MappedFieldName == requiredParentFieldName) {
+                    //            shouldDrawParent = false;
+                    //            break;
+                    //        }
+                    //    }
+
+                    //    if (shouldDrawParent) {
+                    //        dependentFields.push({ FieldName: requiredParentFieldName, MappedFieldName: requiredParentFieldName, IsRequired: true });
+
+                    //        var requiredParentInput = {
+                    //            DataRecordTypeId: dataRecordTypeId,
+                    //            Field: {
+                    //                FieldPath:  requiredParentFieldName,
+                    //                FieldTitle: undefined,
+                    //                FieldViewSettings: undefined,
+                    //                TextResourceKey: undefined,
+                    //                IsRequired: true,
+                    //                IsDisabled: false
+                    //            }
+                    //        };
+
+                    //        $scope.parentSelector = {};
+                    //        $scope.parentSelector.parentDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //        innerParentDirectivePromise.push($scope.parentSelector.parentDirectiveLoadPromiseDeferred.promise);
+
+                    //        VR_GenericData_GenericUIRuntimeAPIService.GetGenericEditorRuntimeField(requiredParentInput).then(function (genericEditorRuntimeField) {
+
+                    //            $scope.parentSelector.parentDirective = genericEditorRuntimeField.FieldType.RuntimeEditor;
+
+                    //            $scope.parentSelector.parentDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //            $scope.parentSelector.onParentDirectiveReady = function (api) {
+                    //                $scope.parentSelector.parentDirectiveAPI = api;
+                    //                $scope.parentSelector.parentDirectiveReadyPromiseDeferred.resolve();
+                    //            };
+
+                    //            $scope.parentSelector.parentDirectiveReadyPromiseDeferred.promise.then(function () {
+                    //                var payload = {
+                    //                    fieldName:  genericEditorRuntimeField.FieldPath,
+                    //                    fieldTitle: genericEditorRuntimeField.FieldTitle,
+                    //                    fieldType: genericEditorRuntimeField.FieldType,
+                    //                    fieldValue: undefined,
+                    //                    genericUIContext: genericUIContext,
+                    //                    genericContext: genericContext,
+                    //                    allFieldValuesByName: allFieldValuesByName,
+                    //                    parentFieldValues: parentFieldValues
+                    //                };
+
+                    //                VRUIUtilsService.callDirectiveLoad($scope.parentSelector.parentDirectiveAPI, payload, $scope.parentSelector.parentDirectiveLoadPromiseDeferred);
+                    //            });
+                    //        });
+                    //    }
+
+                    //    return UtilsService.waitMultiplePromises(innerParentDirectivePromise);
+                    //}
+
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        isFirstLoad = false;
+                    });
                 };
 
                 api.getData = function () {
@@ -273,18 +338,18 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
                     var directiveAPI = getDirectiveAPI();
                     if (directiveAPI == undefined)
-                        return;
+                        return UtilsService.waitMultiplePromises([]);
 
                     if (directiveAPI.onFieldValueChanged != undefined && typeof (directiveAPI.onFieldValueChanged) == "function")
                         return directiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
 
                     var data = evaluateAndApplyFieldState(allFieldValuesByFieldNames);
                     if (!data.isDependentFieldsChanged)
-                        return;
+                        return UtilsService.waitMultiplePromises([]);
 
-                    if (data.isRequiredDependentFieldDeselected) {
+                    if (data.hasEmtyRequiredDependentField) {
                         directiveAPI.clearDataSource();
-                        return;
+                        return UtilsService.waitMultiplePromises([]);
                     }
 
                     return reloadDirectiveOnValueChanged(directiveAPI, data);
@@ -327,9 +392,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                         return setFieldValuesPromiseDeferred.promise;
                     }
 
-                    //var loadParentGenericBusinessEntitiesPromise = loadParentGenericBusinessEntities(newFieldValue);
-
-                    UtilsService.waitMultiplePromises([ $scope.selector.directiveLoadPromiseDeferred.promise]).then(function () {
+                    UtilsService.waitMultiplePromises([$scope.selector.directiveLoadPromiseDeferred.promise]).then(function () {
 
                         fieldValuesByName[fieldName] = valueToSet;
 
@@ -357,6 +420,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }
+
 
             function notifyFieldValueChanged(valueToSet) {
                 var _promises = [];
@@ -406,18 +470,17 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     genericBusinessEntityFilters: undefined,
                     hasEmtyRequiredDependentField: false,
                     isDependentFieldsChanged: false,
-                    isDependentFieldDeselected: false,
-                    isRequiredDependentFieldDeselected: false
+                    isDependentFieldDeselected: false
                 };
 
-                if (dependentFields == undefined || dependentFields.length == 0 || allChangedFields == undefined)
+                if (dependentFields == undefined || dependentFields.length == 0)
                     return data;
 
                 for (var i = 0; i < dependentFields.length; i++) {
                     var currentDependentField = dependentFields[i];
                     var dependentFieldName = currentDependentField.FieldName;
 
-                    if (dependentFieldName in allChangedFields) {
+                    if ( allChangedFields != undefined && dependentFieldName in allChangedFields) {
                         var oldValues = fieldValuesByName[dependentFieldName];
                         var newValues = allChangedFields[dependentFieldName];
 
@@ -440,8 +503,6 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
                         if (fieldValuesByName[dependentFieldName] == undefined) {
                             data.isDependentFieldDeselected = true;
-                            if (currentDependentField.IsRequired)
-                                data.isRequiredDependentFieldDeselected = true;
                         }
                         else {
                             if (data.genericBusinessEntityFilters == undefined)
@@ -470,57 +531,6 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 };
                 return VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directiveLoadPayload, setLoader);
             }
-
-            //function loadParentGenericBusinessEntities(genericBusinessEntityId) {
-            //    var loadParentGenericBusinessEntitiesDeferred = UtilsService.createPromiseDeferred();
-
-            //    if (genericBusinessEntityId == undefined || dependentFields == undefined || dependentFields.length == 0 || genericContext == undefined || genericContext.setFieldValues == undefined ||
-            //        typeof (genericContext.setFieldValues) != "function") {
-            //        loadParentGenericBusinessEntitiesDeferred.resolve();
-            //        return loadParentGenericBusinessEntitiesDeferred.promise;
-            //    }
-
-            //    VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
-            //        if (response) {
-            //            var beFieldValues = response.FieldValues;
-
-            //            var promise; // = setDependentFieldsValues(beFieldValues);
-            //            if (promise != undefined) {
-            //                promise.then(function () {
-            //                    loadParentGenericBusinessEntitiesDeferred.resolve();
-            //                });
-            //            }
-            //            else {
-            //                loadParentGenericBusinessEntitiesDeferred.resolve();
-            //            }
-            //        }
-
-            //    }).finally(function () {
-            //        loadParentGenericBusinessEntitiesDeferred.resolve();
-            //    });
-
-            //    function setDependentFieldsValues(beFieldValues) {
-            //        if (beFieldValues == undefined)
-            //            return;
-
-            //        var fieldsToSet = {};
-
-            //        for (var i = 0; i < dependentFields.length; i++) {
-            //            var currentDependentField = dependentFields[i];
-            //            var beFieldValue = beFieldValues[currentDependentField.MappedFieldName];
-            //            var dependentFieldName = currentDependentField.FieldName;
-            //            fieldsToSet[dependentFieldName] = beFieldValue;
-            //            fieldValuesByName[dependentFieldName] = beFieldValue != undefined ? [beFieldValue] : undefined;
-            //        }
-
-            //        if (Object.keys(fieldsToSet).length == 0)
-            //            return;
-
-            //        return genericContext.setFieldValues(fieldsToSet);
-            //    }
-
-            //    return loadParentGenericBusinessEntitiesDeferred.promise;
-            //}
         }
 
         return directiveDefinitionObject;

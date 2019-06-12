@@ -6,18 +6,6 @@
 
     function GenericBusinessEntityService(VR_GenericData_GenericBusinessEntityAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService, UtilsService, VRUIUtilsService) {
         var drillDownDefinitions = [];
-        return ({
-            addGenericBusinessEntity: addGenericBusinessEntity,
-            editGenericBusinessEntity: editGenericBusinessEntity,
-            defineGenericBEViewTabs: defineGenericBEViewTabs,
-			uploadGenericBusinessEntity:uploadGenericBusinessEntity,
-            getEntityUniqueName: getEntityUniqueName,
-            openBulkActionsEditor: openBulkActionsEditor,
-            sendEmailGenericBE: sendEmailGenericBE,
-            openErrorMessageEditor: openErrorMessageEditor
-         //   getDrillDownDefinition: getDrillDownDefinition
-
-        });
 
         function addGenericBusinessEntity(onGenericBEAdded, businessEntityDefinitionId,editorSize,fieldValues) {
             var parameters = {
@@ -116,7 +104,6 @@
             }
         }
 
-  
         function getEntityUniqueName(businessEntityDefinitionId) {
             return "VR_GenericData_GenericBusinessEntity_"+ businessEntityDefinitionId;
         }
@@ -135,6 +122,7 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityBulkActionsEditor.html', parameters, settings);
         }
+
         function sendEmailGenericBE(genericBEDefinitionId, businessEntityDefinitionId, genericBEAction) {
             var parameters = {
                 genericBEDefinitionId: genericBEDefinitionId,
@@ -148,6 +136,7 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntitySendEmailEditor.html', parameters, settings);
         }
+
         function openErrorMessageEditor(errorEntity) {
             var parameters = {
                 errorEntity: errorEntity,
@@ -158,6 +147,32 @@
             };
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityErrorMessageEditor.html', parameters, settings);
         }
+
+        function tryUpdateAllFieldValuesByFieldName(fieldName, fieldValues, allFieldValuesByFieldName) {
+            if (allFieldValuesByFieldName == undefined) {
+                return false;
+            }
+
+            var oldValues = allFieldValuesByFieldName[fieldName];
+            if (oldValues == undefined && fieldValues == undefined)
+                return false;
+
+            if (!(fieldName in allFieldValuesByFieldName) || fieldValues == undefined || oldValues == undefined || oldValues.length != fieldValues.length) {
+                allFieldValuesByFieldName[fieldName] = fieldValues;
+                return true;
+            }
+
+            for (var i = 0; i < fieldValues.length; i++) {
+                var currentValue = fieldValues[i];
+                if (oldValues.indexOf(currentValue) == -1) {
+                    allFieldValuesByFieldName[fieldName] = fieldValues;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         //function registerObjectTrackingDrillDownToGenericBusinessEntity() {
         //    var drillDownDefinition = {};
 
@@ -177,8 +192,8 @@
         //    };
 
         //    addDrillDownDefinition(drillDownDefinition);
-
         //}
+
         //function addDrillDownDefinition(drillDownDefinition) {
 
         //    drillDownDefinitions.push(drillDownDefinition);
@@ -187,7 +202,22 @@
         //function getDrillDownDefinition() {
         //    return drillDownDefinitions;
         //}
-    };
+
+
+        return ({
+            addGenericBusinessEntity: addGenericBusinessEntity,
+            editGenericBusinessEntity: editGenericBusinessEntity,
+            defineGenericBEViewTabs: defineGenericBEViewTabs,
+            uploadGenericBusinessEntity: uploadGenericBusinessEntity,
+            getEntityUniqueName: getEntityUniqueName,
+            openBulkActionsEditor: openBulkActionsEditor,
+            sendEmailGenericBE: sendEmailGenericBE,
+            openErrorMessageEditor: openErrorMessageEditor,
+            tryUpdateAllFieldValuesByFieldName: tryUpdateAllFieldValuesByFieldName
+            //registerObjectTrackingDrillDownToGenericBusinessEntity: registerObjectTrackingDrillDownToGenericBusinessEntity
+            //getDrillDownDefinition: getDrillDownDefinition
+        });
+    }
 
     appControllers.service('VR_GenericData_GenericBusinessEntityService', GenericBusinessEntityService);
 

@@ -83,6 +83,7 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
                                 allFieldValuesByName: allFieldValuesByName,
                                 genericContext: genericContext,
                                 parentFieldValues: parentFieldValues,
+                                //dataRecordTypeId: dataRecordTypeId
                             };
                             VRUIUtilsService.callDirectiveLoad(sectionDirectiveApi, payloadSelector, sectionDirectiveLoadDeferred);
                         });

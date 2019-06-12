@@ -27,6 +27,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
             var genericContext;
             var allFieldValuesByName;
             var parentFieldValues;
+            //var dataRecordTypeId;
 
             function initializeController() {
                 ctrl.fields = [];
@@ -38,11 +39,13 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                 var api = {};
 
                 api.load = function (payload) {
+                    
                     if (payload.fields != undefined) {
                         currentContext = payload.context;
                         genericContext = payload.genericContext;
                         allFieldValuesByName = payload.allFieldValuesByName;
                         parentFieldValues = payload.parentFieldValues;
+                        //dataRecordTypeId = payload.dataRecordTypeId;
 
                         var promises = [];
 
@@ -124,7 +127,8 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                             TextResourceKey: field.TextResourceKey,
                             genericContext: genericContext,
                             allFieldValuesByName: allFieldValuesByName,
-                            parentFieldValues: parentFieldValues
+                            parentFieldValues: parentFieldValues,
+                            //dataRecordTypeId: dataRecordTypeId
                         };
                         VRUIUtilsService.callDirectiveLoad(field.fieldAPI, payload, field.loadPromiseDeferred);
                     });

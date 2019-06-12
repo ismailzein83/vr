@@ -23,23 +23,29 @@
 
         function GenericFilterRuntimeSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            var dataRecordTypeId;
+
             var definitionSettings;
+            var dataRecordTypeId;
             var dataRecordType;
             var fieldTypeConfigs;
+
             function initializeController() {
                 $scope.scopeModel = {};
+
                 defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     var promises = [];
-                    if (payload != undefined) {
 
+                    if (payload != undefined) {
                         dataRecordTypeId = payload.dataRecordTypeId;
                         definitionSettings = payload.settings;
+                        var allFieldValuesByName = payload.allFieldValuesByName;
+                        var genericContext = payload.genericContext;
 
                         var promise = UtilsService.createPromiseDeferred();
                         promises.push(promise.promise);
@@ -65,7 +71,11 @@
                                 filter.directiveAPI = api;
                                 var directivePayload = {
                                     fieldTitle: definitionSettings.FieldTitle,
-                                    fieldType: fieldType != undefined ? fieldType.Type : undefined
+                                    fieldType: fieldType != undefined ? fieldType.Type : undefined,
+                                    fieldName: definitionSettings.FieldName,
+                                    genericContext: genericContext,
+                                    allFieldValuesByName: allFieldValuesByName,
+                                    //dataRecordTypeId: dataRecordTypeId
                                 };
                                 VRUIUtilsService.callDirectiveLoad(filter.directiveAPI, directivePayload, filter.directiveLoadDeferred);
                             };
@@ -80,19 +90,21 @@
                         }).catch(function (error) {
                             promise.reject(error);
                         });
-
-                        function loadDataRecordType() {
-                            return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
-                                dataRecordType = response;
-                            });
-                        }
-
-                        function loadDataRecordTypeFieldConfigs() {
-                            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
-                                fieldTypeConfigs = response;
-                            });
-                        }
+                        
                     }
+
+                    function loadDataRecordType() {
+                        return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
+                            dataRecordType = response;
+                        });
+                    }
+
+                    function loadDataRecordTypeFieldConfigs() {
+                        return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
+                            fieldTypeConfigs = response;
+                        });
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -125,6 +137,18 @@
 
                 api.hasFilters = function () {
                     return $scope.scopeModel.filter.directiveAPI != undefined;
+                };
+
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                    var _promises = [];
+                    var directiveAPI = $scope.scopeModel.filter.directiveAPI;
+
+                    if (directiveAPI != undefined && directiveAPI.onFieldValueChanged != undefined && typeof (directiveAPI.onFieldValueChanged) == "function") {
+                        var onFieldValueChangedPromise = directiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                        if (onFieldValueChangedPromise != undefined)
+                            _promises.push(onFieldValueChangedPromise);
+                    }
+                    return UtilsService.waitMultiplePromises(_promises);
                 };
 
                 if (ctrl.onReady != null) {

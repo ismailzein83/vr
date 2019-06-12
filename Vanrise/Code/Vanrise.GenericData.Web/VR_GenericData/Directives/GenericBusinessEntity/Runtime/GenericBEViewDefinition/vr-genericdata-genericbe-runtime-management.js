@@ -2,13 +2,13 @@
 
     'use strict';
 
-    GenericBERuntimeManagementDirective.$inject = ['VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VR_GenericData_GenericBusinessEntityAPIService','VRCommon_ModalWidthEnum'];
+    GenericBERuntimeManagementDirective.$inject = ['VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRCommon_ModalWidthEnum'];
 
     function GenericBERuntimeManagementDirective(VR_GenericData_GenericBusinessEntityService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum, VR_GenericData_GenericBusinessEntityAPIService, VRCommon_ModalWidthEnum) {
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -17,23 +17,14 @@
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/GenericBEViewDefinition/Templates/GenericBERuntimeManagementTemplate.html'
         };
 
         function GenericBERuntimeManagementCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var definitionId;
-
-            var filterDirectiveAPI;
-            var filterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var filterRuntimeRootDirectiveAPI;
+            var filterRuntimeRootDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             var viewId;
             var bulkActionId;
@@ -75,9 +66,9 @@
 
                 $scope.scopeModel.addBulkActions = [];
 
-                $scope.scopeModel.onFilterDirectiveReady = function (api) {
-                    filterDirectiveAPI = api;
-                    filterDirectiveReadyDeferred.resolve();
+                $scope.scopeModel.onFilterRuntimeRootDirectiveReady = function (api) {
+                    filterRuntimeRootDirectiveAPI = api;
+                    filterRuntimeRootDirectiveReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onGridDirectiveReady = function (api) {
@@ -121,9 +112,7 @@
                         showAddFromAccess = response;
                         showUploadFromAccess = response;
                     });
-
                 }
-
 
                 $scope.search = function () {
                     return gridDirectiveAPI.load(getGridFilter());
@@ -153,11 +142,11 @@
                 UtilsService.waitMultiplePromises([businessEntityDefinitionReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
-
             }
 
             function defineAPI() {
                 var api = {};
+
                 api.load = function (payload) {
                     $scope.scopeModel.hasFilter = false;
                     $scope.scopeModel.isGridLoading = true;
@@ -177,6 +166,7 @@
                         $scope.isLoading = false;
                     });
                 };
+
                 api.finalizeBulkActionDraft = function () {
                     return gridDirectiveAPI.finalizeBulkActionDraft();
                 };
@@ -228,7 +218,7 @@
                     genericBEDefinitionSettings = response;
                     if (genericBEDefinitionSettings != undefined) {
                         if (genericBEDefinitionSettings.FilterDefinition != undefined && genericBEDefinitionSettings.FilterDefinition.Settings != undefined) {
-                            $scope.scopeModel.filterDirective = genericBEDefinitionSettings.FilterDefinition.Settings.RuntimeEditor;
+                            $scope.scopeModel.filterRuntimeEditor = genericBEDefinitionSettings.FilterDefinition.Settings.RuntimeEditor;
                         }
                         showAddFromDefinitionSettings = !genericBEDefinitionSettings.HideAddButton;
                         showUploadFromDefinitionSettings = genericBEDefinitionSettings.ShowUpload;
@@ -237,25 +227,29 @@
             }
 
             function loadSearchCriteria() {
-                return UtilsService.waitMultipleAsyncOperations([loadFilterDirective]).then(function () {
-                    $scope.scopeModel.hasFilter = filterDirectiveAPI != undefined ? filterDirectiveAPI.hasFilters() : false;
+                return UtilsService.waitMultipleAsyncOperations([loadFilterRuntimeRootDirective]).then(function () {
+                    $scope.scopeModel.hasFilter = filterRuntimeRootDirectiveAPI != undefined ? filterRuntimeRootDirectiveAPI.hasFilters() : false;
                     loadGridDirective();
                 });
             }
 
-            function loadFilterDirective() {
-                if ($scope.scopeModel.filterDirective != undefined) {
-                    var filterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            function loadFilterRuntimeRootDirective() {
+                if ($scope.scopeModel.filterRuntimeEditor == undefined)
+                    return;
 
-                    filterDirectiveReadyDeferred.promise.then(function () {
-                        var filterDirectivePayload = {
-                            settings: genericBEDefinitionSettings.FilterDefinition.Settings,
-                            dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId
-                        };
-                        VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, filterDirectivePayload, filterDirectiveLoadDeferred);
-                    });
-                    return filterDirectiveLoadDeferred.promise;
-                }
+                var filterRuntimeRootDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                filterRuntimeRootDirectiveReadyDeferred.promise.then(function () {
+
+                    var filterRuntimeRootDirectivePayload = {
+                        settings: genericBEDefinitionSettings.FilterDefinition.Settings,
+                        dataRecordTypeId: genericBEDefinitionSettings.DataRecordTypeId,
+                        filterRuntimeEditor: $scope.scopeModel.filterRuntimeEditor
+                    };
+                    VRUIUtilsService.callDirectiveLoad(filterRuntimeRootDirectiveAPI, filterRuntimeRootDirectivePayload, filterRuntimeRootDirectiveLoadDeferred);
+                });
+
+                return filterRuntimeRootDirectiveLoadDeferred.promise;
             }
 
             function loadGridDirective() {
@@ -265,7 +259,7 @@
             }
 
             function getGridFilter() {
-                var filterData = filterDirectiveAPI != undefined ? filterDirectiveAPI.getData() : undefined;
+                var filterData = filterRuntimeRootDirectiveAPI != undefined ? filterRuntimeRootDirectiveAPI.getData() : undefined;
                 var filterGroup;
                 var filters;
 

@@ -1,9 +1,9 @@
 ﻿<vr-tab header="'Settings'">
     <vr-row>
-        <vr-columns width="1/3row">
+        <vr-columns width="1/4row">
             <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" label="Data Record Type" isrequired="true" onselectionchanged="scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModel.selectedDataRecordType" showaddbutton></vr-genericdata-datarecordtype-selector>
         </vr-columns>
-        <vr-columns width="1/3row">
+        <vr-columns width="1/4row">
             <vr-select datasource="scopeModel.genericBEDefinitionTypes"
                        datavaluefield="value"
                        datatextfield="description"
@@ -16,36 +16,33 @@
         </vr-columns>
         <span ng-if="scopeModel.selectedGenericBEDefinitionType!=undefined && scopeModel.selectedGenericBEDefinitionType.value==1">
             <vr-common-connection-selector on-ready="scopeModel.onVRConnectionSelectorReady"
-                                           normal-col-num="4"
+                                           normal-col-num="3"
                                            isrequired="true"
                                            onselectionchanged="scopeModel.onVRConnectionSelectionChanged"
                                            selectedvalues="scopeModel.selectedVRConnection"
-                                           hideremoveicon="true"></vr-common-connection-selector>
+                                           hideremoveicon="true">
+            </vr-common-connection-selector>
+
+            <vr-genericdata-genericbedefinition-remoteselector on-ready="scopeModel.onGenericBEDefinitionRemoteSelectorReady" vr-loader="scopeModel.isLoadingGenericBEDefinitionRemoteSelector" normal-col-num="3" isrequired="true"></vr-genericdata-genericbedefinition-remoteselector>
         </span>
-        <vr-columns width="1/3row" ng-if="scopeModel.selectedGenericBEDefinitionType!=undefined && scopeModel.selectedGenericBEDefinitionType.value==0">
+        <vr-columns width="1/4row" ng-if="scopeModel.selectedGenericBEDefinitionType!=undefined && scopeModel.selectedGenericBEDefinitionType.value==0">
             <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorDirectiveReady" selectedvalues="scopeModel.selectedDataRecordStorage" isrequired="true"></vr-genericdata-datarecordstorage-selector>
         </vr-columns>
-
+        
     </vr-row>
     <vr-row>
-        <!--<vr-columns width="1/4row" vr-loader="scopeModel.isLoadingTitle">
+        <vr-columns width="1/4row" vr-loader="scopeModel.isLoadingTitle">
             <vr-genericdata-datarecordtypefields-selector label="Title Field" on-ready="scopeModel.onDataRecordTypeTitleFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
         </vr-columns>
         <vr-columns width="1/4row" vr-loader="scopeModel.isLoadingRequiredParent">
             <vr-genericdata-datarecordtypefields-selector label="Required Parent Field" on-ready="scopeModel.onDataRecordTypeRequiredParentFieldsDirectiveReady"></vr-genericdata-datarecordtypefields-selector>
         </vr-columns>
-        <vr-columns width="1/4row">-->
-
-        <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingTitle">
-            <vr-genericdata-datarecordtypefields-selector label="Title Field" on-ready="scopeModel.onDataRecordTypeTitleFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
-        </vr-columns>
-        <vr-columns width="1/3row">
+        <vr-columns width="1/4row">
             <vr-switch value="scopeModel.hideAddButton" label="Hide Add Button"></vr-switch>
         </vr-columns>
-        <span ng-if="scopeModel.selectedGenericBEDefinitionType!=undefined && scopeModel.selectedGenericBEDefinitionType.value==1">
-            <!-- 4 -->
-            <vr-genericdata-genericbedefinition-remoteselector on-ready="scopeModel.onGenericBEDefinitionRemoteSelectorReady" vr-loader="scopeModel.isLoadingGenericBEDefinitionRemoteSelector" normal-col-num="4" isrequired="true"></vr-genericdata-genericbedefinition-remoteselector>
-        </span>
+        <vr-columns width="1/4row">
+            <vr-switch value="scopeModel.isRemoteSelector" label="Remote Selector"></vr-switch>
+        </vr-columns>
     </vr-row>
     <vr-row>
         <vr-columns width="1/3row">
@@ -64,11 +61,6 @@
         </vr-columns>
         <vr-columns width="2/3row" haschildcolumns>
             <vr-genericdata-genericbe-uploaddefinition-grid on-ready="scopeModel.uploadedFiledsGridReady" ng-show="scopeModel.showUploadButton" isrequired="scopeModel.showUploadButton"></vr-genericdata-genericbe-uploaddefinition-grid>
-        </vr-columns>
-    </vr-row>
-    <vr-row>
-        <vr-columns width="1/3row">
-            <vr-switch value="scopeModel.isRemoteSelector" label="Remote Selector"></vr-switch>
         </vr-columns>
     </vr-row>
     <vr-genericdata-genericbe-extendedsettings on-ready="scopeModel.onGenericBEEditorExtendedSettingsReady" normal-col-num="4"></vr-genericdata-genericbe-extendedsettings>

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BusinessEntityFieldTypeFilterEditorDirective.$inject = [];
+    BusinessEntityFieldTypeFilterEditorDirective.$inject = ['UtilsService'];
 
-    function BusinessEntityFieldTypeFilterEditorDirective() {
+    function BusinessEntityFieldTypeFilterEditorDirective(UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -62,6 +62,17 @@
                     }
 
                     return returnValue;
+                };
+
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                    var _promises = [];
+
+                    if (directiveAPI != undefined && directiveAPI.onFieldValueChanged != undefined && typeof (directiveAPI.onFieldValueChanged) == "function") {
+                        var onFieldValueChangedPromise = directiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                        if (onFieldValueChangedPromise != undefined)
+                            _promises.push(onFieldValueChangedPromise);
+                    }
+                    return UtilsService.waitMultiplePromises(_promises);
                 };
 
                 return api;

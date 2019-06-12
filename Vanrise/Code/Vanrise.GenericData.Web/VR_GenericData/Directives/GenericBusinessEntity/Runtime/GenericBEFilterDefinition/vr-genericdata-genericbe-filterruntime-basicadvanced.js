@@ -20,7 +20,6 @@
             templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/GenericBEFilterDefinition/Templates/BasicAdvancedFilterRuntimeTemplate.html"
         };
 
-
         function BasicAdvancedFilterRuntimeSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
@@ -32,17 +31,22 @@
 
                 defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
                     $scope.scopeModel.filters = [];
+
+                    var promises = [];
+
                     if (payload != undefined) {
                         dataRecordTypeId = payload.dataRecordTypeId;
 
                         var settings = payload.settings;
                         var filterValues = payload.filterValues;
+                        var genericContext = payload.genericContext;
+                        var allFieldValuesByName = payload.allFieldValuesByName;
 
                         if (settings != undefined && settings.Filters != undefined && settings.Filters.length > 0) {
                             var firstFilterShowInBasic = settings.Filters[0].ShowInBasic;
@@ -80,9 +84,12 @@
                         };
 
                         filterItem.readyPromiseDeferred.promise.then(function () {
+
                             var filterDirectivePayload = {
                                 settings: filterItem.payload.FilterSettings,
-                                dataRecordTypeId: dataRecordTypeId
+                                dataRecordTypeId: dataRecordTypeId,
+                                genericContext: genericContext,
+                                allFieldValuesByName: allFieldValuesByName
                             };
                             VRUIUtilsService.callDirectiveLoad(filter.filterAPI, filterDirectivePayload, filterItem.loadPromisedeferred);
                         });
@@ -129,7 +136,6 @@
 
                 api.hasFilters = function () {
                     var filterCount = $scope.scopeModel.filters.length;
-
                     if (filterCount == 0)
                         return false;
 
@@ -141,6 +147,21 @@
                     }
 
                     return false;
+                };
+
+                api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
+                    var _promises = [];
+
+                    for (var i = 0; i < $scope.scopeModel.filters.length; i++) {
+                        var filter = $scope.scopeModel.filters[i];
+                        if (filter.filterAPI != undefined && filter.filterAPI.onFieldValueChanged != undefined && typeof (filter.filterAPI.onFieldValueChanged) == "function") {
+                            var onFieldValueChangedPromise = filter.filterAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                            if (onFieldValueChangedPromise != undefined)
+                                _promises.push(onFieldValueChangedPromise);
+                        }
+                    }
+
+                    return UtilsService.waitMultiplePromises(_promises);
                 };
 
                 if (ctrl.onReady != null) {

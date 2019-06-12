@@ -125,7 +125,8 @@
                                 genericContext: genericContext,
                                 historyId: historyId,
                                 allFieldValuesByName: allFieldValuesByName,
-                                parentFieldValues: parentFieldValues
+                                parentFieldValues: parentFieldValues,
+                                //dataRecordTypeId: dataRecordTypeId
                             };
 
                             VRUIUtilsService.callDirectiveLoad(rowDirectiveApi, payload, rowDirectiveLoadPromiseDeferred);

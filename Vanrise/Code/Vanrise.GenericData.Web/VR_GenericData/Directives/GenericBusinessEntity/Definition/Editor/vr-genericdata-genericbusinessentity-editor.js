@@ -35,8 +35,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             var dataRecordTypeTitleFieldsSelectorAPI;
             var dataRecordTypeTitleFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            //var dataRecordTypeRequiredParentFieldsSelectorAPI;
-            //var dataRecordTypeRequiredParentFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var dataRecordTypeRequiredParentFieldsSelectorAPI;
+            var dataRecordTypeRequiredParentFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var columnDefinitionGridAPI;
             var columnDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -180,10 +180,10 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     dataRecordTypeTitleFieldsSelectorReadyPromiseDeferred.resolve();
                 };
 
-                //$scope.scopeModel.onDataRecordTypeRequiredParentFieldsDirectiveReady = function (api) {
-                //    dataRecordTypeRequiredParentFieldsSelectorAPI = api;
-                //    dataRecordTypeRequiredParentFieldsSelectorReadyPromiseDeferred.resolve();
-                //};
+                $scope.scopeModel.onDataRecordTypeRequiredParentFieldsDirectiveReady = function (api) {
+                    dataRecordTypeRequiredParentFieldsSelectorAPI = api;
+                    dataRecordTypeRequiredParentFieldsSelectorReadyPromiseDeferred.resolve();
+                };
 
                 $scope.scopeModel.onGenericBEColumnDefinitionGridReady = function (api) {
                     columnDefinitionGridAPI = api;
@@ -354,7 +354,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         ShowUpload: $scope.scopeModel.showUploadButton,
                         UploadFields: ($scope.scopeModel.showUploadButton == true) ? uploadedFieldsGridAPI.getData() : null,
                         AdditionalSettings: additionalSettingsGridAPI.getData(),
-                        //RequiredParentFieldName: dataRecordTypeRequiredParentFieldsSelectorAPI.getSelectedIds(),
+                        RequiredParentFieldName: dataRecordTypeRequiredParentFieldsSelectorAPI.getSelectedIds(),
                         IsRemoteSelector: $scope.scopeModel.isRemoteSelector
                     };
                 };
@@ -415,7 +415,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     if (businessEntityDefinitionSettings != undefined) {
                         promises.push(loadDataRecordTitleFieldsSelector());
                         promises.push(getDataRecordFieldsInfo(businessEntityDefinitionSettings.DataRecordTypeId));
-                        //promises.push(loadDataRecordRequiredParentFieldsSelector());
+                        promises.push(loadDataRecordRequiredParentFieldsSelector());
                     }
 
                     promises.push(loadAdditionalSettingsGrid());
@@ -460,21 +460,21 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         return loadDataRecordTypeTitleFieldsSelectorPromiseDeferred.promise;
                     }
 
-                    //function loadDataRecordRequiredParentFieldsSelector() {
-                    //    var loadDataRecordTypeParentFieldsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                    function loadDataRecordRequiredParentFieldsSelector() {
+                        var loadDataRecordTypeParentFieldsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    //    UtilsService.waitMultiplePromises([recordTypeSelectedPromiseDeferred.promise, dataRecordTypeRequiredParentFieldsSelectorReadyPromiseDeferred.promise]).then(function () {
-                    //        var requiredFieldPayload = {
-                    //            dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,
-                    //            selectedIds: businessEntityDefinitionSettings.RequiredParentFieldName
-                    //        };
+                        UtilsService.waitMultiplePromises([recordTypeSelectedPromiseDeferred.promise, dataRecordTypeRequiredParentFieldsSelectorReadyPromiseDeferred.promise]).then(function () {
+                            var requiredFieldPayload = {
+                                dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,
+                                selectedIds: businessEntityDefinitionSettings.RequiredParentFieldName
+                            };
 
-                    //        VRUIUtilsService.callDirectiveLoad(dataRecordTypeRequiredParentFieldsSelectorAPI, requiredFieldPayload, loadDataRecordTypeParentFieldsSelectorPromiseDeferred);
-                    //    });
+                            VRUIUtilsService.callDirectiveLoad(dataRecordTypeRequiredParentFieldsSelectorAPI, requiredFieldPayload, loadDataRecordTypeParentFieldsSelectorPromiseDeferred);
+                        });
 
-                    //    return loadDataRecordTypeParentFieldsSelectorPromiseDeferred.promise;
+                        return loadDataRecordTypeParentFieldsSelectorPromiseDeferred.promise;
                         
-                    //}
+                    }
 
                     if (businessEntityDefinitionSettings != undefined) {
                         var uploadedFieldsPayload = { DataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId };
@@ -822,10 +822,10 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeTitleFieldsSelectorAPI, recordTypePayload, setDataRecordTypeTitleLoader, recordTypeSelectedPromiseDeferred);
 
-                //var setDataRecordTypeRequiredParentLoader = function (value) {
-                //    $scope.scopeModel.isLoadingRequiredParent = value;
-                //};
-                //VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeRequiredParentFieldsSelectorAPI, recordTypePayload, setDataRecordTypeRequiredParentLoader, recordTypeSelectedPromiseDeferred);
+                var setDataRecordTypeRequiredParentLoader = function (value) {
+                    $scope.scopeModel.isLoadingRequiredParent = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeRequiredParentFieldsSelectorAPI, recordTypePayload, setDataRecordTypeRequiredParentLoader, recordTypeSelectedPromiseDeferred);
 
                 var setGridColumnLoader = function (value) {
                     setTimeout(function () {
@@ -900,8 +900,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             function resetReleatedDirectives() {
                 if (dataRecordTypeTitleFieldsSelectorAPI != undefined)
                     dataRecordTypeTitleFieldsSelectorAPI.clearDataSource();
-                //if (dataRecordTypeRequiredParentFieldsSelectorAPI != undefined)
-                //    dataRecordTypeRequiredParentFieldsSelectorAPI.clearDataSource();
+                if (dataRecordTypeRequiredParentFieldsSelectorAPI != undefined)
+                    dataRecordTypeRequiredParentFieldsSelectorAPI.clearDataSource();
                 if (columnDefinitionGridAPI != undefined)
                     columnDefinitionGridAPI.clearDataSource();
                 if (editorDefinitionAPI != undefined)

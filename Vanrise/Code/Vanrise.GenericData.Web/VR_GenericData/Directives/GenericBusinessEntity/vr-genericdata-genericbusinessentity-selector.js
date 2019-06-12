@@ -258,8 +258,9 @@
             }
         }
 
-        function getDirectiveTemplate(attrs) {
 
+
+        function getDirectiveTemplate(attrs) {
             var multipleselection = '';
 
             var label = '{{ctrl.fieldTitle}}';
@@ -287,6 +288,13 @@
             if (attrs.usefullcolumn != undefined)
                 haschildcolumns = "haschildcolumns";
 
+            //var requiredParentTemplate = '<span ng-if="parentSelector != undefined && parentSelector.parentDirective != undefined">'
+            //    + '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + '>'
+            //    + '<vr-directivewrapper directive="parentSelector.parentDirective" normal-col-num="{{scopeModel.calculatedColNum}}"  on-ready="parentSelector.onParentDirectiveReady" '
+            //    + ' onselectionchanged="parentSelector.onParentSelectionChanged" isrequired = "runtimeEditorCtrl.isrequired" ></vr-directivewrapper > '
+            //    + '</vr-columns>'
+            //    + '</span>';
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}" vr-loader="isLoadingSelector" ' + haschildcolumns + '>'
                 + '<span vr-disabled="ctrl.isDisabled">'
                 + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
@@ -300,7 +308,7 @@
                 + ' datatextfield="Name"'
                 + ' ' + multipleselection
                 + ' ' + hideselectedvaluessection
-                + ' isrequired="ctrl.isrequired"  '  
+                + ' isrequired="ctrl.isrequired"  '
                 + ' ' + hideremoveicon
                 + ' ' + addCliked
                 + ' limitcharactercount="ctrl.limitcharactercount">'
