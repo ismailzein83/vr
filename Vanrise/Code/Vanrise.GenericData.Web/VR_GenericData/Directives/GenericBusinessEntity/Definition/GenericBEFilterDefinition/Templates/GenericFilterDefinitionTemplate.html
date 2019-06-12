@@ -1,11 +1,20 @@
 ﻿<vr-row>
-    <vr-columns width="1/3row">
+    <vr-columns width="1/2row">
         <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady" onselectionchanged="scopeModel.onDataRecordTypeFieldsSelectionChanged" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
     </vr-columns>
-    <vr-columns width="1/3row">
+    <vr-columns width="1/2row">
         <vr-textbox value="scopeModel.fieldTitle" label="Title" isrequired="true"></vr-textbox>
     </vr-columns>
-    <vr-columns width="1/3row">
+</vr-row>
+<vr-row>
+    <!--<span vr-loader="scopeModel.isFieldTypeRumtimeDirectiveLoading">
+        <vr-directivewrapper ng-if="scopeModel.fieldTypeRuntimeDirective != undefined"
+                             directive="scopeModel.fieldTypeRuntimeDirective"
+                             on-ready="scopeModel.onFieldTypeRumtimeDirectiveReady"
+                             normal-col-num="6">
+        </vr-directivewrapper>
+    </span>-->
+    <vr-columns width="1/2row">
         <vr-switch value="scopeModel.isRequired" label="Required"></vr-switch>
     </vr-columns>
 </vr-row>
