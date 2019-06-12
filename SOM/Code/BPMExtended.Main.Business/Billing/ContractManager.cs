@@ -110,6 +110,18 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetGSHDSLContracts(customerId);
         }
 
+        public ContractEntity GetChildADSLContractByTelephonyContract(string telephonyContractId)
+        {
+            ContractEntity adslContract;
+
+            using (SOMClient client = new SOMClient())
+            {
+                adslContract = client.Get<ContractEntity>(String.Format("api/SOM.ST/Billing/GetChildADSLContractRatePlanId?ContractId={0}", telephonyContractId));
+            }
+            return adslContract;
+
+        }
+
         public ADSLContractDetail GetADSLContract(string contractId)
         {
             return RatePlanMockDataGenerator.GetADSLContract(contractId);
@@ -658,6 +670,7 @@ namespace BPMExtended.Main.Business
             {
                 ContractId = contract.Id,
                 ContractAddress = contractAddress,
+                ContractBalance = contract.CurrentBalance,
                 RatePlanId = contract.RateplanId,
                 PathId = contract.LinePathId,
                 PhoneNumber = contract.PhoneNumber,

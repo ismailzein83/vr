@@ -26,6 +26,7 @@ namespace BPMExtended.Main.Business
             }
         }
 
+
         public List<CustomerCategoryInfo> GetCustomerCategoryInfo(BPMCustomerType customerType)
         {
 
@@ -437,5 +438,7 @@ namespace BPMExtended.Main.Business
         }
 
         #endregion
+
+
     }
 }

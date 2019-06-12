@@ -448,6 +448,30 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public string GetDivisionByRatePlanId(string ratePlanId)
+        {
+            List<SaleService> fees = new List<SaleService>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRatePlansInCatalog");
+            var division= esq.AddColumn("StRatePlanCatalog.StSubTypeDivision.StName");
+            esq.AddColumn("StRatePlanID");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRatePlanID", ratePlanId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                return entities[0].GetTypedColumnValue<string>(division.Name);
+             
+            }
+
+            return null;
+
+        }
+
         #endregion
     }
 

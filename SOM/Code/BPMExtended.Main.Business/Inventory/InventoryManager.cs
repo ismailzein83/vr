@@ -176,12 +176,7 @@ namespace BPMExtended.Main.Business
             return GetTechnicalDetails(phoneNumber).PhoneCategory;
         }
 
-        public string GetADSLSubType(string contractId)
-        {
-            Array values = Enum.GetValues(typeof(ADSLSubType));
-            Random random = new Random();
-            return values.GetValue(random.Next(values.Length)).ToString();
-        }
+       
 
         public string GetADSLUserName(string telephonyContractId)
         {

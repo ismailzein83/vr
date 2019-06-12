@@ -329,11 +329,11 @@ namespace BPMExtended.Main.Business
         }
 
 
-        public string generateInvoice(string customerId , string contractId)
+        public bool generateInvoice(string customerId , string contractId)
         {
             //TODO: generate Invoice 
 
-            return "9000";//return invoice Id
+            return true;
         }
 
 

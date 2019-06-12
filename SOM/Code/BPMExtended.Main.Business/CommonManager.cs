@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using BPMExtended.Main.Entities;
+using Newtonsoft.Json;
 using Terrasoft.Core;
+using Terrasoft.Core.DB;
 using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
@@ -110,6 +112,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCSO");
             esq.AddColumn("StCSO.Id");
             esq.AddColumn("StCustomerId");
+            esq.AddColumn("StCustomerCode");
             esq.AddColumn("StCustomerCategoryID");
             esq.AddColumn("StCustomerCategoryName");
 
@@ -123,6 +126,7 @@ namespace BPMExtended.Main.Business
                 var name = entities[0].GetColumnValue("Name");
                 var documentId = entities[0].GetColumnValue("StDocumentID");
                 var customerId = entities[0].GetColumnValue("StCustomerId");
+                var customerCode = entities[0].GetColumnValue("StCustomerCode");
                 var customerCategoryId = entities[0].GetColumnValue("StCustomerCategoryID");
                 var customerCategoryName = entities[0].GetColumnValue("StCustomerCategoryName");
 
@@ -133,7 +137,8 @@ namespace BPMExtended.Main.Business
                     DocumentID = documentId.ToString(),
                     CustomerCategoryID = customerCategoryId.ToString(),
                     CustomerCategoryName = customerCategoryName.ToString(),
-                    CSOId = csoId.ToString()
+                    CSOId = csoId.ToString(),
+                    CustomerCode = customerCode.ToString()
 
 
                 };
@@ -144,6 +149,48 @@ namespace BPMExtended.Main.Business
         public Account GetAccount(string accountId)
         {
             return null;
+        }
+
+        public void UpdateDepositDocumentId(string requestId,string depositDocumentId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            List<DepositDocument> listOfDeposites = new List<DepositDocument>();
+
+            string entityName = new CRMCustomerManager().GetEntityNameByRequestId(requestId);
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, entityName);
+            esq.AddColumn("StOperationAddedDeposites");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                string deposites = entities[0].GetColumnValue("StOperationAddedDeposites").ToString();
+
+                if (deposites != "\"\"" && deposites != null && deposites != "")
+                {
+                    listOfDeposites = JsonConvert.DeserializeObject<List<DepositDocument>>(deposites);
+                }
+
+                listOfDeposites.Add(new DepositDocument()
+                    {
+                        Id = depositDocumentId
+                    }
+                );
+
+
+                //update deposites
+                UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+                var update = new Update(connection, entityName).Set("StOperationAddedDeposites", Column.Parameter(JsonConvert.SerializeObject(listOfDeposites)))
+                    .Where("Id").IsEqual(Column.Parameter(requestId));
+                update.Execute();
+
+
+            }
+
         }
 
     }

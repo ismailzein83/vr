@@ -40,33 +40,22 @@ namespace BPMExtended.Main.Business
             {
                 case welcomeStep: nextStepId = targetCustomerStep; break;
                 case targetCustomerStep: nextStepId = printStep; break;
-                case printStep: nextStepId = checkADSLContract(id)? adslCredentialStep : paymentStep; break;
+                //case printStep: nextStepId = checkADSLContract(id)? adslCredentialStep : paymentStep; break;
+                //case adslCredentialStep: nextStepId = paymentStep; break;
+                //case paymentStep: nextStepId = technicalStep; break;
+                    
+                case printStep: nextStepId = new ContractTakeOverManager().checkBillOnDemand(id) ?billOnDemandStep:new ContractTakeOverManager().hasADSLContract(id)? adslCredentialStep : paymentStep; break;
+                case billOnDemandStep: nextStepId = new ContractTakeOverManager().hasADSLContract(id)? adslCredentialStep : paymentStep; break;
                 case adslCredentialStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = technicalStep; break;
+                case paymentStep: nextStepId = technicalStep; break; 
+                     
+                     
 
             }
             return nextStepId;
         }
 
-        public bool checkADSLContract(string id)
-        {
-            bool hasAnADSL = false;
-            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StTelephonyContractTakeOver");
-            esq.AddColumn("Id");
-            esq.AddColumn("StHasAnADSL");
-
-            var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", id);
-            esq.Filters.Add(esqFirstFilter);
-
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-
-            if (entities.Count > 0)
-            {
-                hasAnADSL = (bool)entities[0].GetColumnValue("StHasAnADSL");
-            }
-
-            return hasAnADSL;
-        }
+       
 
 
     }
