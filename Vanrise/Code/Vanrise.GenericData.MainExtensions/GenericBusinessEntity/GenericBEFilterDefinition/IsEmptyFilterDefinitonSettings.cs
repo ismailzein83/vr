@@ -23,5 +23,6 @@ namespace Vanrise.GenericData.MainExtensions
         public string Title { get; set; }
         public string Resourcekey { get; set; }
         public bool IsDefault { get; set; }
+        public bool RemoveFromSelector { get; set; }
     }
 }

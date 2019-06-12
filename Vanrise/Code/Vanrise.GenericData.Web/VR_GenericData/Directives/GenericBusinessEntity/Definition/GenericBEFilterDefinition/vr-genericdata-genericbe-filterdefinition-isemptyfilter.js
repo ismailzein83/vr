@@ -53,6 +53,9 @@
                     if ($scope.scopeModel.fields.length > 0 && checkDuplicateDefaultField())
                         return "One row only can be selected as default";
 
+                    if ($scope.scopeModel.fields.length > 0 && checkRemoveFromSelector())
+                        return "At least one row must be included";
+
                     return null;
                 }
             }
@@ -159,6 +162,7 @@
                 if (payload != undefined) {
                     dataItem.title = payload.Title;
                     dataItem.isDefault = payload.IsDefault;
+                    dataItem.removeFromSelector = payload.RemoveFromSelector;
                 }
 
                 dataItem.onResourceKeySelectorReady = function (api) {
@@ -182,6 +186,7 @@
                     obj.Title = column.title;
                     obj.Resourcekey = (column.resourceKeyAPI) ? column.resourceKeyAPI.getResourceKey() : undefined;
                     obj.IsDefault = column.isDefault;
+                    obj.RemoveFromSelector = column.removeFromSelector;
                 }
                 return obj;
             }
@@ -195,6 +200,19 @@
                             return true;
                     }
                 }
+                return false;
+            }
+
+            function checkRemoveFromSelector() {
+                var fieldLength = $scope.scopeModel.fields.length;
+                var counter = 0;
+                for (var i = 0; i < fieldLength; i++) {
+                    var currentItem = $scope.scopeModel.fields[i];
+                    if (currentItem.removeFromSelector)
+                        counter++;
+                }
+                if (counter == fieldLength)
+                    return true;
                 return false;
             }
         }

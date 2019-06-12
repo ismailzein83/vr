@@ -44,9 +44,15 @@
                         if (definitionSettings != undefined) {
                             fieldName = definitionSettings.FieldName;
                             $scope.scopeModel.isRequired = definitionSettings.IsRequired;
-                            $scope.scopeModel.filters.push(definitionSettings.AllField);
-                            $scope.scopeModel.filters.push(definitionSettings.NullField);
-                            $scope.scopeModel.filters.push(definitionSettings.NotNullField);
+
+                            if (!definitionSettings.AllField.RemoveFromSelector)
+                                $scope.scopeModel.filters.push(definitionSettings.AllField);
+
+                            if (!definitionSettings.NullField.RemoveFromSelector)
+                                $scope.scopeModel.filters.push(definitionSettings.NullField);
+
+                            if (!definitionSettings.NotNullField.RemoveFromSelector)
+                                $scope.scopeModel.filters.push(definitionSettings.NotNullField);
                         }
                     }
 
