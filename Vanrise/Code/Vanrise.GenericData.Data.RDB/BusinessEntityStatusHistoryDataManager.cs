@@ -24,7 +24,7 @@ namespace Vanrise.GenericData.Data.RDB
         const string COL_IsDeleted = "IsDeleted";
         const string COL_CreatedTime = "CreatedTime";
 		const string COL_MoreInfo = "MoreInfo";
-
+		const string COL_PreviousMoreInfo = "PreviousMoreInfo";
 
 
 		static BusinessEntityStatusHistoryDataManager()
@@ -39,6 +39,7 @@ namespace Vanrise.GenericData.Data.RDB
             columns.Add(COL_StatusChangedDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_IsDeleted, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
 			columns.Add(COL_MoreInfo, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar});
+			columns.Add(COL_PreviousMoreInfo, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
 
 			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
@@ -66,7 +67,10 @@ namespace Vanrise.GenericData.Data.RDB
                 BusinessEntityStatusHistoryId = reader.GetLong(COL_ID),
                 BusinessEntityDefinitionId = reader.GetGuid(COL_BusinessEntityDefinitionID),
                 BusinessEntityId = reader.GetString(COL_BusinessEntityID),
-            };
+				MoreInfo = reader.GetString(COL_MoreInfo),
+				PreviousMoreInfo = reader.GetString(COL_PreviousMoreInfo),
+
+			};
         }
         #endregion
 
@@ -90,7 +94,7 @@ namespace Vanrise.GenericData.Data.RDB
             return queryContext.GetItem(BusinessEntityStatusHistoryMapper);
         }
 
-        public bool Insert(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId, Guid? previousStatusId, string moreInfo)
+        public bool Insert(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId, Guid? previousStatusId, string moreInfo,string previousMoreInfo)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
@@ -104,7 +108,8 @@ namespace Vanrise.GenericData.Data.RDB
             insertQuery.Column(COL_StatusChangedDate).DateNow();
             insertQuery.Column(COL_IsDeleted).Value(false);
 			insertQuery.Column(COL_MoreInfo).Value(moreInfo);
-            return queryContext.ExecuteNonQuery() > 0;
+			insertQuery.Column(COL_PreviousMoreInfo).Value(previousMoreInfo);
+			return queryContext.ExecuteNonQuery() > 0;
         }
     }
 }

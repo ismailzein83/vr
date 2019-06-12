@@ -22,14 +22,16 @@ namespace Vanrise.GenericData.Business
 
 			var lastStatusHistory = GetLastBusinessEntityStatusHistory(businessEntityDefinitionId, businessEntityId, fieldName);
 			Guid? previousStatus = null;
+			string previousMoreInfo = null;
 			if (lastStatusHistory != null)
 			{
 				if (lastStatusHistory.StatusId == statusId)
 					return true;
 				previousStatus = lastStatusHistory.StatusId;
+				previousMoreInfo = lastStatusHistory.MoreInfo;
 			}
 			IBusinessEntityStatusHistoryDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityStatusHistoryDataManager>();
-			return dataManager.Insert(businessEntityDefinitionId, businessEntityId, fieldName, statusId, previousStatus, moreInfo);
+			return dataManager.Insert(businessEntityDefinitionId, businessEntityId, fieldName, statusId, previousStatus, moreInfo, previousMoreInfo);
 
 		}
 		public BusinessEntityStatusHistory GetLastBusinessEntityStatusHistory(Guid businessEntityDefinitionId, string businessEntityId, string fieldName)

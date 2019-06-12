@@ -17,5 +17,6 @@ namespace Vanrise.GenericData.Entities
         public DateTime StatusChangedDate { get; set; }
         public bool IsDeleted { get; set; }
 		public string MoreInfo { get; set; }
+		public string PreviousMoreInfo { get; set; }
     }
 }
