@@ -2260,6 +2260,10 @@ vr-fieldset[notopspace] > .fieldset-vr {
     margin-top: unset;
 }
 
+vr-section[notopspace] > .panel-vr {
+    margin-top: unset;
+}
+
 .fieldset-vr > .panel-heading {
     font-weight: bold;
     font-size: 12px;
