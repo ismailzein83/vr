@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 using Vanrise.MobileNetwork.Entities;
@@ -17,26 +18,14 @@ namespace Vanrise.MobileNetwork.Business
             return numberPrefixes.GetRecord(code);
         }
 
-        public int? GetMobileNetworkByNumberPrefix(string numberPrefix, out long? matchedPrefixId)
+        public NumberPrefix GetNumberPrefixByPrefix(string prefix, DateTime effectiveDate)
         {
-            matchedPrefixId = null;
-            CodeIterator<NumberPrefix> codeIterator = GetCodeIterator();
-            var matchedNumberPrefix = codeIterator.GetLongestMatch(numberPrefix);
+            CodeIterator<NumberPrefix> codeIterator = GetCodeIterator(effectiveDate);
+            var matchedNumberPrefix = codeIterator.GetLongestMatch(prefix);
             if (matchedNumberPrefix == null)
                 return null;
-            matchedPrefixId = matchedNumberPrefix.Id;
-            return matchedNumberPrefix.MobileNetworkId;
-        }
 
-        public int? GetMobileNetworkByNumberPrefix(string numberPrefix, out string matchedPrefix)
-        {
-            matchedPrefix = null;
-            CodeIterator<NumberPrefix> codeIterator = GetCodeIterator();
-            var matchedNumberPrefix = codeIterator.GetLongestMatch(numberPrefix);
-            if (matchedNumberPrefix == null)
-                return null;
-            matchedPrefix = matchedNumberPrefix.Code;
-            return matchedNumberPrefix.MobileNetworkId;
+            return matchedNumberPrefix;
         }
         #endregion
 
@@ -70,6 +59,28 @@ namespace Vanrise.MobileNetwork.Business
                 return NumberPrefixList;
             });
         }
+      
+        private List<NumberPrefix> GetCachedNumberPrefixesByEffectiveDate(DateTime effectiveDate)
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            SlidingWindowCacheExpirationChecker slidingWindowCacheExpirationChecker = new Vanrise.Caching.SlidingWindowCacheExpirationChecker(TimeSpan.FromHours(1));
+            var cacheName = new GetCachedNumberPrefixCacheName { EffectiveDate = effectiveDate.Date };
+            return genericBusinessEntityManager.GetCachedOrCreate(cacheName, BeDefinitionId, slidingWindowCacheExpirationChecker,() =>
+            {
+                List<NumberPrefix> numberPrefixList = GetCachedNumberPrefixes();
+                List<NumberPrefix> filteredNumberPrefixes = new List<NumberPrefix>();
+
+                if (numberPrefixList != null)
+                {
+                    foreach (NumberPrefix numberPrefix in numberPrefixList)
+                    {
+                        if (numberPrefix.IsEffective(effectiveDate))
+                            filteredNumberPrefixes.Add(numberPrefix);
+                    }
+                }
+                return filteredNumberPrefixes;
+            });
+        }
 
         private Dictionary<string, List<NumberPrefix>> GetCachedNumberPrefixesByCode()
         {
@@ -95,14 +106,25 @@ namespace Vanrise.MobileNetwork.Business
                 return numberPrefixesByCode;
             });
         }
-        private CodeIterator<NumberPrefix> GetCodeIterator()
+
+        private CodeIterator<NumberPrefix> GetCodeIterator(DateTime effectiveDate)
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCodeIterator", BeDefinitionId, () =>
-            {
-                var cachedNumberPrefixes = GetCachedNumberPrefixes();
-                return new CodeIterator<NumberPrefix>(cachedNumberPrefixes);
-            });
+            SlidingWindowCacheExpirationChecker slidingWindowCacheExpirationChecker = new Vanrise.Caching.SlidingWindowCacheExpirationChecker(TimeSpan.FromHours(1));
+            var cacheName = new GetCachedCodeIteratorCacheName { EffectiveDate = effectiveDate.Date };
+            return genericBusinessEntityManager.GetCachedOrCreate(cacheName, BeDefinitionId, slidingWindowCacheExpirationChecker, () =>
+             {
+                 var cachedNumberPrefixes = GetCachedNumberPrefixesByEffectiveDate(effectiveDate);
+                 return new CodeIterator<NumberPrefix>(cachedNumberPrefixes);
+             });
+        }
+        private struct GetCachedCodeIteratorCacheName
+        {
+            public DateTime EffectiveDate { get; set; }
+        }
+        private struct GetCachedNumberPrefixCacheName
+        {
+            public DateTime EffectiveDate { get; set; }
         }
         #endregion
 

@@ -36,56 +36,33 @@ namespace Vanrise.MobileNetwork.Business
             return filteredMobileNetworks.Count > 0 ? filteredMobileNetworks : null;
         }
 
-        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix)
+        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix, DateTime effectiveDate)
         {
             long? matchedNumberPrefixId;
-            return GetMobileNetwork(mnc, mcc, numberPrefix, out matchedNumberPrefixId);
+            return GetMobileNetwork(mnc, mcc, numberPrefix, effectiveDate, out matchedNumberPrefixId);
         }
 
-        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix, out long? matchedPrefixId)
+        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix, DateTime effectiveDate, out long? matchedPrefixId)
         {
+            NumberPrefix mobileNumberPrefix;
             matchedPrefixId = null;
 
-            if (!string.IsNullOrEmpty(mnc) && !string.IsNullOrEmpty(mcc))
-            {
-                var mobileCountryId = new MobileCountryManager().GetMobileCountryIdByMCC(mcc);
+            var mobileNetwork = GetMobileNetwork(mnc, mcc, numberPrefix, effectiveDate, out mobileNumberPrefix);
+            if (mobileNumberPrefix != null)
+                matchedPrefixId = mobileNumberPrefix.Id;
 
-                if (mobileCountryId.HasValue)
-                    return GetMobileNetwork(mnc, mobileCountryId.Value);
-            }
-
-            if (string.IsNullOrEmpty(mnc) && string.IsNullOrEmpty(mcc))
-            {
-                var mobileNetworkId = new NumberPrefixManager().GetMobileNetworkByNumberPrefix(numberPrefix, out matchedPrefixId);
-
-                if (mobileNetworkId.HasValue)
-                    return GetMobileNetworkById(mobileNetworkId.Value);
-            }
-
-            return null;
+            return mobileNetwork;
         }
 
-        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix, out string matchedPrefix)
+        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix, DateTime effectiveDate, out string matchedPrefix)
         {
+            NumberPrefix mobileNumberPrefix;
             matchedPrefix = null;
+            var mobileNetwork = GetMobileNetwork(mnc, mcc, numberPrefix, effectiveDate, out mobileNumberPrefix);
+            if (mobileNumberPrefix != null)
+                matchedPrefix = mobileNumberPrefix.Code;
 
-            if (!string.IsNullOrEmpty(mnc) && !string.IsNullOrEmpty(mcc))
-            {
-                var mobileCountryId = new MobileCountryManager().GetMobileCountryIdByMCC(mcc);
-
-                if (mobileCountryId.HasValue)
-                    return GetMobileNetwork(mnc, mobileCountryId.Value);
-            }
-
-            if (string.IsNullOrEmpty(mnc) && string.IsNullOrEmpty(mcc))
-            {
-                var mobileNetworkId = new NumberPrefixManager().GetMobileNetworkByNumberPrefix(numberPrefix, out matchedPrefix);
-
-                if (mobileNetworkId.HasValue)
-                    return GetMobileNetworkById(mobileNetworkId.Value);
-            }
-
-            return null;
+            return mobileNetwork;
         }
 
         public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetworkById(int mobileNetworkId)
@@ -289,6 +266,29 @@ namespace Vanrise.MobileNetwork.Business
                 }
                 return mobileNetworksByMobileCountry;
             });
+        }
+
+        private Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix, DateTime effectiveDate, out NumberPrefix matchedNumberPrefix)
+        {
+            matchedNumberPrefix = null;
+
+            if (!string.IsNullOrEmpty(mnc) && !string.IsNullOrEmpty(mcc))
+            {
+                var mobileCountryId = new MobileCountryManager().GetMobileCountryIdByMCC(mcc);
+
+                if (mobileCountryId.HasValue)
+                    return GetMobileNetwork(mnc, mobileCountryId.Value);
+            }
+
+            if (string.IsNullOrEmpty(mnc) && string.IsNullOrEmpty(mcc))
+            {
+                matchedNumberPrefix = new NumberPrefixManager().GetNumberPrefixByPrefix(numberPrefix, effectiveDate);
+
+                if (matchedNumberPrefix != null)
+                    return GetMobileNetworkById(matchedNumberPrefix.MobileNetworkId);
+            }
+
+            return null;
         }
 
         #endregion
