@@ -19,7 +19,10 @@ namespace TOne.WhS.Invoice.Entities
         public decimal TotalTrafficAmount { get; set; }
         public decimal TotalDealAmount { get; set; }
         public decimal TotalRecurringChargeAmount { get; set; }
+        public decimal AdjustmentAmount { get; set; }
+
         public decimal TotalFullAmount { get; set; }
+
         public int NumberOfCalls { get; set; }
         public int NumberOfSMS { get; set; }
         public decimal Duration { get; set; }

@@ -324,10 +324,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceItemSummaryDetail.DueToSystemTotalDealAmount += invoiceItemDetails.TotalDealAmount;
                                         settlementInvoiceItemSummaryDetail.DueToSystemFullAmount += invoiceItemDetails.TotalFullAmount;
                                         settlementInvoiceItemSummaryDetail.DueToSystemTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemAdjustmentAmount += invoiceItemDetails.AdjustmentAmount;
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = invoiceItemDetails.AmountAfterCommissionWithTaxes;
-
+                                        settlementInvoiceDetailByCurrency.TotalAdjustmentAmount = invoiceItemDetails.AdjustmentAmount;
                                         settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
                                         settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
 
@@ -340,6 +341,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoicedetail.DueToSystemTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
                                         settlementInvoicedetail.DueToSystemTotalDealAmount += invoiceItemDetails.TotalDealAmount;
                                         settlementInvoicedetail.DueToSystemTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
+                                        settlementInvoicedetail.DueToSystemAdjustmentAmount += invoiceItemDetails.AdjustmentAmount;
+
 
                                     }
                                     if (!hasOriginalAmount || (hasOriginalAmount && canAddSettlementInvoiceDetailByCurrency))
@@ -596,13 +599,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceItemSummaryDetail.DueToCarrierTotalDealAmount += invoiceItemDetails.TotalDealAmount;
                                         settlementInvoiceItemSummaryDetail.DueToCarrierFullAmount += invoiceItemDetails.TotalFullAmount;
                                         settlementInvoiceItemSummaryDetail.DueToCarrierTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
-
+                                        settlementInvoiceItemSummaryDetail.DueToCarrierAdjustmentAmount += invoiceItemDetails.AdjustmentAmount;
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = invoiceItemDetails.AmountAfterCommissionWithTaxes;
 
                                         settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
                                         settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
+                                        settlementInvoiceDetailByCurrency.TotalAdjustmentAmount = invoiceItemDetails.AdjustmentAmount;
 
                                         settlementInvoicedetail.DueToCarrierAmount += invoiceItemDetails.AmountAfterCommissionWithTaxes;
                                         settlementInvoicedetail.DueToCarrierAmountAfterCommission += invoiceItemDetails.AmountAfterCommissionWithTaxes;
@@ -612,6 +616,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoicedetail.DueToCarrierTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
                                         settlementInvoicedetail.DueToCarrierTotalDealAmount += invoiceItemDetails.TotalDealAmount;
                                         settlementInvoicedetail.DueToCarrierFullAmount += invoiceItemDetails.TotalFullAmount;
+                                        settlementInvoicedetail.DueToCarrierAdjustmentAmount += invoiceItemDetails.AdjustmentAmount;
 
                                         settlementInvoicedetail.DueToCarrierTotalSMSAmount += invoiceItemDetails.TotalSMSAmount;
                                     }

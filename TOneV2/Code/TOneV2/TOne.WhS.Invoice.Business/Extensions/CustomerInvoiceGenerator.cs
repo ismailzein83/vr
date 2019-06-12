@@ -110,11 +110,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			}
 
 
-			decimal? minAmount = _partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
+            decimal? minAmount = _partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
 
 
-			#region BuildCustomerInvoiceDetails
-			CustomerInvoiceDetails customerInvoiceDetails = BuildCustomerInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, canGenerateVoiceInvoice, dealItemSetNames, currencyId);
+            if(resolvedPayload.Adjustment.HasValue)
+            {
+                AddAdjustmentToCustomerCurrency(invoiceBySaleCurrency, currencyId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Adjustment.Value);
+            }
+
+            #region BuildCustomerInvoiceDetails
+            CustomerInvoiceDetails customerInvoiceDetails = BuildCustomerInvoiceDetails(voiceItemSetNames, smsItemSetNames, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, resolvedPayload.Commission, resolvedPayload.CommissionType, canGenerateVoiceInvoice, dealItemSetNames, currencyId);
 			if (customerInvoiceDetails != null)
 			{
          
@@ -286,9 +291,40 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			#endregion
 
 		}
-		#endregion
+        #endregion
 
-		#region Private Methods
+        #region Private Methods
+        private void AddAdjustmentToCustomerCurrency(List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails, int currency, DateTime fromDate, DateTime toDate, decimal value)
+        {
+
+            string month = fromDate.Year == toDate.Year && fromDate.Month == toDate.Month ? fromDate.ToString("MMMM - yyyy") : string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
+            var customerInvoiceBySaleCurrencyItemDetail = customerInvoiceBySaleCurrencyItemDetails.FindRecord(x => x.CurrencyId == currency && x.Month == month);
+            if (customerInvoiceBySaleCurrencyItemDetail != null)
+            {
+                customerInvoiceBySaleCurrencyItemDetail.Amount += value;
+                customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommission += value;
+                customerInvoiceBySaleCurrencyItemDetail.AdjustmentAmount += value;
+                customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommissionWithTaxes += value;
+                customerInvoiceBySaleCurrencyItemDetail.TotalFullAmount += value;
+            }
+            else
+            {
+                customerInvoiceBySaleCurrencyItemDetails.Add(new CustomerInvoiceBySaleCurrencyItemDetails
+                {
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    AmountAfterCommission = value,
+                    AmountAfterCommissionWithTaxes = value,
+                    NumberOfCalls = 0,
+                    TotalFullAmount = value,
+                    Duration = 0,
+                    CurrencyId = currency,
+                    Amount = value,
+                    AdjustmentAmount = value,
+                    Month = month,
+                });
+            }
+        }
 
         private void AddDealToCustomerCurrency(List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails,List<CustomerInvoiceDealItemDetails> dealItemSetNames)
         {
