@@ -27,6 +27,7 @@ namespace TOne.WhS.Sales.Entities
                 return ZoneEED.HasValue;
             }
         }
+        public int? DealId { get; set; }
         public bool IsFutureZone { get; set; }
 
         #region Rate

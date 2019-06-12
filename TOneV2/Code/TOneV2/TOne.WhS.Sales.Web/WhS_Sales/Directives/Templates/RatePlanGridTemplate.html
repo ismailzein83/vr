@@ -277,6 +277,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div style="width: 25px; display:inline-flex" ng-init="::addColumnFixedAndRecalculate('dealIcon', 25,'',false)">
+                                    <div class="vr-datagrid-header-cell vr-datagrid-celltext">
+                                        <div col-index="renderIndex" style="width:100%">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div style="display:inline-flex" ng-init="::addColumnWidthFactorAndRecalculate('product', 10,'Product',true)" ng-style="{'width': columnsConfig.product.width}" class="rpcolumn_product">
                                     <div class="vr-datagrid-header-cell vr-datagrid-celltext">
                                         <div col-index="renderIndex" style="width:100%">
@@ -366,12 +372,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div style="width: 25px; display:inline-flex" ng-init="::addColumnFixedAndRecalculate('currencyIcon', 25,'',false)">
-                                    <div class="vr-datagrid-header-cell vr-datagrid-celltext">
-                                        <div col-index="renderIndex" style="width:100%">
-                                        </div>
-                                    </div>
-                                </div>
+                                <!--<div style="width: 25px; display:inline-flex" ng-init="::addColumnFixedAndRecalculate('currencyIcon', 25,'',false)">
+        <div class="vr-datagrid-header-cell vr-datagrid-celltext">
+            <div col-index="renderIndex" style="width:100%">
+            </div>
+        </div>
+    </div>-->
                                 <div style="display:inline-flex" ng-init="::addColumnWidthFactorAndRecalculate('routeOptions', 35,'Route Options',true)" ng-style="{'width': columnsConfig.routeOptions.width}" class="rpcolumn_routeOptions">
                                     <div class="vr-datagrid-header-cell vr-datagrid-celltext">
                                         <div col-index="renderIndex" style="width:100%">
@@ -557,15 +563,15 @@
                                 </div>
 
                                 <!--<div ng-show="rateCalculationMethod" style="width: 50px; display:inline-block">
-                                    <div class="vr-datagrid-header-cell">
-                                        <div col-index="renderIndex" style="width:100%">
-                                            <div class="vr-datagrid-celltext" style="overflow: hidden;text-align:right">
-                                                <span>Calculated Rate</span>
-                                            </div>
+        <div class="vr-datagrid-header-cell">
+            <div col-index="renderIndex" style="width:100%">
+                <div class="vr-datagrid-celltext" style="overflow: hidden;text-align:right">
+                    <span>Calculated Rate</span>
+                </div>
 
-                                        </div>
-                                    </div>
-                                </div>-->
+            </div>
+        </div>
+    </div>-->
                                 <div style="display:inline-flex;width:65px" ng-init="::addColumnFixedAndRecalculate('newRate', 65,'N.Rate',true)">
                                     <div class="vr-datagrid-header-cell vr-datagrid-celltext">
                                         <div col-index="renderIndex" style="width:100%">
@@ -703,6 +709,20 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div style="display:inline-flex;vertical-align:top;" class="vr-datagrid-cell-container" ng-style="{'width':'25px'}">
+                                                                <div class="vr-datagrid-cell" ng-if="!ratePlanGridCtrl.isMobile && dataItem.showDealIcon">
+                                                                    <div class="vr-datagrid-celltext ">
+                                                                        <vr-icon icontype="dataItem.dealIconType" tooltip="dataItem.dealIconTooltip" width="12" height="13"></vr-icon>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div ng-if="columnsConfig.dealIcon.includeInListView && ratePlanGridCtrl.isMobile" ng-style="{'width':columnsConfig.dealIcon.mobileWidth}" style="display:inline-flex;vertical-align:top;" class="vr-datagrid-cell-container">
+                                                                <div class="vr-datagrid-cell" ng-style="{'width': '25px'}">
+                                                                    <div class="vr-datagrid-celltext ">
+                                                                        <vr-icon icontype="dataItem.dealIconType" tooltip="dataItem.dealIconTooltip" width="12" height="13"></vr-icon>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
                                                             <div ng-if="!ratePlanGridCtrl.isMobile" style="display:inline-flex;vertical-align:top" ng-style="{'width': columnsConfig.product.width }" class="vr-datagrid-cell-container rpcolumn_product">
                                                                 <div class="vr-datagrid-cell">
@@ -786,20 +806,20 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div style="display:inline-flex;vertical-align:top;" class="vr-datagrid-cell-container" ng-style="{'width':'25px'}">
-                                                                <div class="vr-datagrid-cell" ng-if="!ratePlanGridCtrl.isMobile">
-                                                                    <div class="vr-datagrid-celltext ">
-                                                                        <vr-icon icontype="dataItem.currencyIconType" tooltip="dataItem.currencyIconTooltip"></vr-icon>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div ng-if="columnsConfig.currencyIcon.includeInListView && ratePlanGridCtrl.isMobile" ng-style="{'width':columnsConfig.currencyIcon.mobileWidth}" style="display:inline-flex;vertical-align:top;" class="vr-datagrid-cell-container">
-                                                                <div class="vr-datagrid-cell" ng-style="{'width': '25px'}">
-                                                                    <div class="vr-datagrid-celltext ">
-                                                                        <vr-icon icontype="dataItem.currencyIconType" tooltip="dataItem.currencyIconTooltip"></vr-icon>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                            <!--<div style="display:inline-flex;vertical-align:top;" class="vr-datagrid-cell-container" ng-style="{'width':'25px'}">
+        <div class="vr-datagrid-cell" ng-if="!ratePlanGridCtrl.isMobile">
+            <div class="vr-datagrid-celltext ">
+                <vr-icon icontype="dataItem.currencyIconType" tooltip="dataItem.currencyIconTooltip"></vr-icon>
+            </div>
+        </div>
+    </div>
+    <div ng-if="columnsConfig.currencyIcon.includeInListView && ratePlanGridCtrl.isMobile" ng-style="{'width':columnsConfig.currencyIcon.mobileWidth}" style="display:inline-flex;vertical-align:top;" class="vr-datagrid-cell-container">
+        <div class="vr-datagrid-cell" ng-style="{'width': '25px'}">
+            <div class="vr-datagrid-celltext ">
+                <vr-icon icontype="dataItem.currencyIconType" tooltip="dataItem.currencyIconTooltip"></vr-icon>
+            </div>
+        </div>
+    </div>-->
 
                                                             <div ng-if="!ratePlanGridCtrl.isMobile" style="display:inline-flex;vertical-align:top" ng-style="{'width': columnsConfig.routeOptions.width }" class="vr-datagrid-cell-container rpcolumn_routeOptions">
                                                                 <div class="vr-datagrid-cell">
@@ -918,14 +938,14 @@
                                                             </div>
 
                                                             <!--<div ng-show="rateCalculationMethod" style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
-                                                                <div class="vr-datagrid-cell">
-                                                                    <div class="vr-datagrid-celltext ">
-                                                                        <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-                                                                            <span class="span-summary"> {{CalculatedRate| number: longPrecision}}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>-->
+        <div class="vr-datagrid-cell">
+            <div class="vr-datagrid-celltext ">
+                <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                    <span class="span-summary"> {{CalculatedRate| number: longPrecision}}</span>
+                </div>
+            </div>
+        </div>
+    </div>-->
 
 
                                                             <div ng-if="!ratePlanGridCtrl.isMobile" style="display:inline-flex;vertical-align:top;" class="vr-datagrid-cell-container" ng-style="{'width':'65px'}">

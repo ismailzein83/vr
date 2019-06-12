@@ -656,7 +656,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 setRouteOptionProperties(zoneItem);
                 setServiceViewerLoad(zoneItem);
                 WhS_Sales_RatePlanUtilsService.setNormalRateIconProperties(zoneItem, gridQuery.OwnerType, gridQuery.SaleAreaSettings);
-                setCurrencyIconProperties(zoneItem);
+                setDealIconProperties(zoneItem);
 
 
                 zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
@@ -865,17 +865,26 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     };
                 }
 
-                function setCurrencyIconProperties(dataItem) {
-                    if (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
-                        return;
-                    if (dataItem.CurrentRate == null)
-                        return;
-                    if (gridQuery.CurrencyId == undefined || gridQuery.CurrencyId == null)
-                        return;
-                    if (gridQuery.CurrencyId != dataItem.CurrentRateCurrencyId) {
-                        dataItem.currencyIconType = 'exchange';
-                        dataItem.currencyIconTooltip = 'The real currency for this rate is ' + dataItem.CurrentRateCurrencySymbol;
-                    }
+                //function setCurrencyIconProperties(dataItem) {
+                //    if (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
+                //        return;
+                //    if (dataItem.CurrentRate == null)
+                //        return;
+                //    if (gridQuery.CurrencyId == undefined || gridQuery.CurrencyId == null)
+                //        return;
+                //    if (gridQuery.CurrencyId != dataItem.CurrentRateCurrencyId) {
+                //        dataItem.currencyIconType = 'deal';
+                //        dataItem.currencyIconTooltip = 'The real currency for this rate is ' + dataItem.CurrentRateCurrencySymbol;
+                //        dataItem.any = false;
+                //    }
+                //}
+              function  setDealIconProperties(dataItem)
+                {
+                  if (dataItem.DealId != undefined) {
+                      dataItem.dealIconType = 'deal';
+                      dataItem.dealIconTooltip = 'This zone is included in a deal';
+                      dataItem.showDealIcon = true;
+                  }
                 }
             }
 
