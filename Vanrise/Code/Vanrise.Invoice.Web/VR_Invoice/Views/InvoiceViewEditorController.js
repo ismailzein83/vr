@@ -22,6 +22,9 @@
         var viewCommonPropertiesAPI;
         var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var devProjectDirectiveApi;
+        var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var viewEntity;
         loadParameters();
         defineScope();
@@ -60,6 +63,10 @@
             $scope.scopeModel.onTreeReady = function (api) {
                 treeAPI = api;
                 treeReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onDevProjectSelectorReady = function (api) {
+                devProjectDirectiveApi = api;
+                devProjectPromiseReadyDeferred.resolve();
             };
             $scope.scopeModel.validateMenuLocation = function () {
                 return ($scope.scopeModel.selectedMenuItem != undefined) ? null : 'No menu location selected';
@@ -113,7 +120,7 @@
                     ModuleId: $scope.scopeModel.selectedMenuItem != undefined ? $scope.scopeModel.selectedMenuItem.Id : undefined,
                     Settings: viewSettings,
                     Type: viewEntity != undefined ? viewEntity.Type : undefined,
-
+                    DevProjectId: devProjectDirectiveApi.getSelectedIds(),
                 };
 
                 return view;
@@ -208,7 +215,20 @@
                     return loadInvoiceTypeSelectorPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadInvoiceTypeSelector, loadViewCommonProperties]).then(function () {
+                function loadDevProjectSelector() {
+                    var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                    devProjectPromiseReadyDeferred.promise.then(function () {
+                        var payloadDirective;
+                        if (viewEntity != undefined) {
+                            payloadDirective = {
+                                selectedIds: viewEntity.DevProjectId
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(devProjectDirectiveApi, payloadDirective, devProjectPromiseLoadDeferred);
+                    });
+                    return devProjectPromiseLoadDeferred.promise;
+                }
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadInvoiceTypeSelector, loadViewCommonProperties, loadDevProjectSelector]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
