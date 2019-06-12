@@ -7,16 +7,17 @@
     </vr-columns>
 </vr-row>
 <vr-row>
-    <!--<span vr-loader="scopeModel.isFieldTypeRumtimeDirectiveLoading">
-        <vr-directivewrapper ng-if="scopeModel.fieldTypeRuntimeDirective != undefined"
-                             directive="scopeModel.fieldTypeRuntimeDirective"
-                             on-ready="scopeModel.onFieldTypeRumtimeDirectiveReady"
-                             normal-col-num="6">
-        </vr-directivewrapper>
-    </span>-->
-    <vr-columns width="1/2row">
-        <vr-switch value="scopeModel.isRequired" label="Required"></vr-switch>
-    </vr-columns>
+	<!--<span vr-loader="scopeModel.isFieldTypeRumtimeDirectiveLoading">
+		<vr-directivewrapper ng-if="scopeModel.fieldTypeRuntimeDirective != undefined"
+							 directive="scopeModel.fieldTypeRuntimeDirective"
+							 on-ready="scopeModel.onFieldTypeRumtimeDirectiveReady"
+							 normal-col-num="6">
+		</vr-directivewrapper>
+	</span>-->
+	<vr-columns width="1/2row">
+		<vr-switch value="scopeModel.isRequired" label="Required"></vr-switch>
+	</vr-columns>
+	<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceDirectiveReady" normal-col-num="6"></vr-common-vrlocalizationtextresource-selector>
 </vr-row>
 
 

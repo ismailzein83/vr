@@ -26,12 +26,12 @@ namespace Vanrise.GenericData.MainExtensions
 		public string TextResourceKey { get; set; }
         public dynamic DefaultFieldValues { get; set; }
 
-		public override void TryTranslate()
+		public override void ApplyTranslation(IGenericBETranslationContext context)
 		{
 			VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
 			if (!String.IsNullOrEmpty(TextResourceKey))
 			{
-				FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(TextResourceKey,FieldTitle);
+				FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(TextResourceKey,FieldTitle,context.LanguageId);
 			}
 		}
 	}

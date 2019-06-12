@@ -15,7 +15,7 @@ namespace Vanrise.GenericData.Entities
         {
             return null;
         }
-        public virtual void TryTranslate() { }
+        public virtual void ApplyTranslation(IGenericBETranslationContext context) { }
 	
     }
     public interface IGetGenericEditorColumnsInfoContext
@@ -26,5 +26,11 @@ namespace Vanrise.GenericData.Entities
     {
         public Guid DataRecordTypeId { get; set; }
     }
-
+	public interface IGenericBETranslationContext
+	{
+		Guid LanguageId { get; }
+	}
+	public class GenericBETranslationContext : IGenericBETranslationContext {
+		public Guid LanguageId { get; set; }
+	}
 }

@@ -59,8 +59,8 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 							item.localizationTextResourceSelectorReadyPromiseDeferred.resolve();
 						};
 						item.localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
-							var payload = {};
-							var setLoader = function (value) { $scope.scopeModel.isLocalizationTextResourceSelectorLoading = value; };
+							var payload;
+							var setLoader = function (value) { item.isLocalizationTextResourceSelectorLoading = value; };
 							VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, item.localizationTextResourceSelectorAPI, payload, setLoader);
 						});
 						$scope.scopeModel.uploadedFields.push(item);

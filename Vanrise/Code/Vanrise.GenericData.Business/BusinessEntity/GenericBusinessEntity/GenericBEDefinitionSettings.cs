@@ -197,7 +197,7 @@ namespace Vanrise.GenericData.Business
     {
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeEditor { get; }
-        public virtual void TryTranslate() { }
+        public virtual void ApplyTranslation(IGenericBETranslationContext context) { }
     }
 
     public abstract class GenericBEActionFilterCondition
@@ -229,10 +229,11 @@ namespace Vanrise.GenericData.Business
         }
     }
 
-    #endregion
 
-    #region Public Classes
-    public class GenericBEUploadField
+	#endregion
+
+	#region Public Classes
+	public class GenericBEUploadField
     {
         public string FieldName { get; set; }
         public bool IsRequired { get; set; }

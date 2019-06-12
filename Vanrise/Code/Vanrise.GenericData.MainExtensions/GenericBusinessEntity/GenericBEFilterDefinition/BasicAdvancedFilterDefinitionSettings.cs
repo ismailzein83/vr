@@ -21,13 +21,13 @@ namespace Vanrise.GenericData.MainExtensions
         }
         public List<BasicAdvancedFilterItem> Filters { get; set; }
 
-		public override void TryTranslate()
+		public override void ApplyTranslation(IGenericBETranslationContext context)
 		{
 			if (Filters != null)
 			{
 				foreach (var filter in Filters)
 				{
-					filter.FilterSettings.TryTranslate();
+					filter.FilterSettings.ApplyTranslation(context);
 				}
 			}
 		}

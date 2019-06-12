@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.MainExtensions
 
         public List<VRTabContainer> TabContainers { get; set; }
 
-        public override void TryTranslate()
+        public override void ApplyTranslation(IGenericBETranslationContext context)
         {
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
             if (TabContainers != null)
@@ -23,9 +23,9 @@ namespace Vanrise.GenericData.MainExtensions
                 {
                     if (!String.IsNullOrEmpty(tabContainer.TextResourceKey))
                     {
-                        tabContainer.TabTitle = vrLocalizationManager.GetTranslatedTextResourceValue(tabContainer.TextResourceKey, tabContainer.TabTitle);
+                        tabContainer.TabTitle = vrLocalizationManager.GetTranslatedTextResourceValue(tabContainer.TextResourceKey, tabContainer.TabTitle,context.LanguageId);
                     }
-                    tabContainer.TabSettings.TryTranslate();
+                    tabContainer.TabSettings.ApplyTranslation(context);
                 }
             }
         }

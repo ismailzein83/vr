@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.MainExtensions
 
         public List<GenericEditorRow> Rows { get; set; }
 
-        public override void TryTranslate()
+        public override void ApplyTranslation(IGenericBETranslationContext context)
         {
             VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
             if (Rows != null)
@@ -30,7 +30,7 @@ namespace Vanrise.GenericData.MainExtensions
                         {
                             if (!String.IsNullOrEmpty(filed.TextResourceKey))
                             {
-                                filed.FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(filed.TextResourceKey, filed.FieldTitle);
+                                filed.FieldTitle = vrLocalizationManager.GetTranslatedTextResourceValue(filed.TextResourceKey, filed.FieldTitle,context.LanguageId);
                             }
                         }
                     }
