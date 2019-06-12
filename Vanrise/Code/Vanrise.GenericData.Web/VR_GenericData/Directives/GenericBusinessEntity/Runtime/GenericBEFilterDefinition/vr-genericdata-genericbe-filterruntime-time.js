@@ -23,7 +23,9 @@
       
         function TimeFilterRuntimeSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
             var dataRecordTypeId;
+            var definitionSettings;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -36,6 +38,12 @@
                     var promises = [];
                     if (payload != undefined) {
                         dataRecordTypeId = payload.dataRecordTypeId;
+                        definitionSettings = payload.settings;
+
+                        if (definitionSettings != undefined) {
+                            $scope.scopeModel.fromDate = definitionSettings.DefaultFromDate;
+                            $scope.scopeModel.toDate = definitionSettings.DefaultToDate;
+                        }
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };

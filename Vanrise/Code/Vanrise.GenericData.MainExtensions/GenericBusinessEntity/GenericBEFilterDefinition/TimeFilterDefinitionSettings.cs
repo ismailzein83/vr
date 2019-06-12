@@ -19,7 +19,7 @@ namespace Vanrise.GenericData.MainExtensions
         {
             get { return "vr-genericdata-genericbe-filterruntime-time"; }
         }
-
+        public DateTime? DefaultFromDate { get; set; }
+        public DateTime? DefaultToDate { get; set; }
     }
-
 }
