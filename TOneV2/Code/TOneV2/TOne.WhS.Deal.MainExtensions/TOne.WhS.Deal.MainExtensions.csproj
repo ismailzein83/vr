@@ -107,6 +107,8 @@
     <Compile Include="DealRateEvaluator\SupplierRateEvaluator\FixedSupplierRateEvaluator.cs" />
     <Compile Include="DealSaleZonesFilter.cs" />
     <Compile Include="DealTimePeriod\LastTwentyFourHourTimePeriod.cs" />
+    <Compile Include="DealTimePeriod\OverallDealsTimePeriod.cs" />
+    <Compile Include="DealTimePeriod\WeeklyTimePeriod.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueActivators\EvaluateDealActivator.cs" />
