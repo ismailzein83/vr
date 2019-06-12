@@ -326,6 +326,23 @@ namespace TOne.WhS.Deal.Business
             return DealType == VolCommitmentDealType.Buy ? DealZoneGroupPart.Cost : DealZoneGroupPart.Sale;
         }
 
+        public override void GetDealZoneGroupData(IGetDealZoneGroupDataContext context)
+        {
+            if ((context.IsSale && this.DealType == VolCommitmentDealType.Buy) || (!context.IsSale && this.DealType == VolCommitmentDealType.Sell))
+                return;
+
+            this.Items.ThrowIfNull("Items");
+            VolCommitmentDealItem volCommitmentDealItem = this.Items.FirstOrDefault(itm => itm.ZoneGroupNumber == context.ZoneGroupNb);
+            if (volCommitmentDealItem != null)
+            {
+                context.DealZoneGroupData = new DealZoneGroupData()
+                {
+                    ZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber,
+                    Name = volCommitmentDealItem.Name
+                };
+            }
+        }
+
         #endregion
 
         #region Private Methods

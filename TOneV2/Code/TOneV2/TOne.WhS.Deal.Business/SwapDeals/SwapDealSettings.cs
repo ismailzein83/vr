@@ -275,6 +275,40 @@ namespace TOne.WhS.Deal.Business
             return DealZoneGroupPart.Both;
         }
 
+        public override void GetDealZoneGroupData(IGetDealZoneGroupDataContext context)
+        {
+            if (context.IsSale)
+            {
+                this.Inbounds.ThrowIfNull("Inbounds");
+
+                SwapDealInbound swapDealInbound = this.Inbounds.FirstOrDefault(itm => itm.ZoneGroupNumber == context.ZoneGroupNb);
+                if (swapDealInbound != null)
+                {
+                    context.DealZoneGroupData = new DealZoneGroupData()
+                    {
+                        ZoneGroupNb = swapDealInbound.ZoneGroupNumber,
+                        Name = swapDealInbound.Name,
+                        TotalVolumeInMin = swapDealInbound.Volume
+                    };
+                }
+            }
+            else
+            {
+                this.Outbounds.ThrowIfNull("Inbounds");
+
+                SwapDealOutbound swapDealOutbound = this.Outbounds.FirstOrDefault(itm => itm.ZoneGroupNumber == context.ZoneGroupNb);
+                if (swapDealOutbound != null)
+                {
+                    context.DealZoneGroupData = new DealZoneGroupData()
+                    {
+                        ZoneGroupNb = swapDealOutbound.ZoneGroupNumber,
+                        Name = swapDealOutbound.Name,
+                        TotalVolumeInMin = swapDealOutbound.Volume
+                    };
+                }
+            }
+        }
+
         //TODO: ASA Check if inbounds can have null value and throw exception if not
         public decimal? GetSaleAmount()
         {

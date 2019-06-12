@@ -50,6 +50,7 @@ namespace TOne.WhS.Deal.Entities
         public abstract string GetSupplierZoneGroupName(int dealGroupNumber);
         public abstract TimeSpan? GetCarrierOffSet(TimeSpan? currentOffSet);
         public abstract DealZoneGroupPart GetDealZoneGroupPart();
+        public abstract void GetDealZoneGroupData(IGetDealZoneGroupDataContext context);
     }
 
     public interface IDealGetZoneGroupsContext
@@ -88,6 +89,19 @@ namespace TOne.WhS.Deal.Entities
         public List<DealRoutingSupplierZoneGroup> SupplierZoneGroups { get; set; }
     }
 
+    public interface IGetDealZoneGroupDataContext
+    {
+        int ZoneGroupNb { get; }
+        bool IsSale { get; }
+        DealZoneGroupData DealZoneGroupData { set; }
+    }
+    public class GetDealZoneGroupDataContext : IGetDealZoneGroupDataContext
+    {
+        public int ZoneGroupNb { get; set; }
+        public bool IsSale { get; set; }
+        public DealZoneGroupData DealZoneGroupData { get; set; }
+    }
+
     public class DealRoutingSaleZoneGroup
     {
         public int DealSaleZoneGroupNb { get; set; }
@@ -112,5 +126,14 @@ namespace TOne.WhS.Deal.Entities
     {
         public int TierNumber { get; set; }
         public decimal? SubstituteRate { get; set; }
+    }
+
+    public class DealZoneGroupData
+    {
+        public int ZoneGroupNb { get; set; }
+
+        public string Name { get; set; }
+
+        public int? TotalVolumeInMin { get; set; }
     }
 }
