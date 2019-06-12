@@ -14,7 +14,8 @@ app.directive('vrCommonVrlocalizationlanguageSelector', ['UtilsService', 'VRUIUt
                 ondeselectitem: "=",
                 isdisabled: "=",
                 hideremoveicon: '@',
-                normalColNum: '@'
+                normalColNum: '@',
+                hidelabel: '@',
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -56,8 +57,12 @@ app.directive('vrCommonVrlocalizationlanguageSelector', ['UtilsService', 'VRUIUt
             if (attrs.customlabel != undefined) {
                 label = attrs.customlabel;
             }
+            var hidelabel = "";
+            if (attrs.hidelabel != undefined)
+                hidelabel = " hidelabel ";
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="LocalizationLanguageId" label="' + label + '" ' + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Language" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + hidelabel +'  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="LocalizationLanguageId" label="' + label + '" ' + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Language" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
         }
 
         function languageSelectorCtor(ctrl, $scope, attrs) {

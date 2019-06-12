@@ -7,9 +7,10 @@
 
         var controllerName = 'InvoiceType';
 
-        function GetInvoiceType(invoiceTypeId) {
+        function GetInvoiceType(invoiceTypeId,getTranslated) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceType"), {
-                invoiceTypeId: invoiceTypeId
+                invoiceTypeId: invoiceTypeId,
+                getTranslated: getTranslated
             });
         }
 

@@ -2,13 +2,18 @@
 
     "use strict";
 
-    InvoiceSettingDefinitionSectionEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+    InvoiceSettingDefinitionSectionEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function InvoiceSettingDefinitionSectionEditorController($scope, UtilsService, VRNotificationService, VRNavigationService) {
+    function InvoiceSettingDefinitionSectionEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var isEditMode;
         var sectionTitleValue;
         var exitingSections;
+        var sectionEntity;
+        var sectionTitleResourceKey;
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
 
@@ -17,8 +22,12 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                sectionTitleValue = parameters.sectionTitleValue;
+                sectionEntity = parameters.sectionEntity;
                 exitingSections = parameters.exitingSections;
+            }
+            if (sectionEntity != undefined) {
+                sectionTitleValue = sectionEntity.sectionTitle;
+                sectionTitleResourceKey = sectionEntity.sectionTitleResourceKey;
             }
             isEditMode = (sectionTitleValue != undefined);
         }
@@ -49,6 +58,10 @@
                 $scope.modalContext.closeModal();
             };
 
+            $scope.scopeModal.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
         }
 
         function load() {
@@ -67,8 +80,19 @@
                 function loadStaticData() {
                     $scope.scopeModal.sectionValue = sectionTitleValue;
                 }
+                function loadLocalizationTextResourceSelector() {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).then(function () {
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        var localizationTextResourcePayload = { selectedValue: sectionTitleResourceKey };
+
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
+
+                var promises = [setTitle, loadStaticData, loadLocalizationTextResourceSelector];
+                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModal.isLoading = false;
@@ -80,8 +104,10 @@
         }
 
         function buildSectionObjFromScope() {
-            var sectionTitle = $scope.scopeModal.sectionValue;
-            return sectionTitle;
+            return {
+                sectionTitle: $scope.scopeModal.sectionValue,
+                sectionTitleResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
+            };
         }
 
         function insertSection() {

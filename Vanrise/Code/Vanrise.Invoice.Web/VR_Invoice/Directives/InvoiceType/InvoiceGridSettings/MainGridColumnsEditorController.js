@@ -2,7 +2,7 @@
 
     'use strict';
 
-    mainGridColumnsEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService','VR_Invoice_InvoiceFieldEnum','VRCommon_GridWidthFactorEnum','VRUIUtilsService'];
+    mainGridColumnsEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VR_Invoice_InvoiceFieldEnum', 'VRCommon_GridWidthFactorEnum', 'VRUIUtilsService'];
 
     function mainGridColumnsEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VR_Invoice_InvoiceFieldEnum, VRCommon_GridWidthFactorEnum, VRUIUtilsService) {
 
@@ -13,6 +13,9 @@
 
         var invoiceUIGridColumnFilterAPI;
         var invoiceUIGridColumnFilterPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var isEditMode;
         loadParameters();
@@ -30,6 +33,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onGridWidthFactorEditorReady = function (api) {
                 gridWidthFactorEditorAPI = api;
                 gridWidthFactorEditorPromiseReadyDeferred.resolve();
@@ -51,12 +55,15 @@
             };
 
             $scope.scopeModel.save = function () {
-                return (isEditMode)?  updateGridColumn() : addGridColumn();
+                return (isEditMode) ? updateGridColumn() : addGridColumn();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
 
             function builGridColumnObjFromScope() {
                 return {
@@ -65,7 +72,8 @@
                     CustomFieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined,
                     GridColumnSettings: gridWidthFactorEditorAPI.getData(),
                     UseDescription: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.useDescription : undefined,
-                    Filter: invoiceUIGridColumnFilterAPI.getData()
+                    Filter: invoiceUIGridColumnFilterAPI.getData(),
+                    HeaderResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
                 };
             }
 
@@ -109,8 +117,7 @@
                     }
                 }
 
-                function loadGridWidthFactorEditor()
-                {
+                function loadGridWidthFactorEditor() {
                     var gridWidthFactorEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     gridWidthFactorEditorPromiseReadyDeferred.promise.then(function () {
                         var gridWidthFactorEditorPayload = {
@@ -136,8 +143,18 @@
                     });
                     return invoiceUIGridColumnFilterLoadPromiseDeferred.promise;
                 }
+                function loadLocalizationTextResourceSelector() {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGridWidthFactorEditor, loadInvoiceUIGridColumnFilter]).then(function () {
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        var localizationTextResourcePayload = columnEntity != undefined ? { selectedValue: columnEntity.HeaderResourceKey } : undefined;
+
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
+                var promises = [setTitle, loadStaticData, loadGridWidthFactorEditor, loadInvoiceUIGridColumnFilter, loadLocalizationTextResourceSelector];
+                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;

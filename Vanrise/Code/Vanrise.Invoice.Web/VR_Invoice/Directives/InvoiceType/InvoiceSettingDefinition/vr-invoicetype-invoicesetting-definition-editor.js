@@ -38,7 +38,8 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionEditor', ['UtilsService', 'V
                 ctrl.addSection = function () {
                     var onSectionAdded = function (sectionObj) {
                         var section = {
-                            sectionTitle: sectionObj,
+                            sectionTitle: sectionObj.sectionTitle,
+                            sectionTitleResourceKey: sectionObj.sectionTitleResourceKey,
                             onRowsDirectiveReady: function (api) {
                                 section.rowsGridAPI = api;
                                 var payload = { context: getContext() };
@@ -97,6 +98,7 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionEditor', ['UtilsService', 'V
                             rows = { Rows: section.Rows };
 
                         rows.SectionTitle = section.sectionTitle;
+                        rows.SectionTitleResourceKey = section.sectionTitleResourceKey;
                         sections.push(rows);
                     }
                     return sections;
@@ -129,6 +131,7 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionEditor', ['UtilsService', 'V
             function prepareSectionObject(section) {
 
                 section.sectionTitle = section.SectionTitle;
+                section.sectionTitleResourceKey = section.SectionTitleResourceKey;
                 section.onRowsDirectiveReady = function (api) {
                     section.rowsGridAPI = api;
                     var payload = { context: getContext(), rows: section.Rows };
@@ -148,10 +151,11 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionEditor', ['UtilsService', 'V
             function editSection(dataItem) {
                 var onSectionUpdated = function (sectionObj) {
                     var index = UtilsService.getItemIndexByVal(ctrl.sections, dataItem.sectionTitle, 'sectionTitle');
-                    ctrl.sections[index].sectionTitle = sectionObj;
+                    ctrl.sections[index].sectionTitle = sectionObj.sectionTitle;
+                    ctrl.sections[index].sectionTitleResourceKey = sectionObj.sectionTitleResourceKey;
                 };
 
-                VR_Invoice_InvoiceTypeService.editInvoiceSettingSection(onSectionUpdated, getExistingSections(), dataItem.sectionTitle);
+                VR_Invoice_InvoiceTypeService.editInvoiceSettingSection(onSectionUpdated, getExistingSections(), dataItem);
             }
 
             function getExistingSections() {

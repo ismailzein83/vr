@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeFilenamePattern", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VRModalService","VR_Invoice_InvoiceTypeAPIService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Invoice_InvoiceTypeAPIService) {
+app.directive("vrInvoicetypeFilenamePattern", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRModalService", "VR_Invoice_InvoiceTypeAPIService", "VRLocalizationService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Invoice_InvoiceTypeAPIService, VRLocalizationService) {
 
         var directiveDefinitionObject = {
 
@@ -10,7 +10,7 @@ app.directive("vrInvoicetypeFilenamePattern", ["UtilsService", "VRNotificationSe
             {
                 onReady: "=",
                 normalColNum: '@',
-                isrequired:"="
+                isrequired: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -32,8 +32,13 @@ app.directive("vrInvoicetypeFilenamePattern", ["UtilsService", "VRNotificationSe
             if (attrs.hidelabel != undefined)
                 withemptyline = '';
             var label = "File Name Pattern";
+            var localizedlabel = 'VRRes.Common.SerialNumberPattern.VREnd';
+            if (attrs.localizedlabel != undefined)
+                localizedlabel = attrs.localizedlabel;
             if (attrs.label != undefined)
                 label = attrs.label;
+            if (localizedlabel != undefined && localizedlabel != null && localizedlabel != '' && VRLocalizationService.isLocalizationEnabled())
+                label = localizedlabel;
             var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
                 + '<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired" type="filename"></vr-textbox>'
@@ -98,19 +103,15 @@ app.directive("vrInvoicetypeFilenamePattern", ["UtilsService", "VRNotificationSe
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            function getContext()
-            {
+            function getContext() {
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
-                if (currentContext.getParts == undefined)
-                {
+                if (currentContext.getParts == undefined) {
                     currentContext.getParts = function () {
                         var returnedParts = [];
-                        if (parts != undefined)
-                        {
-                            for (var i = 0, length = parts.length ; i < length; i++)
-                            {
+                        if (parts != undefined) {
+                            for (var i = 0, length = parts.length; i < length; i++) {
                                 returnedParts.push(parts[i]);
                             }
                         }

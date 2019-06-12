@@ -38,13 +38,13 @@ namespace Vanrise.Invoice.Entities
         public List<InvoiceMenualBulkAction> InvoiceMenualBulkActions { get; set; }
         public Guid? InvoiceCommentDefinitionId { get; set; }
         public bool HidePaidFilter { get; set; }
-        public string TextResourceKey { get; set; }
+        public string TitleResourceKey { get; set; }
     }
     public class InvoiceMenualBulkAction
     {
         public Guid InvoiceMenualBulkActionId { get; set; }
         public string Title { get; set; }
-        public string TextResourceKey { get; set; }
+        public string TitleResourceKey { get; set; }
         public Guid InvoiceBulkActionId { get; set; }
     }
    
@@ -102,7 +102,7 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceSettingPartUISection
     {
         public string SectionTitle { get; set; }
-        public string TextResourceKey { get; set; }
+        public string SectionTitleResourceKey { get; set; }
         public List<InvoiceSettingPartUIRow> Rows { get; set; }
     }
     public class InvoiceSettingPartUIRow
@@ -119,7 +119,7 @@ namespace Vanrise.Invoice.Entities
     {
         public Guid AutomaticInvoiceActionId { get; set; }
         public string Title { get; set; }
-        public string TextResourceKey { get; set; }
+        public string TitleResourceKey { get; set; }
         public AutomaticInvoiceActionSettings Settings { get; set; }
     }
     public abstract class AutomaticInvoiceActionSettings

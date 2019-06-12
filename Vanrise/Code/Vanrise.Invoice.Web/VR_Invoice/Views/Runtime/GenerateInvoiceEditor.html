@@ -6,19 +6,19 @@
 
                 <vr-directivewrapper vr-disabled="scopeModel.isEditMode" directive="scopeModel.invoiceTypeEntity.InvoicePartnerManager.PartnerSelector" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="4" isrequired="true"></vr-directivewrapper>
                 <vr-columns width="1/3row">
-                    <vr-datetimepicker type="date" label="Issue Date" value="scopeModel.issueDate" isrequired="true"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="Issue Date" localizedlabel="VRRes.Invoice.IssueDate.VREnd" value="scopeModel.issueDate" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
-            <vr-row >
+            <vr-row>
                 <span vr-disabled="scopeModel.isEditMode">
                     <vr-columns width="1/3row">
 
-                        <vr-datetimepicker type="date" label="From" value="scopeModel.fromDate" isrequired="true" customvalidate="scopeModel.validateFromDate()" vr-disabled="scopeModel.isDateDisabled"></vr-datetimepicker>
+                        <vr-datetimepicker type="date" label="From" localizedlabel="VRRes.Common.From.VREnd" value="scopeModel.fromDate" isrequired="true" customvalidate="scopeModel.validateFromDate()" vr-disabled="scopeModel.isDateDisabled"></vr-datetimepicker>
                     </vr-columns>
                 </span>
                 <span vr-disabled="scopeModel.isEditMode">
                     <vr-columns width="1/3row">
-                        <vr-datetimepicker type="date" label="To" value="scopeModel.toDate" isrequired="true" customvalidate="scopeModel.validateToDate()" vr-disabled="scopeModel.isDateDisabled" applytimemax></vr-datetimepicker>
+                        <vr-datetimepicker type="date" label="To" localizedlabel="VRRes.Common.To.VREnd" value="scopeModel.toDate" isrequired="true" customvalidate="scopeModel.validateToDate()" vr-disabled="scopeModel.isDateDisabled" applytimemax></vr-datetimepicker>
                     </vr-columns>
                 </span>
 
@@ -26,7 +26,7 @@
             </vr-row>
             <vr-row ng-if="scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective" vr-loader="scopeModel.isLoadingCustomSectionPayloadDirective">
                 <vr-columns width="fullrow">
-                    <vr-section header="More Options">
+                    <vr-section header="More Options" localizedtitle="VRRes.Common.MoreOptions.VREnd">
                         <vr-directivewrapper directive="scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective" on-ready="scopeModel.onGenerationCustomSectionDirectiveReady" normal-col-num="4" isrequired="true"></vr-directivewrapper>
                     </vr-section>
                 </vr-columns>

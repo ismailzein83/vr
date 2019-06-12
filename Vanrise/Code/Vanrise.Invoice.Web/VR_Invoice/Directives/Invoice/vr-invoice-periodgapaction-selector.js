@@ -38,11 +38,14 @@
 
             var multipleselection = "";
             var label = "Period Gap Action";
+            var localizedlabel = 'VRRes.Invoice.PeriodGapAction.VREnd';
 
             if (attrs.ismultipleselection != undefined) {
                 label = "Period Gap Actions";
                 multipleselection = "ismultipleselection";
             }
+            if (attrs.localizedlabel != undefined)
+                localizedlabel = attrs.localizedlabel;
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + ' <vr-select on-ready="ctrl.onSelectorReady"'
                 + ' datasource="ctrl.datasource"'
@@ -53,6 +56,7 @@
                 + ' isrequired="ctrl.isrequired"'
                 + ' entityName="' + label + '"'
                 + ' label="' + label + '" '
+                + ' localizedlabel="' + localizedlabel + '"'
                 + ' hideremoveicon>'
                 + '</vr-select>'
                 + ' </vr-columns>';
@@ -89,8 +93,7 @@
 
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
-                    } else if (selectFirstItem)
-                    {
+                    } else if (selectFirstItem) {
                         var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].value] : ctrl.datasource[0].value;
                         VRUIUtilsService.setSelectedValues(defaultValue, 'value', attrs, ctrl);
                     }

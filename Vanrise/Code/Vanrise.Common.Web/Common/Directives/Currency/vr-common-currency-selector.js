@@ -7,6 +7,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
             scope: {
                 onReady: '=',
                 ismultipleselection: "@",
+                localizedlabel: "@",
                 onselectionchanged: '=',
                 selectedvalues: '=',
                 isrequired: "=",
@@ -69,8 +70,12 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
 
             var multipleselection = "";
             var label = "Currency";
+            var localizedlabel = "VRRes.Common.Currency.VREnd";
+
             if (attrs.ismultipleselection != undefined) {
                 label = "Currencies";
+                localizedlabel = "VRRes.Common.Currencies.VREnd";
+
                 multipleselection = "ismultipleselection";
             }
 
@@ -81,14 +86,15 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewCurrency"';
-
+            if (attrs.localizedlabel != undefined)
+                localizedlabel = attrs.localizedlabel;
             var viewCliked = "";
             if (attrs.showviewbutton != undefined)
                 viewCliked = 'onviewclicked="ctrl.ViewCurrency"';
             var hideremoveicon = "";
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Symbol" datavaluefield="CurrencyId"' + hidelabel + ' label="' + label + '" ' + addCliked + viewCliked + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"  ' + hideremoveicon + ' isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' localizedlabel="' + localizedlabel + '"  on-ready="ctrl.onSelectorReady" datatextfield="Symbol" datavaluefield="CurrencyId"' + hidelabel + ' label="' + label + '" ' + addCliked + viewCliked + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"  ' + hideremoveicon + ' isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
         }
 
         function currencyCtor(ctrl, $scope, attrs) {

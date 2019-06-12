@@ -35,12 +35,12 @@ namespace Vanrise.Invoice.Business
             var allItems = GetCachedInvoiceSettings();
             PartnerManager partnerManager = new PartnerManager();
 
-            List<Guid>  invoiceSettingsIdsForRelatedPartners = null;
+            List<Guid> invoiceSettingsIdsForRelatedPartners = null;
 
             if (input.Query.PartnerIds != null && input.Query.PartnerIds.Count > 0)
             {
                 invoiceSettingsIdsForRelatedPartners = new List<Guid>();
-                foreach(var partnerId in input.Query.PartnerIds )
+                foreach (var partnerId in input.Query.PartnerIds)
                 {
                     var partnerInvoiceSetting = partnerManager.GetInvoicePartnerSetting(input.Query.InvoiceTypeId, partnerId);
                     if (partnerInvoiceSetting != null)
@@ -201,7 +201,8 @@ namespace Vanrise.Invoice.Business
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
                 }
-            }else
+            }
+            else
             {
                 deleteOperationOutput.Message = errorMessage;
                 deleteOperationOutput.ShowExactMessage = true;
@@ -211,19 +212,19 @@ namespace Vanrise.Invoice.Business
         public bool CanDeleteInvoiceSetting(Guid invoiceSettingId)
         {
             string errorMessage;
-            return CanDeleteInvoiceSetting(invoiceSettingId, out  errorMessage);
+            return CanDeleteInvoiceSetting(invoiceSettingId, out errorMessage);
         }
         public bool CanDeleteInvoiceSetting(Guid invoiceSettingId, out string errorMessage)
         {
             errorMessage = null;
             var invoiceSetting = GetInvoiceSetting(invoiceSettingId);
-            if(invoiceSetting.IsDefault)
+            if (invoiceSetting.IsDefault)
             {
                 errorMessage = "Cannot delete default invoice setting.";
                 return false;
             }
             PartnerInvoiceSettingManager partnerInvoiceSettingManager = new PartnerInvoiceSettingManager();
-            if(partnerInvoiceSettingManager.CheckIfInvoiceSettingHasLinkedPartners(invoiceSettingId))
+            if (partnerInvoiceSettingManager.CheckIfInvoiceSettingHasLinkedPartners(invoiceSettingId))
             {
                 errorMessage = "Cannot delete invoice setting with linked partners.";
                 return false;
@@ -248,7 +249,7 @@ namespace Vanrise.Invoice.Business
             if (invoiceSetting == null)
                 throw new NullReferenceException("invoiceSetting");
 
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceSetting.InvoiceTypeId);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceSetting.InvoiceTypeId, true);
             if (invoiceType == null)
                 throw new NullReferenceException("invoiceType");
             if (invoiceType.Settings == null)
@@ -305,7 +306,7 @@ namespace Vanrise.Invoice.Business
         public AutomaticInvoiceSettingPartRuntime GetAutomaticInvoiceSettingPartRuntime(Guid invoiceTypeId)
         {
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
+            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId, true);
             return new AutomaticInvoiceSettingPartRuntime
             {
                 AutomaticInvoiceActions = invoiceType.Settings.AutomaticInvoiceActions,

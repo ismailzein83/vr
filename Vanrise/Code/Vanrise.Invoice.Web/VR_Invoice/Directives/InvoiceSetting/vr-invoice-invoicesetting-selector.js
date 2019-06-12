@@ -49,14 +49,17 @@ app.directive('vrInvoiceInvoicesettingSelector', ['VR_Invoice_InvoiceSettingAPIS
 
             var multipleselection = "";
             var label = "Invoice Setting";
+            var localizedlabel = "VRRes.Invoice.InvoiceSettings.VREnd";
+
             if (attrs.ismultipleselection != undefined) {
                 label = "Invoice Settings";
                 multipleselection = "ismultipleselection";
             }
-            if (attrs.customlabel != undefined)
-            {
+            if (attrs.customlabel != undefined) {
                 label = attrs.customlabel;
             }
+            if (attrs.localizedlabel != undefined)
+                localizedlabel = attrs.localizedlabel;
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewInvoiceSetting"';
@@ -65,7 +68,7 @@ app.directive('vrInvoiceInvoicesettingSelector', ['VR_Invoice_InvoiceSettingAPIS
             if (attrs.showviewbutton != undefined)
                 viewCliked = 'onviewclicked="ctrl.ViewInvoiceSetting"';
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="InvoiceSettingId" label="' + label + '" ' + addCliked + viewCliked + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="InvoiceSetting" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select localizedlabel="' + localizedlabel + '"' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="InvoiceSettingId" label="' + label + '" ' + addCliked + viewCliked + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="InvoiceSetting" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
         }
 
         function currencyCtor(ctrl, $scope, attrs) {
@@ -93,7 +96,7 @@ app.directive('vrInvoiceInvoicesettingSelector', ['VR_Invoice_InvoiceSettingAPIS
                 ctrl.haspermission = function () {
                     var promise = UtilsService.createPromiseDeferred();
                     setInvoiceTypeIdPromise.promise.then(function () {
-                        return VR_Invoice_InvoiceSettingAPIService.HasAddInvoiceSettingPermission(invoiceTypeId).then(function(response){
+                        return VR_Invoice_InvoiceSettingAPIService.HasAddInvoiceSettingPermission(invoiceTypeId).then(function (response) {
                             promise.resolve(response);
                         }).catch(function (error) {
                             promise.reject(error);

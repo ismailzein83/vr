@@ -67,7 +67,7 @@ namespace Vanrise.Invoice.Business
             }
             return orderedRecords;
         }
-        private IEnumerable<GroupingInvoiceItemDetail> GetOrderedByAllMeasures(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext,List<Guid> measureIds, IEnumerable<GroupingInvoiceItemDetail> allRecords)
+        private IEnumerable<GroupingInvoiceItemDetail> GetOrderedByAllMeasures(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext, List<Guid> measureIds, IEnumerable<GroupingInvoiceItemDetail> allRecords)
         {
 
             List<string> orderByMeasures = new List<string>();

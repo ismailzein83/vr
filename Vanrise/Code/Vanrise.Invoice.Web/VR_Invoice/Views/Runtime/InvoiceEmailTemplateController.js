@@ -2,9 +2,9 @@
 
     "use strict";
 
-    invoiceTemplateEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceEmailActionAPIService', 'VR_Invoice_InvoiceTypeAPIService', 'VRCommon_VRMailAPIService'];
+    invoiceTemplateEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceEmailActionAPIService', 'VR_Invoice_InvoiceTypeAPIService', 'VRCommon_VRMailAPIService','VRLocalizationService'];
 
-    function invoiceTemplateEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceEmailActionAPIService, VR_Invoice_InvoiceTypeAPIService, VRCommon_VRMailAPIService) {
+    function invoiceTemplateEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceEmailActionAPIService, VR_Invoice_InvoiceTypeAPIService, VRCommon_VRMailAPIService, VRLocalizationService) {
         var invoiceId;
         var invoiceActionId;
         var invoiceTypeId;
@@ -30,6 +30,8 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
+
             $scope.scopeModel.uploadedAttachements = [];
             $scope.scopeModel.onUploadedAttachementFileReady = function (api) {
                 fileAPI = api;
@@ -102,16 +104,14 @@
 
                 var emailObject = buildInvoiceTemplateObjFromScope();
                 return VR_Invoice_InvoiceEmailActionAPIService.SendEmail(emailObject)
-               .then(function (response) {
-                   if ($scope.onInvoiceEmailSend != undefined)
-                       $scope.onInvoiceEmailSend(response);
-                   $scope.modalContext.closeModal();
-               })
-               .catch(function (error) {
-                   VRNotificationService.notifyException(error, $scope);
-               }).finally(function () {
-                   $scope.scopeModel.isLoading = false;
-               });
+                    .then(function (response) {
+                        if ($scope.onInvoiceEmailSend != undefined)
+                            $scope.onInvoiceEmailSend(response);
+                        $scope.modalContext.closeModal();
+                    })
+                  .finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
             }
         }
 
@@ -161,12 +161,12 @@
             }
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, getInvoiceEmail])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.scopeModel.isLoading = false;
-              });
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
         }
 
         function getInvoiceEmail() {

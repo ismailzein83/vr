@@ -1,6 +1,6 @@
 ﻿'use strict';
 app.directive('vrCommonBooleanSelector', ['UtilsService', 'VRUIUtilsService',
-    function ( UtilsService, VRUIUtilsService) {
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -10,6 +10,7 @@ app.directive('vrCommonBooleanSelector', ['UtilsService', 'VRUIUtilsService',
                 isdisabled: "=",
                 onselectionchanged: '=',
                 isrequired: "@",
+                localizedlabel: "@",
                 selectedvalues: '=',
                 normalColNum: '@'
 
@@ -45,20 +46,24 @@ app.directive('vrCommonBooleanSelector', ['UtilsService', 'VRUIUtilsService',
 
             var multipleselection = "";
             var label = "";
+            var localizedlabel = "";
+
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
             }
 
             if (attrs.label != undefined)
                 label = attrs.label;
-
+            if (attrs.localizedlabel != undefined)
+                localizedlabel = ' localizedlabel="'+attrs.localizedlabel+'"';
+          
             var required = "";
             if (attrs.isrequired != undefined)
                 required = "isrequired";
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-                + '<vr-select ' + multipleselection +  ' datatextfield="description" datavaluefield="value" '
-                + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" on-ready="onSelectorReady"></vr-select>'
+                + '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" '
+                + required + localizedlabel +' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" on-ready="onSelectorReady"></vr-select>'
                 + '</vr-columns>';
         }
 

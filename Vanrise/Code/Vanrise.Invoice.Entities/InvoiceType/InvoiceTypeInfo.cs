@@ -10,6 +10,6 @@ namespace Vanrise.Invoice.Entities
     {
         public Guid InvoiceTypeId { get; set; }
         public string Name { get; set; }
-        public string TextResourceKey { get; set; }
+        public string NameResourceKey { get; set; }
     }
 }

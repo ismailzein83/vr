@@ -7,6 +7,7 @@ app.directive('vrCommonCurrencyRemoteselector', ['VRCommon_VRRestCurrencyAPIServ
             scope: {
                 onReady: '=',
                 ismultipleselection: "@",
+                localizedlabel: "@",
                 onselectionchanged: '=',
                 selectedvalues: '=',
                 isrequired: "=",
@@ -49,14 +50,19 @@ app.directive('vrCommonCurrencyRemoteselector', ['VRCommon_VRRestCurrencyAPIServ
 
             var multipleselection = "";
             var label = "Currency";
+            var localizedlabel = "VRRes.Common.Currency.VREnd";
+
             if (attrs.ismultipleselection != undefined) {
                 label = "Currencies";
+                localizedlabel = "VRRes.Common.Currencies.VREnd";
                 multipleselection = "ismultipleselection";
             }
+            if (attrs.localizedlabel != undefined)
+                localizedlabel = attrs.localizedlabel;
             var hideremoveicon = "";
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Symbol" datavaluefield="CurrencyId" label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"  ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' localizedlabel="' + localizedlabel + '" on-ready="ctrl.onSelectorReady" datatextfield="Symbol" datavaluefield="CurrencyId" label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"  ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
         }
 
         function currencyCtor(ctrl, $scope, attrs) {

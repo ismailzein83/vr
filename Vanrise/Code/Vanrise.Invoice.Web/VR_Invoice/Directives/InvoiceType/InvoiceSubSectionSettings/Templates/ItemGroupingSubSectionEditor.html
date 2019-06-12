@@ -7,6 +7,7 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.sectionTitle" label="Section Title" isrequired="true"></vr-textbox>
                         </vr-columns>
+                        <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceSelectorReady" normal-col-num="6"></vr-common-vrlocalizationtextresource-selector>
                     </vr-row>
                 </vr-tab>
                 <vr-invoicetype-invoicesubsectionsettings-itemgrouping-subsectionsettings on-ready="scopeModel.onItemGroupingSubSectionSettingsReady"></vr-invoicetype-invoicesubsectionsettings-itemgrouping-subsectionsettings>
@@ -14,7 +15,7 @@
                     <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterReady"></vr-genericdata-recordfilter>
                 </vr-tab>
             </vr-tabs>
-     
+
 
         </vr-form>
     </vr-modalbody>

@@ -14,6 +14,9 @@
         var invoiceItemSubSectionGridColumnsAPI;
         var invoiceItemSubSectionGridColumnsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -29,6 +32,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onInvoiceItemSubSectionReady = function (api) {
                 invoiceItemSubSectionGridColumnsAPI = api;
                 invoiceItemSubSectionGridColumnsReadyPromiseDeferred.resolve();
@@ -40,12 +44,16 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
             function builSubSectionObjFromScope() {
                 return {
                     SectionTitle: $scope.scopeModel.sectionTitle,
                     UniqueSectionID: UtilsService.guid(),
-                    Settings: invoiceItemSubSectionGridColumnsAPI.getData()
+                    Settings: invoiceItemSubSectionGridColumnsAPI.getData(),
+                    SectionTitleResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
                 };
             }
             function addeSubSection() {
@@ -93,8 +101,19 @@
                     });
                     return invoiceItemSubSectionGridColumnsDeferredLoadPromiseDeferred.promise;
                 }
+                function loadLocalizationTextResourceSelector() {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceItemSubSectionSettings]).then(function () {
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        var localizationTextResourcePayload = subSectionEntity != undefined ? { selectedValue: subSectionEntity.SectionTitleResourceKey } : undefined;
+
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
+                var promises = [setTitle, loadStaticData, loadInvoiceItemSubSectionSettings, loadLocalizationTextResourceSelector];
+
+                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;

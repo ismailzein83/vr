@@ -193,7 +193,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService', 'VRCommon_Object
             };
 
             var parameters = {
-                sectionTitleValue: sectionEntity,
+                sectionEntity: sectionEntity,
                 exitingSections: exitingSections
             };
 
@@ -302,7 +302,7 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService', 'VRCommon_Object
             addGroupItemSubSection: addGroupItemSubSection,
 
             addInvoiceSettingSection: addInvoiceSettingSection,
-            editInvoiceSettingSection:editInvoiceSettingSection,
+            editInvoiceSettingSection: editInvoiceSettingSection,
             addInvoiceSettingPart: addInvoiceSettingPart,
             editInvoiceSettingPart: editInvoiceSettingPart,
             registerObjectTrackingDrillDownToInvoiceType: registerObjectTrackingDrillDownToInvoiceType,

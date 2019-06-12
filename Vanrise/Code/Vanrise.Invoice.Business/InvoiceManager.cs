@@ -37,7 +37,7 @@ namespace Vanrise.Invoice.Business
         private IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input, bool getClientInvoices)
         {
             InvoiceTypeManager manager = new InvoiceTypeManager();
-            var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
+            var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId, true);
             var result = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler());
             if (input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
@@ -80,7 +80,7 @@ namespace Vanrise.Invoice.Business
                 return null;
             else
             {
-                var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+                var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId, true);
                 var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoiceTypeId, new List<string> { partnerId });
                 invoiceAccounts.ThrowIfNull("invoiceAccounts");
                 var invoiceAccount = invoiceAccounts.FirstOrDefault();
@@ -373,7 +373,7 @@ namespace Vanrise.Invoice.Business
                 }
 
                 List<long> insertedInvoiceIds = null;
-                if (SaveInvoice(preparedGenerateInvoiceInputs, out  insertedInvoiceIds))
+                if (SaveInvoice(preparedGenerateInvoiceInputs, out insertedInvoiceIds))
                 {
                     long invoiceAccountId;
                     var invoiceAccountManager = new InvoiceAccountManager();
@@ -524,7 +524,7 @@ namespace Vanrise.Invoice.Business
         public Entities.InvoiceDetail GetInvoiceDetail(long invoiceId)
         {
             var invoice = GetInvoice(invoiceId);
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId, true);
             var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> { invoice.PartnerId });
             invoiceAccounts.ThrowIfNull("invoiceAccounts");
             var invoiceAccount = invoiceAccounts.FirstOrDefault();
@@ -752,7 +752,7 @@ namespace Vanrise.Invoice.Business
 
         public List<Guid> GetAvailableMenualBulkActionIds(Guid invoiceTypeId)
         {
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId, true);
             if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.InvoiceBulkActions != null && invoiceType.Settings.InvoiceBulkActions.Count > 0)
             {
                 var allowedBulkActionIds = new List<Guid>();
@@ -990,7 +990,7 @@ namespace Vanrise.Invoice.Business
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
                 InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
+                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId, true);
                 invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
                 invoiceType.Settings.InvoiceGridSettings.ThrowIfNull("invoiceType.Settings.InvoiceGridSettings");
@@ -1059,37 +1059,52 @@ namespace Vanrise.Invoice.Business
                                 dynamic value = null;
                                 switch (gridColumn.Field)
                                 {
-                                    case InvoiceField.CreatedTime: value = item.Entity.CreatedTime;
+                                    case InvoiceField.CreatedTime:
+                                        value = item.Entity.CreatedTime;
                                         break;
 
-                                    case InvoiceField.DueDate: value = item.Entity.DueDate;
+                                    case InvoiceField.DueDate:
+                                        value = item.Entity.DueDate;
                                         break;
-                                    case InvoiceField.FromDate: value = item.Entity.FromDate;
+                                    case InvoiceField.FromDate:
+                                        value = item.Entity.FromDate;
                                         break;
-                                    case InvoiceField.InvoiceId: value = item.Entity.InvoiceId;
+                                    case InvoiceField.InvoiceId:
+                                        value = item.Entity.InvoiceId;
                                         break;
-                                    case InvoiceField.IsAutomatic: value = item.Entity.IsAutomatic;
+                                    case InvoiceField.IsAutomatic:
+                                        value = item.Entity.IsAutomatic;
                                         break;
-                                    case InvoiceField.IssueDate: value = item.Entity.IssueDate;
+                                    case InvoiceField.IssueDate:
+                                        value = item.Entity.IssueDate;
                                         break;
-                                    case InvoiceField.Lock: value = item.Lock;
+                                    case InvoiceField.Lock:
+                                        value = item.Lock;
                                         break;
-                                    case InvoiceField.Note: value = item.Entity.Note;
+                                    case InvoiceField.Note:
+                                        value = item.Entity.Note;
                                         break;
-                                    case InvoiceField.Paid: value = item.Paid;
+                                    case InvoiceField.Paid:
+                                        value = item.Paid;
                                         break;
-                                    case InvoiceField.Partner: value = item.PartnerName;
+                                    case InvoiceField.Partner:
+                                        value = item.PartnerName;
                                         break;
-                                    case InvoiceField.SerialNumber: value = item.Entity.SerialNumber;
+                                    case InvoiceField.SerialNumber:
+                                        value = item.Entity.SerialNumber;
                                         break;
 
-                                    case InvoiceField.ToDate: value = item.Entity.ToDate.Date;
+                                    case InvoiceField.ToDate:
+                                        value = item.Entity.ToDate.Date;
                                         break;
-                                    case InvoiceField.UserId: value = item.UserName;
+                                    case InvoiceField.UserId:
+                                        value = item.UserName;
                                         break;
-                                    case InvoiceField.IsSent: value = item.IsSent;
+                                    case InvoiceField.IsSent:
+                                        value = item.IsSent;
                                         break;
-                                    case InvoiceField.ApprovedBy:value = item.ApprovedByName;
+                                    case InvoiceField.ApprovedBy:
+                                        value = item.ApprovedByName;
                                         break;
                                     case InvoiceField.CustomField:
                                         foreach (var field in dataRecordType.Fields)
@@ -1419,7 +1434,7 @@ namespace Vanrise.Invoice.Business
             if (input.InvoiceBulkActions == null || input.InvoiceBulkActions.Count == 0)
                 return new ExecuteMenualInvoiceActionsOutput { Succeed = false, OutputMessage = "At least one invoice action should be selected." };
 
-            if(!new InvoiceTypeManager().DoesUserHaveSpecificActionAccess(input.InvoiceBulkActions, input.InvoiceTypeId, userId))
+            if (!new InvoiceTypeManager().DoesUserHaveSpecificActionAccess(input.InvoiceBulkActions, input.InvoiceTypeId, userId))
                 return new ExecuteMenualInvoiceActionsOutput { Succeed = false, OutputMessage = "you are not authorized to perform this request." };
 
 

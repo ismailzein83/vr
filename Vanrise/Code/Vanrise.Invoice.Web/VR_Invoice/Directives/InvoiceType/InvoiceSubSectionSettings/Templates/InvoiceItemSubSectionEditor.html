@@ -7,9 +7,10 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.sectionTitle" label="Section Title" isrequired="true"></vr-textbox>
                         </vr-columns>
+                        <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onLocalizationTextResourceSelectorReady" normal-col-num="6"></vr-common-vrlocalizationtextresource-selector>
                     </vr-row>
                 </vr-tab>
-                    <vr-invoicetype-invoiceuisubsectionsettings-invoiceitem-subsectionsettings on-ready="scopeModel.onInvoiceItemSubSectionReady"></vr-invoicetype-invoiceuisubsectionsettings-invoiceitem-subsectionsettings>
+                <vr-invoicetype-invoiceuisubsectionsettings-invoiceitem-subsectionsettings on-ready="scopeModel.onInvoiceItemSubSectionReady"></vr-invoicetype-invoiceuisubsectionsettings-invoiceitem-subsectionsettings>
             </vr-tabs>
 
         </vr-form>

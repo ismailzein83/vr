@@ -17,6 +17,8 @@
         var recordFilterAPI;
         var recordFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -33,6 +35,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onItemGroupingSubSectionSettingsReady = function (api) {
                 itemGroupingSubSectionSettingsAPI = api;
                 itemGroupingSubSectionSettingsReadyPromiseDeferred.resolve();
@@ -47,14 +50,18 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
+            };
             function builSubSectionObjFromScope() {
                 var filterGroup = recordFilterAPI.getData();
                 return {
-                    InvoiceSubSectionId: subSectionEntity != undefined && subSectionEntity.InvoiceSubSectionId  != undefined? subSectionEntity.InvoiceSubSectionId : UtilsService.guid(),
+                    InvoiceSubSectionId: subSectionEntity != undefined && subSectionEntity.InvoiceSubSectionId != undefined ? subSectionEntity.InvoiceSubSectionId : UtilsService.guid(),
                     SectionTitle: $scope.scopeModel.sectionTitle,
                     Settings: itemGroupingSubSectionSettingsAPI.getData(),
                     SubSectionFilter: filterGroup != undefined ? filterGroup.filterObj : undefined,
+                    SectionTitleResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
                 };
             }
             function addeSubSection() {
@@ -98,7 +105,7 @@
                     var itemGroupingSubSectionSettingsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     itemGroupingSubSectionSettingsReadyPromiseDeferred.promise.then(function () {
                         var itemGroupingDirectivePayload = { context: getContext() };
-                        if(subSectionEntity != undefined)
+                        if (subSectionEntity != undefined)
                             itemGroupingDirectivePayload.subSectionSettingsEntity = subSectionEntity.Settings;
                         VRUIUtilsService.callDirectiveLoad(itemGroupingSubSectionSettingsAPI, itemGroupingDirectivePayload, itemGroupingSubSectionSettingsDeferredLoadPromiseDeferred);
                     });
@@ -116,7 +123,18 @@
                     });
                     return recordFilterLoadPromiseDeferred.promise;
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadItemGroupingSubSectionSettings, loadRecordFilterDirective]).then(function () {
+                function loadLocalizationTextResourceSelector() {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        var localizationTextResourcePayload = subSectionEntity != undefined ? { selectedValue: subSectionEntity.SectionTitleResourceKey } : undefined;
+
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
+                var promises = [setTitle, loadStaticData, loadItemGroupingSubSectionSettings, loadRecordFilterDirective, loadLocalizationTextResourceSelector];
+                return UtilsService.waitMultipleAsyncOperations(promises).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -126,11 +144,9 @@
             }
 
         }
-        function getContext()
-        {
+        function getContext() {
             var currentContext = context;
-            if(currentContext == undefined)
-            {
+            if (currentContext == undefined) {
                 currentContext = {};
             }
             currentContext.getFields = function () {

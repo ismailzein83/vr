@@ -101,7 +101,8 @@
         var invoiceMenualActionsAPI;
         var invoiceMenualActionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
+        var localizationTextResourceSelectorAPI;
+        var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var stagesToHoldAPI;
         var stagesToProcessAPI;
 
@@ -121,9 +122,14 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
             $scope.scopeModel.onMenualActionsReady = function (api) {
                 invoiceMenualActionsAPI = api;
                 invoiceMenualActionsReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onLocalizationTextResourceSelectorReady = function (api) {
+                localizationTextResourceSelectorAPI = api;
+                localizationTextResourceSelectorReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.onCommentDefinitionSelectorReady = function (api) {
@@ -364,7 +370,8 @@
                         ItemSetNamesStorageRules: itemSetNameStorageRuleAPI.getData(),
                         InvToAccBalanceRelationId: relationDefinitionSelectorAPI.getSelectedIds(),
                         InvoiceCommentDefinitionId: commentDefinitionAPI.getSelectedIds(),
-                        HidePaidFilter: $scope.scopeModel.hidePaidFilter
+                        HidePaidFilter: $scope.scopeModel.hidePaidFilter,
+                        TitleResourceKey: localizationTextResourceSelectorAPI != undefined ? localizationTextResourceSelectorAPI.getSelectedValues() : undefined
                     }
                 };
                 return obj;
@@ -423,7 +430,7 @@
             }
 
             function getInvoiceType() {
-                return VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId).then(function (response) {
+                return VR_Invoice_InvoiceTypeAPIService.GetInvoiceType(invoiceTypeId,false).then(function (response) {
                     invoiceTypeEntity = response;
                 });
             }
@@ -458,6 +465,16 @@
                     return dataRecordTypeSelectorLoadPromiseDeferred.promise;
                 }
 
+                function loadLocalizationTextResourceSelector(localizationTextResourcePayload) {
+                    var localizationTextResourceSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    localizationTextResourceSelectorReadyPromiseDeferred.promise.then(function () {
+                        var localizationTextResourcePayload = invoiceTypeEntity != undefined ? { selectedValue: invoiceTypeEntity.Settings.TitleResourceKey } : undefined;
+
+                        VRUIUtilsService.callDirectiveLoad(localizationTextResourceSelectorAPI, localizationTextResourcePayload, localizationTextResourceSelectorLoadPromiseDeferred);
+                    });
+                    return localizationTextResourceSelectorLoadPromiseDeferred.promise;
+                }
                 function loadMainGridColumnsSection() {
                     var mainGridColumnsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -814,9 +831,9 @@
                     });
                     return commentDefinitionSelectorLoadPromiseDeferred.promise;
                 }
+                var promises = [setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection, loadCommentDefinitionSelector, loadLocalizationTextResourceSelector];
 
-
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection, loadCommentDefinitionSelector])
+                return UtilsService.waitMultipleAsyncOperations(promises)
                     .catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     })
@@ -851,7 +868,7 @@
                     var invoiceActionsInfo = [];
                     var actions = invoiceActionsAPI.getData();
                     if (actions != undefined && actions.length > 0) {
-                        for (var i = 0; i < actions.length ; i++) {
+                        for (var i = 0; i < actions.length; i++) {
                             var action = actions[i];
                             invoiceActionsInfo.push({
                                 Title: action.Title,
@@ -866,7 +883,7 @@
                     var invoiceBulkActionsInfo = [];
                     var bulkActions = invoiceBulkActionsAPI.getData();
                     if (bulkActions != undefined && bulkActions.length > 0) {
-                        for (var i = 0; i < bulkActions.length ; i++) {
+                        for (var i = 0; i < bulkActions.length; i++) {
                             var bulkAction = bulkActions[i];
                             invoiceBulkActionsInfo.push({
                                 Title: bulkAction.Title,
@@ -945,7 +962,7 @@
                     var invoiceAttchamentsInfo = [];
                     var invoiceAttchaments = invoiceAttachmentsAPI.getData();
                     if (invoiceAttchaments != undefined && invoiceAttchaments.length > 0) {
-                        for (var i = 0; i < invoiceAttchaments.length ; i++) {
+                        for (var i = 0; i < invoiceAttchaments.length; i++) {
                             var invoiceAttchament = invoiceAttchaments[i];
                             invoiceAttchamentsInfo.push({
                                 Title: invoiceAttchament.Title,

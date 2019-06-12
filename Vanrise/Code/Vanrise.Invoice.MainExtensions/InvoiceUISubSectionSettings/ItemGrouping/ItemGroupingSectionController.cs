@@ -16,7 +16,7 @@ namespace Vanrise.Invoice.MainExtensions
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "ItemGroupingSection")]
     [JSONWithTypeAttribute]
-    public class ItemGroupingSectionController:BaseAPIController
+    public class ItemGroupingSectionController : BaseAPIController
     {
         [HttpPost]
         [Route("GetFilteredGroupingInvoiceItems")]
@@ -34,10 +34,10 @@ namespace Vanrise.Invoice.MainExtensions
                 Query = new GroupingInvoiceItemQuery
                 {
                     DimensionIds = input.Query.DimensionIds,
-                    Filters=input.Query.Filters,
-                    InvoiceId=input.Query.InvoiceId,
-                    InvoiceTypeId=input.Query.InvoiceTypeId,
-                    ItemGroupingId=input.Query.ItemGroupingId,
+                    Filters = input.Query.Filters,
+                    InvoiceId = input.Query.InvoiceId,
+                    InvoiceTypeId = input.Query.InvoiceTypeId,
+                    ItemGroupingId = input.Query.ItemGroupingId,
                     MeasureIds = input.Query.MeasureIds,
                     UniqueSectionID = input.Query.UniqueSectionID
                 },
@@ -58,12 +58,12 @@ namespace Vanrise.Invoice.MainExtensions
                     RecordFilterManager filterManager = new RecordFilterManager();
                     Dictionary<string, ItemGroupingFieldInfo> fieldInfo = new Dictionary<string, ItemGroupingFieldInfo>();
                     ItemGroupingSectionSettings section = null;
-                    if( input.Query.SectionId.HasValue)
+                    if (input.Query.SectionId.HasValue)
                     {
 
-                        var invoiceType = new InvoiceTypeManager().GetInvoiceType(input.Query.InvoiceTypeId);
+                        var invoiceType = new InvoiceTypeManager().GetInvoiceType(input.Query.InvoiceTypeId, true);
                         section = GetSection(invoiceType, input.Query.SectionId.Value);
-                        if(section != null)
+                        if (section != null)
                         {
                             if (section.SubSections != null)
                             {
@@ -108,13 +108,13 @@ namespace Vanrise.Invoice.MainExtensions
                             SubSectionsIds = new List<Guid>()
                         };
 
-                        if (section != null &&  section.SubSections != null)
+                        if (section != null && section.SubSections != null)
                         {
                             ItemGroupingFilterFieldMatchContext context = new ItemGroupingFilterFieldMatchContext(item, fieldInfo);
 
                             foreach (var subSection in section.SubSections)
                             {
-                                if (subSection.SubSectionFilter==null || filterManager.IsFilterGroupMatch(subSection.SubSectionFilter, context))
+                                if (subSection.SubSectionFilter == null || filterManager.IsFilterGroupMatch(subSection.SubSectionFilter, context))
                                     itemGroupingSectionResult.SubSectionsIds.Add(subSection.InvoiceSubSectionId);
                             }
                         }
@@ -134,7 +134,7 @@ namespace Vanrise.Invoice.MainExtensions
         private string GetSectionTitle(Guid invoiceTypeId, Guid uniqueSectionID)
         {
             string sectionTitle = null;
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId, true);
             invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceTypeId);
             invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", invoiceTypeId);
@@ -194,24 +194,25 @@ namespace Vanrise.Invoice.MainExtensions
         private ItemGroupingSectionSettings GetSection(InvoiceType invoiceType, Guid sectionId)
         {
             ItemGroupingSectionSettings subsectionItem = null;
-            foreach(var section in invoiceType.Settings.SubSections)
+            foreach (var section in invoiceType.Settings.SubSections)
             {
 
                 var subSection = section.Settings as ItemGroupingSection;
-                if(subSection != null)
+                if (subSection != null)
                 {
-                    if(section.InvoiceSubSectionId == sectionId)
+                    if (section.InvoiceSubSectionId == sectionId)
                     {
                         subsectionItem = subSection.Settings;
                         break;
                     }
-                    foreach(var item in subSection.Settings.SubSections)
+                    foreach (var item in subSection.Settings.SubSections)
                     {
-                        if(item.InvoiceSubSectionId == sectionId)
+                        if (item.InvoiceSubSectionId == sectionId)
                         {
                             subsectionItem = item.Settings;
                             break;
-                        }else
+                        }
+                        else
                         {
                             subsectionItem = GetSection(item.Settings.SubSections, sectionId);
                             if (subsectionItem != null)

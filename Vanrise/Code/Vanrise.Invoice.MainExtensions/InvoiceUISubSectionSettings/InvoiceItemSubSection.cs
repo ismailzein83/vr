@@ -10,7 +10,7 @@ namespace Vanrise.Invoice.MainExtensions
 {
     public class InvoiceItemSubSection : InvoiceSubSectionSettings
     {
-        public override Guid ConfigId { get { return  new Guid("E46CBB79-5448-460E-A94A-3C6405C5BB5F"); } }
+        public override Guid ConfigId { get { return new Guid("E46CBB79-5448-460E-A94A-3C6405C5BB5F"); } }
         public string ItemSetName { get; set; }
         public CompareOperator CompareOperator { get; set; }
         public List<InvoiceSubSectionGridColumn> GridColumns { get; set; }
@@ -62,6 +62,15 @@ namespace Vanrise.Invoice.MainExtensions
             }
             return gridColumns;
         }
+        public override void ApplyTranslation(IInvoiceTranslationContext context)
+        {
+            if (SubSections != null && SubSections.Count > 0)
+            {
+                foreach (var subsection in SubSections)
+                {
+                    subsection.ApplyTranslation(context);
+                }
+            }
+        }
     }
-
 }

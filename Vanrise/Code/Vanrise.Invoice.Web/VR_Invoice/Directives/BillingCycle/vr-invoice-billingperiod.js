@@ -12,7 +12,7 @@
                 normalColNum: '@',
                 label: '@',
                 customvalidate: '=',
-                isrequired:'='
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -135,9 +135,10 @@
                 + ' datavaluefield="ExtensionConfigurationId"'
                 + ' datatextfield="Title"'
                 + 'label="Billing Period" '
-                + ' ' + hideremoveicon +' '
+                + 'localizedlabel="VRRes.Invoice.BillingPeriod.VREnd" '
+                + ' ' + hideremoveicon + ' '
                 + 'isrequired ="ctrl.isrequired"'
-                +' >'
+                + ' >'
                 + '</vr-select>'
                 + ' </vr-columns>'
                 + '<vr-columns colnum="12" haschildcolumns>'

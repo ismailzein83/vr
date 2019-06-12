@@ -10,6 +10,7 @@
                                entityname="Action"
                                isrequired="true"
                                label="Action"
+                               localizedlabel="VRRes.Common.Action.VREnd"
                                onselectionchanged="scopeModel.onMenualBulkActionSelectionChanged">
                     </vr-select>
 
@@ -22,16 +23,17 @@
                                entityname="Handling"
                                isrequired="true"
                                label="Error Handling"
+                               localizedlabel="VRRes.Common.ErrorHandling.VREnd"
                                hideremoveicon
                                onselectionchanged="scopeModel.onMenualBulkActionSelectionChanged">
                     </vr-select>
                 </vr-columns>
             </vr-row>
-            
+
             <vr-directivewrapper ng-if="scopeModel.selectedMenualBulkAction != undefined" directive="scopeModel.runtimeEditor" vr-loader="scopeModel.isLoadingDirective"
-                                    on-ready="scopeModel.onDirectiveReady">
-            </vr-directivewrapper> 
-           
+                                 on-ready="scopeModel.onDirectiveReady">
+            </vr-directivewrapper>
+
         </vr-form>
     </vr-modalbody>
     <div>

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VRCommon_GridWidthFactorEnum",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_GridWidthFactorEnum) {
+app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRCommon_GridWidthFactorEnum", "VRLocalizationService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_GridWidthFactorEnum, VRLocalizationService) {
 
         var directiveDefinitionObject = {
 
@@ -44,11 +44,14 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                 $scope.scopeModel.selectedDimensions = [];
                 $scope.scopeModel.selectedMeasures = [];
 
+                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
+
+
                 $scope.scopeModel.onSelectDimensionItem = function (dimension) {
                     var dataItem = {
                         DimensionItemFieldId: dimension.DimensionItemFieldId,
                         FieldDescription: dimension.FieldDescription,
-                        FieldName: dimension.FieldName
+                        FieldName: dimension.FieldName,
                     };
                     dataItem.onDimensionGridWidthFactorEditorReady = function (api) {
                         dataItem.dimensionGridWidthFactorAPI = api;
@@ -60,7 +63,13 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                         var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
-
+                    if ($scope.scopeModel.isLocalizationEnabled) {
+                        dataItem.onTextResourceSelectorReady = function (api) {
+                            dataItem.textResourceSeletorAPI = api;
+                            var setLoader = function (value) { dataItem.isDimensionTextResourceSelectorLoading = value; };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
+                        };
+                    }
                     $scope.scopeModel.dimensions.push(dataItem);
                 };
                 $scope.scopeModel.onDeselectDimensionItem = function (dimension) {
@@ -78,7 +87,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                     var dataItem = {
                         MeasureItemFieldId: measure.MeasureItemFieldId,
                         FieldDescription: measure.FieldDescription,
-                        FieldName: measure.FieldName
+                        FieldName: measure.FieldName,
                     };
                     dataItem.onMeasureGridWidthFactorEditorReady = function (api) {
                         dataItem.measureGridWidthFactorAPI = api;
@@ -90,7 +99,13 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                         var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.measureGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
-
+                    if ($scope.scopeModel.isLocalizationEnabled) {
+                        dataItem.onTextResourceSelectorReady = function (api) {
+                            dataItem.textResourceSeletorAPI = api;
+                            var setLoader = function (value) { dataItem.isMeasureTextResourceSelectorLoading = value; };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.textResourceSeletorAPI, undefined, setLoader);
+                        };
+                    }
                     $scope.scopeModel.measures.push(dataItem);
                 };
                 $scope.scopeModel.onDeselectMeasureItem = function (measure) {
@@ -134,9 +149,13 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                 var dimensionGridField = {
                                     payload: gridDimension,
                                     readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                    loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                                 };
                                 promises.push(dimensionGridField.loadPromiseDeferred.promise);
+                                if ($scope.scopeModel.isLocalizationEnabled)
+                                    promises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
                                 addSelectedDimension(dimensionGridField);
                             }
                             for (var j = 0; j < subSectionSettingsEntity.GridMeasures.length; j++) {
@@ -144,9 +163,14 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                 var measureGridField = {
                                     payload: gridMeasure,
                                     readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                    loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                                 };
                                 promises.push(measureGridField.loadPromiseDeferred.promise);
+                                if ($scope.scopeModel.isLocalizationEnabled)
+                                    promises.push(measureGridField.textResourceLoadPromiseDeferred.promise);
+
                                 addSelectedMeasure(measureGridField);
                             }
                             function addSelectedDimension(gridDimension) {
@@ -156,6 +180,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                         Width: VRCommon_GridWidthFactorEnum.Normal.value
                                     }
                                 };
+                                var textResourcePayload;
                                 var groupItemDimension;
 
                                 var dataItem = {};
@@ -165,15 +190,30 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                     dataItem.FieldDescription = gridDimension.payload.Header;
                                     dataItem.FieldName = groupItemDimension.FieldName;
                                     dataItemPayload.data = gridDimension.payload.GridColumnSettings;
+                                    textResourcePayload = { selectedValue: gridDimension.payload.HeaderResourceKey };
+
                                 }
                                 dataItem.onDimensionGridWidthFactorEditorReady = function (api) {
                                     dataItem.dimensionGridWidthFactorAPI = api;
                                     gridDimension.readyPromiseDeferred.resolve();
                                 };
+                                if ($scope.scopeModel.isLocalizationEnabled) {
+
+                                    dataItem.onTextResourceSelectorReady = function (api) {
+                                        dataItem.textResourceSeletorAPI = api;
+                                        gridDimension.textResourceReadyPromiseDeferred.resolve();
+                                    };
+
+                                    gridDimension.textResourceReadyPromiseDeferred.promise
+                                        .then(function () {
+                                            VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridDimension.textResourceLoadPromiseDeferred);
+                                        });
+                                }
                                 gridDimension.readyPromiseDeferred.promise
                                     .then(function () {
                                         VRUIUtilsService.callDirectiveLoad(dataItem.dimensionGridWidthFactorAPI, dataItemPayload, gridDimension.loadPromiseDeferred);
                                     });
+
                                 if (groupItemDimension != undefined) {
                                     $scope.scopeModel.selectedDimensions.push(groupItemDimension);
                                     $scope.scopeModel.dimensions.push(dataItem);
@@ -186,7 +226,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                         Width: VRCommon_GridWidthFactorEnum.Normal.value
                                     }
                                 };
-
+                                var textResourcePayload;
                                 var dataItem = {};
 
                                 var groupItemMeasure;
@@ -196,15 +236,32 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                     dataItem.FieldDescription = gridMeasure.payload.Header;
                                     dataItem.FieldName = groupItemMeasure.FieldName;
                                     dataItemPayload.data = gridMeasure.payload.GridColumnSettings;
+                                    textResourcePayload = {
+                                        selectedValue: gridMeasure.payload.HeaderResourceKey
+                                    };
                                 }
                                 dataItem.onMeasureGridWidthFactorEditorReady = function (api) {
                                     dataItem.measureGridWidthFactorAPI = api;
                                     gridMeasure.readyPromiseDeferred.resolve();
                                 };
+
+                                if ($scope.scopeModel.isLocalizationEnabled) {
+                                    dataItem.onTextResourceSelectorReady = function (api) {
+                                        dataItem.textResourceSeletorAPI = api;
+                                        gridMeasure.textResourceReadyPromiseDeferred.resolve();
+                                    };
+                                    gridMeasure.textResourceReadyPromiseDeferred.promise
+                                        .then(function () {
+                                            VRUIUtilsService.callDirectiveLoad(dataItem.textResourceSeletorAPI, textResourcePayload, gridMeasure.textResourceLoadPromiseDeferred);
+                                        });
+                                }
+                               
+
                                 gridMeasure.readyPromiseDeferred.promise
                                     .then(function () {
                                         VRUIUtilsService.callDirectiveLoad(dataItem.measureGridWidthFactorAPI, dataItemPayload, gridMeasure.loadPromiseDeferred);
                                     });
+
                                 if (groupItemMeasure != undefined) {
                                     $scope.scopeModel.selectedMeasures.push(groupItemMeasure);
                                     $scope.scopeModel.measures.push(dataItem);
@@ -235,7 +292,8 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                             dimensions.push({
                                 DimensionId: dimension.DimensionItemFieldId,
                                 Header: dimension.FieldDescription,
-                                GridColumnSettings: dimension.dimensionGridWidthFactorAPI.getData()
+                                GridColumnSettings: dimension.dimensionGridWidthFactorAPI.getData(),
+                                HeaderResourceKey: dimension.textResourceSeletorAPI != undefined ? dimension.textResourceSeletorAPI.getSelectedValues() : undefined
                             });
                         }
                     }
@@ -248,12 +306,13 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                             measures.push({
                                 MeasureId: measure.MeasureItemFieldId,
                                 Header: measure.FieldDescription,
-                                GridColumnSettings: measure.measureGridWidthFactorAPI.getData()
+                                GridColumnSettings: measure.measureGridWidthFactorAPI.getData(),
+                                HeaderResourceKey: measure.textResourceSeletorAPI != undefined ? measure.textResourceSeletorAPI.getSelectedValues() : undefined
                             });
                         }
                     }
                     return {
-                        GridDimesions:dimensions,
+                        GridDimesions: dimensions,
                         GridMeasures: measures,
                         SubSections: itemGroupingSubSectionsAPI.getData(),
                     };
@@ -262,12 +321,10 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            function getContext()
-            {
+            function getContext() {
                 var currentContext = context;
-                if(currentContext ==undefined)
-                {
-                    currentContext ={};
+                if (currentContext == undefined) {
+                    currentContext = {};
                 }
                 return currentContext;
             }

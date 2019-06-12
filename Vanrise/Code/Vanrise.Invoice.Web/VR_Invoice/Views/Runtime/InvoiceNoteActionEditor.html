@@ -3,7 +3,7 @@
         <vr-form name="formGenericInvoiceEditor">
             <vr-row removeline>
                 <vr-columns width="fullrow">
-                    <vr-textarea label="Notes" value="scopeModel.invoiceNote" ></vr-textarea>
+                    <vr-textarea label="Notes" localizedlabel="VRRes.Common.Notes.VREnd" value="scopeModel.invoiceNote"></vr-textarea>
                 </vr-columns>
             </vr-row>
         </vr-form>
@@ -11,7 +11,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save"  formname="formGenericInvoiceEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Save" formname="formGenericInvoiceEditor" data-onclick="scopeModel.save"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

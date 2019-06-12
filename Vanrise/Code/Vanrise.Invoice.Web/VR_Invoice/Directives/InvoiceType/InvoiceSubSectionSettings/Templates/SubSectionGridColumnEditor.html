@@ -5,13 +5,14 @@
                 <vr-columns width="1/2row">
                     <vr-textbox value="header" label="Header" isrequired="true"></vr-textbox>
                 </vr-columns>
+                <vr-common-vrlocalizationtextresource-selector on-ready="onLocalizationTextResourceSelectorReady" normal-col-num="6"></vr-common-vrlocalizationtextresource-selector>
                 <vr-columns width="1/2row">
                     <vr-textbox value="fieldName" label="Field Name" isrequired="true"></vr-textbox>
                 </vr-columns>
                 <vr-common-gridwidthfactor-selector on-ready="onGridWidthFactorSelector" normal-col-num="6" isrequired="true"></vr-common-gridwidthfactor-selector>
             </vr-row>
             <vr-row>
-                <vr-genericdata-fieldtype-selective on-ready="onFieldTypeSelectiveReady" ></vr-genericdata-fieldtype-selective>
+                <vr-genericdata-fieldtype-selective on-ready="onFieldTypeSelectiveReady"></vr-genericdata-fieldtype-selective>
             </vr-row>
         </vr-form>
     </vr-modalbody>

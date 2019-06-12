@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 
@@ -10,7 +11,7 @@ namespace Vanrise.Invoice.Business
 {
     public class InvoiceItemSubSection : InvoiceSubSectionSettings
     {
-        public override Guid ConfigId { get { return  new Guid("E46CBB79-5448-460E-A94A-3C6405C5BB5F"); } }
+        public override Guid ConfigId { get { return new Guid("E46CBB79-5448-460E-A94A-3C6405C5BB5F"); } }
         public string ItemSetName { get; set; }
         public CompareOperator CompareOperator { get; set; }
         public List<InvoiceSubSectionGridColumn> GridColumns { get; set; }
@@ -59,6 +60,25 @@ namespace Vanrise.Invoice.Business
                 }
             }
             return gridColumns;
+        }
+        public override void ApplyTranslation(IInvoiceTranslationContext context)
+        {
+            if (SubSections != null && SubSections.Count > 0)
+            {
+                if (GridColumns != null && GridColumns.Count > 0)
+                {
+                    VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+                    foreach (var gridColumn in GridColumns)
+                    {
+                        if (gridColumn.HeaderResourceKey != null)
+                            gridColumn.Header = vrLocalizationManager.GetTranslatedTextResourceValue(gridColumn.HeaderResourceKey, gridColumn.Header, context.LanguageId);
+                    }
+                }
+                foreach (var subsection in SubSections)
+                {
+                    subsection.ApplyTranslation(context);
+                }
+            }
         }
     }
 

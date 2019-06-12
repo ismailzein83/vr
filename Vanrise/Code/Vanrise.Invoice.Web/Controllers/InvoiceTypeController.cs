@@ -14,15 +14,15 @@ namespace Vanrise.Invoice.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "InvoiceType")]
     [JSONWithTypeAttribute]
 
-    public class InvoiceTypeController:BaseAPIController
+    public class InvoiceTypeController : BaseAPIController
     {
         InvoiceTypeManager _manager = new InvoiceTypeManager();
 
         [HttpGet]
         [Route("GetInvoiceType")]
-        public InvoiceType GetInvoiceType(Guid invoiceTypeId)
+        public InvoiceType GetInvoiceType(Guid invoiceTypeId,bool getTranslated=true)
         {
-            return _manager.GetInvoiceType(invoiceTypeId);
+            return _manager.GetInvoiceType(invoiceTypeId, getTranslated);
         }
         [HttpGet]
         [Route("GetInvoiceTypeRuntime")]
@@ -148,7 +148,7 @@ namespace Vanrise.Invoice.Web.Controllers
         [Route("GetInvoiceSettingPartsInfo")]
         public IEnumerable<InvoiceSettingPartDefinitionInfo> GetInvoiceSettingPartsInfo(string serializedFilter = null)
         {
-            InvoiceSettingPartsInfoFilter deserializedFilter = serializedFilter != null? Serializer.Deserialize<InvoiceSettingPartsInfoFilter>(serializedFilter):null;
+            InvoiceSettingPartsInfoFilter deserializedFilter = serializedFilter != null ? Serializer.Deserialize<InvoiceSettingPartsInfoFilter>(serializedFilter) : null;
             return _manager.GetInvoiceSettingPartsInfo(deserializedFilter);
         }
     }

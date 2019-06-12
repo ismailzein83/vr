@@ -19,19 +19,106 @@ namespace Vanrise.Invoice.Business
     {
 
         #region Public Methods
-        public InvoiceType GetInvoiceType(Guid invoiceTypeId)
+        public InvoiceType GetInvoiceType(Guid invoiceTypeId, bool getTranslated = false)
         {
             var invoiceTypes = GetCachedInvoiceTypes();
-
-            return invoiceTypes.GetRecord(invoiceTypeId);
+            var invoiceType = invoiceTypes.GetRecord(invoiceTypeId);
+            if (getTranslated)
+                return TransalteInvoiceType(invoiceType);
+            return invoiceType;
         }
+        public InvoiceType TransalteInvoiceType(InvoiceType invoiceType)
+        {
+            VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+          
+            var invoiceTypeCopy = invoiceType.VRDeepCopy();
+            if (vrLocalizationManager.IsLocalizationEnabled())
+            {
+                var languageId = vrLocalizationManager.GetCurrentLanguageId();
+                if (languageId.HasValue)
+                {
+                    var languageIdValue = languageId.Value;
+                    if (invoiceTypeCopy != null)
+                    {
+                        if (invoiceTypeCopy.Settings != null)
+                        {
+                            if (invoiceTypeCopy.Settings.TitleResourceKey != null)
+                                invoiceTypeCopy.Name = vrLocalizationManager.GetTranslatedTextResourceValue(invoiceTypeCopy.Settings.TitleResourceKey, invoiceTypeCopy.Name, languageIdValue);
 
+                            if (invoiceTypeCopy.Settings.InvoiceGeneratorActions != null && invoiceTypeCopy.Settings.InvoiceGeneratorActions.Count > 0)
+                            {
+                                foreach (var generatorAction in invoiceTypeCopy.Settings.InvoiceGeneratorActions)
+                                {
+                                    if (generatorAction.TitleResourceKey != null)
+                                        generatorAction.Title = vrLocalizationManager.GetTranslatedTextResourceValue(generatorAction.TitleResourceKey, generatorAction.Title, languageIdValue);
+                                }
+                            }
+                            if (invoiceTypeCopy.Settings.InvoiceGridSettings != null)
+                            {
+                                if (invoiceTypeCopy.Settings.InvoiceGridSettings.InvoiceGridActions != null && invoiceTypeCopy.Settings.InvoiceGridSettings.InvoiceGridActions.Count > 0)
+                                {
+                                    foreach (var gridAction in invoiceTypeCopy.Settings.InvoiceGridSettings.InvoiceGridActions)
+                                    {
+                                        if (gridAction.TitleResourceKey != null)
+                                            gridAction.Title = vrLocalizationManager.GetTranslatedTextResourceValue(gridAction.TitleResourceKey, gridAction.Title, languageIdValue);
+                                    }
+                                }
+                                if (invoiceTypeCopy.Settings.InvoiceGridSettings.MainGridColumns != null && invoiceTypeCopy.Settings.InvoiceGridSettings.MainGridColumns.Count > 0)
+                                {
+                                    foreach (var gridColumn in invoiceTypeCopy.Settings.InvoiceGridSettings.MainGridColumns)
+                                    {
+                                        if (gridColumn.HeaderResourceKey != null)
+                                            gridColumn.Header = vrLocalizationManager.GetTranslatedTextResourceValue(gridColumn.HeaderResourceKey, gridColumn.Header, languageIdValue);
+                                    }
+                                }
+                            }
+
+                            if (invoiceTypeCopy.Settings.SubSections != null && invoiceTypeCopy.Settings.SubSections.Count > 0)
+                            {
+                                foreach (var subsection in invoiceTypeCopy.Settings.SubSections)
+                                {
+                                    if (subsection.SectionTitleResourceKey != null)
+                                        subsection.SectionTitle = vrLocalizationManager.GetTranslatedTextResourceValue(subsection.SectionTitleResourceKey, subsection.SectionTitle, languageIdValue);
+                                    if (subsection.Settings != null)
+                                        subsection.Settings.ApplyTranslation(new InvoiceTranslationContext { LanguageId = languageIdValue });
+                                }
+                            }
+                            if (invoiceTypeCopy.Settings.AutomaticInvoiceActions != null && invoiceTypeCopy.Settings.AutomaticInvoiceActions.Count > 0)
+                            {
+                                foreach (var action in invoiceTypeCopy.Settings.AutomaticInvoiceActions)
+                                {
+                                    if (action.TitleResourceKey != null)
+                                        action.Title = vrLocalizationManager.GetTranslatedTextResourceValue(action.TitleResourceKey, action.Title, languageIdValue);
+                                }
+                            }
+                            if (invoiceTypeCopy.Settings.InvoiceSettingPartUISections != null && invoiceTypeCopy.Settings.InvoiceSettingPartUISections.Count > 0)
+                            {
+                                foreach (var partUISection in invoiceTypeCopy.Settings.InvoiceSettingPartUISections)
+                                {
+                                    if (partUISection.SectionTitleResourceKey != null)
+                                        partUISection.SectionTitle = vrLocalizationManager.GetTranslatedTextResourceValue(partUISection.SectionTitleResourceKey, partUISection.SectionTitle, languageIdValue);
+                                }
+                            }
+                            if (invoiceTypeCopy.Settings.InvoiceMenualBulkActions != null && invoiceTypeCopy.Settings.InvoiceMenualBulkActions.Count > 0)
+                            {
+                                foreach (var menualBulkAction in invoiceTypeCopy.Settings.InvoiceMenualBulkActions)
+                                {
+                                    if (menualBulkAction.TitleResourceKey != null)
+                                        menualBulkAction.Title = vrLocalizationManager.GetTranslatedTextResourceValue(menualBulkAction.TitleResourceKey, menualBulkAction.Title, languageIdValue);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return invoiceTypeCopy;
+        }
         public Dictionary<Guid, InvoiceAction> GetInvoiceActionsByActionId(Guid invoiceTypeId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("InvoiceTypeManager_GetInvoiceActionsByActionId_{0}", invoiceTypeId),
               () =>
               {
-                  var invoiceType = GetInvoiceType(invoiceTypeId);
+                  var invoiceType = GetInvoiceType(invoiceTypeId, true);
                   invoiceType.ThrowIfNull("Invoice Type", invoiceTypeId);
                   invoiceType.Settings.ThrowIfNull("Invoice Type Settings", invoiceTypeId);
                   invoiceType.Settings.InvoiceActions.ThrowIfNull("Invoice Type Settings Actions", invoiceTypeId);
@@ -44,7 +131,7 @@ namespace Vanrise.Invoice.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("InvoiceTypeManager_GetInvoiceBulkActionsByBulkActionId_{0}", invoiceTypeId),
               () =>
               {
-                  var invoiceType = GetInvoiceType(invoiceTypeId);
+                  var invoiceType = GetInvoiceType(invoiceTypeId, true);
                   invoiceType.ThrowIfNull("Invoice Type", invoiceTypeId);
                   invoiceType.Settings.ThrowIfNull("Invoice Type Settings", invoiceTypeId);
                   invoiceType.Settings.InvoiceBulkActions.ThrowIfNull("Invoice Type Settings Bulk Actions", invoiceTypeId);
@@ -59,7 +146,7 @@ namespace Vanrise.Invoice.Business
         }
         public string GetInvoiceTypeName(Guid invoiceTypeId)
         {
-            var invoiceType = GetInvoiceType(invoiceTypeId);
+            var invoiceType = GetInvoiceType(invoiceTypeId, true);
             if (invoiceType != null)
                 return invoiceType.Name;
             return null;
@@ -67,6 +154,7 @@ namespace Vanrise.Invoice.Business
         public Guid GetInvoiceTypeCommentDefinitionId(Guid invoiceTypeId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
             invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
             return invoiceType.Settings.InvoiceCommentDefinitionId.Value;
 
@@ -80,8 +168,7 @@ namespace Vanrise.Invoice.Business
         }
         public InvoiceTypeRuntime GetInvoiceTypeRuntime(Guid invoiceTypeId)
         {
-            var invoiceTypes = GetCachedInvoiceTypes();
-            var invoiceType = invoiceTypes.GetRecord(invoiceTypeId);
+            var invoiceType = GetInvoiceType(invoiceTypeId, true);
             InvoiceTypeRuntime invoiceTypeRuntime = new InvoiceTypeRuntime();
             invoiceTypeRuntime.InvoiceType = invoiceType;
             invoiceTypeRuntime.MainGridRuntimeColumns = new List<InvoiceUIGridColumnRunTime>();
@@ -130,7 +217,7 @@ namespace Vanrise.Invoice.Business
         }
         public List<InvoiceUIGridColumnRunTime> GetInvoiceTypeGridColumns(Guid invoiceTypeId)
         {
-            var invoiceType = GetInvoiceType(invoiceTypeId);
+            var invoiceType = GetInvoiceType(invoiceTypeId, true);
             List<InvoiceUIGridColumnRunTime> gridColumns = new List<InvoiceUIGridColumnRunTime>();
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             var dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(invoiceType.Settings.InvoiceDetailsRecordTypeId);
@@ -322,13 +409,23 @@ namespace Vanrise.Invoice.Business
             List<GridColumnAttribute> gridColumnAttributes = null;
             if (input.GridColumns != null)
             {
+
+                VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+                Guid? languageId = null;
+                if (vrLocalizationManager.IsLocalizationEnabled())
+                    languageId = vrLocalizationManager.GetCurrentLanguageId();
                 gridColumnAttributes = new List<GridColumnAttribute>();
                 foreach (var column in input.GridColumns)
                 {
                     if (column.FieldType == null)
                         throw new NullReferenceException(string.Format("{0} is not mapped to field type.", column.FieldName));
                     var gridAttribute = column.FieldType.GetGridColumnAttribute(null);
-                    gridAttribute.HeaderText = column.Header;
+
+                    if (column.HeaderResourceKey != null && languageId.HasValue)
+                        gridAttribute.HeaderText = vrLocalizationManager.GetTranslatedTextResourceValue(column.HeaderResourceKey, column.Header, languageId.Value);
+                    else
+                        gridAttribute.HeaderText = column.Header;
+
                     gridAttribute.Field = column.FieldName;
                     gridAttribute.Tag = column.FieldName;
 
@@ -364,7 +461,7 @@ namespace Vanrise.Invoice.Business
         public IEnumerable<InvoiceSettingPartDefinitionInfo> GetInvoiceSettingPartsInfo(InvoiceSettingPartsInfoFilter filter)
         {
             filter.ThrowIfNull("InvoiceSettingPartsInfoFilter");
-            var invoiceType = GetInvoiceType(filter.InvoiceTypeId);
+            var invoiceType = GetInvoiceType(filter.InvoiceTypeId, true);
             invoiceType.ThrowIfNull("invoiceType", filter.InvoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
             List<InvoiceSettingPartDefinitionInfo> invoiceSettingPartDefinitionInfo = new List<InvoiceSettingPartDefinitionInfo>();
@@ -403,7 +500,7 @@ namespace Vanrise.Invoice.Business
         {
 
             var invoiceTypes = GetCachedInvoiceTypes();
-            foreach(var invoiceType in invoiceTypes)
+            foreach (var invoiceType in invoiceTypes)
             {
                 var bulkActionTypes = new InvoiceTypeManager().GetInvoiceBulkActionsByBulkActionId(invoiceType.Key);
                 foreach (var bulkAction in bulkActionTypes)
@@ -532,7 +629,7 @@ namespace Vanrise.Invoice.Business
         }
         public List<InvoiceBulkActionDefinitionEntity> GetMenualInvoiceBulkActionsDefinitions(Guid invoiceTypeId)
         {
-            var invoiceType = GetInvoiceType(invoiceTypeId);
+            var invoiceType = GetInvoiceType(invoiceTypeId, true);
             var invoiceMenualBulkActions = invoiceType.Settings.InvoiceMenualBulkActions;
             List<InvoiceBulkActionDefinitionEntity> invoiceBulkActionDefinitionEntities = null;
 
@@ -663,7 +760,7 @@ namespace Vanrise.Invoice.Business
             return null;
         }
 
-        public bool DoesUserHaveSpecificActionAccess(List<InvoiceBulkActionRuntime> InvoiceBulkActions , Guid invoiceTypeId, int userId)
+        public bool DoesUserHaveSpecificActionAccess(List<InvoiceBulkActionRuntime> InvoiceBulkActions, Guid invoiceTypeId, int userId)
         {
             var bulkActionTypes = new InvoiceTypeManager().GetInvoiceBulkActionsByBulkActionId(invoiceTypeId);
             if (InvoiceBulkActions != null && InvoiceBulkActions.Count != 0)
@@ -673,7 +770,7 @@ namespace Vanrise.Invoice.Business
                     var invoiceBulkAction = bulkActionTypes.GetRecord(bulkAction.InvoiceBulkActionId);
                     var bulkActionCheckAccessContext = new AutomaticInvoiceActionSettingsCheckAccessContext
                     {
-                        UserId = userId ,
+                        UserId = userId,
                         InvoiceBulkAction = invoiceBulkAction
                     };
                     if (!invoiceBulkAction.Settings.DoesUserHaveAccess(bulkActionCheckAccessContext))

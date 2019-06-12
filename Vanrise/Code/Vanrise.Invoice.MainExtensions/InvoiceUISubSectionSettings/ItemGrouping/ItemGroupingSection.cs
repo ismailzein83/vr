@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 
@@ -97,6 +94,11 @@ namespace Vanrise.Invoice.MainExtensions
                 }
             }
             return gridColumns;
+        }
+        public override void ApplyTranslation(IInvoiceTranslationContext context)
+        {
+            if (Settings != null)
+                Settings.ApplyTranslation(context);
         }
     }
 }

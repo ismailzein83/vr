@@ -54,7 +54,7 @@ namespace Vanrise.Invoice.Business
         public string GetSubsectionTitle(Guid invoiceTypeId, Guid uniqueSectionID)
         {
             string sectionTitle = null;
-            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId, true);
             invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceTypeId);
             invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", invoiceTypeId);
@@ -280,12 +280,12 @@ namespace Vanrise.Invoice.Business
                 ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }, Rows = new List<ExportExcelRow>() };
                 InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
                 InvoiceItemRequestHandler invoiceItemRequestHandler = new InvoiceItemRequestHandler();
-                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
+                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId, true);
                 invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings", _query.InvoiceTypeId);
                 invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", _query.InvoiceTypeId);
                 List<InvoiceSubSectionGridColumn> gridColumns = null;
-                foreach(var subsection in invoiceType.Settings.SubSections)
+                foreach (var subsection in invoiceType.Settings.SubSections)
                 {
                     gridColumns = subsection.Settings.GetSubsectionGridColumns(invoiceType, _query.UniqueSectionID);
                     if (gridColumns != null)
@@ -339,7 +339,7 @@ namespace Vanrise.Invoice.Business
             {
                 ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }, Rows = new List<ExportExcelRow>() };
                 InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
+                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId, true);
                 invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings", _query.InvoiceTypeId);
                 invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", _query.InvoiceTypeId);
