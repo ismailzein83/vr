@@ -3155,11 +3155,20 @@ vr-textbox[highlighted] input[type="text"] {
         top: 3px;
     }
 
-.action-bar .btn {
+.action-bar .btn, vr-button[inline-btn] button {
     height: 25px !important;
     padding: 2px 12px !important;
 }
+vr-button[inline-btn] button {
+    background-color: #e22337 !important;
+    color: #fff !important;
+}
 
+vr-button[inline-btn].divDisabled button {
+    background-color: #E22337 !important;
+    cursor: not-allowed;
+    opacity: 0.65;
+}
 .vr-control-label {
     font-weight: bold;
     font-size: 11px;

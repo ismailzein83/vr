@@ -396,9 +396,17 @@
     margin: 0px 15px;
 }
 
-.flat .action-bar {
+.flat .action-bar{
     background-color: #e3e3e3;
     border-radius: 0px;
+}
+.flat vr-button[inline-btn] button {
+    background-color: #e3e3e3 !important;
+    color: #635F5F !important;
+    border-radius: 0px;
+}
+.flat vr-button[inline-btn].divDisabled button {
+    background-color: #cac0c0 !important;
 }
 
     .flat .action-bar .btn {
