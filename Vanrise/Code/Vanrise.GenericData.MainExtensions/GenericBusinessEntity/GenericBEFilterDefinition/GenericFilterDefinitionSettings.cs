@@ -24,6 +24,7 @@ namespace Vanrise.GenericData.MainExtensions
         public string FieldTitle { get; set; }
         public bool IsRequired { get; set; }
 		public string TextResourceKey { get; set; }
+        public dynamic DefaultFieldValues { get; set; }
 
 		public override void TryTranslate()
 		{
