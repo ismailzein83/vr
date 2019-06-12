@@ -115,6 +115,7 @@
     <Compile Include="ReprocessFilterDefinition\DealReprocessFilter.cs" />
     <Compile Include="ReprocessFilterDefinition\DealReprocessFilterDefinition.cs" />
     <Compile Include="RouteRules\RouteRuleCriteria\DealRouteRuleCriteria.cs" />
+    <Compile Include="SwapDealAnalysis\GenericBEActions\CreateSwapDealGenericBEAction.cs" />
     <Compile Include="SwapDealAnalysis\Inbound\SwapDealAnalysisInboundItemRateFixed.cs" />
     <Compile Include="SwapDealAnalysis\Inbound\SwapDealAnalysisInboundItemRateSuppliers.cs" />
     <Compile Include="SwapDealAnalysis\Inbound\SwapDealAnalysisInboundRateFixed.cs" />
