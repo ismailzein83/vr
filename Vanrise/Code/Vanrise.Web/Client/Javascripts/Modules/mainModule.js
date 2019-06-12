@@ -7,6 +7,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
             (function () {
                 document.getElementById("mainBodyContainer").style.display = "block";
+                Highcharts.setOptions({
+                    lang: {
+                        thousandsSep: ','
+                    }
+                });
             })();
             $scope.isMobile = MobileService.isMobile();
             if (!$scope.isMobile) {
