@@ -320,7 +320,8 @@
                                         };
                                         childPromises.push(dimensionGridField.loadPromiseDeferred.promise);
                                         childPromises.push(dimensionGridField.styleLoadPromiseDeferred.promise);
-                                        childPromises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
+                                        if ($scope.scopeModel.isLocalizationEnabled)
+                                            childPromises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
                                         addDimensionGridWidthAPI(dimensionGridField);
                                     }
                                    
@@ -341,7 +342,8 @@
                                         };
                                         childPromises.push(measureGridField.loadPromiseDeferred.promise);
                                         childPromises.push(measureGridField.styleLoadPromiseDeferred.promise);
-                                        childPromises.push(measureGridField.textResourceLoadPromiseDeferred.promise);
+                                        if ($scope.scopeModel.isLocalizationEnabled)
+                                            childPromises.push(measureGridField.textResourceLoadPromiseDeferred.promise);
                                         addMeasureGridWidthAPI(measureGridField);
                                     }
 
@@ -366,12 +368,13 @@
                                         textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                         textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                                     };
-                                    promises.push(dataItem.columnSettingsLoadPromiseDeferred.promise);
-                                    promises.push(dataItem.styleLoadPromiseDeferred.promise);
-                                    promises.push(dataItem.dimensionLoadPromiseDeferred.promise);
-                                    promises.push(dataItem.measureLoadPromiseDeferred.promise);
-                                    promises.push(dataItem.positionValueLoadPromiseDeferred.promise);
-                                    promises.push(dataItem.textResourceLoadPromiseDeferred.promise);
+                                    childPromises.push(dataItem.columnSettingsLoadPromiseDeferred.promise);
+                                    childPromises.push(dataItem.styleLoadPromiseDeferred.promise);
+                                    childPromises.push(dataItem.dimensionLoadPromiseDeferred.promise);
+                                    childPromises.push(dataItem.measureLoadPromiseDeferred.promise);
+                                    childPromises.push(dataItem.positionValueLoadPromiseDeferred.promise);
+                                    if ($scope.scopeModel.isLocalizationEnabled)
+                                        childPromises.push(dataItem.textResourceLoadPromiseDeferred.promise);
                                     var subTableDefinitionEntity = subTables[j];
 
                                     extendSubTableDefinitionDataItem(dataItem, subTableDefinitionEntity);

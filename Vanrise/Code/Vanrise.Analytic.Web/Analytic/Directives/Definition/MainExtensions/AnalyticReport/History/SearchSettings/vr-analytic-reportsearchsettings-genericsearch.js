@@ -313,7 +313,7 @@
                             VRUIUtilsService.callDirectiveLoad(advancedFilterDimensionSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
                         });
                         promises.push(loadAdvancedFilterDirectivePromiseDeferred.promise);
-
+                       
 
 
                         var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -325,7 +325,7 @@
                                 }
                             };
                             if (payload.searchSettings != undefined && payload.searchSettings.Legends != undefined && payload.searchSettings.Legends.length > 0) {
-                                tableSelectorpayLoad.selectedIds = payload.searchSettings.Legends[0].AnalyticTableId
+                                tableSelectorpayLoad.selectedIds = payload.searchSettings.Legends[0].AnalyticTableId;
                             }
                             VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, tableSelectorpayLoad, loadTableSelectorPromiseDeferred);
                         });
@@ -342,7 +342,8 @@
                                             textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                             textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                                         };
-                                        childPromises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
+                                        if ($scope.scopeModel.isLocalizationEnabled)
+                                            childPromises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
                                         addSelectedDimension(dimensionGridField);
                                     }
                                 }
@@ -356,7 +357,8 @@
                                             textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                             textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                                         };
-                                        childPromises.push(filterDimensionField.textResourceLoadPromiseDeferred.promise);
+                                        if ($scope.scopeModel.isLocalizationEnabled)
+                                            childPromises.push(filterDimensionField.textResourceLoadPromiseDeferred.promise);
                                         addSelectedFilterDimension(filterDimensionField);
                                     }
                                 }

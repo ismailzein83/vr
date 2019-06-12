@@ -385,7 +385,8 @@
                             };
                             promises.push(gridColumnItem.loadPromiseDeferred.promise);
                             promises.push(gridColumnItem.styleLoadPromiseDeferred.promise);
-                            promises.push(gridColumnItem.textResourceLoadPromiseDeferred.promise);
+                            if ($scope.scopeModel.isLocalizationEnabled)
+                                promises.push(gridColumnItem.textResourceLoadPromiseDeferred.promise);
                             addGridColumnAPI(gridColumnItem, currentColumn);
                         }
                     }
@@ -401,7 +402,8 @@
                                 textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                             };
-                            promises.push(itemDetail.textResourceLoadPromiseDeferred.promise);
+                            if ($scope.scopeModel.isLocalizationEnabled)
+                                promises.push(itemDetail.textResourceLoadPromiseDeferred.promise);
 
                             addGridItemDetailAPI(itemDetail, currentDetail);
                         }
@@ -433,7 +435,8 @@
                                 textResourceReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                             };
-                            promises.push(filter.textResourceLoadPromiseDeferred.promise);
+                            if ($scope.scopeModel.isLocalizationEnabled)
+                                promises.push(filter.textResourceLoadPromiseDeferred.promise);
 
                             addFilterAPI(filter, currentFilter);
                         }

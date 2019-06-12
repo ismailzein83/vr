@@ -127,7 +127,8 @@
                                         textResourceLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                                     };
                                     selectedFilterIds.push(filterDimension.DimensionName);
-                                    promises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
+                                    if ($scope.scopeModel.isLocalizationEnabled)
+                                        promises.push(dimensionGridField.textResourceLoadPromiseDeferred.promise);
                                     addSelectedFilterDimension(dimensionGridField);
                                 }
                             }
