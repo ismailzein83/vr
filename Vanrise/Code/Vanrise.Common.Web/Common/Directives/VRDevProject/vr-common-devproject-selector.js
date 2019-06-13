@@ -105,7 +105,7 @@ app.directive('vrCommonDevprojectSelector', ['UtilsService', 'VRUIUtilsService',
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
                 '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="VRDevProjectID" isrequired="ctrl.isrequired" label="' + label +
-                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="DevProject" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Project" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                    '</vr-select>' +
                    '</vr-columns>';
         }
