@@ -152,6 +152,7 @@
     <Compile Include="GenericRules\GenericRuleDefinitionOverriddenConfiguration.cs" />
     <Compile Include="GetRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStorage\GetStorageRowCountContext.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="VRNumberPrefixManager.cs" />
     <Compile Include="RecordFilterManager.cs" />
     <Compile Include="SummaryTransformation\DynamicTypeGenerator.cs" />
