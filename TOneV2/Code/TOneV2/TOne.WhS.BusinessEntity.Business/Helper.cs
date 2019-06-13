@@ -102,6 +102,22 @@ namespace TOne.WhS.BusinessEntity.Business
             };
             return businessEntityInfoList.FindRecord(predicate);
         }
+
+        public static bool ShouldFilterCarrierAccount(ModuleName moduleName)
+        {
+            ConfigManager configManager = new ConfigManager();
+            switch (moduleName)
+            {
+                case ModuleName.RatePlan:
+                    return configManager.GetRatePlanCarrierAccountFiltering();
+                case ModuleName.CustomerRoute:
+                    return configManager.GetCustomerRouteCarrierAccountFiltering();
+                case ModuleName.ProductRoute:
+                    return configManager.GetProductRouteCarrierAccountFiltering();
+                default:
+                    return false;
+            }
+        }
     }
 
 }

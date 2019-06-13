@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Business
             context.ThrowIfNull("context");
             context.CarrierAccount.ThrowIfNull("context.CarrierAccount");
 
-            if (ShouldFilterCarrierAccount())
+            if (TOne.WhS.BusinessEntity.Business.Helper.ShouldFilterCarrierAccount(this.ModuleName))
             {
                 List<int> carrierAccountIds;
                 AccountManagerAssignmentManager accountManagerAssignmentManager = new AccountManagerAssignmentManager();
@@ -32,22 +32,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
 
             return false;
-        }
-
-        private bool ShouldFilterCarrierAccount()
-        {
-            ConfigManager configManager = new ConfigManager();
-            switch (this.ModuleName)
-            {
-                case ModuleName.RatePlan:
-                    return configManager.GetRatePlanCarrierAccountFiltering();
-                case ModuleName.CustomerRoute:
-                    return configManager.GetCustomerRouteCarrierAccountFiltering();
-                //case ModuleName.ProductRoute:
-                //    return configManager.GetProductRouteCarrierAccountFiltering();
-                default:
-                    return false;
-            }
         }
     }
 }

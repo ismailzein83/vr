@@ -539,12 +539,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return accountManagerSettings.CarrierAccountFiltering.CustomerRoute;
         }
 
-        //public bool GetProductRouteCarrierAccountFiltering()
-        //{
-        //    AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
-        //    accountManagerSettings.ThrowIfNull("accountManagerSettings");
-        //    return accountManagerSettings.CarrierAccountFiltering.ProductRoute;
-        //}
+        public bool GetProductRouteCarrierAccountFiltering()
+        {
+            AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
+            accountManagerSettings.ThrowIfNull("accountManagerSettings");
+            return accountManagerSettings.CarrierAccountFiltering.ProductRoute;
+        }
 
         public bool GetGenerateTrafficStatsByCode()
         {
