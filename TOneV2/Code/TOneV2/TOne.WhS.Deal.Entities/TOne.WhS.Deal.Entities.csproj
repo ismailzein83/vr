@@ -62,6 +62,7 @@
     <Compile Include="DealDefinition\DealDefinitionInfo.cs" />
     <Compile Include="DealDefinition\DealEntities.cs" />
     <Compile Include="DealEvaluatorProcessState.cs" />
+    <Compile Include="DealInfo.cs" />
     <Compile Include="DealProcess\DayToReprocess.cs" />
     <Compile Include="DealProgress\DealDetailedProgress.cs" />
     <Compile Include="DealProgress\DealProgress.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="RecurringType.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisInbound.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutbound.cs" />
+    <Compile Include="SwapDealProgressDetail.cs" />
     <Compile Include="SwapDeal\SubstituteRateType.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateInboundRateInput.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateOutboundRateInput.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="SwapDeal\DealSettingsDetail.cs" />
     <Compile Include="DealRateEvaluator\BaseDealRateEvaluator.cs" />
     <Compile Include="UpdateDealOperationOutput.cs" />
+    <Compile Include="VolumeCommitmentProgressDetail.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealInfo.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealQuery.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItem.cs" />
