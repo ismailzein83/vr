@@ -71,7 +71,7 @@
 
 .flat .index-logo {
     position: absolute;
-    top: 5px;    
+    top: 5px;
 }
 
 .flat .vr-page-header {
@@ -288,10 +288,12 @@
 .panel-heading-vr {
     color: #87888a !important;
 }
+
 .flat .selected-url {
     color: #6A7470 !important;
     font-weight: bold !important;
 }
+
 .flat .dll-menu-theme {
     color: #87888a !important;
 }
@@ -396,34 +398,36 @@
     margin: 0px 15px;
 }
 
-.flat .action-bar{
+.flat .action-bar {
     background-color: #e3e3e3;
     border-radius: 0px;
 }
-.flat vr-button[inline-btn] button, .flat .inline-btn button {
+
+.flat vr-button[inline-btn] button {
     background-color: #e3e3e3 !important;
     color: #635F5F !important;
     border-radius: 0px;
 }
-.flat vr-button[inline-btn].divDisabled button, .flat .inline-btn.divDisabled button {
+
+.flat vr-button[inline-btn].divDisabled button {
     background-color: #cac0c0 !important;
 }
 
-    .flat .action-bar .btn {
-        color: #635F5F !important;
-        border-radius: 0px !important;
-        font-weight: bold;
-    }
+.flat .action-bar .btn {
+    color: #635F5F !important;
+    border-radius: 0px !important;
+    font-weight: bold;
+}
 
-    .flat .action-bar .vr-half-circle {
-        background-color: #e3e3e3 !important;
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px;
-    }
+.flat .action-bar .vr-half-circle {
+    background-color: #e3e3e3 !important;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
 
-    .flat .action-bar.include-personalization {
-        border-radius: 0px;
-    }
+.flat .action-bar.include-personalization {
+    border-radius: 0px;
+}
 
 .action-bar .vr-action-menu-dote {
     color: #88898B !important;
@@ -448,19 +452,22 @@
     right: 7px;
 }
 
-.flat .vr-grid-menu-h-circle.collapsed {
-    width: 8px;
-    right: -5px;
-}
+    .flat .vr-grid-menu-h-circle.collapsed {
+        width: 8px;
+        right: -5px;
+    }
+
 .flat .vr-grid-menu-box .collapsed-menu-option {
     left: 4.5px;
     top: -12px;
 }
+
 .flat .vr-grid-menu-box .glyphicon-cog {
     top: -11px;
     font-size: 14px;
     left: -3.5px;
 }
+
 .flat .vr-grid-menu-h-dote {
     left: -3px;
     top: -14px;
@@ -571,6 +578,7 @@
     margin-right: auto;
     margin-top: 180px;
 }
+
 .flat .login-action-container .login-btn-container {
     display: inline-block;
     width: 100px
