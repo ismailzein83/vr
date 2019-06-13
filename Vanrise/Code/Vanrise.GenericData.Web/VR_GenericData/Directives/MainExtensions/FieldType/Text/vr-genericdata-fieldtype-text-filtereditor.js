@@ -42,6 +42,9 @@
             function getDirectiveAPI() {
                 var api = {};
                 api.load = function (payload) {
+                    if (payload.fieldValue != undefined && Array.isArray(payload.fieldValue)) {
+                        payload.fieldValue = payload.fieldValue[0];
+                    }
                     return directiveAPI.load(payload);
                 };
                 api.getValuesAsArray = function () {

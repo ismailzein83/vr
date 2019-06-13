@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BooleanFieldTypeFilterEditorDirective.$inject = [];
+    BooleanFieldTypeFilterEditorDirective.$inject = ["UtilsService"];
 
-    function BooleanFieldTypeFilterEditorDirective() {
+    function BooleanFieldTypeFilterEditorDirective(UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -41,6 +41,12 @@
 
                 api.load = function (payload) {
                     ctrl.label = payload != undefined ? payload.fieldTitle : "";
+
+                    if (payload != undefined && payload.fieldValue != undefined) {
+                        var fieldValue = Array.isArray(payload.fieldValue) ? payload.fieldValue[0] : payload.fieldValue;
+                        ctrl.selectedvalues = UtilsService.getItemByVal(ctrl.datasource, fieldValue, "Value"); 
+                    }
+
                 };
 
                 api.getData = function () {
@@ -63,11 +69,11 @@
 
         function getDirectiveTemplate(attrs) {
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                       '<vr-select datatextfield="Text" datavaluefield="Value" isrequired="ctrl.isrequired" label="{{ctrl.label}}"' +
-                           '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"' +
-                           '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" customvalidate="ctrl.customvalidate">' +
-                       '</vr-select>' +
-                   '</vr-columns>';
+                '<vr-select datatextfield="Text" datavaluefield="Value" isrequired="ctrl.isrequired" label="{{ctrl.label}}"' +
+                '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"' +
+                '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" customvalidate="ctrl.customvalidate">' +
+                '</vr-select>' +
+                '</vr-columns>';
         }
     }
 

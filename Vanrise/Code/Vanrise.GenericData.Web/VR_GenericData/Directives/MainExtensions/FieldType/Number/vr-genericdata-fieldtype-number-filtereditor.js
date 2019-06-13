@@ -46,8 +46,9 @@
                 };
                 api.getValuesAsArray = function () {
                     var data = directiveAPI.getData();
-                    if (data != undefined)
-                        return data.Values;
+                    if (data != undefined) {
+                        return [data];
+                    }
                 };
                 api.getData = function () {
 

@@ -73,6 +73,7 @@
                                     fieldTitle: definitionSettings.FieldTitle,
                                     fieldType: fieldType != undefined ? fieldType.Type : undefined,
                                     fieldName: definitionSettings.FieldName,
+                                    fieldValue: definitionSettings.DefaultFieldValues,
                                     genericContext: genericContext,
                                     allFieldValuesByName: allFieldValuesByName,
                                     //dataRecordTypeId: dataRecordTypeId
