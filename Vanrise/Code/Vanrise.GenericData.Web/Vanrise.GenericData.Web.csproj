@@ -862,6 +862,7 @@
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeWithFieldsSelectorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\RecordType\Templates\MultipleParentDataRecordTypeExtraFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\ParentDataRecordTypeExtraFieldsTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\vr-genericdata-datarecordtypefield-groupfilter.js" />
@@ -874,6 +875,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypewithfields-selector.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypextrafields-multipleparentrecordtype.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\Templates\SummaryGroupingColumnsManagement.html" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\Templates\SummaryTransformationDefinitionGrid.html" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarygroupingcolumns-grid.js" />
