@@ -33,9 +33,6 @@
             var supplierFieldSelectorAPI;
             var supplierFieldSelectorReadyPromiseDeferred= UtilsService.createPromiseDeferred();
 
-            var timeFieldSelectorAPI;
-            var timeFieldSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -47,10 +44,7 @@
                     supplierFieldSelectorAPI = api;
                     supplierFieldSelectorReadyPromiseDeferred.resolve();
                 };
-                $scope.scopeModel.onTimeFieldSelectorDirectiveReady = function (api) {
-                    timeFieldSelectorAPI = api;
-                    timeFieldSelectorReadyPromiseDeferred.resolve();
-                };
+              
                 defineAPI();
             }
 
@@ -59,7 +53,7 @@
                 customerFieldSelectorReadyPromiseDeferred.promise.then(function () {
                     var customerFieldPayload = {
                         dataRecordTypeId: payload.dataRecordTypeId,
-                        selectedIds: payload.settings != undefined ? payload.settings.CustomerField : undefined,
+                        selectedIds: payload.settings != undefined ? payload.settings.CustomerAccountManagerField : undefined,
                     };
                     VRUIUtilsService.callDirectiveLoad(customerFieldSelectorAPI, customerFieldPayload, loadCustomerFieldSelectorPromiseDeferred);
                 });
@@ -71,23 +65,13 @@
                 supplierFieldSelectorReadyPromiseDeferred.promise.then(function () {
                     var supplierFieldPayload = {
                         dataRecordTypeId: payload.dataRecordTypeId,
-                        selectedIds: payload.settings != undefined ? payload.settings.SupplierField : undefined,
+                        selectedIds: payload.settings != undefined ? payload.settings.SupplierAccountManagerField : undefined,
                     };
                     VRUIUtilsService.callDirectiveLoad(supplierFieldSelectorAPI, supplierFieldPayload, loadSupplierFieldSelectorPromiseDeferred);
                 });
                 return loadSupplierFieldSelectorPromiseDeferred.promise;
             }
-            function loadTimeFieldSelector(payload) {
-                var loadTimeFieldSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                timeFieldSelectorReadyPromiseDeferred.promise.then(function () {
-                    var timeFieldPayload = {
-                        dataRecordTypeId: payload.dataRecordTypeId,
-                        selectedIds: payload.settings != undefined ? payload.settings.TimeField : undefined,
-                    };
-                    VRUIUtilsService.callDirectiveLoad(timeFieldSelectorAPI, timeFieldPayload, loadTimeFieldSelectorPromiseDeferred);
-                });
-                return loadTimeFieldSelectorPromiseDeferred.promise;
-            }
+  
             function defineAPI() {
                 var api = {};
 
@@ -96,7 +80,6 @@
                     if (payload != undefined) {
                         promises.push(loadCustomerFieldSelector(payload));
                         promises.push(loadSupplierFieldSelector(payload));
-                        promises.push(loadTimeFieldSelector(payload));
                     }
                     return UtilsService.waitPromiseNode({
                         promises: promises
@@ -106,9 +89,8 @@
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Business.AccountManagerDataRecordStoragePermanentFilter,TOne.WhS.BusinessEntity.Business",
-                        CustomerField: customerFieldSelectorAPI.getSelectedIds(),
-                        SupplierField: supplierFieldSelectorAPI.getSelectedIds(),
-                        TimeField: timeFieldSelectorAPI.getSelectedIds()
+                        CustomerAccountManagerField: customerFieldSelectorAPI.getSelectedIds(),
+                        SupplierAccountManagerField: supplierFieldSelectorAPI.getSelectedIds()
                     };
                 };
 

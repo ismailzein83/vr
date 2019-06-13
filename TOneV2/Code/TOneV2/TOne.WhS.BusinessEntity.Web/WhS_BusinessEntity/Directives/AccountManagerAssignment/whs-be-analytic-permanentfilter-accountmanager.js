@@ -24,9 +24,7 @@
         };
 
         function AnalyticPermanentFilterAccountManager($scope, ctrl, $attrs) {
-            var timeDimensionSelectorAPI;
-            var timeDimensionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+          
             var customerDimensionSelectorAPI;
             var customerDimensionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -45,10 +43,7 @@
                     supplierDimensionSelectorAPI = api;
                     supplierDimensionSelectorReadyPromiseDeferred.resolve();
                 };
-                $scope.scopeModel.onTimeDimensionSelectorDirectiveReady = function (api) {
-                    timeDimensionSelectorAPI = api;
-                    timeDimensionSelectorReadyPromiseDeferred.resolve();
-                };
+               
                 defineAPI();
 
             }
