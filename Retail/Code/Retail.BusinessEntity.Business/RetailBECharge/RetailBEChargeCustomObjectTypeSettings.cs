@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.Business
         {
             return true;
         }
-
+        public override string  SelectorUIControl{ get { return "retail-be-charge-staticeditor"; } }
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
             var valueObject = context.FieldValue as RetailBEChargeEntity;
