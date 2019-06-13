@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    GenericBEDefinitionManagementController.$inject = ['$scope', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionService', 'VR_GenericData_BusinessEntityDefinitionAPIService','UtilsService'];
+    GenericBEDefinitionManagementController.$inject = ['$scope', 'VRUIUtilsService','VRNotificationService', 'VR_GenericData_BusinessEntityDefinitionService', 'VR_GenericData_BusinessEntityDefinitionAPIService','UtilsService'];
 
-    function GenericBEDefinitionManagementController($scope, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionService, businessEntityDefinitionAPIService, UtilsService) {
+    function GenericBEDefinitionManagementController($scope, VRUIUtilsService, VRNotificationService, VR_GenericData_BusinessEntityDefinitionService, businessEntityDefinitionAPIService, UtilsService) {
 
         var gridAPI;
        
