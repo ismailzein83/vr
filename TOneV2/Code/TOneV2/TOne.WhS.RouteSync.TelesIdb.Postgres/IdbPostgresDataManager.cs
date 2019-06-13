@@ -254,9 +254,9 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         {
             string dropTempTableScript = string.Format("DROP TABLE IF EXISTS {0};", TempTableNameWithSchema);
             string dropOldTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", OldTableNameWithSchema);
-            string createTempTableScript = string.Format(@"CREATE TABLE {0} (       
-                                                           pref character varying(255) COLLATE pg_catalog.""default"" NOT NULL DEFAULT ''::character varying,
-                                                           route character varying(255) COLLATE pg_catalog.""default"" NOT NULL DEFAULT ''::character varying);", TempTableNameWithSchema);
+            string createTempTableScript = string.Format(@"CREATE TABLE {0} (
+                                                            pref   varchar(255) NOT NULL DEFAULT ''::character varying,
+                                                            route  varchar(255) NOT NULL DEFAULT ''::character varying);", TempTableNameWithSchema);
 
             ExecuteNonQuery(new string[] { dropTempTableScript, dropOldTableScript, createTempTableScript });
         }
