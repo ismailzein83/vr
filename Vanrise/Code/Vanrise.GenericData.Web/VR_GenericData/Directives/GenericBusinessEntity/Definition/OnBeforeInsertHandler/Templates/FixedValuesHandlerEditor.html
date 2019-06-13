@@ -1,0 +1,25 @@
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-genericdata-datarecordtypefields-selector selectedvalues="scopeModel.selectedFields" label="Field" on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady"></vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+    <vr-columns width="1/3row" withemptyline haschildcolumns>
+        <vr-button type="Add" data-onclick="scopeModel.addField" standalone vr-disabled="scopeModel.disableAddButton()"></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+            <vr-datagrid datasource="ctrl.datasource"
+                         enabledraggablerow="true"
+                         hidegridmenu
+                         ondeleterow="scopeModel.onDeleteField">
+                <vr-datagridcolumn headertext="'Field Name'" type="'Text'">
+                    <vr-label>{{dataItem.data.FieldName}}</vr-label>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Value'">
+                    <vr-span ng-if="dataItem.runtimeEditor!=undefined" vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
+                        <vr-directivewrapper  directive="dataItem.runtimeEditor" isrequired="true" on-ready="dataItem.onRunTimeEditorDirectiveReady" selectionmode="single"></vr-directivewrapper>
+                    </vr-span>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+    </vr-columns>
+</vr-row>
