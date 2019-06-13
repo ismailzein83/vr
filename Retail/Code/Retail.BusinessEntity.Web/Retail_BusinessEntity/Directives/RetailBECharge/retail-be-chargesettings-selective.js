@@ -10,7 +10,8 @@
             scope: {
                 onReady: "=",
                 normalColNum: '@',
-                label: '='
+                label: '=',
+                isrequired:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -120,24 +121,21 @@
         }
 
         function getTemplate(attrs) {
-            var template =
-                ' <vr-row>'
-                + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
+            var template = ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                 +'<vr-label>{{scopeModel.label}}</vr-label>'
                 + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                 + ' datasource="scopeModel.templateConfigs"'
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                 + ' datavaluefield="ExtensionConfigurationId"'
                 + ' datatextfield="Title"'
-                + ' isrequired="true"'
+                + ' isrequired="ctrl.isrequired"'
                 
                 + ' hideremoveicon>'
                 + '</vr-select>'
                 + ' </vr-columns>'
                 + ' <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"'
                 + ' on-ready="scopeModel.onDirectiveReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">'
-                + ' </vr-directivewrapper>'
-                + ' </vr-row>';
+                + ' </vr-directivewrapper>';
             return template;
         }
     }
