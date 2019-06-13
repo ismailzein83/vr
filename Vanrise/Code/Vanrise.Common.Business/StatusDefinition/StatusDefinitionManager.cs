@@ -185,6 +185,15 @@ namespace Vanrise.Common.Business
             return this.GetCachedStatusDefinitions().MapRecords(x => x).OrderBy(x => x.Name);
         }
 
+        public override bool TryGetStyleDefinitionId(IBusinessEntityStyleDefinitionContext context)
+        {
+            if (context.FieldValue != null)
+            {
+                context.StyleDefinitionId = GetStyleDefinitionId((Guid)context.FieldValue);
+                return true;
+            }
+            return false;
+        }
         #endregion
 
         #region Private Classes
