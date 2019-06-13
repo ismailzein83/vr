@@ -7,13 +7,13 @@
             <vr-button type="Search" ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" formname="formFilter" data-onclick="search" standalone></vr-button>
             <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton" standalone></vr-button>
             <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton" standalone></vr-button>
-            <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" class="glyphicon glyphicon-menu-up" style="font-size:26px;cursor:pointer;" ng-click="scopeModel.showFilterSection()"></span>
+            <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter"  style="font-size:10px;cursor:pointer;" ng-click="scopeModel.showFilterSection()"><a  style="text-decoration: none">Hide Filter</a></span>
         </vr-columns>
     </vr-columns>
     <vr-columns ng-hide="scopeModel.isFilterSectionShow">
         <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton" standalone></vr-button>
         <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton" standalone></vr-button>
-        <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" class="glyphicon glyphicon-menu-down" style="font-size:26px;cursor:pointer;" ng-click="scopeModel.showFilterSection()"></span>
+        <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" style="font-size:10px;cursor:pointer;" ng-click="scopeModel.showFilterSection()"><a style="text-decoration: none">Show Filter</a></span>
     </vr-columns>
 
     <vr-columns width="fullrow" simplecol>
