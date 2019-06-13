@@ -41,20 +41,19 @@ app.directive('vrWhsBeAccountmanagerSettingsEditor', ['UtilsService', 'VRUIUtils
                     if (carrierAccountFiltering != undefined) {
                         $scope.scopeModel.ratePlanRestricted = carrierAccountFiltering.RatePlan;
                         $scope.scopeModel.customerRouteRestricted = carrierAccountFiltering.CustomerRoute;
-                        //$scope.scopeModel.productRouteRestricted = carrierAccountFiltering.ProductRoute;
+                        $scope.scopeModel.productRouteRestricted = carrierAccountFiltering.ProductRoute;
                     }
                 };
                 api.getData = function () {
                     var carrierAccountFiltering = {
                         RatePlan: $scope.scopeModel.ratePlanRestricted,
                         CustomerRoute: $scope.scopeModel.customerRouteRestricted,
-                        //ProductRoute: $scope.scopeModel.productRouteRestricted
+                        ProductRoute: $scope.scopeModel.productRouteRestricted
                     };
                     var obj = {
                         $type: "TOne.WhS.BusinessEntity.Entities.AccountManagerSettings,TOne.WhS.BusinessEntity.Entities",
                         CarrierAccountFiltering: carrierAccountFiltering
                     };
-                    console.log(obj);
                     return obj;
                 };
                 if (ctrl.onReady != null)

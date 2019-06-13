@@ -17,6 +17,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public bool CustomerRoute { get; set; }
 
-        //public bool ProductRoute { get; set; }
+        public bool ProductRoute { get; set; }
     }
 }
