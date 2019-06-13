@@ -762,6 +762,8 @@
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargePeriod\Templates\RecurringChargePeriodTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ScheduleTask\retail-be-recurringcharge-task.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ScheduleTask\Templates\RecurringChargeTaskTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RetailBECharge\retail-be-charge-customobjectsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RetailBECharge\Templates\RetailBEChargeCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />
