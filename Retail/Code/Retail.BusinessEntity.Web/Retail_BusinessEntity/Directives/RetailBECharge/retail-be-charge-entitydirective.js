@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/RetailBECharge/Templates/RetailBEChargeStaticEditorTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/RetailBECharge/Templates/RetailBEChargeEntityDirectiveTemplate.html"
 
         };
         function RetailBEChargeStaticEditorCtor($scope, ctrl, $attrs) {
@@ -38,11 +38,13 @@
                 var api = {};
 
                 api.load = function (payload) {
+
                     function loadChargeSettingsSelective() {
                         var chargeSettingsSelectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                         chargeSettingsSelectiveReadyPromiseDeferred.promise.then(function () {
                             var selectivePayload = {
-                                Settings: payload != undefined && payload.fieldValue != undefined ? payload.fieldValue.Settings : undefined
+                                settings: payload != undefined && payload.fieldValue != undefined ? payload.fieldValue.Settings : undefined,
+                                title: payload != undefined ? payload.fieldTitle : undefined
                             };
                             VRUIUtilsService.callDirectiveLoad(chargeSettingsSelectiveAPI, selectivePayload, chargeSettingsSelectiveLoadPromiseDeferred);
 
@@ -71,6 +73,6 @@
         }
     }
 
-    app.directive('retailBeChargeStaticeditor', RetailBEChargeStaticEditor);
+    app.directive('retailBeChargeEntitydirective', RetailBEChargeStaticEditor);
 
 })(app);

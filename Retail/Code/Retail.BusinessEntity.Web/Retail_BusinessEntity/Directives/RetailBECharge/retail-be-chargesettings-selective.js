@@ -10,7 +10,7 @@
             scope: {
                 onReady: "=",
                 normalColNum: '@',
-                label: '@',
+                label: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -19,8 +19,8 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            template: function (element, attrs) {
-                return getTamplate(attrs);
+            template: function (attrs) {
+                return getTemplate(attrs);
             }
         };
 
@@ -60,7 +60,8 @@
                     var promises = [];
                     var retailBEChargeSettings;
                     if (payload != undefined) {
-                        retailBEChargeSettings = payload.Settings;
+                        retailBEChargeSettings = payload.settings;
+                        $scope.scopeModel.label = payload.title;
                     }
 
                     function getRetailBEChargeSettingsConfigs() {
@@ -118,25 +119,25 @@
             }
         }
 
-        function getTamplate(attrs) {
-
+        function getTemplate(attrs) {
             var template =
                 ' <vr-row>'
                 + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
+                +'<vr-label>{{scopeModel.label}}</vr-label>'
                 + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                 + ' datasource="scopeModel.templateConfigs"'
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                 + ' datavaluefield="ExtensionConfigurationId"'
                 + ' datatextfield="Title"'
                 + ' isrequired="true"'
-                + ' label="Charge Settings"'
+                
                 + ' hideremoveicon>'
                 + '</vr-select>'
                 + ' </vr-columns>'
-                + ' </vr-row>'
                 + ' <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"'
                 + ' on-ready="scopeModel.onDirectiveReady" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" customvalidate="ctrl.customvalidate">'
-                + ' </vr-directivewrapper>';
+                + ' </vr-directivewrapper>'
+                + ' </vr-row>';
             return template;
         }
     }

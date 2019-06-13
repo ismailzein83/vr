@@ -15,7 +15,9 @@ namespace Retail.BusinessEntity.MainExtensions.RetailBECharge
 
         public override string GetDescription()
         {
-            return string.Format("Charge value per {0} is: {1}", MBPS, ChargeValue);
+            var chargeValue = string.Format("{0:#,0.##} per ", ChargeValue);
+            var mbpsValue = string.Format("{0:#,0.##} Mbps", MBPS);
+            return string.Format("{0}{1}", chargeValue, mbpsValue);
         }
     }
 }

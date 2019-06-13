@@ -14,7 +14,7 @@ namespace Retail.BusinessEntity.MainExtensions.RetailBECharge
 
         public override string GetDescription()
         {
-            return string.Format("Charge value per E1 is: {0}", ChargeValue);
+            return string.Format("{0:#,0.##} * Nb of E1", ChargeValue);
         }
     }
 }

@@ -48,7 +48,7 @@ app.directive("retailBeChargesettingsPerxmbps", ["UtilsService", "VRNotification
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.RetailBECharge.RetailBEPerXMBPS,Retail.BusinessEntity.MainExtensions",
-                        ChargeValue: $scope.scopeModel.ChargeValue,
+                        ChargeValue: $scope.scopeModel.chargeValue,
                         MBPS: $scope.scopeModel.mbps
                     };
                 };
