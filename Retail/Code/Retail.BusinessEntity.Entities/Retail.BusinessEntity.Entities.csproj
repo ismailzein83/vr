@@ -204,6 +204,7 @@
     <Compile Include="ReleaseCause\ReleaseCause.cs" />
     <Compile Include="RetailBECharge\RetailBEChargeEntity.cs" />
     <Compile Include="RetailBECharge\RetailBEChargeSettings.cs" />
+    <Compile Include="RetailBECharge\RetailBEChargeSettingsConfig.cs" />
     <Compile Include="Settings\DIDTechnicalSettings.cs" />
     <Compile Include="Package\Definition\PackageDefinition.cs" />
     <Compile Include="Package\Definition\PackageDefinitionConfig.cs" />
