@@ -325,8 +325,10 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericBERuntimeManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-runtime-management.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBEFilterRuntimeRootContainerEditor.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntitySelectorFilter.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityRootContainerEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbe-filterruntime-rootcontainer.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-selectorfilter.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericeditor-rootcontainer.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\Templates\DataRecordTypeCompositeRecordConditionDefinitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinitiongroup.js" />
