@@ -48,6 +48,6 @@
         }
     }
 
-    app.directive('retailBeChargeCustomobjectsettings', faultTicketType);
+    app.directive('retailBeChargeCustomobjectsettings', RetailBEChargeCustomObjectSettings);
 
 })(app);

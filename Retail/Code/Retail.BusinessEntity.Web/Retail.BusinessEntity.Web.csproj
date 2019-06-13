@@ -195,6 +195,7 @@
     <Compile Include="Controllers\ProductFamilyController.cs" />
     <Compile Include="Controllers\RecurringChargeController.cs" />
     <Compile Include="Controllers\RecurringChargeDefinitionController.cs" />
+    <Compile Include="Controllers\RetailBEChargeController.cs" />
     <Compile Include="Controllers\RevenueComparisonController.cs" />
     <Compile Include="Controllers\StatusChargingSetController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
@@ -524,6 +525,12 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DID\Templates\DIDNumber.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceSerialNumberSettings\retail-invoicetype-serialnumber-accountcity.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\InvoiceSerialNumberSettings\Templates\AccountCitySerialNumberPartTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RetailBEChargeSettings\retail-be-chargesettings-fixed.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RetailBEChargeSettings\retail-be-chargesettings-pere1.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RetailBEChargeSettings\retail-be-chargesettings-perxmbps.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RetailBEChargeSettings\Templates\FixedChargeSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RetailBEChargeSettings\Templates\PerE1ChargeSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RetailBEChargeSettings\Templates\PerXMBPSChargeSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\retail-be-retrievefinancialinfostep-preview.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\retail-be-retrievefinancialinfostep.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\Templates\RetrieveFinancialInfoStepPreviewTemplate.html" />
@@ -763,7 +770,10 @@
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ScheduleTask\retail-be-recurringcharge-task.js" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ScheduleTask\Templates\RecurringChargeTaskTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RetailBECharge\retail-be-charge-customobjectsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RetailBECharge\retail-be-charge-staticeditor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RetailBECharge\retail-be-chargesettings-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\RetailBECharge\Templates\RetailBEChargeCustomObjectSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RetailBECharge\Templates\RetailBEChargeStaticEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />
@@ -855,6 +865,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\ProductFamilyAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\RetailBEChargeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountSynchronizerHandlerAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\VolumePackageDefinitionAPIService.js" />
