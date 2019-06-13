@@ -38,12 +38,11 @@
                 var api = {};
 
                 api.load = function (payload) {
-
                     function loadChargeSettingsSelective() {
                         var chargeSettingsSelectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                         chargeSettingsSelectiveReadyPromiseDeferred.promise.then(function () {
                             var selectivePayload = {
-                                Settings: payload != undefined ? payload.Settings : undefined
+                                Settings: payload != undefined && payload.selectedValues != undefined && payload.selectedValues.ChargeSettings != undefined ? payload.selectedValues.ChargeSettings.Settings : undefined
                             };
                             VRUIUtilsService.callDirectiveLoad(chargeSettingsSelectiveAPI, selectivePayload, chargeSettingsSelectiveLoadPromiseDeferred);
 
@@ -59,7 +58,10 @@
                 };
 
                 api.setData = function (retailBEChargeEntity) {
-                    retailBEChargeEntity.Settings = chargeSettingsSelectiveAPI.getData();
+                    retailBEChargeEntity.ChargeSettings = {
+                        $type:"Retail.BusinessEntity.Entities.RetailBEChargeEntity, Retail.BusinessEntity.Entities",
+                        Settings: chargeSettingsSelectiveAPI.getData()
+                    };
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

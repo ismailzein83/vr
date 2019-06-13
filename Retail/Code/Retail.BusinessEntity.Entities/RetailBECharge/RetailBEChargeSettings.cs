@@ -9,5 +9,6 @@ namespace Retail.BusinessEntity.Entities
     public abstract class RetailBEChargeSettings
     {
         public abstract Guid ConfigId { get; }
+        public abstract string GetDescription();
     }
 }

@@ -30,7 +30,6 @@ app.directive("retailBeChargesettingsPerxmbps", ["UtilsService", "VRNotification
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.inAdvance = false;
                 defineAPI();
             }
 
@@ -40,7 +39,7 @@ app.directive("retailBeChargesettingsPerxmbps", ["UtilsService", "VRNotification
                 api.load = function (payload) {
                     var promises = [];
                     if (payload != undefined && payload.retailBEChargeSettings != undefined) {
-                        $scope.scopeMode.chargeValue = payload.retailBEChargeSettings.ChargeValue;
+                        $scope.scopeModel.chargeValue = payload.retailBEChargeSettings.ChargeValue;
                         $scope.scopeModel.mbps = payload.retailBEChargeSettings.MBPS;
                     }
                     return UtilsService.waitMultiplePromises(promises);

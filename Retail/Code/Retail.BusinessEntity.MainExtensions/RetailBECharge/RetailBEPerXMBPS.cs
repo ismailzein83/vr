@@ -12,5 +12,10 @@ namespace Retail.BusinessEntity.MainExtensions.RetailBECharge
         public override Guid ConfigId { get { return new Guid("1151BAD9-E4E1-450A-B7BA-589C1940D7BE"); } }
         public decimal ChargeValue { get; set; }
         public decimal MBPS { get; set; }
+
+        public override string GetDescription()
+        {
+            return string.Format("Charge value per {0} is: {1}", MBPS, ChargeValue);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Retail.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -14,17 +15,20 @@ namespace Retail.BusinessEntity.Business
 
         public override bool AreEqual(object newValue, object oldValue)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            throw new NotImplementedException();
+            var valueObject = context.FieldValue as RetailBEChargeEntity;
+            if (valueObject == null || valueObject.Settings==null)
+                return null;
+            return valueObject.Settings.GetDescription();
         }
 
         public override Type GetNonNullableRuntimeType()
         {
-            throw new NotImplementedException();
+            return typeof(RetailBEChargeEntity);
         }
 
         public override string GetRuntimeTypeDescription()
@@ -34,7 +38,8 @@ namespace Retail.BusinessEntity.Business
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            throw new NotImplementedException();
+            var castedOriginalValue = originalValue as RetailBEChargeEntity;
+            return castedOriginalValue;
         }
     }
 }

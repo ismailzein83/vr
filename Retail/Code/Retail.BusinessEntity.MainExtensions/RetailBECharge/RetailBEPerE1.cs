@@ -11,5 +11,10 @@ namespace Retail.BusinessEntity.MainExtensions.RetailBECharge
     {
         public override Guid ConfigId { get { return new Guid("CEEAE225-FCC4-49FD-BCEF-D24C6BBB52AE"); } }
         public decimal ChargeValue { get; set; }
+
+        public override string GetDescription()
+        {
+            return string.Format("Charge value per E1 is: {0}", ChargeValue);
+        }
     }
 }
