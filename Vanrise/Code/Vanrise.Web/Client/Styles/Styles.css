@@ -3718,7 +3718,7 @@ vr-panel[fullscreen] .panel-body {
 
 /*end of vr-tabs*/
 
-vr-listitem div[class^="col"] {
+vr-listitem > vr-columns > div[class^="col"] {
     padding: 5px;
 }
 

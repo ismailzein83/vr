@@ -28,7 +28,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            margin: '=',
 	            dragdropsetting: '=',
 	            mobilegridlayout: '=',
-	            alternativecolor: '='
+	            alternativecolor: '=',
+	            expandasfullscreen: '='
 	        },
 	        controller: function ($scope, $element, $attrs) {
 	            columnVisibilities = [];
@@ -41,6 +42,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            });
 	            var ctrl = this;
 	            ctrl.isMobile = MobileService.isMobile();
+	            ctrl.expandAsfullScreen = ctrl.expandasfullscreen == true;
 	            ctrl.mobileGridView = ctrl.mobilegridlayout != undefined ? ctrl.mobilegridlayout : false;
 	            ctrl.mobileSwitchBtn = true;
 	            ctrl.itemsSortable = {
@@ -640,7 +642,12 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            };
 
 	            var lastSelectedRow;
-	            ctrl.onRowClicked = function (evnt) {
+
+	            ctrl.onRowClicked = function (evnt, dataItem) {
+	                if (dataItem.fullScreenMode == true && ctrl.expandAsfullScreen == true) {
+	                    scope.showMenu = false;
+	                    return;
+	                }
 	                $('.vr-datagrid-row').removeClass('vr-datagrid-datacells-click');
 	                if (ctrl.norowhighlightonclick == undefined || !ctrl.norowhighlightonclick) {
 	                    if (lastSelectedRow != undefined)
@@ -1587,8 +1594,18 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                }
 	                dataItem.isRowExpanded = false;
 	            };
-	        }
 
+	            ctrl.switchFullScreenModeOn = function (dataItem, evnt) {
+	                dataItem.fullScreenMode = true;
+	                ctrl.expandRow(dataItem, evnt);
+	            };
+
+	            ctrl.switchFullScreenModeOff = function (dataItem, evnt) {
+	                dataItem.fullScreenMode = false;
+	                ctrl.collapseRow(dataItem, evnt);
+	            };
+	        }
+            
 	        function defineMenuColumn(hasActionMenu, actionsAttribute) {
 	            actionMenuWidth = 0;//hasActionMenu ? 3 : 0;
 	            ctrl.actionsColumnWidth = actionMenuWidth + 'px';
@@ -1598,7 +1615,13 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                if (!actions || actions.length == 0)
 	                    return false;
 	                var haseEnabledActions = actions.some(function (action) {
-	                    return !action.disable;
+	                    if (action.childsactions != undefined) {
+	                        if (action.childsactions.length == 0) return false;
+                            return action.childsactions.some(function (childAction) {
+	                                   return !childAction.disable;
+	                        });
+                        }                        
+	                    return !action.disable ;
 	                });
 	                return (haseEnabledActions);
 	            };
@@ -1839,7 +1862,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            var onResponseReady = function (response) {
 	                if (isExport) {
 	                    if (response) {
-	                       UtilsService.downloadFile(response.data, response.headers);
+	                        UtilsService.downloadFile(response.data, response.headers);
 	                    }
 	                }
 	                else {
