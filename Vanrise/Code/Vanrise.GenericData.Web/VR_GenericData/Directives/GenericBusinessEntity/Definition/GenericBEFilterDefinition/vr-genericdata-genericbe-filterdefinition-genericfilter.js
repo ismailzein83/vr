@@ -30,7 +30,7 @@
 
             var dataRecordTypeFieldsSelectorAPI;
             var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            var dataRecordTypePromiseDeferredSelectionChanged = UtilsService.createPromiseDeferred();
+            var dataRecordTypePromiseDeferredSelectionChanged;
 
             var localizationTextResourceSelectorAPI;
             var localizationTextResourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -130,6 +130,10 @@
                     }
 
                     function loadDataRecordTitleFieldsSelector() {
+                        if (payload.settings != undefined && payload.settings.FieldName != undefined) {
+                            dataRecordTypePromiseDeferredSelectionChanged = UtilsService.createPromiseDeferred();
+                        }
+
                         var loadDataRecordTypeFieldsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                         dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise.then(function () {
                             var fieldsPayload = {
@@ -173,8 +177,12 @@
 
                     function loadFieldTypeRuntimeEditor() {
                         var loadRuntimeEditorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        UtilsService.waitMultiplePromises([fieldTypeRuntimeReadyPromiseDeferred.promise, fieldTypeRuntimeReadyPromiseDeferred.promise]).then(function () {
+                        var readyPromises = [];
+                        readyPromises.push(fieldTypeRuntimeReadyPromiseDeferred.promise);
+                        if (payload.settings != undefined && payload.settings.FieldName != undefined) {
+                            readyPromises.push(dataRecordTypePromiseDeferredSelectionChanged.promise);
+                        }
+                        UtilsService.waitMultiplePromises(readyPromises).then(function () {
                             var directivePayload = {
                                 fieldTitle: "Default Value",
                                 fieldType: fieldType,
@@ -189,6 +197,7 @@
                     loadStaticData();
                     initialPromises.push(getDataRecordFieldTypeConfigs());
                     initialPromises.push(loadDataRecordTitleFieldsSelector());
+                    initialPromises.push(loadLocalizationTextResourceSelector());
 
                     var rootPromiseNode = {
                         promises: initialPromises,
@@ -198,6 +207,7 @@
                                 var dataRecordFieldType = UtilsService.getItemByVal(dataRecordFieldTypes, fieldType.ConfigId, "ExtensionConfigurationId");
                                 if (dataRecordFieldType != undefined && dataRecordFieldType.FilterEditor != undefined) {
                                     $scope.scopeModel.fieldTypeRuntimeDirective = dataRecordFieldType.FilterEditor;
+                                    previousFieldTypeRuntimeDirective = $scope.scopeModel.fieldTypeRuntimeDirective;
                                 }
                             }
                             var directivePromises = [];
@@ -207,7 +217,6 @@
                             }
                             return {
                                 promises: directivePromises,
-                                
                             };
                         }
                     };
