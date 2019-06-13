@@ -322,6 +322,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\MainExtensions\vr-genericdata-ordertype-advancedorderoptions.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\vr-genericdata-genericbe-orderdirection-selective.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEOrder\vr-genericdata-genericbe-ordertype-selective.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\Templates\FixedValuesHandlerEditor.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\vr-genericdata-genericbe-beforeinserthandler-fixedvalues.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\Templates\IsEmptyFilterRuntimeTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\vr-genericdata-genericbe-filterruntime-isempty.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericBERuntimeManagementTemplate.html" />
