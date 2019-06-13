@@ -11,9 +11,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordTypeExtraFields
     {
         public override Guid ConfigId { get { return new Guid("466EECEE-F3AC-4880-8818-8FEDD8D92BA8"); } }
 
+        public List<DataRecordTypeExtraField> DataRecordTypeExtraFields { get; set; }
+
         public override List<DataRecordField> GetFields(IDataRecordExtraFieldContext context)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
