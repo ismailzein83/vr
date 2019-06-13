@@ -227,8 +227,19 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         public void SwapTables(int indexesCommandTimeoutInSeconds)
         {
             string createindexScript = string.Format("ALTER TABLE {0} ADD constraint route_pkey_{1} PRIMARY KEY (pref)", TempTableNameWithSchema, Guid.NewGuid().ToString("N"));
-            string swapTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3}; ", TableNameWithSchema, OldTableName, TempTableNameWithSchema, TableName);
-            ExecuteNonQuery(new string[] { createindexScript, swapTableScript }, indexesCommandTimeoutInSeconds);
+            string renameTableToOldScript = string.Format("ALTER TABLE {0} RENAME TO {1}; ", TableNameWithSchema, OldTableName);
+            string renameTempTableScript = string.Format("ALTER TABLE {0} RENAME TO {1}; ", TempTableNameWithSchema, TableName);
+
+            ExecuteNonQuery(new string[] { createindexScript }, indexesCommandTimeoutInSeconds);
+            try
+            {
+                ExecuteNonQuery(new string[] { renameTableToOldScript }, indexesCommandTimeoutInSeconds);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            ExecuteNonQuery(new string[] { renameTempTableScript }, indexesCommandTimeoutInSeconds);
         }
 
         public void ApplyDifferentialRoutes(List<IdbConvertedRoute> idbRoutes)
