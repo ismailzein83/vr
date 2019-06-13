@@ -12,7 +12,9 @@
             getEntityUniqueName: getEntityUniqueName,
             openMeasureStyles: openMeasureStyles,
             viewMeasureStyles: viewMeasureStyles,
-            openPermanentFilter: openPermanentFilter
+            openPermanentFilter: openPermanentFilter,
+            addConditionFilterItem: addConditionFilterItem,
+            editConditionFilterItem: editConditionFilterItem
         });
 
         function addAnalyticTable(onAnalyticTableAdded) {
@@ -63,10 +65,31 @@
         function getEntityUniqueName() {
             return "VR_Analytic_AnalyticTable";
         }
+        function addConditionFilterItem(analyticTableId, onConditionFilterItemAdded) {
+            var modalParameters = {
+                analyticTableId: analyticTableId
+            };
+            var modalSettings = {};
 
-       
-        
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onConditionFilterItemAdded = onConditionFilterItemAdded;
+            };
 
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticPermanentFilterConditionFilterItemEditor.html', modalParameters, modalSettings);
+        }
+        function editConditionFilterItem(analyticTableId, entity, onConditionFilterItemUpdated) {
+            var modalParameters = {
+                analyticTableId: analyticTableId,
+                entity: entity
+            };
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onConditionFilterItemUpdated = onConditionFilterItemUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticPermanentFilterConditionFilterItemEditor.html', modalParameters, modalSettings);
+        }
     };
 
     appControllers.service('VR_Analytic_AnalyticTableService', AnalyticTableService);

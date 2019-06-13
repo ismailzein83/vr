@@ -11,6 +11,7 @@
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
+                isrequired: "=",
                 customvalidate: '='
             },
             controller: function ($scope, $element, $attrs) {
@@ -145,6 +146,7 @@
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                 + ' datavaluefield="ExtensionConfigurationId"'
                 + ' datatextfield="Title"'
+                +'isrequired="permanentFilterCtrl.isrequired"'
                 + 'label="' + label + '"'
                 + '</vr-select>'
                 + ' </vr-columns>'

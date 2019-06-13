@@ -14,7 +14,9 @@
             addRDBJoinDataRecordStorage: addRDBJoinDataRecordStorage,
             editRDBJoinDataRecordStorage: editRDBJoinDataRecordStorage,
             addRDBExpressionField: addRDBExpressionField,
-            editRDBExpressionField: editRDBExpressionField
+            editRDBExpressionField: editRDBExpressionField,
+            addConditionFilterItem: addConditionFilterItem,
+            editConditionFilterItem: editConditionFilterItem
         };
 
         function addDataRecordStorage(onDataRecordStorageAdded) {
@@ -127,8 +129,33 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordStorage/DataRecordStorageRDBExpressionFieldsEditor.html', modalParameters, modalSettings);
         }
+        function addConditionFilterItem(dataRecordTypeId, onConditionFilterItemAdded) {
+            var modalParameters = {
+                dataRecordTypeId: dataRecordTypeId
+            };
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onConditionFilterItemAdded = onConditionFilterItemAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/ConditionFilter/ConditionFilterItemEditor.html', modalParameters, modalSettings);
+        }
+        function editConditionFilterItem(dataRecordTypeId, entity, onConditionFilterItemUpdated) {
+            var modalParameters = {
+                dataRecordTypeId: dataRecordTypeId,
+                entity: entity
+            };
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onConditionFilterItemUpdated = onConditionFilterItemUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/ConditionFilter/ConditionFilterItemEditor.html', modalParameters, modalSettings);
+        }
     }
 
     appControllers.service('VR_GenericData_DataRecordStorageService', DataRecordStorageService);
 
-})(appControllers);
+})(appControllers); 

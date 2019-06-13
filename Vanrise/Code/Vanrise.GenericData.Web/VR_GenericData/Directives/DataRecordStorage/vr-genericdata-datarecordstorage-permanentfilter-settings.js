@@ -11,6 +11,7 @@
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
+                isrequired: "=",
                 customvalidate: '='
             },
             controller: function ($scope, $element, $attrs) {
@@ -134,7 +135,7 @@
         }
 
         function getTamplate(attrs) {
-            var label = "Permanent Filter Settings";
+            var label = "Filter Type";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
             var template =
@@ -145,6 +146,7 @@
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                 + ' datavaluefield="ExtensionConfigurationId"'
                 + ' datatextfield="Title"'
+                + 'isrequired="permanentFilterCtrl.isrequired"'
                 + 'label="' + label + '"'
                 + '</vr-select>'
                 + ' </vr-columns>'
