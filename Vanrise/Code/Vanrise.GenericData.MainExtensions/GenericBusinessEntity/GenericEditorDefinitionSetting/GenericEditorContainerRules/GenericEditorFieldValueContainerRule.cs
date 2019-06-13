@@ -10,7 +10,13 @@ namespace Vanrise.GenericData.MainExtensions
     public class GenericEditorFieldValueContainerRule : GenericEditorConditionalRule
     {
         public override Guid ConfigId { get { return new Guid("A8811BE9-6311-4FB8-9F88-71FD015F639A"); } }
-        public RecordQueryLogicalOperator LogicalOperator { get; set; }
-        public List<RecordFilter> Conditions { get; set; }
+        public List<GenericEditorFieldValueCondition> Conditions { get; set; }
+    }
+
+    public class GenericEditorFieldValueCondition
+    {
+        public string FieldName { get; set; }
+
+        public List<object> FieldValues { get; set; }
     }
 }
