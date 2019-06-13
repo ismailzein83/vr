@@ -218,7 +218,7 @@ namespace Retail.Voice.Business
 
                 if (volumePackageItemsByPackageId != null)
                 {
-                    string packageCombinations = Helper.SerializePackageCombinations(volumePackageItemsByPackageId);
+                    string packageCombinations = Retail.BusinessEntity.Entities.Helper.SerializePackageCombinations(volumePackageItemsByPackageId);
                     if (!packageCombinationsDict.ContainsKey(packageCombinations))
                         packageCombinationsDict.Add(packageCombinations, new BasePackageUsageVolumeCombination() { PackageItemsByPackageId = volumePackageItemsByPackageId });
 
@@ -265,50 +265,133 @@ namespace Retail.Voice.Business
             return context.EventPricingInfo;
         }
 
-        public void Centrex_ApplyVolumePricingToCDRs(Guid accountBEDefinitionId, List<dynamic> cdrs, Guid? cdrPricingDetailTypeId)
-        {
-            List<dynamic> mainCDRs = new List<dynamic>();
-            List<dynamic> invalidCDRs = new List<dynamic>();
-            List<dynamic> failedCDRs = new List<dynamic>();
-            List<dynamic> billingStats = new List<dynamic>();
-            List<dynamic> trafficStats = new List<dynamic>();
-            //List<>
+        /// <summary>
+        /// Should Be Called from VolumePricingStage
+        /// </summary>
+        //public Centrex_ApplyVolumePricingToCDRsOutput Centrex_ApplyVolumePricingToCDRs(Centrex_ApplyVolumePricingToCDRsInput input)
+        //{
+        //    List<dynamic> mainCDRs = new List<dynamic>(); //All MainCDRs
+        //    List<dynamic> invalidCDRs = new List<dynamic>();
+        //    List<dynamic> failedCDRs = new List<dynamic>();
+        //    List<dynamic> billingStats = new List<dynamic>();
+        //    List<dynamic> trafficStats = new List<dynamic>();
+        //    List<dynamic> volumeMainCDRs = new List<dynamic>(); //Only Main Volume CDRs
+        //    List<dynamic> updateBalanceRecords = new List<dynamic>(); //not implemented yet
 
-            //foreach()
-            //{
+        //    this.ClassifyBillingCDRs(input, mainCDRs, invalidCDRs, failedCDRs, billingStats, trafficStats, volumeMainCDRs);
 
-            //}
+        //    List<CDRVolumePricingInput> cdrVolumePricingInputList = volumeMainCDRs.Select(cdr => new CDRVolumePricingInput(cdr, cdr.SubscriberAccountId, cdr.AttemptDateTime,
+        //        cdr.SaleDurationInSeconds, cdr.PackageUsageVolumeCombinationId)).ToList();
 
-            List<CDRVolumePricingInput> cdrVolumePricingInputList = cdrs.Select(cdr => new CDRVolumePricingInput(cdr, cdr.SubscriberAccountId, cdr.AttemptDateTime, cdr.SaleDurationInSeconds,
-                cdr.PackageUsageVolumeCombinationId)).ToList();
+        //    List<CDRVolumePricingOutput> cdrVolumePricingOutputList = this.ApplyVolumePricingToCDRs(input.AccountBEDefinitionId, cdrVolumePricingInputList, input.CDRPricingDetailTypeId);
 
-            List<CDRVolumePricingOutput> cdrVolumePricingOutputList = this.ApplyVolumePricingToCDRs(accountBEDefinitionId, cdrVolumePricingInputList, cdrPricingDetailTypeId);
+        //    foreach (CDRVolumePricingOutput cdrVolumePricingOutput in cdrVolumePricingOutputList)
+        //    {
+        //        dynamic billingCDR = cdrVolumePricingOutput.CDRInput.CDR;
+        //        this.FillOrigValues(billingCDR);
 
-            foreach (CDRVolumePricingOutput cdrVolumePricingOutput in cdrVolumePricingOutputList)
-            {
-                dynamic billingCDR = cdrVolumePricingOutput.CDRInput.CDR;
-                this.FillOrigValues(billingCDR);
+        //        if (cdrVolumePricingOutput.CDRPricingOutputItem == null)
+        //        {
+        //            billingCDR.PackageId = cdrVolumePricingOutput.CDRVolumePricingOutputItems.First().PackageId;
+        //            this.RemovePricingFieldValues(billingCDR);
+        //        }
+        //        else
+        //        {
+        //            billingCDR.ChargedDurationInSeconds = cdrVolumePricingOutput.CDRPricingOutputItem.PricedDurationInSec;
+        //            billingCDR.SaleAmount = cdrVolumePricingOutput.CDRPricingOutputItem.SaleAmount;
+        //        }
 
-                if (cdrVolumePricingOutput.CDRPricingOutputItem == null)
-                {
-                    billingCDR.PackageId = cdrVolumePricingOutput.CDRVolumePricingOutputItems.First().PackageId;
-                    this.RemovePricingFieldValues(billingCDR);
-                }
-                else
-                {
-                    billingCDR.ChargedDurationInSeconds = cdrVolumePricingOutput.CDRPricingOutputItem.PricedDurationInSec;
-                    billingCDR.SaleAmount = cdrVolumePricingOutput.CDRPricingOutputItem.SaleAmount;
-                }
+        //        if (cdrVolumePricingOutput.CDRPricingDetails != null && cdrVolumePricingOutput.CDRPricingDetails.Count > 0)
+        //        {
+        //            billingCDR.InitializeCDRPricingDetails();
 
-                if (cdrVolumePricingOutput.CDRPricingDetails != null && cdrVolumePricingOutput.CDRPricingDetails.Count > 0)
-                {
-                    billingCDR.InitializeCDRPricingDetails();
+        //            foreach (var cdrPricingDetail in cdrVolumePricingOutput.CDRPricingDetails)
+        //                billingCDR.CDRPricingDetails.Add(cdrPricingDetail);
+        //        }
 
-                    foreach (var cdrPricingDetail in cdrVolumePricingOutput.CDRPricingDetails)
-                        billingCDR.CDRPricingDetails.Add(cdrPricingDetail);
-                }
-            }
-        }
+        //        List<dynamic> currentBillingStats = this.GetBillingStatsCDRRecords(cdrVolumePricingOutput, input.BillingCDRTypeId);
+        //        billingStats.AddRange(currentBillingStats);
+        //        trafficStats.AddRange(currentBillingStats);
+        //    }
+
+        //    return new Centrex_ApplyVolumePricingToCDRsOutput()
+        //    {
+        //        MainCDRs = mainCDRs,
+        //        FailedCDRs = failedCDRs,
+        //        InvalidCDRs = invalidCDRs,
+        //        BillingStats = billingStats,
+        //        TrafficStats = trafficStats,
+        //        UpdateBalanceRecords = updateBalanceRecords
+        //    };
+        //}
+
+        //public void ClassifyBillingCDRs(Centrex_ApplyVolumePricingToCDRsInput input, List<dynamic> mainCDRs, List<dynamic> invalidCDRs, List<dynamic> failedCDRs,
+        //    List<dynamic> billingStats, List<dynamic> trafficStats, List<dynamic> volumeMainCDRs)
+        //{
+        //    foreach (var billingCDR in input.BillingCDRs)
+        //    {
+        //        if (billingCDR.CDRType == input.MainType)
+        //        {
+        //            mainCDRs.Add(billingCDR);
+
+        //            if (!billingCDR.PackageUsageVolumeCombinationId.HasValue)
+        //            {
+        //                billingStats.Add(billingCDR);
+        //                trafficStats.Add(billingCDR);
+        //            }
+        //            else
+        //            {
+        //                volumeMainCDRs.Add(billingCDR);
+        //            }
+        //        }
+        //        else if (billingCDR.CDRType == input.InvalidType)
+        //        {
+        //            invalidCDRs.Add(billingCDR);
+        //            trafficStats.Add(billingCDR);
+        //        }
+        //        else if (billingCDR.CDRType == input.FailedType)
+        //        {
+        //            failedCDRs.Add(billingCDR);
+        //            trafficStats.Add(billingCDR);
+        //        }
+        //        else
+        //        {
+        //            throw new NotSupportedException($"billingCDR.CDRType {billingCDR.CDRType} not supported.");
+        //        }
+        //    }
+        //}
+
+        //public class Centrex_ApplyVolumePricingToCDRsInput
+        //{
+        //    public Guid AccountBEDefinitionId { get; set; }
+
+        //    public List<dynamic> BillingCDRs { get; set; }
+
+        //    public Guid BillingCDRTypeId { get; set; }
+
+        //    public Guid? CDRPricingDetailTypeId { get; set; }
+
+        //    public int MainType { get; set; }
+
+        //    public int InvalidType { get; set; }
+
+        //    public int FailedType { get; set; }
+        //}
+
+        //public class Centrex_ApplyVolumePricingToCDRsOutput
+        //{
+        //    public List<dynamic> MainCDRs = new List<dynamic>();
+
+        //    public List<dynamic> InvalidCDRs = new List<dynamic>();
+
+        //    public List<dynamic> FailedCDRs = new List<dynamic>();
+
+        //    public List<dynamic> BillingStats = new List<dynamic>();
+
+        //    public List<dynamic> TrafficStats = new List<dynamic>();
+
+        //    public List<dynamic> UpdateBalanceRecords = new List<dynamic>();
+        //}
 
         public List<CDRVolumePricingOutput> ApplyVolumePricingToCDRs(Guid accountBEDefinitionId, List<CDRVolumePricingInput> cdrs, Guid? cdrPricingDetailTypeId = null)
         {
@@ -500,7 +583,7 @@ namespace Retail.Voice.Business
             var cdrsInProcess = new List<VolumePricingCDRInProcess>();
             var _volumeBalanceKeys = new HashSet<PackageUsageVolumeBalanceKey>(); //to use inside anonymous method(s)
             volumeBalanceKeys = _volumeBalanceKeys;
-             
+
             AccountPackageProvider accountPackageProvider = new AccountPackageProviderManager().GetAccountPackageProvider(accountBEDefinitionId);
             if (accountPackageProvider == null)
                 return new List<VolumePricingCDRInProcess>(cdrInputs.Select(cdrInput => new VolumePricingCDRInProcess { CDRInput = cdrInput }));
