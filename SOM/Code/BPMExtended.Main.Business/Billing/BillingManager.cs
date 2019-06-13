@@ -362,25 +362,6 @@ namespace BPMExtended.Main.Business
             using (SOMClient client = new SOMClient())
             {
                 List<CreditDebitNotes> items = client.Get<List<CreditDebitNotes>>(String.Format("api/SOM.ST/Billing/GetCustomerDebitAndCreditNotes?CustomerId={0}", customerId));
-                //List<CreditDebitNotes> items = new List<CreditDebitNotes>();
-                //if (items.Count() == 0)
-                //{
-                //    var mockItem = new CreditDebitNotes()
-                //    {
-                //        Id = "123",
-                //        CustomerId = "Customer123",
-                //        Amount = 123,
-                //        BillingAccountCode = "BillingAccountCode123",
-                //        OpenAmount = 1123,
-                //        DocumentType = "documentType",
-                //        DueDate = DateTime.Today,
-                //        EntryDate = DateTime.Today
-                //    };
-                //    for (var i=0; i < 10; i++)
-                //    {
-                //        items.Add(mockItem);
-                //    }
-                //}
                 foreach (var item in items)
                 {
                     var detailItem = CreditDebitNotesMapper(item);
@@ -388,6 +369,21 @@ namespace BPMExtended.Main.Business
                 }
             }
             return creditDebitNotesItems;
+        }
+
+        public List<PromotionDetail> GetPromotions(string contractId)
+        {
+            var promotionsItems = new List<PromotionDetail>();
+            using (SOMClient client = new SOMClient())
+            {
+                List<PromotionPackage> items = client.Get<List<PromotionPackage>>(String.Format("api/SOM.ST/Billing/ReadContractPromotions?ContractId={0}", contractId));
+                foreach (var item in items)
+                {
+                    var detailItem = PromotionToDetailMapper(item);
+                    promotionsItems.Add(detailItem);
+                }
+            }
+            return promotionsItems;
         }
 
 
@@ -595,7 +591,14 @@ namespace BPMExtended.Main.Business
             };
         }
 
-
+        public PromotionDetail PromotionToDetailMapper(PromotionPackage item)
+        {
+            return new PromotionDetail()
+            {
+                PromotionPackageId = item.PromotionPackageId,
+                AssignDate = Convert.ToString(item.AssignDate)
+            };
+        }
 
 
 

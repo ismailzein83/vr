@@ -54,6 +54,7 @@
     <Compile Include="Billing\CustomerCategory.cs" />
     <Compile Include="Billing\Enumerations.cs" />
     <Compile Include="Billing\LeasedLineContractInfo.cs" />
+    <Compile Include="Billing\PromotionPackage.cs" />
     <Compile Include="Billing\RatePlan.cs" />
     <Compile Include="Billing\ServicePackage.cs" />
     <Compile Include="Billing\Service.cs" />
