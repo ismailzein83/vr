@@ -163,8 +163,21 @@ namespace Vanrise.GenericData.Entities
         public virtual void SetDependentFieldValues(ISetDependentFieldValuesContext context)
         {
         }
+        public virtual bool TryGetStyleDefinitionId(IDataRecordFieldStyleDefinitionContext context) {
+            return false;
+        }
     }
+    public interface IDataRecordFieldStyleDefinitionContext
+    {
+        object FieldValue { get; }
+        Guid StyleDefinitionId { set; }
+    }
+    public  class DataRecordFieldStyleDefinitionContext : IDataRecordFieldStyleDefinitionContext
+    {
+        public object FieldValue { get; set; }
+        public Guid StyleDefinitionId { get; set; }
 
+    }
     public interface IDataRecordFieldTypeDefaultRDBFieldAttributeContext
     {
 

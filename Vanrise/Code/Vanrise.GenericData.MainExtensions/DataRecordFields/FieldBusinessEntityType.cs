@@ -335,7 +335,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 dependantFieldType.Type.SetDependentFieldValues(setDependentFieldValuesContext);
             }
         }
+        public override bool TryGetStyleDefinitionId(IDataRecordFieldStyleDefinitionContext context)
+        {
+            BaseBusinessEntityManager baseBusinessEntityManager = GetBusinessEntityManager();
+            var businessEntityStyleDefinitionContext = new BusinessEntityStyleDefinitionContext { FieldValue = context.FieldValue };
+            bool tryGetStyleDefinitionId= baseBusinessEntityManager.TryGetStyleDefinitionId(businessEntityStyleDefinitionContext);
 
+            context.StyleDefinitionId = businessEntityStyleDefinitionContext.StyleDefinitionId;
+
+            return tryGetStyleDefinitionId;
+        }
         #endregion
 
         #region Private Methods

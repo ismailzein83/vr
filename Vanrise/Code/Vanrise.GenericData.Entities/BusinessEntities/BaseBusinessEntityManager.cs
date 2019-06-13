@@ -38,6 +38,10 @@ namespace Vanrise.GenericData.Entities
         {
             return null;
         }
+        public virtual bool TryGetStyleDefinitionId(IBusinessEntityStyleDefinitionContext context)
+        {
+            return false;
+        }
     }
 
     public class BusinessEntityCompatibleFieldInfo
@@ -46,4 +50,16 @@ namespace Vanrise.GenericData.Entities
 
         public string FieldTitle { get; set; }
     }
+    public interface IBusinessEntityStyleDefinitionContext
+    {
+        object FieldValue { get; }
+        Guid StyleDefinitionId { set; }
+    }
+    public  class BusinessEntityStyleDefinitionContext : IBusinessEntityStyleDefinitionContext
+    {
+        public object FieldValue { get; set; }
+        public Guid StyleDefinitionId { get; set; }
+
+    }
 }
+

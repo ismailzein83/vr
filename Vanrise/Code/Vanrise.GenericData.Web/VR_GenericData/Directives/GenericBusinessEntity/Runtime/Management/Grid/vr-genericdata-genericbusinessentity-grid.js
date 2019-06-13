@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRUIUtilsService', 'UtilsService', 'VR_GenericData_GenericBEActionService', 'VR_GenericData_GenericBusinessEntityService', 'VRCommon_VRBulkActionDraftService'];
+    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRUIUtilsService', 'UtilsService', 'VR_GenericData_GenericBEActionService', 'VR_GenericData_GenericBusinessEntityService', 'VRCommon_VRBulkActionDraftService','VRCommon_StyleDefinitionAPIService'];
 
-    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBEDefinitionAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityAPIService, VRUIUtilsService, UtilsService, VR_GenericData_GenericBEActionService, VR_GenericData_GenericBusinessEntityService, VRCommon_VRBulkActionDraftService) {
+    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBEDefinitionAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityAPIService, VRUIUtilsService, UtilsService, VR_GenericData_GenericBEActionService, VR_GenericData_GenericBusinessEntityService, VRCommon_VRBulkActionDraftService, VRCommon_StyleDefinitionAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -38,7 +38,7 @@
             var gridAPI;
             var gridAPIPromiseDeferred = UtilsService.createPromiseDeferred();
             var gridDrillDownTabsObj;
-
+            var styleDefinitions = [];
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.showGrid = false;
@@ -86,7 +86,7 @@
                                 } else {
 
                                     VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, businessEntity, gridAPI, genericBEGridViews, idFieldType);
-                                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, businessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridActionGroups ,genericBEGridViews, idFieldType, fieldValues);
+                                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, businessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridActionGroups, genericBEGridViews, idFieldType, fieldValues);
                                 }
                             }
                         }
@@ -107,6 +107,16 @@
                     }
                 };
 
+                ctrl.getFieldColor = function (dataItem, colDef) {
+                    var name = colDef.name;
+
+                    var fieldValue = dataItem.FieldValues[name];
+                    if (fieldValue != undefined) {
+                        var style = UtilsService.getItemByVal(styleDefinitions, fieldValue.StyleDefinitionId, 'StyleDefinitionId');
+                        if (style != undefined)
+                            return style.StyleDefinitionSettings.StyleFormatingSettings;
+                    }
+                };
                 defineAPI();
             }
 
@@ -149,6 +159,9 @@
                         //Loading GenericBEIdFieldType
                         var idFieldTypeForGenericBELoadPromise = getIdFieldTypeForGenericBELoadPromise();
                         promises.push(idFieldTypeForGenericBELoadPromise);
+
+                        var styleDefinitionsLoadPromise = loadStyleDefinitions();
+                        promises.push(styleDefinitionsLoadPromise);
 
                         promises.push(gridAPIPromiseDeferred.promise);
                     }
@@ -226,7 +239,15 @@
                             }
                         });
                     }
-
+                    function loadStyleDefinitions() {
+                        return VRCommon_StyleDefinitionAPIService.GetAllStyleDefinitions().then(function (response) {
+                            if (response) {
+                                for (var i = 0; i < response.length; i++) {
+                                    styleDefinitions.push(response[i]);
+                                }
+                            }
+                        });
+                    }
                 };
 
                 api.onGenericBEAdded = function (addedBusinessEntity) {

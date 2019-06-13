@@ -20,6 +20,7 @@ namespace Vanrise.GenericData.Entities
     {
         public object Value { get; set; }
         public string Description { get; set; }
+        public Guid? StyleDefinitionId { get; set; }
     }
 
 }
