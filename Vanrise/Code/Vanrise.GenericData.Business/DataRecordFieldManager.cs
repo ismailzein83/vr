@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
+using System.Linq;
 
 namespace Vanrise.GenericData.Business
 {
@@ -79,7 +80,14 @@ namespace Vanrise.GenericData.Business
 
                 if (filter.ExcludeFormula && dataRecordField.Formula != null)
                     return false;
-
+                if (filter.Filters != null && filter.Filters.Count() > 0)
+                {
+                    foreach (var fieldFilter in filter.Filters)
+                    {
+                        if (fieldFilter.IsExcluded(new DataRecordFieldFilterContext { DataRecordField = dataRecordField }))
+                            return false;
+                    }
+                }
                 return true;
             };
 

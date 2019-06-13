@@ -28,11 +28,13 @@
         <vr-columns width="1/4row" ng-if="scopeModel.selectedGenericBEDefinitionType!=undefined && scopeModel.selectedGenericBEDefinitionType.value==0">
             <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorDirectiveReady" selectedvalues="scopeModel.selectedDataRecordStorage" isrequired="true"></vr-genericdata-datarecordstorage-selector>
         </vr-columns>
-        
-    </vr-row>
-    <vr-row>
         <vr-columns width="1/4row" vr-loader="scopeModel.isLoadingTitle">
             <vr-genericdata-datarecordtypefields-selector label="Title Field" on-ready="scopeModel.onDataRecordTypeTitleFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/4row" vr-loader="scopeModel.isLoadingTextResourceField">
+            <vr-genericdata-datarecordtypefields-selector label="Text Resource Field" on-ready="scopeModel.onDataRecordTypeTextResourceFieldSelectorDirectiveReady"></vr-genericdata-datarecordtypefields-selector>
         </vr-columns>
         <vr-columns width="1/4row" vr-loader="scopeModel.isLoadingRequiredParent">
             <vr-genericdata-datarecordtypefields-selector label="Required Parent Field" on-ready="scopeModel.onDataRecordTypeRequiredParentFieldsDirectiveReady"></vr-genericdata-datarecordtypefields-selector>
