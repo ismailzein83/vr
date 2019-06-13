@@ -33,8 +33,6 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
 
         function initializeController() {
             $scope.scopeModel = {};
-
-
             defineAPI();
         }
 
@@ -45,7 +43,6 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
             var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             api.load = function (payload) {
-
                 var fieldType;
                 var innerSectionPromises = [];
                 
@@ -74,10 +71,11 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
                     };
 
                     directiveReadyPromiseDeferred.promise.then(function () {
-                        var payload = {
+                        var payloadDirective = {
                             fieldTitle: $scope.scopeModel.fieldTitle,
+                            fieldValue: payload != undefined ? payload.fieldValue : undefined
                         };
-                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, directiveLoadPromiseDeferred);
                     });
                 }
                 return UtilsService.waitMultiplePromises(innerSectionPromises);
@@ -106,7 +104,7 @@ app.directive('vrGenericdataFieldtypeCustomobjectRuntimeeditor', ['UtilsService'
                 multipleselection = "ismultipleselection";
             }
           
-            return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{runtimeEditorCtrl.normalColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
+            return '<vr-directivewrapper ng-if="selector.directive != undefined" directive="selector.directive" normal-col-num="{{runtimeEditorCtrl.normalColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
                     + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>';
         }
     }
