@@ -8,37 +8,16 @@ CREATE PROCEDURE [bp].[sp_BPVisualEvent_GetAfterId]
 	@BPInstanceID INT
 AS
 BEGIN
-IF (@GreaterThanID IS NULL)
-	BEGIN
-	SELECT  [ID]
+
+	SELECT [ID]
 			,[ProcessInstanceID]
 			,[ActivityID]
 			,[Title]
 			,[EventTypeID]
 			,[EventPayload]
 			,[CreatedTime]
-            INTO #temp_table
 			FROM [bp].[BPVisualEvent] WITH(NOLOCK) 
             WHERE ProcessInstanceID  = @BPInstanceID
-            
-            SELECT * FROM #temp_table
-	END
-	
-	ELSE
-	BEGIN
-	SELECT  [ID]
-			,[ProcessInstanceID]
-			,[ActivityID]
-			,[Title]
-			,[EventTypeID]
-			,[EventPayload]
-			,[CreatedTime]
-            INTO #temp2_table
-            FROM [bp].[BPVisualEvent] WITH(NOLOCK) 
-			WHERE ProcessInstanceID  = @BPInstanceID 
-			AND ID >@GreaterThanID
-            ORDER BY ID
-            
-            SELECT * FROM #temp2_table
-	END
+            and (@GreaterThanID IS NULL OR ID >@GreaterThanID)
+			ORDER BY ID
 END
