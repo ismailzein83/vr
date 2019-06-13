@@ -128,9 +128,7 @@
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                 + ' datavaluefield="ExtensionConfigurationId"'
                 + ' datatextfield="Title"'
-                + ' isrequired="ctrl.isrequired"'
-                
-                + ' hideremoveicon>'
+                + ' isrequired="ctrl.isrequired">'
                 + '</vr-select>'
                 + ' </vr-columns>'
                 + ' <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"'
