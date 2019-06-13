@@ -40,7 +40,7 @@ namespace TOne.WhS.Deal.Business
                     continue;
                 if (!carrierAccountIds.Contains(volCommitmentDealSettings.CarrierAccountId))
                     continue;
-                if (volCommitmentDealSettings.BillingType != DealBillingType.EstimatedVolume)
+                if (!volCommitmentDealSettings.SendOrPay)
                     continue;
 
                 if (volCommitmentDealSettings.RealEED.Value <= toDate && volCommitmentDealSettings.RealEED.Value >= fromDate)

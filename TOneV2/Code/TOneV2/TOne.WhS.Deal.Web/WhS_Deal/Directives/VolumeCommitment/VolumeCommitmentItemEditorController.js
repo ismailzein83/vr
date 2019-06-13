@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentItemEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum','WhS_Deal_DealBillingTypeEnum'];
+    VolumeCommitmentItemEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum'];
 
-    function VolumeCommitmentItemEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, WhS_Deal_DealBillingTypeEnum) {
+    function VolumeCommitmentItemEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum) {
         $scope.scopeModel = {};
         var volumeCommitmentItemEntity;
         var context;
@@ -22,7 +22,7 @@
         var volumeCommitmentType; 
         var dealBED;
 
-        var billingType;
+        var sendOrPay;
          
         loadParameters();
         defineScope();
@@ -34,7 +34,7 @@
                 volumeCommitmentItemEntity = parametersObj.volumeCommitmentItemEntity;
                 context = parametersObj.context;
                 carrierAccountId = parametersObj.carrierAccountId;
-                billingType = parametersObj.billingType;
+                sendOrPay = parametersObj.sendOrPay;
                 if (context != undefined)
                     $scope.scopeModel.zoneSelector = context.getZoneSelector();
             }
@@ -49,9 +49,9 @@
                     var obj = bulidTierObject(volumeCommitmentItemTier, $scope.scopeModel.tiers.length);
                     $scope.scopeModel.tiers.push(obj);
                 };
-                WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItemTier(onVolumeCommitmentItemTierAdded, $scope.scopeModel.tiers, getContext(), billingType);
+                WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItemTier(onVolumeCommitmentItemTierAdded, $scope.scopeModel.tiers, getContext(), sendOrPay);
             };
-            $scope.scopeModel.isEstimatedVolume = billingType != undefined ? billingType.value == WhS_Deal_DealBillingTypeEnum.EstimatedVolume.value:false;
+            $scope.scopeModel.isEstimatedVolume = sendOrPay;
             $scope.scopeModel.isValid = function () {
                 if ($scope.scopeModel.tiers.length == 0)
                     return "You should add at least one tier.";
@@ -336,7 +336,7 @@
                     $scope.scopeModel.tiers[nextindex] = bulidTierObject(nextItem, nextindex);
                 }
             };
-            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTier(tierEntity, onVolumeCommitmentItemTierUpdated, $scope.scopeModel.tiers, getContext(), billingType);
+            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTier(tierEntity, onVolumeCommitmentItemTierUpdated, $scope.scopeModel.tiers, getContext(), sendOrPay);
         };
 
         function findExceptionZoneIds(exrates) {

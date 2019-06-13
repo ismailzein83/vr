@@ -17,11 +17,6 @@ namespace TOne.WhS.Deal.Business
         Customer = 2
     }
 
-    public enum DealBillingType
-    {
-        byTraffic = 0,
-        EstimatedVolume = 1,
-    }
 
     public class VolCommitmentDealSettings : DealSettings
     {
@@ -34,7 +29,6 @@ namespace TOne.WhS.Deal.Business
         public int LastGroupNumber { get; set; }
         public int CurrencyId { get; set; }
         public VolCommitmentTimeZone VolCommitmentTimeZone { get; set; }
-        public DealBillingType BillingType { get; set; }
         public override DateTime? RealEED
         {
             get
@@ -147,7 +141,7 @@ namespace TOne.WhS.Deal.Business
             {
                 foreach (var item in Items)
                 {
-                    if (item != null && BillingType == DealBillingType.EstimatedVolume)
+                    if (item != null && SendOrPay)
                     {
                         if (item.Tiers.Count() > 2)
                         {

@@ -2,15 +2,15 @@
 
     'use strict';
 
-    VolumeCommitmentItemTierEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum','WhS_Deal_DealBillingTypeEnum'];
+    VolumeCommitmentItemTierEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum'];
 
-    function VolumeCommitmentItemTierEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, WhS_Deal_DealBillingTypeEnum) {
+    function VolumeCommitmentItemTierEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum) {
 
         var volumeCommitmentItemTierEntity;
         var tiers;
         var context;
         var isEditMode;
-        var billingType;
+        var sendOrPay;
 
         var rateEvaluatorSelectiveDirectiveAPI;
         var rateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -27,7 +27,7 @@
                 tiers = parametersObj.tiers;
                 context = parametersObj.context;
                 $scope.scopeModel.rateEvaluatorSelective = context.getRateEvaluatorSelective();
-                billingType = parametersObj.billingType;
+                sendOrPay = parametersObj.sendOrPay;
             }
             isEditMode = (volumeCommitmentItemTierEntity != undefined);
         }
@@ -60,7 +60,7 @@
             };
 
             $scope.scopeModel.disabelIsLastTier = function () {
-                if (billingType.value == WhS_Deal_DealBillingTypeEnum.EstimatedVolume.value)
+                if (sendOrPay)
                     return true;
                 if (!isEditMode && tiers.length == 0)
                     return true;
@@ -76,8 +76,8 @@
             };
             $scope.scopeModel.validateEvaluatedRate = function () {
                 var rateEvaluatorData =rateEvaluatorSelectiveDirectiveAPI!= undefined ? rateEvaluatorSelectiveDirectiveAPI.getData(): undefined;
-                if (rateEvaluatorSelectiveDirectiveAPI != undefined && rateEvaluatorData != undefined && billingType.value == WhS_Deal_DealBillingTypeEnum.EstimatedVolume.value && (rateEvaluatorData.ConfigId == "434bb6e0-a725-422e-a66a-be839192ae5c" || rateEvaluatorData.ConfigId == "49af4d76-c067-47da-a600-a1ea0e1aad99"))
-                    return "Estimated volume billing type requires a fixed rate evaluator";
+                if (rateEvaluatorSelectiveDirectiveAPI != undefined && rateEvaluatorData != undefined && sendOrPay && (rateEvaluatorData.ConfigId == "434bb6e0-a725-422e-a66a-be839192ae5c" || rateEvaluatorData.ConfigId == "49af4d76-c067-47da-a600-a1ea0e1aad99"))
+                    return "Send Or Pay requires a fixed rate evaluator";
                 return null;
             };
 
@@ -85,7 +85,7 @@
                 var onVolumeCommitmentItemTierExRateAdded = function (addedObj) {
                     $scope.scopeModel.exceptions.push(addedObj);
                 };
-                WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItemTierExRate(onVolumeCommitmentItemTierExRateAdded, getContext(),billingType);
+                WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItemTierExRate(onVolumeCommitmentItemTierExRateAdded, getContext(), sendOrPay);
             };
 
             $scope.scopeModel.disabelAddException = function () {
@@ -121,7 +121,7 @@
 
                 var payload = {
                     context: getRateEvaluatorContext(),
-                    billingType: billingType
+                    sendOrPay: sendOrPay
                 };
                 if (volumeCommitmentItemTierEntity != undefined && volumeCommitmentItemTierEntity.EvaluatedRate != undefined)
                     payload.evaluatedRate = volumeCommitmentItemTierEntity.EvaluatedRate;
@@ -146,7 +146,7 @@
         }
 
         function loadStaticData() {
-            if ((billingType.value == WhS_Deal_DealBillingTypeEnum.EstimatedVolume.value) && tiers.length == 1)
+            if (sendOrPay && tiers.length == 1)
                 $scope.scopeModel.isLastTier = true;
             if (!isEditMode)
                 return;
@@ -201,7 +201,7 @@
                 var index = $scope.scopeModel.exceptions.indexOf(dataItem);
                 $scope.scopeModel.exceptions[index] = updatedItem;
             };
-            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTierExRate(dataItem, onVolumeCommitmentItemTierExRateUpdated, getContext(),billingType);
+            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTierExRate(dataItem, onVolumeCommitmentItemTierExRateUpdated, getContext(), sendOrPay);
         }
 
         function buildExceptionZoneRatesDataSource(exceptionZoneRates) {

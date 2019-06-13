@@ -30,7 +30,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
             var gridAPI;
             var context;
             var lastGroupNumber;
-            var billingType;
+            var sendOrPay;
 
             this.initializeController = initializeController;
             function initializeController() {
@@ -49,7 +49,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                         volumeCommitmentItem.ZoneGroupNumber = lastGroupNumber;
                         ctrl.datasource.push({ Entity: volumeCommitmentItem });
                     };
-                        WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItem(onVolumeCommitmentItemAdded, getContext(),billingType);
+                        WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItem(onVolumeCommitmentItemAdded, getContext(), sendOrPay);
                     });
                 };
 
@@ -90,7 +90,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        billingType = context.getBillingType();
+                        sendOrPay = context.getSendOrPayValue();
                         lastGroupNumber = context.lastGroupNumber;
                         if (payload.volumeCommitmentItems != undefined) {
                             for (var i = 0; i < payload.volumeCommitmentItems.length; i++) {
@@ -126,7 +126,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                         var index = ctrl.datasource.indexOf(volumeCommitmentItemObj);
                         ctrl.datasource[index] = { Entity: volumeCommitmentItem };
                     };
-                    WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItem(volumeCommitmentItemObj.Entity, onVolumeCommitmentItemUpdated, getContext(),billingType);
+                    WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItem(volumeCommitmentItemObj.Entity, onVolumeCommitmentItemUpdated, getContext(), sendOrPay);
                 });
             }
             function getContext() {

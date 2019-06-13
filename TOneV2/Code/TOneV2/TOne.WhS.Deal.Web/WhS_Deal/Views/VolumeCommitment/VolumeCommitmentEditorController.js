@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'VRCommon_EntityFilterEffectiveModeEnum','WhS_Deal_DealBillingTypeEnum'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'VRCommon_EntityFilterEffectiveModeEnum'];
 
-    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_DealBillingTypeEnum) {
+    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, VRCommon_EntityFilterEffectiveModeEnum) {
 
         var isEditMode;
 
@@ -55,8 +55,6 @@
             $scope.scopeModel = {};
             $scope.scopeModel.disabelType = isEditMode;
             $scope.scopeModel.volumeCommitmentTypes = UtilsService.getArrayEnum(WhS_Deal_VolumeCommitmentTypeEnum);
-            $scope.scopeModel.billingTypes = UtilsService.getArrayEnum(WhS_Deal_DealBillingTypeEnum);
-            //$scope.scopeModel.selectedBillingType = WhS_Deal_DealBillingTypeEnum.ByTraffic;
             $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
 
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
@@ -76,7 +74,7 @@
                 if (!carrierAccountSelectedPromise)
                     $scope.scopeModel.description = undefined;
             };
-            $scope.scopeModel.onDealBillingTypeSelectionChanged = function () {
+            $scope.scopeModel.onSendOrPayValueChanged = function () {
                 volumeCommitmenetItemsReadyDeferred.promise.then(function () {
                     var payload = {
                         context: getContext()
@@ -139,6 +137,10 @@
             $scope.scopeModel.validateBED = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
+            $scope.scopeModel.validatePriority = function () {
+                if ($scope.scopeModel.priority < 1)
+                    return "Deal priority should be greater than 1";
+            };
             $scope.scopeModel.validateEED = function () {
                 var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
                 var eed = UtilsService.createDateFromString($scope.scopeModel.endDate);
@@ -149,7 +151,7 @@
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
             $scope.scopeModel.showVolumeItemSection = function () {
-                return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined && $scope.scopeModel.selectedBillingType != undefined);
+                return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined);
             };
             $scope.scopeModel.validateDealStatusDate = function () {
                 var date = UtilsService.createDateFromString($scope.scopeModel.deActivationDate);
@@ -256,7 +258,8 @@
             $scope.scopeModel.selectedDealStatus = UtilsService.getItemByVal($scope.scopeModel.dealStatus, volumeCommitmentEntity.Settings.Status, 'value');
             $scope.scopeModel.deActivationDate = volumeCommitmentEntity.Settings.DeActivationDate;
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
-            $scope.scopeModel.selectedBillingType = UtilsService.getItemByVal($scope.scopeModel.billingTypes, volumeCommitmentEntity.Settings.BillingType, "value");
+            $scope.scopeModel.sendOrPay = volumeCommitmentEntity.Settings.SendOrPay;
+            $scope.scopeModel.priority = volumeCommitmentEntity.Settings.Priority;
 
             var datasource = [];
             datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.System);
@@ -388,7 +391,8 @@
                     DeActivationDate: $scope.scopeModel.deActivationDate,
                     IsRecurrable: volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined ? volumeCommitmentEntity.Settings.IsRecurrable : true,
                     VolCommitmentTimeZone: $scope.scopeModel.selectedTimeZone.value,
-                    BillingType : $scope.scopeModel.selectedBillingType.value
+                    SendOrPay: $scope.scopeModel.sendOrPay,
+                    Priority : $scope.scopeModel.priority
                 }
             };
             return obj;
@@ -406,9 +410,9 @@
                     if ($scope.scopeModel.selectedVolumeCommitmentType != undefined)
                         return $scope.scopeModel.selectedVolumeCommitmentType.zoneSelector;
                 },
-                getBillingType: function () {
-                    if ($scope.scopeModel.selectedBillingType != undefined)
-                        return $scope.scopeModel.selectedBillingType;
+                getSendOrPayValue: function () {
+                    if ($scope.scopeModel.sendOrPay != undefined)
+                        return $scope.scopeModel.sendOrPay;
                 },
                 getZoneSelectorPayload: function (item) {
                     if ($scope.scopeModel.selectedVolumeCommitmentType != undefined) {

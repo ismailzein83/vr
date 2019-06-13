@@ -83,7 +83,7 @@
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentEditor.html', parameters, settings);
         }
 
-        function addVolumeCommitmentItem(onVolumeCommitmentItemAdded, context,billingType) {
+        function addVolumeCommitmentItem(onVolumeCommitmentItemAdded, context, sendOrPay) {
             var settings = {
             };
 
@@ -92,13 +92,13 @@
             };
             var parameters = {
                 context: context,
-                billingType: billingType
+                sendOrPay: sendOrPay
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemEditor.html', parameters, settings);
         }
 
-        function editVolumeCommitmentItem(volumeCommitmentItemEntity, onVolumeCommitmentItemUpdated, context, billingType) {
+        function editVolumeCommitmentItem(volumeCommitmentItemEntity, onVolumeCommitmentItemUpdated, context, sendOrPay) {
             var settings = {
             };
             settings.onScopeReady = function (modalScope) {
@@ -107,13 +107,13 @@
             var parameters = {
                 volumeCommitmentItemEntity: volumeCommitmentItemEntity,
                 context: context,
-                billingType: billingType
+                sendOrPay: sendOrPay
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemEditor.html', parameters, settings);
         }
 
-        function addVolumeCommitmentItemTier(onVolumeCommitmentItemTierAdded, tiers, context, billingType) {
+        function addVolumeCommitmentItemTier(onVolumeCommitmentItemTierAdded, tiers, context, sendOrPay) {
             var settings = {
             };
 
@@ -123,13 +123,13 @@
             var parameters = {
                 tiers: tiers,
                 context: context,
-                billingType: billingType
+                sendOrPay: sendOrPay
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemtierEditor.html', parameters, settings);
         }
 
-        function editVolumeCommitmentItemTier(volumeCommitmentItemTierEntity, onVolumeCommitmentItemTierUpdated, tiers, context, billingType) {
+        function editVolumeCommitmentItemTier(volumeCommitmentItemTierEntity, onVolumeCommitmentItemTierUpdated, tiers, context, sendOrPay) {
             var settings = {
             };
             settings.onScopeReady = function (modalScope) {
@@ -139,13 +139,13 @@
                 volumeCommitmentItemTierEntity: volumeCommitmentItemTierEntity,
                 tiers: tiers,
                 context: context,
-                billingType: billingType
+                sendOrPay: sendOrPay
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemTierEditor.html', parameters, settings);
         }
 
-        function addVolumeCommitmentItemTierExRate(onVolumeCommitmentItemTierExRateAdded, context, billingType) {
+        function addVolumeCommitmentItemTierExRate(onVolumeCommitmentItemTierExRateAdded, context, sendOrPay) {
             var settings = {
             };
 
@@ -154,13 +154,13 @@
             };
             var parameters = {
                 context: context,
-                billingType: billingType
+                sendOrPay: sendOrPay
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemTierExRateEditor.html', parameters, settings);
         }
 
-        function editVolumeCommitmentItemTierExRate(exRateEntity, onVolumeCommitmentItemTierExRateUpdated, context, billingType) {
+        function editVolumeCommitmentItemTierExRate(exRateEntity, onVolumeCommitmentItemTierExRateUpdated, context, sendOrPay) {
             var settings = {
             };
 
@@ -170,7 +170,7 @@
             var parameters = {
                 exRateEntity: exRateEntity,
                 context: context,
-                billingType: billingType
+                sendOrPay: sendOrPay
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemTierExRateEditor.html', parameters, settings);

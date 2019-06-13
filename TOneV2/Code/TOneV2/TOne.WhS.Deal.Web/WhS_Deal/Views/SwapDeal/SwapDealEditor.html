@@ -33,7 +33,7 @@
                                            isrequired="true"
                                            hideremoveicon="true">
                                 </vr-select>
-                            </vr-columns>
+                            </vr-columns> 
                         </span>
                     </vr-row>
 
@@ -87,6 +87,15 @@
                                 <vr-columns width="1/3row" ng-if="scopeModel.selectedContractType && (scopeModel.selectedContractType.value == 0 || scopeModel.selectedContractType.value == 1 ) ">
                                     <vr-textbox type="number" minvalue="0" maxvalue="100" value="scopeModel.difference" label="Difference %" isrequired="true">  </vr-textbox>
                                 </vr-columns>
+                                <vr-columns width="1/3row">
+                                    <vr-textbox value="scopeModel.priority" type="number" label="Priority" customvalidate="scopeModel.validatePriority()"
+                                                decimalprecision="0" isrequired="true">
+                                    </vr-textbox>
+                                </vr-columns>
+                                <vr-columns width="1/3row">
+                                    <vr-switch value="scopeModel.sendOrPay" label="Send Or Pay" onvaluechanged="scopeModel.onSendOrPayValueChanged">  </vr-switch>
+                                </vr-columns>
+
                             </vr-row>
                         </vr-row>
                     </span>

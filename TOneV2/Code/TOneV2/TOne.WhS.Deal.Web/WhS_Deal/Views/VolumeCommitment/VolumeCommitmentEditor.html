@@ -64,15 +64,12 @@
                             </vr-select>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-select label="Billing Type"
-                                       datasource="scopeModel.billingTypes"
-                                       datavaluefield="value"
-                                       datatextfield="description"
-                                       selectedvalues="scopeModel.selectedBillingType"
-                                       onselectionchanged="scopeModel.onDealBillingTypeSelectionChanged"
-                                       isrequired="true"
-                                       hideremoveicon="true">
-                            </vr-select>
+                            <vr-textbox value="scopeModel.priority" type="number" label="Priority" customvalidate="scopeModel.validatePriority()"
+                                        decimalprecision="0" isrequired="true">
+                            </vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.sendOrPay" label="Send Or Pay" onvaluechanged="scopeModel.onSendOrPayValueChanged">  </vr-switch>
                         </vr-columns>
                     </vr-row>
                     <vr-row>

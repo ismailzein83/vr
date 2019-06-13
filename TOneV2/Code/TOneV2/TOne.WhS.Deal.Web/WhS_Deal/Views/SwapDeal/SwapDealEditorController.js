@@ -127,6 +127,11 @@
                 currencyDirectiveReadyPromiseDeferred.resolve();
             };
 
+            $scope.scopeModel.validatePriority = function () {
+                if ($scope.scopeModel.priority < 1)
+                    return "Deal priority should be greater than 1";
+            };
+
             $scope.scopeModel.analyse = function () {
                 WhS_BE_SwapDealAnalysisService.openSwapDealAnalysis(buildSwapDealObjFromScope());
             };
@@ -307,6 +312,8 @@
             $scope.scopeModel.deActivationDate = dealEntity.Settings.DeActivationDate;
             $scope.scopeModel.active = dealEntity.Settings.Active;
             $scope.scopeModel.difference = dealEntity.Settings.Difference;
+            $scope.scopeModel.sendOrPay = dealEntity.Settings.SendOrPay;
+            $scope.scopeModel.priority = dealEntity.Settings.Priority;
         }
         function loadCarrierBoundsSection() {
             var promises = [];
@@ -454,7 +461,9 @@
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     DeActivationDate: $scope.scopeModel.deActivationDate,
                     IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true,
-                    SwapDealTimeZone: $scope.scopeModel.selectedTimeZone.value
+                    SwapDealTimeZone: $scope.scopeModel.selectedTimeZone.value,
+                    SendOrPay: $scope.scopeModel.sendOrPay,
+                    Priority : $scope.scopeModel.priority
 
                 }
             };
