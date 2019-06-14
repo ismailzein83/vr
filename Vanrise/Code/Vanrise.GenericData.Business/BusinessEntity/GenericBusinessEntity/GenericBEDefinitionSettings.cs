@@ -108,6 +108,8 @@ namespace Vanrise.GenericData.Business
         public bool ShowUpload { get; set; }
         public List<GenericBEUploadField> UploadFields { get; set; }
         public List<GenericBECustomAction> CustomActions { get; set; }
+
+        public GenericBE360DegreeSettings ThreeSixtyDegreeSettings { get; set; }
     }
 
     #region Enums
@@ -410,6 +412,11 @@ namespace Vanrise.GenericData.Business
         public string FieldTitle { get; set; }
 
     }
+
+    public class GenericBE360DegreeSettings{
+        public bool Use360Degree { get; set; }
+    }
+
 
     #endregion
 

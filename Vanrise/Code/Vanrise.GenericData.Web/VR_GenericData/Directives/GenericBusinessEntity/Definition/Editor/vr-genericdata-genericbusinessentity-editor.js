@@ -367,7 +367,10 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         AdditionalSettings: additionalSettingsGridAPI.getData(),
                         RequiredParentFieldName: dataRecordTypeRequiredParentFieldsSelectorAPI.getSelectedIds(),
                         IsRemoteSelector: $scope.scopeModel.isRemoteSelector,
-                        DoNotLoadByDefault: $scope.scopeModel.doNotLoadByDefault
+                        DoNotLoadByDefault: $scope.scopeModel.doNotLoadByDefault,
+                        ThreeSixtyDegreeSettings: {
+                            Use360Degree: $scope.scopeModel.use360Degree
+                        }
                     };
                 };
 
@@ -393,7 +396,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             $scope.scopeModel.showUploadButton = businessEntityDefinitionSettings.ShowUpload;
                             $scope.scopeModel.isRemoteSelector = businessEntityDefinitionSettings.IsRemoteSelector;
                             $scope.scopeModel.doNotLoadByDefault = businessEntityDefinitionSettings.DoNotLoadByDefault;
-
+                            $scope.scopeModel.use360Degree = (businessEntityDefinitionSettings.ThreeSixtyDegreeSettings != undefined) ? businessEntityDefinitionSettings.ThreeSixtyDegreeSettings.Use360Degree : undefined;
                         }
 
                     }
