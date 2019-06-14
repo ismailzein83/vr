@@ -7,9 +7,8 @@
     </vr-columns>
 </vr-row>
 <vr-row>
-	<span vr-loader="scopeModel.isFieldTypeRumtimeDirectiveLoading">
-		<vr-directivewrapper ng-if="scopeModel.fieldTypeRuntimeDirective != undefined"
-							 directive="scopeModel.fieldTypeRuntimeDirective"
+	<span vr-loader="scopeModel.isFieldTypeRumtimeDirectiveLoading" ng-if="scopeModel.fieldTypeRuntimeDirective != undefined">
+		<vr-directivewrapper directive="scopeModel.fieldTypeRuntimeDirective"
 							 on-ready="scopeModel.onFieldTypeRumtimeDirectiveReady"
 							 normal-col-num="6">
 		</vr-directivewrapper>
