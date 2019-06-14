@@ -3,17 +3,17 @@
         
         <vr-genericdata-genericbe-filterruntime-rootcontainer on-ready="scopeModel.onFilterRuntimeRootDirectiveReady"></vr-genericdata-genericbe-filterruntime-rootcontainer>
 
-        <vr-columns withemptyline="{{scopeModel.filterRuntimeEditor != undefined}}">
+        <vr-columns colnum="2" withemptyline="{{scopeModel.filterRuntimeEditor != undefined}}">
             <vr-button type="Search" ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" formname="formFilter" data-onclick="search" standalone></vr-button>
             <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton" standalone></vr-button>
             <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton" standalone></vr-button>
-            <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter"  style="font-size:10px;cursor:pointer;" ng-click="scopeModel.showFilterSection()"><a  style="text-decoration: none">Hide Filter</a></span>
+            <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter"  style="font-size:10px;cursor:pointer;position: absolute; top: 24px;padding-left: 5px;" ng-click="scopeModel.showFilterSection()"><a  style="text-decoration: none">Hide Filter</a></span>
         </vr-columns>
     </vr-columns>
-    <vr-columns ng-hide="scopeModel.isFilterSectionShow">
+    <vr-columns ng-hide="scopeModel.isFilterSectionShow" >
         <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton" standalone></vr-button>
         <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton" standalone></vr-button>
-        <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" style="font-size:10px;cursor:pointer;" ng-click="scopeModel.showFilterSection()"><a style="text-decoration: none">Show Filter</a></span>
+        <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" style="font-size:10px;cursor:pointer;position: absolute; top: 6px;right: -10px;" ng-click="scopeModel.showFilterSection()"><a style="text-decoration: none">Show Filter</a></span>
     </vr-columns>
 
     <vr-columns width="fullrow" simplecol>
