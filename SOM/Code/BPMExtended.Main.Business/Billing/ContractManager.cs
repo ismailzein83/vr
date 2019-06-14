@@ -136,24 +136,15 @@ namespace BPMExtended.Main.Business
         {
             return RatePlanMockDataGenerator.GetADSLContractsByUsername(userName);
         }
-        public bool IsTelephonyLineHasADSLContract(string contractId)
+        public bool IsTelephonyContractHasRelatedADSL(string contractId)
         {
-            //TODO: check if Telephony Line  mapped to an ADSL contract
+            bool hasRelatedADSL;
 
-            //return random boolean value
-            ContractManager contractManager = new ContractManager();
-            //TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
-
-            ADSLLinePath item = new ADSLLinePath();
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<ADSLLinePath>(String.Format("api/SOM/Inventory/CheckADSL?phoneNumber={0}", "1111"));
+                hasRelatedADSL = client.Get<bool>(String.Format("api/SOM.ST/Billing/IsTelephonyContractHasRelatedADSL?ContractId={0}", contractId));
             }
-            string[] path = item.Path.Split(',');
-            return path[6] == "1";
-            //Random gen = new Random();
-            //int prob = gen.Next(100);
-            //return prob <= 50;
+            return hasRelatedADSL;
         }
 
         public GetContractAddressOutput GetContractAddressAndDirectoryInfo(string contractId)
