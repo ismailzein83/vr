@@ -25,6 +25,7 @@ app.directive('vrWhsRoutingCustomerrouteGridfilters', ['UtilsService', 'VRUIUtil
             this.initializeController = initializeController;
 
             var parametersCustomersIds;
+            var parametersSuppliersIds;
             var parametersZoneIds;
             var parametersSaleCode;
             var routingDatabase;
@@ -102,6 +103,7 @@ app.directive('vrWhsRoutingCustomerrouteGridfilters', ['UtilsService', 'VRUIUtil
 
                     if (payload != undefined) {
                         parametersCustomersIds = payload.customersIds;
+                        parametersSuppliersIds = payload.suppliersIds;
                         parametersZoneIds = payload.zoneIds;
                         parametersSaleCode = payload.saleCode;
                         routingDatabase = payload.routingDatabase;
@@ -199,6 +201,9 @@ app.directive('vrWhsRoutingCustomerrouteGridfilters', ['UtilsService', 'VRUIUtil
                         var loadSupplierCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         var payload = { filter: { Filters: getCarrierAccountSelectorFilter() } };
+
+                        if (parametersSuppliersIds != null)
+                            payload.selectedIds = parametersSuppliersIds;
 
                         supplierCarrierAccountReadyPromiseDeferred.promise.then(function () {
                             VRUIUtilsService.callDirectiveLoad(supplierCarrierAccountDirectiveAPI, payload, loadSupplierCarrierAccountPromiseDeferred);

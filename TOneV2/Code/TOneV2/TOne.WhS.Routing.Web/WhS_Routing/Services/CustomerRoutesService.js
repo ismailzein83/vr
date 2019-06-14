@@ -23,6 +23,7 @@
             if (payload.Settings.DimensionFilters == null)
                 return;
             var customersIds;
+            var suppliersIds;
             var zoneIds;
             var saleCode;
             var hasSaleZoneDimension;
@@ -42,12 +43,16 @@
                 if (item.Dimension == 'Customer')
                     customersIds = item.FilterValues;
 
+                if (item.Dimension == 'Supplier')
+                    suppliersIds = item.FilterValues;
+
                 if (item.Dimension == 'SaleCode')
                     saleCode = item.FilterValues != undefined && item.FilterValues.length > 0 ? item.FilterValues[0] : undefined;
             }
 
             var modalParameters = {
                 CustomersIds: customersIds,
+                SuppliersIds: suppliersIds,
                 ZoneIds: zoneIds,
                 SaleCode: saleCode
             };

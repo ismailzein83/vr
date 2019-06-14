@@ -7,6 +7,7 @@
     function customerRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_UtilsService) {
 
         var parametersCustomersIds;
+        var parametersSuppliersIds;
         var parametersZoneIds;
         var parametresSaleCode;
         var loadGrid;
@@ -28,6 +29,7 @@
 
             if (parameters != null) {
                 parametersCustomersIds = parameters.CustomersIds;
+                parametersSuppliersIds = parameters.SuppliersIds;
                 parametersZoneIds = parameters.ZoneIds;
                 parametresSaleCode = parameters.SaleCode;
                 loadGrid = true;
@@ -136,6 +138,7 @@
             var payload = {
                 zoneIds: parametersZoneIds,
                 customersIds: parametersCustomersIds,
+                suppliersIds: parametersSuppliersIds,
                 saleCode: parametresSaleCode
             };
 
