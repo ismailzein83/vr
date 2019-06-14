@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
+app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', function (BaseDirService, VRLocalizationService) {
 
     return ({
         getTemplate: getTemplate,
@@ -24,11 +24,12 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         var customlabel = attrs.customlabel;
         var customLabelTag = (customlabel != undefined && customlabel != "") ? '<span class="btn-label" >' + customlabel + '</span>' : '';
         var buttonAttributes = getButtonAttributes(type);
-        var buttonTitle = attrs.buttontitle != undefined ? attrs.buttontitle : buttonAttributes.text;
+        var buttonAtributesText = VRLocalizationService.getResourceValue(buttonAttributes.localizedText, buttonAttributes.text);
+        var buttonTitle = attrs.buttontitle != undefined ? attrs.buttontitle : buttonAtributesText;
         if (type == "Login") {
             return '<div style="position:relative;display:inline-block;width:100%" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
                 + '<button style="width:100%" type="button" class="btn btn-danger login-btn"'
-                + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
+                + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAtributesText
                 + '<span class="btn-label"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                 + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
                 + '</button>'
@@ -46,7 +47,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         else {
             return '<div style="position:relative;display:inline-block" ng-if="ctrl.isExculdedOnreadOnly()" ng-show="::ctrl.showMenuButton()" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
                 + '<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; "  ng-show="ctrl.showMenuButton()" type="button" class="btn btn-default btncustom"'
-                + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
+                + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAtributesText
                 + (buttonAttributes.class != undefined ? '<span ng-show="!ctrl.menuActions && ctrl.showIcon()"  class="' + buttonAttributes.class + ' btn-label"  aria-hidden="true"></span>' : '')
                 + ' <span  class="glyphicon  glyphicon-chevron-down btn-label" ng-show="ctrl.menuActions.length > 0 " ></span>'
                 +  '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="ctrl.showLoader()" />'
@@ -60,23 +61,27 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         switch (type) {
             case "Start":
                 return {
-                    text: "Start",
+                    text:"Start",
+                    localizedText: "VRRes.Common.Start.VREnd",
                     class: "glyphicon  glyphicon-play"
                 };
 
             case "Reset":
                 return {
                     text: "Reset",
+                    localizedText: "VRRes.Common.Reset.VREnd",
                     class: "glyphicon  glyphicon-refresh"
                 };
             case "Search":
                 return {
-                    text: "Search",
+                    text:"Search",
+                    localizedText: "VRRes.Common.Search.VREnd" ,
                     class: "glyphicon  glyphicon-search"
                 };
             case "Add":
                 return {
-                    text: "Add",
+                    text:"Add",
+                    localizedText: "VRRes.Common.Add.VREnd" ,
                     class: "glyphicon  glyphicon-plus-sign"
                 };
             case "Edit":
@@ -91,23 +96,27 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case "Save":
                 return {
-                    text: "Save",
+                    text:"Save",
+                    localizedText: "VRRes.Common.Save.VREnd" ,
                     class: "glyphicon  glyphicon-floppy-disk"
                 };
             case "Yes":
                 return {
-                    text: "Yes",
+                    text:"Yes",
+                    localizedText: "VRRes.Common.Yes.VREnd",
                     class: "glyphicon  glyphicon-floppy-disk"
                 };
             case "Close":
                 return {
-                    text: "Close",
+                    text:"Close",
+                    localizedText: "VRRes.Common.Close.VREnd",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
 
             case "Cancel":
                 return {
-                    text: "Cancel",
+                    text:"Cancel",
+                    localizedText: "VRRes.Common.Cancel.VREnd",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
 
@@ -141,7 +150,8 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case "No":
                 return {
-                    text: "No",
+                    text:"No",
+                    localizedText: "VRRes.Common.No.VREnd",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
             case "Login":
@@ -186,7 +196,8 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'Upload':
                 return {
-                    text: 'Upload',
+                    text:"Upload",
+                    localizedText: "VRRes.Common.Upload.VREnd",
                     class: 'glyphicon glyphicon-upload'
                 };
             case 'ManageCountries':
@@ -253,17 +264,20 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'SelectAll':
                 return {
-                    text: 'Select All',
+                    text:"Select All",
+                    localizedText: "VRRes.Common.SelectAll.VREnd",
                     class: "glyphicon glyphicon-check"
                 };
             case 'DeselectAll':
                 return {
-                    text: 'Deselect All',
+                    text:"Deselect All",
+                    localizedText: "VRRes.Common.DeselectAll.VREnd",
                     class: "glyphicon glyphicon-unchecked"
                 };
             case 'Export':
                 return {
-                    text: 'Export',
+                    text:"Export",
+                    localizedText: "VRRes.Common.Export.VREnd",
                     class: "glyphicon glyphicon-download"
                 };
             case "Continue":
@@ -293,7 +307,8 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'Help':
                 return {
-                    text: 'Help',
+                    text:"Help",
+                    localizedText: "VRRes.Common.Help.VREnd",
                     class: 'glyphicon glyphicon-question-sign'
                 };
             case 'Next':
@@ -318,12 +333,14 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'GenerateInvoice':
                 return {
-                    text: 'Generate Invoice',
+                    text:"Generate Invoice",
+                    localizedText: "VRRes.Common.GenerateInvoice.VREnd",
                     class: "glyphicon glyphicon-retweet"
                 };
             case 'Generate':
                 return {
-                    text: 'Generate',
+                    text:"Generate",
+                    localizedText: "VRRes.Common.Generate.VREnd",
                     class: "glyphicon glyphicon-retweet"
                 };
             case 'Analyze':
@@ -338,7 +355,8 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'SendEmail':
                 return {
-                    text: 'Send Email',
+                    text:'Send Email',
+                    localizedText: "VRRes.Common.SendEmail.VREnd",
                     class: "glyphicon glyphicon-envelope"
                 };
             case 'ExcludeAll':
@@ -368,7 +386,8 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case "BulkActions":
                 return {
-                    text: "Bulk Actions",
+                    text:"Bulk Actions",
+                    localizedText: "VRRes.Common.BulkActions.VREnd",
                     class: "glyphicon glyphicon-tasks"
                 };
             case "Evaluate":
@@ -402,7 +421,8 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case 'Compare':
                 return {
-                    text: 'Compare',
+                    text:"Compare",
+                    localizedText: "VRRes.Common.Compare.VREnd",
                     class: "glyphicon glyphicon-retweet"
                 };
 
@@ -413,7 +433,8 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case "Delete":
                 return {
-                    text: "Delete",
+                    text:"Delete",
+                    localizedText: "VRRes.Common.Delete.VREnd",
                     class: "glyphicon glyphicon-trash"
                 };
             case "UploadExcel":
