@@ -146,7 +146,7 @@ namespace TOne.WhS.Deal.Business
                         if (item.Tiers.Count() > 2)
                         {
                             validationResult = false;
-                            validateBeforeSaveContext.ValidateMessages.Add(string.Format("Deal billing type is 'Estimated Volume' and contains more than 2 tiers in group '{0}'", item.Name));
+                            validateBeforeSaveContext.ValidateMessages.Add(string.Format("Deal type is 'Send Or Pay' and contains more than 2 tiers in group '{0}'", item.Name));
                         }
                         bool tierWithDiscountEvaluaterExists = false;
                         foreach (var tier in item.Tiers)
@@ -160,10 +160,10 @@ namespace TOne.WhS.Deal.Business
                         if (tierWithDiscountEvaluaterExists)
                         {
                             validationResult = false;
-                            validateBeforeSaveContext.ValidateMessages.Add("Cannot add tier(s) with discount rate evaluater when billing type is 'Estimated Volume'");
+                            validateBeforeSaveContext.ValidateMessages.Add("Cannot add tier(s) with discount rate evaluater when deal type is 'Send Or Pay'");
                         }
                     }
-                }
+                } 
             }
 
 
