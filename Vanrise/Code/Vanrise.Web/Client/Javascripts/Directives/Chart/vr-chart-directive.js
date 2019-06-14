@@ -39,7 +39,9 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
         }
 
     };
-
+    function formatNumber(num) {
+        return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    }
     function Chart(ctrl, chartElement, $scope, VRModalService) {
         var chartObj;
         var currentChartSource;
@@ -273,9 +275,9 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                             var htmlText = '<div style="width:200px"><span style="float:left" title="' + this.name + '">' + (this.name != null && this.name.length > 15 ? this.name.substring(0, 15) + '..' : this.name) + '</span><span style="float:right">';
                             if (this.y != undefined) {
                                 if (allValuesAreIntegers)
-                                    htmlText += this.y.toFixed(0);
+                                    htmlText += formatNumber(this.y.toFixed(0));
                                 else
-                                    htmlText += this.y.toFixed(2);
+                                    htmlText += formatNumber(this.y.toFixed(2));
                             }
                             else
                                 htmlText += this.y;
