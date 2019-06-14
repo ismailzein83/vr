@@ -32,7 +32,7 @@
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>21.27834cm</Top>
+        <Top>21.43709cm</Top>
         <Left>0.23962cm</Left>
         <Height>0.3122cm</Height>
         <Width>19.75609cm</Width>
@@ -302,7 +302,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CarrierSummary</DataSetName>
-        <Top>5.01023in</Top>
+        <Top>5.08523in</Top>
         <Left>0.13817in</Left>
         <Height>0.48622in</Height>
         <Width>5.78332in</Width>
@@ -422,7 +422,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>SystemSummary</DataSetName>
-        <Top>5.01023in</Top>
+        <Top>5.08523in</Top>
         <Left>5.93538in</Left>
         <Height>0.48622in</Height>
         <Width>1.9598in</Width>
@@ -448,7 +448,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>4.61124cm</Height>
+              <Height>4.10853cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -710,7 +710,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>1.13246cm</Height>
+              <Height>1.00017cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -771,7 +771,7 @@
         <DataSetName>ItemsDetails</DataSetName>
         <Top>0.41012cm</Top>
         <Left>0.32339cm</Left>
-        <Height>5.7437cm</Height>
+        <Height>5.1087cm</Height>
         <Width>19.6951cm</Width>
         <ZIndex>3</ZIndex>
         <Style>
@@ -1520,7 +1520,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ItemsDetails</DataSetName>
-        <Top>7.22924cm</Top>
+        <Top>6.40374cm</Top>
         <Left>0.35095cm</Left>
         <Height>3cm</Height>
         <Width>19.66753cm</Width>
@@ -1630,7 +1630,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ItemsDetails</DataSetName>
-        <Top>6.33021cm</Top>
+        <Top>5.59996cm</Top>
         <Left>0.32339cm</Left>
         <Height>0.72285cm</Height>
         <Width>19.6951cm</Width>
@@ -2706,7 +2706,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>5.56637in</Top>
+        <Top>5.62887in</Top>
         <Left>0.13817in</Left>
         <Height>2.17401in</Height>
         <Width>6.1719in</Width>
@@ -2819,7 +2819,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>19.82257cm</Top>
+        <Top>19.98132cm</Top>
         <Left>12.20498cm</Left>
         <Height>1.27938cm</Height>
         <Width>7.81351cm</Width>
@@ -3225,7 +3225,7 @@
           </Tablix>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>4.0967in</Top>
+        <Top>3.7217in</Top>
         <Left>0.13817in</Left>
         <Height>0.5in</Height>
         <Width>7.74312in</Width>
@@ -3341,7 +3341,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CarrierSystemRecurringCharges</DataSetName>
-        <Top>4.69386in</Top>
+        <Top>4.25636in</Top>
         <Left>3.91219in</Left>
         <Height>0.25in</Height>
         <Width>3.96911in</Width>
@@ -3457,7 +3457,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>SystemSummary</DataSetName>
-        <Top>4.69386in</Top>
+        <Top>4.25636in</Top>
         <Left>0.13817in</Left>
         <Height>0.25in</Height>
         <Width>3.77402in</Width>
@@ -3471,8 +3471,207 @@
           </Border>
         </Style>
       </Tablix>
+      <Tablix Name="Tablix3">
+        <TablixBody>
+          <TablixColumns>
+            <TablixColumn>
+              <Width>4.3713cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>5.23236cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>5.11244cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>4.98673cm</Width>
+            </TablixColumn>
+          </TablixColumns>
+          <TablixRows>
+            <TablixRow>
+              <Height>0.6cm</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox16">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=CDate(Parameters!FromDate.Value).ToString("dd MMM yyyy") + "/" + CDate(Parameters!ToDate.Value).ToString("dd MMM yyyy")</Value>
+                              <Style>
+                                <FontFamily>verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox16</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox18">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Adjustment</Value>
+                              <Style>
+                                <FontFamily>verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox18</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="DueToCarrierAdjustmentAmount">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=IIF(Round(Fields!DueToCarrierAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value)&gt;0,FormatNumber(Round(Fields!DueToCarrierAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)+" "+Fields!CurrencyIdDescription.Value,"")</Value>
+                              <Style>
+                                <FontFamily>verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>DueToCarrierAdjustmentAmount</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="DueToSystemAdjustmentAmount">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=IIF(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value) &gt; 0,FormatNumber(Round(Fields!DueToSystemAdjustmentAmount.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value) + " " + Fields!CurrencyIdDescription.Value, "")</Value>
+                              <Style>
+                                <FontFamily>verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>DueToSystemAdjustmentAmount</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+          </TablixRows>
+        </TablixBody>
+        <TablixColumnHierarchy>
+          <TablixMembers>
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+          </TablixMembers>
+        </TablixColumnHierarchy>
+        <TablixRowHierarchy>
+          <TablixMembers>
+            <TablixMember>
+              <Group Name="Details" />
+            </TablixMember>
+          </TablixMembers>
+        </TablixRowHierarchy>
+        <DataSetName>AdjustmentInvoiceMonth</DataSetName>
+        <Top>11.50835cm</Top>
+        <Left>0.35095cm</Left>
+        <Height>0.6cm</Height>
+        <Width>19.70283cm</Width>
+        <ZIndex>11</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Tablix>
     </ReportItems>
-    <Height>21.59054cm</Height>
+    <Height>21.74929cm</Height>
     <Style>
       <Border>
         <Color>White</Color>
@@ -3480,7 +3679,7 @@
       </Border>
     </Style>
   </Body>
-  <Width>20.05376cm</Width>
+  <Width>20.05378cm</Width>
   <Page>
     <PageFooter>
       <Height>1.16416cm</Height>
@@ -3855,6 +4054,36 @@
         <Field Name="DueToCarrierAmountRecurringCharges">
           <DataField>DueToCarrierAmountRecurringCharges</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
+        <rd:TableName>SettlementInvoiceItemDetail</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetSettlementInvoiceItemDetailRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.SettlementInvoiceItemDetail, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="AdjustmentInvoiceMonth">
+      <Query>
+        <DataSourceName>TOneWhSInvoiceEntities</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="DueToSystemAdjustmentAmount">
+          <DataField>DueToSystemAdjustmentAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="DueToCarrierAdjustmentAmount">
+          <DataField>DueToCarrierAdjustmentAmount</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyId">
+          <DataField>CurrencyId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyIdDescription">
+          <DataField>CurrencyIdDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>

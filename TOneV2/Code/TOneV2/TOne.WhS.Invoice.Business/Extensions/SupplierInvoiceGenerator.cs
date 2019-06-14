@@ -108,7 +108,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			decimal? minAmount = _partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
             if (resolvedPayload.Adjustment.HasValue)
             {
-                AddAdjustmentToCustomerCurrency(invoiceByCostCurrency, currencyId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Adjustment.Value);
+                AddAdjustmentToSupplierCurrency(invoiceByCostCurrency, currencyId, resolvedPayload.FromDate, resolvedPayload.ToDate, resolvedPayload.Adjustment.Value);
             }
 
 
@@ -284,7 +284,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 			#endregion
 		}
-        private void AddAdjustmentToCustomerCurrency(List<SupplierInvoiceBySaleCurrencyItemDetails> supplierInvoiceByCostCurrencyItemDetails, int currency, DateTime fromDate, DateTime toDate, decimal value)
+        private void AddAdjustmentToSupplierCurrency(List<SupplierInvoiceBySaleCurrencyItemDetails> supplierInvoiceByCostCurrencyItemDetails, int currency, DateTime fromDate, DateTime toDate, decimal value)
         {
 
             string month = fromDate.Year == toDate.Year && fromDate.Month == toDate.Month ? fromDate.ToString("MMMM - yyyy") : string.Format("{0} / {1}", fromDate.ToString("MMMM - yyyy"), toDate.ToString("MMMM - yyyy"));
@@ -293,7 +293,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             {
                 customerInvoiceBySaleCurrencyItemDetail.Amount += value;
                 customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommission += value;
-                customerInvoiceBySaleCurrencyItemDetail.TotalTrafficAmount += value;
+                customerInvoiceBySaleCurrencyItemDetail.AdjustmentAmount += value;
                 customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommissionWithTaxes += value;
                 customerInvoiceBySaleCurrencyItemDetail.TotalFullAmount += value;
             }
@@ -310,8 +310,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     Duration = 0,
                     CurrencyId = currency,
                     Amount = value,
-                    TotalTrafficAmount = value,
                     Month = month,
+					AdjustmentAmount=value
                 });
             }
         }

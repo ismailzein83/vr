@@ -27,6 +27,7 @@ namespace TOne.WhS.Invoice.Entities
         public int NumberOfSMS { get; set; }
         public decimal Duration { get; set; }
         public int CurrencyId { get; set; }
+		public string CurrencyIdDescription { get; set; }
         public string Month { get; set; }
         
     }
