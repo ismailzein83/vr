@@ -366,7 +366,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         UploadFields: ($scope.scopeModel.showUploadButton == true) ? uploadedFieldsGridAPI.getData() : null,
                         AdditionalSettings: additionalSettingsGridAPI.getData(),
                         RequiredParentFieldName: dataRecordTypeRequiredParentFieldsSelectorAPI.getSelectedIds(),
-                        IsRemoteSelector: $scope.scopeModel.isRemoteSelector
+                        IsRemoteSelector: $scope.scopeModel.isRemoteSelector,
+                        DoNotLoadByDefault: $scope.scopeModel.doNotLoadByDefault
                     };
                 };
 
@@ -391,6 +392,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             $scope.scopeModel.selectedGenericBEDefinitionType = UtilsService.getItemByVal($scope.scopeModel.genericBEDefinitionTypes, businessEntityDefinitionSettings.GenericBEType, "value");
                             $scope.scopeModel.showUploadButton = businessEntityDefinitionSettings.ShowUpload;
                             $scope.scopeModel.isRemoteSelector = businessEntityDefinitionSettings.IsRemoteSelector;
+                            $scope.scopeModel.doNotLoadByDefault = businessEntityDefinitionSettings.DoNotLoadByDefault;
+
                         }
 
                     }
