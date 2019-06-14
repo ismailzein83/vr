@@ -8,6 +8,7 @@ namespace Vanrise.Security.Entities
 {
     public class ViewSettings
     {
+       
         public virtual string GetURL(View view)
         {
             return view.Url;
@@ -16,6 +17,10 @@ namespace Vanrise.Security.Entities
         public virtual bool DoesUserHaveAccess(IViewUserAccessContext context)
         {
             return true;
+        }
+        public virtual string GetIconPath()
+        {
+            return null;
         }
         public string ViewTitleResourceKey { get; set; }
         public string ViewNameResourceKey { get; set; }

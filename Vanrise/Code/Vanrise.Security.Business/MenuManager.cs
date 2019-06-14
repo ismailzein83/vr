@@ -132,11 +132,17 @@ namespace Vanrise.Security.Business
                         )
                     {
                         MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Location = viewItem.Url, Type = viewItem.Type, Rank = viewItem.Rank, MenuType = MenuType.View };
-                        if (viewItem.Settings != null && viewItem.Settings.ViewNameResourceKey != null)
-                            viewMenu.Name = vrLocalizationManager.GetTranslatedTextResourceValue(viewItem.Settings.ViewNameResourceKey, viewItem.Name);
 
-                        if (viewItem.Settings != null && viewItem.Settings.ViewTitleResourceKey != null)
-                            viewMenu.Title = vrLocalizationManager.GetTranslatedTextResourceValue(viewItem.Settings.ViewTitleResourceKey, viewItem.Title);
+                        if(viewItem.Settings != null)
+                        {
+                            if (viewItem.Settings.ViewNameResourceKey != null)
+                                viewMenu.Name = vrLocalizationManager.GetTranslatedTextResourceValue(viewItem.Settings.ViewNameResourceKey, viewItem.Name);
+
+                            if (viewItem.Settings.ViewTitleResourceKey != null)
+                                viewMenu.Title = vrLocalizationManager.GetTranslatedTextResourceValue(viewItem.Settings.ViewTitleResourceKey, viewItem.Title);
+                            viewMenu.Icon = viewItem.Settings.GetIconPath();
+                        }
+                        
                         if (viewMenu.Name == null)
                             viewMenu.Name = viewItem.Name;
                         if (viewMenu.Title == null)
