@@ -1,6 +1,10 @@
 ﻿body {
 }
 
+.vr-left-tooltip-text .tooltip-inner {
+    text-align: left !important;
+}
+
 @-webkit-keyframes vr-visualitem-block-blinker {
     from {
         opacity: 1.0;
