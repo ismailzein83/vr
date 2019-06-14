@@ -47,7 +47,7 @@ app.directive("vrIntegrationAdapterFtp", ['UtilsService', 'VR_Integration_Compre
 
                 $scope.scopeModel.onSelectedActionChanged = function (selectedAction) {
                     if (selectedAction != undefined && selectedAction.value == -1) {
-                        $scope.selectedFileCheckCriteria = undefined;
+                        $scope.scopeModel.selectedFileCheckCriteria = undefined;
                     }
                 };
 
