@@ -12,8 +12,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetFilteredCustomerRoutes"), input);
         };
 
+        function HasViewCustomerRouteRatesPermission() {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "HasViewCustomerRouteRatesPermission"), {});
+        }
+
         return ({
-            GetFilteredCustomerRoutes: GetFilteredCustomerRoutes
+            GetFilteredCustomerRoutes: GetFilteredCustomerRoutes,
+            HasViewCustomerRouteRatesPermission: HasViewCustomerRouteRatesPermission
         });
     }
 
