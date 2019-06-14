@@ -128,7 +128,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
                     initialQueryOrderType = payload.query.OrderType;
 
                     if (payload != undefined) {
@@ -143,54 +142,52 @@
                             fieldValues = gridQuery.fieldValues;
                     }
 
+                    var treePromises = [];
                     if ($scope.scopeModel.columns.length == 0) {
-
-                        //Loading gridColumnsAttributes
-                        var businessEntityGridColumnsLoadPromise = getBusinessEntityGridColumnsLoadPromise();
-                        businessEntityGridColumnsLoadPromise.finally(function () {
-                            $scope.scopeModel.showGrid = true;
-                        });
-                        promises.push(businessEntityGridColumnsLoadPromise);
-
-                        //Loading GenericBEDefinitionSettings
-                        var genericBEDefinitionSettingsLoadPromise = getGenericBEDefinitionSettingsLoadPromise();
-                        promises.push(genericBEDefinitionSettingsLoadPromise);
-
-                        //Loading GenericBEIdFieldType
-                        var idFieldTypeForGenericBELoadPromise = getIdFieldTypeForGenericBELoadPromise();
-                        promises.push(idFieldTypeForGenericBELoadPromise);
-
-                        var styleDefinitionsLoadPromise = loadStyleDefinitions();
-                        promises.push(styleDefinitionsLoadPromise);
-
-                        promises.push(gridAPIPromiseDeferred.promise);
+                        treePromises.push(getIdFieldTypeForGenericBELoadPromise());
                     }
+                    var rootPromiseNode = {
+                        promises: treePromises,
+                        getChildNode: function () {
+                            var promises = [];
 
-                    var gridLoadDeferred = UtilsService.createPromiseDeferred();
+                            if ($scope.scopeModel.columns.length == 0) {
+                                //Loading gridColumnsAttributes
+                                var businessEntityGridColumnsLoadPromise = getBusinessEntityGridColumnsLoadPromise();
+                                businessEntityGridColumnsLoadPromise.finally(function () {
+                                    $scope.scopeModel.showGrid = true;
+                                });
+                                promises.push(businessEntityGridColumnsLoadPromise);
 
-                    //Retrieving Data
-                    UtilsService.waitMultiplePromises(promises).finally(function () {
-                        if (bulkActionId != undefined) {
-                            $scope.scopeModel.showMultipleSelection = true;
-                            bulkActionDraftInstance = VRCommon_VRBulkActionDraftService.createBulkActionDraft(getContext());
+                                //Loading GenericBEDefinitionSettings
+                                var genericBEDefinitionSettingsLoadPromise = getGenericBEDefinitionSettingsLoadPromise();
+                                promises.push(genericBEDefinitionSettingsLoadPromise);
+
+                                var styleDefinitionsLoadPromise = loadStyleDefinitions();
+                                promises.push(styleDefinitionsLoadPromise);
+
+                                promises.push(gridAPIPromiseDeferred.promise);
+                            }
+                            return {
+                                promises: promises,
+                                getChildNode: function () {
+                                    if (bulkActionId != undefined) {
+                                        $scope.scopeModel.showMultipleSelection = true;
+                                        bulkActionDraftInstance = VRCommon_VRBulkActionDraftService.createBulkActionDraft(getContext());
+                                    }
+                                    var retrievePromises = [];
+                                    var retrievePromiseLoadPromise = gridAPI.retrieveData(buildGridQuery(gridQuery));
+                                    if (retrievePromiseLoadPromise != undefined)
+                                        retrievePromises.push(retrievePromiseLoadPromise);
+                                    return {
+                                        promises: retrievePromises
+                                    };
+                                }
+                            };
                         }
+                    };
 
-                        var promise = gridAPI.retrieveData(buildGridQuery(gridQuery));
-                        if (promise != undefined) {
-                            promise.then(function () {
-                                gridLoadDeferred.resolve();
-
-                            }).catch(function (error) {
-                                gridLoadDeferred.reject(error);
-                            });
-                        }
-                        else {
-                            gridLoadDeferred.resolve();
-                        }
-
-                    }).catch(function (error) {
-                        gridLoadDeferred.reject(error);
-                    });
+                    return UtilsService.waitPromiseNode(rootPromiseNode);
 
                     function getBusinessEntityGridColumnsLoadPromise() {
                         return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEGridColumnAttributes(businessEntityDefinitionId).then(function (response) {
@@ -198,8 +195,10 @@
                             if (businessEntityGridColumnAttributes != undefined) {
                                 for (var index = 0; index < businessEntityGridColumnAttributes.length; index++) {
                                     var businessEntityGridColumnAttribute = businessEntityGridColumnAttributes[index];
-                                    if (index == 0) {
-                                        $scope.scopeModel.sortingColumn = 'FieldValues.' + businessEntityGridColumnAttribute.Name + '.Description';
+                                    if (index == 0 || index == 1) {  
+                                        if (idFieldType.Name != businessEntityGridColumnAttribute.Name) {
+                                            $scope.scopeModel.sortingColumn = 'FieldValues.' + businessEntityGridColumnAttribute.Name + '.Description';
+                                        }
                                     }
                                     if (fieldValues == undefined) {
                                         $scope.scopeModel.columns.push(businessEntityGridColumnAttribute.Attribute);
