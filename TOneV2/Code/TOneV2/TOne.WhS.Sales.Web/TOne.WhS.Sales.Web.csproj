@@ -374,8 +374,6 @@
     <Content Include="WhS_Sales\Views\RatePlanSellingzonesWithDefaultRatesController.js" />
     <Content Include="WhS_Sales\Views\RatePlanSettings.html" />
     <Content Include="WhS_Sales\Views\RatePlanSettingsController.js" />
-    <Content Include="WhS_Sales\Views\RPRouteOptionSupplier.html" />
-    <Content Include="WhS_Sales\Views\RPRouteOptionSupplierController.js" />
     <Content Include="WhS_Sales\Views\ManageCountries.html" />
     <Content Include="WhS_Sales\Views\ManageCountriesController.js" />
     <Content Include="WhS_Sales\Views\RatePlan.html" />

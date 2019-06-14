@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_BE_ZoneRouteOptionsEnum',
-    function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RouteRuleService, WhS_BE_ZoneRouteOptionsEnum) {
+app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_BE_ZoneRouteOptionsEnum','Whs_BusinessEntity_ModuleNamesEnum',
+    function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RouteRuleService, WhS_BE_ZoneRouteOptionsEnum, Whs_BusinessEntity_ModuleNamesEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -157,7 +157,8 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                         RouteOptions: rpRouteDetail.RouteOptionsDetails,
                         display: WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value,
                         currencyId: currencyId,
-                        saleRate: rpRouteDetail.EffectiveRateValue
+                        saleRate: rpRouteDetail.EffectiveRateValue,
+                        ModuleName: Whs_BusinessEntity_ModuleNamesEnum.ProductRoute.value
                     };
                     VRUIUtilsService.callDirectiveLoad(rpRouteDetail.RouteOptionsAPI, payload, rpRouteDetail.RouteOptionsLoadDeferred);
                 };
@@ -195,7 +196,8 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                         currencyId: currencyId,
                         includeBlockedSuppliers: includeBlockedSuppliers,
                         saleRate: rpRouteDetail.EffectiveRateValue,
-                        maxSupplierRate: maxSupplierRate
+                        maxSupplierRate: maxSupplierRate,
+                        ModuleName: Whs_BusinessEntity_ModuleNamesEnum.ProductRoute.value
                     };
 
                     return directiveAPI.load(payload);

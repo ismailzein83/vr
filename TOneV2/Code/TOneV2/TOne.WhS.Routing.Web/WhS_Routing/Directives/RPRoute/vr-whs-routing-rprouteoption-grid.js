@@ -72,17 +72,19 @@ app.directive('vrWhsRoutingRprouteoptionGrid', ['WhS_Routing_RPRouteAPIService',
                 var api = {};
 
                 api.load = function (payload) {
-
+                    var rpRouteOptionSupplierInput;
                     if (payload != undefined) {
-                        routingDatabaseId = payload.routingDatabaseId;
-                        routingProductId = payload.routingProductId;
-                        saleZoneId = payload.saleZoneId;
-                        supplierId = payload.supplierId;
-                        currencyId = payload.currencyId;
-                        saleRate = payload.saleRate;
+                        rpRouteOptionSupplierInput = {
+                            RoutingDatabaseId: payload.routingDatabaseId,
+                            RoutingProductId: payload.routingProductId,
+                            SaleZoneId: payload.saleZoneId,
+                            SupplierId: payload.supplierId,
+                            CurrencyId: payload.currencyId,
+                            SaleRate: payload.saleRate
+                        };
                     }
 
-                    return WhS_Routing_RPRouteAPIService.GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId, saleRate).then(function (response) {
+                    return WhS_Routing_RPRouteAPIService.GetRPRouteOptionSupplier(rpRouteOptionSupplierInput).then(function (response) {
                         if (response) {
                             var _supplierZoneServiceViewerPromises = [];
 

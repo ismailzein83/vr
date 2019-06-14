@@ -6,14 +6,15 @@
 
     function RPRouteService(VRModalService) {
 
-        function viewRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId, saleRate) {
+        function viewRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId, saleRate, moduleName) {
             var parameters = {
                 RoutingDatabaseId: routingDatabaseId,
                 RoutingProductId: routingProductId,
                 SaleZoneId: saleZoneId,
                 SupplierId: supplierId,
                 CurrencyId: currencyId,
-                SaleRate: saleRate
+                SaleRate: saleRate,
+                ModuleName: moduleName
             };
             
             VRModalService.showModal("/Client/Modules/WhS_Routing/Views/RPRoute/RPRouteOptionSupplier.html", parameters, null);

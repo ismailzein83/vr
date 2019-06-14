@@ -102,20 +102,20 @@ namespace TOne.WhS.Routing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<RPRouteOptionDetail>(input, rpRouteOptionDetails.ToBigResult(input, null));
         }
 
-        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId, int? toCurrencyId, decimal? saleRate)
+        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(RPRouteOptionSupplierInput input)
         {
-            var latestRoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
+            var latestRoutingDatabase = GetLatestRoutingDatabase(input.RoutingDatabaseId);
             if (latestRoutingDatabase == null)
                 return null;
 
             IRPRouteDataManager routeManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             routeManager.RoutingDatabase = latestRoutingDatabase;
-            Dictionary<int, RPRouteOptionSupplier> dicRouteOptionSuppliers = routeManager.GetRouteOptionSuppliers(routingProductId, saleZoneId);
+            Dictionary<int, RPRouteOptionSupplier> dicRouteOptionSuppliers = routeManager.GetRouteOptionSuppliers(input.RoutingProductId, input.SaleZoneId);
 
-            if (dicRouteOptionSuppliers == null || !dicRouteOptionSuppliers.ContainsKey(supplierId))
+            if (dicRouteOptionSuppliers == null || !dicRouteOptionSuppliers.ContainsKey(input.SupplierId))
                 return null;
 
-            RPRouteOptionSupplier rpRouteOptionSupplier = dicRouteOptionSuppliers[supplierId];
+            RPRouteOptionSupplier rpRouteOptionSupplier = dicRouteOptionSuppliers[input.SupplierId];
             HashSet<long> distinctSupplierRateIds = new HashSet<long>();
             foreach (var supplierZone in rpRouteOptionSupplier.SupplierZones)
             {
@@ -126,14 +126,14 @@ namespace TOne.WhS.Routing.Business
             Dictionary<long, SupplierRate> supplierRateByIds = new SupplierRateManager().GetSupplierRates(distinctSupplierRateIds);
 
             int? systemCurrencyId = null;
-            if (toCurrencyId.HasValue)
+            if (input.ToCurrencyId.HasValue)
                 systemCurrencyId = GetSystemCurrencyId();
 
             SupplierZoneRateLocator futureSupplierZoneRateLocator = null;
 
             if (latestRoutingDatabase.Type != RoutingDatabaseType.Future)
             {
-                List<RoutingSupplierInfo> routingSupplierInfoList = new List<RoutingSupplierInfo>() { new RoutingSupplierInfo() { SupplierId = supplierId } };
+                List<RoutingSupplierInfo> routingSupplierInfoList = new List<RoutingSupplierInfo>() { new RoutingSupplierInfo() { SupplierId = input.SupplierId } };
                 futureSupplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadAllNoCache(routingSupplierInfoList, null, true));
             }
 
@@ -145,8 +145,7 @@ namespace TOne.WhS.Routing.Business
 
             return new RPRouteOptionSupplierDetail()
             {
-                SupplierName = new CarrierAccountManager().GetCarrierAccountName(supplierId),
-                SupplierZones = rpRouteOptionSupplier.SupplierZones.MapRecords(x => RPRouteOptionSupplierZoneDetailMapper(futureSupplierZoneRateLocator, supplierRateByIds, x, systemCurrencyId, toCurrencyId, effectiveDate, saleRate, supplierTransformationId, includedRulesConfiguration))
+                SupplierZones = rpRouteOptionSupplier.SupplierZones.MapRecords(x => RPRouteOptionSupplierZoneDetailMapper(futureSupplierZoneRateLocator, supplierRateByIds, x, systemCurrencyId, input.ToCurrencyId, effectiveDate, input.SaleRate, supplierTransformationId, includedRulesConfiguration))
             };
         }
 
@@ -822,7 +821,6 @@ namespace TOne.WhS.Routing.Business
             int? toCurrencyId, DateTime effectiveDate, decimal? effectiveRateValue, bool includeBlockedSuppliers, int optionOrder, Dictionary<long, SupplierZoneDetail> supplierZoneDetailsByZoneId)
         {
             ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
 
             SupplierZoneDetail supplierZoneDetail = supplierZoneDetailsByZoneId.GetRecord(option.SupplierZoneId);
@@ -836,7 +834,7 @@ namespace TOne.WhS.Routing.Business
                 Percentage = option.Percentage,
                 SupplierCode = option.SupplierCode,
                 SupplierId = option.SupplierId,
-                SupplierName = carrierAccountManager.GetCarrierAccountName(option.SupplierId),
+                SupplierName = _carrierAccountManager.GetCarrierAccountName(option.SupplierId, ModuleName.ProductRoute),
                 SupplierRate = option.SupplierRate,
                 SupplierZoneId = option.SupplierZoneId,
                 SupplierZoneName = supplierZoneManager.GetSupplierZoneName(option.SupplierZoneId),
@@ -866,7 +864,7 @@ namespace TOne.WhS.Routing.Business
                         ExecutedRuleId = backupOption.ExecutedRuleId,
                         SupplierCode = backupOption.SupplierCode,
                         SupplierId = backupOption.SupplierId,
-                        SupplierName = carrierAccountManager.GetCarrierAccountName(backupOption.SupplierId),
+                        SupplierName = _carrierAccountManager.GetCarrierAccountName(backupOption.SupplierId, ModuleName.ProductRoute),
                         SupplierRate = backupOption.SupplierRate,
                         SupplierZoneId = backupOption.SupplierZoneId,
                         SupplierZoneName = supplierZoneManager.GetSupplierZoneName(backupOption.SupplierZoneId),
@@ -979,7 +977,7 @@ namespace TOne.WhS.Routing.Business
             {
                 SaleZoneId = routeOption.SaleZoneId,
                 SupplierId = routeOption.SupplierId,
-                SupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId),
+                SupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId, ModuleName.ProductRoute),
                 SupplierZoneName = routeOption.SupplierZoneId.HasValue ? _supplierZoneManager.GetSupplierZoneName(routeOption.SupplierZoneId.Value) : null,
                 SupplierServicesIds = routeOption.SupplierServicesIds,
                 SupplierServicesNames = routeOption.SupplierServicesIds != null ? _zoneServiceConfigManager.GetZoneServicesNames(routeOption.SupplierServicesIds) : null,
@@ -1078,5 +1076,4 @@ namespace TOne.WhS.Routing.Business
         public GridPersonalizationExtendedSetting ZoneGridPersonalization { get; set; }
         public GridPersonalizationExtendedSetting CodeGridPersonalization { get; set; }
     }
-
 }

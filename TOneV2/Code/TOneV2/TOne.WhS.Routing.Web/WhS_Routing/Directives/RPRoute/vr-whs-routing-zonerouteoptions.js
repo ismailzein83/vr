@@ -28,6 +28,7 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
             var saleRate;
             var routeOptionEvaluatedStatusEnum = UtilsService.getArrayEnum(WhS_Routing_RouteOptionEvaluatedStatusEnum);
 
+            var moduleName;
 
             function initCtrl() {
                 ctrl.routeOptions = [];
@@ -35,7 +36,7 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
                 ctrl.longPrecision = UISettingsService.getUIParameterValue('LongPrecision');
 
                 ctrl.viewSupplier = function (routeOption) {
-                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, routeOption.SupplierId, currencyId, saleRate);
+                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, routeOption.SupplierId, currencyId, saleRate, moduleName);
                 };
 
                 defineAPI();
@@ -48,6 +49,7 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
                     ctrl.routeOptions = [];
 
                     if (payload != undefined) {
+                        moduleName = payload.ModuleName;
                         routingDatabaseId = payload.RoutingDatabaseId;
                         routingProductId = payload.RoutingProductId;
                         saleZoneId = payload.SaleZoneId;

@@ -6,7 +6,7 @@ app.directive('vrWhsRoutingRouteoptions', ['UtilsService', 'WhS_Routing_RouteOpt
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -24,6 +24,8 @@ app.directive('vrWhsRoutingRouteoptions', ['UtilsService', 'WhS_Routing_RouteOpt
         function routeOptions($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var hasViewRatesPermission;
+
             var routeOptionEvaluatedStatusEnum = UtilsService.getArrayEnum(WhS_Routing_RouteOptionEvaluatedStatusEnum);
 
             function initializeController() {
@@ -39,6 +41,7 @@ app.directive('vrWhsRoutingRouteoptions', ['UtilsService', 'WhS_Routing_RouteOpt
                 api.load = function (payload) {
                     var promises = [];
                     if (payload != undefined) {
+                        hasViewRatesPermission = payload.hasViewRatesPermission;
                         $scope.scopeModel.routeOptionDetails = payload.routeOptionDetails;
                         extendRouteOptionDetails($scope.scopeModel.routeOptionDetails);
                     }
@@ -54,6 +57,12 @@ app.directive('vrWhsRoutingRouteoptions', ['UtilsService', 'WhS_Routing_RouteOpt
                     for (var i = 0; i < routeOptionDetails.length; i++) {
                         var currentRouteOptionDetail = routeOptionDetails[i];
 
+                        if (hasViewRatesPermission) 
+                            currentRouteOptionDetail.title = "Rate: " + currentRouteOptionDetail.SupplierRate + ", Services: " + currentRouteOptionDetail.ExactSupplierServiceSymbols;
+                       
+                        else 
+                            currentRouteOptionDetail.title = "Services: " + currentRouteOptionDetail.ExactSupplierServiceSymbols;
+                        
                         var evaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, currentRouteOptionDetail.EvaluatedStatus, "value");
                         if (evaluatedStatus != undefined) {
                             currentRouteOptionDetail.EvaluatedStatusCssClass = evaluatedStatus.cssclass;
@@ -62,6 +71,11 @@ app.directive('vrWhsRoutingRouteoptions', ['UtilsService', 'WhS_Routing_RouteOpt
                         if (currentRouteOptionDetail.Backups) {
                             for (var j = 0; j < currentRouteOptionDetail.Backups.length; j++) {
                                 var currentRouteBackupOptionDetail = currentRouteOptionDetail.Backups[j];
+
+                                if (hasViewRatesPermission) 
+                                    currentRouteBackupOptionDetail.title = "Rate: " + currentRouteBackupOptionDetail.SupplierRate + ", Services: " + currentRouteBackupOptionDetail.ExactSupplierServiceSymbols;
+                                else
+                                    currentRouteBackupOptionDetail.title = "Services: " + currentRouteBackupOptionDetail.ExactSupplierServiceSymbols;
 
                                 var backupEvaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, currentRouteBackupOptionDetail.EvaluatedStatus, "value");
                                 if (backupEvaluatedStatus != undefined) {

@@ -130,6 +130,7 @@
     <Compile Include="RouteRuleQualityContext.cs" />
     <Compile Include="RoutingExcludedDestinations\RoutingExcludedDestinationsConfig.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationRuntime\QualityConfiguration.cs" />
+    <Compile Include="RPRouteOptionSupplierInput.cs" />
     <Compile Include="Settings\BaseRuleCriteriaPriority.cs" />
     <Compile Include="Settings\RouteRuleConfiguration.cs" />
     <Compile Include="Settings\TechnicalQualityConfiguration.cs" />

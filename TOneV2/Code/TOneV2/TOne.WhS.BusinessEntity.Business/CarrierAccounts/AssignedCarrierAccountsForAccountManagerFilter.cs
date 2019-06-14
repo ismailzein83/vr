@@ -5,8 +5,6 @@ using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public enum ModuleName { RatePlan = 0, CustomerRoute = 1, ProductRoute = 2 }
-
     public class AssignedCarrierAccountsForAccountManager : ICarrierAccountFilter
     {
         public ModuleName ModuleName { get; set; }

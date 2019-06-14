@@ -28,6 +28,8 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
         function rpRouteDetailsCtor(ctrl, $scope) {
             this.initializeController = initializeController;
 
+            var moduleName;
+
             var rpRouteDetail;
             var routingDatabaseId;
             var policies;
@@ -80,7 +82,7 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                 };
 
                 $scope.openRouteOptionSupplier = function (dataItem) {
-                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.SupplierId, currencyId, saleRate);
+                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.SupplierId, currencyId, saleRate, moduleName);
                 };
 
                 //$scope.getRowStyle = function (dataItem) {
@@ -114,6 +116,7 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                         includeBlockedSuppliers = payload.includeBlockedSuppliers;
                         saleRate = payload.saleRate;
                         maxSupplierRate = payload.maxSupplierRate;
+                        moduleName = payload.ModuleName;
                     }
 
                     var loadPolicySelectorPromise = loadPolicySelector();

@@ -31,7 +31,7 @@
                 carrierAccountId: carrierAccountId
             });
         }
-        
+
         function GetCarrierAccount(carrierAccountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCarrierAccount"), {
                 carrierAccountId: carrierAccountId
@@ -44,9 +44,10 @@
             });
         }
 
-        function GetCarrierAccountName(carrierAccountId) {
+        function GetCarrierAccountName(carrierAccountId, moduleName) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCarrierAccountName"), {
-                carrierAccountId: carrierAccountId
+                carrierAccountId: carrierAccountId,
+                moduleName: moduleName
             });
 
         }
@@ -76,7 +77,7 @@
         function HasUpdateCarrierAccountPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateCarrierAccount']));
         }
-        
+
         function HasAddCarrierAccountPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddCarrierAccount']));
         }
@@ -109,10 +110,10 @@
             GetFilteredCarrierAccounts: GetFilteredCarrierAccounts,
             GetCarrierAccount: GetCarrierAccount,
             GetCarrierAccountInfos: GetCarrierAccountInfos,
-            GetCarrierAccountName:GetCarrierAccountName,
+            GetCarrierAccountName: GetCarrierAccountName,
             GetCarrierAccountCurrencyId: GetCarrierAccountCurrencyId,
             GetCustomersBySellingNumberPlanId: GetCustomersBySellingNumberPlanId,
-            GetSellingProductId:GetSellingProductId,
+            GetSellingProductId: GetSellingProductId,
             AddCarrierAccount: AddCarrierAccount,
             UpdateCarrierAccount: UpdateCarrierAccount,
             GetSuppliersWithZonesGroupsTemplates: GetSuppliersWithZonesGroupsTemplates,

@@ -6,6 +6,8 @@
 
     function RPRouteOptionSupplierController($scope, WhS_Routing_RPRouteAPIService, WhS_Routing_RouteOptionRuleService, WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
+        var moduleName;
+
         var routingProductId;
         var saleZoneId;
         var supplierId;
@@ -31,6 +33,7 @@
                 supplierId = parameters.SupplierId;
                 currencyId = parameters.CurrencyId;
                 saleRate = parameters.SaleRate;
+                moduleName = parameters.ModuleName;
             }
         }
         function defineScope() {
@@ -57,7 +60,7 @@
         }
 
         function getSupplierName() {
-            return WhS_BE_CarrierAccountAPIService.GetCarrierAccountName(supplierId).then(function (response) {
+            return WhS_BE_CarrierAccountAPIService.GetCarrierAccountName(supplierId, moduleName).then(function (response) {
                 if (response != null) {
                     supplierName = response;
                 }

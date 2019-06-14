@@ -2,9 +2,9 @@
 
     "use strict";
 
-    rpRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RoutingProductFilterEnum', 'WhS_Routing_RouteFilterEnum', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Routing_RoutingDatabaseTypeEnum'];
+    rpRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RoutingProductFilterEnum', 'WhS_Routing_RouteFilterEnum', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Routing_RoutingDatabaseTypeEnum', 'Whs_BusinessEntity_ModuleNamesEnum'];
 
-    function rpRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RoutingProductFilterEnum, WhS_Routing_RouteFilterEnum, VRCommon_EntityFilterEffectiveModeEnum, WhS_Routing_RoutingDatabaseTypeEnum) {
+    function rpRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RoutingProductFilterEnum, WhS_Routing_RouteFilterEnum, VRCommon_EntityFilterEffectiveModeEnum, WhS_Routing_RoutingDatabaseTypeEnum, Whs_BusinessEntity_ModuleNamesEnum) {
 
         var filterSettingsData;
         var currencyId;
@@ -480,10 +480,11 @@
             var loadCustomerPromiseDeferred = UtilsService.createPromiseDeferred();
 
             customerSelectorReadyPromiseDeferred.promise.then(function () {
-                var payload;
+                var payload = { filter: { Filters: getCarrierAccountSelectorFilter() } };
+
                 if (filterSettingsData != undefined) {
                     if (filterSettingsData.CustomerId != undefined) {
-                        payload = { selectedIds: filterSettingsData.CustomerId };
+                        payload.selectedIds = filterSettingsData.CustomerId;
                     }
 
                     selectedSellingNumberPlanId = filterSettingsData.SellingNumberPlanId;
@@ -616,7 +617,6 @@
 
             if (!$scope.showInSystemCurrency && $scope.selectedCustomer != undefined)
                 currencyId = $scope.selectedCustomer.CurrencyId;
-
             var query = {
                 RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
                 PolicyConfigId: rpRoutePolicyAPI.getSelectedIds(),
@@ -637,6 +637,17 @@
             if (query.SaleZoneIds == undefined)
                 query.SellingNumberPlanId = saleZoneSelectorAPI.getSellingNumberPlanId();
             return query;
+        }
+
+        function getCarrierAccountSelectorFilter() {
+            var carrierAccountSelectorFilters = [];
+           
+            var carrierAccountFilterAffected = {
+                $type: 'TOne.WhS.BusinessEntity.Business.AssignedCarrierAccountsForAccountManager, TOne.WhS.BusinessEntity.Business',
+                ModuleName: Whs_BusinessEntity_ModuleNamesEnum.ProductRoute.value
+            };
+            carrierAccountSelectorFilters.push(carrierAccountFilterAffected);
+            return carrierAccountSelectorFilters;
         }
     }
 

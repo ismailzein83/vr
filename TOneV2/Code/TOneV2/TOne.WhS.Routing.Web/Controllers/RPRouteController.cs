@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
@@ -28,12 +25,12 @@ namespace TOne.WhS.Routing.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredRPRoutesByCode(input), "RP Routes By Code");
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetRPRouteOptionSupplier")]
-        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId, int? currencyId = null, decimal? saleRate = null)
+        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(RPRouteOptionSupplierInput rpRouteOptionSupplierInput)
         {
             RPRouteManager manager = new RPRouteManager();
-            return manager.GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId, saleRate);
+            return manager.GetRPRouteOptionSupplier(rpRouteOptionSupplierInput);
         }
 
         [HttpGet]

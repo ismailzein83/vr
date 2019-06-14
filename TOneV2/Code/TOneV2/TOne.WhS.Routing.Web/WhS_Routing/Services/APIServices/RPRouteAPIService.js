@@ -16,15 +16,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetFilteredRPRoutesByCode"), input);
         }
 
-        function GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId, saleRate) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRPRouteOptionSupplier"), {
-                routingDatabaseId: routingDatabaseId,
-                routingProductId: routingProductId,
-                saleZoneId: saleZoneId,
-                supplierId: supplierId,
-                currencyId: currencyId,
-                saleRate: saleRate
-            });
+        function GetRPRouteOptionSupplier(rpRouteOptionSupplierInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRPRouteOptionSupplier"), rpRouteOptionSupplierInput);
         }
 
         function GetPoliciesOptionTemplates(filter) {

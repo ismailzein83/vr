@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum', 'VRLocalizationService', 'WhS_Sales_SupplierStatusEnum', '$filter', 'MobileService',
-    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, VRDateTimeService, VRCommon_TextFilterTypeEnum, VRLocalizationService, WhS_Sales_SupplierStatusEnum, $filter, MobileService) {
+app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum', 'VRLocalizationService', 'WhS_Sales_SupplierStatusEnum', '$filter', 'MobileService','Whs_BusinessEntity_ModuleNamesEnum',
+    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, VRDateTimeService, VRCommon_TextFilterTypeEnum, VRLocalizationService, WhS_Sales_SupplierStatusEnum, $filter, MobileService, Whs_BusinessEntity_ModuleNamesEnum) {
         return {
             restrict: "E",
             scope: {
@@ -740,6 +740,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             gridZoneItem.RPRouteDetail = response.RPRouteDetail;
                             var routeOptions = getRouteOptions(response.RPRouteDetail);
                             gridZoneItem.RouteOptionsDetailsForView = response.RouteOptionsDetailsForView;
+
                             var routeOptionsDirectivePayload = getRouteOptionsDirectivePayload(gridZoneItem);
                             UtilsService.convertToPromiseIfUndefined(gridZoneItem.RouteOptionsAPI.load(routeOptionsDirectivePayload)).then(function () {
                                 loadRouteOptionsDeferred.resolve();
@@ -923,7 +924,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     SaleZoneId: dataItem.ZoneId,
                     RouteOptions: dataItem.RouteOptionsDetailsForView,
                     CurrencyId: gridQuery.CurrencyId,
-                    saleRate: rate
+                    saleRate: rate,
+                    ModuleName: Whs_BusinessEntity_ModuleNamesEnum.RatePlan.value 
                 };
             }
 
