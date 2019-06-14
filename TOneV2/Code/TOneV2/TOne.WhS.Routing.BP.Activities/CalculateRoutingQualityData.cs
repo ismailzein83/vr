@@ -39,18 +39,16 @@ namespace TOne.WhS.Routing.BP.Activities
             DateTime effectiveDate = inputArgument.EffectiveDate;
             RoutingProcessType routingProcessType = inputArgument.RoutingProcessType;
 
-            List<RouteRule> routeRules = null;
+            List<RouteRule> routeRules = new RouteRuleManager().GetEffectiveAndFutureRouteRules(effectiveDate);
             string executionMessage;
 
             switch (routingProcessType)
             {
                 case Entities.RoutingProcessType.CustomerRoute:
-                    routeRules = new RouteRuleManager().GetEffectiveAndFutureCustomerRouteRules(effectiveDate);
                     executionMessage = "Calculate Customer Route Quality Data is done";
                     break;
 
                 case Entities.RoutingProcessType.RoutingProductRoute:
-                    routeRules = new RouteRuleManager().GetEffectiveAndFutureRPRouteRules(effectiveDate);
                     executionMessage = "Calculate Routing Product Quality Data is done";
                     break;
 

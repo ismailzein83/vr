@@ -206,14 +206,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         [QualityConfigurationId] [uniqueidentifier] NOT NULL,
                                                         [SaleZoneId] [bigint] NOT NULL,
                                                         [SupplierId] [int] NOT NULL,
-                                                        [Quality] [decimal](20, 8) NOT NULL,
-                                                        [VersionNumber] [int] NOT NULL
-                                                        )ON [PRIMARY];
-
-                                                        CREATE NONCLUSTERED INDEX [IX_RPQualityConfigurationData_VersionNumber] ON [dbo].[RPQualityConfigurationData] 
-                                                        (
-	                                                        [VersionNumber] DESC
-                                                        );";
+                                                        [Quality] [decimal](20, 8) NOT NULL
+                                                        )ON [PRIMARY];";
 
         const string query_SaleZoneTable = @"CREATE TABLE [dbo].[SaleZone](
 	                                         [ID] [int] NOT NULL,

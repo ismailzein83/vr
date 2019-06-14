@@ -103,38 +103,20 @@ namespace TOne.WhS.Routing.Business
             return linkedRouteRule;
         }
 
-        public List<RouteRule> GetEffectiveAndFutureRPRouteRules(DateTime effectiveDate)
+
+        public List<RouteRule> GetEffectiveAndFutureRouteRules(DateTime effectiveDate)
         {
             var routeRules = base.GetAllRules();
-            List<RouteRule> rpRouteRules = new List<RouteRule>();
-
-            foreach (var routeRuleKvp in routeRules)
-            {
-                RouteRule routeRule = routeRuleKvp.Value;
-
-                if (routeRule.IsEffective(effectiveDate) || (routeRule.BED >= effectiveDate && (!routeRule.EED.HasValue || routeRule.EED.Value != routeRule.BED)))
-                {
-                    int? routingProductId = routeRule.Criteria.GetRoutingProductId();
-                    if (routingProductId.HasValue)
-                        rpRouteRules.Add(routeRule);
-                }
-            }
-            return rpRouteRules;
-        }
-
-        public List<RouteRule> GetEffectiveAndFutureCustomerRouteRules(DateTime effectiveDate)
-        {
-            List<RouteRule> customerRouteRules = new List<RouteRule>();
-            var routeRules = base.GetAllRules();
+            List<RouteRule> effectiveRouteRules = new List<RouteRule>();
 
             foreach (var routeRuleKvp in routeRules)
             {
                 RouteRule routeRule = routeRuleKvp.Value;
                 if (routeRule.IsEffective(effectiveDate) || (routeRule.BED >= effectiveDate && (!routeRule.EED.HasValue || routeRule.EED.Value != routeRule.BED)))
-                    customerRouteRules.Add(routeRule);
+                    effectiveRouteRules.Add(routeRule);
             }
 
-            return customerRouteRules;
+            return effectiveRouteRules;
         }
 
         public Vanrise.Entities.IDataRetrievalResult<RouteRuleDetail> GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
