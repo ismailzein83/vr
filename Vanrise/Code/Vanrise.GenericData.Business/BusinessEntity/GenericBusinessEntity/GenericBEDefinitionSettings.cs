@@ -22,6 +22,9 @@ namespace Vanrise.GenericData.Business
         {
             get { return "vr-genericdata-genericbusinessentity-runtimeeditor"; }
         }
+
+        //public override string SelectorFilterEditor { get { return "vr-genericdata-genericbusinessentity-selectorfilter"; } }
+
         public override string IdType
         {
             get
@@ -230,10 +233,10 @@ namespace Vanrise.GenericData.Business
     }
 
 
-	#endregion
+    #endregion
 
-	#region Public Classes
-	public class GenericBEUploadField
+    #region Public Classes
+    public class GenericBEUploadField
     {
         public string FieldName { get; set; }
         public bool IsRequired { get; set; }
@@ -406,7 +409,7 @@ namespace Vanrise.GenericData.Business
         public string FieldTitle { get; set; }
 
     }
-    
+
     #endregion
 
     #region Interfaces
