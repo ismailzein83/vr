@@ -7,8 +7,9 @@
              showexpand="scopeModel.showDrillDown"
              enableautoexport
              normalcell
+             rowviewsetting="scopeModel.rowViewSettings"
              defaultsortbyfieldname="scopeModel.sortingColumn">
-    <vr-datagridcolumn widthfactor="3" disablesorting isfielddynamic="true" ng-show="scopeModel.showMultipleSelection">
+    <vr-datagridcolumn widthfactor="3" disablesorting isfielddynamic="true" ng-if="scopeModel.showMultipleSelection" columnindex="0">
         <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.scopeModel.onBusinessEntitySelect(dataItem)"></vr-check>
     </vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column" getcolor="ctrl.getFieldColor"></vr-datagridcolumn>

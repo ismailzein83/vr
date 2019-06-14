@@ -296,7 +296,9 @@
                     },
                     businessEntityDefinitionId: businessEntityDefinitionAPI.getSelectedIds(),
                     context: getGridContext(),
-                    bulkActionId: bulkActionId
+                    bulkActionId: bulkActionId,
+                    doNotLoadByDefault: genericBEDefinitionSettings.DoNotLoadByDefault,
+                    threeSixtyDegreeSettings: genericBEDefinitionSettings.ThreeSixtyDegreeSettings
                 };
                 return gridPayload;
             }
