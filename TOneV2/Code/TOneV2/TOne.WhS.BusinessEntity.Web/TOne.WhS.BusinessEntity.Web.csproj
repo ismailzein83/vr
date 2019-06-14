@@ -222,6 +222,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_BusinessEntity\Constant\AccountManagerDataTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\AutoImportEmailTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountActivationStatusEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountInvoiceTypeEnum.js" />

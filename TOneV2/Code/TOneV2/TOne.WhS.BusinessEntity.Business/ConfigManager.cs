@@ -546,6 +546,20 @@ namespace TOne.WhS.BusinessEntity.Business
             return accountManagerSettings.CarrierAccountFiltering.ProductRoute;
         }
 
+        public bool GetTrafficCarrierAccountFiltering()
+        {
+            AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
+            accountManagerSettings.ThrowIfNull("accountManagerSettings");
+            return accountManagerSettings.CarrierAccountFiltering.Traffic;
+        }
+
+        public bool GetBillingCarrierAccountFiltering()
+        {
+            AccountManagerSettings accountManagerSettings = GetAccountManagerSettings();
+            accountManagerSettings.ThrowIfNull("accountManagerSettings");
+            return accountManagerSettings.CarrierAccountFiltering.Billing;
+        }
+
         public bool GetGenerateTrafficStatsByCode()
         {
             CDRImportConfiguration cdrImportConfiguration = GetCDRImportConfiguration();

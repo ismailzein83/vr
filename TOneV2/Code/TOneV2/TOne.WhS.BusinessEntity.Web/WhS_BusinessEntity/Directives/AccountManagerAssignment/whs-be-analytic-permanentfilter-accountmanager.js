@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AnalyticPermanentfilterAccountManager.$inject = ['VRUIUtilsService', 'UtilsService'];
+    AnalyticPermanentfilterAccountManager.$inject = ['VRUIUtilsService', 'UtilsService', 'WhS_BE_AccountManagerDataTypeEnum'];
 
-    function AnalyticPermanentfilterAccountManager(VRUIUtilsService, UtilsService) {
+    function AnalyticPermanentfilterAccountManager(VRUIUtilsService, UtilsService, WhS_BE_AccountManagerDataTypeEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -31,10 +31,15 @@
             var supplierDimensionSelectorAPI;
             var supplierDimensionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var dataTypeSelectorAPI;
+            var dataTypeSelectorReadyPromiseDefereed = UtilsService.createPromiseDeferred();
+
             this.initializeController = initializeController;
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.dataTypes = [];
+
                 $scope.scopeModel.onCustomerDimensionSelectorDirectiveReady = function (api) {
                     customerDimensionSelectorAPI = api;
                     customerDimensionSelectorReadyPromiseDeferred.resolve();
@@ -43,19 +48,30 @@
                     supplierDimensionSelectorAPI = api;
                     supplierDimensionSelectorReadyPromiseDeferred.resolve();
                 };
-               
-                defineAPI();
+                $scope.scopeModel.onDataTypeSelectorReady = function (api) {
+                    dataTypeSelectorAPI = api;
+                    dataTypeSelectorReadyPromiseDefereed.resolve();
+                };
 
+                UtilsService.waitMultiplePromises([customerDimensionSelectorReadyPromiseDeferred.promise, supplierDimensionSelectorReadyPromiseDeferred.promise, dataTypeSelectorReadyPromiseDefereed.promise]).then(function () {
+                    defineAPI();
+                });
             }
             
             function defineAPI() {
                 var api = {};
-
+                 
                 api.load = function (payload) {
                     var promises = [];
                     if (payload != undefined) {
                         promises.push(loadCustomerAccountManagerDimensionSelector(payload));
                         promises.push(loadSupplierAccountManagerDimensionSelector(payload));
+
+                        $scope.scopeModel.dataTypes = UtilsService.getArrayEnum(WhS_BE_AccountManagerDataTypeEnum);
+
+                        if (payload.settings != undefined) {
+                            $scope.scopeModel.selectedDataType = UtilsService.getItemByVal($scope.scopeModel.dataTypes, payload.settings.DataType, 'value');
+                        }
                     }
                     return UtilsService.waitPromiseNode({
                         promises: promises
@@ -66,7 +82,8 @@
                     return {
                         $type: "TOne.WhS.BusinessEntity.Business.AccountManagerAnalyticPermanentFilter,TOne.WhS.BusinessEntity.Business",
                         CustomerAccountManagerDimension: customerDimensionSelectorAPI.getSelectedIds(),
-                        SupplierAccountManagerDimension: supplierDimensionSelectorAPI.getSelectedIds()
+                        SupplierAccountManagerDimension: supplierDimensionSelectorAPI.getSelectedIds(),
+                        DataType: $scope.scopeModel.selectedDataType.value
                     };
                 };
 
@@ -99,8 +116,6 @@
                 });
                 return loadSupplierDimensionSelectorPromiseDeferred.promise;
             }
-
-
         }
     }
 

@@ -2,4 +2,15 @@
     <vr-analytic-dimension-selector normal-col-num="6" customlabel="Customer Account Manager Dimension" on-ready="scopeModel.onCustomerDimensionSelectorDirectiveReady" isrequired="true"></vr-analytic-dimension-selector>
     <vr-analytic-dimension-selector normal-col-num="6" customlabel="Supplier Account Manager Dimension" on-ready="scopeModel.onSupplierDimensionSelectorDirectiveReady" isrequired="true"></vr-analytic-dimension-selector>
 </vr-row>   
-    
+<vr-row>
+    <vr-columns colnum="6">
+        <vr-select on-ready="scopeModel.onDataTypeSelectorReady"
+                   datasource="scopeModel.dataTypes"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   isrequired="true"
+                   label="Data Type"
+                   selectedvalues="scopeModel.selectedDataType">
+        </vr-select>
+    </vr-columns>
+</vr-row>

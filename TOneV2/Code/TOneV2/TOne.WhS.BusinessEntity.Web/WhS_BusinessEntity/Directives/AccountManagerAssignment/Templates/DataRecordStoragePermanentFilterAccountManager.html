@@ -5,4 +5,14 @@
     <vr-columns width="1/3row">
         <vr-genericdata-datarecordtypefields-selector label="Supplier Account Manager Field" on-ready="scopeModel.onSupplierFieldSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
     </vr-columns>
+    <vr-columns colnum="4">
+        <vr-select on-ready="scopeModel.onDataTypeSelectorReady"
+                   datasource="scopeModel.dataTypes"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   isrequired="true"
+                   label="Data Type"
+                   selectedvalues="scopeModel.selectedDataType">
+        </vr-select>
+    </vr-columns>
 </vr-row>

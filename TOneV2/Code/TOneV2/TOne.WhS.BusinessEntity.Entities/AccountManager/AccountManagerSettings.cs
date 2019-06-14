@@ -14,9 +14,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class CarrierAccountFiltering
     {
         public bool RatePlan { get; set; }
-
         public bool CustomerRoute { get; set; }
-
         public bool ProductRoute { get; set; }
+        public bool Traffic { get; set; }
+        public bool Billing { get; set; }
     }
 }

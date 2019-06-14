@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DatarecordstoragePermanentfilterAccountManager.$inject = ['VRUIUtilsService', 'UtilsService'];
+    DatarecordstoragePermanentfilterAccountManager.$inject = ['VRUIUtilsService', 'UtilsService', 'WhS_BE_AccountManagerDataTypeEnum'];
 
-    function DatarecordstoragePermanentfilterAccountManager(VRUIUtilsService, UtilsService) {
+    function DatarecordstoragePermanentfilterAccountManager(VRUIUtilsService, UtilsService, WhS_BE_AccountManagerDataTypeEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -31,10 +31,14 @@
             var customerFieldSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var supplierFieldSelectorAPI;
-            var supplierFieldSelectorReadyPromiseDeferred= UtilsService.createPromiseDeferred();
+            var supplierFieldSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var dataTypeSelectorAPI;
+            var dataTypeSelectorReadyPromiseDefereed = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.dataTypes = [];
 
                 $scope.scopeModel.onCustomerFieldSelectorDirectiveReady = function (api) {
                     customerFieldSelectorAPI = api;
@@ -44,8 +48,14 @@
                     supplierFieldSelectorAPI = api;
                     supplierFieldSelectorReadyPromiseDeferred.resolve();
                 };
+                $scope.scopeModel.onDataTypeSelectorReady = function (api) {
+                    dataTypeSelectorAPI = api;
+                    dataTypeSelectorReadyPromiseDefereed.resolve();
+                };
               
-                defineAPI();
+                UtilsService.waitMultiplePromises([customerFieldSelectorReadyPromiseDeferred.promise, supplierFieldSelectorReadyPromiseDeferred.promise, dataTypeSelectorReadyPromiseDefereed.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function loadCustomerFieldSelector(payload) {
@@ -80,6 +90,12 @@
                     if (payload != undefined) {
                         promises.push(loadCustomerFieldSelector(payload));
                         promises.push(loadSupplierFieldSelector(payload));
+
+                        $scope.scopeModel.dataTypes = UtilsService.getArrayEnum(WhS_BE_AccountManagerDataTypeEnum);
+
+                        if (payload.settings != undefined) {
+                            $scope.scopeModel.selectedDataType = UtilsService.getItemByVal($scope.scopeModel.dataTypes, payload.settings.DataType, 'value');
+                        }
                     }
                     return UtilsService.waitPromiseNode({
                         promises: promises
@@ -90,7 +106,8 @@
                     return {
                         $type: "TOne.WhS.BusinessEntity.Business.AccountManagerDataRecordStoragePermanentFilter,TOne.WhS.BusinessEntity.Business",
                         CustomerAccountManagerField: customerFieldSelectorAPI.getSelectedIds(),
-                        SupplierAccountManagerField: supplierFieldSelectorAPI.getSelectedIds()
+                        SupplierAccountManagerField: supplierFieldSelectorAPI.getSelectedIds(),
+                        DataType: $scope.scopeModel.selectedDataType.value
                     };
                 };
 
@@ -98,8 +115,6 @@
                     ctrl.onReady(api);
                 }
             }
-
-
         }
     }
 
