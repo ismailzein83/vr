@@ -8,6 +8,8 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -38,6 +40,24 @@ namespace TOne.WhS.Routing.Business
         public Vanrise.Entities.IDataRetrievalResult<CustomerRouteDetail> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new CustomerRouteRequestHandler());
+        }
+
+        public bool HasViewCustomerRouteRatesPermission()
+        {
+            var securityManager = new SecurityManager();
+
+            RequiredPermissionEntry requiredPermissionEntry = new RequiredPermissionEntry
+            {
+                EntityId = new System.Guid("a596599b-1bae-4698-827e-e2f5afd8cf4c"),
+                PermissionOptions = new List<string>(new string[] { "View Rates" })
+            };
+
+            RequiredPermissionSettings requiredPermissionSettings = new RequiredPermissionSettings
+            {
+                Entries = new List<RequiredPermissionEntry>() { requiredPermissionEntry }
+            };
+
+            return securityManager.IsAllowed(requiredPermissionSettings, SecurityContext.Current.GetLoggedInUserId());
         }
 
         internal void LoadRoutesFromCurrentDB(int? customerId, string codePrefix, Func<bool> shouldStop, Action<CustomerRoute> onRouteLoaded)

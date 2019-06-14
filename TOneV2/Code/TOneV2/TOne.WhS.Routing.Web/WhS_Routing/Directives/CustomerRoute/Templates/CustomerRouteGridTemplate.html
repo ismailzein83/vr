@@ -1,4 +1,4 @@
-﻿<div vr-loader="isLoading">
+﻿<div vr-loader="isLoading" ng-if="showGrid">
     <vr-datagrid on-ready="onGridReady"
                  datasource="customerRoutes"
                  dataretrievalfunction="dataRetrievalFunction"
@@ -11,7 +11,7 @@
         <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" fixedwidth="120" getcolor="getColor"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Code'" field="'Code'" fixedwidth="100"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Zone'" field="'SaleZoneName'" fixedwidth="120"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="60"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Rate'" field="'Rate'" columnindex="3" ng-if="hasViewRatesPermission" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="60"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Services'" fixedwidth="60">
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>

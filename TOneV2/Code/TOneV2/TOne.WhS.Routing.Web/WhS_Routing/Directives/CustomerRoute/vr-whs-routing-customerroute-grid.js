@@ -1,12 +1,12 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum', 'WhS_Routing_RouteOptionEvaluatedStatusEnum',
-    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_CustomerRouteAPIService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum, WhS_Routing_RouteOptionEvaluatedStatusEnum) {
+app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum', 
+    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_CustomerRouteAPIService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -26,7 +26,6 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
 
             var hidemenuactions = $attrs.hidemenuactions != undefined;
             var isDatabaseTypeCurrent;
-            var routeOptionEvaluatedStatusEnum = UtilsService.getArrayEnum(WhS_Routing_RouteOptionEvaluatedStatusEnum);
 
             var gridAPI;
             var gridDrillDownTabsObj;
@@ -34,10 +33,14 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
             function initializeController() {
                 $scope.customerRoutes = [];
 
+                $scope.showGrid = false;
+                $scope.isLoading = true;
+
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     var drillDownDefinitions = initDrillDownDefinitions();
                     gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+                    $scope.isLoading = false;
                     defineAPI();
                 };
 
@@ -85,6 +88,11 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                     return cssClass;
                 };
 
+                WhS_Routing_CustomerRouteAPIService.HasViewCustomerRouteRatesPermission().then(function (response) {
+                    $scope.hasViewRatesPermission = response;
+                    $scope.showGrid = true;
+                });
+
                 defineMenuActions();
             }
 
@@ -114,7 +122,10 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
 
                         var routeOptionsPayload;
                         if (customerRoute.RouteOptionDetails != undefined) {
-                            routeOptionsPayload = { routeOptionDetails: customerRoute.RouteOptionDetails };
+                            routeOptionsPayload = {
+                                routeOptionDetails: customerRoute.RouteOptionDetails,
+                                hasViewRatesPermission: $scope.hasViewRatesPermission
+                            };
                         }
                         VRUIUtilsService.callDirectiveLoad(customerRoute.routeOptionsAPI, routeOptionsPayload, customerRoute.cutomerRouteOptionsLoadDeferred);
                     };
@@ -137,10 +148,9 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
             }
 
             function defineMenuActions() {
-                if (!hidemenuactions) {
-                    $scope.gridMenuActions = function (dataItem) {
+                $scope.gridMenuActions = function (dataItem) {
+                    if (!hidemenuactions && $scope.hasViewRatesPermission) {
                         var menu = [];
-
                         if (dataItem.CanEditMatchingRule) {
                             menu.push({
                                 name: "Edit Matching Rule",
@@ -185,9 +195,9 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                                 clicked: viewLinkedRouteRules
                             });
                         }
-                        return menu;
-                    };
-                }
+                    }
+                    return menu;
+                };
             }
 
             function hasUpdateRulePermission() {
@@ -296,6 +306,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                 drillDownDefinition.loadDirective = function (directiveAPI, customerRoute) {
                     var payload = {
                         customerRoute: customerRoute,
+                        hidemenuactions: hidemenuactions,
                         context: buildContext()
                     };
 

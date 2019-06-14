@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_ModifiedCustomerRoutePreviewAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum', 'WhS_Routing_RouteOptionEvaluatedStatusEnum',
-    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_ModifiedCustomerRoutePreviewAPIService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum, WhS_Routing_RouteOptionEvaluatedStatusEnum) {
+app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_ModifiedCustomerRoutePreviewAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum', 'WhS_Routing_RouteOptionEvaluatedStatusEnum', 'WhS_Routing_CustomerRouteAPIService',
+    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_ModifiedCustomerRoutePreviewAPIService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum, WhS_Routing_RouteOptionEvaluatedStatusEnum, WhS_Routing_CustomerRouteAPIService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -93,35 +93,45 @@ app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotifica
                 var promises = [];
                 if (customerRoute != undefined) {
 
-                    if (customerRoute.OrigRouteOptionDetails != undefined) {
-                        customerRoute.origCutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(customerRoute.origCutomerRouteOptionsLoadDeferred.promise);
+                    var hasViewRatesPermission;
 
-                        customerRoute.onOrigRouteOptionsReady = function (api) {
-                            customerRoute.origRouteOptionsAPI = api;
+                    var getViewRatesPermissionPromise = WhS_Routing_CustomerRouteAPIService.HasViewCustomerRouteRatesPermission().then(function (response) {
+                        hasViewRatesPermission = response;
+                    });
 
-                            var origRouteOptionsPayload = { routeOptionDetails: customerRoute.OrigRouteOptionDetails };
+                    getViewRatesPermissionPromise.then(function () {
+                        if (customerRoute.OrigRouteOptionDetails != undefined) {
+                            customerRoute.origCutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+                            promises.push(customerRoute.origCutomerRouteOptionsLoadDeferred.promise);
 
-                            VRUIUtilsService.callDirectiveLoad(customerRoute.origRouteOptionsAPI, origRouteOptionsPayload, customerRoute.origCutomerRouteOptionsLoadDeferred);
-                        };
-                    }
+                            customerRoute.onOrigRouteOptionsReady = function (api) {
+                                customerRoute.origRouteOptionsAPI = api;
+                                var origRouteOptionsPayload = {
+                                    routeOptionDetails: customerRoute.OrigRouteOptionDetails,
+                                    hasViewRatesPermission: hasViewRatesPermission
+                                };
 
-                    if (customerRoute.RouteOptionDetails != undefined) {
-                        customerRoute.cutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(customerRoute.cutomerRouteOptionsLoadDeferred.promise);
 
-                        customerRoute.onRouteOptionsReady = function (api) {
-                            customerRoute.routeOptionsAPI = api;
+                                VRUIUtilsService.callDirectiveLoad(customerRoute.origRouteOptionsAPI, origRouteOptionsPayload, customerRoute.origCutomerRouteOptionsLoadDeferred);
+                            };
+                        }
 
-                            var routeOptionsPayload;
-                            if (customerRoute.RouteOptionDetails != undefined) {
-                                routeOptionsPayload = { routeOptionDetails: customerRoute.RouteOptionDetails };
-                            }
-                            VRUIUtilsService.callDirectiveLoad(customerRoute.routeOptionsAPI, routeOptionsPayload, customerRoute.cutomerRouteOptionsLoadDeferred);
-                        };
-                    }
+                        if (customerRoute.RouteOptionDetails != undefined) {
+                            customerRoute.cutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+                            promises.push(customerRoute.cutomerRouteOptionsLoadDeferred.promise);
+
+                            customerRoute.onRouteOptionsReady = function (api) {
+                                customerRoute.routeOptionsAPI = api;
+                                var routeOptionsPayload = {
+                                    hasViewRatesPermission: hasViewRatesPermission,
+                                    routeOptionDetails : customerRoute.RouteOptionDetails
+                                };
+
+                                VRUIUtilsService.callDirectiveLoad(customerRoute.routeOptionsAPI, routeOptionsPayload, customerRoute.cutomerRouteOptionsLoadDeferred);
+                            };
+                        }
+                    });
                 }
-
                 return UtilsService.waitMultiplePromises(promises);
             }
         }

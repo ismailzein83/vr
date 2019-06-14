@@ -1,33 +1,35 @@
-﻿<vr-row>
-    <vr-columns colnum="12" simplecol>
-        <vr-datagrid on-ready="onGridReady"
-                     datasource="routeOptionDetails"
-                     menuactions="getMenuActions"
-                     idfield="CustomerRouteOptionDetailId">
+﻿<span vr-loader="isLoading" ng-if="showGrid">
+    <vr-row>
+        <vr-columns colnum="12" simplecol>
+            <vr-datagrid on-ready="onGridReady"
+                         datasource="routeOptionDetails"
+                         menuactions="getMenuActions"
+                         idfield="CustomerRouteOptionDetailId">
 
-            <vr-datagridcolumn headertext="'Supplier'">
-                <span style="font-size: 11px;" class="option bold-label" ng-class="dataItem.EvaluatedStatusCssClass">
-                    {{dataItem.SupplierName}}
-                </span>
-            </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Code'" field="'SupplierCode'" fixedwidth="100"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Backup'" field="'IsBackup'" fixedwidth="60">
-                <span ng-show="dataItem.IsBackup">
-                    <vr-icon icontype="dataItem.IsBackup" tooltip="'Backup'" centered></vr-icon>
-                </span>
-            </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Rate'" field="'SupplierRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="80"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Services'" disablesorting="true" fixedwidth="60">
-                <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
-            </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Blocked'" fixedwidth="60">
-                <span ng-show="dataItem.IsBlocked">
-                    <vr-icon icontype="'2'" tooltip="'Blocked'" centered></vr-icon>
-                </span>
-            </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Percentage'" field="'Percentage'" type="'Number'" numberprecision="'NoDecimal'" fixedwidth="80"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Linked Rules'" type="'Number'" numberprecision="'NoDecimal'" field="'LinkedRouteOptionRuleCount'" fixedwidth="80"></vr-datagridcolumn>
-        </vr-datagrid>
-    </vr-columns>
-</vr-row>
+                <vr-datagridcolumn headertext="'Supplier'">
+                    <span style="font-size: 11px;" class="option bold-label" ng-class="dataItem.EvaluatedStatusCssClass">
+                        {{dataItem.SupplierName}}
+                    </span>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Code'" field="'SupplierCode'" fixedwidth="100"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Backup'" field="'IsBackup'" fixedwidth="60">
+                    <span ng-show="dataItem.IsBackup">
+                        <vr-icon icontype="dataItem.IsBackup" tooltip="'Backup'" centered></vr-icon>
+                    </span>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Rate'" field="'SupplierRate'" columnindex="4" ng-if="hasViewRatesPermission" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="80"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Services'" disablesorting="true" fixedwidth="60">
+                    <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Blocked'" fixedwidth="60">
+                    <span ng-show="dataItem.IsBlocked">
+                        <vr-icon icontype="'2'" tooltip="'Blocked'" centered></vr-icon>
+                    </span>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Percentage'" field="'Percentage'" type="'Number'" numberprecision="'NoDecimal'" fixedwidth="80"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Linked Rules'" type="'Number'" numberprecision="'NoDecimal'" field="'LinkedRouteOptionRuleCount'" fixedwidth="80"></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</span>

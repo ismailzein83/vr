@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteOptionRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum',
-    function (WhS_Routing_RouteOptionRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum) {
+app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteOptionRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum', 'WhS_Routing_CustomerRouteAPIService',
+    function (WhS_Routing_RouteOptionRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum, WhS_Routing_CustomerRouteAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -29,52 +29,28 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
             this.initializeController = initializeController;
 
             var customerRoute;
+            var hidemenuactions;
+
             var gridAPI;
             var context;
 
             function initializeController() {
                 $scope.routeOptionDetails = [];
+                $scope.showGrid = false;
+                $scope.isLoading = true;
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    $scope.isLoading = false;
                     defineAPI();
                 };
 
-                $scope.getMenuActions = function (dataItem) {
-                    var menuActions = [];
+                WhS_Routing_CustomerRouteAPIService.HasViewCustomerRouteRatesPermission().then(function (response) {
+                    $scope.hasViewRatesPermission = response;
+                    $scope.showGrid = true;
+                });
 
-                    if (dataItem.ExecutedRuleId) {
-                        menuActions.push({
-                            name: "Matching Rule",
-                            clicked: viewRouteOptionRuleEditor,
-                        });
-                    }
-
-                    if (dataItem.LinkedRouteOptionRuleIds != null && dataItem.LinkedRouteOptionRuleIds.length > 0) {
-                        if (dataItem.LinkedRouteOptionRuleIds.length == 1) {
-                            menuActions.push({
-                                name: "Edit Rule",
-                                clicked: editLinkedRouteOptionRule,
-                                haspermission: hasUpdateRulePermission
-                            });
-                        }
-                        else {
-                            menuActions.push({
-                                name: "Linked Rules",
-                                clicked: viewLinkedRouteOptionRules,
-                            });
-                        }
-                    }
-                    else {
-                        menuActions.push({
-                            name: "Add Rule",
-                            clicked: addRouteOptionRuleEditor,
-                            haspermission: hasAddRulePermission
-                        });
-                    }
-
-                    return menuActions;
-                };
+                defineMenuActions();
             }
 
             function defineAPI() {
@@ -82,9 +58,10 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
                 api.load = function (payload) {
                     var promises = [];
-
+                    
                     if (payload != undefined) {
                         customerRoute = payload.customerRoute;
+                        hidemenuactions = payload.hidemenuactions;
                         context = payload.context;
                     }
 
@@ -113,6 +90,46 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function defineMenuActions() {
+                $scope.getMenuActions = function (dataItem) {
+                    if (!hidemenuactions && $scope.hasViewRatesPermission) {
+                        var menuActions = [];
+
+                        if (dataItem.ExecutedRuleId) {
+                            menuActions.push({
+                                name: "Matching Rule",
+                                clicked: viewRouteOptionRuleEditor
+                            });
+                        }
+
+                        if (dataItem.LinkedRouteOptionRuleIds != null && dataItem.LinkedRouteOptionRuleIds.length > 0) {
+                            if (dataItem.LinkedRouteOptionRuleIds.length == 1) {
+                                menuActions.push({
+                                    name: "Edit Rule",
+                                    clicked: editLinkedRouteOptionRule,
+                                    haspermission: hasUpdateRulePermission
+                                });
+                            }
+                            else {
+                                menuActions.push({
+                                    name: "Linked Rules",
+                                    clicked: viewLinkedRouteOptionRules
+                                });
+                            }
+                        }
+                        else {
+                            menuActions.push({
+                                name: "Add Rule",
+                                clicked: addRouteOptionRuleEditor,
+                                haspermission: hasAddRulePermission
+                            });
+                        }
+
+                        return menuActions;
+                    }
+                };
             }
 
             function extendRouteOptionDetailObject(routeOptionDetail) {
@@ -187,25 +204,25 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                     $scope.isLoading = true;
                     BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
                         if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
-							var processTrackingContext = {
-								automaticCloseWhenCompleted: true,
-								onClose: function (bpInstanceClosureContext) {
+                            var processTrackingContext = {
+                                automaticCloseWhenCompleted: true,
+                                onClose: function (bpInstanceClosureContext) {
 
-									if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
-										$scope.isLoading = true;
-										if (context != undefined && context.refreshGrid != undefined && typeof (context.refreshGrid) == 'function') {
-											context.refreshGrid().then(function () {
-												$scope.isLoading = false;
-											}).catch(function (error) {
-												$scope.isLoading = false;
-											});
-										}
-										else {
-											$scope.isLoading = false;
-										}
-									}
-								}
-							};
+                                    if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
+                                        $scope.isLoading = true;
+                                        if (context != undefined && context.refreshGrid != undefined && typeof (context.refreshGrid) == 'function') {
+                                            context.refreshGrid().then(function () {
+                                                $scope.isLoading = false;
+                                            }).catch(function (error) {
+                                                $scope.isLoading = false;
+                                            });
+                                        }
+                                        else {
+                                            $scope.isLoading = false;
+                                        }
+                                    }
+                                }
+                            };
                             BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, processTrackingContext);
                         }
                     }).catch(function (error) {
