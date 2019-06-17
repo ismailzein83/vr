@@ -34,6 +34,8 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
         this.initializeController = initializeController;
 
         var fieldName;
+        var oldValue;
+        var genericContext;
 
         function initializeController() {
             $scope.scopeModel.value;
@@ -41,6 +43,11 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
             if (ctrl.selectionmode != 'single') {
                 defineScopeForMultiModes();
             }
+            else {
+                defineScopeForSingleMode();
+            }
+
+            
 
             defineAPI();
         }
@@ -76,6 +83,22 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
             };
         }
 
+        function defineScopeForSingleMode() {
+            $scope.scopeModel.onFieldBlur = function () {
+                if (oldValue == $scope.scopeModel.value)
+                    return;
+
+                oldValue = $scope.scopeModel.value;
+
+                var valueAsArray = [$scope.scopeModel.value];
+
+                if (genericContext != undefined && genericContext.notifyFieldValueChanged != undefined && typeof (genericContext.notifyFieldValueChanged) == "function") {
+                    var changedField = { fieldName: fieldName, fieldValues: valueAsArray };
+                    genericContext.notifyFieldValueChanged(changedField);
+                }
+            };
+        }
+
         function defineAPI() {
             var api = {};
 
@@ -92,6 +115,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                     if (fieldType != undefined)
                         $scope.scopeModel.hint = fieldType.Hint;
                     fieldValue = payload.fieldValue;
+                    genericContext = payload.genericContext;
                 }
 
                 if (fieldValue != undefined) {
@@ -185,9 +209,9 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
         }
 
         function getSingleSelectionModeTemplate() {
-
+            
             return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
-                + '<vr-textbox type="text" label="{{scopeModel.label}}" hint ="{{scopeModel.hint}}"  value="scopeModel.value" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
+                + '<vr-textbox type="text" label="{{scopeModel.label}}" hint ="{{scopeModel.hint}}"  value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
                 + '</vr-columns>';
 
         }
