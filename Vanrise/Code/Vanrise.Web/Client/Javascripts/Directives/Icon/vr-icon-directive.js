@@ -15,6 +15,7 @@ app.directive('vrIcon', ['$compile', function ($compile) {
         'exchange': { value: "Client/Images/currency-exchange.png", isimage: true, tooltip: 'currency exchange' },
         'deal': { value: "Client/Images/deal-icon.png", isimage: true },
         'music': { value: "glyphicon-music", isimage: false, tooltip: 'Music' },
+        'edit': { value: "glyphicon-pencil", isimage: false, tooltip: 'edit' },
         'above': { value: "glyphicon-arrow-up arrow-above", isimage: false, tooltip: 'Above' },//#37c737
         'below': { value: "glyphicon-arrow-down arrow-below", isimage: false, tooltip: 'Below' },//#ff1111
         'increase': { value: "glyphicon-arrow-up arrow-below", isimage: false, tooltip: 'Increase' },
