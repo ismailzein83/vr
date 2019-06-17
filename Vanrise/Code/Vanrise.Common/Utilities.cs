@@ -35,7 +35,7 @@ namespace Vanrise.Common
             }
             return false;
         }
-        
+
         public static Dictionary<T, Q> GetEnumAttributes<T, Q>()
             where T : struct
             where Q : Attribute
@@ -82,7 +82,7 @@ namespace Vanrise.Common
             System.ComponentModel.DescriptionAttribute descriptionAttribute = GetEnumAttribute<T, System.ComponentModel.DescriptionAttribute>(enumItem);
             return descriptionAttribute != null ? descriptionAttribute.Description : enumItem.ToString();
         }
-      
+
         public static IEnumerable<Type> GetAllImplementations(Type baseType)
         {
             List<Type> lst = new List<Type>();
@@ -170,6 +170,11 @@ namespace Vanrise.Common
                 return false;
 
             return p1To.VRGreaterThan(effectiveP2From) && p2To.VRGreaterThan(effectiveP1From);
+        }
+
+        public static bool IsEffective(DateTime effectiveTime, DateTime fromTime, DateTime? toTime)
+        {
+            return (effectiveTime >= fromTime) && (!toTime.HasValue || effectiveTime < toTime.Value);
         }
 
         public static void ActivateAspose()
@@ -900,13 +905,6 @@ namespace Vanrise.Common
                 return $"{dataProjectName}.SQL";
         }
 
-        class PercentageItemWithDecimalPart
-        {
-            public IPercentageItem PercentageItem { get; set; }
-            public int CalculatedPercentage { get; set; }
-            public decimal DecimalPart { get; set; }
-        }
-
         public static List<T> ResolveItemDependencies<T>(List<T> items, Func<T, List<T>> getDependantItems)
         {
             return ResolveItemDependencies(items, getDependantItems, (itm) => true);
@@ -936,6 +934,12 @@ namespace Vanrise.Common
                 itemsOrderedByDependencies.Add(item);
         }
 
+        private class PercentageItemWithDecimalPart
+        {
+            public IPercentageItem PercentageItem { get; set; }
+            public int CalculatedPercentage { get; set; }
+            public decimal DecimalPart { get; set; }
+        }
     }
 
     public interface IPercentageItem
