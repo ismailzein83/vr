@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Vanrise.Common;
-using Vanrise.Caching;
-using Vanrise.Entities;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Data;
 using TOne.WhS.Deal.Entities;
+using Vanrise.Caching;
+using Vanrise.Common;
 using Vanrise.Common.Business;
-using System.Collections.Generic;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
-using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
     public abstract class BaseDealManager : BaseBusinessEntityManager
     {
         #region Public Methods
+
         public DealDefinition GetDeal(int dealId)
         {
             Dictionary<int, DealDefinition> cachedEntities = this.GetCachedDealsWithDeleted();
@@ -30,6 +31,15 @@ namespace TOne.WhS.Deal.Business
         {
             DealDefinition dealDefinition = GetDeal(dealId);
             return dealDefinition != null ? dealDefinition.Name : null;
+        }
+
+        public T GetDealSettings<T>(int dealId) where T : DealSettings
+        {
+            DealDefinition deal = GetDeal(dealId);
+            deal.ThrowIfNull("deal", dealId);
+
+            T dealSettings = deal.Settings.CastWithValidate<T>("deal.Settings", dealId);
+            return dealSettings;
         }
 
         public Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail> AddDeal(DealDefinition deal)
@@ -75,17 +85,6 @@ namespace TOne.WhS.Deal.Business
             return insertOperationOutput;
         }
 
-        public bool DeleteDeal(int dealId)
-        {
-            IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
-            if (dataManager.Delete(dealId))
-            {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                return true;
-            }
-            return false;
-        }
-
         public Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail> UpdateDeal(DealDefinition deal)
         {
             var existingDealDefinition = GetDeal(deal.DealId);
@@ -123,18 +122,16 @@ namespace TOne.WhS.Deal.Business
             return updateOperationOutput;
         }
 
-        public T GetDealSettings<T>(int dealId) where T : DealSettings
+        public bool DeleteDeal(int dealId)
         {
-            DealDefinition deal = GetDeal(dealId);
-            deal.ThrowIfNull("deal", dealId);
-
-            T dealSettings = deal.Settings.CastWithValidate<T>("deal.Settings", dealId);
-            return dealSettings;
+            IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
+            if (dataManager.Delete(dealId))
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                return true;
+            }
+            return false;
         }
-
-        public abstract DealDefinitionDetail DealDefinitionDetailMapper(DealDefinition deal);
-
-        public abstract BaseDealLoggableEntity GetLoggableEntity();
 
         public object GetMaxUpdateHandle()
         {
@@ -156,9 +153,14 @@ namespace TOne.WhS.Deal.Business
             return effectiveDeals.MinBy(item => item.Settings.RealBED).Settings.RealBED;
         }
 
+        public abstract DealDefinitionDetail DealDefinitionDetailMapper(DealDefinition deal);
+
+        public abstract BaseDealLoggableEntity GetLoggableEntity();
+
         #endregion
 
         #region Protected Methods
+
         protected Dictionary<Guid, List<DealDefinition>> GetCachedDealsByConfigId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDealsByConfig", () =>
@@ -182,8 +184,6 @@ namespace TOne.WhS.Deal.Business
                 return cachedByConfig;
             });
         }
-
-
 
         protected Dictionary<int, DealDefinition> GetCachedDeals()
         {
@@ -219,6 +219,7 @@ namespace TOne.WhS.Deal.Business
         #endregion
 
         #region Private Classes
+
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IDealDataManager _dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
@@ -242,11 +243,6 @@ namespace TOne.WhS.Deal.Business
                 return dealDefinition.DealId;
             }
         }
-
-        #endregion
-
-        #region Private Methods
-
 
         #endregion
     }
