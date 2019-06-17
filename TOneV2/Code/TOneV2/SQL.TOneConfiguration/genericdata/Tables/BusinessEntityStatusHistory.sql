@@ -8,8 +8,12 @@
     [StatusChangedDate]          DATETIME         NOT NULL,
     [IsDeleted]                  BIT              NULL,
     [CreatedTime]                DATETIME         CONSTRAINT [DF_BusinessEntityStatusHistory_CreatedTime] DEFAULT (getdate()) NULL,
+    [MoreInfo]                   NVARCHAR (MAX)   NULL,
+    [PreviousMoreInfo]           NVARCHAR (MAX)   NULL,
     CONSTRAINT [PK_BusinessEntityStatusHistory] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 GO
