@@ -131,7 +131,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetCarrierAccountName")]
-        public string GetCarrierAccountName(int carrierAccountId, ModuleName? moduleName)
+        public string GetCarrierAccountName(int carrierAccountId, ModuleName? moduleName = null)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetCarrierAccountName(carrierAccountId, moduleName);
