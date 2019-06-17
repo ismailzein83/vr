@@ -91,7 +91,6 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StPhoneNumber");
             esq.AddColumn("StNewPhoneNumber");
-            esq.AddColumn("StNewPhoneNumber");
             esq.AddColumn("StIsNewSwitch");
 
 
@@ -137,7 +136,57 @@ namespace BPMExtended.Main.Business
 
         public void ActivateLineMoving(Guid requestId)
         {
+            //Get Data from StLineSubscriptionRequest table
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
 
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineMovingRequest");
+            esq.AddColumn("StContractId");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StPhoneNumber");
+            esq.AddColumn("StNewPhoneNumber");
+            esq.AddColumn("StIsNewSwitch");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractId");
+                var oldPhoneNumber = entities[0].GetColumnValue("StPhoneNumber");
+                var newPhoneNumber = entities[0].GetColumnValue("StNewPhoneNumber");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                bool isNewSwitch = (bool)entities[0].GetColumnValue("StIsNewSwitch");
+
+                SOMRequestInput<LineMovingSubmitNewSwitchInput> somRequestInput = new SOMRequestInput<LineMovingSubmitNewSwitchInput>
+                {
+
+                    InputArguments = new LineMovingSubmitNewSwitchInput
+                    {
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            CustomerId = customerId.ToString()
+                        },
+                        OldDirectoryNumber = oldPhoneNumber.ToString(),
+                        NewDirectoryNumber = newPhoneNumber.ToString(),
+                        SameSwitch = !isNewSwitch
+                    }
+
+                };
+
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<LineMovingSubmitNewSwitchInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateLineMove/StartProcess", somRequestInput);
+                }
+
+            }
         }
 
         #endregion
