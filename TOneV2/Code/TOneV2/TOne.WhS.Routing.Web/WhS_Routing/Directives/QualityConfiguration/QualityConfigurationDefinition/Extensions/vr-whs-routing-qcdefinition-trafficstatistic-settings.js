@@ -134,6 +134,7 @@ app.directive('vrWhsRoutingQcdefinitionTrafficstatisticSettings', ['UtilsService
 
                         if (trafficStatisticQCDefinitionExtendedSettings != undefined) {
                             selectedAnalyticTableId = trafficStatisticQCDefinitionExtendedSettings.AnalyticTableId;
+                            $scope.scopeModel.timeSettingsDirective = trafficStatisticQCDefinitionExtendedSettings.TimeSettingsDirective;
                         }
                     }
 
@@ -241,7 +242,8 @@ app.directive('vrWhsRoutingQcdefinitionTrafficstatisticSettings', ['UtilsService
                         IncludedMeasures: measureSelectorAPI.getSelectedIds(),
                         SaleZoneFieldName: saleZoneDimensionSelectorAPI.getSelectedIds(),
                         SupplierFieldName: supplierDimensionSelectorAPI.getSelectedIds(),
-                        SupplierZoneFieldName: supplierZoneDimensionSelectorAPI.getSelectedIds()
+                        SupplierZoneFieldName: supplierZoneDimensionSelectorAPI.getSelectedIds(),
+                        TimeSettingsDirective: $scope.scopeModel.timeSettingsDirective
                     };
                 };
 

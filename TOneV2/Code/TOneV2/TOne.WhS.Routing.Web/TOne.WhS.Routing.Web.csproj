@@ -145,7 +145,7 @@
     <Compile Include="Controllers\RPRouteController.cs" />
     <Compile Include="Controllers\RouteRuleController.cs" />
     <Compile Include="Controllers\RoutingDatabaseController.cs" />
-    <Compile Include="Controllers\TrafficStatisticQualityConfigurationController.cs" />
+    <Compile Include="Controllers\TrafficStatisticQCDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\RouteRuleSettingsController.cs" />
   </ItemGroup>
@@ -405,7 +405,7 @@
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RoutingDatabaseAPIService.js" />
-    <Content Include="WhS_Routing\Services\APIServices\TrafficStatisticQualityConfigurationAPIService.js" />
+    <Content Include="WhS_Routing\Services\APIServices\TrafficStatisticQCDefinitionAPIService.js" />
     <Content Include="WhS_Routing\Services\CustomerRoutesService.js" />
     <Content Include="WhS_Routing\Services\QualityConfigurationService.js" />
     <Content Include="WhS_Routing\Services\RouteOptionRuleService.js" />

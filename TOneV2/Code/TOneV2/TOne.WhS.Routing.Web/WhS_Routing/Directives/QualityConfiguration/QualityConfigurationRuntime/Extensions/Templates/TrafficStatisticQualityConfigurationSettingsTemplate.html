@@ -1,5 +1,7 @@
 ﻿<vr-tab header="'Time Settings'">
-    <vr-common-timeperiod normal-col-num="3" on-ready="scopeModel.onTimeperiodReady" isrequired="true"></vr-common-timeperiod>
+    <vr-directivewrapper ng-if="scopeModel.timeSettingsDirective != undefined" directive="scopeModel.timeSettingsDirective"
+                         on-ready="scopeModel.onTimeperiodReady" normal-col-num="3" isrequired="true">
+    </vr-directivewrapper>
 </vr-tab>
 <vr-tab header="'Expression'">
     <vr-row>

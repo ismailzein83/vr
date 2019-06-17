@@ -23,6 +23,8 @@ namespace TOne.WhS.Routing.Business
 
         public string SupplierZoneFieldName { get; set; }
 
+        public string TimeSettingsDirective { get; set; }
+
         public override void InitializeQualityConfigurations(IInitializeQualityConfigurationsContext context)
         {
             var qcManager = new TrafficStatisticQualityConfigurationManager();

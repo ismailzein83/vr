@@ -120,6 +120,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Context\SwapDealAnalysisInboundRateCalcMethodContext.cs" />
     <Compile Include="Context\SwapDealAnalysisOutboundRateCalcMethodContext.cs" />
+    <Compile Include="DealTimePeriodManager.cs" />
     <Compile Include="DealZoneInfoByZoneId.cs" />
     <Compile Include="DealZoneRateManager.cs" />
     <Compile Include="Extensions\DealBusinessObjectDataProviderSettings.cs" />

@@ -12,5 +12,5 @@ namespace TOne.WhS.Deal.MainExtensions.DealTimePeriod
             context.ToTime = context.EffectiveDate;
             context.FromTime = context.EffectiveDate.AddDays(-7);
         }
-    }
+    } 
 }

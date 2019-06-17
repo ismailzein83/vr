@@ -169,32 +169,6 @@ namespace TOne.WhS.Routing.Business
             return qualityAnalyticRecordList;
         }
 
-        public List<AnalyticMeasureInfo> GetTrafficStatisticQualityConfigurationMeasures(Guid qualityConfigurationDefinitionId)
-        {
-            QualityConfigurationDefinitionManager qualityConfigurationDefinitionManager = new QualityConfigurationDefinitionManager();
-            QualityConfigurationDefinitionExtendedSettings extendedSettings = qualityConfigurationDefinitionManager.GetQualityConfigurationDefinitionExtendedSettings(qualityConfigurationDefinitionId);
-            var trafficStatisticQCDefinitionSettings = extendedSettings.CastWithValidate<TrafficStatisticQCDefinitionSettings>("qualityConfigurationDefinitionExtendedSettings", qualityConfigurationDefinitionId);
-            List<string> includedMeasures = trafficStatisticQCDefinitionSettings.IncludedMeasures;
-            if (includedMeasures == null || includedMeasures.Count == 0)
-                throw new Exception("trafficStatisticQCDefinitionSettings.IncludedMeasures should contains at least one measure.");
-
-            Dictionary<string, AnalyticMeasure> analyticItemConfigs = new AnalyticItemConfigManager().GetMeasures(trafficStatisticQCDefinitionSettings.AnalyticTableId);
-            List<AnalyticMeasureInfo> analyticMeasureInfos = new List<AnalyticMeasureInfo>();
-
-            if (analyticItemConfigs != null)
-            {
-                AnalyticMeasure analyticMeasure;
-                foreach (var measureName in includedMeasures)
-                {
-                    if (analyticItemConfigs.TryGetValue(measureName, out analyticMeasure))
-                        analyticMeasureInfos.Add(new AnalyticMeasureInfo { Name = measureName, Title = analyticMeasure.Title });
-
-                }
-            }
-
-            return analyticMeasureInfos;
-        }
-
         private struct InitializeTrafficStatisticQualityConfigurationsCacheName
         {
             public Guid QualityConfigurationDefinitionId { get; set; }

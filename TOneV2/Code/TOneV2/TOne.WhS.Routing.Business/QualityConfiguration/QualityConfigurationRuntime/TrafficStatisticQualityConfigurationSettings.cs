@@ -74,6 +74,7 @@ namespace TOne.WhS.Routing.Business
 
         public override bool ValidateRouteRuleQualityConfigurationSettings(IValidateQualityConfigurationDataContext context)
         {
+            TrafficStatisticQCDefinitionManager trafficStatisticQCDefinitionManager = new TrafficStatisticQCDefinitionManager();
             TrafficStatisticQualityConfigurationManager trafficStatisticQualityConfigurationManager = new TrafficStatisticQualityConfigurationManager();
 
             string errorMessage;
@@ -90,12 +91,17 @@ namespace TOne.WhS.Routing.Business
                 return false;
             }
 
-            List<AnalyticMeasureInfo> analyticMeasureInfo = trafficStatisticQualityConfigurationManager.GetTrafficStatisticQualityConfigurationMeasures(context.QualityConfigurationDefinitionId);
+            TrafficStatisticQCDefinitionData trafficStatisticQCDefinitionData = trafficStatisticQCDefinitionManager.GetTrafficStatisticQCDefinitionData(context.QualityConfigurationDefinitionId);
+            trafficStatisticQCDefinitionData.ThrowIfNull("trafficStatisticQCDefinitionData", context.QualityConfigurationDefinitionId);
+
+            List<AnalyticMeasureInfo> analyticMeasureInfoList = trafficStatisticQCDefinitionData.AnalyticMeasureInfos;
+            analyticMeasureInfoList.ThrowIfNull("trafficStatisticQCDefinitionData.AnalyticMeasureInfos", context.QualityConfigurationDefinitionId);
+
             List<string> undefinedMeasureFieldNames = new List<string>();
 
             foreach (var measureFieldName in measureFields)
             {
-                if (!analyticMeasureInfo.Any(itm => itm.Name == measureFieldName))
+                if (!analyticMeasureInfoList.Any(itm => itm.Name == measureFieldName))
                     undefinedMeasureFieldNames.Add(measureFieldName);
             }
 
@@ -155,7 +161,7 @@ namespace TOne.WhS.Routing.Business
                 if (dimensionValue.Value == null)
                     continue;
 
-                long supplierZoneId = (long)dimensionValue.Value;
+                long supplierZoneId = long.Parse(dimensionValue.Value.ToString());
 
                 results.Add(new CustomerRouteQualityConfigurationData()
                 {
@@ -181,8 +187,8 @@ namespace TOne.WhS.Routing.Business
                 if (currentSaleZone.Value == null || currentSupplier.Value == null)
                     continue;
 
-                long saleZoneId = (long)currentSaleZone.Value;
-                int supplierId = (int)currentSupplier.Value;
+                long saleZoneId = long.Parse(currentSaleZone.Value.ToString());
+                int supplierId = int.Parse(currentSupplier.Value.ToString());
 
                 results.Add(new RPQualityConfigurationData()
                 {

@@ -15,9 +15,7 @@ namespace TOne.WhS.Deal.Web.Controllers
         [Route("GetDealTimePeriodTemplateConfigs")]
         public IEnumerable<DealTimePeriodConfig> GetDealTimePeriodTemplateConfigs()
         {
-            throw new NotImplementedException();
-
-            //return new DealTimePeriodManager().GetDealTimePeriodTemplateConfigs();
+            return new DealTimePeriodManager().GetDealTimePeriodTemplateConfigs();
         }
     }
 }

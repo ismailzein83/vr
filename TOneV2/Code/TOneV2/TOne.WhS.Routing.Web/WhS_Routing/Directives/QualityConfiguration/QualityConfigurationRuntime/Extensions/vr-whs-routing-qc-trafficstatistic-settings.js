@@ -2,9 +2,9 @@
 
     'use strict';
 
-    TrafficStatisticQualityConfigurationSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_TrafficStatisticQualityConfigurationAPIService'];
+    TrafficStatisticQualityConfigurationSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_TrafficStatisticQCDefinitionAPIService'];
 
-    function TrafficStatisticQualityConfigurationSettingsDirective(UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_TrafficStatisticQualityConfigurationAPIService) {
+    function TrafficStatisticQualityConfigurationSettingsDirective(UtilsService, VRUIUtilsService, WhS_Routing_TrafficStatisticQCDefinitionAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -22,6 +22,8 @@
 
         function TrafficStatisticQualityConfigurationSettingsCtor($scope, ctrl) {
             this.initializeController = initializeController;
+
+            var trafficStatisticQCDefinitionData;
 
             var timePeriodAPI;
             var timePeriodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -69,45 +71,53 @@
                         qualityConfigurationSettings = payload.qualityConfigurationSettings;
                         qualityConfigurationDefinitionId = payload.qualityConfigurationDefinitionId;
 
-                        $scope.scopeModel.expression = qualityConfigurationSettings != undefined ?  qualityConfigurationSettings.Expression : undefined;
+                        $scope.scopeModel.expression = qualityConfigurationSettings != undefined ? qualityConfigurationSettings.Expression : undefined;
                     }
 
-                    var loadTimeperiodDirectivePromise = loadTimeperiodDirective();
-                    promises.push(loadTimeperiodDirectivePromise);
+                    var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadPromiseDeferred.promise);
 
-                    if (qualityConfigurationDefinitionId != undefined) {
-                        var loadTrafficStatisticQualityConfigurationMeasuresPromise = loadTrafficStatisticQualityConfigurationMeasures();
-                        promises.push(loadTrafficStatisticQualityConfigurationMeasuresPromise);
+                    getTrafficStatisticQCDefinitionData().then(function () {
+                        if (trafficStatisticQCDefinitionData != undefined) {
+                            if (trafficStatisticQCDefinitionData.AnalyticMeasureInfos != undefined) {
+                                for (var i = 0, length = trafficStatisticQCDefinitionData.AnalyticMeasureInfos.length; i < length; i++) {
+                                    var analyticMeasureInfo = trafficStatisticQCDefinitionData.AnalyticMeasureInfos[i];
+                                    $scope.scopeModel.qualityConfigurationFields.push({
+                                        Name: analyticMeasureInfo.Name,
+                                        Title: analyticMeasureInfo.Title,
+                                        Expression: 'context.GetMeasureValue("' + analyticMeasureInfo.Name + '")'
+                                    });
+                                }
+                            }
+
+                            loadTimePeriodDirective().then(function () {
+                                loadPromiseDeferred.resolve();
+                            });
+                        }
+                    });
+
+
+                    function getTrafficStatisticQCDefinitionData() {
+                        return WhS_Routing_TrafficStatisticQCDefinitionAPIService.GetTrafficStatisticQCDefinitionData(qualityConfigurationDefinitionId).then(function (response) {
+                            trafficStatisticQCDefinitionData = response;
+                        });
                     }
+                    function loadTimePeriodDirective() {
+                        var timeSettingsDirective = trafficStatisticQCDefinitionData.TimeSettingsDirective;
+                        $scope.scopeModel.timeSettingsDirective = timeSettingsDirective != undefined ? timeSettingsDirective : "vr-common-timeperiod";
 
-
-                    function loadTimeperiodDirective() {
-                        var loadTimeperiodPromiseDeferred = UtilsService.createPromiseDeferred();
+                        var loadTimePeriodPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         timePeriodReadyPromiseDeferred.promise.then(function () {
+
                             var directivePayload;
                             if (qualityConfigurationSettings != undefined && qualityConfigurationSettings.TimePeriod != undefined) {
                                 directivePayload = { timePeriod: qualityConfigurationSettings.TimePeriod };
                             }
-                            VRUIUtilsService.callDirectiveLoad(timePeriodAPI, directivePayload, loadTimeperiodPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(timePeriodAPI, directivePayload, loadTimePeriodPromiseDeferred);
                         });
 
-                        return loadTimeperiodPromiseDeferred.promise;
-                    }
-
-                    function loadTrafficStatisticQualityConfigurationMeasures() {
-                        return WhS_Routing_TrafficStatisticQualityConfigurationAPIService.GetTrafficStatisticQualityConfigurationMeasures(qualityConfigurationDefinitionId).then(function (response) {
-                            if (response != undefined) {
-                                for (var i = 0, length = response.length ; i < length ; i++) {
-                                    var responseItem = response[i];
-                                    $scope.scopeModel.qualityConfigurationFields.push({
-                                        Name: responseItem.Name,
-                                        Title: responseItem.Title,
-                                        Expression: 'context.GetMeasureValue("' + responseItem.Name + '")'
-                                    });
-                                }
-                            }
-                        });
+                        return loadTimePeriodPromiseDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);

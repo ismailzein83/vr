@@ -5,9 +5,9 @@
     </vr-analytic-table-selector>
 </vr-columns>
 
-<vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" 
+<vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady"
                               isloading="scopeModel.isMeasureSelectorLoading"
-                              customlabel="Included Measures" isrequired="true" 
+                              customlabel="Included Measures" isrequired="true"
                               normal-col-num="6" ismultipleselection>
 </vr-analytic-measure-selector>
 
@@ -28,3 +28,7 @@
                                 customlabel="Supplier Zone Dimension" isrequired="true"
                                 normal-col-num="6" hideremoveicon>
 </vr-analytic-dimension-selector>
+
+<vr-columns colnum="6">
+    <vr-textbox value="scopeModel.timeSettingsDirective" label="Time Settings Directive"></vr-textbox>
+</vr-columns>

@@ -7,6 +7,7 @@ using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.MainExtensions.DataRecordFields;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -14,322 +15,352 @@ namespace TOne.WhS.Deal.Business
     {
         public override List<RawMemoryRecord> GetRawRecords(AnalyticQuery query, List<string> neededFieldNames)
         {
-            return null;
+            if (!query.ToTime.HasValue)
+                throw new NullReferenceException("query.ToTime");
 
-            //if (!query.ToTime.HasValue)
-            //    throw new NullReferenceException("query.ToTime");
+            List<RawMemoryRecord> rawMemoryRecords = new List<RawMemoryRecord>();
 
-            //List<RawMemoryRecord> rawMemoryRecords = new List<RawMemoryRecord>();
+            Dictionary<PropertyName, string> propertyNames = BuildPropertyNames();
+            Dictionary<int, DealDefinition> costDealDefinitions = GetCostDealDefinitions(query.ToTime.Value);
+            if (costDealDefinitions == null || costDealDefinitions.Count == 0)
+                return null;
 
-            //try
-            //{
-            //    Dictionary<PropertyName, string> propertyNames = BuildPropertyNames();
-            //    Dictionary<int, DealDefinition> costDealDefinitions = GetCostDealDefinitions(query.ToTime.Value);
-            //    if (costDealDefinitions == null || costDealDefinitions.Count == 0)
-            //        return null;
+            List<DealZoneGroup> costDealZoneGroups = BuildCostDealZoneGroups(costDealDefinitions);
 
-            //    List<AnalyticRecord> analyticRecords = GetAnalyticRecords(query, costDealDefinitions.Values.ToList(), propertyNames);
-            //    if (analyticRecords == null || analyticRecords.Count == 0)
-            //        return null;
+            List<AnalyticRecord> analyticRecords = GetAnalyticRecords(query, costDealDefinitions.Keys, propertyNames);
+            if (analyticRecords == null || analyticRecords.Count == 0)
+                return null;
 
-            //    Dictionary<string, RawMemoryRecordData> rawMemoryRecordDataByIdentifier;
-            //    Dictionary<DealZoneGroup, List<CostDealBillingStatRecord>> costDealBillingStatRecordsByDealZoneGroup = StructureBillingRecords(analyticRecords, propertyNames,
-            //        query.DimensionFields, out rawMemoryRecordDataByIdentifier);
+            Dictionary<string, RawMemoryRecordData> rawMemoryRecordDataByIdentifier;
+            Dictionary<DealZoneGroup, List<CostDealBillingStatRecord>> costDealBillingStatRecordsByDealZoneGroup = StructureBillingRecords(analyticRecords, propertyNames,
+                query.DimensionFields, costDealZoneGroups, out rawMemoryRecordDataByIdentifier);
 
-            //    Dictionary<DealZoneGroup, DealZoneGroupTrafficSummary> dealZoneGroupTrafficSummaryDict = GetDealZoneGroupTrafficSummary(costDealBillingStatRecordsByDealZoneGroup, costDealDefinitions,
-            //        query.FromTime, query.ToTime.Value);
+            Dictionary<DealZoneGroup, DealZoneGroupTrafficSummary> dealZoneGroupTrafficSummaryDict = GetDealZoneGroupTrafficSummary(costDealBillingStatRecordsByDealZoneGroup, costDealDefinitions,
+                query.FromTime, query.ToTime.Value);
 
-            //    foreach (var rawMemoryRecordDataKvp in rawMemoryRecordDataByIdentifier)
-            //    {
-            //        string serializedRawMemoryRecordIdentifier = rawMemoryRecordDataKvp.Key;
-            //        RawMemoryRecordData rawMemoryRecordData = rawMemoryRecordDataKvp.Value;
+            foreach (var rawMemoryRecordDataKvp in rawMemoryRecordDataByIdentifier)
+            {
+                string serializedRawMemoryRecordIdentifier = rawMemoryRecordDataKvp.Key;
+                RawMemoryRecordData rawMemoryRecordData = rawMemoryRecordDataKvp.Value;
 
-            //        Dictionary<string, object> rawMemoryRecordIdentifier = DeserializeRawMemoryRecordIdentifier(serializedRawMemoryRecordIdentifier);
+                Dictionary<string, object> rawMemoryRecordIdentifier = DeserializeRawMemoryRecordIdentifier(serializedRawMemoryRecordIdentifier);
 
-            //        Decimal zoneProfit = 0;
-            //        Decimal reachedVolumeInSec = 0;
-            //        Decimal? estimatedVolumeInSec = null;
+                Decimal zoneProfit = 0;
+                Decimal reachedVolumeInSec = 0;
+                Decimal? estimatedVolumeInSec = null;
 
-            //        foreach (var dealZoneGroup in rawMemoryRecordData.DealZoneGroups)
-            //        {
-            //            DealZoneGroupTrafficSummary dealZoneGroupTrafficSummary = dealZoneGroupTrafficSummaryDict.GetRecord(dealZoneGroup);
-            //            zoneProfit += dealZoneGroupTrafficSummary.TotalProfit;
-            //            reachedVolumeInSec += dealZoneGroupTrafficSummary.ReachedVolumeInSec;
+                foreach (var dealZoneGroup in rawMemoryRecordData.DealZoneGroups)
+                {
+                    DealZoneGroupTrafficSummary dealZoneGroupTrafficSummary;
+                    if (!dealZoneGroupTrafficSummaryDict.TryGetValue(dealZoneGroup, out dealZoneGroupTrafficSummary))
+                        continue;
 
-            //            if (dealZoneGroupTrafficSummary.EstimatedVolumeInSec.HasValue)
-            //                estimatedVolumeInSec = estimatedVolumeInSec.HasValue ? estimatedVolumeInSec.Value + dealZoneGroupTrafficSummary.EstimatedVolumeInSec.Value : dealZoneGroupTrafficSummary.EstimatedVolumeInSec.Value;
-            //        }
+                    zoneProfit += dealZoneGroupTrafficSummary.TotalProfit;
+                    reachedVolumeInSec += dealZoneGroupTrafficSummary.ReachedVolumeInSec;
 
-            //        Decimal completionPercentage = 0;
-            //        if (estimatedVolumeInSec.HasValue)
-            //            completionPercentage = (reachedVolumeInSec / estimatedVolumeInSec.Value) * 100;
+                    if (dealZoneGroupTrafficSummary.EstimatedVolumeInSec.HasValue)
+                        estimatedVolumeInSec = estimatedVolumeInSec.HasValue ? estimatedVolumeInSec.Value + dealZoneGroupTrafficSummary.EstimatedVolumeInSec.Value : dealZoneGroupTrafficSummary.EstimatedVolumeInSec.Value;
+                }
 
-            //        RawMemoryRecord rawMemoryRecord = new RawMemoryRecord { FieldValues = new Dictionary<string, dynamic>() };
+                Decimal completionPercentage = 0;
+                if (estimatedVolumeInSec.HasValue)
+                    completionPercentage = (reachedVolumeInSec / estimatedVolumeInSec.Value) * 100;
 
-            //        foreach (var itm in rawMemoryRecordIdentifier)
-            //            rawMemoryRecord.FieldValues.Add(itm.Key, itm.Value);
+                RawMemoryRecord rawMemoryRecord = new RawMemoryRecord { FieldValues = new Dictionary<string, dynamic>() };
 
-            //        rawMemoryRecord.FieldValues.Add("ZoneProfit", zoneProfit);
-            //        rawMemoryRecord.FieldValues.Add("CompletionPercentage", completionPercentage);
-            //        rawMemoryRecords.Add(rawMemoryRecord);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
+                foreach (var itm in rawMemoryRecordIdentifier)
+                    rawMemoryRecord.FieldValues.Add(itm.Key, itm.Value);
 
-            //return rawMemoryRecords;
+                rawMemoryRecord.FieldValues.Add("ZoneProfit", zoneProfit);
+                rawMemoryRecord.FieldValues.Add("CompletionPercentage", completionPercentage);
+                rawMemoryRecord.FieldValues.Add("Priority", rawMemoryRecordData.MinDealPriority);
+                rawMemoryRecords.Add(rawMemoryRecord);
+            }
+
+            return rawMemoryRecords;
         }
 
-        //private Dictionary<int, DealDefinition> GetCostDealDefinitions(DateTime effectiveDate)
-        //{
-        //    Dictionary<int, DealDefinition> dealDefinitions = new DealDefinitionManager().GetAllCachedDealDefinitions();
-        //    if (dealDefinitions == null || dealDefinitions.Count == 0)
-        //        return null;
+        private List<DealZoneGroup> BuildCostDealZoneGroups(Dictionary<int, DealDefinition> costDealDefinitions)
+        {
+            List<DealZoneGroup> costDealZoneGroups = new List<DealZoneGroup>();
 
-        //    Dictionary<int, DealDefinition> costDealDefinitions = new Dictionary<int, DealDefinition>();
+            foreach (var costDealDefinition in costDealDefinitions)
+            {
+                int dealId = costDealDefinition.Key;
 
-        //    foreach (var dealDefinition in dealDefinitions.Values)
-        //    {
-        //        dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings");
+                DealDefinition dealDefinition = costDealDefinition.Value;
+                dealDefinition.ThrowIfNull("dealDefinition");
+                dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings");
 
-        //        if (dealDefinition.Settings.Status == DealStatus.Draft)
-        //            continue;
+                DealGetZoneGroupsContext dealGetZoneGroupsContext = new DealGetZoneGroupsContext(dealId, DealZoneGroupPart.Cost, false);
+                dealDefinition.Settings.GetZoneGroups(dealGetZoneGroupsContext);
+                dealGetZoneGroupsContext.SupplierZoneGroups.ThrowIfNull("dealGetZoneGroupsContext.SupplierZoneGroups");
 
-        //        if (dealDefinition.Settings.GetDealZoneGroupPart() == DealZoneGroupPart.Sale)
-        //            continue;
+                foreach (var supplierZoneGroup in dealGetZoneGroupsContext.SupplierZoneGroups)
+                    costDealZoneGroups.Add(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = supplierZoneGroup.DealSupplierZoneGroupNb });
+            }
 
-        //        if (!Utilities.IsEffective(effectiveDate, dealDefinition.Settings.RealBED, dealDefinition.Settings.RealEED))
-        //            continue;
+            return costDealZoneGroups;
+        }
 
-        //        costDealDefinitions.Add(dealDefinition.DealId, dealDefinition);
-        //    }
+        private Dictionary<int, DealDefinition> GetCostDealDefinitions(DateTime effectiveDate)
+        {
+            Dictionary<int, DealDefinition> dealDefinitions = new DealDefinitionManager().GetAllCachedDealDefinitions();
+            if (dealDefinitions == null || dealDefinitions.Count == 0)
+                return null;
 
-        //    return costDealDefinitions;
-        //}
+            Dictionary<int, DealDefinition> costDealDefinitions = new Dictionary<int, DealDefinition>();
 
-        //private List<AnalyticRecord> GetAnalyticRecords(AnalyticQuery query, List<DealDefinition> costDealDefinitions, Dictionary<PropertyName, string> propertyNames)
-        //{
-        //    List<string> dimensionFields = new List<string>();
-        //    dimensionFields.AddRange(query.DimensionFields);
-        //    dimensionFields.Add(propertyNames[PropertyName.CostDeal]);
-        //    dimensionFields.Add(propertyNames[PropertyName.CostDealZoneGroupNb]);
+            foreach (var dealDefinition in dealDefinitions.Values)
+            {
+                dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings");
 
-        //    ObjectListRecordFilter objectListRecordFilter = new ObjectListRecordFilter()
-        //    {
-        //        FieldName = propertyNames[PropertyName.CostDeal],
-        //        CompareOperator = ListRecordFilterOperator.In,
-        //        Values = costDealDefinitions.Select(itm => itm.DealId as object).ToList()
-        //    };
-        //    RecordFilter recordFilter = ConvertToRecordFilter(objectListRecordFilter.FieldName, new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType(), objectListRecordFilter);
+                if (dealDefinition.Settings.Status == DealStatus.Draft)
+                    continue;
 
-        //    RecordFilterGroup filterGroup = new RecordFilterGroup();
-        //    filterGroup.Filters = new List<RecordFilter>();
-        //    filterGroup.Filters.Add(recordFilter);
+                if (dealDefinition.Settings.GetDealZoneGroupPart() == DealZoneGroupPart.Sale)
+                    continue;
 
-        //    AnalyticQuery costAnalyticQuery = new AnalyticQuery
-        //    {
-        //        TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-        //        DimensionFields = dimensionFields,
-        //        MeasureFields = new List<string> { propertyNames[PropertyName.CostDealDurInSec], propertyNames[PropertyName.TotalProfit] },
-        //        FromTime = query.FromTime,
-        //        ToTime = query.ToTime.Value,
-        //        FilterGroup = filterGroup
-        //    };
+                if (!Utilities.IsEffective(effectiveDate, dealDefinition.Settings.RealBED, dealDefinition.Settings.RealEED))
+                    continue;
 
-        //    AnalyticRecord analyticRecordSummary;
-        //    List<AnalyticRecord> costDealBillingStatRecords = new AnalyticManager().GetAllFilteredRecords(costAnalyticQuery, out analyticRecordSummary);
-        //    return costDealBillingStatRecords;
-        //}
+                costDealDefinitions.Add(dealDefinition.DealId, dealDefinition);
+            }
 
-        //private RecordFilter ConvertToRecordFilter(string fieldName, DataRecordFieldType dataRecordFieldType, ObjectListRecordFilter objectListRecordFilter)
-        //{
-        //    var recordFilter = dataRecordFieldType.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext { FieldName = fieldName, FilterValues = objectListRecordFilter.Values, StrictEqual = true });
-        //    if (recordFilter is ObjectListRecordFilter)
-        //        ((ObjectListRecordFilter)recordFilter).CompareOperator = objectListRecordFilter.CompareOperator;
-        //    return recordFilter;
-        //}
+            return costDealDefinitions;
+        }
 
-        //private Dictionary<DealZoneGroup, List<CostDealBillingStatRecord>> StructureBillingRecords(List<AnalyticRecord> analyticRecords, Dictionary<PropertyName, string> propertyNames,
-        //    List<string> dimensionRecords, out Dictionary<string, RawMemoryRecordData> rawMemoryRecordDataByIdentifier)
-        //{
-        //    rawMemoryRecordDataByIdentifier = new Dictionary<string, RawMemoryRecordData>();
-        //    var costDealBillingStatRecordsByDealZoneGroup = new Dictionary<DealZoneGroup, List<CostDealBillingStatRecord>>();
+        private List<AnalyticRecord> GetAnalyticRecords(AnalyticQuery query, IEnumerable<int> costDealDefinitionIds, Dictionary<PropertyName, string> propertyNames)
+        {
+            List<string> dimensionFields = new List<string>();
+            dimensionFields.AddRange(query.DimensionFields);
+            dimensionFields.Add(propertyNames[PropertyName.CostDeal]);
+            dimensionFields.Add(propertyNames[PropertyName.CostDealZoneGroupNb]);
+            dimensionFields.Add(propertyNames[PropertyName.Priority]);
 
-        //    foreach (var analyticRecord in analyticRecords)
-        //    {
-        //        string rawMemoryRecordIdentifier = SerializeRawMemoryRecordIdentifier(dimensionRecords, analyticRecord.DimensionValues);
+            ObjectListRecordFilter objectListRecordFilter = new ObjectListRecordFilter()
+            {
+                FieldName = propertyNames[PropertyName.CostDeal],
+                CompareOperator = ListRecordFilterOperator.In,
+                Values = costDealDefinitionIds.VRCast<object>().ToList()
+            };
+            RecordFilter recordFilter = Vanrise.GenericData.Business.Helper.ConvertToRecordFilter(objectListRecordFilter.FieldName, new FieldNumberType(), objectListRecordFilter);
 
-        //        int costDeal = (int)analyticRecord.DimensionValues[dimensionRecords.Count].Value;
-        //        int costDealZoneGroupNb = (int)analyticRecord.DimensionValues[dimensionRecords.Count + 1].Value;
+            RecordFilterGroup filterGroup = new RecordFilterGroup();
+            filterGroup.Filters = new List<RecordFilter>();
+            filterGroup.Filters.Add(recordFilter);
 
-        //        decimal costDealDurInSecValue = 0;
-        //        MeasureValue costDealDurInSec;
-        //        analyticRecord.MeasureValues.TryGetValue(propertyNames[PropertyName.CostDealDurInSec], out costDealDurInSec);
-        //        if (costDealDurInSec != null && costDealDurInSec.Value != null)
-        //            costDealDurInSecValue = Convert.ToDecimal(costDealDurInSec.Value);
+            AnalyticQuery costAnalyticQuery = new AnalyticQuery
+            {
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                DimensionFields = dimensionFields,
+                MeasureFields = new List<string> { propertyNames[PropertyName.CostDealDurInSec], propertyNames[PropertyName.TotalProfit] },
+                FromTime = query.FromTime,
+                ToTime = query.ToTime.Value,
+                FilterGroup = filterGroup
+            };
 
-        //        decimal zoneProfitValue = 0;
-        //        MeasureValue zoneProfit;
-        //        analyticRecord.MeasureValues.TryGetValue(propertyNames[PropertyName.TotalProfit], out zoneProfit);
-        //        if (zoneProfit != null && zoneProfit.Value != null)
-        //            zoneProfitValue = Convert.ToDecimal(zoneProfit.Value);
+            AnalyticRecord analyticRecordSummary;
+            List<AnalyticRecord> costDealBillingStatRecords = new AnalyticManager().GetAllFilteredRecords(costAnalyticQuery, out analyticRecordSummary);
+            return costDealBillingStatRecords;
+        }
 
-        //        DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = costDeal, ZoneGroupNb = costDealZoneGroupNb };
-        //        CostDealBillingStatRecord costDealBillingStatRecord = new CostDealBillingStatRecord(costDeal, costDealZoneGroupNb, costDealDurInSecValue, zoneProfitValue, analyticRecord);
+        private Dictionary<DealZoneGroup, List<CostDealBillingStatRecord>> StructureBillingRecords(List<AnalyticRecord> analyticRecords, Dictionary<PropertyName, string> propertyNames,
+            List<string> dimensionRecords, List<DealZoneGroup> costDealZoneGroups, out Dictionary<string, RawMemoryRecordData> rawMemoryRecordDataByIdentifier)
+        {
+            rawMemoryRecordDataByIdentifier = new Dictionary<string, RawMemoryRecordData>();
+            var costDealBillingStatRecordsByDealZoneGroup = new Dictionary<DealZoneGroup, List<CostDealBillingStatRecord>>();
 
-        //        List<CostDealBillingStatRecord> costDealBillingStatRecords = costDealBillingStatRecordsByDealZoneGroup.GetOrCreateItem(dealZoneGroup);
-        //        costDealBillingStatRecords.Add(costDealBillingStatRecord);
+            foreach (var analyticRecord in analyticRecords)
+            {
+                string rawMemoryRecordIdentifier = SerializeRawMemoryRecordIdentifier(dimensionRecords, analyticRecord.DimensionValues);
 
-        //        RawMemoryRecordData rawMemoryRecordData = rawMemoryRecordDataByIdentifier.GetOrCreateItem(rawMemoryRecordIdentifier);
-        //        rawMemoryRecordData.DealZoneGroups.Add(dealZoneGroup);
-        //        rawMemoryRecordData.CostDealBillingStatRecords.Add(costDealBillingStatRecord);
-        //    }
+                int costDeal = (int)analyticRecord.DimensionValues[dimensionRecords.Count].Value;
+                int costDealZoneGroupNb = (int)analyticRecord.DimensionValues[dimensionRecords.Count + 1].Value;
+                int costDealPriority = (int)analyticRecord.DimensionValues[dimensionRecords.Count + 2].Value;
 
-        //    return costDealBillingStatRecordsByDealZoneGroup;
-        //}
+                DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = costDeal, ZoneGroupNb = costDealZoneGroupNb };
+                if (!costDealZoneGroups.Contains(dealZoneGroup))
+                    continue;
 
-        //private Dictionary<DealZoneGroup, DealZoneGroupTrafficSummary> GetDealZoneGroupTrafficSummary(Dictionary<DealZoneGroup, List<CostDealBillingStatRecord>> billingStatRecordsByDealZoneGroup,
-        //    Dictionary<int, DealDefinition> costDealDefinitions, DateTime fromTime, DateTime toTime)
-        //{
-        //    Dictionary<DealZoneGroup, DealZoneGroupTrafficSummary> dealZoneGroupTrafficSummaryDict = new Dictionary<DealZoneGroup, DealZoneGroupTrafficSummary>();
+                decimal costDealDurInSecValue = 0;
+                MeasureValue costDealDurInSec;
+                analyticRecord.MeasureValues.TryGetValue(propertyNames[PropertyName.CostDealDurInSec], out costDealDurInSec);
+                if (costDealDurInSec != null && costDealDurInSec.Value != null)
+                    costDealDurInSecValue = Convert.ToDecimal(costDealDurInSec.Value);
 
-        //    foreach (var costDealBillingStatRecordsKvp in billingStatRecordsByDealZoneGroup)
-        //    {
-        //        DealZoneGroup dealZoneGroup = costDealBillingStatRecordsKvp.Key;
-        //        List<CostDealBillingStatRecord> costDealBillingStatRecords = costDealBillingStatRecordsKvp.Value;
+                decimal zoneProfitValue = 0;
+                MeasureValue zoneProfit;
+                analyticRecord.MeasureValues.TryGetValue(propertyNames[PropertyName.TotalProfit], out zoneProfit);
+                if (zoneProfit != null && zoneProfit.Value != null)
+                    zoneProfitValue = Convert.ToDecimal(zoneProfit.Value);
 
-        //        Decimal? periodEstimatedVolumeInSec = null;
+                CostDealBillingStatRecord costDealBillingStatRecord = new CostDealBillingStatRecord(analyticRecord, costDeal, costDealZoneGroupNb, costDealDurInSecValue, zoneProfitValue);
 
-        //        DealDefinition dealDefinition = costDealDefinitions.GetRecord(dealZoneGroup.DealId);
-        //        if (!dealDefinition.Settings.RealEED.HasValue)
-        //            throw new NullReferenceException(String.Format("deal.Settings.EndDate '{0}'", dealDefinition.DealId));
+                List<CostDealBillingStatRecord> costDealBillingStatRecords = costDealBillingStatRecordsByDealZoneGroup.GetOrCreateItem(dealZoneGroup);
+                costDealBillingStatRecords.Add(costDealBillingStatRecord);
 
-        //        var getDealZoneGroupDataContext = new GetDealZoneGroupDataContext() { ZoneGroupNb = dealZoneGroup.ZoneGroupNb, IsSale = false };
-        //        dealDefinition.Settings.GetDealZoneGroupData(getDealZoneGroupDataContext);
-        //        if (getDealZoneGroupDataContext.DealZoneGroupData != null && getDealZoneGroupDataContext.DealZoneGroupData.TotalVolumeInMin.HasValue)
-        //        {
-        //            int nbOfDealDays = (int)(dealDefinition.Settings.RealEED.Value - dealDefinition.Settings.RealBED).TotalDays;
-        //            Decimal dailyEstimatedVolumeInSec = (Decimal)(getDealZoneGroupDataContext.DealZoneGroupData.TotalVolumeInMin.Value * 60) / nbOfDealDays;
+                RawMemoryRecordData rawMemoryRecordData;
+                if (!rawMemoryRecordDataByIdentifier.TryGetValue(rawMemoryRecordIdentifier, out rawMemoryRecordData))
+                {
+                    rawMemoryRecordData = new RawMemoryRecordData();
+                    rawMemoryRecordData.MinDealPriority = costDealPriority;
+                    rawMemoryRecordData.DealZoneGroups = new List<DealZoneGroup>() { dealZoneGroup };
+                    rawMemoryRecordData.CostDealBillingStatRecords = new List<CostDealBillingStatRecord>() { costDealBillingStatRecord };
+                    rawMemoryRecordDataByIdentifier.Add(rawMemoryRecordIdentifier, rawMemoryRecordData);
+                }
+                else
+                {
+                    rawMemoryRecordData.DealZoneGroups.Add(dealZoneGroup);
+                    rawMemoryRecordData.CostDealBillingStatRecords.Add(costDealBillingStatRecord);
 
-        //            int nbOfPeriodDays = (int)(Utilities.Min(dealDefinition.Settings.RealEED.Value, toTime) - Utilities.Max(dealDefinition.Settings.RealBED, fromTime)).TotalDays;
-        //            periodEstimatedVolumeInSec = nbOfPeriodDays * dailyEstimatedVolumeInSec;
-        //        }
+                    if (rawMemoryRecordData.MinDealPriority > costDealPriority)
+                        rawMemoryRecordData.MinDealPriority = costDealPriority;
+                }
+            }
 
-        //        Decimal totalProfit = 0;
-        //        Decimal reachedDurationInSec = 0;
+            return costDealBillingStatRecordsByDealZoneGroup;
+        }
 
-        //        foreach (var costDealBillingStatRecord in costDealBillingStatRecords)
-        //        {
-        //            totalProfit += costDealBillingStatRecord.TotalProfit;
-        //            reachedDurationInSec += costDealBillingStatRecord.CostDealDurInSec;
-        //        }
+        private Dictionary<DealZoneGroup, DealZoneGroupTrafficSummary> GetDealZoneGroupTrafficSummary(Dictionary<DealZoneGroup, List<CostDealBillingStatRecord>> costDealBillingStatRecordsDict,
+            Dictionary<int, DealDefinition> costDealDefinitions, DateTime fromTime, DateTime toTime)
+        {
+            Dictionary<DealZoneGroup, DealZoneGroupTrafficSummary> dealZoneGroupTrafficSummaryDict = new Dictionary<DealZoneGroup, DealZoneGroupTrafficSummary>();
 
-        //        DealZoneGroupTrafficSummary dealZoneGroupTrafficSummary = new DealZoneGroupTrafficSummary()
-        //        {
-        //            TotalProfit = totalProfit,
-        //            ReachedVolumeInSec = reachedDurationInSec,
-        //            EstimatedVolumeInSec = periodEstimatedVolumeInSec
-        //        };
-        //        dealZoneGroupTrafficSummaryDict.Add(dealZoneGroup, dealZoneGroupTrafficSummary);
-        //    }
+            foreach (var costDealBillingStatRecordsKvp in costDealBillingStatRecordsDict)
+            {
+                DealZoneGroup dealZoneGroup = costDealBillingStatRecordsKvp.Key;
+                List<CostDealBillingStatRecord> costDealBillingStatRecords = costDealBillingStatRecordsKvp.Value;
 
-        //    return dealZoneGroupTrafficSummaryDict;
-        //}
+                Decimal? periodEstimatedVolumeInSec = null;
 
-        //private string SerializeRawMemoryRecordIdentifier(List<string> dimensionRecords, DimensionValue[] dimensionValues)
-        //{
-        //    StringBuilder sb_RawMemoryRecordIdentifier = new StringBuilder();
+                DealDefinition dealDefinition = costDealDefinitions.GetRecord(dealZoneGroup.DealId);
+                if (!dealDefinition.Settings.RealEED.HasValue)
+                    throw new NullReferenceException(String.Format("deal.Settings.EndDate '{0}'", dealDefinition.DealId));
 
-        //    for (var index = 0; index < dimensionRecords.Count; index++)
-        //    {
-        //        string currentDimensionFieldName = dimensionRecords[index];
-        //        object currentDimensionValue = dimensionValues[index].Value;
+                var getDealZoneGroupDataContext = new GetDealZoneGroupDataContext() { ZoneGroupNb = dealZoneGroup.ZoneGroupNb, IsSale = false };
+                dealDefinition.Settings.GetDealZoneGroupData(getDealZoneGroupDataContext);
+                getDealZoneGroupDataContext.DealZoneGroupData.ThrowIfNull("getDealZoneGroupDataContext.DealZoneGroupData");
 
-        //        if (sb_RawMemoryRecordIdentifier.Length > 0)
-        //            sb_RawMemoryRecordIdentifier.Append("&");
+                if (getDealZoneGroupDataContext.DealZoneGroupData.TotalVolumeInMin.HasValue)
+                {
+                    int nbOfDealDays = (int)(dealDefinition.Settings.RealEED.Value - dealDefinition.Settings.RealBED).TotalDays;
+                    Decimal dailyEstimatedVolumeInSec = (Decimal)(getDealZoneGroupDataContext.DealZoneGroupData.TotalVolumeInMin.Value * 60) / nbOfDealDays;
 
-        //        sb_RawMemoryRecordIdentifier.Append(string.Concat(currentDimensionFieldName, ":", currentDimensionValue));
-        //    }
+                    int nbOfPeriodDays = (int)(Utilities.Min(dealDefinition.Settings.RealEED.Value, toTime) - Utilities.Max(dealDefinition.Settings.RealBED, fromTime)).TotalDays;
+                    periodEstimatedVolumeInSec = nbOfPeriodDays * dailyEstimatedVolumeInSec;
+                }
 
-        //    return sb_RawMemoryRecordIdentifier.ToString();
-        //}
+                Decimal totalProfit = 0;
+                Decimal reachedDurationInSec = 0;
 
-        //private Dictionary<string, object> DeserializeRawMemoryRecordIdentifier(string rawMemoryRecordIdentifier)
-        //{
-        //    Dictionary<string, object> deserializeRawMemoryRecordIdentifier = new Dictionary<string, object>();
+                foreach (var costDealBillingStatRecord in costDealBillingStatRecords)
+                {
+                    totalProfit += costDealBillingStatRecord.TotalProfit;
+                    reachedDurationInSec += costDealBillingStatRecord.CostDealDurInSec;
+                }
 
-        //    string[] dimensions = rawMemoryRecordIdentifier.Split('&');
+                DealZoneGroupTrafficSummary dealZoneGroupTrafficSummary = new DealZoneGroupTrafficSummary()
+                {
+                    TotalProfit = totalProfit,
+                    ReachedVolumeInSec = reachedDurationInSec,
+                    EstimatedVolumeInSec = periodEstimatedVolumeInSec
+                };
+                dealZoneGroupTrafficSummaryDict.Add(dealZoneGroup, dealZoneGroupTrafficSummary);
+            }
 
-        //    foreach (var dimension in dimensions)
-        //    {
-        //        string[] dimensionItems = dimension.Split(':');
-        //        string dimensionName = dimensionItems[0];
-        //        string dimensionValue = dimensionItems[1];
+            return dealZoneGroupTrafficSummaryDict;
+        }
 
-        //        deserializeRawMemoryRecordIdentifier.Add(dimensionName, dimensionValue);
-        //    }
+        private string SerializeRawMemoryRecordIdentifier(List<string> dimensionRecords, DimensionValue[] dimensionValues)
+        {
+            StringBuilder sb_RawMemoryRecordIdentifier = new StringBuilder();
 
-        //    return deserializeRawMemoryRecordIdentifier;
-        //}
+            for (var index = 0; index < dimensionRecords.Count; index++)
+            {
+                string currentDimensionFieldName = dimensionRecords[index];
+                object currentDimensionValue = dimensionValues[index].Value;
 
-        //private Dictionary<PropertyName, string> BuildPropertyNames()
-        //{
-        //    Dictionary<PropertyName, string> propertyNames = new Dictionary<PropertyName, string>
-        //    {
-        //        { PropertyName.SupplierZone, "SupplierZone" },
-        //        { PropertyName.Supplier, "Supplier" },
-        //        { PropertyName.SaleZone, "SaleZone" },
-        //        { PropertyName.CostDeal, "CostDeal" },
-        //        { PropertyName.CostDealZoneGroupNb, "CostDealZoneGroupNb" },
-        //        { PropertyName.CostDealDurInSec, "CostDealDurationInSec" },
-        //        { PropertyName.TotalProfit, "TotalProfit" }
-        //    };
+                if (sb_RawMemoryRecordIdentifier.Length > 0)
+                    sb_RawMemoryRecordIdentifier.Append("&");
 
-        //    return propertyNames;
-        //}
+                sb_RawMemoryRecordIdentifier.Append(string.Concat(currentDimensionFieldName, ":", currentDimensionValue));
+            }
 
-        //private enum PropertyName { SupplierZone, Supplier, SaleZone, CostDeal, CostDealZoneGroupNb, CostDealDurInSec, TotalProfit }
+            return sb_RawMemoryRecordIdentifier.ToString();
+        }
 
-        //private class CostDealBillingStatRecord
-        //{
-        //    public int CostDeal { get; set; }
-        //    public int CostDealZoneGroupNb { get; set; }
-        //    public Decimal CostDealDurInSec { get; set; }
-        //    public Decimal TotalProfit { get; set; }
-        //    public AnalyticRecord AnalyticRecord { get; set; }
+        private Dictionary<string, object> DeserializeRawMemoryRecordIdentifier(string rawMemoryRecordIdentifier)
+        {
+            Dictionary<string, object> deserializeRawMemoryRecordIdentifier = new Dictionary<string, object>();
 
-        //    public CostDealBillingStatRecord(int costDeal, int costDealZoneGroupNb, decimal costDealDurInSec, decimal totalProfit, AnalyticRecord analyticRecord)
-        //    {
-        //        CostDeal = costDeal;
-        //        CostDealZoneGroupNb = costDealZoneGroupNb;
-        //        CostDealDurInSec = costDealDurInSec;
-        //        TotalProfit = totalProfit;
-        //        AnalyticRecord = analyticRecord;
-        //    }
-        //}
+            string[] dimensions = rawMemoryRecordIdentifier.Split('&');
 
-        //private class DealZoneGroupTrafficSummary
-        //{
-        //    public Decimal TotalProfit { get; set; }
+            foreach (var dimension in dimensions)
+            {
+                string[] dimensionItems = dimension.Split(':');
+                string dimensionName = dimensionItems[0];
+                object dimensionValue = dimensionItems[1];
 
-        //    public Decimal ReachedVolumeInSec { get; set; }
+                deserializeRawMemoryRecordIdentifier.Add(dimensionName, dimensionValue);
+            }
 
-        //    public Decimal? EstimatedVolumeInSec { get; set; }
-        //}
+            return deserializeRawMemoryRecordIdentifier;
+        }
 
-        //private class RawMemoryRecordData
-        //{
-        //    public List<DealZoneGroup> DealZoneGroups { get; set; }
+        private Dictionary<PropertyName, string> BuildPropertyNames()
+        {
+            Dictionary<PropertyName, string> propertyNames = new Dictionary<PropertyName, string>
+            {
+                { PropertyName.SupplierZone, "SupplierZone" },
+                { PropertyName.Supplier, "Supplier" },
+                { PropertyName.SaleZone, "SaleZone" },
+                { PropertyName.CostDeal, "CostDeal" },
+                { PropertyName.CostDealZoneGroupNb, "CostDealZoneGroupNb" },
+                { PropertyName.Priority, "Priority" },
+                { PropertyName.CostDealDurInSec, "CostDealDurationInSec" },
+                { PropertyName.TotalProfit, "TotalProfit" }
+            };
 
-        //    public List<CostDealBillingStatRecord> CostDealBillingStatRecords { get; set; }
+            return propertyNames;
+        }
 
-        //    public RawMemoryRecordData()
-        //    {
-        //        this.DealZoneGroups = new List<DealZoneGroup>();
-        //        this.CostDealBillingStatRecords = new List<CostDealBillingStatRecord>();
-        //    }
-        //}
+        private enum PropertyName { SupplierZone, Supplier, SaleZone, CostDeal, CostDealZoneGroupNb, Priority, CostDealDurInSec, TotalProfit }
+
+        private class CostDealBillingStatRecord
+        {
+            public AnalyticRecord AnalyticRecord { get; set; }
+            public int CostDeal { get; set; }
+            public int CostDealZoneGroupNb { get; set; }
+            public Decimal CostDealDurInSec { get; set; }
+            public Decimal TotalProfit { get; set; }
+
+            public CostDealBillingStatRecord(AnalyticRecord analyticRecord, int costDeal, int costDealZoneGroupNb, decimal costDealDurInSec, decimal totalProfit)
+            {
+                CostDeal = costDeal;
+                CostDealZoneGroupNb = costDealZoneGroupNb;
+                CostDealDurInSec = costDealDurInSec;
+                TotalProfit = totalProfit;
+                AnalyticRecord = analyticRecord;
+            }
+        }
+
+        private class DealZoneGroupTrafficSummary
+        {
+            public Decimal TotalProfit { get; set; }
+
+            public Decimal ReachedVolumeInSec { get; set; }
+
+            public Decimal? EstimatedVolumeInSec { get; set; }
+        }
+
+        private class RawMemoryRecordData
+        {
+            public int MinDealPriority { get; set; }
+
+            public List<DealZoneGroup> DealZoneGroups { get; set; }
+
+            public List<CostDealBillingStatRecord> CostDealBillingStatRecords { get; set; }
+        }
     }
 }
