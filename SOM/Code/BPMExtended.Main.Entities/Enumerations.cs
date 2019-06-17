@@ -323,6 +323,12 @@ namespace BPMExtended.Main.Entities
         [CompletedStepId("0E818E54-C363-4EE2-8D9D-FD41D9D5A5B1")]
         UpdateCustomerProfile = 39,
 
+        [Description("Line Moving Request")]
+        [EntitySchemaName("StLineMovingRequest")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("BB0D3D76-4029-4517-B6BD-A23DA24A9F7C")]
+        LineMovingRequest = 40,
+
     }
     public enum ContractStatus
     {

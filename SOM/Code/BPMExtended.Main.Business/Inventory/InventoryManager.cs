@@ -857,7 +857,12 @@ namespace BPMExtended.Main.Business
             }
             return item;
         }
-        
+
+        public bool UpdateLinePath(string switchID,string mDFPortID, string dPPortID, string primaryPort, string secondaryPort)
+        {
+            return true;
+        }
+
         public bool changeLineSubscriptionMDFPort(string newPort, string switchId)
         {
             //TODO: change MDF port for telephony line subscription

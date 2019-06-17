@@ -96,8 +96,10 @@
     <Compile Include="Billing\WorkflowInput\LeasedLineRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\LeasedLineTerminationRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\LineBlockingRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\LineMovingInput.cs" />
     <Compile Include="Billing\WorkflowInput\LineMovingNewSwitchInput.cs" />
     <Compile Include="Billing\WorkflowInput\LineMovingSameSwitchInput.cs" />
+    <Compile Include="Billing\WorkflowInput\LineMovingSubmitNewSwitchInput.cs" />
     <Compile Include="Billing\WorkflowInput\LineTerminationRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\LineUnBlockingRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\MultiplePackagesServiceInput.cs" />
