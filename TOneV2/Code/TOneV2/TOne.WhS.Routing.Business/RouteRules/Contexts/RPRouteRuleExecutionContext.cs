@@ -20,8 +20,8 @@ namespace TOne.WhS.Routing.Business
         public RoutingDatabase RoutingDatabase { get; set; }
         internal List<SupplierCodeMatchWithRate> SupplierCodeMatches { private get; set; }
         internal SupplierCodeMatchesWithRateBySupplier SupplierCodeMatchesBySupplier { private get; set; }
-
         internal bool KeepBackupsForRemovedOptions { get; set; }
+
         public RPRouteRuleExecutionContext(RouteRule routeRule, Vanrise.Rules.RuleTree[] ruleTreesForRouteOptions)
         {
             _routeRule = routeRule;
