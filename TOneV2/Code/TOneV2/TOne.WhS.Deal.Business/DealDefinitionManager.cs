@@ -62,6 +62,7 @@ namespace TOne.WhS.Deal.Business
 
             return cachedDeals.MapRecords(mapper, filterExpression).OrderBy(item => item.Name);
         }
+
         public bool DeleteDeal(int dealId)
         {
             return base.DeleteDeal(dealId);
@@ -574,6 +575,14 @@ namespace TOne.WhS.Deal.Business
                 BED = settings.BEDToDisplay,
                 EED = settings.EEDToDisplay
             };
+        }
+
+        public int GetDealPriority(int dealId)
+        {
+            DealDefinition dealDefinition = this.GetDeal(dealId);
+            dealDefinition.ThrowIfNull("dealDefinition", dealId);
+            dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings", dealId);
+            return dealDefinition.Settings.Priority;
         }
 
         #endregion

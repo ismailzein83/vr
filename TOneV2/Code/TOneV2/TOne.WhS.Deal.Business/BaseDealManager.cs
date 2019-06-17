@@ -153,17 +153,9 @@ namespace TOne.WhS.Deal.Business
             return effectiveDeals.MinBy(item => item.Settings.RealBED).Settings.RealBED;
         }
 
-        public int GetDealPriority(int dealId)
-        {
-            DealDefinition dealDefinition = this.GetDeal(dealId);
-            dealDefinition.ThrowIfNull("dealDefinition", dealId);
-            dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings", dealId);
-            return dealDefinition.Settings.Priority;
-        }
-
         #endregion
 
-        #region Abstract/Protected Methods
+        #region Protected Methods
 
         protected Dictionary<Guid, List<DealDefinition>> GetCachedDealsByConfigId()
         {
