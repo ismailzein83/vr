@@ -54,4 +54,11 @@ namespace Retail.RA.Entities
         Residual = 2,
         NonUsage = 3
     }
+    public enum SourceType
+    {
+        Voice = 0,
+        SMS = 1,
+        Transaction = 3,
+        TopUp = 4
+    }
 }
