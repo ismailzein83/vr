@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.Business
 {
@@ -21,6 +22,20 @@ namespace Vanrise.GenericData.Business
             if (this.Settings.Select(x => x.BusinessEntityDefinitionId).ToList() != null)
                 return new GenericBusinessEntityManager().DoesUserHaveViewAccess(context.UserId, this.Settings.Select(x => x.BusinessEntityDefinitionId).ToList());
             return false;
+        }
+        public override string GetIconPath()
+        {
+            if (Settings == null || Settings.Count() == 0)
+                return null;
+
+            BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+
+            var firstView = Settings.First();
+            var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(firstView.BusinessEntityDefinitionId);
+            businessEntityDefinition.ThrowIfNull("BusinessEntityDefinition", firstView.BusinessEntityDefinitionId);
+            businessEntityDefinition.Settings.ThrowIfNull("BusinessEntityDefinitionSettings", firstView.BusinessEntityDefinitionId);
+
+            return businessEntityDefinition.Settings.IconPath;
         }
     }
     public class GenericBEViewSettingItem

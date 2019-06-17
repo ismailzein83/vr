@@ -79,6 +79,7 @@
 
                 drillDownTab.title = genericBEGridView.Name;
                 drillDownTab.directive = genericBEGridView.Settings.RuntimeDirective;
+                drillDownTab.iconurl = genericBEGridView.Settings.IconPath;
 
                 drillDownTab.loadDirective = function (genericBEViewGridAPI, currentGenericBEEntity) {
                     currentGenericBEEntity.genericBEViewGridAPI = genericBEViewGridAPI;

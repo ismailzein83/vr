@@ -2,9 +2,9 @@
 
     "use strict";
 
-    GenericBEEditorDefintionController.$inject = ['$scope', 'VR_GenericData_BusinessEntityDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'InsertOperationResultEnum'];
+    GenericBEEditorDefintionController.$inject = ['$scope', 'VR_GenericData_BusinessEntityDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'InsertOperationResultEnum','VRCommon_VRIconVirtualPathEnum'];
 
-    function GenericBEEditorDefintionController($scope, VR_GenericData_BusinessEntityDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, InsertOperationResultEnum) {
+    function GenericBEEditorDefintionController($scope, VR_GenericData_BusinessEntityDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, InsertOperationResultEnum, VRCommon_VRIconVirtualPathEnum) {
 
         var isEditMode;
         var businessEntityDefinitionEntity;
@@ -14,9 +14,12 @@
         var settingReadyPromiseDeferred;
         var additionalData;
 
+        var iconPathSelectorAPI;
+        var iconPathSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var devProjectDirectiveApi;
         var devProjectPromiseReadyDeferred = UtilsService.createPromiseDeferred();
-
+        
         loadParameters();
         defineScope();
         load();
@@ -38,6 +41,11 @@
                     $scope.scopeModel.isLoadingDirective = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, settingDirectiveAPI, undefined, setLoader, settingReadyPromiseDeferred);
+            };
+
+            $scope.scopeModel.onIconPathSelectiveReady = function (api) {
+                iconPathSelectorAPI = api;
+                iconPathSelectorReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.onDevProjectSelectorReady = function (api) {
@@ -122,6 +130,20 @@
                         return loadSettingDirectivePromiseDeferred.promise;
                     }
                 }
+                function loadIconPathSelector() {
+                    var iconPathPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                    iconPathSelectorReadyPromiseDeferred.promise.then(function () {
+                        var payloadDirective;
+                        if (businessEntityDefinitionEntity != undefined) {
+                            payloadDirective = {
+                                selectedIds: businessEntityDefinitionEntity.Settings.IconPath,
+                                paths: [VRCommon_VRIconVirtualPathEnum.View.value]
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(iconPathSelectorAPI, payloadDirective, iconPathPromiseLoadDeferred);
+                    });
+                    return iconPathPromiseLoadDeferred.promise;
+                }
                 function loadDevProjectSelector() {
                     var devProjectPromiseLoadDeferred = UtilsService.createPromiseDeferred();
                     devProjectPromiseReadyDeferred.promise.then(function () {
@@ -136,7 +158,7 @@
                     return devProjectPromiseLoadDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadSettingDirectiveSection, setTitle, loadDevProjectSelector]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadSettingDirectiveSection, setTitle, loadIconPathSelector, loadDevProjectSelector]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -166,6 +188,7 @@
             if (settings != undefined) {
                 settings.ConfigId = $scope.scopeModel.selectedSetingsTypeConfig.ExtensionConfigurationId;
                 settings.NullDisplayText = $scope.scopeModel.nullDisplayText;
+                settings.IconPath = iconPathSelectorAPI.getSelectedIds();
             }
             var bEdefinition = {
                 BusinessEntityDefinitionId: businessEntityDefinitionId,
