@@ -140,6 +140,7 @@
     <Compile Include="Filters\WorkflowAddBEActivityFilter.cs" />
     <Compile Include="Filters\WorkflowUpdateBEActivityFilter.cs" />
     <Compile Include="GenericDataMainExtensionsFactory.cs" />
+    <Compile Include="GenericFinancialAccountManager.cs" />
     <Compile Include="GenericRules\CreateGenericRuleFromExcelContext.cs" />
     <Compile Include="GenericRules\GenericRuleDefinitionViewFilter.cs" />
     <Compile Include="GenericRules\GenericRuleDefinitionFilterContext.cs" />

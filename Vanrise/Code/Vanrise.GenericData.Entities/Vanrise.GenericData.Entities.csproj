@@ -110,6 +110,7 @@
     <Compile Include="CDRCorrelation\CDRCorrelationProcessState.cs" />
     <Compile Include="GenericBusinessEntity\RangeGenericEditorDefinitionSettings.cs" />
     <Compile Include="GenericEditor\Runtime\GenericFieldsRuntimeRow.cs" />
+    <Compile Include="GenericFinancialAccount.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionDetail.cs" />
     <Compile Include="SendEmailActionInput.cs" />
     <Compile Include="CompositeRecordCondition\Runtime\CompositeRecordCondition.cs" />
