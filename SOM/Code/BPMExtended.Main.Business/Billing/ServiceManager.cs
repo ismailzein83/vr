@@ -54,14 +54,19 @@ namespace BPMExtended.Main.Business
             }
             return servicesInfoItems;
         }
-        public List<ServiceHistoryRecord> GetServiceHistory(string contractId, string serviceId)
+        public List<ServiceHistoryRecordDetail> GetServiceHistory(string contractId, string serviceId)
         {
-            var items = new List<ServiceHistoryRecord>();
+            var serviceHistoryItems = new List<ServiceHistoryRecordDetail>();
             using (SOMClient client = new SOMClient())
             {
-                items = client.Get<List<ServiceHistoryRecord>>(String.Format("api/SOM.ST/Billing/GetContractServiceHistory?ContractId={0}&ServiceId={1}", contractId, serviceId));
+                List<ServiceHistoryRecord> items = client.Get<List<ServiceHistoryRecord>>(String.Format("api/SOM.ST/Billing/GetContractServiceHistory?ContractId={0}&ServiceId={1}", contractId, serviceId));
+                foreach (var item in items)
+                {
+                    var serviceHistoryItem = ServiceHistoryToDetailMapper(item);
+                    serviceHistoryItems.Add(serviceHistoryItem);
+                }
             }
-            return items;
+            return serviceHistoryItems;
         }
 
         public List<CustomerContractServiceDetail> GetContractServicesDetail(string contractId)
@@ -364,12 +369,27 @@ namespace BPMExtended.Main.Business
 
         public CustomerContractServiceDetail CustomerContractServiceToDetailMapper(CustomerContractService customerContractService)
         {
+            var contractManager = new ContractManager();
             return new CustomerContractServiceDetail
             {
                 Id = customerContractService.Id,
                 Name = customerContractService.Name,
+                //Status = contractManager.GetContractStatusByEnumValue(customerContractService.Status.ToString()),
                 Status = customerContractService.Status,
                 ActivateDate = customerContractService.ActivateDate,
+            };
+        }
+
+        public ServiceHistoryRecordDetail ServiceHistoryToDetailMapper(ServiceHistoryRecord item)
+        {
+            var contractManager = new ContractManager();
+            return new ServiceHistoryRecordDetail()
+            {
+                ServiceId = item.ServiceId,
+                Status = contractManager.GetContractStatusByEnumValue(item.Status.ToString()),
+                Name = item.Name,
+                EntryDate = item.EntryDate,
+                ValidFromDate = item.ValidFromDate
             };
         }
         #endregion

@@ -85,6 +85,7 @@
     <Compile Include="Contracts\TelephonyContractInfo.cs" />
     <Compile Include="PromotionDetail.cs" />
     <Compile Include="InvoiceEntity.cs" />
+    <Compile Include="ServiceHistoryRecordDetail.cs" />
     <Compile Include="ServiceHistoryRecord .cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Customer.cs" />

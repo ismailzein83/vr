@@ -631,6 +631,29 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
+        public string GetContractStatusByEnumValue(string enumValue)
+        {
+            string contractStatusDescription = null;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StContractStatus");
+
+            esq.AddColumn("StEnumValue");
+            esq.AddColumn("Description");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StEnumValue", enumValue);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                contractStatusDescription = entities[0].GetColumnValue("Description").ToString();
+            }
+
+            return contractStatusDescription;
+        }
+
 
         #region mappers
 
@@ -682,10 +705,11 @@ namespace BPMExtended.Main.Business
             return new TelephonyContractDetail
             {
                 ContractId = contract.Id,
-                Status = stat.ToString(), //Check if API and Our conventions are the same
+                Status = GetContractStatusByEnumValue(contract.Status.ToString()), //Check if API and Our conventions are the same
                 PhoneNumber = contract.PhoneNumber,
                 ActivationDate = contract.ActivationDate,
-                ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
+                //ContractStatusId = Utilities.GetEnumAttribute<ContractStatus, LookupIdAttribute>((ContractStatus)contract.Status).LookupId
+                //ContractStatusId = GetContractStatusByEnumValue(contract.Status.ToString())
             };
         }
 
