@@ -30,25 +30,18 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
             var customerRoute;
             var hidemenuactions;
+            var hasViewRatesPermission;
 
             var gridAPI;
             var context;
 
             function initializeController() {
                 $scope.routeOptionDetails = [];
-                $scope.showGrid = false;
-                $scope.isLoading = true;
-
+               
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
-                    $scope.isLoading = false;
                     defineAPI();
                 };
-
-                WhS_Routing_CustomerRouteAPIService.HasViewCustomerRouteRatesPermission().then(function (response) {
-                    $scope.hasViewRatesPermission = response;
-                    $scope.showGrid = true;
-                });
 
                 defineMenuActions();
             }
@@ -62,6 +55,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                     if (payload != undefined) {
                         customerRoute = payload.customerRoute;
                         hidemenuactions = payload.hidemenuactions;
+                        hasViewRatesPermission = payload.hasViewRatesPermission;
                         context = payload.context;
                     }
 
@@ -94,7 +88,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
             function defineMenuActions() {
                 $scope.getMenuActions = function (dataItem) {
-                    if (!hidemenuactions && $scope.hasViewRatesPermission) {
+                    if (!hidemenuactions && hasViewRatesPermission) {
                         var menuActions = [];
 
                         if (dataItem.ExecutedRuleId) {

@@ -24,11 +24,13 @@ app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotifica
         function partialrouteModifiedcustomerroutesGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var routeOptionEvaluatedStatusEnum = UtilsService.getArrayEnum(WhS_Routing_RouteOptionEvaluatedStatusEnum);
             var gridAPI;
+            var hasViewRatesPermission;
 
             function initializeController() {
                 $scope.customerRoutes = [];
+                $scope.showGrid = false;
+                $scope.isLoading = true;
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -74,6 +76,11 @@ app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotifica
 
                     return cssClass;
                 };
+
+                WhS_Routing_CustomerRouteAPIService.HasViewCustomerRouteRatesPermission().then(function (response) {
+                    hasViewRatesPermission = response;
+                    $scope.showGrid = true;
+                });
             }
 
             function defineAPI() {
@@ -89,49 +96,39 @@ app.directive('vrWhsRoutingPartialrouteModifiedcustomerroutesGrid', ['VRNotifica
             }
 
             function extendCutomerRouteObject(customerRoute) {
-
                 var promises = [];
                 if (customerRoute != undefined) {
+                    if (customerRoute.OrigRouteOptionDetails != undefined) {
+                        customerRoute.origCutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(customerRoute.origCutomerRouteOptionsLoadDeferred.promise);
 
-                    var hasViewRatesPermission;
+                        customerRoute.onOrigRouteOptionsReady = function (api) {
+                            customerRoute.origRouteOptionsAPI = api;
 
-                    var getViewRatesPermissionPromise = WhS_Routing_CustomerRouteAPIService.HasViewCustomerRouteRatesPermission().then(function (response) {
-                        hasViewRatesPermission = response;
-                    });
-
-                    getViewRatesPermissionPromise.then(function () {
-                        if (customerRoute.OrigRouteOptionDetails != undefined) {
-                            customerRoute.origCutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
-                            promises.push(customerRoute.origCutomerRouteOptionsLoadDeferred.promise);
-
-                            customerRoute.onOrigRouteOptionsReady = function (api) {
-                                customerRoute.origRouteOptionsAPI = api;
-                                var origRouteOptionsPayload = {
-                                    routeOptionDetails: customerRoute.OrigRouteOptionDetails,
-                                    hasViewRatesPermission: hasViewRatesPermission
-                                };
-
-
-                                VRUIUtilsService.callDirectiveLoad(customerRoute.origRouteOptionsAPI, origRouteOptionsPayload, customerRoute.origCutomerRouteOptionsLoadDeferred);
+                            var origRouteOptionsPayload = {
+                                routeOptionDetails: customerRoute.OrigRouteOptionDetails,
+                                hasViewRatesPermission: hasViewRatesPermission
                             };
-                        }
+                            VRUIUtilsService.callDirectiveLoad(customerRoute.origRouteOptionsAPI, origRouteOptionsPayload, customerRoute.origCutomerRouteOptionsLoadDeferred);
+                        };
+                    }
 
-                        if (customerRoute.RouteOptionDetails != undefined) {
-                            customerRoute.cutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
-                            promises.push(customerRoute.cutomerRouteOptionsLoadDeferred.promise);
+                    if (customerRoute.RouteOptionDetails != undefined) {
+                        customerRoute.cutomerRouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(customerRoute.cutomerRouteOptionsLoadDeferred.promise);
 
-                            customerRoute.onRouteOptionsReady = function (api) {
-                                customerRoute.routeOptionsAPI = api;
-                                var routeOptionsPayload = {
-                                    hasViewRatesPermission: hasViewRatesPermission,
-                                    routeOptionDetails : customerRoute.RouteOptionDetails
-                                };
-
-                                VRUIUtilsService.callDirectiveLoad(customerRoute.routeOptionsAPI, routeOptionsPayload, customerRoute.cutomerRouteOptionsLoadDeferred);
+                        customerRoute.onRouteOptionsReady = function (api) {
+                            customerRoute.routeOptionsAPI = api;
+                            var routeOptionsPayload = {
+                                hasViewRatesPermission: hasViewRatesPermission,
+                                routeOptionDetails: customerRoute.RouteOptionDetails
                             };
-                        }
-                    });
+
+                            VRUIUtilsService.callDirectiveLoad(customerRoute.routeOptionsAPI, routeOptionsPayload, customerRoute.cutomerRouteOptionsLoadDeferred);
+                        };
+                    }
                 }
+
                 return UtilsService.waitMultiplePromises(promises);
             }
         }

@@ -307,6 +307,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                     var payload = {
                         customerRoute: customerRoute,
                         hidemenuactions: hidemenuactions,
+                        hasViewRatesPermission: $scope.hasViewRatesPermission,
                         context: buildContext()
                     };
 

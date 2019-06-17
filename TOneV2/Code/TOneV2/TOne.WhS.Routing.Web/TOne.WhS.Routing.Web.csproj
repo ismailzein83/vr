@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Routing\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Routing\Constant\ModuleNamesEnum.js" />
     <Content Include="WhS_Routing\Constant\OrderTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\FixedOptionLossTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingApprovalType.js" />
