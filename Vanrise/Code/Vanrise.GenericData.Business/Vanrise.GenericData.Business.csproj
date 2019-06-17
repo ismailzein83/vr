@@ -82,10 +82,12 @@
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEExtendedSettingsContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerInfoByTypeContext.cs" />
+    <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBESelectorConditionGetFilterGroupContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\ExecuteGenericBEBulkActionProcessInput.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\ExecuteGenericBEBulkActionProcessOutput.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEBulkActionProcessInput.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEDefinitionSettings.cs" />
+    <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBERuntimeSelectorFilter.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBusinessEntityDefinitionFilter.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEDefinitionViewFilter.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEViewSettings.cs" />
