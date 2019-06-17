@@ -16,12 +16,13 @@ app.directive('vrWhsBeCarrieraccountRuntimeselectorFilter', ['UtilsService', 'VR
                 var ctor = new CarrierAccountBERuntimeSelectorFilterCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
+            controllerAs: 'ctrl',
+            bindToController: true,
             templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/CarrierAccount/Templates/CarrierAccountBERuntimeSelectorFilterTemplate.html"
         };
 
         function CarrierAccountBERuntimeSelectorFilterCtor(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
-
             var dataTypeSelectorAPI;
             var dataTypeSelectorReadyPromiseDefereed = UtilsService.createPromiseDeferred();
 
@@ -48,9 +49,9 @@ app.directive('vrWhsBeCarrieraccountRuntimeselectorFilter', ['UtilsService', 'VR
 
                     $scope.scopeModel.dataTypes = UtilsService.getArrayEnum(WhS_BE_AccountManagerDataTypeEnum);
 
-                   // if (payload.settings != undefined) {
-                      //  $scope.scopeModel.selectedDataType = UtilsService.getItemByVal($scope.scopeModel.dataTypes, payload.settings.DataType, 'value');
-                    //}
+                    if (payload != undefined && payload.beRuntimeSelectorFilter != undefined) {
+                        $scope.scopeModel.selectedDataType = UtilsService.getItemByVal($scope.scopeModel.dataTypes, payload.beRuntimeSelectorFilter.DataType, 'value');
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -61,7 +62,7 @@ app.directive('vrWhsBeCarrieraccountRuntimeselectorFilter', ['UtilsService', 'VR
                     };
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != null) 
                     ctrl.onReady(api);
             }
         }
