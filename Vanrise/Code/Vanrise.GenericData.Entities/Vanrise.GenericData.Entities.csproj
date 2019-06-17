@@ -76,6 +76,7 @@
     <Compile Include="BusinessEntities\BusinessEntityInfo.cs" />
     <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\BusinessEntityDefinitionSettingsConfig.cs" />
+    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBECustomActionDefinitionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEAdditionalSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericEditorConditionalRulesConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEEditorDefinitionSettingsConfig.cs" />
