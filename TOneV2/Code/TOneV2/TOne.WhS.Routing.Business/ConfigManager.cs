@@ -140,7 +140,7 @@ namespace TOne.WhS.Routing.Business
                     return itm;
             }
 
-            throw new NullReferenceException("No Default Route Rule Quality Configuration");
+            throw new NullReferenceException("No Default Route Rule Formula Configuration");
         }
 
         public QualityConfiguration GetQualityConfiguration()

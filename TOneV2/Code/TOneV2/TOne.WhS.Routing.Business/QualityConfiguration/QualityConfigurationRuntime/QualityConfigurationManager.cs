@@ -247,14 +247,14 @@ namespace TOne.WhS.Routing.Business
                     if (routeRuleQualityConfiguration.IsDefault)
                     {
                         if (!routeRuleQualityConfiguration.IsActive)
-                            throw new VRBusinessException("Default quality configuration is not active");
+                            throw new VRBusinessException("Default formula configuration is not active");
 
                         return routeRuleQualityConfiguration;
                     }
                 }
             }
 
-            throw new VRBusinessException("No default quality configuration is selected");
+            throw new VRBusinessException("No default formula configuration is selected");
         }
 
         #endregion

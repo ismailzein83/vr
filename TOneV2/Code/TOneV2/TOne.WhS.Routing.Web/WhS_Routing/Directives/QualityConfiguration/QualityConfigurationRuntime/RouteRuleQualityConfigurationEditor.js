@@ -65,7 +65,7 @@
                 for (var i = 0; i < qualityConfigurationNames.length; i++) {
                     var qualityConfigurationName = qualityConfigurationNames[i];
                     if ($scope.scopeModel.qualityConfigurationyName.toLowerCase() == qualityConfigurationName.toLowerCase())
-                        return 'Same Quality Configuration Name Exists';
+                        return 'Same Formula Configuration Name Exists';
                 }
                 return null;
             };
@@ -91,9 +91,9 @@
 
             function setTitle() {
                 if (isEditMode && qualityConfigurationEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(qualityConfigurationEntity.Name, "Quality Configuration");
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(qualityConfigurationEntity.Name, "Formula Configuration");
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor("Quality Configuration");
+                    $scope.title = UtilsService.buildTitleForAddEditor("Formula Configuration");
             }
 
             function loadStaticData() {
@@ -158,7 +158,7 @@
                         $scope.onQualityConfigurationAdded(qualityConfigurationObject);
                     $scope.modalContext.closeModal();
                 } else {
-                    VRNotificationService.showError("Quality Configuration validation has failed. Check Log for more informations");
+                    VRNotificationService.showError("Formula Configuration validation has failed. Check Log for more informations");
                 }
             });
         }
@@ -171,7 +171,7 @@
                         $scope.onQualityConfigurationUpdated(qualityConfigurationObject);
                     $scope.modalContext.closeModal();
                 } else {
-                    VRNotificationService.showError("Quality Configuration validation has failed. Check Log for more informations");
+                    VRNotificationService.showError("Formula Configuration validation has failed. Check Log for more informations");
                 }
             });
         }

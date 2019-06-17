@@ -49,19 +49,19 @@ namespace TOne.WhS.Routing.Entities
                     nbOfDefaults++;
                     if (nbOfDefaults > 1)
                     {
-                        context.ErrorMessage = "Only one default route rule quality configuration is permitted.";
+                        context.ErrorMessage = "Only one default route rule formula configuration is permitted.";
                         return false;
                     }
                     if (!routeRuleQualityConfiguration.IsActive)
                     {
-                        context.ErrorMessage = "Default route rule quality configuration should be active.";
+                        context.ErrorMessage = "Default route rule formula configuration should be active.";
                         return false;
                     }
                 }
             }
             if (nbOfDefaults == 0)
             {
-                context.ErrorMessage = "At least one default route rule quality configuration should be added.";
+                context.ErrorMessage = "At least one default route rule formula configuration should be added.";
                 return false;
             }
             return true;

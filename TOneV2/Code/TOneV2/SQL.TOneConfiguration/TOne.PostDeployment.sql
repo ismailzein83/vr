@@ -77,7 +77,7 @@ as (select * from (values
 ('A9356E61-AF73-4F23-8B39-DA15B7C678AC','MatchingCustomerSaleCodeMatch','MatchingCustomerSaleCodeMatch','VR_GenericData_DataTransformationStepConfig'				,'{"Editor":"vr-whs-routing-datatransformation-matchingcustomersalecodematch","StepPreviewUIControl":"vr-whs-routing-datatransformation-matchingcustomersalecodematch-preview"}'),
 ('0EE52656-1BAB-4061-8B43-F75EE38BC55E','By Rate','By Rate','WhS_Routing_RouteRuleOptionOrderSettings'																,'{"Editor":"vr-whs-routing-routerulesettings-order-byrate"}'),
 ('999AD07C-5E78-4838-BC72-F17B5771FCD8','Specific Suppliers','Specific Suppliers','WhS_Routing_RouteOptionSettingsGroup'											,'{"Editor":"vr-whs-routing-routerulesettings-selective"}'),
-('C107E207-6597-4E45-B22F-D4F0BB7DD211','By Quality','By Quality','WhS_Routing_RouteRuleOptionOrderSettings'														,'{"Editor":"vr-whs-routing-routerulesettings-order-byquality"}'),
+('C107E207-6597-4E45-B22F-D4F0BB7DD211','By Quality','By Formula','WhS_Routing_RouteRuleOptionOrderSettings'														,'{"Editor":"vr-whs-routing-routerulesettings-order-byquality"}'),
 
 ('6D584C11-CE52-4385-A871-3B59505D0F57','WhS_Routing_SupplierZoneToRPOptionType_AverageRate','Average Rate','WhS_Routing_SupplierZoneToRPOptionType'				,'{"Editor":"vr-whs-routing-policy-rate-average","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionAverageRatePolicy, TOne.WhS.Routing.Business", "ShowSupplierZone": false}'),
 ('E9519598-354C-41D0-BB89-5371F26D0A5D','By Service','By Service','WhS_Routing_RouteRuleOptionOrderSettings'														,'{"Editor":"vr-whs-routing-routerulesettings-order-byservice"}'),
@@ -101,7 +101,7 @@ as (select * from (values
 ('F966A804-E906-4DBD-8A8F-748805B8FE2E','ExcludeFromRoutes','Exclude From Routes','WhS_Routing_RouteRuleSettingsType'												,'{"Editor":"vr-whs-routing-routerulesettings-excludefromroutes", "DisplayOrder":"41","Priority":1}'),
 
 ('DD2B8C20-C9D2-44BE-9EF5-0890B52FCB9C','By Service Match','By Service Match','WhS_Routing_RouteRuleOptionFilterSettings'											,'{"Editor":"vr-whs-routing-routerulesettings-filter-service"}'),
-('A4CC3BEC-B983-4283-8C82-1C354BBE103C','By Quality','By Quality','WhS_Routing_RouteRuleOptionFilterSettings'														,'{"Editor":"vr-whs-routing-routerulesettings-filter-quality"}'),
+('A4CC3BEC-B983-4283-8C82-1C354BBE103C','By Quality','By Formula','WhS_Routing_RouteRuleOptionFilterSettings'														,'{"Editor":"vr-whs-routing-routerulesettings-filter-quality"}'),
 
 ('0D42AFB5-92E2-43A4-85EE-6A51079AEDC3','Margin','Margin','WhS_Routing_RoutingOptimizerSettings'																	,'{"Editor":"vr-whs-routing-routingoptimizersettings-margin"}'),
 ('0166E5C4-0F13-4741-BD77-2C771BCAFA24','SpecialRequest','Special Request','WhS_Routing_RouteRuleSettingsType'														,'{"Editor":"vr-whs-routing-routerulesettings-specialrequest", "DisplayOrder":"2"}'),
@@ -247,7 +247,7 @@ as (select * from (values
 ('fcfa0193-9463-4435-9d96-54fd2b6d050b','Supplier_Fault_Tickets','Supplier Fault Tickets','VR_GenericData_GenericBEExtendedSettings','{"Editor":"whs-be-supplierfaultticket-settings"}'),
 ('3705144e-4bc8-45d8-94d9-96e9af95353b','Customer_Fault_Tickets','Customer Fault Tickets','VR_GenericData_GenericBEExtendedSettings','{"Editor":"whs-be-customerfaultticket-settings"}'),
 
-('B69F4C1B-FAE8-4352-BB9F-A5AA140F30EE','VR_WhS_Routing_QualityConfigurationDefinition','Quality Configuration Definition','VR_Common_VRComponentType','{"Editor":"vr-whs-routing-qualityconfigurationdefinition-settings"}'),
+('B69F4C1B-FAE8-4352-BB9F-A5AA140F30EE','VR_WhS_Routing_QualityConfigurationDefinition','Formula Configuration Definition','VR_Common_VRComponentType','{"Editor":"vr-whs-routing-qualityconfigurationdefinition-settings"}'),
 ('E670425F-2F91-4C9A-BB03-8B85CD77BBD2','VR_WhS_Routing_QCDefinition_TrafficStatistic','Traffic Statistic','WhS_Routing_QualityConfigurationDefinitionExtendedSettings','{"Editor":"vr-whs-routing-qcdefinition-trafficstatistic-settings"}'),
 
 ('70500270-0BFD-4AEA-A20A-969BA0F6489B','WhS_BE_BasicSalePriceListTemplateSettingsMappedValue_OtherRates','Other Rates','WhS_BE_CodesOnEachRowMappedValue','{"Editor":"vr-whs-be-codesoneachrow-mappedvalue-otherrates"}'),

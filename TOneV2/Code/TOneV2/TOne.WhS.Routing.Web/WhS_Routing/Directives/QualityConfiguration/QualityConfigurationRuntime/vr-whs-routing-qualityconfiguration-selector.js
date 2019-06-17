@@ -86,11 +86,11 @@ app.directive('vrWhsRoutingQualityconfigurationSelector',['WhS_Routing_QualityCo
 
         function getTemplate(attrs) {
             var multipleselection = "";
-            var label = "Quality Configuration";
+            var label = "Formula Configuration";
 
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
-                label = "Quality Configurations";
+                label = "Formula Configurations";
             }
 
             if (attrs.hidelabel != undefined)

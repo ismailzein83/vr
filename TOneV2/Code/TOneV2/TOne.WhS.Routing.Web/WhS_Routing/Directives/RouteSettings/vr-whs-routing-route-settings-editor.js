@@ -152,7 +152,7 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     });
                     promises.push(routeOptionRuleConfigurationLoadPromiseDeferred.promise);
 
-                    //Loading Route Quality Configuration
+                    //Loading Route Formula Configuration
                     var qualityConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     qualityConfigurationReadyPromiseDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(qualityConfigurationAPI, qualityConfiguration, qualityConfigurationLoadPromiseDeferred);

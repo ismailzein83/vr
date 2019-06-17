@@ -78,7 +78,7 @@ namespace TOne.WhS.Routing.Business
                                 errorsBuilder.AppendLine(errorMessage);
                         }
 
-                        throw new Exception(String.Format("Compile Error when building Route Rule Quality Configuration Evaluators. Errors: {0}", errorsBuilder));
+                        throw new Exception(String.Format("Compile Error when building Route Rule Formula Configuration Evaluators. Errors: {0}", errorsBuilder));
                     }
 
                     Dictionary<Guid, InitializedQualityConfiguration> results = new Dictionary<Guid, InitializedQualityConfiguration>();
@@ -122,7 +122,7 @@ namespace TOne.WhS.Routing.Business
                 int quotationMarkIndex = expression.IndexOf("\"");
                 if (quotationMarkIndex == -1)
                 {
-                    errorMessage = string.Format("Quality Configuration '{0}': Expression syntax is incorrect", qualityConfigurationName);
+                    errorMessage = string.Format("Formula Configuration '{0}': Expression syntax is incorrect", qualityConfigurationName);
                     return null;
                 }
 

@@ -86,10 +86,10 @@ app.directive('vrWhsRoutingQualityconfigurationdefinitionSelector', ['UtilsServi
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Quality Configuration Definitions";
+            var label = "Formula Configuration Definitions";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Quality Configuration Definitions";
+                label = "Formula Configuration Definitions";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)

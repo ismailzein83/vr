@@ -45,7 +45,7 @@ namespace TOne.WhS.Routing.Business
                 throw new VRBusinessException(errorMessage);
 
             if (measureFields == null || measureFields.Count == 0)
-                throw new VRBusinessException(string.Format("Quality Configuration '{0}': Expression doesn't contain any measure.", context.QualityConfigurationName));
+                throw new VRBusinessException(string.Format("Formula  Configuration '{0}': Expression doesn't contain any measure.", context.QualityConfigurationName));
 
             var initializedTrafficStatisticQualityConfiguration = context.InitializedQualityConfiguration.CastWithValidate<InitializedTrafficStatisticQualityConfiguration>("initializedQualityConfiguration");
             IRouteRuleQualityConfigurationEvaluator evalutor = initializedTrafficStatisticQualityConfiguration.Evaluator;
@@ -87,7 +87,7 @@ namespace TOne.WhS.Routing.Business
 
             if (measureFields == null || measureFields.Count == 0)
             {
-                LoggerFactory.GetLogger().WriteError(string.Format("'{0}' Traffic Statistic Quality Configuration Expression doesn't contain any measure.", context.QualityConfigurationName));
+                LoggerFactory.GetLogger().WriteError(string.Format("'{0}' Traffic Statistic Formula Configuration Expression doesn't contain any measure.", context.QualityConfigurationName));
                 return false;
             }
 
@@ -144,7 +144,7 @@ namespace TOne.WhS.Routing.Business
                         errorsBuilder.AppendLine(currentErrorMessage);
                 }
 
-                LoggerFactory.GetLogger().WriteError(String.Format("Compile Error when building Traffic Statistic Quality Configuration Evaluator. Errors: {0}", errorsBuilder));
+                LoggerFactory.GetLogger().WriteError(String.Format("Compile Error when building Traffic Statistic Formula Configuration Evaluator. Errors: {0}", errorsBuilder));
                 return false;
             }
 
