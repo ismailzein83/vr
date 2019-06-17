@@ -81,18 +81,19 @@
                 var api = {};
 
                 api.load = function (payload) {
-
                     var selectedIds;
                     var selectIfSingleItem;
 
                     var promises = [];
-
+                    var beRuntimeSelectorFilter;
                     if (payload != undefined) {
                         ctrl.fieldTitle = payload.fieldTitle;
                         ctrl.isDisabled = payload.isDisabled;
 
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         filter = payload.filter;
+                        beRuntimeSelectorFilter = payload.beRuntimeSelectorFilter;
+
                         selectedIds = payload.selectedIds;
                         selectIfSingleItem = payload.selectIfSingleItem;
                         hasEmtyRequiredDependentField = payload.hasEmtyRequiredDependentField;
@@ -100,6 +101,11 @@
                         var getGenericBERuntimeInfoPromise = getGenericBusinessEntityRuntimeInfo();
                         promises.push(getGenericBERuntimeInfoPromise);
                     }
+
+                    //if (beRuntimeSelectorFilter != undefined) {
+                    //    if (filter == undefined)
+                    //        filter = { GenericBESelectorCondition: beRuntimeSelectorFilter.GenericBESelectorCondition };
+                    //}
 
                     if (!hasEmtyRequiredDependentField) {
                         var getGenericBusinessEntityInfoPromiseDeferred = UtilsService.createPromiseDeferred();

@@ -96,6 +96,7 @@
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\StaticBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEFilterDefinitionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\LKUPBEDefinitionSettings\LKUPBEExtendedSettingsConfig.cs" />
+    <Compile Include="BusinessEntities\SelectorFilter\GenericBESelectorCondition.cs" />
     <Compile Include="BusinessEntityStatusHistory\BusinessEntityStatusHistory.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
@@ -320,9 +321,7 @@
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BusinessEntities\SelectorFilter\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

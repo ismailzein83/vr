@@ -33,14 +33,14 @@ app.directive("vrGenericdataGenericbusinessentitySelectorfilter", ["UtilsService
                     var promises = [];
 
                     if (payload != undefined) {
-                       
+
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    
+                    return null;
                 };
 
                 if (ctrl.onReady != null)

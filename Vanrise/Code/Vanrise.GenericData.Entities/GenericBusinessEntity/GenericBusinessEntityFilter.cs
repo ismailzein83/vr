@@ -11,6 +11,10 @@ namespace Vanrise.GenericData.Entities
         public IEnumerable<IGenericBusinessEntityFilter> Filters { get; set; }
 
         public List<GenericBusinessEntityFilter> FieldFilters { get; set; }
+
+        public GenericBESelectorCondition GenericBESelectorCondition { get; set; }
+
+        public List<Object> SelectedIds { get; set; }
     }
 
     public interface IGenericBusinessEntityFilter

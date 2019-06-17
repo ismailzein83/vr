@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Business
     {
         public bool NotApplicableInSearch { get; set; }
 
-        public GenericBESelectorCondition GenericBECondition { get; set; }
+        public GenericBESelectorCondition GenericBESelectorCondition { get; set; }
 
         public override bool IsMatched(IBERuntimeSelectorFilterSelectorFilterContext context)
         {
@@ -16,11 +16,7 @@ namespace Vanrise.GenericData.Business
         }
     }
 
-    public abstract class GenericBESelectorCondition
-    {
-        public abstract Guid ConfigId { get; }
-        public abstract RecordFilterGroup GetFilterGroup(IGenericBESelectorConditionGetFilterGroupContext context);
-    }
+
 
     public class GenericBERecordFilterGroupSelectorCondition : GenericBESelectorCondition
     {

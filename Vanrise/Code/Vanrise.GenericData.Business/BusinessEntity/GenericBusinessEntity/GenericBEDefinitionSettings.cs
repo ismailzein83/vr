@@ -23,7 +23,7 @@ namespace Vanrise.GenericData.Business
             get { return "vr-genericdata-genericbusinessentity-runtimeeditor"; }
         }
 
-        //public override string SelectorFilterEditor { get { return "vr-genericdata-genericbusinessentity-selectorfilter"; } }
+        public override string SelectorFilterEditor { get { return "vr-genericdata-genericbusinessentity-selectorfilter"; } }
 
         public override string IdType
         {
