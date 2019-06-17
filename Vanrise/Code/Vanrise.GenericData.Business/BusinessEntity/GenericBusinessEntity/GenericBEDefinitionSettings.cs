@@ -186,7 +186,7 @@ namespace Vanrise.GenericData.Business
     {
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeDirective { get; }
-
+        public virtual string IconPath { get; set; }
         public virtual bool DoesUserHaveAccess(IGenericBEViewDefinitionCheckAccessContext context)
         {
             return true;
