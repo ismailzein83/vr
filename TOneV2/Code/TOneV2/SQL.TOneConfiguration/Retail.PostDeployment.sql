@@ -158,7 +158,11 @@ as (select * from (values
 ('447B67A5-DBEA-4410-9C00-C8D297B8F81C','Yearly Recurring Charge Period','Yearly','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-yearly"}'),
 ('F0871B89-11BC-42D0-BA88-244DE96F581A','Operator Bank Details','Operator Bank Details','VR_Invoice_InvoiceType_RDLCDataSourceSettings','{"Editor":"retail-be-account-datasourcesettings-operatorbankdetails"}'),
 ('A5FDAE33-89A4-457E-889F-CFA004B74395','StartBPProcessAction','Start BP Process','Retail_BE_AccountActionDefinitionConfig',' {"Editor":"retail-be-accountactiondefinitionsettings-startbpprocess"}'),
-('E3148386-1049-416A-876F-19C6C42B30A0','Retail_BE_GenericBEView','Generic BE ','Retail_BE_AccountViewDefinitionConfig','{ "Editor":"retail-be-accountviewdefinitionsettings-genericbeaccount"}')
+('E3148386-1049-416A-876F-19C6C42B30A0','Retail_BE_GenericBEView','Generic BE ','Retail_BE_AccountViewDefinitionConfig','{ "Editor":"retail-be-accountviewdefinitionsettings-genericbeaccount"}'),
+('0DEC0B45-5A1E-4A91-834F-1AADD591E1E9','RetailBEFixedCharge','Fixed Charge','Retail_BE_ChargeSettingsConfig','{"Editor":"retail-be-chargesettings-fixed"}'),
+('1151BAD9-E4E1-450A-B7BA-589C1940D7BE','RetailBEPerXMBPS','Charge per X Mbps','Retail_BE_ChargeSettingsConfig','{"Editor":"retail-be-chargesettings-perxmbps"}'),
+('0C984560-77EE-4BE7-8EFB-A0FFBE54FCBE','RetailBECharge','Retail BE Charge','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"retail-be-charge-customobjectsettings"}'),
+('CEEAE225-FCC4-49FD-BCEF-D24C6BBB52AE','RetailBEPerE1','Charge per E1','Retail_BE_ChargeSettingsConfig','{"Editor":"retail-be-chargesettings-pere1"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
