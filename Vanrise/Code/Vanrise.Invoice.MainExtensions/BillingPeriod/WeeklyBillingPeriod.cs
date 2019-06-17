@@ -47,14 +47,14 @@ namespace Vanrise.Invoice.MainExtensions
                 }
                // SplitIfExcludeOtherMonth(nextBillingInterval);
 
-                if (nextBillingInterval.ToDate > context.IssueDate)
+                if (nextBillingInterval.ToDate.Date >= context.IssueDate.Date)
                 {
                     return GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
                 }else
                 {
                     perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
                     perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
-                    while (nextBillingInterval.ToDate <= context.IssueDate && nextBillingInterval.ToDate < DateTime.Today)
+                    while (nextBillingInterval.ToDate.Date < context.IssueDate.Date && nextBillingInterval.ToDate < DateTime.Today)
                     {
                         perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
                         perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
