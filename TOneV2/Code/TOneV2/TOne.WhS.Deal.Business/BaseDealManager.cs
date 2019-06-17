@@ -153,13 +153,17 @@ namespace TOne.WhS.Deal.Business
             return effectiveDeals.MinBy(item => item.Settings.RealBED).Settings.RealBED;
         }
 
-        public abstract DealDefinitionDetail DealDefinitionDetailMapper(DealDefinition deal);
-
-        public abstract BaseDealLoggableEntity GetLoggableEntity();
+        public int GetDealPriority(int dealId)
+        {
+            DealDefinition dealDefinition = this.GetDeal(dealId);
+            dealDefinition.ThrowIfNull("dealDefinition", dealId);
+            dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings", dealId);
+            return dealDefinition.Settings.Priority;
+        }
 
         #endregion
 
-        #region Protected Methods
+        #region Abstract/Protected Methods
 
         protected Dictionary<Guid, List<DealDefinition>> GetCachedDealsByConfigId()
         {
@@ -215,6 +219,14 @@ namespace TOne.WhS.Deal.Business
                 return deals.ToDictionary(deal => deal.DealId, deal => deal);
             });
         }
+
+        #endregion
+
+        #region Abstract Methods
+
+        public abstract DealDefinitionDetail DealDefinitionDetailMapper(DealDefinition deal);
+
+        public abstract BaseDealLoggableEntity GetLoggableEntity();
 
         #endregion
 
