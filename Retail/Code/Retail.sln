@@ -276,6 +276,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Interconnect.Data", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Interconnect.Data.RDB", "Retail.Interconnect.Data.RDB\Retail.Interconnect.Data.RDB.csproj", "{441BCB61-49A2-40C0-8A07-30F60423E1A0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.Billing", "Retail.Billing", "{BE797DB1-98AD-4594-B6FB-6F172802D4E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Billing.Business", "Retail.Billing.Business\Retail.Billing.Business.csproj", "{78B0018B-0FAB-4329-B0DB-F2D50099E912}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Billing.Entities", "Retail.Billing.Entities\Retail.Billing.Entities.csproj", "{F0F463C2-64F4-48DC-95AE-FD7F6BCA4AC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Billing.Web", "Retail.Billing.Web\Retail.Billing.Web.csproj", "{952A19A2-0B1B-44F1-A119-5151D32A86DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -768,6 +776,18 @@ Global
 		{441BCB61-49A2-40C0-8A07-30F60423E1A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{441BCB61-49A2-40C0-8A07-30F60423E1A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{441BCB61-49A2-40C0-8A07-30F60423E1A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78B0018B-0FAB-4329-B0DB-F2D50099E912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78B0018B-0FAB-4329-B0DB-F2D50099E912}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78B0018B-0FAB-4329-B0DB-F2D50099E912}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78B0018B-0FAB-4329-B0DB-F2D50099E912}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0F463C2-64F4-48DC-95AE-FD7F6BCA4AC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0F463C2-64F4-48DC-95AE-FD7F6BCA4AC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0F463C2-64F4-48DC-95AE-FD7F6BCA4AC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0F463C2-64F4-48DC-95AE-FD7F6BCA4AC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{952A19A2-0B1B-44F1-A119-5151D32A86DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{952A19A2-0B1B-44F1-A119-5151D32A86DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{952A19A2-0B1B-44F1-A119-5151D32A86DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{952A19A2-0B1B-44F1-A119-5151D32A86DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -902,14 +922,18 @@ Global
 		{954C104F-E2E7-44C0-8F0C-E224EFCC1555} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{19D00A8A-5F7B-4BEB-BB0A-E408E68C4765} = {5EEB3C1D-9A37-4E9C-897A-CB9364A80C9D}
 		{441BCB61-49A2-40C0-8A07-30F60423E1A0} = {5EEB3C1D-9A37-4E9C-897A-CB9364A80C9D}
+		{BE797DB1-98AD-4594-B6FB-6F172802D4E0} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{78B0018B-0FAB-4329-B0DB-F2D50099E912} = {BE797DB1-98AD-4594-B6FB-6F172802D4E0}
+		{F0F463C2-64F4-48DC-95AE-FD7F6BCA4AC3} = {BE797DB1-98AD-4594-B6FB-6F172802D4E0}
+		{952A19A2-0B1B-44F1-A119-5151D32A86DC} = {BE797DB1-98AD-4594-B6FB-6F172802D4E0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 114
+		SccNumberOfProjects = 117
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = Retail.sln
@@ -1363,5 +1387,17 @@ Global
 		SccProjectTopLevelParentUniqueName113 = Retail.sln
 		SccProjectName113 = Retail.Interconnect.Data.RDB
 		SccLocalPath113 = Retail.Interconnect.Data.RDB
+		SccProjectUniqueName114 = Retail.Billing.Business\\Retail.Billing.Business.csproj
+		SccProjectTopLevelParentUniqueName114 = Retail.sln
+		SccProjectName114 = Retail.Billing.Business
+		SccLocalPath114 = Retail.Billing.Business
+		SccProjectUniqueName115 = Retail.Billing.Entities\\Retail.Billing.Entities.csproj
+		SccProjectTopLevelParentUniqueName115 = Retail.sln
+		SccProjectName115 = Retail.Billing.Entities
+		SccLocalPath115 = Retail.Billing.Entities
+		SccProjectUniqueName116 = Retail.Billing.Web\\Retail.Billing.Web.csproj
+		SccProjectTopLevelParentUniqueName116 = Retail.sln
+		SccProjectName116 = Retail.Billing.Web
+		SccLocalPath116 = Retail.Billing.Web
 	EndGlobalSection
 EndGlobal

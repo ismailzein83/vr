@@ -934,6 +934,18 @@
       <Project>{96532272-276c-4e99-a9c9-fa2438bd85e5}</Project>
       <Name>RecordAnalysis.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Billing.Business\Retail.Billing.Business.csproj">
+      <Project>{78b0018b-0fab-4329-b0db-f2d50099e912}</Project>
+      <Name>Retail.Billing.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Billing.Entities\Retail.Billing.Entities.csproj">
+      <Project>{f0f463c2-64f4-48dc-95ae-fd7f6bca4ac3}</Project>
+      <Name>Retail.Billing.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Billing.Web\Retail.Billing.Web.csproj">
+      <Project>{952a19a2-0b1b-44f1-a119-5151d32a86dc}</Project>
+      <Name>Retail.Billing.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.APIEntities\Retail.BusinessEntity.APIEntities.csproj">
       <Project>{bc95dcad-b0aa-4e3e-9ea0-3963f0d54d23}</Project>
       <Name>Retail.BusinessEntity.APIEntities</Name>
