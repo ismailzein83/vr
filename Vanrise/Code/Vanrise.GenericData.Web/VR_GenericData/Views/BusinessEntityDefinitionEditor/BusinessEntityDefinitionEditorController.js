@@ -135,7 +135,7 @@
                     iconPathSelectorReadyPromiseDeferred.promise.then(function () {
                         var payloadDirective = {
                             paths: [VRCommon_VRIconVirtualPathEnum.View.value]
-                        }
+                        };
                         if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined) {
                             payloadDirective.selectedIds= businessEntityDefinitionEntity.Settings.IconPath;
                         }
