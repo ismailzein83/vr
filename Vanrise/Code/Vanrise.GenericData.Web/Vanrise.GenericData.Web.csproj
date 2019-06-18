@@ -707,6 +707,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\StopIteration\Templates\StopIterationStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\StopIteration\vr-genericdata-datatransformation-stopiterationstep-preview.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\StopIteration\vr-genericdata-datatransformation-stopiterationstep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\SelectorCondition\Templates\ConditionGroupSelectorConditionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\SelectorCondition\Templates\RecordFilterGroupSelectorConditionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\SelectorCondition\vr-genericdata-genericbusinessentity-conditiongroup-selectorcondition.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\SelectorCondition\vr-genericdata-genericbusinessentity-recordfiltergroup-selectorcondition.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDataRecordObjectFieldComparisonTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDataRecordObjectFieldTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr-genericdata-datarecordobjectfield.js" />
