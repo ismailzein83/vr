@@ -41,10 +41,9 @@ app.directive('retailBeRecurringchargeperiod', ['UtilsService', 'VRUIUtilsServic
                 var api = {};
 
                 api.load = function (payload) {
-
-                    var selectedValues;
+                    var fieldValue;
                     if (payload != undefined) {
-                        selectedValues = payload.selectedValues;
+                        fieldValue = payload.fieldValue;
                     }
 
                     var promises = [];
@@ -57,8 +56,8 @@ app.directive('retailBeRecurringchargeperiod', ['UtilsService', 'VRUIUtilsServic
                         recurringChargePeriodSelectorReadyDeferred.promise.then(function () {
                             var recurringChargePeriodSelectorPayload;
 
-                            if (selectedValues != undefined && selectedValues.RecurringChargePeriod != undefined)
-                                recurringChargePeriodSelectorPayload = { recurringChargePeriod: selectedValues.RecurringChargePeriod.Settings };
+                            if (fieldValue != undefined)
+                                recurringChargePeriodSelectorPayload = { recurringChargePeriod: fieldValue.Settings };
 
                             VRUIUtilsService.callDirectiveLoad(recurringChargePeriodSelectorAPI, recurringChargePeriodSelectorPayload, recurringChargePeriodSelectorLoadDeferred);
 
@@ -77,6 +76,13 @@ app.directive('retailBeRecurringchargeperiod', ['UtilsService', 'VRUIUtilsServic
                             Settings: recurringChargePeriodSelectorAPI.getData()
                         };
                     }
+                };
+
+                api.getData = function () {
+                    return {
+                        $type: "Retail.BusinessEntity.Entities.FinancialRecurringChargePeriod, Retail.BusinessEntity.Entities",
+                        Settings: recurringChargePeriodSelectorAPI.getData()
+                    };
                 };
 
                 if (ctrl.onReady != null)

@@ -12,6 +12,8 @@ namespace Retail.BusinessEntity.Business
     {
         public override Guid ConfigId { get { return new Guid("77F773F8-FB42-4A4E-97FB-BCC807BA940F"); } }
 
+        public override string SelectorUIControl { get { return "retail-be-recurringchargeperiod"; } }
+
         public override bool AreEqual(object newValue, object oldValue)
         {
             var oldValueObject = oldValue as FinancialRecurringChargePeriod;
