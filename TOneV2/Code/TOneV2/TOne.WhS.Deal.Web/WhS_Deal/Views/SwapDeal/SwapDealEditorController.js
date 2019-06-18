@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealAnalysisAPIService'];
 
-    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService) {
+    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, WhS_Deal_SwapDealAnalysisAPIService) {
         var isEditMode;
 
         var dealId;
@@ -34,6 +34,9 @@
 
         var shiftedBED;
         var shiftedEED;
+        var genericBusinessEntityId;
+        var businessEntityDefinitionId;
+        var isCreateDealFromAnalysis;
 
         loadParameters();
         defineScope();
@@ -41,16 +44,23 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined && parameters != null) {
-                dealId = parameters.dealId;
-                context = parameters.context;
-                isEditable = parameters.isEditable;
-                isReadOnly = parameters.isReadOnly;
-                isViewHistoryMode = context != undefined && context.historyId != undefined;
+                if (parameters.genericBusinessEntityId != undefined) {
+                    //the editor is opened from action in deal analysis
+                    genericBusinessEntityId = parameters.genericBusinessEntityId;
+                    businessEntityDefinitionId = parameters.businessEntityDefinitionId;
+                }
+                else {
+                    dealId = parameters.dealId;
+                    context = parameters.context;
+                    isEditable = parameters.isEditable;
+                    isReadOnly = parameters.isReadOnly;
+                    isViewHistoryMode = context != undefined && context.historyId != undefined;
+                }
             }
 
             isEditMode = (dealId != undefined);
+            isCreateDealFromAnalysis = (genericBusinessEntityId != undefined);
             if (isReadOnly && !isEditable)
                 UtilsService.setContextReadOnly($scope);
         }
@@ -247,6 +257,13 @@
                 });
 
             }
+            else if (isCreateDealFromAnalysis) {
+                getSwapDealFromAnalysis().then(function () {
+                    loadAllControls().finally(function () {
+                        dealEntity = undefined;
+                    });
+                });
+            }
             else {
                 loadAllControls();
             }
@@ -255,7 +272,15 @@
         function getSwapDealHistory() {
             return WhS_Deal_SwapDealAPIService.GetSwapDealHistoryDetailbyHistoryId(context.historyId).then(function (response) {
                 dealEntity = response;
-
+            });
+        }
+        function getSwapDealFromAnalysis() {
+            return WhS_Deal_SwapDealAPIService.getSwapDealFromAnalysis(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
+                dealEntity = response;
+                dealEntity.Settings.DealContract = undefined;
+                dealEntity.Settings.DealType = undefined;
+                dealEntity.Settings.CurrencyId = undefined;
+                dealEntity.Settings.Priority = undefined;
             });
         }
         function getSwapDeal() {
@@ -405,19 +430,39 @@
 
         function insertSwapDeal() {
             $scope.scopeModel.isLoading = true;
+            var createDealFromAnalysis = false;
             return WhS_Deal_SwapDealAPIService.AddDeal(buildSwapDealObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Swap Deal', response, 'Description')) {
                     if ($scope.onSwapDealAdded != undefined)
                         $scope.onSwapDealAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
+                    createDealFromAnalysis = isCreateDealFromAnalysis && response != undefined && response.InsertedObject != undefined && response.InsertedObject.Entity != undefined;
+                    if (createDealFromAnalysis) {
+                        WhS_Deal_SwapDealAnalysisAPIService.UpdateDealAnalysis(response.InsertedObject.Entity.DealId, genericBusinessEntityId, businessEntityDefinitionId)
+                            .then(function () {
+                            if ($scope.IsItemInserted != undefined)
+                                $scope.IsItemInserted(true);
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                            if ($scope.IsItemInserted != undefined)
+                                $scope.IsItemInserted(false);
+                        }).finally(function () {
+                            $scope.scopeModel.isLoading = false;
+                            $scope.modalContext.closeModal();
+                        });
+                    }
                 }
                 else {
                     $scope.validationMessages = response.ValidationMessages;
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+                if ($scope.IsItemInserted != undefined)
+                    $scope.IsItemInserted(false);
+
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+                if (!createDealFromAnalysis)
+                    $scope.modalContext.closeModal();
             });
         }
         function updateSwapDeal() {
@@ -463,7 +508,7 @@
                     IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true,
                     SwapDealTimeZone: $scope.scopeModel.selectedTimeZone.value,
                     SendOrPay: $scope.scopeModel.sendOrPay,
-                    Priority : $scope.scopeModel.priority
+                    Priority: $scope.scopeModel.priority
 
                 }
             };

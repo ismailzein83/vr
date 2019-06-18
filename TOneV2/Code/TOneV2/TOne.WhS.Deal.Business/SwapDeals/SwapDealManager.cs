@@ -11,6 +11,7 @@ using TOne.WhS.Deal.Entities.Settings;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Data;
 using Vanrise.Caching;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -78,6 +79,84 @@ namespace TOne.WhS.Deal.Business
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
             var dealDefinition = s_vrObjectTrackingManager.GetObjectDetailById(swapDealHistoryId);
             return dealDefinition.CastWithValidate<DealDefinition>("DealDefinition : historyId ", swapDealHistoryId);
+        }
+        public DealDefinition GetSwapDealFromAnalysis(int genericBusinessEntityId, Guid businessEntityDefinitionId)
+        {
+            var swapDealAnalysisManager = new SwapDealAnalysisManager();
+            var swapDealAnalysisDefinitionById = swapDealAnalysisManager.GetSwapDealAnalysisSettingById(businessEntityDefinitionId);
+
+            var swapDealAnalysisDefinition = swapDealAnalysisDefinitionById.GetRecord(genericBusinessEntityId);
+
+            if (swapDealAnalysisDefinition == null)
+                return null;
+
+            DealDefinition dealDefinition = new DealDefinition
+            {
+                Name = swapDealAnalysisDefinition.Name
+            };
+
+            var analysisSetting = swapDealAnalysisDefinition.Settings;
+            SwapDealSettings settings = new SwapDealSettings
+            {
+                CarrierAccountId = analysisSetting.CarrierAccountId,
+                BeginDate = analysisSetting.FromDate,
+                EEDToStore = analysisSetting.ToDate,
+                Status = DealStatus.Draft,
+                SwapDealTimeZone = SwapDealTimeZone.Supplier
+            };
+
+            var inbounds = new List<SwapDealInbound>();
+            foreach (var analysisInbound in analysisSetting.Inbounds)
+            {
+                var swapDealInbound = new SwapDealInbound
+                {
+                    CountryIds = new List<int> { analysisInbound.CountryId },
+                    Name = analysisInbound.GroupName,
+                    Rate = analysisInbound.DealRate,
+                    Volume = analysisInbound.Volume,
+                    SaleZones = new List<SwapSaleZone>(),
+                    SubstituteRateType = SubstituteRateType.NormalRate
+                };
+                foreach (var zoneId in analysisInbound.SaleZoneIds)
+                {
+                    swapDealInbound.SaleZones.Add(
+                        new SwapSaleZone
+                        {
+                            ZoneId = zoneId
+                        }
+                    );
+                }
+                inbounds.Add(swapDealInbound);
+            }
+            settings.Inbounds = inbounds;
+
+            var outbounds = new List<SwapDealOutbound>();
+            foreach (var analysisOutbound in analysisSetting.Outbounds)
+            {
+                var swapDealOutbound = new SwapDealOutbound
+                {
+                    CountryIds = new List<int> { analysisOutbound.CountryId },
+                    Name = analysisOutbound.GroupName,
+                    SubstituteRateType = SubstituteRateType.NormalRate,
+                    Rate = analysisOutbound.DealRate,
+                    Volume = analysisOutbound.Volume,
+                    SupplierZones = new List<SwapSupplierZone>()
+                };
+                foreach (var zoneId in analysisOutbound.SupplierZoneIds)
+                {
+                    swapDealOutbound.SupplierZones.Add(
+                        new SwapSupplierZone
+                        {
+                            ZoneId = zoneId
+                        }
+                    );
+                }
+                outbounds.Add(swapDealOutbound);
+            }
+            settings.Outbounds = outbounds;
+            dealDefinition.Settings = settings;
+
+            return dealDefinition;
         }
 
         public SwapDealSettingData GetSwapDealSettingData()
@@ -209,6 +288,7 @@ namespace TOne.WhS.Deal.Business
         #endregion
 
         #region Private Classes
+
 
         private class SwapDealExcelExportHandler : ExcelExportHandler<DealDefinitionDetail>
         {

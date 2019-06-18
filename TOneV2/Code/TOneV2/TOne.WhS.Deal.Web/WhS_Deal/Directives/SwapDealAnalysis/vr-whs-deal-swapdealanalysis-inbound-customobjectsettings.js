@@ -2,9 +2,9 @@
 
     'use strict';
 
-    customerFaultTicketType.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    inboundCustomObjectType.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function customerFaultTicketType(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function inboundCustomObjectType(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -12,7 +12,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new CustomerFaultCtor($scope, ctrl, $attrs);
+                var ctor = new inboundCustomObjectTypeConstructor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "Ctrl",
@@ -20,7 +20,7 @@
             templateUrl: "/Client/Modules/WhS_Deal/Directives/SwapDealAnalysis/Templates/SwapDealAnalysisInboundCustomObjectTemplate.html"
 
         };
-        function CustomerFaultCtor($scope, ctrl, $attrs) {
+        function inboundCustomObjectTypeConstructor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -36,7 +36,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "TOne.WhS.BusinessEntity.Business.CustomerFaultTicketCustomObjectTypeSettings, TOne.WhS.BusinessEntity.Business"
+                        $type: "TOne.WhS.Deal.Business.SwapDealInboundCustomObjectTypeSettings, TOne.WhS.Deal.Business"
                     };
                     return data;
                 };
@@ -48,6 +48,6 @@
         }
     }
 
-    app.directive('whsBeCustomerfaultticketCustomobjectsettings', customerFaultTicketType);
+    app.directive('vrWhsDealSwapdealanalysisInboundCustomobjectsettings', inboundCustomObjectType);
 
 })(app);

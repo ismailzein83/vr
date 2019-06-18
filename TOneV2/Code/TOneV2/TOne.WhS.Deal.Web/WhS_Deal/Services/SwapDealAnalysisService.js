@@ -1,80 +1,105 @@
 ﻿(function (appControllers) {
 
-	'use strict';
+    'use strict';
 
-	SwapDealAnalysisService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService'];
+    SwapDealAnalysisService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VR_GenericData_GenericBEActionService'];
 
-	function SwapDealAnalysisService(VRModalService, VRNotificationService, UtilsService) {
+    function SwapDealAnalysisService(VRModalService, VRNotificationService, UtilsService, VR_GenericData_GenericBEActionService) {
 
-		function addInbound(settings, carrierAccountId, sellingNumberPlanId, onInboundAdded) {
-			var parameters = {
-				settings: settings,
-				carrierAccountId: carrierAccountId,
-				sellingNumberPlanId: sellingNumberPlanId
-			};
+        function addInbound(settings, carrierAccountId, sellingNumberPlanId, onInboundAdded) {
+            var parameters = {
+                settings: settings,
+                carrierAccountId: carrierAccountId,
+                sellingNumberPlanId: sellingNumberPlanId
+            };
 
-			var settings = {};
-			settings.onScopeReady = function (modalScope) {
-				modalScope.onInboundAdded = onInboundAdded;
-			};
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onInboundAdded = onInboundAdded;
+            };
 
-			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/InboundEditor.html', parameters, settings);
-		}
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/InboundEditor.html', parameters, settings);
+        }
 
-		function editInbound(settings, carrierAccountId, sellingNumberPlanId, inboundEntity, onInboundUpdated) {
-			var parameters = {
-				settings: settings,
-				carrierAccountId: carrierAccountId,
-				sellingNumberPlanId: sellingNumberPlanId,
-				inboundEntity: inboundEntity
-			};
+        function editInbound(settings, carrierAccountId, sellingNumberPlanId, inboundEntity, onInboundUpdated) {
+            var parameters = {
+                settings: settings,
+                carrierAccountId: carrierAccountId,
+                sellingNumberPlanId: sellingNumberPlanId,
+                inboundEntity: inboundEntity
+            };
 
-			var settings = {};
-			settings.onScopeReady = function (modalScope) {
-				modalScope.onInboundUpdated = onInboundUpdated;
-			};
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onInboundUpdated = onInboundUpdated;
+            };
 
-			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/InboundEditor.html', parameters, settings);
-		}
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/InboundEditor.html', parameters, settings);
+        }
 
-		function addOutbound(settings, carrierAccountId, onOutboundAdded)
-		{
-			var parameters = {
-				settings: settings,
-				carrierAccountId: carrierAccountId
-			};
+        function addOutbound(settings, carrierAccountId, onOutboundAdded) {
+            var parameters = {
+                settings: settings,
+                carrierAccountId: carrierAccountId
+            };
 
-			var settings = {};
-			settings.onScopeReady = function (modalScope) {
-				modalScope.onOutboundAdded = onOutboundAdded;
-			};
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onOutboundAdded = onOutboundAdded;
+            };
 
-			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/OutboundEditor.html', parameters, settings);
-		}
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/OutboundEditor.html', parameters, settings);
+        }
 
-		function editOutbound(settings, carrierAccountId, outboundEntity, onOutboundUpdated) {
-			var parameters = {
-				settings: settings,
-				carrierAccountId: carrierAccountId,
-				outboundEntity: outboundEntity
-			};
+        function editOutbound(settings, carrierAccountId, outboundEntity, onOutboundUpdated) {
+            var parameters = {
+                settings: settings,
+                carrierAccountId: carrierAccountId,
+                outboundEntity: outboundEntity
+            };
 
-			var settings = {};
-			settings.onScopeReady = function (modalScope) {
-				modalScope.onOutboundUpdated = onOutboundUpdated;
-			};
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onOutboundUpdated = onOutboundUpdated;
+            };
 
-			VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/OutboundEditor.html', parameters, settings);
-		}
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/OutboundEditor.html', parameters, settings);
+        }
 
-		return {
-			addInbound: addInbound,
-			editInbound: editInbound,
-			addOutbound: addOutbound,
-			editOutbound: editOutbound
-		};
-	}
+        function registerCreateSwapDealGenericBEAction() {
+            var CreateSwapDealActionType = {
+                ActionTypeName: "CreateSwapDealGenericBEAction",
+                ExecuteAction: function (payload) {
 
-	appControllers.service('WhS_Deal_SwapDealAnalysisService', SwapDealAnalysisService);
+                    if (payload == undefined)
+                        return;
+
+                    var promiseDeferred = UtilsService.createPromiseDeferred();
+                    var settings = {};
+
+                    settings.onScopeReady = function (modalScope) {
+                        modalScope.IsItemInserted = function (flag) {
+                            promiseDeferred.resolve(flag);
+                        };
+                    };
+                    VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealEditor.html', payload, settings).finally(function () {
+                        promiseDeferred.resolve();
+                    });
+
+                    return promiseDeferred.promise;
+                }
+            };
+            VR_GenericData_GenericBEActionService.registerActionType(CreateSwapDealActionType);
+        }
+        return {
+            addInbound: addInbound,
+            editInbound: editInbound,
+            addOutbound: addOutbound,
+            editOutbound: editOutbound,
+            registerCreateSwapDealGenericBEAction: registerCreateSwapDealGenericBEAction
+        };
+    }
+
+    appControllers.service('WhS_Deal_SwapDealAnalysisService', SwapDealAnalysisService);
 
 })(appControllers);

@@ -5,6 +5,7 @@ using TOne.WhS.Deal.Entities;
 using Vanrise.Web.Base;
 using TOne.WhS.Deal.Entities.Settings;
 using TOne.WhS.BusinessEntity.Entities;
+using System;
 
 namespace TOne.WhS.Deal.Web.Controllers
 {
@@ -53,12 +54,18 @@ namespace TOne.WhS.Deal.Web.Controllers
         {
             return _manager.GetSwapDealSettingData();
         }
-                
+
         [HttpGet]
         [Route("RecurDeal")]
         public InsertDealOperationOutput<RecurredDealItem> RecurDeal(int dealId, int recurringNumber, RecurringType recurringType)
         {
             return _manager.RecurDeal(dealId, recurringNumber, recurringType);
+        }
+        [HttpGet]
+        [Route("GetSwapDealFromAnalysis")]
+        public DealDefinition GetSwapDealFromAnalysis(int genericBusinessEntityId, Guid businessEntityDefinitionId)
+        {
+            return _manager.GetSwapDealFromAnalysis(genericBusinessEntityId, businessEntityDefinitionId);
         }
     }
 }

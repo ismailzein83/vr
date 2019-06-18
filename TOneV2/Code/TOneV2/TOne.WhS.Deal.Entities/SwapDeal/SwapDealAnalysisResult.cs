@@ -31,31 +31,33 @@ namespace TOne.WhS.Deal.Entities
 
     public class SwapDealAnalysisResultInbound
     {
-        public string Name { get; set; }
-
+        public string GroupName { get; set; }
+        public int Volume { get; set; }
         public int DailyVolume { get; set; }
-        
+        public Decimal? DealRate { get; set; }
         public Decimal? CurrentRate { get; set; }
-
         public Decimal? RateProfit { get; set; }
-
         public Decimal? Profit { get; set; }
-
         public Decimal Revenue { get; set; }
+        public Guid CalculationMethodId { get; set; }
+        public SwapDealAnalysisInboundItemRateCalcMethod ItemCalculationMethod { get; set; }
+        public List<long> SaleZoneIds { get; set; }
+        public int CountryId { get; set; }
     }
 
     public class SwapDealAnalysisResultOutbound
     {
-        public string Name { get; set; }
-
+        public string GroupName { get; set; }
+        public int Volume { get; set; }
+        public Decimal? DealRate { get; set; }
         public int DailyVolume { get; set; }
-
-		public Decimal? CurrentRate { get; set; }
-
-		public Decimal RateSavings { get; set; }
-
+        public Decimal? CurrentRate { get; set; }
+        public Decimal RateSavings { get; set; }
         public Decimal Savings { get; set; }
-
         public Decimal Revenue { get; set; }
+        public Guid CalculationMethodId { get; set; }
+        public SwapDealAnalysisOutboundItemRateCalcMethod ItemCalculationMethod { get; set; }
+        public List<long> SupplierZoneIds { get; set; }
+        public int CountryId { get; set; }
     }
 }

@@ -153,7 +153,7 @@
 		function loadStaticSection() {
 			if (outboundEntity == undefined)
 				return;
-			$scope.scopeModel.groupName = outboundEntity.Name;
+            $scope.scopeModel.groupName = outboundEntity.GroupName;
 			$scope.scopeModel.volume = outboundEntity.Volume;
 			$scope.scopeModel.dealRate = outboundEntity.DealRate;
 		}
@@ -265,7 +265,7 @@
 		}
 		function buildOutboundObjFromScope() {
 			var obj = {
-				Name: $scope.scopeModel.groupName,
+                GroupName: $scope.scopeModel.groupName,
 				CountryId: countrySelectorAPI.getSelectedIds(),
 				SupplierZoneIds: supplierZoneSelectorAPI.getSelectedIds(),
 				Volume: $scope.scopeModel.volume,

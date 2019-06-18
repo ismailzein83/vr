@@ -1,109 +1,108 @@
 ﻿'use strict';
 
 app.directive('vrWhsDealSwapdealanalysisSettings', ['UtilsService', 'VRUIUtilsService', 'VRValidationService', function (UtilsService, VRUIUtilsService, VRValidationService) {
-	return {
-		restrict: 'E',
-		scope: {
-			onReady: '=',
-			normalColNum: '@'
-		},
-		controller: function ($scope, $element, $attrs) {
-			var ctrl = this;
-			var swapDealAnalysisSettings = new SwapDealAnalysisSettings($scope, ctrl, $attrs);
-			swapDealAnalysisSettings.initializeController();
-		},
-		controllerAs: 'ctrl',
-		bindToController: true,
-		templateUrl: '/Client/Modules/WhS_Deal/Directives/SwapDealAnalysis/Templates/SwapDealAnalysisSettingsTemplate.html'
-	};
+    return {
+        restrict: 'E',
+        scope: {
+            onReady: '=',
+            normalColNum: '@'
+        },
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            var swapDealAnalysisSettings = new SwapDealAnalysisSettings($scope, ctrl, $attrs);
+            swapDealAnalysisSettings.initializeController();
+        },
+        controllerAs: 'ctrl',
+        bindToController: true,
+        templateUrl: '/Client/Modules/WhS_Deal/Directives/SwapDealAnalysis/Templates/SwapDealAnalysisSettingsTemplate.html'
+    };
 
-	function SwapDealAnalysisSettings($scope, ctrl, $attrs) {
+    function SwapDealAnalysisSettings($scope, ctrl, $attrs) {
 
-		this.initializeController = initializeController;
+        this.initializeController = initializeController;
 
-		var context;
+        var context;
 
-		var carrierAccountSelectorAPI;
-		var carrierAccountReadyDeferred = UtilsService.createPromiseDeferred();
+        var carrierAccountSelectorAPI;
+        var carrierAccountReadyDeferred = UtilsService.createPromiseDeferred();
 
-		function initializeController()
-		{
-			$scope.scopeModel = {};
+        var currentCarrierAccountId;
 
-			$scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
-				carrierAccountSelectorAPI = api;
-				carrierAccountReadyDeferred.resolve();
-			};
+        function initializeController() {
+            $scope.scopeModel = {};
 
-			$scope.scopeModel.onCarrierAccountSelectionChanged = function (selectedCarrierAccount) {
+            $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
+                carrierAccountSelectorAPI = api;
+                carrierAccountReadyDeferred.resolve();
+            };
 
-			    var carrierAccountId = carrierAccountSelectorAPI.getSelectedIds();
-				if (carrierAccountId == undefined)
-					return;
+            $scope.scopeModel.onCarrierAccountSelectionChanged = function (selectedCarrierAccount) {
 
-				context.setSellingNumberPlanId(selectedCarrierAccount.SellingNumberPlanId);
-				context.clearAnalysis();
-			};
+                var carrierAccountId = carrierAccountSelectorAPI.getSelectedIds();
+                if (carrierAccountId == undefined || carrierAccountId == currentCarrierAccountId)
+                    return;
 
-			$scope.scopeModel.validateTimeRange = function () {
-				return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
-			};
+                context.setSellingNumberPlanId(selectedCarrierAccount.SellingNumberPlanId);
+                context.clearAnalysis();
+            };
 
-			UtilsService.waitMultiplePromises([carrierAccountReadyDeferred.promise]).then(function () {
-				defineAPI();
-			});
-		}
+            $scope.scopeModel.validateTimeRange = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
+            };
 
-		function defineAPI() {
-			var api = {};
+            UtilsService.waitMultiplePromises([carrierAccountReadyDeferred.promise]).then(function () {
+                defineAPI();
+            });
+        }
 
-			api.load = function (payload)
-			{
-				var carrierAccountId;
-				var settings;
+        function defineAPI() {
+            var api = {};
 
-				if (payload != undefined)
-				{
-					context = payload.context;
-					settings = payload.Settings;
-				}
+            api.load = function (payload) {
+                var settings;
 
-				if (settings != undefined) {
-					$scope.scopeModel.name = payload.Name;
-					carrierAccountId = payload.CarrierAccountId;
-					$scope.scopeModel.fromDate = payload.FromDate;
-					$scope.scopeModel.toDate = payload.ToDate;
-				}
+                if (payload != undefined) {
+                    context = payload.context;
+                    settings = payload.Settings;
+                }
 
-				return loadCarrierAccountSelector(carrierAccountId);
-			};
+                if (settings != undefined) {
+                    $scope.scopeModel.name = settings.Name;
+                    currentCarrierAccountId = settings.CarrierAccountId;
+                    $scope.scopeModel.fromDate = settings.FromDate;
+                    $scope.scopeModel.toDate = settings.ToDate;
+                }
 
-			api.getData = function () {
-				return {
-					CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-					FromDate: $scope.scopeModel.fromDate,
-					ToDate: $scope.scopeModel.toDate
-				};
-			};
+                return loadCarrierAccountSelector(currentCarrierAccountId);
+            };
 
-			api.getCarrierAccountId = function () {
-				return carrierAccountSelectorAPI.getSelectedIds();
-			};
+            api.getData = function () {
+                return {
+                    Name: $scope.scopeModel.name,
+                    CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                    FromDate: $scope.scopeModel.fromDate,
+                    ToDate: $scope.scopeModel.toDate
+                };
+            };
 
-			if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
-				ctrl.onReady(api);
-		}
-		function loadCarrierAccountSelector(carrierAccountId) {
-			var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            api.getCarrierAccountId = function () {
+                return carrierAccountSelectorAPI.getSelectedIds();
+            };
 
-			carrierAccountReadyDeferred.promise.then(function () {
-				var carrierAccountSelectorPayload = {
-					selectedIds: carrierAccountId
-				};
-				VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, carrierAccountSelectorPayload, carrierAccountSelectorLoadDeferred);
-			});
+            if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
+                ctrl.onReady(api);
+        }
+        function loadCarrierAccountSelector(carrierAccountId) {
+            var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-			return carrierAccountSelectorLoadDeferred.promise;
-		}
-	}
+            carrierAccountReadyDeferred.promise.then(function () {
+                var carrierAccountSelectorPayload = {
+                    selectedIds: carrierAccountId
+                };
+                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, carrierAccountSelectorPayload, carrierAccountSelectorLoadDeferred);
+            });
+
+            return carrierAccountSelectorLoadDeferred.promise;
+        }
+    }
 }]);

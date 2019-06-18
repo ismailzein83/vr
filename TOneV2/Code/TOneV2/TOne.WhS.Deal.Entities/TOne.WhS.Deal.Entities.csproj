@@ -83,6 +83,7 @@
     <Compile Include="OverLappedZonesContext.cs" />
     <Compile Include="Settings\DealTechnicalSettingData.cs" />
     <Compile Include="RecurringType.cs" />
+    <Compile Include="SwapDealAnalysis\DealDefinitionInput.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisInbound.cs" />
     <Compile Include="SwapDealAnalysis\SwapDealAnalysisOutbound.cs" />
     <Compile Include="SwapDealProgressDetail.cs" />

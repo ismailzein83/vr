@@ -663,5 +663,6 @@
     <Build Include="TOneWhS_BE\Tables\TechnicalCode.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierOtherRate_GetByZoneIds.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetByZoneIds.sql" />
+    <Build Include="TOneWhS_Deal\Tables\DealAnalysis.sql" />
   </ItemGroup>
 </Project>

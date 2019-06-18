@@ -77,12 +77,44 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                     promises.push(loadResultDeferred.promise);
 
                     analyzeDealPromise.then(function (response) {
-
                         if (response == null) {
                             loadInboundManagementDeferred.resolve();
                             loadOutboundManagementDeferred.resolve();
                             return;
                         }
+                        if (response == null) {
+                            loadInboundManagementDeferred.resolve();
+                            loadOutboundManagementDeferred.resolve();
+                            return;
+                        }
+                        var inboundManagementData = {
+                            Inbounds: response.Inbounds,
+                            Summary: {
+                                TotalSaleMargin: response.TotalSaleMargin,
+                                TotalSaleRevenue: response.TotalSaleRevenue
+                            }
+                        };
+
+                        loadInboundManagement(inboundManagementData).then(function () {
+                            loadInboundManagementDeferred.resolve();
+                        }).catch(function (error) {
+                            loadInboundManagementDeferred.reject(error, $scope);
+                        });
+
+                        var outboundManagementData = {
+                            Outbounds: response.Outbounds,
+                            Summary: {
+                                TotalCostMargin: response.TotalCostMargin,
+                                TotalCostRevenue: response.TotalCostRevenue
+                            }
+                        };
+                        loadOutboundManagement(outboundManagementData).then(function () {
+                            loadOutboundManagementDeferred.resolve();
+                        }).catch(function (error) {
+                            loadOutboundManagementDeferred.reject(error, $scope);
+                        });
+
+
                         var resultData = {
                             DealPeriodInDays: response.DealPeriodInDays,
                             TotalCostRevenue: response.TotalCostRevenue,
@@ -188,7 +220,7 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
 
                 return settingsLoadDeferred.promise;
             }
-            function loadInboundManagement() {
+            function loadInboundManagement(data) {
                 var inboundManagementLoadDeferred = UtilsService.createPromiseDeferred();
 
                 UtilsService.waitMultiplePromises([swapDealSettingsLoadDeferred.promise, settingsLoadDeferred.promise, inboundManagementReadyDeferred.promise]).then(function () {
@@ -203,12 +235,16 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                         }
                         , Inbounds: inbounds
                     };
+                    if (data != undefined) {
+                        inboundManagementPayload.Inbounds = data.Inbounds;
+                        inboundManagementPayload.Summary = data.Summary;
+                    }
                     VRUIUtilsService.callDirectiveLoad(inboundAPI, inboundManagementPayload, inboundManagementLoadDeferred);
                 });
 
                 return inboundManagementLoadDeferred.promise;
             }
-            function loadOutboundManagement() {
+            function loadOutboundManagement(data) {
                 var outboundManagementLoadDeferred = UtilsService.createPromiseDeferred();
 
                 UtilsService.waitMultiplePromises([swapDealSettingsLoadDeferred.promise, settingsLoadDeferred.promise, outboundManagementReadyDeferred.promise]).then(function () {
@@ -223,6 +259,10 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                         }
                         , Outbounds: outbounds
                     };
+                    if (data != undefined) {
+                        outboundManagementPayload.Outbounds = data.Outbounds;
+                        outboundManagementPayload.Summary = data.Summary;
+                    }
                     VRUIUtilsService.callDirectiveLoad(outboundAPI, outboundManagementPayload, outboundManagementLoadDeferred);
                 });
 
@@ -242,7 +282,6 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                 var settingsData = settingsAPI.getData();
                 var inboundManagementData = inboundAPI.getData();
                 var outboundManagementData = outboundAPI.getData();
-
                 var analysisSettings = {};
 
                 if (settingsData != undefined) {
@@ -255,12 +294,13 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                     for (var i = 0; i < inboundManagementData.$values.length; i++) {
                         var inbound =
                         {
-                            Name: inboundManagementData.$values[i].Name,
+                            GroupName: inboundManagementData.$values[i].GroupName,
                             CountryId: inboundManagementData.$values[i].CountryId,
                             SaleZoneIds: inboundManagementData.$values[i].SaleZoneIds,
                             Volume: inboundManagementData.$values[i].Volume,
                             DealRate: inboundManagementData.$values[i].DealRate,
-                            ItemCalculationMethod: inboundManagementData.$values[i].ItemCalculationMethod
+                            ItemCalculationMethod: inboundManagementData.$values[i].ItemCalculationMethod,
+                            CalculationMethodId: inboundManagementData.$values[i].CalculationMethodId
                         };
                         inbounds.push(inbound);
                     }
@@ -268,15 +308,16 @@ app.directive('vrWhsDealSwapdealanalysisStaticeditor', ['UtilsService', 'VRUIUti
                 }
                 if (outboundManagementData != undefined) {
                     var outbounds = [];
-                    for (var j = 0; i < outboundManagementData.$values.length; j++) {
+                    for (var j = 0; j < outboundManagementData.$values.length; j++) {
                         var outbound =
                         {
-                            Name: outboundManagementData.$values[j].Name,
+                            GroupName: outboundManagementData.$values[j].GroupName,
                             CountryId: outboundManagementData.$values[j].CountryId,
-                            SaleZoneIds: outboundManagementData.$values[j].SupplierZoneIds,
+                            SupplierZoneIds: outboundManagementData.$values[j].SupplierZoneIds,
                             Volume: outboundManagementData.$values[j].Volume,
                             DealRate: outboundManagementData.$values[j].DealRate,
-                            ItemCalculationMethod: outboundManagementData.$values[j].ItemCalculationMethod
+                            ItemCalculationMethod: outboundManagementData.$values[j].ItemCalculationMethod,
+                            CalculationMethodId: outboundManagementData.$values[j].CalculationMethodId
                         };
                         outbounds.push(outbound);
                     }

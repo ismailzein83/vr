@@ -12,82 +12,84 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Deal.MainExtensions
 {
-	public class SwapDealAnalysisInboundItemRateSuppliers : SwapDealAnalysisInboundItemRateCalcMethod
-	{
-		public CarrierFilterType SupplierFilterType { get; set; }
+    public class SwapDealAnalysisInboundItemRateSuppliers : SwapDealAnalysisInboundItemRateCalcMethod
+    {
+        public CarrierFilterType SupplierFilterType { get; set; }
 
-		public IEnumerable<int> SupplierIds { get; set; }
+        public IEnumerable<int> SupplierIds { get; set; }
 
-		public ZoneRateEvaluationType RateEvaluationType { get; set; }
+        public ZoneRateEvaluationType RateEvaluationType { get; set; }
 
-		public override decimal? Execute(ISwapDealAnalysisInboundRateCalcMethodContext context)
-		{
-			var codeZoneMatchManager = new CodeZoneMatchManager();
-			IEnumerable<int> supplierIds = GetSupplierIds();
-			IEnumerable<CodeSupplierZoneMatch> codeSupplierZoneMatches = codeZoneMatchManager.GetSupplierZonesMatchedToSaleZones(context.SaleZoneIds, supplierIds);
+        public override Guid ConfigId => new Guid("96B9EB7E-D08B-4CCB-AC0D-7FE112EF41D8");
 
-			if (codeSupplierZoneMatches == null || codeSupplierZoneMatches.Count() == 0)
-				return null;
+        public override decimal? Execute(ISwapDealAnalysisInboundRateCalcMethodContext context)
+        {
+            var codeZoneMatchManager = new CodeZoneMatchManager();
+            IEnumerable<int> supplierIds = GetSupplierIds();
+            IEnumerable<CodeSupplierZoneMatch> codeSupplierZoneMatches = codeZoneMatchManager.GetSupplierZonesMatchedToSaleZones(context.SaleZoneIds, supplierIds);
 
-			var supplierRates = new List<decimal>();
-			var supplierRateManager = new SupplierRateManager();
-			DateTime effectiveOn = DateTime.Now;
+            if (codeSupplierZoneMatches == null || codeSupplierZoneMatches.Count() == 0)
+                return null;
 
-			foreach (CodeSupplierZoneMatch codeSupplierZoneMatch in codeSupplierZoneMatches)
-			{
-				SupplierZoneRate supplierRate = supplierRateManager.GetCachedSupplierZoneRate(codeSupplierZoneMatch.SupplierId, codeSupplierZoneMatch.SupplierZoneId, effectiveOn);
-				if (supplierRate == null || supplierRate.Rate == null)
-					continue;
-				supplierRates.Add(supplierRate.Rate.Rate);
-			}
+            var supplierRates = new List<decimal>();
+            var supplierRateManager = new SupplierRateManager();
+            DateTime effectiveOn = DateTime.Now;
 
-			return GetCalculatedRate(supplierRates);
-		}
+            foreach (CodeSupplierZoneMatch codeSupplierZoneMatch in codeSupplierZoneMatches)
+            {
+                SupplierZoneRate supplierRate = supplierRateManager.GetCachedSupplierZoneRate(codeSupplierZoneMatch.SupplierId, codeSupplierZoneMatch.SupplierZoneId, effectiveOn);
+                if (supplierRate == null || supplierRate.Rate == null)
+                    continue;
+                supplierRates.Add(supplierRate.Rate.Rate);
+            }
 
-		#region Private Methods
+            return GetCalculatedRate(supplierRates);
+        }
 
-		private IEnumerable<int> GetSupplierIds()
-		{
-			switch (SupplierFilterType)
-			{
-				case CarrierFilterType.All:
-					return null;
-				case CarrierFilterType.Specific:
-					RequireSupplierIds();
-					return SupplierIds;
-				case CarrierFilterType.AllExcept:
-					RequireSupplierIds();
-					var carrierAccountManager = new CarrierAccountManager();
-					IEnumerable<CarrierAccount> allSuppliers = carrierAccountManager.GetAllSuppliers();
-					if (allSuppliers == null)
-						throw new NullReferenceException("allSuppliers");
-					return allSuppliers.MapRecords(x => x.CarrierAccountId, x => !SupplierIds.Contains(x.CarrierAccountId));
-			}
-			throw new Exception("SupplierFilterType");
-		}
+        #region Private Methods
 
-		private void RequireSupplierIds()
-		{
-			if (SupplierIds == null)
-				throw new NullReferenceException("SupplierIds");
-		}
+        private IEnumerable<int> GetSupplierIds()
+        {
+            switch (SupplierFilterType)
+            {
+                case CarrierFilterType.All:
+                    return null;
+                case CarrierFilterType.Specific:
+                    RequireSupplierIds();
+                    return SupplierIds;
+                case CarrierFilterType.AllExcept:
+                    RequireSupplierIds();
+                    var carrierAccountManager = new CarrierAccountManager();
+                    IEnumerable<CarrierAccount> allSuppliers = carrierAccountManager.GetAllSuppliers();
+                    if (allSuppliers == null)
+                        throw new NullReferenceException("allSuppliers");
+                    return allSuppliers.MapRecords(x => x.CarrierAccountId, x => !SupplierIds.Contains(x.CarrierAccountId));
+            }
+            throw new Exception("SupplierFilterType");
+        }
 
-		private decimal? GetCalculatedRate(IEnumerable<decimal> rates)
-		{
-			if (rates.Count() == 0)
-				return null;
-			switch (RateEvaluationType)
-			{
-				case ZoneRateEvaluationType.AverageRate:
-					return rates.Average();
-				case ZoneRateEvaluationType.MaximumRate:
-					return rates.Max();
-				case ZoneRateEvaluationType.BasedOnTraffic:
-					throw new NotImplementedException();
-			}
-			throw new Exception("ZoneRateEvaluationType");
-		}
-		
-		#endregion
-	}
+        private void RequireSupplierIds()
+        {
+            if (SupplierIds == null)
+                throw new NullReferenceException("SupplierIds");
+        }
+
+        private decimal? GetCalculatedRate(IEnumerable<decimal> rates)
+        {
+            if (rates.Count() == 0)
+                return null;
+            switch (RateEvaluationType)
+            {
+                case ZoneRateEvaluationType.AverageRate:
+                    return rates.Average();
+                case ZoneRateEvaluationType.MaximumRate:
+                    return rates.Max();
+                case ZoneRateEvaluationType.BasedOnTraffic:
+                    throw new NotImplementedException();
+            }
+            throw new Exception("ZoneRateEvaluationType");
+        }
+
+        #endregion
+    }
 }

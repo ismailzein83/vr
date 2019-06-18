@@ -40,6 +40,13 @@
                 swapDealHistoryId: swapDealHistoryId
             });
         }
+        function getSwapDealFromAnalysis(genericBusinessEntityId, businessEntityDefinitionId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealFromAnalysis'), {
+                genericBusinessEntityId: genericBusinessEntityId,
+                businessEntityDefinitionId: businessEntityDefinitionId
+            });
+        }
 
         function RecurDeal(dealId, recurringNumber, recurringType) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "RecurDeal"), {
@@ -59,7 +66,8 @@
             HasViewSwapDealPermission: HasViewSwapDealPermission,
             GetSwapDealSettingData: GetSwapDealSettingData,
             GetSwapDealHistoryDetailbyHistoryId: GetSwapDealHistoryDetailbyHistoryId,
-            RecurDeal: RecurDeal
+            RecurDeal: RecurDeal,
+            getSwapDealFromAnalysis: getSwapDealFromAnalysis
         });
     }
 

@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Text;
+using TOne.WhS.Deal.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
     public class SwapDealOutboundCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
-        public override Guid ConfigId => new Guid("76F467C2-E440-4B11-A42C-59F69FDDBCB7");
+        public override Guid ConfigId => new Guid("FFA8B9E5-66E5-4D63-888D-83B45D9137FF");
 
         public override bool AreEqual(object newValue, object oldValue)
         {
@@ -14,22 +16,29 @@ namespace TOne.WhS.Deal.Business
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            throw new NotImplementedException();
+            var valueObject = context.FieldValue as SwapDealAnalysisOutbound;
+
+            if (valueObject != null)
+            {
+                StringBuilder description = new StringBuilder();
+                return description.ToString();
+            }
+            return null;
         }
 
         public override Type GetNonNullableRuntimeType()
         {
-            throw new NotImplementedException();
+            return typeof(SwapDealAnalysisOutbound);
         }
 
         public override string GetRuntimeTypeDescription()
         {
-            throw new NotImplementedException();
+            return "Swap Deal Analysis Outbound";
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            throw new NotImplementedException();
+            return originalValue as SwapDealAnalysisOutbound;
         }
     }
 }

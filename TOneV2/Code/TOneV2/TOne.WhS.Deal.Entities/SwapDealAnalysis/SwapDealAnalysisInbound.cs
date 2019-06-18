@@ -22,5 +22,6 @@ namespace TOne.WhS.Deal.Entities
         public SwapDealAnalysisInboundItemRateCalcMethod ItemCalculationMethod { get; set; }
         public Guid CalculationMethodId { get; set; }
         public List<long> SaleZoneIds { get; set; }
+
     }
 }

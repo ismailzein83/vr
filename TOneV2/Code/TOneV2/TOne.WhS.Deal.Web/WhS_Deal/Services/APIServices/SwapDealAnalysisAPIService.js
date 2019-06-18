@@ -1,42 +1,50 @@
 ﻿(function (appControllers) {
 
-	'use strict';
+    'use strict';
 
-	SwapDealAnalysisAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Deal_ModuleConfig', 'SecurityService'];
+    SwapDealAnalysisAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Deal_ModuleConfig', 'SecurityService'];
 
-	function SwapDealAnalysisAPIService(BaseAPIService, UtilsService, WhS_Deal_ModuleConfig, SecurityService) {
+    function SwapDealAnalysisAPIService(BaseAPIService, UtilsService, WhS_Deal_ModuleConfig, SecurityService) {
 
-		var controllerName = 'SwapDealAnalysis';
+        var controllerName = 'SwapDealAnalysis';
 
-		function AnalyzeDeal(analysisSettings) {
-			return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'AnalyzeDeal'), analysisSettings);
-		}
+        function AnalyzeDeal(analysisSettings) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'AnalyzeDeal'), analysisSettings);
+        }
 
-		function GetInboundRateCalcMethodExtensionConfigs() {
-			return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetInboundRateCalcMethodExtensionConfigs'));
-		}
+        function GetInboundRateCalcMethodExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetInboundRateCalcMethodExtensionConfigs'));
+        }
 
-		function GetOutboundRateCalcMethodExtensionConfigs() {
-			return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetOutboundRateCalcMethodExtensionConfigs'));
-		}
+        function GetOutboundRateCalcMethodExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetOutboundRateCalcMethodExtensionConfigs'));
+        }
 
-		function CalculateInboundRate(input) {
-			return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'CalculateInboundRate'), input);
-		}
+        function CalculateInboundRate(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'CalculateInboundRate'), input);
+        }
 
-		function CalculateOutboundRate(input) {
-			return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'CalculateOutboundRate'), input);
-		}
+        function CalculateOutboundRate(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'CalculateOutboundRate'), input);
+        }
+        function UpdateDealAnalysis(dealId, genericBusinessEntityId, businessEntityDefinitionId) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'UpdateDealAnalysis')
+                , {
+                    DealId: dealId,
+                    GenericBusinessEntityId: genericBusinessEntityId,
+                    BusinessEntityDefinitionId: businessEntityDefinitionId
+                });
+        }
+        return {
+            AnalyzeDeal: AnalyzeDeal,
+            GetOutboundRateCalcMethodExtensionConfigs: GetOutboundRateCalcMethodExtensionConfigs,
+            GetInboundRateCalcMethodExtensionConfigs: GetInboundRateCalcMethodExtensionConfigs,
+            CalculateInboundRate: CalculateInboundRate,
+            CalculateOutboundRate: CalculateOutboundRate,
+            UpdateDealAnalysis: UpdateDealAnalysis
+        };
+    }
 
-		return {
-			AnalyzeDeal: AnalyzeDeal,
-			GetOutboundRateCalcMethodExtensionConfigs: GetOutboundRateCalcMethodExtensionConfigs,
-			GetInboundRateCalcMethodExtensionConfigs: GetInboundRateCalcMethodExtensionConfigs,
-			CalculateInboundRate: CalculateInboundRate,
-			CalculateOutboundRate: CalculateOutboundRate
-		};
-	}
-
-	appControllers.service('WhS_Deal_SwapDealAnalysisAPIService', SwapDealAnalysisAPIService);
+    appControllers.service('WhS_Deal_SwapDealAnalysisAPIService', SwapDealAnalysisAPIService);
 
 })(appControllers);

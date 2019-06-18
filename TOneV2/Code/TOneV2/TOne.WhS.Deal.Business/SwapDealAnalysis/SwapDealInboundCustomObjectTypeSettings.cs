@@ -13,27 +13,34 @@ namespace TOne.WhS.Deal.Business
 
         public override bool AreEqual(object newValue, object oldValue)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            throw new NotImplementedException();
+            var valueObject = context.FieldValue as SwapDealAnalysisInbound;
+           
+            if (valueObject != null)
+            {
+                StringBuilder description = new StringBuilder();
+                return description.ToString();
+            }
+            return null;
         }
 
         public override Type GetNonNullableRuntimeType()
         {
-            throw new NotImplementedException();
+            return typeof(SwapDealAnalysisInbound);
         }
 
         public override string GetRuntimeTypeDescription()
         {
-            throw new NotImplementedException();
+            return "Swap Deal Analysis Inbound";
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            throw new NotImplementedException();
+            return originalValue as SwapDealAnalysisInbound;
         }
     }
 }
