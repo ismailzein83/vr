@@ -23,7 +23,7 @@
 
         function GenericBusinessEntityManagement($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+           
             var filterRuntimeRootDirectiveAPI;
             var filterRuntimeRootDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -286,13 +286,15 @@
                         AdvancedOrderOptions: genericBEDefinitionSettings.AdvancedOrderOptions,
                         LimitResult: filterData != undefined ? filterData.LimitResult : undefined
                     },
-                    businessEntityDefinitionId: businessDefinitionId
+                    businessEntityDefinitionId: businessDefinitionId,
+                    threeSixtyDegreeSettings: genericBEDefinitionSettings.ThreeSixtyDegreeSettings,
+                    doNotLoadByDefault: genericBEDefinitionSettings.DoNotLoadByDefault
                 };
-
                 return gridPayload;
+
             }
         }
-
+     
     }
 
     app.directive('vrGenericdataGenericbusinessentityManagement', GenericBusinessEntityManagement);
