@@ -79,6 +79,13 @@ app.directive('retailBeRecurringchargeperiod', ['UtilsService', 'VRUIUtilsServic
                     }
                 };
 
+                api.getData = function () {
+                    return {
+                        $type: "Retail.BusinessEntity.Entities.FinancialRecurringChargePeriod, Retail.BusinessEntity.Entities",
+                        Settings: recurringChargePeriodSelectorAPI.getData()
+                    };
+                };
+
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
