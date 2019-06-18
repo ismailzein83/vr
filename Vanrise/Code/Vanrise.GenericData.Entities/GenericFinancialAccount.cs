@@ -14,6 +14,7 @@ namespace Vanrise.GenericData.Entities
         public VRAccountStatus Status { get; set; }
         public DateTime? BED { get; set; }
         public DateTime? EED { get; set; }
+        public int CurrencyId { get; set; }
     }
     public class GenericFinancialAccountConfiguration
     {
@@ -23,5 +24,6 @@ namespace Vanrise.GenericData.Entities
         public string StatusFieldName { get; set; }
         public string BEDFieldName { get; set; }
         public string EEDFieldName { get; set; }
+        public string CurrencyFieldName { get; set; }
     }
 }

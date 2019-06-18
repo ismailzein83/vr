@@ -47,6 +47,10 @@ namespace Vanrise.GenericData.Business
             {
                 genericFinancialAccount.FinancialAccountId = genericBusinessEntity.FieldValues.GetRecord(_configuration.FinancialAccountIdFieldName) as string;
             }
+            if (_configuration.CurrencyFieldName != null)
+            {
+                genericFinancialAccount.CurrencyId = (int)genericBusinessEntity.FieldValues.GetRecord(_configuration.CurrencyFieldName);
+            }
             if (_configuration.StatusFieldName != null)
             {
                 var statusDefinitionId = (Guid)genericBusinessEntity.FieldValues.GetRecord(_configuration.StatusFieldName);

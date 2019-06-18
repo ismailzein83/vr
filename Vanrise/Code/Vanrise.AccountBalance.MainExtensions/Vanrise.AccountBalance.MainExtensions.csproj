@@ -62,6 +62,8 @@
   <ItemGroup>
     <Compile Include="AccountBalanceFieldSource\BillingTransactionFieldSourceSetting.cs" />
     <Compile Include="AccountBalanceFieldSource\LiveBalanceFieldSourceSetting.cs" />
+    <Compile Include="GenericSendEmailActionDefinitionSettings.cs" />
+    <Compile Include="GenericFinancialAccountBalanceSetting.cs" />
     <Compile Include="VRObjectTypes\AccountBalancePropertyEvaluator.cs" />
     <Compile Include="AccountUsagePeriods\DailyAccountUsagePeriod.cs" />
     <Compile Include="AccountUsagePeriods\ThirtyMinAccountUsagePeriod.cs" />
