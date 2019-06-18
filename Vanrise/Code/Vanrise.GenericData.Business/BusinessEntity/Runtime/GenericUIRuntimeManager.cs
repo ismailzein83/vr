@@ -102,7 +102,7 @@ namespace Vanrise.GenericData.Business
         public T BuildRuntimeField<T>(GenericUIField field, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, Guid dataRecordTypeId) where T : GenericUIRuntimeField
         {
             var runtimeField = Activator.CreateInstance<T>();
-            runtimeField.FieldTitle = !string.IsNullOrEmpty(field.FieldTitle) ? field.FieldTitle : GetFieldTitle(field.FieldPath, dataRecordTypeFieldsByName, dataRecordTypeId); 
+            runtimeField.FieldTitle = field.FieldTitle; //!string.IsNullOrEmpty(field.FieldTitle) ? field.FieldTitle : GetFieldTitle(field.FieldPath, dataRecordTypeFieldsByName, dataRecordTypeId); 
             runtimeField.FieldPath = field.FieldPath;
             runtimeField.FieldViewSettings = field.FieldViewSettings;
             runtimeField.FieldType = GetFieldType(field.FieldPath, dataRecordTypeFieldsByName, dataRecordTypeId);
