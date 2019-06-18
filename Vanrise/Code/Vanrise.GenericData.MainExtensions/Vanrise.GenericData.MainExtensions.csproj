@@ -128,6 +128,7 @@
     <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\GenericBESerialNumberManager.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\SerialNumberOnBeforeInsertHandler.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\GenericBEDefinitionView.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\GenericItemInformationView.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\HistoryGenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\CallRestAPIEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ConditionalRuleContainerSetting.cs" />
