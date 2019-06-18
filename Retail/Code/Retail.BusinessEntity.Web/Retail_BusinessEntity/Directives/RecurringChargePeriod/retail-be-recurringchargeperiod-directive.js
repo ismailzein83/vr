@@ -59,9 +59,7 @@ app.directive('retailBeRecurringchargeperiodDirective', ['UtilsService', 'VRUIUt
                             if (fieldValue != undefined) {
                                 recurringChargePeriodDirectivePayload = {
                                     selectedValues: {
-                                        RecurringChargePeriod: {
-                                            Settings: fieldValue.Settings
-                                        }
+                                        RecurringChargePeriod: fieldValue
                                     }
                                 };
                             }
