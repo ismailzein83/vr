@@ -3,8 +3,10 @@
     <vr-columns width="fullrow">
         <vr-list maxitemsperrow="1">
             <vr-listitem ng-show="ctrl.totalVoiceAmount!=undefined"><vr-label>Rule.TotalVoiceAmount = {{ ctrl.totalVoiceAmount }}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.durationInSeconds!=undefined"><vr-label>Rule.DurationInSeconds = {{ ctrl.durationInSeconds }}</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.totalVoiceTaxValue!=undefined"><vr-label>{{ ctrl.totalVoiceTaxValue }} = Rule.TotalVoiceTaxValue</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.totalSMSAmount!=undefined"><vr-label> Rule.TotalSMSAmount = {{ ctrl.totalSMSAmount }}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.numberOfSMS!=undefined"><vr-label>Rule.NumberOfSMS = {{ ctrl.numberOfSMS }}</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.totalSMSTaxValue!=undefined"><vr-label>{{ ctrl.totalSMSTaxValue }} = Rule.TotalSMSTaxValue</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.totalTransactionAmount!=undefined"><vr-label> Rule.TotalTransactionAmount = {{ ctrl.totalTransactionAmount }}</vr-label></vr-listitem>
             <vr-listitem ng-show="ctrl.totalTransactionTaxValue!=undefined"><vr-label>{{ ctrl.totalTransactionTaxValue }} = Rule.TotalTransactionTaxValue</vr-label></vr-listitem>

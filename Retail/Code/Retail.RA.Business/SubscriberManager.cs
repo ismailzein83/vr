@@ -38,7 +38,7 @@ namespace Retail.RA.Business
                     if (subscriber.FieldValues != null && subscriber.FieldValues.Count > 0)
                     {
                         var msisdnValue = subscriber.FieldValues.GetRecord("MSISDN");
-                        if (msisdnValue != null)
+                        if (msisdnValue != null && !subscribers.ContainsKey(msisdnValue.ToString()))
                         {
                             subscribers.Add(msisdnValue.ToString(), new SubscriberItem()
                             {

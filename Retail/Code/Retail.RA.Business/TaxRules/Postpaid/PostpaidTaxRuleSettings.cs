@@ -18,23 +18,29 @@ namespace Retail.RA.Business
             StringBuilder description = new StringBuilder();
             if (VoiceSettings != null)
             {
-                if(VoiceSettings.ChargeType == PostpaidVoiceTaxChargeType.Overall && VoiceSettings.TaxPercentage.HasValue)
+                if (VoiceSettings.ChargeType == PostpaidVoiceTaxChargeType.Overall && VoiceSettings.TaxPercentage.HasValue)
                 {
                     description.Append(string.Format("Overall Postpaid Voice Tax Percentage: {0}.", VoiceSettings.TaxPercentage.Value));
                 }
-                else if(VoiceSettings.ChargeType == PostpaidVoiceTaxChargeType.PerMinute && VoiceSettings.TaxPerMinute.HasValue)
+                else if (VoiceSettings.ChargeType == PostpaidVoiceTaxChargeType.PerMinute && VoiceSettings.TaxPerMinute.HasValue)
                 {
+                    if (description.Length > 0)
+                        description.Append(" ");
                     description.Append(string.Format("Postpaid Voice Tax Per Minute: {0}.", VoiceSettings.TaxPerMinute.Value));
                 }
             }
-            if(SMSSettings!=null)
+            if (SMSSettings != null)
             {
                 if (SMSSettings.ChargeType == PostpaidSMSTaxChargeType.Overall && SMSSettings.TaxPercentage.HasValue)
                 {
+                    if (description.Length > 0)
+                        description.Append(" ");
                     description.Append(string.Format("Overall Postpaid SMS Tax Percentage: {0}.", SMSSettings.TaxPercentage.Value));
                 }
                 else if (SMSSettings.ChargeType == PostpaidSMSTaxChargeType.PerSMS && SMSSettings.TaxPerSMS.HasValue)
                 {
+                    if (description.Length > 0)
+                        description.Append(" ");
                     description.Append(string.Format("Postpaid SMS Tax Per SMS: {0}.", SMSSettings.TaxPerSMS.Value));
                 }
             }
@@ -42,6 +48,8 @@ namespace Retail.RA.Business
             {
                 if (TransactionSettings.TaxPercentage.HasValue)
                 {
+                    if (description.Length > 0)
+                        description.Append(" ");
                     description.Append(string.Format("Overall Postpaid Transaction Tax Percentage: {0}.", TransactionSettings.TaxPercentage.Value));
                 }
             }
@@ -50,24 +58,35 @@ namespace Retail.RA.Business
 
         public void ApplyPostpaidTaxRule(IPostpaidTaxRuleContext context)
         {
-            if(context.TotalVoiceAmount.HasValue && VoiceSettings != null)
+            if (VoiceSettings != null && context.VoiceContext != null)
             {
-                if (VoiceSettings.ChargeType == PostpaidVoiceTaxChargeType.Overall)
-                    context.TotalTaxValue = context.TotalVoiceAmount.Value * VoiceSettings.TaxPercentage.Value / 100;
-                else
-                    //do something
-                    context.TotalTaxValue = 0;
+                if (VoiceSettings.ChargeType == PostpaidVoiceTaxChargeType.Overall && context.VoiceContext.TotalAmount.HasValue && VoiceSettings.TaxPercentage.HasValue)
+                {
+                    context.VoiceContext.TotalTaxValue = context.VoiceContext.TotalAmount.Value * VoiceSettings.TaxPercentage.Value / 100;
+                }
+                else if (VoiceSettings.ChargeType == PostpaidVoiceTaxChargeType.PerMinute && context.VoiceContext.DurationInSeconds.HasValue && VoiceSettings.TaxPerMinute.HasValue)
+                {
+                    context.VoiceContext.TotalTaxValue = (context.VoiceContext.DurationInSeconds.Value / 60) * VoiceSettings.TaxPerMinute.Value;
+                }
             }
-            if(context.TotalSMSAmount.HasValue && SMSSettings != null)
+            if (SMSSettings != null && context.SMSContext != null)
             {
-                if (SMSSettings.ChargeType == PostpaidSMSTaxChargeType.Overall)
-                    context.TotalTaxValue = context.TotalSMSAmount.Value * SMSSettings.TaxPercentage.Value / 100;
-                else
-                    //do something
-                    context.TotalTaxValue = 0;
+                if (SMSSettings.ChargeType == PostpaidSMSTaxChargeType.Overall && context.SMSContext.TotalAmount.HasValue && SMSSettings.TaxPercentage.HasValue)
+                {
+                    context.SMSContext.TotalTaxValue = context.SMSContext.TotalAmount.Value * SMSSettings.TaxPercentage.Value / 100;
+                }
+                else if (SMSSettings.ChargeType == PostpaidSMSTaxChargeType.PerSMS && context.SMSContext.NumberOfSMS.HasValue && SMSSettings.TaxPerSMS.HasValue)
+                {
+                    context.SMSContext.TotalTaxValue = context.SMSContext.NumberOfSMS.Value * SMSSettings.TaxPerSMS.Value;
+                }
             }
-            if (context.TotalTransactionAmount.HasValue && TransactionSettings != null)
-                context.TotalTaxValue = context.TotalTransactionAmount.Value * TransactionSettings.TaxPercentage.Value / 100;
+            if (TransactionSettings != null && context.TransactionContext != null)
+            {
+                if (TransactionSettings.TaxPercentage.HasValue && context.TransactionContext.TotalAmount.HasValue)
+                {
+                    context.TransactionContext.TotalTaxValue = context.TransactionContext.TotalAmount.Value * TransactionSettings.TaxPercentage.Value / 100;
+                }
+            }
         }
     }
 

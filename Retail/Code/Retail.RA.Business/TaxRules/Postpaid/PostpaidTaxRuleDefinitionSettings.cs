@@ -10,10 +10,9 @@ namespace Retail.RA.Business
     public class PostpaidTaxRuleDefinitionSettings : GenericRuleDefinitionSettings
     {
         public override Guid ConfigId { get { return new Guid("34F5527C-E05D-49BC-9359-8CBD889EB224"); } }
-
         public override List<string> GetFieldNames()
         {
-            return new List<string> { };
+            return new List<string> { "DurationInSeconds", "TotalVoiceAmount", "TotalVoiceTaxValue", "NumberOfSMS", "TotalSMSAmount", "TotalSMSTaxValue", "TotalTransactionAmount", "TotalTransactionTaxValue" };
         }
     }
 }

@@ -9,18 +9,35 @@ namespace Retail.RA.Business
 {
     public class PostpaidTaxRuleContext : IPostpaidTaxRuleContext
     {
-        public decimal? TotalVoiceAmount { get; set; }
-        public decimal? TotalSMSAmount { get; set; }
-        public decimal? TotalTransactionAmount { get; set; }
-        public decimal? TotalTaxValue { set; get; }
+        public PostpaidTaxRuleVoiceContext VoiceContext { get; set; }
+        public PostpaidTaxRuleSMSContext SMSContext { get; set; }
+        public PostpaidTaxRuleTransactionContext TransactionContext { get; set; }
         public IVRRule Rule { get; set; }
     }
 
     public interface IPostpaidTaxRuleContext : IRuleExecutionContext
     {
-        decimal? TotalVoiceAmount { get; }
-        decimal? TotalSMSAmount { get; }
-        decimal? TotalTransactionAmount { get; }
-        decimal? TotalTaxValue { get; set; }
+        PostpaidTaxRuleVoiceContext VoiceContext { get;}
+        PostpaidTaxRuleSMSContext SMSContext { get; }
+        PostpaidTaxRuleTransactionContext TransactionContext { get; }
+    }
+
+    public class PostpaidTaxRuleVoiceContext
+    {
+        public decimal? DurationInSeconds { get; set; }
+        public decimal? TotalAmount { get; set; }
+        public decimal TotalTaxValue { get; set; }
+    }
+    public class PostpaidTaxRuleSMSContext
+    {
+        public int? NumberOfSMS { get; set; }
+        public decimal? TotalAmount { get; set; }
+        public decimal TotalTaxValue { get; set; }
+
+    }
+    public class PostpaidTaxRuleTransactionContext
+    {
+        public decimal? TotalAmount { get; set; }
+        public decimal TotalTaxValue { get; set; }
     }
 }
