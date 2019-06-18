@@ -418,9 +418,16 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             var endTemplate = '</div>';
 
             var labelTemplate = '';
-            var n = 0;
-            if (attrs.label != undefined)
-                labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
+			var n = 0;
+
+			var label = attrs.label;
+			if (attrs.localizedlabel != undefined && VRLocalizationService.isLocalizationEnabled()) {
+			   label = VRLocalizationService.getResourceValue(attrs.localizedlabel, label);
+			}
+
+			if (label != undefined)
+			  labelTemplate = '<vr-label>' + label + '</vr-label>';
+
             var icontemplate = "";
             if (attrs.type == 'date' || attrs.type == 'dateTime' || attrs.type == 'dateHour' || attrs.type == 'longDateTime' || attrs.type == 'yearMonth') {
                 n++;
