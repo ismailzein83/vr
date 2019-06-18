@@ -47,13 +47,13 @@ namespace Vanrise.GenericData.Business
             {
                 genericFinancialAccount.FinancialAccountId = genericBusinessEntity.FieldValues.GetRecord(_configuration.FinancialAccountIdFieldName) as string;
             }
-            if (_configuration.CurrencyFieldName != null)
+            if (_configuration.CurrencyIdFieldName != null)
             {
-                genericFinancialAccount.CurrencyId = (int)genericBusinessEntity.FieldValues.GetRecord(_configuration.CurrencyFieldName);
+                genericFinancialAccount.CurrencyId = (int)genericBusinessEntity.FieldValues.GetRecord(_configuration.CurrencyIdFieldName);
             }
-            if (_configuration.StatusFieldName != null)
+            if (_configuration.StatusIdFieldName != null)
             {
-                var statusDefinitionId = (Guid)genericBusinessEntity.FieldValues.GetRecord(_configuration.StatusFieldName);
+                var statusDefinitionId = (Guid)genericBusinessEntity.FieldValues.GetRecord(_configuration.StatusIdFieldName);
                 var statusDefinition = new StatusDefinitionManager().GetStatusDefinition(statusDefinitionId);
                 statusDefinition.ThrowIfNull("statusDefinition", statusDefinitionId);
                 statusDefinition.Settings.ThrowIfNull("statusDefinition.Settings", statusDefinitionId);

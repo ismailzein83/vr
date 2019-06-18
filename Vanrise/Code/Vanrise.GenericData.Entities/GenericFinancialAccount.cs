@@ -21,9 +21,9 @@ namespace Vanrise.GenericData.Entities
         public Guid FinancialAccountBEDefinitionId { get; set; }
         public string FinancialAccountIdFieldName { get; set; }
         public string AccountNameFieldName { get; set; }
-        public string StatusFieldName { get; set; }
+        public string StatusIdFieldName { get; set; }
         public string BEDFieldName { get; set; }
         public string EEDFieldName { get; set; }
-        public string CurrencyFieldName { get; set; }
+        public string CurrencyIdFieldName { get; set; }
     }
 }
