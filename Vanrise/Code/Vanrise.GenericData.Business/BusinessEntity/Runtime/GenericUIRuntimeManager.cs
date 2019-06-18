@@ -68,6 +68,10 @@ namespace Vanrise.GenericData.Business
             var runtimeFields = BuildEditorRuntimeFields(fields, dataRecordTypeId);
             return runtimeFields != null && runtimeFields.Count > 0 ? new GenericFieldsRuntimeRowOutput() { Fields = runtimeFields } : null;
         }
+        //public GenericEditorRuntimeField GetGenericEditorRuntimeField(GenericEditorField field, Guid dataRecordTypeId)
+        //{
+        //     return BuildEditorRuntimeField(field, dataRecordTypeId);
+        //}
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(Guid businessEntityId)
         {
             ExtensibleBEItemManager manager = new ExtensibleBEItemManager();
@@ -98,7 +102,7 @@ namespace Vanrise.GenericData.Business
         public T BuildRuntimeField<T>(GenericUIField field, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, Guid dataRecordTypeId) where T : GenericUIRuntimeField
         {
             var runtimeField = Activator.CreateInstance<T>();
-            runtimeField.FieldTitle = field.FieldTitle;
+            runtimeField.FieldTitle = !string.IsNullOrEmpty(field.FieldTitle) ? field.FieldTitle : GetFieldTitle(field.FieldPath, dataRecordTypeFieldsByName, dataRecordTypeId); 
             runtimeField.FieldPath = field.FieldPath;
             runtimeField.FieldViewSettings = field.FieldViewSettings;
             runtimeField.FieldType = GetFieldType(field.FieldPath, dataRecordTypeFieldsByName, dataRecordTypeId);
@@ -112,6 +116,53 @@ namespace Vanrise.GenericData.Business
                 throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, fieldPath));
             return dataRecordTypeField.Type;
         }
+
+        //public string GetFieldTitle(string fieldPath, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, Guid dataRecordTypeId)
+        //{
+        //    DataRecordField dataRecordTypeField;
+        //    if (!dataRecordTypeFieldsByName.TryGetValue(fieldPath, out dataRecordTypeField))
+        //        throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, fieldPath));
+        //    return dataRecordTypeField.Title;
+        //}
+
+        //public GenericEditorRuntimeField GetRequiredParentBEDefData(Guid requiredParentBEDefinitionId)
+        //{
+        //    RequiredParentBEDefData requiredParentBEDefData = null;
+        //    var businessEntityDefinition = new GenericBusinessEntityDefinitionManager().GetGenericBEDefinition(requiredParentBEDefinitionId);
+        //    var genericBEDefinitionSettings = businessEntityDefinition.Settings.CastWithValidate<GenericBEDefinitionSettings>("businessEntityDefinition.Settings", requiredParentBEDefinitionId);
+
+        //    DataRecordType dataRecordType = new DataRecordTypeManager().GetDataRecordType(genericBEDefinitionSettings.DataRecordTypeId);
+        //    dataRecordType.ThrowIfNull("dataRecordType", genericBEDefinitionSettings.DataRecordTypeId);
+
+        //    requiredParentBEDefData = new RequiredParentBEDefData()
+        //    {
+        //        Name = dataRecordType.Name, //or businessEntityDefinition.Title
+        //        Title = businessEntityDefinition.Title,
+        //        ViewerEditor = genericBEDefinitionSettings.ViewerEditor,
+
+        //    };
+        //    return new GenericEditorRuntimeField
+        //    {
+        //        FieldPath = dataRecordType.Name,
+        //        FieldTitle = businessEntityDefinition.Title,
+        //        IsDisabled = false,
+        //        IsRequired = true,
+        //    };
+        //}
+
+        //public class RequiredParentBEDefData
+        //{
+        //    public string Name { get; set; }
+
+        //    public string Title { get; set; }
+
+        //    public string ViewerEditor { get; set; }
+
+        //    public DataRecordField DataRecordField { get; set; }
+
+        //    public GenericEditorRuntimeField GenericEditorRuntimeField { get; set; }
+        //}
+
         #endregion
 
         #region Private Methods
@@ -300,6 +351,22 @@ namespace Vanrise.GenericData.Business
 
             return genericEditorRuntimeFields;
         }
+
+        //private GenericEditorRuntimeField BuildEditorRuntimeField(GenericEditorField field, Guid dataRecordTypeId)
+        //{
+        //    var dataRecordTypeManager = new DataRecordTypeManager();
+        //    var dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
+        //    if (dataRecordTypeFields == null)
+        //        throw new NullReferenceException($"fields of DataRecordType '{dataRecordTypeId}'");
+
+        //    List<GenericEditorRuntimeField> genericEditorRuntimeFields = new List<GenericEditorRuntimeField>();
+        //    var runtimeField = BuildRuntimeField<GenericEditorRuntimeField>(field, dataRecordTypeFields, dataRecordTypeId);
+        //    runtimeField.IsRequired = field.IsRequired;
+        //    runtimeField.IsDisabled = field.IsDisabled;
+        //    //runtimeField.IsDisabledOnEdit = field.IsDisabledOnEdit;
+
+        //    return runtimeField;
+        //}
 
         #endregion
 
