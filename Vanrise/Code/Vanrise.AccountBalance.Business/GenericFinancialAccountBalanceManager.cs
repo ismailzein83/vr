@@ -30,7 +30,7 @@ namespace Vanrise.AccountBalance.Business
             Vanrise.AccountBalance.Entities.AccountInfo accountInfo = new Vanrise.AccountBalance.Entities.AccountInfo
             {
                 Name = financialAccount.Name,
-                StatusDescription = new Vanrise.Common.Business.StatusDefinitionManager().GetStatusDefinitionName(financialAccount.Status),
+               // StatusDescription = new Vanrise.Common.Business.StatusDefinitionManager().GetStatusDefinitionName(financialAccount.Status),
                 CurrencyId = financialAccount.CurrencyId,
                 BED = financialAccount.BED,
                 EED = financialAccount.EED,
