@@ -242,8 +242,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Cpt Request")]
         [EntitySchemaName("StCpt")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [CompletedStep("StStepId")]
+        [CompletedStepId("2A290E4F-A034-46A5-95BF-E0C8ED760805")]
         CptRequest = 28,
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
