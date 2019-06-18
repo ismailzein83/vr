@@ -16,8 +16,8 @@ namespace Vanrise.Common.Business
         public List<VRIconPath> GetVRIconPathsInfo(List<VRIconVirtualPath> paths)
         {
             List<VRIconPath> fileInfos = new List<VRIconPath>();
-
-            foreach(var path in paths)
+            paths.ThrowIfNull("Icon paths");
+            foreach (var path in paths)
             {
                 string pathValue = Utilities.GetEnumDescription<VRIconVirtualPath>(path);
                 string physicalPath = VRWebContext.MapVirtualToPhysicalPath(pathValue);
