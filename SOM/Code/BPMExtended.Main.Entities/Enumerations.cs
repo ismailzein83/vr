@@ -56,7 +56,7 @@ namespace BPMExtended.Main.Entities
         [CompletedStep("StStepId")]
         [CompletedStepId("CEBCB883-84AA-4183-9938-817E711EB2BF")]
         TelephonyLineTermination = 1,
-
+         
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Telephony Line Moving Same Switch")]
         [EntitySchemaName("StLineMovingSameSwitchRequest")]
