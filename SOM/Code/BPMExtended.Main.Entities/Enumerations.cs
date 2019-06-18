@@ -292,17 +292,17 @@ namespace BPMExtended.Main.Entities
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Line Blocking")]
-        [EntitySchemaName("StLineBlocking")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [EntitySchemaName("StLineBlock")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("9ACA0E2B-4D75-4F13-A486-C2674D2F8B0F")]
         LineBlocking = 35,
 
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Line Unblocking")]
-        [EntitySchemaName("StLineUnblocking")]
-        [CompletedStep("")]
-        [CompletedStepId("")]
+        [EntitySchemaName("StLineUnblock")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("A7845FA8-8454-492E-908C-90B9E309C9FB")]
         LineUnblocking = 36,
         
         [Description("Update Customer Category")]

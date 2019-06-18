@@ -18,9 +18,10 @@ namespace BPMExtended.Main.Business
             }
         }
 
-        const string welcomeStep = "2ED78E9D-7567-41D0-BB49-099A698830EA";
-        const string attachmentstep = "AE91CDB4-459B-4059-A238-74FC00587A7F";
-        const string completedStep = "F8545214-789B-4624-B528-46FBB4C27542";
+        const string welcomeStep = "1109C15B-9A13-4CE0-AFCA-467DFAD399DD";
+        const string attachmentstep = "A934D243-BEA2-42F1-947A-906A18F1BED6";
+        const string submittedtoom = "D674711D-9AC1-4C6D-A9EC-1E0546DAADAF";
+        const string completedStep = "9ACA0E2B-4D75-4F13-A486-C2674D2F8B0F";
         public string GetNextStep(string id, string currentStepId)
         {
 
@@ -28,7 +29,8 @@ namespace BPMExtended.Main.Business
             switch (currentStepId)
             {
                 case welcomeStep: nextStepId = attachmentstep; break;
-                case attachmentstep: nextStepId = completedStep; break;
+                case attachmentstep: nextStepId = submittedtoom; break;
+                case submittedtoom: nextStepId = completedStep; break;
             }
             return nextStepId;
         }
