@@ -103,6 +103,33 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public List<string> GetIsRequiredPasswordServicesIds()// MYA: To be tested 
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            var isRequiredPasswordServices = new List<string>();
+            string publicId;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StSpecialServiceCatalog");
+            esq.AddColumn("Id");
+            esq.AddColumn("StServiceId");
+            esq.AddColumn("StIsRequiresChangePassword");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StIsRequiresChangePassword", true);
+
+            esq.Filters.Add(esqFirstFilter);
+
+            entities = esq.GetEntityCollection(BPM_UserConnection);
+            foreach (Entity entity in entities)
+            {
+                publicId = (string)entity.GetColumnValue("StServiceId");
+                isRequiredPasswordServices.Add(publicId);
+            }
+
+            return isRequiredPasswordServices;
+        }
+
         public string GetPABXServiceId()
         {
             EntitySchemaQuery esq;
