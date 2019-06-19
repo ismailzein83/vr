@@ -1571,11 +1571,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                        }
 	                    }
 	                    dataItem.expandableRowTemplate = expandableRowTemplate;
-	                    setTimeout(function () {
-	                        dataItem.showRow = true;
-	                        dataItem.isRowExpanded = true;
-	                        scope.$apply();
-	                    }, 300);
+	                    dataItem.showRow = true;
+	                    dataItem.isRowExpanded = true;
 	                }
 	            };
 
