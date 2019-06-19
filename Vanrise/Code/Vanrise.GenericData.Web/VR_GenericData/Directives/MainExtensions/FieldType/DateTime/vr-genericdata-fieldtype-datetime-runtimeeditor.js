@@ -19,13 +19,6 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             },
             controllerAs: 'runtimeEditorCtrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
             }
@@ -33,6 +26,9 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
 
         function dateTimeCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
+
+            var fieldName;
+            var genericContext;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -83,6 +79,16 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                 $scope.scopeModel.validateValue = function () {
                     return customValidate();
                 };
+
+                $scope.scopeModel.onDateChanged = function () {
+
+                    if (genericContext != undefined && genericContext.notifyFieldValueChanged != undefined && typeof (genericContext.notifyFieldValueChanged) == "function") {
+                        var changedField = {
+                            fieldName: fieldName, fieldValues: [dateFormat($scope.scopeModel.value, "yyyy-mm-dd'T'hh:MM:ss")]
+                        };
+                        genericContext.notifyFieldValueChanged(changedField);
+                    }
+                };
             }
 
             function getDirectiveAPI() {
@@ -99,8 +105,10 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                         $scope.scopeModel.label = payload.fieldTitle;
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
+                        fieldName = payload.fieldName;
                         var dataTypes = UtilsService.getArrayEnum(VR_GenericData_DateTimeDataTypeEnum);
                         $scope.scopeModel.fieldType = UtilsService.getItemByVal(dataTypes, fieldType.DataType, 'value');
+                        genericContext = payload.genericContext;
                     }
 
                     if (fieldValue != undefined) {
@@ -189,24 +197,24 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             }
             else {
                 return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 4}}">'
-                        + '<vr-row>'
-                            + getSingleSelectionModeTemplate()
-                            + '<vr-columns withemptyline>'
-                                + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
-                            + '</vr-columns>'
-                        + '</vr-row>'
-                        + '<vr-row>'
-                            + '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 2}}">'
-                                + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem.displayValue}}</vr-datalist>'
-                            + '</vr-columns>'
-                        + '</vr-row>'
+                    + '<vr-row>'
+                    + getSingleSelectionModeTemplate()
+                    + '<vr-columns withemptyline>'
+                    + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
+                    + '</vr-columns>'
+                    + '</vr-row>'
+                    + '<vr-row>'
+                    + '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 2}}">'
+                    + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem.displayValue}}</vr-datalist>'
+                    + '</vr-columns>'
+                    + '</vr-row>'
                     + '</vr-columns>';
             }
 
             function getSingleSelectionModeTemplate() {
                 return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="scopeModel.fieldType != undefined && scopeModel.label != undefined ">'
-                            + '<vr-label>{{scopeModel.label}}</vr-label>'
-                            + '<vr-directivewrapper directive="\'vr-datetimepicker\'" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
+                    + '<vr-label>{{scopeModel.label}}</vr-label>'
+                    + '<vr-directivewrapper directive="\'vr-datetimepicker\'" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" onvaluechanged="scopeModel.onDateChanged()" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                     + '</vr-columns>';
             }
         }

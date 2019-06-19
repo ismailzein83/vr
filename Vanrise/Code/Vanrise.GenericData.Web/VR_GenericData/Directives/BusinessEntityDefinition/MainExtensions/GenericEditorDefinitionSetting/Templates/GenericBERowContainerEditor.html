@@ -11,10 +11,13 @@
                         </vr-row>
                         <vr-row>
                             <vr-columns width="fullrow">
-                                <vr-datalist maxitemsperrow="1" datasource="scopeModel.addedFields" isitemdraggable onremoveitem="scopeModel.onRemoveField">
+                                <vr-datalist datasource="scopeModel.addedFields" onremoveitem="scopeModel.onRemoveField" maxitemsperrow="1" isitemdraggable collapsible>
                                     <vr-row>
                                         <vr-columns width="fullrow">
-                                            <vr-genericdata-genericbe-editordefinition-settings on-ready="dataItem.onGenericBEFieldEditorDefinitionDirectiveReady" customlabel="Field Type" normal-col-num="4"></vr-genericdata-genericbe-editordefinition-settings>
+                                            <vr-genericdata-genericbe-editordefinition-settings on-ready="dataItem.onGenericBEFieldEditorDefinitionDirectiveReady"
+                                                                                                onselectionchanged="dataItem.onFieldEditorDefinitionSelectionChanged"
+                                                                                                customlabel="Field Type" normal-col-num="4">
+                                            </vr-genericdata-genericbe-editordefinition-settings>
                                         </vr-columns>
                                     </vr-row>
                                 </vr-datalist>

@@ -24,7 +24,7 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
         }
-
+        
         function editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
@@ -174,6 +174,15 @@
             return false;
         }
 
+        function tryUpdateAllFieldValuesByFieldNames(changedFields, allFieldValuesByFieldNames) {
+            var isFieldsChanged = false;
+            for (var fieldName in changedFields) {
+                isFieldsChanged = isFieldsChanged || tryUpdateAllFieldValuesByFieldName(fieldName, changedFields[fieldName], allFieldValuesByFieldNames);
+            }
+
+            return isFieldsChanged;
+        }
+
         //function registerObjectTrackingDrillDownToGenericBusinessEntity() {
         //    var drillDownDefinition = {};
 
@@ -214,7 +223,8 @@
             openBulkActionsEditor: openBulkActionsEditor,
             sendEmailGenericBE: sendEmailGenericBE,
             openErrorMessageEditor: openErrorMessageEditor,
-            tryUpdateAllFieldValuesByFieldName: tryUpdateAllFieldValuesByFieldName
+            tryUpdateAllFieldValuesByFieldName: tryUpdateAllFieldValuesByFieldName,
+            tryUpdateAllFieldValuesByFieldNames: tryUpdateAllFieldValuesByFieldNames
             //registerObjectTrackingDrillDownToGenericBusinessEntity: registerObjectTrackingDrillDownToGenericBusinessEntity
             //getDrillDownDefinition: getDrillDownDefinition
         });

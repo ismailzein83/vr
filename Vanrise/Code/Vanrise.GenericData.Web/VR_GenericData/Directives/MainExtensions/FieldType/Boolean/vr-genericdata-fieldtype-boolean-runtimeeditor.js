@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
@@ -18,19 +19,16 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        compile: function (element, attrs) {
-            return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                }
-            };
-        },
         template: function (element, attrs) {
             return getDirectiveTemplate(attrs);
         }
     };
 
     function booleanCtor(ctrl, $scope, $attrs) {
+        this.initializeController = initializeController;
+
+        var fieldName;
+        var genericContext;
 
         function initializeController() {
 
@@ -38,6 +36,9 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
             
             if (ctrl.selectionmode != 'single') {
                 defineScopeForMultiModes();
+            }
+            else {
+                defineScopeForSingleMode();
             }
 
             defineAPI();
@@ -65,19 +66,33 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
             };
         }
 
+        function defineScopeForSingleMode() {
+            $scope.scopeModel.onSwitchChanged = function () {
+
+                if (genericContext != undefined && genericContext.notifyFieldValueChanged != undefined && typeof (genericContext.notifyFieldValueChanged) == "function") {
+                    var valueAsArray = [$scope.scopeModel.value];
+                    var changedField = { fieldName: fieldName, fieldValues: valueAsArray };
+                    genericContext.notifyFieldValueChanged(changedField);
+                }
+            };
+        }
+
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
-                var fieldType;
-                var fieldValue;
                 $scope.scopeModel.values = [];
                 $scope.scopeModel.value = undefined;
+
+                var fieldType;
+                var fieldValue;
 
                 if (payload != undefined) {
                     $scope.scopeModel.label = payload.fieldTitle;
                     fieldType = payload.fieldType;
                     fieldValue = payload.fieldValue;
+                    fieldName = payload.fieldName;
+                    genericContext = payload.genericContext;
                 }
 
                 if (fieldValue != undefined) {
@@ -123,12 +138,10 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
-
-        this.initializeController = initializeController;
-
     }
 
     function getDirectiveTemplate(attrs) {
+
         if (attrs.selectionmode == 'single') {
             return getSingleSelectionModeTemplate();
         }
@@ -151,7 +164,7 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
         function getSingleSelectionModeTemplate() {
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="scopeModel.label != undefined ">'
                         + '<vr-label>{{scopeModel.label}}</vr-label>'
-                        + '<vr-validator validate="scopeModel.validateValue()"><vr-switch value="scopeModel.value"></vr-switch></vr-validator>'
+                + '<vr-validator validate="scopeModel.validateValue()"><vr-switch value="scopeModel.value" onvaluechanged="scopeModel.onSwitchChanged"></vr-switch></vr-validator>'
                 + '</vr-columns>';
         }
     }

@@ -62,6 +62,13 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetGenericEditorConditionalRulesConfigs")]
+        public IEnumerable<GenericEditorConditionalRulesConfig> GetGenericEditorConditionalRulesConfigs()
+        {
+            return _manager.GetGenericEditorConditionalRulesConfigs();
+        }
+
+        [HttpGet]
         [Route("GetGenericBEFilterDefinitionSettingsConfigs")]
         public IEnumerable<GenericBEFilterDefinitionSettingsConfig> GetGenericBEFilterDefinitionSettingsConfigs()
         {
@@ -172,6 +179,24 @@ namespace Vanrise.GenericData.Web.Controllers
         public IEnumerable<GenericBEAdditionalSettingsConfig> GetGenericBEAdditionalSettingsConfigs()
         {
             return _manager.GetGenericBEAdditionalSettingsConfigs();
+        }
+
+        [HttpGet]
+        [Route("MyAPICall")]
+        public MyAPICallOutput MyAPICall()
+        {
+            return new MyAPICallOutput()
+            {
+                myName = "Ali",
+                 myInt = 15
+            };
+        }
+
+        public class MyAPICallOutput
+        {
+            public string myName { get; set; }
+
+            public int myInt { get; set; }
         }
 
     }

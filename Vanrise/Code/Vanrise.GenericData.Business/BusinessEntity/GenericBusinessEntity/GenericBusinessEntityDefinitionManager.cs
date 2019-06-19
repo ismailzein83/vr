@@ -270,7 +270,13 @@ namespace Vanrise.GenericData.Business
 			return extensionConfiguration.GetExtensionConfigurations<GenericBEViewDefinitionSettingsConfig>(GenericBEViewDefinitionSettingsConfig.EXTENSION_TYPE);
 		}
 
-		public IEnumerable<GenericBEEditorDefinitionSettingsConfig> GetGenericBEEditorDefinitionSettingsConfigs(ContainerType containerType)
+        public IEnumerable<GenericEditorConditionalRulesConfig> GetGenericEditorConditionalRulesConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<GenericEditorConditionalRulesConfig>(GenericEditorConditionalRulesConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<GenericBEEditorDefinitionSettingsConfig> GetGenericBEEditorDefinitionSettingsConfigs(ContainerType containerType)
 		{
 			var extensionConfiguration = new ExtensionConfigurationManager();
 			var genericBEEditorDefinitionSettingsConfigs = extensionConfiguration.GetExtensionConfigurations<GenericBEEditorDefinitionSettingsConfig>(GenericBEEditorDefinitionSettingsConfig.EXTENSION_TYPE);

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    editorDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_ContainerTypeEnum'];
+    genericEditorConditionalRulesDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
 
-    function editorDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_ContainerTypeEnum) {
+    function genericEditorConditionalRulesDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -12,32 +12,30 @@
                 normalColNum: '@',
                 label: '@',
                 customvalidate: '=',
-                isnotrequired: '=',
                 showremoveicon: '@',
-                customlabel: '@',
-                onselectionchanged: '='
+                customlabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new EditorSettings($scope, ctrl, $attrs);
+                var ctor = new ConditionalRulesCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "editorDefinitionCtrl",
+            controllerAs: "genericEditorConditionalRuleCtrl",
             bindToController: true,
             template: function (element, attrs) {
-                return getTamplate(attrs);
+                return getTemplate(attrs);
             }
         };
 
-        function EditorSettings($scope, ctrl, $attrs) {
+        function ConditionalRulesCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
 
             var directiveAPI;
             var directiveReadyDeferred;
-            var directivePayload;
             var context;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -50,11 +48,12 @@
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingDirective = value;
-                    };
+
                     var directivepPayload = {
                         context: getContext()
+                    };
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivepPayload, setLoader, directiveReadyDeferred);
                 };
@@ -62,45 +61,41 @@
 
             function defineAPI() {
                 var api = {};
-                var serviceSettings;
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
-                    var promises = [];
-                    var settings;
-                    var containerType;
+                    var genericEditorConditionalRule;
 
                     if (payload != undefined) {
-                        settings = payload.settings;
+                        genericEditorConditionalRule = payload.genericEditorConditionalRule;
                         context = payload.context;
-                        containerType = payload.containerType;
                     }
 
-                    if (containerType == undefined)
-                        containerType = VR_GenericData_ContainerTypeEnum.Root.value;
+                    var promises = [];
 
-                    if (settings != undefined) {
+                    if (genericEditorConditionalRule != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getSettingsConfigsPromise = getGenericBEEditorDefinitionSettingsConfigs();
-                    promises.push(getSettingsConfigsPromise);
+                    var getGenericEditorConditionalRulesConfigsPromise = getGenericEditorConditionalRulesConfigs();
+                    promises.push(getGenericEditorConditionalRulesConfigsPromise);
 
-                    function getGenericBEEditorDefinitionSettingsConfigs() {
-                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEEditorDefinitionSettingsConfigs(containerType).then(function (response) {
+                    function getGenericEditorConditionalRulesConfigs() {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericEditorConditionalRulesConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (settings != undefined) {
+                                if (genericEditorConditionalRule != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, settings.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, genericEditorConditionalRule.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
                     }
+
                     function loadDirective() {
                         directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -110,12 +105,11 @@
                             directiveReadyDeferred = undefined;
 
                             var directivePayload = {
-                                context: getContext(),
-                                containerType: containerType
+                                context: getContext()
                             };
-                            if (settings != undefined) {
-                                directivePayload.settings = settings;
-                            };
+                            if (genericEditorConditionalRule != undefined) {
+                                directivePayload.genericEditorConditionalRule = genericEditorConditionalRule;
+                            }
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -127,8 +121,8 @@
 
                 api.getData = function () {
                     var data;
-                    if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
 
+                    if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
@@ -137,10 +131,10 @@
                     return data;
                 };
 
-                if (ctrl.onReady != null) {
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
-                }
             }
+
             function getContext() {
                 var currentContext = context;
                 if (currentContext == undefined)
@@ -149,19 +143,19 @@
             }
         }
 
-        function getTamplate(attrs) {
-            var label = "Editor Type";
+        function getTemplate(attrs) {
+            var label = "Conditional Rule";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
             var isrequired = attrs.isnotrequired == undefined ? ' isrequired="true"' : ' ';
             var hideremoveicon = attrs.showremoveicon == undefined ? 'hideremoveicon' : ' ';
             var template =
                 '<vr-row>'
-                + '<vr-columns colnum="{{editorDefinitionCtrl.normalColNum}}">'
+                + '<vr-columns colnum="{{genericEditorConditionalRuleCtrl.normalColNum}}">'
                 + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                 + ' datasource="scopeModel.templateConfigs"'
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
-                + ' datavaluefield="ExtensionConfigurationId" onselectionchanged="editorDefinitionCtrl.onselectionchanged"'
+                + ' datavaluefield="ExtensionConfigurationId"'
                 + ' datatextfield="Title"'
                 + ' label="' + label + '"'
                 + isrequired
@@ -171,12 +165,11 @@
                 + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{editorDefinitionCtrl.normalColNum}}" isrequired="editorDefinitionCtrl.isrequired" customvalidate="editorDefinitionCtrl.customvalidate">'
+                + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{genericEditorConditionalRuleCtrl.normalColNum}}" isrequired="genericEditorConditionalRuleCtrl.isrequired" customvalidate="genericEditorConditionalRuleCtrl.customvalidate">'
                 + '</vr-directivewrapper>';
             return template;
         }
     }
 
-    app.directive('vrGenericdataGenericbeEditordefinitionSettings', editorDefinitionSettingsDirective);
-
+    app.directive('vrGenericdataConditionalrulecontainereditorsettingConditionalrules', genericEditorConditionalRulesDirective);
 })(app);

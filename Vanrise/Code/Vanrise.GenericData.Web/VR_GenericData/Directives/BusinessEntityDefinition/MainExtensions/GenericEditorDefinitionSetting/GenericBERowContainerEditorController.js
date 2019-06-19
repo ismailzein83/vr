@@ -33,6 +33,7 @@
             $scope.scopeModel.addRowContainer = function () {
                 var fieldEditorDefinitionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 var field = prepareFieldData(undefined, fieldEditorDefinitionLoadPromiseDeferred);
+                field.expanded = true;
                 $scope.scopeModel.addedFields.push(field);
             };
 
@@ -102,7 +103,7 @@
                         var fieldEditorDefinitionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(fieldEditorDefinitionLoadPromiseDeferred.promise);
                         var fieldData = prepareFieldData(currentField, fieldEditorDefinitionLoadPromiseDeferred);
-
+                        fieldData.expanded = false;
                         $scope.scopeModel.addedFields.push(fieldData);
                     }
                 }
@@ -137,6 +138,14 @@
 
                 VRUIUtilsService.callDirectiveLoad(fieldData.directiveAPI, payload, fieldEditorDefinitionLoadPromiseDeferred);
             });
+
+            fieldData.onFieldEditorDefinitionSelectionChanged = function (selectedFieldEditor) {
+                fieldData.title = "";
+                if (selectedFieldEditor == undefined)
+                    return; 
+
+                fieldData.title = selectedFieldEditor.Title;
+            };
 
             return fieldData;
         }

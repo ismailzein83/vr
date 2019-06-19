@@ -29,6 +29,8 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
 
             var fieldType;
             var fieldName;
+            var genericContext;
+            var oldValue;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -36,6 +38,9 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
 
                 if (ctrl.selectionmode != 'single') {
                     defineScopeForMultiModes();
+                }
+                else {
+                    defineScopeForSingleMode();
                 }
 
                 $scope.scopeModel.validateValue = function () {
@@ -73,6 +78,21 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
                 };
             }
 
+            function defineScopeForSingleMode() {
+                $scope.scopeModel.onFieldBlur = function () {
+                    if (oldValue == $scope.scopeModel.value)
+                        return;
+
+                    oldValue = $scope.scopeModel.value;
+
+                    if (genericContext != undefined && genericContext.notifyFieldValueChanged != undefined && typeof (genericContext.notifyFieldValueChanged) == "function") {
+                        var valueAsArray = [$scope.scopeModel.value];
+                        var changedField = { fieldName: fieldName, fieldValues: valueAsArray };
+                        genericContext.notifyFieldValueChanged(changedField);
+                    }
+                };
+            }
+
             function defineAPI() {
                 var api = {};
 
@@ -87,6 +107,7 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
                         fieldName = payload.fieldName;
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
+                        genericContext = payload.genericContext;
                     }
 
                     if (fieldValue != undefined) {
@@ -135,24 +156,24 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
                     setFieldValue(fieldValue);
                 };
 
-                function setFieldValue(fieldValue) {
-                    if (ctrl.selectionmode == "dynamic") {
-                        angular.forEach(fieldValue.Values, function (val) {
-                            $scope.scopeModel.values.push(val);
-                        });
-                    }
-                    else if (ctrl.selectionmode == "multiple") {
-                        for (var i = 0; i < fieldValue.length; i++) {
-                            $scope.scopeModel.values.push(fieldValue[i]);
-                        }
-                    }
-                    else {
-                        $scope.scopeModel.value = fieldValue;
-                    }
-                }
-
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function setFieldValue(fieldValue) {
+                if (ctrl.selectionmode == "dynamic") {
+                    angular.forEach(fieldValue.Values, function (val) {
+                        $scope.scopeModel.values.push(val);
+                    });
+                }
+                else if (ctrl.selectionmode == "multiple") {
+                    for (var i = 0; i < fieldValue.length; i++) {
+                        $scope.scopeModel.values.push(fieldValue[i]);
+                    }
+                }
+                else {
+                    $scope.scopeModel.value = fieldValue;
+                }
             }
 
             function getValuesAsNumber(valuesAsString) {
@@ -203,7 +224,8 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService',
 
             function getSingleSelectionModeTemplate() {
                 return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
-                    + '<vr-textbox type="number" label="{{scopeModel.label}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
+                    + '<vr-textbox type="number" label="{{scopeModel.label}}" value="scopeModel.value" onblurtextbox="scopeModel.onFieldBlur" '
+                    + 'customvalidate = "scopeModel.validateValue()" isrequired = "runtimeEditorCtrl.isrequired" ></vr - textbox > '
                     + '</vr-columns>';
             }
         }

@@ -26,6 +26,9 @@
         function GetGenericBEEditorDefinitionSettingsConfigs(containerType) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEEditorDefinitionSettingsConfigs"), { containerType: containerType });
         }
+        function GetGenericEditorConditionalRulesConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericEditorConditionalRulesConfigs"));
+        }
         function GetGenericBEFilterDefinitionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEFilterDefinitionSettingsConfigs"));
         }
@@ -94,6 +97,7 @@
             GetIdFieldTypeForGenericBE: GetIdFieldTypeForGenericBE,
             GetGenericBEViewDefinitionSettingsConfigs: GetGenericBEViewDefinitionSettingsConfigs,
             GetGenericBEEditorDefinitionSettingsConfigs: GetGenericBEEditorDefinitionSettingsConfigs,
+            GetGenericEditorConditionalRulesConfigs: GetGenericEditorConditionalRulesConfigs,
             GetGenericBEFilterDefinitionSettingsConfigs: GetGenericBEFilterDefinitionSettingsConfigs,
             GetGenericBEActionDefinitionSettingsConfigs: GetGenericBEActionDefinitionSettingsConfigs,
             GetGenericBEExtendedSettingsConfigs: GetGenericBEExtendedSettingsConfigs,

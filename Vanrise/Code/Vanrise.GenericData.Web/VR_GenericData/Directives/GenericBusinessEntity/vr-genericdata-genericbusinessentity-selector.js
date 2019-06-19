@@ -37,8 +37,6 @@
         function BusinessentitySelector(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
-            var selectorAPI;
-
             var businessEntityDefinitionId;
             var titleFieldName;
             var idFieldName;
@@ -47,6 +45,8 @@
             var isRemote;
             var isFirstLoad = true;
             var hasEmtyRequiredDependentField;
+
+            var selectorAPI;
 
 
             function initializeController() {
@@ -81,11 +81,13 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var selectedIds;
-                    var selectIfSingleItem;
 
                     var promises = [];
+
+                    var selectedIds;
+                    var selectIfSingleItem;
                     var beRuntimeSelectorFilter;
+
                     if (payload != undefined) {
                         ctrl.fieldTitle = payload.fieldTitle;
                         ctrl.isDisabled = payload.isDisabled;
@@ -115,12 +117,14 @@
                             if (isRemote) {
                                 if (selectedIds != undefined) {
                                     if (isFirstLoad) {
-                                        var fieldFilter = { FieldName: idFieldName, FilterValues: typeof (selectedIds) != "object" ? [selectedIds] : selectedIds };
-                                        if (filter == undefined)
-                                            filter = { FieldFilters: [fieldFilter] };
+                                        if (!Array.isArray(selectedIds))
+                                            selectedIds = [selectedIds];
 
-                                        if (filter.FieldFilters == undefined)
-                                            filter.FieldFilters = [fieldFilter];
+                                        if (filter == undefined) {
+                                            filter = { SelectedIds: selectedIds };
+                                        } else {
+                                            filter.SelectedIds = selectedIds;
+                                        }
                                     }
 
                                     VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
@@ -199,16 +203,14 @@
                     if (isRemote) {
                         var getGenericBusinessEntityInfoPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(getGenericBusinessEntityInfoPromiseDeferred.promise);
+
                         var resetFilter = false;
-
-                        var fieldFilter = { FieldName: idFieldName, FilterValues: typeof (value) != "object" ? [value] : value };
+                        var selectedIds = !Array.isArray(value) ? [value] : value;
                         if (filter == undefined) {
-                            filter = { FieldFilters: [fieldFilter] };
+                            filter = { SelectedIds: [selectedIds] };
                             resetFilter = true;
-                        }
-
-                        if (filter.FieldFilters == undefined) {
-                            filter.FieldFilters = [fieldFilter];
+                        } else {
+                            filter.SelectedIds = [selectedIds];
                             resetFilter = true;
                         }
 
@@ -260,11 +262,12 @@
             }
 
             function searchGenericBE(searchValue) {
+                if (filter != undefined && filter.SelectedIds != undefined)
+                    filter.SelectedIds = undefined;
+
                 return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter), searchValue);
             }
         }
-
-
 
         function getDirectiveTemplate(attrs) {
             var multipleselection = '';

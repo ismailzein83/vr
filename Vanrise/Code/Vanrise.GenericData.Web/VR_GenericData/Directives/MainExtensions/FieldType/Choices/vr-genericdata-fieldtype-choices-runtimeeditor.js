@@ -21,20 +21,12 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                 ctrl.datasource = [];
                 var ctor = new choicesCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-                    }
-                };
-            },
             template: function (element, attrs) {
                 return getTemplate(attrs);
             }
-
         };
 
         function getTemplate(attrs) {
@@ -55,19 +47,43 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
             //var isRequired = (attrs.selectionmode == "single" && attrs.isrequired != undefined) ? 'isrequired="ctrl.isrequired"' : '';
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-            '<vr-select datatextfield="Text" label="{{ctrl.label}}" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" '
+                '<vr-select datatextfield="Text" label="{{ctrl.label}}" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" onselectionchanged="ctrl.onChoiceSelectionChanged"'
                 + multipleselection + ' isrequired="ctrl.isrequired"></vr-select>' +
                 '</vr-columns>';
         }
 
         function choicesCtor(ctrl, $scope, $attrs) {
+            this.initializeController = initializeController;
 
-            var selectorApi;
+            var fieldName;
+            var genericContext;
+
+            var selectorAPI;
+
 
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
-                    selectorApi = api;
+                    selectorAPI = api;
                     defineAPI();
+                };
+
+                if ($attrs.selectionmode == "single") {
+                    defineScopeForSingleMode();
+                }
+            }
+
+            function defineScopeForSingleMode() {
+                ctrl.onChoiceSelectionChanged = function (selectedChoice) {
+
+                    if (genericContext != undefined && genericContext.notifyFieldValueChanged != undefined && typeof (genericContext.notifyFieldValueChanged) == "function") {
+                        var valueAsArray;
+                        if (selectedChoice != undefined) {
+                            valueAsArray = [selectedChoice['Value']];
+                        }
+
+                        var changedField = { fieldName: fieldName, fieldValues: valueAsArray };
+                        genericContext.notifyFieldValueChanged(changedField);
+                    }
                 };
             }
 
@@ -75,7 +91,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                 var api = {};
 
                 api.load = function (payload) {
-                    selectorApi.clearDataSource();
+                    selectorAPI.clearDataSource();
 
                     var filter = {};
                     var fieldType;
@@ -86,6 +102,8 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                         filter = payload.filter;
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
+                        fieldName = payload.fieldName;
+                        genericContext = payload.genericContext;
                     }
 
                     if (fieldType != undefined) {
@@ -146,8 +164,6 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;

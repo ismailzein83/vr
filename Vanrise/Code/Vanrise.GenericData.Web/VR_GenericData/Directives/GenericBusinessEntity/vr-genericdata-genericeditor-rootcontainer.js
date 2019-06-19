@@ -164,10 +164,9 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
             function buildGenericContext() {
                 var context = {
-                    notifyFieldValueChanged: function (changedField) {  //changedField = {fieldName : 'name', fieldValues : ['value1', 'value2'...] }
+                    notifyFieldValueChanged: function (changedField) { //changedField = {fieldName: 'name', fieldValues: ['value1', 'value2', ...] }
                         var fieldName = changedField.fieldName;
                         var fieldValues = changedField.fieldValues;
-
                         var _promises = [];
 
                         if (!VR_GenericData_GenericBusinessEntityService.tryUpdateAllFieldValuesByFieldName(fieldName, fieldValues, allFieldValuesByFieldNames)) {
@@ -185,13 +184,24 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                         return UtilsService.waitMultiplePromises(_promises);
                     },
 
+                    notifyFieldValuesChanged: function (changedFields) { //changedFields = {'fieldName1': ['value1', 'value2', ...], 'fieldName2': ['value1', 'value2', ...], ... }
+                        if (VR_GenericData_GenericBusinessEntityService.tryUpdateAllFieldValuesByFieldNames(changedFields, allFieldValuesByFieldNames) && runtimeEditorAPI.onFieldValueChanged != undefined && typeof (runtimeEditorAPI.onFieldValueChanged) == "function") {
+                            var promise = runtimeEditorAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                            if (promise != undefined) {
+                                return promise;
+                            }
+                        }
+
+                        return UtilsService.waitMultiplePromises([]);
+                    },
+
                     getFieldValues: function () {
                         var dicFieldValues = {};
                         runtimeEditorAPI.setData(dicFieldValues);
                         return dicFieldValues;
                     },
 
-                    setFieldValues: function (fieldValuesByNameDict) { //fieldValuesByNamesDict = {'name' :'value1', .... }
+                    setFieldValues: function (fieldValuesByNameDict) { //fieldValuesByNamesDict = {'fieldName' :'value1', .... }
                         if (fieldValuesByNameDict == undefined)
                             return UtilsService.waitMultiplePromises([]);
 

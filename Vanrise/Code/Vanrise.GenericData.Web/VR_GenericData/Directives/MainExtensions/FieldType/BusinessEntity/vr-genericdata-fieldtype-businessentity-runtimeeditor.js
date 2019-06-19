@@ -421,7 +421,6 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     ctrl.onReady(api);
             }
 
-
             function notifyFieldValueChanged(valueToSet) {
                 var _promises = [];
 
