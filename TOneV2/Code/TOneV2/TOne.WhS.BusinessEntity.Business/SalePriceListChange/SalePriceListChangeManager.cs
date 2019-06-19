@@ -255,7 +255,18 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
 
                 var otherRateZoneOwnerPairs = dataManager.GetCustomerRatePreviewZonePairs(input.Query).ToList();
-                var currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Now));
+
+                List<RoutingCustomerInfoDetails> customerInfos = new List<RoutingCustomerInfoDetails>();
+
+                foreach (var zoneCustomerPair in otherRateZoneOwnerPairs)
+                {
+                    customerInfos.Add(new RoutingCustomerInfoDetails
+                    {
+                        CustomerId = zoneCustomerPair.CustomerId,
+                        SellingProductId = carrierAccountManager.GetSellingProductId(zoneCustomerPair.CustomerId)
+                    });
+                }
+                var currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(customerInfos, DateTime.Now));
                 var saleZoneManager = new SaleZoneManager();
 
                 foreach (var otherRateZoneOwner in otherRateZoneOwnerPairs)
@@ -265,6 +276,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     var zoneId = otherRateZoneOwner.ZoneId.Value;
                     var customerId = otherRateZoneOwner.CustomerId;
                     var sellingProductId = carrierAccountManager.GetSellingProductId(customerId);
+
                     var rate = currentRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
                     var countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
                     if (countryId == null)
