@@ -469,6 +469,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 Rate = salePricelistRateChange.Rate,
                 RecentRate = salePricelistRateChange.RecentRate,
                 ChangeType = salePricelistRateChange.ChangeType,
+                //Note = salePricelistRateChange.Note,
                 ServicesId = !salePricelistRateChange.ZoneId.HasValue
                     ? routingProductManager.GetDefaultServiceIds(salePricelistRateChange.RoutingProductId)
                     : routingProductManager.GetZoneServiceIds(salePricelistRateChange.RoutingProductId,
