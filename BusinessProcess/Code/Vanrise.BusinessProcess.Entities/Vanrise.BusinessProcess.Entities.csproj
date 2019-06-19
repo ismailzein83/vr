@@ -100,6 +100,7 @@
     <Compile Include="BPVisualization\BPVisualEventDetail.cs" />
     <Compile Include="BPVisualization\BPVisualEventDetailUpdateInput.cs" />
     <Compile Include="BPVisualization\BPVisuaIEventDetailUpdateOutput.cs" />
+    <Compile Include="ExecuteBPTaskOutput.cs" />
     <Compile Include="ProcessSynchronisation\StructuredProcessSynchronisation.cs" />
     <Compile Include="ProcessSynchronisation\ProcessSynchronisationQuery.cs" />
     <Compile Include="ProcessSynchronisation\ProcessSynchronisationDetail.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="BusinessRules\IRuleTarget.cs" />
     <Compile Include="BusinessRules\BPValidationMessage.cs" />
     <Compile Include="Tasks\BPGenericTaskTypeActionMappingFieldsInput.cs" />
+    <Compile Include="Tasks\BPTaskFilter.cs" />
     <Compile Include="Tasks\BPTaskTypeFilter.cs" />
     <Compile Include="Tasks\BPTaskTypeInfo.cs" />
     <Compile Include="Tasks\BPTaskTypeSettings.cs" />

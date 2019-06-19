@@ -49,13 +49,22 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public bool UpdateTask(long taskId, BPTaskData taskData)
         {
-            int recordsAffected = ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTask]", taskId, taskData!=null ? Serializer.Serialize(taskData) : null);
+            int recordsAffected = ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTask]", taskId, taskData != null ? Serializer.Serialize(taskData) : null);
             return recordsAffected > 0;
         }
 
-        public List<BPTask> GetUpdated(ref object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId)
+        public List<BPTask> GetUpdated(ref object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId, List<BPTaskStatus> excludedStatuses, BPTaskFilter bPTaskFilter)
         {
             List<BPTask> bpTasks = new List<BPTask>();
+            string title = null;
+            string taskTypeIdsAsString = null;
+            var bpTaskStatusesAsString = excludedStatuses != null && excludedStatuses.Count > 0 ? string.Join(",", excludedStatuses.Select(status => (int)status)) : null;
+
+            if (bPTaskFilter != null)
+            {
+                title = bPTaskFilter.Title;
+                taskTypeIdsAsString = bPTaskFilter.TaskTypeIds != null ? string.Join<Guid>(",", bPTaskFilter.TaskTypeIds) : null;
+            }
 
             DateTime? afterLastUpdateTime;
             long? afterId;
@@ -82,7 +91,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
                     bpTasks.Add(bpTask);
                 }
-            }, afterLastUpdateTime, afterId, nbOfRows, processInstanceId, userId);
+            }, afterLastUpdateTime, afterId, nbOfRows, processInstanceId, userId, bpTaskStatusesAsString, taskTypeIdsAsString, title);
 
             object lastUpdateHandle_local = BuildLastUpdateHandle(maxLastUpdateTime_local, id_local);
 
@@ -92,9 +101,20 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return bpTasks;
         }
 
-        public List<BPTask> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId)
+        public List<BPTask> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId, List<BPTaskStatus> excludedStatuses, BPTaskFilter bPTaskFilter)
         {
-            return GetItemsSP("[bp].[sp_BPTask_GetBeforeID]", BPTaskMapper, lessThanID, nbOfRows, processInstanceId, userId);
+            string title = null;
+            string taskTypeIdsAsString = null;
+
+            var bpTaskStatusesAsString = excludedStatuses != null && excludedStatuses.Count > 0 ? string.Join(",", excludedStatuses.Select(status => (int)status)) : null;
+
+            if (bPTaskFilter != null)
+            {
+                title = bPTaskFilter.Title;
+                taskTypeIdsAsString = bPTaskFilter.TaskTypeIds != null ? string.Join<Guid>(",", bPTaskFilter.TaskTypeIds) : null;
+            }
+
+            return GetItemsSP("[bp].[sp_BPTask_GetBeforeID]", BPTaskMapper, lessThanID, nbOfRows, processInstanceId, userId, bpTaskStatusesAsString, taskTypeIdsAsString, title);
         }
 
         public void CancelNotCompletedTasks(long processInstanceId)

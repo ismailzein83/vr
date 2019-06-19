@@ -8,6 +8,6 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class BPTaskDefaultActionsStateInput
     {
-        public int? UserId { get; set; }
+        public long BPTaskId { get; set; }
     }
 }

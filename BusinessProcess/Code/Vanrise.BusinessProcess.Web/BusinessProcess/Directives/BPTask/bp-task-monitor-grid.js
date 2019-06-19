@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpTaskMonitorGrid", ["BusinessProcess_BPTaskAPIService", "BusinessProcess_GridMaxSize", "BusinessProcess_BPTaskService", "VRTimerService",
-    function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, BusinessProcess_BPTaskService, VRTimerService) {
+app.directive("businessprocessBpTaskMonitorGrid", ["UtilsService", "BusinessProcess_BPTaskAPIService", "BusinessProcess_GridMaxSize", "BusinessProcess_BPTaskService", "VRTimerService", "BPTaskStatusEnum",
+    function (UtilsService, BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, BusinessProcess_BPTaskService, VRTimerService, BPTaskStatusEnum) {
 
         var directiveDefinitionObject = {
 
@@ -59,11 +59,13 @@ app.directive("businessprocessBpTaskMonitorGrid", ["BusinessProcess_BPTaskAPISer
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             $scope.isLoading = true;
+                            gridAPI.clearDataAndContinuePaging();
                             input.LastUpdateHandle = undefined;
                             input.LessThanID = undefined;
                             input.NbOfRows = undefined;
                             myTaskSelected = query.MyTaskSelected;
                             input.ProcessInstanceId = query.BPInstanceID;
+                            input.BPTaskFilter = query.BPTaskFilter;
                             $scope.bpTasks.length = 0;
                             isGettingDataFirstTime = true;
                             minId = undefined;
@@ -92,6 +94,10 @@ app.directive("businessprocessBpTaskMonitorGrid", ["BusinessProcess_BPTaskAPISer
 
                                 var findBPTask = false;
 
+                                var statusTypeObj = UtilsService.getEnum(BPTaskStatusEnum, 'value', bpTask.Entity.Status);
+
+                                var removeTask = statusTypeObj.IsClosed || !bpTask.ShowOnGrid ;
+
                                 for (var j = 0; j < $scope.bpTasks.length; j++) {
 
                                     if ($scope.bpTasks[j].Entity.BPTaskId == bpTask.Entity.BPTaskId) {
@@ -101,11 +107,18 @@ app.directive("businessprocessBpTaskMonitorGrid", ["BusinessProcess_BPTaskAPISer
                                         continue;
                                     }
                                 }
-                                if (!findBPTask) {
+
+                                if (!findBPTask && !removeTask) {
                                     itemAddedOrUpdatedInThisCall = true;
                                     $scope.bpTasks.push(bpTask);
-                                    if (!myTaskSelected && autoTask == undefined && bpTask.AutoOpenTask && bpTask.IsAssignedToCurrentUser && bpTask.Entity.Status == 0) {
+                                    if (!myTaskSelected && autoTask == undefined && bpTask.AutoOpenTask && bpTask.IsAssignedToCurrentUser && bpTask.Entity.Status == BPTaskStatusEnum.New.value) {
                                         autoTask = bpTask;
+                                    }
+                                }
+                                else {
+                                    if (findBPTask && removeTask) {
+                                        var index = $scope.bpTasks.indexOf(bpTask);
+                                        $scope.bpTasks.splice(index, 1);
                                     }
                                 }
                             }
@@ -180,7 +193,6 @@ app.directive("businessprocessBpTaskMonitorGrid", ["BusinessProcess_BPTaskAPISer
                     return BusinessProcess_BPTaskService.openTask(dataItem.Entity.BPTaskId);
                 }
             };
-
 
             function manipulateDataBefore(response) {
                 if (response != undefined && response) {

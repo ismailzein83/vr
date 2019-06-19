@@ -260,7 +260,7 @@
         }
 
         function getInitialBPTaskDefaultActionsState() {
-            return BusinessProcess_BPTaskAPIService.GetInitialBPTaskDefaultActionsState(bpTask.TakenBy).then(function (response) {
+            return BusinessProcess_BPTaskAPIService.GetInitialBPTaskDefaultActionsState(bpTask.BPTaskId).then(function (response) {
                 if (response != undefined) {
                     $scope.scopeModel.showTake = response.ShowTake;
                     $scope.scopeModel.showRelease = response.ShowRelease;

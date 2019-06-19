@@ -31,7 +31,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public BPTaskUpdateOutput GetMyTasksUpdated(BPTaskUpdateInput input)
         {
             BPTaskManager manager = new BPTaskManager();
-            return manager.GetMyTasksUpdated(input.LastUpdateHandle, input.NbOfRows);
+            return manager.GetMyTasksUpdated(input.LastUpdateHandle, input.NbOfRows, input.BPTaskFilter);
         }
 
         [HttpPost]
@@ -44,10 +44,10 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpPost]
         [Route("ExecuteTask")]
-        public void ExecuteTask(ExecuteBPTaskInput input)
+        public ExecuteBPTaskOutput ExecuteTask(ExecuteBPTaskInput input)
         {
             BPTaskManager manager = new BPTaskManager();
-            manager.ExecuteTask(input);
+            return manager.ExecuteTask(input);
         }
 
         [HttpGet]
@@ -103,7 +103,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public BPTaskDefaultActionsState GetInitialBPTaskDefaultActionsState(BPTaskDefaultActionsStateInput input)
         {
             BPTaskManager manager = new BPTaskManager();
-            return manager.GetInitialBPTaskDefaultActionsState(input.UserId);
+            return manager.GetInitialBPTaskDefaultActionsState(input.BPTaskId);
         }
     }
 }

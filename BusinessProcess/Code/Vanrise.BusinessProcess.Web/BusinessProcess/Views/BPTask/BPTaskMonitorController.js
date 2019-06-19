@@ -2,38 +2,64 @@
 
     "use strict";
 
-    BusinessProcess_BP_TaskMonitorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService','VR_Sec_UserAPIService'];
+    BusinessProcess_BP_TaskMonitorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function BusinessProcess_BP_TaskMonitorController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VR_Sec_UserAPIService) {
+    function BusinessProcess_BP_TaskMonitorController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
         var gridAPI;
-        var filter = {};
+        var taskTypeSelectorAPI;
+        var taskTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         loadAllControls();
-        var userId;
+
         function defineScope() {
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                getFilterObject();
-                gridAPI.loadGrid(filter);
+                gridAPI.loadGrid(getFilterObject());
+            };
+
+            $scope.onTaskTypeSelectorReady = function (api) {
+                taskTypeSelectorAPI = api;
+                taskTypeSelectorReadyPromiseDeferred.resolve();
+            };
+
+            $scope.searchClicked = function () {
+                if (gridAPI != undefined)
+                    return gridAPI.loadGrid(getFilterObject());
             };
         }
 
         function getFilterObject() {
-            filter = {
-                MyTaskSelected: true
+            return {
+                MyTaskSelected: true,
+                BPTaskFilter: {
+                    Title: $scope.taskTitle,
+                    TaskTypeIds: taskTypeSelectorAPI != undefined ? taskTypeSelectorAPI.getSelectedIds() : undefined
+                }
             };
         }
 
         function loadAllControls() {
             $scope.isLoading = true;
-            return UtilsService.waitMultipleAsyncOperations([setTitle])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.isLoading = false;
-              });
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadTaskTypeSelector])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+
+            function loadTaskTypeSelector() {
+                var taskTypeSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                taskTypeSelectorReadyPromiseDeferred.promise.then(function () {
+                    var payload = {
+                        businessEntityDefinitionId: "d33fd65a-721f-4ae1-9d41-628be9425796"
+                    };
+                    VRUIUtilsService.callDirectiveLoad(taskTypeSelectorAPI, payload, taskTypeSelectorLoadPromiseDeferred);
+                });
+                return taskTypeSelectorLoadPromiseDeferred.promise;
+            }
         }
 
         function setTitle() {

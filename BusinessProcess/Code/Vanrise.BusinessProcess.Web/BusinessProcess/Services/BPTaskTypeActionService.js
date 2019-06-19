@@ -1,6 +1,6 @@
 ﻿
-app.service('BusinessProcess_TaskTypeActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'BusinessProcess_BPTaskAPIService',
-    function (VRModalService, UtilsService, VRNotificationService, SecurityService, BusinessProcess_BPTaskAPIService) {
+app.service('BusinessProcess_TaskTypeActionService', ['VRNotificationService', 'BusinessProcess_BPTaskAPIService', 'WhS_BP_ExecuteBPTaskResultEnum',
+    function (VRNotificationService, BusinessProcess_BPTaskAPIService, WhS_BP_ExecuteBPTaskResultEnum) {
 
         var actionTypes = [];
 
@@ -30,8 +30,12 @@ app.service('BusinessProcess_TaskTypeActionService', ['VRModalService', 'UtilsSe
                         Notes: payload.notes,
                         Decision: payload.decision
                     };
-                    return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function () {
-                        payload.context.closeModal();
+                    return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
+                        if (response != undefined && response.Result == WhS_BP_ExecuteBPTaskResultEnum.Failed.value) {
+                            VRNotificationService.showError(response.OutputMessage);
+                        }
+                        else
+                            payload.context.closeModal();
                     });
                 }
             };

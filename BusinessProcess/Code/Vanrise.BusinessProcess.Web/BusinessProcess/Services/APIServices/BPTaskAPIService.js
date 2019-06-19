@@ -61,9 +61,9 @@
             });
         }
 
-        function GetInitialBPTaskDefaultActionsState(userId) {
+        function GetInitialBPTaskDefaultActionsState(bpTaskId) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "GetInitialBPTaskDefaultActionsState"), {
-                UserId: userId
+                BPTaskId: bpTaskId
             });
         }
 

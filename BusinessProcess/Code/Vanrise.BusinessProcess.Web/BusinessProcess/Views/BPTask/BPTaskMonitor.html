@@ -2,6 +2,19 @@
 
     <vr-form name="formFilter">
         <vr-row>
+            <vr-columns colnum="2">
+                <vr-textbox value="taskTitle" label="Title"></vr-textbox>
+            </vr-columns>
+            <vr-genericdata-genericbusinessentity-selector on-ready="onTaskTypeSelectorReady" normal-col-num="2" customlabel="Task Type" ismultipleselection></vr-genericdata-genericbusinessentity-selector>
+        </vr-row>
+        <vr-row removeline>
+            <vr-actionbar >
+                <div transclude-to="buttons">
+                    <vr-button type="Search" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
             <vr-columns width="fullrow">
                 <businessprocess-bp-task-monitor-grid on-ready="onGridReady"></businessprocess-bp-task-monitor-grid>
             </vr-columns>

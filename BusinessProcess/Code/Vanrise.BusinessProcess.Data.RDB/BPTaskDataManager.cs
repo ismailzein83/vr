@@ -80,7 +80,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             queryContext.ExecuteNonQuery();
         }
-        public List<Entities.BPTask> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId)
+        public List<Entities.BPTask> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId, List<BPTaskStatus> excludedStatuses, BPTaskFilter bPTaskFilter)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
@@ -93,6 +93,22 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             if (processInstanceId.HasValue)
                 whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId.Value);
+
+            if (bPTaskFilter != null)
+            {
+                if (bPTaskFilter.TaskTypeIds != null && bPTaskFilter.TaskTypeIds.Count > 0)
+                    whereContext.ListCondition(COL_TypeID, RDBListConditionOperator.IN, bPTaskFilter.TaskTypeIds);
+
+                if (!string.IsNullOrEmpty(bPTaskFilter.Title))
+                {
+                    var titleCompareCondition = whereContext.CompareCondition(RDBCompareConditionOperator.Contains);
+                    titleCompareCondition.Expression1().Column(COL_Title);
+                    titleCompareCondition.Expression2().Value(bPTaskFilter.Title);
+                }
+            }
+
+            if (excludedStatuses != null && excludedStatuses.Count > 0)
+                whereContext.ListCondition(COL_Status, RDBListConditionOperator.NotIN, excludedStatuses.Select(status => (int)status));
 
             createUserIdCondition(userId, whereContext);
 
@@ -114,7 +130,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             return queryContext.GetItem(BPTaskMapper);
         }
-        public List<Entities.BPTask> GetUpdated(ref object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId)
+        public List<Entities.BPTask> GetUpdated(ref object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId, List<BPTaskStatus> excludedStatuses, BPTaskFilter bPTaskFilter)
         {
             List<Entities.BPTask> bpTasks = new List<Entities.BPTask>();
 
@@ -137,8 +153,24 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId.Value);
             createUserIdCondition(userId, whereContext);
 
+            if (bPTaskFilter != null)
+            {
+                if (bPTaskFilter.TaskTypeIds != null && bPTaskFilter.TaskTypeIds.Count > 0)
+                    whereContext.ListCondition(COL_TypeID, RDBListConditionOperator.IN, bPTaskFilter.TaskTypeIds);
+
+                if (!string.IsNullOrEmpty(bPTaskFilter.Title))
+                {
+                    var titleCompareCondition = whereContext.CompareCondition(RDBCompareConditionOperator.Contains);
+                    titleCompareCondition.Expression1().Column(COL_Title);
+                    titleCompareCondition.Expression2().Value(bPTaskFilter.Title);
+                }
+            }
+
             if (lastUpdateHandle == null)
             {
+                if (excludedStatuses != null && excludedStatuses.Count > 0)
+                    whereContext.ListCondition(COL_Status, RDBListConditionOperator.NotIN, excludedStatuses.Select(status => (int)status));
+
                 var sortContext = selectQuery.Sort();
                 sortContext.ByColumn(COL_ID, RDBSortDirection.DESC);
             }
