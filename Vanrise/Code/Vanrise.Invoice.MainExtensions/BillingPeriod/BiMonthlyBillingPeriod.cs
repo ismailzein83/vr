@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Invoice.MainExtensions
 {
@@ -44,9 +45,7 @@ namespace Vanrise.Invoice.MainExtensions
             {
                 perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
             }
-            var lastDayOfMonth = DateTime.DaysInMonth(perviousBillingInterval.ToDate.Year, perviousBillingInterval.ToDate.Month);
-            if (perviousBillingInterval.ToDate.Day != lastDayOfMonth)
-                perviousBillingInterval.ToDate = new DateTime(perviousBillingInterval.ToDate.Year, perviousBillingInterval.ToDate.Month, lastDayOfMonth);
+            perviousBillingInterval.ToDate = perviousBillingInterval.ToDate.GetLastDayOfMonth();
             billingIntervalList.Add(perviousBillingInterval);
             return billingIntervalList;
         }
