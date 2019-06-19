@@ -31,12 +31,12 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        private Dictionary<object, BusinessEntityInfo> GetCachedBusinessEntitiesInfo(Guid businessEntityDefinitionId)
+        private Dictionary<string, BusinessEntityInfo> GetCachedBusinessEntitiesInfo(Guid businessEntityDefinitionId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBusinessEntitiesInfo", businessEntityDefinitionId,
                () =>
                {
-                   Dictionary<object, BusinessEntityInfo> results = new Dictionary<object, BusinessEntityInfo>();
+                   Dictionary<string, BusinessEntityInfo> results = new Dictionary<string, BusinessEntityInfo>();
 
                    var businessEntityDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(businessEntityDefinitionId);
                    if (businessEntityDefinition == null)
@@ -48,7 +48,7 @@ namespace Vanrise.GenericData.Business
                    IEnumerable<BusinessEntityInfo> businessEntitiesInfo =
                        connectionSettings.Get<IEnumerable<BusinessEntityInfo>>(string.Format("/api/VR_GenericData/BusinessEntity/GetBusinessEntitiesInfo?businessEntityDefinitionId={0}", vrRestAPIBEDefinitionSettings.RemoteBEDefinitionId));
                    if (businessEntitiesInfo != null)
-                       results = businessEntitiesInfo.ToDictionary(itm => itm.BusinessEntityId);
+                       results = businessEntitiesInfo.ToDictionary(itm => itm.BusinessEntityId.ToString().ToLower());
 
                    return results;
                });
@@ -92,10 +92,10 @@ namespace Vanrise.GenericData.Business
 
         public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            Dictionary<object, BusinessEntityInfo> businessEntitiesInfoByEntityId = this.GetCachedBusinessEntitiesInfo(context.EntityDefinition.BusinessEntityDefinitionId);
+            Dictionary<string, BusinessEntityInfo> businessEntitiesInfoByEntityId = this.GetCachedBusinessEntitiesInfo(context.EntityDefinition.BusinessEntityDefinitionId);
 
             BusinessEntityInfo businessEntityInfo;
-            if (!businessEntitiesInfoByEntityId.TryGetValue(context.EntityId, out businessEntityInfo))
+            if (!businessEntitiesInfoByEntityId.TryGetValue(context.EntityId.ToString().ToLower(), out businessEntityInfo))
                 throw new NullReferenceException(string.Format("businessEntityInfo. EntityDefinitionId:{0}. EntityId:{1}", context.EntityDefinition.BusinessEntityDefinitionId, context.EntityId));
 
             return businessEntityInfo.Description;
