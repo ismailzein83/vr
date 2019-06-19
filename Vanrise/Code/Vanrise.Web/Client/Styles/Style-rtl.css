@@ -448,6 +448,27 @@
 /* end vr-select*/
 
 /*start vr-datagrid*/
+.rtl .wrapper-toogled .vr-datagrid-body.row-full-screen {
+    left: unset;
+    right: 215px;
+}
+.rtl .wrapper-normal .vr-datagrid-body.row-full-screen {
+    left: unset;
+    right:30px;
+}
+.rtl .vr-datagrid-body.row-full-screen .row-main-content.expanded .vr-datagrid-row {
+    margin-left:unset;
+    margin-right:15px;
+}
+
+.rtl .vr-datagrid-body .action-full-screen-icon {
+    right: calc(100% - 260px);
+    left: unset;
+}
+.vr-datagrid-body .exist-full-screen-icon {
+    left: unset;
+    right: calc(100% - 90px);
+}
 .rtl .vr-grid-menu-box {
     position: absolute;
     left: unset;
@@ -458,6 +479,72 @@
 
 .rtl .vr-grid-menu-h-circle {
     transform: rotate(180deg);
+}
+.rtl .vr-datarow-breadcrumb {    
+    left: unset;
+    right:230px;
+}
+.rtl .btn-breadcrumb .btn {
+    float: right;
+    padding: 3px 24px 3px 12px;
+}
+
+
+.rtl .btn-breadcrumb .btn:first-child {
+    padding: 3px 10px 3px 6px;
+}
+
+.rtl .btn-breadcrumb .btn:last-child {
+    padding: 3px 24px 3px 18px;
+}
+
+.rtl .btn-breadcrumb .btn:not(:last-child):before {  
+    border-left:unset;
+    border-right: 10px solid rgb(173, 173, 173); 
+    margin-left: unset;
+    margin-right: 1px;
+    left:unset;
+    right:100%;
+}
+
+
+.rtl .btn-breadcrumb .btn:not(:last-child):after {   
+    border-left: unset;
+    border-right: 10px solid white;
+    left:unset;
+    right:100%;
+    
+}
+
+.rtl .btn-breadcrumb .btn.btn-default:not(:last-child):after {
+    border-left: unset;
+    border-right: 10px solid #fff;
+}
+
+.rtl .btn-breadcrumb .btn.btn-default:not(:last-child):before {
+    border-left: unset;
+    border-right: 10px solid #ccc;
+}
+
+/** Default button **/
+.rtl .btn-breadcrumb .btn.btn-default:not(:last-child):after {
+    border-left: unset;
+    border-right: 10px solid #fff;
+}
+
+.rtl .btn-breadcrumb .btn.btn-default:not(:last-child):before {
+    border-left: unset;
+    border-right: 10px solid #ccc;
+}
+
+.rtl .btn-breadcrumb .btn.btn-default:hover:not(:last-child):after {
+    border-left: unset;
+    border-right: 10px solid #ebebeb;
+}
+
+.rtl .btn-breadcrumb .btn.btn-default:hover:not(:last-child):before {
+    border-left: unset;
+    border-right: 10px solid #adadad;
 }
 
 .rtl .vr-grid-menu-h-dote {
@@ -752,6 +839,11 @@
     margin-left: -2px;
     margin-right: unset !important;
 }
+
+.rtl .page-view-icon.tab-icon {
+    left: unset;
+    right: -5px;
+}
 /*end  vr-tabs*/
 
 /*start  vr-modal*/
@@ -851,6 +943,11 @@
 .rtl.flat .vr-module-tabs-view .dropdown-menu{
     left:unset;
     right:0px;
+}
+
+.rtl.flat .vr-choices-filter .dropdown-menu .page-view-icon {
+    left: unset;
+    right: -5px;
 }
 .rtl.flat .vr-grid-menu-h-circle {
     right: unset;

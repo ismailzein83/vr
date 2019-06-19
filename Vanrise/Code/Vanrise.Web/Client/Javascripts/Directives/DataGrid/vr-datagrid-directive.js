@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', 'DataGridRetrieveDataEventType', 'UISettingsService', 'VRLocalizationService', 'MobileService',
-	function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile, VRModalService, DataGridRetrieveDataEventType, UISettingsService, VRLocalizationService, MobileService) {
+app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', 'DataGridRetrieveDataEventType', 'UISettingsService', 'VRLocalizationService', 'MobileService', 'VRDataGridService',
+	function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile, VRModalService, DataGridRetrieveDataEventType, UISettingsService, VRLocalizationService, MobileService, VRDataGridService) {
 
 	    var paddingDirection = VRLocalizationService.isLocalizationRTL() ? "'padding-left'" : "'padding-right'";
 	    var normaltextDirection = VRLocalizationService.isLocalizationRTL() ? "right" : "left";
@@ -39,10 +39,23 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                $(window).unbind('scroll', hideGridColumnsMenu);
 	                $(document).unbind('click', bindClickOutSideGridMenu);
 	                $element.remove();
+	                VRDataGridService.clearobjectTypes();
 	            });
 	            var ctrl = this;
 	            ctrl.isMobile = MobileService.isMobile();
-	            ctrl.expandAsfullScreen = ctrl.rowviewsetting != undefined && ctrl.rowviewsetting.expandAsFullScreen == true;
+	            ctrl.isRtl = VRLocalizationService.isLocalizationRTL();
+	            if (ctrl.rowviewsetting != undefined) {
+	                ctrl.expandAsfullScreen = ctrl.rowviewsetting.expandAsFullScreen == true;
+	                if (ctrl.rowviewsetting.objectType) {
+	                    ctrl.objectType = {
+	                        objectTypeId: UtilsService.replaceAll(UtilsService.guid(), '-', ''),
+	                        objectTypeName: ctrl.rowviewsetting.objectType
+	                   };
+                    }
+	                ctrl.viewDirective = ctrl.rowviewsetting.viewDirective || undefined;
+	                ctrl.getIdContext = ctrl.rowviewsetting.getIdContext && typeof (ctrl.rowviewsetting.getIdContext) == "function" && ctrl.rowviewsetting.getIdContext || undefined;
+	            }
+
 	            ctrl.mobileGridView = ctrl.mobilegridlayout != undefined ? ctrl.mobilegridlayout : false;
 	            ctrl.mobileSwitchBtn = true;
 	            ctrl.itemsSortable = {
@@ -680,6 +693,13 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    scope.$apply();
 	                    $(menu).show();
 	                }, 1);
+	            };
+                
+	            ctrl.setRowActionMenuDirection = function () {
+	                if(ctrl.isRtl == true)
+	                    ctrl.toLeftDirection = false;
+	                else
+	                    ctrl.toLeftDirection = true;
 	            };
 
 	            ctrl.onGroupMenuActionHover = function (evnt, action) {
@@ -1573,6 +1593,14 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    dataItem.expandableRowTemplate = expandableRowTemplate;
 	                    dataItem.showRow = true;
 	                    dataItem.isRowExpanded = true;
+	                    dataItem.viewReadyPromiseDeffered && dataItem.viewReadyPromiseDeffered.promise.then(function () {
+	                        dataItem.viewDirectiveApi.load({
+	                            entityId: ctrl.getIdContext(dataItem)
+	                        }).then(function () {
+	                            dataItem.isLoadingRowView = false;
+	                        });
+	                    });
+	                       
 	                }
 	            };
 
@@ -1594,15 +1622,27 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	            ctrl.switchFullScreenModeOn = function (dataItem, evnt) {
 	                dataItem.fullScreenMode = true;
+	                VRDataGridService.addObjectType(ctrl.objectType);
+	                ctrl.parentNames = VRDataGridService.getRegisterdObjectTypes();
+	                if (ctrl.viewDirective) {
+	                    dataItem.viewReadyPromiseDeffered = UtilsService.createPromiseDeferred();
+	                    dataItem.isLoadingRowView = true;
+	                    dataItem.onDirectiveReady = function (api) {
+	                        dataItem.viewDirectiveApi = api;
+	                        dataItem.viewReadyPromiseDeffered.resolve();
+	                    };
+	                }
 	                ctrl.expandRow(dataItem, evnt);
 	            };
 
 	            ctrl.switchFullScreenModeOff = function (dataItem, evnt) {
 	                dataItem.fullScreenMode = false;
+	                VRDataGridService.removeObjectType(ctrl.objectType);
+	                ctrl.parentNames = VRDataGridService.getRegisterdObjectTypes();
 	                ctrl.collapseRow(dataItem, evnt);
 	            };
 	        }
-            
+
 	        function defineMenuColumn(hasActionMenu, actionsAttribute) {
 	            actionMenuWidth = 0;//hasActionMenu ? 3 : 0;
 	            ctrl.actionsColumnWidth = actionMenuWidth + 'px';
@@ -1614,10 +1654,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                var haseEnabledActions = actions.some(function (action) {
 	                    if (action.childsactions != undefined) {
 	                        if (action.childsactions.length == 0) return false;
-                            return action.childsactions.some(function (childAction) {
-	                                   return !childAction.disable;
+	                        return action.childsactions.some(function (childAction) {
+	                            return !childAction.disable;
 	                        });
-                        }                        
+	                    }
 	                    return !action.disable ;
 	                });
 	                return (haseEnabledActions);
@@ -1911,3 +1951,33 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	    return directiveDefinitionObject;
 	}]);
 
+(function (app) {
+    'use stict';
+    VRDataGridService.$inject = ['UtilsService'];
+    function VRDataGridService(UtilsService) {
+        var objectTypes = [];
+
+        function addObjectType(objectType) {
+            objectTypes.push(objectType);
+        }
+        function removeObjectType(objectType) {
+            var index = UtilsService.getItemIndexByVal(objectTypes, objectType.objectTypeId, "objectTypeId");
+            if (index >= 0)
+                objectTypes.splice(index, 1);
+        }
+        function getRegisterdObjectTypes() {
+            return objectTypes;
+        }
+        function clearobjectTypes() {
+            objectTypes.length = 0;
+        }       
+        return {
+            getRegisterdObjectTypes: getRegisterdObjectTypes,
+            addObjectType: addObjectType,
+            removeObjectType: removeObjectType,
+            clearobjectTypes: clearobjectTypes
+        };
+    }
+    app.service('VRDataGridService', VRDataGridService);
+
+})(app);

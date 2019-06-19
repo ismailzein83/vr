@@ -2502,7 +2502,9 @@ vr-section[notopspace] > .panel-vr {
     top: calc(50% - 6px);
     left: 4px;
 }
-
+.grid-expand-collapse-icon.vr-fullscreen:hover {
+    transform: scale(1.2,1.2);
+}
 .vr-remove-row {
     top: 50%;
     position: absolute;
@@ -2650,24 +2652,25 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     border-bottom: 1px solid #fff;
 }
 
-    .vr-datagrid-body.row-full-screen {
-        position: fixed;
-        top: 80px;
-        height: calc(100% - 100px);
-        overflow-y: auto;
-        z-index: 10;
-        overflow-x: hidden;
-    }
+.vr-datagrid-body.row-full-screen {
+    position: fixed;
+    top: 88px;
+    height: calc(100% - 100px);
+    overflow-y: auto;
+    z-index: 10;
+    overflow-x: hidden;
+}
 
-        .vr-datagrid-body.row-full-screen .row-main-content.expanded {
-            border-right: none !important;
-            border-left: none !important;
-            background-color: unset !important;
-        }
+.vr-datagrid-body.row-full-screen .row-main-content.expanded {
+    border-right: none !important;
+    border-left: none !important;
+    background-color: unset !important;
+    font-weight: normal !important;
+}
 
-            .vr-datagrid-body.row-full-screen .row-main-content.expanded:hover {
-                background-color: unset !important;
-            }
+.vr-datagrid-body.row-full-screen .row-main-content.expanded:hover {
+    background-color: unset !important;
+}
 
 .vr-datagrid[alternative-color] .vr-datagrid-body > div.expanded:first-of-type:hover {
     background-color: unset !important;
@@ -2677,9 +2680,9 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     border-right: none !important;
 }
 
-    .vr-datagrid-body.row-full-screen .row-main-content.expanded .vr-datagrid-cell-container > div.vr-datagrid-cell {
-        display: block !important;
-    }
+.vr-datagrid-body.row-full-screen .row-main-content.expanded .vr-datagrid-cell-container > div.vr-datagrid-cell {
+    display: block !important;
+}
 
 .vr-datagrid-body.row-full-screen .row-main-content.expanded .vr-datagrid-datacells-click {
     background-color: unset !important;
@@ -2690,7 +2693,10 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 }
 
 .vr-datagrid-body.row-full-screen .row-main-content.expanded .vr-datagrid-row {
-    width: calc(100% - 70px) !important;
+    width: calc(100% - 20px) !important;
+    border: 1px solid #ddd;
+    margin-left: 15px;
+    padding: 5px;
 }
 
 .expanded-row-content-full {
@@ -2739,23 +2745,26 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     left: calc(100% - 100px);
     display: block;
     display: none;
-    top: 8px;
 }
 
+.vr-datarow-breadcrumb {
+    position: fixed;
+    top: 93px;
+    left: 230px;
+}
 .vr-datagrid-body .action-full-screen-icon, .vr-datagrid-body .exist-full-screen-icon {
     position: relative;
     display: none;
-    top: 8px;
     width: 73px;
     margin-top: 5px;
 }
 
 .vr-datagrid-body .exist-full-screen-icon {
-    left: calc(100% - 115px);
+    left: calc(100% - 90px);
 }
 
 .vr-datagrid-body .action-full-screen-icon {
-    left: calc(100% - 270px);
+    left: calc(100% - 260px);
 }
 
 .vr-datagrid-body.row-full-screen .exist-full-screen-icon, .vr-datagrid-body .action-full-screen-icon {
@@ -5551,7 +5560,64 @@ span.option-marketprice {
     -webkit-animation-timing-function: ease-in;
     -webkit-animation-direction: alternate;
 }
+.btn-breadcrumb .btn:not(:last-child):after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 13px solid transparent;
+    border-bottom: 13px solid transparent;
+    border-left: 10px solid white;
+    position: absolute;
+    top: 50%;
+    margin-top: -13px;
+    left: 100%;
+    z-index: 3;
+}
 
+.btn-breadcrumb .btn:not(:last-child):before {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 13px solid transparent;
+    border-bottom: 13px solid transparent;
+    border-left: 10px solid rgb(173, 173, 173);
+    position: absolute;
+    top: 50%;
+    margin-top: -13px;
+    margin-left: 1px;
+    left: 100%;
+    z-index: 3;
+}
+
+/** The Spacing **/
+.btn-breadcrumb .btn {
+    padding: 3px 12px 3px 24px;
+}
+
+.btn-breadcrumb .btn:first-child {
+    padding: 3px 6px 3px 10px;
+}
+
+.btn-breadcrumb .btn:last-child {
+    padding: 3px 18px 3px 24px;
+}
+.btn-breadcrumb .btn.btn-default:not(:last-child):after {
+    border-left: 10px solid #fff;
+}
+
+.btn-breadcrumb .btn.btn-default:not(:last-child):before {
+    border-left: 10px solid #ccc;
+}
+
+.btn-breadcrumb .btn.btn-default:hover:not(:last-child):after {
+    border-left: 10px solid #ebebeb;
+}
+
+.btn-breadcrumb .btn.btn-default:hover:not(:last-child):before {
+    border-left: 10px solid #adadad;
+}
 
 /*end vr-progress*/
 @media print {
