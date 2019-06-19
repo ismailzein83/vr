@@ -162,7 +162,8 @@ as (select * from (values
 ('0DEC0B45-5A1E-4A91-834F-1AADD591E1E9','RetailBEFixedCharge','Fixed Charge','Retail_BE_ChargeSettingsConfig','{"Editor":"retail-be-chargesettings-fixed"}'),
 ('1151BAD9-E4E1-450A-B7BA-589C1940D7BE','RetailBEPerXMBPS','Charge per X Mbps','Retail_BE_ChargeSettingsConfig','{"Editor":"retail-be-chargesettings-perxmbps"}'),
 ('0C984560-77EE-4BE7-8EFB-A0FFBE54FCBE','RetailBECharge','Retail BE Charge','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"retail-be-charge-customobjectsettings"}'),
-('CEEAE225-FCC4-49FD-BCEF-D24C6BBB52AE','RetailBEPerE1','Charge per E1','Retail_BE_ChargeSettingsConfig','{"Editor":"retail-be-chargesettings-pere1"}')
+('CEEAE225-FCC4-49FD-BCEF-D24C6BBB52AE','RetailBEPerE1','Charge per E1','Retail_BE_ChargeSettingsConfig','{"Editor":"retail-be-chargesettings-pere1"}'),
+('01FD5D1B-484B-4AD4-887C-CE3843A96060','Billing Cycle Recurring Charge Period','Billing Cycle','Retail_BE_FinancialRecurringCharge','{"Editor":"retail-be-recurringchargeperiodsettings-billingcycle"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
