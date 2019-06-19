@@ -476,7 +476,7 @@ namespace TOne.WhS.Invoice.Business
                 amountByCurrency = new Dictionary<string, decimal>();
                 foreach (var invoice in invoices)
                 {
-                    bool newInvoiceCheck = true;
+                    List<int> currenciesPerInvoice = new List<int>();
                     if (getAllCurrencies || selectedInvoiceIds.Any(x => x.InvoiceId == invoice.InvoiceId))
                     {
                         var innvoiceDetails = invoice.Details as BaseInvoiceDetails;
@@ -510,8 +510,9 @@ namespace TOne.WhS.Invoice.Business
                                             {
                                                 amountByCurrency.Add(currencySymbol, Math.Round(totalOriginalAmount, normalPrecisionValue));
                                             }
-                                            else if(newInvoiceCheck)
+                                            else if(!currenciesPerInvoice.Contains(invoiceItemDetail.CurrencyId))
                                             {
+                                                currenciesPerInvoice.Add(invoiceItemDetail.CurrencyId);
                                                 amountByCurrency[currencySymbol] = amountValue + Math.Round(totalOriginalAmount, normalPrecisionValue);
                                             }
                                         }
@@ -529,7 +530,6 @@ namespace TOne.WhS.Invoice.Business
                                         }
                                     }
                                 }
-                                newInvoiceCheck = false;
                             }
                         }
                     }
