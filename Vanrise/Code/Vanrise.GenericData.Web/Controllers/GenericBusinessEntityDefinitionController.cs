@@ -82,6 +82,12 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetGenericBEActionDefinitionSettingsConfigs();
         }
+        [HttpGet]
+        [Route("GetGenericBECustomActionDefinitionSettingsConfigs")]
+        public IEnumerable<GenericBECustomActionDefinitionSettingsConfig> GetGenericBECustomActionDefinitionSettingsConfigs()
+        {
+            return _manager.GetGenericBECustomActionDefinitionSettingsConfigs();
+        }
 
         [HttpGet]
         [Route("GetGenericBEExtendedSettingsConfigs")]
@@ -188,7 +194,7 @@ namespace Vanrise.GenericData.Web.Controllers
             return new MyAPICallOutput()
             {
                 myName = "Ali",
-                 myInt = 15
+                myInt = 15
             };
         }
 

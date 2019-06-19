@@ -176,7 +176,12 @@ namespace Vanrise.GenericData.Web.Controllers
             input.ThrowIfNull("input");
             return _manager.GetDependentFieldValues(input.DataRecordTypeId, input.FieldValues);
         }
-
+        [HttpPost]
+        [Route("ExecuteRangeGenericEditorProcess")]
+        public RangeGenericEditorProcessMessage ExecuteRangeGenericEditorProcess(RangeGenericEditorProcessInput input)
+        {
+            return _manager.ExecuteRangeGenericEditorProcess(input);
+        }
         public class GetDependentFieldValuesInput
         {
             public Guid DataRecordTypeId { get; set; }

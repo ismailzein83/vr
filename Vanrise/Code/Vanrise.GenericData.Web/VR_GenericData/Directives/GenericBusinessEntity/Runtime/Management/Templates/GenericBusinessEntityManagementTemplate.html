@@ -1,19 +1,37 @@
 ﻿<vr-row removeline>
-    <vr-columns width="fullrow" haschildcolumns  ng-show="scopeModel.isFilterSectionShow">
-        
+    <vr-columns width="fullrow" haschildcolumns ng-show="scopeModel.isFilterSectionShow">
+
         <vr-genericdata-genericbe-filterruntime-rootcontainer on-ready="scopeModel.onFilterRuntimeRootDirectiveReady"></vr-genericdata-genericbe-filterruntime-rootcontainer>
 
-        <vr-columns colnum="2" withemptyline="{{scopeModel.filterRuntimeEditor != undefined}}">
+        <vr-columns colnum="4" withemptyline="{{scopeModel.filterRuntimeEditor != undefined}}">
             <vr-button type="Search" ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" formname="formFilter" data-onclick="search" standalone></vr-button>
-            <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton" standalone></vr-button>
-            <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton" standalone></vr-button>
-            <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter"  style="font-size:10px;cursor:pointer;position: absolute; top: 24px;padding-left: 5px;" ng-click="scopeModel.showFilterSection()"><a  style="text-decoration: none">Hide Filter</a></span>
+            <span ng-repeat="action in scopeModel.customActions" ng-if="scopeModel.customActions.length > 0">
+                <vr-columns haschildcolumns>
+                    <vr-directivewrapper directive="'vr-button'" type="{{action.type}}" data-onclick="action.onclick" menuactions="action.menuActions" standalone></vr-directivewrapper>
+                </vr-columns>
+            </span>
+            <vr-columns haschildcolumns ng-if="scopeModel.showAddButton">
+                <vr-button type="Add" data-onclick="addBusinessEntity" standalone></vr-button>
+            </vr-columns>
+            <vr-columns haschildcolumns ng-if="scopeModel.showUploadButton">
+                <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" standalone></vr-button>
+            </vr-columns>
+            <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" style="font-size:10px;cursor:pointer;" ng-click="scopeModel.showFilterSection()"><a style="text-decoration: none">Hide Filter</a></span>
         </vr-columns>
-    </vr-columns>
-    <vr-columns ng-hide="scopeModel.isFilterSectionShow" >
-        <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton" standalone></vr-button>
-        <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton" standalone></vr-button>
-        <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" style="font-size:10px;cursor:pointer;position: absolute; top: 6px;right: -10px;" ng-click="scopeModel.showFilterSection()"><a style="text-decoration: none">Show Filter</a></span>
+        </vr-columns>
+    <vr-columns ng-hide="scopeModel.isFilterSectionShow" colnum="4">
+        <span ng-repeat="action in scopeModel.customActions" ng-if="scopeModel.customActions.length > 0">
+            <vr-columns haschildcolumns>
+                <vr-directivewrapper directive="'vr-button'" type="{{action.type}}" data-onclick="action.onclick" menuactions="action.menuActions" standalone></vr-directivewrapper>
+            </vr-columns>
+        </span>
+        <vr-columns haschildcolumns ng-if="scopeModel.showAddButton">
+            <vr-button type="Add" data-onclick="addBusinessEntity" standalone></vr-button>
+        </vr-columns>
+        <vr-columns haschildcolumns ng-if="scopeModel.showUploadButton">
+            <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity"  standalone></vr-button>
+        </vr-columns>
+        <span ng-if="scopeModel.filterRuntimeEditor != undefined && scopeModel.hasFilter" style="font-size:10px;cursor:pointer;" ng-click="scopeModel.showFilterSection()"><a style="text-decoration: none">Show Filter</a></span>
     </vr-columns>
 
     <vr-columns width="fullrow" simplecol>

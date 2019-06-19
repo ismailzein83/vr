@@ -113,7 +113,9 @@
         function GetGenericEditorColumnsInfo(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericEditorColumnsInfo'), input);
         }
-
+        function ExecuteRangeGenericEditorProcess(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'ExecuteRangeGenericEditorProcess'), input);
+        }
         return {
             GetGenericBETitleFieldValue: GetGenericBETitleFieldValue,
             GetFilteredGenericBusinessEntities: GetFilteredGenericBusinessEntities,
@@ -132,7 +134,8 @@
             ExecuteGenericBEBulkActions: ExecuteGenericBEBulkActions,
             DoesUserHaveViewAccess: DoesUserHaveViewAccess,
             GetDependentFieldValues: GetDependentFieldValues,
-            GetGenericEditorColumnsInfo: GetGenericEditorColumnsInfo
+            GetGenericEditorColumnsInfo: GetGenericEditorColumnsInfo,
+            ExecuteRangeGenericEditorProcess: ExecuteRangeGenericEditorProcess
         };
     }
 

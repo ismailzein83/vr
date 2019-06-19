@@ -64,12 +64,23 @@
         <vr-columns colnum="2">
             <vr-switch value="scopeModel.showUploadButton" label="Show Upload Button"></vr-switch>
         </vr-columns>
-        <vr-columns colnum="2">
-            <vr-switch value="scopeModel.use360Degree" label="Enable 360° View"></vr-switch>
+        <vr-columns colnum="5">
+            <vr-section header="360 Degrees Settings" collapsible>
+                <vr-columns colnum="3">
+                    <vr-row>
+                        <vr-switch value="scopeModel.use360Degree" onvaluechanged="scopeModel.onUse360DegreesValueChanged" label="Enable 360° View"></vr-switch>
+                    </vr-row>
+                </vr-columns>
+                <!--<span ng-show="scopeModel.use360Degree" vr-loader="scopeModel.isLoadingThreeHundredSixtyDegreesEditorDirective">
+                    <vr-columns colnum="9">
+                        <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.on360DegreesEditorDefinitionDirectiveReady" normal-col-num="12" isnotrequired showremoveicon="true"></vr-genericdata-genericbe-editordefinition-settings>
+                    </vr-columns>
+                </span>-->
+            </vr-section>
         </vr-columns>
-        <vr-columns width="2/3row" haschildcolumns>
-            <vr-genericdata-genericbe-uploaddefinition-grid on-ready="scopeModel.uploadedFiledsGridReady" ng-show="scopeModel.showUploadButton" isrequired="scopeModel.showUploadButton"></vr-genericdata-genericbe-uploaddefinition-grid>
-        </vr-columns>
+            <vr-columns width="2/3row" haschildcolumns>
+                <vr-genericdata-genericbe-uploaddefinition-grid on-ready="scopeModel.uploadedFiledsGridReady" ng-show="scopeModel.showUploadButton" isrequired="scopeModel.showUploadButton"></vr-genericdata-genericbe-uploaddefinition-grid>
+            </vr-columns>
     </vr-row>
     <vr-genericdata-genericbe-extendedsettings on-ready="scopeModel.onGenericBEEditorExtendedSettingsReady" normal-col-num="4"></vr-genericdata-genericbe-extendedsettings>
 </vr-tab>
@@ -122,18 +133,26 @@
         </vr-columns>
     </vr-row>
 </vr-tab>
-
 <vr-tab header="'Bulk Actions'">
-    <vr-genericdata-genericbe-bulkactions-management vr-loader="scopeModel.isLoadingBulkActionsDirective" on-ready="scopeModel.onGenericBEBulkActionsDirectiveReady"></vr-genericdata-genericbe-bulkactions-management>
+    <vr-span vr-loader="scopeModel.isLoadingBulkActionsDirective">
+        <vr-genericdata-genericbe-bulkactions-management on-ready="scopeModel.onGenericBEBulkActionsDirectiveReady"></vr-genericdata-genericbe-bulkactions-management>
+    </vr-span>
+</vr-tab>
+<vr-tab header="'Custom Actions'">
+    <vr-span vr-loader="scopeModel.isLoadingCustomActionsDirective">
+        <vr-genericdata-genericbe-customactiondefinition-grid on-ready="scopeModel.onGenericBECustomActionsDirectiveReady"></vr-genericdata-genericbe-customactiondefinition-grid>
+    </vr-span>
 </vr-tab>
 <vr-tab header="'Additional Settings'">
     <vr-genericdata-genericbe-additionalsettings-grid on-ready="scopeModel.onAdditionalSettingsGridReady"></vr-genericdata-genericbe-additionalsettings-grid>
 </vr-tab>
 <vr-tab header="'Order Type'">
     <vr-row>
-        <vr-genericdata-genericbe-orderdirection-selective on-ready="scopeModel.onOrderDirectionSelectorReady" normal-col-num="4"></vr-genericdata-genericbe-orderdirection-selective>
+        <vr-genericdata-genericbe-orderdirection-selective  on-ready="scopeModel.onOrderDirectionSelectorReady" normal-col-num="4"></vr-genericdata-genericbe-orderdirection-selective>
     </vr-row>
-    <vr-genericdata-genericbe-ordertype-selective vr-loader="scopeModel.isLoadingOrderTypeSelector" on-ready="scopeModel.onOrderTypeSelectorReady" normal-col-num="4"></vr-genericdata-genericbe-ordertype-selective>
+    <span vr-loader="scopeModel.isLoadingOrderTypeSelector">
+        <vr-genericdata-genericbe-ordertype-selective on-ready="scopeModel.onOrderTypeSelectorReady" normal-col-num="4"></vr-genericdata-genericbe-ordertype-selective>
+    </span>
 </vr-tab>
 
 <vr-tab header="'Handlers'">

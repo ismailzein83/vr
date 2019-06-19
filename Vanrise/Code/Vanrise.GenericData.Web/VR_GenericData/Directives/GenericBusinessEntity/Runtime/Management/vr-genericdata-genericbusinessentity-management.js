@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityManagement.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VRCommon_ModalWidthEnum'];
+    GenericBusinessEntityManagement.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBECustomActionService'];
 
-    function GenericBusinessEntityManagement(UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum, VRCommon_ModalWidthEnum) {
+    function GenericBusinessEntityManagement(UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum, VRCommon_ModalWidthEnum, VR_GenericData_GenericBECustomActionService) {
         return {
             restrict: "E",
             scope: {
@@ -23,7 +23,7 @@
 
         function GenericBusinessEntityManagement($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-           
+
             var filterRuntimeRootDirectiveAPI;
             var filterRuntimeRootDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -43,6 +43,8 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.customActions = [];
+
                 $scope.scopeModel.showAddButton = false;
                 $scope.scopeModel.showUploadButton = false;
 
@@ -119,6 +121,7 @@
                                                 promises: promises3,
                                                 getChildNode: function () {
                                                     var promises4 = [];
+                                                    $scope.scopeModel.customActions = VR_GenericData_GenericBECustomActionService.buildCustomActions(genericBEDefinitionSettings, businessDefinitionId, fieldValues);
                                                     promises4.push(loadGridDirective());
                                                     return {
                                                         promises: promises4
@@ -225,6 +228,7 @@
                         return promiseDeferred.promise;
                     }
 
+
                     return UtilsService.waitPromiseNode(rootPromiseNode).then(function () {
                         $scope.scopeModel.showAddButton = showAddFromDefinitionSettings && showAddFromAccess;
                         $scope.scopeModel.showUploadButton = showUploadFromDefinitionSettings && showUploadFromAccess;
@@ -294,7 +298,7 @@
 
             }
         }
-     
+
     }
 
     app.directive('vrGenericdataGenericbusinessentityManagement', GenericBusinessEntityManagement);

@@ -12,6 +12,7 @@
         var BEFieldModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBEGenericFieldEditor.html";
         var basicAdvancefilterModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBEFilterDefinition/Templates/BasicAdvancedFilterEditor.html";
         var actionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionEditor.html";
+        var customActionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/CustomActionDefinitionEditor.html";
         var bulkActionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBEBulkActionDefinition/Templates/GenericBEBulkActionDefinitionEditor.html";
         var gridActionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/GridActionDefinitionEditor.html";
         var gridActionGroupModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/GridActionGroupDefinitionEditor.html";
@@ -31,6 +32,8 @@
             editGenericBEBasicAdvanceFilter: editGenericBEBasicAdvanceFilter,
             addGenericBEActionDefinition: addGenericBEActionDefinition,
             editGenericBEActionDefinition: editGenericBEActionDefinition,
+            addGenericBECustomActionDefinition: addGenericBECustomActionDefinition,
+            editGenericBECustomActionDefinition: editGenericBECustomActionDefinition,
             addGenericBEGridActionDefinition: addGenericBEGridActionDefinition,
             editGenericBEGridActionDefinition: editGenericBEGridActionDefinition,
             addGenericBEGridActionGroupDefinition: addGenericBEGridActionGroupDefinition,
@@ -189,6 +192,33 @@
             VRModalService.showModal(actionModalPath, parameters, settings);
         }
 
+        function addGenericBECustomActionDefinition(onGenericBECustomActionDefinitionAdded, context) {
+            var parameters = {
+                context: context
+
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBECustomActionDefinitionAdded = onGenericBECustomActionDefinitionAdded;
+            };
+
+            VRModalService.showModal(customActionModalPath, parameters, settings);
+        }
+
+        function editGenericBECustomActionDefinition(onGenericBECustomActionDefinitionUpdated, customActionDefinition, context) {
+            var parameters = {
+                customActionDefinition: customActionDefinition,
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBECustomActionDefinitionUpdated = onGenericBECustomActionDefinitionUpdated;
+            };
+            VRModalService.showModal(customActionModalPath, parameters, settings);
+        }
         function addGenericBEGridActionDefinition(onGenericBEGridActionDefinitionAdded, context) {
             var parameters = {
                 context: context

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBERuntimeManagementDirective.$inject = ['VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRCommon_ModalWidthEnum'];
+    GenericBERuntimeManagementDirective.$inject = ['VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRCommon_ModalWidthEnum','VR_GenericData_GenericBECustomActionService'];
 
-    function GenericBERuntimeManagementDirective(VR_GenericData_GenericBusinessEntityService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum, VR_GenericData_GenericBusinessEntityAPIService, VRCommon_ModalWidthEnum) {
+    function GenericBERuntimeManagementDirective(VR_GenericData_GenericBusinessEntityService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum, VR_GenericData_GenericBusinessEntityAPIService, VRCommon_ModalWidthEnum, VR_GenericData_GenericBECustomActionService) {
         return {
             restrict: 'E',
             scope: {
@@ -54,7 +54,7 @@
                 $scope.scopeModel.showAddButton = false;
                 $scope.scopeModel.showUploadButton = false;
                 $scope.scopeModel.hasFilter = false;
-
+                $scope.scopeModel.customActions = [];
                 $scope.scopeModel.showActionButtons = false;
                 $scope.scopeModel.showMenuActions = false;
                 $scope.scopeModel.deselectAllClicked = function () {
@@ -160,7 +160,14 @@
                         $scope.scopeModel.showActionButtons = true;
                         $scope.scopeModel.showActionInformation = true;
                     }
-                    return UtilsService.waitMultipleAsyncOperations([loadBEDefinitionsSelectorAndSubsections]).catch(function (error) {
+                    return UtilsService.waitPromiseNode({
+                        promises: [loadBEDefinitionsSelectorAndSubsections()],
+
+                        getChildNode: function () {
+                            $scope.scopeModel.customActions = VR_GenericData_GenericBECustomActionService.buildCustomActions(genericBEDefinitionSettings, businessEntityDefinitionId);
+                            return { promises: [] };
+                        }
+                    }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     }).finally(function () {
                         $scope.isLoading = false;
@@ -183,7 +190,6 @@
                 businessEntityDefinitionSelectedDeferred = UtilsService.createPromiseDeferred();
                 promises.push(businessEntityDefinitionSelectedDeferred.promise);
                 promises.push(loadBusinessEntityDefinitionSelector());
-
                 UtilsService.waitMultiplePromises(promises).then(function () {
                     businessEntityDefinitionSelectedDeferred = undefined;
                     $scope.scopeModel.hideBusinessEntityDefinitionSelector = businessEntityDefinitionAPI.hasSingleItem();
@@ -257,6 +263,7 @@
                     gridDirectiveAPI.load(getGridFilter());
                 });
             }
+           
 
             function getGridFilter() {
                 var filterData = filterRuntimeRootDirectiveAPI != undefined ? filterRuntimeRootDirectiveAPI.getData() : undefined;

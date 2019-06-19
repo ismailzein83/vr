@@ -35,6 +35,9 @@
         function GetGenericBEActionDefinitionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEActionDefinitionSettingsConfigs"));
         }
+        function GetGenericBECustomActionDefinitionSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBECustomActionDefinitionSettingsConfigs"));
+        }
         function GetGenericBEExtendedSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEExtendedSettingsConfigs"));
         }
@@ -76,7 +79,7 @@
         function GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs"));
         }
-        
+
         function GetGenericBEBulkActionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEBulkActionSettingsConfigs"));
         }
@@ -90,7 +93,7 @@
         }
 
         return ({
-            
+
             GetGenericBEDefinitionSettings: GetGenericBEDefinitionSettings,
             GetGenericBEGridDefinition: GetGenericBEGridDefinition,
             GetGenericBEGridColumnAttributes: GetGenericBEGridColumnAttributes,
@@ -114,7 +117,8 @@
             GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs: GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs,
             GetGenericBEBulkActionSettingsConfigs: GetGenericBEBulkActionSettingsConfigs,
             GetGenericBEGridConditionConfigs: GetGenericBEGridConditionConfigs,
-            GetGenericBEAdditionalSettingsConfigs: GetGenericBEAdditionalSettingsConfigs
+            GetGenericBEAdditionalSettingsConfigs: GetGenericBEAdditionalSettingsConfigs,
+            GetGenericBECustomActionDefinitionSettingsConfigs: GetGenericBECustomActionDefinitionSettingsConfigs
         });
     }
     appControllers.service("VR_GenericData_GenericBEDefinitionAPIService", genericBusinessEntityDefinitionAPIService);

@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericEditor
     public class NumberRangeGenericEditorDefinition : VRGenericEditorDefinitionSetting
     {
         public override Guid ConfigId => new Guid("6568F466-C2FF-4FF4-AA1D-3862BEB2EBC5");
-        public string RuntimeDirective { get { return ""; } }
+        public override string RuntimeEditor { get { return "vr-genericdata-numberrangeeditor-runtime"; } }
         public string RangeVariableName { get; set; }
     }
 
@@ -26,7 +26,7 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericEditor
                 return new List<object> { FromNumber };
 
             List<Object> numbers = new List<object>();
-            for(var i = FromNumber; FromNumber<= ToNumber;i++)
+            for (var i = FromNumber; i <= ToNumber; i++)
             {
                 numbers.Add(i);
             }
