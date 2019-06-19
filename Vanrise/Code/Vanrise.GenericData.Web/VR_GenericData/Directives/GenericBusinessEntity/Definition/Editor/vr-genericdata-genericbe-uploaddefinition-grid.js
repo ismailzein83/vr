@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VRUIUtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService", "VR_GenericData_DataRecordFieldAPIService",
-	function (UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService, VR_GenericData_DataRecordFieldAPIService) {
+app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VRUIUtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService", "VR_GenericData_DataRecordFieldAPIService", "VRLocalizationService",
+	function (UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService, VR_GenericData_DataRecordFieldAPIService, VRLocalizationService) {
 
 		var directiveDefinitionObject = {
 
@@ -32,11 +32,13 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 			var dataRecordTypeId;
 			var uploadedSelectorDirectiveAPI;
 			var uploadedSelectorReadyDeffered = UtilsService.createPromiseDeferred();
+			var isLocalizationEnabled;
 
 			this.initializeController = initializeController;
 			function initializeController() {
 				$scope.scopeModel = {};
-
+				isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
+				$scope.scopeModel.isLocalizationEnabled = isLocalizationEnabled;
 				$scope.scopeModel.uploadedFields = [];
 
 				$scope.scopeModel.onDataRecordTypeUploadedFieldsSelectorDirectiveReady = function (api) {
@@ -84,7 +86,7 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 
 			function defineAPI() {
 				var api = {};
-
+				var lastPayload;
 				api.load = function (payload) {
 					$scope.scopeModel.uploadedFields.length = 0;
 					var promises = [];
@@ -103,10 +105,12 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 										IsRequired: uploadField.IsRequired,
 										Name: uploadField.FieldName,
 										TextResourceKey: uploadField.TextResourceKey,
-										localizationTextResourceSelectorLoadDeferred: UtilsService.createPromiseDeferred(),
+										localizationTextResourceSelectorLoadDeferred: isLocalizationEnabled ? UtilsService.createPromiseDeferred() : undefined,
 										localizationTextResourceSelectorReadyPromiseDeferred: UtilsService.createPromiseDeferred()
 									};
-									promises.push(loadedItem.localizationTextResourceSelectorLoadDeferred.promise);
+									if (isLocalizationEnabled) {
+										promises.push(loadedItem.localizationTextResourceSelectorLoadDeferred.promise);
+									}
 									addColumnOnEdit(loadedItem);
 								}
 							}
@@ -124,8 +128,11 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 							var uploadField = {
 								FieldName: item.Name,
 								IsRequired: item.IsRequired,
-								TextResourceKey: item.localizationTextResourceSelectorAPI != undefined ? item.localizationTextResourceSelectorAPI.getSelectedValues() : undefined
+								TextResourceKey: item.TextResourceKey
 							};
+							if (item.localizationTextResourceSelectorAPI != undefined) {
+								uploadField.TextResourceKey = item.localizationTextResourceSelectorAPI.getSelectedValues();
+							}
 							uploadFields.push(uploadField);
 						}
 					return uploadFields;

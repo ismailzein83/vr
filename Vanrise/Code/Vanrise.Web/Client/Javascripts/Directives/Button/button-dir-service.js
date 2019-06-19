@@ -499,7 +499,8 @@ app.service('ButtonDirService', ['BaseDirService', 'VRLocalizationService', func
                 };
             case "SaveAndNew":
                 return {
-                    text: "Save & New",
+					text: "Save & New",
+					localizedText: "VRRes.Common.SaveAndNew.VREnd",
                     class: "glyphicon  glyphicon-floppy-disk"
                 };
         }

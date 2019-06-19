@@ -27,6 +27,7 @@ namespace Vanrise.GenericData.MainExtensions
 			{
 				foreach (var filter in Filters)
 				{
+					if(filter.FilterSettings!=null)
 					filter.FilterSettings.ApplyTranslation(context);
 				}
 			}

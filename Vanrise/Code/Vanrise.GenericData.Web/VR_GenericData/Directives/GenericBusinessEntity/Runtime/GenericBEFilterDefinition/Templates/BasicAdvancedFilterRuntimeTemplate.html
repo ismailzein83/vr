@@ -1,10 +1,14 @@
 ﻿<vr-row ng-show="scopeModel.showBasicAdvancedTabs" removeline>
-    <vr-columns width="fullrow">
-        <vr-choices-filter selectedindex="selectedFilternIndex">
-            <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
-            <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
-        </vr-choices-filter>
-    </vr-columns>
+	<vr-columns width="fullrow">
+		<vr-choices-filter ng-if="scopeModel.isLocalizationEnabled" selectedindex="selectedFilternIndex">
+			<vr-choice-filter isselected="basicSelected">VRRes.Common.Basic.VREnd</vr-choice-filter>
+			<vr-choice-filter isselected="advancedSelected">VRRes.Common.Advanced.VREnd</vr-choice-filter>
+		</vr-choices-filter>
+		<vr-choices-filter ng-if="!scopeModel.isLocalizationEnabled" selectedindex="selectedFilternIndex">
+			<vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+			<vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+		</vr-choices-filter>
+	</vr-columns>
 </vr-row>
 
 <span ng-repeat="filter in scopeModel.filters">

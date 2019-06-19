@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
+using Vanrise.Common.Business;
+
 
 namespace Vanrise.GenericData.MainExtensions
 {
@@ -16,8 +19,35 @@ namespace Vanrise.GenericData.MainExtensions
         public IsEmptyFilterDefinitonSettingsField AllField { get; set; }
         public IsEmptyFilterDefinitonSettingsField NullField { get; set; }
         public IsEmptyFilterDefinitonSettingsField NotNullField { get; set; }
-    }
+		public override void ApplyTranslation(IGenericBETranslationContext context)
+		{
+			VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
+			
+			if (AllField != null)
+			{
+				if (!String.IsNullOrEmpty(AllField.Resourcekey))
+				{
+					AllField.Title = vrLocalizationManager.GetTranslatedTextResourceValue(AllField.Resourcekey, AllField.Title, context.LanguageId);
+				}
+			}
+			if (NullField != null)
+			{
+				if (!String.IsNullOrEmpty(NullField.Resourcekey))
+				{
+					NullField.Title = vrLocalizationManager.GetTranslatedTextResourceValue(NullField.Resourcekey, NullField.Title, context.LanguageId);
+				}
+			}
+			if (NotNullField != null)
+			{
+				if (!String.IsNullOrEmpty(NotNullField.Resourcekey))
+				{
+					NotNullField.Title = vrLocalizationManager.GetTranslatedTextResourceValue(NotNullField.Resourcekey, NotNullField.Title, context.LanguageId);
+				}
+			}
 
+		}
+	}
+	
     public class IsEmptyFilterDefinitonSettingsField
     {
         public string Title { get; set; }

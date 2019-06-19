@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BasicAdvancedFilterRuntimeSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_RecordQueryLogicalOperatorEnum'];
+	BasicAdvancedFilterRuntimeSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_RecordQueryLogicalOperatorEnum','VRLocalizationService'];
 
-    function BasicAdvancedFilterRuntimeSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_RecordQueryLogicalOperatorEnum) {
+	function BasicAdvancedFilterRuntimeSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_RecordQueryLogicalOperatorEnum, VRLocalizationService) {
         return {
             restrict: "E",
             scope: {
@@ -26,7 +26,8 @@
             var dataRecordTypeId;
 
             function initializeController() {
-                $scope.scopeModel = {};
+				$scope.scopeModel = {};
+				$scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
                 $scope.scopeModel.showBasicAdvancedTabs = false;
 
                 defineAPI();
