@@ -120,6 +120,17 @@ namespace TOne.WhS.Invoice.Business
                                     customerInvoiceDetails.OriginalAmountByCurrency.Add(item.Key, item.Value);
                             }
                         }
+                        else
+                        {
+                            if(customerInvoiceDetails.OriginalAmountByCurrency != null)
+                            {
+                                foreach (var item in input.OriginalDataCurrency)
+                                {
+                                    if (customerInvoiceDetails.OriginalAmountByCurrency.ContainsKey(item.Key))
+                                        customerInvoiceDetails.OriginalAmountByCurrency.Remove(item.Key);
+                                }
+                            }
+                        }
                         if (input.OriginalDataCurrency.All(x => x.Value.TrafficAmount.HasValue || x.Value.SMSAmount.HasValue || x.Value.DealAmount.HasValue || x.Value.RecurringChargeAmount.HasValue))
                         {
                             customerInvoiceDetails.IsOriginalAmountSetted = true;
@@ -145,6 +156,17 @@ namespace TOne.WhS.Invoice.Business
                             {
                                 if (item.Value.TrafficAmount.HasValue || item.Value.SMSAmount.HasValue || item.Value.DealAmount.HasValue || item.Value.RecurringChargeAmount.HasValue)
                                     supplierInvoiceDetails.OriginalAmountByCurrency.Add(item.Key, item.Value);
+                            }
+                        }
+                        else
+                        {
+                            if (supplierInvoiceDetails.OriginalAmountByCurrency != null)
+                            {
+                                foreach (var item in input.OriginalDataCurrency)
+                                {
+                                    if (supplierInvoiceDetails.OriginalAmountByCurrency.ContainsKey(item.Key))
+                                        supplierInvoiceDetails.OriginalAmountByCurrency.Remove(item.Key);
+                                }
                             }
                         }
                         if (input.OriginalDataCurrency.All(x => x.Value.TrafficAmount.HasValue || x.Value.SMSAmount.HasValue || x.Value.DealAmount.HasValue || x.Value.RecurringChargeAmount.HasValue))
