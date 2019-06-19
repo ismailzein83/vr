@@ -346,9 +346,11 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-genericeditorsubview-runtime.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-runtime-management.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBEFilterRuntimeRootContainerEditor.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntitySelectorCondition.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntitySelectorFilter.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityRootContainerEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbe-filterruntime-rootcontainer.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-selectorcondition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-selectorfilter.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericeditor-rootcontainer.js" />
     <Content Include="VR_GenericData\Directives\GenericFinanialAccount\Templates\GenericFinancialAccountDefinition.html" />
