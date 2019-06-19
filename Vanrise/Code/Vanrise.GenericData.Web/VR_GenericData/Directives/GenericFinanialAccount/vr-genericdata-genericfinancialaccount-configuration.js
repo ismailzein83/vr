@@ -51,7 +51,7 @@ app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsServic
             var currencyFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var selectedCurrency;
 
-            var onBusinessEntityDefinitionSelectionChangeDeferred;
+            var onBusinessEntityDefinitionSelectionChangePromiseDeferred;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -93,8 +93,8 @@ app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsServic
 
                 $scope.scopeModel.onBusinessEntityDefinitionSelectionChange = function (beDefinition) {
                     if (beDefinition != undefined) {
-                        if (onBusinessEntityDefinitionSelectionChangeDeferred != undefined) {
-                            onBusinessEntityDefinitionSelectionChangeDeferred.resolve();
+                        if (onBusinessEntityDefinitionSelectionChangePromiseDeferred != undefined) {
+                            onBusinessEntityDefinitionSelectionChangePromiseDeferred.resolve();
                         }
                         else {
                             dataRecordTypeId = undefined;
@@ -154,6 +154,9 @@ app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsServic
                 api.load = function (payload) {
 
                     if (payload != undefined) {
+
+                        onBusinessEntityDefinitionSelectionChangePromiseDeferred = UtilsService.createPromiseDeferred();
+
                         beDefinitionId = payload.FinancialAccountBEDefinitionId;
                         selectedFinancialAccount = payload.FinancialAccountIdFieldName;
                         selectedAccountName = payload.AccountNameFieldName;
@@ -178,7 +181,7 @@ app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsServic
                             return {
                                 promises: selectorsPromises,
                                 getChildNode: function () {
-                                    onBusinessEntityDefinitionSelectionChangeDeferred = undefined;
+                                    onBusinessEntityDefinitionSelectionChangePromiseDeferred = undefined;
                                     return {
                                         promises: []
                                     };
