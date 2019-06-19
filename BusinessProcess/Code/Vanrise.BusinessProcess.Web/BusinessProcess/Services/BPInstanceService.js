@@ -131,7 +131,7 @@
                     if (payload == undefined)
                         return;
 
-                   
+                    var promiseDeferred = UtilsService.createPromiseDeferred();
                     var businessEntityDefinitionId = payload.businessEntityDefinitionId;
                     var genericBusinessEntityId = payload.genericBusinessEntityId;
                     if (payload.genericBEAction != undefined && payload.genericBEAction.Settings != undefined) {
@@ -140,10 +140,16 @@
                             var editorEnum = UtilsService.getEnum(VRCommon_ModalWidthEnum, "value", response.Configuration.EditorSize);
                             var editorSize = editorEnum != undefined ? editorEnum.modalAttr : undefined;
 
-                            startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings, editorSize);
+                            startBPProcessAction(businessEntityDefinitionId, genericBusinessEntityId, genericBEActionSettings, editorSize).then(function () {
+                                promiseDeferred.resolve(true);
+                            }).catch(function () {
+                                promiseDeferred.reject();
+                            });
+                        }).catch(function () {
+                            promiseDeferred.reject();
                         });
                     }
-
+                    return promiseDeferred.promise;
                    
                 }
             };
@@ -163,7 +169,7 @@
             settings.onScopeReady = function (modalScope) {
             };
            
-            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPProcess/Templates/StartBPProcessEditor.html', parameters, settings);
+           return VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPProcess/Templates/StartBPProcessEditor.html', parameters, settings);
         }
 
 
