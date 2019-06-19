@@ -23,7 +23,7 @@ namespace Vanrise.Invoice.MainExtensions
                 var date = new DateTime(context.PreviousPeriodEndDate.Value.Year, context.PreviousPeriodEndDate.Value.Month, 1);
                 nextBillingInterval.FromDate = date;
                 nextBillingInterval.ToDate = date.AddMonths(2).AddDays(-1);
-                if (nextBillingInterval.ToDate > context.IssueDate)
+                if (nextBillingInterval.ToDate.Date >= context.IssueDate.Date)
                 {
                     perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
                 }
@@ -31,7 +31,7 @@ namespace Vanrise.Invoice.MainExtensions
                 {
                     perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
                     perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
-                    while (nextBillingInterval.ToDate <= context.IssueDate && nextBillingInterval.ToDate < DateTime.Today)
+                    while (nextBillingInterval.ToDate.Date < context.IssueDate.Date && nextBillingInterval.ToDate < DateTime.Today)
                     {
                         perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
                         perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
@@ -44,6 +44,9 @@ namespace Vanrise.Invoice.MainExtensions
             {
                 perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
             }
+            var lastDayOfMonth = DateTime.DaysInMonth(perviousBillingInterval.ToDate.Year, perviousBillingInterval.ToDate.Month);
+            if (perviousBillingInterval.ToDate.Day != lastDayOfMonth)
+                perviousBillingInterval.ToDate = new DateTime(perviousBillingInterval.ToDate.Year, perviousBillingInterval.ToDate.Month, lastDayOfMonth);
             billingIntervalList.Add(perviousBillingInterval);
             return billingIntervalList;
         }

@@ -31,7 +31,7 @@ namespace Vanrise.Invoice.MainExtensions
                     }
                 }
                 nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(13);
-                if (nextBillingInterval.ToDate > context.IssueDate)
+                if (nextBillingInterval.ToDate.Date >= context.IssueDate.Date)
                 {
                     perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
                 }
@@ -39,7 +39,7 @@ namespace Vanrise.Invoice.MainExtensions
                 {
                     perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
                     perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
-                    while (nextBillingInterval.ToDate <= context.IssueDate && nextBillingInterval.ToDate < DateTime.Today)
+                    while (nextBillingInterval.ToDate.Date < context.IssueDate.Date && nextBillingInterval.ToDate < DateTime.Today)
                     {
                         perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
                         perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
