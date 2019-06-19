@@ -59,15 +59,15 @@
                 + '          </vr-columns>'
                 + '      </vr-row>'
                 + '      <vr-row removeline>'
-                + '          <vr-columns width="1/2row">'
+                + '          <vr-columns width="1/3row">'
                 + '              <vr-switch value="dataItem.isRequired" label="Required"></vr-switch>'
                 + '          </vr-columns>'
-                + '          <vr-columns width="1/2row">'
+                + '          <vr-columns width="1/3row">'
                 + '              <vr-switch value="dataItem.isDisabled" label="Disabled"></vr-switch>'
                 + '          </vr-columns>'
-                + '          <!--<vr-columns width="1/2row">'
-                + '              <vr-switch value="dataItem.isDisabledOnEdit" label="Disable on Edit"></vr-switch>'
-                + '          </vr-columns>-->'
+                + '          <vr-columns width="1/3row">'
+                + '              <vr-switch value="dataItem.showAsLabel" label="Show as Label"></vr-switch>'
+                + '          </vr-columns>'
                 + '         <span vr-loader="dataItem.isLocalizationTextResourceSelectorLoading">'
                 + '              <vr-common-vrlocalizationtextresource-selector on-ready="dataItem.onLocalizationTextResourceDirectiveReady" normal-col-num="6"></vr-common - vrlocalizationtextresource - selector > '
                 + '         </span>'
@@ -233,7 +233,7 @@
                                 fieldSettingsLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 isRequired: selectedField.IsRequired,
                                 isDisabled: selectedField.IsDisabled,
-                                //isDisabledOnEdit: selectedField.IsDisabledOnEdit,
+                                showAsLabel: selectedField.ShowAsLabel,
                                 directiveAPI: undefined,
                                 localizationResourceSelectorDirectiveReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                 localizationResourceSelectorLoadPromiseDeferred: UtilsService.createPromiseDeferred()
@@ -283,9 +283,9 @@
                             FieldTitle: selectedField.fieldTitle,
                             IsRequired: selectedField.isRequired,
                             IsDisabled: selectedField.isDisabled,
+                            ShowAsLabel: selectedField.showAsLabel,
                             FieldViewSettings: selectedField.directiveAPI != undefined ? selectedField.directiveAPI.getData() : undefined,
                             TextResourceKey: selectedField.localizationTextResourceSelectorAPI.getSelectedValues()
-                            //IsDisabledOnEdit:selectedField.isDisabledOnEdit
                         });
                     }
 

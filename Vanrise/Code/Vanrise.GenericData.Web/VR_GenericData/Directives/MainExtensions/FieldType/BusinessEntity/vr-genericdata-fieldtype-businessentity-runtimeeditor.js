@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService', 'VR_GenericData_GenericUIRuntimeAPIService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_GenericUIRuntimeAPIService) {
+app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService', 'VR_GenericData_GenericUIRuntimeAPIService', 'VR_GenericData_DataRecordFieldAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_GenericUIRuntimeAPIService, VR_GenericData_DataRecordFieldAPIService) {
 
 
         var directiveDefinitionObject = {
@@ -63,12 +63,24 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     + '</span>';
             }
             else {
-                return '<span vr-loader="isLoading">'
+                return '<span vr-loader="isLoading"  ng-if="!scopeModel.showAsLabel">'
                     + '<vr-directivewrapper directive="selector.directive" ' + showaddbutton + ' normal-col-num="{{scopeModel.calculatedColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" onselectitem = "selector.onselectitem" '
                     + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                     + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
                     '</vr-section>'
-                    + '</span>';
+                    + '</span>'
+
+                    + '<vr-columns colnum="{{scopeModel.calculatedColNum}}" haschildcolumns ng-if="scopeModel.showAsLabel">'
+                    + '<vr-columns colnum="3"> '
+                    + '<vr-label> {{scopeModel.fieldTitle}}</vr-label>'
+                    + '</vr-columns>'
+                    + '<vr-columns colnum="1">'
+                    + '<vr-label> : </vr-label>'
+                    + '</vr-columns>'
+                    + '<vr-columns colnum="8">'
+                    + '<vr-label isvalue> {{scopeModel.valueAsString}} </vr-label>'
+                    + '</vr-columns>'
+                    + '</vr-columns>';
             }
         }
 
@@ -77,6 +89,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
             var fieldName;
             var fieldValue;
+            var fieldType;
             var businessEntityDefinitionId;
             var missingGroupSelectorUIControl;
             var genericContext;
@@ -95,8 +108,8 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
 
-                    var fieldType;
                     var genericUIContext;
                     var allFieldValuesByName;
                     var parentFieldValues;
@@ -111,6 +124,10 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                         allFieldValuesByName = payload.allFieldValuesByName;
                         parentFieldValues = payload.parentFieldValues;
                         //dataRecordTypeId = payload.dataRecordTypeId;
+                        $scope.scopeModel.showAsLabel = payload.showAsLabel;
+                        if (payload.showAsLabel) {
+                            promises.push(getFieldTypeDescription());
+                        }
                     }
 
                     businessEntityDefinitionId = fieldType.BusinessEntityDefinitionId;
@@ -120,12 +137,9 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
                     if (fieldType.DependantFields != null && fieldType.DependantFields != undefined) {
                         dependentFields = fieldType.DependantFields;
-                            data = evaluateAndApplyFieldState(allFieldValuesByName);
-                            hasEmtyRequiredDependentField = data.hasEmtyRequiredDependentField;
+                        data = evaluateAndApplyFieldState(allFieldValuesByName);
+                        hasEmtyRequiredDependentField = data.hasEmtyRequiredDependentField;
                     }
-
-                    var promises = [];
-
                     var loadWholeSectionPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(loadWholeSectionPromiseDeferred.promise);
 
@@ -159,8 +173,10 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                 };
 
                                 $scope.dynamic.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                                innerSectionPromises.push($scope.dynamic.directiveLoadPromiseDeferred.promise);
 
+                                if ($scope.dynamic.directiveAPI != undefined) {
+                                    innerSectionPromises.push($scope.dynamic.directiveLoadPromiseDeferred.promise);
+                                }
                                 $scope.dynamic.directiveReadyPromiseDeferred.promise.then(function () {
 
                                     var payload;
@@ -201,7 +217,9 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                 };
 
                                 $scope.selector.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                                innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
+                                if ($scope.selector.directiveAPI != undefined) {
+                                    innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
+                                }
 
                                 $scope.selector.directiveReadyPromiseDeferred.promise.then(function () {
 
@@ -479,7 +497,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     var currentDependentField = dependentFields[i];
                     var dependentFieldName = currentDependentField.FieldName;
 
-                    if ( allChangedFields != undefined && dependentFieldName in allChangedFields) {
+                    if (allChangedFields != undefined && dependentFieldName in allChangedFields) {
                         var oldValues = fieldValuesByName[dependentFieldName];
                         var newValues = allChangedFields[dependentFieldName];
 
@@ -529,6 +547,12 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     $scope.isLoading = value;
                 };
                 return VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directiveLoadPayload, setLoader);
+            }
+
+            function getFieldTypeDescription() {
+                return VR_GenericData_DataRecordFieldAPIService.GetFieldTypeDescription(fieldType, fieldValue).then(function (response) {
+                    $scope.scopeModel.valueAsString = response;
+                });
             }
         }
 

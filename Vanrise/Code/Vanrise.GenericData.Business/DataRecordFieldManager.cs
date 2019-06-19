@@ -112,6 +112,13 @@ namespace Vanrise.GenericData.Business
             return manager.GetExtensionConfigurations<ListRecordRuntimeViewTypeConfig>(ListRecordRuntimeViewTypeConfig.EXTENSION_TYPE);
         }
 
+        public string GetFieldTypeDescription(FieldTypeDescriptionInput input)
+        {
+            if (input.FieldType == null)
+                return null;
+            return input.FieldType.GetDescription(input.FieldValue);
+        }
+
         #endregion
 
         #region Config
@@ -154,5 +161,10 @@ namespace Vanrise.GenericData.Business
     {
         public List<GenericFieldChangeDifferences> Differences { get; set; }
         public List<GenericFieldChangeSimpleChange> SimpleChanges { get; set; }
+    }
+    public class FieldTypeDescriptionInput
+    {
+        public DataRecordFieldType FieldType { get; set; }
+        public string FieldValue { get; set; }
     }
 }

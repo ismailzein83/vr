@@ -39,6 +39,13 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetFieldCustomObjectTypeSettingsConfig"));
         }
 
+        function GetFieldTypeDescription(fieldType, fieldValue) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetFieldTypeDescription"),
+                {
+                    FieldType: fieldType,
+                    FieldValue: fieldValue
+                });
+        }
 
         return ({
             GetDataRecordFieldsInfo: GetDataRecordFieldsInfo,
@@ -47,7 +54,8 @@
             GetDataRecordFieldTypeConfigs: GetDataRecordFieldTypeConfigs,
             TryResolveDifferences: TryResolveDifferences,
             GetFieldCustomObjectTypeSettingsConfig: GetFieldCustomObjectTypeSettingsConfig,
-            GetListRecordRuntimeViewTypeConfigs: GetListRecordRuntimeViewTypeConfigs
+            GetListRecordRuntimeViewTypeConfigs: GetListRecordRuntimeViewTypeConfigs,
+            GetFieldTypeDescription: GetFieldTypeDescription
         });
 
     }

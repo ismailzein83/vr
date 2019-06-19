@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -46,10 +46,22 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
 
             //var isRequired = (attrs.selectionmode == "single" && attrs.isrequired != undefined) ? 'isrequired="ctrl.isrequired"' : '';
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="!scopeModel.showAsLabel">' +
                 '<vr-select datatextfield="Text" label="{{ctrl.label}}" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" onselectionchanged="ctrl.onChoiceSelectionChanged"'
                 + multipleselection + ' isrequired="ctrl.isrequired"></vr-select>' +
-                '</vr-columns>';
+                '</vr-columns>'
+
+                + '<vr-columns colnum="{{ctrl.normalColNum}}" haschildcolumns ng-if="scopeModel.showAsLabel">'
+                + '<vr-columns colnum="3"> '
+                + '<vr-label> {{ctrl.label}}</vr-label>'
+                + '</vr-columns>'
+                + '<vr-columns colnum="1">'
+                + '<vr-label> : </vr-label>'
+                + '</vr-columns>'
+                + '<vr-columns colnum="8">'
+                + '<vr-label isvalue> {{scopeModel.valueAsString}} </vr-label>'
+                + '</vr-columns>'
+                + '</vr-columns>';
         }
 
         function choicesCtor(ctrl, $scope, $attrs) {
@@ -57,11 +69,15 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
 
             var fieldName;
             var genericContext;
+            var fieldType;
+            var fieldValue;
 
             var selectorAPI;
 
 
             function initializeController() {
+                $scope.scopeModel = {};
+
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
@@ -92,11 +108,10 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
+                    var promises = [];
 
                     var filter = {};
-                    var fieldType;
-                    var fieldValue;
-
+                   
                     if (payload != undefined) {
                         ctrl.label = payload.fieldTitle;
                         filter = payload.filter;
@@ -104,6 +119,10 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                         fieldValue = payload.fieldValue;
                         fieldName = payload.fieldName;
                         genericContext = payload.genericContext;
+                        $scope.scopeModel.showAsLabel = payload.showAsLabel;
+                        if (payload.showAsLabel) {
+                            promises.push(getFieldTypeDescription());
+                        }
                     }
 
                     if (fieldType != undefined) {
@@ -134,6 +153,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                             }
                         }
                     }
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -163,6 +183,12 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function getFieldTypeDescription() {
+                return VR_GenericData_DataRecordFieldAPIService.GetFieldTypeDescription(fieldType, fieldValue).then(function (response) {
+                    $scope.scopeModel.valueAsString = response;
+                });
             }
         }
 

@@ -150,9 +150,9 @@
                         FieldTitle: currentField.FieldTitle,
                         IsRequired: currentField.IsRequired,
                         IsDisabled: currentField.IsDisabled,
+                        ShowAsLabel: currentField.ShowAsLabel,
                         FieldViewSettings: currentField.FieldViewSettings,
                         TextResourceKey: currentField.TextResourceKey,
-                        //IsDisabledOnEdit:currentField.IsDisabledOnEdit
                     });
                 }
 

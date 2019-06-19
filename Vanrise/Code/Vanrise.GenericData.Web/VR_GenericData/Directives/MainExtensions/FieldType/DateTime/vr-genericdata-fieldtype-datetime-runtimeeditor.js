@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'VR_GenericData_DateTimeDataTypeEnum',
-    function (UtilsService, VR_GenericData_DateTimeDataTypeEnum) {
+app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'VR_GenericData_DateTimeDataTypeEnum', 'VR_GenericData_DataRecordFieldAPIService',
+    function (UtilsService, VR_GenericData_DateTimeDataTypeEnum, VR_GenericData_DataRecordFieldAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -28,6 +28,8 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             this.initializeController = initializeController;
 
             var fieldName;
+            var fieldType;
+            var fieldValue;
             var genericContext;
 
             function initializeController() {
@@ -95,11 +97,10 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
+
                     $scope.scopeModel.value = undefined;
                     $scope.scopeModel.values = [];
-
-                    var fieldType;
-                    var fieldValue;
 
                     if (payload != undefined) {
                         $scope.scopeModel.label = payload.fieldTitle;
@@ -109,6 +110,10 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                         var dataTypes = UtilsService.getArrayEnum(VR_GenericData_DateTimeDataTypeEnum);
                         $scope.scopeModel.fieldType = UtilsService.getItemByVal(dataTypes, fieldType.DataType, 'value');
                         genericContext = payload.genericContext;
+                        $scope.scopeModel.showAsLabel = payload.showAsLabel;
+                        if (payload.showAsLabel) {
+                            promises.push(getFieldTypeDescription());
+                        }
                     }
 
                     if (fieldValue != undefined) {
@@ -130,6 +135,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                             }
                         }
                     }
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -189,6 +195,12 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     return ctrl.customvalidate();
                 return undefined;
             }
+
+            function getFieldTypeDescription() {
+                return VR_GenericData_DataRecordFieldAPIService.GetFieldTypeDescription(fieldType, fieldValue).then(function (response) {
+                    $scope.scopeModel.valueAsString = response;
+                });
+            }
         }
 
         function getDirectiveTemplate(attrs) {
@@ -212,9 +224,21 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             }
 
             function getSingleSelectionModeTemplate() {
-                return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="scopeModel.fieldType != undefined && scopeModel.label != undefined ">'
+                return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="scopeModel.fieldType != undefined && scopeModel.label != undefined && !scopeModel.showAsLabel">'
                     + '<vr-label>{{scopeModel.label}}</vr-label>'
                     + '<vr-directivewrapper directive="\'vr-datetimepicker\'" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" onvaluechanged="scopeModel.onDateChanged()" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
+                    + '</vr-columns>'
+
+                    + '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" haschildcolumns ng-if="scopeModel.showAsLabel">'
+                       + '<vr-columns colnum="3"> '
+                          + '<vr-label> {{scopeModel.label}}</vr-label>'
+                       + '</vr-columns>'
+                       + '<vr-columns colnum="1">'
+                         + '<vr-label> : </vr-label>'
+                       + '</vr-columns>'
+                       + '<vr-columns colnum="8">'
+                         + '<vr-label isvalue> {{scopeModel.valueAsString}} </vr-label>'
+                       + '</vr-columns>'
                     + '</vr-columns>';
             }
         }

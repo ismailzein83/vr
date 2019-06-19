@@ -323,7 +323,7 @@ namespace Vanrise.GenericData.Business
                     var runtimeField = BuildRuntimeField<GenericEditorRuntimeField>(field, dataRecordTypeFieldsByName, dataRecordTypeId);
                     runtimeField.IsRequired = field.IsRequired;
                     runtimeField.IsDisabled = field.IsDisabled;
-                    //runtimeField.IsDisabledOnEdit = field.IsDisabledOnEdit;
+                    runtimeField.ShowAsLabel = field.ShowAsLabel;
                     runtimeRow.Fields.Add(runtimeField);
                 }
             }
@@ -345,7 +345,7 @@ namespace Vanrise.GenericData.Business
                 var runtimeField = BuildRuntimeField<GenericEditorRuntimeField>(field, dataRecordTypeFields, dataRecordTypeId);
                 runtimeField.IsRequired = field.IsRequired;
                 runtimeField.IsDisabled = field.IsDisabled;
-                //runtimeField.IsDisabledOnEdit = field.IsDisabledOnEdit;
+                runtimeField.ShowAsLabel = field.ShowAsLabel;
                 genericEditorRuntimeFields.Add(runtimeField);
             }
 

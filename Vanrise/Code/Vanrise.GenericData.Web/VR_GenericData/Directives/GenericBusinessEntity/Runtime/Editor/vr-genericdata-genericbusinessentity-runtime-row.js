@@ -125,6 +125,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
                             fieldValue: currentContext != undefined ? currentContext.getFieldPathValue(field.FieldPath) : undefined,
                             fieldViewSettings: field.FieldViewSettings,
                             TextResourceKey: field.TextResourceKey,
+                            showAsLabel: field.ShowAsLabel,
                             genericContext: genericContext,
                             allFieldValuesByName: allFieldValuesByName,
                             parentFieldValues: parentFieldValues,
