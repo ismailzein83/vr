@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_GenericData_GenericBEDefinitionAPIService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -99,7 +99,7 @@ app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsServic
                         else {
                             dataRecordTypeId = undefined;
                             beDefinitionId = beDefinition.BusinessEntityDefinitionId;
-                            if (bEDefinitionId != undefined) {
+                            if (beDefinitionId != undefined) {
                                 VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEDefinitionSettings(beDefinitionId).then(function (response) {
                                     dataRecordTypeId = response.DataRecordTypeId;
 
@@ -216,10 +216,10 @@ app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsServic
             function getDataRecordTypeId() {
                 var dataRecordTypeGetPromise = UtilsService.createPromiseDeferred();
 
-                VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEDefinitionSettings(bEDefinitionId).then(function (response) {
+                VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEDefinitionSettings(beDefinitionId).then(function (response) {
                     dataRecordTypeId = response.DataRecordTypeId;
 
-                    return dataRecordTypeGetPromise.promise.resolve();
+                    return dataRecordTypeGetPromise.resolve();
 
                 });
                 return dataRecordTypeGetPromise.promise;
@@ -308,7 +308,7 @@ app.directive("vrGenericdataGenericfinancialaccountConfiguration", ["UtilsServic
                     if (selectedFinancialAccount != undefined) {
                         financialAccountFieldSelectorPayload.selectedIds = selectedFinancialAccount;
                     }
-                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, financialAccountFieldSelectorPayload, financialAccountFieldSelectorLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(financialAccountFieldSelectorAPI, financialAccountFieldSelectorPayload, financialAccountFieldSelectorLoadDeferred);
                 });
 
                 return financialAccountFieldSelectorLoadDeferred.promise;

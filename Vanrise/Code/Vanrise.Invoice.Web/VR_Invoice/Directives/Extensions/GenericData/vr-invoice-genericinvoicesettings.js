@@ -13,7 +13,7 @@ app.directive("vrInvoiceGenericinvoicesettings", ["UtilsService", "VRNotificatio
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_Invoice/Directives/Extensions/GenericData/Templates/InvoiceBusinessObjectDataProviderSettingsTemplate.html'
+            templateUrl: '/Client/Modules/VR_Invoice/Directives/Extensions/GenericData/Templates/GenericInvoiceSettings.html'
         };
 
 
@@ -118,10 +118,10 @@ app.directive("vrInvoiceGenericinvoicesettings", ["UtilsService", "VRNotificatio
                         if (configuration != undefined) {
                             genericFinancialAccountPayload = configuration;
                         }
-                        VRUIUtilsService.callDirectiveLoad(eedFieldSelectorAPI, genericFinancialAccountPayload, genericFinancialAccountDirectiverLoadDeferred);
+                        VRUIUtilsService.callDirectiveLoad(genericFinancialAccountDirectiveAPI, genericFinancialAccountPayload, genericFinancialAccountDirectiverLoadDeferred);
                     });
 
-                    return eedFieldSelectorLoadDeferred.promise;
+                    return genericFinancialAccountDirectiverLoadDeferred.promise;
                 }
             }
         }
