@@ -21,6 +21,8 @@ app.directive("vrGenericdataConditionalrulecontainereditorsettingRuntime", ["Uti
         function GenericEditorConditionalRuleRuntimeSetting($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var isFirstLoad = true;
+
             var selectedValues;
             var allFieldValuesByName;
             var definitionSettings;
@@ -30,36 +32,34 @@ app.directive("vrGenericdataConditionalrulecontainereditorsettingRuntime", ["Uti
             var genericContext;
             var genericEditorConditionalRule;
 
-            var conditionalRuleContainerServiceState;
-            var conditionState;
+            var initializeConditionalRuleEvaluationState;
+            var currentConditionalRuleEvaluationResult;
 
-            var editorRuntimeAPI;
-            var editorRuntimeDirectiveReadyPromiseDeferred;
+            var editorRuntimeDirectiveAPI;
+            var editorRuntimeDirectiveReadyPromiseDeferred;  //Defined and Undefined in postConditionalRuleEvaluationAction
+
 
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
-                    editorRuntimeAPI = api;
+                    editorRuntimeDirectiveAPI = api;
+                    editorRuntimeDirectiveReadyPromiseDeferred.resolve();
 
-                    var directivePayload = {
-                        selectedValues: selectedValues,
-                        allFieldValuesByName: allFieldValuesByName,
-                        definitionSettings: definitionSettings.EditorDefinitionSetting,
-                        dataRecordTypeId: dataRecordTypeId,
-                        historyId: historyId,
-                        parentFieldValues: parentFieldValues,
-                        genericContext: genericContext
-                    };
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isDirectiveLoading = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, editorRuntimeAPI, directivePayload, setLoader, undefined).then(function () {
-                        if (editorRuntimeDirectiveReadyPromiseDeferred == undefined)
-                            editorRuntimeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        editorRuntimeDirectiveReadyPromiseDeferred.resolve();
-                    });
+                    if (!isFirstLoad) {
+                        var directivePayload = {
+                            allFieldValuesByName: allFieldValuesByName,
+                            definitionSettings: definitionSettings.EditorDefinitionSetting,
+                            dataRecordTypeId: dataRecordTypeId,
+                            historyId: historyId,
+                            parentFieldValues: parentFieldValues,
+                            genericContext: genericContext
+                        };
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isDirectiveLoading = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, editorRuntimeDirectiveAPI, directivePayload, setLoader, undefined);
+                    }
                 };
 
                 defineAPI();
@@ -70,8 +70,6 @@ app.directive("vrGenericdataConditionalrulecontainereditorsettingRuntime", ["Uti
 
                 api.load = function (payload) {
                     var promises = [];
-
-                    console.log(payload);
 
                     if (payload != undefined) {
                         selectedValues = payload.selectedValues;
@@ -88,33 +86,72 @@ app.directive("vrGenericdataConditionalrulecontainereditorsettingRuntime", ["Uti
                                 $scope.scopeModel.runtimeEditor = definitionSettings.EditorDefinitionSetting.RuntimeEditor;
                             }
 
-                            conditionalRuleContainerServiceState = new VR_GenericData_GenericEditorConditionalRuleContainerService.initializeConditionalRuleEvaluation(getInitializeConditionalRuleEvaluationPayload());
+                            initializeConditionalRuleEvaluationState = new VR_GenericData_GenericEditorConditionalRuleContainerService.initializeConditionalRuleEvaluation(getInitializeConditionalRuleEvaluationContext());
+                        }
+
+                        if (initializeConditionalRuleEvaluationState != undefined && initializeConditionalRuleEvaluationState.onFieldValueChanged != undefined) {
+
+                            var loadRuntimeEditorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                            promises.push(loadRuntimeEditorDirectivePromiseDeferred.promise);
+
+                            initializeConditionalRuleEvaluationState.onFieldValueChanged(allFieldValuesByName).then(function () {
+                                if ($scope.scopeModel.showDirective) {
+                                    loadRuntimeEditorDirective().then(function () {
+                                        loadRuntimeEditorDirectivePromiseDeferred.resolve();
+                                    });
+                                }
+                                else {
+                                    loadRuntimeEditorDirectivePromiseDeferred.resolve();
+                                }
+                            });
                         }
                     }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    function loadRuntimeEditorDirective() {
+                        var loadRuntimeEditorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        editorRuntimeDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var directivePayload = {
+                                selectedValues: selectedValues,
+                                allFieldValuesByName: allFieldValuesByName,
+                                definitionSettings: definitionSettings.EditorDefinitionSetting,
+                                dataRecordTypeId: dataRecordTypeId,
+                                historyId: historyId,
+                                parentFieldValues: parentFieldValues,
+                                genericContext: genericContext
+                            };
+                            VRUIUtilsService.callDirectiveLoad(editorRuntimeDirectiveAPI, directivePayload, loadRuntimeEditorDirectivePromiseDeferred);
+                        });
+
+                        return loadRuntimeEditorDirectivePromiseDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        isFirstLoad = false;
+                    });
                 };
 
                 api.setData = function (dicData) {
-                    if (editorRuntimeAPI != undefined && $scope.scopeModel.showDirective) {
-                        editorRuntimeAPI.setData(dicData);
+                    if (editorRuntimeDirectiveAPI != undefined && $scope.scopeModel.showDirective) {
+                        editorRuntimeDirectiveAPI.setData(dicData);
                     }
                 };
 
                 api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
-                    if (conditionalRuleContainerServiceState.onFieldValueChanged != undefined) {
-                        conditionalRuleContainerServiceState.onFieldValueChanged(allFieldValuesByFieldNames);
+                    if (initializeConditionalRuleEvaluationState.onFieldValueChanged != undefined) {
+                        initializeConditionalRuleEvaluationState.onFieldValueChanged(allFieldValuesByFieldNames);
                     }
 
                     var onFieldValueChangedDeferred = UtilsService.createPromiseDeferred();
 
-                    if (editorRuntimeDirectiveReadyPromiseDeferred != undefined) {
+                    if ($scope.scopeModel.showDirective) {
                         editorRuntimeDirectiveReadyPromiseDeferred.promise.then(function () {
 
                             var _promises = [];
-                            if (editorRuntimeAPI != undefined) {
-                                if (editorRuntimeAPI.onFieldValueChanged != undefined && typeof (editorRuntimeAPI.onFieldValueChanged) == "function") {
-                                    var onFieldValueChangedPromise = editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames);
+                            if (editorRuntimeDirectiveAPI != undefined) {
+                                if (editorRuntimeDirectiveAPI.onFieldValueChanged != undefined && typeof (editorRuntimeDirectiveAPI.onFieldValueChanged) == "function") {
+                                    var onFieldValueChangedPromise = editorRuntimeDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
                                     if (onFieldValueChangedPromise != undefined)
                                         _promises.push(onFieldValueChangedPromise);
                                 }
@@ -133,13 +170,13 @@ app.directive("vrGenericdataConditionalrulecontainereditorsettingRuntime", ["Uti
                 };
 
                 api.setFieldValues = function (fieldValuesByNames) {
-                    if (editorRuntimeAPI == undefined)
+                    if (editorRuntimeDirectiveAPI == undefined)
                         return null;
 
                     var _promises = [];
 
-                    if (editorRuntimeAPI.setFieldValues != undefined && typeof (editorRuntimeAPI.setFieldValues) == "function") {
-                        var onFieldValueSettedPromise = editorRuntimeAPI.setFieldValues(fieldValuesByNames);
+                    if (editorRuntimeDirectiveAPI.setFieldValues != undefined && typeof (editorRuntimeDirectiveAPI.setFieldValues) == "function") {
+                        var onFieldValueSettedPromise = editorRuntimeDirectiveAPI.setFieldValues(fieldValuesByNames);
                         if (onFieldValueSettedPromise != undefined)
                             _promises.push(onFieldValueSettedPromise);
                     }
@@ -151,38 +188,43 @@ app.directive("vrGenericdataConditionalrulecontainereditorsettingRuntime", ["Uti
                     ctrl.onReady(api);
             }
 
-            function getInitializeConditionalRuleEvaluationPayload() {
+            function getInitializeConditionalRuleEvaluationContext() {
+
+                var postConditionalRuleEvaluationAction = function (conditionalRuleEvaluationResult) {
+                    if (conditionalRuleEvaluationResult == currentConditionalRuleEvaluationResult)
+                        return;
+
+                    if (conditionalRuleEvaluationResult) {
+                        editorRuntimeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    } else {
+                        resetEditorRuntimeDirective();
+                    }
+
+                    $scope.scopeModel.showDirective = conditionalRuleEvaluationResult;
+                    currentConditionalRuleEvaluationResult = conditionalRuleEvaluationResult;
+
+                    function resetEditorRuntimeDirective() {
+                        var dicData = {};
+                        if (editorRuntimeDirectiveAPI != undefined) {
+                            editorRuntimeDirectiveAPI.setData(dicData);
+                        }
+
+                        for (var key in dicData) {
+                            dicData[key] = undefined;
+                        }
+
+                        if (genericContext != undefined && genericContext.notifyFieldValuesChanged != undefined && typeof (genericContext.notifyFieldValuesChanged) == "function")
+                            genericContext.notifyFieldValuesChanged(dicData);
+
+                        editorRuntimeDirectiveAPI = undefined;
+                        editorRuntimeDirectiveReadyPromiseDeferred = undefined;
+                    }
+                };
+
                 return {
                     genericEditorConditionalRule: genericEditorConditionalRule,
                     fieldValuesByFieldName: allFieldValuesByName,
-                    postConditionalRuleEvaluationAction: function (conditionResult) {
-                        if (conditionResult == conditionState)
-                            return;
-
-                        $scope.scopeModel.showDirective = conditionResult;
-
-                        conditionState = conditionResult;
-                        if (!conditionResult) {
-                            resetEditorRuntimeDirective();
-                        }
-
-                        function resetEditorRuntimeDirective() {
-                            var dicData = {};
-                            if (editorRuntimeAPI != undefined) {
-                                editorRuntimeAPI.setData(dicData);
-                            }
-
-                            for (var key in dicData) {
-                                dicData[key] = undefined;
-                            }
-
-                            if (genericContext != undefined && genericContext.notifyFieldValuesChanged != undefined && typeof (genericContext.notifyFieldValuesChanged) == "function")
-                                genericContext.notifyFieldValuesChanged(dicData);
-
-                            editorRuntimeAPI = undefined;
-                            editorRuntimeDirectiveReadyPromiseDeferred = undefined;
-                        }
-                    }
+                    postConditionalRuleEvaluationAction: postConditionalRuleEvaluationAction
                 };
             }
         }

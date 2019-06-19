@@ -15,7 +15,7 @@
                     var genericEditorConditionalRule = subscribeToFieldValueChangedContext.genericEditorConditionalRule;
                     var fieldValuesByFieldName = subscribeToFieldValueChangedContext.fieldValuesByFieldName;
 
-                    var conditionsResult = evaluateConditions(genericEditorConditionalRule.Conditions, fieldValuesByFieldName);
+                    var conditionalRuleEvaluationResult = evaluateConditions(genericEditorConditionalRule.Conditions, fieldValuesByFieldName);
 
                     function evaluateConditions(conditions, fieldValuesByFieldName) {
                         if (fieldValuesByFieldName == undefined)
@@ -47,7 +47,7 @@
                         return true;
                     }
 
-                    return conditionsResult;
+                    return conditionalRuleEvaluationResult;
                 };
             };
         }
@@ -60,11 +60,6 @@
             var conditionalRuleAction = conditionalRuleActions[actionName];
             conditionalRuleAction(conditionalRuleActionContext);
 
-            if (context.subscribeToFieldValueChangedFunction != undefined && context.fieldValuesByFieldName != undefined) {
-                var conditionsState = context.subscribeToFieldValueChangedFunction(getFieldValueChangedFunctionContext(context, context.fieldValuesByFieldName));
-                postConditionalRuleEvaluationAction(conditionsState);
-            }
-
             function getFieldValueChangedFunctionContext(context, allFieldValuesByFieldNames) {
                 return {
                     fieldValuesByFieldName: allFieldValuesByFieldNames,
@@ -75,10 +70,18 @@
 
             return {
                 onFieldValueChanged: function (allFieldValuesByFieldNames) {
+                    var onFieldValueChangedPromiseDeferred = UtilsService.createPromiseDeferred();
+
                     if (conditionalRuleActionContext.subscribeToFieldValueChangedFunction != undefined) {
-                        var conditionsState = conditionalRuleActionContext.subscribeToFieldValueChangedFunction(getFieldValueChangedFunctionContext(context, allFieldValuesByFieldNames));
-                        postConditionalRuleEvaluationAction(conditionsState);
+                        var conditionalRuleEvaluationResult = conditionalRuleActionContext.subscribeToFieldValueChangedFunction(getFieldValueChangedFunctionContext(context, allFieldValuesByFieldNames));
+                        postConditionalRuleEvaluationAction(conditionalRuleEvaluationResult);
+                        onFieldValueChangedPromiseDeferred.resolve();
                     }
+                    else {
+                        onFieldValueChangedPromiseDeferred.resolve();
+                    }
+
+                    return onFieldValueChangedPromiseDeferred.promise;
                 }
             };
         }
