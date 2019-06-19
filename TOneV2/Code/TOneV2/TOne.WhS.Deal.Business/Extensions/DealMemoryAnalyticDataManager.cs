@@ -80,29 +80,6 @@ namespace TOne.WhS.Deal.Business
             return rawMemoryRecords;
         }
 
-        private List<DealZoneGroup> BuildCostDealZoneGroups(Dictionary<int, DealDefinition> costDealDefinitions)
-        {
-            List<DealZoneGroup> costDealZoneGroups = new List<DealZoneGroup>();
-
-            foreach (var costDealDefinition in costDealDefinitions)
-            {
-                int dealId = costDealDefinition.Key;
-
-                DealDefinition dealDefinition = costDealDefinition.Value;
-                dealDefinition.ThrowIfNull("dealDefinition");
-                dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings");
-
-                DealGetZoneGroupsContext dealGetZoneGroupsContext = new DealGetZoneGroupsContext(dealId, DealZoneGroupPart.Cost, false);
-                dealDefinition.Settings.GetZoneGroups(dealGetZoneGroupsContext);
-                dealGetZoneGroupsContext.SupplierZoneGroups.ThrowIfNull("dealGetZoneGroupsContext.SupplierZoneGroups");
-
-                foreach (var supplierZoneGroup in dealGetZoneGroupsContext.SupplierZoneGroups)
-                    costDealZoneGroups.Add(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = supplierZoneGroup.DealSupplierZoneGroupNb });
-            }
-
-            return costDealZoneGroups;
-        }
-
         private Dictionary<int, DealDefinition> GetCostDealDefinitions(DateTime effectiveDate)
         {
             Dictionary<int, DealDefinition> dealDefinitions = new DealDefinitionManager().GetAllCachedDealDefinitions();
@@ -128,6 +105,29 @@ namespace TOne.WhS.Deal.Business
             }
 
             return costDealDefinitions;
+        }
+
+        private List<DealZoneGroup> BuildCostDealZoneGroups(Dictionary<int, DealDefinition> costDealDefinitions)
+        {
+            List<DealZoneGroup> costDealZoneGroups = new List<DealZoneGroup>();
+
+            foreach (var costDealDefinition in costDealDefinitions)
+            {
+                int dealId = costDealDefinition.Key;
+
+                DealDefinition dealDefinition = costDealDefinition.Value;
+                dealDefinition.ThrowIfNull("dealDefinition");
+                dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings");
+
+                DealGetZoneGroupsContext dealGetZoneGroupsContext = new DealGetZoneGroupsContext(dealId, DealZoneGroupPart.Cost, false);
+                dealDefinition.Settings.GetZoneGroups(dealGetZoneGroupsContext);
+                dealGetZoneGroupsContext.SupplierZoneGroups.ThrowIfNull("dealGetZoneGroupsContext.SupplierZoneGroups");
+
+                foreach (var supplierZoneGroup in dealGetZoneGroupsContext.SupplierZoneGroups)
+                    costDealZoneGroups.Add(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = supplierZoneGroup.DealSupplierZoneGroupNb });
+            }
+
+            return costDealZoneGroups;
         }
 
         private List<AnalyticRecord> GetAnalyticRecords(AnalyticQuery query, IEnumerable<int> costDealDefinitionIds, Dictionary<PropertyName, string> propertyNames)
