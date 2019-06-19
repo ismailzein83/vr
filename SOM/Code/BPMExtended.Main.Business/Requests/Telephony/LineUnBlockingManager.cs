@@ -27,9 +27,9 @@ namespace BPMExtended.Main.Business
             IEntitySchemaQueryFilterItem esqFirstFilter;
             SOMRequestOutput output;
 
-            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineUnblocking");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLineUnblock");
             esq.AddColumn("StContractID");
-            esq.AddColumn("StCustomerId");
+            //esq.AddColumn("StCustomerId");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -39,7 +39,7 @@ namespace BPMExtended.Main.Business
             if (entities.Count > 0)
             {
                 var contractId = entities[0].GetColumnValue("StContractID");
-                var customerId = entities[0].GetColumnValue("StCustomerId");
+                //var customerId = entities[0].GetColumnValue("StCustomerId");
 
                 SOMRequestInput<LineUnBlockingRequestInput> somRequestInput = new SOMRequestInput<LineUnBlockingRequestInput>
                 {
@@ -48,7 +48,7 @@ namespace BPMExtended.Main.Business
                     {
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            //ContractId = contractId.ToString(),
+                            ContractId = contractId.ToString(),
                             //ContactId = contactId.ToString(),
                             //AccountId = null,
                             RequestId = requestId.ToString(),
