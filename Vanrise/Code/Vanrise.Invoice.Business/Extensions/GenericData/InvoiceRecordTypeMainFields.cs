@@ -148,6 +148,12 @@ namespace Vanrise.Invoice.Business
                 Title = "User",
                 Type = new FieldBusinessEntityType { BusinessEntityDefinitionId = Vanrise.Security.Entities.User.BUSINESSENTITY_DEFINITION_ID }
             });
+            extraFields.Add(new GenericData.Entities.DataRecordField
+            {
+                Name = "FileId",
+                Title = "File Id",
+                Type = new FieldNumberType { DataType = FieldNumberDataType.Int,IsNullable =true}
+            });
             return extraFields;
         }
     }

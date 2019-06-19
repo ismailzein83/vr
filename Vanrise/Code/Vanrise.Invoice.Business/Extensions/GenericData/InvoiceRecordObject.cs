@@ -48,6 +48,9 @@ namespace Vanrise.Invoice.Business
                 invoiceFieldValues.Add("SentDate", invoice.SentDate);
                 invoiceFieldValues.Add("User", invoice.UserId);
 
+                var fileId = invoice.Settings != null ? invoice.Settings.FileId : null;
+                invoiceFieldValues.Add("FileId", fileId);
+
 
                 var duePeriod = (invoice.DueDate).Subtract(invoice.IssueDate);
 
