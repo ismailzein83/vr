@@ -286,6 +286,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Billing.Web", "Retai
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.NIM", "Retail.NIM", "{18BDC6A8-3150-4B65-8710-2AC993342B8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.NIM.Entities", "Retail.NIM.Entities\Retail.NIM.Entities.csproj", "{541DEBF8-B1CB-4608-B09E-F31099AD7DC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.NIM.Business", "Retail.NIM.Business\Retail.NIM.Business.csproj", "{78A6CCE1-FB4E-4BF1-ACE9-B0B845128CFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.NIM.Web", "Retail.NIM.Web\Retail.NIM.Web.csproj", "{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -790,6 +796,18 @@ Global
 		{952A19A2-0B1B-44F1-A119-5151D32A86DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{952A19A2-0B1B-44F1-A119-5151D32A86DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{952A19A2-0B1B-44F1-A119-5151D32A86DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{541DEBF8-B1CB-4608-B09E-F31099AD7DC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{541DEBF8-B1CB-4608-B09E-F31099AD7DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{541DEBF8-B1CB-4608-B09E-F31099AD7DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{541DEBF8-B1CB-4608-B09E-F31099AD7DC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78A6CCE1-FB4E-4BF1-ACE9-B0B845128CFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78A6CCE1-FB4E-4BF1-ACE9-B0B845128CFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78A6CCE1-FB4E-4BF1-ACE9-B0B845128CFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78A6CCE1-FB4E-4BF1-ACE9-B0B845128CFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -929,12 +947,15 @@ Global
 		{F0F463C2-64F4-48DC-95AE-FD7F6BCA4AC3} = {BE797DB1-98AD-4594-B6FB-6F172802D4E0}
 		{952A19A2-0B1B-44F1-A119-5151D32A86DC} = {BE797DB1-98AD-4594-B6FB-6F172802D4E0}
 		{18BDC6A8-3150-4B65-8710-2AC993342B8D} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{541DEBF8-B1CB-4608-B09E-F31099AD7DC5} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
+		{78A6CCE1-FB4E-4BF1-ACE9-B0B845128CFD} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
+		{40CD9CFD-2361-4FC8-BA6C-225A8516F0E1} = {18BDC6A8-3150-4B65-8710-2AC993342B8D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 117
+		SccNumberOfProjects = 120
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1402,5 +1423,17 @@ Global
 		SccProjectTopLevelParentUniqueName116 = Retail.sln
 		SccProjectName116 = Retail.Billing.Web
 		SccLocalPath116 = Retail.Billing.Web
+		SccProjectUniqueName117 = Retail.NIM.Entities\\Retail.NIM.Entities.csproj
+		SccProjectTopLevelParentUniqueName117 = Retail.sln
+		SccProjectName117 = Retail.NIM.Entities
+		SccLocalPath117 = Retail.NIM.Entities
+		SccProjectUniqueName118 = Retail.NIM.Business\\Retail.NIM.Business.csproj
+		SccProjectTopLevelParentUniqueName118 = Retail.sln
+		SccProjectName118 = Retail.NIM.Business
+		SccLocalPath118 = Retail.NIM.Business
+		SccProjectUniqueName119 = Retail.NIM.Web\\Retail.NIM.Web.csproj
+		SccProjectTopLevelParentUniqueName119 = Retail.sln
+		SccProjectName119 = Retail.NIM.Web
+		SccLocalPath119 = Retail.NIM.Web
 	EndGlobalSection
 EndGlobal
