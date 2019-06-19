@@ -18,5 +18,6 @@ namespace TOne.WhS.Deal.Data
         void InsertAffectedDealZoneGroups(HashSet<DealZoneGroup> dealZoneGroups, bool isSale);
 
         void DeleteAffectedDealZoneGroups();
+        List<DealProgress> GetDealProgressesByDealId(int dealId);
     }
 }

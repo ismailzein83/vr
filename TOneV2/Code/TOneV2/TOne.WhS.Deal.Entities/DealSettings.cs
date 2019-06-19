@@ -25,7 +25,18 @@ namespace TOne.WhS.Deal.Entities
         public DateTime? EndDate { get { return EEDToStore.HasValue ? EEDToStore.Value.AddDays(1) : EEDToStore; } }
         public DateTime BEDToDisplay { get { return OffSet.HasValue ? BeginDate.Subtract(OffSet.Value) : BeginDate; } }
         public bool SendOrPay { get; set; }
-        public int Priority { get; set; }
+        public int Priority
+        {
+            get
+            {
+                return _priority;
+            }
+            set
+            {
+                _priority = value;
+            }
+        }
+        public int _priority = 1;
         public DateTime? EEDToDisplay
         {
             get

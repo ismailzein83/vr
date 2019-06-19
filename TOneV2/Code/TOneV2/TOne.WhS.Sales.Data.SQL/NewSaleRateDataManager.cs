@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         #region Fields / Properties
 
-        readonly string[] columns = { "ID", "ProcessInstanceID", "PriceListID", "ZoneID", "RateTypeID", "Rate", "CurrencyID", "BED", "EED", "ChangeType" };
+        readonly string[] columns = { "ID", "ProcessInstanceID", "PriceListID", "ZoneID", "RateTypeID", "Rate", "CurrencyID", "BED", "EED", "ChangeType" ,"Note"};
 
         private long _processInstanceId;
 
@@ -65,7 +65,7 @@ namespace TOne.WhS.Sales.Data.SQL
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord
             (
-                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}",
+                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}",
                 record.RateId,
                 _processInstanceId,
                 record.PriceListId,
@@ -75,7 +75,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 record.CurrencyId,
                 GetDateTimeForBCP(record.BED),
                 GetDateTimeForBCP(record.EED),
-                (int)record.ChangeType
+                (int)record.ChangeType,
+                record.Note
             );
         }
 

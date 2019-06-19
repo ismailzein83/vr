@@ -267,7 +267,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             NormalRate = newRate.Rate,
                             CurrencyId = currencyId,
                             BED = newRate.BED,
-                            EED = newRate.EED
+                            EED = newRate.EED,
+                            Note = newRate.Note
                         });
                         minDate = Vanrise.Common.Utilities.Min(minDate, newRate.BED);
                     }
@@ -332,7 +333,8 @@ namespace TOne.WhS.Sales.BP.Activities
                         NormalRate = draftRateToChange.Rate,
                         CurrencyId = currencyId,
                         BED = draftRateToChange.BED,
-                        EED = draftRateToChange.EED
+                        EED = draftRateToChange.EED,
+                        Note = draftRateToChange.Note
                     });
 
                     minDate = Vanrise.Common.Utilities.Min(minDate, draftRateToChange.BED);

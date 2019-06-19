@@ -62,7 +62,6 @@ namespace TOne.WhS.Deal.Business
 
             return cachedDeals.MapRecords(mapper, filterExpression).OrderBy(item => item.Name);
         }
-
         public bool DeleteDeal(int dealId)
         {
             return base.DeleteDeal(dealId);
@@ -160,7 +159,134 @@ namespace TOne.WhS.Deal.Business
 
             return zoneInfo.DealId;
         }
+        public DealDefinition GetLastDealByCarrierAccountId(int carrierAccountId)
+        {
+            var allDealDefinitions = GetAllCachedDealDefinitions(false);
 
+            if (allDealDefinitions == null || allDealDefinitions.Values == null)
+                return null;
+
+            var lastDealDate = DateTime.MinValue;
+            int? lastDealId = null;
+
+            foreach (var dealDefinition in allDealDefinitions.Values)
+            {
+                if (dealDefinition != null && dealDefinition.Settings != null && dealDefinition.Settings.GetCarrierAccountId() == carrierAccountId && dealDefinition.Settings.BeginDate > lastDealDate)
+                {
+                    lastDealDate = dealDefinition.Settings.BeginDate;
+                    lastDealId = dealDefinition.DealId;
+                }
+            }
+
+            if (lastDealId.HasValue)
+                return allDealDefinitions.GetRecord(lastDealId.Value);
+            return null;
+        }
+        public DealInfo GetLastDealInfo(int carrierAccountId)
+        {
+            var dealDefinition = GetLastDealByCarrierAccountId(carrierAccountId);
+            if (dealDefinition == null)
+                return null;
+            var dealInfo = new DealInfo
+            {
+                DealId = dealDefinition.DealId,
+                DealName = dealDefinition.Name,
+                IsSwapDeal = false
+            };
+            if (dealDefinition.Settings is SwapDealSettings)
+                dealInfo.IsSwapDeal = true;
+            return dealInfo;
+        }
+        public List<SwapDealProgressDetail> GetLastSwapDealProgress(int dealId)
+        {
+            List<SwapDealProgressDetail> swapDealProgressDetails = new List<SwapDealProgressDetail>();
+            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
+            var dealDefinition = dealDefinitionManager.GetDealDefinition(dealId);
+            SwapDealSettings swapDealSettings = dealDefinition.Settings as SwapDealSettings;
+            swapDealSettings.ThrowIfNull("swapDealSettings");
+
+            foreach (var inbound in swapDealSettings.Inbounds)
+            {
+                swapDealProgressDetails.Add(new SwapDealProgressDetail()
+                {
+                    ZoneGroupNumber = inbound.ZoneGroupNumber,
+                    GroupName = inbound.Name,
+                    Reached = 0,
+                    PercentageCompleted = 0,
+                    IsSale = true
+                });
+            }
+            foreach (var outbound in swapDealSettings.Outbounds)
+            {
+                swapDealProgressDetails.Add(new SwapDealProgressDetail()
+                {
+                    ZoneGroupNumber = outbound.ZoneGroupNumber,
+                    GroupName = outbound.Name,
+                    Reached = 0,
+                    PercentageCompleted = 0,
+                    IsSale = false
+                });
+            }
+
+            DealProgressManager dealProgressManager = new DealProgressManager();
+            var dealProgress = dealProgressManager.GetDealProgessesByDealId(dealId);
+
+            if (dealProgress == null)
+                return swapDealProgressDetails;
+
+
+            foreach (var progress in dealProgress)
+            {
+              
+                decimal reachedProgress = progress.ReachedDurationInSeconds.HasValue ? progress.ReachedDurationInSeconds.Value : 0;
+
+                //In case the TargetDurationInSeconds has not a value (null) that means dal is in extra rate phase so target is completed
+                decimal percentageCompleted = progress.TargetDurationInSeconds.HasValue ? (reachedProgress * 100) / progress.TargetDurationInSeconds.Value : 100;
+
+                var swapDealProgressDetail = swapDealProgressDetails.Find(x => x.ZoneGroupNumber == progress.ZoneGroupNb);
+                swapDealProgressDetail.ThrowIfNull("swapDealProgressDetail");
+                swapDealProgressDetail.Reached = progress.ReachedDurationInSeconds.HasValue ? progress.ReachedDurationInSeconds.Value / 60 : 0;
+                swapDealProgressDetail.PercentageCompleted = percentageCompleted;
+            }
+            return swapDealProgressDetails;
+        }
+
+        public List<VolumeCommitmentProgressDetail> GetLastVolumeCommitmentProgress(int dealId)
+        {
+            List<VolumeCommitmentProgressDetail> volumeCommitmentProgressDetails = new List<VolumeCommitmentProgressDetail>();
+            DealProgressManager dealProgressManager = new DealProgressManager();
+            var dealProgress = dealProgressManager.GetDealProgessesByDealId(dealId);
+            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
+            var dealDefinition = dealDefinitionManager.GetDealDefinition(dealId);
+            VolCommitmentDealSettings volCommitmentSettings = dealDefinition.Settings as VolCommitmentDealSettings;
+            volCommitmentSettings.ThrowIfNull("volCommitmentSettings");
+            foreach (var volumeItem in volCommitmentSettings.Items)
+            {
+                volumeCommitmentProgressDetails.Add(new VolumeCommitmentProgressDetail()
+                {
+                    ZoneGroupNumber = volumeItem.ZoneGroupNumber,
+                    GroupName = volumeItem.Name,
+                    Reached = 0,
+                    LastTierReached = 1,
+                    IsSale = volCommitmentSettings.DealType == VolCommitmentDealType.Buy
+                });
+            }
+
+            if (dealProgress == null)
+                return volumeCommitmentProgressDetails;
+
+
+            foreach (var progress in dealProgress)
+            {
+                
+                decimal reachedProgress = progress.ReachedDurationInSeconds.HasValue ? progress.ReachedDurationInSeconds.Value : 0;
+                var volCommitmentProgressDetail = volumeCommitmentProgressDetails.Find(x => x.ZoneGroupNumber == progress.ZoneGroupNb);
+                volCommitmentProgressDetail.ThrowIfNull("swapDealProgressDetail");
+                volCommitmentProgressDetail.Reached = progress.ReachedDurationInSeconds.HasValue ? progress.ReachedDurationInSeconds.Value / 60 : 0;
+                volCommitmentProgressDetail.LastTierReached = progress.CurrentTierNb;
+            }
+            return volumeCommitmentProgressDetails;
+        }
         public DealSaleZoneGroupWithoutRate GetAccountSaleZoneGroup(int? customerId, long? saleZoneId, DateTime effectiveDate)
         {
             if (!customerId.HasValue || !saleZoneId.HasValue)
@@ -424,6 +550,10 @@ namespace TOne.WhS.Deal.Business
                 }
             }
             return result.Count > 0 ? result : null;
+        }
+        public bool IsRateChangeDifferentThanDealZoneGroupRate(DealSaleZoneGroup dealSaleZoneGroup, decimal newRate)
+        {
+            return false;
         }
 
         public IEnumerable<DealSupplierZoneGroup> GetDealSupplierZoneGroupsByDealDefinitions(IEnumerable<DealDefinition> dealDefinitions, bool skipDeleted = true)

@@ -444,7 +444,8 @@ namespace TOne.WhS.Sales.Business
                 Zone = zone,
                 BED = zone.BED > currentRateBED ? zone.BED : currentRateBED,
                 EED = rateToChange.EED,
-                ChangeType = rateToChange.ChangeType
+                ChangeType = rateToChange.ChangeType,
+                Note = rateToChange.Note
             };
             if (newRate.EED.VRGreaterThan(zone.EED))//this means that zone has EED value
             {

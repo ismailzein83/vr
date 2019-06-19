@@ -1,0 +1,17 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_NoteEditorController" vr-loader="scopeModel.isLoading" size="small">
+    <vr-modalbody>
+        <vr-form name="formNote">
+            <vr-row removeline="true">
+                <vr-textarea value="scopeModel.note" rows="10"></vr-textarea>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.saveNote"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

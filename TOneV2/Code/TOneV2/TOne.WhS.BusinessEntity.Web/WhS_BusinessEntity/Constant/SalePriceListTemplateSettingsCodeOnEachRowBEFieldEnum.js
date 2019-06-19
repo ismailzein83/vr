@@ -17,4 +17,5 @@
     Country: { value: 15, description: "Country" },
     ZoneNameWithoutCountryName: { value: 16, description: "Zone Name Without Country Name" },
     AreaCode: { value: 17, description: "Area Code" },
+    Note: { value: 18, description: "Note" }
 });

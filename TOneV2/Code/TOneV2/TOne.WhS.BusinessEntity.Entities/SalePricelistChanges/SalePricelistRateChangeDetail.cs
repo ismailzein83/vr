@@ -19,5 +19,6 @@ namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
         public string CurrencySymbol { get; set; }
         public long ZoneId { get; set; }
         public string RateTypeName { get; set; }
+        public string Note { get; set; }
     }
 }

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealAnalysisAPIService'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealAnalysisAPIService','WhS_Deal_DealService'];
 
-    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, WhS_Deal_SwapDealAnalysisAPIService) {
+    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, WhS_Deal_SwapDealAnalysisAPIService, WhS_Deal_DealService) {
         var isEditMode;
 
         var dealId;
@@ -67,6 +67,7 @@
         function defineScope() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.priority = 1;
             $scope.scopeModel.disabelType = (isEditMode);
             $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum);
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_Deal_DealAgreementTypeEnum);
@@ -82,14 +83,21 @@
                 $scope.scopeModel.followSupplierTimeZone = false;
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-
+                if (carrierAccountInfo != undefined && !isEditMode) {
+                    WhS_Deal_DealDefinitionAPIService.GetLastDealInfo(carrierAccountInfo.CarrierAccountId).then(function (response) {
+                        if (response != undefined) {
+                            var dealInfo = response;
+                            WhS_Deal_DealService.ViewLastDealProgress(dealInfo);
+                        }
+                    });
+                }
                 if (carrierAccountInfo != undefined) {
                     updateDescription();
                     var payload = {
                         carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
                         context: getContext(),
-                        dealId: dealId
+                        dealId: dealId 
                     };
                     var payloadOutbound = {
                         carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),

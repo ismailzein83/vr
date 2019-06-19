@@ -307,6 +307,7 @@
     <Content Include="WhS_Deal\Services\APIServices\VolCommitmentDealAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\SwapDealAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\SwapDealAnalysisAPIService.js" />
+    <Content Include="WhS_Deal\Services\DealService.js" />
     <Content Include="WhS_Deal\Services\RecurDealService.js" />
     <Content Include="WhS_Deal\Services\SwapDealAnalysisService.js" />
     <Content Include="WhS_Deal\Services\SwapDealAnalysisSettingsService.js" />
@@ -317,6 +318,8 @@
     <Content Include="WhS_Deal\Services\VolumeCommitmentService.js" />
     <Content Include="WhS_Deal\Directives\RecurDeal\RecurDealEditor.html" />
     <Content Include="WhS_Deal\Directives\RecurDeal\RecurDealEditorController.js" />
+    <Content Include="WhS_Deal\Views\DealProgressViewController.js" />
+    <Content Include="WhS_Deal\Views\DealProgressViewTemplate.html" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\InboundRateCalcMethodEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\OutboundRateCalcMethodEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\Templates\InboundRateCalcMethodEditor.html" />

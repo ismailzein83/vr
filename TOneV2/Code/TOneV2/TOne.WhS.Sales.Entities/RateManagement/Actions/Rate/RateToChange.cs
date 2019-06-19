@@ -16,6 +16,7 @@ namespace TOne.WhS.Sales.Entities
         public int? RateTypeId { get; set; }
 
         public Decimal NormalRate { get; set; }
+        public string Note { get; set; }
 
         public ExistingRate RecentExistingRate { get; set; }
 

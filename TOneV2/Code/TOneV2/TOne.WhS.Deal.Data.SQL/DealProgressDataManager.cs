@@ -31,7 +31,10 @@ namespace TOne.WhS.Deal.Data.SQL
                 cmd.Parameters.Add(dtPrm);
             });
         }
-
+        public List<DealProgress>GetDealProgressesByDealId (int dealId)
+        {
+            return GetItemsSP("[TOneWhS_Deal].[sp_DealProgress_GetByDealId]", DealProgressMapper, dealId);
+        }
         public void InsertDealProgresses(List<DealProgress> dealProgresses)
         {
             DataTable dtDealProgress = BuildDealProgressTable(dealProgresses);

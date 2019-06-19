@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'VRCommon_EntityFilterEffectiveModeEnum'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_DealService'];
 
-    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, VRCommon_EntityFilterEffectiveModeEnum) {
+    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_DealService) {
 
         var isEditMode;
 
@@ -53,6 +53,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.priority = 1;
             $scope.scopeModel.disabelType = isEditMode;
             $scope.scopeModel.volumeCommitmentTypes = UtilsService.getArrayEnum(WhS_Deal_VolumeCommitmentTypeEnum);
             $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
@@ -67,7 +68,7 @@
                 setTimeout(function () {
                     var payload = {
                         context: getContext(),
-                      
+
                     };
                     volumeCommitmenetItemsAPI.load(payload);
                 });
@@ -114,6 +115,15 @@
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
+                if (carrierAccountInfo != undefined && !isEditMode) {
+                    WhS_Deal_DealDefinitionAPIService.GetLastDealInfo(carrierAccountInfo.CarrierAccountId).then(function (response) {
+                        if (response != undefined) {
+                            var dealInfo = response;
+                            WhS_Deal_DealService.ViewLastDealProgress(dealInfo);
+                        }
+                    });
+                }
+
                 loadVolumeCommitmentItems();
 
             };
@@ -212,7 +222,7 @@
                 else {
                     var payload = {
                         context: getContext(),
-                      
+
                     };
                     volumeCommitmenetItemsAPI.load(payload);
                     updateDescription();
@@ -300,7 +310,7 @@
 
                     var payload = {
                         context: getContext(),
-                       
+
                     };
                     if (volumeCommitmentEntity != undefined) {
                         payload.volumeCommitmentItems = volumeCommitmentEntity.Settings.Items;
@@ -392,7 +402,7 @@
                     IsRecurrable: volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined ? volumeCommitmentEntity.Settings.IsRecurrable : true,
                     VolCommitmentTimeZone: $scope.scopeModel.selectedTimeZone.value,
                     SendOrPay: $scope.scopeModel.sendOrPay,
-                    Priority : $scope.scopeModel.priority
+                    Priority: $scope.scopeModel.priority
                 }
             };
             return obj;

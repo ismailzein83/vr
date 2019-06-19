@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         };
         private readonly string[] _salePricelistRateChangeColumns =
         {
-            "PricelistId","Rate","RateTypeId","RecentCurrencyId","RecentRate","RecentRateConverted","CountryID","ZoneName","ZoneID","Change","ProcessInstanceID","BED","EED","RoutingProductID","CurrencyID"
+            "PricelistId","Rate","RateTypeId","RecentCurrencyId","RecentRate","RecentRateConverted","CountryID","ZoneName","ZoneID","Change","ProcessInstanceID","BED","EED","RoutingProductID","CurrencyID","Note"
         };
         private readonly string[] _salePricelistCustomerChangeColumns =
         {
@@ -246,7 +246,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             if (streamForBulkInsert != null)
-                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}",
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}",
                     record.PricelistId,
                     decimal.Round(record.Rate, 8),
                     record.RateTypeId,
@@ -261,7 +261,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                     GetDateTimeForBCP(record.BED),
                     GetDateTimeForBCP(record.EED),
                     record.RoutingProductId,
-                    record.CurrencyId);
+                    record.CurrencyId,
+                    record.Note);
+
         }
         private void WriteRecordToStream(SalePriceListSnapShot record, object dbApplyStream)
         {
@@ -328,7 +330,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 RoutingProductId = GetReaderValue<int>(reader, "RoutingProductID"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
-                ZoneId = GetReaderValue<long?>(reader, "ZoneID")
+                ZoneId = GetReaderValue<long?>(reader, "ZoneID"),
+                Note = GetReaderValue<string>(reader, "Note")
             };
         }
         SalePricelistRPChange SalePricelistRPChangeMapper(IDataReader reader)

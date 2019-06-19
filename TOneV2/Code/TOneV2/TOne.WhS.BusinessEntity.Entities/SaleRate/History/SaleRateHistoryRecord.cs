@@ -27,6 +27,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime? EED { get; set; }
 
         public string SourceId { get; set; }
+        public string Note { get; set; }
     }
 
     public class SaleRateHistoryRecordDetail
@@ -38,5 +39,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string DisplayedCurrency { get; set; }
 
         public decimal DisplayedRate { get; set; }
+
+        public string Note { get; set; }
     }
 }

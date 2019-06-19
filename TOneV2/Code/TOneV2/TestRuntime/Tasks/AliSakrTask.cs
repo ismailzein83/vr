@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.BusinessProcess;
@@ -14,6 +15,9 @@ namespace TestRuntime
     {
         public void Execute()
         {
+            //SalePriceListChangeManager salePriceListChangeManager = new SalePriceListChangeManager();
+            //salePriceListChangeManager.GetAffectedCustomerIdsRateChangesByProcessInstanceId(1455281);
+            //return;
             var runtimeServices = new List<RuntimeService>();
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };

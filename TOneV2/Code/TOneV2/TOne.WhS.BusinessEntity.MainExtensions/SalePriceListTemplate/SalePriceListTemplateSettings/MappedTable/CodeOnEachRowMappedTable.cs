@@ -78,7 +78,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 				mappedValueContext.RateChangeType = rate.RateChangeType;
 				mappedValueContext.CurrencyId = rate.CurrencyId;
 				mappedValueContext.Increment = zone.Increment;
-			}
+                mappedValueContext.Note = rate.Note;
+
+            }
 			if(zone.OtherRateByRateTypeId != null && zone.OtherRateByRateTypeId.Count>0)
 			{
 			foreach (var otherRateKvp in zone.OtherRateByRateTypeId)

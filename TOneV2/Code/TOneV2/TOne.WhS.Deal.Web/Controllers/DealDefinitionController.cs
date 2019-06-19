@@ -37,6 +37,29 @@ namespace TOne.WhS.Deal.Web.Controllers
         {
             return Helper.GetEffectiveOnDate(isSale, isShifted, carrierId, BED, offset);
         }
+        [HttpGet]
+        [Route("GetLastDealInfo")]
+        public DealInfo GetLastDealInfo(int dealId)
+        {
+            var manager = new DealDefinitionManager();
+            return manager.GetLastDealInfo(dealId);
+        }
+        [HttpGet]
+        [Route("GetLastSwapDealProgress")]
+        public List<SwapDealProgressDetail> GetLastSwapDealProgress(int dealId)
+        {
+            var manager = new DealDefinitionManager();
+            return manager.GetLastSwapDealProgress(dealId);
+        }
+
+        [HttpGet]
+        [Route("GetLastVolumeCommitmentProgress")]
+        public List<VolumeCommitmentProgressDetail> GetLastVolumeCommitmentProgress(int dealId)
+        {
+            var manager = new DealDefinitionManager();
+            return manager.GetLastVolumeCommitmentProgress(dealId);
+        }
+
 
         [HttpGet]
         [Route("GetDealSettingsDetail")]

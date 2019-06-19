@@ -1,10 +1,20 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-section title="Sale" ng-if="ctrl.saleDataSource.length > 0">
+    <vr-row>
+        <vr-datagrid datasource="ctrl.saleDataSource" norowhighlightonclick="true"  maxheight="300px"
+                     on-ready="onSaleGridReady" hidegridmenu>
+            <vr-datagridcolumn headertext="'Group'" field="'GroupName'"  disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Reached'" field="'Reached'"  disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Last Tier Reached'" field="'LastTierReached'"  disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-row>
+</vr-section>
+<vr-section title="Cost" ng-if="ctrl.costDataSource.length > 0">
+    <vr-row>
+        <vr-datagrid datasource="ctrl.costDataSource" norowhighlightonclick="true" maxheight="300px"
+                     on-ready="onCostGridReady" hidegridmenu>
+            <vr-datagridcolumn headertext="'Group'" field="'GroupName'"  disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Reached'" field="'Reached'"  disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Last Tier Reached'" field="'LastTierReached'"  disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-row>
+</vr-section>

@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.Entities
         public long ZoneId { get; set; }
 
         public int? RateTypeId { get; set; }
-        
+
         public Decimal Rate { get; set; }
 
         public int? CurrencyId { get; set; }
@@ -23,5 +23,6 @@ namespace TOne.WhS.Sales.Entities
         public DateTime? EED { get; set; }
 
         public bool IsCancellingRate { get; set; }
+        public string Note { get; set; }
     }
 }

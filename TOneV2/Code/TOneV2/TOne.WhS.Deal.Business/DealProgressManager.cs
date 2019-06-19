@@ -24,7 +24,11 @@ namespace TOne.WhS.Deal.Business
 
             return dealProgressList.ToDictionary(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb }, itm => itm);
         }
-
+        public List<DealProgress> GetDealProgessesByDealId (int dealId)
+        {
+            IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
+          return  dealProgressDataManager.GetDealProgressesByDealId(dealId);
+        }
         public void InsertDealProgresses(IEnumerable<DealProgress> dealProgresses)
         {
             if (dealProgresses == null || dealProgresses.Count() == 0)

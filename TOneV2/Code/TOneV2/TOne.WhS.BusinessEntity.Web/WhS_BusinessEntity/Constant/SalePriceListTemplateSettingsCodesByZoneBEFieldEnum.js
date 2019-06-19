@@ -11,5 +11,6 @@
     Increment: { value: 9, description: "Increment" },
     CodeGroup: { value: 10, description: "Code Group" },
     Country: { value: 11, description: "Country" },
-    ZoneNameWithoutCountryName: { value: 12, description: "Zone Name Without Country Name" }
+    ZoneNameWithoutCountryName: { value: 12, description: "Zone Name Without Country Name" },
+    Note: { value: 13, description: "Note" }
 });

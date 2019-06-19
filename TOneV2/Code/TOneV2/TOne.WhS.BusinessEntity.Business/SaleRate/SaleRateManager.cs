@@ -444,7 +444,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     BED = saleRateHistoryRecord.BED,
                     EED = saleRateHistoryRecord.EED,
                     SourceId = saleRateHistoryRecord.SourceId,
-                    RateChange = saleRateHistoryRecord.ChangeType
+                    RateChange = saleRateHistoryRecord.ChangeType,
+                    Note = saleRateHistoryRecord.Note
                 };
 
                 saleRateDetail.ZoneName = saleZone.Name;

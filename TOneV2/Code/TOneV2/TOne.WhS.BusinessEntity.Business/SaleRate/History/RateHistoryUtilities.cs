@@ -40,7 +40,9 @@ namespace TOne.WhS.BusinessEntity.Business
 				targetSaleRateHistoryRecord.CurrencyId = saleRateHistoryRecord.CurrencyId;
 				targetSaleRateHistoryRecord.SellingProductId = saleRateHistoryRecord.SellingProductId;
 				targetSaleRateHistoryRecord.SourceId = saleRateHistoryRecord.SourceId;
-			};
+                targetSaleRateHistoryRecord.Note = saleRateHistoryRecord.Note;
+
+            };
 
 			for (int i = 0; (i + 1) < orderedZoneRateHistories.GetCount(); i++)
 			{
@@ -143,7 +145,9 @@ namespace TOne.WhS.BusinessEntity.Business
 				saleRateHistoryRecord.CurrencyId = saleRateManager.GetCurrencyId(saleRate);
 				saleRateHistoryRecord.SellingProductId = sellingProductId;
 				saleRateHistoryRecord.SourceId = saleRate.SourceId;
-			};
+                saleRateHistoryRecord.Note = saleRate.Note;
+
+            };
 
 			IEnumerable<SaleRateHistoryRecord> productZoneRateHistory = Utilities.GetQIntersectT(timeIntervals, productZoneRates.ToList(), mapSaleRate);
 
@@ -171,7 +175,8 @@ namespace TOne.WhS.BusinessEntity.Business
 					SellingProductId = null,
 					BED = saleRate.BED,
 					EED = saleRate.EED,
-					SourceId = saleRate.SourceId
+					SourceId = saleRate.SourceId,
+                    Note = saleRate.Note
 				};
 			};
 

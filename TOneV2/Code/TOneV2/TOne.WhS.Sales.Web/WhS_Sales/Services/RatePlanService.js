@@ -16,7 +16,8 @@
             openTQIEditor: openTQIEditor,
             importRatePlan: importRatePlan,
             areDatesTheSame: areDatesTheSame,
-            applyDraftOnMultipleCustomers: applyDraftOnMultipleCustomers
+            applyDraftOnMultipleCustomers: applyDraftOnMultipleCustomers,
+            openNoteEditor: openNoteEditor
         };
 
         function manageCountries(input) {
@@ -33,6 +34,18 @@
             };
 
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ManageCountries.html", parameters, settings);
+        }
+
+        function openNoteEditor(zoneItem, onNoteAdded) {
+
+            var parameters = {
+                zoneItem: zoneItem
+            };
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onNoteAdded = onNoteAdded;
+            };
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/NoteEditor.html", parameters, settings);
         }
 
         function editSettings(settings, onSettingsUpdated) {

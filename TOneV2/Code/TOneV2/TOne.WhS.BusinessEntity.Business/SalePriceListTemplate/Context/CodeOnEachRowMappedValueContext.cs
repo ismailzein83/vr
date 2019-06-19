@@ -25,5 +25,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public Dictionary<int, SalePLOtherRateNotification> OtherRateByRateTypeId { get; set; }
         public long? ZoneId { get; set; }
         public bool IsNumber { get; set; }
+        public string Note { get; set; }
     }
 }

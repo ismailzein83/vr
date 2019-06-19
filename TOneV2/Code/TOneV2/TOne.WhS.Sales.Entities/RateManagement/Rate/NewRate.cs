@@ -26,5 +26,6 @@ namespace TOne.WhS.Sales.Entities
         public DateTime? EED { get; set; }
 
         public RateChangeType ChangeType { get; set; }
+        public string Note { get; set; }
     }
 }

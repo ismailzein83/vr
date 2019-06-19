@@ -25,7 +25,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         CodeGroup = 14,
         Country = 15,
         ZoneNameWithoutCountryName = 16,
-        AreaCode =17
+        AreaCode =17,
+        Note = 18
     }
 
     public class CodeOnEachRowBEFieldMappedValue : CodeOnEachRowMappedValue
@@ -104,6 +105,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     break;
                 case CodeOnEachRowBEFieldType.AreaCode:
                     context.Value = saleZoneManager.GetAreaCodeFromCode(context.Code);
+                    break;
+                case CodeOnEachRowBEFieldType.Note:
+                    context.Value = context.Note;
                     break;
             }
         }

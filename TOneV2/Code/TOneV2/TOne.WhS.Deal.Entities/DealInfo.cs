@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Entities
 {
-    class DealInfo
+    public class DealInfo
     {
+        public int DealId { get; set; }
+        public string DealName { get; set; }
+        public bool IsSwapDeal { get; set; }
     }
 }

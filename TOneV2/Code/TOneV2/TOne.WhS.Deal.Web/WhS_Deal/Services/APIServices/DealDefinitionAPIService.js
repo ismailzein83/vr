@@ -36,13 +36,33 @@
             });
         }
 
+        function GetLastDealInfo(dealId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetLastDealInfo'), {
+                dealId: dealId
+            });
+        }
+        function GetLastSwapDealProgress(dealId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetLastSwapDealProgress'), {
+                dealId: dealId
+            });
+        }
+        function GetLastVolumeCommitmentProgress(dealId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetLastVolumeCommitmentProgress'), {
+                dealId: dealId
+            });
+        }
+
+
         return ({
             GetDealDefinitionInfo: GetDealDefinitionInfo,
             DeleteDeal: DeleteDeal,
             GetEffectiveOnDate: GetEffectiveOnDate,
-            GetDealSettingsDetail: GetDealSettingsDetail
+            GetDealSettingsDetail: GetDealSettingsDetail,
+            GetLastDealInfo: GetLastDealInfo,
+            GetLastSwapDealProgress: GetLastSwapDealProgress,
+            GetLastVolumeCommitmentProgress: GetLastVolumeCommitmentProgress
         });
-    }
+    } 
 
     app.service('WhS_Deal_DealDefinitionAPIService', DealDefinitionAPIService);
 

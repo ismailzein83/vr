@@ -71,7 +71,7 @@ namespace TOne.WhS.Deal.Data.RDB
 
             return queryContext.GetItems(DealProgressMapper);
         }
-
+       
         public void InsertDealProgresses(List<DealProgress> dealProgresses)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -220,6 +220,11 @@ namespace TOne.WhS.Deal.Data.RDB
                 TargetDurationInSeconds = reader.GetNullableDecimal(COL_TargetDurationInSec),
                 CreatedTime = reader.GetDateTime(COL_CreatedTime)
             };
+        }
+
+        public List<DealProgress> GetDealProgressesByDealId(int dealId)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -83,11 +83,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            
 
             var joinContext = selectQuery.Join();
             salePriceListNewDataManager.JoinSalePriceListNew(joinContext, salePriceListTableAlias, TABLE_ALIAS, COL_PricelistId);
-
+          
             selectQuery.SelectColumns().Column(salePriceListTableAlias, SalePriceListNewDataManager.COL_OwnerID, SalePriceListNewDataManager.COL_OwnerID);
 
             var whereContext = selectQuery.Where();
@@ -113,10 +112,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
             var join = selectQuery.Join();
             salePriceLisNewDataManager.JoinSalePriceListNew(join, salePricelistNewTableAlias, TABLE_ALIAS, COL_PricelistId);
+
+           
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereQueryContext = selectQuery.Where();
             whereQueryContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
@@ -134,12 +134,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            var selectColumns = selectQuery.SelectColumns();
-            selectColumns.AllTableColumns(TABLE_ALIAS);
-            selectColumns.Column(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID, SalePriceListNewDataManager.COL_OwnerID);
 
             var join = selectQuery.Join();
             salePriceListNewDataManager.JoinSalePriceListNew(join, salePriceListNewTableAlias, TABLE_ALIAS, COL_PricelistId);
+
+          
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.AllTableColumns(TABLE_ALIAS);
+            selectColumns.Column(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID, SalePriceListNewDataManager.COL_OwnerID);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
@@ -159,12 +161,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
 
+            var join = selectQuery.Join();
+            salePriceListNewDataManager.JoinSalePriceListNew(join, salePriceListNewTableAlias, TABLE_ALIAS, COL_PricelistId);
+
+          
+
+
             var selectContext = selectQuery.SelectColumns();
             selectContext.Column(COL_ZoneID);
             selectContext.Column(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID, SalePriceListNewDataManager.COL_OwnerID);
 
-            var join = selectQuery.Join();
-            salePriceListNewDataManager.JoinSalePriceListNew(join, salePriceListNewTableAlias, TABLE_ALIAS, COL_PricelistId);
+           
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);

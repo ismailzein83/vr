@@ -1,0 +1,19 @@
+﻿<div vr-modalcontent ng-controller="WhS_Deal_DealProgressViewController" vr-loader="scopeModel.isLoading" width="'75%'">
+    <vr-modalbody>
+        <vr-form name="formEditor">
+            <vr-row ng-if="scopeModel.isSwapDeal">
+                <vr-whs-deal-swapdeal-lastdealprogress on-ready="scopeModel.onSwapDealDirectiveReady"></vr-whs-deal-swapdeal-lastdealprogress>
+            </vr-row>
+            <vr-row ng-if="!scopeModel.isSwapDeal">
+                <vr-whs-deal-volumecommitment-lastdealprogress on-ready="scopeModel.onVolumeCommitmentDirectiveReady"></vr-whs-deal-volumecommitment-lastdealprogress>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

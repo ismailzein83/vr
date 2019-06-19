@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum', 'VRLocalizationService', 'WhS_Sales_SupplierStatusEnum', '$filter', 'MobileService','Whs_BusinessEntity_ModuleNamesEnum',
+app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum', 'VRLocalizationService', 'WhS_Sales_SupplierStatusEnum', '$filter', 'MobileService', 'Whs_BusinessEntity_ModuleNamesEnum',
     function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, VRDateTimeService, VRCommon_TextFilterTypeEnum, VRLocalizationService, WhS_Sales_SupplierStatusEnum, $filter, MobileService, Whs_BusinessEntity_ModuleNamesEnum) {
         return {
             restrict: "E",
@@ -65,6 +65,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             var allZonesLetter = "ALL ZONES";
 
+
             var isSellingProductGrid;
             function initializeController() {
 
@@ -78,7 +79,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 $scope.layoutOption = UISettingsService.getGridLayoutOptions();
                 if (ctrl.isMobile)
                     $scope.layoutOption.verticalLine = false;
-
+                $scope.scopeModel.onEditIconClick = function (dataItem) {
+                    var onNoteAdded = function (note) {
+                        //var normalRate = UtilsService.getItemByVal(dataItem.NewRates, null, "RateTypeId");
+                        //  normalRate.Note = note;
+                        dataItem.Note = note;
+                    };
+                    WhS_Sales_RatePlanService.openNoteEditor(dataItem, onNoteAdded);
+                };
                 $scope.onZoneLetterSelectionChanged = function () {
                     var promises = [];
                     $scope.isLoading = true;
@@ -564,6 +572,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             zoneItem.isRowExpanded = false;
                             zoneItem.loadDrilldownTemplate = false;
                             zoneItem.context = getContext(zoneItem);
+                            if (zoneItem.NewRates != undefined) {
+                                var normalRateTemp = UtilsService.getItemByVal(zoneItem.NewRates, null, "RateTypeId");
+                                if (normalRateTemp != undefined)
+                                    zoneItem.Note = normalRateTemp.Note;
+                            }
                             extendZoneItem(zoneItem);
                             setDrillDownExtensionObject(zoneItem);
 
@@ -646,7 +659,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             routeOptionDetails.ConvertedSupplierRate = 'N/A';
                     }
                 }
-
                 zoneItem.IsDirty = isRatePlanZoneDirty();
                 zoneItem.OwnerType = gridQuery.OwnerType;
                 zoneItem.isSellingProductZone = (zoneItem.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value);
@@ -879,13 +891,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 //        dataItem.any = false;
                 //    }
                 //}
-              function  setDealIconProperties(dataItem)
-                {
-                  if (dataItem.DealId != undefined) {
-                      dataItem.dealIconType = 'deal';
-                      dataItem.dealIconTooltip = 'This zone is included in a deal';
-                      dataItem.showDealIcon = true;
-                  }
+                function setDealIconProperties(dataItem) {
+                    if (dataItem.DealId != undefined) {
+                        dataItem.dealIconType = 'deal';
+                        dataItem.dealIconTooltip = 'This zone is included in a deal';
+                        dataItem.showDealIcon = true;
+                    }
                 }
             }
 
@@ -925,7 +936,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     RouteOptions: dataItem.RouteOptionsDetailsForView,
                     CurrencyId: gridQuery.CurrencyId,
                     saleRate: rate,
-                    ModuleName: Whs_BusinessEntity_ModuleNamesEnum.RatePlan.value 
+                    ModuleName: Whs_BusinessEntity_ModuleNamesEnum.RatePlan.value
                 };
             }
 
@@ -1116,7 +1127,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             Rate: zoneItem.NewRate,
                             BED: zoneItem.NewRateBED,
                             EED: zoneItem.NewRateEED,
-                            IsCancellingRate: zoneItem.IsNewRateCancelling
+                            IsCancellingRate: zoneItem.IsNewRateCancelling,
+                            Note: zoneItem.Note
                         };
                         zoneChanges.NewRates = [newRate];
                     }

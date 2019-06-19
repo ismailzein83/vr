@@ -15,11 +15,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         SalePricelistRateChangeNewDataManager _salePricelistRateChangeNewDataManager = new SalePricelistRateChangeNewDataManager();
         SalePriceListNewDataManager _salePriceListNewDataManager = new SalePriceListNewDataManager();
         SalePricelistRPChangeNewDataManager _salePricelistRpChangeNewDataManager = new SalePricelistRPChangeNewDataManager();
+        SalePricelistCodeChangeDataManager _salePricelistCodeChangeDataManager = new SalePricelistCodeChangeDataManager();
 
         #region ISalePriceListChangeDataManager Members
         public List<SalePricelistCodeChange> GetFilteredSalePricelistCodeChanges(int pricelistId, List<int> countryIds)
         {
-            SalePricelistCodeChangeDataManager _salePricelistCodeChangeDataManager = new SalePricelistCodeChangeDataManager();
             return _salePricelistCodeChangeDataManager.GetSalePricelistCodeChanges(pricelistId, countryIds);
         }
 

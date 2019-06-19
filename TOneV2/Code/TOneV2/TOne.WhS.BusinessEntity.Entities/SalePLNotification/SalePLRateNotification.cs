@@ -14,6 +14,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public RateChangeType RateChangeType { get; set; }
         public IEnumerable<int> ServicesIds { get; set; }
         public int? CurrencyId { get; set; }
+        public string Note { get; set; }
     }
     public class SalePLOtherRateNotification
     {

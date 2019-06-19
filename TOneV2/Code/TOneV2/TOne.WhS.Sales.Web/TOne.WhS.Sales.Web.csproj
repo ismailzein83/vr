@@ -181,6 +181,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_Sales\Views\NoteEditor.html" />
     <Content Include="WhS_Sales\Constants\CountrySelectionTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\CustomerSelectionTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\ExcludedItemTypeEnum.js" />
@@ -360,6 +361,7 @@
     <Content Include="WhS_Sales\Views\ImportRatePlan\ImportRatePlanController.js" />
     <Content Include="WhS_Sales\Views\InvalidRate.html" />
     <Content Include="WhS_Sales\Views\InvalidRateController.js" />
+    <Content Include="WhS_Sales\Views\NoteEditorController.js" />
     <Content Include="WhS_Sales\Views\PricingTemplate\PricingTemplateEditor.html" />
     <Content Include="WhS_Sales\Views\PricingTemplate\PricingTemplateEditorController.js" />
     <Content Include="WhS_Sales\Views\PricingTemplate\PricingTemplateManagement.html" />

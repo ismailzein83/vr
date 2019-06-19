@@ -861,7 +861,9 @@ namespace TOne.WhS.Sales.BP.Activities
 					salePricelistRateChange.RecentCurrencyId = saleRateManager.GetCurrencyId(normalRate.RecentExistingRate.RateEntity);
 					salePricelistRateChange.RecentRate = normalRate.RecentExistingRate.RateEntity.Rate;
 					salePricelistRateChange.RecentRateConverted = normalRate.RecentExistingRate.ConvertedRate;
-					context.RateChangesOutArgument.Add(salePricelistRateChange);
+                    salePricelistRateChange.Note = normalRate.Note;
+
+                    context.RateChangesOutArgument.Add(salePricelistRateChange);
 				}
 
 				if (rateToChange.OtheRates != null)
@@ -910,8 +912,10 @@ namespace TOne.WhS.Sales.BP.Activities
 					salePricelistRateChange.RecentCurrencyId = saleRateManager.GetCurrencyId(recentRate.Rate);
 					salePricelistRateChange.RecentRate = recentRate.Rate.Rate;
 					salePricelistRateChange.RecentRateConverted = UtilitiesManager.ConvertToCurrencyAndRound(recentRate.Rate.Rate, saleRateManager.GetCurrencyId(recentRate.Rate), context.CurrencyId, DateTime.Now, longPrecision, currencyExchangeRateManager);
+                    salePricelistRateChange.Note = normalRate.Note;
 
-					SetRateChangeType(recentRate.Rate, normalRate.NormalRate, normalRate.NewRates, salePricelistRateChange, context.CurrencyId, true);
+
+                    SetRateChangeType(recentRate.Rate, normalRate.NormalRate, normalRate.NewRates, salePricelistRateChange, context.CurrencyId, true);
 					context.RateChangesOutArgument.Add(salePricelistRateChange);
 				}
 

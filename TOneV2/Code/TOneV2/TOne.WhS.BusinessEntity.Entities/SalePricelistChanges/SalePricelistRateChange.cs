@@ -18,5 +18,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public DateTime BED { get; set; }
 		public DateTime? EED { get; set; }
 		public int? CurrencyId { get; set; }
+        public string Note { get; set; }
 	}
 }

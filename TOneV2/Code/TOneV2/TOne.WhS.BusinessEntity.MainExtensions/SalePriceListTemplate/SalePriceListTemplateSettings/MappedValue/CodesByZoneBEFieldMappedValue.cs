@@ -21,7 +21,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 		Increment = 9,
 		CodeGroup = 10,
 		Country = 11,
-		ZoneNameWithoutCountryName = 12
+		ZoneNameWithoutCountryName = 12,
+        Note = 13
 	}
 
 	public class CodesByZoneBEFieldMappedValue : CodesByZoneMappedValue
@@ -99,7 +100,11 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 					if (context.ZoneNotification.ZoneId.HasValue)
 						context.Value = saleZoneManager.GetZoneNameWithoutCountryName(context.ZoneNotification.ZoneId, context.ZoneNotification.ZoneName);
 					break;
-			}
+                case CodesByZoneBEFieldType.Note:
+                    if (context.ZoneNotification.Rate != null)
+                        context.Value = context.ZoneNotification.Rate.Note;
+                    break;
+            }
 		}
 
 

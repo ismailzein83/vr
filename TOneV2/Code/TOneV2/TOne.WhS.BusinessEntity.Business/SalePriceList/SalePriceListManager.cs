@@ -729,7 +729,8 @@ namespace TOne.WhS.BusinessEntity.Business
                             BED = rateChange.BED,
                             RateChangeType = rateChange.ChangeType,
                             EED = rateChange.EED,
-                            CurrencyId = rateChange.CurrencyId
+                            CurrencyId = rateChange.CurrencyId,
+                            Note = rateChange.Note
                         };
                         salePlZoneNotification.Increment = GetIncrementDescription(customerId, zoneId, rateChange.BED);
 
@@ -903,7 +904,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 BED = customerZoneLastRate.BED,
                 EED = customerZoneLastRate.EED,
                 RateChangeType = RateChangeType.NotChanged,
-                CurrencyId = customerZoneLastRate.CurrencyId
+                CurrencyId = customerZoneLastRate.CurrencyId,
             };
         }
         private SalePLOtherRateNotification GetOtherRateNotificationFromExistingData(int customerId, int sellingProductId, int rateTypeId, string zoneName, int countryId, CustomerZoneRateHistoryLocator customerZoneRateHistoryLocator)

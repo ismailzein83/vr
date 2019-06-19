@@ -46,7 +46,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     SellingProductId = null,
                     BED = saleRate.BED,
                     EED = saleRate.EED,
-                    SourceId = saleRate.SourceId
+                    SourceId = saleRate.SourceId,
+                    Note = saleRate.Note
                 };
             });
         }
