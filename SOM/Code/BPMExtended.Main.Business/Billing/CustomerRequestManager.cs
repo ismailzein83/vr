@@ -158,8 +158,15 @@ namespace BPMExtended.Main.Business
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
+            UserConnection UserConnection;
+            EntitySchema recordSchema;
+            Entity recordEntity;
             string EntityName = "";
             string workOrderId = "";
+            string StepFieldName = "";
+            string TechnicalStepFieldName = "";
+            string TechnicalStepId = "";
+            string stageId = "";
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
             esq.AddColumn("StRequestId");
@@ -175,9 +182,65 @@ namespace BPMExtended.Main.Business
                 int reqcode = 0;
                 int.TryParse(entities[0].GetTypedColumnValue<int>(requestTypeId.Name).ToString(), out reqcode);
                 EntityName = Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)reqcode).schemaName;
+                TechnicalStepId = Utilities.GetEnumAttribute<OperationType, TechnicalStepIdAttribute>((OperationType)reqcode).technicalStepId;
+                StepFieldName = Utilities.GetEnumAttribute<OperationType, CompletedStepAttribute>((OperationType)reqcode).CompletedStep;
+                TechnicalStepFieldName = Utilities.GetEnumAttribute<OperationType, TechnicalStepFieldNameAttribute>((OperationType)reqcode).fieldName;
                 string requestsTypeId = GetRequestType(EntityName);
                 string recordName = GetEntityName(EntityName, requestId);
                 workOrderId = initiateWorkOrder(requestId,requestsTypeId,WorkOrderType,recordName);
+
+                //update request
+                 UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+                 recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName(EntityName);
+                 recordEntity = recordSchema.CreateEntity(UserConnection);
+
+                var eSQ = new EntitySchemaQuery(UserConnection.EntitySchemaManager, EntityName);
+                eSQ.RowCount = 1;
+                eSQ.AddAllSchemaColumns();
+                eSQ.Filters.Add(eSQ.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId));
+                var collection = eSQ.GetEntityCollection(UserConnection);
+                if (collection.Count > 0)
+                {
+                    recordEntity = collection[0];
+                    recordEntity.SetColumnValue(TechnicalStepFieldName, WorkOrderType);
+                    recordEntity.SetColumnValue(StepFieldName, TechnicalStepId);
+                    recordEntity.SetColumnValue("StWOrkOrderID", workOrderId);
+                    recordEntity.SetColumnValue("StIsWorkOrderCompleted", false);
+                }
+                recordEntity.Save();
+
+                //get stage id
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestStage");
+                esq.AddColumn("Id");
+
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StStage.Id", TechnicalStepId);
+                esq.Filters.Add(esqFirstFilter);
+
+                var items = esq.GetEntityCollection(BPM_UserConnection);
+                if (items.Count > 0)
+                {
+                     stageId = items[0].GetTypedColumnValue<Guid>("Id").ToString();
+
+                }
+
+                 //update request header table
+                 UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+                 recordSchema = UserConnection.EntitySchemaManager.GetInstanceByName("StRequestHeader");
+                 recordEntity = recordSchema.CreateEntity(UserConnection);
+
+                esq = new EntitySchemaQuery(UserConnection.EntitySchemaManager, "StRequestHeader");
+                esq.RowCount = 1;
+                esq.AddAllSchemaColumns();
+                esq.Filters.Add(esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId));
+                collection = esq.GetEntityCollection(UserConnection);
+                if (collection.Count > 0)
+                {
+                    recordEntity = collection[0];
+                    recordEntity.SetColumnValue("StWorkOrderStageId", WorkOrderType);
+                    recordEntity.SetColumnValue("StSageId", stageId);
+                }
+                recordEntity.Save();
+
             }
 
 
@@ -256,6 +319,7 @@ namespace BPMExtended.Main.Business
             string SchemaName = "";
             string CompletedStepId = "";
             string CompletedStep = "";
+            string TechnicalStep = "";
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
             esq.AddColumn("StRequestId");
@@ -273,12 +337,13 @@ namespace BPMExtended.Main.Business
                 SchemaName = Utilities.GetEnumAttribute<OperationType, EntitySchemaNameAttribute>((OperationType)reqcode).schemaName;
                 CompletedStepId = Utilities.GetEnumAttribute<OperationType, CompletedStepIdAttribute>((OperationType)reqcode).CompletedStepId;
                 CompletedStep = Utilities.GetEnumAttribute<OperationType, CompletedStepAttribute>((OperationType)reqcode).CompletedStep;
+                TechnicalStep = Utilities.GetEnumAttribute<OperationType, TechnicalStepFieldNameAttribute>((OperationType)reqcode).fieldName;
 
-                UpdateRequestStatus(requestId, SchemaName,CompletedStepId,CompletedStep);
+                UpdateRequestStatus(requestId, SchemaName,CompletedStepId,CompletedStep, TechnicalStep);
             }
             return "";
         }
-        private void UpdateRequestStatus(string requestId, string SchemaName, string CompletedStepId,string CompletedStep)
+        private void UpdateRequestStatus(string requestId, string SchemaName, string CompletedStepId,string CompletedStep, string TechnicalStep)
         {
             //TODO : Update gshdsl object
             var UserConnection = (UserConnection)HttpContext.Current.Session["UserConnection"];
@@ -294,6 +359,7 @@ namespace BPMExtended.Main.Business
             {
                 recordEntity = collection[0];
                 recordEntity.SetColumnValue(CompletedStep, CompletedStepId);
+                recordEntity.SetColumnValue(TechnicalStep, null);
             }
             recordEntity.Save();
         }

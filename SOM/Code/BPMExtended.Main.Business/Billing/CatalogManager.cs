@@ -454,7 +454,7 @@ namespace BPMExtended.Main.Business
             var Id = esq.AddColumn("StServiceID");
             esq.AddColumn("StServiceName");
 
-            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGeneralSettings", "25B26C43-B28F-4C1F-B745-992F9D2D55B4");
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGeneralSettings", "204A6410-8947-4E88-AF4E-F705DF7A0984");
             esq.Filters.Add(esqFirstFilter);
 
             var entities = esq.GetEntityCollection(BPM_UserConnection);
@@ -467,6 +467,37 @@ namespace BPMExtended.Main.Business
                         Id = item.GetTypedColumnValue<string>(Id.Name),
                         Name = item.GetTypedColumnValue<string>("StServiceName"),
                         UpFront = false
+                    });
+                }
+            }
+
+            return fees;
+
+        }
+
+        public List<SaleService> GetCPTFees()
+        {
+            List<SaleService> fees = new List<SaleService>();
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceInGeneralSettings");
+            var Id = esq.AddColumn("StServiceID");
+            esq.AddColumn("StServiceName");
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StGeneralSettings", "E3CE1E0B-1DBE-4AE0-B80D-CBB2F1E46C63");
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                foreach (var item in entities)
+                {
+                    fees.Add(new SaleService()
+                    {
+
+                        Id = item.GetTypedColumnValue<string>(Id.Name),
+                        Name = item.GetTypedColumnValue<string>("StServiceName"),
+                        UpFront = true
                     });
                 }
             }

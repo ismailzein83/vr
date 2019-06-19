@@ -41,6 +41,24 @@ namespace BPMExtended.Main.Entities
             this.CompletedStepId = completedId;
         }
     }
+    public class TechnicalStepIdAttribute : Attribute
+    {
+        public string technicalStepId { get; private set; }
+
+        public TechnicalStepIdAttribute(string technicalStepId)
+        {
+            this.technicalStepId = technicalStepId;
+        }
+    }
+    public class TechnicalStepFieldNameAttribute : Attribute
+    {
+        public string fieldName { get; private set; }
+
+        public TechnicalStepFieldNameAttribute(string fieldName)
+        {
+            this.fieldName = fieldName;
+        }
+    }
     public enum OperationType
     {
         [LineOfBusiness(LineOfBusiness.Telephony)]
@@ -242,6 +260,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         [Description("Cpt Request")]
         [EntitySchemaName("StCpt")]
+        [TechnicalStepFieldName("StTechnicalStepId")]
+        [TechnicalStepId("A8F7C0E8-4903-4343-93E4-87295BF4D64E")]
         [CompletedStep("StStepId")]
         [CompletedStepId("2A290E4F-A034-46A5-95BF-E0C8ED760805")]
         CptRequest = 28,

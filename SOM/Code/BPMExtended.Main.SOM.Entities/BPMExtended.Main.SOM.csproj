@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Billing\ServiceResponse\BillOnDemandOutput.cs" />
     <Compile Include="Billing\ServiceResponse\ContractAvailableServiceOutput.cs" />
+    <Compile Include="Billing\ServiceResponse\CPTItem.cs" />
     <Compile Include="Billing\ServiceResponse\CreateCustomerRequestOutput.cs" />
     <Compile Include="Billing\ServiceResponse\GetContractAddressOutput.cs" />
     <Compile Include="Billing\ServiceResponse\Invoices.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Billing\ServiceResponse\Installment.cs" />
     <Compile Include="Billing\ServiceResponse\PaymentPlanTemplate.cs" />
     <Compile Include="Billing\ServiceResponse\RatePlanChangeResponse.cs" />
+    <Compile Include="Billing\ServiceResponse\ReserveCPTRequestOutput.cs" />
     <Compile Include="Billing\ServiceResponse\ServiceDefinition.cs" />
     <Compile Include="Billing\ServiceResponse\CustomerCategory.cs" />
     <Compile Include="Billing\ServiceResponse\RatePlan.cs" />
