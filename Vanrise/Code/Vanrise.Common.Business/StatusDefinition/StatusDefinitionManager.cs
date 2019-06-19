@@ -189,7 +189,12 @@ namespace Vanrise.Common.Business
         {
             if (context.FieldValue != null)
             {
-                context.StyleDefinitionId = GetStyleDefinitionId((Guid)context.FieldValue);
+                Guid statusDefinitionId;
+                if (context.FieldValue is Guid)
+                    statusDefinitionId = (Guid)context.FieldValue;
+                else
+                    statusDefinitionId = new Guid(context.FieldValue.ToString());
+                context.StyleDefinitionId = GetStyleDefinitionId(statusDefinitionId);
                 return true;
             }
             return false;
