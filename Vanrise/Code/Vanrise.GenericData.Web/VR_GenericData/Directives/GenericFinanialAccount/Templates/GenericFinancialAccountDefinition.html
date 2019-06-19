@@ -1,0 +1,39 @@
+﻿
+<vr-row>
+    <vr-columns width="fullrow" haschildcolumns>
+        <vr-genericdata-genericbedefinition-selector on-ready="scopeModel.onBEDefinitionSelectorReady" onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChange"
+                                                     customlabel="Business Entity Definition" normal-col-num="6" isrequired="true" hideremoveicon>
+        </vr-genericdata-genericbedefinition-selector>
+    </vr-columns>
+</vr-row>
+
+<vr-columns width="1/3row" vr-loader="scopeModel.isFinancialAccountLoading" haschildcolumns>
+    <vr-genericdata-datarecordtypefields-selector isrequired="true" on-ready="scopeModel.onFinancialAccountFieldSelectorReady" label="Financial Account" hideremoveicon>
+    </vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+
+<vr-columns width="1/3row" vr-loader="scopeModel.isAccountNameLoading" haschildcolumns>
+    <vr-genericdata-datarecordtypefields-selector isrequired="true" on-ready="scopeModel.onAccountNameFieldSelectorReady" label="Account Name" hideremoveicon>
+    </vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+
+<vr-columns width="1/3row" vr-loader="scopeModel.isStatusNameLoading" haschildcolumns>
+    <vr-genericdata-datarecordtypefields-selector isrequired="true" on-ready="scopeModel.onStatusNameFieldSelectorReady" label="Status Name" hideremoveicon>
+    </vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+
+<vr-columns width="1/3row" vr-loader="scopeModel.isBEDLoading" haschildcolumns>
+    <vr-genericdata-datarecordtypefields-selector isrequired="true" on-ready="scopeModel.onBEDFieldSelectorReady"  label="BED" hideremoveicon>
+
+    </vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+
+<vr-columns width="1/3row" vr-loader="scopeModel.isEEDLoading" haschildcolumns>
+    <vr-genericdata-datarecordtypefields-selector isrequired="true" on-ready="scopeModel.onEEDFieldSelectorReady"  label="EED" hideremoveicon>
+    </vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+
+<vr-columns width="1/3row" vr-loader="scopeModel.isCurrencyLoading" haschildcolumns>
+    <vr-genericdata-datarecordtypefields-selector isrequired="true" on-ready="scopeModel.onCurrencyFieldSelectorReady"  label="Currency" hideremoveicon>
+    </vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
