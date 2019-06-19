@@ -745,6 +745,14 @@
       <Project>{d7273138-4b50-41a0-a0c3-93a747c8fe4e}</Project>
       <Name>RecordAnalysis.MainExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Billing.Business\Retail.Billing.Business.csproj">
+      <Project>{78b0018b-0fab-4329-b0db-f2d50099e912}</Project>
+      <Name>Retail.Billing.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Billing.Entities\Retail.Billing.Entities.csproj">
+      <Project>{f0f463c2-64f4-48dc-95ae-fd7f6bca4ac3}</Project>
+      <Name>Retail.Billing.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.BP.Activities\Retail.BusinessEntity.BP.Activities.csproj">
       <Project>{5ecd4fc8-3080-43e8-ad80-581289f30509}</Project>
       <Name>Retail.BusinessEntity.BP.Activities</Name>
