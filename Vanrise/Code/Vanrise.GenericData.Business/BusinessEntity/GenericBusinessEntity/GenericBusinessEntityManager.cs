@@ -1159,8 +1159,16 @@ namespace Vanrise.GenericData.Business
 
             foreach (var fieldValue in fieldValues)
             {
+                if (fieldValue.Value == null)
+                    continue;
+
                 DataRecordField parentDataRecordField = dataRecordType.Fields.FindRecord(itm => string.Compare(itm.Name, fieldValue.Key) == 0);
                 parentDataRecordField.ThrowIfNull("parentDataRecordField", fieldValue.Key);
+
+                Type fieldRuntimeType = parentDataRecordField.Type.GetRuntimeType();
+
+                if (fieldRuntimeType.IsValueType && fieldValue.Value.ToString() == Activator.CreateInstance(fieldRuntimeType).ToString())
+                    continue;
 
                 SetDependentFieldValuesContext context = new SetDependentFieldValuesContext()
                 {
