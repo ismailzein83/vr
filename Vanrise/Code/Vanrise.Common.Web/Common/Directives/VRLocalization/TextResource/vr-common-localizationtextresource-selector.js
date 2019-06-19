@@ -71,6 +71,7 @@ app.directive('vrCommonVrlocalizationtextresourceSelector', ['UtilsService', 'VR
 		function textResourceSelectorCtor(ctrl, $scope, attrs) {
 
 			var selectorAPI;
+			var lastResourceValue;
 
 			function initializeController() {
 				$scope.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
@@ -88,6 +89,8 @@ app.directive('vrCommonVrlocalizationtextresourceSelector', ['UtilsService', 'VR
 
 				api.load = function (payload) {
 					var promises = [];
+					if (payload != undefined)
+					lastResourceValue = payload.selectedValue;
 					if ($scope.isLocalizationEnabled) {
 						promises.push(loadTextResouceInfoSelector(payload));
 					}
@@ -99,6 +102,10 @@ app.directive('vrCommonVrlocalizationtextresourceSelector', ['UtilsService', 'VR
 				};
 
 				api.getSelectedValues = function () {
+					if (!$scope.isLocalizationEnabled) {
+						if (lastResourceValue != undefined)
+							return lastResourceValue;
+					}
 					return VRUIUtilsService.getIdSelectedIds('ResourceKey', attrs, ctrl);
 				};
 
