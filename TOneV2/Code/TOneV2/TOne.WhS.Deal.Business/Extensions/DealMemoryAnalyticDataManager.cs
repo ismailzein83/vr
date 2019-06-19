@@ -138,17 +138,12 @@ namespace TOne.WhS.Deal.Business
             dimensionFields.Add(propertyNames[PropertyName.CostDealZoneGroupNb]);
             dimensionFields.Add(propertyNames[PropertyName.Priority]);
 
-            ObjectListRecordFilter objectListRecordFilter = new ObjectListRecordFilter()
+            DimensionFilter costDealDimensionFilter = new DimensionFilter()
             {
-                FieldName = propertyNames[PropertyName.CostDeal],
-                CompareOperator = ListRecordFilterOperator.In,
-                Values = costDealDefinitionIds.VRCast<object>().ToList()
+                Dimension = propertyNames[PropertyName.CostDeal],
+                FilterValues = costDealDefinitionIds.VRCast<object>().ToList()
             };
-            RecordFilter recordFilter = Vanrise.GenericData.Business.Helper.ConvertToRecordFilter(objectListRecordFilter.FieldName, new FieldNumberType(), objectListRecordFilter);
-
-            RecordFilterGroup filterGroup = new RecordFilterGroup();
-            filterGroup.Filters = new List<RecordFilter>();
-            filterGroup.Filters.Add(recordFilter);
+            List<DimensionFilter> dimensionFilters = new List<DimensionFilter>() { costDealDimensionFilter };
 
             AnalyticQuery costAnalyticQuery = new AnalyticQuery
             {
@@ -157,7 +152,7 @@ namespace TOne.WhS.Deal.Business
                 MeasureFields = new List<string> { propertyNames[PropertyName.CostDealDurInSec], propertyNames[PropertyName.TotalProfit] },
                 FromTime = query.FromTime,
                 ToTime = query.ToTime.Value,
-                FilterGroup = filterGroup
+                Filters = dimensionFilters
             };
 
             AnalyticRecord analyticRecordSummary;
