@@ -22,6 +22,7 @@
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.datasource = [];
+                ctrl.genericBESelectorDatasource = [];
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
 
                 var businessentitySelector = new BusinessentitySelector(ctrl, $scope, $attrs);
@@ -47,7 +48,6 @@
             var hasEmtyRequiredDependentField;
 
             var selectorAPI;
-
 
             function initializeController() {
 
@@ -104,9 +104,11 @@
                         promises.push(getGenericBERuntimeInfoPromise);
                     }
 
+                    //Added by Anthony 
                     //if (beRuntimeSelectorFilter != undefined) {
-                    //    if (filter == undefined)
+                    //    if (filter == undefined) {
                     //        filter = { GenericBESelectorCondition: beRuntimeSelectorFilter.GenericBESelectorCondition };
+                    //    }
                     //}
 
                     if (!hasEmtyRequiredDependentField) {
@@ -117,25 +119,13 @@
                             if (isRemote) {
                                 if (selectedIds != undefined) {
                                     if (isFirstLoad) {
-                                        if (!Array.isArray(selectedIds))
-                                            selectedIds = [selectedIds];
+                                        if (filter == undefined)
+                                            filter = {};
 
-                                        if (filter == undefined) {
-                                            filter = { SelectedIds: selectedIds };
-                                        } else {
-                                            filter.SelectedIds = selectedIds;
-                                        }
+                                        filter.SelectedIds = !Array.isArray(selectedIds) ? [selectedIds] : selectedIds;
                                     }
 
-                                    VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
-                                        selectorAPI.clearDataSource();
-                                        ctrl.datasource.length = 0;
-
-                                        angular.forEach(response, function (item) {
-                                            ctrl.datasource.push(item);
-                                        });
-
-                                        VRUIUtilsService.setSelectedValues(selectedIds, 'GenericBusinessEntityId', attrs, ctrl);
+                                    getGenericBusinessEntityInfo(selectedIds).then(function () {
                                         getGenericBusinessEntityInfoPromiseDeferred.resolve();
                                     });
                                 }
@@ -172,10 +162,11 @@
                                 idFieldName = response.IdFieldName;
                                 isRemote = response.IsRemote;
 
-                                if (isRemote && !hasEmtyRequiredDependentField)
-                                    ctrl.searchGenericBE = searchGenericBE;
-                                else
-                                    ctrl.searchGenericBE = ctrl.datasource;
+                                if (isRemote && !hasEmtyRequiredDependentField) {
+                                    ctrl.genericBESelectorDatasource = searchGenericBE;
+                                } else {
+                                    ctrl.genericBESelectorDatasource = ctrl.datasource;
+                                }
                             }
                         });
                     }
@@ -190,49 +181,26 @@
                 };
 
                 api.clearDataSource = function () {
-                    ctrl.searchGenericBE = [];
+                    ctrl.genericBESelectorDatasource = [];
                     selectorAPI.clearDataSource();
                 };
 
                 api.setFieldValues = function (value, context) {
-                    var promises = [];
 
-                    $scope.isDisabled = context.isDisabled;
                     filter = context.filter;
+                    ctrl.isDisabled = context.isDisabled;
 
                     if (isRemote) {
-                        var getGenericBusinessEntityInfoPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(getGenericBusinessEntityInfoPromiseDeferred.promise);
+                        if (filter == undefined)
+                            filter = {};
 
-                        var resetFilter = false;
-                        var selectedIds = !Array.isArray(value) ? [value] : value;
-                        if (filter == undefined) {
-                            filter = { SelectedIds: [selectedIds] };
-                            resetFilter = true;
-                        } else {
-                            filter.SelectedIds = [selectedIds];
-                            resetFilter = true;
-                        }
-
-                        VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
-                            selectorAPI.clearDataSource();
-                            ctrl.datasource.length = 0;
-
-                            if (resetFilter) {
-                                filter = undefined;
-                            }
-
-                            angular.forEach(response, function (item) {
-                                ctrl.datasource.push(item);
-                            });
-
-                            VRUIUtilsService.setSelectedValues(value, 'GenericBusinessEntityId', attrs, ctrl);
-                            getGenericBusinessEntityInfoPromiseDeferred.resolve();
-                        });
+                        filter.SelectedIds = !Array.isArray(value) ? [value] : value;
                     }
-                    else {
-                        promises.push(getGenericBusinessEntityInfo(value));
-                    }
+
+                    var promises = [];
+
+                    var getGenericBusinessEntityInfoPromiseDeferred = getGenericBusinessEntityInfo(value);
+                    promises.push(getGenericBusinessEntityInfoPromiseDeferred);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -245,18 +213,19 @@
             function getGenericBusinessEntityInfo(selectedIds, selectIfSingleItem) {
                 return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
                     selectorAPI.clearDataSource();
+                    ctrl.datasource.length = 0;
 
                     if (response) {
                         for (var i = 0; i < response.length; i++) {
                             ctrl.datasource.push(response[i]);
                         }
-                    }
 
-                    if (selectedIds) {
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'GenericBusinessEntityId', attrs, ctrl);
-                    }
-                    else if (selectedIds == undefined && selectIfSingleItem) {
-                        selectorAPI.selectIfSingleItem();
+                        if (selectedIds) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'GenericBusinessEntityId', attrs, ctrl);
+                        }
+                        else if (selectedIds == undefined && selectIfSingleItem) {
+                            selectorAPI.selectIfSingleItem();
+                        }
                     }
                 });
             }
@@ -308,7 +277,7 @@
                 + '<span vr-disabled="ctrl.isDisabled">'
                 + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
                 + '<vr-select on-ready="ctrl.onSelectorReady"'
-                + ' datasource="ctrl.searchGenericBE"'
+                + ' datasource="ctrl.genericBESelectorDatasource"'
                 + ' selectedvalues="ctrl.selectedvalues"'
                 + ' onselectionchanged="ctrl.onselectionchanged"'
                 + ' onselectitem="ctrl.onselectitem"'

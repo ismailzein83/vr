@@ -1166,8 +1166,7 @@ namespace Vanrise.GenericData.Business
                 parentDataRecordField.ThrowIfNull("parentDataRecordField", fieldValue.Key);
 
                 Type fieldRuntimeType = parentDataRecordField.Type.GetRuntimeType();
-
-                if (fieldRuntimeType.IsValueType && fieldValue.Value.ToString() == Activator.CreateInstance(fieldRuntimeType).ToString())
+                if (fieldRuntimeType.IsValueType && Nullable.GetUnderlyingType(fieldRuntimeType) == null && fieldValue.Value.ToString() == Activator.CreateInstance(fieldRuntimeType).ToString())
                     continue;
 
                 SetDependentFieldValuesContext context = new SetDependentFieldValuesContext()

@@ -26,14 +26,14 @@
             var selectedValues;
             var runtimeFields;
 
-            var rowDirectiveApi;
+            var rowDirectiveAPI;
             var rowDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onRowDirectiveReady = function (api) {
-                    rowDirectiveApi = api;
+                    rowDirectiveAPI = api;
                     rowDirectiveReadyPromiseDeferred.resolve();
                 };
 
@@ -129,7 +129,7 @@
                                 //dataRecordTypeId: dataRecordTypeId
                             };
 
-                            VRUIUtilsService.callDirectiveLoad(rowDirectiveApi, payload, rowDirectiveLoadPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(rowDirectiveAPI, payload, rowDirectiveLoadPromiseDeferred);
                         });
 
                         return rowDirectiveLoadPromiseDeferred.promise;
@@ -139,14 +139,14 @@
                 };
 
                 api.getData = function () {
-                    return rowDirectiveApi != undefined ? rowDirectiveApi.getData() : undefined;
+                    return rowDirectiveAPI != undefined ? rowDirectiveAPI.getData() : undefined;
                 };
 
                 api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
                     var _promises = [];
 
-                    if (rowDirectiveApi.onFieldValueChanged != undefined && typeof (rowDirectiveApi.onFieldValueChanged) == "function") {
-                        var onFieldValueChangedPromise = rowDirectiveApi.onFieldValueChanged(allFieldValuesByFieldNames);
+                    if (rowDirectiveAPI != undefined && rowDirectiveAPI.onFieldValueChanged != undefined && typeof (rowDirectiveAPI.onFieldValueChanged) == "function") {
+                        var onFieldValueChangedPromise = rowDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
                         if (onFieldValueChangedPromise != undefined)
                             _promises.push(onFieldValueChangedPromise);
                     }
@@ -155,16 +155,16 @@
                 };
 
                 api.setData = function (dicData) {
-                    if (rowDirectiveApi != undefined) {
-                        dicData = UtilsService.mergeObject(dicData, rowDirectiveApi.getData(), true);
+                    if (rowDirectiveAPI != undefined) {
+                        dicData = UtilsService.mergeObject(dicData, rowDirectiveAPI.getData(), true);
                     }
                 };
 
                 api.setFieldValues = function (fieldValuesByNames) {
                     var _promises = [];
 
-                    if (rowDirectiveApi.setFieldValues != undefined && typeof (rowDirectiveApi.setFieldValues) == "function") {
-                        var onFieldValueSettedPromise = rowDirectiveApi.setFieldValues(fieldValuesByNames);
+                    if (rowDirectiveAPI.setFieldValues != undefined && typeof (rowDirectiveAPI.setFieldValues) == "function") {
+                        var onFieldValueSettedPromise = rowDirectiveAPI.setFieldValues(fieldValuesByNames);
                         if (onFieldValueSettedPromise != undefined)
                             _promises.push(onFieldValueSettedPromise);
                     }

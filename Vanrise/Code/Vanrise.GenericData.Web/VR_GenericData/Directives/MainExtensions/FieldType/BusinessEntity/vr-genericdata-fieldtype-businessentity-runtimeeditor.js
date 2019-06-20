@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService', 'VR_GenericData_GenericUIRuntimeAPIService', 
+app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService', 'VR_GenericData_GenericUIRuntimeAPIService',
     function (UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_GenericUIRuntimeAPIService) {
 
 
@@ -95,7 +95,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 var api = {};
 
                 api.load = function (payload) {
-                   
+
                     var fieldType;
                     var genericUIContext;
                     var allFieldValuesByName;
@@ -183,7 +183,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                 };
 
                                 $scope.selector.onselectionchanged = function (selectedvalue) {
-                                    if (isFirstLoad)
+                                    if (isFirstLoad) //needed for first undefined selector behavior
                                         return;
 
                                     if (genericUIContext != undefined && genericUIContext.notifyValueChanged != undefined && typeof (genericUIContext.notifyValueChanged) == "function") {
@@ -202,7 +202,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
                                 $scope.selector.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                                 innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
-                                
+
                                 $scope.selector.directiveReadyPromiseDeferred.promise.then(function () {
 
                                     var payload = {
@@ -479,7 +479,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     var currentDependentField = dependentFields[i];
                     var dependentFieldName = currentDependentField.FieldName;
 
-                    if ( allChangedFields != undefined && dependentFieldName in allChangedFields) {
+                    if (allChangedFields != undefined && dependentFieldName in allChangedFields) {
                         var oldValues = fieldValuesByName[dependentFieldName];
                         var newValues = allChangedFields[dependentFieldName];
 

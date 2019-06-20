@@ -30,14 +30,14 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
             var parentFieldValues;
             var genericContext;
 
-            var sectionDirectiveApi;
+            var sectionDirectiveAPI;
             var sectionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onSectionDirectiveReady = function (api) {
-                    sectionDirectiveApi = api;
+                    sectionDirectiveAPI = api;
                     sectionDirectivePromiseDeferred.resolve();
                 };
 
@@ -85,7 +85,7 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
                                 parentFieldValues: parentFieldValues,
                                 //dataRecordTypeId: dataRecordTypeId
                             };
-                            VRUIUtilsService.callDirectiveLoad(sectionDirectiveApi, payloadSelector, sectionDirectiveLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(sectionDirectiveAPI, payloadSelector, sectionDirectiveLoadDeferred);
                         });
 
                         return sectionDirectiveLoadDeferred.promise;
@@ -96,7 +96,7 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
 
                 api.setData = function (dicData) {
 
-                    var sectionData = sectionDirectiveApi.getData();
+                    var sectionData = sectionDirectiveAPI.getData();
                     if (sectionData != undefined) {
                         for (var prop in sectionData) {
                             dicData[prop] = sectionData[prop];
@@ -107,8 +107,8 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
                 api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
                     var _promises = [];
 
-                    if (sectionDirectiveApi.onFieldValueChanged != undefined && typeof (sectionDirectiveApi.onFieldValueChanged) == "function") {
-                        var onFieldValueChangedPromise = sectionDirectiveApi.onFieldValueChanged(allFieldValuesByFieldNames);
+                    if (sectionDirectiveAPI != undefined && sectionDirectiveAPI.onFieldValueChanged != undefined && typeof (sectionDirectiveAPI.onFieldValueChanged) == "function") {
+                        var onFieldValueChangedPromise = sectionDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
                         if (onFieldValueChangedPromise != undefined)
                             _promises.push(onFieldValueChangedPromise);
                     }
@@ -119,8 +119,8 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRUI
                 api.setFieldValues = function (fieldValuesByNames) {
                     var _promises = [];
 
-                    if (sectionDirectiveApi.setFieldValues != undefined && typeof (sectionDirectiveApi.setFieldValues) == "function") {
-                        var setFieldValuesPromise = sectionDirectiveApi.setFieldValues(fieldValuesByNames);
+                    if (sectionDirectiveAPI.setFieldValues != undefined && typeof (sectionDirectiveAPI.setFieldValues) == "function") {
+                        var setFieldValuesPromise = sectionDirectiveAPI.setFieldValues(fieldValuesByNames);
                         if (setFieldValuesPromise != undefined)
                             _promises.push(setFieldValuesPromise);
                     }

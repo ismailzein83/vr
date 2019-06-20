@@ -137,7 +137,7 @@
                         var rowContainer = $scope.scopeModel.rowContainers[i];
                         for (var j = 0; j < rowContainer.rowSettings.length; j++) {
                             var rowSetting = rowContainer.rowSettings[j];
-                            if (rowSetting.editorRuntimeAPI.onFieldValueChanged != undefined && typeof (rowSetting.editorRuntimeAPI.onFieldValueChanged) == "function") {
+                            if (rowSetting.editorRuntimeAPI != undefined && rowSetting.editorRuntimeAPI.onFieldValueChanged != undefined && typeof (rowSetting.editorRuntimeAPI.onFieldValueChanged) == "function") {
                                 var onFieldValueChangedPromise = rowSetting.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames);
                                 if (onFieldValueChangedPromise != undefined)
                                     _promises.push(onFieldValueChangedPromise);

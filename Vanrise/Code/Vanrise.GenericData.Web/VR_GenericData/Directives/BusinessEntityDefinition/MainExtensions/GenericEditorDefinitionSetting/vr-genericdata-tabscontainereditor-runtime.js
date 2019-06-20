@@ -113,7 +113,7 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRUIU
 
                     for (var i = 0; i < $scope.scopeModel.tabContainers.length; i++) {
                         var currentTabContainers = $scope.scopeModel.tabContainers[i];
-                        if (currentTabContainers.editorRuntimeAPI.onFieldValueChanged != undefined && typeof (currentTabContainers.editorRuntimeAPI.onFieldValueChanged) == "function") {
+                        if (currentTabContainers.editorRuntimeAPI != undefined && currentTabContainers.editorRuntimeAPI.onFieldValueChanged != undefined && typeof (currentTabContainers.editorRuntimeAPI.onFieldValueChanged) == "function") {
                             var onFieldValueChangedPromise = currentTabContainers.editorRuntimeAPI.onFieldValueChanged(allFieldValuesByFieldNames);
                             if (onFieldValueChangedPromise != undefined)
                                 _promises.push(onFieldValueChangedPromise);

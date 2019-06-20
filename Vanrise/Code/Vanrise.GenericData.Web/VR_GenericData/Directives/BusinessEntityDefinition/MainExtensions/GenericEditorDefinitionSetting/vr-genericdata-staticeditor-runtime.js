@@ -29,7 +29,7 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRUIUtilsSer
             var parentFieldValues;
             var genericContext;
 
-            var editorRuntimeDirectiveApi;
+            var editorRuntimeDirectiveAPI;
             var editorRuntimeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
 
@@ -37,7 +37,7 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRUIUtilsSer
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
-                    editorRuntimeDirectiveApi = api;
+                    editorRuntimeDirectiveAPI = api;
                     editorRuntimeDirectivePromiseDeferred.resolve();
                 };
 
@@ -80,7 +80,7 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRUIUtilsSer
                                 parentFieldValues: parentFieldValues,
                                 genericContext: genericContext
                             };
-                            VRUIUtilsService.callDirectiveLoad(editorRuntimeDirectiveApi, directivePayload, editorRuntimeDirectiveLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(editorRuntimeDirectiveAPI, directivePayload, editorRuntimeDirectiveLoadDeferred);
                         });
 
                         return editorRuntimeDirectiveLoadDeferred.promise;
@@ -90,16 +90,16 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRUIUtilsSer
                 };
 
                 api.setData = function (dicData) {
-                    editorRuntimeDirectiveApi.setData(dicData);
+                    editorRuntimeDirectiveAPI.setData(dicData);
                 };
 
                 api.onFieldValueChanged = function (allFieldValuesByFieldNames) {
                     var _promises = [];
 
-                    if (editorRuntimeDirectiveApi.onFieldValueChanged != undefined && typeof (editorRuntimeDirectiveApi.onFieldValueChanged) == "function") {
-                        var onFieldValueChangedPromise = editorRuntimeDirectiveApi.onFieldValueChanged(allFieldValuesByFieldNames);
+                    if (editorRuntimeDirectiveAPI != undefined && editorRuntimeDirectiveAPI.onFieldValueChanged != undefined && typeof (editorRuntimeDirectiveAPI.onFieldValueChanged) == "function") {
+                        var onFieldValueChangedPromise = editorRuntimeDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames);
                         if (onFieldValueChangedPromise != undefined)
-                            _promises.push(editorRuntimeDirectiveApi.onFieldValueChanged(allFieldValuesByFieldNames));
+                            _promises.push(editorRuntimeDirectiveAPI.onFieldValueChanged(allFieldValuesByFieldNames));
                     }
 
                     return UtilsService.waitMultiplePromises(_promises);
@@ -108,8 +108,8 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRUIUtilsSer
                 //api.setFieldValues = function (fieldValuesByNames) {
                 //    var _promises = [];
 
-                //    if (editorRuntimeDirectiveApi.setFieldValues != undefined && typeof (editorRuntimeDirectiveApi.setFieldValues) == "function") {
-                //        var onFieldValueSettedPromise = editorRuntimeDirectiveApi.setFieldValues(fieldValuesByNames);
+                //    if (editorRuntimeDirectiveAPI.setFieldValues != undefined && typeof (editorRuntimeDirectiveAPI.setFieldValues) == "function") {
+                //        var onFieldValueSettedPromise = editorRuntimeDirectiveAPI.setFieldValues(fieldValuesByNames);
                 //        if (onFieldValueSettedPromise != undefined)
                 //            _promises.push(onFieldValueSettedPromise);
                 //    }
