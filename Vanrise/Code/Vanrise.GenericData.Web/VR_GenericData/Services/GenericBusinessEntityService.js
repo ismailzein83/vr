@@ -7,29 +7,29 @@
     function GenericBusinessEntityService(VR_GenericData_GenericBusinessEntityAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService, UtilsService, VRUIUtilsService) {
         var drillDownDefinitions = [];
 
-        function addGenericBusinessEntity(onGenericBEAdded, businessEntityDefinitionId,editorSize,fieldValues) {
+        function addGenericBusinessEntity(onGenericBEAdded, businessEntityDefinitionId, editorSize, fieldValues) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
                 fieldValues: fieldValues
             };
 
             var settings = {
-               size: editorSize != undefined ? editorSize : "medium",
+                size: editorSize != undefined ? editorSize : "medium",
             };
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onGenericBEAdded = onGenericBEAdded;
-             
+
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
         }
-        
+
         function editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
                 genericBusinessEntityId: genericBusinessEntityId,
-                fieldValues : fieldValues
+                fieldValues: fieldValues
             };
 
             var settings = {
@@ -42,19 +42,34 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
         }
 
-        function uploadGenericBusinessEntity(businessEntityDefinitionId,editorSize) {
+        function viewGenericBusinessEntity(businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues) {
+            var parameters = {
+                businessEntityDefinitionId: businessEntityDefinitionId,
+                genericBusinessEntityId: genericBusinessEntityId,
+                fieldValues: fieldValues
+            };
+
+            var settings = {
+                size: editorSize != undefined ? editorSize : "medium"
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
+        }
+        function uploadGenericBusinessEntity(businessEntityDefinitionId, editorSize) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
             };
 
             var settings = {
-               size: editorSize != undefined ? editorSize : "medium",
+                size: editorSize != undefined ? editorSize : "medium",
             };
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditorUploader.html', parameters, settings);
         }
 
-        function defineGenericBEViewTabs(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEGridViews, idFieldType)
-        {
+        function defineGenericBEViewTabs(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEGridViews, idFieldType) {
             if (businessEntityDefinitionId == undefined || genericBusinessEntity == undefined || genericBusinessEntity.AvailableGridViewIds == undefined || genericBusinessEntity.AvailableGridViewIds.length == 0)
                 return;
 
@@ -93,7 +108,7 @@
                         genericBEGridView: genericBEGridView,
                         businessEntityDefinitionId: businessEntityDefinitionId,
                         genericBusinessEntityId: idFieldType != undefined ? genericBusinessEntity.FieldValues[idFieldType.Name].Value : undefined
-                    };                   
+                    };
                     return payload;
                 }
 
@@ -106,10 +121,10 @@
         }
 
         function getEntityUniqueName(businessEntityDefinitionId) {
-            return "VR_GenericData_GenericBusinessEntity_"+ businessEntityDefinitionId;
+            return "VR_GenericData_GenericBusinessEntity_" + businessEntityDefinitionId;
         }
 
-        function openBulkActionsEditor(viewId, bulkAction, businessEntityDefinitionId,dataRecordTypeId) {
+        function openBulkActionsEditor(viewId, bulkAction, businessEntityDefinitionId, dataRecordTypeId) {
             var parameters = {
                 viewId: viewId,
                 bulkAction: bulkAction,
@@ -191,7 +206,7 @@
 
 
         //    drillDownDefinition.loadDirective = function (directiveAPI, genericBusinessEntityItem) {
-               
+
         //        genericBusinessEntityItem.objectTrackingGridAPI = directiveAPI;
         //        var query = {
         //            ObjectId: genericBusinessEntityItem.Entity.GenericBusinessEntityId,
@@ -224,7 +239,8 @@
             sendEmailGenericBE: sendEmailGenericBE,
             openErrorMessageEditor: openErrorMessageEditor,
             tryUpdateAllFieldValuesByFieldName: tryUpdateAllFieldValuesByFieldName,
-            tryUpdateAllFieldValuesByFieldNames: tryUpdateAllFieldValuesByFieldNames
+            tryUpdateAllFieldValuesByFieldNames: tryUpdateAllFieldValuesByFieldNames,
+            viewGenericBusinessEntity: viewGenericBusinessEntity
             //registerObjectTrackingDrillDownToGenericBusinessEntity: registerObjectTrackingDrillDownToGenericBusinessEntity
             //getDrillDownDefinition: getDrillDownDefinition
         });
