@@ -797,7 +797,7 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void UpdateCustomerCategory(string customerCategoryId, string customerId,string contactId, string accountId, string requestId)
+        public void UpdateCustomerCategory(string customerCategoryId, string customerId, string requestId)
         {
                 SOMRequestInput<CustomerCategoryInput> somRequestInput = new SOMRequestInput<CustomerCategoryInput>
                 {
@@ -806,7 +806,6 @@ namespace BPMExtended.Main.Business
                         CustomerCategoryId = customerCategoryId,
                         CommonInputArgument = new CommonInputArgument()
                         {
-                            ContactId = contactId,
                             CustomerId = customerId,
                             RequestId = requestId
                         }
