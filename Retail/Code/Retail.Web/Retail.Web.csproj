@@ -1267,6 +1267,9 @@
     <Content Include="Web.config.NetworkInventory.exclud">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Web.config.Retail.Billing.exclud">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.config.Interconnect.exclud">
       <SubType>Designer</SubType>
     </None>

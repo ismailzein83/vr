@@ -699,6 +699,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="App.config.Retail.Billing.exclude">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App.config.NetworkInventory.exclude">
       <SubType>Designer</SubType>
     </None>
