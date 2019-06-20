@@ -35,6 +35,10 @@
             function initializeController() {
                 $scope.scopeModel = {};
 
+                $scope.scopeModel.onCallOnLoadChanged = function () {
+                    $scope.scopeModel.selectedButton = undefined;
+                };
+
                 $scope.scopeModel.onButtonTypesSelectorReady = function (api) {
                     buttonTypesSelectorAPI = api;
                     buttonTypesSelectorReadyPromiseDeferred.resolve();
@@ -105,9 +109,9 @@
                 api.load = function (payload) {
                     var promises = [];
 
-                    var settings;
                     var context;
 
+                    var callOnLoad;
                     var buttonType;
                     var apiAction;
                     var httpMethodType;
@@ -115,10 +119,11 @@
                     var outputItems;
 
                     if (payload != undefined) {
-                        settings = payload.settings;
                         context = payload.context;
 
+                        var settings = payload.settings;
                         if (settings != undefined) {
+                            callOnLoad = settings.CallOnLoad;
                             buttonType = settings.VRButtonType;
                             apiAction = settings.APIAction;
                             httpMethodType = settings.HTTPMethodType;
@@ -141,6 +146,7 @@
 
                     function loadStaticFields() {
                         $scope.scopeModel.apiAction = apiAction;
+                        $scope.scopeModel.callOnLoad = callOnLoad;
                     }
 
                     function loadHTTPMethodSelector() {
@@ -194,14 +200,18 @@
                 };
 
                 api.getData = function () {
-                    return {
+
+                    var definitionData = {
                         $type: "Vanrise.GenericData.MainExtensions.CallRestAPIEditorDefinitionSetting, Vanrise.GenericData.MainExtensions",
+                        CallOnLoad: $scope.scopeModel.callOnLoad,
                         VRButtonType: buttonTypesSelectorAPI.getSelectedIds(),
                         APIAction: $scope.scopeModel.apiAction,
                         HTTPMethodType: ctrl.selectedvalues != undefined ? ctrl.selectedvalues.value : undefined,
                         InputItems: inputItemsGridAPI.getData(),
                         OutputItems: outputItemsGridAPI.getData()
                     };
+
+                    return definitionData;
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

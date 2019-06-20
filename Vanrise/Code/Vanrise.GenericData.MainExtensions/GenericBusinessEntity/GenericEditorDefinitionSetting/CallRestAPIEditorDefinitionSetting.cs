@@ -12,6 +12,8 @@ namespace Vanrise.GenericData.MainExtensions
 
         public override string RuntimeEditor { get { return "vr-genericdata-callrestapieditorsetting-runtime"; } }
 
+        public bool CallOnLoad { get; set; }
+
         public VRButtonType VRButtonType { get; set; }
 
         public string APIAction { get; set; }

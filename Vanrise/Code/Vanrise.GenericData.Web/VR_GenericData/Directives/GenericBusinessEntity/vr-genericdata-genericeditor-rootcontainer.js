@@ -27,6 +27,10 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
             var runtimeEditorAPI;
             var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
+            //var runtimeEditorLoadDeferred
+
+            //allRootContainerChildDirectivesLoadDeferred
+            var allRootContainerChildDirectivesLoadDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -45,7 +49,6 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                 api.load = function (payload) {
 
                     var promises = [];
-
 
                     var definitionSettings;
                     var historyId;
@@ -104,7 +107,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                                 for (var prop in response) {
                                     var dependentFieldValue = response[prop];
                                     if (prop != "$type") {
-                                        allFieldValuesByFieldNames[prop] = typeof (dependentFieldValue) == "object" ? dependentFieldValue : [dependentFieldValue];
+                                        allFieldValuesByFieldNames[prop] = !Array.isArray(dependentFieldValue) ? [dependentFieldValue] : dependentFieldValue;
                                         if (prop in parentFieldValues) {
                                             parentFieldValues[prop].value = dependentFieldValue;
                                             parentFieldValues[prop].isHidden = false;
@@ -146,7 +149,9 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                         return runtimeEditorLoadDeferred.promise;
                     }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        allRootContainerChildDirectivesLoadDeferred.resolve();
+                    });
                 };
 
                 api.getData = function () {
@@ -194,11 +199,20 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
 
                         return UtilsService.waitMultiplePromises([]);
                     },
-
                     getFieldValues: function () {
                         var dicFieldValues = {};
                         runtimeEditorAPI.setData(dicFieldValues);
                         return dicFieldValues;
+                    },
+                    getFieldValuesPromise: function () {
+                        var getFieldValuesPromiseDeferred = UtilsService.createPromiseDeferred();
+                        allRootContainerChildDirectivesLoadDeferred.promise.then(function () {
+                            var dicFieldValues = {};
+                            runtimeEditorAPI.setData(dicFieldValues);
+                            getFieldValuesPromiseDeferred.resolve(dicFieldValues);
+                        });
+
+                        return getFieldValuesPromiseDeferred.promise;
                     },
 
                     setFieldValues: function (fieldValuesByNameDict) { //fieldValuesByNamesDict = {'fieldName' :'value1', .... }
@@ -224,7 +238,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                                             continue;
 
                                         var dependentFieldValue = response[prop];
-                                        var convertedFieldValue = typeof (dependentFieldValue) == "object" ? dependentFieldValue : [dependentFieldValue];
+                                        var convertedFieldValue = !Array.isArray(dependentFieldValue) ? [dependentFieldValue] : dependentFieldValue;
                                         VR_GenericData_GenericBusinessEntityService.tryUpdateAllFieldValuesByFieldName(prop, convertedFieldValue, allFieldValuesByFieldNames);
 
                                         valuesToSet[prop] = dependentFieldValue;
@@ -234,7 +248,7 @@ app.directive("vrGenericdataGenericeditorRootcontainer", ["UtilsService", "VRUIU
                                 });
 
                                 return {
-                                    promises: [getDependentFieldValuesPromiseDeferred.promise],
+                                    promises: [allRootContainerChildDirectivesLoadDeferred.promise, getDependentFieldValuesPromiseDeferred.promise],
                                     getChildNode: function () {
                                         var _promises = [];
                                         var onFieldValueSettedPromise = runtimeEditorAPI.setFieldValues(valuesToSet);

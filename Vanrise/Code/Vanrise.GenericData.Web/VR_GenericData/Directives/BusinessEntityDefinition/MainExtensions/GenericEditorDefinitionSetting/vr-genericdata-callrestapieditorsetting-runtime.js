@@ -8,7 +8,7 @@
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -54,7 +54,6 @@
                     }
 
                     var fieldValues = genericContext.getFieldValues();
-
                     var requiredInputs = [];
                     for (var i = 0; i < inputItems.length; i++) {
                         var input = inputItems[i];
@@ -74,49 +73,7 @@
                 };
 
                 $scope.scopeModel.callApi = function () {
-                    var inputFields;
-                    var currentFieldValues = genericContext.getFieldValues();
-
-                    if (inputItems != undefined) {
-                        inputFields = {};
-                        for (var i = 0; i < inputItems.length; i++) {
-                            var input = inputItems[i];
-                            if (input.FieldName in currentFieldValues)
-                                inputFields[input.PropertyName] = currentFieldValues[input.FieldName];
-                        }
-                    }
-
-                    switch (httpMethodType) {
-                        case VR_GenericData_CallRestAPIHTTPMethodEnum.Get.value: {
-                            BaseAPIService.get(apiAction, inputFields).then(function (response) {
-                                genericContext.setFieldValues(getOutputFields(response));
-                            });
-                            break;
-                        }
-
-                        case VR_GenericData_CallRestAPIHTTPMethodEnum.Post.value: {
-                            BaseAPIService.post(apiAction, inputFields).then(function (response) {
-                                 genericContext.setFieldValues(getOutputFields(response));
-                            });
-                            break;
-                        }
-                    }
-
-                    function getOutputFields(response) {
-                        if (response && typeof (response) == "object") {
-                            var outputFields = {};
-                            if (outputItems != undefined) {
-                                for (var i = 0; i < outputItems.length; i++) {
-                                    var output = outputItems[i];
-                                    if (output.PropertyName in response && currentFieldValues[output.FieldName] != response[output.PropertyName])
-                                        outputFields[output.FieldName] = response[output.PropertyName];
-                                }
-                            }
-                            return outputFields;
-                        }
-
-                        return undefined;
-                    }
+                    return callAPIAction();
                 };
 
                 defineAPI();
@@ -126,9 +83,8 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var definitionSettings;
 
-                    var promises = [];
+                    var definitionSettings;
 
                     if (payload != undefined) {
                         definitionSettings = payload.definitionSettings;
@@ -137,12 +93,18 @@
 
                     if (definitionSettings != undefined) {
                         $scope.scopeModel.buttonType = UtilsService.getEnumDescription(VRButtonTypeEnum, definitionSettings.VRButtonType);
+                        $scope.scopeModel.callOnLoad = definitionSettings.CallOnLoad;
                         apiAction = definitionSettings.APIAction;
                         httpMethodType = definitionSettings.HTTPMethodType;
                         inputItems = definitionSettings.InputItems;
                         outputItems = definitionSettings.OutputItems;
                     }
 
+                    if ($scope.scopeModel.callOnLoad) {
+                        callAPIAction();
+                    }
+
+                    var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -155,6 +117,62 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
+            }
+
+            function callAPIAction() {
+                var callAPIActionDeferred = UtilsService.createPromiseDeferred();
+
+                var getFieldValuesPromise = genericContext.getFieldValuesPromise();
+                getFieldValuesPromise.then(function (currentFieldValues) {
+                    var inputFields;
+                    if (inputItems != undefined) {
+                        inputFields = {};
+                        for (var i = 0; i < inputItems.length; i++) {
+                            var input = inputItems[i];
+                            if (input.FieldName in currentFieldValues)
+                                inputFields[input.PropertyName] = currentFieldValues[input.FieldName];
+                        }
+                    }
+
+                    switch (httpMethodType) {
+                        case VR_GenericData_CallRestAPIHTTPMethodEnum.Get.value: {
+                            BaseAPIService.get(apiAction, inputFields).then(function (response) {
+                                genericContext.setFieldValues(getOutputFields(response, currentFieldValues)).then(function () {
+                                    callAPIActionDeferred.resolve();
+                                });
+                            });
+                            break;
+                        }
+
+                        case VR_GenericData_CallRestAPIHTTPMethodEnum.Post.value: {
+                            BaseAPIService.post(apiAction, inputFields).then(function (response) {
+                                genericContext.setFieldValues(getOutputFields(response, currentFieldValues)).then(function () {
+                                    callAPIActionDeferred.resolve();
+                                });
+                            });
+                            break;
+                        }
+                    }
+                });
+
+
+                function getOutputFields(response, currentFieldValues) {
+                    if (response && typeof (response) == "object") {
+                        var outputFields = {};
+                        if (outputItems != undefined) {
+                            for (var i = 0; i < outputItems.length; i++) {
+                                var output = outputItems[i];
+                                if (output.PropertyName in response && currentFieldValues[output.FieldName] != response[output.PropertyName])
+                                    outputFields[output.FieldName] = response[output.PropertyName];
+                            }
+                        }
+                        return outputFields;
+                    }
+
+                    return undefined;
+                }
+
+                return callAPIActionDeferred.promise;
             }
         }
     }
