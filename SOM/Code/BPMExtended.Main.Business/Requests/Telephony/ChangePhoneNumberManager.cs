@@ -121,7 +121,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ChangePhoneNumberOnSameSwitch/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitChangePhoneNumberOnSameSwitch/StartProcess", somRequestInput);
                 }
 
             }
@@ -196,7 +196,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitChangePhoneNumberOnSameSwitch/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<ChangePhoneNumberRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateChangePhoneNumberOnSameSwitch/StartProcess", somRequestInput);
                 }
 
             }

@@ -108,6 +108,7 @@
     <Compile Include="Request Flow Management\LineUnBlockingFlowManagement.cs" />
     <Compile Include="Request Flow Management\NetworkResetPasswordFlowManagement.cs" />
     <Compile Include="Request Flow Management\OtherChargesFlowManagement.cs" />
+    <Compile Include="Request Flow Management\ServiceRemovalFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateContractAddressFlowManagement.cs" />
     <Compile Include="Request Flow Management\UpdateRatePlanFlowManagement.cs" />
     <Compile Include="Requests\Administrative\AdministrativeComplaintManager.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Requests\Telephony\OtherChargesManager.cs" />
     <Compile Include="Requests\Telephony\PABXManager.cs" />
     <Compile Include="Requests\Telephony\ServiceAdditionManager.cs" />
+    <Compile Include="Requests\Telephony\ServiceRemovalManager.cs" />
     <Compile Include="Requests\Telephony\UpdateContractAddressManager.cs" />
     <Compile Include="Requests\Telephony\TelephonyTechnicalComplaintManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />
