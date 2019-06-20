@@ -2578,3 +2578,7 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
+
+
+--[Rules].[Rule]------------------------------------------------------------------------
+delete FROM [rules].[Rule] where ruledetails like '%SwapDealRouteRuleCriteria%'
