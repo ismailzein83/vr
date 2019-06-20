@@ -25,6 +25,17 @@ namespace Vanrise.GenericData.Business
                 return null;
             return GenericFinancialAccountMapper(entity);
         }
+
+        public IEnumerable<GenericFinancialAccount> GetFinancialAccounts()
+        {
+            var entities = new GenericBusinessEntityManager().GetAllGenericBusinessEntities(_configuration.FinancialAccountBEDefinitionId);
+            if (entities == null)
+                return null;
+            List<GenericFinancialAccount> financialAccounts = new List<GenericFinancialAccount>();
+
+            return entities.Select(item => GenericFinancialAccountMapper(item));
+        }
+
         private GenericFinancialAccount GenericFinancialAccountMapper(GenericBusinessEntity genericBusinessEntity)
         {
 
