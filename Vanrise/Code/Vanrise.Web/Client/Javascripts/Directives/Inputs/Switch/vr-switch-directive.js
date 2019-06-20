@@ -58,6 +58,9 @@ app.directive('vrSwitch', ['SecurityService', 'UtilsService','VRLocalizationServ
             if (attrs.label != undefined)
                 scope.withLable = true;
 
+            if (attrs.hidelabel != undefined)
+                scope.withLable = false;
+
             if (attrs.hint != undefined)
                 scope.hint = attrs.hint;
           
