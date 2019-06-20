@@ -189,6 +189,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                     dataItem.DimensionItemFieldId = gridDimension.payload.DimensionId;
                                     dataItem.FieldDescription = gridDimension.payload.Header;
                                     dataItem.FieldName = groupItemDimension.FieldName;
+                                    dataItem.oldHeaderResourceKey = gridDimension.payload.HeaderResourceKey;
                                     dataItemPayload.data = gridDimension.payload.GridColumnSettings;
                                     textResourcePayload = { selectedValue: gridDimension.payload.HeaderResourceKey };
 
@@ -235,6 +236,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                     dataItem.MeasureItemFieldId = gridMeasure.payload.MeasureId;
                                     dataItem.FieldDescription = gridMeasure.payload.Header;
                                     dataItem.FieldName = groupItemMeasure.FieldName;
+                                    dataItem.oldHeaderResourceKey = gridMeasure.payload.HeaderResourceKey;
                                     dataItemPayload.data = gridMeasure.payload.GridColumnSettings;
                                     textResourcePayload = {
                                         selectedValue: gridMeasure.payload.HeaderResourceKey
@@ -293,7 +295,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                 DimensionId: dimension.DimensionItemFieldId,
                                 Header: dimension.FieldDescription,
                                 GridColumnSettings: dimension.dimensionGridWidthFactorAPI.getData(),
-                                HeaderResourceKey: dimension.textResourceSeletorAPI != undefined ? dimension.textResourceSeletorAPI.getSelectedValues() : undefined
+                                HeaderResourceKey: dimension.textResourceSeletorAPI != undefined ? dimension.textResourceSeletorAPI.getSelectedValues() : dimension.oldHeaderResourceKey
                             });
                         }
                     }
@@ -307,7 +309,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                 MeasureId: measure.MeasureItemFieldId,
                                 Header: measure.FieldDescription,
                                 GridColumnSettings: measure.measureGridWidthFactorAPI.getData(),
-                                HeaderResourceKey: measure.textResourceSeletorAPI != undefined ? measure.textResourceSeletorAPI.getSelectedValues() : undefined
+                                HeaderResourceKey: measure.textResourceSeletorAPI != undefined ? measure.textResourceSeletorAPI.getSelectedValues() : measure.oldHeaderResourceKey
                             });
                         }
                     }
