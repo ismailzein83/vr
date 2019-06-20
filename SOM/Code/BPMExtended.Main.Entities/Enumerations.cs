@@ -311,7 +311,7 @@ namespace BPMExtended.Main.Entities
 
 
         [LineOfBusiness(LineOfBusiness.Telephony)]
-        [Description("Line Blocking")]
+        [Description("Line Blocking")]  
         [EntitySchemaName("StLineBlock")]
         [CompletedStep("StTypeId")]
         [CompletedStepId("9ACA0E2B-4D75-4F13-A486-C2674D2F8B0F")]
@@ -348,6 +348,14 @@ namespace BPMExtended.Main.Entities
         [CompletedStep("StTypeId")]
         [CompletedStepId("BB0D3D76-4029-4517-B6BD-A23DA24A9F7C")]
         LineMovingRequest = 40,
+
+        [Description("Service Removal")]
+        [EntitySchemaName("StServiceRemoval")]
+        [TechnicalStepFieldName("StTechnicalStepId")]
+        [TechnicalStepId("42CC62BA-A708-4097-A2B2-17CC2374AC13")]
+        [CompletedStep("StTypeId")]
+        [CompletedStepId("B1295B96-C7B3-40B3-9089-24A05E94FF41")]
+        ServiceRemoval = 41,
 
     }
     public enum ContractStatus

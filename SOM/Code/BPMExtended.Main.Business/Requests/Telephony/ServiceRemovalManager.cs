@@ -7,6 +7,7 @@ using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
+using Newtonsoft.Json;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 
@@ -58,7 +59,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    items = client.Post<ServiceRemovalContractServicesInput, List<ContractAvailableServiceOutput>>("api/SOM.ST/Billing/GetContractAvailableServices", somRequestInput);
+                    items = client.Post<ServiceRemovalContractServicesInput, List<ContractAvailableServiceOutput>>("api/SOM.ST/Billing/GetContractServicesWithExcludedPackages", somRequestInput);
                 }
 
             }
@@ -68,14 +69,116 @@ namespace BPMExtended.Main.Business
 
         }
 
-        public void SubmitServiceRemovalToOM(Guid requestid)
+        public void SubmitServiceRemovalToOM(Guid requestId)
         {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
 
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceRemoval");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StOperationAddedServices");
+            esq.AddColumn("StIsPaid");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                string VASServices = entities[0].GetColumnValue("StOperationAddedServices").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+                SOMRequestInput<ServiceRemovalSubmitInput> somRequestInput = new SOMRequestInput<ServiceRemovalSubmitInput>
+                {
+
+                    InputArguments = new ServiceRemovalSubmitInput
+                    {
+                        ServicesToRemove = JsonConvert.DeserializeObject<List<VASService>>(VASServices),
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            CustomerId= customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ServiceRemovalSubmitInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_SubmitRemoveContractServices/StartProcess", somRequestInput);
+                }
+
+            }
         }
 
-        public void ActivateServiceRemovalToOM(Guid requestid)
+        public void ActivateServiceRemovalToOM(Guid requestId)
         {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            SOMRequestOutput output;
 
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StServiceRemoval");
+            esq.AddColumn("StContractID");
+            esq.AddColumn("StCustomerId");
+            esq.AddColumn("StOperationAddedFees");
+            esq.AddColumn("StOperationAddedServices");
+            esq.AddColumn("StIsPaid");
+
+
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
+            esq.Filters.Add(esqFirstFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contractId = entities[0].GetColumnValue("StContractID");
+                var customerId = entities[0].GetColumnValue("StCustomerId");
+                string fees = entities[0].GetColumnValue("StOperationAddedFees").ToString();
+                string VASServices = entities[0].GetColumnValue("StOperationAddedServices").ToString();
+                var isPaid = entities[0].GetColumnValue("StIsPaid");
+
+                SOMRequestInput<ServiceRemovalSubmitInput> somRequestInput = new SOMRequestInput<ServiceRemovalSubmitInput>
+                {
+
+                    InputArguments = new ServiceRemovalSubmitInput
+                    {
+                        ServicesToRemove = JsonConvert.DeserializeObject<List<VASService>>(VASServices),
+                        PaymentData = new PaymentData()
+                        {
+                            Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees),
+                            IsPaid = (bool)isPaid
+                        },
+                        CommonInputArgument = new CommonInputArgument()
+                        {
+                            ContractId = contractId.ToString(),
+                            RequestId = requestId.ToString(),
+                            CustomerId = customerId.ToString()
+                        }
+                    }
+
+                };
+
+                //call api
+                using (var client = new SOMClient())
+                {
+                    output = client.Post<SOMRequestInput<ServiceRemovalSubmitInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Tel_ActivateRemoveContractServices/StartProcess", somRequestInput);
+                }
+
+            }
         }
 
         #endregion

@@ -10,6 +10,6 @@ namespace BPMExtended.Main.SOMAPI
     public class LineBlockingRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
-
+        public PaymentData PaymentData { get; set; }
     }
 }

@@ -108,6 +108,8 @@
     <Compile Include="Billing\WorkflowInput\NetworkServiceResetPasswordRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ResetNetworkServicePasswordRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\ServiceAdditionRequestInput.cs" />
+    <Compile Include="Billing\WorkflowInput\ServiceRemovalContractServicesInput.cs" />
+    <Compile Include="Billing\WorkflowInput\ServiceRemovalSubmitInput.cs" />
     <Compile Include="Billing\WorkflowInput\SOMRequestInput.cs" />
     <Compile Include="Billing\WorkflowInput\SubmitToPOSInput.cs" />
     <Compile Include="Billing\WorkflowInput\TelephonyContractOnHoldInput.cs" />

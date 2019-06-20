@@ -7,9 +7,10 @@ using BPMExtended.Main.Entities;
 
 namespace BPMExtended.Main.SOMAPI
 {
-    public class LineUnBlockingRequestInput
+    public class ServiceRemovalSubmitInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public List<VASService> ServicesToRemove { get; set; }
         public PaymentData PaymentData { get; set; }
     }
 }

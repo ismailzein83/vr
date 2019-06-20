@@ -359,7 +359,7 @@ namespace BPMExtended.Main.Business
             {
                 recordEntity = collection[0];
                 recordEntity.SetColumnValue(CompletedStep, CompletedStepId);
-                recordEntity.SetColumnValue(TechnicalStep, null);
+                recordEntity.SetColumnValue(TechnicalStep, System.Guid.Empty);
             }
             recordEntity.Save();
         }
