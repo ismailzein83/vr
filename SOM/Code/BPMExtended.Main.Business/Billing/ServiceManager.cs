@@ -83,6 +83,35 @@ namespace BPMExtended.Main.Business
             }
             return customerContractServiceList;
         }
+
+        public List<ServiceInfo> GetContractServicesInfo(string contractId)
+        {
+            var serviceInfoItems = new List<ServiceInfo>();
+            using (SOMClient client = new SOMClient())
+            {
+                var items = client.Get<List<CustomerContractService>>(String.Format("api/SOM.ST/Billing/GetContractServices?ContractId={0}", contractId));
+                foreach (var item in items)
+                {
+                    var serviceInfo = CustomerContractServiceToServiceInfoMapper(item);
+                    serviceInfoItems.Add(serviceInfo);
+                }
+            }
+            return serviceInfoItems;
+        }
+
+        public List<ServiceInfo> GetServicesWithPasswordResetSupport(string contractId)
+        {
+            var servicesWithRequiredPasswordList = new List<ServiceInfo>();
+
+            var catalogManager = new CatalogManager();
+            List<ServiceInfo> contractServices = GetContractServicesInfo(contractId);
+            List<string> isRequiredPasswordServicesIDs = catalogManager.GetIsRequiredPasswordServicesIds();
+
+            servicesWithRequiredPasswordList = contractServices.Where(p => isRequiredPasswordServicesIDs.Any(p2 => p2.ToString() == p.ServiceId.ToString())).ToList();
+
+            return servicesWithRequiredPasswordList;
+        }
+
         public List<ServiceDetail> GetCoreServices(string ratePlanId)
         {
             //var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
@@ -377,6 +406,16 @@ namespace BPMExtended.Main.Business
                 //Status = contractManager.GetContractStatusByEnumValue(customerContractService.Status.ToString()),
                 Status = customerContractService.Status,
                 ActivateDate = customerContractService.ActivateDate,
+            };
+        }
+
+        public ServiceInfo CustomerContractServiceToServiceInfoMapper(CustomerContractService item)
+        {
+            var contractManager = new ContractManager();
+            return new ServiceInfo
+            {
+                ServiceId = item.Id,
+                Name = item.Name
             };
         }
 
