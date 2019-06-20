@@ -1,3 +1,6 @@
-﻿<vr-columns width="1/2row">
-    <vr-textbox value="guidValue" label="Guid"></vr-textbox>
+﻿<vr-columns width="normal">
+    <vr-select label="Condition" datatextfield="description" datavaluefield="value" hideremoveicon
+               datasource="filters" selectedvalues="selectedFilter" isrequired="true"></vr-select>
 </vr-columns>
+
+<vr-genericdata-fieldtype-text-runtimeeditor on-ready="onTextFilterEditorReady" isrequired="true" selectionmode="single" normal-col-num="4"></vr-genericdata-fieldtype-text-runtimeeditor>
