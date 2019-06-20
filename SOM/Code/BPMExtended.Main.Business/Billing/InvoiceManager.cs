@@ -92,7 +92,7 @@ namespace BPMExtended.Main.Business
         {//Invoice Code, Bill Cycle, phone Number , InvoiceAmount, open amount, Invoice URL
             return new InvoiceDetail
             {
-                InvoiceCode = item.Id,
+                InvoiceCode = item.DocumentCode,
                 InvoiceAccount = item.BillingAccountCode,
                 OpenAmount = Convert.ToString(item.OpenAmount),
                 Amount = Convert.ToString(item.Amount)
