@@ -12,6 +12,6 @@
 \Vanrise.MobileNetwork.
 \RecordAnalysis.
 \Retail.NIM.
-\Retail.Billing
+\Retail.Billing.
 .aspx\
 .cs\
