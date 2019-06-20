@@ -314,6 +314,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridviewcondition-filtergroup.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\SendEmailGenericBEDefinitionActionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\DownloadFileGenericBEDefinitionActionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-downloadfileaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-sendemailaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\GenericBEBulkActionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\Templates\GenericBEBulkActionSettingsUpdateTemplate.html" />
@@ -951,6 +953,7 @@
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageLogAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataStoreAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\GenericBEDownloadActionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericBESerialNumberAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationStepConfigAPIService.js" />

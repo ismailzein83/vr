@@ -3,9 +3,9 @@
 
     'use strict';
 
-    GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum', 'VRCommon_ModalWidthEnum', 'VR_GenericData_GenericBEDefinitionAPIService','VR_GenericData_GenericBEDownloadActionAPIService'];
 
-    function GenericBEActionService(VRModalService, UtilsService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum, VRCommon_ModalWidthEnum, VR_GenericData_GenericBEDefinitionAPIService) {
+    function GenericBEActionService(VRModalService, UtilsService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum, VRCommon_ModalWidthEnum, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_GenericBEDownloadActionAPIService) {
 
         var actionTypes = [];
 
@@ -235,14 +235,32 @@
             registerActionType(sendEmailActionType);
         }
 
-
+        function registerDownloadFileGenericBEAction() {
+            var sendEmailActionType = {
+                ActionTypeName: "DownloadFileGenericBEAction",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+                    var downloadFileInput = {
+                        GenericBusinessEntityId: payload.genericBusinessEntityId,
+                        GenericBEAction: payload.genericBEAction,
+                        BusinessEntityDefinitionId: payload.businessEntityDefinitionId
+                    };
+                    VR_GenericData_GenericBEDownloadActionAPIService.DownloadGenericBEFile(downloadFileInput).then(function (response) {
+                        UtilsService.downloadFile(response.data, response.headers);
+                    });
+                }
+            };
+            registerActionType(sendEmailActionType);
+        }
         return ({
             defineGenericBEMenuActions: defineGenericBEMenuActions,
             getActionTypeIfExist: getActionTypeIfExist,
             registerActionType: registerActionType,
             registerEditBEAction: registerEditBEAction,
             registerDeleteBEAction: registerDeleteBEAction,
-            registerSendEmailGenericBEAction: registerSendEmailGenericBEAction
+            registerSendEmailGenericBEAction: registerSendEmailGenericBEAction,
+            registerDownloadFileGenericBEAction: registerDownloadFileGenericBEAction
         });
     };
 

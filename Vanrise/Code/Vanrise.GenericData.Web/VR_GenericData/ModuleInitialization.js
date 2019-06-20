@@ -14,4 +14,6 @@
         VR_GenericData_GenericBEActionService.registerSendEmailGenericBEAction();
         VR_GenericData_GenericEditorConditionalRuleContainerService.registerFieldValueConditionalRuleAction();
         VR_GenericData_GenericBECustomActionService.registerBulkAddCustomAction();
+        VR_GenericData_GenericBEActionService.registerDownloadFileGenericBEAction();
     }]);
+ 
